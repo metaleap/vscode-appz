@@ -1,0 +1,32 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "es2020",
+		"outDir": "out",
+		"lib": [
+			"es2020"
+		],
+		"watch": true,
+		"sourceMap": false,
+		"rootDir": "src",
+		"newLine": "LF",
+		"noFallthroughCasesInSwitch": true,
+		"noEmitHelpers": true,
+		"alwaysStrict": true,
+		"noEmitOnError": false,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"preserveConstEnums": false,
+		"pretty": false,
+		"removeComments": true,
+		"strict": true,
+		"strictNullChecks": false
+	},
+	"exclude": [
+		"node_modules",
+		".vscode-test"
+	]
+}
