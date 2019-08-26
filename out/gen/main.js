@@ -13,6 +13,7 @@ const genApiSurface = {
         {
             "window": [
                 "showErrorMessage",
+                "noSuchMemberHere",
                 "showInformationMessage",
                 "showWarningMessage"
             ]
@@ -29,10 +30,39 @@ function main() {
                 md = null;
         });
         if (md)
-            genMembers(modulename, md, genApiSurface[modulename]);
+            genMembers(md.body, genApiSurface[modulename], modulename);
     }
 }
-function genMembers(prefix, astNode, childItems) {
-    println(prefix);
-    println(123);
+function genMembers(astNode, childItems, ...prefixes) {
+    for (var item of childItems)
+        if (typeof item === 'string') {
+            var member = undefined;
+            astNode.forEachChild(n => {
+                if (!member) {
+                    var decl;
+                    if ((decl = n) && decl.name && decl.name.text === item)
+                        member = n;
+                }
+            });
+            if (!member)
+                println("GONE FROM API:\tmember `" + prefixes.join(".") + "." + item + "`");
+            else {
+            }
+        }
+        else {
+            const mem = item;
+            for (var key in mem) {
+                var ns = undefined;
+                astNode.forEachChild(n => {
+                    if ((!ns) && (ns = n)) {
+                        if (!(ns.name && ns.name.text === key))
+                            ns = undefined;
+                    }
+                });
+                if (!ns)
+                    println("GONE FROM API:\tnamespace `" + prefixes.join(".") + "." + key + "`");
+                else
+                    genMembers(ns.body, mem[key], ...prefixes.concat(key));
+            }
+        }
 }
