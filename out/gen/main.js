@@ -21,17 +21,18 @@ const genApiSurface = {
 };
 main();
 function main() {
-    const o = console.log;
     const dtsfile = ts.createSourceFile(filePathDts, node_fs.readFileSync(filePathDts).toString(), ts.ScriptTarget.ES2020, true, ts.ScriptKind.TS);
     for (const modulename in genApiSurface) {
-        let nmod = null;
+        let md = null;
         dtsfile.forEachChild(astnode => {
-            if ((!nmod) && (nmod = astnode) && (nmod.name.text !== modulename))
-                nmod = null;
+            if ((!md) && (md = astnode) && (md.name.text !== modulename))
+                md = null;
         });
-        if (nmod)
-            genMembers(modulename, nmod);
+        if (md)
+            genMembers(modulename, md, genApiSurface[modulename]);
     }
 }
-function genMembers(prefix, parent) {
+function genMembers(prefix, astNode, childItems) {
+    println(prefix);
+    println(123);
 }

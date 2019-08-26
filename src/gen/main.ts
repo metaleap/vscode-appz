@@ -3,7 +3,11 @@ import * as ts from 'typescript';
 
 const println = console.log
 const filePathDts = "node_modules/@types/vscode/index.d.ts"
-const genApiSurface = {
+
+type genApiMember = { [_: string]: genApiMembers }
+type genApiMembers = (string | genApiMember)[]
+
+const genApiSurface: genApiMember = {
     "vscode": [
         "MessageOptions",
         "DoesntExist",
@@ -22,20 +26,20 @@ const genApiSurface = {
 main()
 
 function main() {
-    const o = console.log
     const dtsfile = ts.createSourceFile(filePathDts, node_fs.readFileSync(filePathDts).toString(), ts.ScriptTarget.ES2020, true, ts.ScriptKind.TS)
 
     for (const modulename in genApiSurface) {
-        let nmod: ts.ModuleDeclaration = null
+        let md: ts.ModuleDeclaration = null
         dtsfile.forEachChild(astnode => {
-            if ((!nmod) && (nmod = astnode as ts.ModuleDeclaration) && (nmod.name.text !== modulename))
-                nmod = null
+            if ((!md) && (md = astnode as ts.ModuleDeclaration) && (md.name.text !== modulename))
+                md = null
         })
-        if (nmod)
-            genMembers(modulename, nmod)
+        if (md)
+            genMembers(modulename, md, genApiSurface[modulename])
     }
 }
 
-function genMembers(prefix: string, parent: ts.Node) {
-
+function genMembers(prefix: string, astNode: ts.Node, childItems: genApiMembers) {
+    println(prefix)
+    println(123)
 }
