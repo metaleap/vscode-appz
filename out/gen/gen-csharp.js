@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class Gen {
-    constructor(outFilePath) { this.outFilePath = outFilePath; }
+const gen_shared = require("./gen-shared");
+class Gen extends gen_shared.Gen {
+    gen() {
+        console.log(`C#\tpref=${this.outFilePathPref}\tsuff=${this.outFilePathSuff}`);
+    }
 }
 exports.Gen = Gen;

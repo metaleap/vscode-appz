@@ -1,11 +1,7 @@
-import * as gen from './gen'
+import * as gen_shared from './gen-shared'
 
-export class Gen implements gen.IGen {
-    outFilePath: string;
-    constructor(outFilePath: string) { this.outFilePath = outFilePath; }
-
-    gen: () => {
-
-    };
-
+export class Gen extends gen_shared.Gen implements gen_shared.IGen {
+    gen() {
+        console.log(`C#\tpref=${this.outFilePathPref}\tsuff=${this.outFilePathSuff}`)
+    }
 }

@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const node_fs = require("fs");
 const ts = require("typescript");
 const gen_golang = require("./gen-golang");
-const gen_csharp = require("./gen-golang");
+const gen_csharp = require("./gen-csharp");
 const println = console.log;
 const filePathDts = 'node_modules/@types/vscode/index.d.ts';
 const gens = [
-    new gen_golang.Gen('libs/golang/generated.go'),
-    new gen_csharp.Gen('libs/csharp/generated.cs'),
+    new gen_golang.Gen('libs/golang/', '.gen.go'),
+    new gen_csharp.Gen('libs/csharp/', '.gen.cs'),
 ];
 const genApiSurface = {
     'vscode': [
@@ -36,6 +36,8 @@ function main() {
             gatherAll(md.body, genApiSurface[modulename], modulename);
         }
     }
+    for (const gen of gens)
+        gen.gen();
 }
 function gatherAll(astNode, childItems, ...prefixes) {
     for (var item of childItems)

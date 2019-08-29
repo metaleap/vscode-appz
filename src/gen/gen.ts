@@ -1,23 +1,19 @@
-import * as node_fs from 'fs';
-import * as ts from 'typescript';
+import * as node_fs from 'fs'
+import * as ts from 'typescript'
 import * as vs from 'vscode'
 
+import * as gen_shared from './gen-shared'
 import * as gen_golang from './gen-golang'
-import * as gen_csharp from './gen-golang'
+import * as gen_csharp from './gen-csharp'
 
 
 
 const println = console.log
 const filePathDts = 'node_modules/@types/vscode/index.d.ts'
 
-export interface IGen {
-    outFilePath: string
-    gen: () => void
-}
-
-const gens: IGen[] = [
-    new gen_golang.Gen('libs/golang/generated.go'),
-    new gen_csharp.Gen('libs/csharp/generated.cs'),
+const gens: gen_shared.IGen[] = [
+    new gen_golang.Gen('libs/golang/', '.gen.go'),
+    new gen_csharp.Gen('libs/csharp/', '.gen.cs'),
 ]
 
 type genApiMember = { [_: string]: genApiMembers }
@@ -52,6 +48,9 @@ function main() {
             gatherAll(md.body, genApiSurface[modulename], modulename)
         }
     }
+
+    for (const gen of gens)
+        gen.gen()
 }
 
 function gatherAll(astNode: ts.Node, childItems: genApiMembers, ...prefixes: string[]) {
