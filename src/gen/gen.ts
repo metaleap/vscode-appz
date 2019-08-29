@@ -29,7 +29,8 @@ const genApiSurface: genApiMember = {
             'window': [
                 'showErrorMessage',
                 'showInformationMessage',
-                'showWarningMessage'
+                'showWarningMessage',
+                'showInputBox',
             ]
         }
     ]
@@ -78,63 +79,97 @@ function gatherAll(astNode: ts.Node, childItems: genApiMembers, ...prefixes: str
             if (!members.length)
                 throw ("GONE FROM API:\texport named `" + prefixes.join('.') + '.' + item + '`')
             else
-                for (let i = 0; i < members.length; i++) {
-                    const member = members[i]
-                    switch (member.kind) {
-                        case ts.SyntaxKind.FunctionDeclaration:
-                            gatherFunc(member as ts.FunctionDeclaration, (members.length === 1) ? 0 : (i + 1), ...prefixes)
-                            break
-                        case ts.SyntaxKind.InterfaceDeclaration:
-                            gatherStruct(member as ts.InterfaceDeclaration, ...prefixes)
-                            break
-                        default:
-                            throw (member.kind)
-                    }
-                }
+                for (let i = 0; i < members.length; i++)
+                    gatherMember(members[i], (members.length === 1) ? 0 : (i + 1), ...prefixes)
         }
 }
 
 const
     genAllFuncs: {
-        qName: string[]
+        qName: string
         overload: number
         decl: ts.FunctionDeclaration
     }[] = [],
     genAllStructs: {
-        qName: string[]
+        qName: string
         decl: ts.InterfaceDeclaration
     }[] = []
 
-function gatherFunc(decl: ts.FunctionDeclaration, overload: number, ...prefixes: string[]) {
-    genAllFuncs.push({ qName: prefixes.concat(decl.name.text), overload: overload, decl: decl })
-    println(decl.name.text)
-    decl.parameters.forEach(param => gatherFrom(param.type))
-    gatherFrom(decl.type)
+function gatherMember(member: ts.Node, overload: number, ...prefixes: string[]) {
+    switch (member.kind) {
+        case ts.SyntaxKind.FunctionDeclaration:
+            gatherFunc(member as ts.FunctionDeclaration, overload, ...prefixes)
+            break
+        case ts.SyntaxKind.InterfaceDeclaration:
+            gatherStruct(member as ts.InterfaceDeclaration, ...prefixes)
+            break
+        case ts.SyntaxKind.TupleType:
+            (member as ts.TupleTypeNode).elementTypes.forEach(_ => gatherFrom(_))
+            break
+        default:
+            throw (member.kind)
+    }
 }
 
-function gatherFrom(typeNode: ts.TypeNode) {
+function gatherFrom(typeNode: ts.TypeNode, typeParams: ts.NodeArray<ts.TypeParameterDeclaration> = undefined) {
     switch (typeNode.kind) {
         case ts.SyntaxKind.ArrayType:
-            gatherFrom((typeNode as ts.ArrayTypeNode).elementType)
+            gatherFrom((typeNode as ts.ArrayTypeNode).elementType, typeParams)
             break
         case ts.SyntaxKind.TypeReference:
             const tref = typeNode as ts.TypeReferenceNode,
                 tname = tref.typeName.getText()
-            if (tname != 'Thenable') {
-                println(tref.flags + "\t" + (tref.typeArguments ? tref.typeArguments.length : -1))
+            const tparam = (!typeParams) ? null : typeParams.find(_ => _.name.getText() === tname)
+            if (tparam) {
+                const tnode = ts.getEffectiveConstraintOfTypeParameter(tparam)
+                if (tnode)
+                    gatherAll(_curmod[1], [tnode.getText()], _curmod[0])
+            } else if (tname !== 'Thenable' && tname !== 'CancellationToken')
                 gatherAll(_curmod[1], [tname], _curmod[0])
-            }
             break
-        case ts.SyntaxKind.StringKeyword:
+        case ts.SyntaxKind.TupleType:
+            (typeNode as ts.TupleTypeNode).elementTypes.forEach(_ => gatherFrom(_, typeParams))
+            break
+        case ts.SyntaxKind.UnionType:
+            (typeNode as ts.UnionTypeNode).types.forEach(_ => gatherFrom(_, typeParams))
             break
         default:
-            throw (typeNode.kind)
+            if (![ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(typeNode.kind))
+                throw (typeNode.kind)
     }
 }
 
+function gatherFunc(decl: ts.FunctionDeclaration, overload: number, ...prefixes: string[]) {
+    const qname = prefixes.concat(decl.name.text).join('.')
+    if (genAllFuncs.some(_ => _.qName === qname && _.overload === overload))
+        return
+    genAllFuncs.push({ qName: qname, overload: overload, decl: decl })
+    decl.parameters.forEach(_ => gatherFrom(_.type, decl.typeParameters))
+    gatherFrom(decl.type, decl.typeParameters)
+}
+
 function gatherStruct(decl: ts.InterfaceDeclaration, ...prefixes: string[]) {
-    println("GENSTRUCT:\t" + prefixes.concat(decl.name.text).join('~'))
-    genAllStructs.push({ qName: prefixes.concat(decl.name.text), decl: decl })
+    const qname = prefixes.concat(decl.name.text).join('.')
+    if (genAllStructs.some(_ => _.qName === qname))
+        return
+
+    println("GENSTRUCT:\t" + qname)
+    genAllStructs.push({ qName: qname, decl: decl })
+    decl.members.forEach(member => {
+        switch (member.kind) {
+            case ts.SyntaxKind.PropertySignature:
+                const prop = member as ts.PropertySignature
+                gatherFrom(prop.type)
+                break
+            case ts.SyntaxKind.MethodSignature:
+                const method = member as ts.MethodSignature
+                gatherFrom(method.type, method.typeParameters)
+                method.parameters.forEach(_ => gatherFrom(_.type, method.typeParameters))
+                break
+            default:
+                throw (member.kind)
+        }
+    })
 }
 
 
