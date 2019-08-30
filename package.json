@@ -1,8 +1,16 @@
 {
-	"name": "vscode-appz",
+	"name": "metaleap.vscode-appz",
+	"author": {
+		"url": "http://metaleap.net",
+		"name": "metaleap"
+	},
+	"homepage": "http://github.com/metaleap/vscode-appz",
+	"repository": {
+		"url": "http://github.com/metaleap/vscode-appz"
+	},
 	"displayName": "VS Code Appz",
-	"description": "",
-	"version": "0.0.1",
+	"description": "Exposes Visual Studio Code as a GUI layer to your written-in-[Go|C#|Python|your-lang-here] programs (for that sweet spot where printf/TUIs no longer suffice but a full-fledged Native App or reactive SPA would be overkill).",
+	"version": "1.0.0",
 	"engines": {
 		"vscode": "^1.37.1"
 	},
@@ -10,14 +18,14 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onCommand:vsc_appz.main"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+				"command": "vsc_appz.main",
+				"title": "Appz"
 			}
 		]
 	},
