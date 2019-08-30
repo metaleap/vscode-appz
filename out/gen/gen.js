@@ -31,13 +31,15 @@ function main() {
             if ((!md) && (md = astnode) && (md.name.text !== modulename))
                 md = null;
         });
-        if (md) {
+        if (!md)
+            throw ("GONE FROM API:\tmodule `" + modulename + '`');
+        else {
             _curmod = [modulename, md.body];
             gatherAll(md.body, genApiSurface[modulename], modulename);
+            for (const gen of gens)
+                gen.gen(_curmod, genAllFuncs, genAllStructs);
         }
     }
-    for (const gen of gens)
-        gen.gen();
 }
 function gatherAll(astNode, childItems, ...prefixes) {
     for (var item of childItems)
@@ -124,7 +126,6 @@ function gatherStruct(decl, ...prefixes) {
     const qname = prefixes.concat(decl.name.text).join('.');
     if (genAllStructs.some(_ => _.qName === qname))
         return;
-    println("GENSTRUCT:\t" + qname);
     genAllStructs.push({ qName: qname, decl: decl });
     decl.members.forEach(member => {
         switch (member.kind) {

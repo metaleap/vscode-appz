@@ -43,14 +43,15 @@ function main() {
             if ((!md) && (md = astnode as ts.ModuleDeclaration) && (md.name.text !== modulename))
                 md = null
         })
-        if (md) {
+        if (!md)
+            throw ("GONE FROM API:\tmodule `" + modulename + '`')
+        else {
             _curmod = [modulename, md.body]
             gatherAll(md.body, genApiSurface[modulename], modulename)
+            for (const gen of gens)
+                gen.gen(_curmod, genAllFuncs, genAllStructs)
         }
     }
-
-    for (const gen of gens)
-        gen.gen()
 }
 
 function gatherAll(astNode: ts.Node, childItems: genApiMembers, ...prefixes: string[]) {
@@ -84,15 +85,8 @@ function gatherAll(astNode: ts.Node, childItems: genApiMembers, ...prefixes: str
 }
 
 const
-    genAllFuncs: {
-        qName: string
-        overload: number
-        decl: ts.FunctionDeclaration
-    }[] = [],
-    genAllStructs: {
-        qName: string
-        decl: ts.InterfaceDeclaration
-    }[] = []
+    genAllFuncs: gen_shared.GenFunc[] = [],
+    genAllStructs: gen_shared.GenStruct[] = []
 
 function gatherMember(member: ts.Node, overload: number, ...prefixes: string[]) {
     switch (member.kind) {
@@ -152,7 +146,6 @@ function gatherStruct(decl: ts.InterfaceDeclaration, ...prefixes: string[]) {
     if (genAllStructs.some(_ => _.qName === qname))
         return
 
-    println("GENSTRUCT:\t" + qname)
     genAllStructs.push({ qName: qname, decl: decl })
     decl.members.forEach(member => {
         switch (member.kind) {
