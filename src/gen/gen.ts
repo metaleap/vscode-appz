@@ -48,8 +48,9 @@ function main() {
                 module: [modulename, md.body], enums: [], structs: [], funcs: []
             }
             gatherAll(job, md.body, genApiSurface[modulename], modulename)
+            const prep = new gen_shared.GenPrep(job)
             for (const gen of gens)
-                gen.gen(job)
+                gen.gen(job, prep)
         }
     }
 }

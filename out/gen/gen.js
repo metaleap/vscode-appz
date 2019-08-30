@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_fs = require("fs");
 const ts = require("typescript");
+const gen_shared = require("./gen-shared");
 const gen_golang = require("./gen-golang");
 const gen_csharp = require("./gen-csharp");
 const gen_python = require("./gen-python");
@@ -38,8 +39,9 @@ function main() {
                 module: [modulename, md.body], enums: [], structs: [], funcs: []
             };
             gatherAll(job, md.body, genApiSurface[modulename], modulename);
+            const prep = new gen_shared.GenPrep(job);
             for (const gen of gens)
-                gen.gen(job);
+                gen.gen(job, prep);
         }
     }
 }
