@@ -14,15 +14,17 @@ const gens = [
 ];
 const genApiSurface = {
     'vscode': [
+        'TreeItemCollapsibleState',
         {
             'window': [
                 'showErrorMessage',
                 'showInformationMessage',
                 'showWarningMessage',
                 'showInputBox',
-            ]
-        }
-    ]
+            ],
+        },
+        'StatusBarAlignment',
+    ],
 };
 function main() {
     const dtsfile = ts.createSourceFile(filePathDts, node_fs.readFileSync(filePathDts).toString(), ts.ScriptTarget.ES2020, true, ts.ScriptKind.TS);
@@ -98,6 +100,12 @@ function gatherFrom(into, typeNode, typeParams = undefined) {
         case ts.SyntaxKind.ArrayType:
             gatherFrom(into, typeNode.elementType, typeParams);
             break;
+        case ts.SyntaxKind.TupleType:
+            typeNode.elementTypes.forEach(_ => gatherFrom(into, _, typeParams));
+            break;
+        case ts.SyntaxKind.UnionType:
+            typeNode.types.forEach(_ => gatherFrom(into, _, typeParams));
+            break;
         case ts.SyntaxKind.TypeReference:
             const tref = typeNode, tname = tref.typeName.getText();
             const tparam = (!typeParams) ? null : typeParams.find(_ => _.name.getText() === tname);
@@ -108,12 +116,6 @@ function gatherFrom(into, typeNode, typeParams = undefined) {
             }
             else if (tname !== 'Thenable' && tname !== 'CancellationToken')
                 gatherAll(into, into.module[1], [tname], into.module[0]);
-            break;
-        case ts.SyntaxKind.TupleType:
-            typeNode.elementTypes.forEach(_ => gatherFrom(into, _, typeParams));
-            break;
-        case ts.SyntaxKind.UnionType:
-            typeNode.types.forEach(_ => gatherFrom(into, _, typeParams));
             break;
         default:
             if (![ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(typeNode.kind))

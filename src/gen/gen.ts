@@ -21,15 +21,17 @@ type genApiMembers = (string | genApiMember)[]
 
 const genApiSurface: genApiMember = {
     'vscode': [
+        'TreeItemCollapsibleState',
         {
             'window': [
                 'showErrorMessage',
                 'showInformationMessage',
                 'showWarningMessage',
                 'showInputBox',
-            ]
-        }
-    ]
+            ],
+        },
+        'StatusBarAlignment',
+    ],
 }
 
 function main() {
@@ -109,6 +111,12 @@ function gatherFrom(into: gen_shared.GenJob, typeNode: ts.TypeNode, typeParams: 
         case ts.SyntaxKind.ArrayType:
             gatherFrom(into, (typeNode as ts.ArrayTypeNode).elementType, typeParams)
             break
+        case ts.SyntaxKind.TupleType:
+            (typeNode as ts.TupleTypeNode).elementTypes.forEach(_ => gatherFrom(into, _, typeParams))
+            break
+        case ts.SyntaxKind.UnionType:
+            (typeNode as ts.UnionTypeNode).types.forEach(_ => gatherFrom(into, _, typeParams))
+            break
         case ts.SyntaxKind.TypeReference:
             const tref = typeNode as ts.TypeReferenceNode,
                 tname = tref.typeName.getText()
@@ -119,12 +127,6 @@ function gatherFrom(into: gen_shared.GenJob, typeNode: ts.TypeNode, typeParams: 
                     gatherAll(into, into.module[1], [tnode.getText()], into.module[0])
             } else if (tname !== 'Thenable' && tname !== 'CancellationToken')
                 gatherAll(into, into.module[1], [tname], into.module[0])
-            break
-        case ts.SyntaxKind.TupleType:
-            (typeNode as ts.TupleTypeNode).elementTypes.forEach(_ => gatherFrom(into, _, typeParams))
-            break
-        case ts.SyntaxKind.UnionType:
-            (typeNode as ts.UnionTypeNode).types.forEach(_ => gatherFrom(into, _, typeParams))
             break
         default:
             if (![ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(typeNode.kind))
