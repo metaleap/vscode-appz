@@ -6,7 +6,7 @@ class GenPrep {
         this.enums = [];
         this.structs = [];
         this.interfaces = [];
-        this.job = job;
+        this.fromOrig = job;
         for (var enumjob of job.enums)
             this.addEnum(enumjob);
         for (var structjob of job.structs)
@@ -69,7 +69,7 @@ class GenPrep {
     }
     qName(memJob) {
         const qname = memJob.qName.split('.');
-        if ((!qname) || (!qname.length) || (qname.length < 2) || qname[0] !== this.job.module[0])
+        if ((!qname) || (!qname.length) || (qname.length < 2) || qname[0] !== this.fromOrig.module[0])
             throw (memJob.qName);
         return qname;
     }

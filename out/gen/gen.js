@@ -42,7 +42,7 @@ function main() {
             gatherAll(job, md.body, genApiSurface[modulename], modulename);
             const prep = new gen_shared.GenPrep(job);
             for (const gen of gens)
-                gen.gen(job, prep);
+                gen.gen(prep);
         }
     }
 }

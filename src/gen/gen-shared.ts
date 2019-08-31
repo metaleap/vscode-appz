@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
 
 export interface IGen {
-    gen(job: GenJob, prep: GenPrep): void
+    gen(prep: GenPrep): void
 }
 
 export interface GenJob {
@@ -54,10 +54,10 @@ export class GenPrep {
         }[]
     }[] = []
 
-    private readonly job: GenJob;
+    readonly fromOrig: GenJob;
 
     constructor(job: GenJob) {
-        this.job = job
+        this.fromOrig = job
         for (var enumjob of job.enums)
             this.addEnum(enumjob)
         for (var structjob of job.structs)
@@ -124,7 +124,7 @@ export class GenPrep {
 
     qName(memJob: GenJobNamed): string[] {
         const qname = memJob.qName.split('.')
-        if ((!qname) || (!qname.length) || (qname.length < 2) || qname[0] !== this.job.module[0])
+        if ((!qname) || (!qname.length) || (qname.length < 2) || qname[0] !== this.fromOrig.module[0])
             throw (memJob.qName)
         return qname
     }

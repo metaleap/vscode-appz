@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const gen_shared = require("./gen-shared");
 class Gen extends gen_shared.Gen {
-    gen(job, prep) {
-        console.log(`C#\t${this.outFilePathPref}${job.module[0]}${this.outFilePathSuff}`);
+    gen(prep) {
+        console.log(`C#\t${this.outFilePathPref}${prep.fromOrig.module[0]}${this.outFilePathSuff}`);
     }
 }
 exports.Gen = Gen;
