@@ -176,7 +176,7 @@ export class GenPrep {
                         throw (tparam)
                 } else if (tname === 'Thenable') {
                     const tprom: TypeSpecProm = {
-                        Then: tref.typeArguments.map(_ => this.typeSpec(_, tParams))
+                        Thens: tref.typeArguments.map(_ => this.typeSpec(_, tParams))
                     }
                     return tprom
                 } else
@@ -207,7 +207,7 @@ export interface TypeSpecFun {
 }
 
 export interface TypeSpecProm {
-    Then: TypeSpec[]
+    Thens: TypeSpec[]
 }
 
 export enum ScriptPrimType {

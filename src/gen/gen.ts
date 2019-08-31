@@ -11,9 +11,9 @@ import * as gen_python from './gen-python'
 const filePathDts = 'node_modules/@types/vscode/index.d.ts'
 
 const gens: gen_shared.IGen[] = [
-    new gen_golang.Gen('libs/golang/', '.gen.go'),
-    new gen_csharp.Gen('libs/csharp/', '.gen.cs'),
-    new gen_python.Gen('libs/csharp/', '.gen.py'),
+    new gen_golang.Gen('libs/go/', '.gen.go'),
+    new gen_csharp.Gen('libs/cs/', '.gen.cs'),
+    new gen_python.Gen('libs/py/', '.gen.py'),
 ]
 
 type genApiMember = { [_: string]: genApiMembers }
