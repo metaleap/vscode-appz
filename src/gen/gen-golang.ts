@@ -16,7 +16,7 @@ export class Gen extends gen_shared.Gen implements gen_shared.IGen {
         const it = prep.enums[idx]
         let src = "type " + it.name + " int\n\nconst (\n"
         for (const enumerant of it.enumerants)
-            src += enumerant.name + " " + it.name + " = " + enumerant.value + "\n"
+            src += "\t" + enumerant.name + " " + it.name + " = " + enumerant.value + "\n"
         return src + ")\n\n"
     }
 
