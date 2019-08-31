@@ -42,6 +42,7 @@ export class GenPrep {
         fields: {
             name: string
             typeSpec: TypeSpec
+            optional: boolean
         }[]
     }[] = []
 
@@ -100,7 +101,8 @@ export class GenPrep {
                 }
                 return {
                     name: _.name.getText(),
-                    typeSpec: tspec
+                    typeSpec: tspec,
+                    optional: _.questionToken ? true : false
                 }
             })
         })
@@ -224,5 +226,13 @@ export abstract class Gen {
 
     constructor(outFilePathPref: string, outFilePathSuff: string) {
         [this.outFilePathPref, this.outFilePathSuff] = [outFilePathPref, outFilePathSuff]
+    }
+
+    ensureCaseLo(name: string): string {
+        return name.charAt(0).toLowerCase() + name.slice(1)
+    }
+
+    ensureCaseUp(name: string): string {
+        return name.charAt(0).toUpperCase() + name.slice(1)
     }
 }

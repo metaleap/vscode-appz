@@ -47,7 +47,8 @@ class GenPrep {
                 }
                 return {
                     name: _.name.getText(),
-                    typeSpec: tspec
+                    typeSpec: tspec,
+                    optional: _.questionToken ? true : false
                 };
             })
         });
@@ -143,6 +144,12 @@ var ScriptPrimType;
 class Gen {
     constructor(outFilePathPref, outFilePathSuff) {
         [this.outFilePathPref, this.outFilePathSuff] = [outFilePathPref, outFilePathSuff];
+    }
+    ensureCaseLo(name) {
+        return name.charAt(0).toLowerCase() + name.slice(1);
+    }
+    ensureCaseUp(name) {
+        return name.charAt(0).toUpperCase() + name.slice(1);
     }
 }
 exports.Gen = Gen;
