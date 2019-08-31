@@ -27,7 +27,7 @@ const genApiSurface: genApiMember = {
                 'showErrorMessage',
                 'showInformationMessage',
                 'showWarningMessage',
-                'showInputBox',
+                // 'showInputBox',
             ],
         },
         'StatusBarAlignment',
@@ -125,7 +125,9 @@ function gatherFrom(into: gen_shared.GenJob, typeNode: ts.TypeNode, typeParams: 
                 const tnode = ts.getEffectiveConstraintOfTypeParameter(tparam)
                 if (tnode)
                     gatherAll(into, into.module[1], [tnode.getText()], into.module[0])
-            } else if (tname !== 'Thenable' && tname !== 'CancellationToken')
+            } else if (tname === 'Thenable')
+                tref.typeArguments.forEach(_ => gatherFrom(into, _, typeParams))
+            else
                 gatherAll(into, into.module[1], [tname], into.module[0])
             break
         default:

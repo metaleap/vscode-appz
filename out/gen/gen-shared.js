@@ -118,6 +118,12 @@ class GenPrep {
                     else
                         throw (tparam);
                 }
+                else if (tname === 'Thenable') {
+                    const tprom = {
+                        Then: tref.typeArguments.map(_ => this.typeSpec(_, tParams))
+                    };
+                    return tprom;
+                }
                 else
                     return tname;
             default:

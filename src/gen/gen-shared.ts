@@ -174,6 +174,11 @@ export class GenPrep {
                         return this.typeSpec(tnode, tParams)
                     else
                         throw (tparam)
+                } else if (tname === 'Thenable') {
+                    const tprom: TypeSpecProm = {
+                        Then: tref.typeArguments.map(_ => this.typeSpec(_, tParams))
+                    }
+                    return tprom
                 } else
                     return tname
             default:
@@ -182,7 +187,7 @@ export class GenPrep {
     }
 }
 
-export type TypeSpec = ScriptPrimType | null | string | TypeSpecArr | TypeSpecTup | TypeSpecSum | TypeSpecFun
+export type TypeSpec = ScriptPrimType | null | string | TypeSpecArr | TypeSpecTup | TypeSpecSum | TypeSpecFun | TypeSpecProm
 
 export interface TypeSpecArr {
     ArrOf: TypeSpec
@@ -199,6 +204,10 @@ export interface TypeSpecTup {
 export interface TypeSpecFun {
     From: TypeSpec[]
     To: TypeSpec
+}
+
+export interface TypeSpecProm {
+    Then: TypeSpec[]
 }
 
 export enum ScriptPrimType {
