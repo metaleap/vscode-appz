@@ -13,6 +13,7 @@ class GenPrep {
             this.addStruct(structjob);
         for (var funcjob of job.funcs)
             this.addFunc(funcjob);
+        this.interfaces.forEach(_ => _.methods.forEach(method => method.args = method.args.filter(arg => arg.typeSpec !== 'CancellationToken')));
         console.log(JSON.stringify({
             e: this.enums,
             s: this.structs,
@@ -63,9 +64,10 @@ class GenPrep {
             name: qname[qname.length - 1] + ((funcJob.overload > 0) ? funcJob.overload : ''),
             args: funcJob.decl.parameters.map(_ => ({
                 name: _.name.getText(),
-                typeSpec: this.typeSpec(_.type, funcJob.decl.typeParameters)
+                typeSpec: this.typeSpec(_.type, funcJob.decl.typeParameters),
+                optional: _.questionToken ? true : false
             })),
-            retTypeSpec: this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters)
+            ret: this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters)
         });
     }
     qName(memJob) {
@@ -145,11 +147,36 @@ class Gen {
     constructor(outFilePathPref, outFilePathSuff) {
         [this.outFilePathPref, this.outFilePathSuff] = [outFilePathPref, outFilePathSuff];
     }
-    ensureCaseLo(name) {
+    caseLo(name) {
         return name.charAt(0).toLowerCase() + name.slice(1);
     }
-    ensureCaseUp(name) {
+    caseUp(name) {
         return name.charAt(0).toUpperCase() + name.slice(1);
     }
 }
 exports.Gen = Gen;
+function typeArrOf(typeSpec) {
+    const tarr = typeSpec;
+    return (tarr && tarr.ArrOf) ? tarr.ArrOf : null;
+}
+exports.typeArrOf = typeArrOf;
+function typeTupOf(typeSpec) {
+    const ttup = typeSpec;
+    return (ttup && ttup.TupOf) ? ttup.TupOf : null;
+}
+exports.typeTupOf = typeTupOf;
+function typeSumOf(typeSpec) {
+    const tsum = typeSpec;
+    return (tsum && tsum.SumOf) ? tsum.SumOf : null;
+}
+exports.typeSumOf = typeSumOf;
+function typeProm(typeSpec) {
+    const tprom = typeSpec;
+    return (tprom && tprom.Thens) ? tprom.Thens : null;
+}
+exports.typeProm = typeProm;
+function typeFun(typeSpec) {
+    const tfun = typeSpec;
+    return (tfun && tfun.From) ? [tfun.From, tfun.To] : null;
+}
+exports.typeFun = typeFun;

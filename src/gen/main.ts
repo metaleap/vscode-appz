@@ -1,7 +1,7 @@
 import * as node_fs from 'fs'
 import * as ts from 'typescript'
 
-import * as gen_shared from './gen-shared'
+import * as gen from './gen-shared'
 import * as gen_golang from './gen-golang'
 import * as gen_csharp from './gen-csharp'
 import * as gen_python from './gen-python'
@@ -10,7 +10,7 @@ import * as gen_python from './gen-python'
 
 const filePathDts = 'node_modules/@types/vscode/index.d.ts'
 
-const gens: gen_shared.IGen[] = [
+const gens: gen.IGen[] = [
     new gen_golang.Gen('libs/go/', '.gen.go'),
     new gen_csharp.Gen('libs/cs/', '.gen.cs'),
     new gen_python.Gen('libs/py/', '.gen.py'),
@@ -21,16 +21,14 @@ type genApiMembers = (string | genApiMember)[]
 
 const genApiSurface: genApiMember = {
     'vscode': [
-        'TreeItemCollapsibleState',
         {
             'window': [
                 'showErrorMessage',
                 'showInformationMessage',
                 'showWarningMessage',
-                // 'showInputBox',
+                'showInputBox',
             ],
         },
-        'StatusBarAlignment',
     ],
 }
 
@@ -46,18 +44,18 @@ function main() {
         if (!md)
             throw ("GONE FROM API:\tmodule `" + modulename + '`')
         else {
-            const job: gen_shared.GenJob = {
+            const job: gen.GenJob = {
                 module: [modulename, md.body], enums: [], structs: [], funcs: []
             }
             gatherAll(job, md.body, genApiSurface[modulename], modulename)
-            const prep = new gen_shared.GenPrep(job)
+            const prep = new gen.GenPrep(job)
             for (const gen of gens)
                 gen.gen(prep)
         }
     }
 }
 
-function gatherAll(into: gen_shared.GenJob, astNode: ts.Node, childItems: genApiMembers, ...prefixes: string[]) {
+function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers, ...prefixes: string[]) {
     for (var item of childItems)
         if (typeof item !== 'string') {
             for (var subns in item) {
@@ -87,7 +85,7 @@ function gatherAll(into: gen_shared.GenJob, astNode: ts.Node, childItems: genApi
         }
 }
 
-function gatherMember(into: gen_shared.GenJob, member: ts.Node, overload: number, ...prefixes: string[]) {
+function gatherMember(into: gen.GenJob, member: ts.Node, overload: number, ...prefixes: string[]) {
     switch (member.kind) {
         case ts.SyntaxKind.EnumDeclaration:
             gatherEnum(into, member as ts.EnumDeclaration, ...prefixes)
@@ -102,11 +100,11 @@ function gatherMember(into: gen_shared.GenJob, member: ts.Node, overload: number
             (member as ts.TupleTypeNode).elementTypes.forEach(_ => gatherFrom(into, _))
             break
         default:
-            throw (member.kind)
+            throw (member.kind + '\t' + member.getText())
     }
 }
 
-function gatherFrom(into: gen_shared.GenJob, typeNode: ts.TypeNode, typeParams: ts.NodeArray<ts.TypeParameterDeclaration> = undefined) {
+function gatherFrom(into: gen.GenJob, typeNode: ts.TypeNode, typeParams: ts.NodeArray<ts.TypeParameterDeclaration> = undefined) {
     switch (typeNode.kind) {
         case ts.SyntaxKind.ArrayType:
             gatherFrom(into, (typeNode as ts.ArrayTypeNode).elementType, typeParams)
@@ -127,16 +125,16 @@ function gatherFrom(into: gen_shared.GenJob, typeNode: ts.TypeNode, typeParams: 
                     gatherAll(into, into.module[1], [tnode.getText()], into.module[0])
             } else if (tname === 'Thenable')
                 tref.typeArguments.forEach(_ => gatherFrom(into, _, typeParams))
-            else
+            else if (tname !== 'CancellationToken')
                 gatherAll(into, into.module[1], [tname], into.module[0])
             break
         default:
             if (![ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(typeNode.kind))
-                throw (typeNode.kind)
+                throw (typeNode.kind + '\t' + typeNode.getText())
     }
 }
 
-function gatherFunc(into: gen_shared.GenJob, decl: ts.FunctionDeclaration, overload: number, ...prefixes: string[]) {
+function gatherFunc(into: gen.GenJob, decl: ts.FunctionDeclaration, overload: number, ...prefixes: string[]) {
     const qname = prefixes.concat(decl.name.text).join('.')
     if (into.funcs.some(_ => _.qName === qname && _.overload === overload))
         return
@@ -145,13 +143,13 @@ function gatherFunc(into: gen_shared.GenJob, decl: ts.FunctionDeclaration, overl
     gatherFrom(into, decl.type, decl.typeParameters)
 }
 
-function gatherEnum(into: gen_shared.GenJob, decl: ts.EnumDeclaration, ...prefixes: string[]) {
+function gatherEnum(into: gen.GenJob, decl: ts.EnumDeclaration, ...prefixes: string[]) {
     const qname = prefixes.concat(decl.name.text).join('.')
     if (!into.enums.some(_ => _.qName === qname))
         into.enums.push({ qName: qname, decl: decl })
 }
 
-function gatherStruct(into: gen_shared.GenJob, decl: ts.InterfaceDeclaration, ...prefixes: string[]) {
+function gatherStruct(into: gen.GenJob, decl: ts.InterfaceDeclaration, ...prefixes: string[]) {
     const qname = prefixes.concat(decl.name.text).join('.')
     if (into.structs.some(_ => _.qName === qname))
         return
@@ -168,8 +166,13 @@ function gatherStruct(into: gen_shared.GenJob, decl: ts.InterfaceDeclaration, ..
                 gatherFrom(into, method.type, method.typeParameters)
                 method.parameters.forEach(_ => gatherFrom(into, _.type, method.typeParameters))
                 break
+            case ts.SyntaxKind.CallSignature:
+                const sig = member as ts.CallSignatureDeclaration
+                gatherFrom(into, sig.type, sig.typeParameters)
+                sig.parameters.forEach(_ => gatherFrom(into, _.type, sig.typeParameters))
+                break
             default:
-                throw (member.kind)
+                throw (member.kind + '\t' + member.getText())
         }
     })
 }

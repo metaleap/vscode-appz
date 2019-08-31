@@ -1,10 +1,10 @@
 import * as node_fs from 'fs'
 
-import * as gen_shared from './gen-shared'
+import * as gen from './gen-shared'
 
-export class Gen extends gen_shared.Gen implements gen_shared.IGen {
+export class Gen extends gen.Gen implements gen.IGen {
 
-    gen(prep: gen_shared.GenPrep) {
+    gen(prep: gen.GenPrep) {
         const pkgname = prep.fromOrig.module[0]
         let src: string = "package " + pkgname + "\n\n"
         for (let i = 0; i < prep.enums.length; i++)
@@ -16,36 +16,90 @@ export class Gen extends gen_shared.Gen implements gen_shared.IGen {
         node_fs.writeFileSync(`${this.outFilePathPref}${pkgname}${this.outFilePathSuff}`, src)
     }
 
-    genEnum(prep: gen_shared.GenPrep, idx: number): string {
+    genEnum(prep: gen.GenPrep, idx: number): string {
         const it = prep.enums[idx]
-        const name = this.ensureCaseUp(it.name)
+        const name = this.caseUp(it.name)
         let src = "type " + name + " int\n\nconst (\n"
         for (const enumerant of it.enumerants)
-            src += "\t" + name + this.ensureCaseUp(enumerant.name) + " " + name + " = " + enumerant.value + "\n"
+            src += "\t" + name + this.caseUp(enumerant.name) + " " + name + " = " + enumerant.value + "\n"
         return src + ")\n\n"
     }
 
-    genStruct(prep: gen_shared.GenPrep, idx: number): string {
+    genStruct(prep: gen.GenPrep, idx: number): string {
         const it = prep.structs[idx]
-        let src = "type " + this.ensureCaseUp(it.name) + " struct {\n"
+        let src = "type " + this.caseUp(it.name) + " struct {\n"
         for (const field of it.fields)
-            src += "\t" + this.ensureCaseUp(field.name) + " " + this.typeSpec(field.typeSpec) + " `json:\"" + field.name + (field.optional ? ",omitempty" : "") + "\"`\n"
+            src += "\t" + this.caseUp(field.name) + " " + this.typeSpec(field.typeSpec)
+                + ((gen.typeFun(field.typeSpec)) ? " `json:\"-\"`" : (" `json:\"" + field.name + (field.optional ? ",omitempty" : "") + "\"`"))
+                + "\n"
         return src + "}\n\n"
     }
 
-    genInterface(prep: gen_shared.GenPrep, idx: number): string {
+    genInterface(prep: gen.GenPrep, idx: number): string {
         const it = prep.interfaces[idx]
-        let src = "type " + this.ensureCaseUp(it.name) + " interface {\n"
+        let src = "type " + this.caseUp(it.name) + " interface {\n"
         for (const method of it.methods) {
-            src += "\t" + this.ensureCaseUp(method.name) + "("
+            src += "\t" + this.caseUp(method.name) + "("
             for (const arg of method.args)
-                src += this.ensureCaseLo(arg.name) + " " + this.typeSpec(arg.typeSpec) + ", "
-            src += ")\n"
+                src += this.caseLo(arg.name) + " " + this.typeSpec(arg.typeSpec) + ", "
+            src += ")" + (method.ret ? (" " + this.typeSpec(method.ret)) : "") + "\n"
         }
         return src + "}\n\n"
     }
 
-    typeSpec(from: gen_shared.TypeSpec): string {
+    typeSpec(from: gen.TypeSpec): string {
+        if (!from)
+            return ""
+
+        if (from === gen.ScriptPrimType.Boolean)
+            return "bool"
+        if (from === gen.ScriptPrimType.String)
+            return "string"
+        if (from === gen.ScriptPrimType.Number)
+            return "int"
+        if (from === gen.ScriptPrimType.Null || from === gen.ScriptPrimType.Undefined)
+            throw (from)
+
+        const tarr = gen.typeArrOf(from)
+        if (tarr)
+            return "[]" + this.typeSpec(tarr)
+
+        const tfun = gen.typeFun(from)
+        if (tfun && tfun.length && tfun[0])
+            return "func(" + tfun[0].map(_ => this.typeSpec(_)).join(", ") + ") " + this.typeSpec(tfun[1])
+
+        let ttup = gen.typeTupOf(from)
+        if (ttup && ttup.length) {
+            let tname: string = null
+            for (const t of ttup) {
+                const tn = this.typeSpec(t)
+                if (!tname)
+                    tname = tn
+                else if (tn !== tname) {
+                    tname = undefined
+                    break
+                }
+            }
+            return "[]" + (tname ? tname : "interface{}")
+        }
+
+        let tsum = gen.typeSumOf(from)
+        if (tsum && tsum.length) {
+            tsum = tsum.filter(_ =>
+                _ !== gen.ScriptPrimType.Null && _ !== gen.ScriptPrimType.Undefined && !gen.typeProm(_))
+            return tsum.map(_ => this.typeSpec(_)).join('|')
+        }
+
+        const tprom = gen.typeProm(from)
+        if (tprom && tprom.length)
+            if (tprom.length > 1)
+                throw (from)
+            else
+                return "func(func(" + this.typeSpec(tprom[0]) + "))"
+
+        if (typeof from === 'string')
+            return from
+
         return "interface{}"
     }
 

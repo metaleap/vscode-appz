@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_fs = require("fs");
 const ts = require("typescript");
-const gen_shared = require("./gen-shared");
+const gen = require("./gen-shared");
 const gen_golang = require("./gen-golang");
 const gen_csharp = require("./gen-csharp");
 const gen_python = require("./gen-python");
@@ -14,15 +14,14 @@ const gens = [
 ];
 const genApiSurface = {
     'vscode': [
-        'TreeItemCollapsibleState',
         {
             'window': [
                 'showErrorMessage',
                 'showInformationMessage',
                 'showWarningMessage',
+                'showInputBox',
             ],
         },
-        'StatusBarAlignment',
     ],
 };
 function main() {
@@ -40,7 +39,7 @@ function main() {
                 module: [modulename, md.body], enums: [], structs: [], funcs: []
             };
             gatherAll(job, md.body, genApiSurface[modulename], modulename);
-            const prep = new gen_shared.GenPrep(job);
+            const prep = new gen.GenPrep(job);
             for (const gen of gens)
                 gen.gen(prep);
         }
@@ -91,7 +90,7 @@ function gatherMember(into, member, overload, ...prefixes) {
             member.elementTypes.forEach(_ => gatherFrom(into, _));
             break;
         default:
-            throw (member.kind);
+            throw (member.kind + '\t' + member.getText());
     }
 }
 function gatherFrom(into, typeNode, typeParams = undefined) {
@@ -115,12 +114,12 @@ function gatherFrom(into, typeNode, typeParams = undefined) {
             }
             else if (tname === 'Thenable')
                 tref.typeArguments.forEach(_ => gatherFrom(into, _, typeParams));
-            else
+            else if (tname !== 'CancellationToken')
                 gatherAll(into, into.module[1], [tname], into.module[0]);
             break;
         default:
             if (![ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(typeNode.kind))
-                throw (typeNode.kind);
+                throw (typeNode.kind + '\t' + typeNode.getText());
     }
 }
 function gatherFunc(into, decl, overload, ...prefixes) {
@@ -152,8 +151,13 @@ function gatherStruct(into, decl, ...prefixes) {
                 gatherFrom(into, method.type, method.typeParameters);
                 method.parameters.forEach(_ => gatherFrom(into, _.type, method.typeParameters));
                 break;
+            case ts.SyntaxKind.CallSignature:
+                const sig = member;
+                gatherFrom(into, sig.type, sig.typeParameters);
+                sig.parameters.forEach(_ => gatherFrom(into, _.type, sig.typeParameters));
+                break;
             default:
-                throw (member.kind);
+                throw (member.kind + '\t' + member.getText());
         }
     });
 }

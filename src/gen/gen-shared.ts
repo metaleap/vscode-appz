@@ -50,8 +50,12 @@ export class GenPrep {
         name: string
         methods: {
             name: string
-            args: { name: string, typeSpec: TypeSpec }[]
-            retTypeSpec: TypeSpec
+            args: {
+                name: string,
+                typeSpec: TypeSpec,
+                optional: boolean
+            }[]
+            ret: TypeSpec
         }[]
     }[] = []
 
@@ -65,6 +69,10 @@ export class GenPrep {
             this.addStruct(structjob)
         for (var funcjob of job.funcs)
             this.addFunc(funcjob)
+        this.interfaces.forEach(_ => _.methods.forEach(method =>
+            method.args = method.args.filter(arg =>
+                arg.typeSpec !== 'CancellationToken')
+        ))
         console.log(JSON.stringify({
             e: this.enums,
             s: this.structs,
@@ -118,9 +126,10 @@ export class GenPrep {
             name: qname[qname.length - 1] + ((funcJob.overload > 0) ? funcJob.overload : ''),
             args: funcJob.decl.parameters.map(_ => ({
                 name: _.name.getText(),
-                typeSpec: this.typeSpec(_.type, funcJob.decl.typeParameters)
+                typeSpec: this.typeSpec(_.type, funcJob.decl.typeParameters),
+                optional: _.questionToken ? true : false
             })),
-            retTypeSpec: this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters)
+            ret: this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters)
         })
     }
 
@@ -189,7 +198,7 @@ export class GenPrep {
     }
 }
 
-export type TypeSpec = ScriptPrimType | null | string | TypeSpecArr | TypeSpecTup | TypeSpecSum | TypeSpecFun | TypeSpecProm
+export type TypeSpec = ScriptPrimType | string | TypeSpecArr | TypeSpecTup | TypeSpecSum | TypeSpecFun | TypeSpecProm
 
 export interface TypeSpecArr {
     ArrOf: TypeSpec
@@ -228,11 +237,37 @@ export abstract class Gen {
         [this.outFilePathPref, this.outFilePathSuff] = [outFilePathPref, outFilePathSuff]
     }
 
-    ensureCaseLo(name: string): string {
+    caseLo(name: string): string {
         return name.charAt(0).toLowerCase() + name.slice(1)
     }
 
-    ensureCaseUp(name: string): string {
+    caseUp(name: string): string {
         return name.charAt(0).toUpperCase() + name.slice(1)
     }
+
+}
+
+export function typeArrOf(typeSpec: TypeSpec): TypeSpec {
+    const tarr = typeSpec as TypeSpecArr
+    return (tarr && tarr.ArrOf) ? tarr.ArrOf : null
+}
+
+export function typeTupOf(typeSpec: TypeSpec): TypeSpec[] {
+    const ttup = typeSpec as TypeSpecTup
+    return (ttup && ttup.TupOf) ? ttup.TupOf : null
+}
+
+export function typeSumOf(typeSpec: TypeSpec): TypeSpec[] {
+    const tsum = typeSpec as TypeSpecSum
+    return (tsum && tsum.SumOf) ? tsum.SumOf : null
+}
+
+export function typeProm(typeSpec: TypeSpec): TypeSpec[] {
+    const tprom = typeSpec as TypeSpecProm
+    return (tprom && tprom.Thens) ? tprom.Thens : null
+}
+
+export function typeFun(typeSpec: TypeSpec): [TypeSpec[], TypeSpec] {
+    const tfun = typeSpec as TypeSpecFun
+    return (tfun && tfun.From) ? [tfun.From, tfun.To] : null
 }

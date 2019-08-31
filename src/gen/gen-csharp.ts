@@ -1,8 +1,8 @@
-import * as gen_shared from './gen-shared'
+import * as gen from './gen-shared'
 
-export class Gen extends gen_shared.Gen implements gen_shared.IGen {
+export class Gen extends gen.Gen implements gen.IGen {
 
-    gen(prep: gen_shared.GenPrep) {
+    gen(prep: gen.GenPrep) {
         console.log(`C#\t${this.outFilePathPref}${prep.fromOrig.module[0]}${this.outFilePathSuff}`)
     }
 
