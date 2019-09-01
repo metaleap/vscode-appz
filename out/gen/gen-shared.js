@@ -117,6 +117,8 @@ class GenPrep {
             return rfun;
         }
         switch (tNode.kind) {
+            case ts.SyntaxKind.AnyKeyword:
+                return ScriptPrimType.Any;
             case ts.SyntaxKind.StringKeyword:
                 return ScriptPrimType.String;
             case ts.SyntaxKind.NumberKeyword:

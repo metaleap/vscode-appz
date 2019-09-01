@@ -51,6 +51,8 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (!from)
             return ""
 
+        if (from === gen.ScriptPrimType.Any)
+            return "interface{}"
         if (from === gen.ScriptPrimType.Boolean)
             return "bool"
         if (from === gen.ScriptPrimType.String)

@@ -129,7 +129,7 @@ function gatherFrom(into: gen.GenJob, typeNode: ts.TypeNode, typeParams: ts.Node
                 gatherAll(into, into.module[1], [tname], into.module[0])
             break
         default:
-            if (![ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(typeNode.kind))
+            if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(typeNode.kind))
                 throw (typeNode.kind + '\t' + typeNode.getText())
     }
 }
