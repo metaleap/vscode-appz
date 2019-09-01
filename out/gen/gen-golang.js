@@ -83,7 +83,7 @@ class Gen extends gen.Gen {
             if (tprom.length > 1)
                 throw (from);
             else
-                return "func(func(" + this.typeSpec(tprom[0]) + "))";
+                return "func(" + this.typeSpec(tprom[0]) + ")";
         if (typeof from === 'string')
             return from;
         return "interface{}";

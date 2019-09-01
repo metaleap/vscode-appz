@@ -13,7 +13,36 @@ class GenPrep {
             this.addStruct(structjob);
         for (var funcjob of job.funcs)
             this.addFunc(funcjob);
-        this.interfaces.forEach(_ => _.methods.forEach(method => method.args = method.args.filter(arg => arg.typeSpec !== 'CancellationToken')));
+        this.structs.forEach(struct => {
+            let isarg = false, isret = false;
+            this.interfaces.forEach(iface => iface.methods.forEach(method => {
+                if (typeRefersTo(method.ret, struct.name))
+                    isret = true;
+                method.args.forEach(arg => {
+                    if (typeRefersTo(arg.typeSpec, struct.name))
+                        isarg = true;
+                });
+            }));
+            if (isarg && isret) {
+                const fieldname = pickName(['tag', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields);
+                if (!fieldname)
+                    throw (struct);
+                struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Any });
+            }
+        });
+        this.interfaces.forEach(iface => iface.methods.forEach(method => {
+            method.args = method.args.filter(arg => arg.typeSpec !== 'CancellationToken');
+            if (method.ret) {
+                const tprom = typeProm(method.ret);
+                if (tprom && tprom.length) {
+                    const argname = pickName(['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args);
+                    if (!argname)
+                        throw (method);
+                    method.args.push({ name: argname, typeSpec: method.ret, isFromRetThenable: true, optional: true, });
+                    method.ret = null;
+                }
+            }
+        }));
         console.log(JSON.stringify({
             e: this.enums,
             s: this.structs,
@@ -49,7 +78,8 @@ class GenPrep {
                 return {
                     name: _.name.getText(),
                     typeSpec: tspec,
-                    optional: _.questionToken ? true : false
+                    optional: _.questionToken ? true : false,
+                    isExtBaggage: false,
                 };
             })
         });
@@ -65,7 +95,8 @@ class GenPrep {
             args: funcJob.decl.parameters.map(_ => ({
                 name: _.name.getText(),
                 typeSpec: this.typeSpec(_.type, funcJob.decl.typeParameters),
-                optional: _.questionToken ? true : false
+                optional: _.questionToken ? true : false,
+                isFromRetThenable: false,
             })),
             ret: this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters)
         });
@@ -137,6 +168,7 @@ class GenPrep {
 exports.GenPrep = GenPrep;
 var ScriptPrimType;
 (function (ScriptPrimType) {
+    ScriptPrimType[ScriptPrimType["Any"] = 121] = "Any";
     ScriptPrimType[ScriptPrimType["String"] = 139] = "String";
     ScriptPrimType[ScriptPrimType["Number"] = 136] = "Number";
     ScriptPrimType[ScriptPrimType["Boolean"] = 124] = "Boolean";
@@ -180,3 +212,29 @@ function typeFun(typeSpec) {
     return (tfun && tfun.From) ? [tfun.From, tfun.To] : null;
 }
 exports.typeFun = typeFun;
+function typeRefersTo(typeSpec, name) {
+    const tarr = typeArrOf(typeSpec);
+    if (tarr)
+        return typeRefersTo(tarr, name);
+    const ttup = typeTupOf(typeSpec);
+    if (ttup)
+        return ttup.some(_ => typeRefersTo(_, name));
+    const tsum = typeSumOf(typeSpec);
+    if (tsum)
+        return tsum.some(_ => typeRefersTo(_, name));
+    const tfun = typeFun(typeSpec);
+    if (tfun)
+        return typeRefersTo(tfun[1], name) || tfun[0].some(_ => typeRefersTo(_, name));
+    const tprom = typeProm(typeSpec);
+    if (tprom)
+        return tprom.some(_ => typeRefersTo(_, name));
+    return typeSpec === name;
+}
+exports.typeRefersTo = typeRefersTo;
+function pickName(pickFrom, dontCollideWith) {
+    for (const name of pickFrom)
+        if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
+            return name;
+    return undefined;
+}
+exports.pickName = pickName;
