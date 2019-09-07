@@ -61,15 +61,18 @@ export class GenPrep {
         }[]
     }[] = []
 
-    readonly fromOrig: GenJob;
+    readonly fromOrig: GenJob
+    state: {
+        genDecoders: { [_: string]: boolean }
+    }
 
     constructor(job: GenJob) {
         this.fromOrig = job
-        for (var enumjob of job.enums)
+        for (const enumjob of job.enums)
             this.addEnum(enumjob)
-        for (var structjob of job.structs)
+        for (const structjob of job.structs)
             this.addStruct(structjob)
-        for (var funcjob of job.funcs)
+        for (const funcjob of job.funcs)
             this.addFunc(funcjob)
         this.structs.forEach(struct => {
             let isarg = false, isret = false
@@ -82,7 +85,7 @@ export class GenPrep {
                 })
             }))
             if (isarg && isret) {
-                const fieldname = pickName(['tag', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields)
+                const fieldname = pickName(true, ['tag', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields)
                 if (!fieldname)
                     throw (struct)
                 struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Any })
@@ -92,7 +95,7 @@ export class GenPrep {
             method.args = method.args.filter(arg =>
                 arg.typeSpec !== 'CancellationToken')
             if (method.ret) {
-                const argname = pickName(['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args)
+                const argname = pickName(false, ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args)
                 if (!argname)
                     throw (method)
                 method.args.push({ name: argname, typeSpec: method.ret, isFromRetThenable: true, optional: true, })
@@ -322,10 +325,11 @@ export function typeRefersTo(typeSpec: TypeSpec, name: string): boolean {
     return typeSpec === name
 }
 
-export function pickName(pickFrom: string[], dontCollideWith: { name: string }[]): string {
-    for (const name of pickFrom)
-        if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
-            return name
+export function pickName(forcePrefix: boolean, pickFrom: string[], dontCollideWith: { name: string }[]): string {
+    if (!forcePrefix)
+        for (const name of pickFrom)
+            if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
+                return name
     for (const pref of ['appz', 'vscAppz'])
         for (let name of pickFrom) {
             name = pref + name.charAt(0).toUpperCase() + name.slice(1)

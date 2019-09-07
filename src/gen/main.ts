@@ -49,17 +49,19 @@ function main() {
             }
             gatherAll(job, md.body, genApiSurface[modulename], modulename)
             const prep = new gen.GenPrep(job)
-            for (const gen of gens)
+            for (const gen of gens) {
+                prep.state = { genDecoders: {} }
                 gen.gen(prep)
+            }
         }
     }
 }
 
 function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers, ...prefixes: string[]) {
-    for (var item of childItems)
+    for (const item of childItems)
         if (typeof item !== 'string') {
-            for (var subns in item) {
-                var ns: ts.NamespaceDeclaration = undefined
+            for (const subns in item) {
+                let ns: ts.NamespaceDeclaration = undefined
                 astNode.forEachChild(n => {
                     if ((!ns) && (ns = n as ts.NamespaceDeclaration)
                         && (!(ns.name && ns.name.text === subns)))
@@ -71,10 +73,10 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                     gatherAll(into, ns.body, item[subns], ...prefixes.concat(subns))
             }
         } else {
-            var members: ts.Node[] = []
+            const members: ts.Node[] = []
             astNode.forEachChild(n => {
-                var decl: ts.DeclarationStatement
-                if ((decl = n as ts.DeclarationStatement) && decl.name && decl.name.text === item)
+                const decl = n as ts.DeclarationStatement
+                if (decl && decl.name && decl.name.text === item)
                     members.push(n)
             })
             if (!members.length)

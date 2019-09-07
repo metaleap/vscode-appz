@@ -16,6 +16,17 @@ class Gen extends gen.Gen {
             src += this.genStruct(prep, i);
         for (let i = 0; i < prep.interfaces.length; i++)
             src += this.genInterface(prep, i);
+        {
+            let anydec = true;
+            while (anydec) {
+                anydec = false;
+                for (const name in prep.state.genDecoders)
+                    if (anydec = prep.state.genDecoders[name]) {
+                        src += this.genPopulate(prep, name);
+                        prep.state.genDecoders[name] = false;
+                    }
+            }
+        }
         node_fs.writeFileSync(`${this.outFilePathPref}${pkgname}${this.outFilePathSuff}`, src);
     }
     genEnum(prep, idx) {
@@ -41,18 +52,18 @@ class Gen extends gen.Gen {
         for (const method of it.methods) {
             src += "\t" + this.caseUp(method.name) + "(";
             for (const arg of method.args)
-                src += this.caseLo(arg.name) + " " + this.typeSpecNullable(arg.typeSpec, arg.optional) + ", ";
+                src += this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional, 'string') + ", ";
             src += ")" + (method.ret ? (" " + this.typeSpec(method.ret)) : "") + "\n";
         }
         src += "}\n\n";
         for (const method of it.methods) {
             src += "func (me *impl) " + this.caseUp(method.name) + "(";
             for (const arg of method.args)
-                src += this.caseLo(arg.name) + " " + this.typeSpecNullable(arg.typeSpec, arg.optional) + ", ";
+                src += this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional, 'string') + ", ";
             src += ")" + (method.ret ? (" " + this.typeSpec(method.ret)) : "") + "{\n";
             const numargs = method.args.filter(_ => !_.isFromRetThenable).length;
             src += `\tmsg := msgOutgoing{Ns: "${it.name}", Name: "${method.name}", Payload: make(map[string]interface{}, ${numargs})}\n`;
-            for (var arg of method.args)
+            for (const arg of method.args)
                 if (!arg.isFromRetThenable)
                     src += `\tmsg.Payload["${arg.name}"] = ${this.caseLo(arg.name)}\n`;
             src += `\n\tvar on func(interface{}, bool)\n`;
@@ -66,7 +77,7 @@ class Gen extends gen.Gen {
                 src += `\t\t\tif isFail {\n`;
                 src += `\t\t\t\tfailure = payload\n`;
                 src += `\t\t\t} else {\n`;
-                src += `\t\t\t\tresult = payload.(${tret})\n`;
+                src += this.genDecodeFromAny(prep, "\t\t\t\t", "payload", "result", tret, "failure");
                 src += `\t\t\t}\n`;
                 src += `\t\t\t${laname}(result, failure)\n`;
                 src += `\t\t}\n`;
@@ -77,12 +88,59 @@ class Gen extends gen.Gen {
         }
         return src;
     }
-    typeSpecNullable(from, ensureNullable) {
+    genDecodeFromAny(prep, indent, srcName, dstName, dstTypeGo, errName) {
+        if (dstTypeGo === 'interface{}')
+            return `${indent}${dstName} = ${srcName}\n`;
+        let src = `${indent}var ok bool\n`;
+        if (prep.structs.some(_ => _.name === dstTypeGo)) {
+            prep.state.genDecoders[dstTypeGo] = true;
+            src += `${indent}ok = ${dstName}.populateFrom(${srcName})\n`;
+        }
+        else {
+            src += `${indent}${dstName}, ok = ${srcName}.(${dstTypeGo})\n`;
+        }
+        src += `${indent}if !ok {\n`;
+        if (errName)
+            src += `${indent}\t${errName} = ${srcName}\n`;
+        else
+            src += `${indent}\treturn false\n`;
+        src += `${indent}}\n`;
+        return src;
+    }
+    genPopulate(prep, typeName) {
+        const struct = prep.structs.find(_ => _.name === typeName);
+        if (!struct)
+            throw (typeName);
+        let src = `func (me *${typeName}) populateFrom(payload interface{}) bool {\n`;
+        src += "\tm, ok := payload.(map[string]interface{})\n";
+        src += "\tif ok && m != nil {\n";
+        struct.fields.forEach(_ => {
+            src += "\t\t{\n";
+            src += `\t\t\tval, exists := m["${_.name}"]\n`;
+            src += `\t\t\tif (exists) {\n`;
+            src += `\t\t\t\tif val != nil {\n`;
+            src += this.genDecodeFromAny(prep, "\t\t\t\t\t", "val", "me." + this.caseUp(_.name), this.typeSpec(_.typeSpec), "");
+            src += `\t\t\t\t} else if ${!_.optional} {\n`;
+            src += `\t\t\t\t\treturn false\n`;
+            src += `\t\t\t\t}\n`;
+            src += `\t\t\t} else if ${!_.optional} {\n`;
+            src += `\t\t\t\treturn false\n`;
+            src += `\t\t\t}\n`;
+            src += "\t\t}\n";
+        });
+        src += "\t\treturn true\n";
+        src += "\t}\n";
+        src += "\treturn false\n";
+        src += "}\n\n";
+        return src;
+    }
+    typeSpecNilable(from, ensureNilable, ...assumeNilable) {
         const nullableprefixes = ['*', '[]', 'map[', 'interface{', 'func('];
-        var ret = this.typeSpec(from);
-        if (ensureNullable && !nullableprefixes.some(_ => ret.startsWith(_)))
-            ret = "*" + ret;
-        return ret;
+        let src = this.typeSpec(from);
+        if (ensureNilable && (!nullableprefixes.some(_ => src.startsWith(_)))
+            && (assumeNilable && assumeNilable.length && !assumeNilable.some(_ => src === _)))
+            src = "*" + src;
+        return src;
     }
     typeSpec(from, intoProm = false) {
         if (!from)

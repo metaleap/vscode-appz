@@ -40,16 +40,18 @@ function main() {
             };
             gatherAll(job, md.body, genApiSurface[modulename], modulename);
             const prep = new gen.GenPrep(job);
-            for (const gen of gens)
+            for (const gen of gens) {
+                prep.state = { genDecoders: {} };
                 gen.gen(prep);
+            }
         }
     }
 }
 function gatherAll(into, astNode, childItems, ...prefixes) {
-    for (var item of childItems)
+    for (const item of childItems)
         if (typeof item !== 'string') {
-            for (var subns in item) {
-                var ns = undefined;
+            for (const subns in item) {
+                let ns = undefined;
                 astNode.forEachChild(n => {
                     if ((!ns) && (ns = n)
                         && (!(ns.name && ns.name.text === subns)))
@@ -62,10 +64,10 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
             }
         }
         else {
-            var members = [];
+            const members = [];
             astNode.forEachChild(n => {
-                var decl;
-                if ((decl = n) && decl.name && decl.name.text === item)
+                const decl = n;
+                if (decl && decl.name && decl.name.text === item)
                     members.push(n);
             });
             if (!members.length)

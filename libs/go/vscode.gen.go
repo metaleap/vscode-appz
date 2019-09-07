@@ -4,6 +4,8 @@ package vscode
 
 type Impl interface {
 	Window
+
+	MainLoop()
 }
 
 type MessageOptions struct {
@@ -11,38 +13,38 @@ type MessageOptions struct {
 }
 
 type MessageItem struct {
-	Title string `json:"title"`
-	IsCloseAffordance bool `json:"isCloseAffordance,omitempty"`
-	Tag interface{} `json:"tag,omitempty"`
+	Title             string      `json:"title"`
+	IsCloseAffordance bool        `json:"isCloseAffordance,omitempty"`
+	AppzTag           interface{} `json:"appzTag,omitempty"`
 }
 
 type InputBoxOptions struct {
-	Value string `json:"value,omitempty"`
-	ValueSelection []int `json:"valueSelection,omitempty"`
-	Prompt string `json:"prompt,omitempty"`
-	PlaceHolder string `json:"placeHolder,omitempty"`
-	Password bool `json:"password,omitempty"`
-	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
-	ValidateInput func(string) string `json:"-"`
+	Value          string              `json:"value,omitempty"`
+	ValueSelection []int               `json:"valueSelection,omitempty"`
+	Prompt         string              `json:"prompt,omitempty"`
+	PlaceHolder    string              `json:"placeHolder,omitempty"`
+	Password       bool                `json:"password,omitempty"`
+	IgnoreFocusOut bool                `json:"ignoreFocusOut,omitempty"`
+	ValidateInput  func(string) string `json:"-"`
 }
 
 type Window interface {
-	ShowErrorMessage1(message string, items []string, andThen func(result string, failure interface{}), )
-	ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(result string, failure interface{}), )
-	ShowErrorMessage3(message string, items []MessageItem, andThen func(result MessageItem, failure interface{}), )
-	ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(result MessageItem, failure interface{}), )
-	ShowInformationMessage1(message string, items []string, andThen func(result string, failure interface{}), )
-	ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(result string, failure interface{}), )
-	ShowInformationMessage3(message string, items []MessageItem, andThen func(result MessageItem, failure interface{}), )
-	ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(result MessageItem, failure interface{}), )
-	ShowWarningMessage1(message string, items []string, andThen func(result string, failure interface{}), )
-	ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(result string, failure interface{}), )
-	ShowWarningMessage3(message string, items []MessageItem, andThen func(result MessageItem, failure interface{}), )
-	ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(result MessageItem, failure interface{}), )
-	ShowInputBox(options *InputBoxOptions, andThen func(result string, failure interface{}), )
+	ShowErrorMessage1(message string, items []string, andThen func(result string, failure interface{}))
+	ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(result string, failure interface{}))
+	ShowErrorMessage3(message string, items []MessageItem, andThen func(result MessageItem, failure interface{}))
+	ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(result MessageItem, failure interface{}))
+	ShowInformationMessage1(message string, items []string, andThen func(result string, failure interface{}))
+	ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(result string, failure interface{}))
+	ShowInformationMessage3(message string, items []MessageItem, andThen func(result MessageItem, failure interface{}))
+	ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(result MessageItem, failure interface{}))
+	ShowWarningMessage1(message string, items []string, andThen func(result string, failure interface{}))
+	ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(result string, failure interface{}))
+	ShowWarningMessage3(message string, items []MessageItem, andThen func(result MessageItem, failure interface{}))
+	ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(result MessageItem, failure interface{}))
+	ShowInputBox(options *InputBoxOptions, andThen func(result string, failure interface{}))
 }
 
-func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(result string, failure interface{}), ){
+func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(result string, failure interface{})) {
 	msg := msgOutgoing{Ns: "window", Name: "showErrorMessage1", Payload: make(map[string]interface{}, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
@@ -55,7 +57,11 @@ func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(r
 			if isFail {
 				failure = payload
 			} else {
-				result = payload.(string)
+				var ok bool
+				result, ok = payload.(string)
+				if !ok {
+					failure = payload
+				}
 			}
 			andThen(result, failure)
 		}
@@ -64,7 +70,7 @@ func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(r
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(result string, failure interface{}), ){
+func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(result string, failure interface{})) {
 	msg := msgOutgoing{Ns: "window", Name: "showErrorMessage2", Payload: make(map[string]interface{}, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
@@ -78,7 +84,11 @@ func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items 
 			if isFail {
 				failure = payload
 			} else {
-				result = payload.(string)
+				var ok bool
+				result, ok = payload.(string)
+				if !ok {
+					failure = payload
+				}
 			}
 			andThen(result, failure)
 		}
@@ -87,7 +97,7 @@ func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items 
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen func(result MessageItem, failure interface{}), ){
+func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen func(result MessageItem, failure interface{})) {
 	msg := msgOutgoing{Ns: "window", Name: "showErrorMessage3", Payload: make(map[string]interface{}, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
@@ -100,7 +110,11 @@ func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen f
 			if isFail {
 				failure = payload
 			} else {
-				result = payload.(MessageItem)
+				var ok bool
+				ok = result.populateFrom(payload)
+				if !ok {
+					failure = payload
+				}
 			}
 			andThen(result, failure)
 		}
@@ -109,7 +123,7 @@ func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen f
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(result MessageItem, failure interface{}), ){
+func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(result MessageItem, failure interface{})) {
 	msg := msgOutgoing{Ns: "window", Name: "showErrorMessage4", Payload: make(map[string]interface{}, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
@@ -123,7 +137,11 @@ func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items 
 			if isFail {
 				failure = payload
 			} else {
-				result = payload.(MessageItem)
+				var ok bool
+				ok = result.populateFrom(payload)
+				if !ok {
+					failure = payload
+				}
 			}
 			andThen(result, failure)
 		}
@@ -132,7 +150,7 @@ func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items 
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowInformationMessage1(message string, items []string, andThen func(result string, failure interface{}), ){
+func (me *impl) ShowInformationMessage1(message string, items []string, andThen func(result string, failure interface{})) {
 	msg := msgOutgoing{Ns: "window", Name: "showInformationMessage1", Payload: make(map[string]interface{}, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
@@ -145,7 +163,11 @@ func (me *impl) ShowInformationMessage1(message string, items []string, andThen 
 			if isFail {
 				failure = payload
 			} else {
-				result = payload.(string)
+				var ok bool
+				result, ok = payload.(string)
+				if !ok {
+					failure = payload
+				}
 			}
 			andThen(result, failure)
 		}
@@ -154,7 +176,7 @@ func (me *impl) ShowInformationMessage1(message string, items []string, andThen 
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(result string, failure interface{}), ){
+func (me *impl) ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(result string, failure interface{})) {
 	msg := msgOutgoing{Ns: "window", Name: "showInformationMessage2", Payload: make(map[string]interface{}, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
@@ -168,7 +190,11 @@ func (me *impl) ShowInformationMessage2(message string, options MessageOptions, 
 			if isFail {
 				failure = payload
 			} else {
-				result = payload.(string)
+				var ok bool
+				result, ok = payload.(string)
+				if !ok {
+					failure = payload
+				}
 			}
 			andThen(result, failure)
 		}
@@ -177,7 +203,7 @@ func (me *impl) ShowInformationMessage2(message string, options MessageOptions, 
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowInformationMessage3(message string, items []MessageItem, andThen func(result MessageItem, failure interface{}), ){
+func (me *impl) ShowInformationMessage3(message string, items []MessageItem, andThen func(result MessageItem, failure interface{})) {
 	msg := msgOutgoing{Ns: "window", Name: "showInformationMessage3", Payload: make(map[string]interface{}, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
@@ -190,7 +216,11 @@ func (me *impl) ShowInformationMessage3(message string, items []MessageItem, and
 			if isFail {
 				failure = payload
 			} else {
-				result = payload.(MessageItem)
+				var ok bool
+				ok = result.populateFrom(payload)
+				if !ok {
+					failure = payload
+				}
 			}
 			andThen(result, failure)
 		}
@@ -199,7 +229,7 @@ func (me *impl) ShowInformationMessage3(message string, items []MessageItem, and
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(result MessageItem, failure interface{}), ){
+func (me *impl) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(result MessageItem, failure interface{})) {
 	msg := msgOutgoing{Ns: "window", Name: "showInformationMessage4", Payload: make(map[string]interface{}, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
@@ -213,7 +243,11 @@ func (me *impl) ShowInformationMessage4(message string, options MessageOptions, 
 			if isFail {
 				failure = payload
 			} else {
-				result = payload.(MessageItem)
+				var ok bool
+				ok = result.populateFrom(payload)
+				if !ok {
+					failure = payload
+				}
 			}
 			andThen(result, failure)
 		}
@@ -222,7 +256,7 @@ func (me *impl) ShowInformationMessage4(message string, options MessageOptions, 
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowWarningMessage1(message string, items []string, andThen func(result string, failure interface{}), ){
+func (me *impl) ShowWarningMessage1(message string, items []string, andThen func(result string, failure interface{})) {
 	msg := msgOutgoing{Ns: "window", Name: "showWarningMessage1", Payload: make(map[string]interface{}, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
@@ -235,7 +269,11 @@ func (me *impl) ShowWarningMessage1(message string, items []string, andThen func
 			if isFail {
 				failure = payload
 			} else {
-				result = payload.(string)
+				var ok bool
+				result, ok = payload.(string)
+				if !ok {
+					failure = payload
+				}
 			}
 			andThen(result, failure)
 		}
@@ -244,7 +282,7 @@ func (me *impl) ShowWarningMessage1(message string, items []string, andThen func
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(result string, failure interface{}), ){
+func (me *impl) ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(result string, failure interface{})) {
 	msg := msgOutgoing{Ns: "window", Name: "showWarningMessage2", Payload: make(map[string]interface{}, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
@@ -258,7 +296,11 @@ func (me *impl) ShowWarningMessage2(message string, options MessageOptions, item
 			if isFail {
 				failure = payload
 			} else {
-				result = payload.(string)
+				var ok bool
+				result, ok = payload.(string)
+				if !ok {
+					failure = payload
+				}
 			}
 			andThen(result, failure)
 		}
@@ -267,7 +309,7 @@ func (me *impl) ShowWarningMessage2(message string, options MessageOptions, item
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen func(result MessageItem, failure interface{}), ){
+func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen func(result MessageItem, failure interface{})) {
 	msg := msgOutgoing{Ns: "window", Name: "showWarningMessage3", Payload: make(map[string]interface{}, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
@@ -280,7 +322,11 @@ func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen
 			if isFail {
 				failure = payload
 			} else {
-				result = payload.(MessageItem)
+				var ok bool
+				ok = result.populateFrom(payload)
+				if !ok {
+					failure = payload
+				}
 			}
 			andThen(result, failure)
 		}
@@ -289,7 +335,7 @@ func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(result MessageItem, failure interface{}), ){
+func (me *impl) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(result MessageItem, failure interface{})) {
 	msg := msgOutgoing{Ns: "window", Name: "showWarningMessage4", Payload: make(map[string]interface{}, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
@@ -303,7 +349,11 @@ func (me *impl) ShowWarningMessage4(message string, options MessageOptions, item
 			if isFail {
 				failure = payload
 			} else {
-				result = payload.(MessageItem)
+				var ok bool
+				ok = result.populateFrom(payload)
+				if !ok {
+					failure = payload
+				}
 			}
 			andThen(result, failure)
 		}
@@ -312,7 +362,7 @@ func (me *impl) ShowWarningMessage4(message string, options MessageOptions, item
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(result string, failure interface{}), ){
+func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(result string, failure interface{})) {
 	msg := msgOutgoing{Ns: "window", Name: "showInputBox", Payload: make(map[string]interface{}, 1)}
 	msg.Payload["options"] = options
 
@@ -324,7 +374,11 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(result strin
 			if isFail {
 				failure = payload
 			} else {
-				result = payload.(string)
+				var ok bool
+				result, ok = payload.(string)
+				if !ok {
+					failure = payload
+				}
 			}
 			andThen(result, failure)
 		}
@@ -333,3 +387,54 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(result strin
 	me.send(&msg, on)
 }
 
+func (me *MessageItem) populateFrom(payload interface{}) bool {
+	m, ok := payload.(map[string]interface{})
+	if ok && m != nil {
+		{
+			val, exists := m["title"]
+			if exists {
+				if val != nil {
+					var ok bool
+					me.Title, ok = val.(string)
+					if !ok {
+						return false
+					}
+				} else if true {
+					return false
+				}
+			} else if true {
+				return false
+			}
+		}
+		{
+			val, exists := m["isCloseAffordance"]
+			if exists {
+				if val != nil {
+					var ok bool
+					me.IsCloseAffordance, ok = val.(bool)
+					if !ok {
+						return false
+					}
+				} else if false {
+					return false
+				}
+			} else if false {
+				return false
+			}
+		}
+		{
+			val, exists := m["appzTag"]
+			if exists {
+				if val != nil {
+					me.AppzTag = val
+				} else if false {
+					return false
+				}
+			} else if false {
+				return false
+			}
+		}
+		return true
+	}
+	return false
+}

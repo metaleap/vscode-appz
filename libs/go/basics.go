@@ -1,6 +1,14 @@
 package vscode
 
+import (
+	"bufio"
+	"io"
+	"os"
+)
+
 type impl struct {
+	readln       *bufio.Scanner
+	counterparty io.Writer
 }
 
 type msgOutgoing struct {
@@ -16,8 +24,20 @@ type msgIncoming struct {
 	IsFail   bool          `json:"isFail"`
 }
 
-func New() Window {
-	return nil
+func Main(stdin io.Reader, stdout io.Writer) Impl {
+	if stdin == nil {
+		stdin = os.Stdin
+	}
+	if stdout == nil {
+		stdout = os.Stdout
+	}
+	return &impl{readln: bufio.NewScanner(stdin), counterparty: stdout}
+}
+
+func (me *impl) MainLoop() {
+	for me.readln.Scan() {
+
+	}
 }
 
 func (me *impl) send(msg *msgOutgoing, on func(interface{}, bool)) {
