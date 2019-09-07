@@ -64,18 +64,18 @@ class Gen extends gen.Gen {
                 src += this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional, 'string') + ", ";
             src += ") {\n";
             const numargs = method.args.filter(_ => !_.isFromRetThenable).length;
-            src += `\tmsg := msgOutgoing{Ns: "${it.name}", Name: "${method.name}", Payload: make(map[string]interface{}, ${numargs})}\n`;
+            src += `\tmsg := msgOutgoing{Ns: "${it.name}", Name: "${method.name}", Payload: make(map[string]Any, ${numargs})}\n`;
             for (const arg of method.args)
                 if (!arg.isFromRetThenable)
                     src += `\tmsg.Payload["${arg.name}"] = ${this.caseLo(arg.name)}\n`;
-            src += `\n\tvar on func(interface{}, bool)\n`;
+            src += `\n\tvar on func(Any, bool)\n`;
             const lastarg = method.args[method.args.length - 1];
             if (lastarg.isFromRetThenable) {
                 let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true);
                 src += `\tif ${laname} != nil {\n`;
-                src += `\t\ton = func(payload interface{}, isFail bool) {\n`;
+                src += `\t\ton = func(payload Any, isFail bool) {\n`;
                 src += `\t\t\tvar result ${tret}\n`;
-                src += `\t\t\tvar failure interface{}\n`;
+                src += `\t\t\tvar failure Any\n`;
                 src += `\t\t\tif isFail {\n`;
                 src += `\t\t\t\tfailure = payload\n`;
                 src += `\t\t\t} else {\n`;
@@ -91,7 +91,7 @@ class Gen extends gen.Gen {
         return src;
     }
     genDecodeFromAny(prep, indent, srcName, dstName, dstTypeGo, errName) {
-        if (dstTypeGo === 'interface{}')
+        if (dstTypeGo === 'interface{}' || dstTypeGo === 'Any')
             return `${indent}${dstName} = ${srcName}\n`;
         let src = `${indent}var ok bool\n`;
         if (prep.structs.some(_ => _.name === dstTypeGo)) {
@@ -113,8 +113,8 @@ class Gen extends gen.Gen {
         const struct = prep.structs.find(_ => _.name === typeName);
         if (!struct)
             throw (typeName);
-        let src = `func (me *${typeName}) populateFrom(payload interface{}) bool {\n`;
-        src += "\tm, ok := payload.(map[string]interface{})\n";
+        let src = `func (me *${typeName}) populateFrom(payload Any) bool {\n`;
+        src += "\tm, ok := payload.(map[string]Any)\n";
         src += "\tif ok && m != nil {\n";
         struct.fields.forEach(_ => {
             src += "\t\t{\n";
@@ -165,7 +165,7 @@ class Gen extends gen.Gen {
         if (!from)
             return "";
         if (from === gen.ScriptPrimType.Any)
-            return "interface{}";
+            return "Any";
         if (from === gen.ScriptPrimType.Boolean)
             return "bool";
         if (from === gen.ScriptPrimType.String)
@@ -192,7 +192,7 @@ class Gen extends gen.Gen {
                     break;
                 }
             }
-            return "[]" + (tname ? tname : "interface{}");
+            return "[]" + (tname ? tname : "Any");
         }
         let tsum = gen.typeSumOf(from);
         if (tsum && tsum.length) {
@@ -206,10 +206,10 @@ class Gen extends gen.Gen {
             else if (intoProm)
                 return this.typeSpec(tprom[0]);
             else
-                return "func(result " + this.typeSpec(tprom[0]) + ", failure interface{})";
+                return "func(result " + this.typeSpec(tprom[0]) + ", failure Any)";
         if (typeof from === 'string')
             return from;
-        return "interface{}";
+        return "Any";
     }
 }
 exports.Gen = Gen;

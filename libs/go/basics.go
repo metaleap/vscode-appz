@@ -10,6 +10,8 @@ import (
 	"sync"
 )
 
+type Any = interface{}
+
 var OnError func(impl Protocol, err error, jsonMsgIncoming string)
 
 func init() {
@@ -24,6 +26,19 @@ func init() {
 	}
 }
 
+type msgOutgoing struct {
+	Ns       string         `json:"ns"`   // eg. 'window'
+	Name     string         `json:"name"` // eg. 'ShowInformationMessage3'
+	Payload  map[string]Any `json:"payload"`
+	Callback string         `json:"andThen"`
+}
+
+type msgIncoming struct {
+	Callback string `json:"andThen"`
+	Payload  Any    `json:"payload"`
+	IsFail   bool   `json:"isFail"`
+}
+
 type impl struct {
 	readln       *bufio.Scanner
 	counterparty *json.Encoder
@@ -31,21 +46,8 @@ type impl struct {
 		sync.Mutex
 		looping bool
 		counter uint64
-		waiting map[uint64]func(interface{}, bool)
+		waiting map[uint64]func(Any, bool)
 	}
-}
-
-type msgOutgoing struct {
-	Ns       string                 `json:"ns"`   // eg. 'window'
-	Name     string                 `json:"name"` // eg. 'ShowInformationMessage3'
-	Payload  map[string]interface{} `json:"payload"`
-	Callback string                 `json:"andThen"`
-}
-
-type msgIncoming struct {
-	Callback string      `json:"andThen"`
-	Payload  interface{} `json:"payload"`
-	IsFail   bool        `json:"isFail"`
 }
 
 func Via(stdin io.Reader, stdout io.Writer) Protocol {
@@ -59,7 +61,7 @@ func Via(stdin io.Reader, stdout io.Writer) Protocol {
 	me.readln.Buffer(make([]byte, 1024*1024), 8*1024*1024)
 	me.counterparty.SetEscapeHTML(false)
 	me.counterparty.SetIndent("", "")
-	me.callbacks.waiting = make(map[uint64]func(interface{}, bool), 8)
+	me.callbacks.waiting = make(map[uint64]func(Any, bool), 8)
 	return me
 }
 
@@ -87,7 +89,7 @@ func (me *impl) loop() {
 	}
 }
 
-func (me *impl) send(msg *msgOutgoing, on func(interface{}, bool)) {
+func (me *impl) send(msg *msgOutgoing, on func(Any, bool)) {
 	me.callbacks.Lock()
 	var startloop bool
 	if startloop = !me.callbacks.looping; startloop {
