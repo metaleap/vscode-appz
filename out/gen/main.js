@@ -6,11 +6,13 @@ const gen = require("./gen-shared");
 const gen_golang = require("./gen-golang");
 const gen_csharp = require("./gen-csharp");
 const gen_python = require("./gen-python");
+const gen_vscext = require("./gen-vscext");
 const filePathDts = 'node_modules/@types/vscode/index.d.ts';
 const gens = [
     new gen_golang.Gen('libs/go/', '.gen.go'),
     new gen_csharp.Gen('libs/cs/', '.gen.cs'),
     new gen_python.Gen('libs/py/', '.gen.py'),
+    new gen_vscext.Gen('src/', '.gen.ts'),
 ];
 const genApiSurface = {
     'vscode': [

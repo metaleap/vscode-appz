@@ -32,7 +32,7 @@
 			{
 				"title": "Appz",
 				"properties": {
-					"appz.cmds": {
+					"appz.progs": {
 						"type": "array",
 						"default": [
 							"go-vsc-appz-demo"

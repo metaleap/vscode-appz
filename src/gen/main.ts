@@ -5,6 +5,7 @@ import * as gen from './gen-shared'
 import * as gen_golang from './gen-golang'
 import * as gen_csharp from './gen-csharp'
 import * as gen_python from './gen-python'
+import * as gen_vscext from './gen-vscext'
 
 
 
@@ -14,6 +15,7 @@ const gens: gen.IGen[] = [
     new gen_golang.Gen('libs/go/', '.gen.go'),
     new gen_csharp.Gen('libs/cs/', '.gen.cs'),
     new gen_python.Gen('libs/py/', '.gen.py'),
+    new gen_vscext.Gen('src/', '.gen.ts'),
 ]
 
 type genApiMember = { [_: string]: genApiMembers }

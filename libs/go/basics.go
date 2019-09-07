@@ -100,7 +100,7 @@ func (me *impl) loopReadln() {
 					}, nil)
 				}
 			}
-			if err != nil {
+			if err != nil && OnError != nil {
 				OnError(me, err, jsonmsg)
 			}
 		}
@@ -120,7 +120,7 @@ func (me *impl) send(msg *msgOutgoing, on func(Any, bool)) {
 	me.callbacks.Unlock()
 
 	err := me.counterparty.Encode(msg)
-	if err != nil {
+	if err != nil && OnError != nil {
 		OnError(me, err, "")
 	}
 	if startloop {
