@@ -55,14 +55,14 @@ class Gen extends gen.Gen {
             src += "\t" + this.caseUp(method.name) + "(";
             for (const arg of method.args)
                 src += this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional, 'string') + ", ";
-            src += ") error\n";
+            src += ")\n";
         }
         src += "}\n\n";
         for (const method of it.methods) {
             src += "func (me *impl) " + this.caseUp(method.name) + "(";
             for (const arg of method.args)
                 src += this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional, 'string') + ", ";
-            src += ") error {\n";
+            src += ") {\n";
             const numargs = method.args.filter(_ => !_.isFromRetThenable).length;
             src += `\tmsg := msgOutgoing{Ns: "${it.name}", Name: "${method.name}", Payload: make(map[string]interface{}, ${numargs})}\n`;
             for (const arg of method.args)
@@ -85,7 +85,7 @@ class Gen extends gen.Gen {
                 src += `\t\t}\n`;
                 src += `\t}\n`;
             }
-            src += `\n\treturn me.send(&msg, on)\n`;
+            src += `\n\tme.send(&msg, on)\n`;
             src += "}\n\n";
         }
         return src;
@@ -135,6 +135,23 @@ class Gen extends gen.Gen {
         src += "\treturn false\n";
         src += "}\n\n";
         return src;
+    }
+    genNonZeroCheck(name, from) {
+        if (from) {
+            if (from === gen.ScriptPrimType.Boolean)
+                return `${name}`;
+            if (from === gen.ScriptPrimType.String)
+                return `len(${name}) != 0`;
+            if (from === gen.ScriptPrimType.Number)
+                return "${name} != 0";
+            const tarr = gen.typeArrOf(from);
+            if (tarr)
+                return `len(${name}) != 0`;
+            const ttup = gen.typeTupOf(from);
+            if (ttup && ttup.length)
+                return `len(${name}) != 0`;
+        }
+        return `${name} != nil`;
     }
     typeSpecNilable(from, ensureNilable, ...assumeNilable) {
         const nullableprefixes = ['*', '[]', 'map[', 'interface{', 'func('];

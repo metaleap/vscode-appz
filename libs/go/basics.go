@@ -10,7 +10,19 @@ import (
 	"sync"
 )
 
-var OnError func(impl Protocol, jsonMsgIncoming string, err error)
+var OnError func(impl Protocol, err error, jsonMsgIncoming string)
+
+func init() {
+	var stderr sync.Mutex
+	OnError = func(_ Protocol, err error, jsonmsg string) {
+		if jsonmsg != "" {
+			jsonmsg = ", jsonMsgIncoming:" + jsonmsg
+		}
+		stderr.Lock()
+		println(err.Error() + jsonmsg)
+		stderr.Unlock()
+	}
+}
 
 type impl struct {
 	readln       *bufio.Scanner
@@ -27,7 +39,7 @@ type msgOutgoing struct {
 	Ns       string                 `json:"ns"`   // eg. 'window'
 	Name     string                 `json:"name"` // eg. 'ShowInformationMessage3'
 	Payload  map[string]interface{} `json:"payload"`
-	Callback string                 `json:"callback"`
+	Callback string                 `json:"andThen"`
 }
 
 type msgIncoming struct {
@@ -44,10 +56,10 @@ func Via(stdin io.Reader, stdout io.Writer) Protocol {
 		stdout = os.Stdout
 	}
 	me := &impl{readln: bufio.NewScanner(stdin), counterparty: json.NewEncoder(stdout)}
+	me.readln.Buffer(make([]byte, 1024*1024), 8*1024*1024)
 	me.counterparty.SetEscapeHTML(false)
 	me.counterparty.SetIndent("", "")
-	me.callbacks.waiting = make(map[uint64]func(interface{}, bool))
-	me.readln.Buffer(make([]byte, 1024*1024), 8*1024*1024)
+	me.callbacks.waiting = make(map[uint64]func(interface{}, bool), 8)
 	return me
 }
 
@@ -64,35 +76,35 @@ func (me *impl) loop() {
 					delete(me.callbacks.waiting, callbackid)
 					me.callbacks.Unlock()
 					if cb != nil {
-						go cb(msg.Payload, msg.IsFail)
+						cb(msg.Payload, msg.IsFail)
 					}
 				}
 			}
 			if err != nil {
-				if OnError == nil {
-					println(err.Error() + ", jsonMsgIncoming:" + jsonmsg)
-				} else {
-					OnError(me, jsonmsg, err)
-				}
+				OnError(me, err, jsonmsg)
 			}
 		}
 	}
 }
 
-func (me *impl) send(msg *msgOutgoing, on func(interface{}, bool)) error {
+func (me *impl) send(msg *msgOutgoing, on func(interface{}, bool)) {
 	me.callbacks.Lock()
-	defer me.callbacks.Unlock()
-
-	if !me.callbacks.looping {
+	var startloop bool
+	if startloop = !me.callbacks.looping; startloop {
 		me.callbacks.looping = true
-		go me.loop()
 	}
-
 	if on != nil {
 		me.callbacks.counter++
 		msg.Callback = strconv.FormatUint(me.callbacks.counter, 36)
 		me.callbacks.waiting[me.callbacks.counter] = on
 	}
+	me.callbacks.Unlock()
 
-	return me.counterparty.Encode(msg)
+	err := me.counterparty.Encode(msg)
+	if err != nil {
+		OnError(me, err, "")
+	}
+	if startloop {
+		me.loop()
+	}
 }
