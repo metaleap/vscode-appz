@@ -70,10 +70,14 @@ export class Gen extends gen.Gen implements gen.IGen {
                 let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true)
                 src += `\tif ${laname} != nil {\n`
                 src += `\t\ton = func(payload interface{}, isFail bool) {\n`
+                src += `\t\t\tvar result ${tret}\n`
+                src += `\t\t\tvar failure interface{}\n`
                 src += `\t\t\tif isFail {\n`
+                src += `\t\t\t\tfailure = payload\n`
                 src += `\t\t\t} else {\n`
-                src += `\t\t\t\t${laname}(payload.(${tret}), nil)\n`
+                src += `\t\t\t\tresult = payload.(${tret})\n`
                 src += `\t\t\t}\n`
+                src += `\t\t\t${laname}(result, failure)\n`
                 src += `\t\t}\n`
                 src += `\t}\n`
             }
