@@ -28,38 +28,48 @@ export interface GenJobStruct extends GenJobNamed {
     decl: ts.InterfaceDeclaration
 }
 
+export interface GenPrepEnum {
+    name: string
+    enumerants: {
+        name: string
+        value: number
+    }[]
+}
+
+export interface GenPrepStruct {
+    name: string
+    fields: GenPrepField[]
+    funcFields: string[]
+}
+
+export interface GenPrepField {
+    name: string
+    typeSpec: TypeSpec
+    optional: boolean
+    isExtBaggage: boolean
+}
+
+export interface GenPrepInterface {
+    name: string
+    methods: GenPrepMethod[]
+}
+
+export interface GenPrepMethod {
+    name: string
+    args: GenPrepArg[]
+}
+
+export interface GenPrepArg {
+    name: string
+    typeSpec: TypeSpec
+    optional: boolean
+    isFromRetThenable: boolean
+}
+
 export class GenPrep {
-    enums: {
-        name: string
-        enumerants: {
-            name: string
-            value: number
-        }[]
-    }[] = []
-
-    structs: {
-        name: string
-        fields: {
-            name: string
-            typeSpec: TypeSpec
-            optional: boolean
-            isExtBaggage: boolean
-        }[]
-    }[] = []
-
-    interfaces: {
-        name: string
-        methods: {
-            name: string
-            args: {
-                name: string
-                typeSpec: TypeSpec
-                optional: boolean
-                isFromRetThenable: boolean
-            }[]
-            // ret: TypeSpec
-        }[]
-    }[] = []
+    enums: GenPrepEnum[] = []
+    structs: GenPrepStruct[] = []
+    interfaces: GenPrepInterface[] = []
 
     readonly fromOrig: GenJob
     state: {
@@ -76,15 +86,15 @@ export class GenPrep {
             this.addFunc(funcjob)
 
         this.structs.forEach(struct => {
-            let isarg = false
+            let isretarg = false
             this.interfaces.forEach(iface => {
-                if (!isarg) iface.methods.forEach(method => {
-                    if (!isarg) method.args.forEach(arg => {
-                        isarg = isarg || typeRefersTo(arg.typeSpec, struct.name)
+                if (!isretarg) iface.methods.forEach(method => {
+                    if (!isretarg) method.args.forEach(arg => {
+                        isretarg = isretarg || (arg.isFromRetThenable && typeRefersTo(arg.typeSpec, struct.name))
                     })
                 })
             })
-            if (isarg) {
+            if (isretarg) {
                 const fieldname = pickName(true, ['tag', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields)
                 if (!fieldname)
                     throw (struct)
@@ -136,8 +146,11 @@ export class GenPrep {
                     optional: _.questionToken ? true : false,
                     isExtBaggage: false,
                 }
-            })
+            }),
+            funcFields: []
         })
+        const struct = this.structs[this.structs.length - 1]
+        struct.funcFields = struct.fields.filter(_ => typeFun(_.typeSpec)).map(_ => _.name)
     }
 
     addFunc(funcJob: GenJobFunc) {

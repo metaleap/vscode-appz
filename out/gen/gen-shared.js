@@ -14,17 +14,17 @@ class GenPrep {
         for (const funcjob of job.funcs)
             this.addFunc(funcjob);
         this.structs.forEach(struct => {
-            let isarg = false;
+            let isretarg = false;
             this.interfaces.forEach(iface => {
-                if (!isarg)
+                if (!isretarg)
                     iface.methods.forEach(method => {
-                        if (!isarg)
+                        if (!isretarg)
                             method.args.forEach(arg => {
-                                isarg = isarg || typeRefersTo(arg.typeSpec, struct.name);
+                                isretarg = isretarg || (arg.isFromRetThenable && typeRefersTo(arg.typeSpec, struct.name));
                             });
                     });
             });
-            if (isarg) {
+            if (isretarg) {
                 const fieldname = pickName(true, ['tag', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields);
                 if (!fieldname)
                     throw (struct);
@@ -72,8 +72,11 @@ class GenPrep {
                     optional: _.questionToken ? true : false,
                     isExtBaggage: false,
                 };
-            })
+            }),
+            funcFields: []
         });
+        const struct = this.structs[this.structs.length - 1];
+        struct.funcFields = struct.fields.filter(_ => typeFun(_.typeSpec)).map(_ => _.name);
     }
     addFunc(funcJob) {
         const qname = this.qName(funcJob);

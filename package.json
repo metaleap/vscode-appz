@@ -20,12 +20,25 @@
 	"activationEvents": [
 		"onCommand:vsc_appz.main"
 	],
-	"main": "./out/extension.js",
+	"main": "./out/appz.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "vsc_appz.main",
 				"title": "Appz"
+			}
+		],
+		"configuration": [
+			{
+				"title": "Appz",
+				"properties": {
+					"appz.cmds": {
+						"type": "array",
+						"default": [
+							"go-vsc-appz-demo"
+						]
+					}
+				}
 			}
 		]
 	},

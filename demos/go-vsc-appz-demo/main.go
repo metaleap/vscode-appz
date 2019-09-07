@@ -7,7 +7,7 @@ import (
 func main() {
 	vscwin := vsc.Via(nil, nil).Window()
 	vscwin.ShowInformationMessage1("Hi World", []string{"btn1", "btn2"},
-		func(pick string, failure vsc.Any) {
+		func(pick string) {
 			if pick == "btn1" || pick == "btn2" {
 				vscwin.ShowInformationMessage1("You picked: "+pick, nil, nil)
 			} else {

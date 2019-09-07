@@ -12,20 +12,6 @@ import (
 
 type Any = interface{}
 
-var OnError func(impl Protocol, err error, jsonMsgIncoming string)
-
-func init() {
-	var stderr sync.Mutex
-	OnError = func(_ Protocol, err error, jsonmsg string) {
-		if jsonmsg != "" {
-			jsonmsg = ", jsonMsgIncoming:" + jsonmsg
-		}
-		stderr.Lock()
-		println(err.Error() + jsonmsg)
-		stderr.Unlock()
-	}
-}
-
 type msgOutgoing struct {
 	Ns       string         `json:"ns"`   // eg. 'window'
 	Name     string         `json:"name"` // eg. 'ShowInformationMessage3'
@@ -46,7 +32,22 @@ type impl struct {
 		sync.Mutex
 		looping bool
 		counter uint64
-		waiting map[uint64]func(Any, bool)
+		waiting map[string]func(Any, bool)
+		other   map[string]func(...Any) (Any, bool)
+	}
+}
+
+var OnError func(impl Protocol, err error, jsonMsgIncoming string)
+
+func init() {
+	var stderr sync.Mutex
+	OnError = func(_ Protocol, err error, jsonmsg string) {
+		if jsonmsg != "" {
+			jsonmsg = ", jsonMsgIncoming:" + jsonmsg
+		}
+		stderr.Lock()
+		println(err.Error() + jsonmsg)
+		stderr.Unlock()
 	}
 }
 
@@ -61,7 +62,8 @@ func Via(stdin io.Reader, stdout io.Writer) Protocol {
 	me.readln.Buffer(make([]byte, 1024*1024), 8*1024*1024)
 	me.counterparty.SetEscapeHTML(false)
 	me.counterparty.SetIndent("", "")
-	me.callbacks.waiting = make(map[uint64]func(Any, bool), 8)
+	me.callbacks.waiting = make(map[string]func(Any, bool), 8)
+	me.callbacks.other = make(map[string]func(...Any) (Any, bool), 8)
 	return me
 }
 
@@ -71,15 +73,12 @@ func (me *impl) loop() {
 			var msg msgIncoming
 			err := json.Unmarshal([]byte(jsonmsg), &msg)
 			if err == nil {
-				var callbackid uint64
-				if callbackid, err = strconv.ParseUint(msg.Callback, 0, 64); err == nil {
-					me.callbacks.Lock()
-					cb := me.callbacks.waiting[callbackid]
-					delete(me.callbacks.waiting, callbackid)
-					me.callbacks.Unlock()
-					if cb != nil {
-						cb(msg.Payload, msg.IsFail)
-					}
+				me.callbacks.Lock()
+				cb := me.callbacks.waiting[msg.Callback]
+				delete(me.callbacks.waiting, msg.Callback)
+				me.callbacks.Unlock()
+				if cb != nil {
+					cb(msg.Payload, msg.IsFail)
 				}
 			}
 			if err != nil {
@@ -89,6 +88,11 @@ func (me *impl) loop() {
 	}
 }
 
+func (me *impl) nextFuncId() string {
+	me.callbacks.counter++
+	return strconv.FormatUint(me.callbacks.counter, 36)
+}
+
 func (me *impl) send(msg *msgOutgoing, on func(Any, bool)) {
 	me.callbacks.Lock()
 	var startloop bool
@@ -96,9 +100,8 @@ func (me *impl) send(msg *msgOutgoing, on func(Any, bool)) {
 		me.callbacks.looping = true
 	}
 	if on != nil {
-		me.callbacks.counter++
-		msg.Callback = strconv.FormatUint(me.callbacks.counter, 36)
-		me.callbacks.waiting[me.callbacks.counter] = on
+		msg.Callback = me.nextFuncId()
+		me.callbacks.waiting[msg.Callback] = on
 	}
 	me.callbacks.Unlock()
 

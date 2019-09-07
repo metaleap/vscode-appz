@@ -12,12 +12,12 @@ class Gen extends gen.Gen {
         src += "}\n\n";
         for (let i = 0; i < prep.interfaces.length; i++)
             src += `func (me *impl) ${this.caseUp(prep.interfaces[i].name)}() ${this.caseUp(prep.interfaces[i].name)} { return me }\n\n`;
-        for (let i = 0; i < prep.enums.length; i++)
-            src += this.genEnum(prep, i);
-        for (let i = 0; i < prep.structs.length; i++)
-            src += this.genStruct(prep, i);
-        for (let i = 0; i < prep.interfaces.length; i++)
-            src += this.genInterface(prep, i);
+        for (const it of prep.enums)
+            src += this.genEnum(it);
+        for (const it of prep.structs)
+            src += this.genStruct(it);
+        for (const it of prep.interfaces)
+            src += this.genInterface(prep, it);
         {
             let anydec = true;
             while (anydec) {
@@ -31,25 +31,25 @@ class Gen extends gen.Gen {
         }
         node_fs.writeFileSync(`${this.outFilePathPref}${pkgname}${this.outFilePathSuff}`, src);
     }
-    genEnum(prep, idx) {
-        const it = prep.enums[idx];
+    genEnum(it) {
         const name = this.caseUp(it.name);
         let src = "type " + name + " int\n\nconst (\n";
         for (const enumerant of it.enumerants)
             src += "\t" + name + this.caseUp(enumerant.name) + " " + name + " = " + enumerant.value + "\n";
         return src + ")\n\n";
     }
-    genStruct(prep, idx) {
-        const it = prep.structs[idx];
+    genStruct(it) {
         let src = "type " + this.caseUp(it.name) + " struct {\n";
         for (const field of it.fields)
             src += "\t" + this.caseUp(field.name) + " " + this.typeSpec(field.typeSpec)
                 + ((gen.typeFun(field.typeSpec)) ? " `json:\"-\"`" : (" `json:\"" + field.name + (field.optional ? ",omitempty" : "") + "\"`"))
                 + "\n";
+        for (const field of it.funcFields) {
+            src += "\t" + this.caseUp(field) + "_AppzFuncId string `json:\",omitempty\"`\n";
+        }
         return src + "}\n\n";
     }
-    genInterface(prep, idx) {
-        const it = prep.interfaces[idx];
+    genInterface(prep, it) {
         let src = "type " + this.caseUp(it.name) + " interface {\n";
         for (const method of it.methods) {
             src += "\t" + this.caseUp(method.name) + "(";
@@ -58,55 +58,103 @@ class Gen extends gen.Gen {
             src += ")\n";
         }
         src += "}\n\n";
-        for (const method of it.methods) {
-            src += "func (me *impl) " + this.caseUp(method.name) + "(";
-            for (const arg of method.args)
-                src += this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional, 'string') + ", ";
-            src += ") {\n";
-            const numargs = method.args.filter(_ => !_.isFromRetThenable).length;
-            src += `\tmsg := msgOutgoing{Ns: "${it.name}", Name: "${method.name}", Payload: make(map[string]Any, ${numargs})}\n`;
-            for (const arg of method.args)
-                if (!arg.isFromRetThenable)
-                    src += `\tmsg.Payload["${arg.name}"] = ${this.caseLo(arg.name)}\n`;
-            src += `\n\tvar on func(Any, bool)\n`;
-            const lastarg = method.args[method.args.length - 1];
-            if (lastarg.isFromRetThenable) {
-                let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true);
-                src += `\tif ${laname} != nil {\n`;
-                src += `\t\ton = func(payload Any, isFail bool) {\n`;
-                src += `\t\t\tvar result ${tret}\n`;
-                src += `\t\t\tvar failure Any\n`;
-                src += `\t\t\tif isFail {\n`;
-                src += `\t\t\t\tfailure = payload\n`;
-                src += `\t\t\t} else {\n`;
-                src += this.genDecodeFromAny(prep, "\t\t\t\t", "payload", "result", tret, "failure");
+        for (const method of it.methods)
+            src += this.genImpl(prep, it, method);
+        return src;
+    }
+    genImpl(prep, it, method) {
+        let src = "func (me *impl) " + this.caseUp(method.name) + "(";
+        const funcfields = [];
+        for (const arg of method.args) {
+            src += this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional, 'string') + ", ";
+            for (const struct of prep.structs.filter(_ => _.name === arg.typeSpec))
+                if (struct.funcFields && struct.funcFields.length)
+                    for (const funcfield of struct.funcFields)
+                        funcfields.push({ arg: arg.name, struct: struct, name: funcfield });
+        }
+        src += ") {\n";
+        const numargs = method.args.filter(_ => !_.isFromRetThenable).length;
+        src += `\tmsg := msgOutgoing{Ns: "${it.name}", Name: "${method.name}", Payload: make(map[string]Any, ${numargs})}\n`;
+        if (funcfields.length) {
+            src += `\tfuncids := make([]string, 0, ${funcfields.length})\n`;
+            src += `\tme.callbacks.Lock()\n`;
+            for (const ff of funcfields) {
+                const facc = this.caseLo(ff.arg) + '.' + this.caseUp(ff.name);
+                src += `\t${facc}_AppzFuncId = ""\n`;
+                src += `\tif fn := ${facc}; fn != nil {\n`;
+                src += `\t\t${facc}_AppzFuncId = me.nextFuncId()\n`;
+                src += `\t\tfuncids = append(funcids, ${facc}_AppzFuncId)\n`;
+                src += `\t\tme.callbacks.other[${facc}_AppzFuncId] = func(args...Any) (ret Any, ok bool) {\n`;
+                const args = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)[0];
+                src += `\t\t\tif ok = (len(args) == ${args.length}); ok {\n`;
+                for (let a = 0; a < args.length; a++) {
+                    const tspec = this.typeSpec(args[a]);
+                    src += `\t\t\t\tvar a${a} ${tspec}\n`;
+                    src += this.genDecodeFromAny(prep, "\t\t\t\t", "args[" + a + "]", "a" + a, tspec, "", "return", true);
+                }
+                src += `\t\t\t\tret = fn(${args.map((_, a) => 'a' + a).join(', ')})\n`;
                 src += `\t\t\t}\n`;
-                src += `\t\t\t${laname}(result, failure)\n`;
+                src += `\t\t\treturn\n`;
                 src += `\t\t}\n`;
                 src += `\t}\n`;
             }
-            src += `\n\tme.send(&msg, on)\n`;
-            src += "}\n\n";
+            src += `\tme.callbacks.Unlock()\n`;
         }
+        for (const arg of method.args)
+            if (!arg.isFromRetThenable)
+                src += `\tmsg.Payload["${arg.name}"] = ${this.caseLo(arg.name)}\n`;
+        src += `\n\tvar on func(Any, bool)\n`;
+        const lastarg = method.args[method.args.length - 1];
+        if (lastarg.isFromRetThenable) {
+            let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true);
+            src += `\tif ${laname} != nil {\n`;
+            src += `\t\ton = func(payload Any, isFail bool) {\n`;
+            src += `\t\t\tvar result ${tret}\n`;
+            src += `\t\t\tvar reject Any\n`;
+            src += `\t\t\tif isFail {\n`;
+            src += `\t\t\t\treject = payload\n`;
+            src += `\t\t\t} else {\n`;
+            src += this.genDecodeFromAny(prep, "\t\t\t\t", "payload", "result", tret, "reject");
+            src += `\t\t\t}\n`;
+            src += `\t\t\tif reject == nil {\n`;
+            src += `\t\t\t\t${laname}(result)\n`;
+            src += `\t\t\t}\n`;
+            src += `\t\t}\n`;
+            src += `\t}\n`;
+        }
+        if (funcfields.length) {
+            src += `\n\tme.send(&msg, func(payload Any, isFail bool) {\n`;
+            src += `\t\tif len(funcids) != 0 {\n`;
+            src += `\t\t\tme.callbacks.Lock()\n`;
+            src += `\t\t\tfor _, funcid := range funcids {\n`;
+            src += `\t\t\t\tdelete(me.callbacks.other, funcid)\n`;
+            src += `\t\t\t}\n`;
+            src += `\t\t\tme.callbacks.Unlock()\n`;
+            src += `\t\t}\n`;
+            src += `\t\tif on != nil {\n\t\t\ton(payload, isFail)\n\t\t}\n`;
+            src += `\t})\n`;
+        }
+        else
+            src += `\n\tme.send(&msg, on)\n`;
+        src += "}\n\n";
         return src;
     }
-    genDecodeFromAny(prep, indent, srcName, dstName, dstTypeGo, errName) {
+    genDecodeFromAny(prep, pref, srcName, dstName, dstTypeGo, errName, errOther = "return false", haveOk = false) {
         if (dstTypeGo === 'interface{}' || dstTypeGo === 'Any')
-            return `${indent}${dstName} = ${srcName}\n`;
-        let src = `${indent}var ok bool\n`;
+            return `${pref}${dstName} = ${srcName}\n`;
+        let src = haveOk ? "" : `${pref}var ok bool\n`;
         if (prep.structs.some(_ => _.name === dstTypeGo)) {
             prep.state.genDecoders[dstTypeGo] = true;
-            src += `${indent}ok = ${dstName}.populateFrom(${srcName})\n`;
+            src += `${pref}ok = ${dstName}.populateFrom(${srcName})\n`;
         }
-        else {
-            src += `${indent}${dstName}, ok = ${srcName}.(${dstTypeGo})\n`;
-        }
-        src += `${indent}if !ok {\n`;
-        if (errName)
-            src += `${indent}\t${errName} = ${srcName}\n`;
         else
-            src += `${indent}\treturn false\n`;
-        src += `${indent}}\n`;
+            src += `${pref}${dstName}, ok = ${srcName}.(${dstTypeGo})\n`;
+        src += `${pref}if !ok {\n`;
+        if (errName)
+            src += `${pref}\t${errName} = ${srcName}\n`;
+        else if (errOther)
+            src += `${pref}\t${errOther}\n`;
+        src += `${pref}}\n`;
         return src;
     }
     genPopulate(prep, typeName) {
@@ -206,7 +254,7 @@ class Gen extends gen.Gen {
             else if (intoProm)
                 return this.typeSpec(tprom[0]);
             else
-                return "func(result " + this.typeSpec(tprom[0]) + ", failure Any)";
+                return "func(" + this.typeSpec(tprom[0]) + ")";
         if (typeof from === 'string')
             return from;
         return "Any";
