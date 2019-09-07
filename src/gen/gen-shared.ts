@@ -57,7 +57,7 @@ export class GenPrep {
                 optional: boolean
                 isFromRetThenable: boolean
             }[]
-            ret: TypeSpec
+            // ret: TypeSpec
         }[]
     }[] = []
 
@@ -74,33 +74,27 @@ export class GenPrep {
             this.addStruct(structjob)
         for (const funcjob of job.funcs)
             this.addFunc(funcjob)
+
         this.structs.forEach(struct => {
-            let isarg = false, isret = false
-            this.interfaces.forEach(iface => iface.methods.forEach(method => {
-                if (typeRefersTo(method.ret, struct.name))
-                    isret = true
-                method.args.forEach(arg => {
-                    if (typeRefersTo(arg.typeSpec, struct.name))
-                        isarg = true
+            let isarg = false
+            this.interfaces.forEach(iface => {
+                if (!isarg) iface.methods.forEach(method => {
+                    if (!isarg) method.args.forEach(arg => {
+                        isarg = isarg || typeRefersTo(arg.typeSpec, struct.name)
+                    })
                 })
-            }))
-            if (isarg && isret) {
+            })
+            if (isarg) {
                 const fieldname = pickName(true, ['tag', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields)
                 if (!fieldname)
                     throw (struct)
                 struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Any })
             }
         })
+
         this.interfaces.forEach(iface => iface.methods.forEach(method => {
             method.args = method.args.filter(arg =>
                 arg.typeSpec !== 'CancellationToken')
-            if (method.ret) {
-                const argname = pickName(false, ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args)
-                if (!argname)
-                    throw (method)
-                method.args.push({ name: argname, typeSpec: method.ret, isFromRetThenable: true, optional: true, })
-                method.ret = null
-            }
         }))
         console.log(JSON.stringify({
             e: this.enums,
@@ -159,9 +153,16 @@ export class GenPrep {
                 typeSpec: this.typeSpec(_.type, funcJob.decl.typeParameters),
                 optional: _.questionToken ? true : false,
                 isFromRetThenable: false,
-            })),
-            ret: this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters)
+            }))
         })
+        const tret = this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters)
+        if (tret) {
+            const method = iface.methods[iface.methods.length - 1]
+            const argname = pickName(false, ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args)
+            if (!argname)
+                throw (method)
+            method.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, })
+        }
     }
 
     qName(memJob: GenJobNamed): string[] {
