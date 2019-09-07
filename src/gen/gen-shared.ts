@@ -92,14 +92,11 @@ export class GenPrep {
             method.args = method.args.filter(arg =>
                 arg.typeSpec !== 'CancellationToken')
             if (method.ret) {
-                const tprom = typeProm(method.ret)
-                if (tprom && tprom.length) {
-                    const argname = pickName(['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args)
-                    if (!argname)
-                        throw (method)
-                    method.args.push({ name: argname, typeSpec: method.ret, isFromRetThenable: true, optional: true, })
-                    method.ret = null
-                }
+                const argname = pickName(['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args)
+                if (!argname)
+                    throw (method)
+                method.args.push({ name: argname, typeSpec: method.ret, isFromRetThenable: true, optional: true, })
+                method.ret = null
             }
         }))
         console.log(JSON.stringify({
@@ -329,5 +326,11 @@ export function pickName(pickFrom: string[], dontCollideWith: { name: string }[]
     for (const name of pickFrom)
         if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
             return name
+    for (const pref of ['appz', 'vscAppz'])
+        for (let name of pickFrom) {
+            name = pref + name.charAt(0).toUpperCase() + name.slice(1)
+            if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
+                return name
+        }
     return undefined
 }

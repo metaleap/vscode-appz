@@ -55,20 +55,20 @@ class Gen extends gen.Gen {
             for (var arg of method.args)
                 if (!arg.isFromRetThenable)
                     src += `\tmsg.Payload["${arg.name}"] = ${this.caseLo(arg.name)}\n`;
-            src += `\tvar on func(...interface{})\n`;
+            src += `\n\tvar on func(interface{}, bool)\n`;
             const lastarg = method.args[method.args.length - 1];
             if (lastarg.isFromRetThenable) {
-                src += `\ton = func(...interface{}) {\n`;
-                const cbsig = gen.typeFun(lastarg.typeSpec);
-                if (!cbsig) throw (lastarg.typeSpec)
-                if (cbsig[1])
-                    throw (cbsig[1]);
-                for (let idx = 0; idx < cbsig[0].length; idx++)
-                    src += `\t\tvar arg${idx} ${this.typeSpec(cbsig[0][idx])}\n`;
-                src += `\t\t${this.caseLo(lastarg.name)}(${cbsig[0].map((_, i) => "a" + i).join(', ')})\n`;
+                let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true);
+                src += `\tif ${laname} != nil {\n`;
+                src += `\t\ton = func(payload interface{}, isFail bool) {\n`;
+                src += `\t\t\tif isFail {\n`;
+                src += `\t\t\t} else {\n`;
+                src += `\t\t\t\t${laname}(payload.(${tret}), nil)\n`;
+                src += `\t\t\t}\n`;
+                src += `\t\t}\n`;
                 src += `\t}\n`;
             }
-            src += `\tme.send(&msg, on)\n`;
+            src += `\n\tme.send(&msg, on)\n`;
             src += "}\n\n";
         }
         return src;
@@ -80,7 +80,7 @@ class Gen extends gen.Gen {
             ret = "*" + ret;
         return ret;
     }
-    typeSpec(from) {
+    typeSpec(from, intoProm = false) {
         if (!from)
             return "";
         if (from === gen.ScriptPrimType.Any)
@@ -122,8 +122,10 @@ class Gen extends gen.Gen {
         if (tprom && tprom.length)
             if (tprom.length > 1)
                 throw (from);
+            else if (intoProm)
+                return this.typeSpec(tprom[0]);
             else
-                return "func(" + this.typeSpec(tprom[0]) + ")";
+                return "func(result " + this.typeSpec(tprom[0]) + ", failure interface{})";
         if (typeof from === 'string')
             return from;
         return "interface{}";

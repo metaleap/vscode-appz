@@ -13,11 +13,12 @@ type msgOutgoing struct {
 type msgIncoming struct {
 	Callback int           `json:"andThen"`
 	Payload  []interface{} `json:"payload"`
+	IsFail   bool          `json:"isFail"`
 }
 
 func New() Window {
 	return nil
 }
 
-func (me *impl) send(msg *msgOutgoing, on func(...interface{})) {
+func (me *impl) send(msg *msgOutgoing, on func(interface{}, bool)) {
 }
