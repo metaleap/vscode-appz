@@ -1,5 +1,3 @@
-import * as node_fs from 'fs'
-
 import * as gen from './gen-shared'
 
 export class Gen extends gen.Gen implements gen.IGen {
@@ -34,7 +32,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             }
         }
 
-        node_fs.writeFileSync(`${this.outFilePathPref}${pkgname}${this.outFilePathSuff}`, src)
+        this.writeFileSync(pkgname, src)
     }
 
     genEnum(it: gen.GenPrepEnum): string {

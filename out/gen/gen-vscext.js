@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const node_fs = require("fs");
 const gen = require("./gen-shared");
 class Gen extends gen.Gen {
     gen(prep) {
@@ -43,7 +42,7 @@ class Gen extends gen.Gen {
         src += "\t\t\tthrow (msg.ns)\n";
         src += "\t}\n";
         src += "}\n\n";
-        node_fs.writeFileSync(`${this.outFilePathPref}${pkgname}${this.outFilePathSuff}`, src);
+        this.writeFileSync(pkgname, src);
     }
     typeSpec(from, intoProm = false) {
         if (!from)

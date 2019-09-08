@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const node_fs = require("fs");
 const gen = require("./gen-shared");
 class Gen extends gen.Gen {
     gen(prep) {
@@ -29,7 +28,7 @@ class Gen extends gen.Gen {
                     }
             }
         }
-        node_fs.writeFileSync(`${this.outFilePathPref}${pkgname}${this.outFilePathSuff}`, src);
+        this.writeFileSync(pkgname, src);
     }
     genEnum(it) {
         const name = this.caseUp(it.name);

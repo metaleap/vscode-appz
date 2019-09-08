@@ -1,5 +1,3 @@
-import * as node_fs from 'fs'
-
 import * as gen from './gen-shared'
 
 export class Gen extends gen.Gen implements gen.IGen {
@@ -49,7 +47,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         src += "\t}\n"
         src += "}\n\n"
 
-        node_fs.writeFileSync(`${this.outFilePathPref}${pkgname}${this.outFilePathSuff}`, src)
+        this.writeFileSync(pkgname, src)
     }
 
 

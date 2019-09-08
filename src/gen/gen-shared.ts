@@ -1,3 +1,5 @@
+import * as node_fs from 'fs'
+
 import * as ts from 'typescript'
 
 export interface IGen {
@@ -301,6 +303,10 @@ export abstract class Gen {
 
     caseUp(name: string): string {
         return name.charAt(0).toUpperCase() + name.slice(1)
+    }
+
+    writeFileSync(pkgName: string, src: string) {
+        node_fs.writeFileSync(`${this.outFilePathPref}${this.caseLo(pkgName)}${this.outFilePathSuff}`, src)
     }
 
 }

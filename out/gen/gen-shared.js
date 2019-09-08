@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const node_fs = require("fs");
 const ts = require("typescript");
 class GenPrep {
     constructor(job) {
@@ -194,6 +195,9 @@ class Gen {
     }
     caseUp(name) {
         return name.charAt(0).toUpperCase() + name.slice(1);
+    }
+    writeFileSync(pkgName, src) {
+        node_fs.writeFileSync(`${this.outFilePathPref}${this.caseLo(pkgName)}${this.outFilePathSuff}`, src);
     }
 }
 exports.Gen = Gen;
