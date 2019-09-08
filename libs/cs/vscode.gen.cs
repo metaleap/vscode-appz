@@ -43,56 +43,56 @@ namespace Vscode {
 	}
 
 	public interface IWindow {
-		void ShowErrorMessage1(string message, string[] items, Action<string> andThen);
-		void ShowErrorMessage2(string message, MessageOptions options, string[] items, Action<string> andThen);
-		void ShowErrorMessage3(string message, MessageItem[] items, Action<MessageItem> andThen);
-		void ShowErrorMessage4(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen);
-		void ShowInformationMessage1(string message, string[] items, Action<string> andThen);
-		void ShowInformationMessage2(string message, MessageOptions options, string[] items, Action<string> andThen);
-		void ShowInformationMessage3(string message, MessageItem[] items, Action<MessageItem> andThen);
-		void ShowInformationMessage4(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen);
-		void ShowWarningMessage1(string message, string[] items, Action<string> andThen);
-		void ShowWarningMessage2(string message, MessageOptions options, string[] items, Action<string> andThen);
-		void ShowWarningMessage3(string message, MessageItem[] items, Action<MessageItem> andThen);
-		void ShowWarningMessage4(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen);
+		void ShowErrorMessage(string message, string[] items, Action<string> andThen);
+		void ShowErrorMessage(string message, MessageOptions options, string[] items, Action<string> andThen);
+		void ShowErrorMessage(string message, MessageItem[] items, Action<MessageItem> andThen);
+		void ShowErrorMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen);
+		void ShowInformationMessage(string message, string[] items, Action<string> andThen);
+		void ShowInformationMessage(string message, MessageOptions options, string[] items, Action<string> andThen);
+		void ShowInformationMessage(string message, MessageItem[] items, Action<MessageItem> andThen);
+		void ShowInformationMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen);
+		void ShowWarningMessage(string message, string[] items, Action<string> andThen);
+		void ShowWarningMessage(string message, MessageOptions options, string[] items, Action<string> andThen);
+		void ShowWarningMessage(string message, MessageItem[] items, Action<MessageItem> andThen);
+		void ShowWarningMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen);
 		void ShowInputBox(InputBoxOptions options, Action<string> andThen);
 	}
 
 	internal partial class impl : IWindow {
-		void IWindow.ShowErrorMessage1(string message, string[] items, Action<string> andThen) {
+		void IWindow.ShowErrorMessage(string message, string[] items, Action<string> andThen) {
 		}
 
-		void IWindow.ShowErrorMessage2(string message, MessageOptions options, string[] items, Action<string> andThen) {
+		void IWindow.ShowErrorMessage(string message, MessageOptions options, string[] items, Action<string> andThen) {
 		}
 
-		void IWindow.ShowErrorMessage3(string message, MessageItem[] items, Action<MessageItem> andThen) {
+		void IWindow.ShowErrorMessage(string message, MessageItem[] items, Action<MessageItem> andThen) {
 		}
 
-		void IWindow.ShowErrorMessage4(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
+		void IWindow.ShowErrorMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
 		}
 
-		void IWindow.ShowInformationMessage1(string message, string[] items, Action<string> andThen) {
+		void IWindow.ShowInformationMessage(string message, string[] items, Action<string> andThen) {
 		}
 
-		void IWindow.ShowInformationMessage2(string message, MessageOptions options, string[] items, Action<string> andThen) {
+		void IWindow.ShowInformationMessage(string message, MessageOptions options, string[] items, Action<string> andThen) {
 		}
 
-		void IWindow.ShowInformationMessage3(string message, MessageItem[] items, Action<MessageItem> andThen) {
+		void IWindow.ShowInformationMessage(string message, MessageItem[] items, Action<MessageItem> andThen) {
 		}
 
-		void IWindow.ShowInformationMessage4(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
+		void IWindow.ShowInformationMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
 		}
 
-		void IWindow.ShowWarningMessage1(string message, string[] items, Action<string> andThen) {
+		void IWindow.ShowWarningMessage(string message, string[] items, Action<string> andThen) {
 		}
 
-		void IWindow.ShowWarningMessage2(string message, MessageOptions options, string[] items, Action<string> andThen) {
+		void IWindow.ShowWarningMessage(string message, MessageOptions options, string[] items, Action<string> andThen) {
 		}
 
-		void IWindow.ShowWarningMessage3(string message, MessageItem[] items, Action<MessageItem> andThen) {
+		void IWindow.ShowWarningMessage(string message, MessageItem[] items, Action<MessageItem> andThen) {
 		}
 
-		void IWindow.ShowWarningMessage4(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
+		void IWindow.ShowWarningMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
 		}
 
 		void IWindow.ShowInputBox(InputBoxOptions options, Action<string> andThen) {
