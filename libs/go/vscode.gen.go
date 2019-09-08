@@ -46,27 +46,20 @@ type Window interface {
 }
 
 func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(string), ) {
-	msg := msgOutgoing{Ns: "window", Name: "showErrorMessage1", Payload: make(map[string]Any, 2)}
+	msg := msgToVsc{Ns: "window", Name: "showErrorMessage1", Payload: make(map[string]Any, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
 
-	var on func(Any, bool)
+	var on func(Any)
 	if andThen != nil {
-		on = func(payload Any, isFail bool) {
+		on = func(payload Any) {
 			var result string
-			var reject Any
-			if isFail {
-				reject = payload
-			} else {
-				var ok bool
-				result, ok = payload.(string)
-				if !ok {
-					reject = payload
-				}
+			var ok bool
+			result, ok = payload.(string)
+			if !ok {
+				return
 			}
-			if reject == nil {
-				andThen(result)
-			}
+			andThen(result)
 		}
 	}
 
@@ -74,28 +67,21 @@ func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(s
 }
 
 func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(string), ) {
-	msg := msgOutgoing{Ns: "window", Name: "showErrorMessage2", Payload: make(map[string]Any, 3)}
+	msg := msgToVsc{Ns: "window", Name: "showErrorMessage2", Payload: make(map[string]Any, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
 	msg.Payload["items"] = items
 
-	var on func(Any, bool)
+	var on func(Any)
 	if andThen != nil {
-		on = func(payload Any, isFail bool) {
+		on = func(payload Any) {
 			var result string
-			var reject Any
-			if isFail {
-				reject = payload
-			} else {
-				var ok bool
-				result, ok = payload.(string)
-				if !ok {
-					reject = payload
-				}
+			var ok bool
+			result, ok = payload.(string)
+			if !ok {
+				return
 			}
-			if reject == nil {
-				andThen(result)
-			}
+			andThen(result)
 		}
 	}
 
@@ -103,27 +89,20 @@ func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items 
 }
 
 func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen func(MessageItem), ) {
-	msg := msgOutgoing{Ns: "window", Name: "showErrorMessage3", Payload: make(map[string]Any, 2)}
+	msg := msgToVsc{Ns: "window", Name: "showErrorMessage3", Payload: make(map[string]Any, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
 
-	var on func(Any, bool)
+	var on func(Any)
 	if andThen != nil {
-		on = func(payload Any, isFail bool) {
+		on = func(payload Any) {
 			var result MessageItem
-			var reject Any
-			if isFail {
-				reject = payload
-			} else {
-				var ok bool
-				ok = result.populateFrom(payload)
-				if !ok {
-					reject = payload
-				}
+			var ok bool
+			ok = result.populateFrom(payload)
+			if !ok {
+				return
 			}
-			if reject == nil {
-				andThen(result)
-			}
+			andThen(result)
 		}
 	}
 
@@ -131,28 +110,21 @@ func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen f
 }
 
 func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(MessageItem), ) {
-	msg := msgOutgoing{Ns: "window", Name: "showErrorMessage4", Payload: make(map[string]Any, 3)}
+	msg := msgToVsc{Ns: "window", Name: "showErrorMessage4", Payload: make(map[string]Any, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
 	msg.Payload["items"] = items
 
-	var on func(Any, bool)
+	var on func(Any)
 	if andThen != nil {
-		on = func(payload Any, isFail bool) {
+		on = func(payload Any) {
 			var result MessageItem
-			var reject Any
-			if isFail {
-				reject = payload
-			} else {
-				var ok bool
-				ok = result.populateFrom(payload)
-				if !ok {
-					reject = payload
-				}
+			var ok bool
+			ok = result.populateFrom(payload)
+			if !ok {
+				return
 			}
-			if reject == nil {
-				andThen(result)
-			}
+			andThen(result)
 		}
 	}
 
@@ -160,27 +132,20 @@ func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items 
 }
 
 func (me *impl) ShowInformationMessage1(message string, items []string, andThen func(string), ) {
-	msg := msgOutgoing{Ns: "window", Name: "showInformationMessage1", Payload: make(map[string]Any, 2)}
+	msg := msgToVsc{Ns: "window", Name: "showInformationMessage1", Payload: make(map[string]Any, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
 
-	var on func(Any, bool)
+	var on func(Any)
 	if andThen != nil {
-		on = func(payload Any, isFail bool) {
+		on = func(payload Any) {
 			var result string
-			var reject Any
-			if isFail {
-				reject = payload
-			} else {
-				var ok bool
-				result, ok = payload.(string)
-				if !ok {
-					reject = payload
-				}
+			var ok bool
+			result, ok = payload.(string)
+			if !ok {
+				return
 			}
-			if reject == nil {
-				andThen(result)
-			}
+			andThen(result)
 		}
 	}
 
@@ -188,28 +153,21 @@ func (me *impl) ShowInformationMessage1(message string, items []string, andThen 
 }
 
 func (me *impl) ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(string), ) {
-	msg := msgOutgoing{Ns: "window", Name: "showInformationMessage2", Payload: make(map[string]Any, 3)}
+	msg := msgToVsc{Ns: "window", Name: "showInformationMessage2", Payload: make(map[string]Any, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
 	msg.Payload["items"] = items
 
-	var on func(Any, bool)
+	var on func(Any)
 	if andThen != nil {
-		on = func(payload Any, isFail bool) {
+		on = func(payload Any) {
 			var result string
-			var reject Any
-			if isFail {
-				reject = payload
-			} else {
-				var ok bool
-				result, ok = payload.(string)
-				if !ok {
-					reject = payload
-				}
+			var ok bool
+			result, ok = payload.(string)
+			if !ok {
+				return
 			}
-			if reject == nil {
-				andThen(result)
-			}
+			andThen(result)
 		}
 	}
 
@@ -217,27 +175,20 @@ func (me *impl) ShowInformationMessage2(message string, options MessageOptions, 
 }
 
 func (me *impl) ShowInformationMessage3(message string, items []MessageItem, andThen func(MessageItem), ) {
-	msg := msgOutgoing{Ns: "window", Name: "showInformationMessage3", Payload: make(map[string]Any, 2)}
+	msg := msgToVsc{Ns: "window", Name: "showInformationMessage3", Payload: make(map[string]Any, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
 
-	var on func(Any, bool)
+	var on func(Any)
 	if andThen != nil {
-		on = func(payload Any, isFail bool) {
+		on = func(payload Any) {
 			var result MessageItem
-			var reject Any
-			if isFail {
-				reject = payload
-			} else {
-				var ok bool
-				ok = result.populateFrom(payload)
-				if !ok {
-					reject = payload
-				}
+			var ok bool
+			ok = result.populateFrom(payload)
+			if !ok {
+				return
 			}
-			if reject == nil {
-				andThen(result)
-			}
+			andThen(result)
 		}
 	}
 
@@ -245,28 +196,21 @@ func (me *impl) ShowInformationMessage3(message string, items []MessageItem, and
 }
 
 func (me *impl) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(MessageItem), ) {
-	msg := msgOutgoing{Ns: "window", Name: "showInformationMessage4", Payload: make(map[string]Any, 3)}
+	msg := msgToVsc{Ns: "window", Name: "showInformationMessage4", Payload: make(map[string]Any, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
 	msg.Payload["items"] = items
 
-	var on func(Any, bool)
+	var on func(Any)
 	if andThen != nil {
-		on = func(payload Any, isFail bool) {
+		on = func(payload Any) {
 			var result MessageItem
-			var reject Any
-			if isFail {
-				reject = payload
-			} else {
-				var ok bool
-				ok = result.populateFrom(payload)
-				if !ok {
-					reject = payload
-				}
+			var ok bool
+			ok = result.populateFrom(payload)
+			if !ok {
+				return
 			}
-			if reject == nil {
-				andThen(result)
-			}
+			andThen(result)
 		}
 	}
 
@@ -274,27 +218,20 @@ func (me *impl) ShowInformationMessage4(message string, options MessageOptions, 
 }
 
 func (me *impl) ShowWarningMessage1(message string, items []string, andThen func(string), ) {
-	msg := msgOutgoing{Ns: "window", Name: "showWarningMessage1", Payload: make(map[string]Any, 2)}
+	msg := msgToVsc{Ns: "window", Name: "showWarningMessage1", Payload: make(map[string]Any, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
 
-	var on func(Any, bool)
+	var on func(Any)
 	if andThen != nil {
-		on = func(payload Any, isFail bool) {
+		on = func(payload Any) {
 			var result string
-			var reject Any
-			if isFail {
-				reject = payload
-			} else {
-				var ok bool
-				result, ok = payload.(string)
-				if !ok {
-					reject = payload
-				}
+			var ok bool
+			result, ok = payload.(string)
+			if !ok {
+				return
 			}
-			if reject == nil {
-				andThen(result)
-			}
+			andThen(result)
 		}
 	}
 
@@ -302,28 +239,21 @@ func (me *impl) ShowWarningMessage1(message string, items []string, andThen func
 }
 
 func (me *impl) ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(string), ) {
-	msg := msgOutgoing{Ns: "window", Name: "showWarningMessage2", Payload: make(map[string]Any, 3)}
+	msg := msgToVsc{Ns: "window", Name: "showWarningMessage2", Payload: make(map[string]Any, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
 	msg.Payload["items"] = items
 
-	var on func(Any, bool)
+	var on func(Any)
 	if andThen != nil {
-		on = func(payload Any, isFail bool) {
+		on = func(payload Any) {
 			var result string
-			var reject Any
-			if isFail {
-				reject = payload
-			} else {
-				var ok bool
-				result, ok = payload.(string)
-				if !ok {
-					reject = payload
-				}
+			var ok bool
+			result, ok = payload.(string)
+			if !ok {
+				return
 			}
-			if reject == nil {
-				andThen(result)
-			}
+			andThen(result)
 		}
 	}
 
@@ -331,27 +261,20 @@ func (me *impl) ShowWarningMessage2(message string, options MessageOptions, item
 }
 
 func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen func(MessageItem), ) {
-	msg := msgOutgoing{Ns: "window", Name: "showWarningMessage3", Payload: make(map[string]Any, 2)}
+	msg := msgToVsc{Ns: "window", Name: "showWarningMessage3", Payload: make(map[string]Any, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
 
-	var on func(Any, bool)
+	var on func(Any)
 	if andThen != nil {
-		on = func(payload Any, isFail bool) {
+		on = func(payload Any) {
 			var result MessageItem
-			var reject Any
-			if isFail {
-				reject = payload
-			} else {
-				var ok bool
-				ok = result.populateFrom(payload)
-				if !ok {
-					reject = payload
-				}
+			var ok bool
+			ok = result.populateFrom(payload)
+			if !ok {
+				return
 			}
-			if reject == nil {
-				andThen(result)
-			}
+			andThen(result)
 		}
 	}
 
@@ -359,28 +282,21 @@ func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen
 }
 
 func (me *impl) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(MessageItem), ) {
-	msg := msgOutgoing{Ns: "window", Name: "showWarningMessage4", Payload: make(map[string]Any, 3)}
+	msg := msgToVsc{Ns: "window", Name: "showWarningMessage4", Payload: make(map[string]Any, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
 	msg.Payload["items"] = items
 
-	var on func(Any, bool)
+	var on func(Any)
 	if andThen != nil {
-		on = func(payload Any, isFail bool) {
+		on = func(payload Any) {
 			var result MessageItem
-			var reject Any
-			if isFail {
-				reject = payload
-			} else {
-				var ok bool
-				ok = result.populateFrom(payload)
-				if !ok {
-					reject = payload
-				}
+			var ok bool
+			ok = result.populateFrom(payload)
+			if !ok {
+				return
 			}
-			if reject == nil {
-				andThen(result)
-			}
+			andThen(result)
 		}
 	}
 
@@ -388,49 +304,44 @@ func (me *impl) ShowWarningMessage4(message string, options MessageOptions, item
 }
 
 func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string), ) {
-	msg := msgOutgoing{Ns: "window", Name: "showInputBox", Payload: make(map[string]Any, 1)}
+	msg := msgToVsc{Ns: "window", Name: "showInputBox", Payload: make(map[string]Any, 1)}
 	funcids := make([]string, 0, 1)
 	me.callbacks.Lock()
-	options.ValidateInput_AppzFuncId = ""
-	if fn := options.ValidateInput; fn != nil {
-		options.ValidateInput_AppzFuncId = me.nextFuncId()
-		funcids = append(funcids, options.ValidateInput_AppzFuncId)
-		me.callbacks.other[options.ValidateInput_AppzFuncId] = func(args...Any) (ret Any, ok bool) {
-			if ok = (len(args) == 1); ok {
-				var a0 string
-				a0, ok = args[0].(string)
-				if !ok {
-					return
+	if options != nil {
+		options.ValidateInput_AppzFuncId = ""
+		if fn := options.ValidateInput; fn != nil {
+			options.ValidateInput_AppzFuncId = me.nextFuncId()
+			funcids = append(funcids, options.ValidateInput_AppzFuncId)
+			me.callbacks.other[options.ValidateInput_AppzFuncId] = func(args...Any) (ret Any, ok bool) {
+				if ok = (len(args) == 1); ok {
+					var a0 string
+					a0, ok = args[0].(string)
+					if !ok {
+						return
+					}
+					ret = fn(a0)
 				}
-				ret = fn(a0)
+				return
 			}
-			return
 		}
 	}
 	me.callbacks.Unlock()
 	msg.Payload["options"] = options
 
-	var on func(Any, bool)
+	var on func(Any)
 	if andThen != nil {
-		on = func(payload Any, isFail bool) {
+		on = func(payload Any) {
 			var result string
-			var reject Any
-			if isFail {
-				reject = payload
-			} else {
-				var ok bool
-				result, ok = payload.(string)
-				if !ok {
-					reject = payload
-				}
+			var ok bool
+			result, ok = payload.(string)
+			if !ok {
+				return
 			}
-			if reject == nil {
-				andThen(result)
-			}
+			andThen(result)
 		}
 	}
 
-	me.send(&msg, func(payload Any, isFail bool) {
+	me.send(&msg, func(payload Any) {
 		if len(funcids) != 0 {
 			me.callbacks.Lock()
 			for _, funcid := range funcids {
@@ -439,7 +350,7 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string), ) {
 			me.callbacks.Unlock()
 		}
 		if on != nil {
-			on(payload, isFail)
+			on(payload)
 		}
 	})
 }

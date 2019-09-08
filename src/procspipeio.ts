@@ -9,6 +9,8 @@ const vscwin = vsc.window
 
 
 
+const dbgLogJsonMsgs = true
+
 export let procs: { [_key: string]: node_proc.ChildProcess } = {}
 let pipes: { [_pid: string]: node_pipeio.ReadLine } = {}
 
@@ -95,41 +97,80 @@ export function proc(fullCmd: string): node_proc.ChildProcess {
     return p
 }
 
-export function send(proc: node_proc.ChildProcess, msgOut: ipc.MsgOutgoing) {
-    const onsendmaybefailed = (_problem: any) => {
-        // later: if proms involved signal rejection
-        // later: if waiting-callbacks hang around, del them
+export function send(proc: node_proc.ChildProcess, msgOut: ipc.MsgToApp) {
+    const onmaybefailed = (err: any) => {
+        if (err)
+            vscwin.showErrorMessage(err + '')
     }
     try {
-        const jsonmsgout = JSON.stringify(msgOut)
-        if (!proc.stdin.write(jsonmsgout + '\n'))
-            proc.stdin.once('drain', onsendmaybefailed)
-        else
-            process.nextTick(onsendmaybefailed)
+        const jsonmsgout = JSON.stringify(msgOut) + '\n'
+        if (dbgLogJsonMsgs)
+            console.log("OUT:\n" + jsonmsgout)
+
+        const bufs = bufsUntilPipeDrained[proc.pid]
+        if (bufs)
+            bufs.push(jsonmsgout)
+        else if (!proc.stdin.write(jsonmsgout, onmaybefailed)) {
+            bufsUntilPipeDrained[proc.pid] = []
+            proc.stdin.once('drain', onProcPipeDrain(proc, onmaybefailed))
+        }
     } catch (e) {
-        onsendmaybefailed(e)
+        onmaybefailed(e)
     }
+}
+
+const bufsUntilPipeDrained: { [_: number]: string[] } = {}
+
+function onProcPipeDrain(proc: node_proc.ChildProcess, onMaybeFailed: (err: any) => void) {
+    let ondrain: () => void
+    ondrain = () => {
+        const bufs = bufsUntilPipeDrained[proc.pid]
+        delete bufsUntilPipeDrained[proc.pid]
+        if (bufs && bufs.length)
+            for (let i = 0; i < bufs.length; i++)
+                if (!proc.stdin.write(bufs[i], onMaybeFailed)) {
+                    bufsUntilPipeDrained[proc.pid] =
+                        (i === (bufs.length - 1)) ? [] : bufs.slice(i + 1)
+                    proc.stdin.once('drain', ondrain)
+                    break
+                }
+    }
+    return ondrain
 }
 
 function onProcRecv(proc: node_proc.ChildProcess) {
     return (ln: string) => {
-        const msg = JSON.parse(ln) as ipc.MsgIncoming
+        if (dbgLogJsonMsgs)
+            console.log("IN:\n" + ln)
+        let msg: ipc.MsgFromApp
+        try { msg = JSON.parse(ln) as ipc.MsgFromApp } catch (_) { }
+
+        const onfail = (err: any) => {
+            vscwin.showWarningMessage(err)
+            if (msg && msg.andThen)
+                send(proc, { andThen: msg.andThen, failed: true })
+        }
+
         if (!msg)
             vscwin.showErrorMessage(ln)
+
         else if (msg.ns && msg.name) { // API request
             try {
                 const promise = vscgen.handle(msg)
-                promise.then(
-                    result => send(proc, { andThen: msg.andThen, payload: result }),
-                    err => send(proc, { andThen: msg.andThen, isFail: true, payload: err })
+                if (promise) promise.then(
+                    ret => {
+                        if (msg.andThen)
+                            send(proc, { andThen: msg.andThen, payload: ret })
+                    },
+                    err =>
+                        onfail(err),
                 )
-            } catch (err) {
-                vscwin.showErrorMessage(err)
-                if (msg.andThen)
-                    send(proc, { andThen: msg.andThen, isFail: true, payload: err })
-            }
-        } else if (msg.andThen) { // response to an earlier remote-func-call of ours
+            } catch (err) { onfail(err) }
 
-        }
+        } else if (msg.andThen) { // response to an earlier remote-func-call of ours
+            vscwin.showInformationMessage(ln)
+
+        } else
+            vscwin.showErrorMessage(ln)
     }
 }

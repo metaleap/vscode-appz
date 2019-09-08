@@ -1,13 +1,13 @@
 
-export interface MsgIncoming {
+export interface MsgFromApp {
     ns?: string
     name?: string
     payload: { [_: string]: any }
     andThen?: string
 }
 
-export interface MsgOutgoing {
-    andThen?: string
-    payload: any
-    isFail?: boolean
+export interface MsgToApp {
+    andThen: string
+    payload?: any
+    failed?: boolean
 }

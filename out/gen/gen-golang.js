@@ -70,31 +70,34 @@ class Gen extends gen.Gen {
             for (const struct of prep.structs.filter(_ => _.name === arg.typeSpec))
                 if (struct.funcFields && struct.funcFields.length)
                     for (const funcfield of struct.funcFields)
-                        funcfields.push({ arg: arg.name, struct: struct, name: funcfield });
+                        funcfields.push({ arg: arg, struct: struct, name: funcfield });
         }
         src += ") {\n";
         const numargs = method.args.filter(_ => !_.isFromRetThenable).length;
-        src += `\tmsg := msgOutgoing{Ns: "${it.name}", Name: "${method.name}", Payload: make(map[string]Any, ${numargs})}\n`;
+        src += `\tmsg := msgToVsc{Ns: "${it.name}", Name: "${method.name}", Payload: make(map[string]Any, ${numargs})}\n`;
         if (funcfields.length) {
             src += `\tfuncids := make([]string, 0, ${funcfields.length})\n`;
             src += `\tme.callbacks.Lock()\n`;
             for (const ff of funcfields) {
-                const facc = this.caseLo(ff.arg) + '.' + this.caseUp(ff.name);
-                src += `\t${facc}_AppzFuncId = ""\n`;
-                src += `\tif fn := ${facc}; fn != nil {\n`;
-                src += `\t\t${facc}_AppzFuncId = me.nextFuncId()\n`;
-                src += `\t\tfuncids = append(funcids, ${facc}_AppzFuncId)\n`;
-                src += `\t\tme.callbacks.other[${facc}_AppzFuncId] = func(args...Any) (ret Any, ok bool) {\n`;
+                let facc = this.caseLo(ff.arg.name);
+                src += `\tif ${ff.arg.optional ? (facc + ' != nil') : 'true'} {\n`;
+                facc += '.' + this.caseUp(ff.name);
+                src += `\t\t${facc}_AppzFuncId = ""\n`;
+                src += `\t\tif fn := ${facc}; fn != nil {\n`;
+                src += `\t\t\t${facc}_AppzFuncId = me.nextFuncId()\n`;
+                src += `\t\t\tfuncids = append(funcids, ${facc}_AppzFuncId)\n`;
+                src += `\t\t\tme.callbacks.other[${facc}_AppzFuncId] = func(args...Any) (ret Any, ok bool) {\n`;
                 const args = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)[0];
-                src += `\t\t\tif ok = (len(args) == ${args.length}); ok {\n`;
+                src += `\t\t\t\tif ok = (len(args) == ${args.length}); ok {\n`;
                 for (let a = 0; a < args.length; a++) {
                     const tspec = this.typeSpec(args[a]);
-                    src += `\t\t\t\tvar a${a} ${tspec}\n`;
-                    src += this.genDecodeFromAny(prep, "\t\t\t\t", "args[" + a + "]", "a" + a, tspec, "", "return", true);
+                    src += `\t\t\t\t\tvar a${a} ${tspec}\n`;
+                    src += this.genDecodeFromAny(prep, "\t\t\t\t\t", "args[" + a + "]", "a" + a, tspec, "", "return", true);
                 }
-                src += `\t\t\t\tret = fn(${args.map((_, a) => 'a' + a).join(', ')})\n`;
+                src += `\t\t\t\t\tret = fn(${args.map((_, a) => 'a' + a).join(', ')})\n`;
+                src += `\t\t\t\t}\n`;
+                src += `\t\t\t\treturn\n`;
                 src += `\t\t\t}\n`;
-                src += `\t\t\treturn\n`;
                 src += `\t\t}\n`;
                 src += `\t}\n`;
             }
@@ -103,27 +106,20 @@ class Gen extends gen.Gen {
         for (const arg of method.args)
             if (!arg.isFromRetThenable)
                 src += `\tmsg.Payload["${arg.name}"] = ${this.caseLo(arg.name)}\n`;
-        src += `\n\tvar on func(Any, bool)\n`;
+        src += `\n\tvar on func(Any)\n`;
         const lastarg = method.args[method.args.length - 1];
         if (lastarg.isFromRetThenable) {
             let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true);
             src += `\tif ${laname} != nil {\n`;
-            src += `\t\ton = func(payload Any, isFail bool) {\n`;
+            src += `\t\ton = func(payload Any) {\n`;
             src += `\t\t\tvar result ${tret}\n`;
-            src += `\t\t\tvar reject Any\n`;
-            src += `\t\t\tif isFail {\n`;
-            src += `\t\t\t\treject = payload\n`;
-            src += `\t\t\t} else {\n`;
-            src += this.genDecodeFromAny(prep, "\t\t\t\t", "payload", "result", tret, "reject");
-            src += `\t\t\t}\n`;
-            src += `\t\t\tif reject == nil {\n`;
-            src += `\t\t\t\t${laname}(result)\n`;
-            src += `\t\t\t}\n`;
+            src += this.genDecodeFromAny(prep, "\t\t\t", "payload", "result", tret, "", "return");
+            src += `\t\t\t${laname}(result)\n`;
             src += `\t\t}\n`;
             src += `\t}\n`;
         }
         if (funcfields.length) {
-            src += `\n\tme.send(&msg, func(payload Any, isFail bool) {\n`;
+            src += `\n\tme.send(&msg, func(payload Any) {\n`;
             src += `\t\tif len(funcids) != 0 {\n`;
             src += `\t\t\tme.callbacks.Lock()\n`;
             src += `\t\t\tfor _, funcid := range funcids {\n`;
@@ -131,7 +127,7 @@ class Gen extends gen.Gen {
             src += `\t\t\t}\n`;
             src += `\t\t\tme.callbacks.Unlock()\n`;
             src += `\t\t}\n`;
-            src += `\t\tif on != nil {\n\t\t\ton(payload, isFail)\n\t\t}\n`;
+            src += `\t\tif on != nil {\n\t\t\ton(payload)\n\t\t}\n`;
             src += `\t})\n`;
         }
         else

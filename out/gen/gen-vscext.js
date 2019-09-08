@@ -21,7 +21,7 @@ class Gen extends gen.Gen {
                 src += "}\n";
             }
         }
-        src += "\nexport function handle(msg: ipc.MsgIncoming): Thenable<any> {\n";
+        src += "\nexport function handle(msg: ipc.MsgFromApp): Thenable<any> {\n";
         src += "\tswitch (msg.ns) {\n";
         for (const it of prep.interfaces) {
             src += `\t\tcase "${it.name}":\n`;
@@ -32,7 +32,7 @@ class Gen extends gen.Gen {
                 src += `\t\t\t\t\treturn ${method.fromOrig.qName}(`;
                 for (const arg of method.args)
                     if (arg !== lastarg)
-                        src += (arg.spreads ? '...' : '') + `msg.payload['${arg.name}'] as ${this.typeSpec(arg.typeSpec)}, `;
+                        src += (arg.spreads ? '...' : '') + `(msg.payload['${arg.name}']${(gen.typeArrOf(arg.typeSpec) || gen.typeTupOf(arg.typeSpec)) ? ' || []' : ''}) as ${this.typeSpec(arg.typeSpec)}, `;
                 src += ")\n";
             }
             src += "\t\t\t\tdefault:\n";

@@ -12,17 +12,17 @@ import (
 
 type Any = interface{}
 
-type msgOutgoing struct {
+type msgToVsc struct {
 	Ns       string         `json:"ns"`   // eg. 'window'
 	Name     string         `json:"name"` // eg. 'ShowInformationMessage3'
 	Payload  map[string]Any `json:"payload"`
 	Callback string         `json:"andThen"`
 }
 
-type msgIncoming struct {
+type msgFromVsc struct {
 	Callback string `json:"andThen"`
 	Payload  Any    `json:"payload"`
-	IsFail   bool   `json:"isFail"`
+	Failed   bool   `json:"failed"`
 }
 
 type impl struct {
@@ -32,7 +32,7 @@ type impl struct {
 		sync.Mutex
 		looping bool
 		counter uint64
-		waiting map[string]func(Any, bool)
+		waiting map[string]func(Any)
 		other   map[string]func(...Any) (Any, bool)
 	}
 }
@@ -62,7 +62,7 @@ func Via(stdin io.Reader, stdout io.Writer) Protocol {
 	me.readln.Buffer(make([]byte, 1024*1024), 8*1024*1024)
 	me.counterparty.SetEscapeHTML(false)
 	me.counterparty.SetIndent("", "")
-	me.callbacks.waiting = make(map[string]func(Any, bool), 8)
+	me.callbacks.waiting = make(map[string]func(Any), 8)
 	me.callbacks.other = make(map[string]func(...Any) (Any, bool), 8)
 	return me
 }
@@ -75,7 +75,7 @@ func (me *impl) nextFuncId() string {
 func (me *impl) loopReadln() {
 	for me.readln.Scan() {
 		if jsonmsg := strings.TrimSpace(me.readln.Text()); jsonmsg != "" {
-			var msg msgIncoming
+			var msg msgFromVsc
 			err := json.Unmarshal([]byte(jsonmsg), &msg)
 			if err == nil {
 				me.callbacks.Lock()
@@ -83,15 +83,15 @@ func (me *impl) loopReadln() {
 				delete(me.callbacks.waiting, msg.Callback)
 				delete(me.callbacks.other, msg.Callback)
 				me.callbacks.Unlock()
-				if cb != nil {
-					cb(msg.Payload, msg.IsFail)
+				if cb != nil && !msg.Failed {
+					cb(msg.Payload)
 				} else if fn != nil {
 					args, ok := msg.Payload.([]Any)
 					if !ok {
 						args = []Any{msg.Payload}
 					}
 					ret, ok := fn(args...)
-					me.send(&msgOutgoing{
+					me.send(&msgToVsc{
 						Callback: msg.Callback,
 						Payload: map[string]Any{
 							"ret": ret,
@@ -107,7 +107,7 @@ func (me *impl) loopReadln() {
 	}
 }
 
-func (me *impl) send(msg *msgOutgoing, on func(Any, bool)) {
+func (me *impl) send(msg *msgToVsc, on func(Any)) {
 	me.callbacks.Lock()
 	var startloop bool
 	if startloop = !me.callbacks.looping; startloop {
