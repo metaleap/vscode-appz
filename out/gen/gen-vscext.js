@@ -67,10 +67,10 @@ class Gen extends gen.Gen {
             return "(" + tfun[0].map(_ => this.typeSpec(_)).join(", ") + ")=>" + (tfun[1] ? this.typeSpec(tfun[1]) : "void");
         let ttup = gen.typeTupOf(from);
         if (ttup && ttup.length)
-            return "[" + ttup.map(_ => this.typeSpec(_)).join(',') + "]";
+            return "[" + ttup.map(_ => this.typeSpec(_)).join(', ') + "]";
         let tsum = gen.typeSumOf(from);
         if (tsum && tsum.length)
-            return '(' + tsum.map(_ => '(' + this.typeSpec(_) + ')').join('|') + ')';
+            return this.parensIfJoin(tsum.map(_ => '(' + this.typeSpec(_) + ')'), '|');
         const tprom = gen.typeProm(from);
         if (tprom && tprom.length)
             if (tprom.length > 1)

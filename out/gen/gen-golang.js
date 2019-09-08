@@ -240,7 +240,7 @@ class Gen extends gen.Gen {
         let tsum = gen.typeSumOf(from);
         if (tsum && tsum.length) {
             tsum = tsum.filter(_ => _ !== gen.ScriptPrimType.Null && _ !== gen.ScriptPrimType.Undefined && !gen.typeProm(_));
-            return tsum.map(_ => this.typeSpec(_)).join('|');
+            return this.parensIfJoin(tsum.map(_ => this.typeSpec(_)), '|');
         }
         const tprom = gen.typeProm(from);
         if (tprom && tprom.length)

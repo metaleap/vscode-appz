@@ -78,11 +78,11 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         let ttup = gen.typeTupOf(from)
         if (ttup && ttup.length)
-            return "[" + ttup.map(_ => this.typeSpec(_)).join(',') + "]"
+            return "[" + ttup.map(_ => this.typeSpec(_)).join(', ') + "]"
 
         let tsum = gen.typeSumOf(from)
         if (tsum && tsum.length)
-            return '(' + tsum.map(_ => '(' + this.typeSpec(_) + ')').join('|') + ')'
+            return this.parensIfJoin(tsum.map(_ => '(' + this.typeSpec(_) + ')'), '|')
 
         const tprom = gen.typeProm(from)
         if (tprom && tprom.length)

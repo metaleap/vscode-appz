@@ -305,6 +305,10 @@ export abstract class Gen {
         return name.charAt(0).toUpperCase() + name.slice(1)
     }
 
+    parensIfJoin(arr: string[], joinSep: string = ', '): string {
+        return (arr && arr.length === 1) ? arr[0] : ('(' + arr.join(joinSep) + ')')
+    }
+
     writeFileSync(pkgName: string, src: string) {
         node_fs.writeFileSync(`${this.outFilePathPref}${this.caseLo(pkgName)}${this.outFilePathSuff}`, src)
     }

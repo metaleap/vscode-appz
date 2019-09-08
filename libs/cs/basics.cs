@@ -1,6 +1,6 @@
 namespace Vscode {
 
-    public class Foo {
+    internal partial class impl {
     }
 
 }
