@@ -65,8 +65,9 @@ function onProcErr(pId: number) {
 export function proc(fullCmd: string): node_proc.ChildProcess {
     let p = procs[fullCmd]
     if (!p) {
+        const [cmd, args] = cmdAndArgs(fullCmd)
         try {
-            p = node_proc.spawn(fullCmd)
+            p = node_proc.spawn(cmd, args, { stdio: 'pipe' })
         } catch (e) { vscwin.showErrorMessage(e) }
         if (p)
             if (!(p.pid && p.stdin && p.stdin.writable && p.stdout && p.stdout.readable && p.stderr && p.stderr.readable))
@@ -89,12 +90,46 @@ export function proc(fullCmd: string): node_proc.ChildProcess {
                     p.stderr.on('data', vscwin.showWarningMessage)
                 }
             }
-        if (!p)
-            delete procs[fullCmd]
-        else
+        if (p)
             procs[fullCmd] = p
+        else {
+            delete procs[fullCmd]
+            vscwin.showErrorMessage('Could not run: ' + fullCmd)
+        }
     }
     return p
+}
+
+function cmdAndArgs(fullCmd: string): [string, string[]] {
+    let cmd = (fullCmd + '').trim(), args: string[] = []
+    const idx = cmd.indexOf(' ')
+    if (idx > 0) {
+        let instr = 0
+        for (let i = idx; i < cmd.length; i++)
+            if (cmd[i] === '"') {
+                if (instr === 0)
+                    instr = i
+                else if (cmd[i - 1] !== '\\') {
+                    args.push(cmd.slice(instr + 1, i))
+                    instr = 0
+                }
+            } else if (instr === 0 && i < (cmd.length - 1) && cmd[i] === ' ' && cmd[i + 1] !== '"') {
+                const pos = cmd.indexOf(' ', i + 1)
+                if (pos < 0) {
+                    args.push(cmd.slice(i + 1))
+                    break
+                } else if (pos > (i + 1)) {
+                    args.push(cmd.slice(i + 1, pos))
+                    i = pos - 1
+                }
+            }
+        if (instr > 0)
+            args.push(cmd.slice(instr))
+
+        cmd = cmd.slice(0, idx)
+        console.log(args)
+    }
+    return [cmd, args]
 }
 
 export function send(proc: node_proc.ChildProcess, msgOut: ipc.MsgToApp) {

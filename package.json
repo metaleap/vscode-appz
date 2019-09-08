@@ -35,7 +35,7 @@
 					"appz.progs": {
 						"type": "array",
 						"default": [
-							"go-vsc-appz-demo"
+							"go-vsc-appz-demo \"${arg}\" \"${workspaceFolder}\""
 						]
 					}
 				}

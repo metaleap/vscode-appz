@@ -75,8 +75,9 @@ function onProcErr(pId) {
 function proc(fullCmd) {
     let p = exports.procs[fullCmd];
     if (!p) {
+        const [cmd, args] = cmdAndArgs(fullCmd);
         try {
-            p = node_proc.spawn(fullCmd);
+            p = node_proc.spawn(cmd, args, { stdio: 'pipe' });
         }
         catch (e) {
             vscwin.showErrorMessage(e);
@@ -114,14 +115,48 @@ function proc(fullCmd) {
                     p.stderr.on('data', vscwin.showWarningMessage);
                 }
             }
-        if (!p)
-            delete exports.procs[fullCmd];
-        else
+        if (p)
             exports.procs[fullCmd] = p;
+        else {
+            delete exports.procs[fullCmd];
+            vscwin.showErrorMessage('Could not run: ' + fullCmd);
+        }
     }
     return p;
 }
 exports.proc = proc;
+function cmdAndArgs(fullCmd) {
+    let cmd = (fullCmd + '').trim(), args = [];
+    const idx = cmd.indexOf(' ');
+    if (idx > 0) {
+        let instr = 0;
+        for (let i = idx; i < cmd.length; i++)
+            if (cmd[i] === '"') {
+                if (instr === 0)
+                    instr = i;
+                else if (cmd[i - 1] !== '\\') {
+                    args.push(cmd.slice(instr + 1, i));
+                    instr = 0;
+                }
+            }
+            else if (instr === 0 && i < (cmd.length - 1) && cmd[i] === ' ' && cmd[i + 1] !== '"') {
+                const pos = cmd.indexOf(' ', i + 1);
+                if (pos < 0) {
+                    args.push(cmd.slice(i + 1));
+                    break;
+                }
+                else if (pos > (i + 1)) {
+                    args.push(cmd.slice(i + 1, pos));
+                    i = pos - 1;
+                }
+            }
+        if (instr > 0)
+            args.push(cmd.slice(instr));
+        cmd = cmd.slice(0, idx);
+        console.log(args);
+    }
+    return [cmd, args];
+}
 function send(proc, msgOut) {
     const onmaybefailed = (err) => {
         if (err)
