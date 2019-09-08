@@ -2,7 +2,9 @@
 {
     "files.exclude": {
         "node_modules": true,
-        "out": true
+        "out": true,
+        "libs/cs/bin": true,
+        "libs/cs/obj": true,
     },
     "search.exclude": {
         "out": true // set this to false to include "out" folder in search results

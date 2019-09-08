@@ -46,17 +46,6 @@ export function Interpolate(str: string): Thenable<string> {
     else if (expr.startsWith("command:"))
         return fromProm(vsc.commands.executeCommand(expr.slice("command:".length)))
 
-    else if (expr.startsWith("pick:")) {
-        const items = expr.slice("pick:".length).split('|')
-        if (items && items.length) {
-            let prompt = undefined
-            const colon = items[0].indexOf(':')
-            if (colon > 0)
-                [prompt, items[0]] = [items[0].slice(0, colon), items[0].slice(colon + 1)]
-            return fromProm(vsc.window.showQuickPick(items, { ignoreFocusOut: true, placeHolder: prompt }))
-        }
-    }
-
     else {
         const fileordirstuff = (name: string): string => {
             const eds = [vsc.window.activeTextEditor].concat(...vsc.window.visibleTextEditors.filter(_ => _ !== vsc.window.activeTextEditor)).filter(_ => _ ? true : false)
@@ -118,9 +107,19 @@ export function Interpolate(str: string): Thenable<string> {
         if (AllStdBuiltins.some(_ => expr === _ || expr.startsWith(_ + ':')))
             newval = fileordirstuff(expr)
 
-        if (!newval)
-            return fromProm(vsc.window.showInputBox({ ignoreFocusOut: true, prompt: expr }))
+        if (!newval) {
+            let items: string[] = [],
+                prompt = expr
+            const colon = prompt.indexOf(':')
+            if (colon > 0)
+                [prompt, items] = [prompt.slice(0, colon), prompt.slice(colon + 1).split('|')]
+            return (items && items.length)
+                ? fromProm(vsc.window.showQuickPick(items, { ignoreFocusOut: true, placeHolder: prompt }))
+                : fromProm(vsc.window.showInputBox({ ignoreFocusOut: true, prompt: prompt }))
+        }
+
     }
+
     return Promise.resolve<string>(Interpolate(str.slice(0, idx1) + newval + str.slice(idx2 + 1)))
 }
 

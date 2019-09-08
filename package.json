@@ -35,7 +35,7 @@
 					"appz.progs": {
 						"type": "array",
 						"default": [
-							"go-vsc-appz-demo \"${Enter a name}\" \"${pick:Pick a greeting:Hello|Hiya|Hola}\""
+							"go-vsc-appz-demo \"${Enter a name}\" \"${Pick a greeting:Hello|Hiya|Hola}\""
 						]
 					}
 				}
