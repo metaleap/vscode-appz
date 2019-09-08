@@ -1,3 +1,6 @@
+import * as ipc from './ipcprotocol'
+import * as vscgen from './vscode.gen'
+
 import * as node_proc from 'child_process'
 import * as node_pipeio from 'readline'
 
@@ -74,7 +77,7 @@ export function proc(fullCmd: string): node_proc.ChildProcess {
                     try { p.kill() } catch (_) { } finally { p = null }
                 else {
                     pipe.setMaxListeners(0)
-                    pipe.on('line', vscwin.showInformationMessage)
+                    pipe.on('line', onProcRecv(p))
                     pipes[p.pid.toString()] = pipe
                     p.on('error', onProcErr(p.pid))
                     const ongone = onProgEnd(p.pid)
@@ -104,5 +107,18 @@ export function send(proc: node_proc.ChildProcess, jsonMsgOut: string) {
             process.nextTick(onsendmaybefailed)
     } catch (e) {
         onsendmaybefailed(e)
+    }
+}
+
+function onProcRecv(proc: node_proc.ChildProcess) {
+    return (ln: string) => {
+        const msg = JSON.parse(ln) as ipc.MsgIncoming
+        if (!msg)
+            vscwin.showErrorMessage(ln)
+        else if (msg.ns && msg.name) { // API request
+            vscgen.handle(msg)
+        } else if (msg.andThen) { // response to an earlier remote-func-call of ours
+
+        }
     }
 }

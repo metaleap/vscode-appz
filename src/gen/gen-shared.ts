@@ -57,6 +57,7 @@ export interface GenPrepInterface {
 export interface GenPrepMethod {
     name: string
     args: GenPrepArg[]
+    fromOrig: GenJobFunc
 }
 
 export interface GenPrepArg {
@@ -64,6 +65,7 @@ export interface GenPrepArg {
     typeSpec: TypeSpec
     optional: boolean
     isFromRetThenable: boolean
+    spreads: boolean
 }
 
 export class GenPrep {
@@ -110,7 +112,9 @@ export class GenPrep {
             e: this.enums,
             s: this.structs,
             i: this.interfaces,
-        }, undefined, 2))
+        }, function (this: any, key: string, val: any): any {
+            return (key === 'parent') ? null : val
+        }, 2))
     }
 
     addEnum(enumJob: GenJobEnum) {
@@ -166,7 +170,9 @@ export class GenPrep {
                 typeSpec: this.typeSpec(_.type, funcJob.decl.typeParameters),
                 optional: _.questionToken ? true : false,
                 isFromRetThenable: false,
-            }))
+                spreads: _.dotDotDotToken ? true : false,
+            })),
+            fromOrig: funcJob
         })
         const tret = this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters)
         if (tret) {
@@ -174,7 +180,7 @@ export class GenPrep {
             const argname = pickName(false, ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args)
             if (!argname)
                 throw (method)
-            method.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, })
+            method.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, spreads: false })
         }
     }
 

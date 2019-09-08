@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const vscgen = require("./vscode.gen");
 const node_proc = require("child_process");
 const node_pipeio = require("readline");
 const vsc = require("vscode");
@@ -102,7 +103,7 @@ function proc(fullCmd) {
                     }
                 else {
                     pipe.setMaxListeners(0);
-                    pipe.on('line', vscwin.showInformationMessage);
+                    pipe.on('line', onProcRecv(p));
                     pipes[p.pid.toString()] = pipe;
                     p.on('error', onProcErr(p.pid));
                     const ongone = onProgEnd(p.pid);
@@ -120,3 +121,29 @@ function proc(fullCmd) {
     return p;
 }
 exports.proc = proc;
+function send(proc, jsonMsgOut) {
+    const onsendmaybefailed = (_problem) => {
+    };
+    try {
+        if (!proc.stdin.write(jsonMsgOut + '\n'))
+            proc.stdin.once('drain', onsendmaybefailed);
+        else
+            process.nextTick(onsendmaybefailed);
+    }
+    catch (e) {
+        onsendmaybefailed(e);
+    }
+}
+exports.send = send;
+function onProcRecv(proc) {
+    return (ln) => {
+        const msg = JSON.parse(ln);
+        if (!msg)
+            vscwin.showErrorMessage(ln);
+        else if (msg.ns && msg.name) {
+            vscgen.handle(msg);
+        }
+        else if (msg.andThen) {
+        }
+    };
+}
