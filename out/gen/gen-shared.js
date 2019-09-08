@@ -88,6 +88,7 @@ class GenPrep {
         if (!iface)
             this.interfaces.push(iface = { name: ifacename, methods: [] });
         iface.methods.push({
+            nameOrig: qname[qname.length - 1],
             name: qname[qname.length - 1] + ((funcJob.overload > 0) ? funcJob.overload : ''),
             args: funcJob.decl.parameters.map(_ => ({
                 name: _.name.getText(),

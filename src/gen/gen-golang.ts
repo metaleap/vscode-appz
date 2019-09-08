@@ -87,7 +87,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         src += `\tmsg := msgToVsc{Ns: "${it.name}", Name: "${method.name}", Payload: make(map[string]Any, ${numargs})}\n`
         if (funcfields.length) {
             src += `\tfuncids := make([]string, 0, ${funcfields.length})\n`
-            src += `\tme.callbacks.Lock()\n`
+            src += `\tme.state.Lock()\n`
             for (const ff of funcfields) {
                 let facc = this.caseLo(ff.arg.name)
                 src += `\tif ${ff.arg.optional ? (facc + ' != nil') : 'true'} {\n`
@@ -96,7 +96,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 src += `\t\tif fn := ${facc}; fn != nil {\n`
                 src += `\t\t\t${facc}_AppzFuncId = me.nextFuncId()\n`
                 src += `\t\t\tfuncids = append(funcids, ${facc}_AppzFuncId)\n`
-                src += `\t\t\tme.callbacks.other[${facc}_AppzFuncId] = func(args...Any) (ret Any, ok bool) {\n`
+                src += `\t\t\tme.state.callbacks.other[${facc}_AppzFuncId] = func(args...Any) (ret Any, ok bool) {\n`
                 const args = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)[0]
                 src += `\t\t\t\tif ok = (len(args) == ${args.length}); ok {\n`
                 for (let a = 0; a < args.length; a++) {
@@ -111,7 +111,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 src += `\t\t}\n`
                 src += `\t}\n`
             }
-            src += `\tme.callbacks.Unlock()\n`
+            src += `\tme.state.Unlock()\n`
         }
         for (const arg of method.args)
             if (!arg.isFromRetThenable)
@@ -132,11 +132,11 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (funcfields.length) {
             src += `\n\tme.send(&msg, func(payload Any) {\n`
             src += `\t\tif len(funcids) != 0 {\n`
-            src += `\t\t\tme.callbacks.Lock()\n`
+            src += `\t\t\tme.state.Lock()\n`
             src += `\t\t\tfor _, funcid := range funcids {\n`
-            src += `\t\t\t\tdelete(me.callbacks.other, funcid)\n`
+            src += `\t\t\t\tdelete(me.state.callbacks.other, funcid)\n`
             src += `\t\t\t}\n`
-            src += `\t\t\tme.callbacks.Unlock()\n`
+            src += `\t\t\tme.state.Unlock()\n`
             src += `\t\t}\n`
             src += `\t\tif on != nil {\n\t\t\ton(payload)\n\t\t}\n`
             src += `\t})\n`

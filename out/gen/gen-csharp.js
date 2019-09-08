@@ -46,13 +46,13 @@ class Gen extends gen.Gen {
     genInterface(it) {
         let src = "\tpublic interface I" + this.caseUp(it.name) + " {\n";
         for (const method of it.methods)
-            src += "\t\tvoid " + this.caseUp(method.name) + "("
+            src += "\t\tvoid " + this.caseUp(method.nameOrig) + "("
                 + method.args.map(_ => this.typeSpec(_.typeSpec) + " " + this.caseLo(_.name)).join(', ')
                 + ");\n";
         src += "\t}\n\n";
         src += "\tinternal partial class impl : I" + this.caseUp(it.name) + " {";
         for (const method of it.methods)
-            src += "\n\t\tvoid I" + this.caseUp(it.name) + "." + this.caseUp(method.name) + "("
+            src += "\n\t\tvoid I" + this.caseUp(it.name) + "." + this.caseUp(method.nameOrig) + "("
                 + method.args.map(_ => this.typeSpec(_.typeSpec) + " " + this.caseLo(_.name)).join(', ')
                 + ") {\n"
                 + "\t\t}\n";

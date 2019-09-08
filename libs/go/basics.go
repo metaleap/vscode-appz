@@ -13,27 +13,29 @@ import (
 type Any = interface{}
 
 type msgToVsc struct {
-	Ns       string         `json:"ns"`   // eg. 'window'
-	Name     string         `json:"name"` // eg. 'ShowInformationMessage3'
-	Payload  map[string]Any `json:"payload"`
-	Callback string         `json:"andThen"`
+	Ns      string         `json:"ns"`   // eg. 'window'
+	Name    string         `json:"name"` // eg. 'ShowInformationMessage3'
+	Payload map[string]Any `json:"payload"`
+	AndThen string         `json:"andThen"`
 }
 
 type msgFromVsc struct {
-	Callback string `json:"andThen"`
-	Payload  Any    `json:"payload"`
-	Failed   bool   `json:"failed"`
+	AndThen string `json:"andThen"`
+	Payload Any    `json:"payload"`
+	Failed  bool   `json:"failed"`
 }
 
 type impl struct {
 	readln       *bufio.Scanner
 	counterparty *json.Encoder
-	callbacks    struct {
+	state        struct {
 		sync.Mutex
-		looping bool
-		counter uint64
-		waiting map[string]func(Any)
-		other   map[string]func(...Any) (Any, bool)
+		looping   bool
+		counter   uint64
+		callbacks struct {
+			waiting map[string]func(Any)
+			other   map[string]func(...Any) (Any, bool)
+		}
 	}
 }
 
@@ -62,14 +64,14 @@ func Via(stdin io.Reader, stdout io.Writer) Protocol {
 	me.readln.Buffer(make([]byte, 1024*1024), 8*1024*1024)
 	me.counterparty.SetEscapeHTML(false)
 	me.counterparty.SetIndent("", "")
-	me.callbacks.waiting = make(map[string]func(Any), 8)
-	me.callbacks.other = make(map[string]func(...Any) (Any, bool), 8)
+	me.state.callbacks.waiting = make(map[string]func(Any), 8)
+	me.state.callbacks.other = make(map[string]func(...Any) (Any, bool), 8)
 	return me
 }
 
 func (me *impl) nextFuncId() string {
-	me.callbacks.counter++
-	return strconv.FormatUint(me.callbacks.counter, 36)
+	me.state.counter++
+	return strconv.FormatUint(me.state.counter, 36)
 }
 
 func (me *impl) loopReadln() {
@@ -78,11 +80,11 @@ func (me *impl) loopReadln() {
 			var msg msgFromVsc
 			err := json.Unmarshal([]byte(jsonmsg), &msg)
 			if err == nil {
-				me.callbacks.Lock()
-				cb, fn := me.callbacks.waiting[msg.Callback], me.callbacks.other[msg.Callback]
-				delete(me.callbacks.waiting, msg.Callback)
-				delete(me.callbacks.other, msg.Callback)
-				me.callbacks.Unlock()
+				me.state.Lock()
+				cb, fn := me.state.callbacks.waiting[msg.AndThen], me.state.callbacks.other[msg.AndThen]
+				delete(me.state.callbacks.waiting, msg.AndThen)
+				delete(me.state.callbacks.other, msg.AndThen)
+				me.state.Unlock()
 				if cb != nil && !msg.Failed {
 					cb(msg.Payload)
 				} else if fn != nil {
@@ -92,7 +94,7 @@ func (me *impl) loopReadln() {
 					}
 					ret, ok := fn(args...)
 					me.send(&msgToVsc{
-						Callback: msg.Callback,
+						AndThen: msg.AndThen,
 						Payload: map[string]Any{
 							"ret": ret,
 							"ok":  ok,
@@ -108,16 +110,16 @@ func (me *impl) loopReadln() {
 }
 
 func (me *impl) send(msg *msgToVsc, on func(Any)) {
-	me.callbacks.Lock()
+	me.state.Lock()
 	var startloop bool
-	if startloop = !me.callbacks.looping; startloop {
-		me.callbacks.looping = true
+	if startloop = !me.state.looping; startloop {
+		me.state.looping = true
 	}
 	if on != nil {
-		msg.Callback = me.nextFuncId()
-		me.callbacks.waiting[msg.Callback] = on
+		msg.AndThen = me.nextFuncId()
+		me.state.callbacks.waiting[msg.AndThen] = on
 	}
-	me.callbacks.Unlock()
+	me.state.Unlock()
 
 	err := me.counterparty.Encode(msg)
 	if err != nil && OnError != nil {

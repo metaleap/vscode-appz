@@ -306,13 +306,13 @@ func (me *impl) ShowWarningMessage4(message string, options MessageOptions, item
 func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string), ) {
 	msg := msgToVsc{Ns: "window", Name: "showInputBox", Payload: make(map[string]Any, 1)}
 	funcids := make([]string, 0, 1)
-	me.callbacks.Lock()
+	me.state.Lock()
 	if options != nil {
 		options.ValidateInput_AppzFuncId = ""
 		if fn := options.ValidateInput; fn != nil {
 			options.ValidateInput_AppzFuncId = me.nextFuncId()
 			funcids = append(funcids, options.ValidateInput_AppzFuncId)
-			me.callbacks.other[options.ValidateInput_AppzFuncId] = func(args...Any) (ret Any, ok bool) {
+			me.state.callbacks.other[options.ValidateInput_AppzFuncId] = func(args...Any) (ret Any, ok bool) {
 				if ok = (len(args) == 1); ok {
 					var a0 string
 					a0, ok = args[0].(string)
@@ -325,7 +325,7 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string), ) {
 			}
 		}
 	}
-	me.callbacks.Unlock()
+	me.state.Unlock()
 	msg.Payload["options"] = options
 
 	var on func(Any)
@@ -343,11 +343,11 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string), ) {
 
 	me.send(&msg, func(payload Any) {
 		if len(funcids) != 0 {
-			me.callbacks.Lock()
+			me.state.Lock()
 			for _, funcid := range funcids {
-				delete(me.callbacks.other, funcid)
+				delete(me.state.callbacks.other, funcid)
 			}
-			me.callbacks.Unlock()
+			me.state.Unlock()
 		}
 		if on != nil {
 			on(payload)
