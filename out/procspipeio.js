@@ -121,11 +121,12 @@ function proc(fullCmd) {
     return p;
 }
 exports.proc = proc;
-function send(proc, jsonMsgOut) {
+function send(proc, msgOut) {
     const onsendmaybefailed = (_problem) => {
     };
     try {
-        if (!proc.stdin.write(jsonMsgOut + '\n'))
+        const jsonmsgout = JSON.stringify(msgOut);
+        if (!proc.stdin.write(jsonmsgout + '\n'))
             proc.stdin.once('drain', onsendmaybefailed);
         else
             process.nextTick(onsendmaybefailed);
@@ -141,7 +142,15 @@ function onProcRecv(proc) {
         if (!msg)
             vscwin.showErrorMessage(ln);
         else if (msg.ns && msg.name) {
-            vscgen.handle(msg);
+            try {
+                const promise = vscgen.handle(msg);
+                promise.then(result => send(proc, { andThen: msg.andThen, payload: result }), err => send(proc, { andThen: msg.andThen, isFail: true, payload: err }));
+            }
+            catch (err) {
+                vscwin.showErrorMessage(err);
+                if (msg.andThen)
+                    send(proc, { andThen: msg.andThen, isFail: true, payload: err });
+            }
         }
         else if (msg.andThen) {
         }

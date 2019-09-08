@@ -95,13 +95,14 @@ export function proc(fullCmd: string): node_proc.ChildProcess {
     return p
 }
 
-export function send(proc: node_proc.ChildProcess, jsonMsgOut: string) {
+export function send(proc: node_proc.ChildProcess, msgOut: ipc.MsgOutgoing) {
     const onsendmaybefailed = (_problem: any) => {
         // later: if proms involved signal rejection
         // later: if waiting-callbacks hang around, del them
     }
     try {
-        if (!proc.stdin.write(jsonMsgOut + '\n'))
+        const jsonmsgout = JSON.stringify(msgOut)
+        if (!proc.stdin.write(jsonmsgout + '\n'))
             proc.stdin.once('drain', onsendmaybefailed)
         else
             process.nextTick(onsendmaybefailed)
@@ -116,7 +117,17 @@ function onProcRecv(proc: node_proc.ChildProcess) {
         if (!msg)
             vscwin.showErrorMessage(ln)
         else if (msg.ns && msg.name) { // API request
-            vscgen.handle(msg)
+            try {
+                const promise = vscgen.handle(msg)
+                promise.then(
+                    result => send(proc, { andThen: msg.andThen, payload: result }),
+                    err => send(proc, { andThen: msg.andThen, isFail: true, payload: err })
+                )
+            } catch (err) {
+                vscwin.showErrorMessage(err)
+                if (msg.andThen)
+                    send(proc, { andThen: msg.andThen, isFail: true, payload: err })
+            }
         } else if (msg.andThen) { // response to an earlier remote-func-call of ours
 
         }
