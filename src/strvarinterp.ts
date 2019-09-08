@@ -57,9 +57,6 @@ export function Interpolate(str: string): Thenable<string> {
         }
     }
 
-    else if (expr.startsWith("input:"))
-        return fromProm(vsc.window.showInputBox({ ignoreFocusOut: true, prompt: expr.slice("input:".length) }))
-
     else {
         const fileordirstuff = (name: string): string => {
             const eds = [vsc.window.activeTextEditor].concat(...vsc.window.visibleTextEditors.filter(_ => _ !== vsc.window.activeTextEditor)).filter(_ => _ ? true : false)

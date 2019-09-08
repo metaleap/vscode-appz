@@ -44,8 +44,6 @@ function Interpolate(str) {
             return fromProm(vsc.window.showQuickPick(items, { ignoreFocusOut: true, placeHolder: prompt }));
         }
     }
-    else if (expr.startsWith("input:"))
-        return fromProm(vsc.window.showInputBox({ ignoreFocusOut: true, prompt: expr.slice("input:".length) }));
     else {
         const fileordirstuff = (name) => {
             const eds = [vsc.window.activeTextEditor].concat(...vsc.window.visibleTextEditors.filter(_ => _ !== vsc.window.activeTextEditor)).filter(_ => _ ? true : false);

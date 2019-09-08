@@ -52,7 +52,7 @@ function disposeProc(pId) {
     }
     let proc;
     for (const key in exports.procs)
-        if ((proc = exports.procs[key]) && proc.pid.toString() === pId) {
+        if ((proc = exports.procs[key]) && proc.pid.toString() === pId.toString()) {
             delete exports.procs[key];
             try {
                 proc.removeAllListeners();
@@ -67,10 +67,10 @@ function disposeProc(pId) {
 }
 exports.disposeProc = disposeProc;
 function onProgEnd(pId) {
-    return (_code, _sig) => disposeProc(pId + '');
+    return (_code, _sig) => disposeProc(pId);
 }
 function onProcErr(pId) {
-    return (_err) => disposeProc(pId + '');
+    return (_err) => disposeProc(pId);
 }
 function proc(fullCmd) {
     let p = exports.procs[fullCmd];
@@ -106,7 +106,7 @@ function proc(fullCmd) {
                 else {
                     pipe.setMaxListeners(0);
                     pipe.on('line', onProcRecv(p));
-                    pipes[p.pid.toString()] = pipe;
+                    pipes[p.pid] = pipe;
                     p.on('error', onProcErr(p.pid));
                     const ongone = onProgEnd(p.pid);
                     p.on('disconnect', ongone);
@@ -159,7 +159,7 @@ function cmdAndArgs(fullCmd) {
 }
 function send(proc, msgOut) {
     const onmaybefailed = (err) => {
-        if (err)
+        if (err && proc.pid && pipes[proc.pid])
             vscwin.showErrorMessage(err + '');
     };
     try {
@@ -169,7 +169,7 @@ function send(proc, msgOut) {
         const bufs = bufsUntilPipeDrained[proc.pid];
         if (bufs)
             bufs.push(jsonmsgout);
-        else if (!proc.stdin.write(jsonmsgout, onmaybefailed)) {
+        else if (pipes[proc.pid] && !proc.stdin.write(jsonmsgout, onmaybefailed)) {
             bufsUntilPipeDrained[proc.pid] = [];
             proc.stdin.once('drain', onProcPipeDrain(proc, onmaybefailed));
         }
@@ -186,7 +186,7 @@ function onProcPipeDrain(proc, onMaybeFailed) {
         const bufs = bufsUntilPipeDrained[proc.pid];
         delete bufsUntilPipeDrained[proc.pid];
         if (bufs && bufs.length)
-            for (let i = 0; i < bufs.length; i++)
+            for (let i = 0; i < bufs.length && pipes[proc.pid]; i++)
                 if (!proc.stdin.write(bufs[i], onMaybeFailed)) {
                     bufsUntilPipeDrained[proc.pid] =
                         (i === (bufs.length - 1)) ? [] : bufs.slice(i + 1);
@@ -217,7 +217,7 @@ function onProcRecv(proc) {
                 const promise = vscgen.handle(msg);
                 if (promise)
                     promise.then(ret => {
-                        if (msg.andThen)
+                        if (pipes[proc.pid] && msg.andThen)
                             send(proc, { andThen: msg.andThen, payload: ret });
                     }, err => onfail(err));
             }

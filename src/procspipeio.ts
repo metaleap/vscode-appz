@@ -12,7 +12,7 @@ const vscwin = vsc.window
 const dbgLogJsonMsgs = true
 
 export let procs: { [_key: string]: node_proc.ChildProcess } = {}
-let pipes: { [_pid: string]: node_pipeio.ReadLine } = {}
+let pipes: { [_pid: number]: node_pipeio.ReadLine } = {}
 
 
 
@@ -35,7 +35,7 @@ export function disposeAll() {
         }
 }
 
-export function disposeProc(pId: string) {
+export function disposeProc(pId: number) {
     const pipe = pipes[pId]
     if (pipe) {
         delete pipes[pId]
@@ -44,7 +44,7 @@ export function disposeProc(pId: string) {
     }
     let proc: node_proc.ChildProcess
     for (const key in procs)
-        if ((proc = procs[key]) && proc.pid.toString() === pId) {
+        if ((proc = procs[key]) && proc.pid.toString() === pId.toString()) {
             delete procs[key]
             try { proc.removeAllListeners() } catch (_) { }
             try { proc.kill() } catch (_) { }
@@ -54,12 +54,12 @@ export function disposeProc(pId: string) {
 
 function onProgEnd(pId: number) {
     return (_code: number, _sig: string) =>
-        disposeProc(pId + '')
+        disposeProc(pId)
 }
 
 function onProcErr(pId: number) {
     return (_err: Error) =>
-        disposeProc(pId + '')
+        disposeProc(pId)
 }
 
 export function proc(fullCmd: string): node_proc.ChildProcess {
@@ -81,7 +81,7 @@ export function proc(fullCmd: string): node_proc.ChildProcess {
                 else {
                     pipe.setMaxListeners(0)
                     pipe.on('line', onProcRecv(p))
-                    pipes[p.pid.toString()] = pipe
+                    pipes[p.pid] = pipe
                     p.on('error', onProcErr(p.pid))
                     const ongone = onProgEnd(p.pid)
                     p.on('disconnect', ongone)
@@ -134,7 +134,7 @@ function cmdAndArgs(fullCmd: string): [string, string[]] {
 
 export function send(proc: node_proc.ChildProcess, msgOut: ipc.MsgToApp) {
     const onmaybefailed = (err: any) => {
-        if (err)
+        if (err && proc.pid && pipes[proc.pid])
             vscwin.showErrorMessage(err + '')
     }
     try {
@@ -145,7 +145,7 @@ export function send(proc: node_proc.ChildProcess, msgOut: ipc.MsgToApp) {
         const bufs = bufsUntilPipeDrained[proc.pid]
         if (bufs)
             bufs.push(jsonmsgout)
-        else if (!proc.stdin.write(jsonmsgout, onmaybefailed)) {
+        else if (pipes[proc.pid] && !proc.stdin.write(jsonmsgout, onmaybefailed)) {
             bufsUntilPipeDrained[proc.pid] = []
             proc.stdin.once('drain', onProcPipeDrain(proc, onmaybefailed))
         }
@@ -162,7 +162,7 @@ function onProcPipeDrain(proc: node_proc.ChildProcess, onMaybeFailed: (err: any)
         const bufs = bufsUntilPipeDrained[proc.pid]
         delete bufsUntilPipeDrained[proc.pid]
         if (bufs && bufs.length)
-            for (let i = 0; i < bufs.length; i++)
+            for (let i = 0; i < bufs.length && pipes[proc.pid]; i++)
                 if (!proc.stdin.write(bufs[i], onMaybeFailed)) {
                     bufsUntilPipeDrained[proc.pid] =
                         (i === (bufs.length - 1)) ? [] : bufs.slice(i + 1)
@@ -194,7 +194,7 @@ function onProcRecv(proc: node_proc.ChildProcess) {
                 const promise = vscgen.handle(msg)
                 if (promise) promise.then(
                     ret => {
-                        if (msg.andThen)
+                        if (pipes[proc.pid] && msg.andThen)
                             send(proc, { andThen: msg.andThen, payload: ret })
                     },
                     err =>

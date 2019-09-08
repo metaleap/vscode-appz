@@ -17,7 +17,7 @@ function onCmdMain() {
     const progs = vscproj.getConfiguration("appz").get("progs");
     const items = progs.map(_ => ({
         prog: _, pid: 0, label: "RUN: " + _,
-        detail: ppio.procs[_] ? "Already running. Will kill and re-start." : "Not currently running."
+        detail: ppio.procs[_] ? "Already running. Will kill and re-start." : "Not currently running" + (_.includes(' ') ? ' (at least not with those exact args)' : '') + "."
     }));
     for (const _ in ppio.procs)
         items.push({
@@ -30,17 +30,17 @@ function onCmdMain() {
         vscwin.showQuickPick(items).then(_ => {
             if (_ && _.prog)
                 if (_.pid)
-                    ppio.disposeProc(_.pid + '');
+                    ppio.disposeProc(_.pid);
                 else
                     strvar.Interpolate(_.prog).then(prog => {
                         if (prog && prog.length) {
                             const alreadyrunning = ppio.procs[prog];
                             if (alreadyrunning)
-                                ppio.disposeProc(alreadyrunning.pid + '');
+                                ppio.disposeProc(alreadyrunning.pid);
                             if (ppio.proc(prog))
                                 appStartTimes[prog] = Date.now();
                         }
-                    });
+                    }, () => { });
         });
 }
 const appStartTimes = {};
