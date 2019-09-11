@@ -18,14 +18,14 @@ var Std;
     Std["selectedText"] = "selectedText";
     Std["execPath"] = "execPath";
 })(Std = exports.Std || (exports.Std = {}));
-function Interpolate(str) {
+function Interpolate(str, extras = undefined) {
     const idx1 = str.lastIndexOf('${');
     if (idx1 < 0)
         return Promise.resolve(str);
     const idx2 = str.indexOf('}', idx1);
     if (idx2 < 0)
         return Promise.resolve(str);
-    const fromProm = (_) => _.then((ret) => (ret === undefined) ? Promise.reject() : Interpolate(str.slice(0, idx1) + ret + str.slice(idx2 + 1)), (err) => Promise.reject(err));
+    const fromProm = (_) => _.then((ret) => (ret === undefined) ? Promise.reject() : Interpolate(str.slice(0, idx1) + ret + str.slice(idx2 + 1), extras), (err) => Promise.reject(err));
     const expr = str.slice(idx1 + 2, idx2);
     let newval = "";
     if (expr.startsWith("env:"))
@@ -93,6 +93,10 @@ function Interpolate(str) {
         };
         if (exports.AllStdBuiltins.some(_ => expr === _ || expr.startsWith(_ + ':')))
             newval = fileordirstuff(expr);
+        if (extras)
+            for (const key in extras)
+                if (key === expr)
+                    newval = extras[key](key);
         if (!newval) {
             let items = [], prompt = expr;
             const colon = prompt.indexOf(':');
@@ -103,7 +107,7 @@ function Interpolate(str) {
                 : fromProm(vsc.window.showInputBox({ ignoreFocusOut: true, prompt: prompt }));
         }
     }
-    return Promise.resolve(Interpolate(str.slice(0, idx1) + newval + str.slice(idx2 + 1)));
+    return Promise.resolve(Interpolate(str.slice(0, idx1) + newval + str.slice(idx2 + 1), extras));
 }
 exports.Interpolate = Interpolate;
 exports.AllStdBuiltins = [

@@ -6,7 +6,7 @@ import * as ipc from './ipcprotocol'
 
 type MessageOptions = vscode.MessageOptions
 interface MessageItem extends vscode.MessageItem {
-	appzTag?: any
+	myTag?: any
 }
 type InputBoxOptions = vscode.InputBoxOptions
 

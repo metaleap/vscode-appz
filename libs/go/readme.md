@@ -38,7 +38,7 @@ type InputBoxOptions struct {
 type MessageItem struct {
 	Title             string `json:"title"`
 	IsCloseAffordance bool   `json:"isCloseAffordance,omitempty"`
-	AppzTag           Any    `json:"appzTag,omitempty"`
+	MyTag             Any    `json:"myTag,omitempty"`
 }
 ```
 

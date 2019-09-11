@@ -70,14 +70,19 @@ function onProgEnd(pId) {
     return (_code, _sig) => disposeProc(pId);
 }
 function onProcErr(pId) {
-    return (_err) => disposeProc(pId);
+    return (err) => {
+        console.log(err);
+        disposeProc(pId);
+    };
 }
 function proc(fullCmd) {
     let p = exports.procs[fullCmd];
     if (!p) {
         const [cmd, args] = cmdAndArgs(fullCmd);
         try {
-            p = node_proc.spawn(cmd, args, { stdio: 'pipe' });
+            const nuenv = process.env;
+            nuenv['CLR_OPENSSL_VERSION_OVERRIDE'] = '46';
+            p = node_proc.spawn(cmd, args, { env: nuenv, stdio: 'pipe', windowsHide: true, argv0: cmd });
         }
         catch (e) {
             vscwin.showErrorMessage(e);
@@ -92,6 +97,8 @@ function proc(fullCmd) {
                     p = null;
                 }
             else {
+                p.stderr.on('data', foo => vscwin.showWarningMessage(foo));
+                p.stdout.on('data', moo => vscwin.showInformationMessage(moo));
                 const pipe = node_pipeio.createInterface({
                     input: p.stdout, terminal: false, historySize: 0
                 });
@@ -119,7 +126,7 @@ function proc(fullCmd) {
             exports.procs[fullCmd] = p;
         else {
             delete exports.procs[fullCmd];
-            vscwin.showErrorMessage('Could not run: ' + fullCmd);
+            vscwin.showErrorMessage('Unable to execute this exact command, any typos? ─── ' + fullCmd);
         }
     }
     return p;
@@ -153,7 +160,6 @@ function cmdAndArgs(fullCmd) {
         if (instr > 0)
             args.push(cmd.slice(instr));
         cmd = cmd.slice(0, idx);
-        console.log(args);
     }
     return [cmd, args];
 }

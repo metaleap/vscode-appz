@@ -6,12 +6,16 @@ const vscproj = vsc.workspace
 const vscwin = vsc.window
 
 
+let extDirPath: string;
+let extDirPathStrVarProvider: { [_: string]: (_: string) => string } = {};
 
-export function deactivate() {
-	ppio.disposeAll()
-}
+
+export function deactivate() { ppio.disposeAll() }
 
 export function activate(ctx: vsc.ExtensionContext) {
+	extDirPath = ctx.extensionPath
+	extDirPathStrVarProvider['appzExtDir'] = _ => extDirPath;
+
 	ctx.subscriptions.push(
 		vsc.commands.registerCommand('vsc_appz.main', onCmdMain)
 	)
@@ -39,15 +43,18 @@ function onCmdMain() {
 				if (_.pid)
 					ppio.disposeProc(_.pid)
 				else
-					strvar.Interpolate(_.prog).then(prog => {
-						if (prog && prog.length) {
-							const alreadyrunning = ppio.procs[prog]
-							if (alreadyrunning)
-								ppio.disposeProc(alreadyrunning.pid)
-							if (ppio.proc(prog))
-								appStartTimes[prog] = Date.now()
-						}
-					}, () => { })
+					strvar.Interpolate(_.prog, extDirPathStrVarProvider).then(
+						prog => {
+							if (prog && prog.length) {
+								const alreadyrunning = ppio.procs[prog]
+								if (alreadyrunning)
+									ppio.disposeProc(alreadyrunning.pid)
+								if (ppio.proc(prog))
+									appStartTimes[prog] = Date.now()
+							}
+						},
+						_failed => { /* ignore, but keep handler to prevent warn-logs */ }
+					)
 		})
 }
 

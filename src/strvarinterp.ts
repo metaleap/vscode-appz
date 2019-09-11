@@ -20,7 +20,7 @@ export enum Std {
 }
 
 
-export function Interpolate(str: string): Thenable<string> {
+export function Interpolate(str: string, extras: { [_: string]: (_: string) => string } = undefined): Thenable<string> {
     const idx1 = str.lastIndexOf('${')
     if (idx1 < 0)
         return Promise.resolve(str)
@@ -30,7 +30,7 @@ export function Interpolate(str: string): Thenable<string> {
 
     const fromProm = (_: Thenable<any>) => _.then(
         (ret: any) =>
-            (ret === undefined) ? Promise.reject() : Interpolate(str.slice(0, idx1) + ret + str.slice(idx2 + 1)),
+            (ret === undefined) ? Promise.reject() : Interpolate(str.slice(0, idx1) + ret + str.slice(idx2 + 1), extras),
         (err: any) =>
             Promise.reject(err)
     )
@@ -107,6 +107,11 @@ export function Interpolate(str: string): Thenable<string> {
         if (AllStdBuiltins.some(_ => expr === _ || expr.startsWith(_ + ':')))
             newval = fileordirstuff(expr)
 
+        if (extras)
+            for (const key in extras)
+                if (key === expr)
+                    newval = extras[key](key)
+
         if (!newval) {
             let items: string[] = [],
                 prompt = expr
@@ -120,7 +125,7 @@ export function Interpolate(str: string): Thenable<string> {
 
     }
 
-    return Promise.resolve<string>(Interpolate(str.slice(0, idx1) + newval + str.slice(idx2 + 1)))
+    return Promise.resolve<string>(Interpolate(str.slice(0, idx1) + newval + str.slice(idx2 + 1), extras))
 }
 
 

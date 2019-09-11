@@ -41,7 +41,7 @@ function main() {
                 module: [modulename, md.body], enums: [], structs: [], funcs: []
             };
             gatherAll(job, md.body, genApiSurface[modulename], modulename);
-            const prep = new gen.GenPrep(job);
+            const prep = new gen.Prep(job);
             for (const gen of gens) {
                 prep.state = { genDecoders: {} };
                 gen.gen(prep);

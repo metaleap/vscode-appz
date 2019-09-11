@@ -15,7 +15,7 @@ type MessageOptions struct {
 type MessageItem struct {
 	Title string `json:"title"`
 	IsCloseAffordance bool `json:"isCloseAffordance,omitempty"`
-	AppzTag Any `json:"appzTag,omitempty"`
+	MyTag Any `json:"myTag,omitempty"`
 }
 
 type InputBoxOptions struct {
@@ -45,7 +45,7 @@ type Window interface {
 	ShowInputBox(options *InputBoxOptions, andThen func(string), )
 }
 
-func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(string), ) {
+func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(string)) {
 	msg := msgToVsc{Ns: "window", Name: "showErrorMessage1", Payload: make(map[string]Any, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
@@ -66,7 +66,7 @@ func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(s
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(string), ) {
+func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(string)) {
 	msg := msgToVsc{Ns: "window", Name: "showErrorMessage2", Payload: make(map[string]Any, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
@@ -88,7 +88,7 @@ func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items 
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen func(MessageItem), ) {
+func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen func(MessageItem)) {
 	msg := msgToVsc{Ns: "window", Name: "showErrorMessage3", Payload: make(map[string]Any, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
@@ -109,7 +109,7 @@ func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen f
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(MessageItem), ) {
+func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(MessageItem)) {
 	msg := msgToVsc{Ns: "window", Name: "showErrorMessage4", Payload: make(map[string]Any, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
@@ -131,7 +131,7 @@ func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items 
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowInformationMessage1(message string, items []string, andThen func(string), ) {
+func (me *impl) ShowInformationMessage1(message string, items []string, andThen func(string)) {
 	msg := msgToVsc{Ns: "window", Name: "showInformationMessage1", Payload: make(map[string]Any, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
@@ -152,7 +152,7 @@ func (me *impl) ShowInformationMessage1(message string, items []string, andThen 
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(string), ) {
+func (me *impl) ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(string)) {
 	msg := msgToVsc{Ns: "window", Name: "showInformationMessage2", Payload: make(map[string]Any, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
@@ -174,7 +174,7 @@ func (me *impl) ShowInformationMessage2(message string, options MessageOptions, 
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowInformationMessage3(message string, items []MessageItem, andThen func(MessageItem), ) {
+func (me *impl) ShowInformationMessage3(message string, items []MessageItem, andThen func(MessageItem)) {
 	msg := msgToVsc{Ns: "window", Name: "showInformationMessage3", Payload: make(map[string]Any, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
@@ -195,7 +195,7 @@ func (me *impl) ShowInformationMessage3(message string, items []MessageItem, and
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(MessageItem), ) {
+func (me *impl) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(MessageItem)) {
 	msg := msgToVsc{Ns: "window", Name: "showInformationMessage4", Payload: make(map[string]Any, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
@@ -217,7 +217,7 @@ func (me *impl) ShowInformationMessage4(message string, options MessageOptions, 
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowWarningMessage1(message string, items []string, andThen func(string), ) {
+func (me *impl) ShowWarningMessage1(message string, items []string, andThen func(string)) {
 	msg := msgToVsc{Ns: "window", Name: "showWarningMessage1", Payload: make(map[string]Any, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
@@ -238,7 +238,7 @@ func (me *impl) ShowWarningMessage1(message string, items []string, andThen func
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(string), ) {
+func (me *impl) ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(string)) {
 	msg := msgToVsc{Ns: "window", Name: "showWarningMessage2", Payload: make(map[string]Any, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
@@ -260,7 +260,7 @@ func (me *impl) ShowWarningMessage2(message string, options MessageOptions, item
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen func(MessageItem), ) {
+func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen func(MessageItem)) {
 	msg := msgToVsc{Ns: "window", Name: "showWarningMessage3", Payload: make(map[string]Any, 2)}
 	msg.Payload["message"] = message
 	msg.Payload["items"] = items
@@ -281,7 +281,7 @@ func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(MessageItem), ) {
+func (me *impl) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(MessageItem)) {
 	msg := msgToVsc{Ns: "window", Name: "showWarningMessage4", Payload: make(map[string]Any, 3)}
 	msg.Payload["message"] = message
 	msg.Payload["options"] = options
@@ -303,15 +303,15 @@ func (me *impl) ShowWarningMessage4(message string, options MessageOptions, item
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string), ) {
+func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string)) {
 	msg := msgToVsc{Ns: "window", Name: "showInputBox", Payload: make(map[string]Any, 1)}
-	funcids := make([]string, 0, 1)
+	fnids := make([]string, 0, 1)
 	me.state.Lock()
 	if options != nil {
 		options.ValidateInput_AppzFuncId = ""
 		if fn := options.ValidateInput; fn != nil {
 			options.ValidateInput_AppzFuncId = me.nextFuncId()
-			funcids = append(funcids, options.ValidateInput_AppzFuncId)
+			fnids = append(fnids, options.ValidateInput_AppzFuncId)
 			me.state.callbacks.other[options.ValidateInput_AppzFuncId] = func(args...Any) (ret Any, ok bool) {
 				if ok = (len(args) == 1); ok {
 					var a0 string
@@ -342,10 +342,10 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string), ) {
 	}
 
 	me.send(&msg, func(payload Any) {
-		if len(funcids) != 0 {
+		if len(fnids) != 0 {
 			me.state.Lock()
-			for _, funcid := range funcids {
-				delete(me.state.callbacks.other, funcid)
+			for _, fnid := range fnids {
+				delete(me.state.callbacks.other, fnid)
 			}
 			me.state.Unlock()
 		}
@@ -391,10 +391,10 @@ func (me *MessageItem) populateFrom(payload Any) bool {
 			}
 		}
 		{
-			val, exists := m["appzTag"]
+			val, exists := m["myTag"]
 			if (exists) {
 				if val != nil {
-					me.AppzTag = val
+					me.MyTag = val
 				} else if false {
 					return false
 				}

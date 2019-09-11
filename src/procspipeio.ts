@@ -1,6 +1,7 @@
 import * as ipc from './ipcprotocol'
 import * as vscgen from './vscode.gen'
 
+import * as node_os from 'os'
 import * as node_proc from 'child_process'
 import * as node_pipeio from 'readline'
 
@@ -58,21 +59,28 @@ function onProgEnd(pId: number) {
 }
 
 function onProcErr(pId: number) {
-    return (_err: Error) =>
+    return (err: Error) => {
+        console.log(err)
         disposeProc(pId)
+    }
 }
 
 export function proc(fullCmd: string): node_proc.ChildProcess {
     let p = procs[fullCmd]
     if (!p) {
+
         const [cmd, args] = cmdAndArgs(fullCmd)
         try {
-            p = node_proc.spawn(cmd, args, { stdio: 'pipe' })
+            const nuenv = process.env
+            nuenv['CLR_OPENSSL_VERSION_OVERRIDE'] = '46'// lol MS lame as usual
+            p = node_proc.spawn(cmd, args, { env: nuenv, stdio: 'pipe', windowsHide: true, argv0: cmd })
         } catch (e) { vscwin.showErrorMessage(e) }
         if (p)
             if (!(p.pid && p.stdin && p.stdin.writable && p.stdout && p.stdout.readable && p.stderr && p.stderr.readable))
                 try { p.kill() } catch (_) { } finally { p = null }
             else {
+                p.stderr.on('data', foo => vscwin.showWarningMessage(foo))
+                p.stdout.on('data', moo => vscwin.showInformationMessage(moo))
                 const pipe = node_pipeio.createInterface({
                     input: p.stdout, terminal: false, historySize: 0
                 })
@@ -94,7 +102,7 @@ export function proc(fullCmd: string): node_proc.ChildProcess {
             procs[fullCmd] = p
         else {
             delete procs[fullCmd]
-            vscwin.showErrorMessage('Could not run: ' + fullCmd)
+            vscwin.showErrorMessage('Unable to execute this exact command, any typos? ─── ' + fullCmd)
         }
     }
     return p
@@ -127,7 +135,6 @@ function cmdAndArgs(fullCmd: string): [string, string[]] {
             args.push(cmd.slice(instr))
 
         cmd = cmd.slice(0, idx)
-        console.log(args)
     }
     return [cmd, args]
 }

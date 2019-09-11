@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_fs = require("fs");
 const ts = require("typescript");
-class GenPrep {
+class Prep {
     constructor(job) {
         this.enums = [];
         this.structs = [];
@@ -26,7 +26,7 @@ class GenPrep {
                     });
             });
             if (isretarg) {
-                const fieldname = pickName(true, ['tag', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields);
+                const fieldname = pickName('my', ['tag', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields);
                 if (!fieldname)
                     throw (struct);
                 struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Any });
@@ -102,7 +102,7 @@ class GenPrep {
         const tret = this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters);
         if (tret) {
             const method = iface.methods[iface.methods.length - 1];
-            const argname = pickName(false, ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args);
+            const argname = pickName('', ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args);
             if (!argname)
                 throw (method);
             method.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, spreads: false });
@@ -174,7 +174,7 @@ class GenPrep {
         }
     }
 }
-exports.GenPrep = GenPrep;
+exports.Prep = Prep;
 var ScriptPrimType;
 (function (ScriptPrimType) {
     ScriptPrimType[ScriptPrimType["Any"] = 121] = "Any";
@@ -249,17 +249,42 @@ function typeRefersTo(typeSpec, name) {
     return typeSpec === name;
 }
 exports.typeRefersTo = typeRefersTo;
+function argsFuncFields(prep, args) {
+    const funcfields = [];
+    for (const arg of args)
+        for (const struct of prep.structs.filter(_ => _.name === arg.typeSpec))
+            if (struct.funcFields && struct.funcFields.length)
+                for (const funcfield of struct.funcFields)
+                    funcfields.push({ arg: arg, struct: struct, name: funcfield });
+    return funcfields;
+}
+exports.argsFuncFields = argsFuncFields;
+function idents(dontCollideWith, ...names) {
+    const ret = {};
+    for (const name of names)
+        ret[name] = pickName('', [name], dontCollideWith);
+    return ret;
+}
+exports.idents = idents;
 function pickName(forcePrefix, pickFrom, dontCollideWith) {
-    if (!forcePrefix)
+    if (!(forcePrefix && forcePrefix.length)) {
         for (const name of pickFrom)
             if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
                 return name;
-    for (const pref of ['appz', 'vscAppz'])
-        for (let name of pickFrom) {
-            name = pref + name.charAt(0).toUpperCase() + name.slice(1);
-            if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
-                return name;
-        }
+        if (pickFrom.length === 1)
+            for (let i = 1; true; i++) {
+                var name = '_'.repeat(i) + pickFrom[0];
+                if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
+                    return name;
+            }
+    }
+    for (const pref of [forcePrefix, 'appz', 'vscAppz'])
+        if (pref && pref.length)
+            for (let name of pickFrom) {
+                name = pref + name.charAt(0).toUpperCase() + name.slice(1);
+                if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
+                    return name;
+            }
     return undefined;
 }
 exports.pickName = pickName;

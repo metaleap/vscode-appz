@@ -35,7 +35,8 @@
 					"appz.progs": {
 						"type": "array",
 						"default": [
-							"go-vsc-appz-demo \"${Enter a name}\" \"${Pick a greeting:Hello|Hiya|Hola}\""
+							"go run \"${appzExtDir}/demos/go-vsc-appz-demo\" \"${Enter a name}\" \"${Pick a greeting:Hello|Hiya|Hola}\"",
+							"/home/_/a/dotnet-sdk-2.2.401-linux-x64/dotnet run --project \"${appzExtDir}/demos/cs-vsc-appz-demo\" -- \"${Enter a name}\" \"${Pick a greeting:Hello|Hiya|Hola}\""
 						]
 					}
 				}

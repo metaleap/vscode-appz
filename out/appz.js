@@ -5,11 +5,13 @@ const strvar = require("./strvarinterp");
 const vsc = require("vscode");
 const vscproj = vsc.workspace;
 const vscwin = vsc.window;
-function deactivate() {
-    ppio.disposeAll();
-}
+let extDirPath;
+let extDirPathStrVarProvider = {};
+function deactivate() { ppio.disposeAll(); }
 exports.deactivate = deactivate;
 function activate(ctx) {
+    extDirPath = ctx.extensionPath;
+    extDirPathStrVarProvider['appzExtDir'] = _ => extDirPath;
     ctx.subscriptions.push(vsc.commands.registerCommand('vsc_appz.main', onCmdMain));
 }
 exports.activate = activate;
@@ -32,7 +34,7 @@ function onCmdMain() {
                 if (_.pid)
                     ppio.disposeProc(_.pid);
                 else
-                    strvar.Interpolate(_.prog).then(prog => {
+                    strvar.Interpolate(_.prog, extDirPathStrVarProvider).then(prog => {
                         if (prog && prog.length) {
                             const alreadyrunning = ppio.procs[prog];
                             if (alreadyrunning)
@@ -40,7 +42,7 @@ function onCmdMain() {
                             if (ppio.proc(prog))
                                 appStartTimes[prog] = Date.now();
                         }
-                    }, () => { });
+                    }, _failed => { });
         });
 }
 const appStartTimes = {};

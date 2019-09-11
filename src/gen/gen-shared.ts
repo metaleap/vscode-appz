@@ -3,7 +3,7 @@ import * as node_fs from 'fs'
 import * as ts from 'typescript'
 
 export interface IGen {
-    gen(prep: GenPrep): void
+    gen(prep: Prep): void
 }
 
 export interface GenJob {
@@ -30,7 +30,7 @@ export interface GenJobStruct extends GenJobNamed {
     decl: ts.InterfaceDeclaration
 }
 
-export interface GenPrepEnum {
+export interface PrepEnum {
     name: string
     enumerants: {
         name: string
@@ -38,32 +38,32 @@ export interface GenPrepEnum {
     }[]
 }
 
-export interface GenPrepStruct {
+export interface PrepStruct {
     name: string
-    fields: GenPrepField[]
+    fields: PrepField[]
     funcFields: string[]
 }
 
-export interface GenPrepField {
+export interface PrepField {
     name: string
     typeSpec: TypeSpec
     optional: boolean
     isExtBaggage: boolean
 }
 
-export interface GenPrepInterface {
+export interface PrepInterface {
     name: string
-    methods: GenPrepMethod[]
+    methods: PrepMethod[]
 }
 
-export interface GenPrepMethod {
+export interface PrepMethod {
     name: string
-    args: GenPrepArg[]
+    args: PrepArg[]
     fromOrig: GenJobFunc
     nameOrig: string
 }
 
-export interface GenPrepArg {
+export interface PrepArg {
     name: string
     typeSpec: TypeSpec
     optional: boolean
@@ -71,10 +71,10 @@ export interface GenPrepArg {
     spreads: boolean
 }
 
-export class GenPrep {
-    enums: GenPrepEnum[] = []
-    structs: GenPrepStruct[] = []
-    interfaces: GenPrepInterface[] = []
+export class Prep {
+    enums: PrepEnum[] = []
+    structs: PrepStruct[] = []
+    interfaces: PrepInterface[] = []
 
     readonly fromOrig: GenJob
     state: {
@@ -100,7 +100,7 @@ export class GenPrep {
                 })
             })
             if (isretarg) {
-                const fieldname = pickName(true, ['tag', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields)
+                const fieldname = pickName('my', ['tag', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields)
                 if (!fieldname)
                     throw (struct)
                 struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Any })
@@ -181,7 +181,7 @@ export class GenPrep {
         const tret = this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters)
         if (tret) {
             const method = iface.methods[iface.methods.length - 1]
-            const argname = pickName(false, ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args)
+            const argname = pickName('', ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args)
             if (!argname)
                 throw (method)
             method.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, spreads: false })
@@ -361,16 +361,41 @@ export function typeRefersTo(typeSpec: TypeSpec, name: string): boolean {
     return typeSpec === name
 }
 
-export function pickName(forcePrefix: boolean, pickFrom: string[], dontCollideWith: { name: string }[]): string {
-    if (!forcePrefix)
+export function argsFuncFields(prep: Prep, args: PrepArg[]) {
+    const funcfields: { arg: PrepArg, struct: PrepStruct, name: string }[] = []
+    for (const arg of args)
+        for (const struct of prep.structs.filter(_ => _.name === arg.typeSpec))
+            if (struct.funcFields && struct.funcFields.length)
+                for (const funcfield of struct.funcFields)
+                    funcfields.push({ arg: arg, struct: struct, name: funcfield })
+    return funcfields
+}
+
+export function idents(dontCollideWith: { name: string }[], ...names: string[]) {
+    const ret: { [_: string]: string } = {}
+    for (const name of names)
+        ret[name] = pickName('', [name], dontCollideWith)
+    return ret
+}
+
+export function pickName(forcePrefix: string, pickFrom: string[], dontCollideWith: { name: string }[]): string {
+    if (!(forcePrefix && forcePrefix.length)) {
         for (const name of pickFrom)
             if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
                 return name
-    for (const pref of ['appz', 'vscAppz'])
-        for (let name of pickFrom) {
-            name = pref + name.charAt(0).toUpperCase() + name.slice(1)
-            if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
-                return name
-        }
+        if (pickFrom.length === 1)
+            for (let i = 1; true; i++) {
+                var name = '_'.repeat(i) + pickFrom[0]
+                if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
+                    return name
+            }
+    }
+    for (const pref of [forcePrefix, 'appz', 'vscAppz'])
+        if (pref && pref.length)
+            for (let name of pickFrom) {
+                name = pref + name.charAt(0).toUpperCase() + name.slice(1)
+                if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
+                    return name
+            }
     return undefined
 }
