@@ -80,9 +80,7 @@ function proc(fullCmd) {
     if (!p) {
         const [cmd, args] = cmdAndArgs(fullCmd);
         try {
-            const nuenv = process.env;
-            nuenv['CLR_OPENSSL_VERSION_OVERRIDE'] = '46';
-            p = node_proc.spawn(cmd, args, { env: nuenv, stdio: 'pipe', windowsHide: true, argv0: cmd });
+            p = node_proc.spawn(cmd, args, { stdio: 'pipe', windowsHide: true, argv0: cmd });
         }
         catch (e) {
             vscwin.showErrorMessage(e);
@@ -185,6 +183,15 @@ function send(proc, msgOut) {
     }
 }
 exports.send = send;
+const callBacks = {};
+function callBack(proc, fnId, ...args) {
+    const prom = new Promise((resolve, reject) => {
+        callBacks[fnId] = { resolve: resolve, reject: reject };
+    });
+    send(proc, { andThen: fnId, payload: args });
+    return prom;
+}
+exports.callBack = callBack;
 const bufsUntilPipeDrained = {};
 function onProcPipeDrain(proc, onMaybeFailed) {
     let ondrain;
@@ -220,7 +227,7 @@ function onProcRecv(proc) {
             vscwin.showErrorMessage(ln);
         else if (msg.ns && msg.name) {
             try {
-                const promise = vscgen.handle(msg);
+                const promise = vscgen.handle(msg, proc);
                 if (promise)
                     promise.then(ret => {
                         if (pipes[proc.pid] && msg.andThen)
@@ -231,8 +238,14 @@ function onProcRecv(proc) {
                 onfail(err);
             }
         }
-        else if (msg.andThen) {
-            vscwin.showInformationMessage(ln);
+        else if (msg.andThen && msg.payload) {
+            const [prom, ret, ok] = [callBacks[msg.andThen], msg.payload['ret'], msg.payload['ok']];
+            delete callBacks[msg.andThen];
+            if (prom)
+                if (ok)
+                    prom.resolve(ret);
+                else
+                    prom.reject();
         }
         else
             vscwin.showErrorMessage(ln);

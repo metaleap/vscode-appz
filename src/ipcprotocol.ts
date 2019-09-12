@@ -2,12 +2,12 @@
 export interface MsgFromApp {
     ns?: string
     name?: string
-    payload: { [_: string]: any }
+    payload?: { [_: string]: any }
     andThen?: string
 }
 
 export interface MsgToApp {
-    andThen: string
+    andThen?: string
     payload?: any
     failed?: boolean
 }

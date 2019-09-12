@@ -14,7 +14,7 @@ export function deactivate() { ppio.disposeAll() }
 
 export function activate(ctx: vsc.ExtensionContext) {
 	extDirPath = ctx.extensionPath
-	extDirPathStrVarProvider['appzExtDir'] = _ => extDirPath;
+	extDirPathStrVarProvider['appz'] = _ => extDirPath;
 
 	ctx.subscriptions.push(
 		vsc.commands.registerCommand('vsc_appz.main', onCmdMain)

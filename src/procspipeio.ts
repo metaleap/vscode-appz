@@ -1,7 +1,6 @@
 import * as ipc from './ipcprotocol'
 import * as vscgen from './vscode.gen'
 
-import * as node_os from 'os'
 import * as node_proc from 'child_process'
 import * as node_pipeio from 'readline'
 
@@ -68,12 +67,9 @@ function onProcErr(pId: number) {
 export function proc(fullCmd: string): node_proc.ChildProcess {
     let p = procs[fullCmd]
     if (!p) {
-
         const [cmd, args] = cmdAndArgs(fullCmd)
         try {
-            const nuenv = process.env
-            nuenv['CLR_OPENSSL_VERSION_OVERRIDE'] = '46'// lol MS lame as usual
-            p = node_proc.spawn(cmd, args, { env: nuenv, stdio: 'pipe', windowsHide: true, argv0: cmd })
+            p = node_proc.spawn(cmd, args, { stdio: 'pipe', windowsHide: true, argv0: cmd })
         } catch (e) { vscwin.showErrorMessage(e) }
         if (p)
             if (!(p.pid && p.stdin && p.stdin.writable && p.stdout && p.stdout.readable && p.stderr && p.stderr.readable))
@@ -161,6 +157,21 @@ export function send(proc: node_proc.ChildProcess, msgOut: ipc.MsgToApp) {
     }
 }
 
+const callBacks: {
+    [_: string]: {
+        resolve: ((_: any) => void),
+        reject: (() => void)
+    }
+} = {}
+
+export function callBack<T>(proc: node_proc.ChildProcess, fnId: string, ...args: any[]): Thenable<T> {
+    const prom = new Promise<T>((resolve, reject) => {
+        callBacks[fnId] = { resolve: resolve, reject: reject }
+    })
+    send(proc, { andThen: fnId, payload: args })
+    return prom
+}
+
 const bufsUntilPipeDrained: { [_: number]: string[] } = {}
 
 function onProcPipeDrain(proc: node_proc.ChildProcess, onMaybeFailed: (err: any) => void) {
@@ -198,7 +209,7 @@ function onProcRecv(proc: node_proc.ChildProcess) {
 
         else if (msg.ns && msg.name) { // API request
             try {
-                const promise = vscgen.handle(msg)
+                const promise = vscgen.handle(msg, proc)
                 if (promise) promise.then(
                     ret => {
                         if (pipes[proc.pid] && msg.andThen)
@@ -209,8 +220,14 @@ function onProcRecv(proc: node_proc.ChildProcess) {
                 )
             } catch (err) { onfail(err) }
 
-        } else if (msg.andThen) { // response to an earlier remote-func-call of ours
-            vscwin.showInformationMessage(ln)
+        } else if (msg.andThen && msg.payload) { // response to an earlier remote-func-call of ours
+            const [prom, ret, ok] = [callBacks[msg.andThen], msg.payload['ret'], msg.payload['ok']]
+            delete callBacks[msg.andThen]
+            if (prom)
+                if (ok)
+                    prom.resolve(ret)
+                else
+                    prom.reject()
 
         } else
             vscwin.showErrorMessage(ln)

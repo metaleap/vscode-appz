@@ -26,7 +26,7 @@ type InputBoxOptions struct {
 	Password bool `json:"password,omitempty"`
 	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
 	ValidateInput func(string) string `json:"-"`
-	ValidateInput_AppzFuncId string `json:",omitempty"`
+	ValidateInput_AppzFuncId string `json:"validateInput_AppzFuncId,omitempty"`
 }
 
 type Window interface {

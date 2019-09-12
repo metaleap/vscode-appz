@@ -11,7 +11,7 @@ function deactivate() { ppio.disposeAll(); }
 exports.deactivate = deactivate;
 function activate(ctx) {
     extDirPath = ctx.extensionPath;
-    extDirPathStrVarProvider['appzExtDir'] = _ => extDirPath;
+    extDirPathStrVarProvider['appz'] = _ => extDirPath;
     ctx.subscriptions.push(vsc.commands.registerCommand('vsc_appz.main', onCmdMain));
 }
 exports.activate = activate;

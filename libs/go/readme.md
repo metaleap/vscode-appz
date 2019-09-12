@@ -9,6 +9,12 @@
 var OnError func(impl Protocol, err error, jsonMsgIncoming string)
 ```
 
+#### func  Main
+
+```go
+func Main(main func(Protocol))
+```
+
 #### type Any
 
 ```go
@@ -27,7 +33,7 @@ type InputBoxOptions struct {
 	Password                 bool                `json:"password,omitempty"`
 	IgnoreFocusOut           bool                `json:"ignoreFocusOut,omitempty"`
 	ValidateInput            func(string) string `json:"-"`
-	ValidateInput_AppzFuncId string              `json:",omitempty"`
+	ValidateInput_AppzFuncId string              `json:"validateInput_AppzFuncId,omitempty"`
 }
 ```
 

@@ -6,8 +6,9 @@ class Gen extends gen.Gen {
         const pkgname = this.caseUp(prep.fromOrig.module[0]);
         let src = "// " + this.doNotEditComment("csharp") + "\n";
         src += `namespace ${pkgname} {\n`;
-        src += "\tusing System;\n\n";
+        src += "\tusing System;\n";
         src += "\tusing System.Collections.Generic;\n\n";
+        src += "\tusing Newtonsoft.Json;\n\n";
         src += "\tpublic interface IProtocol {\n";
         for (const it of prep.interfaces)
             src += `\t\tI${this.caseUp(it.name)} ${this.caseUp(it.name)} { get; }\n`;
@@ -43,10 +44,12 @@ class Gen extends gen.Gen {
     }
     genStruct(it) {
         let src = "\tpublic partial class " + this.caseUp(it.name) + " {\n";
-        for (const field of it.fields)
-            src += "\t\tpublic " + this.typeSpec(field.typeSpec) + " " + this.caseUp(field.name) + " = default;\n";
+        for (const field of it.fields) {
+            src += "\t\t[" + (gen.typeFun(field.typeSpec) ? 'JsonIgnore' : `JsonProperty("${field.name}")${field.optional ? '' : ', JsonRequired'}`) + "]\n";
+            src += `\t\tpublic ${this.typeSpec(field.typeSpec)} ${this.caseUp(field.name)};\n`;
+        }
         for (const ff of it.funcFields)
-            src += "\t\tinternal string " + this.caseUp(ff) + "_AppzFuncId = \"\";\n";
+            src += `\t\t[JsonProperty("${ff}_AppzFuncId")]\n\t\tpublic string ${this.caseUp(ff)}_AppzFuncId = "";\n`;
         src += "\n\t\tpublic " + this.caseUp(it.name) + "() { }\n";
         src += "\t\tpublic " + this.caseUp(it.name) + "("
             + it.fields.map(_ => this.typeSpec(_.typeSpec) + " " + this.caseLo(_.name) + " = default").join(', ')
@@ -77,6 +80,35 @@ class Gen extends gen.Gen {
         const numargs = method.args.filter(_ => !_.isFromRetThenable).length;
         const __ = gen.idents(method.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result');
         src += `\t\t\tvar ${__.msg} = new msgToVsc("${it.name}", "${method.name}", ${numargs});\n`;
+        if (funcfields.length) {
+            src += `\t\t\tvar ${__.fnids} = new List<string>(${funcfields.length});\n`;
+            src += "\t\t\tlock (this) {\n";
+            for (const ff of funcfields) {
+                let facc = this.caseLo(ff.arg.name);
+                src += `\t\t\t\tif (${ff.arg.optional ? (facc + ' != null') : 'true'}) {\n`;
+                facc += '.' + this.caseUp(ff.name);
+                src += `\t\t\t\t\t${facc}_AppzFuncId = "";\n`;
+                src += `\t\t\t\t\tvar ${__.fn} = ${facc};\n`;
+                src += `\t\t\t\t\tif (${__.fn} != null) {\n`;
+                src += `\t\t\t\t\t\t${facc}_AppzFuncId = this.nextFuncId();\n`;
+                src += `\t\t\t\t\t\t${__.fnids}.Add(${facc}_AppzFuncId);\n`;
+                src += `\t\t\t\t\t\tthis.cbOther[${facc}_AppzFuncId] = (object[] args) => {\n`;
+                const args = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)[0];
+                src += `\t\t\t\t\t\t\tif (args != null && args.Length == ${args.length}) {\n`;
+                for (let a = 0; a < args.length; a++) {
+                    const tspec = this.typeSpec(args[a]);
+                    src += `\t\t\t\t\t\t\t\t${tspec} a${a} = default;\n`;
+                    src += this.genDecodeFromAny(prep, "\t\t\t\t\t\t\t\t", "args[" + a + "]", "a" + a, tspec, "", "return (null, false);", false);
+                }
+                src += `\t\t\t\t\t\t\t\treturn (${__.fn}(${args.map((_, a) => 'a' + a).join(', ')}), true);\n`;
+                src += `\t\t\t\t\t\t\t}\n`;
+                src += `\t\t\t\t\t\t\treturn (null, false);\n`;
+                src += `\t\t\t\t\t\t};\n`;
+                src += `\t\t\t\t\t}\n`;
+                src += `\t\t\t\t}\n`;
+            }
+            src += "\t\t\t}\n";
+        }
         for (const arg of method.args)
             if (!arg.isFromRetThenable)
                 src += `\t\t\t${__.msg}.Payload["${arg.name}"] = ${this.caseLo(arg.name)};\n`;
@@ -86,12 +118,22 @@ class Gen extends gen.Gen {
             let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true);
             src += `\t\t\tif (${laname} != null)\n`;
             src += `\t\t\t\t${__.on} = (object ${__.payload}) => {\n`;
-            src += `\t\t\t\t\t${tret} result = default;\n`;
+            src += `\t\t\t\t\t${tret} ${__.result} = default;\n`;
             src += this.genDecodeFromAny(prep, "\t\t\t\t\t", __.payload, __.result, tret, "", "return;");
             src += `\t\t\t\t\t${laname}(${__.result});\n`;
             src += `\t\t\t\t};\n`;
         }
-        src += `\n\t\t\tthis.send(${__.msg}, ${__.on});\n`;
+        if (funcfields.length) {
+            src += `\n\t\t\tthis.send(${__.msg}, (object payload) => {\n`;
+            src += `\t\t\t\tif (${__.fnids}.Count != 0)\n`;
+            src += `\t\t\t\t\tlock (this)\n`;
+            src += `\t\t\t\t\t\tforeach (var ${__.fnid} in ${__.fnids})\n`;
+            src += `\t\t\t\t\t\t\t_ = this.cbOther.Remove(${__.fnid});\n`;
+            src += `\t\t\t\tif (${__.on} != null)\n\t\t\t\t\t${__.on}(payload);\n`;
+            src += `\t\t\t});\n`;
+        }
+        else
+            src += `\n\t\t\tthis.send(${__.msg}, ${__.on});\n`;
         src += "\t\t}\n";
         return src;
     }

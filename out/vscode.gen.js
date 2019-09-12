@@ -1,36 +1,83 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
-function handle(msg) {
+const ppio = require("./procspipeio");
+function handle(msg, proc) {
     switch (msg.ns) {
         case "window":
             switch (msg.name) {
-                case "showErrorMessage1":
-                    return vscode.window.showErrorMessage((msg.payload['message']), ...(msg.payload['items'] || []));
-                case "showErrorMessage2":
-                    return vscode.window.showErrorMessage((msg.payload['message']), (msg.payload['options']), ...(msg.payload['items'] || []));
-                case "showErrorMessage3":
-                    return vscode.window.showErrorMessage((msg.payload['message']), ...(msg.payload['items'] || []));
-                case "showErrorMessage4":
-                    return vscode.window.showErrorMessage((msg.payload['message']), (msg.payload['options']), ...(msg.payload['items'] || []));
-                case "showInformationMessage1":
-                    return vscode.window.showInformationMessage((msg.payload['message']), ...(msg.payload['items'] || []));
-                case "showInformationMessage2":
-                    return vscode.window.showInformationMessage((msg.payload['message']), (msg.payload['options']), ...(msg.payload['items'] || []));
-                case "showInformationMessage3":
-                    return vscode.window.showInformationMessage((msg.payload['message']), ...(msg.payload['items'] || []));
-                case "showInformationMessage4":
-                    return vscode.window.showInformationMessage((msg.payload['message']), (msg.payload['options']), ...(msg.payload['items'] || []));
-                case "showWarningMessage1":
-                    return vscode.window.showWarningMessage((msg.payload['message']), ...(msg.payload['items'] || []));
-                case "showWarningMessage2":
-                    return vscode.window.showWarningMessage((msg.payload['message']), (msg.payload['options']), ...(msg.payload['items'] || []));
-                case "showWarningMessage3":
-                    return vscode.window.showWarningMessage((msg.payload['message']), ...(msg.payload['items'] || []));
-                case "showWarningMessage4":
-                    return vscode.window.showWarningMessage((msg.payload['message']), (msg.payload['options']), ...(msg.payload['items'] || []));
-                case "showInputBox":
-                    return vscode.window.showInputBox((msg.payload['options']));
+                case "showErrorMessage1": {
+                    const arg_message = (msg.payload['message']);
+                    const arg_items = (msg.payload['items'] || []);
+                    return vscode.window.showErrorMessage(arg_message, ...arg_items);
+                }
+                case "showErrorMessage2": {
+                    const arg_message = (msg.payload['message']);
+                    const arg_options = (msg.payload['options']);
+                    const arg_items = (msg.payload['items'] || []);
+                    return vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items);
+                }
+                case "showErrorMessage3": {
+                    const arg_message = (msg.payload['message']);
+                    const arg_items = (msg.payload['items'] || []);
+                    return vscode.window.showErrorMessage(arg_message, ...arg_items);
+                }
+                case "showErrorMessage4": {
+                    const arg_message = (msg.payload['message']);
+                    const arg_options = (msg.payload['options']);
+                    const arg_items = (msg.payload['items'] || []);
+                    return vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items);
+                }
+                case "showInformationMessage1": {
+                    const arg_message = (msg.payload['message']);
+                    const arg_items = (msg.payload['items'] || []);
+                    return vscode.window.showInformationMessage(arg_message, ...arg_items);
+                }
+                case "showInformationMessage2": {
+                    const arg_message = (msg.payload['message']);
+                    const arg_options = (msg.payload['options']);
+                    const arg_items = (msg.payload['items'] || []);
+                    return vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items);
+                }
+                case "showInformationMessage3": {
+                    const arg_message = (msg.payload['message']);
+                    const arg_items = (msg.payload['items'] || []);
+                    return vscode.window.showInformationMessage(arg_message, ...arg_items);
+                }
+                case "showInformationMessage4": {
+                    const arg_message = (msg.payload['message']);
+                    const arg_options = (msg.payload['options']);
+                    const arg_items = (msg.payload['items'] || []);
+                    return vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items);
+                }
+                case "showWarningMessage1": {
+                    const arg_message = (msg.payload['message']);
+                    const arg_items = (msg.payload['items'] || []);
+                    return vscode.window.showWarningMessage(arg_message, ...arg_items);
+                }
+                case "showWarningMessage2": {
+                    const arg_message = (msg.payload['message']);
+                    const arg_options = (msg.payload['options']);
+                    const arg_items = (msg.payload['items'] || []);
+                    return vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items);
+                }
+                case "showWarningMessage3": {
+                    const arg_message = (msg.payload['message']);
+                    const arg_items = (msg.payload['items'] || []);
+                    return vscode.window.showWarningMessage(arg_message, ...arg_items);
+                }
+                case "showWarningMessage4": {
+                    const arg_message = (msg.payload['message']);
+                    const arg_options = (msg.payload['options']);
+                    const arg_items = (msg.payload['items'] || []);
+                    return vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items);
+                }
+                case "showInputBox": {
+                    const arg_options = (msg.payload['options']);
+                    if (arg_options.validateInput_AppzFuncId && arg_options.validateInput_AppzFuncId.length)
+                        arg_options.validateInput = (a0) => ppio.callBack(proc, arg_options.validateInput_AppzFuncId, a0);
+                    return vscode.window.showInputBox(arg_options);
+                }
                 default:
                     throw (msg.name);
             }

@@ -47,10 +47,10 @@ export class Gen extends gen.Gen implements gen.IGen {
         let src = "type " + this.caseUp(it.name) + " struct {\n"
         for (const field of it.fields)
             src += "\t" + this.caseUp(field.name) + " " + this.typeSpec(field.typeSpec)
-                + ((gen.typeFun(field.typeSpec)) ? " `json:\"-\"`" : (" `json:\"" + field.name + (field.optional ? ",omitempty" : "") + "\"`"))
+                + (gen.typeFun(field.typeSpec) ? " `json:\"-\"`" : (" `json:\"" + field.name + (field.optional ? ",omitempty" : "") + "\"`"))
                 + "\n"
         for (const ff of it.funcFields)
-            src += "\t" + this.caseUp(ff) + "_AppzFuncId string `json:\",omitempty\"`\n"
+            src += "\t" + this.caseUp(ff) + "_AppzFuncId string `json:\"" + ff + "_AppzFuncId,omitempty\"`\n"
         return src + "}\n\n"
     }
 
@@ -80,6 +80,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         const numargs = method.args.filter(_ => !_.isFromRetThenable).length
         const __ = gen.idents(method.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result')
         src += `\t${__.msg} := msgToVsc{Ns: "${it.name}", Name: "${method.name}", Payload: make(map[string]Any, ${numargs})}\n`
+
         if (funcfields.length) {
             src += `\t${__.fnids} := make([]string, 0, ${funcfields.length})\n`
             src += `\tme.state.Lock()\n`
@@ -119,7 +120,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true)
             src += `\tif ${laname} != nil {\n`
             src += `\t\t${__.on} = func(${__.payload} Any) {\n`
-            src += `\t\t\tvar result ${tret}\n`
+            src += `\t\t\tvar ${__.result} ${tret}\n`
             src += this.genDecodeFromAny(prep, "\t\t\t", __.payload, __.result, tret, "", "return")
             src += `\t\t\t${laname}(${__.result})\n`
             src += `\t\t}\n`

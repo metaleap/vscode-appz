@@ -13,10 +13,10 @@ import (
 type Any = interface{}
 
 type msgToVsc struct {
-	Ns      string         `json:"ns"`   // eg. 'window'
-	Name    string         `json:"name"` // eg. 'ShowInformationMessage3'
-	Payload map[string]Any `json:"payload"`
-	AndThen string         `json:"andThen"`
+	Ns      string         `json:"ns,omitempty"`   // eg. 'window'
+	Name    string         `json:"name,omitempty"` // eg. 'ShowInformationMessage3'
+	Payload map[string]Any `json:"payload,omitempty"`
+	AndThen string         `json:"andThen,omitempty"`
 }
 
 type msgFromVsc struct {
@@ -26,9 +26,9 @@ type msgFromVsc struct {
 }
 
 type impl struct {
-	readln       *bufio.Scanner
-	counterparty *json.Encoder
-	state        struct {
+	readln  *bufio.Scanner
+	jsonOut *json.Encoder
+	state   struct {
 		sync.Mutex
 		looping   bool
 		counter   uint64
@@ -53,6 +53,10 @@ func init() {
 	}
 }
 
+func Main(main func(Protocol)) {
+	main(Via(nil, nil))
+}
+
 func Via(stdin io.Reader, stdout io.Writer) Protocol {
 	if stdin == nil {
 		stdin = os.Stdin
@@ -60,10 +64,10 @@ func Via(stdin io.Reader, stdout io.Writer) Protocol {
 	if stdout == nil {
 		stdout = os.Stdout
 	}
-	me := &impl{readln: bufio.NewScanner(stdin), counterparty: json.NewEncoder(stdout)}
+	me := &impl{readln: bufio.NewScanner(stdin), jsonOut: json.NewEncoder(stdout)}
 	me.readln.Buffer(make([]byte, 1024*1024), 8*1024*1024)
-	me.counterparty.SetEscapeHTML(false)
-	me.counterparty.SetIndent("", "")
+	me.jsonOut.SetEscapeHTML(false)
+	me.jsonOut.SetIndent("", "")
 	me.state.callbacks.waiting = make(map[string]func(Any), 8)
 	me.state.callbacks.other = make(map[string]func(...Any) (Any, bool), 8)
 	return me
@@ -83,7 +87,6 @@ func (me *impl) loopReadln() {
 				me.state.Lock()
 				cb, fn := me.state.callbacks.waiting[msg.AndThen], me.state.callbacks.other[msg.AndThen]
 				delete(me.state.callbacks.waiting, msg.AndThen)
-				delete(me.state.callbacks.other, msg.AndThen)
 				me.state.Unlock()
 				if cb != nil && !msg.Failed {
 					cb(msg.Payload)
@@ -119,9 +122,8 @@ func (me *impl) send(msg *msgToVsc, on func(Any)) {
 		msg.AndThen = me.nextFuncId()
 		me.state.callbacks.waiting[msg.AndThen] = on
 	}
+	err := me.jsonOut.Encode(msg)
 	me.state.Unlock()
-
-	err := me.counterparty.Encode(msg)
 	if err != nil && OnError != nil {
 		OnError(me, err, "")
 	}
