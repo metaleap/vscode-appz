@@ -10,6 +10,7 @@ import (
 	"sync"
 )
 
+// Any is a type alias of `interface{}` for legibility reasons.
 type Any = interface{} // must remain an `=` type alias or json stuff will fail at runtime not compile-time. just to reduce brackets-noise throughout
 
 type msgToVsc struct {
@@ -39,6 +40,7 @@ type impl struct {
 	}
 }
 
+// Called on every `error` during the forever-looping stdin/stdout communication with the `vscode-appz` VSC extension.
 var OnError func(impl Vscode, err error, jsonMsgIncoming string)
 
 func init() {
@@ -53,14 +55,15 @@ func init() {
 	}
 }
 
-func Vsc(stdin io.Reader, stdout io.Writer) Vscode {
-	if stdin == nil {
-		stdin = os.Stdin
+// Vsc returns a `Vscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `os.Stdin` and `stdOut` defaulting to `os.Stdout`). Communication only begins its forever loop upon the first method invocation (which consequently never `return`s) on any of the `interface`s offered by the returned `Vscode`'s members.
+func Vsc(stdIn io.Reader, stdOut io.Writer) Vscode {
+	if stdIn == nil {
+		stdIn = os.Stdin
 	}
-	if stdout == nil {
-		stdout = os.Stdout
+	if stdOut == nil {
+		stdOut = os.Stdout
 	}
-	me := &impl{readln: bufio.NewScanner(stdin), jsonOut: json.NewEncoder(stdout)}
+	me := &impl{readln: bufio.NewScanner(stdIn), jsonOut: json.NewEncoder(stdOut)}
 	me.readln.Buffer(make([]byte, 1024*1024), 8*1024*1024)
 	me.jsonOut.SetEscapeHTML(false)
 	me.jsonOut.SetIndent("", "")

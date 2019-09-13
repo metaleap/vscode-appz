@@ -18,37 +18,41 @@ func main() {
 		}
 	}
 
-	vsc := Vsc(nil, nil).Window()
+	win := Vsc(nil, nil).Window()
+	exit := func(_unused string) { os.Exit(0) }
 
-	vsc.ShowInformationMessage1(greethow+", "+greetname+"! Pick or input?", []string{
-		"Show Quick Pick...",
-		"Show Input Box...",
-	}, func(button string) {
-		switch button {
-		case "Show Quick Pick...":
-			vsc.ShowWarningMessage1("Not yet implemented: `"+button+"`", nil, nil)
-		case "Show Input Box...":
-			vsc.ShowInputBox(&InputBoxOptions{
-				IgnoreFocusOut: true,
-				ValidateInput: func(input string) (complaint string) {
-					input = strings.ToLower(input)
-					if strings.Contains(input, "foo") || strings.Contains(input, "f0o") || strings.Contains(input, "fo0") || strings.Contains(input, "f00") {
-						return "Contains something looking like `foo`."
+	buttons := []string{"Show Quick Pick...", "Show Input Box..."}
+	win.ShowInformationMessage1(greethow+", "+greetname+"! What to try out?",
+		buttons, func(button string) {
+			switch button {
+			case buttons[0]:
+				win.ShowWarningMessage1("Not yet implemented: `"+button+"`", nil, exit)
+
+			case buttons[1]:
+				win.ShowInputBox(&InputBoxOptions{
+					IgnoreFocusOut: true,
+					ValidateInput: func(input string) (complaint string) {
+						input = strings.ToLower(input)
+						if strings.Contains(input, "foo") || strings.Contains(input, "f0o") || strings.Contains(input, "fo0") || strings.Contains(input, "f00") {
+							return "Contains something looking like `foo`."
+						}
+						return ""
+					},
+					Prompt: "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
+				}, func(input string) {
+					if input == "" {
+						win.ShowInformationMessage1("You cancelled, bye now!", nil, exit)
+					} else {
+						win.ShowInformationMessage1("You entered: `"+input+"`, bye now!", nil, exit)
 					}
-					return ""
-				},
-				Prompt: "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
-			}, func(input string) {
-				if input == "" {
-					vsc.ShowInformationMessage1("You abandoned the input box.", nil, exit)
-				} else {
-					vsc.ShowInformationMessage1("You entered: `"+input+"`", nil, exit)
-				}
-			})
-		default:
-			vsc.ShowErrorMessage1("Unknown: `"+button+"`", nil, nil)
-		}
-	})
-}
+				})
 
-func exit(undefined string) { os.Exit(0) }
+			default:
+				if cancelled := (button == ""); cancelled {
+					exit("")
+				} else {
+					win.ShowErrorMessage1("Unknown: `"+button+"`", nil, exit)
+				}
+			}
+		})
+}

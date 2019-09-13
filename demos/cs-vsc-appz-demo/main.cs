@@ -1,4 +1,5 @@
 namespace VscAppzDemo {
+    using System;
     using VscAppz;
 
     public static class App {
@@ -12,27 +13,34 @@ namespace VscAppzDemo {
                     greethow = args[1];
             }
 
-            var vscwin = Vsc.InOut().Window;
-            vscwin.ShowInformationMessage(greethow + ", " + greetname + "! Pick or input?",
-                new[] { "showQuickPick", "showInputBox" }, pick => {
-                    switch (pick) {
-                        case "showQuickPick":
-                            vscwin.ShowWarningMessage("Not yet implemented", nil);
-                            break;
-                        case "showInputBox":
-                            vscwin.ShowInputBox(new InputBoxOptions(
-                                ignoreFocusOut: true,
-                                prompt: "Enter anything that doesn't look like `foo`: my validateInput handler will reject it.",
-                                validateInput: input => (input.ToLowerInvariant() != "foo" && input.ToLowerInvariant() != "f00" && input.ToLowerInvariant() != "fo0" && input.ToLowerInvariant() != "f0o")
-                                                        ? ""
-                                                        : "Invalid input"
-                            ), input =>
-                                vscwin.ShowInformationMessage("Accepted input: " + input, nil));
-                            break;
-                        default:
-                            vscwin.ShowErrorMessage("Unknown: " + pick, nil);
-                            break;
-                    }
+            var win = Vsc.InOut().Window;
+            Action<string> exit = (_unused) => Environment.Exit(0);
+
+            var buttons = new[] {"Show Quick Pick...", "Show Input Box..."};
+            win.ShowInformationMessage(greethow + ", " + greetname + "! What to try out?",
+                buttons, button => {
+                    if (button == "")
+                        exit("");
+
+                    else if (button == buttons[0])
+                        win.ShowWarningMessage("Not yet implemented", nil, exit);
+
+                    else if (button == buttons[1])
+                        win.ShowInputBox(new InputBoxOptions(
+                            ignoreFocusOut: true,
+                            prompt:         "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
+                            validateInput:  input =>
+                                                ((input = input.ToLowerInvariant()) != "foo" && input != "f00" && input != "fo0" && input != "f0o")
+                                                ? "" : "Invalid input"
+                        ), input => {
+                            if (string.IsNullOrEmpty(input))
+                                win.ShowWarningMessage("Cancelled input, bye now!", nil, exit);
+                            else
+                                win.ShowInformationMessage("You entered: `"+input+"`, bye now!", nil, exit);
+                        });
+
+                    else
+                        win.ShowErrorMessage("Unknown: " + button, nil, exit);
                 }
             );
         }

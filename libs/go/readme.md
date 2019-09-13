@@ -8,6 +8,8 @@
 ```go
 var OnError func(impl Vscode, err error, jsonMsgIncoming string)
 ```
+Called on every `error` during the forever-looping stdin/stdout communication
+with the `vscode-appz` VSC extension.
 
 #### type Any
 
@@ -16,6 +18,7 @@ type Any = interface{} // must remain an `=` type alias or json stuff will fail 
 
 ```
 
+Any is a type alias of `interface{}` for legibility reasons.
 
 #### type InputBoxOptions
 
@@ -112,8 +115,13 @@ https://code.visualstudio.com/api for more information
 #### func  Vsc
 
 ```go
-func Vsc(stdin io.Reader, stdout io.Writer) Vscode
+func Vsc(stdIn io.Reader, stdOut io.Writer) Vscode
 ```
+Vsc returns a `Vscode` implementation that communicates via the specified input
+and output streams (with `stdIn` defaulting to `os.Stdin` and `stdOut`
+defaulting to `os.Stdout`). Communication only begins its forever loop upon the
+first method invocation (which consequently never `return`s) on any of the
+`interface`s offered by the returned `Vscode`'s members.
 
 #### type Window
 

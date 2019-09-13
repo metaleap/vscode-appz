@@ -35,9 +35,13 @@
 					"appz.progs": {
 						"type": "array",
 						"default": [
-							"go run \"${appz}/demos/go-vsc-appz-demo\" \"${Enter name}\" \"${Pick greeting:Hello|Hiya|Hola}\"",
-							"dotnet run --project \"${appz}/demos/cs-vsc-appz-demo\" -- \"${Enter name}\" \"${Pick greeting:Hello|Hiya|Hola}\""
+							"go run \"${appz}/demos/go-vsc-appz-demo\" \"${Enter name}\" \"${Pick greeting:${config:appz.demoPicks}}\"",
+							"dotnet run --project \"${appz}/demos/cs-vsc-appz-demo\" -- \"${Enter name}\" \"${Pick greeting:${config:appz.demoPicks}}\""
 						]
+					},
+					"appz.demoPicks": {
+						"type": "string",
+						"default": "Hello|Welcome|Hiya|Hola"
 					}
 				}
 			}
