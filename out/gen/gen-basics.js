@@ -2,6 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_fs = require("fs");
 const ts = require("typescript");
+const dbgJsonPrintEnums = false, dbgJsonPrintStructs = false, dbgJsonPrintIfaces = false;
+exports.docStrs = {
+    extBaggage: "Free-form custom data, preserved across a roundtrip.",
+    internalOnly: "For internal runtime use only."
+};
 class Prep {
     constructor(job) {
         this.enums = [];
@@ -35,17 +40,20 @@ class Prep {
         this.interfaces.forEach(iface => iface.methods.forEach(method => {
             method.args = method.args.filter(arg => arg.typeSpec !== 'CancellationToken');
         }));
-        console.log(JSON.stringify({
-            e: this.enums,
-            s: this.structs,
-            i: this.interfaces,
-        }, function (key, val) {
+        const printjson = (_) => console.log(JSON.stringify(_, function (key, val) {
             return (key === 'parent') ? null : val;
         }, 2));
+        if (dbgJsonPrintEnums)
+            printjson(this.enums);
+        if (dbgJsonPrintStructs)
+            printjson(this.structs);
+        if (dbgJsonPrintIfaces)
+            printjson(this.structs);
     }
     addEnum(enumJob) {
         const qname = this.qName(enumJob);
         this.enums.push({
+            fromOrig: enumJob,
             name: qname.slice(1).join('_'),
             enumerants: enumJob.decl.members.map(_ => ({
                 name: _.name.getText(),
@@ -56,6 +64,7 @@ class Prep {
     addStruct(structJob) {
         const qname = this.qName(structJob);
         this.structs.push({
+            fromOrig: structJob,
             name: qname.slice(1).join('_'),
             fields: structJob.decl.members.map(_ => {
                 let tspec = null;
@@ -70,6 +79,7 @@ class Prep {
                         throw (_.kind);
                 }
                 return {
+                    fromOrig: (_.kind === ts.SyntaxKind.PropertySignature) ? _ : _,
                     name: _.name.getText(),
                     typeSpec: tspec,
                     optional: _.questionToken ? true : false,
@@ -86,18 +96,19 @@ class Prep {
         const ifacename = qname.slice(1, qname.length - 1).join('_');
         let iface = this.interfaces.find(_ => _.name === ifacename);
         if (!iface)
-            this.interfaces.push(iface = { name: ifacename, methods: [] });
+            this.interfaces.push(iface = { name: ifacename, methods: [], fromOrig: funcJob.ifaceNs });
         iface.methods.push({
+            fromOrig: funcJob,
             nameOrig: qname[qname.length - 1],
             name: qname[qname.length - 1] + ((funcJob.overload > 0) ? funcJob.overload : ''),
             args: funcJob.decl.parameters.map(_ => ({
+                fromOrig: _,
                 name: _.name.getText(),
                 typeSpec: this.typeSpec(_.type, funcJob.decl.typeParameters),
                 optional: _.questionToken ? true : false,
                 isFromRetThenable: false,
                 spreads: _.dotDotDotToken ? true : false,
             })),
-            fromOrig: funcJob
         });
         const tret = this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters);
         if (tret) {
@@ -110,7 +121,7 @@ class Prep {
     }
     qName(memJob) {
         const qname = memJob.qName.split('.');
-        if ((!qname) || (!qname.length) || (qname.length < 2) || qname[0] !== this.fromOrig.module[0])
+        if ((!qname) || (!qname.length) || (qname.length < 2) || qname[0] !== this.fromOrig.moduleName)
             throw (memJob.qName);
         return qname;
     }
@@ -197,6 +208,12 @@ class Gen {
     caseUp(name) {
         return name.charAt(0).toUpperCase() + name.slice(1);
     }
+    genDocSrc(lnPref, docLns) {
+        let src = "";
+        if (docLns && docLns.length)
+            src = docLns.map(_ => lnPref + _).join('\n') + '\n';
+        return src;
+    }
     parensIfJoin(arr, joinSep = ', ') {
         return (arr && arr.length === 1) ? arr[0] : ('(' + arr.join(joinSep) + ')');
     }
@@ -248,7 +265,6 @@ function typeRefersTo(typeSpec, name) {
         return tprom.some(_ => typeRefersTo(_, name));
     return typeSpec === name;
 }
-exports.typeRefersTo = typeRefersTo;
 function argsFuncFields(prep, args) {
     const funcfields = [];
     for (const arg of args)
@@ -259,6 +275,36 @@ function argsFuncFields(prep, args) {
     return funcfields;
 }
 exports.argsFuncFields = argsFuncFields;
+function docFrom(from, retName) {
+    let ret = null, txt;
+    if (from) {
+        ret = { fromOrig: from, subs: [], lines: [] };
+        if (txt = from.comment) {
+            if (ts.isJSDocParameterTag(from))
+                txt = "`" + from.name.getText() + "` ── " + txt;
+            else if (ts.isJSDocReturnTag(from)) {
+                const rn = retName ? retName() : null;
+                txt = "`" + ((rn && rn.name && rn.name.length) ? rn.name : 'return') + "` ── " + txt;
+            }
+            ret.lines.push(...txt.split('\n').filter(_ => _ !== null
+                && (!(_.startsWith('[') && _.endsWith(')') && _.includes('](#')))
+                && (!(_.startsWith("`token` ── ") && _.includes('cancellation')))));
+        }
+        from.forEachChild(_ => {
+            const sub = docFrom(_, retName);
+            if (sub)
+                ret.subs.push(sub);
+        });
+    }
+    return ret;
+}
+function docs(from, retName = undefined) {
+    const docs = jsDocs(from), ret = [];
+    if (docs && docs.length)
+        ret.push(...docs.map(_ => docFrom(_, retName)));
+    return ret;
+}
+exports.docs = docs;
 function idents(dontCollideWith, ...names) {
     const ret = {};
     for (const name of names)
@@ -266,6 +312,10 @@ function idents(dontCollideWith, ...names) {
     return ret;
 }
 exports.idents = idents;
+function jsDocs(from) {
+    const have = from;
+    return (have && have.jsDoc && have.jsDoc.length) ? have.jsDoc : null;
+}
 function pickName(forcePrefix, pickFrom, dontCollideWith) {
     if (!(forcePrefix && forcePrefix.length)) {
         for (const name of pickFrom)
@@ -287,4 +337,3 @@ function pickName(forcePrefix, pickFrom, dontCollideWith) {
             }
     return undefined;
 }
-exports.pickName = pickName;

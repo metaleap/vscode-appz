@@ -1,4 +1,4 @@
-package vscode
+package vscAppz
 
 import (
 	"bufio"
@@ -10,7 +10,7 @@ import (
 	"sync"
 )
 
-type Any = interface{}
+type Any = interface{} // must remain an `=` type alias or json stuff will fail at runtime not compile-time. just to reduce brackets-noise throughout
 
 type msgToVsc struct {
 	Ns      string         `json:"ns,omitempty"`   // eg. 'window'
@@ -39,11 +39,11 @@ type impl struct {
 	}
 }
 
-var OnError func(impl Protocol, err error, jsonMsgIncoming string)
+var OnError func(impl Vscode, err error, jsonMsgIncoming string)
 
 func init() {
 	var stderr sync.Mutex
-	OnError = func(_ Protocol, err error, jsonmsg string) {
+	OnError = func(_ Vscode, err error, jsonmsg string) {
 		if jsonmsg != "" {
 			jsonmsg = ", jsonMsgIncoming:" + jsonmsg
 		}
@@ -53,11 +53,7 @@ func init() {
 	}
 }
 
-func Main(main func(Protocol)) {
-	main(Via(nil, nil))
-}
-
-func Via(stdin io.Reader, stdout io.Writer) Protocol {
+func Vsc(stdin io.Reader, stdout io.Writer) Vscode {
 	if stdin == nil {
 		stdin = os.Stdin
 	}

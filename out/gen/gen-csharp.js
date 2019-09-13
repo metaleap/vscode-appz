@@ -1,21 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const gen = require("./gen-shared");
+const gen = require("./gen-basics");
 class Gen extends gen.Gen {
     gen(prep) {
-        const pkgname = this.caseUp(prep.fromOrig.module[0]);
         let src = "// " + this.doNotEditComment("csharp") + "\n";
-        src += `namespace ${pkgname} {\n`;
+        src += `namespace VscAppz {\n`;
         src += "\tusing System;\n";
         src += "\tusing System.Collections.Generic;\n\n";
         src += "\tusing Newtonsoft.Json;\n\n";
-        src += "\tpublic interface IProtocol {\n";
+        const doclns = this.genDocLns(gen.docs(prep.fromOrig.fromOrig));
+        src += this.genDocSrc('\t', doclns);
+        src += `\tpublic interface I${this.caseUp(prep.fromOrig.moduleName)} {\n`;
         for (const it of prep.interfaces)
-            src += `\t\tI${this.caseUp(it.name)} ${this.caseUp(it.name)} { get; }\n`;
+            src += '\n' + this.genDocSrc('\t\t', this.genDocLns(gen.docs(it.fromOrig)))
+                + `\t\tI${this.caseUp(it.name)} ${this.caseUp(it.name)} { get; }\n`;
         src += "\t}\n\n";
-        src += "\tinternal partial class impl : IProtocol {\n";
+        src += `\tinternal partial class impl : I${this.caseUp(prep.fromOrig.moduleName)} {\n`;
         for (const it of prep.interfaces)
-            src += `\t\tI${this.caseUp(it.name)} IProtocol.${this.caseUp(it.name)} { get { return this; } }\n`;
+            src += `\t\tI${this.caseUp(it.name)} I${this.caseUp(prep.fromOrig.moduleName)}.${this.caseUp(it.name)} { get { return this; } }\n`;
         src += "\t}\n\n";
         for (const it of prep.enums)
             src += this.genEnum(it);
@@ -35,22 +37,29 @@ class Gen extends gen.Gen {
             }
         }
         src += "}\n";
-        this.writeFileSync(pkgname, src);
+        this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), src);
     }
     genEnum(it) {
-        let src = "\tpublic enum " + this.caseUp(it.name) + " {\n";
+        const doclns = this.genDocLns(gen.docs(it.fromOrig.decl));
+        let src = this.genDocSrc('\t', doclns);
+        src += "\tpublic enum " + this.caseUp(it.name) + " {\n";
         src += "\t}\n\n";
         return src;
     }
     genStruct(it) {
-        let src = "\tpublic partial class " + this.caseUp(it.name) + " {\n";
+        const doclns = this.genDocLns(gen.docs(it.fromOrig.decl));
+        let src = this.genDocSrc('\t', doclns);
+        src += "\tpublic partial class " + this.caseUp(it.name) + " {\n";
         for (const field of it.fields) {
-            src += "\t\t[" + (gen.typeFun(field.typeSpec) ? 'JsonIgnore' : `JsonProperty("${field.name}")${field.optional ? '' : ', JsonRequired'}`) + "]\n";
+            src += '\n' + (field.isExtBaggage ? (`\t\t/// <summary>${gen.docStrs.extBaggage}</summary>\n`) : (this.genDocSrc("\t\t", this.genDocLns(gen.docs(field.fromOrig)))))
+                + "\t\t[" + (gen.typeFun(field.typeSpec) ? 'JsonIgnore' : `JsonProperty("${field.name}")${field.optional ? '' : ', JsonRequired'}`) + "]\n";
             src += `\t\tpublic ${this.typeSpec(field.typeSpec)} ${this.caseUp(field.name)};\n`;
         }
         for (const ff of it.funcFields)
-            src += `\t\t[JsonProperty("${ff}_AppzFuncId")]\n\t\tpublic string ${this.caseUp(ff)}_AppzFuncId = "";\n`;
-        src += "\n\t\tpublic " + this.caseUp(it.name) + "() { }\n";
+            src += `\n\t\t/// <summary>${gen.docStrs.internalOnly}</summary>\n\t\t[JsonProperty("${ff}_AppzFuncId")]\n\t\tpublic string ${this.caseUp(ff)}_AppzFuncId = "";\n`;
+        src += '\n' + this.genDocSrc('\t\t', doclns);
+        src += "\t\tpublic " + this.caseUp(it.name) + "() { }\n";
+        src += '\n' + this.genDocSrc('\t\t', doclns);
         src += "\t\tpublic " + this.caseUp(it.name) + "("
             + it.fields.map(_ => this.typeSpec(_.typeSpec) + " " + this.caseLo(_.name) + " = default").join(', ')
             + ") =>\n\t\t\t"
@@ -60,9 +69,12 @@ class Gen extends gen.Gen {
         return src;
     }
     genInterface(prep, it) {
-        let src = "\tpublic interface I" + this.caseUp(it.name) + " {\n";
+        const doclns = this.genDocLns(gen.docs(it.fromOrig));
+        let src = this.genDocSrc('\t', doclns);
+        src += "\tpublic interface I" + this.caseUp(it.name) + " {\n";
         for (const method of it.methods)
-            src += "\t\tvoid " + this.caseUp(method.nameOrig) + "("
+            src += '\n' + this.genDocSrc('\t\t', this.genDocLns(gen.docs(method.fromOrig.decl, () => method.args.find(_ => _.isFromRetThenable))))
+                + "\t\tvoid " + this.caseUp(method.nameOrig) + "("
                 + method.args.map(_ => this.typeSpec(_.typeSpec) + " " + this.caseLo(_.name) + " = default").join(', ')
                 + ");\n";
         src += "\t}\n\n";
@@ -172,6 +184,24 @@ class Gen extends gen.Gen {
         src += "\t\t\treturn (this, true);\n";
         src += "\t\t}\n\t}\n\n";
         return src;
+    }
+    genDocLns(docs, isSub = false) {
+        let ret = [];
+        if (docs && docs.length)
+            for (const doc of docs) {
+                if (doc.lines && doc.lines.length) {
+                    ret.push("/// ");
+                    for (const ln of doc.lines)
+                        ret.push("/// " + ln);
+                }
+                if (doc.subs && doc.subs.length)
+                    ret.push(...this.genDocLns(doc.subs, true));
+            }
+        if (ret.length && !isSub) {
+            ret[0] = "/// <summary>";
+            ret.push("/// </summary>");
+        }
+        return ret;
     }
     typeSpec(from, intoProm = false) {
         if (!from)

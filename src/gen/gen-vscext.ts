@@ -1,9 +1,9 @@
-import * as gen from './gen-shared'
+import * as gen from './gen-basics'
 
 export class Gen extends gen.Gen implements gen.IGen {
 
     gen(prep: gen.Prep) {
-        const pkgname = prep.fromOrig.module[0]
+        const pkgname = prep.fromOrig.moduleName
         let src = "// " + this.doNotEditComment("vscext") + "\n\n"
         src += "import * as node_proc from 'child_process'\n"
         src += "import * as vscode from 'vscode'\n\n"

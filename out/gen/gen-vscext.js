@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const gen = require("./gen-shared");
+const gen = require("./gen-basics");
 class Gen extends gen.Gen {
     gen(prep) {
-        const pkgname = prep.fromOrig.module[0];
+        const pkgname = prep.fromOrig.moduleName;
         let src = "// " + this.doNotEditComment("vscext") + "\n\n";
         src += "import * as node_proc from 'child_process'\n";
         src += "import * as vscode from 'vscode'\n\n";

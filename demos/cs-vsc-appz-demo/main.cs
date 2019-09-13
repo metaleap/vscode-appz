@@ -1,11 +1,9 @@
-namespace VscAppzDemo
-{
-    using Vscode;
+namespace VscAppzDemo {
+    using VscAppz;
 
-    public static class App
-    {
-        public static void Main(string[] args)
-        {
+    public static class App {
+
+        public static void Main(string[] args) {
             var (greethow, greetname, nil) = ("Hallo", "Welt", new string[0]);
             if (args != null && args.Length > 0) {
                 if (!string.IsNullOrEmpty(args[0]))
@@ -16,11 +14,8 @@ namespace VscAppzDemo
 
             var vscwin = Vsc.InOut().Window;
             vscwin.ShowInformationMessage(greethow + ", " + greetname + "! Pick or input?",
-                new[] { "showQuickPick", "showInputBox" },
-                (pick) =>
-                {
-                    switch (pick)
-                    {
+                new[] { "showQuickPick", "showInputBox" }, pick => {
+                    switch (pick) {
                         case "showQuickPick":
                             vscwin.ShowWarningMessage("Not yet implemented", nil);
                             break;
@@ -31,7 +26,8 @@ namespace VscAppzDemo
                                 validateInput: input => (input.ToLowerInvariant() != "foo" && input.ToLowerInvariant() != "f00" && input.ToLowerInvariant() != "fo0" && input.ToLowerInvariant() != "f0o")
                                                         ? ""
                                                         : "Invalid input"
-                            ), input => vscwin.ShowInformationMessage("Accepted input: " + input, nil));
+                            ), input =>
+                                vscwin.ShowInformationMessage("Accepted input: " + input, nil));
                             break;
                         default:
                             vscwin.ShowErrorMessage("Unknown: " + pick, nil);
@@ -40,5 +36,7 @@ namespace VscAppzDemo
                 }
             );
         }
+
     }
+
 }

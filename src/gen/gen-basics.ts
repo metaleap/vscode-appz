@@ -2,12 +2,22 @@ import * as node_fs from 'fs'
 
 import * as ts from 'typescript'
 
+
+
+const dbgJsonPrintEnums = false, dbgJsonPrintStructs = false, dbgJsonPrintIfaces = false
+export const docStrs = {
+    extBaggage: "Free-form custom data, preserved across a roundtrip.",
+    internalOnly: "For internal runtime use only."
+}
+
 export interface IGen {
     gen(prep: Prep): void
 }
 
 export interface GenJob {
-    module: [string, ts.ModuleBody]
+    fromOrig: ts.ModuleDeclaration
+    namespaces: { [_: string]: ts.NamespaceDeclaration }
+    moduleName: string
     funcs: GenJobFunc[]
     structs: GenJobStruct[]
     enums: GenJobEnum[]
@@ -18,6 +28,7 @@ interface GenJobNamed {
 }
 
 export interface GenJobFunc extends GenJobNamed {
+    ifaceNs: ts.NamespaceDeclaration
     overload: number
     decl: ts.FunctionDeclaration
 }
@@ -31,6 +42,7 @@ export interface GenJobStruct extends GenJobNamed {
 }
 
 export interface PrepEnum {
+    fromOrig: GenJobEnum
     name: string
     enumerants: {
         name: string
@@ -39,12 +51,14 @@ export interface PrepEnum {
 }
 
 export interface PrepStruct {
+    fromOrig: GenJobStruct
     name: string
     fields: PrepField[]
     funcFields: string[]
 }
 
 export interface PrepField {
+    fromOrig?: ts.MethodSignature | ts.PropertySignature
     name: string
     typeSpec: TypeSpec
     optional: boolean
@@ -52,18 +66,20 @@ export interface PrepField {
 }
 
 export interface PrepInterface {
+    fromOrig: ts.NamespaceDeclaration
     name: string
     methods: PrepMethod[]
 }
 
 export interface PrepMethod {
+    fromOrig: GenJobFunc
     name: string
     args: PrepArg[]
-    fromOrig: GenJobFunc
     nameOrig: string
 }
 
 export interface PrepArg {
+    fromOrig?: ts.ParameterDeclaration
     name: string
     typeSpec: TypeSpec
     optional: boolean
@@ -111,18 +127,22 @@ export class Prep {
             method.args = method.args.filter(arg =>
                 arg.typeSpec !== 'CancellationToken')
         }))
-        console.log(JSON.stringify({
-            e: this.enums,
-            s: this.structs,
-            i: this.interfaces,
-        }, function (this: any, key: string, val: any): any {
+
+        const printjson = (_: any) => console.log(JSON.stringify(_, function (this: any, key: string, val: any): any {
             return (key === 'parent') ? null : val
         }, 2))
+        if (dbgJsonPrintEnums)
+            printjson(this.enums)
+        if (dbgJsonPrintStructs)
+            printjson(this.structs)
+        if (dbgJsonPrintIfaces)
+            printjson(this.structs)
     }
 
     addEnum(enumJob: GenJobEnum) {
         const qname = this.qName(enumJob)
         this.enums.push({
+            fromOrig: enumJob,
             name: qname.slice(1).join('_'),
             enumerants: enumJob.decl.members.map(_ => ({
                 name: _.name.getText(),
@@ -134,6 +154,7 @@ export class Prep {
     addStruct(structJob: GenJobStruct) {
         const qname = this.qName(structJob)
         this.structs.push({
+            fromOrig: structJob,
             name: qname.slice(1).join('_'),
             fields: structJob.decl.members.map(_ => {
                 let tspec: TypeSpec = null
@@ -148,6 +169,7 @@ export class Prep {
                         throw (_.kind)
                 }
                 return {
+                    fromOrig: (_.kind === ts.SyntaxKind.PropertySignature) ? (_ as ts.PropertySignature) : (_ as ts.MethodSignature),
                     name: _.name.getText(),
                     typeSpec: tspec,
                     optional: _.questionToken ? true : false,
@@ -165,18 +187,19 @@ export class Prep {
         const ifacename = qname.slice(1, qname.length - 1).join('_')
         let iface = this.interfaces.find(_ => _.name === ifacename)
         if (!iface)
-            this.interfaces.push(iface = { name: ifacename, methods: [] })
+            this.interfaces.push(iface = { name: ifacename, methods: [], fromOrig: funcJob.ifaceNs })
         iface.methods.push({
+            fromOrig: funcJob,
             nameOrig: qname[qname.length - 1],
             name: qname[qname.length - 1] + ((funcJob.overload > 0) ? funcJob.overload : ''),
             args: funcJob.decl.parameters.map(_ => ({
+                fromOrig: _,
                 name: _.name.getText(),
                 typeSpec: this.typeSpec(_.type, funcJob.decl.typeParameters),
                 optional: _.questionToken ? true : false,
                 isFromRetThenable: false,
                 spreads: _.dotDotDotToken ? true : false,
             })),
-            fromOrig: funcJob
         })
         const tret = this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters)
         if (tret) {
@@ -190,7 +213,7 @@ export class Prep {
 
     qName(memJob: GenJobNamed): string[] {
         const qname = memJob.qName.split('.')
-        if ((!qname) || (!qname.length) || (qname.length < 2) || qname[0] !== this.fromOrig.module[0])
+        if ((!qname) || (!qname.length) || (qname.length < 2) || qname[0] !== this.fromOrig.moduleName)
             throw (memJob.qName)
         return qname
     }
@@ -287,6 +310,9 @@ export enum ScriptPrimType {
     Null = ts.SyntaxKind.NullKeyword,
 }
 
+export type Doc = { fromOrig: ts.JSDoc, lines: string[], subs: Docs }
+export type Docs = Doc[]
+
 export abstract class Gen {
     outFilePathPref: string
     outFilePathSuff: string
@@ -305,6 +331,13 @@ export abstract class Gen {
 
     caseUp(name: string): string {
         return name.charAt(0).toUpperCase() + name.slice(1)
+    }
+
+    genDocSrc(lnPref: string, docLns: string[]): string {
+        let src = ""
+        if (docLns && docLns.length)
+            src = docLns.map(_ => lnPref + _).join('\n') + '\n'
+        return src
     }
 
     parensIfJoin(arr: string[], joinSep: string = ', '): string {
@@ -342,7 +375,7 @@ export function typeFun(typeSpec: TypeSpec): [TypeSpec[], TypeSpec] {
     return (tfun && tfun.From) ? [tfun.From, tfun.To] : null
 }
 
-export function typeRefersTo(typeSpec: TypeSpec, name: string): boolean {
+function typeRefersTo(typeSpec: TypeSpec, name: string): boolean {
     const tarr = typeArrOf(typeSpec)
     if (tarr) return typeRefersTo(tarr, name)
 
@@ -371,6 +404,38 @@ export function argsFuncFields(prep: Prep, args: PrepArg[]) {
     return funcfields
 }
 
+function docFrom(from: ts.JSDoc, retName: () => { name: string }): Doc {
+    let ret: Doc = null, txt: string
+    if (from) {
+        ret = { fromOrig: from, subs: [], lines: [] }
+        if (txt = from.comment) {
+            if (ts.isJSDocParameterTag(from))
+                txt = "`" + from.name.getText() + "` ── " + txt
+            else if (ts.isJSDocReturnTag(from)) {
+                const rn = retName ? retName() : null
+                txt = "`" + ((rn && rn.name && rn.name.length) ? rn.name : 'return') + "` ── " + txt
+            }
+            ret.lines.push(...txt.split('\n').filter(_ =>
+                _ !== null
+                && (!(_.startsWith('[') && _.endsWith(')') && _.includes('](#')))
+                && (!(_.startsWith("`token` ── ") && _.includes('cancellation')))
+            ))
+        }
+        from.forEachChild(_ => {
+            const sub = docFrom(_ as ts.JSDoc, retName)
+            if (sub) ret.subs.push(sub)
+        })
+    }
+    return ret
+}
+
+export function docs(from: ts.Node, retName: () => { name: string } = undefined): Docs {
+    const docs = jsDocs(from), ret: Docs = []
+    if (docs && docs.length)
+        ret.push(...docs.map(_ => docFrom(_, retName)))
+    return ret
+}
+
 export function idents(dontCollideWith: { name: string }[], ...names: string[]) {
     const ret: { [_: string]: string } = {}
     for (const name of names)
@@ -378,7 +443,12 @@ export function idents(dontCollideWith: { name: string }[], ...names: string[]) 
     return ret
 }
 
-export function pickName(forcePrefix: string, pickFrom: string[], dontCollideWith: { name: string }[]): string {
+function jsDocs(from: ts.Node): ts.JSDoc[] {
+    const have = (from as any) as { jsDoc: ts.JSDoc[] }
+    return (have && have.jsDoc && have.jsDoc.length) ? have.jsDoc : null
+}
+
+function pickName(forcePrefix: string, pickFrom: string[], dontCollideWith: { name: string }[]): string {
     if (!(forcePrefix && forcePrefix.length)) {
         for (const name of pickFrom)
             if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))

@@ -4,7 +4,7 @@ import (
 	"os"
 	"strings"
 
-	vsc "github.com/metaleap/vscode-appz/libs/go"
+	. "github.com/metaleap/vscode-appz/libs/go"
 )
 
 func main() {
@@ -18,17 +18,17 @@ func main() {
 		}
 	}
 
-	vscwin := vsc.Via(nil, nil).Window()
+	vsc := Vsc(nil, nil).Window()
 
-	vscwin.ShowInformationMessage1(greethow+", "+greetname+"! Pick or input?", []string{
+	vsc.ShowInformationMessage1(greethow+", "+greetname+"! Pick or input?", []string{
 		"Show Quick Pick...",
 		"Show Input Box...",
 	}, func(button string) {
 		switch button {
 		case "Show Quick Pick...":
-			vscwin.ShowWarningMessage1("Not yet implemented: `"+button+"`", nil, nil)
+			vsc.ShowWarningMessage1("Not yet implemented: `"+button+"`", nil, nil)
 		case "Show Input Box...":
-			vscwin.ShowInputBox(&vsc.InputBoxOptions{
+			vsc.ShowInputBox(&InputBoxOptions{
 				IgnoreFocusOut: true,
 				ValidateInput: func(input string) (complaint string) {
 					input = strings.ToLower(input)
@@ -40,13 +40,15 @@ func main() {
 				Prompt: "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
 			}, func(input string) {
 				if input == "" {
-					vscwin.ShowInformationMessage1("You abandoned the input box.", nil, nil)
+					vsc.ShowInformationMessage1("You abandoned the input box.", nil, exit)
 				} else {
-					vscwin.ShowInformationMessage1("You entered: `"+input+"`", nil, nil)
+					vsc.ShowInformationMessage1("You entered: `"+input+"`", nil, exit)
 				}
 			})
 		default:
-			vscwin.ShowErrorMessage1("Unknown: `"+button+"`", nil, nil)
+			vsc.ShowErrorMessage1("Unknown: `"+button+"`", nil, nil)
 		}
 	})
 }
+
+func exit(undefined string) { os.Exit(0) }

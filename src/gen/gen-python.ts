@@ -1,9 +1,9 @@
-import * as gen from './gen-shared'
+import * as gen from './gen-basics'
 
 export class Gen extends gen.Gen implements gen.IGen {
 
     gen(prep: gen.Prep) {
-        console.log(`Py\t${this.outFilePathPref}${prep.fromOrig.module[0]}${this.outFilePathSuff}`)
+        console.log(`Py\t${this.outFilePathPref}${prep.fromOrig.moduleName}${this.outFilePathSuff}`)
     }
 
 }

@@ -231,7 +231,7 @@ function onProcRecv(proc) {
                 if (promise)
                     promise.then(ret => {
                         if (pipes[proc.pid] && msg.andThen)
-                            send(proc, { andThen: msg.andThen, payload: ret });
+                            send(proc, { andThen: msg.andThen, payload: ret ? ret : null });
                     }, err => onfail(err));
             }
             catch (err) {

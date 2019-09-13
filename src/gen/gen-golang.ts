@@ -1,17 +1,19 @@
-import * as gen from './gen-shared'
+import * as gen from './gen-basics'
 
 export class Gen extends gen.Gen implements gen.IGen {
 
     gen(prep: gen.Prep) {
-        const pkgname = prep.fromOrig.module[0]
-        let src = "package " + pkgname + "\n\n// " + this.doNotEditComment("golang") + "\n\n"
+        let src = "package vscAppz\n\n// " + this.doNotEditComment("golang") + "\n\n"
 
-        src += "type Protocol interface {\n"
-        for (let i = 0; i < prep.interfaces.length; i++)
-            src += "\t" + this.caseUp(prep.interfaces[i].name) + "() " + this.caseUp(prep.interfaces[i].name) + "\n"
+        const doclns = this.genDocLns(gen.docs(prep.fromOrig.fromOrig))
+        src += this.genDocSrc('', doclns)
+        src += `type ${this.caseUp(prep.fromOrig.moduleName)} interface {\n`
+        for (const it of prep.interfaces)
+            src += '\n' + this.genDocSrc('\t', this.genDocLns(gen.docs(it.fromOrig)))
+                + "\t" + this.caseUp(it.name) + "() " + this.caseUp(it.name) + "\n"
         src += "}\n\n"
-        for (let i = 0; i < prep.interfaces.length; i++)
-            src += `func (me *impl) ${this.caseUp(prep.interfaces[i].name)}() ${this.caseUp(prep.interfaces[i].name)} { return me }\n\n`
+        for (const it of prep.interfaces)
+            src += `func (me *impl) ${this.caseUp(it.name)}() ${this.caseUp(it.name)} { return me }\n\n`
 
         for (const it of prep.enums)
             src += this.genEnum(it)
@@ -32,32 +34,41 @@ export class Gen extends gen.Gen implements gen.IGen {
             }
         }
 
-        this.writeFileSync(pkgname, src)
+        this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), src)
     }
 
     genEnum(it: gen.PrepEnum): string {
         const name = this.caseUp(it.name)
-        let src = "type " + name + " int\n\nconst (\n"
+        const doclns = this.genDocLns(gen.docs(it.fromOrig.decl))
+        let src = this.genDocSrc('', doclns)
+        src += "type " + name + " int\n\nconst (\n"
         for (const enumerant of it.enumerants)
             src += "\t" + name + this.caseUp(enumerant.name) + " " + name + " = " + enumerant.value + "\n"
         return src + ")\n\n"
     }
 
     genStruct(it: gen.PrepStruct): string {
-        let src = "type " + this.caseUp(it.name) + " struct {\n"
+        const doclns = this.genDocLns(gen.docs(it.fromOrig.decl))
+        let src = this.genDocSrc('', doclns)
+        src += "type " + this.caseUp(it.name) + " struct {\n"
         for (const field of it.fields)
-            src += "\t" + this.caseUp(field.name) + " " + this.typeSpec(field.typeSpec)
+            src += '\n' + (field.isExtBaggage ? ("\t// " + gen.docStrs.extBaggage + "\n") : this.genDocSrc('\t', this.genDocLns(gen.docs(field.fromOrig))))
+                + "\t" + this.caseUp(field.name) + " " + this.typeSpec(field.typeSpec)
                 + (gen.typeFun(field.typeSpec) ? " `json:\"-\"`" : (" `json:\"" + field.name + (field.optional ? ",omitempty" : "") + "\"`"))
                 + "\n"
         for (const ff of it.funcFields)
-            src += "\t" + this.caseUp(ff) + "_AppzFuncId string `json:\"" + ff + "_AppzFuncId,omitempty\"`\n"
+            src += "\n\t// " + gen.docStrs.internalOnly + "\n"
+                + "\t" + this.caseUp(ff) + "_AppzFuncId string `json:\"" + ff + "_AppzFuncId,omitempty\"`\n"
         return src + "}\n\n"
     }
 
     genInterface(prep: gen.Prep, it: gen.PrepInterface): string {
-        let src = "type " + this.caseUp(it.name) + " interface {\n"
+        const doclns = this.genDocLns(gen.docs(it.fromOrig))
+        let src = this.genDocSrc('', doclns)
+        src += "type " + this.caseUp(it.name) + " interface {\n"
         for (const method of it.methods) {
-            src += "\t" + this.caseUp(method.name) + "("
+            src += '\n' + this.genDocSrc('\t', this.genDocLns(gen.docs(method.fromOrig.decl, () => method.args.find(_ => _.isFromRetThenable))))
+                + "\t" + this.caseUp(method.name) + "("
             for (const arg of method.args)
                 src += this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional, 'string') + ", "
             src += ")\n"
@@ -98,7 +109,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 for (let a = 0; a < args.length; a++) {
                     const tspec = this.typeSpec(args[a])
                     src += `\t\t\t\t\tvar a${a} ${tspec}\n`
-                    src += this.genDecodeFromAny(prep, "\t\t\t\t\t", "args[" + a + "]", "a" + a, tspec, "", "return", true)
+                    src += this.genDecodeFromAny(prep, "\t\t\t\t\t", "args[" + a + "]", "a" + a, tspec, true, "", "return", true)
                 }
                 src += `\t\t\t\t\tret = ${__.fn}(${args.map((_, a) => 'a' + a).join(', ')})\n`
                 src += `\t\t\t\t}\n`
@@ -117,11 +128,11 @@ export class Gen extends gen.Gen implements gen.IGen {
         src += `\n\tvar ${__.on} func(Any)\n`
         const lastarg = method.args[method.args.length - 1]
         if (lastarg.isFromRetThenable) {
-            let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true)
+            let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true, true)
             src += `\tif ${laname} != nil {\n`
             src += `\t\t${__.on} = func(${__.payload} Any) {\n`
             src += `\t\t\tvar ${__.result} ${tret}\n`
-            src += this.genDecodeFromAny(prep, "\t\t\t", __.payload, __.result, tret, "", "return")
+            src += this.genDecodeFromAny(prep, "\t\t\t", __.payload, __.result, tret, true, "", "return")
             src += `\t\t\t${laname}(${__.result})\n`
             src += `\t\t}\n`
             src += `\t}\n`
@@ -144,13 +155,19 @@ export class Gen extends gen.Gen implements gen.IGen {
         return src
     }
 
-    genDecodeFromAny(prep: gen.Prep, pref: string, srcName: string, dstName: string, dstTypeGo: string, errName: string, errOther: string = "return false", haveOk: boolean = false): string {
+    genDecodeFromAny(prep: gen.Prep, pref: string, srcName: string, dstName: string, dstTypeGo: string, nilToZeroOk: boolean, errName: string, errOther: string = "return false", haveOk: boolean = false): string {
         if (dstTypeGo === 'interface{}' || dstTypeGo === 'Any')
             return `${pref}${dstName} = ${srcName}\n`
 
-        let src = haveOk ? "" : `${pref}var ok bool\n`
-        if (prep.structs.some(_ => _.name === dstTypeGo)) {
-            prep.state.genDecoders[dstTypeGo] = true
+        let src = ""
+        if (nilToZeroOk)
+            [src, pref] = [src + `${pref}if ${srcName} != nil {\n`, pref + '\t']
+        src += haveOk ? "" : `${pref}var ok bool\n`
+        const dsttypego = dstTypeGo.startsWith('*') ? dstTypeGo.slice(1) : dstTypeGo
+        if (prep.structs.some(_ => _.name === dsttypego)) {
+            prep.state.genDecoders[dsttypego] = true
+            if (dstTypeGo !== dsttypego)
+                src += `${pref}${dstName} = new(${dsttypego})\n`
             src += `${pref}ok = ${dstName}.populateFrom(${srcName})\n`
         } else
             src += `${pref}${dstName}, ok = ${srcName}.(${dstTypeGo})\n`
@@ -160,6 +177,8 @@ export class Gen extends gen.Gen implements gen.IGen {
         else if (errOther)
             src += `${pref}\t${errOther}\n`
         src += `${pref}}\n`
+        if (nilToZeroOk)
+            src += pref.substr(0, pref.length - 1) + '}\n'
         return src
     }
 
@@ -174,7 +193,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             src += `\t\t\tval, exists := m["${_.name}"]\n`
             src += `\t\t\tif (exists) {\n`
             src += `\t\t\t\tif val != nil {\n`
-            src += this.genDecodeFromAny(prep, "\t\t\t\t\t", "val", "me." + this.caseUp(_.name), this.typeSpec(_.typeSpec), "")
+            src += this.genDecodeFromAny(prep, "\t\t\t\t\t", "val", "me." + this.caseUp(_.name), this.typeSpec(_.typeSpec), false, "")
             src += `\t\t\t\t} else if ${!_.optional} {\n`
             src += `\t\t\t\t\treturn false\n`
             src += `\t\t\t\t}\n`
@@ -210,6 +229,20 @@ export class Gen extends gen.Gen implements gen.IGen {
         return `${name} != nil`
     }
 
+    genDocLns(docs: gen.Docs, isSub: boolean = false): string[] {
+        let ret: string[] = []
+        if (docs && docs.length) for (const doc of docs) {
+            if (doc.lines && doc.lines.length) {
+                ret.push("// ")
+                for (const ln of doc.lines)
+                    ret.push("// " + ln)
+            }
+            if (doc.subs && doc.subs.length)
+                ret.push(...this.genDocLns(doc.subs, true))
+        }
+        return isSub ? ret : ret.slice(1)
+    }
+
     typeSpecNilable(from: gen.TypeSpec, ensureNilable: boolean, ...assumeNilable: string[]): string {
         const nullableprefixes = ['*', '[]', 'map[', 'interface{', 'func(']
         let src = this.typeSpec(from)
@@ -220,7 +253,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         return src
     }
 
-    typeSpec(from: gen.TypeSpec, intoProm: boolean = false): string {
+    typeSpec(from: gen.TypeSpec, intoProm: boolean = false, ptrIfStruct: boolean = false): string {
         if (!from)
             return ""
 
@@ -247,7 +280,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (ttup && ttup.length) {
             let tname: string = null
             for (const t of ttup) {
-                const tn = this.typeSpec(t)
+                const tn = this.typeSpec(t, intoProm, ptrIfStruct)
                 if (!tname)
                     tname = tn
                 else if (tn !== tname) {
@@ -262,7 +295,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (tsum && tsum.length) {
             tsum = tsum.filter(_ =>
                 _ !== gen.ScriptPrimType.Null && _ !== gen.ScriptPrimType.Undefined && !gen.typeProm(_))
-            return this.parensIfJoin(tsum.map(_ => this.typeSpec(_)), '|')
+            return this.parensIfJoin(tsum.map(_ => this.typeSpec(_, intoProm, ptrIfStruct)), '|')
         }
 
         const tprom = gen.typeProm(from)
@@ -270,12 +303,12 @@ export class Gen extends gen.Gen implements gen.IGen {
             if (tprom.length > 1)
                 throw (from)
             else if (intoProm)
-                return this.typeSpec(tprom[0])
+                return this.typeSpec(tprom[0], false, ptrIfStruct)
             else
-                return "func(" + this.typeSpec(tprom[0]) + ")"
+                return "func(" + this.typeSpec(tprom[0], false, true) + ")"
 
         if (typeof from === 'string')
-            return from
+            return ptrIfStruct ? ('*' + from) : from
 
         return "Any"
     }

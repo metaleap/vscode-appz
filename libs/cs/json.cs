@@ -1,4 +1,4 @@
-namespace Vscode {
+namespace VscAppz {
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -55,7 +55,7 @@ namespace Vscode {
             using (var w = new StringWriter()) {
                 var jw = new JsonTextWriter(w);
                 jw.WriteStartObject();
-                if (!(string.IsNullOrEmpty(Ns) || string.IsNullOrEmpty(Name))) {
+                if (!(string.IsNullOrEmpty(Ns) && string.IsNullOrEmpty(Name))) {
                     jw.WritePropertyName("ns");
                     jw.WriteValue(Ns);
                     jw.WritePropertyName("name");

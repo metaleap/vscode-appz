@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_fs = require("fs");
 const ts = require("typescript");
-const gen = require("./gen-shared");
+const gen = require("./gen-basics");
 const gen_golang = require("./gen-golang");
 const gen_csharp = require("./gen-csharp");
 const gen_python = require("./gen-python");
@@ -38,7 +38,7 @@ function main() {
             throw ("GONE FROM API:\tmodule `" + modulename + '`');
         else {
             const job = {
-                module: [modulename, md.body], enums: [], structs: [], funcs: []
+                fromOrig: md, moduleName: modulename, enums: [], structs: [], funcs: [], namespaces: {}
             };
             gatherAll(job, md.body, genApiSurface[modulename], modulename);
             const prep = new gen.Prep(job);
@@ -61,8 +61,10 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                 });
                 if (!ns)
                     throw ("GONE FROM API:\tnamespace `" + prefixes.join('.') + '.' + subns + '`');
-                else
+                else {
+                    into.namespaces[subns] = ns;
                     gatherAll(into, ns.body, item[subns], ...prefixes.concat(subns));
+                }
             }
         }
         else {
@@ -114,12 +116,12 @@ function gatherFrom(into, typeNode, typeParams = undefined) {
             if (tparam) {
                 const tnode = ts.getEffectiveConstraintOfTypeParameter(tparam);
                 if (tnode)
-                    gatherAll(into, into.module[1], [tnode.getText()], into.module[0]);
+                    gatherAll(into, into.fromOrig.body, [tnode.getText()], into.moduleName);
             }
             else if (tname === 'Thenable')
                 tref.typeArguments.forEach(_ => gatherFrom(into, _, typeParams));
             else if (tname !== 'CancellationToken')
-                gatherAll(into, into.module[1], [tname], into.module[0]);
+                gatherAll(into, into.fromOrig.body, [tname], into.moduleName);
             break;
         default:
             if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(typeNode.kind))
@@ -130,7 +132,7 @@ function gatherFunc(into, decl, overload, ...prefixes) {
     const qname = prefixes.concat(decl.name.text).join('.');
     if (into.funcs.some(_ => _.qName === qname && _.overload === overload))
         return;
-    into.funcs.push({ qName: qname, overload: overload, decl: decl });
+    into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] });
     decl.parameters.forEach(_ => gatherFrom(into, _.type, decl.typeParameters));
     gatherFrom(into, decl.type, decl.typeParameters);
 }

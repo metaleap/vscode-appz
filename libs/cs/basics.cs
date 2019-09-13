@@ -1,18 +1,20 @@
-namespace Vscode {
+namespace VscAppz {
     using System;
     using System.IO;
     using System.Collections.Generic;
-    using Newtonsoft.Json;
 
+    /// <summary>Everything related to the running of your app.</summary>
     public static class Vsc {
+        /// <summary>Called on every `catch` during the forever-looping stdin/stdout communication with the `vscode-appz` VSC extension.</summary>
         public static Action<Exception> OnError = Console.Error.WriteLine;
 
-        public static IProtocol InOut(TextReader stdIn = null, TextWriter stdOut = null) =>
+        /// <summary>Returns an `IVscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `Console.In` and `stdOut` defaulting to `Console.Out`). Communication only begins its forever loop upon the first method invocation (which consequently never `return`s) on any of the `interface`s offered by the returned `IVscode`'s properties.</summary>
+        public static IVscode InOut(TextReader stdIn = null, TextWriter stdOut = null) =>
             new impl(stdIn, stdOut);
     }
 
     internal partial class msgToVsc {
-        internal string Ns;
+        internal string Ns = "";
         internal string Name;
         internal Dictionary<string, object> Payload;
         internal string AndThen;
@@ -69,8 +71,7 @@ namespace Vscode {
                         }, null);
                     }
                 } catch (Exception err) {
-                    if (Vsc.OnError != null)
-                        Vsc.OnError(err);
+                    if (Vsc.OnError != null) Vsc.OnError(err);
                 }
             }
         }
@@ -82,7 +83,9 @@ namespace Vscode {
                     looping = true;
                 if (on != null)
                     cbWaiting[msg.AndThen = nextFuncId()] = on;
-                stdOut.WriteLine(msg.ToString());
+                try { stdOut.WriteLine(msg.ToString()); } catch (Exception err) {
+                    if (Vsc.OnError != null) Vsc.OnError(err);
+                }
             }
             if (startloop)
                 loopReadln();
