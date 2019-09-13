@@ -69,8 +69,8 @@ namespace VscAppz {
 		public bool IsCloseAffordance;
 
 		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
-		[JsonProperty("myTag")]
-		public object MyTag;
+		[JsonProperty("my")]
+		public Dictionary<string, object> My;
 
 		/// <summary>
 		/// Represents an action that is shown with an information, warning, or
@@ -82,8 +82,8 @@ namespace VscAppz {
 		/// Represents an action that is shown with an information, warning, or
 		/// error message.
 		/// </summary>
-		public MessageItem(string title = default, bool isCloseAffordance = default, object myTag = default) =>
-			(Title, IsCloseAffordance, MyTag) = (title, isCloseAffordance, myTag);
+		public MessageItem(string title = default, bool isCloseAffordance = default, Dictionary<string, object> my = default) =>
+			(Title, IsCloseAffordance, My) = (title, isCloseAffordance, my);
 	}
 
 	/// <summary>
@@ -626,8 +626,12 @@ namespace VscAppz {
 				}
 			}
 			{
-				if (m.TryGetValue("myTag", out var val)) {
-					MyTag = val;
+				if (m.TryGetValue("my", out var val)) {
+					bool ok;
+					if (ok = (val is Dictionary<string, object>))
+						My = (Dictionary<string, object>)val;
+					if (!ok)
+						return (null, false);
 				}
 			}
 			return (this, true);

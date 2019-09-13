@@ -78,7 +78,7 @@ type MessageItem struct {
 	IsCloseAffordance bool `json:"isCloseAffordance,omitempty"`
 
 	// Free-form custom data, preserved across a roundtrip.
-	MyTag Any `json:"myTag,omitempty"`
+	My map[string]Any `json:"my,omitempty"`
 }
 ```
 

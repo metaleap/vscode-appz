@@ -84,6 +84,8 @@ export class Gen extends gen.Gen implements gen.IGen {
             return "null"
         if (from === gen.ScriptPrimType.Undefined)
             return "undefined"
+        if (from === gen.ScriptPrimType.Dict)
+            return "{ [_:string]: any }"
 
         const tarr = gen.typeArrOf(from)
         if (tarr)

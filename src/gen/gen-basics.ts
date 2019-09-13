@@ -116,10 +116,10 @@ export class Prep {
                 })
             })
             if (isretarg) {
-                const fieldname = pickName('my', ['tag', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields)
+                const fieldname = pickName('my', ['', 'tags', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields)
                 if (!fieldname)
                     throw (struct)
-                struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Any })
+                struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict })
             }
         })
 
@@ -308,6 +308,7 @@ export enum ScriptPrimType {
     Boolean = ts.SyntaxKind.BooleanKeyword,
     Undefined = ts.SyntaxKind.UndefinedKeyword,
     Null = ts.SyntaxKind.NullKeyword,
+    Dict = ts.SyntaxKind.ObjectLiteralExpression,
 }
 
 export type Doc = { fromOrig: ts.JSDoc, lines: string[], subs: Docs }
@@ -451,9 +452,9 @@ function jsDocs(from: ts.Node): ts.JSDoc[] {
 function pickName(forcePrefix: string, pickFrom: string[], dontCollideWith: { name: string }[]): string {
     if (!(forcePrefix && forcePrefix.length)) {
         for (const name of pickFrom)
-            if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
+            if (name && name.length && !dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
                 return name
-        if (pickFrom.length === 1)
+        if (pickFrom.length === 1 && pickFrom[0] && pickFrom[0].length)
             for (let i = 1; true; i++) {
                 var name = '_'.repeat(i) + pickFrom[0]
                 if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
@@ -463,7 +464,7 @@ function pickName(forcePrefix: string, pickFrom: string[], dontCollideWith: { na
     for (const pref of [forcePrefix, 'appz', 'vscAppz'])
         if (pref && pref.length)
             for (let name of pickFrom) {
-                name = pref + name.charAt(0).toUpperCase() + name.slice(1)
+                name = pref + (name ? (name.charAt(0).toUpperCase() + name.slice(1)) : '')
                 if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
                     return name
             }

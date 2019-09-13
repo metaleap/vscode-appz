@@ -8,7 +8,7 @@ import * as ppio from './procspipeio'
 
 type MessageOptions = vscode.MessageOptions
 interface MessageItem extends vscode.MessageItem {
-	myTag?: any
+	my?: { [_:string]: any }
 }
 interface InputBoxOptions extends vscode.InputBoxOptions {
 	validateInput_AppzFuncId: string

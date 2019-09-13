@@ -36,7 +36,7 @@ type MessageItem struct {
 	IsCloseAffordance bool `json:"isCloseAffordance,omitempty"`
 
 	// Free-form custom data, preserved across a roundtrip.
-	MyTag Any `json:"myTag,omitempty"`
+	My map[string]Any `json:"my,omitempty"`
 }
 
 // Options to configure the behavior of the input box UI.
@@ -595,10 +595,14 @@ func (me *MessageItem) populateFrom(payload Any) bool {
 			}
 		}
 		{
-			val, exists := m["myTag"]
+			val, exists := m["my"]
 			if (exists) {
 				if val != nil {
-					me.MyTag = val
+					var ok bool
+					me.My, ok = val.(map[string]Any)
+					if !ok {
+						return false
+					}
 				} else if false {
 					return false
 				}

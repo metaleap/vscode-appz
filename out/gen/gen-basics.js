@@ -31,10 +31,10 @@ class Prep {
                     });
             });
             if (isretarg) {
-                const fieldname = pickName('my', ['tag', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields);
+                const fieldname = pickName('my', ['', 'tags', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields);
                 if (!fieldname)
                     throw (struct);
-                struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Any });
+                struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict });
             }
         });
         this.interfaces.forEach(iface => iface.methods.forEach(method => {
@@ -194,6 +194,7 @@ var ScriptPrimType;
     ScriptPrimType[ScriptPrimType["Boolean"] = 124] = "Boolean";
     ScriptPrimType[ScriptPrimType["Undefined"] = 142] = "Undefined";
     ScriptPrimType[ScriptPrimType["Null"] = 97] = "Null";
+    ScriptPrimType[ScriptPrimType["Dict"] = 189] = "Dict";
 })(ScriptPrimType = exports.ScriptPrimType || (exports.ScriptPrimType = {}));
 class Gen {
     constructor(outFilePathPref, outFilePathSuff) {
@@ -319,9 +320,9 @@ function jsDocs(from) {
 function pickName(forcePrefix, pickFrom, dontCollideWith) {
     if (!(forcePrefix && forcePrefix.length)) {
         for (const name of pickFrom)
-            if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
+            if (name && name.length && !dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
                 return name;
-        if (pickFrom.length === 1)
+        if (pickFrom.length === 1 && pickFrom[0] && pickFrom[0].length)
             for (let i = 1; true; i++) {
                 var name = '_'.repeat(i) + pickFrom[0];
                 if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
@@ -331,7 +332,7 @@ function pickName(forcePrefix, pickFrom, dontCollideWith) {
     for (const pref of [forcePrefix, 'appz', 'vscAppz'])
         if (pref && pref.length)
             for (let name of pickFrom) {
-                name = pref + name.charAt(0).toUpperCase() + name.slice(1);
+                name = pref + (name ? (name.charAt(0).toUpperCase() + name.slice(1)) : '');
                 if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
                     return name;
             }

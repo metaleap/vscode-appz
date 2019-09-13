@@ -76,6 +76,8 @@ class Gen extends gen.Gen {
             return "null";
         if (from === gen.ScriptPrimType.Undefined)
             return "undefined";
+        if (from === gen.ScriptPrimType.Dict)
+            return "{ [_:string]: any }";
         const tarr = gen.typeArrOf(from);
         if (tarr)
             return this.typeSpec(tarr) + "[]";

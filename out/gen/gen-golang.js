@@ -242,6 +242,8 @@ class Gen extends gen.Gen {
             return "string";
         if (from === gen.ScriptPrimType.Number)
             return "int";
+        if (from === gen.ScriptPrimType.Dict)
+            return "map[string]Any";
         if (from === gen.ScriptPrimType.Null || from === gen.ScriptPrimType.Undefined)
             throw (from);
         const tarr = gen.typeArrOf(from);

@@ -212,8 +212,8 @@ function onProcRecv(proc: node_proc.ChildProcess) {
                 const promise = vscgen.handle(msg, proc)
                 if (promise) promise.then(
                     ret => {
-                        if (pipes[proc.pid] && msg.andThen)
-                            send(proc, { andThen: msg.andThen, payload: ret ? ret : null })
+                        if (proc.pid && pipes[proc.pid] && msg.andThen)
+                            send(proc, { andThen: msg.andThen, payload: ret ? ret : null /* prevents `undefined` which would skip the json field, we rather send explicit `null` as counterparties are non-JS/TS */ })
                     },
                     err =>
                         onfail(err),
