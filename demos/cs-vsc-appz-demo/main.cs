@@ -26,13 +26,13 @@ namespace VscAppzDemo {
                         win.ShowWarningMessage("Not yet implemented", nil, exit);
 
                     else if (button == buttons[1])
-                        win.ShowInputBox(new InputBoxOptions(
-                            ignoreFocusOut: true,
-                            prompt:         "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
-                            validateInput:  input =>
+                        win.ShowInputBox(new InputBoxOptions() {
+                            IgnoreFocusOut  = true,
+                            Prompt          = "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
+                            ValidateInput   = input =>
                                                 ((input = input.ToLowerInvariant()) != "foo" && input != "f00" && input != "fo0" && input != "f0o")
                                                 ? "" : "Invalid input"
-                        ), input => {
+                        }, input => {
                             if (string.IsNullOrEmpty(input))
                                 win.ShowWarningMessage("Cancelled input, bye now!", nil, exit);
                             else

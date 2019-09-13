@@ -59,16 +59,18 @@ export class Gen extends gen.Gen implements gen.IGen {
         const doclns = this.genDocLns(gen.docs(it.fromOrig.decl))
         let src = this.genDocSrc('\t', doclns)
         src += "\tpublic partial class " + this.caseUp(it.name) + " {\n"
+        let fielddocs: { [_: string]: string } = {}
         for (const field of it.fields) {
-            src += '\n' + (field.isExtBaggage ? (`\t\t/// <summary>${gen.docStrs.extBaggage}</summary>\n`) : (this.genDocSrc("\t\t", this.genDocLns(gen.docs(field.fromOrig)))))
+            fielddocs[field.name] = (field.isExtBaggage ? (`\t\t/// <summary>${gen.docStrs.extBaggage}</summary>\n`) : (this.genDocSrc("\t\t", this.genDocLns(gen.docs(field.fromOrig)))))
+            src += '\n' + fielddocs[field.name]
                 + "\t\t[" + (gen.typeFun(field.typeSpec) ? 'JsonIgnore' : `JsonProperty("${field.name}")${field.optional ? '' : ', JsonRequired'}`) + "]\n"
             src += `\t\tpublic ${this.typeSpec(field.typeSpec)} ${this.caseUp(field.name)};\n`
         }
         for (const ff of it.funcFields)
             src += `\n\t\t/// <summary>${gen.docStrs.internalOnly}</summary>\n\t\t[JsonProperty("${ff}_AppzFuncId")]\n\t\tpublic string ${this.caseUp(ff)}_AppzFuncId = "";\n`
         src += '\n' + this.genDocSrc('\t\t', doclns)
-        src += "\t\tpublic " + this.caseUp(it.name) + "() { }\n"
-        src += '\n' + this.genDocSrc('\t\t', doclns)
+        src += "\t\tpublic " + this.caseUp(it.name) + "() {}\n"
+        src += '\n' + this.genDocSrc('\t\t', doclns.concat(...it.fields.map(_ => fielddocs[_.name].replace('</summary>', '</param>').replace('<summary>', `<param name="${this.caseLo(_.name)}">`).trim())))
         src += "\t\tpublic " + this.caseUp(it.name) + "("
             + it.fields.map(_ => this.typeSpec(_.typeSpec) + " " + this.caseLo(_.name) + " = default").join(', ')
             + ") =>\n\t\t\t"

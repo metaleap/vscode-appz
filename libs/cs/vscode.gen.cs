@@ -37,11 +37,14 @@ namespace VscAppz {
 		/// <summary>
 		/// Options to configure the behavior of the message.
 		/// </summary>
-		public MessageOptions() { }
+		public MessageOptions() {}
 
 		/// <summary>
 		/// Options to configure the behavior of the message.
 		/// </summary>
+		/// <param name="modal">
+		/// Indicates that this message should be modal.
+		/// </param>
 		public MessageOptions(bool modal = default) =>
 			Modal = modal;
 	}
@@ -76,12 +79,23 @@ namespace VscAppz {
 		/// Represents an action that is shown with an information, warning, or
 		/// error message.
 		/// </summary>
-		public MessageItem() { }
+		public MessageItem() {}
 
 		/// <summary>
 		/// Represents an action that is shown with an information, warning, or
 		/// error message.
 		/// </summary>
+		/// <param name="title">
+		/// A short title like 'Retry', 'Open Log' etc.
+		/// </param>
+		/// <param name="isCloseAffordance">
+		/// A hint for modal dialogs that the item should be triggered
+		/// when the user cancels the dialog (e.g. by pressing the ESC
+		/// key).
+		/// 
+		/// Note: this option is ignored for non-modal messages.
+		/// </param>
+		/// <param name="my">Free-form custom data, preserved across a roundtrip.</param>
 		public MessageItem(string title = default, bool isCloseAffordance = default, Dictionary<string, object> my = default) =>
 			(Title, IsCloseAffordance, My) = (title, isCloseAffordance, my);
 	}
@@ -149,11 +163,41 @@ namespace VscAppz {
 		/// <summary>
 		/// Options to configure the behavior of the input box UI.
 		/// </summary>
-		public InputBoxOptions() { }
+		public InputBoxOptions() {}
 
 		/// <summary>
 		/// Options to configure the behavior of the input box UI.
 		/// </summary>
+		/// <param name="value">
+		/// The value to prefill in the input box.
+		/// </param>
+		/// <param name="valueSelection">
+		/// Selection of the prefilled [`value`](#InputBoxOptions.value). Defined as tuple of two number where the
+		/// first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
+		/// word will be selected, when empty (start equals end) only the cursor will be set,
+		/// otherwise the defined range will be selected.
+		/// </param>
+		/// <param name="prompt">
+		/// The text to display underneath the input box.
+		/// </param>
+		/// <param name="placeHolder">
+		/// An optional string to show as place holder in the input box to guide the user what to type.
+		/// </param>
+		/// <param name="password">
+		/// Set to `true` to show a password prompt that will not show the typed value.
+		/// </param>
+		/// <param name="ignoreFocusOut">
+		/// Set to `true` to keep the input box open when focus moves to another part of the editor or to another window.
+		/// </param>
+		/// <param name="validateInput">
+		/// An optional function that will be called to validate input and to give a hint
+		/// to the user.
+		/// 
+		/// `value` ── The current value of the input box.
+		/// 
+		/// `return` ── A human readable string which is presented as diagnostic message.
+		/// Return `undefined`, `null`, or the empty string when 'value' is valid.
+		/// </param>
 		public InputBoxOptions(string value = default, (int, int) valueSelection = default, string prompt = default, string placeHolder = default, bool password = default, bool ignoreFocusOut = default, Func<string, string> validateInput = default) =>
 			(Value, ValueSelection, Prompt, PlaceHolder, Password, IgnoreFocusOut, ValidateInput) = (value, valueSelection, prompt, placeHolder, password, ignoreFocusOut, validateInput);
 	}

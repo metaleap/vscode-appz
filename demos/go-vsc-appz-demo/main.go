@@ -31,6 +31,7 @@ func main() {
 			case buttons[1]:
 				win.ShowInputBox(&InputBoxOptions{
 					IgnoreFocusOut: true,
+					Prompt:         "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
 					ValidateInput: func(input string) (complaint string) {
 						input = strings.ToLower(input)
 						if strings.Contains(input, "foo") || strings.Contains(input, "f0o") || strings.Contains(input, "fo0") || strings.Contains(input, "f00") {
@@ -38,7 +39,6 @@ func main() {
 						}
 						return ""
 					},
-					Prompt: "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
 				}, func(input string) {
 					if input == "" {
 						win.ShowInformationMessage1("You cancelled, bye now!", nil, exit)
