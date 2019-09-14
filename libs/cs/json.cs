@@ -6,13 +6,15 @@ namespace VscAppz {
 
     using Any = System.Object;
 
-    internal static class Json {
-        internal static Any Load(string jsonSrc) {
+    internal static class json {
+        internal static readonly JsonSerializer serializer = new JsonSerializer();
+
+        internal static Any load(string jsonSrc) {
             using (StringReader jsonsrc = new StringReader(jsonSrc))
-                return Load(new JsonTextReader(jsonsrc), jsonSrc, false);
+                return load(new JsonTextReader(jsonsrc), jsonSrc, false);
         }
 
-        internal static Any Load(JsonTextReader r, string origJsonSrcForErr, bool skipFirstRead) {
+        internal static Any load(JsonTextReader r, string origJsonSrcForErr, bool skipFirstRead) {
             if ((!skipFirstRead) && !r.Read())
                 throw err();
             switch (r.TokenType) {
@@ -29,7 +31,7 @@ namespace VscAppz {
             case JsonToken.StartArray:
                 List<Any> list = new List<Any>(8);
                 while (r.Read() && r.TokenType != JsonToken.EndArray)
-                    list.Add(Load(r, origJsonSrcForErr, true));
+                    list.Add(load(r, origJsonSrcForErr, true));
                 return list.ToArray();
             case JsonToken.StartObject:
                 Dictionary<string, Any> dict = new Dictionary<string, Any>(8);
@@ -37,7 +39,7 @@ namespace VscAppz {
                     var key = r.Value;
                     if (r.TokenType != JsonToken.PropertyName || !r.Read())
                         throw err();
-                    dict.Add(key.ToString(), Load(r, origJsonSrcForErr, true));
+                    dict.Add(key.ToString(), load(r, origJsonSrcForErr, true));
                 }
                 return dict;
             }
@@ -46,42 +48,41 @@ namespace VscAppz {
         }
     }
 
-    internal partial class IpcMsg {
-        internal static IpcMsg FromJson(string jsonSrc) {
-            Dictionary<string, Any> dict = Json.Load(jsonSrc) as Dictionary<string, Any>;
-            var ret = new IpcMsg();
+    internal partial class ipcMsg {
+        internal static ipcMsg fromJson(string jsonSrc) {
+            Dictionary<string, Any> dict = json.load(jsonSrc) as Dictionary<string, Any>;
+            var ret = new ipcMsg();
             if (dict.TryGetValue("qName", out var n))
-                ret.QName = (n == null) ? null : (string)n;
+                ret.qName = (n == null) ? null : (string)n;
             if (dict.TryGetValue("cbId", out var a))
-                ret.ContId = (a == null) ? null : (string)a;
+                ret.cbId = (a == null) ? null : (string)a;
             if (dict.TryGetValue("data", out var d) )
-                ret.Data = (d == null) ? null : (Dictionary<string, Any>)d;
-            if (ret.Data == null || ret.Data.Count == 0)
+                ret.data = (d == null) ? null : (Dictionary<string, Any>)d;
+            if (ret.data == null || ret.data.Count == 0)
                 throw new JsonException("field `data` is missing");
             return ret;
         }
 
-        internal string ToJson() {
+        internal string toJson() {
             using (var w = new StringWriter()) {
                 var jw = new JsonTextWriter(w);
                 jw.WriteStartObject();
-                if (!string.IsNullOrEmpty(QName)) {
+                if (!string.IsNullOrEmpty(qName)) {
                     jw.WritePropertyName("qName");
-                    jw.WriteValue(QName);
+                    jw.WriteValue(qName);
                 }
                 jw.WritePropertyName("data");
                 jw.WriteStartObject();
-                if (Data != null) {
-                    var js = new JsonSerializer();
-                    foreach (var kvp in Data) {
-                        jw.WritePropertyName(kvp.Key);
-                        js.Serialize(jw, kvp.Value);
-                    }
-                }
+                if (data != null && data.Count > 0)
+                    lock (json.serializer)
+                        foreach (var kvp in data) {
+                            jw.WritePropertyName(kvp.Key);
+                            json.serializer.Serialize(jw, kvp.Value);
+                        }
                 jw.WriteEndObject();
-                if (!string.IsNullOrEmpty(ContId)) {
+                if (!string.IsNullOrEmpty(cbId)) {
                     jw.WritePropertyName("cbId");
-                    jw.WriteValue(ContId);
+                    jw.WriteValue(cbId);
                 }
                 jw.WriteEndObject();
                 jw.Flush();

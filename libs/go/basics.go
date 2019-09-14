@@ -28,9 +28,9 @@ type Any = interface { // just to reduce brackets-noise throughout
 }
 
 type ipcMsg struct {
-	QName  string         `json:"qName,omitempty"` // eg. 'window.ShowInformationMessage3'
-	Data   map[string]Any `json:"data"`
-	ContId string         `json:"cbId,omitempty"`
+	QName string         `json:"qName,omitempty"` // eg. 'window.ShowInformationMessage3'
+	Data  map[string]Any `json:"data"`
+	CbId  string         `json:"cbId,omitempty"`
 }
 
 type impl struct {
@@ -88,8 +88,8 @@ func (me *impl) loopReadln() {
 				OnError(me, errors.New("field `data` is missing"), jsonmsg)
 			} else {
 				me.state.Lock()
-				cb, fn := me.state.callbacks.waiting[inmsg.ContId], me.state.callbacks.other[inmsg.ContId]
-				delete(me.state.callbacks.waiting, inmsg.ContId)
+				cb, fn := me.state.callbacks.waiting[inmsg.CbId], me.state.callbacks.other[inmsg.CbId]
+				delete(me.state.callbacks.waiting, inmsg.CbId)
 				me.state.Unlock()
 
 				if cb != nil {
@@ -110,7 +110,7 @@ func (me *impl) loopReadln() {
 							ret, ok = fn(args...)
 						}
 					}
-					outmsg := ipcMsg{ContId: inmsg.ContId, Data: make(map[string]Any, 1)}
+					outmsg := ipcMsg{CbId: inmsg.CbId, Data: make(map[string]Any, 1)}
 					if ok {
 						outmsg.Data["yay"] = ret
 					} else {
@@ -133,8 +133,8 @@ func (me *impl) send(msg *ipcMsg, on func(Any) bool) {
 		me.state.looping = true
 	}
 	if on != nil {
-		msg.ContId = me.nextFuncId()
-		me.state.callbacks.waiting[msg.ContId] = on
+		msg.CbId = me.nextFuncId()
+		me.state.callbacks.waiting[msg.CbId] = on
 	}
 	err := me.jsonOut.Encode(msg)
 	me.state.Unlock()

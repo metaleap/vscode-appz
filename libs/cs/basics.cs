@@ -5,14 +5,14 @@ namespace VscAppz {
 
     using Any = System.Object;
 
-    internal partial class IpcMsg {
-        internal string QName = "";
-        internal Dictionary<string, Any> Data;
-        internal string ContId;
+    internal partial class ipcMsg {
+        internal string qName = "";
+        internal Dictionary<string, Any> data;
+        internal string cbId;
 
-        internal IpcMsg() { }
-        internal IpcMsg(string qName, int numData, string contId = "") =>
-            (QName, Data, ContId) = (qName, new Dictionary<string, Any>(numData), contId);
+        internal ipcMsg() { }
+        internal ipcMsg(string qName, int numData, string contId = "") =>
+            (this.qName, data, this.cbId) = (qName, new Dictionary<string, Any>(numData), contId);
     }
 
     /// <summary>Everything related to the running of your app.</summary>
@@ -47,7 +47,7 @@ namespace VscAppz {
 
         internal bool looping = false;
         internal uint counter = 0;
-        internal readonly Dictionary<string, Action<Any>> cbWaiting = new Dictionary<string, Action<Any>>();
+        internal readonly Dictionary<string, Func<Any, bool>> cbWaiting = new Dictionary<string, Func<Any, bool>>();
         internal readonly Dictionary<string, Func<Any[], (Any, bool)>> cbOther = new Dictionary<string, Func<Any[], (Any, bool)>>();
 
         internal impl(TextReader stdIn, TextWriter stdOut) =>
@@ -61,32 +61,32 @@ namespace VscAppz {
             while (true) try {
                 jsonmsg = ""; // so that the `catch` at the end won't use prior one
                 if (!string.IsNullOrEmpty(jsonmsg = stdIn.ReadLine().Trim())) {
-                    var msg = IpcMsg.FromJson(jsonmsg);
+                    var msg = ipcMsg.fromJson(jsonmsg);
 
-                    Action<Any> cb = null;
+                    Func<Any, bool> cb = null;
                     Func<Any[], (Any, bool)> fn = null;
                     lock (this)
-                        if (cbWaiting.TryGetValue(msg.ContId, out cb))
-                            _ = cbWaiting.Remove(msg.ContId);
+                        if (cbWaiting.TryGetValue(msg.cbId, out cb))
+                            _ = cbWaiting.Remove(msg.cbId);
                         else
-                            _ = cbOther.TryGetValue(msg.ContId, out fn);
+                            _ = cbOther.TryGetValue(msg.cbId, out fn);
 
                     if (cb != null) {
-                        if (msg.Data.TryGetValue("nay", out var nay))
+                        if (msg.data.TryGetValue("nay", out var nay))
                             Vsc.OnError(this, nay, jsonmsg);
-                        else if (msg.Data.TryGetValue("yay", out var yay))
-                            cb(yay);
-                        else
+                        else if (!msg.data.TryGetValue("yay", out var yay))
                             throw new Exception("field `data` must have either `yay` or `nay` member");
+                        else if (!cb(yay))
+                            throw new Exception("unexpected args: " + yay);
 
                     } else if (fn != null) {
                         Any fnargs;
                         Any ret = null;
-                        var ok = msg.Data.TryGetValue("", out fnargs);
+                        var ok = msg.data.TryGetValue("", out fnargs);
                         if (ok = (ok && (fnargs is Any[])))
                             (ret, ok) = fn((Any[])fnargs);
-                        send(new IpcMsg("", 1, msg.ContId) { Data = {
-                            [ok ? "yay" : "nay"] = ok ? ret : string.Format("unexpected args: {0}", fnargs)
+                        send(new ipcMsg("", 1, msg.cbId) { data = {
+                            [ok ? "yay" : "nay"] = ok ? ret : ("unexpected args: " + fnargs)
                         } }, null);
 
                     } else
@@ -97,20 +97,20 @@ namespace VscAppz {
             }
         }
 
-        internal void send(IpcMsg msg, Action<Any> on) {
+        internal void send(ipcMsg msg, Func<Any, bool> on) {
             bool startloop;
             Exception err = null;
             lock (this) {
                 if (startloop = !looping)
                     looping = true;
                 if (on != null)
-                    cbWaiting[msg.ContId = nextFuncId()] = on;
-                try { stdOut.WriteLine(msg.ToJson()); }
+                    cbWaiting[msg.cbId = nextFuncId()] = on;
+                try { stdOut.WriteLine(msg.toJson()); }
                 catch (Exception _) { err = _;}
             }
             if (err != null ) {
-                msg.Data[""] = msg.QName;
-                Vsc.OnError(this, err, msg.Data);
+                msg.data[""] = msg.qName;
+                Vsc.OnError(this, err, msg.data);
             }
             if (startloop)
                 loopReadln();
