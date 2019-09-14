@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const appz_1 = require("./appz");
-const vscgen = require("./vscode.gen");
 const node_proc = require("child_process");
 const node_pipeio = require("readline");
 const vsc = require("vscode");
-const vscwin = vsc.window, vscproj = vsc.workspace;
+const appz_1 = require("./appz");
+const vscgen = require("./vscode.gen");
 const dbgLogJsonMsgs = true;
 exports.procs = {};
 let pipes = {};
@@ -90,7 +89,7 @@ function proc(fullCmd) {
             p = node_proc.spawn(cmd, args, { stdio: 'pipe', windowsHide: true, argv0: cmd });
         }
         catch (e) {
-            vscwin.showErrorMessage(e);
+            vsc.window.showErrorMessage(e);
         }
         if (p)
             if (!(p.pid && p.stdin && p.stdin.writable && p.stdout && p.stdout.readable))
@@ -128,7 +127,7 @@ function proc(fullCmd) {
                             if (both) {
                                 let vscout = both[1];
                                 if (!vscout) {
-                                    both[1] = vscout = vscwin.createOutputChannel("Appz: " + fullCmd);
+                                    both[1] = vscout = vsc.window.createOutputChannel("Appz: " + fullCmd);
                                     pipes[pid] = both;
                                 }
                                 vscout.appendLine(_);
@@ -140,7 +139,7 @@ function proc(fullCmd) {
             exports.procs[fullCmd] = p;
         else {
             delete exports.procs[fullCmd];
-            vscwin.showErrorMessage('Unable to execute this exact command, any typos? ─── ' + fullCmd);
+            vsc.window.showErrorMessage('Unable to execute this exact command, any typos? ─── ' + fullCmd);
         }
     }
     return p;
@@ -180,7 +179,7 @@ function cmdAndArgs(fullCmd) {
 function send(proc, msgOut) {
     const onmaybefailed = (err) => {
         if (err && proc.pid && pipes[proc.pid])
-            vscwin.showErrorMessage(err + '');
+            vsc.window.showErrorMessage(err + '');
     };
     try {
         const jsonmsgout = JSON.stringify(msgOut) + '\n';
@@ -204,7 +203,7 @@ function callBack(proc, fnId, ...args) {
     const prom = new Promise((resolve, reject) => {
         callBacks[fnId] = { resolve: resolve, reject: reject };
     });
-    send(proc, { andThen: fnId, payload: args });
+    send(proc, { cbId: fnId, data: { "": args } });
     return prom;
 }
 exports.callBack = callBack;
@@ -234,39 +233,39 @@ function onProcRecv(proc) {
             msg = JSON.parse(ln);
         }
         catch (_) { }
-        const onfail = (err) => {
-            vscwin.showErrorMessage(err);
-            if (msg && msg.andThen)
-                send(proc, { andThen: msg.andThen, payload: err, failed: true });
-        };
         if (!msg)
-            vscwin.showErrorMessage(ln);
-        else if (msg.ns && msg.name) {
+            vsc.window.showErrorMessage(ln);
+        else if (msg.qName) {
+            const onfail = (err) => {
+                vsc.window.showErrorMessage(err);
+                if (msg && msg.cbId)
+                    send(proc, { cbId: msg.cbId, data: { nay: err } });
+            };
             try {
                 const promise = vscgen.handle(msg, proc);
                 if (promise)
                     promise.then(ret => {
-                        if (proc.pid && pipes[proc.pid] && msg.andThen)
-                            send(proc, { andThen: msg.andThen, payload: ret ? ret : null });
-                    }, err => onfail(err));
+                        if (proc.pid && pipes[proc.pid] && msg.cbId)
+                            send(proc, { cbId: msg.cbId, data: { yay: ret ? ret : null } });
+                    }, rej => onfail(rej));
             }
             catch (err) {
                 onfail(err);
             }
         }
-        else if (msg.andThen && msg.payload) {
-            const [prom, ret, ok] = [callBacks[msg.andThen], msg.payload['ret'], msg.payload['ok']];
-            delete callBacks[msg.andThen];
+        else if (msg.cbId && msg.data) {
+            const [prom, yay, nay] = [callBacks[msg.cbId], msg.data['yay'], msg.data['nay']];
+            delete callBacks[msg.cbId];
             if (prom)
-                if (ok)
-                    prom.resolve(ret);
+                if (nay)
+                    prom.reject(nay);
                 else
-                    prom.reject();
+                    prom.resolve(yay);
         }
         else
-            vscwin.showErrorMessage(ln);
+            vsc.window.showErrorMessage(ln);
     };
 }
 function cfgAutoCloseStderrOutputsOnProgExit() {
-    return vscproj.getConfiguration("appz").get("autoCloseStderrOutputsOnProgExit", true);
+    return vsc.workspace.getConfiguration("appz").get("autoCloseStderrOutputsOnProgExit", true);
 }

@@ -3,7 +3,6 @@
 import * as node_proc from 'child_process'
 import * as vscode from 'vscode'
 
-import * as ipc from './ipcprotocol'
 import * as ppio from './procspipeio'
 
 type MessageOptions = vscode.MessageOptions
@@ -14,87 +13,89 @@ interface InputBoxOptions extends vscode.InputBoxOptions {
 	validateInput_AppzFuncId: string
 }
 
-export function handle(msg: ipc.MsgFromApp, proc: node_proc.ChildProcess): Thenable<any> {
-	switch (msg.ns) {
+export function handle(msg: ppio.Msg, proc: node_proc.ChildProcess): Thenable<any> {
+	const idxdot = msg.qName.lastIndexOf('.')
+	const [apiname, methodname] = (idxdot > 0) ? [msg.qName.slice(0, idxdot), msg.qName.slice(idxdot + 1)] : ['', msg.qName]
+	switch (apiname) {
 		case "window":
-			switch (msg.name) {
+			switch (methodname) {
 				case "showErrorMessage1": {
-					const arg_message = (msg.payload['message']) as string
-					const arg_items = (msg.payload['items'] || []) as string[]
+					const arg_message = (msg.data['message']) as string
+					const arg_items = (msg.data['items'] || []) as string[]
 					return vscode.window.showErrorMessage(arg_message, ...arg_items, )
 				}
 				case "showErrorMessage2": {
-					const arg_message = (msg.payload['message']) as string
-					const arg_options = (msg.payload['options']) as MessageOptions
-					const arg_items = (msg.payload['items'] || []) as string[]
+					const arg_message = (msg.data['message']) as string
+					const arg_options = (msg.data['options']) as MessageOptions
+					const arg_items = (msg.data['items'] || []) as string[]
 					return vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items, )
 				}
 				case "showErrorMessage3": {
-					const arg_message = (msg.payload['message']) as string
-					const arg_items = (msg.payload['items'] || []) as MessageItem[]
+					const arg_message = (msg.data['message']) as string
+					const arg_items = (msg.data['items'] || []) as MessageItem[]
 					return vscode.window.showErrorMessage(arg_message, ...arg_items, )
 				}
 				case "showErrorMessage4": {
-					const arg_message = (msg.payload['message']) as string
-					const arg_options = (msg.payload['options']) as MessageOptions
-					const arg_items = (msg.payload['items'] || []) as MessageItem[]
+					const arg_message = (msg.data['message']) as string
+					const arg_options = (msg.data['options']) as MessageOptions
+					const arg_items = (msg.data['items'] || []) as MessageItem[]
 					return vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items, )
 				}
 				case "showInformationMessage1": {
-					const arg_message = (msg.payload['message']) as string
-					const arg_items = (msg.payload['items'] || []) as string[]
+					const arg_message = (msg.data['message']) as string
+					const arg_items = (msg.data['items'] || []) as string[]
 					return vscode.window.showInformationMessage(arg_message, ...arg_items, )
 				}
 				case "showInformationMessage2": {
-					const arg_message = (msg.payload['message']) as string
-					const arg_options = (msg.payload['options']) as MessageOptions
-					const arg_items = (msg.payload['items'] || []) as string[]
+					const arg_message = (msg.data['message']) as string
+					const arg_options = (msg.data['options']) as MessageOptions
+					const arg_items = (msg.data['items'] || []) as string[]
 					return vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items, )
 				}
 				case "showInformationMessage3": {
-					const arg_message = (msg.payload['message']) as string
-					const arg_items = (msg.payload['items'] || []) as MessageItem[]
+					const arg_message = (msg.data['message']) as string
+					const arg_items = (msg.data['items'] || []) as MessageItem[]
 					return vscode.window.showInformationMessage(arg_message, ...arg_items, )
 				}
 				case "showInformationMessage4": {
-					const arg_message = (msg.payload['message']) as string
-					const arg_options = (msg.payload['options']) as MessageOptions
-					const arg_items = (msg.payload['items'] || []) as MessageItem[]
+					const arg_message = (msg.data['message']) as string
+					const arg_options = (msg.data['options']) as MessageOptions
+					const arg_items = (msg.data['items'] || []) as MessageItem[]
 					return vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items, )
 				}
 				case "showWarningMessage1": {
-					const arg_message = (msg.payload['message']) as string
-					const arg_items = (msg.payload['items'] || []) as string[]
+					const arg_message = (msg.data['message']) as string
+					const arg_items = (msg.data['items'] || []) as string[]
 					return vscode.window.showWarningMessage(arg_message, ...arg_items, )
 				}
 				case "showWarningMessage2": {
-					const arg_message = (msg.payload['message']) as string
-					const arg_options = (msg.payload['options']) as MessageOptions
-					const arg_items = (msg.payload['items'] || []) as string[]
+					const arg_message = (msg.data['message']) as string
+					const arg_options = (msg.data['options']) as MessageOptions
+					const arg_items = (msg.data['items'] || []) as string[]
 					return vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items, )
 				}
 				case "showWarningMessage3": {
-					const arg_message = (msg.payload['message']) as string
-					const arg_items = (msg.payload['items'] || []) as MessageItem[]
+					const arg_message = (msg.data['message']) as string
+					const arg_items = (msg.data['items'] || []) as MessageItem[]
 					return vscode.window.showWarningMessage(arg_message, ...arg_items, )
 				}
 				case "showWarningMessage4": {
-					const arg_message = (msg.payload['message']) as string
-					const arg_options = (msg.payload['options']) as MessageOptions
-					const arg_items = (msg.payload['items'] || []) as MessageItem[]
+					const arg_message = (msg.data['message']) as string
+					const arg_options = (msg.data['options']) as MessageOptions
+					const arg_items = (msg.data['items'] || []) as MessageItem[]
 					return vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items, )
 				}
 				case "showInputBox": {
-					const arg_options = (msg.payload['options']) as InputBoxOptions
+					const arg_options = (msg.data['options']) as InputBoxOptions
 					if (arg_options.validateInput_AppzFuncId && arg_options.validateInput_AppzFuncId.length)
 						arg_options.validateInput = (a0) => ppio.callBack(proc, arg_options.validateInput_AppzFuncId, a0)
 					return vscode.window.showInputBox(arg_options, )
 				}
 				default:
-					throw (msg.name)
+					throw (methodname)
 			}
 		default:
-			throw (msg.ns)
+			throw (apiname)
 	}
 }
 

@@ -26,16 +26,10 @@ type Any = interface { // just to reduce brackets-noise throughout
 	// must remain an `=` type alias or json stuff will fail at runtime not compile-time.
 }
 
-type msgToVsc struct {
-	QName   string         `json:"qName,omitempty"` // eg. 'window.ShowInformationMessage3'
-	Payload map[string]Any `json:"payload,omitempty"`
-	AndThen string         `json:"andThen,omitempty"`
-}
-
-type msgFromVsc struct {
-	AndThen string `json:"andThen"`
-	Payload Any    `json:"payload"`
-	Failed  bool   `json:"failed"`
+type ipcMsg struct {
+	QName  string         `json:"qName,omitempty"` // eg. 'window.ShowInformationMessage3'
+	Data   map[string]Any `json:"data,omitempty"`
+	ContId string         `json:"cbId,omitempty"`
 }
 
 type impl struct {
@@ -86,31 +80,37 @@ func (me *impl) nextFuncId() string {
 func (me *impl) loopReadln() {
 	for me.readln.Scan() {
 		if jsonmsg := strings.TrimSpace(me.readln.Text()); jsonmsg != "" {
-			var msg msgFromVsc
-			if err := json.Unmarshal([]byte(jsonmsg), &msg); err == nil {
+			var inmsg ipcMsg
+			if err := json.Unmarshal([]byte(jsonmsg), &inmsg); err == nil {
 				me.state.Lock()
-				cb, fn := me.state.callbacks.waiting[msg.AndThen], me.state.callbacks.other[msg.AndThen]
-				delete(me.state.callbacks.waiting, msg.AndThen)
+				cb, fn := me.state.callbacks.waiting[inmsg.ContId], me.state.callbacks.other[inmsg.ContId]
+				delete(me.state.callbacks.waiting, inmsg.ContId)
 				me.state.Unlock()
-				if cb != nil {
-					if !msg.Failed {
-						cb(msg.Payload)
-					} else if OnError != nil {
-						OnError(me, msg.Payload, jsonmsg)
+				if inmsg.Data != nil && len(inmsg.Data) != 0 {
+					if cb != nil {
+						yay, nay := inmsg.Data["yay"], inmsg.Data["nay"]
+						if nay == nil {
+							cb(yay)
+						} else if OnError != nil {
+							OnError(me, nay, jsonmsg)
+						}
+					} else if fn != nil {
+						var args []Any
+						var ret Any
+						fnargs, ok := inmsg.Data[""]
+						if ok {
+							if args, ok = fnargs.([]Any); ok {
+								ret, ok = fn(args...)
+							}
+						}
+						outmsg := ipcMsg{ContId: inmsg.ContId, Data: make(map[string]Any, 1)}
+						if ok {
+							outmsg.Data["yay"] = ret
+						} else {
+							outmsg.Data["nay"] = "unexpected payload: " + fmt.Sprintf("%v", args)
+						}
+						me.send(&outmsg, nil)
 					}
-				} else if fn != nil {
-					args, ok := msg.Payload.([]Any)
-					if !ok {
-						args = []Any{msg.Payload}
-					}
-					ret, ok := fn(args...)
-					me.send(&msgToVsc{
-						AndThen: msg.AndThen,
-						Payload: map[string]Any{
-							"ret": ret,
-							"ok":  ok,
-						},
-					}, nil)
 				}
 			} else if OnError != nil {
 				OnError(me, err, jsonmsg)
@@ -119,20 +119,23 @@ func (me *impl) loopReadln() {
 	}
 }
 
-func (me *impl) send(msg *msgToVsc, on func(Any)) {
+func (me *impl) send(msg *ipcMsg, on func(Any)) {
 	me.state.Lock()
 	var startloop bool
 	if startloop = !me.state.looping; startloop {
 		me.state.looping = true
 	}
 	if on != nil {
-		msg.AndThen = me.nextFuncId()
-		me.state.callbacks.waiting[msg.AndThen] = on
+		msg.ContId = me.nextFuncId()
+		me.state.callbacks.waiting[msg.ContId] = on
 	}
 	err := me.jsonOut.Encode(msg)
 	me.state.Unlock()
 	if err != nil && OnError != nil {
-		OnError(me, err, msg.Payload)
+		if msg.QName != "" {
+			msg.Data[""] = msg.QName
+		}
+		OnError(me, err, msg.Data)
 	}
 	if startloop {
 		me.loopReadln()

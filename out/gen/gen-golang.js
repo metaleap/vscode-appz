@@ -78,7 +78,7 @@ class Gen extends gen.Gen {
             + ") {\n";
         const numargs = method.args.filter(_ => !_.isFromRetThenable).length;
         const __ = gen.idents(method.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result');
-        src += `\t${__.msg} := msgToVsc{Ns: "${it.name}", Name: "${method.name}", Payload: make(map[string]Any, ${numargs})}\n`;
+        src += `\t${__.msg} := ipcMsg{QName: "${it.name}.${method.name}", Data: make(map[string]Any, ${numargs})}\n`;
         if (funcfields.length) {
             src += `\t${__.fnids} := make([]string, 0, ${funcfields.length})\n`;
             src += `\tme.state.Lock()\n`;
@@ -109,7 +109,7 @@ class Gen extends gen.Gen {
         }
         for (const arg of method.args)
             if (!arg.isFromRetThenable)
-                src += `\t${__.msg}.Payload["${arg.name}"] = ${this.caseLo(arg.name)}\n`;
+                src += `\t${__.msg}.Data["${arg.name}"] = ${this.caseLo(arg.name)}\n`;
         src += `\n\tvar ${__.on} func(Any)\n`;
         const lastarg = method.args[method.args.length - 1];
         if (lastarg.isFromRetThenable) {
@@ -123,7 +123,7 @@ class Gen extends gen.Gen {
             src += `\t}\n`;
         }
         if (funcfields.length) {
-            src += `\n\tme.send(&${__.msg}, func(payload Any) {\n`;
+            src += `\n\tme.send(&${__.msg}, func(${__.payload} Any) {\n`;
             src += `\t\tif len(${__.fnids}) != 0 {\n`;
             src += `\t\t\tme.state.Lock()\n`;
             src += `\t\t\tfor _, ${__.fnid} := range ${__.fnids} {\n`;
@@ -131,7 +131,7 @@ class Gen extends gen.Gen {
             src += `\t\t\t}\n`;
             src += `\t\t\tme.state.Unlock()\n`;
             src += `\t\t}\n`;
-            src += `\t\tif ${__.on} != nil {\n\t\t\t${__.on}(payload)\n\t\t}\n`;
+            src += `\t\tif ${__.on} != nil {\n\t\t\t${__.on}(${__.payload})\n\t\t}\n`;
             src += `\t})\n`;
         }
         else

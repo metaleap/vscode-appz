@@ -46,7 +46,7 @@ namespace VscAppz {
             Dictionary<string, Any> dict = Json.Load(jsonSrc) as Dictionary<string, Any>;
             var me = new msgFromVsc();
             if (dict.TryGetValue("failed", out var f)) me.Failed = (bool)f;
-            if (dict.TryGetValue("andThen", out var a)) me.AndThen = (string)a;
+            if (dict.TryGetValue("cbId", out var a)) me.ContId = (string)a;
             if (dict.TryGetValue("payload", out var p)) me.Payload = p;
             return me;
         }
@@ -57,25 +57,23 @@ namespace VscAppz {
             using (var w = new StringWriter()) {
                 var jw = new JsonTextWriter(w);
                 jw.WriteStartObject();
-                if (!(string.IsNullOrEmpty(Ns) && string.IsNullOrEmpty(Name))) {
-                    jw.WritePropertyName("ns");
-                    jw.WriteValue(Ns);
-                    jw.WritePropertyName("name");
-                    jw.WriteValue(Name);
+                if (!string.IsNullOrEmpty(QName)) {
+                    jw.WritePropertyName("qName");
+                    jw.WriteValue(QName);
                 }
-                if (Payload != null) {
-                    jw.WritePropertyName("payload");
+                if (Data != null) {
+                    jw.WritePropertyName("data");
                     jw.WriteStartObject();
                     var js = new JsonSerializer();
-                    foreach (var kvp in Payload) {
+                    foreach (var kvp in Data) {
                         jw.WritePropertyName(kvp.Key);
                         js.Serialize(jw, kvp.Value);
                     }
                     jw.WriteEndObject();
                 }
-                if (!string.IsNullOrEmpty(AndThen)) {
-                    jw.WritePropertyName("andThen");
-                    jw.WriteValue(AndThen);
+                if (!string.IsNullOrEmpty(ContId)) {
+                    jw.WritePropertyName("cbId");
+                    jw.WriteValue(ContId);
                 }
                 jw.WriteEndObject();
                 return w.ToString();

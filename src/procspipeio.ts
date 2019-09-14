@@ -1,17 +1,20 @@
-import { vscCtx } from './appz'
-import * as ipc from './ipcprotocol'
-import * as vscgen from './vscode.gen'
-
 import * as node_proc from 'child_process'
 import * as node_pipeio from 'readline'
-
 import * as vsc from 'vscode'
-const vscwin = vsc.window, vscproj = vsc.workspace
+import { vscCtx } from './appz'
+import * as vscgen from './vscode.gen'
+
+
+
+export interface Msg {
+    qName?: string
+    data: { [_: string]: any } // | { yay: any } | { nay: any }
+    cbId?: string
+}
 
 
 
 const dbgLogJsonMsgs = true
-
 export let procs: { [_key: string]: node_proc.ChildProcess } = {}
 let pipes: { [_pid: number]: [node_pipeio.ReadLine, vsc.OutputChannel] } = {}
 
@@ -75,7 +78,7 @@ export function proc(fullCmd: string): node_proc.ChildProcess {
         const [cmd, args] = cmdAndArgs(fullCmd)
         try {
             p = node_proc.spawn(cmd, args, { stdio: 'pipe', windowsHide: true, argv0: cmd })
-        } catch (e) { vscwin.showErrorMessage(e) }
+        } catch (e) { vsc.window.showErrorMessage(e) }
         if (p)
             if (!(p.pid && p.stdin && p.stdin.writable && p.stdout && p.stdout.readable))
                 try { p.kill() } catch (_) { } finally { p = null }
@@ -99,7 +102,7 @@ export function proc(fullCmd: string): node_proc.ChildProcess {
                         if (both) {
                             let vscout = both[1]
                             if (!vscout) {
-                                both[1] = vscout = vscwin.createOutputChannel("Appz: " + fullCmd)
+                                both[1] = vscout = vsc.window.createOutputChannel("Appz: " + fullCmd)
                                 pipes[pid] = both
                             }
                             vscout.appendLine(_)
@@ -111,7 +114,7 @@ export function proc(fullCmd: string): node_proc.ChildProcess {
             procs[fullCmd] = p
         else {
             delete procs[fullCmd]
-            vscwin.showErrorMessage('Unable to execute this exact command, any typos? ─── ' + fullCmd)
+            vsc.window.showErrorMessage('Unable to execute this exact command, any typos? ─── ' + fullCmd)
         }
     }
     return p
@@ -148,10 +151,10 @@ function cmdAndArgs(fullCmd: string): [string, string[]] {
     return [cmd, args]
 }
 
-export function send(proc: node_proc.ChildProcess, msgOut: ipc.MsgToApp) {
+export function send(proc: node_proc.ChildProcess, msgOut: Msg) {
     const onmaybefailed = (err: any) => {
         if (err && proc.pid && pipes[proc.pid])
-            vscwin.showErrorMessage(err + '')
+            vsc.window.showErrorMessage(err + '')
     }
     try {
         const jsonmsgout = JSON.stringify(msgOut) + '\n'
@@ -173,7 +176,7 @@ export function send(proc: node_proc.ChildProcess, msgOut: ipc.MsgToApp) {
 const callBacks: {
     [_: string]: {
         resolve: ((_: any) => void),
-        reject: (() => void)
+        reject: ((_?: any) => void)
     }
 } = {}
 
@@ -181,7 +184,7 @@ export function callBack<T>(proc: node_proc.ChildProcess, fnId: string, ...args:
     const prom = new Promise<T>((resolve, reject) => {
         callBacks[fnId] = { resolve: resolve, reject: reject }
     })
-    send(proc, { andThen: fnId, payload: args })
+    send(proc, { cbId: fnId, data: { "": args } })
     return prom
 }
 
@@ -208,45 +211,45 @@ function onProcRecv(proc: node_proc.ChildProcess) {
     return (ln: string) => {
         if (dbgLogJsonMsgs)
             console.log("IN:\n" + ln)
-        let msg: ipc.MsgFromApp
-        try { msg = JSON.parse(ln) as ipc.MsgFromApp } catch (_) { }
-
-        const onfail = (err: any) => {
-            vscwin.showErrorMessage(err)
-            if (msg && msg.andThen)
-                send(proc, { andThen: msg.andThen, payload: err, failed: true })
-        }
+        let msg: Msg
+        try { msg = JSON.parse(ln) as Msg } catch (_) { }
 
         if (!msg)
-            vscwin.showErrorMessage(ln)
+            vsc.window.showErrorMessage(ln)
 
-        else if (msg.ns && msg.name) { // API request
+        else if (msg.qName) { // API request
+            const onfail = (err: any) => {
+                vsc.window.showErrorMessage(err)
+                if (msg && msg.cbId)
+                    send(proc, { cbId: msg.cbId, data: { nay: err } })
+            }
+
             try {
                 const promise = vscgen.handle(msg, proc)
                 if (promise) promise.then(
                     ret => {
-                        if (proc.pid && pipes[proc.pid] && msg.andThen)
-                            send(proc, { andThen: msg.andThen, payload: ret ? ret : null /* prevents `undefined` which would skip the json field, we rather send explicit `null` as counterparties are non-JS/TS */ })
+                        if (proc.pid && pipes[proc.pid] && msg.cbId)
+                            send(proc, { cbId: msg.cbId, data: { yay: ret ? ret : null /* prevents `undefined` which would skip the json field, we rather send explicit `null` as counterparties are non-JS/TS */ } })
                     },
-                    err =>
-                        onfail(err),
+                    rej =>
+                        onfail(rej),
                 )
             } catch (err) { onfail(err) }
 
-        } else if (msg.andThen && msg.payload) { // response to an earlier remote-func-call of ours
-            const [prom, ret, ok] = [callBacks[msg.andThen], msg.payload['ret'], msg.payload['ok']]
-            delete callBacks[msg.andThen]
+        } else if (msg.cbId && msg.data) { // response to an earlier remote-func-call of ours
+            const [prom, yay, nay] = [callBacks[msg.cbId], msg.data['yay'] as any, msg.data['nay']]
+            delete callBacks[msg.cbId]
             if (prom)
-                if (ok)
-                    prom.resolve(ret)
+                if (nay)
+                    prom.reject(nay)
                 else
-                    prom.reject()
+                    prom.resolve(yay)
 
         } else
-            vscwin.showErrorMessage(ln)
+            vsc.window.showErrorMessage(ln)
     }
 }
 
 function cfgAutoCloseStderrOutputsOnProgExit() {
-    return vscproj.getConfiguration("appz").get<boolean>("autoCloseStderrOutputsOnProgExit", true)
+    return vsc.workspace.getConfiguration("appz").get<boolean>("autoCloseStderrOutputsOnProgExit", true)
 }

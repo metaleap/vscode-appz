@@ -20,18 +20,17 @@ namespace VscAppz {
     }
 
     internal partial class msgToVsc {
-        internal string Ns = "";
-        internal string Name;
-        internal Dictionary<string, Any> Payload;
-        internal string AndThen;
+        internal string QName = "";
+        internal Dictionary<string, Any> Data;
+        internal string ContId;
 
         internal msgToVsc() { }
-        internal msgToVsc(string ns, string name, int capPayload, string andThen = "") =>
-            (Ns, Name, Payload, AndThen) = (ns, name, new Dictionary<string, Any>(capPayload), andThen);
+        internal msgToVsc(string qName, int numData, string contId = "") =>
+            (QName, Data, ContId) = (qName, new Dictionary<string, Any>(numData), contId);
     }
 
     internal partial class msgFromVsc {
-        internal string AndThen;
+        internal string ContId;
         internal Any Payload;
         internal bool Failed;
     }
@@ -60,10 +59,10 @@ namespace VscAppz {
                     Action<Any> cb = null;
                     Func<Any[], (Any, bool)> fn = null;
                     lock (this)
-                        if (cbWaiting.TryGetValue(msg.AndThen, out cb))
-                            _ = cbWaiting.Remove(msg.AndThen);
+                        if (cbWaiting.TryGetValue(msg.ContId, out cb))
+                            _ = cbWaiting.Remove(msg.ContId);
                         else
-                            _ = cbOther.TryGetValue(msg.AndThen, out fn);
+                            _ = cbOther.TryGetValue(msg.ContId, out fn);
                     if (cb != null) {
                         if (!msg.Failed)
                             cb(msg.Payload);
@@ -75,8 +74,8 @@ namespace VscAppz {
                             args = new Any[] { msg.Payload };
                         var (ret, ok) = fn(args);
                         send(new msgToVsc() {
-                            AndThen = msg.AndThen,
-                            Payload = new Dictionary<string, Any>(2)
+                            ContId = msg.ContId,
+                            Data = new Dictionary<string, Any>(2)
                                             { ["ret"] = ret, ["ok"] = ok },
                         }, null);
                     }
@@ -93,12 +92,12 @@ namespace VscAppz {
                 if (startloop = !looping)
                     looping = true;
                 if (on != null)
-                    cbWaiting[msg.AndThen = nextFuncId()] = on;
+                    cbWaiting[msg.ContId = nextFuncId()] = on;
                 try { stdOut.WriteLine(msg.ToString()); }
                 catch (Exception _) { err = _;}
             }
             if (err != null && Vsc.OnError != null)
-                Vsc.OnError(this, err, msg.Payload);
+                Vsc.OnError(this, err, msg.Data);
             if (startloop)
                 loopReadln();
         }

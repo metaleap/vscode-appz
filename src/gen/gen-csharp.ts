@@ -109,7 +109,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         const numargs = method.args.filter(_ => !_.isFromRetThenable).length
         const __ = gen.idents(method.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result')
-        src += `\t\t\tvar ${__.msg} = new msgToVsc("${it.name}", "${method.name}", ${numargs});\n`
+        src += `\t\t\tvar ${__.msg} = new msgToVsc("${it.name}.${method.name}", ${numargs});\n`
 
         if (funcfields.length) {
             src += `\t\t\tvar ${__.fnids} = new List<string>(${funcfields.length});\n`
@@ -143,7 +143,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         for (const arg of method.args)
             if (!arg.isFromRetThenable)
-                src += `\t\t\t${__.msg}.Payload["${arg.name}"] = ${this.caseLo(arg.name)};\n`
+                src += `\t\t\t${__.msg}.Data["${arg.name}"] = ${this.caseLo(arg.name)};\n`
 
         src += `\t\t\tAction<Any> ${__.on} = null;\n`
         const lastarg = method.args[method.args.length - 1];
@@ -158,12 +158,12 @@ export class Gen extends gen.Gen implements gen.IGen {
         }
 
         if (funcfields.length) {
-            src += `\n\t\t\tthis.send(${__.msg}, (Any payload) => {\n`
+            src += `\n\t\t\tthis.send(${__.msg}, (Any ${__.payload}) => {\n`
             src += `\t\t\t\tif (${__.fnids}.Count != 0)\n`
             src += `\t\t\t\t\tlock (this)\n`
             src += `\t\t\t\t\t\tforeach (var ${__.fnid} in ${__.fnids})\n`
             src += `\t\t\t\t\t\t\t_ = this.cbOther.Remove(${__.fnid});\n`
-            src += `\t\t\t\tif (${__.on} != null)\n\t\t\t\t\t${__.on}(payload);\n`
+            src += `\t\t\t\tif (${__.on} != null)\n\t\t\t\t\t${__.on}(${__.payload});\n`
             src += `\t\t\t});\n`
         } else
             src += `\n\t\t\tthis.send(${__.msg}, ${__.on});\n`

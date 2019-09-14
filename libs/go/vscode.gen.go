@@ -216,9 +216,9 @@ type Window interface {
 }
 
 func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(string)) {
-	msg := msgToVsc{Ns: "window", Name: "showErrorMessage1", Payload: make(map[string]Any, 2)}
-	msg.Payload["message"] = message
-	msg.Payload["items"] = items
+	msg := ipcMsg{QName: "window.showErrorMessage1", Data: make(map[string]Any, 2)}
+	msg.Data["message"] = message
+	msg.Data["items"] = items
 
 	var on func(Any)
 	if andThen != nil {
@@ -239,10 +239,10 @@ func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(s
 }
 
 func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(string)) {
-	msg := msgToVsc{Ns: "window", Name: "showErrorMessage2", Payload: make(map[string]Any, 3)}
-	msg.Payload["message"] = message
-	msg.Payload["options"] = options
-	msg.Payload["items"] = items
+	msg := ipcMsg{QName: "window.showErrorMessage2", Data: make(map[string]Any, 3)}
+	msg.Data["message"] = message
+	msg.Data["options"] = options
+	msg.Data["items"] = items
 
 	var on func(Any)
 	if andThen != nil {
@@ -263,9 +263,9 @@ func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items 
 }
 
 func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
-	msg := msgToVsc{Ns: "window", Name: "showErrorMessage3", Payload: make(map[string]Any, 2)}
-	msg.Payload["message"] = message
-	msg.Payload["items"] = items
+	msg := ipcMsg{QName: "window.showErrorMessage3", Data: make(map[string]Any, 2)}
+	msg.Data["message"] = message
+	msg.Data["items"] = items
 
 	var on func(Any)
 	if andThen != nil {
@@ -287,10 +287,10 @@ func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen f
 }
 
 func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
-	msg := msgToVsc{Ns: "window", Name: "showErrorMessage4", Payload: make(map[string]Any, 3)}
-	msg.Payload["message"] = message
-	msg.Payload["options"] = options
-	msg.Payload["items"] = items
+	msg := ipcMsg{QName: "window.showErrorMessage4", Data: make(map[string]Any, 3)}
+	msg.Data["message"] = message
+	msg.Data["options"] = options
+	msg.Data["items"] = items
 
 	var on func(Any)
 	if andThen != nil {
@@ -312,9 +312,9 @@ func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items 
 }
 
 func (me *impl) ShowInformationMessage1(message string, items []string, andThen func(string)) {
-	msg := msgToVsc{Ns: "window", Name: "showInformationMessage1", Payload: make(map[string]Any, 2)}
-	msg.Payload["message"] = message
-	msg.Payload["items"] = items
+	msg := ipcMsg{QName: "window.showInformationMessage1", Data: make(map[string]Any, 2)}
+	msg.Data["message"] = message
+	msg.Data["items"] = items
 
 	var on func(Any)
 	if andThen != nil {
@@ -335,10 +335,10 @@ func (me *impl) ShowInformationMessage1(message string, items []string, andThen 
 }
 
 func (me *impl) ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(string)) {
-	msg := msgToVsc{Ns: "window", Name: "showInformationMessage2", Payload: make(map[string]Any, 3)}
-	msg.Payload["message"] = message
-	msg.Payload["options"] = options
-	msg.Payload["items"] = items
+	msg := ipcMsg{QName: "window.showInformationMessage2", Data: make(map[string]Any, 3)}
+	msg.Data["message"] = message
+	msg.Data["options"] = options
+	msg.Data["items"] = items
 
 	var on func(Any)
 	if andThen != nil {
@@ -359,9 +359,9 @@ func (me *impl) ShowInformationMessage2(message string, options MessageOptions, 
 }
 
 func (me *impl) ShowInformationMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
-	msg := msgToVsc{Ns: "window", Name: "showInformationMessage3", Payload: make(map[string]Any, 2)}
-	msg.Payload["message"] = message
-	msg.Payload["items"] = items
+	msg := ipcMsg{QName: "window.showInformationMessage3", Data: make(map[string]Any, 2)}
+	msg.Data["message"] = message
+	msg.Data["items"] = items
 
 	var on func(Any)
 	if andThen != nil {
@@ -383,10 +383,10 @@ func (me *impl) ShowInformationMessage3(message string, items []MessageItem, and
 }
 
 func (me *impl) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
-	msg := msgToVsc{Ns: "window", Name: "showInformationMessage4", Payload: make(map[string]Any, 3)}
-	msg.Payload["message"] = message
-	msg.Payload["options"] = options
-	msg.Payload["items"] = items
+	msg := ipcMsg{QName: "window.showInformationMessage4", Data: make(map[string]Any, 3)}
+	msg.Data["message"] = message
+	msg.Data["options"] = options
+	msg.Data["items"] = items
 
 	var on func(Any)
 	if andThen != nil {
@@ -408,9 +408,9 @@ func (me *impl) ShowInformationMessage4(message string, options MessageOptions, 
 }
 
 func (me *impl) ShowWarningMessage1(message string, items []string, andThen func(string)) {
-	msg := msgToVsc{Ns: "window", Name: "showWarningMessage1", Payload: make(map[string]Any, 2)}
-	msg.Payload["message"] = message
-	msg.Payload["items"] = items
+	msg := ipcMsg{QName: "window.showWarningMessage1", Data: make(map[string]Any, 2)}
+	msg.Data["message"] = message
+	msg.Data["items"] = items
 
 	var on func(Any)
 	if andThen != nil {
@@ -431,10 +431,10 @@ func (me *impl) ShowWarningMessage1(message string, items []string, andThen func
 }
 
 func (me *impl) ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(string)) {
-	msg := msgToVsc{Ns: "window", Name: "showWarningMessage2", Payload: make(map[string]Any, 3)}
-	msg.Payload["message"] = message
-	msg.Payload["options"] = options
-	msg.Payload["items"] = items
+	msg := ipcMsg{QName: "window.showWarningMessage2", Data: make(map[string]Any, 3)}
+	msg.Data["message"] = message
+	msg.Data["options"] = options
+	msg.Data["items"] = items
 
 	var on func(Any)
 	if andThen != nil {
@@ -455,9 +455,9 @@ func (me *impl) ShowWarningMessage2(message string, options MessageOptions, item
 }
 
 func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
-	msg := msgToVsc{Ns: "window", Name: "showWarningMessage3", Payload: make(map[string]Any, 2)}
-	msg.Payload["message"] = message
-	msg.Payload["items"] = items
+	msg := ipcMsg{QName: "window.showWarningMessage3", Data: make(map[string]Any, 2)}
+	msg.Data["message"] = message
+	msg.Data["items"] = items
 
 	var on func(Any)
 	if andThen != nil {
@@ -479,10 +479,10 @@ func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen
 }
 
 func (me *impl) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
-	msg := msgToVsc{Ns: "window", Name: "showWarningMessage4", Payload: make(map[string]Any, 3)}
-	msg.Payload["message"] = message
-	msg.Payload["options"] = options
-	msg.Payload["items"] = items
+	msg := ipcMsg{QName: "window.showWarningMessage4", Data: make(map[string]Any, 3)}
+	msg.Data["message"] = message
+	msg.Data["options"] = options
+	msg.Data["items"] = items
 
 	var on func(Any)
 	if andThen != nil {
@@ -504,7 +504,7 @@ func (me *impl) ShowWarningMessage4(message string, options MessageOptions, item
 }
 
 func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string)) {
-	msg := msgToVsc{Ns: "window", Name: "showInputBox", Payload: make(map[string]Any, 1)}
+	msg := ipcMsg{QName: "window.showInputBox", Data: make(map[string]Any, 1)}
 	fnids := make([]string, 0, 1)
 	me.state.Lock()
 	if options != nil {
@@ -528,7 +528,7 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string)) {
 		}
 	}
 	me.state.Unlock()
-	msg.Payload["options"] = options
+	msg.Data["options"] = options
 
 	var on func(Any)
 	if andThen != nil {
