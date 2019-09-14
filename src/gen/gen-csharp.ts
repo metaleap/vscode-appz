@@ -71,7 +71,12 @@ export class Gen extends gen.Gen implements gen.IGen {
             src += `\n\t\t/// <summary>${gen.docStrs.internalOnly}</summary>\n\t\t[JsonProperty("${ff}_AppzFuncId")]\n\t\tpublic string ${this.caseUp(ff)}_AppzFuncId = "";\n`
         src += '\n' + this.genDocSrc('\t\t', doclns)
         src += "\t\tpublic " + this.caseUp(it.name) + "() {}\n"
-        src += '\n' + this.genDocSrc('\t\t', doclns.concat(...it.fields.map(_ => fielddocs[_.name].replace('</summary>', '</param>').replace('<summary>', `<param name="${this.caseLo(_.name)}">`).trim())))
+        src += '\n' + this.genDocSrc('\t\t', doclns.concat(...it.fields.map(_ => {
+            let hacky = fielddocs[_.name], needle = '\n\t\t/// '
+            for (let idx = hacky.indexOf(needle); idx >= 0; idx = hacky.indexOf(needle))
+                hacky = (hacky.slice(0, idx) + " " + hacky.slice(idx + needle.length))
+            return hacky.replace('</summary>', '</param>').replace('<summary>', `<param name="${this.caseLo(_.name)}">`).trim()
+        })))
         src += "\t\tpublic " + this.caseUp(it.name) + "("
             + it.fields.map(_ => this.typeSpec(_.typeSpec) + " " + this.caseLo(_.name) + " = default").join(', ')
             + ") =>\n\t\t\t"
@@ -235,7 +240,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 })
                 if (paramdocstrlns.length) {
                     ret.push(`/// <param name="${this.caseLo(arg.name)}">`)
-                    ret.push(...paramdocstrlns.map(_ => "/// " + _))
+                    ret.push("/// " + paramdocstrlns.filter(_ => _ && _.length).join(' ').trim())
                     ret.push("/// </param>")
                 }
             }

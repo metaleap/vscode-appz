@@ -407,21 +407,12 @@ Options to configure the behavior of the input box UI.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | value | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The value to prefill in the input box. |
-| valueSelection | [System.ValueTuple{System.Int32,System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.ValueTuple 'System.ValueTuple{System.Int32,System.Int32}') | Selection of the prefilled [\`value\`](#InputBoxOptions.value). Defined as tuple of two number where the
-first is the inclusive start index and the second the exclusive end index. When \`undefined\` the whole
-word will be selected, when empty (start equals end) only the cursor will be set,
-otherwise the defined range will be selected. |
+| valueSelection | [System.ValueTuple{System.Int32,System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.ValueTuple 'System.ValueTuple{System.Int32,System.Int32}') | Selection of the prefilled [\`value\`](#InputBoxOptions.value). Defined as tuple of two number where the first is the inclusive start index and the second the exclusive end index. When \`undefined\` the whole word will be selected, when empty (start equals end) only the cursor will be set, otherwise the defined range will be selected. |
 | prompt | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The text to display underneath the input box. |
 | placeHolder | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | An optional string to show as place holder in the input box to guide the user what to type. |
 | password | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Set to \`true\` to show a password prompt that will not show the typed value. |
 | ignoreFocusOut | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Set to \`true\` to keep the input box open when focus moves to another part of the editor or to another window. |
-| validateInput | [System.Func{System.String,System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Func 'System.Func{System.String,System.String}') | An optional function that will be called to validate input and to give a hint
-to the user.
-
-\`value\` ── The current value of the input box.
-
-\`return\` ── A human readable string which is presented as diagnostic message.
-Return \`undefined\`, \`null\`, or the empty string when 'value' is valid. |
+| validateInput | [System.Func{System.String,System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Func 'System.Func{System.String,System.String}') | An optional function that will be called to validate input and to give a hint to the user.  \`value\` ── The current value of the input box.  \`return\` ── A human readable string which is presented as diagnostic message. Return \`undefined\`, \`null\`, or the empty string when 'value' is valid. |
 
 <a name='F-VscAppz-InputBoxOptions-IgnoreFocusOut'></a>
 ### IgnoreFocusOut `constants`
@@ -525,11 +516,7 @@ error message.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | title | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | A short title like 'Retry', 'Open Log' etc. |
-| isCloseAffordance | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | A hint for modal dialogs that the item should be triggered
-when the user cancels the dialog (e.g. by pressing the ESC
-key).
-
-Note: this option is ignored for non-modal messages. |
+| isCloseAffordance | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | A hint for modal dialogs that the item should be triggered when the user cancels the dialog (e.g. by pressing the ESC key).  Note: this option is ignored for non-modal messages. |
 | my | [System.Collections.Generic.Dictionary{System.String,System.Object}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Collections.Generic.Dictionary 'System.Collections.Generic.Dictionary{System.String,System.Object}') | Free-form custom data, preserved across a roundtrip. |
 
 <a name='F-VscAppz-MessageItem-IsCloseAffordance'></a>
