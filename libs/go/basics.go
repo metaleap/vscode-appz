@@ -41,7 +41,7 @@ type impl struct {
 		looping   bool
 		counter   uint64
 		callbacks struct {
-			waiting map[string]func(Any)
+			waiting map[string]func(Any) bool
 			other   map[string]func(...Any) (Any, bool)
 		}
 	}
@@ -68,7 +68,7 @@ func Vsc(stdIn io.Reader, stdOut io.Writer) Vscode {
 	me.readln.Buffer(make([]byte, 1024*1024), 8*1024*1024)
 	me.jsonOut.SetEscapeHTML(false)
 	me.jsonOut.SetIndent("", "")
-	me.state.callbacks.waiting = make(map[string]func(Any), 8)
+	me.state.callbacks.waiting = make(map[string]func(Any) bool, 8)
 	me.state.callbacks.other = make(map[string]func(...Any) (Any, bool), 8)
 	return me
 }
@@ -95,10 +95,10 @@ func (me *impl) loopReadln() {
 				if cb != nil {
 					if nay, isnay := inmsg.Data["nay"]; isnay {
 						OnError(me, nay, jsonmsg)
-					} else if yay, isyay := inmsg.Data["yay"]; isyay {
-						cb(yay)
-					} else {
+					} else if yay, isyay := inmsg.Data["yay"]; !isyay {
 						OnError(me, errors.New("field `data` must have either `yay` or `nay` member"), jsonmsg)
+					} else if !cb(yay) {
+						OnError(me, fmt.Errorf("unexpected args: %v", yay), jsonmsg)
 					}
 
 				} else if fn != nil {
@@ -126,7 +126,7 @@ func (me *impl) loopReadln() {
 	}
 }
 
-func (me *impl) send(msg *ipcMsg, on func(Any)) {
+func (me *impl) send(msg *ipcMsg, on func(Any) bool) {
 	me.state.Lock()
 	var startloop bool
 	if startloop = !me.state.looping; startloop {

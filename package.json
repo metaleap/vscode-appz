@@ -36,7 +36,7 @@
 						"type": "array",
 						"default": [
 							"go run \"${appz}/demos/go-vsc-appz-demo\" \"${Enter name}\" \"${Pick greeting:|Hello|Hiya|Hola|}\"",
-							"dotnet run --project \"${appz}/demos/cs-vsc-appz-demo\" -c Release -- \"${Enter name}\" \"${Pick greeting:|Hola|Hiya|Hello|}\""
+							"dotnet run --project \"${appz}/demos/cs-vsc-appz-demo\" -- \"${Enter name}\" \"${Pick greeting:|Hola|Hiya|Hello|}\""
 						]
 					},
 					"appz.autoCloseStderrOutputsOnProgExit": {

@@ -220,18 +220,19 @@ func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(s
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 
-	var on func(Any)
+	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) {
+		on = func(payload Any) bool {
 			var result string
 			if payload != nil {
 				var ok bool
 				result, ok = payload.(string)
 				if !ok {
-					return
+					return false
 				}
 			}
 			andThen(result)
+			return true
 		}
 	}
 
@@ -244,18 +245,19 @@ func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items 
 	msg.Data["options"] = options
 	msg.Data["items"] = items
 
-	var on func(Any)
+	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) {
+		on = func(payload Any) bool {
 			var result string
 			if payload != nil {
 				var ok bool
 				result, ok = payload.(string)
 				if !ok {
-					return
+					return false
 				}
 			}
 			andThen(result)
+			return true
 		}
 	}
 
@@ -267,19 +269,20 @@ func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen f
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 
-	var on func(Any)
+	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) {
+		on = func(payload Any) bool {
 			var result *MessageItem
 			if payload != nil {
 				var ok bool
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
 				if !ok {
-					return
+					return false
 				}
 			}
 			andThen(result)
+			return true
 		}
 	}
 
@@ -292,19 +295,20 @@ func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items 
 	msg.Data["options"] = options
 	msg.Data["items"] = items
 
-	var on func(Any)
+	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) {
+		on = func(payload Any) bool {
 			var result *MessageItem
 			if payload != nil {
 				var ok bool
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
 				if !ok {
-					return
+					return false
 				}
 			}
 			andThen(result)
+			return true
 		}
 	}
 
@@ -316,18 +320,19 @@ func (me *impl) ShowInformationMessage1(message string, items []string, andThen 
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 
-	var on func(Any)
+	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) {
+		on = func(payload Any) bool {
 			var result string
 			if payload != nil {
 				var ok bool
 				result, ok = payload.(string)
 				if !ok {
-					return
+					return false
 				}
 			}
 			andThen(result)
+			return true
 		}
 	}
 
@@ -340,18 +345,19 @@ func (me *impl) ShowInformationMessage2(message string, options MessageOptions, 
 	msg.Data["options"] = options
 	msg.Data["items"] = items
 
-	var on func(Any)
+	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) {
+		on = func(payload Any) bool {
 			var result string
 			if payload != nil {
 				var ok bool
 				result, ok = payload.(string)
 				if !ok {
-					return
+					return false
 				}
 			}
 			andThen(result)
+			return true
 		}
 	}
 
@@ -363,19 +369,20 @@ func (me *impl) ShowInformationMessage3(message string, items []MessageItem, and
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 
-	var on func(Any)
+	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) {
+		on = func(payload Any) bool {
 			var result *MessageItem
 			if payload != nil {
 				var ok bool
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
 				if !ok {
-					return
+					return false
 				}
 			}
 			andThen(result)
+			return true
 		}
 	}
 
@@ -388,19 +395,20 @@ func (me *impl) ShowInformationMessage4(message string, options MessageOptions, 
 	msg.Data["options"] = options
 	msg.Data["items"] = items
 
-	var on func(Any)
+	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) {
+		on = func(payload Any) bool {
 			var result *MessageItem
 			if payload != nil {
 				var ok bool
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
 				if !ok {
-					return
+					return false
 				}
 			}
 			andThen(result)
+			return true
 		}
 	}
 
@@ -412,18 +420,19 @@ func (me *impl) ShowWarningMessage1(message string, items []string, andThen func
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 
-	var on func(Any)
+	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) {
+		on = func(payload Any) bool {
 			var result string
 			if payload != nil {
 				var ok bool
 				result, ok = payload.(string)
 				if !ok {
-					return
+					return false
 				}
 			}
 			andThen(result)
+			return true
 		}
 	}
 
@@ -436,18 +445,19 @@ func (me *impl) ShowWarningMessage2(message string, options MessageOptions, item
 	msg.Data["options"] = options
 	msg.Data["items"] = items
 
-	var on func(Any)
+	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) {
+		on = func(payload Any) bool {
 			var result string
 			if payload != nil {
 				var ok bool
 				result, ok = payload.(string)
 				if !ok {
-					return
+					return false
 				}
 			}
 			andThen(result)
+			return true
 		}
 	}
 
@@ -459,19 +469,20 @@ func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 
-	var on func(Any)
+	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) {
+		on = func(payload Any) bool {
 			var result *MessageItem
 			if payload != nil {
 				var ok bool
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
 				if !ok {
-					return
+					return false
 				}
 			}
 			andThen(result)
+			return true
 		}
 	}
 
@@ -484,19 +495,20 @@ func (me *impl) ShowWarningMessage4(message string, options MessageOptions, item
 	msg.Data["options"] = options
 	msg.Data["items"] = items
 
-	var on func(Any)
+	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) {
+		on = func(payload Any) bool {
 			var result *MessageItem
 			if payload != nil {
 				var ok bool
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
 				if !ok {
-					return
+					return false
 				}
 			}
 			andThen(result)
+			return true
 		}
 	}
 
@@ -530,22 +542,23 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string)) {
 	me.state.Unlock()
 	msg.Data["options"] = options
 
-	var on func(Any)
+	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) {
+		on = func(payload Any) bool {
 			var result string
 			if payload != nil {
 				var ok bool
 				result, ok = payload.(string)
 				if !ok {
-					return
+					return false
 				}
 			}
 			andThen(result)
+			return true
 		}
 	}
 
-	me.send(&msg, func(payload Any) {
+	me.send(&msg, func(payload Any) bool {
 		if len(fnids) != 0 {
 			me.state.Lock()
 			for _, fnid := range fnids {
@@ -553,9 +566,7 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string)) {
 			}
 			me.state.Unlock()
 		}
-		if on != nil {
-			on(payload)
-		}
+		return on == nil || on(payload)
 	})
 }
 

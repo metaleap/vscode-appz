@@ -125,20 +125,21 @@ export class Gen extends gen.Gen implements gen.IGen {
             if (!arg.isFromRetThenable)
                 src += `\t${__.msg}.Data["${arg.name}"] = ${this.caseLo(arg.name)}\n`
 
-        src += `\n\tvar ${__.on} func(Any)\n`
+        src += `\n\tvar ${__.on} func(Any) bool\n`
         const lastarg = method.args[method.args.length - 1]
         if (lastarg.isFromRetThenable) {
             let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true, true)
             src += `\tif ${laname} != nil {\n`
-            src += `\t\t${__.on} = func(${__.payload} Any) {\n`
+            src += `\t\t${__.on} = func(${__.payload} Any) bool {\n`
             src += `\t\t\tvar ${__.result} ${tret}\n`
-            src += this.genDecodeFromAny(prep, "\t\t\t", __.payload, __.result, tret, true, "", "return")
+            src += this.genDecodeFromAny(prep, "\t\t\t", __.payload, __.result, tret, true, "")
             src += `\t\t\t${laname}(${__.result})\n`
+            src += `\t\t\treturn true\n`
             src += `\t\t}\n`
             src += `\t}\n`
         }
         if (funcfields.length) {
-            src += `\n\tme.send(&${__.msg}, func(${__.payload} Any) {\n`
+            src += `\n\tme.send(&${__.msg}, func(${__.payload} Any) bool {\n`
             src += `\t\tif len(${__.fnids}) != 0 {\n`
             src += `\t\t\tme.state.Lock()\n`
             src += `\t\t\tfor _, ${__.fnid} := range ${__.fnids} {\n`
@@ -146,7 +147,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             src += `\t\t\t}\n`
             src += `\t\t\tme.state.Unlock()\n`
             src += `\t\t}\n`
-            src += `\t\tif ${__.on} != nil {\n\t\t\t${__.on}(${__.payload})\n\t\t}\n`
+            src += `\t\treturn ${__.on} == nil || ${__.on}(${__.payload})\n`
             src += `\t})\n`
         } else
             src += `\n\tme.send(&${__.msg}, ${__.on})\n`
