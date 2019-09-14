@@ -236,16 +236,17 @@ function onProcRecv(proc) {
         if (!msg)
             vsc.window.showErrorMessage(ln);
         else if (msg.qName) {
+            let sendret = false;
             const onfail = (err) => {
                 vsc.window.showErrorMessage(err);
-                if (msg && msg.cbId)
-                    send(proc, { cbId: msg.cbId, data: { nay: err } });
+                if (msg && msg.cbId && !sendret)
+                    send(proc, { cbId: msg.cbId, data: { nay: err ? err : null } });
             };
             try {
                 const promise = vscgen.handle(msg, proc);
                 if (promise)
                     promise.then(ret => {
-                        if (proc.pid && pipes[proc.pid] && msg.cbId)
+                        if (sendret = (proc.pid && pipes[proc.pid] && msg.cbId) ? true : false)
                             send(proc, { cbId: msg.cbId, data: { yay: ret ? ret : null } });
                     }, rej => onfail(rej));
             }

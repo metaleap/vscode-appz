@@ -9,7 +9,8 @@
 var OnError func(this Vscode, err Any, jsonMsg Any)
 ```
 Reports problems during the ongoing forever-looping stdin/stdout communication
-with the `vscode-appz` VSC extension. Defaults to a stderr println.
+with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be
+`nil`.
 
 `err` ── if an `error`, it occurred on the Go side (I/O or JSON), else some
 JSON-decoded Go value from whatever was transmitted as the problem data (if

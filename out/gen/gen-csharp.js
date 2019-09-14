@@ -94,7 +94,7 @@ class Gen extends gen.Gen {
             + ") {\n";
         const numargs = method.args.filter(_ => !_.isFromRetThenable).length;
         const __ = gen.idents(method.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result');
-        src += `\t\t\tvar ${__.msg} = new msgToVsc("${it.name}.${method.name}", ${numargs});\n`;
+        src += `\t\t\tvar ${__.msg} = new IpcMsg("${it.name}.${method.name}", ${numargs});\n`;
         if (funcfields.length) {
             src += `\t\t\tvar ${__.fnids} = new List<string>(${funcfields.length});\n`;
             src += "\t\t\tlock (this) {\n";

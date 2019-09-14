@@ -9,10 +9,10 @@ namespace VscAppz {
     internal static class Json {
         internal static Any Load(string jsonSrc) {
             using (StringReader jsonsrc = new StringReader(jsonSrc))
-                return load(new JsonTextReader(jsonsrc), jsonSrc, false);
+                return Load(new JsonTextReader(jsonsrc), jsonSrc, false);
         }
 
-        internal static Any load(JsonTextReader r, string origJsonSrcForErr, bool skipFirstRead) {
+        internal static Any Load(JsonTextReader r, string origJsonSrcForErr, bool skipFirstRead) {
             if ((!skipFirstRead) && !r.Read())
                 throw err();
             if (r.TokenType == JsonToken.Null) return null;
@@ -26,14 +26,14 @@ namespace VscAppz {
                     var key = r.Value;
                     if (r.TokenType != JsonToken.PropertyName || !r.Read())
                         throw err();
-                    coll.Add(key.ToString(), load(r, origJsonSrcForErr, true));
+                    coll.Add(key.ToString(), Load(r, origJsonSrcForErr, true));
                 }
                 return coll;
             }
             if (r.TokenType == JsonToken.StartArray) {
                 List<Any> coll = new List<Any>(8);
                 while (r.Read() && r.TokenType != JsonToken.EndArray)
-                    coll.Add(load(r, origJsonSrcForErr, true));
+                    coll.Add(Load(r, origJsonSrcForErr, true));
                 return coll;
             }
             throw err();
@@ -41,18 +41,19 @@ namespace VscAppz {
         }
     }
 
-    internal partial class msgFromVsc {
-        internal static msgFromVsc parse(string jsonSrc) {
+    internal partial class IpcMsg {
+        internal static IpcMsg Parse(string jsonSrc) {
             Dictionary<string, Any> dict = Json.Load(jsonSrc) as Dictionary<string, Any>;
-            var me = new msgFromVsc();
-            if (dict.TryGetValue("failed", out var f)) me.Failed = (bool)f;
-            if (dict.TryGetValue("cbId", out var a)) me.ContId = (string)a;
-            if (dict.TryGetValue("payload", out var p)) me.Payload = p;
+            var me = new IpcMsg();
+            if (dict.TryGetValue("cbId", out var a))
+                me.ContId = (string)a;
+            if (dict.TryGetValue("data", out var d) )
+                me.Data = (Dictionary<string, Any>)d;
+            if (me.Data == null || me.Data.Count == 0)
+                throw new JsonException("field `data` is missing");
             return me;
         }
-    }
 
-    internal partial class msgToVsc {
         public override string ToString() {
             using (var w = new StringWriter()) {
                 var jw = new JsonTextWriter(w);

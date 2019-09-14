@@ -6,7 +6,7 @@ import * as vscgen from './vscode.gen'
 
 
 
-export interface Msg {
+export interface IpcMsg {
     qName?: string
     data: { [_: string]: any } // | { yay: any } | { nay: any }
     cbId?: string
@@ -151,7 +151,7 @@ function cmdAndArgs(fullCmd: string): [string, string[]] {
     return [cmd, args]
 }
 
-export function send(proc: node_proc.ChildProcess, msgOut: Msg) {
+export function send(proc: node_proc.ChildProcess, msgOut: IpcMsg) {
     const onmaybefailed = (err: any) => {
         if (err && proc.pid && pipes[proc.pid])
             vsc.window.showErrorMessage(err + '')
@@ -211,25 +211,26 @@ function onProcRecv(proc: node_proc.ChildProcess) {
     return (ln: string) => {
         if (dbgLogJsonMsgs)
             console.log("IN:\n" + ln)
-        let msg: Msg
-        try { msg = JSON.parse(ln) as Msg } catch (_) { }
+        let msg: IpcMsg
+        try { msg = JSON.parse(ln) as IpcMsg } catch (_) { }
 
         if (!msg)
             vsc.window.showErrorMessage(ln)
 
         else if (msg.qName) { // API request
+            let sendret = false
             const onfail = (err: any) => {
                 vsc.window.showErrorMessage(err)
-                if (msg && msg.cbId)
-                    send(proc, { cbId: msg.cbId, data: { nay: err } })
+                if (msg && msg.cbId && !sendret)
+                    send(proc, { cbId: msg.cbId, data: { nay: err ? err : null /* prevent undefined */ } })
             }
 
             try {
                 const promise = vscgen.handle(msg, proc)
                 if (promise) promise.then(
                     ret => {
-                        if (proc.pid && pipes[proc.pid] && msg.cbId)
-                            send(proc, { cbId: msg.cbId, data: { yay: ret ? ret : null /* prevents `undefined` which would skip the json field, we rather send explicit `null` as counterparties are non-JS/TS */ } })
+                        if (sendret = (proc.pid && pipes[proc.pid] && msg.cbId) ? true : false)
+                            send(proc, { cbId: msg.cbId, data: { yay: ret ? ret : null /* prevent undefined */ } })
                     },
                     rej =>
                         onfail(rej),

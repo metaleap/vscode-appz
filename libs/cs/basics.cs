@@ -19,20 +19,14 @@ namespace VscAppz {
             new impl(stdIn, stdOut);
     }
 
-    internal partial class msgToVsc {
+    internal partial class IpcMsg {
         internal string QName = "";
         internal Dictionary<string, Any> Data;
         internal string ContId;
 
-        internal msgToVsc() { }
-        internal msgToVsc(string qName, int numData, string contId = "") =>
+        internal IpcMsg() { }
+        internal IpcMsg(string qName, int numData, string contId = "") =>
             (QName, Data, ContId) = (qName, new Dictionary<string, Any>(numData), contId);
-    }
-
-    internal partial class msgFromVsc {
-        internal string ContId;
-        internal Any Payload;
-        internal bool Failed;
     }
 
     internal partial class impl {
@@ -55,7 +49,8 @@ namespace VscAppz {
             while (true) try {
                 jsonmsg = ""; // so that the `catch` at the end won't use prior one
                 if (!string.IsNullOrEmpty(jsonmsg = stdIn.ReadLine().Trim())) {
-                    var msg = msgFromVsc.parse(jsonmsg);
+                    var msg = IpcMsg.Parse(jsonmsg);
+
                     Action<Any> cb = null;
                     Func<Any[], (Any, bool)> fn = null;
                     lock (this)
@@ -63,29 +58,33 @@ namespace VscAppz {
                             _ = cbWaiting.Remove(msg.ContId);
                         else
                             _ = cbOther.TryGetValue(msg.ContId, out fn);
+
                     if (cb != null) {
-                        if (!msg.Failed)
-                            cb(msg.Payload);
-                        else if (Vsc.OnError != null)
-                            Vsc.OnError(this, msg.Payload, jsonmsg);
+                        if (msg.Data.TryGetValue("nay", out var nay))
+                            Vsc.OnError(this, nay, jsonmsg);
+                        else if (msg.Data.TryGetValue("yay", out var yay))
+                            cb(yay);
+                        else
+                            throw new Exception("field `data` must have either `yay` or `nay` member");
+
                     } else if (fn != null) {
-                        var args = msg.Payload as Any[];
-                        if (args == null)
-                            args = new Any[] { msg.Payload };
-                        var (ret, ok) = fn(args);
-                        send(new msgToVsc() {
-                            ContId = msg.ContId,
-                            Data = new Dictionary<string, Any>(2)
-                                            { ["ret"] = ret, ["ok"] = ok },
-                        }, null);
-                    }
+                        Any fnargs;
+                        Any ret = null;
+                        var ok = msg.Data.TryGetValue("", out fnargs);
+                        if (ok = (ok && (fnargs is Any[])))
+                            (ret, ok) = fn((Any[])fnargs);
+                        send(new IpcMsg("", 1, msg.ContId) { Data = {
+                            [ok ? "yay" : "nay"] = ok ? ret : string.Format("unexpected args: {0}", fnargs)
+                        } }, null);
+                    } else
+                        throw new Exception("specified `cbId` not known locally");
                 }
             } catch (Exception err) {
-                if (Vsc.OnError != null) Vsc.OnError(this, err, jsonmsg);
+                Vsc.OnError(this, err, jsonmsg);
             }
         }
 
-        internal void send(msgToVsc msg, Action<Any> on) {
+        internal void send(IpcMsg msg, Action<Any> on) {
             bool startloop;
             Exception err = null;
             lock (this) {
@@ -96,7 +95,7 @@ namespace VscAppz {
                 try { stdOut.WriteLine(msg.ToString()); }
                 catch (Exception _) { err = _;}
             }
-            if (err != null && Vsc.OnError != null)
+            if (err != null )
                 Vsc.OnError(this, err, msg.Data);
             if (startloop)
                 loopReadln();

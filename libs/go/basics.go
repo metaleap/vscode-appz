@@ -3,6 +3,7 @@ package vscAppz
 import (
 	"bufio"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -12,7 +13,7 @@ import (
 )
 
 // Reports problems during the ongoing forever-looping stdin/stdout communication
-// with the `vscode-appz` VSC extension. Defaults to a stderr println.
+// with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be `nil`.
 //
 // `err` ── if an `error`, it occurred on the Go side (I/O or JSON), else some JSON-decoded Go value from whatever was transmitted as the problem data (if anything) by VS Code.
 //
@@ -81,39 +82,45 @@ func (me *impl) loopReadln() {
 	for me.readln.Scan() {
 		if jsonmsg := strings.TrimSpace(me.readln.Text()); jsonmsg != "" {
 			var inmsg ipcMsg
-			if err := json.Unmarshal([]byte(jsonmsg), &inmsg); err == nil {
+			if err := json.Unmarshal([]byte(jsonmsg), &inmsg); err != nil {
+				OnError(me, err, jsonmsg)
+			} else if inmsg.Data == nil || len(inmsg.Data) == 0 {
+				OnError(me, errors.New("field `data` is missing"), jsonmsg)
+			} else {
 				me.state.Lock()
 				cb, fn := me.state.callbacks.waiting[inmsg.ContId], me.state.callbacks.other[inmsg.ContId]
 				delete(me.state.callbacks.waiting, inmsg.ContId)
 				me.state.Unlock()
-				if inmsg.Data != nil && len(inmsg.Data) != 0 {
-					if cb != nil {
-						yay, nay := inmsg.Data["yay"], inmsg.Data["nay"]
-						if nay == nil {
-							cb(yay)
-						} else if OnError != nil {
-							OnError(me, nay, jsonmsg)
-						}
-					} else if fn != nil {
-						var args []Any
-						var ret Any
-						fnargs, ok := inmsg.Data[""]
-						if ok {
-							if args, ok = fnargs.([]Any); ok {
-								ret, ok = fn(args...)
-							}
-						}
-						outmsg := ipcMsg{ContId: inmsg.ContId, Data: make(map[string]Any, 1)}
-						if ok {
-							outmsg.Data["yay"] = ret
-						} else {
-							outmsg.Data["nay"] = "unexpected payload: " + fmt.Sprintf("%v", args)
-						}
-						me.send(&outmsg, nil)
+
+				if cb != nil {
+					if nay, isnay := inmsg.Data["nay"]; isnay {
+						OnError(me, nay, jsonmsg)
+					} else if yay, isyay := inmsg.Data["yay"]; isyay {
+						cb(yay)
+					} else {
+						OnError(me, errors.New("field `data` must have either `yay` or `nay` member"), jsonmsg)
 					}
+
+				} else if fn != nil {
+					var args []Any
+					var ret Any
+					fnargs, ok := inmsg.Data[""]
+					if ok {
+						if args, ok = fnargs.([]Any); ok {
+							ret, ok = fn(args...)
+						}
+					}
+					outmsg := ipcMsg{ContId: inmsg.ContId, Data: make(map[string]Any, 1)}
+					if ok {
+						outmsg.Data["yay"] = ret
+					} else {
+						outmsg.Data["nay"] = "unexpected args: " + fmt.Sprintf("%v", args)
+					}
+					me.send(&outmsg, nil)
+
+				} else {
+					OnError(me, errors.New("specified `cbId` not known locally"), jsonmsg)
 				}
-			} else if OnError != nil {
-				OnError(me, err, jsonmsg)
 			}
 		}
 	}
@@ -131,7 +138,7 @@ func (me *impl) send(msg *ipcMsg, on func(Any)) {
 	}
 	err := me.jsonOut.Encode(msg)
 	me.state.Unlock()
-	if err != nil && OnError != nil {
+	if err != nil {
 		if msg.QName != "" {
 			msg.Data[""] = msg.QName
 		}

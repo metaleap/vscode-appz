@@ -372,7 +372,7 @@ namespace VscAppz {
 
 	internal partial class impl : IWindow {
 		void IWindow.ShowErrorMessage(string message, string[] items, Action<string> andThen) {
-			var msg = new msgToVsc("window.showErrorMessage1", 2);
+			var msg = new IpcMsg("window.showErrorMessage1", 2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
 			Action<Any> on = null;
@@ -391,7 +391,7 @@ namespace VscAppz {
 		}
 
 		void IWindow.ShowErrorMessage(string message, MessageOptions options, string[] items, Action<string> andThen) {
-			var msg = new msgToVsc("window.showErrorMessage2", 3);
+			var msg = new IpcMsg("window.showErrorMessage2", 3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
@@ -411,7 +411,7 @@ namespace VscAppz {
 		}
 
 		void IWindow.ShowErrorMessage(string message, MessageItem[] items, Action<MessageItem> andThen) {
-			var msg = new msgToVsc("window.showErrorMessage3", 2);
+			var msg = new IpcMsg("window.showErrorMessage3", 2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
 			Action<Any> on = null;
@@ -429,7 +429,7 @@ namespace VscAppz {
 		}
 
 		void IWindow.ShowErrorMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
-			var msg = new msgToVsc("window.showErrorMessage4", 3);
+			var msg = new IpcMsg("window.showErrorMessage4", 3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
@@ -448,7 +448,7 @@ namespace VscAppz {
 		}
 
 		void IWindow.ShowInformationMessage(string message, string[] items, Action<string> andThen) {
-			var msg = new msgToVsc("window.showInformationMessage1", 2);
+			var msg = new IpcMsg("window.showInformationMessage1", 2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
 			Action<Any> on = null;
@@ -467,7 +467,7 @@ namespace VscAppz {
 		}
 
 		void IWindow.ShowInformationMessage(string message, MessageOptions options, string[] items, Action<string> andThen) {
-			var msg = new msgToVsc("window.showInformationMessage2", 3);
+			var msg = new IpcMsg("window.showInformationMessage2", 3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
@@ -487,7 +487,7 @@ namespace VscAppz {
 		}
 
 		void IWindow.ShowInformationMessage(string message, MessageItem[] items, Action<MessageItem> andThen) {
-			var msg = new msgToVsc("window.showInformationMessage3", 2);
+			var msg = new IpcMsg("window.showInformationMessage3", 2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
 			Action<Any> on = null;
@@ -505,7 +505,7 @@ namespace VscAppz {
 		}
 
 		void IWindow.ShowInformationMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
-			var msg = new msgToVsc("window.showInformationMessage4", 3);
+			var msg = new IpcMsg("window.showInformationMessage4", 3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
@@ -524,7 +524,7 @@ namespace VscAppz {
 		}
 
 		void IWindow.ShowWarningMessage(string message, string[] items, Action<string> andThen) {
-			var msg = new msgToVsc("window.showWarningMessage1", 2);
+			var msg = new IpcMsg("window.showWarningMessage1", 2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
 			Action<Any> on = null;
@@ -543,7 +543,7 @@ namespace VscAppz {
 		}
 
 		void IWindow.ShowWarningMessage(string message, MessageOptions options, string[] items, Action<string> andThen) {
-			var msg = new msgToVsc("window.showWarningMessage2", 3);
+			var msg = new IpcMsg("window.showWarningMessage2", 3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
@@ -563,7 +563,7 @@ namespace VscAppz {
 		}
 
 		void IWindow.ShowWarningMessage(string message, MessageItem[] items, Action<MessageItem> andThen) {
-			var msg = new msgToVsc("window.showWarningMessage3", 2);
+			var msg = new IpcMsg("window.showWarningMessage3", 2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
 			Action<Any> on = null;
@@ -581,7 +581,7 @@ namespace VscAppz {
 		}
 
 		void IWindow.ShowWarningMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
-			var msg = new msgToVsc("window.showWarningMessage4", 3);
+			var msg = new IpcMsg("window.showWarningMessage4", 3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
@@ -600,7 +600,7 @@ namespace VscAppz {
 		}
 
 		void IWindow.ShowInputBox(InputBoxOptions options, Action<string> andThen) {
-			var msg = new msgToVsc("window.showInputBox", 1);
+			var msg = new IpcMsg("window.showInputBox", 1);
 			var fnids = new List<string>(1);
 			lock (this) {
 				if (options != null) {

@@ -23,7 +23,7 @@ class Gen extends gen.Gen {
             else
                 src += "type " + it.name + " = vscode." + it.name + "\n";
         }
-        src += "\nexport function handle(msg: ppio.Msg, proc: node_proc.ChildProcess): Thenable<any> {\n";
+        src += "\nexport function handle(msg: ppio.IpcMsg, proc: node_proc.ChildProcess): Thenable<any> {\n";
         src += "\tconst idxdot = msg.qName.lastIndexOf('.')\n";
         src += `\tconst [apiname, methodname] = (idxdot > 0) ? [msg.qName.slice(0, idxdot), msg.qName.slice(idxdot + 1)] : ['', msg.qName]\n`;
         src += "\tswitch (apiname) {\n";

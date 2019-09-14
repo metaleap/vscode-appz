@@ -13,7 +13,7 @@ interface InputBoxOptions extends vscode.InputBoxOptions {
 	validateInput_AppzFuncId: string
 }
 
-export function handle(msg: ppio.Msg, proc: node_proc.ChildProcess): Thenable<any> {
+export function handle(msg: ppio.IpcMsg, proc: node_proc.ChildProcess): Thenable<any> {
 	const idxdot = msg.qName.lastIndexOf('.')
 	const [apiname, methodname] = (idxdot > 0) ? [msg.qName.slice(0, idxdot), msg.qName.slice(idxdot + 1)] : ['', msg.qName]
 	switch (apiname) {
