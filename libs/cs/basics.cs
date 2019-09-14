@@ -7,11 +7,12 @@ namespace VscAppz {
 
     /// <summary>Everything related to the running of your app.</summary>
     public static class Vsc {
+        /// <summary>Used by the default `OnError` handler to print error details to stderr (aka. `Console.Error`).</summary>
         public static string OnErrorDefaultOutputFormat = "err:\t{0}\njson:\t{1}\n\n";
 
         /// <summary>Called on every `catch` during the forever-looping stdin/stdout communication with the `vscode-appz` VSC extension.</summary>
         public static Action<IVscode,Any,Any> OnError = (_, err, jsonMsg) => {
-            Console.Error.WriteLine(string.Format(OnErrorDefaultOutputFormat, err, jsonMsg));
+            Console.Error.Write(string.Format(OnErrorDefaultOutputFormat, err, jsonMsg));
         };
 
         /// <summary>Returns an `IVscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `Console.In` and `stdOut` defaulting to `Console.Out`). Communication only begins its forever loop upon the first method invocation (which consequently never `return`s) on any of the `interface`s offered by the returned `IVscode`'s members.</summary>
