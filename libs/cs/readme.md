@@ -86,11 +86,11 @@ asking for user input.
 
 Show an error message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`andThen\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -98,7 +98,7 @@ Show an error message.
 | ---- | ---- | ----------- |
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
-| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}-'></a>
 ### ShowErrorMessage(message,options,items,andThen) `method`
@@ -107,13 +107,13 @@ Show an error message.
 
 Show an error message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`options\` ── Configures the behaviour of the message.
+`options` ── Configures the behaviour of the message.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`andThen\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -122,7 +122,7 @@ Show an error message.
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
-| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
 ### ShowErrorMessage(message,items,andThen) `method`
@@ -131,11 +131,11 @@ Show an error message.
 
 Show an error message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`andThen\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -143,7 +143,7 @@ Show an error message.
 | ---- | ---- | ----------- |
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
-| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
+| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
 ### ShowErrorMessage(message,options,items,andThen) `method`
@@ -152,13 +152,13 @@ Show an error message.
 
 Show an error message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`options\` ── Configures the behaviour of the message.
+`options` ── Configures the behaviour of the message.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`andThen\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -167,7 +167,7 @@ Show an error message.
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
 | items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
-| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
+| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowInformationMessage-System-String,System-String[],System-Action{System-String}-'></a>
 ### ShowInformationMessage(message,items,andThen) `method`
@@ -177,11 +177,11 @@ Show an error message.
 Show an information message to users. Optionally provide an array of items which will be presented as
 clickable buttons.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`andThen\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -189,7 +189,7 @@ clickable buttons.
 | ---- | ---- | ----------- |
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
-| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}-'></a>
 ### ShowInformationMessage(message,options,items,andThen) `method`
@@ -199,13 +199,13 @@ clickable buttons.
 Show an information message to users. Optionally provide an array of items which will be presented as
 clickable buttons.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`options\` ── Configures the behaviour of the message.
+`options` ── Configures the behaviour of the message.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`andThen\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -214,7 +214,7 @@ clickable buttons.
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
-| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
 ### ShowInformationMessage(message,items,andThen) `method`
@@ -223,11 +223,11 @@ clickable buttons.
 
 Show an information message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`andThen\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -235,7 +235,7 @@ Show an information message.
 | ---- | ---- | ----------- |
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
-| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
+| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
 ### ShowInformationMessage(message,options,items,andThen) `method`
@@ -244,13 +244,13 @@ Show an information message.
 
 Show an information message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`options\` ── Configures the behaviour of the message.
+`options` ── Configures the behaviour of the message.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`andThen\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -259,7 +259,7 @@ Show an information message.
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
 | items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
-| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
+| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowInputBox-VscAppz-InputBoxOptions,System-Action{System-String}-'></a>
 ### ShowInputBox(options,andThen) `method`
@@ -268,20 +268,20 @@ Show an information message.
 
 Opens an input box to ask the user for input.
 
-The returned value will be \`undefined\` if the input box was canceled (e.g. pressing ESC). Otherwise the
+The returned value will be `undefined` if the input box was canceled (e.g. pressing ESC). Otherwise the
 returned value will be the string typed by the user or an empty string if the user did not type
 anything but dismissed the input box with OK.
 
-\`options\` ── Configures the behavior of the input box.
+`options` ── Configures the behavior of the input box.
 
-\`andThen\` ── A promise that resolves to a string the user provided or to \`undefined\` in case of dismissal.
+`andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | options | [VscAppz.InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions') | Configures the behavior of the input box. |
-| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A promise that resolves to a string the user provided or to \`undefined\` in case of dismissal. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A promise that resolves to a string the user provided or to `undefined` in case of dismissal. |
 
 <a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,System-String[],System-Action{System-String}-'></a>
 ### ShowWarningMessage(message,items,andThen) `method`
@@ -290,11 +290,11 @@ anything but dismissed the input box with OK.
 
 Show a warning message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`andThen\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -302,7 +302,7 @@ Show a warning message.
 | ---- | ---- | ----------- |
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
-| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}-'></a>
 ### ShowWarningMessage(message,options,items,andThen) `method`
@@ -311,13 +311,13 @@ Show a warning message.
 
 Show a warning message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`options\` ── Configures the behaviour of the message.
+`options` ── Configures the behaviour of the message.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`andThen\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -326,7 +326,7 @@ Show a warning message.
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
-| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
 ### ShowWarningMessage(message,items,andThen) `method`
@@ -335,11 +335,11 @@ Show a warning message.
 
 Show a warning message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`andThen\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -347,7 +347,7 @@ Show a warning message.
 | ---- | ---- | ----------- |
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
-| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
+| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
 ### ShowWarningMessage(message,options,items,andThen) `method`
@@ -356,13 +356,13 @@ Show a warning message.
 
 Show a warning message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`options\` ── Configures the behaviour of the message.
+`options` ── Configures the behaviour of the message.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`andThen\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -371,7 +371,7 @@ Show a warning message.
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
 | items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
-| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
+| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
 <a name='T-VscAppz-InputBoxOptions'></a>
 ## InputBoxOptions `type`
@@ -407,26 +407,26 @@ Options to configure the behavior of the input box UI.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | value | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The value to prefill in the input box. |
-| valueSelection | [System.ValueTuple{System.Int32,System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.ValueTuple 'System.ValueTuple{System.Int32,System.Int32}') | Selection of the prefilled [\`value\`](#InputBoxOptions.value). Defined as tuple of two number where the first is the inclusive start index and the second the exclusive end index. When \`undefined\` the whole word will be selected, when empty (start equals end) only the cursor will be set, otherwise the defined range will be selected. |
+| valueSelection | [System.ValueTuple{System.Int32,System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.ValueTuple 'System.ValueTuple{System.Int32,System.Int32}') | Selection of the prefilled [`value`](#InputBoxOptions.value). Defined as tuple of two number where the first is the inclusive start index and the second the exclusive end index. When `undefined` the whole word will be selected, when empty (start equals end) only the cursor will be set, otherwise the defined range will be selected. |
 | prompt | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The text to display underneath the input box. |
 | placeHolder | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | An optional string to show as place holder in the input box to guide the user what to type. |
-| password | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Set to \`true\` to show a password prompt that will not show the typed value. |
-| ignoreFocusOut | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Set to \`true\` to keep the input box open when focus moves to another part of the editor or to another window. |
-| validateInput | [System.Func{System.String,System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Func 'System.Func{System.String,System.String}') | An optional function that will be called to validate input and to give a hint to the user.  \`value\` ── The current value of the input box.  \`return\` ── A human readable string which is presented as diagnostic message. Return \`undefined\`, \`null\`, or the empty string when 'value' is valid. |
+| password | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Set to `true` to show a password prompt that will not show the typed value. |
+| ignoreFocusOut | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Set to `true` to keep the input box open when focus moves to another part of the editor or to another window. |
+| validateInput | [System.Func{System.String,System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Func 'System.Func{System.String,System.String}') | An optional function that will be called to validate input and to give a hint to the user.  `value` ── The current value of the input box.  `return` ── A human readable string which is presented as diagnostic message. Return `undefined`, `null`, or the empty string when 'value' is valid. |
 
 <a name='F-VscAppz-InputBoxOptions-IgnoreFocusOut'></a>
 ### IgnoreFocusOut `constants`
 
 ##### Summary
 
-Set to \`true\` to keep the input box open when focus moves to another part of the editor or to another window.
+Set to `true` to keep the input box open when focus moves to another part of the editor or to another window.
 
 <a name='F-VscAppz-InputBoxOptions-Password'></a>
 ### Password `constants`
 
 ##### Summary
 
-Set to \`true\` to show a password prompt that will not show the typed value.
+Set to `true` to show a password prompt that will not show the typed value.
 
 <a name='F-VscAppz-InputBoxOptions-PlaceHolder'></a>
 ### PlaceHolder `constants`
@@ -450,10 +450,10 @@ The text to display underneath the input box.
 An optional function that will be called to validate input and to give a hint
 to the user.
 
-\`value\` ── The current value of the input box.
+`value` ── The current value of the input box.
 
-\`return\` ── A human readable string which is presented as diagnostic message.
-Return \`undefined\`, \`null\`, or the empty string when 'value' is valid.
+`return` ── A human readable string which is presented as diagnostic message.
+Return `undefined`, `null`, or the empty string when 'value' is valid.
 
 <a name='F-VscAppz-InputBoxOptions-ValidateInput_AppzFuncId'></a>
 ### ValidateInput_AppzFuncId `constants`
@@ -474,8 +474,8 @@ The value to prefill in the input box.
 
 ##### Summary
 
-Selection of the prefilled [\`value\`](#InputBoxOptions.value). Defined as tuple of two number where the
-first is the inclusive start index and the second the exclusive end index. When \`undefined\` the whole
+Selection of the prefilled [`value`](#InputBoxOptions.value). Defined as tuple of two number where the
+first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
 word will be selected, when empty (start equals end) only the cursor will be set,
 otherwise the defined range will be selected.
 
@@ -603,31 +603,31 @@ Everything related to the running of your app.
 ##### Summary
 
 Reports problems during the ongoing forever-looping stdin/stdout communication
- with the \`vscode-appz\` VSC extension. Defaults to a stderr println. Must not be \`null\`.
+ with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be `null`.
 
- \`self\`── the caller, an \`IVscode\` instance that encountered the problem being reported.
+ `self`── the caller, an `IVscode` instance that encountered the problem being reported.
 
- \`err\` ── if an \`Exception\`, it occurred on the C# side (I/O or JSON), else some JSON-decoded C# value from whatever was transmitted as the problem data (if anything) by VS Code.
+ `err` ── if an `Exception`, it occurred on the C# side (I/O or JSON), else some JSON-decoded C# value from whatever was transmitted as the problem data (if anything) by VS Code.
 
- \`jsonMsg\` ─ if a \`string\`, the incoming JSON message; if a \`Dictionary<string, object>\`, the outgoing one.
+ `jsonMsg` ─ if a `string`, the incoming JSON message; if a `Dictionary<string, object>`, the outgoing one.
 
 <a name='F-VscAppz-Vsc-OnErrorDefaultOutputFormat'></a>
 ### OnErrorDefaultOutputFormat `constants`
 
 ##### Summary
 
-Used by the default \`OnError\` handler to print error details to stderr (aka. \`Console.Error\`).
+Used by the default `OnError` handler to print error details to stderr (aka. `Console.Error`).
 
 <a name='M-VscAppz-Vsc-InOut-System-IO-TextReader,System-IO-TextWriter-'></a>
 ### InOut(stdIn,stdOut) `method`
 
 ##### Summary
 
-Returns an \`IVscode\` implementation that communicates via the specified input and output streams (with \`stdIn\` defaulting to \`Console.In\` and \`stdOut\` defaulting to \`Console.Out\`). Communication only begins its forever loop upon the first method invocation (which consequently never \`return\`s) on any of the \`interface\`s offered by the returned \`IVscode\`'s members.
+Returns an `IVscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `Console.In` and `stdOut` defaulting to `Console.Out`). Communication only begins its forever loop upon the first method invocation (which consequently never `return`s) on any of the `interface`s offered by the returned `IVscode`'s members.
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| stdIn | [System.IO.TextReader](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.IO.TextReader 'System.IO.TextReader') | If \`null\`, defaults to \`Console.In\`. |
-| stdOut | [System.IO.TextWriter](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.IO.TextWriter 'System.IO.TextWriter') | If \`null\`, defaults to \`Console.Out\` |
+| stdIn | [System.IO.TextReader](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.IO.TextReader 'System.IO.TextReader') | If `null`, defaults to `Console.In`. |
+| stdOut | [System.IO.TextWriter](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.IO.TextWriter 'System.IO.TextWriter') | If `null`, defaults to `Console.Out` |
