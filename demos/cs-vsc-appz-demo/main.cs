@@ -30,7 +30,7 @@ namespace VscAppzDemo {
                         win.ShowInputBox(new InputBoxOptions() {
                             IgnoreFocusOut  = true,
                             Prompt          = "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
-                            ValidateInput   = input => Array.Exists(foos, _ => (input == null) ? false : input.ToLower().Contains(_))
+                            ValidateInput   = input => Array.Exists(foos, _ => input.ToLower().Contains(_))
                                                     ? "Contains something looking like `foo`."
                                                     : ""
                         }, input => {
