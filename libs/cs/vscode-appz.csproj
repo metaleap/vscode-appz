@@ -13,7 +13,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <Target Name="ReadmeMdUnescapeBackticks" AfterTargets="Build" BeforeTargets="Publish">
-    <Exec Command="sed -i 's/\\`/`/g' $(DocumentationMarkdown)" />
+    <Exec Command="sed -i 's/\\`/`/g' $(DocumentationMarkdown)" IgnoreExitCode="true" />
   </Target>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
