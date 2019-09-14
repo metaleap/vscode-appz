@@ -437,6 +437,13 @@ export function docs(from: ts.Node, retName: () => { name: string } = undefined)
     return ret
 }
 
+export function docsTraverse(docs: Docs, on: ((_: Doc) => void)) {
+    for (const doc of docs) {
+        on(doc)
+        docsTraverse(doc.subs, on)
+    }
+}
+
 export function idents(dontCollideWith: { name: string }[], ...names: string[]) {
     const ret: { [_: string]: string } = {}
     for (const name of names)

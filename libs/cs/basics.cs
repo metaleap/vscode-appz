@@ -10,12 +10,23 @@ namespace VscAppz {
         /// <summary>Used by the default `OnError` handler to print error details to stderr (aka. `Console.Error`).</summary>
         public static string OnErrorDefaultOutputFormat = "err:\t{0}\njson:\t{1}\n\n";
 
-        /// <summary>Called on every `catch` during the forever-looping stdin/stdout communication with the `vscode-appz` VSC extension.</summary>
-        public static Action<IVscode,Any,Any> OnError = (_, err, jsonMsg) => {
+        /// <summary>
+        /// Reports problems during the ongoing forever-looping stdin/stdout communication
+        /// with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be `null`.
+        ///
+        /// `self`── the caller, an `IVscode` instance that encountered the problem being reported.
+        ///
+        /// `err` ── if an `Exception`, it occurred on the C# side (I/O or JSON), else some JSON-decoded C# value from whatever was transmitted as the problem data (if anything) by VS Code.
+        ///
+        /// `jsonMsg` ─ if a `string`, the incoming JSON message; if a `Dictionary&lt;string, object&gt;`, the outgoing one.
+        /// </summary>
+        public static Action<IVscode,Any,Any> OnError = (self, err, jsonMsg) => {
             Console.Error.Write(string.Format(OnErrorDefaultOutputFormat, err, jsonMsg));
         };
 
         /// <summary>Returns an `IVscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `Console.In` and `stdOut` defaulting to `Console.Out`). Communication only begins its forever loop upon the first method invocation (which consequently never `return`s) on any of the `interface`s offered by the returned `IVscode`'s members.</summary>
+        /// <param name="stdIn">If `null`, defaults to `Console.In`.</param>
+        /// <param name="stdOut">If `null`, defaults to `Console.Out`</param>
         public static IVscode InOut(TextReader stdIn = null, TextWriter stdOut = null) =>
             new impl(stdIn, stdOut);
     }

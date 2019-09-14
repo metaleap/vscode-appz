@@ -306,6 +306,13 @@ function docs(from, retName = undefined) {
     return ret;
 }
 exports.docs = docs;
+function docsTraverse(docs, on) {
+    for (const doc of docs) {
+        on(doc);
+        docsTraverse(doc.subs, on);
+    }
+}
+exports.docsTraverse = docsTraverse;
 function idents(dontCollideWith, ...names) {
     const ret = {};
     for (const name of names)

@@ -219,6 +219,15 @@ namespace VscAppz {
 		/// 
 		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
+		/// <param name="message">
+		/// The message to show.
+		/// </param>
+		/// <param name="items">
+		/// A set of items that will be rendered as actions in the message.
+		/// </param>
+		/// <param name="andThen">
+		/// A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </param>
 		void ShowErrorMessage(string message = default, string[] items = default, Action<string> andThen = default);
 
 		/// <summary>
@@ -232,6 +241,18 @@ namespace VscAppz {
 		/// 
 		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
+		/// <param name="message">
+		/// The message to show.
+		/// </param>
+		/// <param name="options">
+		/// Configures the behaviour of the message.
+		/// </param>
+		/// <param name="items">
+		/// A set of items that will be rendered as actions in the message.
+		/// </param>
+		/// <param name="andThen">
+		/// A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </param>
 		void ShowErrorMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
 
 		/// <summary>
@@ -243,6 +264,15 @@ namespace VscAppz {
 		/// 
 		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
+		/// <param name="message">
+		/// The message to show.
+		/// </param>
+		/// <param name="items">
+		/// A set of items that will be rendered as actions in the message.
+		/// </param>
+		/// <param name="andThen">
+		/// A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </param>
 		void ShowErrorMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
 
 		/// <summary>
@@ -256,6 +286,18 @@ namespace VscAppz {
 		/// 
 		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
+		/// <param name="message">
+		/// The message to show.
+		/// </param>
+		/// <param name="options">
+		/// Configures the behaviour of the message.
+		/// </param>
+		/// <param name="items">
+		/// A set of items that will be rendered as actions in the message.
+		/// </param>
+		/// <param name="andThen">
+		/// A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </param>
 		void ShowErrorMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
 
 		/// <summary>
@@ -268,6 +310,15 @@ namespace VscAppz {
 		/// 
 		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
+		/// <param name="message">
+		/// The message to show.
+		/// </param>
+		/// <param name="items">
+		/// A set of items that will be rendered as actions in the message.
+		/// </param>
+		/// <param name="andThen">
+		/// A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </param>
 		void ShowInformationMessage(string message = default, string[] items = default, Action<string> andThen = default);
 
 		/// <summary>
@@ -282,6 +333,18 @@ namespace VscAppz {
 		/// 
 		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
+		/// <param name="message">
+		/// The message to show.
+		/// </param>
+		/// <param name="options">
+		/// Configures the behaviour of the message.
+		/// </param>
+		/// <param name="items">
+		/// A set of items that will be rendered as actions in the message.
+		/// </param>
+		/// <param name="andThen">
+		/// A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </param>
 		void ShowInformationMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
 
 		/// <summary>
@@ -293,6 +356,15 @@ namespace VscAppz {
 		/// 
 		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
+		/// <param name="message">
+		/// The message to show.
+		/// </param>
+		/// <param name="items">
+		/// A set of items that will be rendered as actions in the message.
+		/// </param>
+		/// <param name="andThen">
+		/// A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </param>
 		void ShowInformationMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
 
 		/// <summary>
@@ -306,6 +378,18 @@ namespace VscAppz {
 		/// 
 		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
+		/// <param name="message">
+		/// The message to show.
+		/// </param>
+		/// <param name="options">
+		/// Configures the behaviour of the message.
+		/// </param>
+		/// <param name="items">
+		/// A set of items that will be rendered as actions in the message.
+		/// </param>
+		/// <param name="andThen">
+		/// A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </param>
 		void ShowInformationMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
 
 		/// <summary>
@@ -317,6 +401,15 @@ namespace VscAppz {
 		/// 
 		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
+		/// <param name="message">
+		/// The message to show.
+		/// </param>
+		/// <param name="items">
+		/// A set of items that will be rendered as actions in the message.
+		/// </param>
+		/// <param name="andThen">
+		/// A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </param>
 		void ShowWarningMessage(string message = default, string[] items = default, Action<string> andThen = default);
 
 		/// <summary>
@@ -330,6 +423,18 @@ namespace VscAppz {
 		/// 
 		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
+		/// <param name="message">
+		/// The message to show.
+		/// </param>
+		/// <param name="options">
+		/// Configures the behaviour of the message.
+		/// </param>
+		/// <param name="items">
+		/// A set of items that will be rendered as actions in the message.
+		/// </param>
+		/// <param name="andThen">
+		/// A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </param>
 		void ShowWarningMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
 
 		/// <summary>
@@ -341,6 +446,15 @@ namespace VscAppz {
 		/// 
 		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
+		/// <param name="message">
+		/// The message to show.
+		/// </param>
+		/// <param name="items">
+		/// A set of items that will be rendered as actions in the message.
+		/// </param>
+		/// <param name="andThen">
+		/// A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </param>
 		void ShowWarningMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
 
 		/// <summary>
@@ -354,6 +468,18 @@ namespace VscAppz {
 		/// 
 		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
+		/// <param name="message">
+		/// The message to show.
+		/// </param>
+		/// <param name="options">
+		/// Configures the behaviour of the message.
+		/// </param>
+		/// <param name="items">
+		/// A set of items that will be rendered as actions in the message.
+		/// </param>
+		/// <param name="andThen">
+		/// A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </param>
 		void ShowWarningMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
 
 		/// <summary>
@@ -367,6 +493,12 @@ namespace VscAppz {
 		/// 
 		/// `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
 		/// </summary>
+		/// <param name="options">
+		/// Configures the behavior of the input box.
+		/// </param>
+		/// <param name="andThen">
+		/// A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
+		/// </param>
 		void ShowInputBox(InputBoxOptions options = default, Action<string> andThen = default);
 	}
 

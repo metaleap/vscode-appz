@@ -86,7 +86,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         let src = this.genDocSrc('\t', doclns)
         src += "\tpublic interface I" + this.caseUp(it.name) + " {\n"
         for (const method of it.methods)
-            src += '\n' + this.genDocSrc('\t\t', this.genDocLns(gen.docs(method.fromOrig.decl, () => method.args.find(_ => _.isFromRetThenable))))
+            src += '\n' + this.genDocSrc('\t\t', this.genDocLns(gen.docs(method.fromOrig.decl, () => method.args.find(_ => _.isFromRetThenable)), method))
                 + "\t\tvoid " + this.caseUp(method.nameOrig) + "("
                 + method.args.map(_ => this.typeSpec(_.typeSpec) + " " + this.caseLo(_.name) + " = default").join(', ')
                 + ");\n"
@@ -209,7 +209,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         return src
     }
 
-    genDocLns(docs: gen.Docs, isSub: boolean = false): string[] {
+    genDocLns(docs: gen.Docs, method: gen.PrepMethod = undefined, isSub: boolean = false): string[] {
         let ret: string[] = []
         if (docs && docs.length) for (const doc of docs) {
             if (doc.lines && doc.lines.length) {
@@ -218,12 +218,27 @@ export class Gen extends gen.Gen implements gen.IGen {
                     ret.push("/// " + ln)
             }
             if (doc.subs && doc.subs.length)
-                ret.push(...this.genDocLns(doc.subs, true))
+                ret.push(...this.genDocLns(doc.subs, method, true))
         }
         if (ret.length && !isSub) {
             ret[0] = "/// <summary>"
             ret.push("/// </summary>")
         }
+        if ((!isSub) && method && method.args && method.args.length)
+            for (const arg of method.args) {
+                let paramdocstrlns: string[] = []
+                gen.docsTraverse(docs, doc => {
+                    if (paramdocstrlns.length === 0 && doc.lines && doc.lines.length && doc.lines[0].startsWith("`" + arg.name + "` ── ")) {
+                        paramdocstrlns.push(...doc.lines)
+                        paramdocstrlns[0] = paramdocstrlns[0].slice(paramdocstrlns[0].indexOf("` ── ") + 5)
+                    }
+                })
+                if (paramdocstrlns.length) {
+                    ret.push(`/// <param name="${this.caseLo(arg.name)}">`)
+                    ret.push(...paramdocstrlns.map(_ => "/// " + _))
+                    ret.push("/// </param>")
+                }
+            }
         return ret
     }
 

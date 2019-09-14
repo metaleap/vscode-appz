@@ -6,19 +6,19 @@
 - [IVscode](#T-VscAppz-IVscode 'VscAppz.IVscode')
   - [Window](#P-VscAppz-IVscode-Window 'VscAppz.IVscode.Window')
 - [IWindow](#T-VscAppz-IWindow 'VscAppz.IWindow')
-  - [ShowErrorMessage()](#M-VscAppz-IWindow-ShowErrorMessage-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowErrorMessage(System.String,System.String[],System.Action{System.String})')
-  - [ShowErrorMessage()](#M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowErrorMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
-  - [ShowErrorMessage()](#M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowErrorMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
-  - [ShowErrorMessage()](#M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowErrorMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
-  - [ShowInformationMessage()](#M-VscAppz-IWindow-ShowInformationMessage-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowInformationMessage(System.String,System.String[],System.Action{System.String})')
-  - [ShowInformationMessage()](#M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
-  - [ShowInformationMessage()](#M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
-  - [ShowInformationMessage()](#M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
-  - [ShowInputBox()](#M-VscAppz-IWindow-ShowInputBox-VscAppz-InputBoxOptions,System-Action{System-String}- 'VscAppz.IWindow.ShowInputBox(VscAppz.InputBoxOptions,System.Action{System.String})')
-  - [ShowWarningMessage()](#M-VscAppz-IWindow-ShowWarningMessage-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowWarningMessage(System.String,System.String[],System.Action{System.String})')
-  - [ShowWarningMessage()](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
-  - [ShowWarningMessage()](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
-  - [ShowWarningMessage()](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
+  - [ShowErrorMessage(message,items,andThen)](#M-VscAppz-IWindow-ShowErrorMessage-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowErrorMessage(System.String,System.String[],System.Action{System.String})')
+  - [ShowErrorMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowErrorMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
+  - [ShowErrorMessage(message,items,andThen)](#M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowErrorMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
+  - [ShowErrorMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowErrorMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
+  - [ShowInformationMessage(message,items,andThen)](#M-VscAppz-IWindow-ShowInformationMessage-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowInformationMessage(System.String,System.String[],System.Action{System.String})')
+  - [ShowInformationMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
+  - [ShowInformationMessage(message,items,andThen)](#M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
+  - [ShowInformationMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
+  - [ShowInputBox(options,andThen)](#M-VscAppz-IWindow-ShowInputBox-VscAppz-InputBoxOptions,System-Action{System-String}- 'VscAppz.IWindow.ShowInputBox(VscAppz.InputBoxOptions,System.Action{System.String})')
+  - [ShowWarningMessage(message,items,andThen)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowWarningMessage(System.String,System.String[],System.Action{System.String})')
+  - [ShowWarningMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
+  - [ShowWarningMessage(message,items,andThen)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
+  - [ShowWarningMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
 - [InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions')
   - [#ctor()](#M-VscAppz-InputBoxOptions-#ctor 'VscAppz.InputBoxOptions.#ctor')
   - [#ctor(value,valueSelection,prompt,placeHolder,password,ignoreFocusOut,validateInput)](#M-VscAppz-InputBoxOptions-#ctor-System-String,System-ValueTuple{System-Int32,System-Int32},System-String,System-String,System-Boolean,System-Boolean,System-Func{System-String,System-String}- 'VscAppz.InputBoxOptions.#ctor(System.String,System.ValueTuple{System.Int32,System.Int32},System.String,System.String,System.Boolean,System.Boolean,System.Func{System.String,System.String})')
@@ -43,7 +43,7 @@
 - [Vsc](#T-VscAppz-Vsc 'VscAppz.Vsc')
   - [OnError](#F-VscAppz-Vsc-OnError 'VscAppz.Vsc.OnError')
   - [OnErrorDefaultOutputFormat](#F-VscAppz-Vsc-OnErrorDefaultOutputFormat 'VscAppz.Vsc.OnErrorDefaultOutputFormat')
-  - [InOut()](#M-VscAppz-Vsc-InOut-System-IO-TextReader,System-IO-TextWriter- 'VscAppz.Vsc.InOut(System.IO.TextReader,System.IO.TextWriter)')
+  - [InOut(stdIn,stdOut)](#M-VscAppz-Vsc-InOut-System-IO-TextReader,System-IO-TextWriter- 'VscAppz.Vsc.InOut(System.IO.TextReader,System.IO.TextWriter)')
 
 <a name='T-VscAppz-IVscode'></a>
 ## IVscode `type`
@@ -80,7 +80,7 @@ and active editors, as well as, UI elements to show messages, selections, and
 asking for user input.
 
 <a name='M-VscAppz-IWindow-ShowErrorMessage-System-String,System-String[],System-Action{System-String}-'></a>
-### ShowErrorMessage() `method`
+### ShowErrorMessage(message,items,andThen) `method`
 
 ##### Summary
 
@@ -94,10 +94,14 @@ Show an error message.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
+| items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}-'></a>
-### ShowErrorMessage() `method`
+### ShowErrorMessage(message,options,items,andThen) `method`
 
 ##### Summary
 
@@ -113,10 +117,15 @@ Show an error message.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
+| options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
+| items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
-### ShowErrorMessage() `method`
+### ShowErrorMessage(message,items,andThen) `method`
 
 ##### Summary
 
@@ -130,10 +139,14 @@ Show an error message.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
+| items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
+| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
-### ShowErrorMessage() `method`
+### ShowErrorMessage(message,options,items,andThen) `method`
 
 ##### Summary
 
@@ -149,10 +162,15 @@ Show an error message.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
+| options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
+| items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
+| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowInformationMessage-System-String,System-String[],System-Action{System-String}-'></a>
-### ShowInformationMessage() `method`
+### ShowInformationMessage(message,items,andThen) `method`
 
 ##### Summary
 
@@ -167,10 +185,14 @@ clickable buttons.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
+| items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}-'></a>
-### ShowInformationMessage() `method`
+### ShowInformationMessage(message,options,items,andThen) `method`
 
 ##### Summary
 
@@ -187,10 +209,15 @@ clickable buttons.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
+| options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
+| items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
-### ShowInformationMessage() `method`
+### ShowInformationMessage(message,items,andThen) `method`
 
 ##### Summary
 
@@ -204,10 +231,14 @@ Show an information message.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
+| items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
+| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
-### ShowInformationMessage() `method`
+### ShowInformationMessage(message,options,items,andThen) `method`
 
 ##### Summary
 
@@ -223,10 +254,15 @@ Show an information message.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
+| options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
+| items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
+| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowInputBox-VscAppz-InputBoxOptions,System-Action{System-String}-'></a>
-### ShowInputBox() `method`
+### ShowInputBox(options,andThen) `method`
 
 ##### Summary
 
@@ -242,10 +278,13 @@ anything but dismissed the input box with OK.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| options | [VscAppz.InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions') | Configures the behavior of the input box. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A promise that resolves to a string the user provided or to \`undefined\` in case of dismissal. |
 
 <a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,System-String[],System-Action{System-String}-'></a>
-### ShowWarningMessage() `method`
+### ShowWarningMessage(message,items,andThen) `method`
 
 ##### Summary
 
@@ -259,10 +298,14 @@ Show a warning message.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
+| items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}-'></a>
-### ShowWarningMessage() `method`
+### ShowWarningMessage(message,options,items,andThen) `method`
 
 ##### Summary
 
@@ -278,10 +321,15 @@ Show a warning message.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
+| options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
+| items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
-### ShowWarningMessage() `method`
+### ShowWarningMessage(message,items,andThen) `method`
 
 ##### Summary
 
@@ -295,10 +343,14 @@ Show a warning message.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
+| items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
+| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
-### ShowWarningMessage() `method`
+### ShowWarningMessage(message,options,items,andThen) `method`
 
 ##### Summary
 
@@ -314,7 +366,12 @@ Show a warning message.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
+| options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
+| items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
+| andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or \`undefined\` when being dismissed. |
 
 <a name='T-VscAppz-InputBoxOptions'></a>
 ## InputBoxOptions `type`
@@ -558,7 +615,14 @@ Everything related to the running of your app.
 
 ##### Summary
 
-Called on every \`catch\` during the forever-looping stdin/stdout communication with the \`vscode-appz\` VSC extension.
+Reports problems during the ongoing forever-looping stdin/stdout communication
+ with the \`vscode-appz\` VSC extension. Defaults to a stderr println. Must not be \`null\`.
+
+ \`self\`── the caller, an \`IVscode\` instance that encountered the problem being reported.
+
+ \`err\` ── if an \`Exception\`, it occurred on the C# side (I/O or JSON), else some JSON-decoded C# value from whatever was transmitted as the problem data (if anything) by VS Code.
+
+ \`jsonMsg\` ─ if a \`string\`, the incoming JSON message; if a \`Dictionary<string, object>\`, the outgoing one.
 
 <a name='F-VscAppz-Vsc-OnErrorDefaultOutputFormat'></a>
 ### OnErrorDefaultOutputFormat `constants`
@@ -568,7 +632,7 @@ Called on every \`catch\` during the forever-looping stdin/stdout communication 
 Used by the default \`OnError\` handler to print error details to stderr (aka. \`Console.Error\`).
 
 <a name='M-VscAppz-Vsc-InOut-System-IO-TextReader,System-IO-TextWriter-'></a>
-### InOut() `method`
+### InOut(stdIn,stdOut) `method`
 
 ##### Summary
 
@@ -576,4 +640,7 @@ Returns an \`IVscode\` implementation that communicates via the specified input 
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| stdIn | [System.IO.TextReader](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.IO.TextReader 'System.IO.TextReader') | If \`null\`, defaults to \`Console.In\`. |
+| stdOut | [System.IO.TextWriter](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.IO.TextWriter 'System.IO.TextWriter') | If \`null\`, defaults to \`Console.Out\` |
