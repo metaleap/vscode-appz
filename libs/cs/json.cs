@@ -30,7 +30,7 @@ namespace VscAppz {
                 List<Any> list = new List<Any>(8);
                 while (r.Read() && r.TokenType != JsonToken.EndArray)
                     list.Add(Load(r, origJsonSrcForErr, true));
-                return list;
+                return list.ToArray();
             case JsonToken.StartObject:
                 Dictionary<string, Any> dict = new Dictionary<string, Any>(8);
                 while (r.Read() && r.TokenType != JsonToken.EndObject) {

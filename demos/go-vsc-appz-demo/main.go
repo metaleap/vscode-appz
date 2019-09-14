@@ -26,7 +26,6 @@ func main() {
 		buttons, func(button string) {
 			switch button {
 			case buttons[0]:
-				println("SO not happening.")
 				win.ShowWarningMessage1("Not yet implemented: `"+button+"`", nil, exit)
 
 			case buttons[1]:

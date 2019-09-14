@@ -23,9 +23,10 @@
 				"cwd": "${workspaceRoot}/libs/cs"
 			},
 			"command": [
-				"dotnet build",
+				"dotnet build -c Release",
+				"&& dotnet pack -c Release",
 				"&& cd ../../demos/cs-vsc-appz-demo",
-				"&& dotnet build"
+				"&& dotnet build -c Release"
 			],
 			"group": {
 				"kind": "build",

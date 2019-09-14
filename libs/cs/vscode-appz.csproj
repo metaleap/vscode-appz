@@ -4,6 +4,14 @@
     <DocumentationFile>vscode-appz.doc.xml</DocumentationFile>
     <DocumentationMarkdown>readme.md</DocumentationMarkdown>
   </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>metaleap_VscAppz</PackageId>
+    <Version>1.0.0</Version>
+    <Title>VS Code Appz: dotnet binding</Title>
+    <Authors>metaleap</Authors>
+    <Company>metaleap</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Vsxmd" Version="1.4.2">

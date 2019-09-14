@@ -747,11 +747,13 @@ namespace VscAppz {
 						this.cbOther[options.ValidateInput_AppzFuncId] = (Any[] args) => {
 							if (args != null && args.Length == 1) {
 								string a0 = default;
-								bool ok;
-								if (ok = (args[0] is string))
-									a0 = (string)args[0];
-								if (!ok)
-									return (null, false);
+								if (args[0] != null) {
+									bool ok;
+									if (ok = (args[0] is string))
+										a0 = (string)args[0];
+									if (!ok)
+										return (null, false);
+								}
 								return (fn(a0), true);
 							}
 							return (null, false);

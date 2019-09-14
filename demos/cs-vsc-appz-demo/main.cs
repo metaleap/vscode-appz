@@ -19,26 +19,27 @@ namespace VscAppzDemo {
             var buttons = new[] {"Show Quick Pick...", "Show Input Box..."};
             win.ShowInformationMessage(greethow + ", " + greetname + "! What to try out?",
                 buttons, button => {
-                    Console.Error.WriteLine("button choice: " + button);
                     if (button == "")
                         exit("");
 
                     else if (button == buttons[0])
                         win.ShowWarningMessage("Not yet implemented", nil, exit);
 
-                    else if (button == buttons[1])
+                    else if (button == buttons[1]) {
+                        var foos = new[] {"foo", "f00", "fo0", "f0o"};
                         win.ShowInputBox(new InputBoxOptions() {
                             IgnoreFocusOut  = true,
                             Prompt          = "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
-                            ValidateInput   = input =>
-                                                ((input = input.ToLowerInvariant()) != "foo" && input != "f00" && input != "fo0" && input != "f0o")
-                                                ? "" : "Invalid input"
+                            ValidateInput   = input => Array.Exists(foos, _ => (input == null) ? false : input.ToLower().Contains(_))
+                                                    ? "Contains something looking like `foo`."
+                                                    : ""
                         }, input => {
-                            if (string.IsNullOrEmpty(input))
+                            if (input == null)
                                 win.ShowWarningMessage("Cancelled input, bye now!", nil, exit);
                             else
                                 win.ShowInformationMessage("You entered: `"+input+"`, bye now!", nil, exit);
                         });
+                    }
 
                     else
                         win.ShowErrorMessage("Unknown: " + button, nil, exit);

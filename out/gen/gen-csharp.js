@@ -118,7 +118,9 @@ class Gen extends gen.Gen {
                 for (let a = 0; a < args.length; a++) {
                     const tspec = this.typeSpec(args[a]);
                     src += `\t\t\t\t\t\t\t\t${tspec} a${a} = default;\n`;
-                    src += this.genDecodeFromAny(prep, "\t\t\t\t\t\t\t\t", "args[" + a + "]", "a" + a, tspec, "", "return (null, false);", false);
+                    src += `\t\t\t\t\t\t\t\tif (args[${a}] != null) {\n`;
+                    src += this.genDecodeFromAny(prep, "\t\t\t\t\t\t\t\t\t", "args[" + a + "]", "a" + a, tspec, "", "return (null, false);", false);
+                    src += `\t\t\t\t\t\t\t\t}\n`;
                 }
                 src += `\t\t\t\t\t\t\t\treturn (${__.fn}(${args.map((_, a) => 'a' + a).join(', ')}), true);\n`;
                 src += `\t\t\t\t\t\t\t}\n`;
