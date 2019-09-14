@@ -95,8 +95,10 @@ namespace VscAppz {
                 try { stdOut.WriteLine(msg.ToString()); }
                 catch (Exception _) { err = _;}
             }
-            if (err != null )
+            if (err != null ) {
+                msg.Data[""] = msg.QName;
                 Vsc.OnError(this, err, msg.Data);
+            }
             if (startloop)
                 loopReadln();
         }
