@@ -474,15 +474,18 @@ namespace VscAppz {
 			var msg = new IpcMsg("window.showErrorMessage1", 2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
+
 			Action<Any> on = null;
 			if (andThen != null)
 				on = (Any payload) => {
 					string result = default;
-					bool ok;
-					if (ok = (payload is string))
-						result = (string)payload;
-					if (!ok)
-						return;
+					if (payload != null) {
+						bool ok;
+						if (ok = (payload is string))
+							result = (string)payload;
+						if (!ok)
+							return;
+					}
 					andThen(result);
 				};
 
@@ -494,15 +497,18 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
+
 			Action<Any> on = null;
 			if (andThen != null)
 				on = (Any payload) => {
 					string result = default;
-					bool ok;
-					if (ok = (payload is string))
-						result = (string)payload;
-					if (!ok)
-						return;
+					if (payload != null) {
+						bool ok;
+						if (ok = (payload is string))
+							result = (string)payload;
+						if (!ok)
+							return;
+					}
 					andThen(result);
 				};
 
@@ -513,14 +519,17 @@ namespace VscAppz {
 			var msg = new IpcMsg("window.showErrorMessage3", 2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
+
 			Action<Any> on = null;
 			if (andThen != null)
 				on = (Any payload) => {
 					MessageItem result = default;
-					bool ok;
-					(result, ok) = new MessageItem().populateFrom(payload);
-					if (!ok)
-						return;
+					if (payload != null) {
+						bool ok;
+						(result, ok) = new MessageItem().populateFrom(payload);
+						if (!ok)
+							return;
+					}
 					andThen(result);
 				};
 
@@ -532,14 +541,17 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
+
 			Action<Any> on = null;
 			if (andThen != null)
 				on = (Any payload) => {
 					MessageItem result = default;
-					bool ok;
-					(result, ok) = new MessageItem().populateFrom(payload);
-					if (!ok)
-						return;
+					if (payload != null) {
+						bool ok;
+						(result, ok) = new MessageItem().populateFrom(payload);
+						if (!ok)
+							return;
+					}
 					andThen(result);
 				};
 
@@ -550,15 +562,18 @@ namespace VscAppz {
 			var msg = new IpcMsg("window.showInformationMessage1", 2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
+
 			Action<Any> on = null;
 			if (andThen != null)
 				on = (Any payload) => {
 					string result = default;
-					bool ok;
-					if (ok = (payload is string))
-						result = (string)payload;
-					if (!ok)
-						return;
+					if (payload != null) {
+						bool ok;
+						if (ok = (payload is string))
+							result = (string)payload;
+						if (!ok)
+							return;
+					}
 					andThen(result);
 				};
 
@@ -570,15 +585,18 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
+
 			Action<Any> on = null;
 			if (andThen != null)
 				on = (Any payload) => {
 					string result = default;
-					bool ok;
-					if (ok = (payload is string))
-						result = (string)payload;
-					if (!ok)
-						return;
+					if (payload != null) {
+						bool ok;
+						if (ok = (payload is string))
+							result = (string)payload;
+						if (!ok)
+							return;
+					}
 					andThen(result);
 				};
 
@@ -589,14 +607,17 @@ namespace VscAppz {
 			var msg = new IpcMsg("window.showInformationMessage3", 2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
+
 			Action<Any> on = null;
 			if (andThen != null)
 				on = (Any payload) => {
 					MessageItem result = default;
-					bool ok;
-					(result, ok) = new MessageItem().populateFrom(payload);
-					if (!ok)
-						return;
+					if (payload != null) {
+						bool ok;
+						(result, ok) = new MessageItem().populateFrom(payload);
+						if (!ok)
+							return;
+					}
 					andThen(result);
 				};
 
@@ -608,14 +629,17 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
+
 			Action<Any> on = null;
 			if (andThen != null)
 				on = (Any payload) => {
 					MessageItem result = default;
-					bool ok;
-					(result, ok) = new MessageItem().populateFrom(payload);
-					if (!ok)
-						return;
+					if (payload != null) {
+						bool ok;
+						(result, ok) = new MessageItem().populateFrom(payload);
+						if (!ok)
+							return;
+					}
 					andThen(result);
 				};
 
@@ -626,15 +650,18 @@ namespace VscAppz {
 			var msg = new IpcMsg("window.showWarningMessage1", 2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
+
 			Action<Any> on = null;
 			if (andThen != null)
 				on = (Any payload) => {
 					string result = default;
-					bool ok;
-					if (ok = (payload is string))
-						result = (string)payload;
-					if (!ok)
-						return;
+					if (payload != null) {
+						bool ok;
+						if (ok = (payload is string))
+							result = (string)payload;
+						if (!ok)
+							return;
+					}
 					andThen(result);
 				};
 
@@ -646,15 +673,18 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
+
 			Action<Any> on = null;
 			if (andThen != null)
 				on = (Any payload) => {
 					string result = default;
-					bool ok;
-					if (ok = (payload is string))
-						result = (string)payload;
-					if (!ok)
-						return;
+					if (payload != null) {
+						bool ok;
+						if (ok = (payload is string))
+							result = (string)payload;
+						if (!ok)
+							return;
+					}
 					andThen(result);
 				};
 
@@ -665,14 +695,17 @@ namespace VscAppz {
 			var msg = new IpcMsg("window.showWarningMessage3", 2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
+
 			Action<Any> on = null;
 			if (andThen != null)
 				on = (Any payload) => {
 					MessageItem result = default;
-					bool ok;
-					(result, ok) = new MessageItem().populateFrom(payload);
-					if (!ok)
-						return;
+					if (payload != null) {
+						bool ok;
+						(result, ok) = new MessageItem().populateFrom(payload);
+						if (!ok)
+							return;
+					}
 					andThen(result);
 				};
 
@@ -684,14 +717,17 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
+
 			Action<Any> on = null;
 			if (andThen != null)
 				on = (Any payload) => {
 					MessageItem result = default;
-					bool ok;
-					(result, ok) = new MessageItem().populateFrom(payload);
-					if (!ok)
-						return;
+					if (payload != null) {
+						bool ok;
+						(result, ok) = new MessageItem().populateFrom(payload);
+						if (!ok)
+							return;
+					}
 					andThen(result);
 				};
 
@@ -724,15 +760,18 @@ namespace VscAppz {
 				}
 			}
 			msg.Data["options"] = options;
+
 			Action<Any> on = null;
 			if (andThen != null)
 				on = (Any payload) => {
 					string result = default;
-					bool ok;
-					if (ok = (payload is string))
-						result = (string)payload;
-					if (!ok)
-						return;
+					if (payload != null) {
+						bool ok;
+						if (ok = (payload is string))
+							result = (string)payload;
+						if (!ok)
+							return;
+					}
 					andThen(result);
 				};
 
@@ -750,7 +789,9 @@ namespace VscAppz {
 	public partial class MessageItem {
 		internal (MessageItem, bool) populateFrom(Any payload) {
 			var m = payload as Dictionary<string, Any>;
-			if (m == null) return (null, false);
+			if (m == null)
+				return (null, false);
+
 			{
 				if (m.TryGetValue("title", out var val) && val != null) {
 					bool ok;
@@ -761,7 +802,7 @@ namespace VscAppz {
 				} else return (null, false);
 			}
 			{
-				if (m.TryGetValue("isCloseAffordance", out var val)) {
+				if (m.TryGetValue("isCloseAffordance", out var val) && val != null) {
 					bool ok;
 					if (ok = (val is bool))
 						IsCloseAffordance = (bool)val;
@@ -770,7 +811,7 @@ namespace VscAppz {
 				}
 			}
 			{
-				if (m.TryGetValue("my", out var val)) {
+				if (m.TryGetValue("my", out var val) && val != null) {
 					bool ok;
 					if (ok = (val is Dictionary<string, Any>))
 						My = (Dictionary<string, Any>)val;

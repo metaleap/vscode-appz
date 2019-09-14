@@ -132,14 +132,16 @@ class Gen extends gen.Gen {
         for (const arg of method.args)
             if (!arg.isFromRetThenable)
                 src += `\t\t\t${__.msg}.Data["${arg.name}"] = ${this.caseLo(arg.name)};\n`;
-        src += `\t\t\tAction<Any> ${__.on} = null;\n`;
+        src += `\n\t\t\tAction<Any> ${__.on} = null;\n`;
         const lastarg = method.args[method.args.length - 1];
         if (lastarg.isFromRetThenable) {
             let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true);
             src += `\t\t\tif (${laname} != null)\n`;
             src += `\t\t\t\t${__.on} = (Any ${__.payload}) => {\n`;
             src += `\t\t\t\t\t${tret} ${__.result} = default;\n`;
-            src += this.genDecodeFromAny(prep, "\t\t\t\t\t", __.payload, __.result, tret, "", "return;");
+            src += `\t\t\t\t\tif (${__.payload} != null) {\n`;
+            src += this.genDecodeFromAny(prep, "\t\t\t\t\t\t", __.payload, __.result, tret, "", "return;");
+            src += `\t\t\t\t\t}\n`;
             src += `\t\t\t\t\t${laname}(${__.result});\n`;
             src += `\t\t\t\t};\n`;
         }
@@ -181,10 +183,10 @@ class Gen extends gen.Gen {
         let src = `\tpublic partial class ${typeName} {\n`;
         src += `\t\tinternal (${typeName}, bool) populateFrom(Any payload) {\n`;
         src += "\t\t\tvar m = payload as Dictionary<string, Any>;\n";
-        src += "\t\t\tif (m == null) return (null, false);\n";
+        src += "\t\t\tif (m == null)\n\t\t\t\treturn (null, false);\n\n";
         for (const _ of struct.fields) {
             src += "\t\t\t{\n";
-            src += `\t\t\t\tif (m.TryGetValue("${_.name}", out var val)${_.optional ? "" : " && val != null"}) {\n`;
+            src += `\t\t\t\tif (m.TryGetValue("${_.name}", out var val) && val != null) {\n`;
             src += this.genDecodeFromAny(prep, "\t\t\t\t\t", "val", this.caseUp(_.name), this.typeSpec(_.typeSpec), "", "return (null, false);");
             src += "\t\t\t\t" + (_.optional ? "}\n" : "} else return (null, false);\n");
             src += "\t\t\t}\n";

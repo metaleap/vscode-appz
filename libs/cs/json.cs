@@ -15,26 +15,31 @@ namespace VscAppz {
         internal static Any Load(JsonTextReader r, string origJsonSrcForErr, bool skipFirstRead) {
             if ((!skipFirstRead) && !r.Read())
                 throw err();
-            if (r.TokenType == JsonToken.Null) return null;
-            if (r.TokenType == JsonToken.String) return r.Value.ToString();
-            if (r.TokenType == JsonToken.Boolean) return bool.Parse(r.Value.ToString());
-            if (r.TokenType == JsonToken.Integer) return int.Parse(r.Value.ToString());
-            if (r.TokenType == JsonToken.Float) return double.Parse(r.Value.ToString());
-            if (r.TokenType == JsonToken.StartObject) {
-                Dictionary<string, Any> coll = new Dictionary<string, Any>(8);
+            switch (r.TokenType) {
+            case JsonToken.Null:
+                return null;
+            case JsonToken.String:
+                return r.Value.ToString();
+            case JsonToken.Boolean:
+                return (r.Value is bool) ? (bool)r.Value : bool.Parse(r.Value.ToString());
+            case JsonToken.Integer:
+                return (r.Value is int) ? (int)r.Value : int.Parse(r.Value.ToString());
+            case JsonToken.Float:
+                return (r.Value is double) ? (double)r.Value : double.Parse(r.Value.ToString());
+            case JsonToken.StartArray:
+                List<Any> list = new List<Any>(8);
+                while (r.Read() && r.TokenType != JsonToken.EndArray)
+                    list.Add(Load(r, origJsonSrcForErr, true));
+                return list;
+            case JsonToken.StartObject:
+                Dictionary<string, Any> dict = new Dictionary<string, Any>(8);
                 while (r.Read() && r.TokenType != JsonToken.EndObject) {
                     var key = r.Value;
                     if (r.TokenType != JsonToken.PropertyName || !r.Read())
                         throw err();
-                    coll.Add(key.ToString(), Load(r, origJsonSrcForErr, true));
+                    dict.Add(key.ToString(), Load(r, origJsonSrcForErr, true));
                 }
-                return coll;
-            }
-            if (r.TokenType == JsonToken.StartArray) {
-                List<Any> coll = new List<Any>(8);
-                while (r.Read() && r.TokenType != JsonToken.EndArray)
-                    coll.Add(Load(r, origJsonSrcForErr, true));
-                return coll;
+                return dict;
             }
             throw err();
             Exception err() => new JsonException(origJsonSrcForErr);
@@ -42,19 +47,21 @@ namespace VscAppz {
     }
 
     internal partial class IpcMsg {
-        internal static IpcMsg Parse(string jsonSrc) {
+        internal static IpcMsg FromJson(string jsonSrc) {
             Dictionary<string, Any> dict = Json.Load(jsonSrc) as Dictionary<string, Any>;
-            var me = new IpcMsg();
+            var ret = new IpcMsg();
+            if (dict.TryGetValue("qName", out var n))
+                ret.QName = (n == null) ? null : (string)n;
             if (dict.TryGetValue("cbId", out var a))
-                me.ContId = (string)a;
+                ret.ContId = (a == null) ? null : (string)a;
             if (dict.TryGetValue("data", out var d) )
-                me.Data = (Dictionary<string, Any>)d;
-            if (me.Data == null || me.Data.Count == 0)
+                ret.Data = (d == null) ? null : (Dictionary<string, Any>)d;
+            if (ret.Data == null || ret.Data.Count == 0)
                 throw new JsonException("field `data` is missing");
-            return me;
+            return ret;
         }
 
-        public override string ToString() {
+        internal string ToJson() {
             using (var w = new StringWriter()) {
                 var jw = new JsonTextWriter(w);
                 jw.WriteStartObject();
@@ -62,21 +69,22 @@ namespace VscAppz {
                     jw.WritePropertyName("qName");
                     jw.WriteValue(QName);
                 }
+                jw.WritePropertyName("data");
+                jw.WriteStartObject();
                 if (Data != null) {
-                    jw.WritePropertyName("data");
-                    jw.WriteStartObject();
                     var js = new JsonSerializer();
                     foreach (var kvp in Data) {
                         jw.WritePropertyName(kvp.Key);
                         js.Serialize(jw, kvp.Value);
                     }
-                    jw.WriteEndObject();
                 }
+                jw.WriteEndObject();
                 if (!string.IsNullOrEmpty(ContId)) {
                     jw.WritePropertyName("cbId");
                     jw.WriteValue(ContId);
                 }
                 jw.WriteEndObject();
+                jw.Flush();
                 return w.ToString();
             }
         }

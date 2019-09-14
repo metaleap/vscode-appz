@@ -6,14 +6,14 @@ class Gen extends gen.Gen {
         const pkgname = prep.fromOrig.moduleName;
         let src = "// " + this.doNotEditComment("vscext") + "\n\n";
         src += "import * as node_proc from 'child_process'\n";
-        src += "import * as vscode from 'vscode'\n\n";
+        src += `import * as ${pkgname} from '${pkgname}'\n\n`;
         src += "import * as ppio from './procspipeio'\n\n";
         for (const it of prep.enums)
-            src += "type " + it.name + " = vscode." + it.name + "\n";
+            src += "type " + it.name + " = " + pkgname + "." + it.name + "\n";
         for (const it of prep.structs) {
             const fieldsextra = it.fields.filter(_ => _.isExtBaggage);
             if ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length)) {
-                src += "interface " + it.name + " extends vscode." + it.name + " {\n";
+                src += "interface " + it.name + " extends " + pkgname + "." + it.name + " {\n";
                 for (const f of fieldsextra)
                     src += `\t${f.name + (f.optional ? '?' : '')}: ${this.typeSpec(f.typeSpec)}\n`;
                 for (const ff of it.funcFields)
@@ -21,7 +21,7 @@ class Gen extends gen.Gen {
                 src += "}\n";
             }
             else
-                src += "type " + it.name + " = vscode." + it.name + "\n";
+                src += "type " + it.name + " = " + pkgname + "." + it.name + "\n";
         }
         src += "\nexport function handle(msg: ppio.IpcMsg, proc: node_proc.ChildProcess): Thenable<any> {\n";
         src += "\tconst idxdot = msg.qName.lastIndexOf('.')\n";
@@ -78,7 +78,7 @@ class Gen extends gen.Gen {
         if (from === gen.ScriptPrimType.Undefined)
             return "undefined";
         if (from === gen.ScriptPrimType.Dict)
-            return "{ [_:string]: any }";
+            return "{ [_: string]: any }";
         const tarr = gen.typeArrOf(from);
         if (tarr)
             return this.typeSpec(tarr) + "[]";

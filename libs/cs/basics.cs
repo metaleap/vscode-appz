@@ -5,6 +5,16 @@ namespace VscAppz {
 
     using Any = System.Object;
 
+    internal partial class IpcMsg {
+        internal string QName = "";
+        internal Dictionary<string, Any> Data;
+        internal string ContId;
+
+        internal IpcMsg() { }
+        internal IpcMsg(string qName, int numData, string contId = "") =>
+            (QName, Data, ContId) = (qName, new Dictionary<string, Any>(numData), contId);
+    }
+
     /// <summary>Everything related to the running of your app.</summary>
     public static class Vsc {
         /// <summary>Used by the default `OnError` handler to print error details to stderr (aka. `Console.Error`).</summary>
@@ -31,16 +41,6 @@ namespace VscAppz {
             new impl(stdIn, stdOut);
     }
 
-    internal partial class IpcMsg {
-        internal string QName = "";
-        internal Dictionary<string, Any> Data;
-        internal string ContId;
-
-        internal IpcMsg() { }
-        internal IpcMsg(string qName, int numData, string contId = "") =>
-            (QName, Data, ContId) = (qName, new Dictionary<string, Any>(numData), contId);
-    }
-
     internal partial class impl {
         internal readonly TextReader stdIn;
         internal readonly TextWriter stdOut;
@@ -61,7 +61,7 @@ namespace VscAppz {
             while (true) try {
                 jsonmsg = ""; // so that the `catch` at the end won't use prior one
                 if (!string.IsNullOrEmpty(jsonmsg = stdIn.ReadLine().Trim())) {
-                    var msg = IpcMsg.Parse(jsonmsg);
+                    var msg = IpcMsg.FromJson(jsonmsg);
 
                     Action<Any> cb = null;
                     Func<Any[], (Any, bool)> fn = null;
@@ -88,6 +88,7 @@ namespace VscAppz {
                         send(new IpcMsg("", 1, msg.ContId) { Data = {
                             [ok ? "yay" : "nay"] = ok ? ret : string.Format("unexpected args: {0}", fnargs)
                         } }, null);
+
                     } else
                         throw new Exception("specified `cbId` not known locally");
                 }
@@ -104,7 +105,7 @@ namespace VscAppz {
                     looping = true;
                 if (on != null)
                     cbWaiting[msg.ContId = nextFuncId()] = on;
-                try { stdOut.WriteLine(msg.ToString()); }
+                try { stdOut.WriteLine(msg.ToJson()); }
                 catch (Exception _) { err = _;}
             }
             if (err != null ) {
