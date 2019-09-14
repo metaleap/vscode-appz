@@ -6,25 +6,27 @@
 ## Usage
 
 ```go
-var OnError func(vsc Vscode, err Any, jsonMsg Any)
+var OnError func(this Vscode, err Any, jsonMsg Any)
 ```
-Called on every `error` during the forever-looping stdin/stdout communication
-with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be
-set to `nil` (if so desired, set to a no-op func instead).
+Reports problems during the ongoing forever-looping stdin/stdout communication
+with the `vscode-appz` VSC extension. Defaults to a stderr println.
 
-`vsc` ── the `Vscode` having caught the error
-
-`err` ── if an `error`, it occurred on the Go side, else something reported by
-the counterparty (decoded JSON value).
+`err` ── if an `error`, it occurred on the Go side (I/O or JSON), else some
+JSON-decoded Go value from whatever was transmitted as the problem data (if
+anything) by VS Code.
 
 `jsonMsg` ─ if a `string`, the incoming JSON message; if a
-`map[string]interface{}` the outgoing one.
+`map[string]interface{}`, the outgoing one.
+
+```go
+var OnErrorDefaultOutputFormat = "err:\t%v\njson:\t%v\n\n"
+```
 
 #### type Any
 
 ```go
-type Any = interface{} // must remain an `=` type alias or json stuff will fail at runtime not compile-time. just to reduce brackets-noise throughout
-
+type Any = interface {
+}
 ```
 
 Any is a type alias of `interface{}` for legibility reasons.

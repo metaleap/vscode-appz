@@ -2,8 +2,9 @@
 namespace VscAppz {
 	using System;
 	using System.Collections.Generic;
-
 	using Newtonsoft.Json;
+
+	using Any = System.Object;
 
 	/// <summary>
 	/// Type Definition for Visual Studio Code 1.37 Extension API
@@ -73,7 +74,7 @@ namespace VscAppz {
 
 		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
 		[JsonProperty("my")]
-		public Dictionary<string, object> My;
+		public Dictionary<string, Any> My;
 
 		/// <summary>
 		/// Represents an action that is shown with an information, warning, or
@@ -96,7 +97,7 @@ namespace VscAppz {
 		/// Note: this option is ignored for non-modal messages.
 		/// </param>
 		/// <param name="my">Free-form custom data, preserved across a roundtrip.</param>
-		public MessageItem(string title = default, bool isCloseAffordance = default, Dictionary<string, object> my = default) =>
+		public MessageItem(string title = default, bool isCloseAffordance = default, Dictionary<string, Any> my = default) =>
 			(Title, IsCloseAffordance, My) = (title, isCloseAffordance, my);
 	}
 
@@ -374,9 +375,9 @@ namespace VscAppz {
 			var msg = new msgToVsc("window", "showErrorMessage1", 2);
 			msg.Payload["message"] = message;
 			msg.Payload["items"] = items;
-			Action<object> on = null;
+			Action<Any> on = null;
 			if (andThen != null)
-				on = (object payload) => {
+				on = (Any payload) => {
 					string result = default;
 					bool ok;
 					if (ok = (payload is string))
@@ -394,9 +395,9 @@ namespace VscAppz {
 			msg.Payload["message"] = message;
 			msg.Payload["options"] = options;
 			msg.Payload["items"] = items;
-			Action<object> on = null;
+			Action<Any> on = null;
 			if (andThen != null)
-				on = (object payload) => {
+				on = (Any payload) => {
 					string result = default;
 					bool ok;
 					if (ok = (payload is string))
@@ -413,9 +414,9 @@ namespace VscAppz {
 			var msg = new msgToVsc("window", "showErrorMessage3", 2);
 			msg.Payload["message"] = message;
 			msg.Payload["items"] = items;
-			Action<object> on = null;
+			Action<Any> on = null;
 			if (andThen != null)
-				on = (object payload) => {
+				on = (Any payload) => {
 					MessageItem result = default;
 					bool ok;
 					(result, ok) = new MessageItem().populateFrom(payload);
@@ -432,9 +433,9 @@ namespace VscAppz {
 			msg.Payload["message"] = message;
 			msg.Payload["options"] = options;
 			msg.Payload["items"] = items;
-			Action<object> on = null;
+			Action<Any> on = null;
 			if (andThen != null)
-				on = (object payload) => {
+				on = (Any payload) => {
 					MessageItem result = default;
 					bool ok;
 					(result, ok) = new MessageItem().populateFrom(payload);
@@ -450,9 +451,9 @@ namespace VscAppz {
 			var msg = new msgToVsc("window", "showInformationMessage1", 2);
 			msg.Payload["message"] = message;
 			msg.Payload["items"] = items;
-			Action<object> on = null;
+			Action<Any> on = null;
 			if (andThen != null)
-				on = (object payload) => {
+				on = (Any payload) => {
 					string result = default;
 					bool ok;
 					if (ok = (payload is string))
@@ -470,9 +471,9 @@ namespace VscAppz {
 			msg.Payload["message"] = message;
 			msg.Payload["options"] = options;
 			msg.Payload["items"] = items;
-			Action<object> on = null;
+			Action<Any> on = null;
 			if (andThen != null)
-				on = (object payload) => {
+				on = (Any payload) => {
 					string result = default;
 					bool ok;
 					if (ok = (payload is string))
@@ -489,9 +490,9 @@ namespace VscAppz {
 			var msg = new msgToVsc("window", "showInformationMessage3", 2);
 			msg.Payload["message"] = message;
 			msg.Payload["items"] = items;
-			Action<object> on = null;
+			Action<Any> on = null;
 			if (andThen != null)
-				on = (object payload) => {
+				on = (Any payload) => {
 					MessageItem result = default;
 					bool ok;
 					(result, ok) = new MessageItem().populateFrom(payload);
@@ -508,9 +509,9 @@ namespace VscAppz {
 			msg.Payload["message"] = message;
 			msg.Payload["options"] = options;
 			msg.Payload["items"] = items;
-			Action<object> on = null;
+			Action<Any> on = null;
 			if (andThen != null)
-				on = (object payload) => {
+				on = (Any payload) => {
 					MessageItem result = default;
 					bool ok;
 					(result, ok) = new MessageItem().populateFrom(payload);
@@ -526,9 +527,9 @@ namespace VscAppz {
 			var msg = new msgToVsc("window", "showWarningMessage1", 2);
 			msg.Payload["message"] = message;
 			msg.Payload["items"] = items;
-			Action<object> on = null;
+			Action<Any> on = null;
 			if (andThen != null)
-				on = (object payload) => {
+				on = (Any payload) => {
 					string result = default;
 					bool ok;
 					if (ok = (payload is string))
@@ -546,9 +547,9 @@ namespace VscAppz {
 			msg.Payload["message"] = message;
 			msg.Payload["options"] = options;
 			msg.Payload["items"] = items;
-			Action<object> on = null;
+			Action<Any> on = null;
 			if (andThen != null)
-				on = (object payload) => {
+				on = (Any payload) => {
 					string result = default;
 					bool ok;
 					if (ok = (payload is string))
@@ -565,9 +566,9 @@ namespace VscAppz {
 			var msg = new msgToVsc("window", "showWarningMessage3", 2);
 			msg.Payload["message"] = message;
 			msg.Payload["items"] = items;
-			Action<object> on = null;
+			Action<Any> on = null;
 			if (andThen != null)
-				on = (object payload) => {
+				on = (Any payload) => {
 					MessageItem result = default;
 					bool ok;
 					(result, ok) = new MessageItem().populateFrom(payload);
@@ -584,9 +585,9 @@ namespace VscAppz {
 			msg.Payload["message"] = message;
 			msg.Payload["options"] = options;
 			msg.Payload["items"] = items;
-			Action<object> on = null;
+			Action<Any> on = null;
 			if (andThen != null)
-				on = (object payload) => {
+				on = (Any payload) => {
 					MessageItem result = default;
 					bool ok;
 					(result, ok) = new MessageItem().populateFrom(payload);
@@ -608,7 +609,7 @@ namespace VscAppz {
 					if (fn != null) {
 						options.ValidateInput_AppzFuncId = this.nextFuncId();
 						fnids.Add(options.ValidateInput_AppzFuncId);
-						this.cbOther[options.ValidateInput_AppzFuncId] = (object[] args) => {
+						this.cbOther[options.ValidateInput_AppzFuncId] = (Any[] args) => {
 							if (args != null && args.Length == 1) {
 								string a0 = default;
 								bool ok;
@@ -624,9 +625,9 @@ namespace VscAppz {
 				}
 			}
 			msg.Payload["options"] = options;
-			Action<object> on = null;
+			Action<Any> on = null;
 			if (andThen != null)
-				on = (object payload) => {
+				on = (Any payload) => {
 					string result = default;
 					bool ok;
 					if (ok = (payload is string))
@@ -636,7 +637,7 @@ namespace VscAppz {
 					andThen(result);
 				};
 
-			this.send(msg, (object payload) => {
+			this.send(msg, (Any payload) => {
 				if (fnids.Count != 0)
 					lock (this)
 						foreach (var fnid in fnids)
@@ -648,8 +649,8 @@ namespace VscAppz {
 	}
 
 	public partial class MessageItem {
-		internal (MessageItem, bool) populateFrom(object payload) {
-			var m = payload as Dictionary<string, object>;
+		internal (MessageItem, bool) populateFrom(Any payload) {
+			var m = payload as Dictionary<string, Any>;
 			if (m == null) return (null, false);
 			{
 				if (m.TryGetValue("title", out var val) && val != null) {
@@ -672,8 +673,8 @@ namespace VscAppz {
 			{
 				if (m.TryGetValue("my", out var val)) {
 					bool ok;
-					if (ok = (val is Dictionary<string, object>))
-						My = (Dictionary<string, object>)val;
+					if (ok = (val is Dictionary<string, Any>))
+						My = (Dictionary<string, Any>)val;
 					if (!ok)
 						return (null, false);
 				}

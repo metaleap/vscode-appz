@@ -19,6 +19,7 @@ namespace VscAppzDemo {
             var buttons = new[] {"Show Quick Pick...", "Show Input Box..."};
             win.ShowInformationMessage(greethow + ", " + greetname + "! What to try out?",
                 buttons, button => {
+                    Console.Error.WriteLine("button choice: " + button);
                     if (button == "")
                         exit("");
 

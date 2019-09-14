@@ -4,13 +4,15 @@ namespace VscAppz {
     using System.IO;
     using Newtonsoft.Json;
 
+    using Any = System.Object;
+
     internal static class Json {
-        internal static object Load(string jsonSrc) {
+        internal static Any Load(string jsonSrc) {
             using (StringReader jsonsrc = new StringReader(jsonSrc))
                 return load(new JsonTextReader(jsonsrc), jsonSrc, false);
         }
 
-        internal static object load(JsonTextReader r, string origJsonSrcForErr, bool skipFirstRead) {
+        internal static Any load(JsonTextReader r, string origJsonSrcForErr, bool skipFirstRead) {
             if ((!skipFirstRead) && !r.Read())
                 throw err();
             if (r.TokenType == JsonToken.Null) return null;
@@ -19,7 +21,7 @@ namespace VscAppz {
             if (r.TokenType == JsonToken.Integer) return int.Parse(r.Value.ToString());
             if (r.TokenType == JsonToken.Float) return double.Parse(r.Value.ToString());
             if (r.TokenType == JsonToken.StartObject) {
-                Dictionary<string, object> coll = new Dictionary<string, object>(8);
+                Dictionary<string, Any> coll = new Dictionary<string, Any>(8);
                 while (r.Read() && r.TokenType != JsonToken.EndObject) {
                     var key = r.Value;
                     if (r.TokenType != JsonToken.PropertyName || !r.Read())
@@ -29,7 +31,7 @@ namespace VscAppz {
                 return coll;
             }
             if (r.TokenType == JsonToken.StartArray) {
-                List<object> coll = new List<object>(8);
+                List<Any> coll = new List<Any>(8);
                 while (r.Read() && r.TokenType != JsonToken.EndArray)
                     coll.Add(load(r, origJsonSrcForErr, true));
                 return coll;
@@ -41,7 +43,7 @@ namespace VscAppz {
 
     internal partial class msgFromVsc {
         internal static msgFromVsc parse(string jsonSrc) {
-            Dictionary<string, object> dict = Json.Load(jsonSrc) as Dictionary<string, object>;
+            Dictionary<string, Any> dict = Json.Load(jsonSrc) as Dictionary<string, Any>;
             var me = new msgFromVsc();
             if (dict.TryGetValue("failed", out var f)) me.Failed = (bool)f;
             if (dict.TryGetValue("andThen", out var a)) me.AndThen = (string)a;

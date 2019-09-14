@@ -70,7 +70,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             src += '\n' + this.genDocSrc('\t', this.genDocLns(gen.docs(method.fromOrig.decl, () => method.args.find(_ => _.isFromRetThenable))))
                 + "\t" + this.caseUp(method.name) + "("
             for (const arg of method.args)
-                src += this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional, 'string') + ", "
+                src += this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional) + ", "
             src += ")\n"
         }
         src += "}\n\n"
@@ -85,7 +85,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         const funcfields = gen.argsFuncFields(prep, method.args)
         let
             src = "func (me *impl) " + this.caseUp(method.name) + "("
-                + method.args.map(arg => this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional, 'string')).join(', ')
+                + method.args.map(arg => this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional)).join(', ')
                 + ") {\n"
 
         const numargs = method.args.filter(_ => !_.isFromRetThenable).length
@@ -243,11 +243,11 @@ export class Gen extends gen.Gen implements gen.IGen {
         return isSub ? ret : ret.slice(1)
     }
 
-    typeSpecNilable(from: gen.TypeSpec, ensureNilable: boolean, ...assumeNilable: string[]): string {
+    typeSpecNilable(from: gen.TypeSpec, ensureNilable: boolean): string {
         const nullableprefixes = ['*', '[]', 'map[', 'interface{', 'func(']
         let src = this.typeSpec(from)
         if (ensureNilable && (!nullableprefixes.some(_ => src.startsWith(_)))
-            && (assumeNilable && assumeNilable.length && !assumeNilable.some(_ => src === _))
+            && (!['Any', 'string'].some(_ => src === _))
         )
             src = "*" + src
         return src

@@ -6,8 +6,9 @@ class Gen extends gen.Gen {
         let src = "// " + this.doNotEditComment("csharp") + "\n";
         src += `namespace VscAppz {\n`;
         src += "\tusing System;\n";
-        src += "\tusing System.Collections.Generic;\n\n";
+        src += "\tusing System.Collections.Generic;\n";
         src += "\tusing Newtonsoft.Json;\n\n";
+        src += "\tusing Any = System.Object;\n\n";
         const doclns = this.genDocLns(gen.docs(prep.fromOrig.fromOrig));
         src += this.genDocSrc('\t', doclns);
         src += `\tpublic interface I${this.caseUp(prep.fromOrig.moduleName)} {\n`;
@@ -106,7 +107,7 @@ class Gen extends gen.Gen {
                 src += `\t\t\t\t\tif (${__.fn} != null) {\n`;
                 src += `\t\t\t\t\t\t${facc}_AppzFuncId = this.nextFuncId();\n`;
                 src += `\t\t\t\t\t\t${__.fnids}.Add(${facc}_AppzFuncId);\n`;
-                src += `\t\t\t\t\t\tthis.cbOther[${facc}_AppzFuncId] = (object[] args) => {\n`;
+                src += `\t\t\t\t\t\tthis.cbOther[${facc}_AppzFuncId] = (Any[] args) => {\n`;
                 const args = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)[0];
                 src += `\t\t\t\t\t\t\tif (args != null && args.Length == ${args.length}) {\n`;
                 for (let a = 0; a < args.length; a++) {
@@ -126,19 +127,19 @@ class Gen extends gen.Gen {
         for (const arg of method.args)
             if (!arg.isFromRetThenable)
                 src += `\t\t\t${__.msg}.Payload["${arg.name}"] = ${this.caseLo(arg.name)};\n`;
-        src += `\t\t\tAction<object> ${__.on} = null;\n`;
+        src += `\t\t\tAction<Any> ${__.on} = null;\n`;
         const lastarg = method.args[method.args.length - 1];
         if (lastarg.isFromRetThenable) {
             let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true);
             src += `\t\t\tif (${laname} != null)\n`;
-            src += `\t\t\t\t${__.on} = (object ${__.payload}) => {\n`;
+            src += `\t\t\t\t${__.on} = (Any ${__.payload}) => {\n`;
             src += `\t\t\t\t\t${tret} ${__.result} = default;\n`;
             src += this.genDecodeFromAny(prep, "\t\t\t\t\t", __.payload, __.result, tret, "", "return;");
             src += `\t\t\t\t\t${laname}(${__.result});\n`;
             src += `\t\t\t\t};\n`;
         }
         if (funcfields.length) {
-            src += `\n\t\t\tthis.send(${__.msg}, (object payload) => {\n`;
+            src += `\n\t\t\tthis.send(${__.msg}, (Any payload) => {\n`;
             src += `\t\t\t\tif (${__.fnids}.Count != 0)\n`;
             src += `\t\t\t\t\tlock (this)\n`;
             src += `\t\t\t\t\t\tforeach (var ${__.fnid} in ${__.fnids})\n`;
@@ -173,8 +174,8 @@ class Gen extends gen.Gen {
         if (!struct)
             throw (typeName);
         let src = `\tpublic partial class ${typeName} {\n`;
-        src += `\t\tinternal (${typeName}, bool) populateFrom(object payload) {\n`;
-        src += "\t\t\tvar m = payload as Dictionary<string, object>;\n";
+        src += `\t\tinternal (${typeName}, bool) populateFrom(Any payload) {\n`;
+        src += "\t\t\tvar m = payload as Dictionary<string, Any>;\n";
         src += "\t\t\tif (m == null) return (null, false);\n";
         for (const _ of struct.fields) {
             src += "\t\t\t{\n";
@@ -209,7 +210,7 @@ class Gen extends gen.Gen {
         if (!from)
             return "";
         if (from === gen.ScriptPrimType.Any)
-            return "object";
+            return "Any";
         if (from === gen.ScriptPrimType.Boolean)
             return "bool";
         if (from === gen.ScriptPrimType.String)
@@ -217,7 +218,7 @@ class Gen extends gen.Gen {
         if (from === gen.ScriptPrimType.Number)
             return "int";
         if (from === gen.ScriptPrimType.Dict)
-            return "Dictionary<string, object>";
+            return "Dictionary<string, Any>";
         if (from === gen.ScriptPrimType.Null || from === gen.ScriptPrimType.Undefined)
             throw (from);
         const tarr = gen.typeArrOf(from);
@@ -244,7 +245,7 @@ class Gen extends gen.Gen {
                 return "Action<" + this.typeSpec(tprom[0]) + ">";
         if (typeof from === 'string')
             return from;
-        return "object";
+        return "Any";
     }
 }
 exports.Gen = Gen;

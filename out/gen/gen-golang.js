@@ -63,7 +63,7 @@ class Gen extends gen.Gen {
             src += '\n' + this.genDocSrc('\t', this.genDocLns(gen.docs(method.fromOrig.decl, () => method.args.find(_ => _.isFromRetThenable))))
                 + "\t" + this.caseUp(method.name) + "(";
             for (const arg of method.args)
-                src += this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional, 'string') + ", ";
+                src += this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional) + ", ";
             src += ")\n";
         }
         src += "}\n\n";
@@ -74,7 +74,7 @@ class Gen extends gen.Gen {
     genImpl(prep, it, method) {
         const funcfields = gen.argsFuncFields(prep, method.args);
         let src = "func (me *impl) " + this.caseUp(method.name) + "("
-            + method.args.map(arg => this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional, 'string')).join(', ')
+            + method.args.map(arg => this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional)).join(', ')
             + ") {\n";
         const numargs = method.args.filter(_ => !_.isFromRetThenable).length;
         const __ = gen.idents(method.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result');
@@ -223,11 +223,11 @@ class Gen extends gen.Gen {
             }
         return isSub ? ret : ret.slice(1);
     }
-    typeSpecNilable(from, ensureNilable, ...assumeNilable) {
+    typeSpecNilable(from, ensureNilable) {
         const nullableprefixes = ['*', '[]', 'map[', 'interface{', 'func('];
         let src = this.typeSpec(from);
         if (ensureNilable && (!nullableprefixes.some(_ => src.startsWith(_)))
-            && (assumeNilable && assumeNilable.length && !assumeNilable.some(_ => src === _)))
+            && (!['Any', 'string'].some(_ => src === _)))
             src = "*" + src;
         return src;
     }
