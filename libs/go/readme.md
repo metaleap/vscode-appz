@@ -6,10 +6,19 @@
 ## Usage
 
 ```go
-var OnError func(impl Vscode, err error, jsonMsgIncoming string)
+var OnError func(vsc Vscode, err Any, jsonMsg Any)
 ```
 Called on every `error` during the forever-looping stdin/stdout communication
-with the `vscode-appz` VSC extension.
+with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be
+set to `nil` (if so desired, set to a no-op func instead).
+
+`vsc` ── the `Vscode` having caught the error
+
+`err` ── if an `error`, it occurred on the Go side, else something reported by
+the counterparty (decoded JSON value).
+
+`jsonMsg` ─ if a `string`, the incoming JSON message; if a
+`map[string]interface{}` the outgoing one.
 
 #### type Any
 

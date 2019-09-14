@@ -3,12 +3,23 @@ package vscAppz
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"strconv"
 	"strings"
 	"sync"
 )
+
+// Called on every `error` during the forever-looping stdin/stdout communication with the `vscode-appz` VSC extension.
+// Defaults to a stderr println. Must not be set to `nil` (if so desired, set to a no-op func instead).
+//
+// `vsc` ── the `Vscode` having caught the error
+//
+// `err` ── if an `error`, it occurred on the Go side, else something reported by the counterparty (decoded JSON value).
+//
+// `jsonMsg` ─ if a `string`, the incoming JSON message; if a `map[string]interface{}` the outgoing one.
+var OnError func(vsc Vscode, err Any, jsonMsg Any)
 
 // Any is a type alias of `interface{}` for legibility reasons.
 type Any = interface{} // must remain an `=` type alias or json stuff will fail at runtime not compile-time. just to reduce brackets-noise throughout
@@ -40,18 +51,12 @@ type impl struct {
 	}
 }
 
-// Called on every `error` during the forever-looping stdin/stdout communication with the `vscode-appz` VSC extension.
-var OnError func(impl Vscode, err error, jsonMsgIncoming string)
-
 func init() {
 	var stderr sync.Mutex
-	OnError = func(_ Vscode, err error, jsonmsg string) {
-		if jsonmsg != "" {
-			jsonmsg = ", jsonMsgIncoming:" + jsonmsg
-		}
+	OnError = func(_ Vscode, err Any, jsonmsg Any) {
 		stderr.Lock()
-		println(err.Error() + jsonmsg)
-		stderr.Unlock()
+		defer stderr.Unlock()
+		_, _ = os.Stderr.WriteString(fmt.Sprintf("%v ── %v\n", err, jsonmsg))
 	}
 }
 
@@ -81,14 +86,19 @@ func (me *impl) loopReadln() {
 	for me.readln.Scan() {
 		if jsonmsg := strings.TrimSpace(me.readln.Text()); jsonmsg != "" {
 			var msg msgFromVsc
-			err := json.Unmarshal([]byte(jsonmsg), &msg)
-			if err == nil {
+			if err := json.Unmarshal([]byte(jsonmsg), &msg); err != nil {
+				OnError(me, err, jsonmsg)
+			} else {
 				me.state.Lock()
 				cb, fn := me.state.callbacks.waiting[msg.AndThen], me.state.callbacks.other[msg.AndThen]
 				delete(me.state.callbacks.waiting, msg.AndThen)
 				me.state.Unlock()
-				if cb != nil && !msg.Failed {
-					cb(msg.Payload)
+				if cb != nil {
+					if !msg.Failed {
+						cb(msg.Payload)
+					} else {
+						OnError(me, msg.Payload, jsonmsg)
+					}
 				} else if fn != nil {
 					args, ok := msg.Payload.([]Any)
 					if !ok {
@@ -103,9 +113,6 @@ func (me *impl) loopReadln() {
 						},
 					}, nil)
 				}
-			}
-			if err != nil && OnError != nil {
-				OnError(me, err, jsonmsg)
 			}
 		}
 	}
@@ -123,8 +130,8 @@ func (me *impl) send(msg *msgToVsc, on func(Any)) {
 	}
 	err := me.jsonOut.Encode(msg)
 	me.state.Unlock()
-	if err != nil && OnError != nil {
-		OnError(me, err, "")
+	if err != nil {
+		OnError(me, err, msg.Payload)
 	}
 	if startloop {
 		me.loopReadln()

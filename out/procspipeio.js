@@ -1,26 +1,29 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const appz_1 = require("./appz");
 const vscgen = require("./vscode.gen");
 const node_proc = require("child_process");
 const node_pipeio = require("readline");
 const vsc = require("vscode");
-const vscwin = vsc.window;
+const vscwin = vsc.window, vscproj = vsc.workspace;
 const dbgLogJsonMsgs = true;
 exports.procs = {};
 let pipes = {};
 function disposeAll() {
-    let proc, pipe;
+    let proc, both;
     const allprocs = exports.procs, allpipes = pipes;
     exports.procs = {};
     pipes = {};
     for (const pid in allpipes)
-        if (pipe = allpipes[pid]) {
+        if ((both = allpipes[pid]) && both.length) {
+            if (both[1])
+                both[1].dispose();
             try {
-                pipe.removeAllListeners();
+                both[0].removeAllListeners();
             }
             catch (_) { }
             try {
-                pipe.close();
+                both[0].close();
             }
             catch (_) { }
         }
@@ -38,15 +41,19 @@ function disposeAll() {
 }
 exports.disposeAll = disposeAll;
 function disposeProc(pId) {
-    const pipe = pipes[pId];
-    if (pipe) {
+    const both = pipes[pId];
+    if (both && both.length) {
         delete pipes[pId];
+        if (both[1] && cfgAutoCloseStderrOutputsOnProgExit())
+            both[1].dispose();
+        else
+            appz_1.vscCtx.subscriptions.push(both[1]);
         try {
-            pipe.removeAllListeners();
+            both[0].removeAllListeners();
         }
         catch (_) { }
         try {
-            pipe.close();
+            both[0].close();
         }
         catch (_) { }
     }
@@ -86,7 +93,7 @@ function proc(fullCmd) {
             vscwin.showErrorMessage(e);
         }
         if (p)
-            if (!(p.pid && p.stdin && p.stdin.writable && p.stdout && p.stdout.readable && p.stderr && p.stderr.readable))
+            if (!(p.pid && p.stdin && p.stdin.writable && p.stdout && p.stdout.readable))
                 try {
                     p.kill();
                 }
@@ -95,9 +102,7 @@ function proc(fullCmd) {
                     p = null;
                 }
             else {
-                p.stderr.on('data', foo => vscwin.showWarningMessage(foo));
-                p.stdout.on('data', moo => vscwin.showInformationMessage(moo));
-                const pipe = node_pipeio.createInterface({
+                const pid = p.pid, pipe = node_pipeio.createInterface({
                     input: p.stdout, terminal: false, historySize: 0
                 });
                 if (!pipe)
@@ -111,13 +116,24 @@ function proc(fullCmd) {
                 else {
                     pipe.setMaxListeners(0);
                     pipe.on('line', onProcRecv(p));
-                    pipes[p.pid] = pipe;
-                    p.on('error', onProcErr(p.pid));
-                    const ongone = onProgEnd(p.pid);
+                    pipes[pid] = [pipe, null];
+                    p.on('error', onProcErr(pid));
+                    const ongone = onProgEnd(pid);
                     p.on('disconnect', ongone);
                     p.on('close', ongone);
                     p.on('exit', ongone);
-                    p.stderr.on('data', vscwin.showWarningMessage);
+                    if (p.stderr)
+                        p.stderr.on('data', _ => {
+                            const both = pipes[pid];
+                            if (both) {
+                                let vscout = both[1];
+                                if (!vscout) {
+                                    both[1] = vscout = vscwin.createOutputChannel("Appz: " + fullCmd);
+                                    pipes[pid] = both;
+                                }
+                                vscout.appendLine(_);
+                            }
+                        });
                 }
             }
         if (p)
@@ -219,9 +235,9 @@ function onProcRecv(proc) {
         }
         catch (_) { }
         const onfail = (err) => {
-            vscwin.showWarningMessage(err);
+            vscwin.showErrorMessage(err);
             if (msg && msg.andThen)
-                send(proc, { andThen: msg.andThen, failed: true });
+                send(proc, { andThen: msg.andThen, payload: err, failed: true });
         };
         if (!msg)
             vscwin.showErrorMessage(ln);
@@ -250,4 +266,7 @@ function onProcRecv(proc) {
         else
             vscwin.showErrorMessage(ln);
     };
+}
+function cfgAutoCloseStderrOutputsOnProgExit() {
+    return vscproj.getConfiguration("appz").get("autoCloseStderrOutputsOnProgExit", true);
 }

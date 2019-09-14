@@ -1,3 +1,4 @@
+import { vscCtx } from './appz'
 import * as ipc from './ipcprotocol'
 import * as vscgen from './vscode.gen'
 
@@ -5,28 +6,28 @@ import * as node_proc from 'child_process'
 import * as node_pipeio from 'readline'
 
 import * as vsc from 'vscode'
-const vscwin = vsc.window
+const vscwin = vsc.window, vscproj = vsc.workspace
 
 
 
 const dbgLogJsonMsgs = true
 
 export let procs: { [_key: string]: node_proc.ChildProcess } = {}
-let pipes: { [_pid: number]: node_pipeio.ReadLine } = {}
+let pipes: { [_pid: number]: [node_pipeio.ReadLine, vsc.OutputChannel] } = {}
 
 
 
 export function disposeAll() {
     let proc: node_proc.ChildProcess,
-        pipe: node_pipeio.ReadLine
-    const allprocs = procs,
-        allpipes = pipes
+        both: [node_pipeio.ReadLine, vsc.OutputChannel]
+    const allprocs = procs, allpipes = pipes
     procs = {}
     pipes = {}
     for (const pid in allpipes)
-        if (pipe = allpipes[pid]) {
-            try { pipe.removeAllListeners() } catch (_) { }
-            try { pipe.close() } catch (_) { }
+        if ((both = allpipes[pid]) && both.length) {
+            if (both[1]) both[1].dispose()
+            try { both[0].removeAllListeners() } catch (_) { }
+            try { both[0].close() } catch (_) { }
         }
     for (const key in allprocs)
         if (proc = allprocs[key]) {
@@ -36,11 +37,15 @@ export function disposeAll() {
 }
 
 export function disposeProc(pId: number) {
-    const pipe = pipes[pId]
-    if (pipe) {
+    const both = pipes[pId]
+    if (both && both.length) {
         delete pipes[pId]
-        try { pipe.removeAllListeners() } catch (_) { }
-        try { pipe.close() } catch (_) { }
+        if (both[1] && cfgAutoCloseStderrOutputsOnProgExit())
+            both[1].dispose()
+        else
+            vscCtx.subscriptions.push(both[1])
+        try { both[0].removeAllListeners() } catch (_) { }
+        try { both[0].close() } catch (_) { }
     }
     let proc: node_proc.ChildProcess
     for (const key in procs)
@@ -72,12 +77,10 @@ export function proc(fullCmd: string): node_proc.ChildProcess {
             p = node_proc.spawn(cmd, args, { stdio: 'pipe', windowsHide: true, argv0: cmd })
         } catch (e) { vscwin.showErrorMessage(e) }
         if (p)
-            if (!(p.pid && p.stdin && p.stdin.writable && p.stdout && p.stdout.readable && p.stderr && p.stderr.readable))
+            if (!(p.pid && p.stdin && p.stdin.writable && p.stdout && p.stdout.readable))
                 try { p.kill() } catch (_) { } finally { p = null }
             else {
-                p.stderr.on('data', foo => vscwin.showWarningMessage(foo))
-                p.stdout.on('data', moo => vscwin.showInformationMessage(moo))
-                const pipe = node_pipeio.createInterface({
+                const pid = p.pid, pipe = node_pipeio.createInterface({
                     input: p.stdout, terminal: false, historySize: 0
                 })
                 if (!pipe)
@@ -85,13 +88,23 @@ export function proc(fullCmd: string): node_proc.ChildProcess {
                 else {
                     pipe.setMaxListeners(0)
                     pipe.on('line', onProcRecv(p))
-                    pipes[p.pid] = pipe
-                    p.on('error', onProcErr(p.pid))
-                    const ongone = onProgEnd(p.pid)
+                    pipes[pid] = [pipe, null]
+                    p.on('error', onProcErr(pid))
+                    const ongone = onProgEnd(pid)
                     p.on('disconnect', ongone)
                     p.on('close', ongone)
                     p.on('exit', ongone)
-                    p.stderr.on('data', vscwin.showWarningMessage)
+                    if (p.stderr) p.stderr.on('data', _ => {
+                        const both = pipes[pid]
+                        if (both) {
+                            let vscout = both[1]
+                            if (!vscout) {
+                                both[1] = vscout = vscwin.createOutputChannel("Appz: " + fullCmd)
+                                pipes[pid] = both
+                            }
+                            vscout.appendLine(_)
+                        }
+                    })
                 }
             }
         if (p)
@@ -199,9 +212,9 @@ function onProcRecv(proc: node_proc.ChildProcess) {
         try { msg = JSON.parse(ln) as ipc.MsgFromApp } catch (_) { }
 
         const onfail = (err: any) => {
-            vscwin.showWarningMessage(err)
+            vscwin.showErrorMessage(err)
             if (msg && msg.andThen)
-                send(proc, { andThen: msg.andThen, failed: true })
+                send(proc, { andThen: msg.andThen, payload: err, failed: true })
         }
 
         if (!msg)
@@ -232,4 +245,8 @@ function onProcRecv(proc: node_proc.ChildProcess) {
         } else
             vscwin.showErrorMessage(ln)
     }
+}
+
+function cfgAutoCloseStderrOutputsOnProgExit() {
+    return vscproj.getConfiguration("appz").get<boolean>("autoCloseStderrOutputsOnProgExit", true)
 }

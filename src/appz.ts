@@ -6,23 +6,23 @@ const vscproj = vsc.workspace
 const vscwin = vsc.window
 
 
-let extDirPath: string;
-let extDirPathStrVarProvider: { [_: string]: (_: string) => string } = {};
+export let vscCtx: vsc.ExtensionContext
+let extDirPathStrVarProvider: { [_: string]: ((_: string) => string) } = {
+	'appz': _ => vscCtx.extensionPath,
+}
 
 
 export function deactivate() { ppio.disposeAll() }
 
-export function activate(ctx: vsc.ExtensionContext) {
-	extDirPath = ctx.extensionPath
-	extDirPathStrVarProvider['appz'] = _ => extDirPath;
 
-	ctx.subscriptions.push(
-		vsc.commands.registerCommand('vsc_appz.main', onCmdMain)
+export function activate(ctx: vsc.ExtensionContext) {
+	(vscCtx = ctx).subscriptions.push(
+		vsc.commands.registerCommand('vsc_appz.main', onCmdMain),
 	)
 }
 
 function onCmdMain() {
-	const progs = vscproj.getConfiguration("appz").get<string[]>("progs")
+	const progs = vscproj.getConfiguration("appz").get<string[]>("allProgs")
 
 	interface pickItem extends vsc.QuickPickItem { prog: string, pid: number }
 	const items: pickItem[] = progs.map(_ => ({
@@ -36,7 +36,7 @@ function onCmdMain() {
 		})
 
 	if (!items.length)
-		vscwin.showInformationMessage("Your current `settings.json` has no Appz configured under `appz.progs`.")
+		vscwin.showInformationMessage("Your current `settings.json` has no Appz configured under `appz.allProgs`.")
 	else
 		vscwin.showQuickPick(items).then(_ => {
 			if (_ && _.prog)
