@@ -29,7 +29,7 @@ type Any = interface { // just to reduce brackets-noise throughout
 
 type ipcMsg struct {
 	QName  string         `json:"qName,omitempty"` // eg. 'window.ShowInformationMessage3'
-	Data   map[string]Any `json:"data,omitempty"`
+	Data   map[string]Any `json:"data"`
 	ContId string         `json:"cbId,omitempty"`
 }
 
