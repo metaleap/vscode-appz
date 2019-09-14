@@ -240,14 +240,14 @@ function onProcRecv(proc) {
             const onfail = (err) => {
                 vsc.window.showErrorMessage(err);
                 if (msg && msg.cbId && !sendret)
-                    send(proc, { cbId: msg.cbId, data: { nay: err ? err : null } });
+                    send(proc, { cbId: msg.cbId, data: { nay: (err === undefined) ? null : err } });
             };
             try {
                 const promise = vscgen.handle(msg, proc);
                 if (promise)
                     promise.then(ret => {
                         if (sendret = (proc.pid && pipes[proc.pid] && msg.cbId) ? true : false)
-                            send(proc, { cbId: msg.cbId, data: { yay: ret ? ret : null } });
+                            send(proc, { cbId: msg.cbId, data: { yay: (ret === undefined) ? null : ret } });
                     }, rej => onfail(rej));
             }
             catch (err) {

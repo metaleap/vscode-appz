@@ -222,7 +222,7 @@ function onProcRecv(proc: node_proc.ChildProcess) {
             const onfail = (err: any) => {
                 vsc.window.showErrorMessage(err)
                 if (msg && msg.cbId && !sendret)
-                    send(proc, { cbId: msg.cbId, data: { nay: err ? err : null /* prevent undefined */ } })
+                    send(proc, { cbId: msg.cbId, data: { nay: (err === undefined) ? null : err } })
             }
 
             try {
@@ -230,7 +230,7 @@ function onProcRecv(proc: node_proc.ChildProcess) {
                 if (promise) promise.then(
                     ret => {
                         if (sendret = (proc.pid && pipes[proc.pid] && msg.cbId) ? true : false)
-                            send(proc, { cbId: msg.cbId, data: { yay: ret ? ret : null /* prevent undefined */ } })
+                            send(proc, { cbId: msg.cbId, data: { yay: (ret === undefined) ? null : ret } })
                     },
                     rej =>
                         onfail(rej),

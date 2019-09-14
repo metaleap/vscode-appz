@@ -232,17 +232,17 @@ class Gen extends gen.Gen {
             src = "*" + src;
         return src;
     }
-    typeSpec(from, intoProm = false, ptrIfStruct = false) {
+    typeSpec(from, intoProm = false, ptrIfStruct = false, ptrIfNonNilable = false) {
         if (!from)
             return "";
         if (from === gen.ScriptPrimType.Any)
             return "Any";
         if (from === gen.ScriptPrimType.Boolean)
-            return "bool";
+            return ptrIfNonNilable ? "*bool" : "bool";
         if (from === gen.ScriptPrimType.String)
-            return "string";
+            return ptrIfNonNilable ? "*string" : "string";
         if (from === gen.ScriptPrimType.Number)
-            return "int";
+            return ptrIfNonNilable ? "*int" : "int";
         if (from === gen.ScriptPrimType.Dict)
             return "map[string]Any";
         if (from === gen.ScriptPrimType.Null || from === gen.ScriptPrimType.Undefined)
@@ -257,7 +257,7 @@ class Gen extends gen.Gen {
         if (ttup && ttup.length) {
             let tname = null;
             for (const t of ttup) {
-                const tn = this.typeSpec(t, intoProm, ptrIfStruct);
+                const tn = this.typeSpec(t, intoProm, ptrIfStruct, ptrIfNonNilable);
                 if (!tname)
                     tname = tn;
                 else if (tn !== tname) {
@@ -270,16 +270,16 @@ class Gen extends gen.Gen {
         let tsum = gen.typeSumOf(from);
         if (tsum && tsum.length) {
             tsum = tsum.filter(_ => _ !== gen.ScriptPrimType.Null && _ !== gen.ScriptPrimType.Undefined && !gen.typeProm(_));
-            return this.parensIfJoin(tsum.map(_ => this.typeSpec(_, intoProm, ptrIfStruct)), '|');
+            return this.parensIfJoin(tsum.map(_ => this.typeSpec(_, intoProm, ptrIfStruct, ptrIfNonNilable)), '|');
         }
         const tprom = gen.typeProm(from);
         if (tprom && tprom.length)
             if (tprom.length > 1)
                 throw (from);
             else if (intoProm)
-                return this.typeSpec(tprom[0], false, ptrIfStruct);
+                return this.typeSpec(tprom[0], false, ptrIfStruct, ptrIfNonNilable);
             else
-                return "func(" + this.typeSpec(tprom[0], false, true) + ")";
+                return "func(" + this.typeSpec(tprom[0], false, true, false) + ")";
         if (typeof from === 'string')
             return ptrIfStruct ? ('*' + from) : from;
         return "Any";
