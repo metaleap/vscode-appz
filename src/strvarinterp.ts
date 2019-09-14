@@ -20,7 +20,7 @@ export enum Std {
 }
 
 
-export function Interpolate(str: string, extras: { [_: string]: (_: string) => string } = undefined): Thenable<string> {
+export function Interpolate(str: string, extras: { [_: string]: (_: string) => string } = undefined, pickSplitSep: string = undefined): Thenable<string> {
     const idx1 = str.lastIndexOf('${')
     if (idx1 < 0)
         return Promise.resolve(str)
@@ -113,13 +113,22 @@ export function Interpolate(str: string, extras: { [_: string]: (_: string) => s
                     newval = extras[key](key)
 
         if (!newval) {
-            let items: string[] = [],
+            let pickitems: string[] = [],
                 prompt = expr
-            const colon = prompt.indexOf(':')
-            if (colon > 0)
-                [prompt, items] = [prompt.slice(0, colon), prompt.slice(colon + 1).split('|')]
-            return (items && items.length)
-                ? fromProm(vsc.window.showQuickPick(items, { ignoreFocusOut: true, placeHolder: prompt }))
+            const idxcolon = prompt.indexOf(':')
+            if (idxcolon > 0) {
+                let strpicks = prompt.slice(idxcolon + 1)
+                if (strpicks && strpicks.length && strpicks.length > 1) {
+                    if (pickSplitSep === undefined && strpicks[0] === strpicks[strpicks.length - 1]) {
+                        pickSplitSep = strpicks[0]
+                        strpicks = strpicks.slice(1, strpicks.length - 1)
+                    }
+                    if (pickSplitSep)
+                        [prompt, pickitems] = [prompt.slice(0, idxcolon), strpicks.split(pickSplitSep)]
+                }
+            }
+            return (pickitems && pickitems.length)
+                ? fromProm(vsc.window.showQuickPick(pickitems, { ignoreFocusOut: true, placeHolder: prompt }))
                 : fromProm(vsc.window.showInputBox({ ignoreFocusOut: true, prompt: prompt }))
         }
 

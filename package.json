@@ -41,7 +41,7 @@
 					},
 					"appz.demoPicks": {
 						"type": "string",
-						"default": "Hello|Welcome|Hiya|Hola"
+						"default": "|Hello|Hiya|Hola|"
 					}
 				}
 			}
