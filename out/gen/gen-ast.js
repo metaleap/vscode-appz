@@ -8,24 +8,25 @@ var TypeRefPrim;
     TypeRefPrim[TypeRefPrim["String"] = 139] = "String";
 })(TypeRefPrim = exports.TypeRefPrim || (exports.TypeRefPrim = {}));
 class Builder {
+    constructor(prep) { this.prep = prep; }
     enumFrom(it) {
         return {
-            DocLns: [], Name: it.name,
+            Docs: [], Name: it.name,
             Enumerants: it.enumerants.map((_, idx) => this.enumerantFrom(it, idx)),
         };
     }
     enumerantFrom(it, idx) {
-        return { DocLns: [], Name: it.enumerants[idx].name, Value: it.enumerants[idx].value };
+        return { Docs: [], Name: it.enumerants[idx].name, Value: it.enumerants[idx].value };
     }
     structFrom(it) {
         return {
-            DocLns: [], Name: it.name,
+            Docs: [], Name: it.name,
             Fields: it.fields.map(_ => this.fieldFrom(_)),
         };
     }
     fieldFrom(it) {
         return {
-            DocLns: [], Name: it.name,
+            Docs: [], Name: it.name,
             Type: TypeRefPrim.Int,
             Json: { Ignore: false, Name: it.name, Required: false },
         };
@@ -36,7 +37,6 @@ class Gen extends gen.Gen {
         super(...arguments);
         this.src = "";
         this.indent = 0;
-        this.b = new Builder();
         this.ln = (...srcLns) => {
             for (const srcln of srcLns)
                 this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : '') + "\n";
@@ -47,8 +47,16 @@ class Gen extends gen.Gen {
             this.indent--;
         };
         this.emitDocs = (it) => {
-            for (const docln of it.DocLns)
-                this.ln("# " + docln);
+            for (const doc of it.Docs) {
+                if (doc.ForParam && doc.ForParam.length) {
+                    this.indent++;
+                    this.ln("# @" + doc.ForParam + ":");
+                }
+                for (const docln of doc.Lines)
+                    this.ln("# " + docln);
+                if (doc.ForParam && doc.ForParam.length)
+                    this.indent--;
+            }
         };
         this.emitEnum = (it) => {
             this.ln("", "");
@@ -85,10 +93,11 @@ class Gen extends gen.Gen {
     gen(prep) {
         this.resetState();
         this.src = "";
+        const build = new Builder(prep);
         for (const it of prep.enums)
-            this.emitEnum(this.b.enumFrom(it));
+            this.emitEnum(build.enumFrom(it));
         for (const it of prep.structs)
-            this.emitStruct(this.b.structFrom(it));
+            this.emitStruct(build.structFrom(it));
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src);
     }
 }

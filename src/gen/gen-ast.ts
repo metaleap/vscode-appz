@@ -1,18 +1,19 @@
 import * as gen from './gen-basics'
 
-export interface WithDocs { DocLns: string[] }
 export interface WithName { Name: string }
 export interface WithType { Type: TypeRef }
+export interface WithDocs { Docs: { ForParam: string, Lines: string[] }[] }
 
 export interface TEnum extends WithDocs, WithName { Enumerants: Enumerant[] }
 export interface TInterface extends WithDocs, WithName { Methods: Method[] }
 export interface Enumerant extends WithDocs, WithName { Value: number }
 export interface TStruct extends WithDocs, WithName { Fields: Field[] }
-export interface Method extends WithDocs, WithName { Args: Arg[], Impl: IBlock }
+export interface Method extends WithDocs, WithName { Args: Arg[] }
 export interface Arg extends WithDocs, WithName, WithType { }
 export interface Field extends WithDocs, WithName, WithType {
     Json: { Name: string, Required: boolean, Ignore: boolean }
 }
+export interface Func extends WithName, WithType { Func: EFunc }
 
 export type TypeRef = WithName | TypeRefPrim | TypeRefArr | TypeRefFunc | TypeRefTup | TypeRefPtr
 export enum TypeRefPrim {
@@ -95,28 +96,32 @@ export interface IDictDel {
 
 
 class Builder {
+    prep: gen.Prep
+
+    constructor(prep: gen.Prep) { this.prep = prep }
+
     enumFrom(it: gen.PrepEnum): TEnum {
         return {
-            DocLns: [], Name: it.name,
+            Docs: [], Name: it.name,
             Enumerants: it.enumerants.map((_, idx) =>
                 this.enumerantFrom(it, idx)),
         }
     }
 
     enumerantFrom(it: gen.PrepEnum, idx: number): Enumerant {
-        return { DocLns: [], Name: it.enumerants[idx].name, Value: it.enumerants[idx].value }
+        return { Docs: [], Name: it.enumerants[idx].name, Value: it.enumerants[idx].value }
     }
 
     structFrom(it: gen.PrepStruct): TStruct {
         return {
-            DocLns: [], Name: it.name,
+            Docs: [], Name: it.name,
             Fields: it.fields.map(_ => this.fieldFrom(_)),
         }
     }
 
     fieldFrom(it: gen.PrepField): Field {
         return {
-            DocLns: [], Name: it.name,
+            Docs: [], Name: it.name,
             Type: TypeRefPrim.Int,
             Json: { Ignore: false, Name: it.name, Required: false },
         }
@@ -128,8 +133,6 @@ class Builder {
 export class Gen extends gen.Gen implements gen.IGen {
     protected src: string = ""
     protected indent: number = 0
-
-    private b = new Builder()
 
     protected ln = (...srcLns: string[]) => {
         for (const srcln of srcLns)
@@ -143,8 +146,16 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     protected emitDocs = (it: WithDocs) => {
-        for (const docln of it.DocLns)
-            this.ln("# " + docln)
+        for (const doc of it.Docs) {
+            if (doc.ForParam && doc.ForParam.length) {
+                this.indent++
+                this.ln("# @" + doc.ForParam + ":")
+            }
+            for (const docln of doc.Lines)
+                this.ln("# " + docln)
+            if (doc.ForParam && doc.ForParam.length)
+                this.indent--
+        }
     }
 
     protected emitEnum = (it: TEnum) => {
@@ -185,10 +196,12 @@ export class Gen extends gen.Gen implements gen.IGen {
     gen(prep: gen.Prep) {
         this.resetState()
         this.src = ""
+        const build = new Builder(prep)
+
         for (const it of prep.enums)
-            this.emitEnum(this.b.enumFrom(it))
+            this.emitEnum(build.enumFrom(it))
         for (const it of prep.structs)
-            this.emitStruct(this.b.structFrom(it))
+            this.emitStruct(build.structFrom(it))
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src)
     }
 
