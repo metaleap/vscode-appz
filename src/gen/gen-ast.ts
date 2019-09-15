@@ -1,6 +1,7 @@
 import * as gen from './gen-basics'
 
-export interface WithName { Name: string }
+
+export interface WithName { Name: string, name?: string }
 export interface WithType { Type: TypeRef }
 export interface WithDocs { Docs: Doc[] }
 export interface Doc { ForParam: string, Lines: string[] }
@@ -104,9 +105,11 @@ class Builder {
 
     enumFrom(it: gen.PrepEnum): TEnum {
         return {
+            name: it.name,
             Name: this.gen.nameRewriters.types.enums(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
             Enumerants: it.enumerants.map(_ => ({
+                name: _.name,
                 Name: this.gen.nameRewriters.enumerants(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig)),
                 Value: _.value,
@@ -116,12 +119,15 @@ class Builder {
 
     interfaceFrom(it: gen.PrepInterface): TInterface {
         return {
+            name: it.name,
             Name: this.gen.nameRewriters.types.interfaces(it.name),
             Docs: this.docs(gen.docs(it.fromOrig)),
             Methods: it.methods.map(_ => ({
+                name: _.nameOrig,
                 Name: this.gen.nameRewriters.methods(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig.decl, () => _.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
                 Args: _.args.map(arg => ({
+                    name: arg.name,
                     Name: this.gen.nameRewriters.args(arg.name),
                     Docs: this.docs(gen.docs(arg.fromOrig)),
                     Type: TypeRefPrim.Bool,
@@ -132,9 +138,11 @@ class Builder {
 
     structFrom(it: gen.PrepStruct): TStruct {
         let ret: TStruct = {
+            name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
             Fields: it.fields.map(_ => ({
+                name: _.name,
                 Name: this.gen.nameRewriters.fields(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummaryFor.funcFields),
                 Type: TypeRefPrim.Int,
@@ -197,6 +205,7 @@ class Builder {
 export class Gen extends gen.Gen implements gen.IGen {
     private src: string = ""
     private indent: number = 0
+
     nameRewriters = {
         args: this.caseLo,
         fields: this.caseUp,
@@ -215,7 +224,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
     protected ln = (...srcLns: string[]) => {
         for (const srcln of srcLns)
-            this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : '') + "\n"
+            this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : "") + "\n"
     }
 
     protected indented = (andThen: () => void) => {
@@ -224,7 +233,9 @@ export class Gen extends gen.Gen implements gen.IGen {
         this.indent--
     }
 
-    protected emitDocs = (it: WithDocs) => {
+    protected emitDocs = (it: (WithDocs & WithName)) => {
+        if (it.name && it.Name && it.name !== it.Name)
+            this.ln("# " + it.name + ":")
         for (const doc of it.Docs) {
             if (doc.ForParam && doc.ForParam.length) {
                 this.ln("# ", "# @" + doc.ForParam + ":")
@@ -250,13 +261,13 @@ export class Gen extends gen.Gen implements gen.IGen {
     protected emitInterface = (it: TInterface) => {
         this.ln("", "")
         this.emitDocs(it)
-        this.ln(it.Name + ": interface")
+        this.ln(it.Name + ": iface")
         this.indented(() => it.Methods.forEach(_ => {
             this.ln("")
             this.emitDocs(_)
             this.ln(`${_.Name}: method`)
             this.indented(() => _.Args.forEach(arg => {
-                this.ln(`${arg.Name}: ${this.emitTypeRef(arg.Type)}`)
+                this.ln(`${arg.Name}: ${this.emitTypeRef(arg.Type)}${(arg.name === arg.Name) ? '' : ('#' + arg.name)}`)
             }))
         }))
         this.ln("", "")
