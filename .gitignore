@@ -2,5 +2,4 @@ libs/cs/bin
 libs/cs/obj
 demos/cs-vsc-appz-demo/bin
 demos/cs-vsc-appz-demo/obj
-out
 node_modules
