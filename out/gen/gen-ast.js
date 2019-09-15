@@ -7,11 +7,36 @@ var TypeRefPrim;
     TypeRefPrim[TypeRefPrim["Int"] = 136] = "Int";
     TypeRefPrim[TypeRefPrim["String"] = 139] = "String";
 })(TypeRefPrim = exports.TypeRefPrim || (exports.TypeRefPrim = {}));
+class Builder {
+    enumFrom(it) {
+        return {
+            DocLns: [], Name: it.name,
+            Enumerants: it.enumerants.map((_, idx) => this.enumerantFrom(it, idx)),
+        };
+    }
+    enumerantFrom(it, idx) {
+        return { DocLns: [], Name: it.enumerants[idx].name, Value: it.enumerants[idx].value };
+    }
+    structFrom(it) {
+        return {
+            DocLns: [], Name: it.name,
+            Fields: it.fields.map(_ => this.fieldFrom(_)),
+        };
+    }
+    fieldFrom(it) {
+        return {
+            DocLns: [], Name: it.name,
+            Type: TypeRefPrim.Int,
+            Json: { Ignore: false, Name: it.name, Required: false },
+        };
+    }
+}
 class Gen extends gen.Gen {
     constructor() {
         super(...arguments);
         this.src = "";
         this.indent = 0;
+        this.b = new Builder();
         this.ln = (...srcLns) => {
             for (const srcln of srcLns)
                 this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : '') + "\n";
@@ -61,32 +86,10 @@ class Gen extends gen.Gen {
         this.resetState();
         this.src = "";
         for (const it of prep.enums)
-            this.emitEnum(this.newEnumFrom(it));
+            this.emitEnum(this.b.enumFrom(it));
         for (const it of prep.structs)
-            this.emitStruct(this.newStructFrom(it));
+            this.emitStruct(this.b.structFrom(it));
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src);
-    }
-    newEnumFrom(it) {
-        return {
-            DocLns: [], Name: it.name,
-            Enumerants: it.enumerants.map((_, idx) => this.newEnumerantFrom(it, idx)),
-        };
-    }
-    newEnumerantFrom(it, idx) {
-        return { DocLns: [], Name: it.enumerants[idx].name, Value: it.enumerants[idx].value };
-    }
-    newStructFrom(it) {
-        return {
-            DocLns: [], Name: it.name,
-            Fields: it.fields.map(_ => this.newFieldFrom(_)),
-        };
-    }
-    newFieldFrom(it) {
-        return {
-            DocLns: [], Name: it.name,
-            Type: TypeRefPrim.Int,
-            Json: { Ignore: false, Name: it.name, Required: false },
-        };
     }
 }
 exports.Gen = Gen;

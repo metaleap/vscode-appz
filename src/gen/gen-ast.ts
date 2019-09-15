@@ -94,9 +94,42 @@ export interface IDictDel {
 
 
 
+class Builder {
+    enumFrom(it: gen.PrepEnum): TEnum {
+        return {
+            DocLns: [], Name: it.name,
+            Enumerants: it.enumerants.map((_, idx) =>
+                this.enumerantFrom(it, idx)),
+        }
+    }
+
+    enumerantFrom(it: gen.PrepEnum, idx: number): Enumerant {
+        return { DocLns: [], Name: it.enumerants[idx].name, Value: it.enumerants[idx].value }
+    }
+
+    structFrom(it: gen.PrepStruct): TStruct {
+        return {
+            DocLns: [], Name: it.name,
+            Fields: it.fields.map(_ => this.fieldFrom(_)),
+        }
+    }
+
+    fieldFrom(it: gen.PrepField): Field {
+        return {
+            DocLns: [], Name: it.name,
+            Type: TypeRefPrim.Int,
+            Json: { Ignore: false, Name: it.name, Required: false },
+        }
+    }
+}
+
+
+
 export class Gen extends gen.Gen implements gen.IGen {
     protected src: string = ""
     protected indent: number = 0
+
+    private b = new Builder()
 
     protected ln = (...srcLns: string[]) => {
         for (const srcln of srcLns)
@@ -153,37 +186,10 @@ export class Gen extends gen.Gen implements gen.IGen {
         this.resetState()
         this.src = ""
         for (const it of prep.enums)
-            this.emitEnum(this.newEnumFrom(it))
+            this.emitEnum(this.b.enumFrom(it))
         for (const it of prep.structs)
-            this.emitStruct(this.newStructFrom(it))
+            this.emitStruct(this.b.structFrom(it))
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src)
-    }
-
-    private newEnumFrom(it: gen.PrepEnum): TEnum {
-        return {
-            DocLns: [], Name: it.name,
-            Enumerants: it.enumerants.map((_, idx) =>
-                this.newEnumerantFrom(it, idx)),
-        }
-    }
-
-    private newEnumerantFrom(it: gen.PrepEnum, idx: number): Enumerant {
-        return { DocLns: [], Name: it.enumerants[idx].name, Value: it.enumerants[idx].value }
-    }
-
-    private newStructFrom(it: gen.PrepStruct): TStruct {
-        return {
-            DocLns: [], Name: it.name,
-            Fields: it.fields.map(_ => this.newFieldFrom(_)),
-        }
-    }
-
-    private newFieldFrom(it: gen.PrepField): Field {
-        return {
-            DocLns: [], Name: it.name,
-            Type: TypeRefPrim.Int,
-            Json: { Ignore: false, Name: it.name, Required: false },
-        }
     }
 
 }
