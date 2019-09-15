@@ -1,3 +1,4 @@
+import * as ts from 'typescript'
 import * as gen from './gen-basics'
 
 export interface WithName { Name: string }
@@ -99,6 +100,10 @@ class Builder {
     prep: gen.Prep
 
     constructor(prep: gen.Prep) { this.prep = prep }
+
+    docs(from: ts.Node, method: gen.PrepMethod = undefined, isSub: boolean = false) {
+        const docs = gen.docs(from)
+    }
 
     enumFrom(it: gen.PrepEnum): TEnum {
         return {

@@ -222,8 +222,7 @@ class Gen extends gen.Gen {
             for (const doc of docs) {
                 if (doc.lines && doc.lines.length) {
                     ret.push("// ");
-                    for (const ln of doc.lines)
-                        ret.push("// " + ln);
+                    doc.lines.forEach((ln, idx) => ret.push("// " + (idx ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.caseLo))));
                 }
                 if (doc.subs && doc.subs.length)
                     ret.push(...this.genDocLns(doc.subs, true));

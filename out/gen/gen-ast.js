@@ -9,6 +9,9 @@ var TypeRefPrim;
 })(TypeRefPrim = exports.TypeRefPrim || (exports.TypeRefPrim = {}));
 class Builder {
     constructor(prep) { this.prep = prep; }
+    docs(from, method = undefined, isSub = false) {
+        const docs = gen.docs(from);
+    }
     enumFrom(it) {
         return {
             Docs: [], Name: it.name,

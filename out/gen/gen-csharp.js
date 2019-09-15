@@ -205,8 +205,7 @@ class Gen extends gen.Gen {
             for (const doc of docs) {
                 if (doc.lines && doc.lines.length) {
                     ret.push("/// ");
-                    for (const ln of doc.lines)
-                        ret.push("/// " + ln);
+                    doc.lines.forEach((ln, idx) => ret.push("/// " + ((idx || !isSub) ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.caseLo))));
                 }
                 if (doc.subs && doc.subs.length)
                     ret.push(...this.genDocLns(doc.subs, method, true));
@@ -214,22 +213,20 @@ class Gen extends gen.Gen {
         if (ret.length && !isSub) {
             ret[0] = "/// <summary>";
             ret.push("/// </summary>");
-        }
-        if ((!isSub) && method && method.args && method.args.length)
-            for (const arg of method.args) {
-                let paramdocstrlns = [];
-                gen.docsTraverse(docs, doc => {
-                    if (paramdocstrlns.length === 0 && doc.lines && doc.lines.length && doc.lines[0].startsWith("`" + arg.name + "` ── ")) {
-                        paramdocstrlns.push(...doc.lines);
-                        paramdocstrlns[0] = paramdocstrlns[0].slice(paramdocstrlns[0].indexOf("` ── ") + 5);
+            if (method && method.args && method.args.length)
+                for (const arg of method.args) {
+                    let paramdocstrlns = null;
+                    gen.docsTraverse(docs, doc => {
+                        if (paramdocstrlns === null && doc.lines && doc.lines.length && ((!arg.isFromRetThenable) ? (doc.isForArg === arg.name) : (doc.isForRet !== null && doc.isForRet !== undefined)))
+                            paramdocstrlns = doc.lines;
+                    });
+                    if (paramdocstrlns && paramdocstrlns.length) {
+                        ret.push(`/// <param name="${this.caseLo(arg.name)}">`);
+                        ret.push("/// " + paramdocstrlns.filter(_ => _ && _.length).join(' ').trim());
+                        ret.push("/// </param>");
                     }
-                });
-                if (paramdocstrlns.length) {
-                    ret.push(`/// <param name="${this.caseLo(arg.name)}">`);
-                    ret.push("/// " + paramdocstrlns.filter(_ => _ && _.length).join(' ').trim());
-                    ret.push("/// </param>");
                 }
-            }
+        }
         return ret;
     }
     typeSpec(from, intoProm = false, needNullable = false) {

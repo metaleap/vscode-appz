@@ -1,7 +1,5 @@
 import * as node_fs from 'fs'
-
 import * as ts from 'typescript'
-
 
 
 const dbgJsonPrintEnums = false, dbgJsonPrintStructs = false, dbgJsonPrintIfaces = false
@@ -308,7 +306,7 @@ export enum ScriptPrimType {
     Dict = ts.SyntaxKind.ObjectLiteralExpression,
 }
 
-export type Doc = { fromOrig: ts.JSDoc, lines: string[], subs: Docs }
+export type Doc = { fromOrig: ts.JSDoc, lines: string[], subs: Docs, isForArg?: string, isForRet?: string }
 export type Docs = Doc[]
 
 export abstract class Gen {
@@ -416,10 +414,10 @@ function docFrom(from: ts.JSDoc, retName: () => { name: string }): Doc {
         ret = { fromOrig: from, subs: [], lines: [] }
         if (txt = from.comment) {
             if (ts.isJSDocParameterTag(from))
-                txt = "`" + from.name.getText() + "` ── " + txt
+                ret.isForArg = from.name.getText()
             else if (ts.isJSDocReturnTag(from)) {
                 const rn = retName ? retName() : null
-                txt = "`" + ((rn && rn.name && rn.name.length) ? rn.name : 'return') + "` ── " + txt
+                ret.isForRet = (rn && rn.name && rn.name.length) ? rn.name : ""
             }
             ret.lines.push(...txt.split('\n').filter(_ => _ !== null && (!(_.startsWith('[') && _.endsWith(')') && _.includes('](#')))))
         }
@@ -436,6 +434,19 @@ export function docs(from: ts.Node, retName: () => { name: string } = undefined)
     if (docs && docs.length)
         ret.push(...docs.map(_ => docFrom(_, retName)))
     return ret
+}
+
+export function docIsForArgOrRet(doc: Doc) {
+    return (doc.isForArg || (doc.isForRet !== undefined && doc.isForRet !== null))
+}
+
+export function docPrependArgOrRetName(doc: Doc, ln: string, retFallback: string, argNameRewrite: ((_: string) => string) = undefined, pref = "`", suff = "` ── ") {
+    let isfor = doc.isForArg
+    if (isfor && isfor.length)
+        isfor = argNameRewrite ? argNameRewrite(isfor) : isfor
+    else if (doc.isForRet !== undefined && doc.isForRet !== null)
+        isfor = (doc.isForRet && doc.isForRet.length) ? doc.isForRet : retFallback
+    return (!(isfor && isfor.length)) ? ln : (pref + isfor + suff + ln)
 }
 
 export function docsTraverse(docs: Docs, on: ((_: Doc) => void)) {

@@ -274,6 +274,8 @@ anything but dismissed the input box with OK.
 
 `options` ── Configures the behavior of the input box.
 
+`token` ── A token that can be used to signal cancellation.
+
 `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
 
 ##### Parameters

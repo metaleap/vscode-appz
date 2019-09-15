@@ -286,10 +286,10 @@ function docFrom(from, retName) {
         ret = { fromOrig: from, subs: [], lines: [] };
         if (txt = from.comment) {
             if (ts.isJSDocParameterTag(from))
-                txt = "`" + from.name.getText() + "` ── " + txt;
+                ret.isForArg = from.name.getText();
             else if (ts.isJSDocReturnTag(from)) {
                 const rn = retName ? retName() : null;
-                txt = "`" + ((rn && rn.name && rn.name.length) ? rn.name : 'return') + "` ── " + txt;
+                ret.isForRet = (rn && rn.name && rn.name.length) ? rn.name : "";
             }
             ret.lines.push(...txt.split('\n').filter(_ => _ !== null && (!(_.startsWith('[') && _.endsWith(')') && _.includes('](#')))));
         }
@@ -308,6 +308,19 @@ function docs(from, retName = undefined) {
     return ret;
 }
 exports.docs = docs;
+function docIsForArgOrRet(doc) {
+    return (doc.isForArg || (doc.isForRet !== undefined && doc.isForRet !== null));
+}
+exports.docIsForArgOrRet = docIsForArgOrRet;
+function docPrependArgOrRetName(doc, ln, retFallback, argNameRewrite = undefined, pref = "`", suff = "` ── ") {
+    let isfor = doc.isForArg;
+    if (isfor && isfor.length)
+        isfor = argNameRewrite ? argNameRewrite(isfor) : isfor;
+    else if (doc.isForRet !== undefined && doc.isForRet !== null)
+        isfor = (doc.isForRet && doc.isForRet.length) ? doc.isForRet : retFallback;
+    return (!(isfor && isfor.length)) ? ln : (pref + isfor + suff + ln);
+}
+exports.docPrependArgOrRetName = docPrependArgOrRetName;
 function docsTraverse(docs, on) {
     for (const doc of docs) {
         on(doc);
