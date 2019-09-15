@@ -109,7 +109,7 @@ namespace VscAppz {
 		/// otherwise the defined range will be selected.
 		/// </summary>
 		[JsonProperty("valueSelection")]
-		public (int, int) ValueSelection;
+		public Nullable<(int, int)> ValueSelection;
 
 		/// <summary>
 		/// The text to display underneath the input box.
@@ -166,7 +166,7 @@ namespace VscAppz {
 		/// <param name="password"> Set to `true` to show a password prompt that will not show the typed value. </param>
 		/// <param name="ignoreFocusOut"> Set to `true` to keep the input box open when focus moves to another part of the editor or to another window. </param>
 		/// <param name="validateInput"> An optional function that will be called to validate input and to give a hint to the user.  `value` ── The current value of the input box.  `return` ── A human readable string which is presented as diagnostic message. Return `undefined`, `null`, or the empty string when 'value' is valid. </param>
-		public InputBoxOptions(string value = default, (int, int) valueSelection = default, string prompt = default, string placeHolder = default, bool password = default, bool ignoreFocusOut = default, Func<string, string> validateInput = default) =>
+		public InputBoxOptions(string value = default, Nullable<(int, int)> valueSelection = default, string prompt = default, string placeHolder = default, bool password = default, bool ignoreFocusOut = default, Func<string, string> validateInput = default) =>
 			(Value, ValueSelection, Prompt, PlaceHolder, Password, IgnoreFocusOut, ValidateInput) = (value, valueSelection, prompt, placeHolder, password, ignoreFocusOut, validateInput);
 	}
 
@@ -457,6 +457,8 @@ namespace VscAppz {
 		/// anything but dismissed the input box with OK.
 		/// 
 		/// `options` ── Configures the behavior of the input box.
+		/// 
+		/// `token` ── A token that can be used to signal cancellation.
 		/// 
 		/// `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
 		/// </summary>

@@ -288,9 +288,7 @@ function docFrom(from, retName) {
                 const rn = retName ? retName() : null;
                 txt = "`" + ((rn && rn.name && rn.name.length) ? rn.name : 'return') + "` ── " + txt;
             }
-            ret.lines.push(...txt.split('\n').filter(_ => _ !== null
-                && (!(_.startsWith('[') && _.endsWith(')') && _.includes('](#')))
-                && (!(_.startsWith("`token` ── ") && _.includes('cancellation')))));
+            ret.lines.push(...txt.split('\n').filter(_ => _ !== null && (!(_.startsWith('[') && _.endsWith(')') && _.includes('](#')))));
         }
         from.forEachChild(_ => {
             const sub = docFrom(_, retName);

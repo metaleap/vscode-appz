@@ -21,7 +21,7 @@
   - [ShowWarningMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
 - [InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions')
   - [#ctor()](#M-VscAppz-InputBoxOptions-#ctor 'VscAppz.InputBoxOptions.#ctor')
-  - [#ctor(value,valueSelection,prompt,placeHolder,password,ignoreFocusOut,validateInput)](#M-VscAppz-InputBoxOptions-#ctor-System-String,System-ValueTuple{System-Int32,System-Int32},System-String,System-String,System-Boolean,System-Boolean,System-Func{System-String,System-String}- 'VscAppz.InputBoxOptions.#ctor(System.String,System.ValueTuple{System.Int32,System.Int32},System.String,System.String,System.Boolean,System.Boolean,System.Func{System.String,System.String})')
+  - [#ctor(value,valueSelection,prompt,placeHolder,password,ignoreFocusOut,validateInput)](#M-VscAppz-InputBoxOptions-#ctor-System-String,System-Nullable{System-ValueTuple{System-Int32,System-Int32}},System-String,System-String,System-Boolean,System-Boolean,System-Func{System-String,System-String}- 'VscAppz.InputBoxOptions.#ctor(System.String,System.Nullable{System.ValueTuple{System.Int32,System.Int32}},System.String,System.String,System.Boolean,System.Boolean,System.Func{System.String,System.String})')
   - [IgnoreFocusOut](#F-VscAppz-InputBoxOptions-IgnoreFocusOut 'VscAppz.InputBoxOptions.IgnoreFocusOut')
   - [Password](#F-VscAppz-InputBoxOptions-Password 'VscAppz.InputBoxOptions.Password')
   - [PlaceHolder](#F-VscAppz-InputBoxOptions-PlaceHolder 'VscAppz.InputBoxOptions.PlaceHolder')
@@ -395,7 +395,7 @@ Options to configure the behavior of the input box UI.
 
 This constructor has no parameters.
 
-<a name='M-VscAppz-InputBoxOptions-#ctor-System-String,System-ValueTuple{System-Int32,System-Int32},System-String,System-String,System-Boolean,System-Boolean,System-Func{System-String,System-String}-'></a>
+<a name='M-VscAppz-InputBoxOptions-#ctor-System-String,System-Nullable{System-ValueTuple{System-Int32,System-Int32}},System-String,System-String,System-Boolean,System-Boolean,System-Func{System-String,System-String}-'></a>
 ### #ctor(value,valueSelection,prompt,placeHolder,password,ignoreFocusOut,validateInput) `constructor`
 
 ##### Summary
@@ -407,7 +407,7 @@ Options to configure the behavior of the input box UI.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | value | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The value to prefill in the input box. |
-| valueSelection | [System.ValueTuple{System.Int32,System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.ValueTuple 'System.ValueTuple{System.Int32,System.Int32}') | Selection of the prefilled [`value`](#InputBoxOptions.value). Defined as tuple of two number where the first is the inclusive start index and the second the exclusive end index. When `undefined` the whole word will be selected, when empty (start equals end) only the cursor will be set, otherwise the defined range will be selected. |
+| valueSelection | [System.Nullable{System.ValueTuple{System.Int32,System.Int32}}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.ValueTuple{System.Int32,System.Int32}}') | Selection of the prefilled [`value`](#InputBoxOptions.value). Defined as tuple of two number where the first is the inclusive start index and the second the exclusive end index. When `undefined` the whole word will be selected, when empty (start equals end) only the cursor will be set, otherwise the defined range will be selected. |
 | prompt | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The text to display underneath the input box. |
 | placeHolder | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | An optional string to show as place holder in the input box to guide the user what to type. |
 | password | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Set to `true` to show a password prompt that will not show the typed value. |

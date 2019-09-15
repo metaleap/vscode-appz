@@ -1,9 +1,8 @@
+import * as vsc from 'vscode'
+
 import * as ppio from './procspipeio'
 import * as strvar from './strvarinterp'
 
-import * as vsc from 'vscode'
-const vscproj = vsc.workspace
-const vscwin = vsc.window
 
 
 export let vscCtx: vsc.ExtensionContext
@@ -24,7 +23,7 @@ export function activate(ctx: vsc.ExtensionContext) {
 function onCmdMain() {
 	interface pickItem extends vsc.QuickPickItem { prog: string, pid: number }
 
-	const progs = vscproj.getConfiguration("appz").get<string[]>("allProgs") || []
+	const progs = vsc.workspace.getConfiguration("appz").get<string[]>("allProgs") || []
 	const items: pickItem[] = progs.map(_ => ({
 		prog: _, pid: 0, label: "RUN: " + _,
 		detail: ppio.procs[_] ? "Already running. Will kill and re-start." : "Not currently running" + (_.includes(' ') ? ' (at least not with those exact args)' : '') + "."
@@ -36,9 +35,9 @@ function onCmdMain() {
 		})
 
 	if (!items.length)
-		vscwin.showInformationMessage("Your current `settings.json` has no Appz configured under `appz.allProgs`.")
+		vsc.window.showInformationMessage("Your current `settings.json` has no Appz configured under `appz.allProgs`.")
 	else
-		vscwin.showQuickPick(items).then(_ => {
+		vsc.window.showQuickPick(items).then(_ => {
 			if (_ && _.prog)
 				if (_.pid)
 					ppio.disposeProc(_.pid)

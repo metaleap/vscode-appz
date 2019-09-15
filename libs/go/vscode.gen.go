@@ -211,6 +211,8 @@ type Window interface {
 	// 
 	// `options` ── Configures the behavior of the input box.
 	// 
+	// `token` ── A token that can be used to signal cancellation.
+	// 
 	// `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
 	ShowInputBox(options *InputBoxOptions, andThen func(*string), )
 }

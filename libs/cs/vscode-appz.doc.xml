@@ -156,7 +156,7 @@
             Options to configure the behavior of the input box UI.
             </summary>
         </member>
-        <member name="M:VscAppz.InputBoxOptions.#ctor(System.String,System.ValueTuple{System.Int32,System.Int32},System.String,System.String,System.Boolean,System.Boolean,System.Func{System.String,System.String})">
+        <member name="M:VscAppz.InputBoxOptions.#ctor(System.String,System.Nullable{System.ValueTuple{System.Int32,System.Int32}},System.String,System.String,System.Boolean,System.Boolean,System.Func{System.String,System.String})">
             <summary>
             Options to configure the behavior of the input box UI.
             </summary>

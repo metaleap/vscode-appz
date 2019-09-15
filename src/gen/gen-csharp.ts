@@ -65,7 +65,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             fielddocs[field.name] = (field.isExtBaggage ? (`\t\t/// <summary>${gen.docStrs.extBaggage}</summary>\n`) : (this.genDocSrc("\t\t", this.genDocLns(gen.docs(field.fromOrig)))))
             src += '\n' + fielddocs[field.name]
                 + "\t\t[" + (gen.typeFun(field.typeSpec) ? 'JsonIgnore' : `JsonProperty("${field.name}")${field.optional ? '' : ', JsonRequired'}`) + "]\n"
-            src += `\t\tpublic ${this.typeSpec(field.typeSpec)} ${this.caseUp(field.name)};\n`
+            src += `\t\tpublic ${this.typeSpec(field.typeSpec, false, field.optional)} ${this.caseUp(field.name)};\n`
         }
         for (const ff of it.funcFields)
             src += `\n\t\t/// <summary>${gen.docStrs.internalOnly}</summary>\n\t\t[JsonProperty("${ff}_AppzFuncId")]\n\t\tpublic string ${this.caseUp(ff)}_AppzFuncId = "";\n`
@@ -78,7 +78,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             return hacky.replace('</summary>', '</param>').replace('<summary>', `<param name="${this.caseLo(_.name)}">`).trim()
         })))
         src += "\t\tpublic " + this.caseUp(it.name) + "("
-            + it.fields.map(_ => this.typeSpec(_.typeSpec) + " " + this.caseLo(_.name) + " = default").join(', ')
+            + it.fields.map(_ => this.typeSpec(_.typeSpec, false, _.optional) + " " + this.caseLo(_.name) + " = default").join(', ')
             + ") =>\n\t\t\t"
             + this.parensIfJoin(it.fields.map(_ => this.caseUp(_.name))) + " = "
             + this.parensIfJoin(it.fields.map(_ => this.caseLo(_.name))) + ";\n"
@@ -93,7 +93,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         for (const method of it.methods)
             src += '\n' + this.genDocSrc('\t\t', this.genDocLns(gen.docs(method.fromOrig.decl, () => method.args.find(_ => _.isFromRetThenable)), method))
                 + "\t\tvoid " + this.caseUp(method.nameOrig) + "("
-                + method.args.map(_ => this.typeSpec(_.typeSpec) + " " + this.caseLo(_.name) + " = default").join(', ')
+                + method.args.map(_ => this.typeSpec(_.typeSpec, false, _.optional) + " " + this.caseLo(_.name) + " = default").join(', ')
                 + ");\n"
         src += "\t}\n\n"
 
@@ -109,7 +109,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         const funcfields = gen.argsFuncFields(prep, method.args)
         let
             src = "\n\t\tvoid I" + this.caseUp(it.name) + "." + this.caseUp(method.nameOrig) + "("
-                + method.args.map(arg => this.typeSpec(arg.typeSpec) + " " + this.caseLo(arg.name)).join(', ')
+                + method.args.map(arg => this.typeSpec(arg.typeSpec, false, arg.optional) + " " + this.caseLo(arg.name)).join(', ')
                 + ") {\n"
 
         const numargs = method.args.filter(_ => !_.isFromRetThenable).length
@@ -155,7 +155,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         src += `\n\t\t\tFunc<Any, bool> ${__.on} = null;\n`
         const lastarg = method.args[method.args.length - 1];
         if (lastarg.isFromRetThenable) {
-            let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true)
+            let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true, true)
             src += `\t\t\tif (${laname} != null)\n`
             src += `\t\t\t\t${__.on} = (Any ${__.payload}) => {\n`
             src += `\t\t\t\t\t${tret} ${__.result} = default;\n`
@@ -252,7 +252,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         return ret
     }
 
-    typeSpec(from: gen.TypeSpec, intoProm: boolean = false): string {
+    typeSpec(from: gen.TypeSpec, intoProm: boolean = false, needNullable: boolean = false): string {
         if (!from)
             return ""
 
@@ -263,7 +263,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (from === gen.ScriptPrimType.String)
             return "string"
         if (from === gen.ScriptPrimType.Number)
-            return "int"
+            return needNullable ? "Nullable<bool>" : "int"
         if (from === gen.ScriptPrimType.Dict)
             return "Dictionary<string, Any>"
         if (from === gen.ScriptPrimType.Null || from === gen.ScriptPrimType.Undefined)
@@ -277,9 +277,11 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (tfun && tfun.length && tfun[0])
             return "Func<" + tfun[0].map(_ => this.typeSpec(_)).join(", ") + ", " + this.typeSpec(tfun[1]) + ">"
 
-        let ttup = gen.typeTupOf(from)
-        if (ttup && ttup.length)
-            return "(" + ttup.map(_ => this.typeSpec(_)).join(', ') + ")"
+        const ttup = gen.typeTupOf(from)
+        if (ttup && ttup.length) {
+            const ret = "(" + ttup.map(_ => this.typeSpec(_)).join(', ') + ")"
+            return (!needNullable) ? ret : (`Nullable<${ret}>`)
+        }
 
         let tsum = gen.typeSumOf(from)
         if (tsum && tsum.length) {

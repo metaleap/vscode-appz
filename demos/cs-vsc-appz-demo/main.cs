@@ -7,10 +7,11 @@ namespace VscAppzDemo {
         public static void Main(string[] args) {
             var (greethow, greetname, nil) = ("Hallo", "Welt", new string[0]);
             if (args != null && args.Length > 0) {
-                if (!string.IsNullOrEmpty(args[0]))
-                    greetname = args[0];
-                if (args.Length > 1 && !string.IsNullOrEmpty(args[1]))
-                    greethow = args[1];
+                // why all the Trims? dotnet doesnt seem to fill in explicitly-specified-as-empty-via-quotes args, unlike other runtimes... sheesh
+                if (!string.IsNullOrEmpty(args[0].Trim()))
+                    greetname = args[0].Trim();
+                if (args.Length > 1 && !string.IsNullOrEmpty(args[1].Trim()))
+                    greethow = args[1].Trim();
             }
 
             var win = Vsc.InOut().Window;
@@ -19,7 +20,7 @@ namespace VscAppzDemo {
             var buttons = new[] {"Show Quick Pick...", "Show Input Box..."};
             win.ShowInformationMessage(greethow + ", " + greetname + "! What to try out?",
                 buttons, button => {
-                    if (button == "")
+                    if (string.IsNullOrEmpty(button))
                         exit("");
 
                     else if (button == buttons[0])

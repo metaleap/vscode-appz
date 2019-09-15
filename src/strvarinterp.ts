@@ -1,5 +1,4 @@
 import * as node_path from 'path'
-
 import * as vsc from 'vscode'
 
 

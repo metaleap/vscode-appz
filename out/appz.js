@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const vsc = require("vscode");
 const ppio = require("./procspipeio");
 const strvar = require("./strvarinterp");
-const vsc = require("vscode");
-const vscproj = vsc.workspace;
-const vscwin = vsc.window;
 let extDirPathStrVarProvider = {
     'appz': _ => exports.vscCtx.extensionPath,
 };
@@ -15,7 +13,7 @@ function activate(ctx) {
 }
 exports.activate = activate;
 function onCmdMain() {
-    const progs = vscproj.getConfiguration("appz").get("allProgs") || [];
+    const progs = vsc.workspace.getConfiguration("appz").get("allProgs") || [];
     const items = progs.map(_ => ({
         prog: _, pid: 0, label: "RUN: " + _,
         detail: ppio.procs[_] ? "Already running. Will kill and re-start." : "Not currently running" + (_.includes(' ') ? ' (at least not with those exact args)' : '') + "."
@@ -26,9 +24,9 @@ function onCmdMain() {
             detail: `Started ${getDurStr(_)} ago.`
         });
     if (!items.length)
-        vscwin.showInformationMessage("Your current `settings.json` has no Appz configured under `appz.allProgs`.");
+        vsc.window.showInformationMessage("Your current `settings.json` has no Appz configured under `appz.allProgs`.");
     else
-        vscwin.showQuickPick(items).then(_ => {
+        vsc.window.showQuickPick(items).then(_ => {
             if (_ && _.prog)
                 if (_.pid)
                     ppio.disposeProc(_.pid);

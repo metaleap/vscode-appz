@@ -24,8 +24,9 @@ func main() {
 	buttons := []string{"Show Quick Pick...", "Show Input Box..."}
 	win.ShowInformationMessage1(greethow+", "+greetname+"! What to try out?",
 		buttons, func(button *string) {
-			if button == nil {
+			if button == nil { // msgbox dismissed via close / esc key
 				exit(button)
+				return
 			}
 			switch button := *button; button {
 			case buttons[0]:
