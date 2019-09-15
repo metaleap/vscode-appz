@@ -13,15 +13,16 @@ export interface TStruct extends WithDocs, WithName { Fields: Field[] }
 export interface Method extends WithDocs, WithName { Args: Arg[] }
 export interface Arg extends WithDocs, WithName, WithType { }
 export interface Field extends WithDocs, WithName, WithType {
-    FuncFieldRel?: Field, Json: { Name: string, Required?: boolean, Ignore?: boolean }
+    FuncFieldRel?: Field, Json: { Excluded: boolean, Name: string, Required: boolean }
 }
 export interface Func extends WithName, WithType { Func: EFunc }
 
-export type TypeRef = WithName | TypeRefPrim | TypeRefArr | TypeRefFunc | TypeRefTup | TypeRefPtr
+export type TypeRef = WithName | TypeRefPrim | TypeRefArr | TypeRefFunc | TypeRefTup | TypeRefMaybe
 export enum TypeRefPrim {
     Bool = gen.ScriptPrimType.Boolean,
     Int = gen.ScriptPrimType.Number,
     String = gen.ScriptPrimType.String,
+    Dict = gen.ScriptPrimType.Dict,
 }
 export interface TypeRefArr {
     ArrOf: TypeRef
@@ -33,8 +34,8 @@ export interface TypeRefFunc {
 export interface TypeRefTup {
     TupOf: TypeRef[]
 }
-export interface TypeRefPtr {
-    PtrTo: TypeRef
+export interface TypeRefMaybe {
+    Maybe: TypeRef
 }
 
 export type Expr = ELit | EName | ECall | EOp | EFunc | EDictNew | ELen | EConv | ENew
@@ -108,7 +109,7 @@ class Builder {
             name: it.name,
             Name: this.gen.nameRewriters.types.enums(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
-            Enumerants: it.enumerants.map(_ => ({
+            Enumerants: it.enumerants.map((_): Enumerant => ({
                 name: _.name,
                 Name: this.gen.nameRewriters.enumerants(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig)),
@@ -122,15 +123,15 @@ class Builder {
             name: it.name,
             Name: this.gen.nameRewriters.types.interfaces(it.name),
             Docs: this.docs(gen.docs(it.fromOrig)),
-            Methods: it.methods.map(_ => ({
+            Methods: it.methods.map((_: gen.PrepMethod): Method => ({
                 name: _.nameOrig,
                 Name: this.gen.nameRewriters.methods(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig.decl, () => _.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
-                Args: _.args.map(arg => ({
+                Args: _.args.map((arg: gen.PrepArg): Arg => ({
                     name: arg.name,
                     Name: this.gen.nameRewriters.args(arg.name),
                     Docs: this.docs(gen.docs(arg.fromOrig)),
-                    Type: TypeRefPrim.Bool,
+                    Type: this.typeRef(arg.typeSpec, arg.optional),
                 })),
             })),
         }
@@ -141,12 +142,12 @@ class Builder {
             name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
-            Fields: it.fields.map(_ => ({
+            Fields: it.fields.map((_: gen.PrepField): Field => ({
                 name: _.name,
                 Name: this.gen.nameRewriters.fields(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummaryFor.funcFields),
-                Type: TypeRefPrim.Int,
-                Json: { Name: _.name, Required: !_.optional, Ignore: it.funcFields.some(ff => _.name === ff) },
+                Type: this.typeRef(_.typeSpec, _.optional),
+                Json: { Name: _.name, Required: !_.optional, Excluded: it.funcFields.some(ff => _.name === ff) },
             }))
         }
         for (const ff of it.funcFields) {
@@ -156,12 +157,79 @@ class Builder {
                 Name: ffname + "_AppzFuncId",
                 Docs: this.docs(null, [gen.docStrs.internalOnly]),
                 Type: TypeRefPrim.String,
-                Json: { Name: ff + "_AppzFuncId" },
+                Json: { Name: ff + "_AppzFuncId", Required: false, Excluded: false },
                 FuncFieldRel: fldfn,
             }
             ret.Fields.push(fldfn.FuncFieldRel)
         }
         return ret
+    }
+
+    typeRefEnsureMaybe(of: TypeRef): TypeRefMaybe {
+        let maybe: TypeRefMaybe = of as TypeRefMaybe
+        if (!(maybe && maybe.Maybe))
+            maybe = { Maybe: of }
+        return maybe
+    }
+
+    typeRef(it: gen.TypeSpec, needMaybe: boolean = false, intoProm: boolean = false): TypeRef {
+        if (!it)
+            return null
+
+        if (needMaybe)
+            return this.typeRefEnsureMaybe(this.typeRef(it, false, intoProm))
+
+        if (it === gen.ScriptPrimType.Boolean)
+            return TypeRefPrim.Bool
+        if (it === gen.ScriptPrimType.Number)
+            return TypeRefPrim.Int
+        if (it === gen.ScriptPrimType.String)
+            return TypeRefPrim.String
+        if (it === gen.ScriptPrimType.Dict)
+            return TypeRefPrim.Dict
+        if (it === gen.ScriptPrimType.Any)
+            return { Name: "Any" }
+
+        const tarr = gen.typeArrOf(it)
+        if (tarr)
+            return { ArrOf: this.typeRef(tarr) }
+
+        const ttup = gen.typeTupOf(it)
+        if (ttup && ttup.length)
+            return { TupOf: ttup.map(_ => this.typeRef(_)) }
+
+        const tfun = gen.typeFun(it)
+        if (tfun && tfun.length)
+            return { From: tfun[0].map(_ => this.typeRef(_)), To: this.typeRef(tfun[1]) }
+
+        let tsum = gen.typeSumOf(it)
+        if (tsum && tsum.length) {
+            let hadoptional = false
+            tsum = tsum.filter(_ => {
+                const optional = (_ === gen.ScriptPrimType.Undefined || _ === gen.ScriptPrimType.Null)
+                hadoptional = hadoptional || optional
+                return (!optional) && !gen.typeProm(_)
+            })
+            if (tsum.length !== 1)
+                throw it
+            let ret = this.typeRef(tsum[0])
+
+            return ret
+        }
+
+        const tprom = gen.typeProm(it)
+        if (tprom && tprom.length)
+            if (tprom.length > 1)
+                throw it
+            else if (intoProm)
+                return this.typeRef(tprom[0])
+            else
+                return { From: tprom.map(_ => this.typeRef(_)), To: null }
+
+        if (typeof it === 'string')
+            return { Name: it }
+
+        throw it
     }
 
     docs(docs: gen.Docs, extraSummaryLines: string[] = undefined, isMethod = false, appendArgsAndRetsToSummaryToo = true, retNameFallback = "return", into: Doc[] = undefined) {
@@ -238,7 +306,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             this.ln("# " + it.name + ":")
         for (const doc of it.Docs) {
             if (doc.ForParam && doc.ForParam.length) {
-                this.ln("# ", "# @" + doc.ForParam + ":")
+                this.ln("#", "# @" + doc.ForParam + ":")
             }
             for (const docln of doc.Lines)
                 this.ln("# " + docln)
@@ -280,20 +348,43 @@ export class Gen extends gen.Gen implements gen.IGen {
         this.indented(() => it.Fields.forEach(_ => {
             this.ln("")
             this.emitDocs(_)
+            this.ln("#", `# JSON FLAGS: ${JSON.stringify(_.Json)}`)
             this.ln(`${_.Name}: ${this.emitTypeRef(_.Type)}`)
         }))
         this.ln("", "")
     }
 
-    protected emitTypeRef = (it: TypeRef) => {
+    protected emitTypeRef = (it: TypeRef): string => {
         if (it === TypeRefPrim.Bool)
-            return "bool"
+            return "yesno"
         if (it === TypeRefPrim.Int)
             return "intnum"
         if (it === TypeRefPrim.String)
-            return "str"
+            return "txt"
+        if (it === TypeRefPrim.Dict)
+            return "[txt:Any]"
 
-        return "Any"
+        const tname = it as WithName
+        if (tname && tname.Name && tname.Name.length)
+            return tname.Name
+
+        const ttup = it as TypeRefTup
+        if (ttup && ttup.TupOf && ttup.TupOf.length)
+            return "[" + ttup.TupOf.map(_ => this.emitTypeRef(_)).join(',') + "]"
+
+        const tarr = it as TypeRefArr
+        if (tarr && tarr.ArrOf)
+            return "[" + this.emitTypeRef(tarr.ArrOf) + "]"
+
+        const tfun = it as TypeRefFunc
+        if (tfun && tfun.From && tfun.From.length)
+            return "(" + tfun.From.map(_ => this.emitTypeRef(_)).join(' -> ') + " -> " + (tfun.To ? this.emitTypeRef(tfun.To) : '') + ")"
+
+        const tmay = it as TypeRefMaybe
+        if (tmay && tmay.Maybe)
+            return "?" + this.emitTypeRef(tmay.Maybe)
+
+        throw it
     }
 
     gen(prep: gen.Prep) {
