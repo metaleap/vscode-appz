@@ -8,8 +8,8 @@ var TypeRefPrim;
     TypeRefPrim[TypeRefPrim["String"] = 139] = "String";
 })(TypeRefPrim = exports.TypeRefPrim || (exports.TypeRefPrim = {}));
 class Builder {
-    constructor(prep) { this.prep = prep; }
-    docs(docs, method = undefined, retNameFallback = "return", into = undefined) {
+    constructor(prep, gen) { [this.prep, this.gen] = [prep, gen]; }
+    docs(docs, method = undefined, retNameFallback = "return", appendArgsAndRetsToSummaryToo = true, into = undefined) {
         const issub = (into === undefined);
         if (issub)
             into = [];
@@ -22,12 +22,16 @@ class Builder {
                     if (!name)
                         name = "";
                     let dst = into.find(_ => _.ForParam === name);
-                    if (!dst)
-                        into.push(dst = { ForParam: name, Lines: [] });
-                    dst.Lines.push(...doc.lines);
+                    if (method || !(name && name.length)) {
+                        if (!dst)
+                            into.push(dst = { ForParam: name, Lines: [] });
+                        dst.Lines.push(...doc.lines);
+                    }
+                    if (name && name.length && appendArgsAndRetsToSummaryToo && (dst = into.find(_ => _.ForParam === "")))
+                        dst.Lines.push("", ...doc.lines.map((ln, idx) => ((idx) ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.gen.rewriteArgName))));
                 }
                 if (doc.subs && doc.subs.length)
-                    this.docs(doc.subs, method, retNameFallback, into);
+                    this.docs(doc.subs, method, retNameFallback, appendArgsAndRetsToSummaryToo, into);
             }
         if (into.length && !issub) { }
         return into;
@@ -67,6 +71,7 @@ class Gen extends gen.Gen {
         super(...arguments);
         this.src = "";
         this.indent = 0;
+        this.rewriteArgName = this.caseLo;
         this.ln = (...srcLns) => {
             for (const srcln of srcLns)
                 this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : '') + "\n";
@@ -121,7 +126,7 @@ class Gen extends gen.Gen {
     gen(prep) {
         this.resetState();
         this.src = "";
-        const build = new Builder(prep);
+        const build = new Builder(prep, this);
         for (const it of prep.enums)
             this.emitEnum(build.enumFrom(it));
         for (const it of prep.structs)

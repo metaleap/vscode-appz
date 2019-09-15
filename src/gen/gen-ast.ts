@@ -99,12 +99,14 @@ export interface IDictDel {
 
 class Builder {
     prep: gen.Prep
+    gen: Gen
 
-    constructor(prep: gen.Prep) { this.prep = prep }
+    constructor(prep: gen.Prep, gen: Gen) { [this.prep, this.gen] = [prep, gen] }
 
-    docs(docs: gen.Docs, method: gen.PrepMethod = undefined, retNameFallback = "return", into: Doc[] = undefined) {
+    docs(docs: gen.Docs, method: gen.PrepMethod = undefined, retNameFallback = "return", appendArgsAndRetsToSummaryToo = true, into: Doc[] = undefined) {
         const issub = (into === undefined)
-        if (issub) into = []
+        if (issub)
+            into = []
         if (docs && docs.length) for (const doc of docs) {
             if (doc.lines && doc.lines.length) {
                 let name = doc.isForArg
@@ -113,12 +115,18 @@ class Builder {
                 if (!name)
                     name = ""
                 let dst = into.find(_ => _.ForParam === name)
-                if (!dst)
-                    into.push(dst = { ForParam: name, Lines: [] })
-                dst.Lines.push(...doc.lines)
+                if (method || !(name && name.length)) {
+                    if (!dst)
+                        into.push(dst = { ForParam: name, Lines: [] })
+                    dst.Lines.push(...doc.lines)
+                }
+                if (name && name.length && appendArgsAndRetsToSummaryToo && (dst = into.find(_ => _.ForParam === "")))
+                    dst.Lines.push("", ...doc.lines.map((ln, idx) =>
+                        ((idx) ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.gen.rewriteArgName))
+                    ))
             }
             if (doc.subs && doc.subs.length)
-                this.docs(doc.subs, method, retNameFallback, into)
+                this.docs(doc.subs, method, retNameFallback, appendArgsAndRetsToSummaryToo, into)
         }
         if (into.length && !issub) { }
         return into
@@ -164,6 +172,7 @@ class Builder {
 export class Gen extends gen.Gen implements gen.IGen {
     protected src: string = ""
     protected indent: number = 0
+    rewriteArgName: ((_: string) => string) = this.caseLo
 
     protected ln = (...srcLns: string[]) => {
         for (const srcln of srcLns)
@@ -225,7 +234,7 @@ export class Gen extends gen.Gen implements gen.IGen {
     gen(prep: gen.Prep) {
         this.resetState()
         this.src = ""
-        const build = new Builder(prep)
+        const build = new Builder(prep, this)
 
         for (const it of prep.enums)
             this.emitEnum(build.enumFrom(it))
