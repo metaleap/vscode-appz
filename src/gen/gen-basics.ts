@@ -43,6 +43,7 @@ export interface PrepEnum {
     fromOrig: GenJobEnum
     name: string
     enumerants: {
+        fromOrig: ts.EnumMember,
         name: string
         value: number
     }[]
@@ -140,6 +141,7 @@ export class Prep {
             fromOrig: enumJob,
             name: qname.slice(1).join('_'),
             enumerants: enumJob.decl.members.map(_ => ({
+                fromOrig: _,
                 name: _.name.getText(),
                 value: parseInt((_.initializer as ts.LiteralExpression).text)
             }))

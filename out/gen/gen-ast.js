@@ -9,9 +9,60 @@ var TypeRefPrim;
 })(TypeRefPrim = exports.TypeRefPrim || (exports.TypeRefPrim = {}));
 class Builder {
     constructor(prep, gen) { [this.prep, this.gen] = [prep, gen]; }
-    docs(docs, method = undefined, retNameFallback = "return", appendArgsAndRetsToSummaryToo = true, into = undefined) {
-        const issub = (into === undefined);
-        if (issub)
+    enumFrom(it) {
+        return {
+            Name: this.gen.nameRewriters.types.enums(it.name),
+            Docs: this.docs(gen.docs(it.fromOrig.decl)),
+            Enumerants: it.enumerants.map(_ => ({
+                Name: this.gen.nameRewriters.enumerants(_.name),
+                Docs: this.docs(gen.docs(_.fromOrig)),
+                Value: _.value,
+            })),
+        };
+    }
+    interfaceFrom(it) {
+        return {
+            Name: this.gen.nameRewriters.types.interfaces(it.name),
+            Docs: this.docs(gen.docs(it.fromOrig)),
+            Methods: it.methods.map(_ => ({
+                Name: this.gen.nameRewriters.methods(_.name),
+                Docs: this.docs(gen.docs(_.fromOrig.decl, () => _.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
+                Args: _.args.map(arg => ({
+                    Name: this.gen.nameRewriters.args(arg.name),
+                    Docs: this.docs(gen.docs(arg.fromOrig)),
+                    Type: TypeRefPrim.Bool,
+                })),
+            })),
+        };
+    }
+    structFrom(it) {
+        let ret = {
+            Name: this.gen.nameRewriters.types.structs(it.name),
+            Docs: this.docs(gen.docs(it.fromOrig.decl)),
+            Fields: it.fields.map(_ => ({
+                Name: this.gen.nameRewriters.fields(_.name),
+                Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummaryFor.funcFields),
+                Type: TypeRefPrim.Int,
+                Json: { Name: _.name, Required: !_.optional, Ignore: it.funcFields.some(ff => _.name === ff) },
+            }))
+        };
+        for (const ff of it.funcFields) {
+            const ffname = this.gen.nameRewriters.fields(ff);
+            const fldfn = ret.Fields.find(_ => _.Name === ffname);
+            fldfn.FuncFieldRel = {
+                Name: ffname + "_AppzFuncId",
+                Docs: this.docs(null, [gen.docStrs.internalOnly]),
+                Type: TypeRefPrim.String,
+                Json: { Name: ff + "_AppzFuncId" },
+                FuncFieldRel: fldfn,
+            };
+            ret.Fields.push(fldfn.FuncFieldRel);
+        }
+        return ret;
+    }
+    docs(docs, extraSummaryLines = undefined, isMethod = false, appendArgsAndRetsToSummaryToo = true, retNameFallback = "return", into = undefined) {
+        const istop = (into === undefined);
+        if (istop)
             into = [];
         if (docs && docs.length)
             for (const doc of docs) {
@@ -22,48 +73,24 @@ class Builder {
                     if (!name)
                         name = "";
                     let dst = into.find(_ => _.ForParam === name);
-                    if (method || !(name && name.length)) {
+                    if (isMethod || !(name && name.length)) {
                         if (!dst)
                             into.push(dst = { ForParam: name, Lines: [] });
                         dst.Lines.push(...doc.lines);
                     }
                     if (name && name.length && appendArgsAndRetsToSummaryToo && (dst = into.find(_ => _.ForParam === "")))
-                        dst.Lines.push("", ...doc.lines.map((ln, idx) => ((idx) ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.gen.rewriteArgName))));
+                        dst.Lines.push("", ...doc.lines.map((ln, idx) => ((idx) ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.gen.nameRewriters.args))));
                 }
                 if (doc.subs && doc.subs.length)
-                    this.docs(doc.subs, method, retNameFallback, appendArgsAndRetsToSummaryToo, into);
+                    this.docs(doc.subs, undefined, isMethod, appendArgsAndRetsToSummaryToo, retNameFallback, into);
             }
-        if (into.length && !issub) { }
+        if (istop && extraSummaryLines && extraSummaryLines.length) {
+            let dst = into.find(_ => _.ForParam === "");
+            if (!dst)
+                into.push(dst = { ForParam: "", Lines: [] });
+            dst.Lines.push(...extraSummaryLines);
+        }
         return into;
-    }
-    enumFrom(it) {
-        return {
-            Name: it.name,
-            Docs: this.docs(gen.docs(it.fromOrig.decl)),
-            Enumerants: it.enumerants.map((_, idx) => this.enumerantFrom(it, idx)),
-        };
-    }
-    enumerantFrom(it, idx) {
-        return {
-            Name: it.enumerants[idx].name,
-            Docs: this.docs(gen.docs(it.fromOrig.decl)),
-            Value: it.enumerants[idx].value,
-        };
-    }
-    structFrom(it) {
-        return {
-            Name: it.name,
-            Docs: this.docs(gen.docs(it.fromOrig.decl)),
-            Fields: it.fields.map(_ => this.fieldFrom(_)),
-        };
-    }
-    fieldFrom(it) {
-        return {
-            Name: it.name,
-            Docs: this.docs(gen.docs(it.fromOrig)),
-            Type: TypeRefPrim.Int,
-            Json: { Ignore: false, Name: it.name, Required: false },
-        };
     }
 }
 class Gen extends gen.Gen {
@@ -71,12 +98,26 @@ class Gen extends gen.Gen {
         super(...arguments);
         this.src = "";
         this.indent = 0;
-        this.rewriteArgName = this.caseLo;
+        this.nameRewriters = {
+            args: this.caseLo,
+            fields: this.caseUp,
+            methods: this.caseUp,
+            enumerants: this.caseUp,
+            types: { enums: this.caseUp, structs: this.caseUp, interfaces: this.caseUp },
+        };
+        this.options = {
+            doc: {
+                appendArgsToSummaryFor: {
+                    methods: false,
+                    funcFields: true,
+                }
+            }
+        };
         this.ln = (...srcLns) => {
             for (const srcln of srcLns)
                 this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : '') + "\n";
         };
-        this.ind = (andThen) => {
+        this.indented = (andThen) => {
             this.indent++;
             andThen();
             this.indent--;
@@ -95,32 +136,46 @@ class Gen extends gen.Gen {
             this.ln("", "");
             this.emitDocs(it);
             this.ln(it.Name + ": enum");
-            this.ind(() => {
-                for (const _ of it.Enumerants) {
-                    this.ln("");
-                    this.emitDocs(_);
-                    this.ln(`${_.Name}: ${_.Value}`);
-                }
-            });
+            this.indented(() => it.Enumerants.forEach(_ => {
+                this.ln("");
+                this.emitDocs(_);
+                this.ln(`${_.Name}: ${_.Value}`);
+            }));
+            this.ln("", "");
+        };
+        this.emitInterface = (it) => {
+            this.ln("", "");
+            this.emitDocs(it);
+            this.ln(it.Name + ": interface");
+            this.indented(() => it.Methods.forEach(_ => {
+                this.ln("");
+                this.emitDocs(_);
+                this.ln(`${_.Name}: method`);
+                this.indented(() => _.Args.forEach(arg => {
+                    this.ln(`${arg.Name}: ${this.emitTypeRef(arg.Type)}`);
+                }));
+            }));
             this.ln("", "");
         };
         this.emitStruct = (it) => {
             this.ln("", "");
             this.emitDocs(it);
             this.ln(it.Name + ": struct");
-            this.ind(() => {
-                for (const _ of it.Fields) {
-                    this.ln("");
-                    this.emitDocs(_);
-                    this.ln(`${_.Name}: ${this.emitTypeRef(_.Type)}`);
-                }
-            });
+            this.indented(() => it.Fields.forEach(_ => {
+                this.ln("");
+                this.emitDocs(_);
+                this.ln(`${_.Name}: ${this.emitTypeRef(_.Type)}`);
+            }));
             this.ln("", "");
         };
         this.emitTypeRef = (it) => {
-            return "tref";
-        };
-        this.emitInterface = (it) => {
+            if (it === TypeRefPrim.Bool)
+                return "bool";
+            if (it === TypeRefPrim.Int)
+                return "intnum";
+            if (it === TypeRefPrim.String)
+                return "str";
+            return "Any";
         };
     }
     gen(prep) {
@@ -131,6 +186,8 @@ class Gen extends gen.Gen {
             this.emitEnum(build.enumFrom(it));
         for (const it of prep.structs)
             this.emitStruct(build.structFrom(it));
+        for (const it of prep.interfaces)
+            this.emitInterface(build.interfaceFrom(it));
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src);
     }
 }
