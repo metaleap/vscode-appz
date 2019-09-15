@@ -308,10 +308,6 @@ function docs(from, retName = undefined) {
     return ret;
 }
 exports.docs = docs;
-function docIsForArgOrRet(doc) {
-    return (doc.isForArg || (doc.isForRet !== undefined && doc.isForRet !== null));
-}
-exports.docIsForArgOrRet = docIsForArgOrRet;
 function docPrependArgOrRetName(doc, ln, retFallback, argNameRewrite = undefined, pref = "`", suff = "` ── ") {
     let isfor = doc.isForArg;
     if (isfor && isfor.length)

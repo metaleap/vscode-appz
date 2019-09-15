@@ -3,7 +3,8 @@ import * as gen from './gen-basics'
 
 export interface WithName { Name: string }
 export interface WithType { Type: TypeRef }
-export interface WithDocs { Docs: { ForParam: string, Lines: string[] }[] }
+export interface WithDocs { Docs: Doc[] }
+export interface Doc { ForParam: string, Lines: string[] }
 
 export interface TEnum extends WithDocs, WithName { Enumerants: Enumerant[] }
 export interface TInterface extends WithDocs, WithName { Methods: Method[] }
@@ -101,32 +102,57 @@ class Builder {
 
     constructor(prep: gen.Prep) { this.prep = prep }
 
-    docs(from: ts.Node, method: gen.PrepMethod = undefined, isSub: boolean = false) {
-        const docs = gen.docs(from)
+    docs(docs: gen.Docs, method: gen.PrepMethod = undefined, retNameFallback = "return", into: Doc[] = undefined) {
+        const issub = (into === undefined)
+        if (issub) into = []
+        if (docs && docs.length) for (const doc of docs) {
+            if (doc.lines && doc.lines.length) {
+                let name = doc.isForArg
+                if ((!(name && name.length)) && doc.isForRet !== null && doc.isForRet !== undefined)
+                    name = (doc.isForRet && doc.isForRet.length) ? doc.isForRet : retNameFallback
+                if (!name)
+                    name = ""
+                let dst = into.find(_ => _.ForParam === name)
+                if (!dst)
+                    into.push(dst = { ForParam: name, Lines: [] })
+                dst.Lines.push(...doc.lines)
+            }
+            if (doc.subs && doc.subs.length)
+                this.docs(doc.subs, method, retNameFallback, into)
+        }
+        if (into.length && !issub) { }
+        return into
     }
 
     enumFrom(it: gen.PrepEnum): TEnum {
         return {
-            Docs: [], Name: it.name,
+            Name: it.name,
+            Docs: this.docs(gen.docs(it.fromOrig.decl)),
             Enumerants: it.enumerants.map((_, idx) =>
                 this.enumerantFrom(it, idx)),
         }
     }
 
     enumerantFrom(it: gen.PrepEnum, idx: number): Enumerant {
-        return { Docs: [], Name: it.enumerants[idx].name, Value: it.enumerants[idx].value }
+        return {
+            Name: it.enumerants[idx].name,
+            Docs: this.docs(gen.docs(it.fromOrig.decl)),
+            Value: it.enumerants[idx].value,
+        }
     }
 
     structFrom(it: gen.PrepStruct): TStruct {
         return {
-            Docs: [], Name: it.name,
+            Name: it.name,
+            Docs: this.docs(gen.docs(it.fromOrig.decl)),
             Fields: it.fields.map(_ => this.fieldFrom(_)),
         }
     }
 
     fieldFrom(it: gen.PrepField): Field {
         return {
-            Docs: [], Name: it.name,
+            Name: it.name,
+            Docs: this.docs(gen.docs(it.fromOrig)),
             Type: TypeRefPrim.Int,
             Json: { Ignore: false, Name: it.name, Required: false },
         }
@@ -153,13 +179,11 @@ export class Gen extends gen.Gen implements gen.IGen {
     protected emitDocs = (it: WithDocs) => {
         for (const doc of it.Docs) {
             if (doc.ForParam && doc.ForParam.length) {
-                this.indent++
-                this.ln("# @" + doc.ForParam + ":")
+                this.ln("# ", "# @" + doc.ForParam + ":")
             }
             for (const docln of doc.Lines)
                 this.ln("# " + docln)
-            if (doc.ForParam && doc.ForParam.length)
-                this.indent--
+            if (doc.ForParam && doc.ForParam.length) { }
         }
     }
 

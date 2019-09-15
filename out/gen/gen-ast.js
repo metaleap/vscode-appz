@@ -9,27 +9,54 @@ var TypeRefPrim;
 })(TypeRefPrim = exports.TypeRefPrim || (exports.TypeRefPrim = {}));
 class Builder {
     constructor(prep) { this.prep = prep; }
-    docs(from, method = undefined, isSub = false) {
-        const docs = gen.docs(from);
+    docs(docs, method = undefined, retNameFallback = "return", into = undefined) {
+        const issub = (into === undefined);
+        if (issub)
+            into = [];
+        if (docs && docs.length)
+            for (const doc of docs) {
+                if (doc.lines && doc.lines.length) {
+                    let name = doc.isForArg;
+                    if ((!(name && name.length)) && doc.isForRet !== null && doc.isForRet !== undefined)
+                        name = (doc.isForRet && doc.isForRet.length) ? doc.isForRet : retNameFallback;
+                    if (!name)
+                        name = "";
+                    let dst = into.find(_ => _.ForParam === name);
+                    if (!dst)
+                        into.push(dst = { ForParam: name, Lines: [] });
+                    dst.Lines.push(...doc.lines);
+                }
+                if (doc.subs && doc.subs.length)
+                    this.docs(doc.subs, method, retNameFallback, into);
+            }
+        if (into.length && !issub) { }
+        return into;
     }
     enumFrom(it) {
         return {
-            Docs: [], Name: it.name,
+            Name: it.name,
+            Docs: this.docs(gen.docs(it.fromOrig.decl)),
             Enumerants: it.enumerants.map((_, idx) => this.enumerantFrom(it, idx)),
         };
     }
     enumerantFrom(it, idx) {
-        return { Docs: [], Name: it.enumerants[idx].name, Value: it.enumerants[idx].value };
+        return {
+            Name: it.enumerants[idx].name,
+            Docs: this.docs(gen.docs(it.fromOrig.decl)),
+            Value: it.enumerants[idx].value,
+        };
     }
     structFrom(it) {
         return {
-            Docs: [], Name: it.name,
+            Name: it.name,
+            Docs: this.docs(gen.docs(it.fromOrig.decl)),
             Fields: it.fields.map(_ => this.fieldFrom(_)),
         };
     }
     fieldFrom(it) {
         return {
-            Docs: [], Name: it.name,
+            Name: it.name,
+            Docs: this.docs(gen.docs(it.fromOrig)),
             Type: TypeRefPrim.Int,
             Json: { Ignore: false, Name: it.name, Required: false },
         };
@@ -52,13 +79,11 @@ class Gen extends gen.Gen {
         this.emitDocs = (it) => {
             for (const doc of it.Docs) {
                 if (doc.ForParam && doc.ForParam.length) {
-                    this.indent++;
-                    this.ln("# @" + doc.ForParam + ":");
+                    this.ln("# ", "# @" + doc.ForParam + ":");
                 }
                 for (const docln of doc.Lines)
                     this.ln("# " + docln);
-                if (doc.ForParam && doc.ForParam.length)
-                    this.indent--;
+                if (doc.ForParam && doc.ForParam.length) { }
             }
         };
         this.emitEnum = (it) => {

@@ -436,10 +436,6 @@ export function docs(from: ts.Node, retName: () => { name: string } = undefined)
     return ret
 }
 
-export function docIsForArgOrRet(doc: Doc) {
-    return (doc.isForArg || (doc.isForRet !== undefined && doc.isForRet !== null))
-}
-
 export function docPrependArgOrRetName(doc: Doc, ln: string, retFallback: string, argNameRewrite: ((_: string) => string) = undefined, pref = "`", suff = "` ── ") {
     let isfor = doc.isForArg
     if (isfor && isfor.length)
