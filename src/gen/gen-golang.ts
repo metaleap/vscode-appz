@@ -3,6 +3,7 @@ import * as gen from './gen-basics'
 export class Gen extends gen.Gen implements gen.IGen {
 
     gen(prep: gen.Prep) {
+        this.resetState()
         let src = "package vscAppz\n\n// " + this.doNotEditComment("golang") + "\n\n"
 
         const doclns = this.genDocLns(gen.docs(prep.fromOrig.fromOrig))
@@ -26,10 +27,10 @@ export class Gen extends gen.Gen implements gen.IGen {
             let anydec = true
             while (anydec) {
                 anydec = false
-                for (const name in prep.state.genDecoders)
-                    if (anydec = prep.state.genDecoders[name]) {
+                for (const name in this.state.genDecoders)
+                    if (anydec = this.state.genDecoders[name]) {
                         src += this.genPopulateFrom(prep, name)
-                        prep.state.genDecoders[name] = false
+                        this.state.genDecoders[name] = false
                     }
             }
         }
@@ -169,7 +170,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         src += haveOk ? "" : `${pref}var ok bool\n`
         const dsttypego = dstTypeGo.startsWith('*') ? dstTypeGo.slice(1) : dstTypeGo
         if (prep.structs.some(_ => _.name === dsttypego)) {
-            prep.state.genDecoders[dsttypego] = true
+            this.state.genDecoders[dsttypego] = true
             if (dstTypeGo !== dsttypego)
                 src += `${pref}${dstName} = new(${dsttypego})\n`
             src += `${pref}ok = ${dstName}.populateFrom(${srcName})\n`

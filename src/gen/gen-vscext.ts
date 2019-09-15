@@ -3,6 +3,7 @@ import * as gen from './gen-basics'
 export class Gen extends gen.Gen implements gen.IGen {
 
     gen(prep: gen.Prep) {
+        this.resetState()
         const pkgname = prep.fromOrig.moduleName
         let src = "// " + this.doNotEditComment("vscext") + "\n\n"
         src += "import * as node_proc from 'child_process'\n"

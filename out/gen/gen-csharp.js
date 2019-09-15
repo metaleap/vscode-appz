@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const gen = require("./gen-basics");
 class Gen extends gen.Gen {
     gen(prep) {
+        this.resetState();
         let src = "// " + this.doNotEditComment("csharp") + "\n";
         src += `namespace VscAppz {\n`;
         src += "\tusing System;\n";
@@ -30,10 +31,10 @@ class Gen extends gen.Gen {
             let anydec = true;
             while (anydec) {
                 anydec = false;
-                for (const name in prep.state.genDecoders)
-                    if (anydec = prep.state.genDecoders[name]) {
+                for (const name in this.state.genDecoders)
+                    if (anydec = this.state.genDecoders[name]) {
                         src += this.genPopulateFrom(prep, name);
-                        prep.state.genDecoders[name] = false;
+                        this.state.genDecoders[name] = false;
                     }
             }
         }
@@ -167,7 +168,7 @@ class Gen extends gen.Gen {
             return `${pref}${dstName} = ${srcName};\n`;
         let src = haveOk ? "" : `${pref}bool ok;\n`;
         if (prep.structs.some(_ => _.name === dstTypeCs)) {
-            prep.state.genDecoders[dstTypeCs] = true;
+            this.state.genDecoders[dstTypeCs] = true;
             src += `${pref}(${dstName}, ok) = new ${dstTypeCs}().populateFrom(${srcName});\n`;
         }
         else

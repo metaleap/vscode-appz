@@ -2,6 +2,7 @@ import * as node_fs from 'fs'
 import * as ts from 'typescript'
 
 import * as gen from './gen-basics'
+import * as gen_ast from './gen-ast'
 import * as gen_golang from './gen-golang'
 import * as gen_csharp from './gen-csharp'
 import * as gen_python from './gen-python'
@@ -12,6 +13,7 @@ import * as gen_vscext from './gen-vscext'
 const filePathDts = 'node_modules/@types/vscode/index.d.ts'
 
 const gens: gen.IGen[] = [
+    new gen_ast.Gen('libs/tmpdbg/', '.gen.tmpdbg'),
     new gen_golang.Gen('libs/go/', '.gen.go'),
     new gen_csharp.Gen('libs/cs/', '.gen.cs'),
     new gen_python.Gen('libs/py/', '.gen.py'),
@@ -51,10 +53,8 @@ function main() {
             }
             gatherAll(job, md.body, genApiSurface[modulename], modulename)
             const prep = new gen.Prep(job)
-            for (const gen of gens) {
-                prep.state = { genDecoders: {} }
+            for (const gen of gens)
                 gen.gen(prep)
-            }
         }
     }
 }

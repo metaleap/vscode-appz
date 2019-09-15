@@ -3,12 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const node_fs = require("fs");
 const ts = require("typescript");
 const gen = require("./gen-basics");
+const gen_ast = require("./gen-ast");
 const gen_golang = require("./gen-golang");
 const gen_csharp = require("./gen-csharp");
 const gen_python = require("./gen-python");
 const gen_vscext = require("./gen-vscext");
 const filePathDts = 'node_modules/@types/vscode/index.d.ts';
 const gens = [
+    new gen_ast.Gen('libs/tmpdbg/', '.gen.tmpdbg'),
     new gen_golang.Gen('libs/go/', '.gen.go'),
     new gen_csharp.Gen('libs/cs/', '.gen.cs'),
     new gen_python.Gen('libs/py/', '.gen.py'),
@@ -42,10 +44,8 @@ function main() {
             };
             gatherAll(job, md.body, genApiSurface[modulename], modulename);
             const prep = new gen.Prep(job);
-            for (const gen of gens) {
-                prep.state = { genDecoders: {} };
+            for (const gen of gens)
                 gen.gen(prep);
-            }
         }
     }
 }

@@ -93,9 +93,6 @@ export class Prep {
     interfaces: PrepInterface[] = []
 
     readonly fromOrig: GenJob
-    state: null | {
-        genDecoders: { [_: string]: boolean }
-    } = null
 
     constructor(job: GenJob) {
         this.fromOrig = job
@@ -317,9 +314,17 @@ export type Docs = Doc[]
 export abstract class Gen {
     outFilePathPref: string
     outFilePathSuff: string
+    state: {
+        genDecoders: { [_: string]: boolean }
+    }
 
     constructor(outFilePathPref: string, outFilePathSuff: string) {
         [this.outFilePathPref, this.outFilePathSuff] = [outFilePathPref, outFilePathSuff]
+        this.resetState()
+    }
+
+    resetState() {
+        this.state = { genDecoders: {} }
     }
 
     doNotEditComment(moniker: string): string {

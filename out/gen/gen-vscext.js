@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const gen = require("./gen-basics");
 class Gen extends gen.Gen {
     gen(prep) {
+        this.resetState();
         const pkgname = prep.fromOrig.moduleName;
         let src = "// " + this.doNotEditComment("vscext") + "\n\n";
         src += "import * as node_proc from 'child_process'\n";
