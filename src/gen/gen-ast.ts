@@ -189,7 +189,7 @@ class Builder {
         if (it === gen.ScriptPrimType.Dict)
             return TypeRefPrim.Dict
         if (it === gen.ScriptPrimType.Any)
-            return { Name: "Any" }
+            return { Name: this.gen.options.idents.anyType }
 
         const tarr = gen.typeArrOf(it)
         if (tarr)
@@ -290,7 +290,8 @@ export class Gen extends gen.Gen implements gen.IGen {
             }
         },
         idents: {
-            self: "self"
+            curInst: "$",
+            anyType: "Any",
         }
     }
 
@@ -360,16 +361,16 @@ export class Gen extends gen.Gen implements gen.IGen {
 
     protected emitTypeRef = (it: TypeRef): string => {
         if (it === null)
-            return "!"
+            return "void"
 
         if (it === TypeRefPrim.Bool)
-            return "yesno"
+            return "bool"
         if (it === TypeRefPrim.Int)
-            return "intnum"
+            return "int"
         if (it === TypeRefPrim.String)
-            return "txt"
+            return "string"
         if (it === TypeRefPrim.Dict)
-            return "[txt:Any]"
+            return `[string:${this.options.idents.anyType}]`
 
         const tname = it as WithName
         if (tname && tname.Name && tname.Name.length)
@@ -437,7 +438,7 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     protected emitEName(eName: EName): string {
-        return eName.Name ? eName.Name : this.options.idents.self
+        return eName.Name ? eName.Name : this.options.idents.curInst
     }
 
     gen(prep: gen.Prep) {

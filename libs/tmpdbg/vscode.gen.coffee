@@ -34,7 +34,7 @@ MessageOptions: struct
 	# Indicates that this message should be modal.
 	#
 	# JSON FLAGS: {"Name":"modal","Required":false,"Excluded":false}
-	Modal: ?yesno
+	Modal: ?bool
 
 
 
@@ -47,7 +47,7 @@ MessageItem: struct
 	# A short title like 'Retry', 'Open Log' etc.
 	#
 	# JSON FLAGS: {"Name":"title","Required":true,"Excluded":false}
-	Title: txt
+	Title: string
 
 	# isCloseAffordance:
 	# A hint for modal dialogs that the item should be triggered
@@ -57,13 +57,13 @@ MessageItem: struct
 	# Note: this option is ignored for non-modal messages.
 	#
 	# JSON FLAGS: {"Name":"isCloseAffordance","Required":false,"Excluded":false}
-	IsCloseAffordance: ?yesno
+	IsCloseAffordance: ?bool
 
 	# my:
 	# Free-form custom data, preserved across a roundtrip.
 	#
 	# JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
-	My: ?[txt:Any]
+	My: ?[string:Any]
 
 
 
@@ -75,7 +75,7 @@ InputBoxOptions: struct
 	# The value to prefill in the input box.
 	#
 	# JSON FLAGS: {"Name":"value","Required":false,"Excluded":false}
-	Value: ?txt
+	Value: ?string
 
 	# valueSelection:
 	# Selection of the prefilled [`value`](#InputBoxOptions.value). Defined as tuple of two number where the
@@ -84,31 +84,31 @@ InputBoxOptions: struct
 	# otherwise the defined range will be selected.
 	#
 	# JSON FLAGS: {"Name":"valueSelection","Required":false,"Excluded":false}
-	ValueSelection: ?[intnum,intnum]
+	ValueSelection: ?[int,int]
 
 	# prompt:
 	# The text to display underneath the input box.
 	#
 	# JSON FLAGS: {"Name":"prompt","Required":false,"Excluded":false}
-	Prompt: ?txt
+	Prompt: ?string
 
 	# placeHolder:
 	# An optional string to show as place holder in the input box to guide the user what to type.
 	#
 	# JSON FLAGS: {"Name":"placeHolder","Required":false,"Excluded":false}
-	PlaceHolder: ?txt
+	PlaceHolder: ?string
 
 	# password:
 	# Set to `true` to show a password prompt that will not show the typed value.
 	#
 	# JSON FLAGS: {"Name":"password","Required":false,"Excluded":false}
-	Password: ?yesno
+	Password: ?bool
 
 	# ignoreFocusOut:
 	# Set to `true` to keep the input box open when focus moves to another part of the editor or to another window.
 	#
 	# JSON FLAGS: {"Name":"ignoreFocusOut","Required":false,"Excluded":false}
-	IgnoreFocusOut: ?yesno
+	IgnoreFocusOut: ?bool
 
 	# validateInput:
 	# An optional function that will be called to validate input and to give a hint
@@ -120,12 +120,12 @@ InputBoxOptions: struct
 	# Return `undefined`, `null`, or the empty string when 'value' is valid.
 	#
 	# JSON FLAGS: {"Name":"validateInput","Required":false,"Excluded":true}
-	ValidateInput: ?(txt -> txt)
+	ValidateInput: ?(string -> string)
 
 	# For internal runtime use only.
 	#
 	# JSON FLAGS: {"Name":"validateInput_AppzFuncId","Required":false,"Excluded":false}
-	ValidateInput_AppzFuncId: txt
+	ValidateInput_AppzFuncId: string
 
 
 
@@ -148,9 +148,9 @@ Window: iface
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
 	ShowErrorMessage1: 
-		message: txt
-		items: [txt]
-		andThen: ?(txt -> !)
+		message: string
+		items: [string]
+		andThen: ?(string -> void)
 
 	# showErrorMessage:
 	# Show an error message.
@@ -167,10 +167,10 @@ Window: iface
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
 	ShowErrorMessage2: 
-		message: txt
+		message: string
 		options: MessageOptions
-		items: [txt]
-		andThen: ?(txt -> !)
+		items: [string]
+		andThen: ?(string -> void)
 
 	# showErrorMessage:
 	# Show an error message.
@@ -184,9 +184,9 @@ Window: iface
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
 	ShowErrorMessage3: 
-		message: txt
+		message: string
 		items: [MessageItem]
-		andThen: ?(MessageItem -> !)
+		andThen: ?(MessageItem -> void)
 
 	# showErrorMessage:
 	# Show an error message.
@@ -203,10 +203,10 @@ Window: iface
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
 	ShowErrorMessage4: 
-		message: txt
+		message: string
 		options: MessageOptions
 		items: [MessageItem]
-		andThen: ?(MessageItem -> !)
+		andThen: ?(MessageItem -> void)
 
 	# showInformationMessage:
 	# Show an information message to users. Optionally provide an array of items which will be presented as
@@ -221,9 +221,9 @@ Window: iface
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
 	ShowInformationMessage1: 
-		message: txt
-		items: [txt]
-		andThen: ?(txt -> !)
+		message: string
+		items: [string]
+		andThen: ?(string -> void)
 
 	# showInformationMessage:
 	# Show an information message to users. Optionally provide an array of items which will be presented as
@@ -241,10 +241,10 @@ Window: iface
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
 	ShowInformationMessage2: 
-		message: txt
+		message: string
 		options: MessageOptions
-		items: [txt]
-		andThen: ?(txt -> !)
+		items: [string]
+		andThen: ?(string -> void)
 
 	# showInformationMessage:
 	# Show an information message.
@@ -258,9 +258,9 @@ Window: iface
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
 	ShowInformationMessage3: 
-		message: txt
+		message: string
 		items: [MessageItem]
-		andThen: ?(MessageItem -> !)
+		andThen: ?(MessageItem -> void)
 
 	# showInformationMessage:
 	# Show an information message.
@@ -277,10 +277,10 @@ Window: iface
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
 	ShowInformationMessage4: 
-		message: txt
+		message: string
 		options: MessageOptions
 		items: [MessageItem]
-		andThen: ?(MessageItem -> !)
+		andThen: ?(MessageItem -> void)
 
 	# showWarningMessage:
 	# Show a warning message.
@@ -294,9 +294,9 @@ Window: iface
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
 	ShowWarningMessage1: 
-		message: txt
-		items: [txt]
-		andThen: ?(txt -> !)
+		message: string
+		items: [string]
+		andThen: ?(string -> void)
 
 	# showWarningMessage:
 	# Show a warning message.
@@ -313,10 +313,10 @@ Window: iface
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
 	ShowWarningMessage2: 
-		message: txt
+		message: string
 		options: MessageOptions
-		items: [txt]
-		andThen: ?(txt -> !)
+		items: [string]
+		andThen: ?(string -> void)
 
 	# showWarningMessage:
 	# Show a warning message.
@@ -330,9 +330,9 @@ Window: iface
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
 	ShowWarningMessage3: 
-		message: txt
+		message: string
 		items: [MessageItem]
-		andThen: ?(MessageItem -> !)
+		andThen: ?(MessageItem -> void)
 
 	# showWarningMessage:
 	# Show a warning message.
@@ -349,10 +349,10 @@ Window: iface
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
 	ShowWarningMessage4: 
-		message: txt
+		message: string
 		options: MessageOptions
 		items: [MessageItem]
-		andThen: ?(MessageItem -> !)
+		andThen: ?(MessageItem -> void)
 
 	# showInputBox:
 	# Opens an input box to ask the user for input.
@@ -371,90 +371,90 @@ Window: iface
 	# A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
 	ShowInputBox: 
 		options: ?InputBoxOptions
-		andThen: ?(txt -> !)
+		andThen: ?(string -> void)
 
 
 
 
 Vscode.Window (): Window
-	ret self
+	ret $
 
 
 
 
-Window.ShowErrorMessage1 (message: txt, items: [txt], andThen: ?(txt -> !)): !
+Window.ShowErrorMessage1 (message: string, items: [string], andThen: ?(string -> void)): void
 	ret
 
 
 
 
-Window.ShowErrorMessage2 (message: txt, options: MessageOptions, items: [txt], andThen: ?(txt -> !)): !
+Window.ShowErrorMessage2 (message: string, options: MessageOptions, items: [string], andThen: ?(string -> void)): void
 	ret
 
 
 
 
-Window.ShowErrorMessage3 (message: txt, items: [MessageItem], andThen: ?(MessageItem -> !)): !
+Window.ShowErrorMessage3 (message: string, items: [MessageItem], andThen: ?(MessageItem -> void)): void
 	ret
 
 
 
 
-Window.ShowErrorMessage4 (message: txt, options: MessageOptions, items: [MessageItem], andThen: ?(MessageItem -> !)): !
+Window.ShowErrorMessage4 (message: string, options: MessageOptions, items: [MessageItem], andThen: ?(MessageItem -> void)): void
 	ret
 
 
 
 
-Window.ShowInformationMessage1 (message: txt, items: [txt], andThen: ?(txt -> !)): !
+Window.ShowInformationMessage1 (message: string, items: [string], andThen: ?(string -> void)): void
 	ret
 
 
 
 
-Window.ShowInformationMessage2 (message: txt, options: MessageOptions, items: [txt], andThen: ?(txt -> !)): !
+Window.ShowInformationMessage2 (message: string, options: MessageOptions, items: [string], andThen: ?(string -> void)): void
 	ret
 
 
 
 
-Window.ShowInformationMessage3 (message: txt, items: [MessageItem], andThen: ?(MessageItem -> !)): !
+Window.ShowInformationMessage3 (message: string, items: [MessageItem], andThen: ?(MessageItem -> void)): void
 	ret
 
 
 
 
-Window.ShowInformationMessage4 (message: txt, options: MessageOptions, items: [MessageItem], andThen: ?(MessageItem -> !)): !
+Window.ShowInformationMessage4 (message: string, options: MessageOptions, items: [MessageItem], andThen: ?(MessageItem -> void)): void
 	ret
 
 
 
 
-Window.ShowWarningMessage1 (message: txt, items: [txt], andThen: ?(txt -> !)): !
+Window.ShowWarningMessage1 (message: string, items: [string], andThen: ?(string -> void)): void
 	ret
 
 
 
 
-Window.ShowWarningMessage2 (message: txt, options: MessageOptions, items: [txt], andThen: ?(txt -> !)): !
+Window.ShowWarningMessage2 (message: string, options: MessageOptions, items: [string], andThen: ?(string -> void)): void
 	ret
 
 
 
 
-Window.ShowWarningMessage3 (message: txt, items: [MessageItem], andThen: ?(MessageItem -> !)): !
+Window.ShowWarningMessage3 (message: string, items: [MessageItem], andThen: ?(MessageItem -> void)): void
 	ret
 
 
 
 
-Window.ShowWarningMessage4 (message: txt, options: MessageOptions, items: [MessageItem], andThen: ?(MessageItem -> !)): !
+Window.ShowWarningMessage4 (message: string, options: MessageOptions, items: [MessageItem], andThen: ?(MessageItem -> void)): void
 	ret
 
 
 
 
-Window.ShowInputBox (options: ?InputBoxOptions, andThen: ?(txt -> !)): !
+Window.ShowInputBox (options: ?InputBoxOptions, andThen: ?(string -> void)): void
 	ret
 
 

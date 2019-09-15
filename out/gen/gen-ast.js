@@ -89,7 +89,7 @@ class Builder {
         if (it === gen.ScriptPrimType.Dict)
             return TypeRefPrim.Dict;
         if (it === gen.ScriptPrimType.Any)
-            return { Name: "Any" };
+            return { Name: this.gen.options.idents.anyType };
         const tarr = gen.typeArrOf(it);
         if (tarr)
             return { ArrOf: this.typeRef(tarr) };
@@ -177,7 +177,8 @@ class Gen extends gen.Gen {
                 }
             },
             idents: {
-                self: "self"
+                curInst: "$",
+                anyType: "Any",
             }
         };
         this.ln = (...srcLns) => {
@@ -240,15 +241,15 @@ class Gen extends gen.Gen {
         };
         this.emitTypeRef = (it) => {
             if (it === null)
-                return "!";
+                return "void";
             if (it === TypeRefPrim.Bool)
-                return "yesno";
+                return "bool";
             if (it === TypeRefPrim.Int)
-                return "intnum";
+                return "int";
             if (it === TypeRefPrim.String)
-                return "txt";
+                return "string";
             if (it === TypeRefPrim.Dict)
-                return "[txt:Any]";
+                return `[string:${this.options.idents.anyType}]`;
             const tname = it;
             if (tname && tname.Name && tname.Name.length)
                 return tname.Name;
@@ -300,7 +301,7 @@ class Gen extends gen.Gen {
         return "<expr>" + JSON.stringify(expr);
     }
     emitEName(eName) {
-        return eName.Name ? eName.Name : this.options.idents.self;
+        return eName.Name ? eName.Name : this.options.idents.curInst;
     }
     gen(prep) {
         this.resetState();
