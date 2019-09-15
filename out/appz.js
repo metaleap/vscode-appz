@@ -15,7 +15,7 @@ function activate(ctx) {
 }
 exports.activate = activate;
 function onCmdMain() {
-    const progs = vscproj.getConfiguration("appz").get("allProgs");
+    const progs = vscproj.getConfiguration("appz").get("allProgs") || [];
     const items = progs.map(_ => ({
         prog: _, pid: 0, label: "RUN: " + _,
         detail: ppio.procs[_] ? "Already running. Will kill and re-start." : "Not currently running" + (_.includes(' ') ? ' (at least not with those exact args)' : '') + "."

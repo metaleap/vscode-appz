@@ -8,7 +8,7 @@ import * as vscgen from './vscode.gen'
 
 export interface IpcMsg {
     qName?: string
-    data: { [_: string]: any } // | { yay: any } | { nay: any }
+    data: { [_: string]: any } // | { "yay": any } | { "nay": any }
     cbId?: string
 }
 

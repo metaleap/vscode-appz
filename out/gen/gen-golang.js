@@ -77,7 +77,7 @@ class Gen extends gen.Gen {
             + method.args.map(arg => this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional)).join(', ')
             + ") {\n";
         const numargs = method.args.filter(_ => !_.isFromRetThenable).length;
-        const __ = gen.idents(method.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result');
+        const __ = gen.idents(method.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'resultptr');
         src += `\t${__.msg} := ipcMsg{QName: "${it.name}.${method.name}", Data: make(map[string]Any, ${numargs})}\n`;
         if (funcfields.length) {
             src += `\t${__.fnids} := make([]string, 0, ${funcfields.length})\n`;
@@ -96,7 +96,7 @@ class Gen extends gen.Gen {
                 for (let a = 0; a < args.length; a++) {
                     const tspec = this.typeSpec(args[a]);
                     src += `\t\t\t\t\tvar a${a} ${tspec}\n`;
-                    src += this.genDecodeFromAny(prep, "\t\t\t\t\t", "args[" + a + "]", "a" + a, tspec, true, "", "return", true);
+                    src += this.genDecodeFromAny(prep, "\t\t\t\t\t", "args[" + a + "]", "a" + a, tspec, true, true);
                 }
                 src += `\t\t\t\t\tret = ${__.fn}(${args.map((_, a) => 'a' + a).join(', ')})\n`;
                 src += `\t\t\t\t}\n`;
@@ -113,12 +113,14 @@ class Gen extends gen.Gen {
         src += `\n\tvar ${__.on} func(Any) bool\n`;
         const lastarg = method.args[method.args.length - 1];
         if (lastarg.isFromRetThenable) {
-            let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true, true);
+            let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true, true), hacky = (tret == "*string" || tret == "*int" || tret == "*bool") ? tret.slice(1) : '';
             src += `\tif ${laname} != nil {\n`;
-            src += `\t\t${__.on} = func(${__.payload} Any) bool {\n`;
-            src += `\t\t\tvar ${__.result} ${tret}\n`;
-            src += this.genDecodeFromAny(prep, "\t\t\t", __.payload, __.result, tret, true, "");
-            src += `\t\t\t${laname}(${__.result})\n`;
+            src += `\t\t${__.on} = func(${__.payload} Any) (ok bool) {\n`;
+            src += `\t\t\tvar ${__.result} ${hacky || tret}\n`;
+            if (hacky)
+                src += `\t\t\tvar ${__.resultptr} ${tret}\n`;
+            src += this.genDecodeFromAny(prep, "\t\t\t", __.payload, __.result, hacky || tret, true, true, hacky ? (__.resultptr + " = &" + __.result) : "");
+            src += `\t\t\t${laname}(${hacky ? __.resultptr : __.result})\n`;
             src += `\t\t\treturn true\n`;
             src += `\t\t}\n`;
             src += `\t}\n`;
@@ -140,7 +142,7 @@ class Gen extends gen.Gen {
         src += "}\n\n";
         return src;
     }
-    genDecodeFromAny(prep, pref, srcName, dstName, dstTypeGo, nilToZeroOk, errName, errOther = "return false", haveOk = false) {
+    genDecodeFromAny(prep, pref, srcName, dstName, dstTypeGo, nilToZeroOk, haveOk = false, onOk = undefined) {
         if (dstTypeGo === 'interface{}' || dstTypeGo === 'Any')
             return `${pref}${dstName} = ${srcName}\n`;
         let src = "";
@@ -157,11 +159,14 @@ class Gen extends gen.Gen {
         else
             src += `${pref}${dstName}, ok = ${srcName}.(${dstTypeGo})\n`;
         src += `${pref}if !ok {\n`;
-        if (errName)
-            src += `${pref}\t${errName} = ${srcName}\n`;
-        else if (errOther)
-            src += `${pref}\t${errOther}\n`;
-        src += `${pref}}\n`;
+        src += `${pref}\treturn\n`;
+        if (onOk && onOk.length) {
+            src += `${pref}} else {\n`;
+            src += `${pref}\t${onOk}\n`;
+            src += `${pref}}\n`;
+        }
+        else
+            src += `${pref}}\n`;
         if (nilToZeroOk)
             src += pref.substr(0, pref.length - 1) + '}\n';
         return src;
@@ -170,15 +175,15 @@ class Gen extends gen.Gen {
         const struct = prep.structs.find(_ => _.name === typeName);
         if (!struct)
             throw (typeName);
-        let src = `func (me *${typeName}) populateFrom(payload Any) bool {\n`;
-        src += "\tm, ok := payload.(map[string]Any)\n";
-        src += "\tif ok && m != nil {\n";
+        let src = `func (me *${typeName}) populateFrom(payload Any) (ok bool) {\n`;
+        src += "\tvar m map[string]Any\n";
+        src += "\tif m, ok = payload.(map[string]Any); ok && m != nil {\n";
         for (const _ of struct.fields) {
             src += "\t\t{\n";
             src += `\t\t\tval, exists := m["${_.name}"]\n`;
             src += `\t\t\tif (exists) {\n`;
             src += `\t\t\t\tif val != nil {\n`;
-            src += this.genDecodeFromAny(prep, "\t\t\t\t\t", "val", "me." + this.caseUp(_.name), this.typeSpec(_.typeSpec), false, "");
+            src += this.genDecodeFromAny(prep, "\t\t\t\t\t", "val", "me." + this.caseUp(_.name), this.typeSpec(_.typeSpec), false, true);
             src += `\t\t\t\t} else if ${!_.optional} {\n`;
             src += `\t\t\t\t\treturn false\n`;
             src += `\t\t\t\t}\n`;
@@ -269,8 +274,9 @@ class Gen extends gen.Gen {
         }
         let tsum = gen.typeSumOf(from);
         if (tsum && tsum.length) {
-            tsum = tsum.filter(_ => _ !== gen.ScriptPrimType.Null && _ !== gen.ScriptPrimType.Undefined && !gen.typeProm(_));
-            return this.parensIfJoin(tsum.map(_ => this.typeSpec(_, intoProm, ptrIfStruct, ptrIfNonNilable)), '|');
+            let hadnullorundef = false;
+            tsum = tsum.filter(_ => (_ !== gen.ScriptPrimType.Null && _ !== gen.ScriptPrimType.Undefined && !gen.typeProm(_)) || !(hadnullorundef = true));
+            return this.parensIfJoin(tsum.map(_ => this.typeSpec(_, intoProm, ptrIfStruct, hadnullorundef)), '|');
         }
         const tprom = gen.typeProm(from);
         if (tprom && tprom.length)

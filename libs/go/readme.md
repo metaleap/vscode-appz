@@ -65,7 +65,7 @@ type InputBoxOptions struct {
 	//
 	// `return` ── A human readable string which is presented as diagnostic message.
 	// Return `undefined`, `null`, or the empty string when 'value' is valid.
-	ValidateInput func(string) string `json:"-"`
+	ValidateInput func(string) *string `json:"-"`
 
 	// For internal runtime use only.
 	ValidateInput_AppzFuncId string `json:"validateInput_AppzFuncId,omitempty"`
@@ -147,7 +147,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
 	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage1(message string, items []string, andThen func(string))
+	ShowErrorMessage1(message string, items []string, andThen func(*string))
 
 	// Show an error message.
 	//
@@ -158,7 +158,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
 	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(string))
+	ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(*string))
 
 	// Show an error message.
 	//
@@ -188,7 +188,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
 	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage1(message string, items []string, andThen func(string))
+	ShowInformationMessage1(message string, items []string, andThen func(*string))
 
 	// Show an information message to users. Optionally provide an array of items which will be presented as
 	// clickable buttons.
@@ -200,7 +200,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
 	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(string))
+	ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(*string))
 
 	// Show an information message.
 	//
@@ -229,7 +229,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
 	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage1(message string, items []string, andThen func(string))
+	ShowWarningMessage1(message string, items []string, andThen func(*string))
 
 	// Show a warning message.
 	//
@@ -240,7 +240,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
 	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(string))
+	ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(*string))
 
 	// Show a warning message.
 	//
@@ -271,7 +271,7 @@ type Window interface {
 	// `options` ── Configures the behavior of the input box.
 	//
 	// `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
-	ShowInputBox(options *InputBoxOptions, andThen func(string))
+	ShowInputBox(options *InputBoxOptions, andThen func(*string))
 }
 ```
 

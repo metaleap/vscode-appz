@@ -22,9 +22,9 @@ export function activate(ctx: vsc.ExtensionContext) {
 }
 
 function onCmdMain() {
-	const progs = vscproj.getConfiguration("appz").get<string[]>("allProgs")
-
 	interface pickItem extends vsc.QuickPickItem { prog: string, pid: number }
+
+	const progs = vscproj.getConfiguration("appz").get<string[]>("allProgs") || []
 	const items: pickItem[] = progs.map(_ => ({
 		prog: _, pid: 0, label: "RUN: " + _,
 		detail: ppio.procs[_] ? "Already running. Will kill and re-start." : "Not currently running" + (_.includes(' ') ? ' (at least not with those exact args)' : '') + "."

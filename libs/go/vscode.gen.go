@@ -70,7 +70,7 @@ type InputBoxOptions struct {
 	// 
 	// `return` ── A human readable string which is presented as diagnostic message.
 	// Return `undefined`, `null`, or the empty string when 'value' is valid.
-	ValidateInput func(string) string `json:"-"`
+	ValidateInput func(string) *string `json:"-"`
 
 	// For internal runtime use only.
 	ValidateInput_AppzFuncId string `json:"validateInput_AppzFuncId,omitempty"`
@@ -88,7 +88,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
 	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage1(message string, items []string, andThen func(string), )
+	ShowErrorMessage1(message string, items []string, andThen func(*string), )
 
 	// Show an error message.
 	// 
@@ -99,7 +99,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
 	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(string), )
+	ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(*string), )
 
 	// Show an error message.
 	// 
@@ -129,7 +129,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
 	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage1(message string, items []string, andThen func(string), )
+	ShowInformationMessage1(message string, items []string, andThen func(*string), )
 
 	// Show an information message to users. Optionally provide an array of items which will be presented as
 	// clickable buttons.
@@ -141,7 +141,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
 	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(string), )
+	ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(*string), )
 
 	// Show an information message.
 	// 
@@ -170,7 +170,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
 	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage1(message string, items []string, andThen func(string), )
+	ShowWarningMessage1(message string, items []string, andThen func(*string), )
 
 	// Show a warning message.
 	// 
@@ -181,7 +181,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
 	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(string), )
+	ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(*string), )
 
 	// Show a warning message.
 	// 
@@ -212,26 +212,28 @@ type Window interface {
 	// `options` ── Configures the behavior of the input box.
 	// 
 	// `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
-	ShowInputBox(options *InputBoxOptions, andThen func(string), )
+	ShowInputBox(options *InputBoxOptions, andThen func(*string), )
 }
 
-func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(string)) {
+func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(*string)) {
 	msg := ipcMsg{QName: "window.showErrorMessage1", Data: make(map[string]Any, 2)}
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 
 	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) bool {
+		on = func(payload Any) (ok bool) {
 			var result string
+			var resultptr *string
 			if payload != nil {
-				var ok bool
 				result, ok = payload.(string)
 				if !ok {
-					return false
+					return
+				} else {
+					resultptr = &result
 				}
 			}
-			andThen(result)
+			andThen(resultptr)
 			return true
 		}
 	}
@@ -239,7 +241,7 @@ func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(s
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(string)) {
+func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
 	msg := ipcMsg{QName: "window.showErrorMessage2", Data: make(map[string]Any, 3)}
 	msg.Data["message"] = message
 	msg.Data["options"] = options
@@ -247,16 +249,18 @@ func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items 
 
 	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) bool {
+		on = func(payload Any) (ok bool) {
 			var result string
+			var resultptr *string
 			if payload != nil {
-				var ok bool
 				result, ok = payload.(string)
 				if !ok {
-					return false
+					return
+				} else {
+					resultptr = &result
 				}
 			}
-			andThen(result)
+			andThen(resultptr)
 			return true
 		}
 	}
@@ -271,14 +275,13 @@ func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen f
 
 	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) bool {
+		on = func(payload Any) (ok bool) {
 			var result *MessageItem
 			if payload != nil {
-				var ok bool
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
 				if !ok {
-					return false
+					return
 				}
 			}
 			andThen(result)
@@ -297,14 +300,13 @@ func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items 
 
 	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) bool {
+		on = func(payload Any) (ok bool) {
 			var result *MessageItem
 			if payload != nil {
-				var ok bool
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
 				if !ok {
-					return false
+					return
 				}
 			}
 			andThen(result)
@@ -315,23 +317,25 @@ func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items 
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowInformationMessage1(message string, items []string, andThen func(string)) {
+func (me *impl) ShowInformationMessage1(message string, items []string, andThen func(*string)) {
 	msg := ipcMsg{QName: "window.showInformationMessage1", Data: make(map[string]Any, 2)}
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 
 	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) bool {
+		on = func(payload Any) (ok bool) {
 			var result string
+			var resultptr *string
 			if payload != nil {
-				var ok bool
 				result, ok = payload.(string)
 				if !ok {
-					return false
+					return
+				} else {
+					resultptr = &result
 				}
 			}
-			andThen(result)
+			andThen(resultptr)
 			return true
 		}
 	}
@@ -339,7 +343,7 @@ func (me *impl) ShowInformationMessage1(message string, items []string, andThen 
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(string)) {
+func (me *impl) ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
 	msg := ipcMsg{QName: "window.showInformationMessage2", Data: make(map[string]Any, 3)}
 	msg.Data["message"] = message
 	msg.Data["options"] = options
@@ -347,16 +351,18 @@ func (me *impl) ShowInformationMessage2(message string, options MessageOptions, 
 
 	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) bool {
+		on = func(payload Any) (ok bool) {
 			var result string
+			var resultptr *string
 			if payload != nil {
-				var ok bool
 				result, ok = payload.(string)
 				if !ok {
-					return false
+					return
+				} else {
+					resultptr = &result
 				}
 			}
-			andThen(result)
+			andThen(resultptr)
 			return true
 		}
 	}
@@ -371,14 +377,13 @@ func (me *impl) ShowInformationMessage3(message string, items []MessageItem, and
 
 	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) bool {
+		on = func(payload Any) (ok bool) {
 			var result *MessageItem
 			if payload != nil {
-				var ok bool
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
 				if !ok {
-					return false
+					return
 				}
 			}
 			andThen(result)
@@ -397,14 +402,13 @@ func (me *impl) ShowInformationMessage4(message string, options MessageOptions, 
 
 	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) bool {
+		on = func(payload Any) (ok bool) {
 			var result *MessageItem
 			if payload != nil {
-				var ok bool
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
 				if !ok {
-					return false
+					return
 				}
 			}
 			andThen(result)
@@ -415,23 +419,25 @@ func (me *impl) ShowInformationMessage4(message string, options MessageOptions, 
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowWarningMessage1(message string, items []string, andThen func(string)) {
+func (me *impl) ShowWarningMessage1(message string, items []string, andThen func(*string)) {
 	msg := ipcMsg{QName: "window.showWarningMessage1", Data: make(map[string]Any, 2)}
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 
 	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) bool {
+		on = func(payload Any) (ok bool) {
 			var result string
+			var resultptr *string
 			if payload != nil {
-				var ok bool
 				result, ok = payload.(string)
 				if !ok {
-					return false
+					return
+				} else {
+					resultptr = &result
 				}
 			}
-			andThen(result)
+			andThen(resultptr)
 			return true
 		}
 	}
@@ -439,7 +445,7 @@ func (me *impl) ShowWarningMessage1(message string, items []string, andThen func
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(string)) {
+func (me *impl) ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
 	msg := ipcMsg{QName: "window.showWarningMessage2", Data: make(map[string]Any, 3)}
 	msg.Data["message"] = message
 	msg.Data["options"] = options
@@ -447,16 +453,18 @@ func (me *impl) ShowWarningMessage2(message string, options MessageOptions, item
 
 	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) bool {
+		on = func(payload Any) (ok bool) {
 			var result string
+			var resultptr *string
 			if payload != nil {
-				var ok bool
 				result, ok = payload.(string)
 				if !ok {
-					return false
+					return
+				} else {
+					resultptr = &result
 				}
 			}
-			andThen(result)
+			andThen(resultptr)
 			return true
 		}
 	}
@@ -471,14 +479,13 @@ func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen
 
 	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) bool {
+		on = func(payload Any) (ok bool) {
 			var result *MessageItem
 			if payload != nil {
-				var ok bool
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
 				if !ok {
-					return false
+					return
 				}
 			}
 			andThen(result)
@@ -497,14 +504,13 @@ func (me *impl) ShowWarningMessage4(message string, options MessageOptions, item
 
 	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) bool {
+		on = func(payload Any) (ok bool) {
 			var result *MessageItem
 			if payload != nil {
-				var ok bool
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
 				if !ok {
-					return false
+					return
 				}
 			}
 			andThen(result)
@@ -515,7 +521,7 @@ func (me *impl) ShowWarningMessage4(message string, options MessageOptions, item
 	me.send(&msg, on)
 }
 
-func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string)) {
+func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(*string)) {
 	msg := ipcMsg{QName: "window.showInputBox", Data: make(map[string]Any, 1)}
 	fnids := make([]string, 0, 1)
 	me.state.Lock()
@@ -544,16 +550,18 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string)) {
 
 	var on func(Any) bool
 	if andThen != nil {
-		on = func(payload Any) bool {
+		on = func(payload Any) (ok bool) {
 			var result string
+			var resultptr *string
 			if payload != nil {
-				var ok bool
 				result, ok = payload.(string)
 				if !ok {
-					return false
+					return
+				} else {
+					resultptr = &result
 				}
 			}
-			andThen(result)
+			andThen(resultptr)
 			return true
 		}
 	}
@@ -570,17 +578,16 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(string)) {
 	})
 }
 
-func (me *MessageItem) populateFrom(payload Any) bool {
-	m, ok := payload.(map[string]Any)
-	if ok && m != nil {
+func (me *MessageItem) populateFrom(payload Any) (ok bool) {
+	var m map[string]Any
+	if m, ok = payload.(map[string]Any); ok && m != nil {
 		{
 			val, exists := m["title"]
 			if (exists) {
 				if val != nil {
-					var ok bool
 					me.Title, ok = val.(string)
 					if !ok {
-						return false
+						return
 					}
 				} else if true {
 					return false
@@ -593,10 +600,9 @@ func (me *MessageItem) populateFrom(payload Any) bool {
 			val, exists := m["isCloseAffordance"]
 			if (exists) {
 				if val != nil {
-					var ok bool
 					me.IsCloseAffordance, ok = val.(bool)
 					if !ok {
-						return false
+						return
 					}
 				} else if false {
 					return false
@@ -609,10 +615,9 @@ func (me *MessageItem) populateFrom(payload Any) bool {
 			val, exists := m["my"]
 			if (exists) {
 				if val != nil {
-					var ok bool
 					me.My, ok = val.(map[string]Any)
 					if !ok {
-						return false
+						return
 					}
 				} else if false {
 					return false

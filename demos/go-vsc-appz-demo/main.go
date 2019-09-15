@@ -19,12 +19,15 @@ func main() {
 	}
 
 	win := Vsc(nil, nil).Window()
-	exit := func(_unused string) { os.Exit(0) }
+	exit := func(_unused *string) { os.Exit(0) }
 
 	buttons := []string{"Show Quick Pick...", "Show Input Box..."}
 	win.ShowInformationMessage1(greethow+", "+greetname+"! What to try out?",
-		buttons, func(button string) {
-			switch button {
+		buttons, func(button *string) {
+			if button == nil {
+				exit(button)
+			}
+			switch button := *button; button {
 			case buttons[0]:
 				win.ShowWarningMessage1("Not yet implemented: `"+button+"`", nil, exit)
 
@@ -32,24 +35,24 @@ func main() {
 				win.ShowInputBox(&InputBoxOptions{
 					IgnoreFocusOut: true,
 					Prompt:         "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
-					ValidateInput: func(input string) (complaint string) {
-						input = strings.ToLower(input)
-						if strings.Contains(input, "foo") || strings.Contains(input, "f0o") || strings.Contains(input, "fo0") || strings.Contains(input, "f00") {
-							return "Contains something looking like `foo`."
+					ValidateInput: func(input string) (complaint *string) {
+						if input = strings.ToLower(input); strings.Contains(input, "foo") || strings.Contains(input, "f0o") || strings.Contains(input, "fo0") || strings.Contains(input, "f00") {
+							var msg = "Contains something looking like `foo`."
+							complaint = &msg
 						}
-						return ""
+						return
 					},
-				}, func(input string) {
-					if input == "" {
+				}, func(input *string) {
+					if input == nil {
 						win.ShowInformationMessage1("You cancelled, bye now!", nil, exit)
 					} else {
-						win.ShowInformationMessage1("You entered: `"+input+"`, bye now!", nil, exit)
+						win.ShowInformationMessage1("You entered: `"+(*input)+"`, bye now!", nil, exit)
 					}
 				})
 
 			default:
 				if cancelled := (button == ""); cancelled {
-					exit("")
+					exit(nil)
 				} else {
 					win.ShowErrorMessage1("Unknown: `"+button+"`", nil, exit)
 				}

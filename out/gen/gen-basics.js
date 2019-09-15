@@ -12,6 +12,7 @@ class Prep {
         this.enums = [];
         this.structs = [];
         this.interfaces = [];
+        this.state = null;
         this.fromOrig = job;
         for (const enumjob of job.enums)
             this.addEnum(enumjob);

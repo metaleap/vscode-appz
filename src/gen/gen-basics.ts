@@ -93,9 +93,9 @@ export class Prep {
     interfaces: PrepInterface[] = []
 
     readonly fromOrig: GenJob
-    state: {
+    state: null | {
         genDecoders: { [_: string]: boolean }
-    }
+    } = null
 
     constructor(job: GenJob) {
         this.fromOrig = job
