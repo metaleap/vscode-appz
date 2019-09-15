@@ -32,6 +32,7 @@ class Builder {
                 name: _.nameOrig,
                 Name: this.gen.nameRewriters.methods(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig.decl, () => _.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
+                Type: null,
                 Args: _.args.map((arg) => ({
                     name: arg.name,
                     Name: this.gen.nameRewriters.args(arg.name),
@@ -174,6 +175,9 @@ class Gen extends gen.Gen {
                     methods: false,
                     funcFields: true,
                 }
+            },
+            idents: {
+                self: "self"
             }
         };
         this.ln = (...srcLns) => {
@@ -215,7 +219,7 @@ class Gen extends gen.Gen {
             this.indented(() => it.Methods.forEach(_ => {
                 this.ln("");
                 this.emitDocs(_);
-                this.ln(`${_.Name}: method`);
+                this.ln(`${_.Name}: ${_.Type ? this.emitTypeRef(_.Type) : ''}`);
                 this.indented(() => _.Args.forEach(arg => {
                     this.ln(`${arg.Name}: ${this.emitTypeRef(arg.Type)}${(arg.name === arg.Name) ? '' : ('#' + arg.name)}`);
                 }));
@@ -235,6 +239,8 @@ class Gen extends gen.Gen {
             this.ln("", "");
         };
         this.emitTypeRef = (it) => {
+            if (it === null)
+                return "!";
             if (it === TypeRefPrim.Bool)
                 return "yesno";
             if (it === TypeRefPrim.Int)
@@ -254,23 +260,84 @@ class Gen extends gen.Gen {
                 return "[" + this.emitTypeRef(tarr.ArrOf) + "]";
             const tfun = it;
             if (tfun && tfun.From && tfun.From.length)
-                return "(" + tfun.From.map(_ => this.emitTypeRef(_)).join(' -> ') + " -> " + (tfun.To ? this.emitTypeRef(tfun.To) : '') + ")";
+                return "(" + tfun.From.map(_ => this.emitTypeRef(_)).join(' -> ') + " -> " + this.emitTypeRef(tfun.To) + ")";
             const tmay = it;
             if (tmay && tmay.Maybe)
                 return "?" + this.emitTypeRef(tmay.Maybe);
             throw it;
         };
+        this.emitFuncImpl = (it) => {
+            this.ln("", "");
+            this.ln(`${this.emitTypeRef(it.Type)}.${it.Name} (${it.Func.Args.map(_ => _.Name + ': ' + this.emitTypeRef(_.Type)).join(', ')}): ${this.emitTypeRef(it.Func.Type)}`);
+            this.emitIBlock(it.Func.Body);
+            this.ln("", "");
+        };
+        this.emitIBlock = (iBlock) => {
+            this.indented(() => iBlock.Instrs.forEach(_ => this.emitInstr(_)));
+            return this;
+        };
+        this.emitIRet = (iRet) => {
+            this.ln("ret" + (iRet.Ret === null ? '' : (' ' + this.emitExpr(iRet.Ret))));
+            return this;
+        };
+    }
+    emitInstr(instr) {
+        if (instr) {
+            const iblock = instr;
+            if (iblock && iblock.Instrs !== undefined)
+                return this.emitIBlock(iblock);
+            const iret = instr;
+            if (iret && iret.Ret !== undefined)
+                return this.emitIRet(iret);
+            this.ln("<instr>" + JSON.stringify(instr));
+        }
+        return this;
+    }
+    emitExpr(expr) {
+        const ename = expr;
+        if (ename && ename.Name !== undefined)
+            return this.emitEName(ename);
+        return "<expr>" + JSON.stringify(expr);
+    }
+    emitEName(eName) {
+        return eName.Name ? eName.Name : this.options.idents.self;
     }
     gen(prep) {
         this.resetState();
-        this.src = "";
+        this.src = "# NOTE, this is not a CoffeeScript file:\n# the .coffee extension is solely for the convenience of syntax-highlighting.\n#\n# A debug-print of our in-memory-only imperative-intermediate-representation\n# available to code-gens that want to stay lean & mean & low on LoCs for\n# maintainability & ease of porting.\n#\n# The format is again just a debug-print: it's never to be parsed or anything,\n# and exists merely to dump all knowledge held by generated in-memory\n# representations available to code-gens.\n#\n# Generated representations follow below.\n\n";
         const build = new Builder(prep, this);
+        const ifacemain = {
+            name: prep.fromOrig.moduleName,
+            Name: this.nameRewriters.types.interfaces(prep.fromOrig.moduleName),
+            Docs: build.docs(gen.docs(prep.fromOrig.fromOrig)),
+            Methods: prep.interfaces.map((_) => ({
+                name: _.name,
+                Name: this.nameRewriters.methods(_.name),
+                Docs: build.docs(gen.docs(_.fromOrig)),
+                Type: build.typeRef(this.nameRewriters.types.interfaces(_.name)),
+                Args: [],
+            })),
+        };
+        this.emitInterface(ifacemain);
         for (const it of prep.enums)
             this.emitEnum(build.enumFrom(it));
         for (const it of prep.structs)
             this.emitStruct(build.structFrom(it));
-        for (const it of prep.interfaces)
-            this.emitInterface(build.interfaceFrom(it));
+        const ifaces = prep.interfaces.map(_ => build.interfaceFrom(_));
+        for (const it of ifaces)
+            this.emitInterface(it);
+        for (const it of [ifacemain].concat(...ifaces))
+            it.Methods.forEach(_ => {
+                this.emitFuncImpl({
+                    name: _.name, Name: _.Name, Type: it, Func: {
+                        Args: _.Args, Type: _.Type, Body: {
+                            Instrs: [
+                                { Ret: _.Type ? { Name: "" } : null }
+                            ]
+                        }
+                    }
+                });
+            });
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src);
     }
 }

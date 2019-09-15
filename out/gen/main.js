@@ -10,7 +10,7 @@ const gen_python = require("./gen-python");
 const gen_vscext = require("./gen-vscext");
 const filePathDts = 'node_modules/@types/vscode/index.d.ts';
 const gens = [
-    new gen_ast.Gen('libs/tmpdbg/', '.gen.tmpdbg'),
+    new gen_ast.Gen('libs/tmpdbg/', '.gen.coffee'),
     new gen_golang.Gen('libs/go/', '.gen.go'),
     new gen_csharp.Gen('libs/cs/', '.gen.cs'),
     new gen_python.Gen('libs/py/', '.gen.py'),
