@@ -120,7 +120,7 @@ InputBoxOptions: struct
 	# Return `undefined`, `null`, or the empty string when 'value' is valid.
 	#
 	# JSON FLAGS: {"Name":"validateInput","Required":false,"Excluded":true}
-	ValidateInput: ?(string -> string)
+	ValidateInput: ?(string->string)
 
 	# For internal runtime use only.
 	#
@@ -147,10 +147,10 @@ Window: iface
 	#
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage1: 
+	ShowErrorMessage1: void
 		message: string
 		items: [string]
-		andThen: ?(string -> void)
+		andThen: ?(string->void)
 
 	# showErrorMessage:
 	# Show an error message.
@@ -166,11 +166,11 @@ Window: iface
 	#
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage2: 
+	ShowErrorMessage2: void
 		message: string
 		options: MessageOptions
 		items: [string]
-		andThen: ?(string -> void)
+		andThen: ?(string->void)
 
 	# showErrorMessage:
 	# Show an error message.
@@ -183,10 +183,10 @@ Window: iface
 	#
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage3: 
+	ShowErrorMessage3: void
 		message: string
 		items: [MessageItem]
-		andThen: ?(MessageItem -> void)
+		andThen: ?(MessageItem->void)
 
 	# showErrorMessage:
 	# Show an error message.
@@ -202,11 +202,11 @@ Window: iface
 	#
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage4: 
+	ShowErrorMessage4: void
 		message: string
 		options: MessageOptions
 		items: [MessageItem]
-		andThen: ?(MessageItem -> void)
+		andThen: ?(MessageItem->void)
 
 	# showInformationMessage:
 	# Show an information message to users. Optionally provide an array of items which will be presented as
@@ -220,10 +220,10 @@ Window: iface
 	#
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage1: 
+	ShowInformationMessage1: void
 		message: string
 		items: [string]
-		andThen: ?(string -> void)
+		andThen: ?(string->void)
 
 	# showInformationMessage:
 	# Show an information message to users. Optionally provide an array of items which will be presented as
@@ -240,11 +240,11 @@ Window: iface
 	#
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage2: 
+	ShowInformationMessage2: void
 		message: string
 		options: MessageOptions
 		items: [string]
-		andThen: ?(string -> void)
+		andThen: ?(string->void)
 
 	# showInformationMessage:
 	# Show an information message.
@@ -257,10 +257,10 @@ Window: iface
 	#
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage3: 
+	ShowInformationMessage3: void
 		message: string
 		items: [MessageItem]
-		andThen: ?(MessageItem -> void)
+		andThen: ?(MessageItem->void)
 
 	# showInformationMessage:
 	# Show an information message.
@@ -276,11 +276,11 @@ Window: iface
 	#
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage4: 
+	ShowInformationMessage4: void
 		message: string
 		options: MessageOptions
 		items: [MessageItem]
-		andThen: ?(MessageItem -> void)
+		andThen: ?(MessageItem->void)
 
 	# showWarningMessage:
 	# Show a warning message.
@@ -293,10 +293,10 @@ Window: iface
 	#
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage1: 
+	ShowWarningMessage1: void
 		message: string
 		items: [string]
-		andThen: ?(string -> void)
+		andThen: ?(string->void)
 
 	# showWarningMessage:
 	# Show a warning message.
@@ -312,11 +312,11 @@ Window: iface
 	#
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage2: 
+	ShowWarningMessage2: void
 		message: string
 		options: MessageOptions
 		items: [string]
-		andThen: ?(string -> void)
+		andThen: ?(string->void)
 
 	# showWarningMessage:
 	# Show a warning message.
@@ -329,10 +329,10 @@ Window: iface
 	#
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage3: 
+	ShowWarningMessage3: void
 		message: string
 		items: [MessageItem]
-		andThen: ?(MessageItem -> void)
+		andThen: ?(MessageItem->void)
 
 	# showWarningMessage:
 	# Show a warning message.
@@ -348,11 +348,11 @@ Window: iface
 	#
 	# @andThen:
 	# A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage4: 
+	ShowWarningMessage4: void
 		message: string
 		options: MessageOptions
 		items: [MessageItem]
-		andThen: ?(MessageItem -> void)
+		andThen: ?(MessageItem->void)
 
 	# showInputBox:
 	# Opens an input box to ask the user for input.
@@ -369,92 +369,105 @@ Window: iface
 	#
 	# @andThen:
 	# A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
-	ShowInputBox: 
+	ShowInputBox: void
 		options: ?InputBoxOptions
-		andThen: ?(string -> void)
+		andThen: ?(string->void)
 
 
 
 
-Vscode.Window (): Window
+VscodeWindow: ( -> Window)
 	ret $
 
 
 
 
-Window.ShowErrorMessage1 (message: string, items: [string], andThen: ?(string -> void)): void
-	ret
+WindowShowErrorMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
+	msg: ipcMsg
+	msg = ipcMsg·new
 
 
 
 
-Window.ShowErrorMessage2 (message: string, options: MessageOptions, items: [string], andThen: ?(string -> void)): void
-	ret
+WindowShowErrorMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
+	msg: ipcMsg
+	msg = ipcMsg·new
 
 
 
 
-Window.ShowErrorMessage3 (message: string, items: [MessageItem], andThen: ?(MessageItem -> void)): void
-	ret
+WindowShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
+	msg: ipcMsg
+	msg = ipcMsg·new
 
 
 
 
-Window.ShowErrorMessage4 (message: string, options: MessageOptions, items: [MessageItem], andThen: ?(MessageItem -> void)): void
-	ret
+WindowShowErrorMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
+	msg: ipcMsg
+	msg = ipcMsg·new
 
 
 
 
-Window.ShowInformationMessage1 (message: string, items: [string], andThen: ?(string -> void)): void
-	ret
+WindowShowInformationMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
+	msg: ipcMsg
+	msg = ipcMsg·new
 
 
 
 
-Window.ShowInformationMessage2 (message: string, options: MessageOptions, items: [string], andThen: ?(string -> void)): void
-	ret
+WindowShowInformationMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
+	msg: ipcMsg
+	msg = ipcMsg·new
 
 
 
 
-Window.ShowInformationMessage3 (message: string, items: [MessageItem], andThen: ?(MessageItem -> void)): void
-	ret
+WindowShowInformationMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
+	msg: ipcMsg
+	msg = ipcMsg·new
 
 
 
 
-Window.ShowInformationMessage4 (message: string, options: MessageOptions, items: [MessageItem], andThen: ?(MessageItem -> void)): void
-	ret
+WindowShowInformationMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
+	msg: ipcMsg
+	msg = ipcMsg·new
 
 
 
 
-Window.ShowWarningMessage1 (message: string, items: [string], andThen: ?(string -> void)): void
-	ret
+WindowShowWarningMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
+	msg: ipcMsg
+	msg = ipcMsg·new
 
 
 
 
-Window.ShowWarningMessage2 (message: string, options: MessageOptions, items: [string], andThen: ?(string -> void)): void
-	ret
+WindowShowWarningMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
+	msg: ipcMsg
+	msg = ipcMsg·new
 
 
 
 
-Window.ShowWarningMessage3 (message: string, items: [MessageItem], andThen: ?(MessageItem -> void)): void
-	ret
+WindowShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
+	msg: ipcMsg
+	msg = ipcMsg·new
 
 
 
 
-Window.ShowWarningMessage4 (message: string, options: MessageOptions, items: [MessageItem], andThen: ?(MessageItem -> void)): void
-	ret
+WindowShowWarningMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
+	msg: ipcMsg
+	msg = ipcMsg·new
 
 
 
 
-Window.ShowInputBox (options: ?InputBoxOptions, andThen: ?(string -> void)): void
-	ret
+WindowShowInputBox: (options:?InputBoxOptions -> andThen:?(string->void) -> void)
+	msg: ipcMsg
+	msg = ipcMsg·new
 
 

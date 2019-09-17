@@ -78,7 +78,7 @@ export interface ENew {
 export type Instr = IBlock | IRet | IVar | ISet | IDictDel
 export interface IBlock {
     Instrs: Instr[]
-    Lock?: boolean
+    Lock?: Expr
     If?: [Expr, IBlock]
     ForEach?: [EName, Expr]
 }
@@ -88,7 +88,7 @@ export interface IRet {
 export interface IVar extends WithName, WithType {
 }
 export interface ISet {
-    SetNames: string[]
+    SetWhat: Expr,
     SetTo: Expr
 }
 export interface IDictDel {
@@ -98,11 +98,29 @@ export interface IDictDel {
 
 
 
-class Builder {
+export class Builder {
     prep: gen.Prep
     gen: Gen
 
     constructor(prep: gen.Prep, gen: Gen) { [this.prep, this.gen] = [prep, gen] }
+
+    iRet(ret: Expr): IRet { return { Ret: ret } }
+    iVar(varName: string, varType: TypeRef): IVar { return { Name: varName, Type: varType } }
+    iSet(setWhat: Expr, setTo: Expr): ISet { return { SetWhat: setWhat, SetTo: setTo } }
+    iDel(delFrom: Expr, delWhat: Expr): IDictDel { return { DelFrom: delFrom, DelWhat: delWhat } }
+    iBlock(...instrs: Instr[]): IBlock { return { Instrs: instrs } }
+    iLock(lock: Expr, ...instrs: Instr[]): IBlock { return { Lock: lock, Instrs: instrs } }
+    iIf(ifCond: Expr, thenInstrs: Instr[], elseInstrs: Instr[] = undefined): IBlock { return { Instrs: thenInstrs, If: [ifCond, { Instrs: elseInstrs }] } }
+    iFor(iterVarName: EName, iterable: Expr, ...instrs: Instr[]): IBlock { return { Instrs: instrs, ForEach: [iterVarName, iterable] } }
+    eNew(typeRef: TypeRef): ENew { return { New: typeRef } }
+    eConv(typeRef: TypeRef, conv: Expr): EConv { return { Conv: conv, To: typeRef } }
+    eLen(lenOf: Expr): ELen { return { LenOf: lenOf } }
+    eDictNew(cap: Expr): EDictNew { return { Capacity: cap } }
+    eFunc(args: Arg[], retType: TypeRef, ...instrs: Instr[]): EFunc { return { Args: args, Type: retType, Body: { Instrs: instrs } } }
+    eOp(op: string, ...args: Expr[]): EOp { return { Name: op, Operands: args } }
+    eCall(callee: Expr, ...args: Expr[]): ECall { return { Call: callee, Args: args } }
+    eName(name: string): EName { return { Name: name } }
+    eLit(litVal: string | number | boolean | null): ELit { return { Lit: litVal } }
 
     enumFrom(it: gen.PrepEnum): TEnum {
         return {
@@ -189,7 +207,7 @@ class Builder {
         if (it === gen.ScriptPrimType.Dict)
             return TypeRefPrim.Dict
         if (it === gen.ScriptPrimType.Any)
-            return { Name: this.gen.options.idents.anyType }
+            return { Name: this.gen.options.idents.typeAny }
 
         const tarr = gen.typeArrOf(it)
         if (tarr)
@@ -275,6 +293,8 @@ export class Gen extends gen.Gen implements gen.IGen {
     private src: string = ""
     private indent: number = 0
 
+    protected b: Builder = null
+
     nameRewriters = {
         args: this.caseLo,
         fields: this.caseUp,
@@ -291,160 +311,262 @@ export class Gen extends gen.Gen implements gen.IGen {
         },
         idents: {
             curInst: "$",
-            anyType: "Any",
+            typeAny: "Any",
         }
     }
 
-    protected ln = (...srcLns: string[]) => {
-        for (const srcln of srcLns)
-            this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : "") + "\n"
-    }
-
-    protected indented = (andThen: () => void) => {
+    protected indented = (andThen: () => void): Gen => {
         this.indent++
         andThen()
         this.indent--
+        return this
     }
 
-    protected emitDocs = (it: (WithDocs & WithName)) => {
-        if (it.name && it.Name && it.name !== it.Name)
-            this.ln("# " + it.name + ":")
-        for (const doc of it.Docs) {
-            if (doc.ForParam && doc.ForParam.length) {
-                this.ln("#", "# @" + doc.ForParam + ":")
-            }
-            for (const docln of doc.Lines)
-                this.ln("# " + docln)
-            if (doc.ForParam && doc.ForParam.length) { }
+    protected ln = (andThen: (() => void)): Gen => {
+        this.src += "\t".repeat(this.indent)
+        andThen()
+        this.src += "\n"
+        return this
+    }
+
+    protected each<T>(arr: T[], joinBy: string, andThen: ((_: T) => void)): Gen {
+        for (let i = 0; i < arr.length; i++) {
+            if (i > 0)
+                this.s(joinBy)
+            andThen(arr[i])
         }
+        return this
+    }
+
+    protected line = (srcLn: string = ""): Gen =>
+        this.lines(srcLn)
+
+    protected lines = (...srcLns: string[]): Gen => {
+        for (const srcln of srcLns)
+            this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : "") + "\n"
+        return this
+    }
+
+    protected s = (...s: string[]): Gen => {
+        for (const str of s)
+            this.src += str
+        return this
+    }
+
+    protected emitDocs = (it: (WithDocs & WithName)): Gen => {
+        if (it.name && it.Name && it.name !== it.Name)
+            this.line("# " + it.name + ":")
+        for (const doc of it.Docs) {
+            if (doc.ForParam && doc.ForParam.length)
+                this.lines("#", "# @" + doc.ForParam + ":")
+            for (const docln of doc.Lines)
+                this.line("# " + docln)
+        }
+        return this
     }
 
     protected emitEnum = (it: TEnum) => {
-        this.ln("", "")
-        this.emitDocs(it)
-        this.ln(it.Name + ": enum")
-        this.indented(() => it.Enumerants.forEach(_ => {
-            this.ln("")
-            this.emitDocs(_)
-            this.ln(`${_.Name}: ${_.Value}`)
-        }))
-        this.ln("", "")
+        this.lines("", "")
+            .emitDocs(it)
+            .line(it.Name + ": enum")
+            .indented(() => it.Enumerants.forEach(_ =>
+                this.line()
+                    .emitDocs(_)
+                    .line(`${_.Name}: ${_.Value}`)))
+            .lines("", "")
     }
 
     protected emitInterface = (it: TInterface) => {
-        this.ln("", "")
-        this.emitDocs(it)
-        this.ln(it.Name + ": iface")
-        this.indented(() => it.Methods.forEach(_ => {
-            this.ln("")
-            this.emitDocs(_)
-            this.ln(`${_.Name}: ${_.Type ? this.emitTypeRef(_.Type) : ''}`)
-            this.indented(() => _.Args.forEach(arg => {
-                this.ln(`${arg.Name}: ${this.emitTypeRef(arg.Type)}${(arg.name === arg.Name) ? '' : ('#' + arg.name)}`)
-            }))
-        }))
-        this.ln("", "")
+        this.lines("", "")
+            .emitDocs(it)
+            .line(it.Name + ": iface")
+            .indented(() => it.Methods.forEach(_ => {
+                this.line()
+                    .emitDocs(_)
+                    .ln(() => this.s(_.Name, ': ').emitTypeRef(_.Type))
+                    .indented(() => _.Args.forEach(arg =>
+                        this.ln(() => this.s(arg.Name, ': ').emitTypeRef(arg.Type).s((arg.name === arg.Name) ? '' : (' # ' + arg.name)))
+                    ))
+            })).lines("", "")
     }
 
     protected emitStruct = (it: TStruct) => {
-        this.ln("", "")
-        this.emitDocs(it)
-        this.ln(it.Name + ": struct")
-        this.indented(() => it.Fields.forEach(_ => {
-            this.ln("")
-            this.emitDocs(_)
-            this.ln("#", `# JSON FLAGS: ${JSON.stringify(_.Json)}`)
-            this.ln(`${_.Name}: ${this.emitTypeRef(_.Type)}`)
-        }))
-        this.ln("", "")
+        this.lines("", "")
+            .emitDocs(it)
+            .line(it.Name + ": struct")
+            .indented(() => it.Fields.forEach(_ => {
+                this.line()
+                    .emitDocs(_)
+                    .lines("#", `# JSON FLAGS: ${JSON.stringify(_.Json)}`)
+                    .ln(() => this.s(_.Name, ': ').emitTypeRef(_.Type))
+            })).lines("", "")
     }
 
-    protected emitTypeRef = (it: TypeRef): string => {
+    protected emitTypeRef = (it: TypeRef): Gen => {
         if (it === null)
-            return "void"
+            return this.s("void")
 
         if (it === TypeRefPrim.Bool)
-            return "bool"
+            return this.s("bool")
         if (it === TypeRefPrim.Int)
-            return "int"
+            return this.s("int")
         if (it === TypeRefPrim.String)
-            return "string"
+            return this.s("string")
         if (it === TypeRefPrim.Dict)
-            return `[string:${this.options.idents.anyType}]`
+            return this.s("[string:", this.options.idents.typeAny, "]")
 
         const tname = it as WithName
         if (tname && tname.Name && tname.Name.length)
-            return tname.Name
+            return this.s(tname.Name)
 
         const ttup = it as TypeRefTup
         if (ttup && ttup.TupOf && ttup.TupOf.length)
-            return "[" + ttup.TupOf.map(_ => this.emitTypeRef(_)).join(',') + "]"
+            return this.s("[").each(ttup.TupOf, ',', _ => this.emitTypeRef(_)).s(']')
 
         const tarr = it as TypeRefArr
         if (tarr && tarr.ArrOf)
-            return "[" + this.emitTypeRef(tarr.ArrOf) + "]"
+            return this.s('[').emitTypeRef(tarr.ArrOf).s(']')
 
         const tfun = it as TypeRefFunc
         if (tfun && tfun.From && tfun.From.length)
-            return "(" + tfun.From.map(_ => this.emitTypeRef(_)).join(' -> ') + " -> " + this.emitTypeRef(tfun.To) + ")"
+            return this.s('(').each(tfun.From, '->', _ => this.emitTypeRef(_)).s('->').emitTypeRef(tfun.To).s(')')
 
         const tmay = it as TypeRefMaybe
         if (tmay && tmay.Maybe)
-            return "?" + this.emitTypeRef(tmay.Maybe)
+            return this.s('?').emitTypeRef(tmay.Maybe)
 
         throw it
     }
 
-    protected emitFuncImpl = (it: Func) => {
-        this.ln("", "")
-        this.ln(`${this.emitTypeRef(it.Type)}.${it.Name} (${it.Func.Args.map(_ => _.Name + ': ' + this.emitTypeRef(_.Type)).join(', ')}): ${this.emitTypeRef(it.Func.Type)}`)
-        this.emitIBlock(it.Func.Body)
-        this.ln("", "")
+    protected emitMethodImpl(iface: TInterface, method: Method, isMainInterface: boolean) {
+        const b = this.b, me: Func = {
+            name: method.name, Name: method.Name, Type: iface, Func: {
+                Args: method.Args, Type: method.Type, Body: { Instrs: [] }
+            }
+        }
+        if (isMainInterface)
+            me.Func.Body.Instrs.push(b.iRet(b.eName(this.options.idents.curInst)))
+        else {
+            me.Func.Body.Instrs.push(
+                b.iVar("msg", { Name: "ipcMsg" }),
+                b.iSet(["msg"], b.eNew({ Name: "ipcMsg" })),
+
+            )
+        }
+        this.emitFuncImpl(me)
     }
 
-    protected emitInstr(instr: Instr): Gen {
-        if (instr) {
-            const iblock = instr as IBlock
-            if (iblock && iblock.Instrs !== undefined)
-                return this.emitIBlock(iblock)
+    protected emitFuncImpl = (it: Func) => {
+        this.lines("", "")
+            .ln(() => this.emitTypeRef(it.Type).s(it.Name, ': (').each(it.Func.Args, ' -> ', _ => this.s(_.Name, ':').emitTypeRef(_.Type)).s(' -> ').emitTypeRef(it.Func.Type).s(')'))
+            .emitInstr(it.Func.Body)
+            .lines("", "")
+    }
 
-            const iret = instr as IRet
+    protected emitInstr(it: Instr): Gen {
+        if (it) {
+
+            const iret = it as IRet
             if (iret && iret.Ret !== undefined)
-                return this.emitIRet(iret)
+                return this.ln(() =>
+                    this.s("ret ").emitExpr(iret.Ret === null ? undefined : iret.Ret))
 
-            this.ln("<instr>" + JSON.stringify(instr))
+            const ivar = it as IVar
+            if (ivar && ivar.Name)
+                return this.ln(() =>
+                    this.s(ivar.Name, ": ").emitTypeRef(ivar.Type))
+
+            const iset = it as ISet
+            if (iset && iset.SetWhat && iset.SetTo)
+                return this.ln(() =>
+                    this.emitExpr(iset.SetWhat).s(" = ").emitExpr(iset.SetTo))
+
+            const idictdel = it as IDictDel
+            if (idictdel && idictdel.DelFrom && idictdel.DelWhat)
+                return this.ln(() =>
+                    this.emitExpr(idictdel.DelFrom).s('·del(').emitExpr(idictdel.DelWhat).s(')'))
+
+            const iblock = it as IBlock
+            if (iblock && iblock.Instrs !== undefined) {
+                if (iblock.Lock)
+                    this.ln(() => this.emitExpr(iblock.Lock).s("·lock"))
+                else if (iblock.ForEach && iblock.ForEach.length)
+                    this.ln(() => this.s("for ", iblock.ForEach[0].Name, " in ").emitExpr(iblock.ForEach[1]))
+                else if (iblock.If && iblock.If.length)
+                    this.ln(() => this.s("if ").emitExpr(iblock.If[0]))
+
+                this.indented(() =>
+                    iblock.Instrs.forEach(_ => this.emitInstr(_)))
+
+                if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
+                    this.line("else")
+                        .emitInstr(iblock.If[1])
+                return this
+            }
+
+            throw "<instr>" + JSON.stringify(it)
         }
         return this
     }
 
-    protected emitIBlock = (iBlock: IBlock): Gen => {
-        this.indented(() =>
-            iBlock.Instrs.forEach(_ => this.emitInstr(_))
-        )
-        return this
+    private emitExprs(joinBy: string, ...arr: Expr[]): Gen {
+        return this.each(arr, joinBy, (_) => this.emitExpr(_))
     }
 
-    protected emitIRet = (iRet: IRet): Gen => {
-        this.ln("ret" + (iRet.Ret === null ? '' : (' ' + this.emitExpr(iRet.Ret))))
-        return this
-    }
+    private emitExpr(it: Expr): Gen {
+        if (it === undefined)
+            return this
+        if (it === null)
+            return this.s('null')
 
-    protected emitExpr(expr: Expr): string {
-        const ename = expr as EName
+        const ename = it as EName
         if (ename && ename.Name !== undefined)
-            return this.emitEName(ename)
+            return this.s(ename.Name ? ename.Name : this.options.idents.curInst)
 
-        return "<expr>" + JSON.stringify(expr)
-    }
+        const elit = it as ELit
+        if (elit && elit.Lit !== undefined)
+            return this.s((elit.Lit === null) ? 'null' : elit.Lit.toString())
 
-    protected emitEName(eName: EName): string {
-        return eName.Name ? eName.Name : this.options.idents.curInst
+        const edictnew = it as EDictNew
+        if (edictnew && edictnew.Capacity !== undefined)
+            return this.s("dict·new(" + edictnew.Capacity + ")")
+
+        const enew = it as ENew
+        if (enew && enew.New)
+            return this.emitTypeRef(enew.New).s("·new")
+
+        const econv = it as EConv
+        if (econv && econv.Conv && econv.To)
+            return this.s('((').emitTypeRef(econv.To).s(')(').emitExpr(econv.Conv).s('))')
+
+        const elen = it as ELen
+        if (elen && elen.LenOf)
+            return this.emitExpr(elen.LenOf).s("·len")
+
+        const ecall = it as ECall
+        if (ecall && ecall.Call)
+            return this.emitExpr(ecall.Call).s("(").emitExprs(', ', ...ecall.Args).s(")")
+
+        const eop = it as EOp
+        if (eop && eop.Name && eop.Operands && eop.Operands.length)
+            return this.s("(" + ((eop.Operands.length > 1) ? '' : eop.Name)).emitExprs(' ' + eop.Name + ' ', ...eop.Operands).s(')')
+
+        const efn = it as EFunc
+        if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
+            return this
+                .s('(')
+                .each(efn.Args, ' -> ', _ => this.s(_.Name, ':').emitTypeRef(_.Type))
+                .s(' -> ').emitTypeRef(efn.Type)
+                .emitInstr(efn.Body)
+                .s(')')
+
+        throw "<expr>" + JSON.stringify(it)
     }
 
     gen(prep: gen.Prep) {
         this.resetState()
         this.src = "# NOTE, this is not a CoffeeScript file:\n# the .coffee extension is solely for the convenience of syntax-highlighting.\n#\n# A debug-print of our in-memory-only imperative-intermediate-representation\n# available to code-gens that want to stay lean & mean & low on LoCs for\n# maintainability & ease of porting.\n#\n# The format is again just a debug-print: it's never to be parsed or anything,\n# and exists merely to dump all knowledge held by generated in-memory\n# representations available to code-gens.\n#\n# Generated representations follow below.\n\n"
-        const build = new Builder(prep, this)
+        const build = (this.b = new Builder(prep, this))
 
         const ifacemain: TInterface = {
             name: prep.fromOrig.moduleName,
@@ -468,18 +590,11 @@ export class Gen extends gen.Gen implements gen.IGen {
         for (const it of ifaces)
             this.emitInterface(it)
 
-        for (const it of [ifacemain].concat(...ifaces))
-            it.Methods.forEach(_ => {
-                this.emitFuncImpl({
-                    name: _.name, Name: _.Name, Type: it, Func: {
-                        Args: _.Args, Type: _.Type, Body: {
-                            Instrs: [
-                                { Ret: _.Type ? { Name: "" } : null }
-                            ]
-                        }
-                    }
-                })
-            })
+        for (const it of ifacemain.Methods)
+            this.emitMethodImpl(ifacemain, it, true)
+        for (const it of ifaces)
+            for (const method of it.Methods)
+                this.emitMethodImpl(it, method, false)
 
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src)
     }

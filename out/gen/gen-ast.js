@@ -10,6 +10,23 @@ var TypeRefPrim;
 })(TypeRefPrim = exports.TypeRefPrim || (exports.TypeRefPrim = {}));
 class Builder {
     constructor(prep, gen) { [this.prep, this.gen] = [prep, gen]; }
+    iRet(ret) { return { Ret: ret }; }
+    iVar(varName, varType) { return { Name: varName, Type: varType }; }
+    iSet(setWhat, setTo) { return { SetWhat: setWhat, SetTo: setTo }; }
+    iDel(delFrom, delWhat) { return { DelFrom: delFrom, DelWhat: delWhat }; }
+    iBlock(...instrs) { return { Instrs: instrs }; }
+    iLock(lock, ...instrs) { return { Lock: lock, Instrs: instrs }; }
+    iIf(ifCond, thenInstrs, elseInstrs = undefined) { return { Instrs: thenInstrs, If: [ifCond, { Instrs: elseInstrs }] }; }
+    iFor(iterVarName, iterable, ...instrs) { return { Instrs: instrs, ForEach: [iterVarName, iterable] }; }
+    eNew(typeRef) { return { New: typeRef }; }
+    eConv(typeRef, conv) { return { Conv: conv, To: typeRef }; }
+    eLen(lenOf) { return { LenOf: lenOf }; }
+    eDictNew(cap) { return { Capacity: cap }; }
+    eFunc(args, retType, ...instrs) { return { Args: args, Type: retType, Body: { Instrs: instrs } }; }
+    eOp(op, ...args) { return { Name: op, Operands: args }; }
+    eCall(callee, ...args) { return { Call: callee, Args: args }; }
+    eName(name) { return { Name: name }; }
+    eLit(litVal) { return { Lit: litVal }; }
     enumFrom(it) {
         return {
             name: it.name,
@@ -89,7 +106,7 @@ class Builder {
         if (it === gen.ScriptPrimType.Dict)
             return TypeRefPrim.Dict;
         if (it === gen.ScriptPrimType.Any)
-            return { Name: this.gen.options.idents.anyType };
+            return { Name: this.gen.options.idents.typeAny };
         const tarr = gen.typeArrOf(it);
         if (tarr)
             return { ArrOf: this.typeRef(tarr) };
@@ -157,11 +174,13 @@ class Builder {
         return into;
     }
 }
+exports.Builder = Builder;
 class Gen extends gen.Gen {
     constructor() {
         super(...arguments);
         this.src = "";
         this.indent = 0;
+        this.b = null;
         this.nameRewriters = {
             args: this.caseLo,
             fields: this.caseUp,
@@ -178,135 +197,208 @@ class Gen extends gen.Gen {
             },
             idents: {
                 curInst: "$",
-                anyType: "Any",
+                typeAny: "Any",
             }
-        };
-        this.ln = (...srcLns) => {
-            for (const srcln of srcLns)
-                this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : "") + "\n";
         };
         this.indented = (andThen) => {
             this.indent++;
             andThen();
             this.indent--;
+            return this;
+        };
+        this.ln = (andThen) => {
+            this.src += "\t".repeat(this.indent);
+            andThen();
+            this.src += "\n";
+            return this;
+        };
+        this.line = (srcLn = "") => this.lines(srcLn);
+        this.lines = (...srcLns) => {
+            for (const srcln of srcLns)
+                this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : "") + "\n";
+            return this;
+        };
+        this.s = (...s) => {
+            for (const str of s)
+                this.src += str;
+            return this;
         };
         this.emitDocs = (it) => {
             if (it.name && it.Name && it.name !== it.Name)
-                this.ln("# " + it.name + ":");
+                this.line("# " + it.name + ":");
             for (const doc of it.Docs) {
-                if (doc.ForParam && doc.ForParam.length) {
-                    this.ln("#", "# @" + doc.ForParam + ":");
-                }
+                if (doc.ForParam && doc.ForParam.length)
+                    this.lines("#", "# @" + doc.ForParam + ":");
                 for (const docln of doc.Lines)
-                    this.ln("# " + docln);
-                if (doc.ForParam && doc.ForParam.length) { }
+                    this.line("# " + docln);
             }
+            return this;
         };
         this.emitEnum = (it) => {
-            this.ln("", "");
-            this.emitDocs(it);
-            this.ln(it.Name + ": enum");
-            this.indented(() => it.Enumerants.forEach(_ => {
-                this.ln("");
-                this.emitDocs(_);
-                this.ln(`${_.Name}: ${_.Value}`);
-            }));
-            this.ln("", "");
+            this.lines("", "")
+                .emitDocs(it)
+                .line(it.Name + ": enum")
+                .indented(() => it.Enumerants.forEach(_ => this.line()
+                .emitDocs(_)
+                .line(`${_.Name}: ${_.Value}`)))
+                .lines("", "");
         };
         this.emitInterface = (it) => {
-            this.ln("", "");
-            this.emitDocs(it);
-            this.ln(it.Name + ": iface");
-            this.indented(() => it.Methods.forEach(_ => {
-                this.ln("");
-                this.emitDocs(_);
-                this.ln(`${_.Name}: ${_.Type ? this.emitTypeRef(_.Type) : ''}`);
-                this.indented(() => _.Args.forEach(arg => {
-                    this.ln(`${arg.Name}: ${this.emitTypeRef(arg.Type)}${(arg.name === arg.Name) ? '' : ('#' + arg.name)}`);
-                }));
-            }));
-            this.ln("", "");
+            this.lines("", "")
+                .emitDocs(it)
+                .line(it.Name + ": iface")
+                .indented(() => it.Methods.forEach(_ => {
+                this.line()
+                    .emitDocs(_)
+                    .ln(() => this.s(_.Name, ': ').emitTypeRef(_.Type))
+                    .indented(() => _.Args.forEach(arg => this.ln(() => this.s(arg.Name, ': ').emitTypeRef(arg.Type).s((arg.name === arg.Name) ? '' : (' # ' + arg.name)))));
+            })).lines("", "");
         };
         this.emitStruct = (it) => {
-            this.ln("", "");
-            this.emitDocs(it);
-            this.ln(it.Name + ": struct");
-            this.indented(() => it.Fields.forEach(_ => {
-                this.ln("");
-                this.emitDocs(_);
-                this.ln("#", `# JSON FLAGS: ${JSON.stringify(_.Json)}`);
-                this.ln(`${_.Name}: ${this.emitTypeRef(_.Type)}`);
-            }));
-            this.ln("", "");
+            this.lines("", "")
+                .emitDocs(it)
+                .line(it.Name + ": struct")
+                .indented(() => it.Fields.forEach(_ => {
+                this.line()
+                    .emitDocs(_)
+                    .lines("#", `# JSON FLAGS: ${JSON.stringify(_.Json)}`)
+                    .ln(() => this.s(_.Name, ': ').emitTypeRef(_.Type));
+            })).lines("", "");
         };
         this.emitTypeRef = (it) => {
             if (it === null)
-                return "void";
+                return this.s("void");
             if (it === TypeRefPrim.Bool)
-                return "bool";
+                return this.s("bool");
             if (it === TypeRefPrim.Int)
-                return "int";
+                return this.s("int");
             if (it === TypeRefPrim.String)
-                return "string";
+                return this.s("string");
             if (it === TypeRefPrim.Dict)
-                return `[string:${this.options.idents.anyType}]`;
+                return this.s("[string:", this.options.idents.typeAny, "]");
             const tname = it;
             if (tname && tname.Name && tname.Name.length)
-                return tname.Name;
+                return this.s(tname.Name);
             const ttup = it;
             if (ttup && ttup.TupOf && ttup.TupOf.length)
-                return "[" + ttup.TupOf.map(_ => this.emitTypeRef(_)).join(',') + "]";
+                return this.s("[").each(ttup.TupOf, ',', _ => this.emitTypeRef(_)).s(']');
             const tarr = it;
             if (tarr && tarr.ArrOf)
-                return "[" + this.emitTypeRef(tarr.ArrOf) + "]";
+                return this.s('[').emitTypeRef(tarr.ArrOf).s(']');
             const tfun = it;
             if (tfun && tfun.From && tfun.From.length)
-                return "(" + tfun.From.map(_ => this.emitTypeRef(_)).join(' -> ') + " -> " + this.emitTypeRef(tfun.To) + ")";
+                return this.s('(').each(tfun.From, '->', _ => this.emitTypeRef(_)).s('->').emitTypeRef(tfun.To).s(')');
             const tmay = it;
             if (tmay && tmay.Maybe)
-                return "?" + this.emitTypeRef(tmay.Maybe);
+                return this.s('?').emitTypeRef(tmay.Maybe);
             throw it;
         };
         this.emitFuncImpl = (it) => {
-            this.ln("", "");
-            this.ln(`${this.emitTypeRef(it.Type)}.${it.Name} (${it.Func.Args.map(_ => _.Name + ': ' + this.emitTypeRef(_.Type)).join(', ')}): ${this.emitTypeRef(it.Func.Type)}`);
-            this.emitIBlock(it.Func.Body);
-            this.ln("", "");
-        };
-        this.emitIBlock = (iBlock) => {
-            this.indented(() => iBlock.Instrs.forEach(_ => this.emitInstr(_)));
-            return this;
-        };
-        this.emitIRet = (iRet) => {
-            this.ln("ret" + (iRet.Ret === null ? '' : (' ' + this.emitExpr(iRet.Ret))));
-            return this;
+            this.lines("", "")
+                .ln(() => this.emitTypeRef(it.Type).s(it.Name, ': (').each(it.Func.Args, ' -> ', _ => this.s(_.Name, ':').emitTypeRef(_.Type)).s(' -> ').emitTypeRef(it.Func.Type).s(')'))
+                .emitInstr(it.Func.Body)
+                .lines("", "");
         };
     }
-    emitInstr(instr) {
-        if (instr) {
-            const iblock = instr;
-            if (iblock && iblock.Instrs !== undefined)
-                return this.emitIBlock(iblock);
-            const iret = instr;
-            if (iret && iret.Ret !== undefined)
-                return this.emitIRet(iret);
-            this.ln("<instr>" + JSON.stringify(instr));
+    each(arr, joinBy, andThen) {
+        for (let i = 0; i < arr.length; i++) {
+            if (i > 0)
+                this.s(joinBy);
+            andThen(arr[i]);
         }
         return this;
     }
-    emitExpr(expr) {
-        const ename = expr;
-        if (ename && ename.Name !== undefined)
-            return this.emitEName(ename);
-        return "<expr>" + JSON.stringify(expr);
+    emitMethodImpl(iface, method, isMainInterface) {
+        const b = this.b, me = {
+            name: method.name, Name: method.Name, Type: iface, Func: {
+                Args: method.Args, Type: method.Type, Body: { Instrs: [] }
+            }
+        };
+        if (isMainInterface)
+            me.Func.Body.Instrs.push(b.iRet(b.eName(this.options.idents.curInst)));
+        else {
+            me.Func.Body.Instrs.push(b.iVar("msg", { Name: "ipcMsg" }), b.iSet(["msg"], b.eNew({ Name: "ipcMsg" })));
+        }
+        this.emitFuncImpl(me);
     }
-    emitEName(eName) {
-        return eName.Name ? eName.Name : this.options.idents.curInst;
+    emitInstr(it) {
+        if (it) {
+            const iret = it;
+            if (iret && iret.Ret !== undefined)
+                return this.ln(() => this.s("ret ").emitExpr(iret.Ret === null ? undefined : iret.Ret));
+            const ivar = it;
+            if (ivar && ivar.Name)
+                return this.ln(() => this.s(ivar.Name, ": ").emitTypeRef(ivar.Type));
+            const iset = it;
+            if (iset && iset.SetWhat && iset.SetTo)
+                return this.ln(() => this.emitExpr(iset.SetWhat).s(" = ").emitExpr(iset.SetTo));
+            const idictdel = it;
+            if (idictdel && idictdel.DelFrom && idictdel.DelWhat)
+                return this.ln(() => this.emitExpr(idictdel.DelFrom).s('·del(').emitExpr(idictdel.DelWhat).s(')'));
+            const iblock = it;
+            if (iblock && iblock.Instrs !== undefined) {
+                if (iblock.Lock)
+                    this.ln(() => this.emitExpr(iblock.Lock).s("·lock"));
+                else if (iblock.ForEach && iblock.ForEach.length)
+                    this.ln(() => this.s("for ", iblock.ForEach[0].Name, " in ").emitExpr(iblock.ForEach[1]));
+                else if (iblock.If && iblock.If.length)
+                    this.ln(() => this.s("if ").emitExpr(iblock.If[0]));
+                this.indented(() => iblock.Instrs.forEach(_ => this.emitInstr(_)));
+                if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
+                    this.line("else")
+                        .emitInstr(iblock.If[1]);
+                return this;
+            }
+            throw "<instr>" + JSON.stringify(it);
+        }
+        return this;
+    }
+    emitExprs(joinBy, ...arr) {
+        return this.each(arr, joinBy, (_) => this.emitExpr(_));
+    }
+    emitExpr(it) {
+        if (it === undefined)
+            return this;
+        if (it === null)
+            return this.s('null');
+        const ename = it;
+        if (ename && ename.Name !== undefined)
+            return this.s(ename.Name ? ename.Name : this.options.idents.curInst);
+        const elit = it;
+        if (elit && elit.Lit !== undefined)
+            return this.s((elit.Lit === null) ? 'null' : elit.Lit.toString());
+        const edictnew = it;
+        if (edictnew && edictnew.Capacity !== undefined)
+            return this.s("dict·new(" + edictnew.Capacity + ")");
+        const enew = it;
+        if (enew && enew.New)
+            return this.emitTypeRef(enew.New).s("·new");
+        const econv = it;
+        if (econv && econv.Conv && econv.To)
+            return this.s('((').emitTypeRef(econv.To).s(')(').emitExpr(econv.Conv).s('))');
+        const elen = it;
+        if (elen && elen.LenOf)
+            return this.emitExpr(elen.LenOf).s("·len");
+        const ecall = it;
+        if (ecall && ecall.Call)
+            return this.emitExpr(ecall.Call).s("(").emitExprs(', ', ...ecall.Args).s(")");
+        const eop = it;
+        if (eop && eop.Name && eop.Operands && eop.Operands.length)
+            return this.s("(" + ((eop.Operands.length > 1) ? '' : eop.Name)).emitExprs(' ' + eop.Name + ' ', ...eop.Operands).s(')');
+        const efn = it;
+        if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
+            return this
+                .s('(')
+                .each(efn.Args, ' -> ', _ => this.s(_.Name, ':').emitTypeRef(_.Type))
+                .s(' -> ').emitTypeRef(efn.Type)
+                .emitInstr(efn.Body)
+                .s(')');
+        throw "<expr>" + JSON.stringify(it);
     }
     gen(prep) {
         this.resetState();
         this.src = "# NOTE, this is not a CoffeeScript file:\n# the .coffee extension is solely for the convenience of syntax-highlighting.\n#\n# A debug-print of our in-memory-only imperative-intermediate-representation\n# available to code-gens that want to stay lean & mean & low on LoCs for\n# maintainability & ease of porting.\n#\n# The format is again just a debug-print: it's never to be parsed or anything,\n# and exists merely to dump all knowledge held by generated in-memory\n# representations available to code-gens.\n#\n# Generated representations follow below.\n\n";
-        const build = new Builder(prep, this);
+        const build = (this.b = new Builder(prep, this));
         const ifacemain = {
             name: prep.fromOrig.moduleName,
             Name: this.nameRewriters.types.interfaces(prep.fromOrig.moduleName),
@@ -327,18 +419,11 @@ class Gen extends gen.Gen {
         const ifaces = prep.interfaces.map(_ => build.interfaceFrom(_));
         for (const it of ifaces)
             this.emitInterface(it);
-        for (const it of [ifacemain].concat(...ifaces))
-            it.Methods.forEach(_ => {
-                this.emitFuncImpl({
-                    name: _.name, Name: _.Name, Type: it, Func: {
-                        Args: _.Args, Type: _.Type, Body: {
-                            Instrs: [
-                                { Ret: _.Type ? { Name: "" } : null }
-                            ]
-                        }
-                    }
-                });
-            });
+        for (const it of ifacemain.Methods)
+            this.emitMethodImpl(ifacemain, it, true);
+        for (const it of ifaces)
+            for (const method of it.Methods)
+                this.emitMethodImpl(it, method, false);
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src);
     }
 }
