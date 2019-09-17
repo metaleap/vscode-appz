@@ -5,7 +5,7 @@ import * as gen from './gen-basics'
 export interface WithName { Name: string, name?: string }
 export interface WithType { Type: TypeRef }
 export interface WithFrom<T> { fromPrep?: T }
-export interface WithDocs { Docs: Doc[] }
+export interface WithDocs { Docs?: Doc[] }
 export interface Doc { ForParam: string, Lines: string[] }
 
 export interface TEnum extends WithDocs, WithName, WithFrom<gen.PrepEnum> { Enumerants: Enumerant[] }
@@ -28,6 +28,7 @@ export enum TypeRefPrim {
 }
 export interface TypeRefArr {
     ArrOf: TypeRef
+    AsList: boolean
 }
 export interface TypeRefFunc {
     From: TypeRef[]
@@ -40,7 +41,7 @@ export interface TypeRefMaybe {
     Maybe: TypeRef
 }
 
-export type Expr = ELit | EName | ECall | EOp | EFunc | EDictNew | ELen | EConv | ENew
+export type Expr = ELit | EName | ECall | EOp | EFunc | ECollNew | ELen | EConv | ENew
 export interface ELit {
     Lit: boolean | number | string | null
 }
@@ -63,8 +64,9 @@ export interface EAddr {
 export interface EDeref {
     Deref: Expr
 }
-export interface EDictNew {
+export interface ECollNew {
     Capacity: Expr
+    ElemTypeIfList?: TypeRef // else it's std dict (string-to-any)
 }
 export interface ELen {
     LenOf: Expr
@@ -77,7 +79,7 @@ export interface ENew {
     New: TypeRef
 }
 
-export type Instr = IBlock | IRet | IVar | ISet | IDictDel
+export type Instr = IBlock | IRet | IVar | ISet | IDictDel | ECall
 export interface IBlock {
     Instrs: Instr[]
     Lock?: Expr
@@ -117,14 +119,36 @@ export class Builder {
     eNew(typeRef: TypeRef): ENew { return { New: typeRef } }
     eConv(typeRef: TypeRef, conv: Expr): EConv { return { Conv: conv, To: typeRef } }
     eLen(lenOf: Expr): ELen { return { LenOf: lenOf } }
-    eDictNew(cap: Expr): EDictNew { return { Capacity: cap } }
+    eCollNew(cap: Expr, listElemType: TypeRef = undefined): ECollNew { return { ElemTypeIfList: listElemType, Capacity: cap } }
     eFunc(args: Arg[], retType: TypeRef, ...instrs: Instr[]): EFunc { return { Args: args, Type: retType, Body: { Instrs: instrs } } }
     eCall(callee: Expr, ...args: Expr[]): ECall { return { Call: callee, Args: args } }
     n(name: string): EName { return { Name: name } }
     eLit(litVal: string | number | boolean | null): ELit { return { Lit: litVal } }
+    eNil(): ELit { return this.eLit(null) }
+    eThis(): EName { return this.n(null) }
     eOp(op: string, ...args: Expr[]): EOp { return { Name: op, Operands: args } }
     oDot(...args: Expr[]): EOp { return this.eOp('.', ...args) }
     oIdx(...args: Expr[]): EOp { return this.eOp('@', ...args) }
+    oEq(...args: Expr[]): EOp { return this.eOp('==', ...args) }
+    oNeq(...args: Expr[]): EOp { return this.eOp('!=', ...args) }
+    oOr(...args: Expr[]): EOp { return this.eOp('||', ...args) }
+    oAnd(...args: Expr[]): EOp { return this.eOp('&&', ...args) }
+    oNot(arg: Expr): EOp { return this.eOp("!", arg) }
+
+    each<T>(from: T[], fn: ((_: T) => Instr[])): Instr[] {
+        const me: Instr[] = []
+        for (const it of from)
+            me.push(...fn(it))
+        return me
+    }
+
+    let<TIn, TOut>(value: TIn, andThen: ((_: TIn) => TOut)) {
+        return andThen(value)
+    }
+
+    lets<TIn, TOut>(values: TIn[], andThen: ((..._: TIn[]) => TOut)) {
+        return andThen(...values)
+    }
 
     enumFrom(it: gen.PrepEnum): TEnum {
         return {
@@ -222,7 +246,7 @@ export class Builder {
 
         const tarr = gen.typeArrOf(it)
         if (tarr)
-            return { ArrOf: this.typeRef(tarr) }
+            return { ArrOf: this.typeRef(tarr), AsList: false }
 
         const ttup = gen.typeTupOf(it)
         if (ttup && ttup.length)
@@ -272,15 +296,15 @@ export class Builder {
                 if ((!(name && name.length)) && doc.isForRet !== null && doc.isForRet !== undefined)
                     name = (doc.isForRet && doc.isForRet.length) ? doc.isForRet : retNameFallback
                 if (!name)
-                    name = ""
+                    name = ''
                 let dst = into.find(_ => _.ForParam === name)
                 if (isMethod || !(name && name.length)) {
                     if (!dst)
                         into.push(dst = { ForParam: name, Lines: [] })
                     dst.Lines.push(...doc.lines)
                 }
-                if (name && name.length && appendArgsAndRetsToSummaryToo && (dst = into.find(_ => _.ForParam === "")))
-                    dst.Lines.push("", ...doc.lines.map((ln, idx) =>
+                if (name && name.length && appendArgsAndRetsToSummaryToo && (dst = into.find(_ => _.ForParam === '')))
+                    dst.Lines.push('', ...doc.lines.map((ln, idx) =>
                         ((idx) ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.gen.nameRewriters.args))
                     ))
             }
@@ -288,9 +312,9 @@ export class Builder {
                 this.docs(doc.subs, undefined, isMethod, appendArgsAndRetsToSummaryToo, retNameFallback, into)
         }
         if (istop && extraSummaryLines && extraSummaryLines.length) {
-            let dst = into.find(_ => _.ForParam === "")
+            let dst = into.find(_ => _.ForParam === '')
             if (!dst)
-                into.push(dst = { ForParam: "", Lines: [] })
+                into.push(dst = { ForParam: '', Lines: [] })
             dst.Lines.push(...extraSummaryLines)
         }
         return into
@@ -301,7 +325,7 @@ export class Builder {
 
 
 export class Gen extends gen.Gen implements gen.IGen {
-    private src: string = ""
+    private src: string = ''
     private indent: number = 0
 
     protected b: Builder = null
@@ -349,12 +373,12 @@ export class Gen extends gen.Gen implements gen.IGen {
         return this
     }
 
-    protected line = (srcLn: string = ""): Gen =>
+    protected line = (srcLn: string = ''): Gen =>
         this.lines(srcLn)
 
     protected lines = (...srcLns: string[]): Gen => {
         for (const srcln of srcLns)
-            this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : "") + "\n"
+            this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : '') + "\n"
         return this
     }
 
@@ -364,12 +388,18 @@ export class Gen extends gen.Gen implements gen.IGen {
         return this
     }
 
+    protected when(check: any, ifTrue: () => void, ifFalse: () => void): Gen {
+        if (check) ifTrue()
+        else ifFalse()
+        return this
+    }
+
     protected emitDocs = (it: (WithDocs & WithName)): Gen => {
         if (it.name && it.Name && it.name !== it.Name)
             this.line("# " + it.name + ":")
         for (const doc of it.Docs) {
             if (doc.ForParam && doc.ForParam.length)
-                this.lines("#", "# @" + doc.ForParam + ":")
+                this.lines('#', "# @" + doc.ForParam + ":")
             for (const docln of doc.Lines)
                 this.line("# " + docln)
         }
@@ -377,18 +407,18 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     protected emitEnum = (it: TEnum) => {
-        this.lines("", "")
+        this.lines('', '')
             .emitDocs(it)
             .line(it.Name + ": enum")
             .indented(() => it.Enumerants.forEach(_ =>
                 this.line()
                     .emitDocs(_)
                     .line(`${_.Name}: ${_.Value}`)))
-            .lines("", "")
+            .lines('', '')
     }
 
     protected emitInterface = (it: TInterface) => {
-        this.lines("", "")
+        this.lines('', '')
             .emitDocs(it)
             .line(it.Name + ": iface")
             .indented(() => it.Methods.forEach(_ => {
@@ -398,19 +428,19 @@ export class Gen extends gen.Gen implements gen.IGen {
                     .indented(() => _.Args.forEach(arg =>
                         this.ln(() => this.s(arg.Name, ': ').emitTypeRef(arg.Type).s((arg.name === arg.Name) ? '' : (' # ' + arg.name)))
                     ))
-            })).lines("", "")
+            })).lines('', '')
     }
 
     protected emitStruct = (it: TStruct) => {
-        this.lines("", "")
+        this.lines('', '')
             .emitDocs(it)
             .line(it.Name + ": struct")
             .indented(() => it.Fields.forEach(_ => {
                 this.line()
                     .emitDocs(_)
-                    .lines("#", `# JSON FLAGS: ${JSON.stringify(_.Json)}`)
+                    .lines('#', `# JSON FLAGS: ${JSON.stringify(_.Json)}`)
                     .ln(() => this.s(_.Name, ': ').emitTypeRef(_.Type))
-            })).lines("", "")
+            })).lines('', '')
     }
 
     protected emitTypeRef = (it: TypeRef): Gen => {
@@ -455,36 +485,75 @@ export class Gen extends gen.Gen implements gen.IGen {
                 Args: method.Args, Type: method.Type, Body: { Instrs: [] }
             }
         }
+        const body = me.Func.Body.Instrs
         if (isMainInterface)
-            me.Func.Body.Instrs.push(_.iRet(_.n(this.options.idents.curInst)))
+            body.push(_.iRet(_.n(this.options.idents.curInst)))
         else {
             const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'resultptr')
             const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args)
             const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length
 
-            me.Func.Body.Instrs.push(
-                _.iVar(__.msg, _.n("ipcMsg")),
-                _.iSet(_.n(__.msg), _.eNew(_.n("ipcMsg"))),
-                _.iSet(_.oDot(_.n(__.msg), _.n("QName")), _.eLit(iface.name + '.' + method.fromPrep.name)),
-                _.iSet(_.oDot(_.n(__.msg), _.n("Data")), _.eDictNew(_.eLit(numargs))),
+            body.push(
+                _.iVar(__.msg, _.n('ipcMsg')),
+                _.iSet(_.n(__.msg), _.eNew(_.n('ipcMsg'))),
+                _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(iface.name + '.' + method.fromPrep.name)),
+                _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs))),
             )
 
-            if (funcfields.length) { }
+            if (funcfields.length) body.push(
+                _.iVar(__.fnids, { ArrOf: TypeRefPrim.String, AsList: true }),
+                _.iSet(_.n(__.fnids), _.eCollNew(_.eLit(funcfields.length), TypeRefPrim.String)),
+                _.iLock(_.eThis(), ..._.each(funcfields, ff => [
+                    _.let(this.nameRewriters.args(ff.arg.name), argname =>
+                        _.let(this.nameRewriters.fields(ff.name), fld =>
+                            _.iIf((!ff.arg.optional) ? _.eNil() : _.oNeq(_.n(argname), _.eNil()), [
+                                _.iSet(_.oDot(_.n(argname), _.n(fld + '_AppzFuncId')), _.eLit("")),
+                            ])
+                        )
+                    ),
+                ])),
+            )
 
             for (const arg of method.Args)
                 if (!arg.fromPrep.isFromRetThenable)
-                    me.Func.Body.Instrs.push(
+                    body.push(
                         _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), arg)
                     )
+
+            const lastarg = method.Args[method.Args.length - 1]
+            body.push(_.iVar(__.on, { From: [_.n(this.options.idents.typeAny)], To: TypeRefPrim.Bool }))
+            if (lastarg.fromPrep.isFromRetThenable)
+                body.push(
+                    _.iIf(_.oNeq(_.n(lastarg.Name), _.eNil()), [
+                        _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: _.n(this.options.idents.typeAny) }], TypeRefPrim.Bool,
+                            _.iRet(_.eLit(true)),
+                        )),
+                    ]),
+                )
+            if (!funcfields.length) body.push(
+                _.eCall(_.oDot(_.eThis(), _.n('send')), _.n(__.msg), _.n(__.on)),
+            )
+            else body.push(
+                _.eCall(_.oDot(_.eThis(), _.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: _.n(this.options.idents.typeAny) }], TypeRefPrim.Bool,
+                    _.iIf(_.oNeq(_.eLen(_.n(__.fnids)), _.eLit(0)), [
+                        _.iLock(_.eThis(),
+                            _.iFor(_.n(__.fnid), _.n(__.fnids),
+                                _.iDel(_.oDot(_.eThis(), _.n('cbOther')), _.n(__.fnid)),
+                            ),
+                        ),
+                    ]),
+                    _.iRet(_.oOr(_.oEq(_.n(__.on), _.eNil()), _.eCall(_.n(__.on), _.n(__.payload)))),
+                )),
+            )
         }
         this.emitFuncImpl(me)
     }
 
     protected emitFuncImpl = (it: Func) => {
-        this.lines("", "")
+        this.lines('', '')
             .ln(() => this.emitTypeRef(it.Type).s(it.Name, ': (').each(it.Func.Args, ' -> ', _ => this.s(_.Name, ':').emitTypeRef(_.Type)).s(' -> ').emitTypeRef(it.Func.Type).s(')'))
             .emitInstr(it.Func.Body)
-            .lines("", "")
+            .lines('', '')
     }
 
     protected emitInstr(it: Instr): Gen {
@@ -528,14 +597,13 @@ export class Gen extends gen.Gen implements gen.IGen {
                 return this
             }
 
+            const ecall = it as ECall
+            if (ecall && ecall.Call)
+                return this.ln(() =>
+                    this.emitExpr(ecall))
+
             throw "<instr>" + JSON.stringify(it)
         }
-        return this
-    }
-
-    private when(ifTrue: boolean, thenDo: (() => void), elseDo: (() => void)): Gen {
-        if (ifTrue) thenDo()
-        else elseDo()
         return this
     }
 
@@ -553,9 +621,12 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (elit && elit.Lit !== undefined)
             return this.s(node_util.format("%j", elit.Lit))
 
-        const edictnew = it as EDictNew
-        if (edictnew && edictnew.Capacity !== undefined)
-            return this.s('dict·new(').emitExpr(edictnew.Capacity).s(')')
+        const ecollnew = it as ECollNew
+        if (ecollnew && ecollnew.Capacity !== undefined)
+            return this.when(ecollnew.ElemTypeIfList,
+                () => this.s('[').emitTypeRef(ecollnew.ElemTypeIfList).s(']'),
+                () => this.s('dict')
+            ).s('·new(').emitExpr(ecollnew.Capacity).s(')')
 
         const enew = it as ENew
         if (enew && enew.New)
@@ -589,8 +660,9 @@ export class Gen extends gen.Gen implements gen.IGen {
                 .s('(')
                 .each(efn.Args, ' -> ', _ => this.s(_.Name, ':').emitTypeRef(_.Type))
                 .s(' -> ').emitTypeRef(efn.Type)
+                .s(')\n')
                 .emitInstr(efn.Body)
-                .s(')')
+                .s('\t'.repeat(this.indent))
 
         const ename = it as EName
         if (ename && ename.Name !== undefined)

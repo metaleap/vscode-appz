@@ -389,6 +389,12 @@ WindowShowErrorMessage1: (message:string -> items:[string] -> andThen:?(string->
 	msg.Data = dict·new(2)
 	msg.Data@"message" = message
 	msg.Data@"items" = items
+	on: (Any->bool)
+	if (andThen != null)
+		on = (payload:Any -> bool)
+			ret true
+		
+	$.send(msg, on)
 
 
 
@@ -401,6 +407,12 @@ WindowShowErrorMessage2: (message:string -> options:MessageOptions -> items:[str
 	msg.Data@"message" = message
 	msg.Data@"options" = options
 	msg.Data@"items" = items
+	on: (Any->bool)
+	if (andThen != null)
+		on = (payload:Any -> bool)
+			ret true
+		
+	$.send(msg, on)
 
 
 
@@ -412,6 +424,12 @@ WindowShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(Mes
 	msg.Data = dict·new(2)
 	msg.Data@"message" = message
 	msg.Data@"items" = items
+	on: (Any->bool)
+	if (andThen != null)
+		on = (payload:Any -> bool)
+			ret true
+		
+	$.send(msg, on)
 
 
 
@@ -424,6 +442,12 @@ WindowShowErrorMessage4: (message:string -> options:MessageOptions -> items:[Mes
 	msg.Data@"message" = message
 	msg.Data@"options" = options
 	msg.Data@"items" = items
+	on: (Any->bool)
+	if (andThen != null)
+		on = (payload:Any -> bool)
+			ret true
+		
+	$.send(msg, on)
 
 
 
@@ -435,6 +459,12 @@ WindowShowInformationMessage1: (message:string -> items:[string] -> andThen:?(st
 	msg.Data = dict·new(2)
 	msg.Data@"message" = message
 	msg.Data@"items" = items
+	on: (Any->bool)
+	if (andThen != null)
+		on = (payload:Any -> bool)
+			ret true
+		
+	$.send(msg, on)
 
 
 
@@ -447,6 +477,12 @@ WindowShowInformationMessage2: (message:string -> options:MessageOptions -> item
 	msg.Data@"message" = message
 	msg.Data@"options" = options
 	msg.Data@"items" = items
+	on: (Any->bool)
+	if (andThen != null)
+		on = (payload:Any -> bool)
+			ret true
+		
+	$.send(msg, on)
 
 
 
@@ -458,6 +494,12 @@ WindowShowInformationMessage3: (message:string -> items:[MessageItem] -> andThen
 	msg.Data = dict·new(2)
 	msg.Data@"message" = message
 	msg.Data@"items" = items
+	on: (Any->bool)
+	if (andThen != null)
+		on = (payload:Any -> bool)
+			ret true
+		
+	$.send(msg, on)
 
 
 
@@ -470,6 +512,12 @@ WindowShowInformationMessage4: (message:string -> options:MessageOptions -> item
 	msg.Data@"message" = message
 	msg.Data@"options" = options
 	msg.Data@"items" = items
+	on: (Any->bool)
+	if (andThen != null)
+		on = (payload:Any -> bool)
+			ret true
+		
+	$.send(msg, on)
 
 
 
@@ -481,6 +529,12 @@ WindowShowWarningMessage1: (message:string -> items:[string] -> andThen:?(string
 	msg.Data = dict·new(2)
 	msg.Data@"message" = message
 	msg.Data@"items" = items
+	on: (Any->bool)
+	if (andThen != null)
+		on = (payload:Any -> bool)
+			ret true
+		
+	$.send(msg, on)
 
 
 
@@ -493,6 +547,12 @@ WindowShowWarningMessage2: (message:string -> options:MessageOptions -> items:[s
 	msg.Data@"message" = message
 	msg.Data@"options" = options
 	msg.Data@"items" = items
+	on: (Any->bool)
+	if (andThen != null)
+		on = (payload:Any -> bool)
+			ret true
+		
+	$.send(msg, on)
 
 
 
@@ -504,6 +564,12 @@ WindowShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?(M
 	msg.Data = dict·new(2)
 	msg.Data@"message" = message
 	msg.Data@"items" = items
+	on: (Any->bool)
+	if (andThen != null)
+		on = (payload:Any -> bool)
+			ret true
+		
+	$.send(msg, on)
 
 
 
@@ -516,6 +582,12 @@ WindowShowWarningMessage4: (message:string -> options:MessageOptions -> items:[M
 	msg.Data@"message" = message
 	msg.Data@"options" = options
 	msg.Data@"items" = items
+	on: (Any->bool)
+	if (andThen != null)
+		on = (payload:Any -> bool)
+			ret true
+		
+	$.send(msg, on)
 
 
 
@@ -525,6 +597,23 @@ WindowShowInputBox: (options:?InputBoxOptions -> andThen:?(string->void) -> void
 	msg = ipcMsg·new
 	msg.QName = "window.showInputBox"
 	msg.Data = dict·new(1)
+	fnids: [string]
+	fnids = [string]·new(1)
+	$·lock
+		if (options != null)
+			options.ValidateInput_AppzFuncId = ""
 	msg.Data@"options" = options
+	on: (Any->bool)
+	if (andThen != null)
+		on = (payload:Any -> bool)
+			ret true
+		
+	$.send(msg, (payload:Any -> bool)
+		if (fnids·len != 0)
+			$·lock
+				for fnid in fnids
+					$.cbOther·del(fnid)
+		ret ((on == null) || on(payload))
+	)
 
 

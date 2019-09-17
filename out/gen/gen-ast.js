@@ -22,14 +22,33 @@ class Builder {
     eNew(typeRef) { return { New: typeRef }; }
     eConv(typeRef, conv) { return { Conv: conv, To: typeRef }; }
     eLen(lenOf) { return { LenOf: lenOf }; }
-    eDictNew(cap) { return { Capacity: cap }; }
+    eCollNew(cap, listElemType = undefined) { return { ElemTypeIfList: listElemType, Capacity: cap }; }
     eFunc(args, retType, ...instrs) { return { Args: args, Type: retType, Body: { Instrs: instrs } }; }
     eCall(callee, ...args) { return { Call: callee, Args: args }; }
     n(name) { return { Name: name }; }
     eLit(litVal) { return { Lit: litVal }; }
+    eNil() { return this.eLit(null); }
+    eThis() { return this.n(null); }
     eOp(op, ...args) { return { Name: op, Operands: args }; }
     oDot(...args) { return this.eOp('.', ...args); }
     oIdx(...args) { return this.eOp('@', ...args); }
+    oEq(...args) { return this.eOp('==', ...args); }
+    oNeq(...args) { return this.eOp('!=', ...args); }
+    oOr(...args) { return this.eOp('||', ...args); }
+    oAnd(...args) { return this.eOp('&&', ...args); }
+    oNot(arg) { return this.eOp("!", arg); }
+    each(from, fn) {
+        const me = [];
+        for (const it of from)
+            me.push(...fn(it));
+        return me;
+    }
+    let(value, andThen) {
+        return andThen(value);
+    }
+    lets(values, andThen) {
+        return andThen(...values);
+    }
     enumFrom(it) {
         return {
             fromPrep: it,
@@ -119,7 +138,7 @@ class Builder {
             return { Name: this.gen.options.idents.typeAny };
         const tarr = gen.typeArrOf(it);
         if (tarr)
-            return { ArrOf: this.typeRef(tarr) };
+            return { ArrOf: this.typeRef(tarr), AsList: false };
         const ttup = gen.typeTupOf(it);
         if (ttup && ttup.length)
             return { TupOf: ttup.map(_ => this.typeRef(_)) };
@@ -162,23 +181,23 @@ class Builder {
                     if ((!(name && name.length)) && doc.isForRet !== null && doc.isForRet !== undefined)
                         name = (doc.isForRet && doc.isForRet.length) ? doc.isForRet : retNameFallback;
                     if (!name)
-                        name = "";
+                        name = '';
                     let dst = into.find(_ => _.ForParam === name);
                     if (isMethod || !(name && name.length)) {
                         if (!dst)
                             into.push(dst = { ForParam: name, Lines: [] });
                         dst.Lines.push(...doc.lines);
                     }
-                    if (name && name.length && appendArgsAndRetsToSummaryToo && (dst = into.find(_ => _.ForParam === "")))
-                        dst.Lines.push("", ...doc.lines.map((ln, idx) => ((idx) ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.gen.nameRewriters.args))));
+                    if (name && name.length && appendArgsAndRetsToSummaryToo && (dst = into.find(_ => _.ForParam === '')))
+                        dst.Lines.push('', ...doc.lines.map((ln, idx) => ((idx) ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.gen.nameRewriters.args))));
                 }
                 if (doc.subs && doc.subs.length)
                     this.docs(doc.subs, undefined, isMethod, appendArgsAndRetsToSummaryToo, retNameFallback, into);
             }
         if (istop && extraSummaryLines && extraSummaryLines.length) {
-            let dst = into.find(_ => _.ForParam === "");
+            let dst = into.find(_ => _.ForParam === '');
             if (!dst)
-                into.push(dst = { ForParam: "", Lines: [] });
+                into.push(dst = { ForParam: '', Lines: [] });
             dst.Lines.push(...extraSummaryLines);
         }
         return into;
@@ -188,7 +207,7 @@ exports.Builder = Builder;
 class Gen extends gen.Gen {
     constructor() {
         super(...arguments);
-        this.src = "";
+        this.src = '';
         this.indent = 0;
         this.b = null;
         this.nameRewriters = {
@@ -222,10 +241,10 @@ class Gen extends gen.Gen {
             this.src += "\n";
             return this;
         };
-        this.line = (srcLn = "") => this.lines(srcLn);
+        this.line = (srcLn = '') => this.lines(srcLn);
         this.lines = (...srcLns) => {
             for (const srcln of srcLns)
-                this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : "") + "\n";
+                this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : '') + "\n";
             return this;
         };
         this.s = (...s) => {
@@ -238,23 +257,23 @@ class Gen extends gen.Gen {
                 this.line("# " + it.name + ":");
             for (const doc of it.Docs) {
                 if (doc.ForParam && doc.ForParam.length)
-                    this.lines("#", "# @" + doc.ForParam + ":");
+                    this.lines('#', "# @" + doc.ForParam + ":");
                 for (const docln of doc.Lines)
                     this.line("# " + docln);
             }
             return this;
         };
         this.emitEnum = (it) => {
-            this.lines("", "")
+            this.lines('', '')
                 .emitDocs(it)
                 .line(it.Name + ": enum")
                 .indented(() => it.Enumerants.forEach(_ => this.line()
                 .emitDocs(_)
                 .line(`${_.Name}: ${_.Value}`)))
-                .lines("", "");
+                .lines('', '');
         };
         this.emitInterface = (it) => {
-            this.lines("", "")
+            this.lines('', '')
                 .emitDocs(it)
                 .line(it.Name + ": iface")
                 .indented(() => it.Methods.forEach(_ => {
@@ -262,18 +281,18 @@ class Gen extends gen.Gen {
                     .emitDocs(_)
                     .ln(() => this.s(_.Name, ': ').emitTypeRef(_.Type))
                     .indented(() => _.Args.forEach(arg => this.ln(() => this.s(arg.Name, ': ').emitTypeRef(arg.Type).s((arg.name === arg.Name) ? '' : (' # ' + arg.name)))));
-            })).lines("", "");
+            })).lines('', '');
         };
         this.emitStruct = (it) => {
-            this.lines("", "")
+            this.lines('', '')
                 .emitDocs(it)
                 .line(it.Name + ": struct")
                 .indented(() => it.Fields.forEach(_ => {
                 this.line()
                     .emitDocs(_)
-                    .lines("#", `# JSON FLAGS: ${JSON.stringify(_.Json)}`)
+                    .lines('#', `# JSON FLAGS: ${JSON.stringify(_.Json)}`)
                     .ln(() => this.s(_.Name, ': ').emitTypeRef(_.Type));
-            })).lines("", "");
+            })).lines('', '');
         };
         this.emitTypeRef = (it) => {
             if (it === null)
@@ -304,10 +323,10 @@ class Gen extends gen.Gen {
             throw it;
         };
         this.emitFuncImpl = (it) => {
-            this.lines("", "")
+            this.lines('', '')
                 .ln(() => this.emitTypeRef(it.Type).s(it.Name, ': (').each(it.Func.Args, ' -> ', _ => this.s(_.Name, ':').emitTypeRef(_.Type)).s(' -> ').emitTypeRef(it.Func.Type).s(')'))
                 .emitInstr(it.Func.Body)
-                .lines("", "");
+                .lines('', '');
         };
     }
     each(arr, joinBy, andThen) {
@@ -318,23 +337,48 @@ class Gen extends gen.Gen {
         }
         return this;
     }
+    when(check, ifTrue, ifFalse) {
+        if (check)
+            ifTrue();
+        else
+            ifFalse();
+        return this;
+    }
     emitMethodImpl(iface, method, isMainInterface) {
         const _ = this.b, me = {
             name: method.name, Name: method.Name, Type: iface, Func: {
                 Args: method.Args, Type: method.Type, Body: { Instrs: [] }
             }
         };
+        const body = me.Func.Body.Instrs;
         if (isMainInterface)
-            me.Func.Body.Instrs.push(_.iRet(_.n(this.options.idents.curInst)));
+            body.push(_.iRet(_.n(this.options.idents.curInst)));
         else {
             const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'resultptr');
             const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args);
             const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length;
-            me.Func.Body.Instrs.push(_.iVar(__.msg, _.n("ipcMsg")), _.iSet(_.n(__.msg), _.eNew(_.n("ipcMsg"))), _.iSet(_.oDot(_.n(__.msg), _.n("QName")), _.eLit(iface.name + '.' + method.fromPrep.name)), _.iSet(_.oDot(_.n(__.msg), _.n("Data")), _.eDictNew(_.eLit(numargs))));
-            if (funcfields.length) { }
+            body.push(_.iVar(__.msg, _.n('ipcMsg')), _.iSet(_.n(__.msg), _.eNew(_.n('ipcMsg'))), _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(iface.name + '.' + method.fromPrep.name)), _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs))));
+            if (funcfields.length)
+                body.push(_.iVar(__.fnids, { ArrOf: TypeRefPrim.String, AsList: true }), _.iSet(_.n(__.fnids), _.eCollNew(_.eLit(funcfields.length), TypeRefPrim.String)), _.iLock(_.eThis(), ..._.each(funcfields, ff => [
+                    _.let(this.nameRewriters.args(ff.arg.name), argname => _.let(this.nameRewriters.fields(ff.name), fld => _.iIf((!ff.arg.optional) ? _.eNil() : _.oNeq(_.n(argname), _.eNil()), [
+                        _.iSet(_.oDot(_.n(argname), _.n(fld + '_AppzFuncId')), _.eLit("")),
+                    ]))),
+                ])));
             for (const arg of method.Args)
                 if (!arg.fromPrep.isFromRetThenable)
-                    me.Func.Body.Instrs.push(_.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), arg));
+                    body.push(_.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), arg));
+            const lastarg = method.Args[method.Args.length - 1];
+            body.push(_.iVar(__.on, { From: [_.n(this.options.idents.typeAny)], To: TypeRefPrim.Bool }));
+            if (lastarg.fromPrep.isFromRetThenable)
+                body.push(_.iIf(_.oNeq(_.n(lastarg.Name), _.eNil()), [
+                    _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: _.n(this.options.idents.typeAny) }], TypeRefPrim.Bool, _.iRet(_.eLit(true)))),
+                ]));
+            if (!funcfields.length)
+                body.push(_.eCall(_.oDot(_.eThis(), _.n('send')), _.n(__.msg), _.n(__.on)));
+            else
+                body.push(_.eCall(_.oDot(_.eThis(), _.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: _.n(this.options.idents.typeAny) }], TypeRefPrim.Bool, _.iIf(_.oNeq(_.eLen(_.n(__.fnids)), _.eLit(0)), [
+                    _.iLock(_.eThis(), _.iFor(_.n(__.fnid), _.n(__.fnids), _.iDel(_.oDot(_.eThis(), _.n('cbOther')), _.n(__.fnid)))),
+                ]), _.iRet(_.oOr(_.oEq(_.n(__.on), _.eNil()), _.eCall(_.n(__.on), _.n(__.payload)))))));
         }
         this.emitFuncImpl(me);
     }
@@ -366,15 +410,11 @@ class Gen extends gen.Gen {
                         .emitInstr(iblock.If[1]);
                 return this;
             }
+            const ecall = it;
+            if (ecall && ecall.Call)
+                return this.ln(() => this.emitExpr(ecall));
             throw "<instr>" + JSON.stringify(it);
         }
-        return this;
-    }
-    when(ifTrue, thenDo, elseDo) {
-        if (ifTrue)
-            thenDo();
-        else
-            elseDo();
         return this;
     }
     emitExprs(joinBy, ...arr) {
@@ -388,9 +428,9 @@ class Gen extends gen.Gen {
         const elit = it;
         if (elit && elit.Lit !== undefined)
             return this.s(node_util.format("%j", elit.Lit));
-        const edictnew = it;
-        if (edictnew && edictnew.Capacity !== undefined)
-            return this.s('dict·new(').emitExpr(edictnew.Capacity).s(')');
+        const ecollnew = it;
+        if (ecollnew && ecollnew.Capacity !== undefined)
+            return this.when(ecollnew.ElemTypeIfList, () => this.s('[').emitTypeRef(ecollnew.ElemTypeIfList).s(']'), () => this.s('dict')).s('·new(').emitExpr(ecollnew.Capacity).s(')');
         const enew = it;
         if (enew && enew.New)
             return this.emitTypeRef(enew.New).s("·new");
@@ -418,8 +458,9 @@ class Gen extends gen.Gen {
                 .s('(')
                 .each(efn.Args, ' -> ', _ => this.s(_.Name, ':').emitTypeRef(_.Type))
                 .s(' -> ').emitTypeRef(efn.Type)
+                .s(')\n')
                 .emitInstr(efn.Body)
-                .s(')');
+                .s('\t'.repeat(this.indent));
         const ename = it;
         if (ename && ename.Name !== undefined)
             return this.s(ename.Name ? ename.Name : this.options.idents.curInst);
