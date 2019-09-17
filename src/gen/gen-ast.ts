@@ -3,16 +3,17 @@ import * as gen from './gen-basics'
 
 export interface WithName { Name: string, name?: string }
 export interface WithType { Type: TypeRef }
+export interface WithFrom<T> { fromOrig?: T }
 export interface WithDocs { Docs: Doc[] }
 export interface Doc { ForParam: string, Lines: string[] }
 
-export interface TEnum extends WithDocs, WithName { Enumerants: Enumerant[] }
-export interface TInterface extends WithDocs, WithName { Methods: Method[] }
-export interface Enumerant extends WithDocs, WithName { Value: number }
-export interface TStruct extends WithDocs, WithName { Fields: Field[] }
-export interface Method extends WithDocs, WithName, WithType { Args: Arg[] }
-export interface Arg extends WithDocs, WithName, WithType { }
-export interface Field extends WithDocs, WithName, WithType {
+export interface TEnum extends WithDocs, WithName, WithFrom<gen.PrepEnum> { Enumerants: Enumerant[] }
+export interface TInterface extends WithDocs, WithName, WithFrom<gen.PrepInterface> { Methods: Method[] }
+export interface Enumerant extends WithDocs, WithName, WithFrom<gen.PrepEnumerant> { Value: number }
+export interface TStruct extends WithDocs, WithName, WithFrom<gen.PrepStruct> { Fields: Field[] }
+export interface Method extends WithDocs, WithName, WithType, WithFrom<gen.PrepMethod> { Args: Arg[] }
+export interface Arg extends WithDocs, WithName, WithType, WithFrom<gen.PrepArg> { }
+export interface Field extends WithDocs, WithName, WithType, WithFrom<gen.PrepField> {
     FuncFieldRel?: Field, Json: { Excluded: boolean, Name: string, Required: boolean }
 }
 export interface Func extends WithName, WithType { Func: EFunc }
@@ -117,17 +118,20 @@ export class Builder {
     eLen(lenOf: Expr): ELen { return { LenOf: lenOf } }
     eDictNew(cap: Expr): EDictNew { return { Capacity: cap } }
     eFunc(args: Arg[], retType: TypeRef, ...instrs: Instr[]): EFunc { return { Args: args, Type: retType, Body: { Instrs: instrs } } }
-    eOp(op: string, ...args: Expr[]): EOp { return { Name: op, Operands: args } }
     eCall(callee: Expr, ...args: Expr[]): ECall { return { Call: callee, Args: args } }
     eName(name: string): EName { return { Name: name } }
     eLit(litVal: string | number | boolean | null): ELit { return { Lit: litVal } }
+    eOp(op: string, ...args: Expr[]): EOp { return { Name: op, Operands: args } }
+    eDot(...args: Expr[]): EOp { return this.eOp(".", ...args) }
 
     enumFrom(it: gen.PrepEnum): TEnum {
         return {
+            fromOrig: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.enums(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
             Enumerants: it.enumerants.map((_): Enumerant => ({
+                fromOrig: _,
                 name: _.name,
                 Name: this.gen.nameRewriters.enumerants(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig)),
@@ -138,15 +142,18 @@ export class Builder {
 
     interfaceFrom(it: gen.PrepInterface): TInterface {
         return {
+            fromOrig: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.interfaces(it.name),
             Docs: this.docs(gen.docs(it.fromOrig)),
             Methods: it.methods.map((_: gen.PrepMethod): Method => ({
+                fromOrig: _,
                 name: _.nameOrig,
                 Name: this.gen.nameRewriters.methods(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig.decl, () => _.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
                 Type: null,
                 Args: _.args.map((arg: gen.PrepArg): Arg => ({
+                    fromOrig: arg,
                     name: arg.name,
                     Name: this.gen.nameRewriters.args(arg.name),
                     Docs: this.docs(gen.docs(arg.fromOrig)),
@@ -158,10 +165,12 @@ export class Builder {
 
     structFrom(it: gen.PrepStruct): TStruct {
         let ret: TStruct = {
+            fromOrig: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
             Fields: it.fields.map((_: gen.PrepField): Field => ({
+                fromOrig: _,
                 name: _.name,
                 Name: this.gen.nameRewriters.fields(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummaryFor.funcFields),
@@ -449,8 +458,8 @@ export class Gen extends gen.Gen implements gen.IGen {
         else {
             me.Func.Body.Instrs.push(
                 b.iVar("msg", { Name: "ipcMsg" }),
-                b.iSet(["msg"], b.eNew({ Name: "ipcMsg" })),
-
+                b.iSet({ Name: "msg" }, b.eNew({ Name: "ipcMsg" })),
+                b.iSet(b.eDot({ Name: "msg" }, { Name: "QName" }), b.eLit("qname")),
             )
         }
         this.emitFuncImpl(me)

@@ -42,11 +42,13 @@ export interface GenJobStruct extends GenJobNamed {
 export interface PrepEnum {
     fromOrig: GenJobEnum
     name: string
-    enumerants: {
-        fromOrig: ts.EnumMember,
-        name: string
-        value: number
-    }[]
+    enumerants: PrepEnumerant[]
+}
+
+export interface PrepEnumerant {
+    fromOrig: ts.EnumMember,
+    name: string
+    value: number
 }
 
 export interface PrepStruct {

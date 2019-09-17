@@ -23,16 +23,19 @@ class Builder {
     eLen(lenOf) { return { LenOf: lenOf }; }
     eDictNew(cap) { return { Capacity: cap }; }
     eFunc(args, retType, ...instrs) { return { Args: args, Type: retType, Body: { Instrs: instrs } }; }
-    eOp(op, ...args) { return { Name: op, Operands: args }; }
     eCall(callee, ...args) { return { Call: callee, Args: args }; }
     eName(name) { return { Name: name }; }
     eLit(litVal) { return { Lit: litVal }; }
+    eOp(op, ...args) { return { Name: op, Operands: args }; }
+    eDot(...args) { return this.eOp(".", ...args); }
     enumFrom(it) {
         return {
+            fromOrig: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.enums(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
             Enumerants: it.enumerants.map((_) => ({
+                fromOrig: _,
                 name: _.name,
                 Name: this.gen.nameRewriters.enumerants(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig)),
@@ -42,15 +45,18 @@ class Builder {
     }
     interfaceFrom(it) {
         return {
+            fromOrig: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.interfaces(it.name),
             Docs: this.docs(gen.docs(it.fromOrig)),
             Methods: it.methods.map((_) => ({
+                fromOrig: _,
                 name: _.nameOrig,
                 Name: this.gen.nameRewriters.methods(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig.decl, () => _.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
                 Type: null,
                 Args: _.args.map((arg) => ({
+                    fromOrig: arg,
                     name: arg.name,
                     Name: this.gen.nameRewriters.args(arg.name),
                     Docs: this.docs(gen.docs(arg.fromOrig)),
@@ -61,10 +67,12 @@ class Builder {
     }
     structFrom(it) {
         let ret = {
+            fromOrig: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
             Fields: it.fields.map((_) => ({
+                fromOrig: _,
                 name: _.name,
                 Name: this.gen.nameRewriters.fields(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummaryFor.funcFields),
@@ -317,7 +325,7 @@ class Gen extends gen.Gen {
         if (isMainInterface)
             me.Func.Body.Instrs.push(b.iRet(b.eName(this.options.idents.curInst)));
         else {
-            me.Func.Body.Instrs.push(b.iVar("msg", { Name: "ipcMsg" }), b.iSet(["msg"], b.eNew({ Name: "ipcMsg" })));
+            me.Func.Body.Instrs.push(b.iVar("msg", { Name: "ipcMsg" }), b.iSet({ Name: "msg" }, b.eNew({ Name: "ipcMsg" })), b.iSet(b.eDot({ Name: "msg" }, { Name: "QName" }), b.eLit("qname")));
         }
         this.emitFuncImpl(me);
     }
