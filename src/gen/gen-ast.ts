@@ -1,9 +1,10 @@
+import * as node_util from 'util'
 import * as gen from './gen-basics'
 
 
 export interface WithName { Name: string, name?: string }
 export interface WithType { Type: TypeRef }
-export interface WithFrom<T> { fromOrig?: T }
+export interface WithFrom<T> { fromPrep?: T }
 export interface WithDocs { Docs: Doc[] }
 export interface Doc { ForParam: string, Lines: string[] }
 
@@ -119,19 +120,20 @@ export class Builder {
     eDictNew(cap: Expr): EDictNew { return { Capacity: cap } }
     eFunc(args: Arg[], retType: TypeRef, ...instrs: Instr[]): EFunc { return { Args: args, Type: retType, Body: { Instrs: instrs } } }
     eCall(callee: Expr, ...args: Expr[]): ECall { return { Call: callee, Args: args } }
-    eName(name: string): EName { return { Name: name } }
+    n(name: string): EName { return { Name: name } }
     eLit(litVal: string | number | boolean | null): ELit { return { Lit: litVal } }
     eOp(op: string, ...args: Expr[]): EOp { return { Name: op, Operands: args } }
-    eDot(...args: Expr[]): EOp { return this.eOp(".", ...args) }
+    oDot(...args: Expr[]): EOp { return this.eOp('.', ...args) }
+    oIdx(...args: Expr[]): EOp { return this.eOp('@', ...args) }
 
     enumFrom(it: gen.PrepEnum): TEnum {
         return {
-            fromOrig: it,
+            fromPrep: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.enums(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
             Enumerants: it.enumerants.map((_): Enumerant => ({
-                fromOrig: _,
+                fromPrep: _,
                 name: _.name,
                 Name: this.gen.nameRewriters.enumerants(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig)),
@@ -142,18 +144,18 @@ export class Builder {
 
     interfaceFrom(it: gen.PrepInterface): TInterface {
         return {
-            fromOrig: it,
+            fromPrep: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.interfaces(it.name),
             Docs: this.docs(gen.docs(it.fromOrig)),
             Methods: it.methods.map((_: gen.PrepMethod): Method => ({
-                fromOrig: _,
+                fromPrep: _,
                 name: _.nameOrig,
                 Name: this.gen.nameRewriters.methods(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig.decl, () => _.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
                 Type: null,
                 Args: _.args.map((arg: gen.PrepArg): Arg => ({
-                    fromOrig: arg,
+                    fromPrep: arg,
                     name: arg.name,
                     Name: this.gen.nameRewriters.args(arg.name),
                     Docs: this.docs(gen.docs(arg.fromOrig)),
@@ -165,12 +167,12 @@ export class Builder {
 
     structFrom(it: gen.PrepStruct): TStruct {
         let ret: TStruct = {
-            fromOrig: it,
+            fromPrep: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
             Fields: it.fields.map((_: gen.PrepField): Field => ({
-                fromOrig: _,
+                fromPrep: _,
                 name: _.name,
                 Name: this.gen.nameRewriters.fields(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummaryFor.funcFields),
@@ -448,19 +450,32 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     protected emitMethodImpl(iface: TInterface, method: Method, isMainInterface: boolean) {
-        const b = this.b, me: Func = {
+        const _ = this.b, me: Func = {
             name: method.name, Name: method.Name, Type: iface, Func: {
                 Args: method.Args, Type: method.Type, Body: { Instrs: [] }
             }
         }
         if (isMainInterface)
-            me.Func.Body.Instrs.push(b.iRet(b.eName(this.options.idents.curInst)))
+            me.Func.Body.Instrs.push(_.iRet(_.n(this.options.idents.curInst)))
         else {
+            const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'resultptr')
+            const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args)
+            const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length
+
             me.Func.Body.Instrs.push(
-                b.iVar("msg", { Name: "ipcMsg" }),
-                b.iSet({ Name: "msg" }, b.eNew({ Name: "ipcMsg" })),
-                b.iSet(b.eDot({ Name: "msg" }, { Name: "QName" }), b.eLit("qname")),
+                _.iVar(__.msg, _.n("ipcMsg")),
+                _.iSet(_.n(__.msg), _.eNew(_.n("ipcMsg"))),
+                _.iSet(_.oDot(_.n(__.msg), _.n("QName")), _.eLit(iface.name + '.' + method.fromPrep.name)),
+                _.iSet(_.oDot(_.n(__.msg), _.n("Data")), _.eDictNew(_.eLit(numargs))),
             )
+
+            if (funcfields.length) { }
+
+            for (const arg of method.Args)
+                if (!arg.fromPrep.isFromRetThenable)
+                    me.Func.Body.Instrs.push(
+                        _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), arg)
+                    )
         }
         this.emitFuncImpl(me)
     }
@@ -518,6 +533,12 @@ export class Gen extends gen.Gen implements gen.IGen {
         return this
     }
 
+    private when(ifTrue: boolean, thenDo: (() => void), elseDo: (() => void)): Gen {
+        if (ifTrue) thenDo()
+        else elseDo()
+        return this
+    }
+
     private emitExprs(joinBy: string, ...arr: Expr[]): Gen {
         return this.each(arr, joinBy, (_) => this.emitExpr(_))
     }
@@ -528,17 +549,13 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (it === null)
             return this.s('null')
 
-        const ename = it as EName
-        if (ename && ename.Name !== undefined)
-            return this.s(ename.Name ? ename.Name : this.options.idents.curInst)
-
         const elit = it as ELit
         if (elit && elit.Lit !== undefined)
-            return this.s((elit.Lit === null) ? 'null' : elit.Lit.toString())
+            return this.s(node_util.format("%j", elit.Lit))
 
         const edictnew = it as EDictNew
         if (edictnew && edictnew.Capacity !== undefined)
-            return this.s("dict·new(" + edictnew.Capacity + ")")
+            return this.s('dict·new(').emitExpr(edictnew.Capacity).s(')')
 
         const enew = it as ENew
         if (enew && enew.New)
@@ -557,8 +574,14 @@ export class Gen extends gen.Gen implements gen.IGen {
             return this.emitExpr(ecall.Call).s("(").emitExprs(', ', ...ecall.Args).s(")")
 
         const eop = it as EOp
-        if (eop && eop.Name && eop.Operands && eop.Operands.length)
-            return this.s("(" + ((eop.Operands.length > 1) ? '' : eop.Name)).emitExprs(' ' + eop.Name + ' ', ...eop.Operands).s(')')
+        if (eop && eop.Name && eop.Operands && eop.Operands.length) {
+            const notactualoperator = (eop.Name === '@' || eop.Name === '.')
+            return this
+                .s((notactualoperator ? '' : '(')
+                    + ((eop.Operands.length > 1) ? '' : /* unary*/ eop.Name))
+                .emitExprs(notactualoperator ? eop.Name : (' ' + eop.Name + ' '), ...eop.Operands)
+                .s(notactualoperator ? '' : ')')
+        }
 
         const efn = it as EFunc
         if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
@@ -568,6 +591,10 @@ export class Gen extends gen.Gen implements gen.IGen {
                 .s(' -> ').emitTypeRef(efn.Type)
                 .emitInstr(efn.Body)
                 .s(')')
+
+        const ename = it as EName
+        if (ename && ename.Name !== undefined)
+            return this.s(ename.Name ? ename.Name : this.options.idents.curInst)
 
         throw "<expr>" + JSON.stringify(it)
     }

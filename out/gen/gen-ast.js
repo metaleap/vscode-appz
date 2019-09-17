@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const node_util = require("util");
 const gen = require("./gen-basics");
 var TypeRefPrim;
 (function (TypeRefPrim) {
@@ -24,18 +25,19 @@ class Builder {
     eDictNew(cap) { return { Capacity: cap }; }
     eFunc(args, retType, ...instrs) { return { Args: args, Type: retType, Body: { Instrs: instrs } }; }
     eCall(callee, ...args) { return { Call: callee, Args: args }; }
-    eName(name) { return { Name: name }; }
+    n(name) { return { Name: name }; }
     eLit(litVal) { return { Lit: litVal }; }
     eOp(op, ...args) { return { Name: op, Operands: args }; }
-    eDot(...args) { return this.eOp(".", ...args); }
+    oDot(...args) { return this.eOp('.', ...args); }
+    oIdx(...args) { return this.eOp('@', ...args); }
     enumFrom(it) {
         return {
-            fromOrig: it,
+            fromPrep: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.enums(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
             Enumerants: it.enumerants.map((_) => ({
-                fromOrig: _,
+                fromPrep: _,
                 name: _.name,
                 Name: this.gen.nameRewriters.enumerants(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig)),
@@ -45,18 +47,18 @@ class Builder {
     }
     interfaceFrom(it) {
         return {
-            fromOrig: it,
+            fromPrep: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.interfaces(it.name),
             Docs: this.docs(gen.docs(it.fromOrig)),
             Methods: it.methods.map((_) => ({
-                fromOrig: _,
+                fromPrep: _,
                 name: _.nameOrig,
                 Name: this.gen.nameRewriters.methods(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig.decl, () => _.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
                 Type: null,
                 Args: _.args.map((arg) => ({
-                    fromOrig: arg,
+                    fromPrep: arg,
                     name: arg.name,
                     Name: this.gen.nameRewriters.args(arg.name),
                     Docs: this.docs(gen.docs(arg.fromOrig)),
@@ -67,12 +69,12 @@ class Builder {
     }
     structFrom(it) {
         let ret = {
-            fromOrig: it,
+            fromPrep: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
             Fields: it.fields.map((_) => ({
-                fromOrig: _,
+                fromPrep: _,
                 name: _.name,
                 Name: this.gen.nameRewriters.fields(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummaryFor.funcFields),
@@ -317,15 +319,22 @@ class Gen extends gen.Gen {
         return this;
     }
     emitMethodImpl(iface, method, isMainInterface) {
-        const b = this.b, me = {
+        const _ = this.b, me = {
             name: method.name, Name: method.Name, Type: iface, Func: {
                 Args: method.Args, Type: method.Type, Body: { Instrs: [] }
             }
         };
         if (isMainInterface)
-            me.Func.Body.Instrs.push(b.iRet(b.eName(this.options.idents.curInst)));
+            me.Func.Body.Instrs.push(_.iRet(_.n(this.options.idents.curInst)));
         else {
-            me.Func.Body.Instrs.push(b.iVar("msg", { Name: "ipcMsg" }), b.iSet({ Name: "msg" }, b.eNew({ Name: "ipcMsg" })), b.iSet(b.eDot({ Name: "msg" }, { Name: "QName" }), b.eLit("qname")));
+            const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'resultptr');
+            const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args);
+            const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length;
+            me.Func.Body.Instrs.push(_.iVar(__.msg, _.n("ipcMsg")), _.iSet(_.n(__.msg), _.eNew(_.n("ipcMsg"))), _.iSet(_.oDot(_.n(__.msg), _.n("QName")), _.eLit(iface.name + '.' + method.fromPrep.name)), _.iSet(_.oDot(_.n(__.msg), _.n("Data")), _.eDictNew(_.eLit(numargs))));
+            if (funcfields.length) { }
+            for (const arg of method.Args)
+                if (!arg.fromPrep.isFromRetThenable)
+                    me.Func.Body.Instrs.push(_.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), arg));
         }
         this.emitFuncImpl(me);
     }
@@ -361,6 +370,13 @@ class Gen extends gen.Gen {
         }
         return this;
     }
+    when(ifTrue, thenDo, elseDo) {
+        if (ifTrue)
+            thenDo();
+        else
+            elseDo();
+        return this;
+    }
     emitExprs(joinBy, ...arr) {
         return this.each(arr, joinBy, (_) => this.emitExpr(_));
     }
@@ -369,15 +385,12 @@ class Gen extends gen.Gen {
             return this;
         if (it === null)
             return this.s('null');
-        const ename = it;
-        if (ename && ename.Name !== undefined)
-            return this.s(ename.Name ? ename.Name : this.options.idents.curInst);
         const elit = it;
         if (elit && elit.Lit !== undefined)
-            return this.s((elit.Lit === null) ? 'null' : elit.Lit.toString());
+            return this.s(node_util.format("%j", elit.Lit));
         const edictnew = it;
         if (edictnew && edictnew.Capacity !== undefined)
-            return this.s("dict·new(" + edictnew.Capacity + ")");
+            return this.s('dict·new(').emitExpr(edictnew.Capacity).s(')');
         const enew = it;
         if (enew && enew.New)
             return this.emitTypeRef(enew.New).s("·new");
@@ -391,8 +404,14 @@ class Gen extends gen.Gen {
         if (ecall && ecall.Call)
             return this.emitExpr(ecall.Call).s("(").emitExprs(', ', ...ecall.Args).s(")");
         const eop = it;
-        if (eop && eop.Name && eop.Operands && eop.Operands.length)
-            return this.s("(" + ((eop.Operands.length > 1) ? '' : eop.Name)).emitExprs(' ' + eop.Name + ' ', ...eop.Operands).s(')');
+        if (eop && eop.Name && eop.Operands && eop.Operands.length) {
+            const notactualoperator = (eop.Name === '@' || eop.Name === '.');
+            return this
+                .s((notactualoperator ? '' : '(')
+                + ((eop.Operands.length > 1) ? '' : eop.Name))
+                .emitExprs(notactualoperator ? eop.Name : (' ' + eop.Name + ' '), ...eop.Operands)
+                .s(notactualoperator ? '' : ')');
+        }
         const efn = it;
         if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
             return this
@@ -401,6 +420,9 @@ class Gen extends gen.Gen {
                 .s(' -> ').emitTypeRef(efn.Type)
                 .emitInstr(efn.Body)
                 .s(')');
+        const ename = it;
+        if (ename && ename.Name !== undefined)
+            return this.s(ename.Name ? ename.Name : this.options.idents.curInst);
         throw "<expr>" + JSON.stringify(it);
     }
     gen(prep) {

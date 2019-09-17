@@ -385,6 +385,10 @@ VscodeWindow: ( -> Window)
 WindowShowErrorMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
+	msg.QName = "window.showErrorMessage1"
+	msg.Data = dict·new(2)
+	msg.Data@"message" = message
+	msg.Data@"items" = items
 
 
 
@@ -392,6 +396,11 @@ WindowShowErrorMessage1: (message:string -> items:[string] -> andThen:?(string->
 WindowShowErrorMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
+	msg.QName = "window.showErrorMessage2"
+	msg.Data = dict·new(3)
+	msg.Data@"message" = message
+	msg.Data@"options" = options
+	msg.Data@"items" = items
 
 
 
@@ -399,6 +408,10 @@ WindowShowErrorMessage2: (message:string -> options:MessageOptions -> items:[str
 WindowShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
+	msg.QName = "window.showErrorMessage3"
+	msg.Data = dict·new(2)
+	msg.Data@"message" = message
+	msg.Data@"items" = items
 
 
 
@@ -406,6 +419,11 @@ WindowShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(Mes
 WindowShowErrorMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
+	msg.QName = "window.showErrorMessage4"
+	msg.Data = dict·new(3)
+	msg.Data@"message" = message
+	msg.Data@"options" = options
+	msg.Data@"items" = items
 
 
 
@@ -413,6 +431,10 @@ WindowShowErrorMessage4: (message:string -> options:MessageOptions -> items:[Mes
 WindowShowInformationMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
+	msg.QName = "window.showInformationMessage1"
+	msg.Data = dict·new(2)
+	msg.Data@"message" = message
+	msg.Data@"items" = items
 
 
 
@@ -420,6 +442,11 @@ WindowShowInformationMessage1: (message:string -> items:[string] -> andThen:?(st
 WindowShowInformationMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
+	msg.QName = "window.showInformationMessage2"
+	msg.Data = dict·new(3)
+	msg.Data@"message" = message
+	msg.Data@"options" = options
+	msg.Data@"items" = items
 
 
 
@@ -427,6 +454,10 @@ WindowShowInformationMessage2: (message:string -> options:MessageOptions -> item
 WindowShowInformationMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
+	msg.QName = "window.showInformationMessage3"
+	msg.Data = dict·new(2)
+	msg.Data@"message" = message
+	msg.Data@"items" = items
 
 
 
@@ -434,6 +465,11 @@ WindowShowInformationMessage3: (message:string -> items:[MessageItem] -> andThen
 WindowShowInformationMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
+	msg.QName = "window.showInformationMessage4"
+	msg.Data = dict·new(3)
+	msg.Data@"message" = message
+	msg.Data@"options" = options
+	msg.Data@"items" = items
 
 
 
@@ -441,6 +477,10 @@ WindowShowInformationMessage4: (message:string -> options:MessageOptions -> item
 WindowShowWarningMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
+	msg.QName = "window.showWarningMessage1"
+	msg.Data = dict·new(2)
+	msg.Data@"message" = message
+	msg.Data@"items" = items
 
 
 
@@ -448,6 +488,11 @@ WindowShowWarningMessage1: (message:string -> items:[string] -> andThen:?(string
 WindowShowWarningMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
+	msg.QName = "window.showWarningMessage2"
+	msg.Data = dict·new(3)
+	msg.Data@"message" = message
+	msg.Data@"options" = options
+	msg.Data@"items" = items
 
 
 
@@ -455,6 +500,10 @@ WindowShowWarningMessage2: (message:string -> options:MessageOptions -> items:[s
 WindowShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
+	msg.QName = "window.showWarningMessage3"
+	msg.Data = dict·new(2)
+	msg.Data@"message" = message
+	msg.Data@"items" = items
 
 
 
@@ -462,6 +511,11 @@ WindowShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?(M
 WindowShowWarningMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
+	msg.QName = "window.showWarningMessage4"
+	msg.Data = dict·new(3)
+	msg.Data@"message" = message
+	msg.Data@"options" = options
+	msg.Data@"items" = items
 
 
 
@@ -469,5 +523,8 @@ WindowShowWarningMessage4: (message:string -> options:MessageOptions -> items:[M
 WindowShowInputBox: (options:?InputBoxOptions -> andThen:?(string->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
+	msg.QName = "window.showInputBox"
+	msg.Data = dict·new(1)
+	msg.Data@"options" = options
 
 
