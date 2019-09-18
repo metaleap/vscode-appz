@@ -21,6 +21,7 @@ export interface Func extends WithName, WithType { Func: EFunc }
 
 export type TypeRef = WithName | TypeRefPrim | TypeRefArr | TypeRefFunc | TypeRefTup | TypeRefMaybe
 export enum TypeRefPrim {
+    Any = gen.ScriptPrimType.Any,
     Bool = gen.ScriptPrimType.Boolean,
     Int = gen.ScriptPrimType.Number,
     String = gen.ScriptPrimType.String,
@@ -28,7 +29,7 @@ export enum TypeRefPrim {
 }
 export interface TypeRefArr {
     ArrOf: TypeRef
-    AsList: boolean
+    AsList?: boolean
 }
 export interface TypeRefFunc {
     From: TypeRef[]
@@ -41,7 +42,7 @@ export interface TypeRefMaybe {
     Maybe: TypeRef
 }
 
-export type Expr = ELit | EName | ECall | EOp | EFunc | ECollNew | ELen | EConv | ENew
+export type Expr = ELit | EName | ECall | EOp | EFunc | ECollNew | ELen | EConv | ENew | ETup
 export interface ELit {
     Lit: boolean | number | string | null
 }
@@ -78,8 +79,12 @@ export interface EConv {
 export interface ENew {
     New: TypeRef
 }
+export interface ETup {
+    Items: Expr[]
+    IsArr?: boolean
+}
 
-export type Instr = IBlock | IRet | IVar | ISet | IDictDel | ECall
+export type Instr = IBlock | IRet | IVar | ISet | IDictDel | ICollAdd | ECall
 export interface IBlock {
     Instrs: Instr[]
     Lock?: Expr
@@ -94,6 +99,10 @@ export interface IVar extends WithName, WithType {
 export interface ISet {
     SetWhat: Expr,
     SetTo: Expr
+}
+export interface ICollAdd {
+    AddTo: Expr
+    AddWhat: Expr
 }
 export interface IDictDel {
     DelFrom: Expr
@@ -111,6 +120,7 @@ export class Builder {
     iRet(ret: Expr): IRet { return { Ret: ret } }
     iVar(varName: string, varType: TypeRef): IVar { return { Name: varName, Type: varType } }
     iSet(setWhat: Expr, setTo: Expr): ISet { return { SetWhat: setWhat, SetTo: setTo } }
+    iAdd(addTo: Expr, addWhat: Expr): ICollAdd { return { AddTo: addTo, AddWhat: addWhat } }
     iDel(delFrom: Expr, delWhat: Expr): IDictDel { return { DelFrom: delFrom, DelWhat: delWhat } }
     iBlock(...instrs: Instr[]): IBlock { return { Instrs: instrs } }
     iLock(lock: Expr, ...instrs: Instr[]): IBlock { return { Lock: lock, Instrs: instrs } }
@@ -118,6 +128,8 @@ export class Builder {
     iFor(iterVarName: EName, iterable: Expr, ...instrs: Instr[]): IBlock { return { Instrs: instrs, ForEach: [iterVarName, iterable] } }
     eNew(typeRef: TypeRef): ENew { return { New: typeRef } }
     eConv(typeRef: TypeRef, conv: Expr): EConv { return { Conv: conv, To: typeRef } }
+    eTup(...items: Expr[]): ETup { return { Items: items } }
+    eArr(...items: Expr[]): ETup { return { Items: items, IsArr: true } }
     eLen(lenOf: Expr): ELen { return { LenOf: lenOf } }
     eCollNew(cap: Expr, listElemType: TypeRef = undefined): ECollNew { return { ElemTypeIfList: listElemType, Capacity: cap } }
     eFunc(args: Arg[], retType: TypeRef, ...instrs: Instr[]): EFunc { return { Args: args, Type: retType, Body: { Instrs: instrs } } }
@@ -127,26 +139,28 @@ export class Builder {
     eNil(): ELit { return this.eLit(null) }
     eThis(): EName { return this.n(null) }
     eOp(op: string, ...args: Expr[]): EOp { return { Name: op, Operands: args } }
-    oDot(...args: Expr[]): EOp { return this.eOp('.', ...args) }
+    oDot(...args: Expr[]): EOp { return (args.length === 1) ? this.eOp('.', ...[this.eThis() as Expr].concat(...args)) : this.eOp('.', ...args) }
     oIdx(...args: Expr[]): EOp { return this.eOp('@', ...args) }
     oEq(...args: Expr[]): EOp { return this.eOp('==', ...args) }
     oNeq(...args: Expr[]): EOp { return this.eOp('!=', ...args) }
     oOr(...args: Expr[]): EOp { return this.eOp('||', ...args) }
     oAnd(...args: Expr[]): EOp { return this.eOp('&&', ...args) }
     oNot(arg: Expr): EOp { return this.eOp("!", arg) }
+    oIs(arg: Expr): EOp { return this.eOp("is·", arg) }
+    oIsnt(arg: Expr): EOp { return this.eOp("isnt·", arg) }
 
-    each<T>(from: T[], fn: ((_: T) => Instr[])): Instr[] {
-        const me: Instr[] = []
-        for (const it of from)
-            me.push(...fn(it))
+    _each<TIn, TOut>(from: TIn[], fn: ((_: TIn, idx?: number) => TOut[])): TOut[] {
+        const me: TOut[] = []
+        for (let idx = 0; idx < from.length; idx++)
+            me.push(...fn(from[idx], idx))
         return me
     }
 
-    let<TIn, TOut>(value: TIn, andThen: ((_: TIn) => TOut)) {
+    _let<TIn, TOut>(value: TIn, andThen: ((_: TIn) => TOut)) {
         return andThen(value)
     }
 
-    lets<TIn, TOut>(values: TIn[], andThen: ((..._: TIn[]) => TOut)) {
+    _lets<TIn, TOut>(values: TIn[], andThen: ((..._: TIn[]) => TOut)) {
         return andThen(...values)
     }
 
@@ -242,7 +256,7 @@ export class Builder {
         if (it === gen.ScriptPrimType.Dict)
             return TypeRefPrim.Dict
         if (it === gen.ScriptPrimType.Any)
-            return { Name: this.gen.options.idents.typeAny }
+            return TypeRefPrim.Any
 
         const tarr = gen.typeArrOf(it)
         if (tarr)
@@ -345,7 +359,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             }
         },
         idents: {
-            curInst: "$",
+            curInst: "this",
             typeAny: "Any",
         }
     }
@@ -447,6 +461,8 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (it === null)
             return this.s("void")
 
+        if (it === TypeRefPrim.Any)
+            return this.s(this.options.idents.typeAny)
         if (it === TypeRefPrim.Bool)
             return this.s("bool")
         if (it === TypeRefPrim.Int)
@@ -479,79 +495,104 @@ export class Gen extends gen.Gen implements gen.IGen {
         throw it
     }
 
-    protected emitMethodImpl(iface: TInterface, method: Method, isMainInterface: boolean) {
-        const _ = this.b, me: Func = {
+    protected methodImpl_TopInterface(_iface: WithName, _method: Method, _: Builder, body: Instr[]) {
+        body.push(_.iRet(_.n(this.options.idents.curInst)))
+    }
+    protected methodImpl_PopulateFrom(_iface: WithName, _method: Method, _: Builder, _body: Instr[]) {
+
+    }
+    protected methodImpl_MessageDispatch(iface: WithName, method: Method, _: Builder, body: Instr[]) {
+        const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'resultptr', 'args')
+        const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args)
+        const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length
+
+        body.push(
+            _.iVar(__.msg, _.n('ipcMsg')),
+            _.iSet(_.n(__.msg), _.eNew(_.n('ipcMsg'))),
+            _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(iface.name + '.' + method.fromPrep.name)),
+            _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs))),
+        )
+
+        if (funcfields.length) body.push(
+            _.iVar(__.fnids, { ArrOf: TypeRefPrim.String, AsList: true }),
+            _.iSet(_.n(__.fnids), _.eCollNew(_.eLit(funcfields.length), TypeRefPrim.String)),
+            _.iLock(_.eThis(), ..._._each(funcfields, ff => [
+                _._let(this.nameRewriters.args(ff.arg.name), argname =>
+                    _._let(this.nameRewriters.fields(ff.name), ffname =>
+                        _._let(ff.struct.fields.find(_ => _.name === ff.name), ffld =>
+                            _._let(gen.typeFun(ffld.typeSpec)[0], fnargs =>
+                                _.iIf((!ff.arg.optional) ? _.eLit(true) : _.oIs(_.n(argname)), [
+                                    _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eLit("")),
+                                    _.iVar(__.fn, _.typeRef(ffld.typeSpec, ffld.optional)),
+                                    _.iSet(_.n(__.fn), _.oDot(_.n(argname), _.n(ffname))),
+                                    _.iIf(_.oIs(_.n(__.fn)), [
+                                        _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eCall(_.oDot(_.n('nextFuncId')))),
+                                        _.iAdd(_.n(__.fnids), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
+                                        _.iSet(_.oIdx(_.oDot(_.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
+                                            _.eFunc([{ Name: __.args, Type: { ArrOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] },
+                                                _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args))), [
+                                                    _.iRet(_.eTup(_.eNil(), _.eLit(false))),
+                                                ], _._each(fnargs, (fnarg, idx) => [
+                                                    _.iVar('__' + idx, this.b.typeRef(fnarg)),
+                                                    _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
+                                                ] as Instr[])),
+                                            )
+                                        ),
+                                    ]),
+                                ])
+                            )
+                        )
+                    )
+                ),
+            ] as Instr[])),
+        )
+
+        for (const arg of method.Args)
+            if (!arg.fromPrep.isFromRetThenable)
+                body.push(
+                    _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), arg)
+                )
+
+        const lastarg = method.Args[method.Args.length - 1]
+        body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }))
+        if (lastarg.fromPrep.isFromRetThenable)
+            body.push(
+                _.iIf(_.oIs(_.n(lastarg.Name)), [
+                    _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool,
+                        _.iRet(_.eLit(true)),
+                    )),
+                ]),
+            )
+        if (!funcfields.length) body.push(
+            _.eCall(_.oDot(_.n('send')), _.n(__.msg), _.n(__.on)),
+        )
+        else body.push(
+            _.eCall(_.oDot(_.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool,
+                _.iIf(_.oNeq(_.eLen(_.n(__.fnids)), _.eLit(0)), [
+                    _.iLock(_.eThis(),
+                        _.iFor(_.n(__.fnid), _.n(__.fnids),
+                            _.iDel(_.oDot(_.n('cbOther')), _.n(__.fnid)),
+                        ),
+                    ),
+                ]),
+                _.iRet(_.oOr(_.oIsnt(_.n(__.on)), _.eCall(_.n(__.on), _.n(__.payload)))),
+            )),
+        )
+    }
+
+    protected emitMethodImpl(iface: WithName, method: Method, fillBody: ((iface: WithName, method: Method, _: Builder, bodyToFill: Instr[]) => void)) {
+        const me: Func = {
             name: method.name, Name: method.Name, Type: iface, Func: {
                 Args: method.Args, Type: method.Type, Body: { Instrs: [] }
             }
         }
-        const body = me.Func.Body.Instrs
-        if (isMainInterface)
-            body.push(_.iRet(_.n(this.options.idents.curInst)))
-        else {
-            const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'resultptr')
-            const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args)
-            const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length
-
-            body.push(
-                _.iVar(__.msg, _.n('ipcMsg')),
-                _.iSet(_.n(__.msg), _.eNew(_.n('ipcMsg'))),
-                _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(iface.name + '.' + method.fromPrep.name)),
-                _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs))),
-            )
-
-            if (funcfields.length) body.push(
-                _.iVar(__.fnids, { ArrOf: TypeRefPrim.String, AsList: true }),
-                _.iSet(_.n(__.fnids), _.eCollNew(_.eLit(funcfields.length), TypeRefPrim.String)),
-                _.iLock(_.eThis(), ..._.each(funcfields, ff => [
-                    _.let(this.nameRewriters.args(ff.arg.name), argname =>
-                        _.let(this.nameRewriters.fields(ff.name), fld =>
-                            _.iIf((!ff.arg.optional) ? _.eNil() : _.oNeq(_.n(argname), _.eNil()), [
-                                _.iSet(_.oDot(_.n(argname), _.n(fld + '_AppzFuncId')), _.eLit("")),
-                            ])
-                        )
-                    ),
-                ])),
-            )
-
-            for (const arg of method.Args)
-                if (!arg.fromPrep.isFromRetThenable)
-                    body.push(
-                        _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), arg)
-                    )
-
-            const lastarg = method.Args[method.Args.length - 1]
-            body.push(_.iVar(__.on, { From: [_.n(this.options.idents.typeAny)], To: TypeRefPrim.Bool }))
-            if (lastarg.fromPrep.isFromRetThenable)
-                body.push(
-                    _.iIf(_.oNeq(_.n(lastarg.Name), _.eNil()), [
-                        _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: _.n(this.options.idents.typeAny) }], TypeRefPrim.Bool,
-                            _.iRet(_.eLit(true)),
-                        )),
-                    ]),
-                )
-            if (!funcfields.length) body.push(
-                _.eCall(_.oDot(_.eThis(), _.n('send')), _.n(__.msg), _.n(__.on)),
-            )
-            else body.push(
-                _.eCall(_.oDot(_.eThis(), _.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: _.n(this.options.idents.typeAny) }], TypeRefPrim.Bool,
-                    _.iIf(_.oNeq(_.eLen(_.n(__.fnids)), _.eLit(0)), [
-                        _.iLock(_.eThis(),
-                            _.iFor(_.n(__.fnid), _.n(__.fnids),
-                                _.iDel(_.oDot(_.eThis(), _.n('cbOther')), _.n(__.fnid)),
-                            ),
-                        ),
-                    ]),
-                    _.iRet(_.oOr(_.oEq(_.n(__.on), _.eNil()), _.eCall(_.n(__.on), _.n(__.payload)))),
-                )),
-            )
-        }
+        fillBody.call(this, iface, method, this.b, me.Func.Body.Instrs)
         this.emitFuncImpl(me)
     }
 
     protected emitFuncImpl = (it: Func) => {
         this.lines('', '')
-            .ln(() => this.emitTypeRef(it.Type).s(it.Name, ': (').each(it.Func.Args, ' -> ', _ => this.s(_.Name, ':').emitTypeRef(_.Type)).s(' -> ').emitTypeRef(it.Func.Type).s(')'))
+            .ln(() => this.emitTypeRef(it.Type).s('·', it.Name, ': (').each(it.Func.Args, ' -> ', _ => this.s(_.Name, ':').emitTypeRef(_.Type)).s(' -> ').emitTypeRef(it.Func.Type).s(')'))
             .emitInstr(it.Func.Body)
             .lines('', '')
     }
@@ -562,7 +603,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             const iret = it as IRet
             if (iret && iret.Ret !== undefined)
                 return this.ln(() =>
-                    this.s("ret ").emitExpr(iret.Ret === null ? undefined : iret.Ret))
+                    this.s("ret ").emitExpr((!iret.Ret) ? undefined : iret.Ret))
 
             const ivar = it as IVar
             if (ivar && ivar.Name)
@@ -579,10 +620,15 @@ export class Gen extends gen.Gen implements gen.IGen {
                 return this.ln(() =>
                     this.emitExpr(idictdel.DelFrom).s('·del(').emitExpr(idictdel.DelWhat).s(')'))
 
+            const icolladd = it as ICollAdd
+            if (icolladd && icolladd.AddTo && icolladd.AddWhat)
+                return this.ln(() =>
+                    this.emitExpr(icolladd.AddTo).s('·add(').emitExpr(icolladd.AddWhat).s(')'))
+
             const iblock = it as IBlock
             if (iblock && iblock.Instrs !== undefined) {
                 if (iblock.Lock)
-                    this.ln(() => this.emitExpr(iblock.Lock).s("·lock"))
+                    this.ln(() => this.s('lock ').emitExpr(iblock.Lock))
                 else if (iblock.ForEach && iblock.ForEach.length)
                     this.ln(() => this.s("for ", iblock.ForEach[0].Name, " in ").emitExpr(iblock.ForEach[1]))
                 else if (iblock.If && iblock.If.length)
@@ -640,6 +686,10 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (elen && elen.LenOf)
             return this.emitExpr(elen.LenOf).s("·len")
 
+        const etup = it as ETup
+        if (etup && etup.Items !== undefined)
+            return this.s('[').each(etup.Items, ',', _ => { this.emitExpr(_) }).s(']')
+
         const ecall = it as ECall
         if (ecall && ecall.Call)
             return this.emitExpr(ecall.Call).s("(").emitExprs(', ', ...ecall.Args).s(")")
@@ -676,7 +726,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         this.src = "# NOTE, this is not a CoffeeScript file:\n# the .coffee extension is solely for the convenience of syntax-highlighting.\n#\n# A debug-print of our in-memory-only imperative-intermediate-representation\n# available to code-gens that want to stay lean & mean & low on LoCs for\n# maintainability & ease of porting.\n#\n# The format is again just a debug-print: it's never to be parsed or anything,\n# and exists merely to dump all knowledge held by generated in-memory\n# representations available to code-gens.\n#\n# Generated representations follow below.\n\n"
         const build = (this.b = new Builder(prep, this))
 
-        const ifacemain: TInterface = {
+        const ifacetop: TInterface = {
             name: prep.fromOrig.moduleName,
             Name: this.nameRewriters.types.interfaces(prep.fromOrig.moduleName),
             Docs: build.docs(gen.docs(prep.fromOrig.fromOrig)),
@@ -688,7 +738,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 Args: [],
             })),
         }
-        this.emitInterface(ifacemain)
+        this.emitInterface(ifacetop)
 
         for (const it of prep.enums)
             this.emitEnum(build.enumFrom(it))
@@ -698,11 +748,26 @@ export class Gen extends gen.Gen implements gen.IGen {
         for (const it of ifaces)
             this.emitInterface(it)
 
-        for (const it of ifacemain.Methods)
-            this.emitMethodImpl(ifacemain, it, true)
+        for (const it of ifacetop.Methods)
+            this.emitMethodImpl(ifacetop, it, this.methodImpl_TopInterface)
         for (const it of ifaces)
             for (const method of it.Methods)
-                this.emitMethodImpl(it, method, false)
+                this.emitMethodImpl(it, method, this.methodImpl_MessageDispatch)
+
+        {
+            let anydecoderstogenerate = true
+            while (anydecoderstogenerate) {
+                anydecoderstogenerate = false
+                for (const name in this.state.genDecoders)
+                    if (anydecoderstogenerate = this.state.genDecoders[name]) {
+                        this.state.genDecoders[name] = false
+                        this.emitMethodImpl({ Name: name }, {
+                            Name: "populateFrom", Type: TypeRefPrim.Bool,
+                            Args: [{ Name: "payload", Type: TypeRefPrim.Any }]
+                        }, this.methodImpl_PopulateFrom)
+                    }
+            }
+        }
 
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src)
     }

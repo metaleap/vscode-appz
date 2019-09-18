@@ -376,13 +376,13 @@ Window: iface
 
 
 
-VscodeWindow: ( -> Window)
-	ret $
+Vscode·Window: ( -> Window)
+	ret this
 
 
 
 
-WindowShowErrorMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
+Window·ShowErrorMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showErrorMessage1"
@@ -390,16 +390,16 @@ WindowShowErrorMessage1: (message:string -> items:[string] -> andThen:?(string->
 	msg.Data@"message" = message
 	msg.Data@"items" = items
 	on: (Any->bool)
-	if (andThen != null)
+	if (is·andThen)
 		on = (payload:Any -> bool)
 			ret true
 		
-	$.send(msg, on)
+	this.send(msg, on)
 
 
 
 
-WindowShowErrorMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
+Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showErrorMessage2"
@@ -408,16 +408,16 @@ WindowShowErrorMessage2: (message:string -> options:MessageOptions -> items:[str
 	msg.Data@"options" = options
 	msg.Data@"items" = items
 	on: (Any->bool)
-	if (andThen != null)
+	if (is·andThen)
 		on = (payload:Any -> bool)
 			ret true
 		
-	$.send(msg, on)
+	this.send(msg, on)
 
 
 
 
-WindowShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
+Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showErrorMessage3"
@@ -425,16 +425,16 @@ WindowShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(Mes
 	msg.Data@"message" = message
 	msg.Data@"items" = items
 	on: (Any->bool)
-	if (andThen != null)
+	if (is·andThen)
 		on = (payload:Any -> bool)
 			ret true
 		
-	$.send(msg, on)
+	this.send(msg, on)
 
 
 
 
-WindowShowErrorMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
+Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showErrorMessage4"
@@ -443,16 +443,16 @@ WindowShowErrorMessage4: (message:string -> options:MessageOptions -> items:[Mes
 	msg.Data@"options" = options
 	msg.Data@"items" = items
 	on: (Any->bool)
-	if (andThen != null)
+	if (is·andThen)
 		on = (payload:Any -> bool)
 			ret true
 		
-	$.send(msg, on)
+	this.send(msg, on)
 
 
 
 
-WindowShowInformationMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
+Window·ShowInformationMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showInformationMessage1"
@@ -460,16 +460,16 @@ WindowShowInformationMessage1: (message:string -> items:[string] -> andThen:?(st
 	msg.Data@"message" = message
 	msg.Data@"items" = items
 	on: (Any->bool)
-	if (andThen != null)
+	if (is·andThen)
 		on = (payload:Any -> bool)
 			ret true
 		
-	$.send(msg, on)
+	this.send(msg, on)
 
 
 
 
-WindowShowInformationMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
+Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showInformationMessage2"
@@ -478,16 +478,16 @@ WindowShowInformationMessage2: (message:string -> options:MessageOptions -> item
 	msg.Data@"options" = options
 	msg.Data@"items" = items
 	on: (Any->bool)
-	if (andThen != null)
+	if (is·andThen)
 		on = (payload:Any -> bool)
 			ret true
 		
-	$.send(msg, on)
+	this.send(msg, on)
 
 
 
 
-WindowShowInformationMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
+Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showInformationMessage3"
@@ -495,16 +495,16 @@ WindowShowInformationMessage3: (message:string -> items:[MessageItem] -> andThen
 	msg.Data@"message" = message
 	msg.Data@"items" = items
 	on: (Any->bool)
-	if (andThen != null)
+	if (is·andThen)
 		on = (payload:Any -> bool)
 			ret true
 		
-	$.send(msg, on)
+	this.send(msg, on)
 
 
 
 
-WindowShowInformationMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
+Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showInformationMessage4"
@@ -513,16 +513,16 @@ WindowShowInformationMessage4: (message:string -> options:MessageOptions -> item
 	msg.Data@"options" = options
 	msg.Data@"items" = items
 	on: (Any->bool)
-	if (andThen != null)
+	if (is·andThen)
 		on = (payload:Any -> bool)
 			ret true
 		
-	$.send(msg, on)
+	this.send(msg, on)
 
 
 
 
-WindowShowWarningMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
+Window·ShowWarningMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showWarningMessage1"
@@ -530,16 +530,16 @@ WindowShowWarningMessage1: (message:string -> items:[string] -> andThen:?(string
 	msg.Data@"message" = message
 	msg.Data@"items" = items
 	on: (Any->bool)
-	if (andThen != null)
+	if (is·andThen)
 		on = (payload:Any -> bool)
 			ret true
 		
-	$.send(msg, on)
+	this.send(msg, on)
 
 
 
 
-WindowShowWarningMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
+Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showWarningMessage2"
@@ -548,16 +548,16 @@ WindowShowWarningMessage2: (message:string -> options:MessageOptions -> items:[s
 	msg.Data@"options" = options
 	msg.Data@"items" = items
 	on: (Any->bool)
-	if (andThen != null)
+	if (is·andThen)
 		on = (payload:Any -> bool)
 			ret true
 		
-	$.send(msg, on)
+	this.send(msg, on)
 
 
 
 
-WindowShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
+Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showWarningMessage3"
@@ -565,16 +565,16 @@ WindowShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?(M
 	msg.Data@"message" = message
 	msg.Data@"items" = items
 	on: (Any->bool)
-	if (andThen != null)
+	if (is·andThen)
 		on = (payload:Any -> bool)
 			ret true
 		
-	$.send(msg, on)
+	this.send(msg, on)
 
 
 
 
-WindowShowWarningMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
+Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showWarningMessage4"
@@ -583,37 +583,49 @@ WindowShowWarningMessage4: (message:string -> options:MessageOptions -> items:[M
 	msg.Data@"options" = options
 	msg.Data@"items" = items
 	on: (Any->bool)
-	if (andThen != null)
+	if (is·andThen)
 		on = (payload:Any -> bool)
 			ret true
 		
-	$.send(msg, on)
+	this.send(msg, on)
 
 
 
 
-WindowShowInputBox: (options:?InputBoxOptions -> andThen:?(string->void) -> void)
+Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(string->void) -> void)
 	msg: ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showInputBox"
 	msg.Data = dict·new(1)
 	fnids: [string]
 	fnids = [string]·new(1)
-	$·lock
-		if (options != null)
+	lock this
+		if (is·options)
 			options.ValidateInput_AppzFuncId = ""
+			fn: ?(string->string)
+			fn = options.ValidateInput
+			if (is·fn)
+				options.ValidateInput_AppzFuncId = this.nextFuncId()
+				fnids·add(options.ValidateInput_AppzFuncId)
+				this.cbOther@options.ValidateInput_AppzFuncId = (args:[Any] -> [Any,bool])
+					if (1 != args·len)
+						ret [null,false]
+					else
+						__0: string
+						ret [fn(__0),true]
+				
 	msg.Data@"options" = options
 	on: (Any->bool)
-	if (andThen != null)
+	if (is·andThen)
 		on = (payload:Any -> bool)
 			ret true
 		
-	$.send(msg, (payload:Any -> bool)
+	this.send(msg, (payload:Any -> bool)
 		if (fnids·len != 0)
-			$·lock
+			lock this
 				for fnid in fnids
-					$.cbOther·del(fnid)
-		ret ((on == null) || on(payload))
+					this.cbOther·del(fnid)
+		ret ((isnt·on) || on(payload))
 	)
 
 
