@@ -27,10 +27,10 @@ export class Gen extends gen.Gen implements gen.IGen {
             let anydec = true
             while (anydec) {
                 anydec = false
-                for (const name in this.state.genDecoders)
-                    if (anydec = this.state.genDecoders[name]) {
+                for (const name in this.state.genPopulateFor)
+                    if (anydec = this.state.genPopulateFor[name]) {
                         src += this.genPopulateFrom(prep, name)
-                        this.state.genDecoders[name] = false
+                        this.state.genPopulateFor[name] = false
                     }
             }
         }
@@ -170,7 +170,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         src += haveOk ? "" : `${pref}var ok bool\n`
         const dsttypego = dstTypeGo.startsWith('*') ? dstTypeGo.slice(1) : dstTypeGo
         if (prep.structs.some(_ => _.name === dsttypego)) {
-            this.state.genDecoders[dsttypego] = true
+            this.state.genPopulateFor[dsttypego] = true
             if (dstTypeGo !== dsttypego)
                 src += `${pref}${dstName} = new(${dsttypego})\n`
             src += `${pref}ok = ${dstName}.populateFrom(${srcName})\n`

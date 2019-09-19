@@ -17,10 +17,25 @@
 			}
 		},
 		{
+			"label": "Re-gen all *.gen.* files",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"command": "node out/gen/main.js",
+			"presentation": {
+				"reveal": "silent",
+				"showReuseMessage": true,
+				"clear": true
+			},
+			"group": "build",
+			"problemMatcher": "$tsc"
+		},
+		{
 			"label": "build_on_save",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceRoot}/libs/cs"
+				"cwd": "${workspaceFolder}/libs/cs"
 			},
 			"command": [
 				"dotnet build -c Release",
@@ -33,7 +48,8 @@
 				"isDefault": true
 			},
 			"presentation": {
-				"reveal": "silent"
+				"reveal": "silent",
+				"clear": true
 			},
 			"problemMatcher": "$msCompile"
 		}

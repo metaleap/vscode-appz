@@ -36,10 +36,10 @@ export class Gen extends gen.Gen implements gen.IGen {
             let anydec = true
             while (anydec) {
                 anydec = false
-                for (const name in this.state.genDecoders)
-                    if (anydec = this.state.genDecoders[name]) {
+                for (const name in this.state.genPopulateFor)
+                    if (anydec = this.state.genPopulateFor[name]) {
                         src += this.genPopulateFrom(prep, name)
-                        this.state.genDecoders[name] = false
+                        this.state.genPopulateFor[name] = false
                     }
             }
         }
@@ -189,7 +189,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         let src = haveOk ? "" : `${pref}bool ok;\n`
         if (prep.structs.some(_ => _.name === dstTypeCs)) {
-            this.state.genDecoders[dstTypeCs] = true
+            this.state.genPopulateFor[dstTypeCs] = true
             src += `${pref}(${dstName}, ok) = new ${dstTypeCs}().populateFrom(${srcName});\n`
         } else
             src += `${pref}if (ok = (${srcName} is ${dstTypeCs}))\n${pref}\t${dstName} = (${dstTypeCs})${srcName};\n`

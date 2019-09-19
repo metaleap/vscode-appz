@@ -149,18 +149,18 @@ export class Builder {
     oIs(arg: Expr): EOp { return this.eOp("is·", arg) }
     oIsnt(arg: Expr): EOp { return this.eOp("isnt·", arg) }
 
-    _each<TIn, TOut>(from: TIn[], fn: ((_: TIn, idx?: number) => TOut[])): TOut[] {
+    EACH<TIn, TOut>(from: TIn[], fn: ((_: TIn, idx?: number) => TOut[])): TOut[] {
         const me: TOut[] = []
         for (let idx = 0; idx < from.length; idx++)
             me.push(...fn(from[idx], idx))
         return me
     }
 
-    _let<TIn, TOut>(value: TIn, andThen: ((_: TIn) => TOut)) {
+    LET<TIn, TOut>(value: TIn, andThen: ((_: TIn) => TOut)) {
         return andThen(value)
     }
 
-    _lets<TIn, TOut>(values: TIn[], andThen: ((..._: TIn[]) => TOut)) {
+    LETS<TIn, TOut>(values: TIn[], andThen: ((..._: TIn[]) => TOut)) {
         return andThen(...values)
     }
 
@@ -472,112 +472,27 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (it === TypeRefPrim.Dict)
             return this.s("[string:", this.options.idents.typeAny, "]")
 
-        const tname = it as WithName
-        if (tname && tname.Name && tname.Name.length)
+        const tname = typeNamed(it)
+        if (tname)
             return this.s(tname.Name)
 
-        const ttup = it as TypeRefTup
-        if (ttup && ttup.TupOf && ttup.TupOf.length)
+        const ttup = typeTup(it)
+        if (ttup)
             return this.s("[").each(ttup.TupOf, ',', _ => this.emitTypeRef(_)).s(']')
 
-        const tarr = it as TypeRefArr
-        if (tarr && tarr.ArrOf)
+        const tarr = typeArr(it)
+        if (tarr)
             return this.s('[').emitTypeRef(tarr.ArrOf).s(']')
 
-        const tfun = it as TypeRefFunc
-        if (tfun && tfun.From && tfun.From.length)
+        const tfun = typeFunc(it)
+        if (tfun)
             return this.s('(').each(tfun.From, '->', _ => this.emitTypeRef(_)).s('->').emitTypeRef(tfun.To).s(')')
 
-        const tmay = it as TypeRefMaybe
-        if (tmay && tmay.Maybe)
+        const tmay = typeMaybe(it)
+        if (tmay)
             return this.s('?').emitTypeRef(tmay.Maybe)
 
         throw it
-    }
-
-    protected methodImpl_TopInterface(_iface: WithName, _method: Method, _: Builder, body: Instr[]) {
-        body.push(_.iRet(_.n(this.options.idents.curInst)))
-    }
-    protected methodImpl_PopulateFrom(_iface: WithName, _method: Method, _: Builder, _body: Instr[]) {
-
-    }
-    protected methodImpl_MessageDispatch(iface: WithName, method: Method, _: Builder, body: Instr[]) {
-        const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'resultptr', 'args')
-        const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args)
-        const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length
-
-        body.push(
-            _.iVar(__.msg, _.n('ipcMsg')),
-            _.iSet(_.n(__.msg), _.eNew(_.n('ipcMsg'))),
-            _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(iface.name + '.' + method.fromPrep.name)),
-            _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs))),
-        )
-
-        if (funcfields.length) body.push(
-            _.iVar(__.fnids, { ArrOf: TypeRefPrim.String, AsList: true }),
-            _.iSet(_.n(__.fnids), _.eCollNew(_.eLit(funcfields.length), TypeRefPrim.String)),
-            _.iLock(_.eThis(), ..._._each(funcfields, ff => [
-                _._let(this.nameRewriters.args(ff.arg.name), argname =>
-                    _._let(this.nameRewriters.fields(ff.name), ffname =>
-                        _._let(ff.struct.fields.find(_ => _.name === ff.name), ffld =>
-                            _._let(gen.typeFun(ffld.typeSpec)[0], fnargs =>
-                                _.iIf((!ff.arg.optional) ? _.eLit(true) : _.oIs(_.n(argname)), [
-                                    _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eLit("")),
-                                    _.iVar(__.fn, _.typeRef(ffld.typeSpec, ffld.optional)),
-                                    _.iSet(_.n(__.fn), _.oDot(_.n(argname), _.n(ffname))),
-                                    _.iIf(_.oIs(_.n(__.fn)), [
-                                        _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eCall(_.oDot(_.n('nextFuncId')))),
-                                        _.iAdd(_.n(__.fnids), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
-                                        _.iSet(_.oIdx(_.oDot(_.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
-                                            _.eFunc([{ Name: __.args, Type: { ArrOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] },
-                                                _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args))), [
-                                                    _.iRet(_.eTup(_.eNil(), _.eLit(false))),
-                                                ], _._each(fnargs, (fnarg, idx) => [
-                                                    _.iVar('__' + idx, this.b.typeRef(fnarg)),
-                                                    _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
-                                                ] as Instr[])),
-                                            )
-                                        ),
-                                    ]),
-                                ])
-                            )
-                        )
-                    )
-                ),
-            ] as Instr[])),
-        )
-
-        for (const arg of method.Args)
-            if (!arg.fromPrep.isFromRetThenable)
-                body.push(
-                    _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), arg)
-                )
-
-        const lastarg = method.Args[method.Args.length - 1]
-        body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }))
-        if (lastarg.fromPrep.isFromRetThenable)
-            body.push(
-                _.iIf(_.oIs(_.n(lastarg.Name)), [
-                    _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool,
-                        _.iRet(_.eLit(true)),
-                    )),
-                ]),
-            )
-        if (!funcfields.length) body.push(
-            _.eCall(_.oDot(_.n('send')), _.n(__.msg), _.n(__.on)),
-        )
-        else body.push(
-            _.eCall(_.oDot(_.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool,
-                _.iIf(_.oNeq(_.eLen(_.n(__.fnids)), _.eLit(0)), [
-                    _.iLock(_.eThis(),
-                        _.iFor(_.n(__.fnid), _.n(__.fnids),
-                            _.iDel(_.oDot(_.n('cbOther')), _.n(__.fnid)),
-                        ),
-                    ),
-                ]),
-                _.iRet(_.oOr(_.oIsnt(_.n(__.on)), _.eCall(_.n(__.on), _.n(__.payload)))),
-            )),
-        )
     }
 
     protected emitMethodImpl(iface: WithName, method: Method, fillBody: ((iface: WithName, method: Method, _: Builder, bodyToFill: Instr[]) => void)) {
@@ -680,7 +595,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         const econv = it as EConv
         if (econv && econv.Conv && econv.To)
-            return this.s('((').emitTypeRef(econv.To).s(')(').emitExpr(econv.Conv).s('))')
+            return this.s('((').emitExpr(econv.Conv).s(')·(').emitTypeRef(econv.To).s('))')
 
         const elen = it as ELen
         if (elen && elen.LenOf)
@@ -721,6 +636,126 @@ export class Gen extends gen.Gen implements gen.IGen {
         throw "<expr>" + JSON.stringify(it)
     }
 
+    private genConvertOrReturn(dstVarName: string, okBoolName: string, src: Expr, dstType: TypeRef, onErrRet: Expr): Instr[] {
+        const _ = this.b
+        const dstnamedtype = typeNamed(typeUnmaybe(dstType))
+        if (dstnamedtype && dstnamedtype.Name) {
+            if (dstnamedtype.Name === this.options.idents.typeAny)
+                return [_.iSet(_.n(dstVarName), src)]
+            else {
+                if (this.state.genPopulateFor[dstnamedtype.Name] !== false) // why this peculiar checking construct?..
+                    this.state.genPopulateFor[dstnamedtype.Name] = true // ..see the consumer of genDecoders to grasp it
+                return [_.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eCall(_.oDot(_.eNew(dstType), _.n('populateFrom')), src))]
+            }
+        }
+        return [
+            _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(dstType, src)),
+            _.iIf(_.oNot(_.n(okBoolName)), [
+                _.iRet(onErrRet),
+            ]),
+        ]
+    }
+
+    private genMethodImpl_TopInterface(_iface: WithName, _method: Method, _: Builder, body: Instr[]) {
+        body.push(_.iRet(_.n(this.options.idents.curInst)))
+    }
+
+    private genMethodImpl_PopulateFrom(_iface: WithName, _method: Method, _: Builder, _body: Instr[]) {
+
+    }
+
+    private genMethodImpl_MessageDispatch(iface: WithName, method: Method, _: Builder, body: Instr[]) {
+        const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'resultptr', 'args', 'ok')
+        const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args)
+        const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length
+
+        body.push(
+            _.iVar(__.msg, _.n('ipcMsg')),
+            _.iSet(_.n(__.msg), _.eNew(_.n('ipcMsg'))),
+            _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(iface.name + '.' + method.fromPrep.name)),
+            _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs))),
+        )
+
+        if (funcfields.length) body.push(
+            _.iVar(__.fnids, { ArrOf: TypeRefPrim.String, AsList: true }),
+            _.iSet(_.n(__.fnids), _.eCollNew(_.eLit(funcfields.length), TypeRefPrim.String)),
+            _.iLock(_.eThis(), ..._.EACH(funcfields, ff => [
+                _.LET(this.nameRewriters.args(ff.arg.name), argname =>
+                    _.LET(this.nameRewriters.fields(ff.name), ffname =>
+                        _.LET(ff.struct.fields.find(_ => _.name === ff.name), ffld =>
+                            _.LET(gen.typeFun(ffld.typeSpec)[0], fnargs =>
+                                _.iIf((!ff.arg.optional) ? _.eLit(true) : _.oIs(_.n(argname)), [
+                                    _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eLit("")),
+                                    _.iVar(__.fn, _.typeRef(ffld.typeSpec, ffld.optional)),
+                                    _.iSet(_.n(__.fn), _.oDot(_.n(argname), _.n(ffname))),
+                                    _.iIf(_.oIs(_.n(__.fn)), [
+                                        _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eCall(_.oDot(_.n('nextFuncId')))),
+                                        _.iAdd(_.n(__.fnids), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
+                                        _.iSet(_.oIdx(_.oDot(_.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
+                                            _.eFunc([{ Name: __.args, Type: { ArrOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] },
+                                                _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args))), [
+                                                    _.iRet(_.eTup(_.eNil(), _.eLit(false))),
+                                                ], [_.iVar(__.ok, TypeRefPrim.Bool) as Instr].concat(
+                                                    ..._.EACH(fnargs, (fnarg, idx) => [
+                                                        _.iVar('__' + idx, this.b.typeRef(fnarg)),
+                                                        _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))),
+                                                            this.genConvertOrReturn('__' + idx, __.ok, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), _.eTup(_.eNil(), _.eLit(false))),
+                                                        ),
+                                                        _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
+                                                    ] as Instr[]))
+                                                ),
+                                            )
+                                        ),
+                                    ]),
+                                ])
+                            )
+                        )
+                    )
+                ),
+            ] as Instr[])),
+        )
+
+        for (const arg of method.Args)
+            if (!arg.fromPrep.isFromRetThenable)
+                body.push(
+                    _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), arg)
+                )
+
+        const lastarg = method.Args[method.Args.length - 1]
+        body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }))
+        if (lastarg.fromPrep.isFromRetThenable) {
+            const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, true, true)
+            body.push(
+                _.iIf(_.oIs(_.n(lastarg.Name)), [
+                    _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool,
+                        _.iVar(__.ok, TypeRefPrim.Bool),
+                        _.iVar(__.result, dsttype),
+                        _.iIf(_.oIs(_.n(__.payload)),
+                            this.genConvertOrReturn(__.result, __.ok, _.n(__.payload), dsttype, _.eLit(false))
+                        ),
+                        _.eCall(_.n(lastarg.Name), _.n(__.result)),
+                        _.iRet(_.eLit(true)),
+                    )),
+                ]),
+            )
+        }
+        if (!funcfields.length) body.push(
+            _.eCall(_.oDot(_.n('send')), _.n(__.msg), _.n(__.on)),
+        )
+        else body.push(
+            _.eCall(_.oDot(_.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool,
+                _.iIf(_.oNeq(_.eLen(_.n(__.fnids)), _.eLit(0)), [
+                    _.iLock(_.eThis(),
+                        _.iFor(_.n(__.fnid), _.n(__.fnids),
+                            _.iDel(_.oDot(_.n('cbOther')), _.n(__.fnid)),
+                        ),
+                    ),
+                ]),
+                _.iRet(_.oOr(_.oIsnt(_.n(__.on)), _.eCall(_.n(__.on), _.n(__.payload)))),
+            )),
+        )
+    }
+
     gen(prep: gen.Prep) {
         this.resetState()
         this.src = "# NOTE, this is not a CoffeeScript file:\n# the .coffee extension is solely for the convenience of syntax-highlighting.\n#\n# A debug-print of our in-memory-only imperative-intermediate-representation\n# available to code-gens that want to stay lean & mean & low on LoCs for\n# maintainability & ease of porting.\n#\n# The format is again just a debug-print: it's never to be parsed or anything,\n# and exists merely to dump all knowledge held by generated in-memory\n# representations available to code-gens.\n#\n# Generated representations follow below.\n\n"
@@ -749,22 +784,22 @@ export class Gen extends gen.Gen implements gen.IGen {
             this.emitInterface(it)
 
         for (const it of ifacetop.Methods)
-            this.emitMethodImpl(ifacetop, it, this.methodImpl_TopInterface)
+            this.emitMethodImpl(ifacetop, it, this.genMethodImpl_TopInterface)
         for (const it of ifaces)
             for (const method of it.Methods)
-                this.emitMethodImpl(it, method, this.methodImpl_MessageDispatch)
+                this.emitMethodImpl(it, method, this.genMethodImpl_MessageDispatch)
 
         {
             let anydecoderstogenerate = true
             while (anydecoderstogenerate) {
                 anydecoderstogenerate = false
-                for (const name in this.state.genDecoders)
-                    if (anydecoderstogenerate = this.state.genDecoders[name]) {
-                        this.state.genDecoders[name] = false
+                for (const name in this.state.genPopulateFor)
+                    if (anydecoderstogenerate = this.state.genPopulateFor[name]) {
+                        this.state.genPopulateFor[name] = false
                         this.emitMethodImpl({ Name: name }, {
                             Name: "populateFrom", Type: TypeRefPrim.Bool,
                             Args: [{ Name: "payload", Type: TypeRefPrim.Any }]
-                        }, this.methodImpl_PopulateFrom)
+                        }, this.genMethodImpl_PopulateFrom)
                     }
             }
         }
@@ -772,4 +807,35 @@ export class Gen extends gen.Gen implements gen.IGen {
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src)
     }
 
+}
+
+function typeUnmaybe(typeRef: TypeRef): TypeRef {
+    const me = typeRef as TypeRefMaybe
+    return (me && me.Maybe) ? typeUnmaybe(me.Maybe) : typeRef
+}
+
+function typeNamed(typeRef: TypeRef): WithName {
+    const me = typeRef as WithName
+    return (me && me.Name && me.Name.length) ? me : null
+}
+
+function typeMaybe(typeRef: TypeRef): TypeRefMaybe {
+    const me = typeRef as TypeRefMaybe
+    return (me && me.Maybe) ? me : null
+}
+
+function typeFunc(typeRef: TypeRef): TypeRefFunc {
+    const me = typeRef as TypeRefFunc
+    return (me && me.From !== undefined) ? me : null
+
+}
+
+function typeArr(typeRef: TypeRef): TypeRefArr {
+    const me = typeRef as TypeRefArr
+    return (me && me.ArrOf) ? me : null
+}
+
+function typeTup(typeRef: TypeRef): TypeRefTup {
+    const me = typeRef as TypeRefTup
+    return (me && me.TupOf && me.TupOf.length) ? me : null
 }

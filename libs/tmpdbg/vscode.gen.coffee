@@ -392,6 +392,13 @@ Window·ShowErrorMessage1: (message:string -> items:[string] -> andThen:?(string
 	on: (Any->bool)
 	if (is·andThen)
 		on = (payload:Any -> bool)
+			ok: bool
+			result: ?string
+			if (is·payload)
+				[result,ok] = ((payload)·(?string))
+				if (!ok)
+					ret false
+			andThen(result)
 			ret true
 		
 	this.send(msg, on)
@@ -410,6 +417,13 @@ Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[s
 	on: (Any->bool)
 	if (is·andThen)
 		on = (payload:Any -> bool)
+			ok: bool
+			result: ?string
+			if (is·payload)
+				[result,ok] = ((payload)·(?string))
+				if (!ok)
+					ret false
+			andThen(result)
 			ret true
 		
 	this.send(msg, on)
@@ -427,6 +441,11 @@ Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(M
 	on: (Any->bool)
 	if (is·andThen)
 		on = (payload:Any -> bool)
+			ok: bool
+			result: ?MessageItem
+			if (is·payload)
+				[result,ok] = ?MessageItem·new.populateFrom(payload)
+			andThen(result)
 			ret true
 		
 	this.send(msg, on)
@@ -445,6 +464,11 @@ Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[M
 	on: (Any->bool)
 	if (is·andThen)
 		on = (payload:Any -> bool)
+			ok: bool
+			result: ?MessageItem
+			if (is·payload)
+				[result,ok] = ?MessageItem·new.populateFrom(payload)
+			andThen(result)
 			ret true
 		
 	this.send(msg, on)
@@ -462,6 +486,13 @@ Window·ShowInformationMessage1: (message:string -> items:[string] -> andThen:?(
 	on: (Any->bool)
 	if (is·andThen)
 		on = (payload:Any -> bool)
+			ok: bool
+			result: ?string
+			if (is·payload)
+				[result,ok] = ((payload)·(?string))
+				if (!ok)
+					ret false
+			andThen(result)
 			ret true
 		
 	this.send(msg, on)
@@ -480,6 +511,13 @@ Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> it
 	on: (Any->bool)
 	if (is·andThen)
 		on = (payload:Any -> bool)
+			ok: bool
+			result: ?string
+			if (is·payload)
+				[result,ok] = ((payload)·(?string))
+				if (!ok)
+					ret false
+			andThen(result)
 			ret true
 		
 	this.send(msg, on)
@@ -497,6 +535,11 @@ Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> andTh
 	on: (Any->bool)
 	if (is·andThen)
 		on = (payload:Any -> bool)
+			ok: bool
+			result: ?MessageItem
+			if (is·payload)
+				[result,ok] = ?MessageItem·new.populateFrom(payload)
+			andThen(result)
 			ret true
 		
 	this.send(msg, on)
@@ -515,6 +558,11 @@ Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> it
 	on: (Any->bool)
 	if (is·andThen)
 		on = (payload:Any -> bool)
+			ok: bool
+			result: ?MessageItem
+			if (is·payload)
+				[result,ok] = ?MessageItem·new.populateFrom(payload)
+			andThen(result)
 			ret true
 		
 	this.send(msg, on)
@@ -532,6 +580,13 @@ Window·ShowWarningMessage1: (message:string -> items:[string] -> andThen:?(stri
 	on: (Any->bool)
 	if (is·andThen)
 		on = (payload:Any -> bool)
+			ok: bool
+			result: ?string
+			if (is·payload)
+				[result,ok] = ((payload)·(?string))
+				if (!ok)
+					ret false
+			andThen(result)
 			ret true
 		
 	this.send(msg, on)
@@ -550,6 +605,13 @@ Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:
 	on: (Any->bool)
 	if (is·andThen)
 		on = (payload:Any -> bool)
+			ok: bool
+			result: ?string
+			if (is·payload)
+				[result,ok] = ((payload)·(?string))
+				if (!ok)
+					ret false
+			andThen(result)
 			ret true
 		
 	this.send(msg, on)
@@ -567,6 +629,11 @@ Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?
 	on: (Any->bool)
 	if (is·andThen)
 		on = (payload:Any -> bool)
+			ok: bool
+			result: ?MessageItem
+			if (is·payload)
+				[result,ok] = ?MessageItem·new.populateFrom(payload)
+			andThen(result)
 			ret true
 		
 	this.send(msg, on)
@@ -585,6 +652,11 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
 	on: (Any->bool)
 	if (is·andThen)
 		on = (payload:Any -> bool)
+			ok: bool
+			result: ?MessageItem
+			if (is·payload)
+				[result,ok] = ?MessageItem·new.populateFrom(payload)
+			andThen(result)
 			ret true
 		
 	this.send(msg, on)
@@ -611,13 +683,25 @@ Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(string->void) -> vo
 					if (1 != args·len)
 						ret [null,false]
 					else
+						ok: bool
 						__0: string
+						if (is·args@0)
+							[__0,ok] = ((args@0)·(string))
+							if (!ok)
+								ret [null,false]
 						ret [fn(__0),true]
 				
 	msg.Data@"options" = options
 	on: (Any->bool)
 	if (is·andThen)
 		on = (payload:Any -> bool)
+			ok: bool
+			result: ?string
+			if (is·payload)
+				[result,ok] = ((payload)·(?string))
+				if (!ok)
+					ret false
+			andThen(result)
 			ret true
 		
 	this.send(msg, (payload:Any -> bool)
@@ -627,5 +711,10 @@ Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(string->void) -> vo
 					this.cbOther·del(fnid)
 		ret ((isnt·on) || on(payload))
 	)
+
+
+
+
+MessageItem·populateFrom: (payload:Any -> bool)
 
 

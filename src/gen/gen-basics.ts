@@ -317,7 +317,7 @@ export abstract class Gen {
     outFilePathPref: string
     outFilePathSuff: string
     state: {
-        genDecoders: { [_: string]: boolean }
+        genPopulateFor: { [_: string]: boolean }
     }
 
     constructor(outFilePathPref: string, outFilePathSuff: string) {
@@ -326,7 +326,7 @@ export abstract class Gen {
     }
 
     resetState() {
-        this.state = { genDecoders: {} }
+        this.state = { genPopulateFor: {} }
     }
 
     doNotEditComment(moniker: string): string {
