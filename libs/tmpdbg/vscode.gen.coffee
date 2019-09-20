@@ -6,11 +6,10 @@
 # for code-gens that choose to inherit from `gen-ast.Gen` to stay lean &
 # mean & low on LoCs for maintainability & ease of porting & consistency.
 #
-# Again, all the below is just a debug-print: it's never to be parsed or
-# interpreted (other than for actual code-gen) and exists merely to showcase
-# all the data available to a code-gen for emitting in its target language.
+# Again, all the below is just a debug-print: it's never to be parsed (and
+# the in-mem IR never to be interpreted, other than for actual code-gen).
+# Just a dump of all the structures available to a code-gen for emitting.
 #
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 

@@ -10,8 +10,23 @@ var TypeRefPrim;
     TypeRefPrim[TypeRefPrim["String"] = 139] = "String";
     TypeRefPrim[TypeRefPrim["Dict"] = 189] = "Dict";
 })(TypeRefPrim = exports.TypeRefPrim || (exports.TypeRefPrim = {}));
+var BuilderOperators;
+(function (BuilderOperators) {
+    BuilderOperators["Dot"] = ".";
+    BuilderOperators["Idx"] = "@";
+    BuilderOperators["Eq"] = "==";
+    BuilderOperators["Neq"] = "!=";
+    BuilderOperators["Or"] = "||";
+    BuilderOperators["And"] = "&&";
+    BuilderOperators["Not"] = "!";
+    BuilderOperators["Is"] = "=?";
+    BuilderOperators["Isnt"] = "=!";
+})(BuilderOperators = exports.BuilderOperators || (exports.BuilderOperators = {}));
 class Builder {
-    constructor(prep, gen) { [this.prep, this.gen] = [prep, gen]; }
+    constructor(prep, gen) {
+        this.op = BuilderOperators;
+        [this.prep, this.gen] = [prep, gen];
+    }
     iRet(ret) { return { Ret: ret }; }
     iVar(varName, varType) { return { Name: varName, Type: varType }; }
     iSet(setWhat, setTo) { return { SetWhat: setWhat, SetTo: setTo }; }
@@ -34,15 +49,15 @@ class Builder {
     eNil() { return this.eLit(null); }
     eThis() { return this.n(null); }
     eOp(op, ...args) { return { Name: op, Operands: args }; }
-    oDot(...args) { return (args.length === 1) ? this.eOp('.', ...[this.eThis()].concat(...args)) : this.eOp('.', ...args); }
-    oIdx(...args) { return this.eOp('@', ...args); }
-    oEq(...args) { return this.eOp('==', ...args); }
-    oNeq(...args) { return this.eOp('!=', ...args); }
-    oOr(...args) { return this.eOp('||', ...args); }
-    oAnd(...args) { return this.eOp('&&', ...args); }
-    oNot(arg) { return this.eOp("!", arg); }
-    oIs(arg) { return this.eOp("=?", arg); }
-    oIsnt(arg) { return this.eOp("=!", arg); }
+    oDot(...args) { return (args.length === 1) ? this.eOp(this.op.Dot, ...[this.eThis()].concat(...args)) : this.eOp(this.op.Dot, ...args); }
+    oIdx(...args) { return this.eOp(this.op.Idx, ...args); }
+    oEq(...args) { return this.eOp(this.op.Eq, ...args); }
+    oNeq(...args) { return this.eOp(this.op.Neq, ...args); }
+    oOr(...args) { return this.eOp(this.op.Or, ...args); }
+    oAnd(...args) { return this.eOp(this.op.And, ...args); }
+    oNot(arg) { return this.eOp(this.op.Not, arg); }
+    oIs(arg) { return this.eOp(this.op.Is, arg); }
+    oIsnt(arg) { return this.eOp(this.op.Isnt, arg); }
     EACH(from, fn) {
         const me = [];
         for (let idx = 0; idx < from.length; idx++)
@@ -379,7 +394,7 @@ class Gen extends gen.Gen {
                 return this.emitExpr(ecall.Call).s("(").emitExprs(', ', ...ecall.Args).s(")");
             const eop = it;
             if (eop && eop.Name && eop.Operands && eop.Operands.length) {
-                const notactualoperator = (eop.Name === '@' || eop.Name === '.');
+                const notactualoperator = (eop.Name === BuilderOperators.Idx || eop.Name === BuilderOperators.Dot);
                 return this
                     .s((notactualoperator ? '' : '(')
                     + ((eop.Operands.length > 1) ? '' : eop.Name))
@@ -401,7 +416,7 @@ class Gen extends gen.Gen {
             throw "<expr>" + JSON.stringify(it);
         };
         this.emitIntro = () => {
-            return this.lines("#", "# NOTE, this is not a CoffeeScript file: the .coffee extension is solely", "# for the convenience of syntax-highlighting in editors & source viewers.", "#", "# A debug-print of our in-memory-only intermediate-representation prepared", "# for code-gens that choose to inherit from `gen-ast.Gen` to stay lean &", "# mean & low on LoCs for maintainability & ease of porting & consistency.", "#", "# Again, all the below is just a debug-print: it's never to be parsed or", "# interpreted (other than for actual code-gen) and exists merely to showcase", "# all the data available to a code-gen for emitting in its target language.", "#", "# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "", "");
+            return this.lines("#", "# NOTE, this is not a CoffeeScript file: the .coffee extension is solely", "# for the convenience of syntax-highlighting in editors & source viewers.", "#", "# A debug-print of our in-memory-only intermediate-representation prepared", "# for code-gens that choose to inherit from `gen-ast.Gen` to stay lean &", "# mean & low on LoCs for maintainability & ease of porting & consistency.", "#", "# Again, all the below is just a debug-print: it's never to be parsed (and", "# the in-mem IR never to be interpreted, other than for actual code-gen).", "# Just a dump of all the structures available to a code-gen for emitting.", "#", "", "");
         };
         this.emitOutro = () => {
             return this.lines("# override `emitOutro` for this trailing part..");
