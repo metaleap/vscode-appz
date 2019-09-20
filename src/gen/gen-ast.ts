@@ -146,8 +146,8 @@ export class Builder {
     oOr(...args: Expr[]): EOp { return this.eOp('||', ...args) }
     oAnd(...args: Expr[]): EOp { return this.eOp('&&', ...args) }
     oNot(arg: Expr): EOp { return this.eOp("!", arg) }
-    oIs(arg: Expr): EOp { return this.eOp("is·", arg) }
-    oIsnt(arg: Expr): EOp { return this.eOp("isnt·", arg) }
+    oIs(arg: Expr): EOp { return this.eOp("=?", arg) }
+    oIsnt(arg: Expr): EOp { return this.eOp("=!", arg) }
 
     EACH<TIn, TOut>(from: TIn[], fn: ((_: TIn, idx?: number) => TOut[])): TOut[] {
         const me: TOut[] = []
@@ -281,8 +281,7 @@ export class Builder {
             if (tsum.length !== 1)
                 throw it
             let ret = this.typeRef(tsum[0])
-
-            return ret
+            return hadoptional ? this.typeRefEnsureMaybe(ret) : ret
         }
 
         const tprom = gen.typeProm(it)
@@ -364,14 +363,14 @@ export class Gen extends gen.Gen implements gen.IGen {
         }
     }
 
-    protected indented = (andThen: () => void): Gen => {
+    protected indented(andThen: () => void): Gen {
         this.indent++
         andThen()
         this.indent--
         return this
     }
 
-    protected ln = (andThen: (() => void)): Gen => {
+    protected ln(andThen: (() => void)): Gen {
         this.src += "\t".repeat(this.indent)
         andThen()
         this.src += "\n"
@@ -387,16 +386,17 @@ export class Gen extends gen.Gen implements gen.IGen {
         return this
     }
 
-    protected line = (srcLn: string = ''): Gen =>
-        this.lines(srcLn)
+    protected line(srcLn: string = ''): Gen {
+        return this.lines(srcLn)
+    }
 
-    protected lines = (...srcLns: string[]): Gen => {
+    protected lines(...srcLns: string[]): Gen {
         for (const srcln of srcLns)
             this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : '') + "\n"
         return this
     }
 
-    protected s = (...s: string[]): Gen => {
+    protected s(...s: string[]): Gen {
         for (const str of s)
             this.src += str
         return this
@@ -434,7 +434,7 @@ export class Gen extends gen.Gen implements gen.IGen {
     protected emitInterface = (it: TInterface) => {
         this.lines('', '')
             .emitDocs(it)
-            .line(it.Name + ": iface")
+            .line(it.Name + ": interface")
             .indented(() => it.Methods.forEach(_ => {
                 this.line()
                     .emitDocs(_)
@@ -448,7 +448,7 @@ export class Gen extends gen.Gen implements gen.IGen {
     protected emitStruct = (it: TStruct) => {
         this.lines('', '')
             .emitDocs(it)
-            .line(it.Name + ": struct")
+            .line(it.Name + ": class")
             .indented(() => it.Fields.forEach(_ => {
                 this.line()
                     .emitDocs(_)
@@ -512,7 +512,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             .lines('', '')
     }
 
-    protected emitInstr(it: Instr): Gen {
+    protected emitInstr = (it: Instr): Gen => {
         if (it) {
 
             const iret = it as IRet
@@ -523,7 +523,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             const ivar = it as IVar
             if (ivar && ivar.Name)
                 return this.ln(() =>
-                    this.s(ivar.Name, ": ").emitTypeRef(ivar.Type))
+                    this.s("var ", ivar.Name, " of ").emitTypeRef(ivar.Type))
 
             const iset = it as ISet
             if (iset && iset.SetWhat && iset.SetTo)
@@ -568,11 +568,11 @@ export class Gen extends gen.Gen implements gen.IGen {
         return this
     }
 
-    private emitExprs(joinBy: string, ...arr: Expr[]): Gen {
+    protected emitExprs(joinBy: string, ...arr: Expr[]): Gen {
         return this.each(arr, joinBy, (_) => this.emitExpr(_))
     }
 
-    private emitExpr(it: Expr): Gen {
+    protected emitExpr = (it: Expr): Gen => {
         if (it === undefined)
             return this
         if (it === null)
@@ -636,8 +636,11 @@ export class Gen extends gen.Gen implements gen.IGen {
         throw "<expr>" + JSON.stringify(it)
     }
 
-    private genConvertOrReturn(dstVarName: string, okBoolName: string, src: Expr, dstType: TypeRef, onErrRet: Expr): Instr[] {
+    private genConvertOrReturn(dstVarName: string, src: Expr, dstType: TypeRef, okBoolName: string = 'ok', onErrRet: Expr = undefined): Instr[] {
         const _ = this.b
+        if (!onErrRet)
+            onErrRet = _.eLit(false)
+        const retifnotok = _.iIf(_.oNot(_.n(okBoolName)), [_.iRet(onErrRet),])
         const dstnamedtype = typeNamed(typeUnmaybe(dstType))
         if (dstnamedtype && dstnamedtype.Name) {
             if (dstnamedtype.Name === this.options.idents.typeAny)
@@ -645,14 +648,16 @@ export class Gen extends gen.Gen implements gen.IGen {
             else {
                 if (this.state.genPopulateFor[dstnamedtype.Name] !== false) // why this peculiar checking construct?..
                     this.state.genPopulateFor[dstnamedtype.Name] = true // ..see the consumer of genDecoders to grasp it
-                return [_.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eCall(_.oDot(_.eNew(dstType), _.n('populateFrom')), src))]
+                return [
+                    _.iSet(_.n(dstVarName), _.eNew(dstType)),
+                    _.iSet(_.n(okBoolName), _.eCall(_.oDot(_.n(dstVarName), _.n('populateFrom')), src)),
+                    retifnotok,
+                ]
             }
         }
         return [
             _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(dstType, src)),
-            _.iIf(_.oNot(_.n(okBoolName)), [
-                _.iRet(onErrRet),
-            ]),
+            retifnotok,
         ]
     }
 
@@ -660,12 +665,32 @@ export class Gen extends gen.Gen implements gen.IGen {
         body.push(_.iRet(_.n(this.options.idents.curInst)))
     }
 
-    private genMethodImpl_PopulateFrom(_iface: WithName, _method: Method, _: Builder, _body: Instr[]) {
+    private genMethodImpl_PopulateFrom(struct: WithName, _method: Method, _: Builder, body: Instr[]) {
+        body.push(
+            _.iVar('dict', TypeRefPrim.Dict),
+            _.iVar('ok', TypeRefPrim.Bool),
+            _.iVar('val', TypeRefPrim.Any),
+        )
+        body.push(...this.genConvertOrReturn('dict', _.n('payload'), TypeRefPrim.Dict))
+        for (const fld of (struct as TStruct).Fields)
+            if (!fld.Json.Excluded)
+                body.push(
+                    _.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdx(_.n('dict'), _.eLit(fld.Json.Name))),
+                    _.iIf(_.n('ok'), [
+                        _.iVar(fld.name, fld.Type) as Instr,
+                    ].concat(
+                        this.genConvertOrReturn(fld.name, _.n('val'), fld.Type),
+                        _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name)),
+                    ),
+                        fld.Json.Required ? [_.iRet(_.eLit(false))] : []
+                    ),
+                )
 
+        body.push(_.iRet(_.eLit(true)))
     }
 
     private genMethodImpl_MessageDispatch(iface: WithName, method: Method, _: Builder, body: Instr[]) {
-        const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'resultptr', 'args', 'ok')
+        const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok')
         const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args)
         const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length
 
@@ -699,7 +724,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                                                     ..._.EACH(fnargs, (fnarg, idx) => [
                                                         _.iVar('__' + idx, this.b.typeRef(fnarg)),
                                                         _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))),
-                                                            this.genConvertOrReturn('__' + idx, __.ok, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), _.eTup(_.eNil(), _.eLit(false))),
+                                                            this.genConvertOrReturn('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), __.ok, _.eTup(_.eNil(), _.eLit(false))),
                                                         ),
                                                         _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
                                                     ] as Instr[]))
@@ -731,7 +756,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                         _.iVar(__.ok, TypeRefPrim.Bool),
                         _.iVar(__.result, dsttype),
                         _.iIf(_.oIs(_.n(__.payload)),
-                            this.genConvertOrReturn(__.result, __.ok, _.n(__.payload), dsttype, _.eLit(false))
+                            this.genConvertOrReturn(__.result, _.n(__.payload), dsttype, __.ok)
                         ),
                         _.eCall(_.n(lastarg.Name), _.n(__.result)),
                         _.iRet(_.eLit(true)),
@@ -756,10 +781,29 @@ export class Gen extends gen.Gen implements gen.IGen {
         )
     }
 
+    protected emitIntro = (): Gen => {
+        return this.lines("#",
+            "# NOTE, this is not a CoffeeScript file: the .coffee extension is solely",
+            "# for the convenience of syntax-highlighting in editors & source viewers.",
+            "#",
+            "# A debug-print of our in-memory-only intermediate-representation prepared",
+            "# for code-gens that choose to inherit from `gen-ast.Gen` to stay lean &",
+            "# mean & low on LoCs for maintainability & ease of porting & consistency.",
+            "#",
+            "# Again, all the below is just a debug-print: it's never to be parsed or",
+            "# interpreted (other than for actual code-gen) and exists merely to showcase",
+            "# all the data available to a code-gen for emitting in its target language.",
+            "#", "# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "", "")
+    }
+
+    protected emitOutro = (): Gen => {
+        return this.lines("# override `emitOutro` for this trailing part..")
+    }
+
     gen(prep: gen.Prep) {
         this.resetState()
-        this.src = "# NOTE, this is not a CoffeeScript file:\n# the .coffee extension is solely for the convenience of syntax-highlighting.\n#\n# A debug-print of our in-memory-only imperative-intermediate-representation\n# available to code-gens that want to stay lean & mean & low on LoCs for\n# maintainability & ease of porting.\n#\n# The format is again just a debug-print: it's never to be parsed or anything,\n# and exists merely to dump all knowledge held by generated in-memory\n# representations available to code-gens.\n#\n# Generated representations follow below.\n\n"
         const build = (this.b = new Builder(prep, this))
+        this.emitIntro()
 
         const ifacetop: TInterface = {
             name: prep.fromOrig.moduleName,
@@ -777,8 +821,12 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         for (const it of prep.enums)
             this.emitEnum(build.enumFrom(it))
-        for (const it of prep.structs)
-            this.emitStruct(build.structFrom(it))
+        const structs: { [_: string]: TStruct } = {}
+        for (const it of prep.structs) {
+            const struct = build.structFrom(it)
+            structs[struct.Name] = struct
+            this.emitStruct(struct)
+        }
         const ifaces = prep.interfaces.map(_ => build.interfaceFrom(_))
         for (const it of ifaces)
             this.emitInterface(it)
@@ -796,7 +844,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 for (const name in this.state.genPopulateFor)
                     if (anydecoderstogenerate = this.state.genPopulateFor[name]) {
                         this.state.genPopulateFor[name] = false
-                        this.emitMethodImpl({ Name: name }, {
+                        this.emitMethodImpl(structs[name], {
                             Name: "populateFrom", Type: TypeRefPrim.Bool,
                             Args: [{ Name: "payload", Type: TypeRefPrim.Any }]
                         }, this.genMethodImpl_PopulateFrom)
@@ -804,6 +852,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             }
         }
 
+        this.emitOutro()
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src)
     }
 

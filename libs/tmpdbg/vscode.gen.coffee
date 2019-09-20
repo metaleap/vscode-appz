@@ -1,22 +1,24 @@
-# NOTE, this is not a CoffeeScript file:
-# the .coffee extension is solely for the convenience of syntax-highlighting.
 #
-# A debug-print of our in-memory-only imperative-intermediate-representation
-# available to code-gens that want to stay lean & mean & low on LoCs for
-# maintainability & ease of porting.
+# NOTE, this is not a CoffeeScript file: the .coffee extension is solely
+# for the convenience of syntax-highlighting in editors & source viewers.
 #
-# The format is again just a debug-print: it's never to be parsed or anything,
-# and exists merely to dump all knowledge held by generated in-memory
-# representations available to code-gens.
+# A debug-print of our in-memory-only intermediate-representation prepared
+# for code-gens that choose to inherit from `gen-ast.Gen` to stay lean &
+# mean & low on LoCs for maintainability & ease of porting & consistency.
 #
-# Generated representations follow below.
+# Again, all the below is just a debug-print: it's never to be parsed or
+# interpreted (other than for actual code-gen) and exists merely to showcase
+# all the data available to a code-gen for emitting in its target language.
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 
 
 # vscode:
 # Type Definition for Visual Studio Code 1.37 Extension API
 # See https://code.visualstudio.com/api for more information
-Vscode: iface
+Vscode: interface
 
 	# window:
 	# Namespace for dealing with the current window of the editor. That is visible
@@ -28,7 +30,7 @@ Vscode: iface
 
 
 # Options to configure the behavior of the message.
-MessageOptions: struct
+MessageOptions: class
 
 	# modal:
 	# Indicates that this message should be modal.
@@ -41,7 +43,7 @@ MessageOptions: struct
 
 # Represents an action that is shown with an information, warning, or
 # error message.
-MessageItem: struct
+MessageItem: class
 
 	# title:
 	# A short title like 'Retry', 'Open Log' etc.
@@ -69,7 +71,7 @@ MessageItem: struct
 
 
 # Options to configure the behavior of the input box UI.
-InputBoxOptions: struct
+InputBoxOptions: class
 
 	# value:
 	# The value to prefill in the input box.
@@ -120,7 +122,7 @@ InputBoxOptions: struct
 	# Return `undefined`, `null`, or the empty string when 'value' is valid.
 	#
 	# JSON FLAGS: {"Name":"validateInput","Required":false,"Excluded":true}
-	ValidateInput: ?(string->string)
+	ValidateInput: ?(string->?string)
 
 	# For internal runtime use only.
 	#
@@ -134,7 +136,7 @@ InputBoxOptions: struct
 # Namespace for dealing with the current window of the editor. That is visible
 # and active editors, as well as, UI elements to show messages, selections, and
 # asking for user input.
-Window: iface
+Window: interface
 
 	# showErrorMessage:
 	# Show an error message.
@@ -150,7 +152,7 @@ Window: iface
 	ShowErrorMessage1: void
 		message: string
 		items: [string]
-		andThen: ?(string->void)
+		andThen: ?(?string->void)
 
 	# showErrorMessage:
 	# Show an error message.
@@ -170,7 +172,7 @@ Window: iface
 		message: string
 		options: MessageOptions
 		items: [string]
-		andThen: ?(string->void)
+		andThen: ?(?string->void)
 
 	# showErrorMessage:
 	# Show an error message.
@@ -186,7 +188,7 @@ Window: iface
 	ShowErrorMessage3: void
 		message: string
 		items: [MessageItem]
-		andThen: ?(MessageItem->void)
+		andThen: ?(?MessageItem->void)
 
 	# showErrorMessage:
 	# Show an error message.
@@ -206,7 +208,7 @@ Window: iface
 		message: string
 		options: MessageOptions
 		items: [MessageItem]
-		andThen: ?(MessageItem->void)
+		andThen: ?(?MessageItem->void)
 
 	# showInformationMessage:
 	# Show an information message to users. Optionally provide an array of items which will be presented as
@@ -223,7 +225,7 @@ Window: iface
 	ShowInformationMessage1: void
 		message: string
 		items: [string]
-		andThen: ?(string->void)
+		andThen: ?(?string->void)
 
 	# showInformationMessage:
 	# Show an information message to users. Optionally provide an array of items which will be presented as
@@ -244,7 +246,7 @@ Window: iface
 		message: string
 		options: MessageOptions
 		items: [string]
-		andThen: ?(string->void)
+		andThen: ?(?string->void)
 
 	# showInformationMessage:
 	# Show an information message.
@@ -260,7 +262,7 @@ Window: iface
 	ShowInformationMessage3: void
 		message: string
 		items: [MessageItem]
-		andThen: ?(MessageItem->void)
+		andThen: ?(?MessageItem->void)
 
 	# showInformationMessage:
 	# Show an information message.
@@ -280,7 +282,7 @@ Window: iface
 		message: string
 		options: MessageOptions
 		items: [MessageItem]
-		andThen: ?(MessageItem->void)
+		andThen: ?(?MessageItem->void)
 
 	# showWarningMessage:
 	# Show a warning message.
@@ -296,7 +298,7 @@ Window: iface
 	ShowWarningMessage1: void
 		message: string
 		items: [string]
-		andThen: ?(string->void)
+		andThen: ?(?string->void)
 
 	# showWarningMessage:
 	# Show a warning message.
@@ -316,7 +318,7 @@ Window: iface
 		message: string
 		options: MessageOptions
 		items: [string]
-		andThen: ?(string->void)
+		andThen: ?(?string->void)
 
 	# showWarningMessage:
 	# Show a warning message.
@@ -332,7 +334,7 @@ Window: iface
 	ShowWarningMessage3: void
 		message: string
 		items: [MessageItem]
-		andThen: ?(MessageItem->void)
+		andThen: ?(?MessageItem->void)
 
 	# showWarningMessage:
 	# Show a warning message.
@@ -352,7 +354,7 @@ Window: iface
 		message: string
 		options: MessageOptions
 		items: [MessageItem]
-		andThen: ?(MessageItem->void)
+		andThen: ?(?MessageItem->void)
 
 	# showInputBox:
 	# Opens an input box to ask the user for input.
@@ -371,7 +373,7 @@ Window: iface
 	# A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
 	ShowInputBox: void
 		options: ?InputBoxOptions
-		andThen: ?(string->void)
+		andThen: ?(?string->void)
 
 
 
@@ -382,19 +384,19 @@ Vscode·Window: ( -> Window)
 
 
 
-Window·ShowErrorMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
-	msg: ipcMsg
+Window·ShowErrorMessage1: (message:string -> items:[string] -> andThen:?(?string->void) -> void)
+	var msg of ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showErrorMessage1"
 	msg.Data = dict·new(2)
 	msg.Data@"message" = message
 	msg.Data@"items" = items
-	on: (Any->bool)
-	if (is·andThen)
+	var on of (Any->bool)
+	if (=?andThen)
 		on = (payload:Any -> bool)
-			ok: bool
-			result: ?string
-			if (is·payload)
+			var ok of bool
+			var result of ?string
+			if (=?payload)
 				[result,ok] = ((payload)·(?string))
 				if (!ok)
 					ret false
@@ -406,20 +408,20 @@ Window·ShowErrorMessage1: (message:string -> items:[string] -> andThen:?(string
 
 
 
-Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
-	msg: ipcMsg
+Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(?string->void) -> void)
+	var msg of ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showErrorMessage2"
 	msg.Data = dict·new(3)
 	msg.Data@"message" = message
 	msg.Data@"options" = options
 	msg.Data@"items" = items
-	on: (Any->bool)
-	if (is·andThen)
+	var on of (Any->bool)
+	if (=?andThen)
 		on = (payload:Any -> bool)
-			ok: bool
-			result: ?string
-			if (is·payload)
+			var ok of bool
+			var result of ?string
+			if (=?payload)
 				[result,ok] = ((payload)·(?string))
 				if (!ok)
 					ret false
@@ -431,20 +433,23 @@ Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[s
 
 
 
-Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
-	msg: ipcMsg
+Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
+	var msg of ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showErrorMessage3"
 	msg.Data = dict·new(2)
 	msg.Data@"message" = message
 	msg.Data@"items" = items
-	on: (Any->bool)
-	if (is·andThen)
+	var on of (Any->bool)
+	if (=?andThen)
 		on = (payload:Any -> bool)
-			ok: bool
-			result: ?MessageItem
-			if (is·payload)
-				[result,ok] = ?MessageItem·new.populateFrom(payload)
+			var ok of bool
+			var result of ?MessageItem
+			if (=?payload)
+				result = ?MessageItem·new
+				ok = result.populateFrom(payload)
+				if (!ok)
+					ret false
 			andThen(result)
 			ret true
 		
@@ -453,21 +458,24 @@ Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(M
 
 
 
-Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
-	msg: ipcMsg
+Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
+	var msg of ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showErrorMessage4"
 	msg.Data = dict·new(3)
 	msg.Data@"message" = message
 	msg.Data@"options" = options
 	msg.Data@"items" = items
-	on: (Any->bool)
-	if (is·andThen)
+	var on of (Any->bool)
+	if (=?andThen)
 		on = (payload:Any -> bool)
-			ok: bool
-			result: ?MessageItem
-			if (is·payload)
-				[result,ok] = ?MessageItem·new.populateFrom(payload)
+			var ok of bool
+			var result of ?MessageItem
+			if (=?payload)
+				result = ?MessageItem·new
+				ok = result.populateFrom(payload)
+				if (!ok)
+					ret false
 			andThen(result)
 			ret true
 		
@@ -476,19 +484,19 @@ Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[M
 
 
 
-Window·ShowInformationMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
-	msg: ipcMsg
+Window·ShowInformationMessage1: (message:string -> items:[string] -> andThen:?(?string->void) -> void)
+	var msg of ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showInformationMessage1"
 	msg.Data = dict·new(2)
 	msg.Data@"message" = message
 	msg.Data@"items" = items
-	on: (Any->bool)
-	if (is·andThen)
+	var on of (Any->bool)
+	if (=?andThen)
 		on = (payload:Any -> bool)
-			ok: bool
-			result: ?string
-			if (is·payload)
+			var ok of bool
+			var result of ?string
+			if (=?payload)
 				[result,ok] = ((payload)·(?string))
 				if (!ok)
 					ret false
@@ -500,20 +508,20 @@ Window·ShowInformationMessage1: (message:string -> items:[string] -> andThen:?(
 
 
 
-Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
-	msg: ipcMsg
+Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(?string->void) -> void)
+	var msg of ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showInformationMessage2"
 	msg.Data = dict·new(3)
 	msg.Data@"message" = message
 	msg.Data@"options" = options
 	msg.Data@"items" = items
-	on: (Any->bool)
-	if (is·andThen)
+	var on of (Any->bool)
+	if (=?andThen)
 		on = (payload:Any -> bool)
-			ok: bool
-			result: ?string
-			if (is·payload)
+			var ok of bool
+			var result of ?string
+			if (=?payload)
 				[result,ok] = ((payload)·(?string))
 				if (!ok)
 					ret false
@@ -525,20 +533,23 @@ Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> it
 
 
 
-Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
-	msg: ipcMsg
+Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
+	var msg of ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showInformationMessage3"
 	msg.Data = dict·new(2)
 	msg.Data@"message" = message
 	msg.Data@"items" = items
-	on: (Any->bool)
-	if (is·andThen)
+	var on of (Any->bool)
+	if (=?andThen)
 		on = (payload:Any -> bool)
-			ok: bool
-			result: ?MessageItem
-			if (is·payload)
-				[result,ok] = ?MessageItem·new.populateFrom(payload)
+			var ok of bool
+			var result of ?MessageItem
+			if (=?payload)
+				result = ?MessageItem·new
+				ok = result.populateFrom(payload)
+				if (!ok)
+					ret false
 			andThen(result)
 			ret true
 		
@@ -547,21 +558,24 @@ Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> andTh
 
 
 
-Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
-	msg: ipcMsg
+Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
+	var msg of ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showInformationMessage4"
 	msg.Data = dict·new(3)
 	msg.Data@"message" = message
 	msg.Data@"options" = options
 	msg.Data@"items" = items
-	on: (Any->bool)
-	if (is·andThen)
+	var on of (Any->bool)
+	if (=?andThen)
 		on = (payload:Any -> bool)
-			ok: bool
-			result: ?MessageItem
-			if (is·payload)
-				[result,ok] = ?MessageItem·new.populateFrom(payload)
+			var ok of bool
+			var result of ?MessageItem
+			if (=?payload)
+				result = ?MessageItem·new
+				ok = result.populateFrom(payload)
+				if (!ok)
+					ret false
 			andThen(result)
 			ret true
 		
@@ -570,19 +584,19 @@ Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> it
 
 
 
-Window·ShowWarningMessage1: (message:string -> items:[string] -> andThen:?(string->void) -> void)
-	msg: ipcMsg
+Window·ShowWarningMessage1: (message:string -> items:[string] -> andThen:?(?string->void) -> void)
+	var msg of ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showWarningMessage1"
 	msg.Data = dict·new(2)
 	msg.Data@"message" = message
 	msg.Data@"items" = items
-	on: (Any->bool)
-	if (is·andThen)
+	var on of (Any->bool)
+	if (=?andThen)
 		on = (payload:Any -> bool)
-			ok: bool
-			result: ?string
-			if (is·payload)
+			var ok of bool
+			var result of ?string
+			if (=?payload)
 				[result,ok] = ((payload)·(?string))
 				if (!ok)
 					ret false
@@ -594,20 +608,20 @@ Window·ShowWarningMessage1: (message:string -> items:[string] -> andThen:?(stri
 
 
 
-Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(string->void) -> void)
-	msg: ipcMsg
+Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(?string->void) -> void)
+	var msg of ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showWarningMessage2"
 	msg.Data = dict·new(3)
 	msg.Data@"message" = message
 	msg.Data@"options" = options
 	msg.Data@"items" = items
-	on: (Any->bool)
-	if (is·andThen)
+	var on of (Any->bool)
+	if (=?andThen)
 		on = (payload:Any -> bool)
-			ok: bool
-			result: ?string
-			if (is·payload)
+			var ok of bool
+			var result of ?string
+			if (=?payload)
 				[result,ok] = ((payload)·(?string))
 				if (!ok)
 					ret false
@@ -619,20 +633,23 @@ Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:
 
 
 
-Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
-	msg: ipcMsg
+Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
+	var msg of ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showWarningMessage3"
 	msg.Data = dict·new(2)
 	msg.Data@"message" = message
 	msg.Data@"items" = items
-	on: (Any->bool)
-	if (is·andThen)
+	var on of (Any->bool)
+	if (=?andThen)
 		on = (payload:Any -> bool)
-			ok: bool
-			result: ?MessageItem
-			if (is·payload)
-				[result,ok] = ?MessageItem·new.populateFrom(payload)
+			var ok of bool
+			var result of ?MessageItem
+			if (=?payload)
+				result = ?MessageItem·new
+				ok = result.populateFrom(payload)
+				if (!ok)
+					ret false
 			andThen(result)
 			ret true
 		
@@ -641,21 +658,24 @@ Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?
 
 
 
-Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(MessageItem->void) -> void)
-	msg: ipcMsg
+Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
+	var msg of ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showWarningMessage4"
 	msg.Data = dict·new(3)
 	msg.Data@"message" = message
 	msg.Data@"options" = options
 	msg.Data@"items" = items
-	on: (Any->bool)
-	if (is·andThen)
+	var on of (Any->bool)
+	if (=?andThen)
 		on = (payload:Any -> bool)
-			ok: bool
-			result: ?MessageItem
-			if (is·payload)
-				[result,ok] = ?MessageItem·new.populateFrom(payload)
+			var ok of bool
+			var result of ?MessageItem
+			if (=?payload)
+				result = ?MessageItem·new
+				ok = result.populateFrom(payload)
+				if (!ok)
+					ret false
 			andThen(result)
 			ret true
 		
@@ -664,40 +684,40 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
 
 
 
-Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(string->void) -> void)
-	msg: ipcMsg
+Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(?string->void) -> void)
+	var msg of ipcMsg
 	msg = ipcMsg·new
 	msg.QName = "window.showInputBox"
 	msg.Data = dict·new(1)
-	fnids: [string]
+	var fnids of [string]
 	fnids = [string]·new(1)
 	lock this
-		if (is·options)
+		if (=?options)
 			options.ValidateInput_AppzFuncId = ""
-			fn: ?(string->string)
+			var fn of ?(string->?string)
 			fn = options.ValidateInput
-			if (is·fn)
+			if (=?fn)
 				options.ValidateInput_AppzFuncId = this.nextFuncId()
 				fnids·add(options.ValidateInput_AppzFuncId)
 				this.cbOther@options.ValidateInput_AppzFuncId = (args:[Any] -> [Any,bool])
 					if (1 != args·len)
 						ret [null,false]
 					else
-						ok: bool
-						__0: string
-						if (is·args@0)
+						var ok of bool
+						var __0 of string
+						if (=?args@0)
 							[__0,ok] = ((args@0)·(string))
 							if (!ok)
 								ret [null,false]
 						ret [fn(__0),true]
 				
 	msg.Data@"options" = options
-	on: (Any->bool)
-	if (is·andThen)
+	var on of (Any->bool)
+	if (=?andThen)
 		on = (payload:Any -> bool)
-			ok: bool
-			result: ?string
-			if (is·payload)
+			var ok of bool
+			var result of ?string
+			if (=?payload)
 				[result,ok] = ((payload)·(?string))
 				if (!ok)
 					ret false
@@ -709,12 +729,43 @@ Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(string->void) -> vo
 			lock this
 				for fnid in fnids
 					this.cbOther·del(fnid)
-		ret ((isnt·on) || on(payload))
+		ret ((=!on) || on(payload))
 	)
 
 
 
 
 MessageItem·populateFrom: (payload:Any -> bool)
+	var dict of [string:Any]
+	var ok of bool
+	var val of Any
+	[dict,ok] = ((payload)·([string:Any]))
+	if (!ok)
+		ret false
+	[val,ok] = dict@"title"
+	if ok
+		var title of string
+		[title,ok] = ((val)·(string))
+		if (!ok)
+			ret false
+		this.Title = title
+	else
+		ret false
+	[val,ok] = dict@"isCloseAffordance"
+	if ok
+		var isCloseAffordance of ?bool
+		[isCloseAffordance,ok] = ((val)·(?bool))
+		if (!ok)
+			ret false
+		this.IsCloseAffordance = isCloseAffordance
+	[val,ok] = dict@"my"
+	if ok
+		var my of ?[string:Any]
+		[my,ok] = ((val)·(?[string:Any]))
+		if (!ok)
+			ret false
+		this.My = my
+	ret true
 
 
+# override `emitOutro` for this trailing part..

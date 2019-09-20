@@ -41,8 +41,8 @@ class Builder {
     oOr(...args) { return this.eOp('||', ...args); }
     oAnd(...args) { return this.eOp('&&', ...args); }
     oNot(arg) { return this.eOp("!", arg); }
-    oIs(arg) { return this.eOp("is·", arg); }
-    oIsnt(arg) { return this.eOp("isnt·", arg); }
+    oIs(arg) { return this.eOp("=?", arg); }
+    oIsnt(arg) { return this.eOp("=!", arg); }
     EACH(from, fn) {
         const me = [];
         for (let idx = 0; idx < from.length; idx++)
@@ -162,7 +162,7 @@ class Builder {
             if (tsum.length !== 1)
                 throw it;
             let ret = this.typeRef(tsum[0]);
-            return ret;
+            return hadoptional ? this.typeRefEnsureMaybe(ret) : ret;
         }
         const tprom = gen.typeProm(it);
         if (tprom && tprom.length)
@@ -235,29 +235,6 @@ class Gen extends gen.Gen {
                 typeAny: "Any",
             }
         };
-        this.indented = (andThen) => {
-            this.indent++;
-            andThen();
-            this.indent--;
-            return this;
-        };
-        this.ln = (andThen) => {
-            this.src += "\t".repeat(this.indent);
-            andThen();
-            this.src += "\n";
-            return this;
-        };
-        this.line = (srcLn = '') => this.lines(srcLn);
-        this.lines = (...srcLns) => {
-            for (const srcln of srcLns)
-                this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : '') + "\n";
-            return this;
-        };
-        this.s = (...s) => {
-            for (const str of s)
-                this.src += str;
-            return this;
-        };
         this.emitDocs = (it) => {
             if (it.name && it.Name && it.name !== it.Name)
                 this.line("# " + it.name + ":");
@@ -281,7 +258,7 @@ class Gen extends gen.Gen {
         this.emitInterface = (it) => {
             this.lines('', '')
                 .emitDocs(it)
-                .line(it.Name + ": iface")
+                .line(it.Name + ": interface")
                 .indented(() => it.Methods.forEach(_ => {
                 this.line()
                     .emitDocs(_)
@@ -292,7 +269,7 @@ class Gen extends gen.Gen {
         this.emitStruct = (it) => {
             this.lines('', '')
                 .emitDocs(it)
-                .line(it.Name + ": struct")
+                .line(it.Name + ": class")
                 .indented(() => it.Fields.forEach(_ => {
                 this.line()
                     .emitDocs(_)
@@ -336,6 +313,111 @@ class Gen extends gen.Gen {
                 .emitInstr(it.Func.Body)
                 .lines('', '');
         };
+        this.emitInstr = (it) => {
+            if (it) {
+                const iret = it;
+                if (iret && iret.Ret !== undefined)
+                    return this.ln(() => this.s("ret ").emitExpr((!iret.Ret) ? undefined : iret.Ret));
+                const ivar = it;
+                if (ivar && ivar.Name)
+                    return this.ln(() => this.s("var ", ivar.Name, " of ").emitTypeRef(ivar.Type));
+                const iset = it;
+                if (iset && iset.SetWhat && iset.SetTo)
+                    return this.ln(() => this.emitExpr(iset.SetWhat).s(" = ").emitExpr(iset.SetTo));
+                const idictdel = it;
+                if (idictdel && idictdel.DelFrom && idictdel.DelWhat)
+                    return this.ln(() => this.emitExpr(idictdel.DelFrom).s('·del(').emitExpr(idictdel.DelWhat).s(')'));
+                const icolladd = it;
+                if (icolladd && icolladd.AddTo && icolladd.AddWhat)
+                    return this.ln(() => this.emitExpr(icolladd.AddTo).s('·add(').emitExpr(icolladd.AddWhat).s(')'));
+                const iblock = it;
+                if (iblock && iblock.Instrs !== undefined) {
+                    if (iblock.Lock)
+                        this.ln(() => this.s('lock ').emitExpr(iblock.Lock));
+                    else if (iblock.ForEach && iblock.ForEach.length)
+                        this.ln(() => this.s("for ", iblock.ForEach[0].Name, " in ").emitExpr(iblock.ForEach[1]));
+                    else if (iblock.If && iblock.If.length)
+                        this.ln(() => this.s("if ").emitExpr(iblock.If[0]));
+                    this.indented(() => iblock.Instrs.forEach(_ => this.emitInstr(_)));
+                    if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
+                        this.line("else")
+                            .emitInstr(iblock.If[1]);
+                    return this;
+                }
+                const ecall = it;
+                if (ecall && ecall.Call)
+                    return this.ln(() => this.emitExpr(ecall));
+                throw "<instr>" + JSON.stringify(it);
+            }
+            return this;
+        };
+        this.emitExpr = (it) => {
+            if (it === undefined)
+                return this;
+            if (it === null)
+                return this.s('null');
+            const elit = it;
+            if (elit && elit.Lit !== undefined)
+                return this.s(node_util.format("%j", elit.Lit));
+            const ecollnew = it;
+            if (ecollnew && ecollnew.Capacity !== undefined)
+                return this.when(ecollnew.ElemTypeIfList, () => this.s('[').emitTypeRef(ecollnew.ElemTypeIfList).s(']'), () => this.s('dict')).s('·new(').emitExpr(ecollnew.Capacity).s(')');
+            const enew = it;
+            if (enew && enew.New)
+                return this.emitTypeRef(enew.New).s("·new");
+            const econv = it;
+            if (econv && econv.Conv && econv.To)
+                return this.s('((').emitExpr(econv.Conv).s(')·(').emitTypeRef(econv.To).s('))');
+            const elen = it;
+            if (elen && elen.LenOf)
+                return this.emitExpr(elen.LenOf).s("·len");
+            const etup = it;
+            if (etup && etup.Items !== undefined)
+                return this.s('[').each(etup.Items, ',', _ => { this.emitExpr(_); }).s(']');
+            const ecall = it;
+            if (ecall && ecall.Call)
+                return this.emitExpr(ecall.Call).s("(").emitExprs(', ', ...ecall.Args).s(")");
+            const eop = it;
+            if (eop && eop.Name && eop.Operands && eop.Operands.length) {
+                const notactualoperator = (eop.Name === '@' || eop.Name === '.');
+                return this
+                    .s((notactualoperator ? '' : '(')
+                    + ((eop.Operands.length > 1) ? '' : eop.Name))
+                    .emitExprs(notactualoperator ? eop.Name : (' ' + eop.Name + ' '), ...eop.Operands)
+                    .s(notactualoperator ? '' : ')');
+            }
+            const efn = it;
+            if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
+                return this
+                    .s('(')
+                    .each(efn.Args, ' -> ', _ => this.s(_.Name, ':').emitTypeRef(_.Type))
+                    .s(' -> ').emitTypeRef(efn.Type)
+                    .s(')\n')
+                    .emitInstr(efn.Body)
+                    .s('\t'.repeat(this.indent));
+            const ename = it;
+            if (ename && ename.Name !== undefined)
+                return this.s(ename.Name ? ename.Name : this.options.idents.curInst);
+            throw "<expr>" + JSON.stringify(it);
+        };
+        this.emitIntro = () => {
+            return this.lines("#", "# NOTE, this is not a CoffeeScript file: the .coffee extension is solely", "# for the convenience of syntax-highlighting in editors & source viewers.", "#", "# A debug-print of our in-memory-only intermediate-representation prepared", "# for code-gens that choose to inherit from `gen-ast.Gen` to stay lean &", "# mean & low on LoCs for maintainability & ease of porting & consistency.", "#", "# Again, all the below is just a debug-print: it's never to be parsed or", "# interpreted (other than for actual code-gen) and exists merely to showcase", "# all the data available to a code-gen for emitting in its target language.", "#", "# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "", "");
+        };
+        this.emitOutro = () => {
+            return this.lines("# override `emitOutro` for this trailing part..");
+        };
+    }
+    indented(andThen) {
+        this.indent++;
+        andThen();
+        this.indent--;
+        return this;
+    }
+    ln(andThen) {
+        this.src += "\t".repeat(this.indent);
+        andThen();
+        this.src += "\n";
+        return this;
     }
     each(arr, joinBy, andThen) {
         for (let i = 0; i < arr.length; i++) {
@@ -343,6 +425,19 @@ class Gen extends gen.Gen {
                 this.s(joinBy);
             andThen(arr[i]);
         }
+        return this;
+    }
+    line(srcLn = '') {
+        return this.lines(srcLn);
+    }
+    lines(...srcLns) {
+        for (const srcln of srcLns)
+            this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : '') + "\n";
+        return this;
+    }
+    s(...s) {
+        for (const str of s)
+            this.src += str;
         return this;
     }
     when(check, ifTrue, ifFalse) {
@@ -361,98 +456,14 @@ class Gen extends gen.Gen {
         fillBody.call(this, iface, method, this.b, me.Func.Body.Instrs);
         this.emitFuncImpl(me);
     }
-    emitInstr(it) {
-        if (it) {
-            const iret = it;
-            if (iret && iret.Ret !== undefined)
-                return this.ln(() => this.s("ret ").emitExpr((!iret.Ret) ? undefined : iret.Ret));
-            const ivar = it;
-            if (ivar && ivar.Name)
-                return this.ln(() => this.s(ivar.Name, ": ").emitTypeRef(ivar.Type));
-            const iset = it;
-            if (iset && iset.SetWhat && iset.SetTo)
-                return this.ln(() => this.emitExpr(iset.SetWhat).s(" = ").emitExpr(iset.SetTo));
-            const idictdel = it;
-            if (idictdel && idictdel.DelFrom && idictdel.DelWhat)
-                return this.ln(() => this.emitExpr(idictdel.DelFrom).s('·del(').emitExpr(idictdel.DelWhat).s(')'));
-            const icolladd = it;
-            if (icolladd && icolladd.AddTo && icolladd.AddWhat)
-                return this.ln(() => this.emitExpr(icolladd.AddTo).s('·add(').emitExpr(icolladd.AddWhat).s(')'));
-            const iblock = it;
-            if (iblock && iblock.Instrs !== undefined) {
-                if (iblock.Lock)
-                    this.ln(() => this.s('lock ').emitExpr(iblock.Lock));
-                else if (iblock.ForEach && iblock.ForEach.length)
-                    this.ln(() => this.s("for ", iblock.ForEach[0].Name, " in ").emitExpr(iblock.ForEach[1]));
-                else if (iblock.If && iblock.If.length)
-                    this.ln(() => this.s("if ").emitExpr(iblock.If[0]));
-                this.indented(() => iblock.Instrs.forEach(_ => this.emitInstr(_)));
-                if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
-                    this.line("else")
-                        .emitInstr(iblock.If[1]);
-                return this;
-            }
-            const ecall = it;
-            if (ecall && ecall.Call)
-                return this.ln(() => this.emitExpr(ecall));
-            throw "<instr>" + JSON.stringify(it);
-        }
-        return this;
-    }
     emitExprs(joinBy, ...arr) {
         return this.each(arr, joinBy, (_) => this.emitExpr(_));
     }
-    emitExpr(it) {
-        if (it === undefined)
-            return this;
-        if (it === null)
-            return this.s('null');
-        const elit = it;
-        if (elit && elit.Lit !== undefined)
-            return this.s(node_util.format("%j", elit.Lit));
-        const ecollnew = it;
-        if (ecollnew && ecollnew.Capacity !== undefined)
-            return this.when(ecollnew.ElemTypeIfList, () => this.s('[').emitTypeRef(ecollnew.ElemTypeIfList).s(']'), () => this.s('dict')).s('·new(').emitExpr(ecollnew.Capacity).s(')');
-        const enew = it;
-        if (enew && enew.New)
-            return this.emitTypeRef(enew.New).s("·new");
-        const econv = it;
-        if (econv && econv.Conv && econv.To)
-            return this.s('((').emitExpr(econv.Conv).s(')·(').emitTypeRef(econv.To).s('))');
-        const elen = it;
-        if (elen && elen.LenOf)
-            return this.emitExpr(elen.LenOf).s("·len");
-        const etup = it;
-        if (etup && etup.Items !== undefined)
-            return this.s('[').each(etup.Items, ',', _ => { this.emitExpr(_); }).s(']');
-        const ecall = it;
-        if (ecall && ecall.Call)
-            return this.emitExpr(ecall.Call).s("(").emitExprs(', ', ...ecall.Args).s(")");
-        const eop = it;
-        if (eop && eop.Name && eop.Operands && eop.Operands.length) {
-            const notactualoperator = (eop.Name === '@' || eop.Name === '.');
-            return this
-                .s((notactualoperator ? '' : '(')
-                + ((eop.Operands.length > 1) ? '' : eop.Name))
-                .emitExprs(notactualoperator ? eop.Name : (' ' + eop.Name + ' '), ...eop.Operands)
-                .s(notactualoperator ? '' : ')');
-        }
-        const efn = it;
-        if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
-            return this
-                .s('(')
-                .each(efn.Args, ' -> ', _ => this.s(_.Name, ':').emitTypeRef(_.Type))
-                .s(' -> ').emitTypeRef(efn.Type)
-                .s(')\n')
-                .emitInstr(efn.Body)
-                .s('\t'.repeat(this.indent));
-        const ename = it;
-        if (ename && ename.Name !== undefined)
-            return this.s(ename.Name ? ename.Name : this.options.idents.curInst);
-        throw "<expr>" + JSON.stringify(it);
-    }
-    genConvertOrReturn(dstVarName, okBoolName, src, dstType, onErrRet) {
+    genConvertOrReturn(dstVarName, src, dstType, okBoolName = 'ok', onErrRet = undefined) {
         const _ = this.b;
+        if (!onErrRet)
+            onErrRet = _.eLit(false);
+        const retifnotok = _.iIf(_.oNot(_.n(okBoolName)), [_.iRet(onErrRet),]);
         const dstnamedtype = typeNamed(typeUnmaybe(dstType));
         if (dstnamedtype && dstnamedtype.Name) {
             if (dstnamedtype.Name === this.options.idents.typeAny)
@@ -460,23 +471,33 @@ class Gen extends gen.Gen {
             else {
                 if (this.state.genPopulateFor[dstnamedtype.Name] !== false)
                     this.state.genPopulateFor[dstnamedtype.Name] = true;
-                return [_.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eCall(_.oDot(_.eNew(dstType), _.n('populateFrom')), src))];
+                return [
+                    _.iSet(_.n(dstVarName), _.eNew(dstType)),
+                    _.iSet(_.n(okBoolName), _.eCall(_.oDot(_.n(dstVarName), _.n('populateFrom')), src)),
+                    retifnotok,
+                ];
             }
         }
         return [
             _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(dstType, src)),
-            _.iIf(_.oNot(_.n(okBoolName)), [
-                _.iRet(onErrRet),
-            ]),
+            retifnotok,
         ];
     }
     genMethodImpl_TopInterface(_iface, _method, _, body) {
         body.push(_.iRet(_.n(this.options.idents.curInst)));
     }
-    genMethodImpl_PopulateFrom(_iface, _method, _, _body) {
+    genMethodImpl_PopulateFrom(struct, _method, _, body) {
+        body.push(_.iVar('dict', TypeRefPrim.Dict), _.iVar('ok', TypeRefPrim.Bool), _.iVar('val', TypeRefPrim.Any));
+        body.push(...this.genConvertOrReturn('dict', _.n('payload'), TypeRefPrim.Dict));
+        for (const fld of struct.Fields)
+            if (!fld.Json.Excluded)
+                body.push(_.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdx(_.n('dict'), _.eLit(fld.Json.Name))), _.iIf(_.n('ok'), [
+                    _.iVar(fld.name, fld.Type),
+                ].concat(this.genConvertOrReturn(fld.name, _.n('val'), fld.Type), _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name))), fld.Json.Required ? [_.iRet(_.eLit(false))] : []));
+        body.push(_.iRet(_.eLit(true)));
     }
     genMethodImpl_MessageDispatch(iface, method, _, body) {
-        const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'resultptr', 'args', 'ok');
+        const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok');
         const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args);
         const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length;
         body.push(_.iVar(__.msg, _.n('ipcMsg')), _.iSet(_.n(__.msg), _.eNew(_.n('ipcMsg'))), _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(iface.name + '.' + method.fromPrep.name)), _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs))));
@@ -493,7 +514,7 @@ class Gen extends gen.Gen {
                             _.iRet(_.eTup(_.eNil(), _.eLit(false))),
                         ], [_.iVar(__.ok, TypeRefPrim.Bool)].concat(..._.EACH(fnargs, (fnarg, idx) => [
                             _.iVar('__' + idx, this.b.typeRef(fnarg)),
-                            _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))), this.genConvertOrReturn('__' + idx, __.ok, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), _.eTup(_.eNil(), _.eLit(false)))),
+                            _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))), this.genConvertOrReturn('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), __.ok, _.eTup(_.eNil(), _.eLit(false)))),
                             _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
                         ]))))),
                     ]),
@@ -507,7 +528,7 @@ class Gen extends gen.Gen {
         if (lastarg.fromPrep.isFromRetThenable) {
             const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, true, true);
             body.push(_.iIf(_.oIs(_.n(lastarg.Name)), [
-                _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iVar(__.ok, TypeRefPrim.Bool), _.iVar(__.result, dsttype), _.iIf(_.oIs(_.n(__.payload)), this.genConvertOrReturn(__.result, __.ok, _.n(__.payload), dsttype, _.eLit(false))), _.eCall(_.n(lastarg.Name), _.n(__.result)), _.iRet(_.eLit(true)))),
+                _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iVar(__.ok, TypeRefPrim.Bool), _.iVar(__.result, dsttype), _.iIf(_.oIs(_.n(__.payload)), this.genConvertOrReturn(__.result, _.n(__.payload), dsttype, __.ok)), _.eCall(_.n(lastarg.Name), _.n(__.result)), _.iRet(_.eLit(true)))),
             ]));
         }
         if (!funcfields.length)
@@ -519,8 +540,8 @@ class Gen extends gen.Gen {
     }
     gen(prep) {
         this.resetState();
-        this.src = "# NOTE, this is not a CoffeeScript file:\n# the .coffee extension is solely for the convenience of syntax-highlighting.\n#\n# A debug-print of our in-memory-only imperative-intermediate-representation\n# available to code-gens that want to stay lean & mean & low on LoCs for\n# maintainability & ease of porting.\n#\n# The format is again just a debug-print: it's never to be parsed or anything,\n# and exists merely to dump all knowledge held by generated in-memory\n# representations available to code-gens.\n#\n# Generated representations follow below.\n\n";
         const build = (this.b = new Builder(prep, this));
+        this.emitIntro();
         const ifacetop = {
             name: prep.fromOrig.moduleName,
             Name: this.nameRewriters.types.interfaces(prep.fromOrig.moduleName),
@@ -536,8 +557,12 @@ class Gen extends gen.Gen {
         this.emitInterface(ifacetop);
         for (const it of prep.enums)
             this.emitEnum(build.enumFrom(it));
-        for (const it of prep.structs)
-            this.emitStruct(build.structFrom(it));
+        const structs = {};
+        for (const it of prep.structs) {
+            const struct = build.structFrom(it);
+            structs[struct.Name] = struct;
+            this.emitStruct(struct);
+        }
         const ifaces = prep.interfaces.map(_ => build.interfaceFrom(_));
         for (const it of ifaces)
             this.emitInterface(it);
@@ -553,13 +578,14 @@ class Gen extends gen.Gen {
                 for (const name in this.state.genPopulateFor)
                     if (anydecoderstogenerate = this.state.genPopulateFor[name]) {
                         this.state.genPopulateFor[name] = false;
-                        this.emitMethodImpl({ Name: name }, {
+                        this.emitMethodImpl(structs[name], {
                             Name: "populateFrom", Type: TypeRefPrim.Bool,
                             Args: [{ Name: "payload", Type: TypeRefPrim.Any }]
                         }, this.genMethodImpl_PopulateFrom);
                     }
             }
         }
+        this.emitOutro();
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src);
     }
 }
