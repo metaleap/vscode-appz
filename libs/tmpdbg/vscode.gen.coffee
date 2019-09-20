@@ -378,7 +378,7 @@ Window: interface
 
 
 Vscode·Window: ( -> Window)
-	ret this
+	return this
 
 
 
@@ -398,9 +398,9 @@ Window·ShowErrorMessage1: (message:string -> items:[string] -> andThen:?(?strin
 			if (=?payload)
 				[result,ok] = ((payload)·(?string))
 				if (!ok)
-					ret false
+					return false
 			andThen(result)
-			ret true
+			return true
 		
 	this.send(msg, on)
 
@@ -423,9 +423,9 @@ Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[s
 			if (=?payload)
 				[result,ok] = ((payload)·(?string))
 				if (!ok)
-					ret false
+					return false
 			andThen(result)
-			ret true
+			return true
 		
 	this.send(msg, on)
 
@@ -448,9 +448,9 @@ Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(?
 				result = ?MessageItem·new
 				ok = result.populateFrom(payload)
 				if (!ok)
-					ret false
+					return false
 			andThen(result)
-			ret true
+			return true
 		
 	this.send(msg, on)
 
@@ -474,9 +474,9 @@ Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[M
 				result = ?MessageItem·new
 				ok = result.populateFrom(payload)
 				if (!ok)
-					ret false
+					return false
 			andThen(result)
-			ret true
+			return true
 		
 	this.send(msg, on)
 
@@ -498,9 +498,9 @@ Window·ShowInformationMessage1: (message:string -> items:[string] -> andThen:?(
 			if (=?payload)
 				[result,ok] = ((payload)·(?string))
 				if (!ok)
-					ret false
+					return false
 			andThen(result)
-			ret true
+			return true
 		
 	this.send(msg, on)
 
@@ -523,9 +523,9 @@ Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> it
 			if (=?payload)
 				[result,ok] = ((payload)·(?string))
 				if (!ok)
-					ret false
+					return false
 			andThen(result)
-			ret true
+			return true
 		
 	this.send(msg, on)
 
@@ -548,9 +548,9 @@ Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> andTh
 				result = ?MessageItem·new
 				ok = result.populateFrom(payload)
 				if (!ok)
-					ret false
+					return false
 			andThen(result)
-			ret true
+			return true
 		
 	this.send(msg, on)
 
@@ -574,9 +574,9 @@ Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> it
 				result = ?MessageItem·new
 				ok = result.populateFrom(payload)
 				if (!ok)
-					ret false
+					return false
 			andThen(result)
-			ret true
+			return true
 		
 	this.send(msg, on)
 
@@ -598,9 +598,9 @@ Window·ShowWarningMessage1: (message:string -> items:[string] -> andThen:?(?str
 			if (=?payload)
 				[result,ok] = ((payload)·(?string))
 				if (!ok)
-					ret false
+					return false
 			andThen(result)
-			ret true
+			return true
 		
 	this.send(msg, on)
 
@@ -623,9 +623,9 @@ Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:
 			if (=?payload)
 				[result,ok] = ((payload)·(?string))
 				if (!ok)
-					ret false
+					return false
 			andThen(result)
-			ret true
+			return true
 		
 	this.send(msg, on)
 
@@ -648,9 +648,9 @@ Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?
 				result = ?MessageItem·new
 				ok = result.populateFrom(payload)
 				if (!ok)
-					ret false
+					return false
 			andThen(result)
-			ret true
+			return true
 		
 	this.send(msg, on)
 
@@ -674,9 +674,9 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
 				result = ?MessageItem·new
 				ok = result.populateFrom(payload)
 				if (!ok)
-					ret false
+					return false
 			andThen(result)
-			ret true
+			return true
 		
 	this.send(msg, on)
 
@@ -700,15 +700,15 @@ Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(?string->void) -> v
 				fnids·add(options.ValidateInput_AppzFuncId)
 				this.cbOther@options.ValidateInput_AppzFuncId = (args:[Any] -> [Any,bool])
 					if (1 != args·len)
-						ret [null,false]
+						return [null,false]
 					else
 						var ok of bool
 						var __0 of string
 						if (=?args@0)
 							[__0,ok] = ((args@0)·(string))
 							if (!ok)
-								ret [null,false]
-						ret [fn(__0),true]
+								return [null,false]
+						return [fn(__0),true]
 				
 	msg.Data@"options" = options
 	var on of (Any->bool)
@@ -719,16 +719,16 @@ Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(?string->void) -> v
 			if (=?payload)
 				[result,ok] = ((payload)·(?string))
 				if (!ok)
-					ret false
+					return false
 			andThen(result)
-			ret true
+			return true
 		
 	this.send(msg, (payload:Any -> bool)
 		if (fnids·len != 0)
 			lock this
 				for fnid in fnids
 					this.cbOther·del(fnid)
-		ret ((=!on) || on(payload))
+		return ((=!on) || on(payload))
 	)
 
 
@@ -740,31 +740,31 @@ MessageItem·populateFrom: (payload:Any -> bool)
 	var val of Any
 	[dict,ok] = ((payload)·([string:Any]))
 	if (!ok)
-		ret false
+		return false
 	[val,ok] = dict@"title"
 	if ok
 		var title of string
 		[title,ok] = ((val)·(string))
 		if (!ok)
-			ret false
+			return false
 		this.Title = title
 	else
-		ret false
+		return false
 	[val,ok] = dict@"isCloseAffordance"
 	if ok
 		var isCloseAffordance of ?bool
 		[isCloseAffordance,ok] = ((val)·(?bool))
 		if (!ok)
-			ret false
+			return false
 		this.IsCloseAffordance = isCloseAffordance
 	[val,ok] = dict@"my"
 	if ok
 		var my of ?[string:Any]
 		[my,ok] = ((val)·(?[string:Any]))
 		if (!ok)
-			ret false
+			return false
 		this.My = my
-	ret true
+	return true
 
 
 # override `emitOutro` for this trailing part..

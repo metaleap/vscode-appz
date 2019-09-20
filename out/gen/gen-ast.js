@@ -332,7 +332,7 @@ class Gen extends gen.Gen {
             if (it) {
                 const iret = it;
                 if (iret && iret.Ret !== undefined)
-                    return this.ln(() => this.s("ret ").emitExpr((!iret.Ret) ? undefined : iret.Ret));
+                    return this.ln(() => this.s("return ").emitExpr((!iret.Ret) ? undefined : iret.Ret));
                 const ivar = it;
                 if (ivar && ivar.Name)
                     return this.ln(() => this.s("var ", ivar.Name, " of ").emitTypeRef(ivar.Type));

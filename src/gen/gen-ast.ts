@@ -531,7 +531,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             const iret = it as IRet
             if (iret && iret.Ret !== undefined)
                 return this.ln(() =>
-                    this.s("ret ").emitExpr((!iret.Ret) ? undefined : iret.Ret))
+                    this.s("return ").emitExpr((!iret.Ret) ? undefined : iret.Ret))
 
             const ivar = it as IVar
             if (ivar && ivar.Name)
