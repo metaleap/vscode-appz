@@ -111,6 +111,18 @@ export interface IDictDel {
 
 
 
+export enum BuilderOperators {
+    Dot = '.',
+    Idx = '@',
+    Eq = '==',
+    Neq = '!=',
+    Or = '||',
+    And = '&&',
+    Not = '!',
+    Is = '=?',
+    Isnt = '=!',
+}
+
 export class Builder {
     prep: gen.Prep
     gen: Gen
@@ -139,15 +151,16 @@ export class Builder {
     eNil(): ELit { return this.eLit(null) }
     eThis(): EName { return this.n(null) }
     eOp(op: string, ...args: Expr[]): EOp { return { Name: op, Operands: args } }
-    oDot(...args: Expr[]): EOp { return (args.length === 1) ? this.eOp('.', ...[this.eThis() as Expr].concat(...args)) : this.eOp('.', ...args) }
-    oIdx(...args: Expr[]): EOp { return this.eOp('@', ...args) }
-    oEq(...args: Expr[]): EOp { return this.eOp('==', ...args) }
-    oNeq(...args: Expr[]): EOp { return this.eOp('!=', ...args) }
-    oOr(...args: Expr[]): EOp { return this.eOp('||', ...args) }
-    oAnd(...args: Expr[]): EOp { return this.eOp('&&', ...args) }
-    oNot(arg: Expr): EOp { return this.eOp("!", arg) }
-    oIs(arg: Expr): EOp { return this.eOp("=?", arg) }
-    oIsnt(arg: Expr): EOp { return this.eOp("=!", arg) }
+    oDot(...args: Expr[]): EOp { return (args.length === 1) ? this.eOp(this.op.Dot, ...[this.eThis() as Expr].concat(...args)) : this.eOp(this.op.Dot, ...args) }
+    oIdx(...args: Expr[]): EOp { return this.eOp(this.op.Idx, ...args) }
+    oEq(...args: Expr[]): EOp { return this.eOp(this.op.Eq, ...args) }
+    oNeq(...args: Expr[]): EOp { return this.eOp(this.op.Neq, ...args) }
+    oOr(...args: Expr[]): EOp { return this.eOp(this.op.Or, ...args) }
+    oAnd(...args: Expr[]): EOp { return this.eOp(this.op.And, ...args) }
+    oNot(arg: Expr): EOp { return this.eOp(this.op.Not, arg) }
+    oIs(arg: Expr): EOp { return this.eOp(this.op.Is, arg) }
+    oIsnt(arg: Expr): EOp { return this.eOp(this.op.Isnt, arg) }
+    private readonly op = BuilderOperators // just a local shorthand for all the aboves
 
     EACH<TIn, TOut>(from: TIn[], fn: ((_: TIn, idx?: number) => TOut[])): TOut[] {
         const me: TOut[] = []
@@ -611,7 +624,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         const eop = it as EOp
         if (eop && eop.Name && eop.Operands && eop.Operands.length) {
-            const notactualoperator = (eop.Name === '@' || eop.Name === '.')
+            const notactualoperator = (eop.Name === BuilderOperators.Idx || eop.Name === BuilderOperators.Dot)
             return this
                 .s((notactualoperator ? '' : '(')
                     + ((eop.Operands.length > 1) ? '' : /* unary*/ eop.Name))
