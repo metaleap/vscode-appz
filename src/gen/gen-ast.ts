@@ -374,7 +374,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             curInst: "this",
             typeAny: "Any",
         },
-        indent: '    '
+        oneIndent: '    '
     }
 
     indented(andThen: () => void): Gen {
@@ -389,13 +389,13 @@ export class Gen extends gen.Gen implements gen.IGen {
         return this
     }
 
-    outdent(): Gen {
+    undent(): Gen {
         this.indents--
         return this
     }
 
     ln(andThen: (() => void)): Gen {
-        this.src += this.options.indent.repeat(this.indents)
+        this.src += this.options.oneIndent.repeat(this.indents)
         andThen()
         this.src += "\n"
         return this
@@ -416,19 +416,24 @@ export class Gen extends gen.Gen implements gen.IGen {
 
     lines(...srcLns: string[]): Gen {
         for (const srcln of srcLns)
-            this.src += ((srcln && srcln.length) ? (this.options.indent.repeat(this.indents) + srcln) : '') + "\n"
+            this.src += ((srcln && srcln.length) ? (this.options.oneIndent.repeat(this.indents) + srcln) : '') + "\n"
+        return this
+    }
+
+    lf(...s: string[]): Gen {
+        this.src += this.options.oneIndent.repeat(this.indents)
+        this.src += s.join('')
         return this
     }
 
     s(...s: string[]): Gen {
-        for (const str of s)
-            this.src += str
+        this.src += s.join('')
         return this
     }
 
-    when(check: any, ifTrue: () => void, ifFalse: () => void): Gen {
+    when(check: any, ifTrue: () => void, ifFalse: () => void = undefined): Gen {
         if (check) ifTrue()
-        else ifFalse()
+        else if (ifFalse) ifFalse()
         return this
     }
 
@@ -496,23 +501,23 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (it === TypeRefPrim.Dict)
             return this.s("[string:", this.options.idents.typeAny, "]")
 
-        const tname = typeNamed(it)
+        const tname = this.typeNamed(it)
         if (tname)
             return this.s(tname.Name)
 
-        const ttup = typeTup(it)
+        const ttup = this.typeTup(it)
         if (ttup)
             return this.s("[").each(ttup.TupOf, ',', _ => this.emitTypeRef(_)).s(']')
 
-        const tarr = typeArr(it)
+        const tarr = this.typeArr(it)
         if (tarr)
             return this.s('[').emitTypeRef(tarr.ArrOf).s(']')
 
-        const tfun = typeFunc(it)
+        const tfun = this.typeFunc(it)
         if (tfun)
             return this.s('(').each(tfun.From, '->', _ => this.emitTypeRef(_)).s('->').emitTypeRef(tfun.To).s(')')
 
-        const tmay = typeMaybe(it)
+        const tmay = this.typeMaybe(it)
         if (tmay)
             return this.s('?').emitTypeRef(tmay.Maybe)
 
@@ -651,7 +656,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 .s(' -> ').emitTypeRef(efn.Type)
                 .s(')\n')
                 .emitInstr(efn.Body)
-                .s(this.options.indent.repeat(this.indents))
+                .s(this.options.oneIndent.repeat(this.indents))
 
         const ename = it as EName
         if (ename && ename.Name !== undefined)
@@ -665,7 +670,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (!onErrRet)
             onErrRet = _.eLit(false)
         const retifnotok = _.iIf(_.oNot(_.n(okBoolName)), [_.iRet(onErrRet),])
-        const dstnamedtype = typeNamed(typeUnmaybe(dstType))
+        const dstnamedtype = this.typeNamed(this.typeUnmaybe(dstType))
         if (dstnamedtype && dstnamedtype.Name) {
             if (dstnamedtype.Name === this.options.idents.typeAny)
                 return [_.iSet(_.n(dstVarName), src)]
@@ -880,35 +885,35 @@ export class Gen extends gen.Gen implements gen.IGen {
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src)
     }
 
-}
+    typeUnmaybe(typeRef: TypeRef): TypeRef {
+        const me = typeRef as TypeRefMaybe
+        return (me && me.Maybe) ? this.typeUnmaybe(me.Maybe) : typeRef
+    }
 
-function typeUnmaybe(typeRef: TypeRef): TypeRef {
-    const me = typeRef as TypeRefMaybe
-    return (me && me.Maybe) ? typeUnmaybe(me.Maybe) : typeRef
-}
+    typeNamed(typeRef: TypeRef): WithName {
+        const me = typeRef as WithName
+        return (me && me.Name && me.Name.length) ? me : null
+    }
 
-function typeNamed(typeRef: TypeRef): WithName {
-    const me = typeRef as WithName
-    return (me && me.Name && me.Name.length) ? me : null
-}
+    typeMaybe(typeRef: TypeRef): TypeRefMaybe {
+        const me = typeRef as TypeRefMaybe
+        return (me && me.Maybe) ? me : null
+    }
 
-function typeMaybe(typeRef: TypeRef): TypeRefMaybe {
-    const me = typeRef as TypeRefMaybe
-    return (me && me.Maybe) ? me : null
-}
+    typeFunc(typeRef: TypeRef): TypeRefFunc {
+        const me = typeRef as TypeRefFunc
+        return (me && me.From !== undefined) ? me : null
 
-function typeFunc(typeRef: TypeRef): TypeRefFunc {
-    const me = typeRef as TypeRefFunc
-    return (me && me.From !== undefined) ? me : null
+    }
 
-}
+    typeArr(typeRef: TypeRef): TypeRefArr {
+        const me = typeRef as TypeRefArr
+        return (me && me.ArrOf) ? me : null
+    }
 
-function typeArr(typeRef: TypeRef): TypeRefArr {
-    const me = typeRef as TypeRefArr
-    return (me && me.ArrOf) ? me : null
-}
+    typeTup(typeRef: TypeRef): TypeRefTup {
+        const me = typeRef as TypeRefTup
+        return (me && me.TupOf && me.TupOf.length) ? me : null
+    }
 
-function typeTup(typeRef: TypeRef): TypeRefTup {
-    const me = typeRef as TypeRefTup
-    return (me && me.TupOf && me.TupOf.length) ? me : null
 }

@@ -249,7 +249,7 @@ class Gen extends gen.Gen {
                 curInst: "this",
                 typeAny: "Any",
             },
-            indent: '    '
+            oneIndent: '    '
         };
     }
     indented(andThen) {
@@ -262,12 +262,12 @@ class Gen extends gen.Gen {
         this.indents++;
         return this;
     }
-    outdent() {
+    undent() {
         this.indents--;
         return this;
     }
     ln(andThen) {
-        this.src += this.options.indent.repeat(this.indents);
+        this.src += this.options.oneIndent.repeat(this.indents);
         andThen();
         this.src += "\n";
         return this;
@@ -285,18 +285,22 @@ class Gen extends gen.Gen {
     }
     lines(...srcLns) {
         for (const srcln of srcLns)
-            this.src += ((srcln && srcln.length) ? (this.options.indent.repeat(this.indents) + srcln) : '') + "\n";
+            this.src += ((srcln && srcln.length) ? (this.options.oneIndent.repeat(this.indents) + srcln) : '') + "\n";
+        return this;
+    }
+    lf(...s) {
+        this.src += this.options.oneIndent.repeat(this.indents);
+        this.src += s.join('');
         return this;
     }
     s(...s) {
-        for (const str of s)
-            this.src += str;
+        this.src += s.join('');
         return this;
     }
-    when(check, ifTrue, ifFalse) {
+    when(check, ifTrue, ifFalse = undefined) {
         if (check)
             ifTrue();
-        else
+        else if (ifFalse)
             ifFalse();
         return this;
     }
@@ -355,19 +359,19 @@ class Gen extends gen.Gen {
             return this.s("string");
         if (it === TypeRefPrim.Dict)
             return this.s("[string:", this.options.idents.typeAny, "]");
-        const tname = typeNamed(it);
+        const tname = this.typeNamed(it);
         if (tname)
             return this.s(tname.Name);
-        const ttup = typeTup(it);
+        const ttup = this.typeTup(it);
         if (ttup)
             return this.s("[").each(ttup.TupOf, ',', _ => this.emitTypeRef(_)).s(']');
-        const tarr = typeArr(it);
+        const tarr = this.typeArr(it);
         if (tarr)
             return this.s('[').emitTypeRef(tarr.ArrOf).s(']');
-        const tfun = typeFunc(it);
+        const tfun = this.typeFunc(it);
         if (tfun)
             return this.s('(').each(tfun.From, '->', _ => this.emitTypeRef(_)).s('->').emitTypeRef(tfun.To).s(')');
-        const tmay = typeMaybe(it);
+        const tmay = this.typeMaybe(it);
         if (tmay)
             return this.s('?').emitTypeRef(tmay.Maybe);
         throw it;
@@ -471,7 +475,7 @@ class Gen extends gen.Gen {
                 .s(' -> ').emitTypeRef(efn.Type)
                 .s(')\n')
                 .emitInstr(efn.Body)
-                .s(this.options.indent.repeat(this.indents));
+                .s(this.options.oneIndent.repeat(this.indents));
         const ename = it;
         if (ename && ename.Name !== undefined)
             return this.s(ename.Name ? ename.Name : this.options.idents.curInst);
@@ -482,7 +486,7 @@ class Gen extends gen.Gen {
         if (!onErrRet)
             onErrRet = _.eLit(false);
         const retifnotok = _.iIf(_.oNot(_.n(okBoolName)), [_.iRet(onErrRet),]);
-        const dstnamedtype = typeNamed(typeUnmaybe(dstType));
+        const dstnamedtype = this.typeNamed(this.typeUnmaybe(dstType));
         if (dstnamedtype && dstnamedtype.Name) {
             if (dstnamedtype.Name === this.options.idents.typeAny)
                 return [_.iSet(_.n(dstVarName), src)];
@@ -612,29 +616,29 @@ class Gen extends gen.Gen {
         this.emitOutro();
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src);
     }
+    typeUnmaybe(typeRef) {
+        const me = typeRef;
+        return (me && me.Maybe) ? this.typeUnmaybe(me.Maybe) : typeRef;
+    }
+    typeNamed(typeRef) {
+        const me = typeRef;
+        return (me && me.Name && me.Name.length) ? me : null;
+    }
+    typeMaybe(typeRef) {
+        const me = typeRef;
+        return (me && me.Maybe) ? me : null;
+    }
+    typeFunc(typeRef) {
+        const me = typeRef;
+        return (me && me.From !== undefined) ? me : null;
+    }
+    typeArr(typeRef) {
+        const me = typeRef;
+        return (me && me.ArrOf) ? me : null;
+    }
+    typeTup(typeRef) {
+        const me = typeRef;
+        return (me && me.TupOf && me.TupOf.length) ? me : null;
+    }
 }
 exports.Gen = Gen;
-function typeUnmaybe(typeRef) {
-    const me = typeRef;
-    return (me && me.Maybe) ? typeUnmaybe(me.Maybe) : typeRef;
-}
-function typeNamed(typeRef) {
-    const me = typeRef;
-    return (me && me.Name && me.Name.length) ? me : null;
-}
-function typeMaybe(typeRef) {
-    const me = typeRef;
-    return (me && me.Maybe) ? me : null;
-}
-function typeFunc(typeRef) {
-    const me = typeRef;
-    return (me && me.From !== undefined) ? me : null;
-}
-function typeArr(typeRef) {
-    const me = typeRef;
-    return (me && me.ArrOf) ? me : null;
-}
-function typeTup(typeRef) {
-    const me = typeRef;
-    return (me && me.TupOf && me.TupOf.length) ? me : null;
-}

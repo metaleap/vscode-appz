@@ -7,6 +7,7 @@ namespace VscAppz {
 	using Any = System.Object;
 
 	public interface IVscode {
+		IWindow Window;
 	}
 
 
@@ -17,7 +18,7 @@ namespace VscAppz {
 		# Indicates that this message should be modal.
 		#
 		# JSON FLAGS: {"Name":"modal","Required":false,"Excluded":false}
-		Modal: ?bool
+		Modal: Nullable<bool>
 
 
 
@@ -40,13 +41,13 @@ namespace VscAppz {
 		# Note: this option is ignored for non-modal messages.
 		#
 		# JSON FLAGS: {"Name":"isCloseAffordance","Required":false,"Excluded":false}
-		IsCloseAffordance: ?bool
+		IsCloseAffordance: Nullable<bool>
 
 		# my:
 		# Free-form custom data, preserved across a roundtrip.
 		#
 		# JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
-		My: ?[string:Any]
+		My: [string:Any]
 
 
 
@@ -58,7 +59,7 @@ namespace VscAppz {
 		# The value to prefill in the input box.
 		#
 		# JSON FLAGS: {"Name":"value","Required":false,"Excluded":false}
-		Value: ?string
+		Value: string
 
 		# valueSelection:
 		# Selection of the prefilled [`value`](#InputBoxOptions.value). Defined as tuple of two number where the
@@ -67,31 +68,31 @@ namespace VscAppz {
 		# otherwise the defined range will be selected.
 		#
 		# JSON FLAGS: {"Name":"valueSelection","Required":false,"Excluded":false}
-		ValueSelection: ?[int,int]
+		ValueSelection: Nullable<(int, int)>
 
 		# prompt:
 		# The text to display underneath the input box.
 		#
 		# JSON FLAGS: {"Name":"prompt","Required":false,"Excluded":false}
-		Prompt: ?string
+		Prompt: string
 
 		# placeHolder:
 		# An optional string to show as place holder in the input box to guide the user what to type.
 		#
 		# JSON FLAGS: {"Name":"placeHolder","Required":false,"Excluded":false}
-		PlaceHolder: ?string
+		PlaceHolder: string
 
 		# password:
 		# Set to `true` to show a password prompt that will not show the typed value.
 		#
 		# JSON FLAGS: {"Name":"password","Required":false,"Excluded":false}
-		Password: ?bool
+		Password: Nullable<bool>
 
 		# ignoreFocusOut:
 		# Set to `true` to keep the input box open when focus moves to another part of the editor or to another window.
 		#
 		# JSON FLAGS: {"Name":"ignoreFocusOut","Required":false,"Excluded":false}
-		IgnoreFocusOut: ?bool
+		IgnoreFocusOut: Nullable<bool>
 
 		# validateInput:
 		# An optional function that will be called to validate input and to give a hint
@@ -103,7 +104,7 @@ namespace VscAppz {
 		# Return `undefined`, `null`, or the empty string when 'value' is valid.
 		#
 		# JSON FLAGS: {"Name":"validateInput","Required":false,"Excluded":true}
-		ValidateInput: ?(string->?string)
+		ValidateInput: Func<>
 
 		# For internal runtime use only.
 		#
@@ -112,6 +113,19 @@ namespace VscAppz {
 
 
 	public interface IWindow {
+		void ShowErrorMessage1(string message = default, string[] items = default, Action<string> andThen = default);
+		void ShowErrorMessage2(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
+		void ShowErrorMessage3(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+		void ShowErrorMessage4(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+		void ShowInformationMessage1(string message = default, string[] items = default, Action<string> andThen = default);
+		void ShowInformationMessage2(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
+		void ShowInformationMessage3(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+		void ShowInformationMessage4(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+		void ShowWarningMessage1(string message = default, string[] items = default, Action<string> andThen = default);
+		void ShowWarningMessage2(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
+		void ShowWarningMessage3(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+		void ShowWarningMessage4(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+		void ShowInputBox(InputBoxOptions options = default, Action<string> andThen = default);
 	}
 
 
@@ -121,20 +135,20 @@ namespace VscAppz {
 
 
 
-	IWindow·ShowErrorMessage1: (message:string -> items:[string] -> andThen:?(?string->void) -> void)
+	IWindow·ShowErrorMessage1: (message:string -> items:string[] -> andThen:Action<string> -> void)
 		var msg of ipcMsg
 		msg = ipcMsg·new
 		msg.QName = "window.showErrorMessage1"
 		msg.Data = dict·new(2)
 		msg.Data@"message" = message
 		msg.Data@"items" = items
-		var on of (Any->bool)
+		var on of Func<>
 		if (=?andThen)
 			on = (payload:Any -> bool)
 				var ok of bool
-				var result of ?string
+				var result of string
 				if (=?payload)
-					[result,ok] = ((payload)·(?string))
+					[result,ok] = ((payload)·(string))
 					if (!ok)
 						return false
 				andThen(result)
@@ -145,7 +159,7 @@ namespace VscAppz {
 
 
 
-	IWindow·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(?string->void) -> void)
+	IWindow·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:string[] -> andThen:Action<string> -> void)
 		var msg of ipcMsg
 		msg = ipcMsg·new
 		msg.QName = "window.showErrorMessage2"
@@ -153,13 +167,13 @@ namespace VscAppz {
 		msg.Data@"message" = message
 		msg.Data@"options" = options
 		msg.Data@"items" = items
-		var on of (Any->bool)
+		var on of Func<>
 		if (=?andThen)
 			on = (payload:Any -> bool)
 				var ok of bool
-				var result of ?string
+				var result of string
 				if (=?payload)
-					[result,ok] = ((payload)·(?string))
+					[result,ok] = ((payload)·(string))
 					if (!ok)
 						return false
 				andThen(result)
@@ -170,20 +184,20 @@ namespace VscAppz {
 
 
 
-	IWindow·ShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
+	IWindow·ShowErrorMessage3: (message:string -> items:MessageItem[] -> andThen:Action<MessageItem> -> void)
 		var msg of ipcMsg
 		msg = ipcMsg·new
 		msg.QName = "window.showErrorMessage3"
 		msg.Data = dict·new(2)
 		msg.Data@"message" = message
 		msg.Data@"items" = items
-		var on of (Any->bool)
+		var on of Func<>
 		if (=?andThen)
 			on = (payload:Any -> bool)
 				var ok of bool
-				var result of ?MessageItem
+				var result of MessageItem
 				if (=?payload)
-					result = ?MessageItem·new
+					result = MessageItem·new
 					ok = result.populateFrom(payload)
 					if (!ok)
 						return false
@@ -195,7 +209,7 @@ namespace VscAppz {
 
 
 
-	IWindow·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
+	IWindow·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:MessageItem[] -> andThen:Action<MessageItem> -> void)
 		var msg of ipcMsg
 		msg = ipcMsg·new
 		msg.QName = "window.showErrorMessage4"
@@ -203,13 +217,13 @@ namespace VscAppz {
 		msg.Data@"message" = message
 		msg.Data@"options" = options
 		msg.Data@"items" = items
-		var on of (Any->bool)
+		var on of Func<>
 		if (=?andThen)
 			on = (payload:Any -> bool)
 				var ok of bool
-				var result of ?MessageItem
+				var result of MessageItem
 				if (=?payload)
-					result = ?MessageItem·new
+					result = MessageItem·new
 					ok = result.populateFrom(payload)
 					if (!ok)
 						return false
@@ -221,20 +235,20 @@ namespace VscAppz {
 
 
 
-	IWindow·ShowInformationMessage1: (message:string -> items:[string] -> andThen:?(?string->void) -> void)
+	IWindow·ShowInformationMessage1: (message:string -> items:string[] -> andThen:Action<string> -> void)
 		var msg of ipcMsg
 		msg = ipcMsg·new
 		msg.QName = "window.showInformationMessage1"
 		msg.Data = dict·new(2)
 		msg.Data@"message" = message
 		msg.Data@"items" = items
-		var on of (Any->bool)
+		var on of Func<>
 		if (=?andThen)
 			on = (payload:Any -> bool)
 				var ok of bool
-				var result of ?string
+				var result of string
 				if (=?payload)
-					[result,ok] = ((payload)·(?string))
+					[result,ok] = ((payload)·(string))
 					if (!ok)
 						return false
 				andThen(result)
@@ -245,7 +259,7 @@ namespace VscAppz {
 
 
 
-	IWindow·ShowInformationMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(?string->void) -> void)
+	IWindow·ShowInformationMessage2: (message:string -> options:MessageOptions -> items:string[] -> andThen:Action<string> -> void)
 		var msg of ipcMsg
 		msg = ipcMsg·new
 		msg.QName = "window.showInformationMessage2"
@@ -253,13 +267,13 @@ namespace VscAppz {
 		msg.Data@"message" = message
 		msg.Data@"options" = options
 		msg.Data@"items" = items
-		var on of (Any->bool)
+		var on of Func<>
 		if (=?andThen)
 			on = (payload:Any -> bool)
 				var ok of bool
-				var result of ?string
+				var result of string
 				if (=?payload)
-					[result,ok] = ((payload)·(?string))
+					[result,ok] = ((payload)·(string))
 					if (!ok)
 						return false
 				andThen(result)
@@ -270,20 +284,20 @@ namespace VscAppz {
 
 
 
-	IWindow·ShowInformationMessage3: (message:string -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
+	IWindow·ShowInformationMessage3: (message:string -> items:MessageItem[] -> andThen:Action<MessageItem> -> void)
 		var msg of ipcMsg
 		msg = ipcMsg·new
 		msg.QName = "window.showInformationMessage3"
 		msg.Data = dict·new(2)
 		msg.Data@"message" = message
 		msg.Data@"items" = items
-		var on of (Any->bool)
+		var on of Func<>
 		if (=?andThen)
 			on = (payload:Any -> bool)
 				var ok of bool
-				var result of ?MessageItem
+				var result of MessageItem
 				if (=?payload)
-					result = ?MessageItem·new
+					result = MessageItem·new
 					ok = result.populateFrom(payload)
 					if (!ok)
 						return false
@@ -295,7 +309,7 @@ namespace VscAppz {
 
 
 
-	IWindow·ShowInformationMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
+	IWindow·ShowInformationMessage4: (message:string -> options:MessageOptions -> items:MessageItem[] -> andThen:Action<MessageItem> -> void)
 		var msg of ipcMsg
 		msg = ipcMsg·new
 		msg.QName = "window.showInformationMessage4"
@@ -303,13 +317,13 @@ namespace VscAppz {
 		msg.Data@"message" = message
 		msg.Data@"options" = options
 		msg.Data@"items" = items
-		var on of (Any->bool)
+		var on of Func<>
 		if (=?andThen)
 			on = (payload:Any -> bool)
 				var ok of bool
-				var result of ?MessageItem
+				var result of MessageItem
 				if (=?payload)
-					result = ?MessageItem·new
+					result = MessageItem·new
 					ok = result.populateFrom(payload)
 					if (!ok)
 						return false
@@ -321,20 +335,20 @@ namespace VscAppz {
 
 
 
-	IWindow·ShowWarningMessage1: (message:string -> items:[string] -> andThen:?(?string->void) -> void)
+	IWindow·ShowWarningMessage1: (message:string -> items:string[] -> andThen:Action<string> -> void)
 		var msg of ipcMsg
 		msg = ipcMsg·new
 		msg.QName = "window.showWarningMessage1"
 		msg.Data = dict·new(2)
 		msg.Data@"message" = message
 		msg.Data@"items" = items
-		var on of (Any->bool)
+		var on of Func<>
 		if (=?andThen)
 			on = (payload:Any -> bool)
 				var ok of bool
-				var result of ?string
+				var result of string
 				if (=?payload)
-					[result,ok] = ((payload)·(?string))
+					[result,ok] = ((payload)·(string))
 					if (!ok)
 						return false
 				andThen(result)
@@ -345,7 +359,7 @@ namespace VscAppz {
 
 
 
-	IWindow·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(?string->void) -> void)
+	IWindow·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:string[] -> andThen:Action<string> -> void)
 		var msg of ipcMsg
 		msg = ipcMsg·new
 		msg.QName = "window.showWarningMessage2"
@@ -353,13 +367,13 @@ namespace VscAppz {
 		msg.Data@"message" = message
 		msg.Data@"options" = options
 		msg.Data@"items" = items
-		var on of (Any->bool)
+		var on of Func<>
 		if (=?andThen)
 			on = (payload:Any -> bool)
 				var ok of bool
-				var result of ?string
+				var result of string
 				if (=?payload)
-					[result,ok] = ((payload)·(?string))
+					[result,ok] = ((payload)·(string))
 					if (!ok)
 						return false
 				andThen(result)
@@ -370,20 +384,20 @@ namespace VscAppz {
 
 
 
-	IWindow·ShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
+	IWindow·ShowWarningMessage3: (message:string -> items:MessageItem[] -> andThen:Action<MessageItem> -> void)
 		var msg of ipcMsg
 		msg = ipcMsg·new
 		msg.QName = "window.showWarningMessage3"
 		msg.Data = dict·new(2)
 		msg.Data@"message" = message
 		msg.Data@"items" = items
-		var on of (Any->bool)
+		var on of Func<>
 		if (=?andThen)
 			on = (payload:Any -> bool)
 				var ok of bool
-				var result of ?MessageItem
+				var result of MessageItem
 				if (=?payload)
-					result = ?MessageItem·new
+					result = MessageItem·new
 					ok = result.populateFrom(payload)
 					if (!ok)
 						return false
@@ -395,7 +409,7 @@ namespace VscAppz {
 
 
 
-	IWindow·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
+	IWindow·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:MessageItem[] -> andThen:Action<MessageItem> -> void)
 		var msg of ipcMsg
 		msg = ipcMsg·new
 		msg.QName = "window.showWarningMessage4"
@@ -403,13 +417,13 @@ namespace VscAppz {
 		msg.Data@"message" = message
 		msg.Data@"options" = options
 		msg.Data@"items" = items
-		var on of (Any->bool)
+		var on of Func<>
 		if (=?andThen)
 			on = (payload:Any -> bool)
 				var ok of bool
-				var result of ?MessageItem
+				var result of MessageItem
 				if (=?payload)
-					result = ?MessageItem·new
+					result = MessageItem·new
 					ok = result.populateFrom(payload)
 					if (!ok)
 						return false
@@ -421,22 +435,22 @@ namespace VscAppz {
 
 
 
-	IWindow·ShowInputBox: (options:?InputBoxOptions -> andThen:?(?string->void) -> void)
+	IWindow·ShowInputBox: (options:InputBoxOptions -> andThen:Action<string> -> void)
 		var msg of ipcMsg
 		msg = ipcMsg·new
 		msg.QName = "window.showInputBox"
 		msg.Data = dict·new(1)
-		var fnids of [string]
+		var fnids of List<string>
 		fnids = [string]·new(1)
 		lock this
 			if (=?options)
 				options.ValidateInput_AppzFuncId = ""
-				var fn of ?(string->?string)
+				var fn of Func<>
 				fn = options.ValidateInput
 				if (=?fn)
 					options.ValidateInput_AppzFuncId = this.nextFuncId()
 					fnids·add(options.ValidateInput_AppzFuncId)
-					this.cbOther@options.ValidateInput_AppzFuncId = (args:[Any] -> [Any,bool])
+					this.cbOther@options.ValidateInput_AppzFuncId = (args:Any[] -> (Any, bool))
 						if (1 != args·len)
 							return [null,false]
 						else
@@ -449,13 +463,13 @@ namespace VscAppz {
 							return [fn(__0),true]
 					
 		msg.Data@"options" = options
-		var on of (Any->bool)
+		var on of Func<>
 		if (=?andThen)
 			on = (payload:Any -> bool)
 				var ok of bool
-				var result of ?string
+				var result of string
 				if (=?payload)
-					[result,ok] = ((payload)·(?string))
+					[result,ok] = ((payload)·(string))
 					if (!ok)
 						return false
 				andThen(result)
@@ -490,15 +504,15 @@ namespace VscAppz {
 			return false
 		[val,ok] = dict@"isCloseAffordance"
 		if ok
-			var isCloseAffordance of ?bool
-			[isCloseAffordance,ok] = ((val)·(?bool))
+			var isCloseAffordance of Nullable<bool>
+			[isCloseAffordance,ok] = ((val)·(Nullable<bool>))
 			if (!ok)
 				return false
 			this.IsCloseAffordance = isCloseAffordance
 		[val,ok] = dict@"my"
 		if ok
-			var my of ?[string:Any]
-			[my,ok] = ((val)·(?[string:Any]))
+			var my of [string:Any]
+			[my,ok] = ((val)·([string:Any]))
 			if (!ok)
 				return false
 			this.My = my
