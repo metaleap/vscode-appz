@@ -15,9 +15,9 @@ const filePathDts = 'node_modules/@types/vscode/index.d.ts'
 
 const gens: gen.IGen[] = [
     new gen_ast.Gen('libs/tmpdbg/', '.gen.coffee'),
-    new gen_astcs.Gen('libs/tmpdbg/', '.gen.cs'),
     new gen_golang.Gen('libs/go/', '.gen.go'),
-    new gen_csharp.Gen('libs/cs/', '.gen.cs'),
+    new gen_astcs.Gen('libs/cs/', '.gen.cs'),
+    new gen_csharp.Gen('libs/cs/', '.gen.cs.txt'),
     new gen_python.Gen('libs/py/', '.gen.py'),
     new gen_vscext.Gen('src/', '.gen.ts'),
 ]

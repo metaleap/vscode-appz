@@ -1,9 +1,14 @@
 import * as gen from './gen-basics'
 import * as gen_ast from './gen-ast'
 
+
+let anonVarCounter: number
+
+
 export class Gen extends gen_ast.Gen {
 
     gen(prep: gen.Prep) {
+        anonVarCounter = 1
         this.options.oneIndent = "\t"
         this.options.doc.appendArgsToSummaryFor.funcFields = true
         this.options.doc.appendArgsToSummaryFor.methods = true
@@ -21,7 +26,7 @@ export class Gen extends gen_ast.Gen {
             "using System.Collections.Generic;",
             "using Newtonsoft.Json;", "",
             "using " + this.options.idents.typeAny + " = System.Object;",
-            "using " + this.options.idents.typeDict + " = Dictionary<string, " + this.options.idents.typeAny + ">;", ""
+            "using " + this.options.idents.typeDict + " = System.Collections.Generic.Dictionary<string, object>;", ""
         )
     }
 
@@ -55,41 +60,46 @@ export class Gen extends gen_ast.Gen {
 
     emitInterface(it: gen_ast.TInterface) {
         this.emitDocs(it)
-            .line("public interface " + it.Name + " {")
-            .indented(() => this.each(it.Methods, "\n", m =>
-                this.emitDocs(m).lf()
-                    .emitTypeRef(m.Type).s(" ", m.Name)
-                    .when(m.Args && m.Args.length, () =>
-                        this.s("(").each(m.Args, ", ", a =>
-                            this.emitTypeRef(a.Type).s(" ", a.Name, " = default")
-                        ).s(")"),
-                    ).s(";").line()
-            ))
+            .line("public interface " + it.Name + " {").indented(() =>
+                this.each(it.Methods, "\n", m =>
+                    this.emitDocs(m).lf()
+                        .emitTypeRef(m.Type).s(" ", m.Name)
+                        .when(m.Args && m.Args.length,
+                            () => this.s("(").each(m.Args, ", ", a =>
+                                this.emitTypeRef(a.Type).s(" ", a.Name, " = default"))
+                                .s(");"),
+                            () => this.s(" { get; }")
+                        ).line()
+                )
+            )
             .lines("}", "")
     }
 
     emitStruct(it: gen_ast.TStruct) {
-        this.line("public partial class " + it.Name + " {").indented(() =>
-            this.each(it.Fields, "", fld =>
-                this.line(fld.Json.Excluded ? "[JsonIgnore]"
-                    : `[JsonProperty("${fld.Json.Name}")` + (fld.Json.Required ? ", JsonRequired]" : "]")
-                ).ln(() => this
-                    .s("public ")
-                    .emitTypeRef(fld.Type)
-                    .s(" ", fld.Name, ";")
-                ))
-        ).line("}")
+        this.emitDocs(it)
+            .line("public partial class " + it.Name + " {").indented(() =>
+                this.each(it.Fields, "\n", f =>
+                    this.emitDocs(f).line(f.Json.Excluded
+                        ? "[JsonIgnore]"
+                        : `[JsonProperty("${f.Json.Name}")` + (f.Json.Required ? ", JsonRequired]" : "]")
+                    ).when((f.Type === gen_ast.TypeRefPrim.String && f.FuncFieldRel),
+                        () => this.line("[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]")
+                    ).ln(() => this
+                        .s("public ")
+                        .emitTypeRef(f.Type)
+                        .s(" ", f.Name, ";")
+                    ))
+            ).lines("}", "")
     }
 
     onBeforeEmitImpls(...interfaces: gen_ast.TInterface[]) {
-        //internal partial class impl : IWindow {
         this.line("internal partial class "
             + this.options.idents.typeImpl + " : "
-            + interfaces.map(_ => _.Name).join(", ") + " {").indent()
+            + interfaces.map(_ => _.Name).join(", ") + " {").line().indent()
     }
 
     onAfterEmitImpls() {
-        this.undent().line("}")
+        this.undent().lines("}", "")
     }
 
     emitFuncImpl(it: gen_ast.Func) {
@@ -109,14 +119,14 @@ export class Gen extends gen_ast.Gen {
                 )
 
         if (struct)
-            this.line("internal partial class " + struct.Name + " {")
+            this.line("public partial class " + struct.Name + " {")
                 .indented(() =>
                     emitsigheadln().emitInstr(it.Func.Body).line()
-                ).line("}")
+                ).lines("}", "")
         else if (iface)
             emitsigheadln()
                 .emitInstr(it.Func.Body)
-                .s(isproperty ? " }" : "").line()
+                .s(isproperty ? " }" : "").lines("", "")
         else
             throw it;
     }
@@ -141,7 +151,7 @@ export class Gen extends gen_ast.Gen {
             const idictdel = it as gen_ast.IDictDel
             if (idictdel && idictdel.DelFrom && idictdel.DelWhat)
                 return this.ln(() =>
-                    this.emitExpr(idictdel.DelFrom).s(".Delete(").emitExpr(idictdel.DelWhat).s(");"))
+                    this.emitExpr(idictdel.DelFrom).s(".Remove(").emitExpr(idictdel.DelWhat).s(");"))
 
             const icolladd = it as gen_ast.ICollAdd
             if (icolladd && icolladd.AddTo && icolladd.AddWhat)
@@ -159,7 +169,7 @@ export class Gen extends gen_ast.Gen {
                 if (endeol = iblock.Lock ? true : false)
                     this.ln(() => this.s("lock (").emitExpr(iblock.Lock).s(") {"))
                 else if (endeol = (iblock.ForEach && iblock.ForEach.length) ? true : false)
-                    this.ln(() => this.s("for (var ", iblock.ForEach[0].Name, " in ").emitExpr(iblock.ForEach[1]).s(") {"))
+                    this.ln(() => this.s("foreach (var ", iblock.ForEach[0].Name, " in ").emitExpr(iblock.ForEach[1]).s(") {"))
                 else if (endeol = (iblock.If && iblock.If.length) ? true : false)
                     this.ln(() => this.s("if (").emitExpr(iblock.If[0]).s(") {"))
                 else
@@ -202,7 +212,7 @@ export class Gen extends gen_ast.Gen {
 
         const elen = it as gen_ast.ELen
         if (elen && elen.LenOf)
-            return this.emitExpr(elen.LenOf).s(".Count")
+            return this.emitExpr(elen.LenOf).s(elen.IsArr ? ".Length" : ".Count")
 
         const etup = it as gen_ast.ETup
         if (etup && etup.Items !== undefined)
@@ -216,6 +226,8 @@ export class Gen extends gen_ast.Gen {
                 return this.s("(null == ").emitExpr(eop.Operands[0]).s(")")
             else if (eop.Name === gen_ast.BuilderOperators.Idx)
                 return this.emitExpr(eop.Operands[0]).s("[").emitExprs("][", ...eop.Operands.slice(1)).s("]")
+            else if (eop.Name === gen_ast.BuilderOperators.IdxMay)
+                return this.s("(").emitExpr(eop.Operands[0]).s(".TryGetValue(").emitExpr(eop.Operands[1]).s(", out var " + "_".repeat(++anonVarCounter) + ") ? (" + "_".repeat(anonVarCounter) + ", true) : (default, false))")
 
         const efn = it as gen_ast.EFunc
         if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)

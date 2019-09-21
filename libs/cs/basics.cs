@@ -6,13 +6,13 @@ namespace VscAppz {
     using Any = System.Object;
 
     internal partial class ipcMsg {
-        internal string qName = "";
-        internal Dictionary<string, Any> data;
-        internal string cbId;
+        internal string QName = "";
+        internal Dictionary<string, Any> Data;
+        internal string CbId;
 
         internal ipcMsg() { }
         internal ipcMsg(string qName, int numData, string contId = "") =>
-            (this.qName, data, this.cbId) = (qName, new Dictionary<string, Any>(numData), contId);
+            (this.QName, Data, this.CbId) = (qName, new Dictionary<string, Any>(numData), contId);
     }
 
     /// <summary>Everything related to the running of your app.</summary>
@@ -66,15 +66,15 @@ namespace VscAppz {
                     Func<Any, bool> cb = null;
                     Func<Any[], (Any, bool)> fn = null;
                     lock (this)
-                        if (cbWaiting.TryGetValue(msg.cbId, out cb))
-                            _ = cbWaiting.Remove(msg.cbId);
+                        if (cbWaiting.TryGetValue(msg.CbId, out cb))
+                            _ = cbWaiting.Remove(msg.CbId);
                         else
-                            _ = cbOther.TryGetValue(msg.cbId, out fn);
+                            _ = cbOther.TryGetValue(msg.CbId, out fn);
 
                     if (cb != null) {
-                        if (msg.data.TryGetValue("nay", out var nay))
+                        if (msg.Data.TryGetValue("nay", out var nay))
                             Vsc.OnError(this, nay, jsonmsg);
-                        else if (!msg.data.TryGetValue("yay", out var yay))
+                        else if (!msg.Data.TryGetValue("yay", out var yay))
                             throw new Exception("field `data` must have either `yay` or `nay` member");
                         else if (!cb(yay))
                             throw new Exception("unexpected args: " + yay);
@@ -82,10 +82,10 @@ namespace VscAppz {
                     } else if (fn != null) {
                         Any fnargs;
                         Any ret = null;
-                        var ok = msg.data.TryGetValue("", out fnargs);
+                        var ok = msg.Data.TryGetValue("", out fnargs);
                         if (ok = (ok && (fnargs is Any[])))
                             (ret, ok) = fn((Any[])fnargs);
-                        send(new ipcMsg("", 1, msg.cbId) { data = {
+                        send(new ipcMsg("", 1, msg.CbId) { Data = {
                             [ok ? "yay" : "nay"] = ok ? ret : ("unexpected args: " + fnargs)
                         } }, null);
 
@@ -104,13 +104,13 @@ namespace VscAppz {
                 if (startloop = !looping)
                     looping = true;
                 if (on != null)
-                    cbWaiting[msg.cbId = nextFuncId()] = on;
+                    cbWaiting[msg.CbId = nextFuncId()] = on;
                 try { stdOut.WriteLine(msg.toJson()); }
                 catch (Exception _) { err = _;}
             }
             if (err != null ) {
-                msg.data[""] = msg.qName;
-                Vsc.OnError(this, err, msg.data);
+                msg.Data[""] = msg.QName;
+                Vsc.OnError(this, err, msg.Data);
             }
             if (startloop)
                 loopReadln();

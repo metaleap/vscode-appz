@@ -32,6 +32,38 @@ type Any = interface {
 
 Any is a type alias of `interface{}` for legibility reasons.
 
+#### type DiagnosticSeverity
+
+```go
+type DiagnosticSeverity int
+```
+
+Represents the severity of diagnostics.
+
+```go
+const (
+	DiagnosticSeverityError       DiagnosticSeverity = 0
+	DiagnosticSeverityWarning     DiagnosticSeverity = 1
+	DiagnosticSeverityInformation DiagnosticSeverity = 2
+	DiagnosticSeverityHint        DiagnosticSeverity = 3
+)
+```
+
+#### type DiagnosticTag
+
+```go
+type DiagnosticTag int
+```
+
+Additional metadata about the type of a diagnostic.
+
+```go
+const (
+	DiagnosticTagUnnecessary DiagnosticTag = 1
+	DiagnosticTagDeprecated  DiagnosticTag = 2
+)
+```
+
 #### type InputBoxOptions
 
 ```go
@@ -121,7 +153,7 @@ type Vscode interface {
 }
 ```
 
-Type Definition for Visual Studio Code 1.37 Extension API See
+Type Definition for Visual Studio Code 1.38 Extension API See
 https://code.visualstudio.com/api for more information
 
 #### func  Vsc

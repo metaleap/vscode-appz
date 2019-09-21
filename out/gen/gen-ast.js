@@ -14,6 +14,7 @@ var BuilderOperators;
 (function (BuilderOperators) {
     BuilderOperators["Dot"] = ".";
     BuilderOperators["Idx"] = "@";
+    BuilderOperators["IdxMay"] = "@?";
     BuilderOperators["Eq"] = "==";
     BuilderOperators["Neq"] = "!=";
     BuilderOperators["Or"] = "||";
@@ -23,10 +24,7 @@ var BuilderOperators;
     BuilderOperators["Isnt"] = "=!";
 })(BuilderOperators = exports.BuilderOperators || (exports.BuilderOperators = {}));
 class Builder {
-    constructor(prep, gen) {
-        this.op = BuilderOperators;
-        [this.prep, this.gen] = [prep, gen];
-    }
+    constructor(prep, gen) { [this.prep, this.gen] = [prep, gen]; }
     iRet(ret) { return { Ret: ret }; }
     iVar(varName, varType) { return { Name: varName, Type: varType }; }
     iSet(setWhat, setTo) { return { SetWhat: setWhat, SetTo: setTo }; }
@@ -40,7 +38,7 @@ class Builder {
     eConv(typeRef, conv, wontBeNull) { return { Conv: conv, To: typeRef, WontBeNull: wontBeNull }; }
     eTup(...items) { return { Items: items }; }
     eArr(...items) { return { Items: items, IsArr: true }; }
-    eLen(lenOf) { return { LenOf: lenOf }; }
+    eLen(lenOf, isArr) { return { LenOf: lenOf, IsArr: isArr }; }
     eCollNew(cap, listElemType = undefined) { return { ElemTypeIfList: listElemType, Capacity: cap }; }
     eFunc(args, retType, ...instrs) { return { Args: args, Type: retType, Body: { Instrs: instrs } }; }
     eCall(callee, ...args) { return { Call: callee, Args: args }; }
@@ -49,15 +47,16 @@ class Builder {
     eNil() { return this.eLit(null); }
     eThis() { return this.n(null); }
     eOp(op, ...args) { return { Name: op, Operands: args }; }
-    oDot(...args) { return (args.length === 1) ? this.eOp(this.op.Dot, ...[this.eThis()].concat(...args)) : this.eOp(this.op.Dot, ...args); }
-    oIdx(...args) { return this.eOp(this.op.Idx, ...args); }
-    oEq(...args) { return this.eOp(this.op.Eq, ...args); }
-    oNeq(...args) { return this.eOp(this.op.Neq, ...args); }
-    oOr(...args) { return this.eOp(this.op.Or, ...args); }
-    oAnd(...args) { return this.eOp(this.op.And, ...args); }
-    oNot(arg) { return this.eOp(this.op.Not, arg); }
-    oIs(arg) { return this.eOp(this.op.Is, arg); }
-    oIsnt(arg) { return this.eOp(this.op.Isnt, arg); }
+    oIdx(...args) { return this.eOp(BuilderOperators.Idx, ...args); }
+    oIdxMay(coll, key) { return this.eOp(BuilderOperators.IdxMay, coll, key); }
+    oEq(...args) { return this.eOp(BuilderOperators.Eq, ...args); }
+    oNeq(...args) { return this.eOp(BuilderOperators.Neq, ...args); }
+    oOr(...args) { return this.eOp(BuilderOperators.Or, ...args); }
+    oAnd(...args) { return this.eOp(BuilderOperators.And, ...args); }
+    oNot(arg) { return this.eOp(BuilderOperators.Not, arg); }
+    oIs(arg) { return this.eOp(BuilderOperators.Is, arg); }
+    oIsnt(arg) { return this.eOp(BuilderOperators.Isnt, arg); }
+    oDot(...args) { return (args.length === 1) ? this.oDot(this.eThis(), args[0]) : this.eOp(BuilderOperators.Dot, ...args); }
     EACH(from, fn) {
         const me = [];
         for (let idx = 0; idx < from.length; idx++)
@@ -210,7 +209,7 @@ class Builder {
                         dst.Lines.push(...doc.lines);
                     }
                     if (name && name.length && appendArgsAndRetsToSummaryToo && (dst = into.find(_ => _.ForParam === '')))
-                        dst.Lines.push('', ...doc.lines.map((ln, idx) => ((idx) ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.gen.nameRewriters.args))));
+                        dst.Lines.push('', ...doc.lines.map((ln, idx) => (idx ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.gen.nameRewriters.args))));
                 }
                 if (doc.subs && doc.subs.length)
                     this.docs(doc.subs, undefined, isMethod, appendArgsAndRetsToSummaryToo, retNameFallback, into);
@@ -464,7 +463,7 @@ class Gen extends gen.Gen {
             return this.emitExpr(ecall.Call).s("(").emitExprs(', ', ...ecall.Args).s(")");
         const eop = it;
         if (eop && eop.Name && eop.Operands && eop.Operands.length) {
-            const notactualoperator = (eop.Name === BuilderOperators.Idx || eop.Name === BuilderOperators.Dot);
+            const notactualoperator = (eop.Name === BuilderOperators.Idx || eop.Name === BuilderOperators.IdxMay || eop.Name === BuilderOperators.Dot);
             return this
                 .s((notactualoperator ? '' : '(')
                 + ((eop.Operands.length > 1) ? '' : eop.Name))
@@ -517,7 +516,7 @@ class Gen extends gen.Gen {
         body.push(...this.genConvertOrReturn('dict', _.n('payload'), TypeRefPrim.Dict, true));
         for (const fld of struct.Fields)
             if (!fld.Json.Excluded)
-                body.push(_.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdx(_.n('dict'), _.eLit(fld.Json.Name))), _.iIf(_.n('ok'), [
+                body.push(_.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdxMay(_.n('dict'), _.eLit(fld.Json.Name))), _.iIf(_.n('ok'), [
                     _.iVar(fld.name, this.typeRefForField(fld.Type)),
                 ].concat(this.genConvertOrReturn(fld.name, _.n('val'), this.typeRefForField(fld.Type), false), _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name))), fld.Json.Required ? [_.iRet(_.eLit(false))] : []));
         body.push(_.iRet(_.eLit(true)));
@@ -536,7 +535,7 @@ class Gen extends gen.Gen {
                     _.iIf(_.oIs(_.n(__.fn)), [
                         _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eCall(_.oDot(_.n('nextFuncId')))),
                         _.iAdd(_.n(__.fnids), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
-                        _.iSet(_.oIdx(_.oDot(_.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))), _.eFunc([{ Name: __.args, Type: { ArrOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] }, _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args))), [
+                        _.iSet(_.oIdx(_.oDot(_.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))), _.eFunc([{ Name: __.args, Type: { ArrOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] }, _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args), true)), [
                             _.iRet(_.eTup(_.eNil(), _.eLit(false))),
                         ], [_.iVar(__.ok, TypeRefPrim.Bool)].concat(..._.EACH(fnargs, (fnarg, idx) => [
                             _.iVar('__' + idx, this.b.typeRef(fnarg)),
@@ -560,7 +559,7 @@ class Gen extends gen.Gen {
         if (!funcfields.length)
             body.push(_.eCall(_.oDot(_.n('send')), _.n(__.msg), _.n(__.on)));
         else
-            body.push(_.eCall(_.oDot(_.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iIf(_.oNeq(_.eLen(_.n(__.fnids)), _.eLit(0)), [
+            body.push(_.eCall(_.oDot(_.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iIf(_.oNeq(_.eLen(_.n(__.fnids), false), _.eLit(0)), [
                 _.iLock(_.eThis(), _.iFor(_.n(__.fnid), _.n(__.fnids), _.iDel(_.oDot(_.n('cbOther')), _.n(__.fnid)))),
             ]), _.iRet(_.oOr(_.oIsnt(_.n(__.on)), _.eCall(_.n(__.on), _.n(__.payload)))))));
     }

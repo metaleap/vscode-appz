@@ -71,6 +71,7 @@ export interface ECollNew {
 }
 export interface ELen {
     LenOf: Expr
+    IsArr: boolean
 }
 export interface EConv {
     Conv: Expr
@@ -115,6 +116,7 @@ export interface IDictDel {
 export enum BuilderOperators {
     Dot = '.',
     Idx = '@',
+    IdxMay = '@?',
     Eq = '==',
     Neq = '!=',
     Or = '||',
@@ -143,7 +145,7 @@ export class Builder {
     eConv(typeRef: TypeRef, conv: Expr, wontBeNull: boolean): EConv { return { Conv: conv, To: typeRef, WontBeNull: wontBeNull } }
     eTup(...items: Expr[]): ETup { return { Items: items } }
     eArr(...items: Expr[]): ETup { return { Items: items, IsArr: true } }
-    eLen(lenOf: Expr): ELen { return { LenOf: lenOf } }
+    eLen(lenOf: Expr, isArr: boolean): ELen { return { LenOf: lenOf, IsArr: isArr } }
     eCollNew(cap: Expr, listElemType: TypeRef = undefined): ECollNew { return { ElemTypeIfList: listElemType, Capacity: cap } }
     eFunc(args: Arg[], retType: TypeRef, ...instrs: Instr[]): EFunc { return { Args: args, Type: retType, Body: { Instrs: instrs } } }
     eCall(callee: Expr, ...args: Expr[]): ECall { return { Call: callee, Args: args } }
@@ -152,16 +154,16 @@ export class Builder {
     eNil(): ELit { return this.eLit(null) }
     eThis(): EName { return this.n(null) }
     eOp(op: string, ...args: Expr[]): EOp { return { Name: op, Operands: args } }
-    oDot(...args: Expr[]): EOp { return (args.length === 1) ? this.eOp(this.op.Dot, ...[this.eThis() as Expr].concat(...args)) : this.eOp(this.op.Dot, ...args) }
-    oIdx(...args: Expr[]): EOp { return this.eOp(this.op.Idx, ...args) }
-    oEq(...args: Expr[]): EOp { return this.eOp(this.op.Eq, ...args) }
-    oNeq(...args: Expr[]): EOp { return this.eOp(this.op.Neq, ...args) }
-    oOr(...args: Expr[]): EOp { return this.eOp(this.op.Or, ...args) }
-    oAnd(...args: Expr[]): EOp { return this.eOp(this.op.And, ...args) }
-    oNot(arg: Expr): EOp { return this.eOp(this.op.Not, arg) }
-    oIs(arg: Expr): EOp { return this.eOp(this.op.Is, arg) }
-    oIsnt(arg: Expr): EOp { return this.eOp(this.op.Isnt, arg) }
-    private readonly op = BuilderOperators // just a local shorthand for all the aboves
+    oIdx(...args: Expr[]): EOp { return this.eOp(BuilderOperators.Idx, ...args) }
+    oIdxMay(coll: Expr, key: Expr): EOp { return this.eOp(BuilderOperators.IdxMay, coll, key) }
+    oEq(...args: Expr[]): EOp { return this.eOp(BuilderOperators.Eq, ...args) }
+    oNeq(...args: Expr[]): EOp { return this.eOp(BuilderOperators.Neq, ...args) }
+    oOr(...args: Expr[]): EOp { return this.eOp(BuilderOperators.Or, ...args) }
+    oAnd(...args: Expr[]): EOp { return this.eOp(BuilderOperators.And, ...args) }
+    oNot(arg: Expr): EOp { return this.eOp(BuilderOperators.Not, arg) }
+    oIs(arg: Expr): EOp { return this.eOp(BuilderOperators.Is, arg) }
+    oIsnt(arg: Expr): EOp { return this.eOp(BuilderOperators.Isnt, arg) }
+    oDot(...args: Expr[]): EOp { return (args.length === 1) ? this.oDot(this.eThis(), args[0]) : this.eOp(BuilderOperators.Dot, ...args) }
 
     EACH<TIn, TOut>(from: TIn[], fn: ((_: TIn, idx?: number) => TOut[])): TOut[] {
         const me: TOut[] = []
@@ -332,7 +334,7 @@ export class Builder {
                 }
                 if (name && name.length && appendArgsAndRetsToSummaryToo && (dst = into.find(_ => _.ForParam === '')))
                     dst.Lines.push('', ...doc.lines.map((ln, idx) =>
-                        ((idx) ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.gen.nameRewriters.args))
+                        (idx ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.gen.nameRewriters.args))
                     ))
             }
             if (doc.subs && doc.subs.length)
@@ -645,7 +647,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         const eop = it as EOp
         if (eop && eop.Name && eop.Operands && eop.Operands.length) {
-            const notactualoperator = (eop.Name === BuilderOperators.Idx || eop.Name === BuilderOperators.Dot)
+            const notactualoperator = (eop.Name === BuilderOperators.Idx || eop.Name === BuilderOperators.IdxMay || eop.Name === BuilderOperators.Dot)
             return this
                 .s((notactualoperator ? '' : '(')
                     + ((eop.Operands.length > 1) ? '' : /* unary*/ eop.Name))
@@ -709,7 +711,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         for (const fld of (struct as TStruct).Fields)
             if (!fld.Json.Excluded)
                 body.push(
-                    _.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdx(_.n('dict'), _.eLit(fld.Json.Name))),
+                    _.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdxMay(_.n('dict'), _.eLit(fld.Json.Name))),
                     _.iIf(_.n('ok'), [
                         _.iVar(fld.name, this.typeRefForField(fld.Type)) as Instr,
                     ].concat(
@@ -752,7 +754,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                                         _.iAdd(_.n(__.fnids), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
                                         _.iSet(_.oIdx(_.oDot(_.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
                                             _.eFunc([{ Name: __.args, Type: { ArrOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] },
-                                                _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args))), [
+                                                _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args), true)), [
                                                     _.iRet(_.eTup(_.eNil(), _.eLit(false))),
                                                 ], [_.iVar(__.ok, TypeRefPrim.Bool) as Instr].concat(
                                                     ..._.EACH(fnargs, (fnarg, idx) => [
@@ -803,7 +805,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         )
         else body.push(
             _.eCall(_.oDot(_.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool,
-                _.iIf(_.oNeq(_.eLen(_.n(__.fnids)), _.eLit(0)), [
+                _.iIf(_.oNeq(_.eLen(_.n(__.fnids), false), _.eLit(0)), [
                     _.iLock(_.eThis(),
                         _.iFor(_.n(__.fnid), _.n(__.fnids),
                             _.iDel(_.oDot(_.n('cbOther')), _.n(__.fnid)),

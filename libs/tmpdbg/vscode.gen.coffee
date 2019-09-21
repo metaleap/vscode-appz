@@ -781,7 +781,7 @@ MessageItem·populateFrom: (payload:Any -> bool)
     [dict,ok] = ((payload)·([string:Any]))
     if (!ok)
         return false
-    [val,ok] = dict@"title"
+    [val,ok] = dict@?"title"
     if ok
         var title of string
         [title,ok] = ((val)·(string))
@@ -790,14 +790,14 @@ MessageItem·populateFrom: (payload:Any -> bool)
         this.Title = title
     else
         return false
-    [val,ok] = dict@"isCloseAffordance"
+    [val,ok] = dict@?"isCloseAffordance"
     if ok
         var isCloseAffordance of ?bool
         [isCloseAffordance,ok] = ((val)·(?bool))
         if (!ok)
             return false
         this.IsCloseAffordance = isCloseAffordance
-    [val,ok] = dict@"my"
+    [val,ok] = dict@?"my"
     if ok
         var my of ?[string:Any]
         [my,ok] = ((val)·(?[string:Any]))

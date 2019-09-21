@@ -3,6 +3,14 @@
 
 ## Contents
 
+- [DiagnosticSeverity](#T-VscAppz-DiagnosticSeverity 'VscAppz.DiagnosticSeverity')
+  - [Error](#F-VscAppz-DiagnosticSeverity-Error 'VscAppz.DiagnosticSeverity.Error')
+  - [Hint](#F-VscAppz-DiagnosticSeverity-Hint 'VscAppz.DiagnosticSeverity.Hint')
+  - [Information](#F-VscAppz-DiagnosticSeverity-Information 'VscAppz.DiagnosticSeverity.Information')
+  - [Warning](#F-VscAppz-DiagnosticSeverity-Warning 'VscAppz.DiagnosticSeverity.Warning')
+- [DiagnosticTag](#T-VscAppz-DiagnosticTag 'VscAppz.DiagnosticTag')
+  - [Deprecated](#F-VscAppz-DiagnosticTag-Deprecated 'VscAppz.DiagnosticTag.Deprecated')
+  - [Unnecessary](#F-VscAppz-DiagnosticTag-Unnecessary 'VscAppz.DiagnosticTag.Unnecessary')
 - [IVscode](#T-VscAppz-IVscode 'VscAppz.IVscode')
   - [Window](#P-VscAppz-IVscode-Window 'VscAppz.IVscode.Window')
 - [IWindow](#T-VscAppz-IWindow 'VscAppz.IWindow')
@@ -14,14 +22,12 @@
   - [ShowInformationMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
   - [ShowInformationMessage(message,items,andThen)](#M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
   - [ShowInformationMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
-  - [ShowInputBox(options,andThen)](#M-VscAppz-IWindow-ShowInputBox-VscAppz-InputBoxOptions,System-Action{System-String}- 'VscAppz.IWindow.ShowInputBox(VscAppz.InputBoxOptions,System.Action{System.String})')
+  - [ShowInputBox(options,token,andThen)](#M-VscAppz-IWindow-ShowInputBox-VscAppz-InputBoxOptions,System-Action{System-String}- 'VscAppz.IWindow.ShowInputBox(VscAppz.InputBoxOptions,System.Action{System.String})')
   - [ShowWarningMessage(message,items,andThen)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowWarningMessage(System.String,System.String[],System.Action{System.String})')
   - [ShowWarningMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
   - [ShowWarningMessage(message,items,andThen)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
   - [ShowWarningMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
 - [InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions')
-  - [#ctor()](#M-VscAppz-InputBoxOptions-#ctor 'VscAppz.InputBoxOptions.#ctor')
-  - [#ctor(value,valueSelection,prompt,placeHolder,password,ignoreFocusOut,validateInput)](#M-VscAppz-InputBoxOptions-#ctor-System-String,System-Nullable{System-ValueTuple{System-Int32,System-Int32}},System-String,System-String,System-Boolean,System-Boolean,System-Func{System-String,System-String}- 'VscAppz.InputBoxOptions.#ctor(System.String,System.Nullable{System.ValueTuple{System.Int32,System.Int32}},System.String,System.String,System.Boolean,System.Boolean,System.Func{System.String,System.String})')
   - [IgnoreFocusOut](#F-VscAppz-InputBoxOptions-IgnoreFocusOut 'VscAppz.InputBoxOptions.IgnoreFocusOut')
   - [Password](#F-VscAppz-InputBoxOptions-Password 'VscAppz.InputBoxOptions.Password')
   - [PlaceHolder](#F-VscAppz-InputBoxOptions-PlaceHolder 'VscAppz.InputBoxOptions.PlaceHolder')
@@ -31,19 +37,89 @@
   - [Value](#F-VscAppz-InputBoxOptions-Value 'VscAppz.InputBoxOptions.Value')
   - [ValueSelection](#F-VscAppz-InputBoxOptions-ValueSelection 'VscAppz.InputBoxOptions.ValueSelection')
 - [MessageItem](#T-VscAppz-MessageItem 'VscAppz.MessageItem')
-  - [#ctor()](#M-VscAppz-MessageItem-#ctor 'VscAppz.MessageItem.#ctor')
-  - [#ctor(title,isCloseAffordance,my)](#M-VscAppz-MessageItem-#ctor-System-String,System-Boolean,System-Collections-Generic-Dictionary{System-String,System-Object}- 'VscAppz.MessageItem.#ctor(System.String,System.Boolean,System.Collections.Generic.Dictionary{System.String,System.Object})')
   - [IsCloseAffordance](#F-VscAppz-MessageItem-IsCloseAffordance 'VscAppz.MessageItem.IsCloseAffordance')
   - [My](#F-VscAppz-MessageItem-My 'VscAppz.MessageItem.My')
   - [Title](#F-VscAppz-MessageItem-Title 'VscAppz.MessageItem.Title')
 - [MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions')
-  - [#ctor()](#M-VscAppz-MessageOptions-#ctor 'VscAppz.MessageOptions.#ctor')
-  - [#ctor(modal)](#M-VscAppz-MessageOptions-#ctor-System-Boolean- 'VscAppz.MessageOptions.#ctor(System.Boolean)')
   - [Modal](#F-VscAppz-MessageOptions-Modal 'VscAppz.MessageOptions.Modal')
 - [Vsc](#T-VscAppz-Vsc 'VscAppz.Vsc')
   - [OnError](#F-VscAppz-Vsc-OnError 'VscAppz.Vsc.OnError')
   - [OnErrorDefaultOutputFormat](#F-VscAppz-Vsc-OnErrorDefaultOutputFormat 'VscAppz.Vsc.OnErrorDefaultOutputFormat')
   - [InOut(stdIn,stdOut)](#M-VscAppz-Vsc-InOut-System-IO-TextReader,System-IO-TextWriter- 'VscAppz.Vsc.InOut(System.IO.TextReader,System.IO.TextWriter)')
+
+<a name='T-VscAppz-DiagnosticSeverity'></a>
+## DiagnosticSeverity `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Represents the severity of diagnostics.
+
+<a name='F-VscAppz-DiagnosticSeverity-Error'></a>
+### Error `constants`
+
+##### Summary
+
+Something not allowed by the rules of a language or other means.
+
+<a name='F-VscAppz-DiagnosticSeverity-Hint'></a>
+### Hint `constants`
+
+##### Summary
+
+Something to hint to a better way of doing it, like proposing
+a refactoring.
+
+<a name='F-VscAppz-DiagnosticSeverity-Information'></a>
+### Information `constants`
+
+##### Summary
+
+Something to inform about but not a problem.
+
+<a name='F-VscAppz-DiagnosticSeverity-Warning'></a>
+### Warning `constants`
+
+##### Summary
+
+Something suspicious but allowed.
+
+<a name='T-VscAppz-DiagnosticTag'></a>
+## DiagnosticTag `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Additional metadata about the type of a diagnostic.
+
+<a name='F-VscAppz-DiagnosticTag-Deprecated'></a>
+### Deprecated `constants`
+
+##### Summary
+
+Deprecated or obsolete code.
+
+Diagnostics with this tag are rendered with a strike through.
+
+<a name='F-VscAppz-DiagnosticTag-Unnecessary'></a>
+### Unnecessary `constants`
+
+##### Summary
+
+Unused or unnecessary code.
+
+Diagnostics with this tag are rendered faded out. The amount of fading
+is controlled by the `"editorUnnecessaryCode.opacity"` theme color. For
+example, `"editorUnnecessaryCode.opacity": "#000000c0"` will render the
+code with 75% opacity. For high contrast themes, use the
+`"editorUnnecessaryCode.border"` theme color to underline unnecessary code
+instead of fading it out.
 
 <a name='T-VscAppz-IVscode'></a>
 ## IVscode `type`
@@ -54,7 +130,7 @@ VscAppz
 
 ##### Summary
 
-Type Definition for Visual Studio Code 1.37 Extension API
+Type Definition for Visual Studio Code 1.38 Extension API
 See https://code.visualstudio.com/api for more information
 
 <a name='P-VscAppz-IVscode-Window'></a>
@@ -262,7 +338,7 @@ Show an information message.
 | andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
 <a name='M-VscAppz-IWindow-ShowInputBox-VscAppz-InputBoxOptions,System-Action{System-String}-'></a>
-### ShowInputBox(options,andThen) `method`
+### ShowInputBox(options,token,andThen) `method`
 
 ##### Summary
 
@@ -283,7 +359,7 @@ anything but dismissed the input box with OK.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | options | [VscAppz.InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions') | Configures the behavior of the input box. |
-| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A promise that resolves to a string the user provided or to `undefined` in case of dismissal. |
+| token | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A token that can be used to signal cancellation. |
 
 <a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,System-String[],System-Action{System-String}-'></a>
 ### ShowWarningMessage(message,items,andThen) `method`
@@ -386,36 +462,6 @@ VscAppz
 
 Options to configure the behavior of the input box UI.
 
-<a name='M-VscAppz-InputBoxOptions-#ctor'></a>
-### #ctor() `constructor`
-
-##### Summary
-
-Options to configure the behavior of the input box UI.
-
-##### Parameters
-
-This constructor has no parameters.
-
-<a name='M-VscAppz-InputBoxOptions-#ctor-System-String,System-Nullable{System-ValueTuple{System-Int32,System-Int32}},System-String,System-String,System-Boolean,System-Boolean,System-Func{System-String,System-String}-'></a>
-### #ctor(value,valueSelection,prompt,placeHolder,password,ignoreFocusOut,validateInput) `constructor`
-
-##### Summary
-
-Options to configure the behavior of the input box UI.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| value | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The value to prefill in the input box. |
-| valueSelection | [System.Nullable{System.ValueTuple{System.Int32,System.Int32}}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.ValueTuple{System.Int32,System.Int32}}') | Selection of the prefilled [`value`](#InputBoxOptions.value). Defined as tuple of two number where the first is the inclusive start index and the second the exclusive end index. When `undefined` the whole word will be selected, when empty (start equals end) only the cursor will be set, otherwise the defined range will be selected. |
-| prompt | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The text to display underneath the input box. |
-| placeHolder | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | An optional string to show as place holder in the input box to guide the user what to type. |
-| password | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Set to `true` to show a password prompt that will not show the typed value. |
-| ignoreFocusOut | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Set to `true` to keep the input box open when focus moves to another part of the editor or to another window. |
-| validateInput | [System.Func{System.String,System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Func 'System.Func{System.String,System.String}') | An optional function that will be called to validate input and to give a hint to the user.  `value` ── The current value of the input box.  `return` ── A human readable string which is presented as diagnostic message. Return `undefined`, `null`, or the empty string when 'value' is valid. |
-
 <a name='F-VscAppz-InputBoxOptions-IgnoreFocusOut'></a>
 ### IgnoreFocusOut `constants`
 
@@ -493,34 +539,6 @@ VscAppz
 Represents an action that is shown with an information, warning, or
 error message.
 
-<a name='M-VscAppz-MessageItem-#ctor'></a>
-### #ctor() `constructor`
-
-##### Summary
-
-Represents an action that is shown with an information, warning, or
-error message.
-
-##### Parameters
-
-This constructor has no parameters.
-
-<a name='M-VscAppz-MessageItem-#ctor-System-String,System-Boolean,System-Collections-Generic-Dictionary{System-String,System-Object}-'></a>
-### #ctor(title,isCloseAffordance,my) `constructor`
-
-##### Summary
-
-Represents an action that is shown with an information, warning, or
-error message.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| title | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | A short title like 'Retry', 'Open Log' etc. |
-| isCloseAffordance | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | A hint for modal dialogs that the item should be triggered when the user cancels the dialog (e.g. by pressing the ESC key).  Note: this option is ignored for non-modal messages. |
-| my | [System.Collections.Generic.Dictionary{System.String,System.Object}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Collections.Generic.Dictionary 'System.Collections.Generic.Dictionary{System.String,System.Object}') | Free-form custom data, preserved across a roundtrip. |
-
 <a name='F-VscAppz-MessageItem-IsCloseAffordance'></a>
 ### IsCloseAffordance `constants`
 
@@ -556,30 +574,6 @@ VscAppz
 ##### Summary
 
 Options to configure the behavior of the message.
-
-<a name='M-VscAppz-MessageOptions-#ctor'></a>
-### #ctor() `constructor`
-
-##### Summary
-
-Options to configure the behavior of the message.
-
-##### Parameters
-
-This constructor has no parameters.
-
-<a name='M-VscAppz-MessageOptions-#ctor-System-Boolean-'></a>
-### #ctor(modal) `constructor`
-
-##### Summary
-
-Options to configure the behavior of the message.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| modal | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Indicates that this message should be modal. |
 
 <a name='F-VscAppz-MessageOptions-Modal'></a>
 ### Modal `constants`

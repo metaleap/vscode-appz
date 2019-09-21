@@ -53,12 +53,12 @@ namespace VscAppz {
             Dictionary<string, Any> dict = json.load(jsonSrc) as Dictionary<string, Any>;
             var ret = new ipcMsg();
             if (dict.TryGetValue("qName", out var n))
-                ret.qName = (n == null) ? null : (string)n;
+                ret.QName = (n == null) ? null : (string)n;
             if (dict.TryGetValue("cbId", out var a))
-                ret.cbId = (a == null) ? null : (string)a;
+                ret.CbId = (a == null) ? null : (string)a;
             if (dict.TryGetValue("data", out var d) )
-                ret.data = (d == null) ? null : (Dictionary<string, Any>)d;
-            if (ret.data == null || ret.data.Count == 0)
+                ret.Data = (d == null) ? null : (Dictionary<string, Any>)d;
+            if (ret.Data == null || ret.Data.Count == 0)
                 throw new JsonException("field `data` is missing");
             return ret;
         }
@@ -67,22 +67,22 @@ namespace VscAppz {
             using (var w = new StringWriter()) {
                 var jw = new JsonTextWriter(w);
                 jw.WriteStartObject();
-                if (!string.IsNullOrEmpty(qName)) {
+                if (!string.IsNullOrEmpty(QName)) {
                     jw.WritePropertyName("qName");
-                    jw.WriteValue(qName);
+                    jw.WriteValue(QName);
                 }
                 jw.WritePropertyName("data");
                 jw.WriteStartObject();
-                if (data != null && data.Count > 0)
+                if (Data != null && Data.Count > 0)
                     lock (json.serializer)
-                        foreach (var kvp in data) {
+                        foreach (var kvp in Data) {
                             jw.WritePropertyName(kvp.Key);
                             json.serializer.Serialize(jw, kvp.Value);
                         }
                 jw.WriteEndObject();
-                if (!string.IsNullOrEmpty(cbId)) {
+                if (!string.IsNullOrEmpty(CbId)) {
                     jw.WritePropertyName("cbId");
-                    jw.WriteValue(cbId);
+                    jw.WriteValue(CbId);
                 }
                 jw.WriteEndObject();
                 jw.Flush();
