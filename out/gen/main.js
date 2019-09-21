@@ -20,6 +20,8 @@ const gens = [
 ];
 const genApiSurface = {
     'vscode': [
+        'DiagnosticTag',
+        'DiagnosticSeverity',
         {
             'window': [
                 'showErrorMessage',

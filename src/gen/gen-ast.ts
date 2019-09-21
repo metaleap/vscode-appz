@@ -202,7 +202,7 @@ export class Builder {
             Methods: it.methods.map((_: gen.PrepMethod): Method => ({
                 fromPrep: _,
                 name: _.nameOrig,
-                Name: this.gen.nameRewriters.methods(_.name),
+                Name: this.gen.nameRewriters.methods(this.gen.options.funcOverloads ? _.nameOrig : _.name),
                 Docs: this.docs(gen.docs(_.fromOrig.decl, () => _.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
                 Type: null,
                 Args: _.args.map((arg: gen.PrepArg): Arg => ({
@@ -373,8 +373,11 @@ export class Gen extends gen.Gen implements gen.IGen {
         idents: {
             curInst: "this",
             typeAny: "Any",
+            typeDict: "Dict",
+            typeImpl: "impl",
         },
-        oneIndent: '    '
+        oneIndent: '    ',
+        funcOverloads: false,
     }
 
     indented(andThen: () => void): Gen {
@@ -860,11 +863,13 @@ export class Gen extends gen.Gen implements gen.IGen {
         for (const it of ifaces)
             this.emitInterface(it)
 
+        this.onBeforeEmitImpls(...[ifacetop].concat(ifaces))
         for (const it of ifacetop.Methods)
             this.emitMethodImpl(ifacetop, it, this.genMethodImpl_TopInterface)
         for (const it of ifaces)
             for (const method of it.Methods)
                 this.emitMethodImpl(it, method, this.genMethodImpl_MessageDispatch)
+        this.onAfterEmitImpls()
 
         {
             let anydecoderstogenerate = true
@@ -884,6 +889,9 @@ export class Gen extends gen.Gen implements gen.IGen {
         this.emitOutro()
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src)
     }
+
+    onBeforeEmitImpls(..._: TInterface[]) { }
+    onAfterEmitImpls() { }
 
     typeUnmaybe(typeRef: TypeRef): TypeRef {
         const me = typeRef as TypeRefMaybe

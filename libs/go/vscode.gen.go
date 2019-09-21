@@ -14,6 +14,24 @@ type Vscode interface {
 
 func (me *impl) Window() Window { return me }
 
+// Additional metadata about the type of a diagnostic.
+type DiagnosticTag int
+
+const (
+	DiagnosticTagUnnecessary DiagnosticTag = 1
+	DiagnosticTagDeprecated DiagnosticTag = 2
+)
+
+// Represents the severity of diagnostics.
+type DiagnosticSeverity int
+
+const (
+	DiagnosticSeverityError DiagnosticSeverity = 0
+	DiagnosticSeverityWarning DiagnosticSeverity = 1
+	DiagnosticSeverityInformation DiagnosticSeverity = 2
+	DiagnosticSeverityHint DiagnosticSeverity = 3
+)
+
 // Options to configure the behavior of the message.
 type MessageOptions struct {
 

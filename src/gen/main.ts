@@ -27,6 +27,8 @@ type genApiMembers = (string | genApiMember)[]
 
 const genApiSurface: genApiMember = {
     'vscode': [
+        'DiagnosticTag',
+        'DiagnosticSeverity',
         {
             'window': [
                 'showErrorMessage',

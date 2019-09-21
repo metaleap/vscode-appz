@@ -25,6 +25,18 @@ namespace VscAppz {
 	}
 
 	/// <summary>
+	/// Additional metadata about the type of a diagnostic.
+	/// </summary>
+	public enum DiagnosticTag {
+	}
+
+	/// <summary>
+	/// Represents the severity of diagnostics.
+	/// </summary>
+	public enum DiagnosticSeverity {
+	}
+
+	/// <summary>
 	/// Options to configure the behavior of the message.
 	/// </summary>
 	public partial class MessageOptions {

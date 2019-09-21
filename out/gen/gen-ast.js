@@ -94,7 +94,7 @@ class Builder {
             Methods: it.methods.map((_) => ({
                 fromPrep: _,
                 name: _.nameOrig,
-                Name: this.gen.nameRewriters.methods(_.name),
+                Name: this.gen.nameRewriters.methods(this.gen.options.funcOverloads ? _.nameOrig : _.name),
                 Docs: this.docs(gen.docs(_.fromOrig.decl, () => _.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
                 Type: null,
                 Args: _.args.map((arg) => ({
@@ -248,8 +248,11 @@ class Gen extends gen.Gen {
             idents: {
                 curInst: "this",
                 typeAny: "Any",
+                typeDict: "Dict",
+                typeImpl: "impl",
             },
-            oneIndent: '    '
+            oneIndent: '    ',
+            funcOverloads: false,
         };
     }
     indented(andThen) {
@@ -594,11 +597,13 @@ class Gen extends gen.Gen {
         const ifaces = prep.interfaces.map(_ => build.interfaceFrom(_));
         for (const it of ifaces)
             this.emitInterface(it);
+        this.onBeforeEmitImpls(...[ifacetop].concat(ifaces));
         for (const it of ifacetop.Methods)
             this.emitMethodImpl(ifacetop, it, this.genMethodImpl_TopInterface);
         for (const it of ifaces)
             for (const method of it.Methods)
                 this.emitMethodImpl(it, method, this.genMethodImpl_MessageDispatch);
+        this.onAfterEmitImpls();
         {
             let anydecoderstogenerate = true;
             while (anydecoderstogenerate) {
@@ -616,6 +621,8 @@ class Gen extends gen.Gen {
         this.emitOutro();
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src);
     }
+    onBeforeEmitImpls(..._) { }
+    onAfterEmitImpls() { }
     typeUnmaybe(typeRef) {
         const me = typeRef;
         return (me && me.Maybe) ? this.typeUnmaybe(me.Maybe) : typeRef;

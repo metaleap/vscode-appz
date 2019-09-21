@@ -10,8 +10,9 @@ export class Gen extends gen.Gen implements gen.IGen {
         src += `import * as ${pkgname} from '${pkgname}'\n\n`
         src += "import * as ppio from './procspipeio'\n\n"
 
-        for (const it of prep.enums)
-            src += "type " + it.name + " = " + pkgname + "." + it.name + "\n"
+        if (false)
+            for (const it of prep.enums)
+                src += "type " + it.name + " = " + pkgname + "." + it.name + "\n"
         for (const it of prep.structs) {
             const fieldsextra = it.fields.filter(_ => _.isExtBaggage)
             if ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length)) {
