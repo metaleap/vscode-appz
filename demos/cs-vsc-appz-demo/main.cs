@@ -30,6 +30,8 @@ namespace VscAppzDemo {
                         var foos = new[] {"foo", "f00", "fo0", "f0o"};
                         win.ShowInputBox(new InputBoxOptions() {
                             IgnoreFocusOut  = true,
+                            Value           = "Enter almost anything...",
+                            ValueSelection  = (6, 12),
                             Prompt          = "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
                             ValidateInput   = input => Array.Exists(foos, _ => input.ToLower().Contains(_))
                                                     ? "Contains something looking like `foo`."

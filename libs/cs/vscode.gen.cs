@@ -316,8 +316,8 @@ namespace VscAppz {
 		/// word will be selected, when empty (start equals end) only the cursor will be set,
 		/// otherwise the defined range will be selected.
 		/// </summary>
-		[JsonProperty("valueSelection")]
-		public Nullable<(int, int)> ValueSelection;
+		[JsonProperty("valueSelection"), JsonConverter(typeof(json.valueTuples))]
+		public (int, int)? ValueSelection;
 
 		/// <summary>The text to display underneath the input box.</summary>
 		[JsonProperty("prompt")]

@@ -2,6 +2,7 @@ namespace VscAppz {
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Reflection;
     using Newtonsoft.Json;
 
     using Any = System.Object;
@@ -45,6 +46,27 @@ namespace VscAppz {
             }
             throw err();
             Exception err() => new JsonException(origJsonSrcForErr);
+        }
+
+        internal class valueTuples : JsonConverter
+        {
+            public override bool CanRead { get => false;}
+            public override bool CanWrite { get => true;}
+            public override bool CanConvert(Type objectType) => true;
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) =>
+                throw new NotImplementedException();
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                if (value == null)
+                    writer.WriteNull();
+                else {
+                    writer.WriteStartArray();
+                    Type vt = value.GetType();
+                    for (var (i, fld) = (1, vt.GetField("Item1")); fld != null; fld = vt.GetField("Item" + (++i)))
+                        serializer.Serialize(writer, fld.GetValue(value), fld.FieldType);
+                    writer.WriteEndArray();
+                }
+            }
         }
     }
 

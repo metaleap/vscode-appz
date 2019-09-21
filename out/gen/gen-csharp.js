@@ -1,276 +1,205 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const gen = require("./gen-basics");
-class Gen extends gen.Gen {
+const gen_ast = require("./gen-ast");
+let anonVarCounter;
+class Gen extends gen_ast.Gen {
     gen(prep) {
-        this.resetState();
-        let src = "// " + this.doNotEditComment("csharp") + "\n";
-        src += `namespace VscAppz {\n`;
-        src += "\tusing System;\n";
-        src += "\tusing System.Collections.Generic;\n";
-        src += "\tusing Newtonsoft.Json;\n\n";
-        src += "\tusing Any = System.Object;\n\n";
-        const doclns = this.genDocLns(gen.docs(prep.fromOrig.fromOrig));
-        src += this.genDocSrc('\t', doclns);
-        src += `\tpublic interface I${this.caseUp(prep.fromOrig.moduleName)} {\n`;
-        for (const it of prep.interfaces)
-            src += '\n' + this.genDocSrc('\t\t', this.genDocLns(gen.docs(it.fromOrig)))
-                + `\t\tI${this.caseUp(it.name)} ${this.caseUp(it.name)} { get; }\n`;
-        src += "\t}\n\n";
-        src += `\tinternal partial class impl : I${this.caseUp(prep.fromOrig.moduleName)} {\n`;
-        for (const it of prep.interfaces)
-            src += `\t\tI${this.caseUp(it.name)} I${this.caseUp(prep.fromOrig.moduleName)}.${this.caseUp(it.name)} { get { return this; } }\n`;
-        src += "\t}\n\n";
-        for (const it of prep.enums)
-            src += this.genEnum(it);
-        for (const it of prep.structs)
-            src += this.genStruct(it);
-        for (const it of prep.interfaces)
-            src += this.genInterface(prep, it);
-        {
-            let anydec = true;
-            while (anydec) {
-                anydec = false;
-                for (const name in this.state.genPopulateFor)
-                    if (anydec = this.state.genPopulateFor[name]) {
-                        src += this.genPopulateFrom(prep, name);
-                        this.state.genPopulateFor[name] = false;
-                    }
-            }
-        }
-        src += "}\n";
-        this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), src);
+        anonVarCounter = 1;
+        this.options.oneIndent = "\t";
+        this.options.doc.appendArgsToSummaryFor.funcFields = true;
+        this.options.doc.appendArgsToSummaryFor.methods = true;
+        this.options.funcOverloads = true;
+        this.nameRewriters.types.interfaces = _ => "I" + this.caseUp(_);
+        super.gen(prep);
     }
-    genEnum(it) {
-        const doclns = this.genDocLns(gen.docs(it.fromOrig.decl));
-        let src = this.genDocSrc('\t', doclns);
-        src += "\tpublic enum " + this.caseUp(it.name) + " {\n";
-        src += "\t}\n\n";
-        return src;
+    emitIntro() {
+        return this.lines("//" + this.doNotEditComment("csharp"), "namespace VscAppz {").indent().lines("using System;", "using System.Collections.Generic;", "using Newtonsoft.Json;", "", "using " + this.options.idents.typeAny + " = System.Object;", "using " + this.options.idents.typeDict + " = System.Collections.Generic.Dictionary<string, object>;", "");
     }
-    genStruct(it) {
-        const doclns = this.genDocLns(gen.docs(it.fromOrig.decl));
-        let src = this.genDocSrc('\t', doclns);
-        src += "\tpublic partial class " + this.caseUp(it.name) + " {\n";
-        let fielddocs = {};
-        for (const field of it.fields) {
-            fielddocs[field.name] = (field.isExtBaggage ? (`\t\t/// <summary>${gen.docStrs.extBaggage}</summary>\n`) : (this.genDocSrc("\t\t", this.genDocLns(gen.docs(field.fromOrig)))));
-            src += '\n' + fielddocs[field.name]
-                + "\t\t[" + (gen.typeFun(field.typeSpec) ? 'JsonIgnore' : `JsonProperty("${field.name}")${field.optional ? '' : ', JsonRequired'}`) + "]\n";
-            src += `\t\tpublic ${this.typeSpec(field.typeSpec, false, field.optional)} ${this.caseUp(field.name)};\n`;
-        }
-        for (const ff of it.funcFields)
-            src += `\n\t\t/// <summary>${gen.docStrs.internalOnly}</summary>\n\t\t[JsonProperty("${ff}_AppzFuncId")]\n\t\tpublic string ${this.caseUp(ff)}_AppzFuncId = "";\n`;
-        src += '\n' + this.genDocSrc('\t\t', doclns);
-        src += "\t\tpublic " + this.caseUp(it.name) + "() {}\n";
-        src += '\n' + this.genDocSrc('\t\t', doclns.concat(...it.fields.map(_ => {
-            let hacky = fielddocs[_.name], needle = '\n\t\t/// ';
-            for (let idx = hacky.indexOf(needle); idx >= 0; idx = hacky.indexOf(needle))
-                hacky = (hacky.slice(0, idx) + " " + hacky.slice(idx + needle.length));
-            return hacky.replace('</summary>', '</param>').replace('<summary>', `<param name="${this.caseLo(_.name)}">`).trim();
-        })));
-        src += "\t\tpublic " + this.caseUp(it.name) + "("
-            + it.fields.map(_ => this.typeSpec(_.typeSpec, false, _.optional) + " " + this.caseLo(_.name) + " = default").join(', ')
-            + ") =>\n\t\t\t"
-            + this.parensIfJoin(it.fields.map(_ => this.caseUp(_.name))) + " = "
-            + this.parensIfJoin(it.fields.map(_ => this.caseLo(_.name))) + ";\n";
-        src += "\t}\n\n";
-        return src;
+    emitOutro() {
+        return this.undent().lines("}");
     }
-    genInterface(prep, it) {
-        const doclns = this.genDocLns(gen.docs(it.fromOrig));
-        let src = this.genDocSrc('\t', doclns);
-        src += "\tpublic interface I" + this.caseUp(it.name) + " {\n";
-        for (const method of it.methods)
-            src += '\n' + this.genDocSrc('\t\t', this.genDocLns(gen.docs(method.fromOrig.decl, () => method.args.find(_ => _.isFromRetThenable)), method))
-                + "\t\tvoid " + this.caseUp(method.nameOrig) + "("
-                + method.args.map(_ => this.typeSpec(_.typeSpec, false, _.optional) + " " + this.caseLo(_.name) + " = default").join(', ')
-                + ");\n";
-        src += "\t}\n\n";
-        src += "\tinternal partial class impl : I" + this.caseUp(it.name) + " {";
-        for (const method of it.methods)
-            src += this.genImpl(prep, it, method);
-        src += "\t}\n\n";
-        return src;
+    emitDocs(it) {
+        if (it.Docs && it.Docs.length)
+            for (const doc of it.Docs)
+                if (doc.Lines && doc.Lines.length)
+                    if (doc.ForParam && doc.ForParam.length)
+                        this.line("/// <param name=\"" + doc.ForParam + "\">" + doc.Lines.join(" ") + "</param>");
+                    else if (doc.Lines.length > 1)
+                        this.line("/// <summary>")
+                            .lines(...doc.Lines.map(_ => "/// " + _))
+                            .line("/// </summary>");
+                    else
+                        this.line("/// <summary>" + doc.Lines[0] + "</summary>");
+        return this;
     }
-    genImpl(prep, it, method) {
-        const funcfields = gen.argsFuncFields(prep, method.args);
-        let src = "\n\t\tvoid I" + this.caseUp(it.name) + "." + this.caseUp(method.nameOrig) + "("
-            + method.args.map(arg => this.typeSpec(arg.typeSpec, false, arg.optional) + " " + this.caseLo(arg.name)).join(', ')
-            + ") {\n";
-        const numargs = method.args.filter(_ => !_.isFromRetThenable).length;
-        const __ = gen.idents(method.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result');
-        src += `\t\t\tvar ${__.msg} = new ipcMsg("${it.name}.${method.name}", ${numargs});\n`;
-        if (funcfields.length) {
-            src += `\t\t\tvar ${__.fnids} = new List<string>(${funcfields.length});\n`;
-            src += "\t\t\tlock (this) {\n";
-            for (const ff of funcfields) {
-                let facc = this.caseLo(ff.arg.name);
-                src += `\t\t\t\tif (${ff.arg.optional ? (facc + ' != null') : 'true'}) {\n`;
-                facc += '.' + this.caseUp(ff.name);
-                src += `\t\t\t\t\t${facc}_AppzFuncId = "";\n`;
-                src += `\t\t\t\t\tvar ${__.fn} = ${facc};\n`;
-                src += `\t\t\t\t\tif (${__.fn} != null) {\n`;
-                src += `\t\t\t\t\t\t${facc}_AppzFuncId = this.nextFuncId();\n`;
-                src += `\t\t\t\t\t\t${__.fnids}.Add(${facc}_AppzFuncId);\n`;
-                src += `\t\t\t\t\t\tthis.cbOther[${facc}_AppzFuncId] = (Any[] args) => {\n`;
-                const args = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)[0];
-                src += `\t\t\t\t\t\t\tif (args != null && args.Length == ${args.length}) {\n`;
-                for (let a = 0; a < args.length; a++) {
-                    const tspec = this.typeSpec(args[a]);
-                    src += `\t\t\t\t\t\t\t\t${tspec} a${a} = default;\n`;
-                    src += `\t\t\t\t\t\t\t\tif (args[${a}] != null) {\n`;
-                    src += this.genDecodeFromAny(prep, "\t\t\t\t\t\t\t\t\t", "args[" + a + "]", "a" + a, tspec, "", "return (null, false);", false);
-                    src += `\t\t\t\t\t\t\t\t}\n`;
-                }
-                src += `\t\t\t\t\t\t\t\treturn (${__.fn}(${args.map((_, a) => 'a' + a).join(', ')}), true);\n`;
-                src += `\t\t\t\t\t\t\t}\n`;
-                src += `\t\t\t\t\t\t\treturn (null, false);\n`;
-                src += `\t\t\t\t\t\t};\n`;
-                src += `\t\t\t\t\t}\n`;
-                src += `\t\t\t\t}\n`;
-            }
-            src += "\t\t\t}\n";
-        }
-        for (const arg of method.args)
-            if (!arg.isFromRetThenable)
-                src += `\t\t\t${__.msg}.data["${arg.name}"] = ${this.caseLo(arg.name)};\n`;
-        src += `\n\t\t\tFunc<Any, bool> ${__.on} = null;\n`;
-        const lastarg = method.args[method.args.length - 1];
-        if (lastarg.isFromRetThenable) {
-            let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true, true);
-            src += `\t\t\tif (${laname} != null)\n`;
-            src += `\t\t\t\t${__.on} = (Any ${__.payload}) => {\n`;
-            src += `\t\t\t\t\t${tret} ${__.result} = default;\n`;
-            src += `\t\t\t\t\tif (${__.payload} != null) {\n`;
-            src += this.genDecodeFromAny(prep, "\t\t\t\t\t\t", __.payload, __.result, tret, "", "return false;");
-            src += `\t\t\t\t\t}\n`;
-            src += `\t\t\t\t\t${laname}(${__.result});\n`;
-            src += `\t\t\t\t\treturn true;\n`;
-            src += `\t\t\t\t};\n`;
-        }
-        if (funcfields.length) {
-            src += `\n\t\t\tthis.send(${__.msg}, (Any ${__.payload}) => {\n`;
-            src += `\t\t\t\tif (${__.fnids}.Count != 0)\n`;
-            src += `\t\t\t\t\tlock (this)\n`;
-            src += `\t\t\t\t\t\tforeach (var ${__.fnid} in ${__.fnids})\n`;
-            src += `\t\t\t\t\t\t\t_ = this.cbOther.Remove(${__.fnid});\n`;
-            src += `\t\t\t\treturn (${__.on} == null) || ${__.on}(${__.payload});\n`;
-            src += `\t\t\t});\n`;
-        }
+    emitEnum(it) {
+        this.emitDocs(it)
+            .line("public enum " + it.Name + " {")
+            .indented(() => this.each(it.Enumerants, "\n", e => this.emitDocs(e).line(e.Name + " = " + e.Value + ",")))
+            .lines("}", "");
+    }
+    emitInterface(it) {
+        this.emitDocs(it)
+            .line("public interface " + it.Name + " {").indented(() => this.each(it.Methods, "\n", m => this.emitDocs(m).lf()
+            .emitTypeRef(m.Type).s(" ", m.Name)
+            .when(m.Args && m.Args.length, () => this.s("(").each(m.Args, ", ", a => this.emitTypeRef(a.Type).s(" ", a.Name, " = default"))
+            .s(");"), () => this.s(" { get; }")).line()))
+            .lines("}", "");
+    }
+    emitStruct(it) {
+        this.emitDocs(it)
+            .line("public partial class " + it.Name + " {").indented(() => this.each(it.Fields, "\n", f => this.emitDocs(f).line(f.Json.Excluded
+            ? "[JsonIgnore]"
+            : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnmaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")).when((f.Type === gen_ast.TypeRefPrim.String && f.FuncFieldRel), () => this.line("[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]")).ln(() => this
+            .s("public ")
+            .emitTypeRef(f.Type)
+            .s(" ", f.Name, ";")))).lines("}", "");
+    }
+    onBeforeEmitImpls(...interfaces) {
+        this.line("internal partial class "
+            + this.options.idents.typeImpl + " : "
+            + interfaces.map(_ => _.Name).join(", ") + " {").line().indent();
+    }
+    onAfterEmitImpls() {
+        this.undent().lines("}", "");
+    }
+    emitFuncImpl(it) {
+        let struct = it.Type, iface = it.Type;
+        [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null];
+        const isproperty = !(it.Func.Args && it.Func.Args.length);
+        const emitsigheadln = () => this.lf(iface ? "" : "internal ").emitTypeRef(it.Func.Type)
+            .s(" ", (iface ? (iface.Name + ".") : "") + it.Name)
+            .when(isproperty, () => this.s(" { get "), () => this.s("(")
+            .each(it.Func.Args, ", ", a => this.emitTypeRef(a.Type).s(" ", a.Name))
+            .s(") "));
+        if (struct)
+            this.line("public partial class " + struct.Name + " {")
+                .indented(() => emitsigheadln().emitInstr(it.Func.Body).line()).lines("}", "");
+        else if (iface)
+            emitsigheadln()
+                .emitInstr(it.Func.Body)
+                .s(isproperty ? " }" : "").lines("", "");
         else
-            src += `\n\t\t\tthis.send(${__.msg}, ${__.on});\n`;
-        src += "\t\t}\n";
-        return src;
+            throw it;
     }
-    genDecodeFromAny(prep, pref, srcName, dstName, dstTypeCs, errName, errOther, haveOk = false) {
-        if (dstTypeCs === 'object' || dstTypeCs === 'Any')
-            return `${pref}${dstName} = ${srcName};\n`;
-        let src = haveOk ? "" : `${pref}bool ok;\n`;
-        if (prep.structs.some(_ => _.name === dstTypeCs)) {
-            this.state.genPopulateFor[dstTypeCs] = true;
-            src += `${pref}(${dstName}, ok) = new ${dstTypeCs}().populateFrom(${srcName});\n`;
-        }
-        else
-            src += `${pref}if (ok = (${srcName} is ${dstTypeCs}))\n${pref}\t${dstName} = (${dstTypeCs})${srcName};\n`;
-        src += `${pref}if (!ok)\n`;
-        if (errName)
-            src += `${pref}\t${errName} = ${srcName};\n`;
-        else if (errOther)
-            src += `${pref}\t${errOther}\n`;
-        return src;
-    }
-    genPopulateFrom(prep, typeName) {
-        const struct = prep.structs.find(_ => _.name === typeName);
-        if (!struct)
-            throw (typeName);
-        let src = `\tpublic partial class ${typeName} {\n`;
-        src += `\t\tinternal (${typeName}, bool) populateFrom(Any payload) {\n`;
-        src += "\t\t\tvar m = payload as Dictionary<string, Any>;\n";
-        src += "\t\t\tif (m == null)\n\t\t\t\treturn (null, false);\n\n";
-        for (const _ of struct.fields) {
-            src += "\t\t\t{\n";
-            src += `\t\t\t\tif (m.TryGetValue("${_.name}", out var val) && val != null) {\n`;
-            src += this.genDecodeFromAny(prep, "\t\t\t\t\t", "val", this.caseUp(_.name), this.typeSpec(_.typeSpec), "", "return (null, false);");
-            src += "\t\t\t\t" + (_.optional ? "}\n" : "} else return (null, false);\n");
-            src += "\t\t\t}\n";
-        }
-        src += "\t\t\treturn (this, true);\n";
-        src += "\t\t}\n\t}\n\n";
-        return src;
-    }
-    genDocLns(docs, method = undefined, isSub = false) {
-        let ret = [];
-        if (docs && docs.length)
-            for (const doc of docs) {
-                if (doc.lines && doc.lines.length) {
-                    ret.push("/// ");
-                    doc.lines.forEach((ln, idx) => ret.push("/// " + ((idx || !isSub) ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.caseLo))));
-                }
-                if (doc.subs && doc.subs.length)
-                    ret.push(...this.genDocLns(doc.subs, method, true));
+    emitInstr(it) {
+        if (it) {
+            const iret = it;
+            if (iret && iret.Ret !== undefined)
+                return this.ln(() => this.s("return ").emitExpr((!iret.Ret) ? undefined : iret.Ret).s(";"));
+            const ivar = it;
+            if (ivar && ivar.Name)
+                return this.ln(() => this.emitTypeRef(ivar.Type).s(" ", ivar.Name, " = default;"));
+            const iset = it;
+            if (iset && iset.SetWhat && iset.SetTo)
+                return this.ln(() => this.emitExpr(iset.SetWhat).s(" = ").emitExpr(iset.SetTo).s(";"));
+            const idictdel = it;
+            if (idictdel && idictdel.DelFrom && idictdel.DelWhat)
+                return this.ln(() => this.emitExpr(idictdel.DelFrom).s(".Remove(").emitExpr(idictdel.DelWhat).s(");"));
+            const icolladd = it;
+            if (icolladd && icolladd.AddTo && icolladd.AddWhat)
+                return this.ln(() => this.emitExpr(icolladd.AddTo).s('.Add(').emitExpr(icolladd.AddWhat).s(");"));
+            const ecall = it;
+            if (ecall && ecall.Call)
+                return this.ln(() => this.emitExpr(ecall).s(";"));
+            const iblock = it;
+            if (iblock && iblock.Instrs !== undefined) {
+                let endeol = false;
+                if (endeol = iblock.Lock ? true : false)
+                    this.ln(() => this.s("lock (").emitExpr(iblock.Lock).s(") {"));
+                else if (endeol = (iblock.ForEach && iblock.ForEach.length) ? true : false)
+                    this.ln(() => this.s("foreach (var ", iblock.ForEach[0].Name, " in ").emitExpr(iblock.ForEach[1]).s(") {"));
+                else if (endeol = (iblock.If && iblock.If.length) ? true : false)
+                    this.ln(() => this.s("if (").emitExpr(iblock.If[0]).s(") {"));
+                else
+                    this.s("{").line();
+                this.indented(() => iblock.Instrs.forEach(_ => this.emitInstr(_)));
+                this.lf().s("}");
+                if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
+                    this.s(" else ").emitInstr(iblock.If[1]).lf();
+                return endeol ? this.line() : this;
             }
-        if (ret.length && !isSub) {
-            ret[0] = "/// <summary>";
-            ret.push("/// </summary>");
-            if (method && method.args && method.args.length)
-                for (const arg of method.args) {
-                    let paramdocstrlns = null;
-                    gen.docsTraverse(docs, doc => {
-                        if (paramdocstrlns === null && doc.lines && doc.lines.length && ((!arg.isFromRetThenable) ? (doc.isForArg === arg.name) : (doc.isForRet !== null && doc.isForRet !== undefined)))
-                            paramdocstrlns = doc.lines;
-                    });
-                    if (paramdocstrlns && paramdocstrlns.length) {
-                        ret.push(`/// <param name="${this.caseLo(arg.name)}">`);
-                        ret.push("/// " + paramdocstrlns.filter(_ => _ && _.length).join(' ').trim());
-                        ret.push("/// </param>");
-                    }
-                }
         }
-        return ret;
+        return super.emitInstr(it);
     }
-    typeSpec(from, intoProm = false, needNullable = false) {
-        if (!from)
-            return "";
-        if (from === gen.ScriptPrimType.Any)
-            return "Any";
-        if (from === gen.ScriptPrimType.Boolean)
-            return "bool";
-        if (from === gen.ScriptPrimType.String)
-            return "string";
-        if (from === gen.ScriptPrimType.Number)
-            return needNullable ? "Nullable<bool>" : "int";
-        if (from === gen.ScriptPrimType.Dict)
-            return "Dictionary<string, Any>";
-        if (from === gen.ScriptPrimType.Null || from === gen.ScriptPrimType.Undefined)
-            throw (from);
-        const tarr = gen.typeArrOf(from);
+    emitExpr(it) {
+        const ecollnew = it;
+        if (ecollnew && ecollnew.Capacity !== undefined)
+            return this.when(ecollnew.ElemTypeIfList, () => this.s("new List<").emitTypeRef(ecollnew.ElemTypeIfList).s(">"), () => this.s("new Dict")).s("(").emitExpr(ecollnew.Capacity).s(")");
+        const enew = it;
+        if (enew && enew.New)
+            return this.s("new ").emitTypeRef(enew.New).s("()");
+        const econv = it;
+        if (econv && econv.Conv && econv.To) {
+            const tval = typeRefUnMaybe(econv.To, true, true, true);
+            return this.when(typeRefNullable(econv.To) && !econv.WontBeNull, () => this.s("(null == ").emitExpr(econv.Conv).s(") ? (default, true) : ")).s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(tval).s(") ? (((").emitTypeRef(tval).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)");
+        }
+        const elen = it;
+        if (elen && elen.LenOf)
+            return this.emitExpr(elen.LenOf).s(elen.IsArr ? ".Length" : ".Count");
+        const etup = it;
+        if (etup && etup.Items !== undefined)
+            return this.s("(").each(etup.Items, ", ", _ => { this.emitExpr(_); }).s(")");
+        const eop = it;
+        if (eop && eop.Name && eop.Operands && eop.Operands.length)
+            if (eop.Name === gen_ast.BuilderOperators.Is)
+                return this.s("(null != ").emitExpr(eop.Operands[0]).s(")");
+            else if (eop.Name === gen_ast.BuilderOperators.Isnt)
+                return this.s("(null == ").emitExpr(eop.Operands[0]).s(")");
+            else if (eop.Name === gen_ast.BuilderOperators.Idx)
+                return this.emitExpr(eop.Operands[0]).s("[").emitExprs("][", ...eop.Operands.slice(1)).s("]");
+            else if (eop.Name === gen_ast.BuilderOperators.IdxMay)
+                return this.s("(").emitExpr(eop.Operands[0]).s(".TryGetValue(").emitExpr(eop.Operands[1]).s(", out var " + "_".repeat(++anonVarCounter) + ") ? (" + "_".repeat(anonVarCounter) + ", true) : (default, false))");
+        const efn = it;
+        if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
+            return this
+                .s("(")
+                .each(efn.Args, ", ", _ => this.emitTypeRef(_.Type).s(" ").s(_.Name))
+                .s(") => ").emitInstr(efn.Body);
+        return super.emitExpr(it);
+    }
+    emitTypeRef(it) {
+        if (it === gen_ast.TypeRefPrim.Dict)
+            return this.s(this.options.idents.typeDict);
+        const tmay = this.typeMaybe(it);
+        if (tmay)
+            return this.emitTypeRef(tmay.Maybe)
+                .s(typeRefNullable(tmay.Maybe) ? "" : "?");
+        const tarr = this.typeArr(it);
         if (tarr)
-            return this.typeSpec(tarr) + "[]";
-        const tfun = gen.typeFun(from);
-        if (tfun && tfun.length && tfun[0])
-            return "Func<" + tfun[0].map(_ => this.typeSpec(_)).join(", ") + ", " + this.typeSpec(tfun[1]) + ">";
-        const ttup = gen.typeTupOf(from);
-        if (ttup && ttup.length) {
-            const ret = "(" + ttup.map(_ => this.typeSpec(_)).join(', ') + ")";
-            return (!needNullable) ? ret : (`Nullable<${ret}>`);
-        }
-        let tsum = gen.typeSumOf(from);
-        if (tsum && tsum.length) {
-            tsum = tsum.filter(_ => _ !== gen.ScriptPrimType.Null && _ !== gen.ScriptPrimType.Undefined && !gen.typeProm(_));
-            return this.parensIfJoin(tsum.map(_ => this.typeSpec(_)), '|');
-        }
-        const tprom = gen.typeProm(from);
-        if (tprom && tprom.length)
-            if (tprom.length > 1)
-                throw (from);
-            else if (intoProm)
-                return this.typeSpec(tprom[0]);
-            else
-                return "Action<" + this.typeSpec(tprom[0]) + ">";
-        if (typeof from === 'string')
-            return from;
-        return "Any";
+            return (tarr.AsList)
+                ? this.s("List<").emitTypeRef(tarr.ArrOf).s(">")
+                : this.emitTypeRef(tarr.ArrOf).s("[]");
+        const ttup = this.typeTup(it);
+        if (ttup)
+            return this.s("(").each(ttup.TupOf, ", ", t => this.emitTypeRef(t)).s(")");
+        const tfun = this.typeFunc(it);
+        if (tfun)
+            return (!tfun.To)
+                ? this.s("Action<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(">")
+                : this.s("Func<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(", ").emitTypeRef(tfun.To).s(">");
+        return super.emitTypeRef(it);
+    }
+    typeRefForField(it) {
+        return typeRefUnMaybe(it, true, false, false);
     }
 }
 exports.Gen = Gen;
+function typeRefNullable(it, forceTrueForBools = false, forceTrueForInts = false, forceTrueForTups = false) {
+    const ttup = it;
+    const isvt = ((it === gen_ast.TypeRefPrim.Bool && !forceTrueForBools)
+        || (it === gen_ast.TypeRefPrim.Int && !forceTrueForInts)
+        || (ttup && ttup.TupOf && ttup.TupOf.length && !forceTrueForTups));
+    return !isvt;
+}
+function typeRefUnMaybe(it, unMaybeBools, unMaybeInts, unMaybeTuples) {
+    const tmay = it;
+    if (tmay && tmay.Maybe) {
+        const ttup = tmay.Maybe;
+        if ((unMaybeTuples && ttup && ttup.TupOf && ttup.TupOf.length)
+            || (unMaybeBools && tmay.Maybe === gen_ast.TypeRefPrim.Bool)
+            || (unMaybeInts && tmay.Maybe === gen_ast.TypeRefPrim.Int))
+            return typeRefUnMaybe(tmay.Maybe, unMaybeBools, unMaybeInts, unMaybeTuples);
+    }
+    return it;
+}

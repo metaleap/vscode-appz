@@ -3,7 +3,6 @@ import * as ts from 'typescript'
 
 import * as gen from './gen-basics'
 import * as gen_ast from './gen-ast'
-import * as gen_astcs from './gen-astcs'
 import * as gen_golang from './gen-golang'
 import * as gen_csharp from './gen-csharp'
 import * as gen_python from './gen-python'
@@ -16,8 +15,7 @@ const filePathDts = 'node_modules/@types/vscode/index.d.ts'
 const gens: gen.IGen[] = [
     new gen_ast.Gen('libs/tmpdbg/', '.gen.coffee'),
     new gen_golang.Gen('libs/go/', '.gen.go'),
-    new gen_astcs.Gen('libs/cs/', '.gen.cs'),
-    new gen_csharp.Gen('libs/cs/', '.gen.cs.txt'),
+    new gen_csharp.Gen('libs/cs/', '.gen.cs'),
     new gen_python.Gen('libs/py/', '.gen.py'),
     new gen_vscext.Gen('src/', '.gen.ts'),
 ]
