@@ -37,7 +37,7 @@ class Builder {
     iIf(ifCond, thenInstrs, elseInstrs = undefined) { return { Instrs: thenInstrs, If: [ifCond, { Instrs: elseInstrs }] }; }
     iFor(iterVarName, iterable, ...instrs) { return { Instrs: instrs, ForEach: [iterVarName, iterable] }; }
     eNew(typeRef) { return { New: typeRef }; }
-    eConv(typeRef, conv) { return { Conv: conv, To: typeRef }; }
+    eConv(typeRef, conv, wontBeNull) { return { Conv: conv, To: typeRef, WontBeNull: wontBeNull }; }
     eTup(...items) { return { Items: items }; }
     eArr(...items) { return { Items: items, IsArr: true }; }
     eLen(lenOf) { return { LenOf: lenOf }; }
@@ -411,6 +411,9 @@ class Gen extends gen.Gen {
             const icolladd = it;
             if (icolladd && icolladd.AddTo && icolladd.AddWhat)
                 return this.ln(() => this.emitExpr(icolladd.AddTo).s('·add(').emitExpr(icolladd.AddWhat).s(')'));
+            const ecall = it;
+            if (ecall && ecall.Call)
+                return this.ln(() => this.emitExpr(ecall));
             const iblock = it;
             if (iblock && iblock.Instrs !== undefined) {
                 if (iblock.Lock)
@@ -425,9 +428,6 @@ class Gen extends gen.Gen {
                         .emitInstr(iblock.If[1]);
                 return this;
             }
-            const ecall = it;
-            if (ecall && ecall.Call)
-                return this.ln(() => this.emitExpr(ecall));
             throw "<instr>" + JSON.stringify(it);
         }
         return this;
@@ -478,13 +478,13 @@ class Gen extends gen.Gen {
                 .s(' -> ').emitTypeRef(efn.Type)
                 .s(')\n')
                 .emitInstr(efn.Body)
-                .s(this.options.oneIndent.repeat(this.indents));
+                .lf();
         const ename = it;
         if (ename && ename.Name !== undefined)
             return this.s(ename.Name ? ename.Name : this.options.idents.curInst);
         throw "<expr>" + JSON.stringify(it);
     }
-    genConvertOrReturn(dstVarName, src, dstType, okBoolName = 'ok', onErrRet = undefined) {
+    genConvertOrReturn(dstVarName, src, dstType, wontBeNull, okBoolName = 'ok', onErrRet = undefined) {
         const _ = this.b;
         if (!onErrRet)
             onErrRet = _.eLit(false);
@@ -504,7 +504,7 @@ class Gen extends gen.Gen {
             }
         }
         return [
-            _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(dstType, src)),
+            _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(dstType, src, wontBeNull)),
             retifnotok,
         ];
     }
@@ -513,12 +513,12 @@ class Gen extends gen.Gen {
     }
     genMethodImpl_PopulateFrom(struct, _method, _, body) {
         body.push(_.iVar('dict', TypeRefPrim.Dict), _.iVar('ok', TypeRefPrim.Bool), _.iVar('val', TypeRefPrim.Any));
-        body.push(...this.genConvertOrReturn('dict', _.n('payload'), TypeRefPrim.Dict));
+        body.push(...this.genConvertOrReturn('dict', _.n('payload'), TypeRefPrim.Dict, true));
         for (const fld of struct.Fields)
             if (!fld.Json.Excluded)
                 body.push(_.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdx(_.n('dict'), _.eLit(fld.Json.Name))), _.iIf(_.n('ok'), [
                     _.iVar(fld.name, fld.Type),
-                ].concat(this.genConvertOrReturn(fld.name, _.n('val'), fld.Type), _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name))), fld.Json.Required ? [_.iRet(_.eLit(false))] : []));
+                ].concat(this.genConvertOrReturn(fld.name, _.n('val'), fld.Type, false), _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name))), fld.Json.Required ? [_.iRet(_.eLit(false))] : []));
         body.push(_.iRet(_.eLit(true)));
     }
     genMethodImpl_MessageDispatch(iface, method, _, body) {
@@ -539,7 +539,7 @@ class Gen extends gen.Gen {
                             _.iRet(_.eTup(_.eNil(), _.eLit(false))),
                         ], [_.iVar(__.ok, TypeRefPrim.Bool)].concat(..._.EACH(fnargs, (fnarg, idx) => [
                             _.iVar('__' + idx, this.b.typeRef(fnarg)),
-                            _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))), this.genConvertOrReturn('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), __.ok, _.eTup(_.eNil(), _.eLit(false)))),
+                            _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))), this.genConvertOrReturn('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), true, __.ok, _.eTup(_.eNil(), _.eLit(false)))),
                             _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
                         ]))))),
                     ]),
@@ -553,7 +553,7 @@ class Gen extends gen.Gen {
         if (lastarg.fromPrep.isFromRetThenable) {
             const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, true, true);
             body.push(_.iIf(_.oIs(_.n(lastarg.Name)), [
-                _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iVar(__.ok, TypeRefPrim.Bool), _.iVar(__.result, dsttype), _.iIf(_.oIs(_.n(__.payload)), this.genConvertOrReturn(__.result, _.n(__.payload), dsttype, __.ok)), _.eCall(_.n(lastarg.Name), _.n(__.result)), _.iRet(_.eLit(true)))),
+                _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iVar(__.ok, TypeRefPrim.Bool), _.iVar(__.result, dsttype), _.iIf(_.oIs(_.n(__.payload)), this.genConvertOrReturn(__.result, _.n(__.payload), dsttype, true, __.ok)), _.eCall(_.n(lastarg.Name), _.n(__.result)), _.iRet(_.eLit(true)))),
             ]));
         }
         if (!funcfields.length)
@@ -585,24 +585,24 @@ class Gen extends gen.Gen {
                 Args: [],
             })),
         };
-        this.emitInterface(ifacetop);
-        for (const it of prep.enums)
-            this.emitEnum(build.enumFrom(it));
+        const enums = prep.enums.map(_ => build.enumFrom(_));
+        for (const it of enums)
+            this.emitEnum(it);
+        const ifaces = [ifacetop].concat(...prep.interfaces.map(_ => build.interfaceFrom(_)));
+        for (const it of ifaces)
+            this.emitInterface(it);
         const structs = {};
         for (const it of prep.structs) {
             const struct = build.structFrom(it);
             structs[struct.Name] = struct;
             this.emitStruct(struct);
         }
-        const ifaces = prep.interfaces.map(_ => build.interfaceFrom(_));
-        for (const it of ifaces)
-            this.emitInterface(it);
-        this.onBeforeEmitImpls(...[ifacetop].concat(ifaces));
-        for (const it of ifacetop.Methods)
-            this.emitMethodImpl(ifacetop, it, this.genMethodImpl_TopInterface);
+        this.onBeforeEmitImpls(...ifaces);
         for (const it of ifaces)
             for (const method of it.Methods)
-                this.emitMethodImpl(it, method, this.genMethodImpl_MessageDispatch);
+                this.emitMethodImpl(it, method, it === ifacetop
+                    ? this.genMethodImpl_TopInterface
+                    : this.genMethodImpl_MessageDispatch);
         this.onAfterEmitImpls();
         {
             let anydecoderstogenerate = true;

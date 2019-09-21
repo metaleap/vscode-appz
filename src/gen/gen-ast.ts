@@ -75,6 +75,7 @@ export interface ELen {
 export interface EConv {
     Conv: Expr
     To: TypeRef
+    WontBeNull: boolean
 }
 export interface ENew {
     New: TypeRef
@@ -139,7 +140,7 @@ export class Builder {
     iIf(ifCond: Expr, thenInstrs: Instr[], elseInstrs: Instr[] = undefined): IBlock { return { Instrs: thenInstrs, If: [ifCond, { Instrs: elseInstrs }] } }
     iFor(iterVarName: EName, iterable: Expr, ...instrs: Instr[]): IBlock { return { Instrs: instrs, ForEach: [iterVarName, iterable] } }
     eNew(typeRef: TypeRef): ENew { return { New: typeRef } }
-    eConv(typeRef: TypeRef, conv: Expr): EConv { return { Conv: conv, To: typeRef } }
+    eConv(typeRef: TypeRef, conv: Expr, wontBeNull: boolean): EConv { return { Conv: conv, To: typeRef, WontBeNull: wontBeNull } }
     eTup(...items: Expr[]): ETup { return { Items: items } }
     eArr(...items: Expr[]): ETup { return { Items: items, IsArr: true } }
     eLen(lenOf: Expr): ELen { return { LenOf: lenOf } }
@@ -572,6 +573,11 @@ export class Gen extends gen.Gen implements gen.IGen {
                 return this.ln(() =>
                     this.emitExpr(icolladd.AddTo).s('·add(').emitExpr(icolladd.AddWhat).s(')'))
 
+            const ecall = it as ECall
+            if (ecall && ecall.Call)
+                return this.ln(() =>
+                    this.emitExpr(ecall))
+
             const iblock = it as IBlock
             if (iblock && iblock.Instrs !== undefined) {
                 if (iblock.Lock)
@@ -589,11 +595,6 @@ export class Gen extends gen.Gen implements gen.IGen {
                         .emitInstr(iblock.If[1])
                 return this
             }
-
-            const ecall = it as ECall
-            if (ecall && ecall.Call)
-                return this.ln(() =>
-                    this.emitExpr(ecall))
 
             throw "<instr>" + JSON.stringify(it)
         }
@@ -659,7 +660,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 .s(' -> ').emitTypeRef(efn.Type)
                 .s(')\n')
                 .emitInstr(efn.Body)
-                .s(this.options.oneIndent.repeat(this.indents))
+                .lf()
 
         const ename = it as EName
         if (ename && ename.Name !== undefined)
@@ -668,7 +669,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         throw "<expr>" + JSON.stringify(it)
     }
 
-    private genConvertOrReturn(dstVarName: string, src: Expr, dstType: TypeRef, okBoolName: string = 'ok', onErrRet: Expr = undefined): Instr[] {
+    private genConvertOrReturn(dstVarName: string, src: Expr, dstType: TypeRef, wontBeNull: boolean, okBoolName: string = 'ok', onErrRet: Expr = undefined): Instr[] {
         const _ = this.b
         if (!onErrRet)
             onErrRet = _.eLit(false)
@@ -688,7 +689,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             }
         }
         return [
-            _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(dstType, src)),
+            _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(dstType, src, wontBeNull)),
             retifnotok,
         ]
     }
@@ -703,7 +704,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             _.iVar('ok', TypeRefPrim.Bool),
             _.iVar('val', TypeRefPrim.Any),
         )
-        body.push(...this.genConvertOrReturn('dict', _.n('payload'), TypeRefPrim.Dict))
+        body.push(...this.genConvertOrReturn('dict', _.n('payload'), TypeRefPrim.Dict, true))
         for (const fld of (struct as TStruct).Fields)
             if (!fld.Json.Excluded)
                 body.push(
@@ -711,7 +712,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                     _.iIf(_.n('ok'), [
                         _.iVar(fld.name, fld.Type) as Instr,
                     ].concat(
-                        this.genConvertOrReturn(fld.name, _.n('val'), fld.Type),
+                        this.genConvertOrReturn(fld.name, _.n('val'), fld.Type, false),
                         _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name)),
                     ),
                         fld.Json.Required ? [_.iRet(_.eLit(false))] : []
@@ -756,7 +757,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                                                     ..._.EACH(fnargs, (fnarg, idx) => [
                                                         _.iVar('__' + idx, this.b.typeRef(fnarg)),
                                                         _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))),
-                                                            this.genConvertOrReturn('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), __.ok, _.eTup(_.eNil(), _.eLit(false))),
+                                                            this.genConvertOrReturn('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), true, __.ok, _.eTup(_.eNil(), _.eLit(false))),
                                                         ),
                                                         _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
                                                     ] as Instr[]))
@@ -788,7 +789,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                         _.iVar(__.ok, TypeRefPrim.Bool),
                         _.iVar(__.result, dsttype),
                         _.iIf(_.oIs(_.n(__.payload)),
-                            this.genConvertOrReturn(__.result, _.n(__.payload), dsttype, __.ok)
+                            this.genConvertOrReturn(__.result, _.n(__.payload), dsttype, true, __.ok)
                         ),
                         _.eCall(_.n(lastarg.Name), _.n(__.result)),
                         _.iRet(_.eLit(true)),
@@ -849,26 +850,26 @@ export class Gen extends gen.Gen implements gen.IGen {
                 Args: [],
             })),
         }
-        this.emitInterface(ifacetop)
 
-        for (const it of prep.enums)
-            this.emitEnum(build.enumFrom(it))
+        const enums = prep.enums.map(_ => build.enumFrom(_))
+        for (const it of enums) this.emitEnum(it)
+
+        const ifaces = [ifacetop].concat(...prep.interfaces.map(_ => build.interfaceFrom(_)))
+        for (const it of ifaces) this.emitInterface(it)
+
         const structs: { [_: string]: TStruct } = {}
         for (const it of prep.structs) {
             const struct = build.structFrom(it)
             structs[struct.Name] = struct
             this.emitStruct(struct)
         }
-        const ifaces = prep.interfaces.map(_ => build.interfaceFrom(_))
-        for (const it of ifaces)
-            this.emitInterface(it)
 
-        this.onBeforeEmitImpls(...[ifacetop].concat(ifaces))
-        for (const it of ifacetop.Methods)
-            this.emitMethodImpl(ifacetop, it, this.genMethodImpl_TopInterface)
+        this.onBeforeEmitImpls(...ifaces)
         for (const it of ifaces)
             for (const method of it.Methods)
-                this.emitMethodImpl(it, method, this.genMethodImpl_MessageDispatch)
+                this.emitMethodImpl(it, method, it === ifacetop
+                    ? this.genMethodImpl_TopInterface
+                    : this.genMethodImpl_MessageDispatch)
         this.onAfterEmitImpls()
 
         {

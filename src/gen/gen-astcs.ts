@@ -57,7 +57,7 @@ export class Gen extends gen_ast.Gen {
                     : `[JsonProperty("${fld.Json.Name}")` + (fld.Json.Required ? ", JsonRequired]" : "]")
                 ).ln(() => this
                     .s("public ")
-                    .emitTypeRef(typeRefUnmaybe(fld.Type, true))
+                    .emitTypeRef(typeRefUnMaybe(fld.Type, true, false, false))
                     .s(" ", fld.Name, ";")
                 )))
             .line("}")
@@ -75,10 +75,141 @@ export class Gen extends gen_ast.Gen {
     }
 
     emitFuncImpl(it: gen_ast.Func) {
-        const tstr = it.Type as gen_ast.TStruct
-        const tif = it.Type as gen_ast.TInterface
-        console.log(it.Name, (tstr && tstr.Fields) ? tstr.Name : "(nostruct)", (tif && tif.Methods) ? tif.Name : "(noiface)")
-        super.emitFuncImpl(it)
+        let struct = it.Type as gen_ast.TStruct,
+            iface = it.Type as gen_ast.TInterface
+        [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null]
+
+        const isproperty = !(it.Func.Args && it.Func.Args.length)
+        const emitsigheadln = () =>
+            this.lf(iface ? "" : "internal ").emitTypeRef(it.Func.Type)
+                .s(" ", (iface ? (iface.Name + ".") : "") + it.Name)
+                .when(isproperty,
+                    () => this.s(" { get "),
+                    () => this.s("(")
+                        .each(it.Func.Args, ", ", a => this.emitTypeRef(a.Type).s(" ", a.Name))
+                        .s(") "),
+                )
+
+        if (struct)
+            this.line("internal partial class " + struct.Name + " {")
+                .indented(() =>
+                    emitsigheadln()
+                        .emitInstr(it.Func.Body)
+                        .line("}")
+                )
+                .line("}")
+        else if (iface)
+            emitsigheadln()
+                .emitInstr(it.Func.Body)
+                .s(isproperty ? " }" : "").line()
+        else
+            super.emitFuncImpl(it)
+    }
+
+    emitInstr(it: gen_ast.Instr): Gen {
+        if (it) {
+            const iret = it as gen_ast.IRet
+            if (iret && iret.Ret !== undefined)
+                return this.ln(() =>
+                    this.s("return ").emitExpr((!iret.Ret) ? undefined : iret.Ret).s(";"))
+
+            const ivar = it as gen_ast.IVar
+            if (ivar && ivar.Name)
+                return this.ln(() =>
+                    this.emitTypeRef(ivar.Type).s(" ", ivar.Name, " = default;"))
+
+            const iset = it as gen_ast.ISet
+            if (iset && iset.SetWhat && iset.SetTo)
+                return this.ln(() =>
+                    this.emitExpr(iset.SetWhat).s(" = ").emitExpr(iset.SetTo).s(";"))
+
+            const idictdel = it as gen_ast.IDictDel
+            if (idictdel && idictdel.DelFrom && idictdel.DelWhat)
+                return this.ln(() =>
+                    this.emitExpr(idictdel.DelFrom).s(".Delete(").emitExpr(idictdel.DelWhat).s(");"))
+
+            const icolladd = it as gen_ast.ICollAdd
+            if (icolladd && icolladd.AddTo && icolladd.AddWhat)
+                return this.ln(() =>
+                    this.emitExpr(icolladd.AddTo).s('.Add(').emitExpr(icolladd.AddWhat).s(");"))
+
+            const ecall = it as gen_ast.ECall
+            if (ecall && ecall.Call)
+                return this.ln(() =>
+                    this.emitExpr(ecall).s(";"))
+
+            const iblock = it as gen_ast.IBlock
+            if (iblock && iblock.Instrs !== undefined) {
+                let endeol = false
+                if (endeol = iblock.Lock ? true : false)
+                    this.ln(() => this.s("lock (").emitExpr(iblock.Lock).s(") {"))
+                else if (endeol = (iblock.ForEach && iblock.ForEach.length) ? true : false)
+                    this.ln(() => this.s("for (var ", iblock.ForEach[0].Name, " in ").emitExpr(iblock.ForEach[1]).s(") {"))
+                else if (endeol = (iblock.If && iblock.If.length) ? true : false)
+                    this.ln(() => this.s("if (").emitExpr(iblock.If[0]).s(") {"))
+                else
+                    this.s("{").line()
+
+                this.indented(() =>
+                    iblock.Instrs.forEach(_ => this.emitInstr(_)))
+
+                this.lf().s("}")
+
+                if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
+                    this.s(" else ").emitInstr(iblock.If[1]).lf()
+
+                return endeol ? this.line() : this
+            }
+
+        }
+        return super.emitInstr(it)
+    }
+
+    emitExpr(it: gen_ast.Expr): Gen {
+        const ecollnew = it as gen_ast.ECollNew
+        if (ecollnew && ecollnew.Capacity !== undefined)
+            return this.when(ecollnew.ElemTypeIfList,
+                () => this.s("new List<").emitTypeRef(ecollnew.ElemTypeIfList).s(">"),
+                () => this.s("new Dict")
+            ).s("(").emitExpr(ecollnew.Capacity).s(")")
+
+        const enew = it as gen_ast.ENew
+        if (enew && enew.New)
+            return this.s("new ").emitTypeRef(enew.New).s("()")
+
+        const econv = it as gen_ast.EConv
+        if (econv && econv.Conv && econv.To) {
+            const tval = typeRefUnMaybe(econv.To, true, true, true)
+            return this.when(typeRefNullable(econv.To) && !econv.WontBeNull,
+                () => this.s("(null == ").emitExpr(econv.Conv).s(") ? (default, true) : ")
+            ).s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(tval).s(") ? (((").emitTypeRef(tval).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)")
+        }
+
+        const elen = it as gen_ast.ELen
+        if (elen && elen.LenOf)
+            return this.emitExpr(elen.LenOf).s(".Count")
+
+        const etup = it as gen_ast.ETup
+        if (etup && etup.Items !== undefined)
+            return this.s("(").each(etup.Items, ", ", _ => { this.emitExpr(_) }).s(")")
+
+        const eop = it as gen_ast.EOp
+        if (eop && eop.Name && eop.Operands && eop.Operands.length)
+            if (eop.Name === gen_ast.BuilderOperators.Is)
+                return this.s("(null != ").emitExpr(eop.Operands[0]).s(")")
+            else if (eop.Name === gen_ast.BuilderOperators.Isnt)
+                return this.s("(null == ").emitExpr(eop.Operands[0]).s(")")
+            else if (eop.Name === gen_ast.BuilderOperators.Idx)
+                return this.emitExpr(eop.Operands[0]).s("[").emitExprs("][", ...eop.Operands.slice(1)).s("]")
+
+        const efn = it as gen_ast.EFunc
+        if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
+            return this
+                .s("(")
+                .each(efn.Args, ", ", _ => this.emitTypeRef(_.Type).s(" ").s(_.Name))
+                .s(") => ").emitInstr(efn.Body)
+
+        return super.emitExpr(it)
     }
 
     emitTypeRef(it: gen_ast.TypeRef): Gen {
@@ -98,7 +229,7 @@ export class Gen extends gen_ast.Gen {
         const ttup = this.typeTup(it)
         if (ttup) return this.s("(").each(ttup.TupOf, ", ", t =>
             this.emitTypeRef(t)
-        ).s(')')
+        ).s(")")
 
         const tfun = this.typeFunc(it)
         if (tfun) return (!tfun.To)
@@ -110,14 +241,23 @@ export class Gen extends gen_ast.Gen {
 
 }
 
-function typeRefUnmaybe(it: gen_ast.TypeRef, unmaybeBools: boolean = false, unmaybeInts: boolean = false, unmaybeTuples: boolean = false): gen_ast.TypeRef {
+function typeRefNullable(it: gen_ast.TypeRef, forceTrueForBools: boolean = false, forceTrueForInts: boolean = false, forceTrueForTups: boolean = false) {
+    const ttup = it as gen_ast.TypeRefTup
+    const isvt = ((it === gen_ast.TypeRefPrim.Bool && !forceTrueForBools)
+        || (it === gen_ast.TypeRefPrim.Int && !forceTrueForInts)
+        || (ttup && ttup.TupOf && ttup.TupOf.length && !forceTrueForTups)
+    )
+    return !isvt
+}
+
+function typeRefUnMaybe(it: gen_ast.TypeRef, unMaybeBools: boolean, unMaybeInts: boolean, unMaybeTuples: boolean): gen_ast.TypeRef {
     const tmay = it as gen_ast.TypeRefMaybe
     if (tmay && tmay.Maybe) {
         const ttup = tmay.Maybe as gen_ast.TypeRefTup
-        if ((unmaybeTuples && ttup && ttup.TupOf && ttup.TupOf.length)
-            || (unmaybeBools && tmay.Maybe === gen_ast.TypeRefPrim.Bool)
-            || (unmaybeInts && tmay.Maybe === gen_ast.TypeRefPrim.Int))
-            return tmay.Maybe
+        if ((unMaybeTuples && ttup && ttup.TupOf && ttup.TupOf.length)
+            || (unMaybeBools && tmay.Maybe === gen_ast.TypeRefPrim.Bool)
+            || (unMaybeInts && tmay.Maybe === gen_ast.TypeRefPrim.Int))
+            return typeRefUnMaybe(tmay.Maybe, unMaybeBools, unMaybeInts, unMaybeTuples)
     }
     return it
 }

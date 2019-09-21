@@ -14,20 +14,6 @@
 
 
 
-# vscode:
-# Type Definition for Visual Studio Code 1.37 Extension API
-# See https://code.visualstudio.com/api for more information
-Vscode: interface
-
-    # window:
-    # Namespace for dealing with the current window of the editor. That is visible
-    # and active editors, as well as, UI elements to show messages, selections, and
-    # asking for user input.
-    Window: Window
-
-
-
-
 # Additional metadata about the type of a diagnostic.
 DiagnosticTag: enum
 
@@ -68,105 +54,16 @@ DiagnosticSeverity: enum
 
 
 
-# Options to configure the behavior of the message.
-MessageOptions: class
+# vscode:
+# Type Definition for Visual Studio Code 1.38 Extension API
+# See https://code.visualstudio.com/api for more information
+Vscode: interface
 
-    # modal:
-    # Indicates that this message should be modal.
-    #
-    # JSON FLAGS: {"Name":"modal","Required":false,"Excluded":false}
-    Modal: ?bool
-
-
-
-
-# Represents an action that is shown with an information, warning, or
-# error message.
-MessageItem: class
-
-    # title:
-    # A short title like 'Retry', 'Open Log' etc.
-    #
-    # JSON FLAGS: {"Name":"title","Required":true,"Excluded":false}
-    Title: string
-
-    # isCloseAffordance:
-    # A hint for modal dialogs that the item should be triggered
-    # when the user cancels the dialog (e.g. by pressing the ESC
-    # key).
-    # 
-    # Note: this option is ignored for non-modal messages.
-    #
-    # JSON FLAGS: {"Name":"isCloseAffordance","Required":false,"Excluded":false}
-    IsCloseAffordance: ?bool
-
-    # my:
-    # Free-form custom data, preserved across a roundtrip.
-    #
-    # JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
-    My: ?[string:Any]
-
-
-
-
-# Options to configure the behavior of the input box UI.
-InputBoxOptions: class
-
-    # value:
-    # The value to prefill in the input box.
-    #
-    # JSON FLAGS: {"Name":"value","Required":false,"Excluded":false}
-    Value: ?string
-
-    # valueSelection:
-    # Selection of the prefilled [`value`](#InputBoxOptions.value). Defined as tuple of two number where the
-    # first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
-    # word will be selected, when empty (start equals end) only the cursor will be set,
-    # otherwise the defined range will be selected.
-    #
-    # JSON FLAGS: {"Name":"valueSelection","Required":false,"Excluded":false}
-    ValueSelection: ?[int,int]
-
-    # prompt:
-    # The text to display underneath the input box.
-    #
-    # JSON FLAGS: {"Name":"prompt","Required":false,"Excluded":false}
-    Prompt: ?string
-
-    # placeHolder:
-    # An optional string to show as place holder in the input box to guide the user what to type.
-    #
-    # JSON FLAGS: {"Name":"placeHolder","Required":false,"Excluded":false}
-    PlaceHolder: ?string
-
-    # password:
-    # Set to `true` to show a password prompt that will not show the typed value.
-    #
-    # JSON FLAGS: {"Name":"password","Required":false,"Excluded":false}
-    Password: ?bool
-
-    # ignoreFocusOut:
-    # Set to `true` to keep the input box open when focus moves to another part of the editor or to another window.
-    #
-    # JSON FLAGS: {"Name":"ignoreFocusOut","Required":false,"Excluded":false}
-    IgnoreFocusOut: ?bool
-
-    # validateInput:
-    # An optional function that will be called to validate input and to give a hint
-    # to the user.
-    # 
-    # `value` ── The current value of the input box.
-    # 
-    # `return` ── A human readable string which is presented as diagnostic message.
-    # Return `undefined`, `null`, or the empty string when 'value' is valid.
-    #
-    # JSON FLAGS: {"Name":"validateInput","Required":false,"Excluded":true}
-    ValidateInput: ?(string->?string)
-
-    # For internal runtime use only.
-    #
-    # JSON FLAGS: {"Name":"validateInput_AppzFuncId","Required":false,"Excluded":false}
-    ValidateInput_AppzFuncId: string
+    # window:
+    # Namespace for dealing with the current window of the editor. That is visible
+    # and active editors, as well as, UI elements to show messages, selections, and
+    # asking for user input.
+    Window: Window
 
 
 
@@ -413,6 +310,109 @@ Window: interface
     ShowInputBox: void
         options: ?InputBoxOptions
         andThen: ?(?string->void)
+
+
+
+
+# Options to configure the behavior of the message.
+MessageOptions: class
+
+    # modal:
+    # Indicates that this message should be modal.
+    #
+    # JSON FLAGS: {"Name":"modal","Required":false,"Excluded":false}
+    Modal: ?bool
+
+
+
+
+# Represents an action that is shown with an information, warning, or
+# error message.
+MessageItem: class
+
+    # title:
+    # A short title like 'Retry', 'Open Log' etc.
+    #
+    # JSON FLAGS: {"Name":"title","Required":true,"Excluded":false}
+    Title: string
+
+    # isCloseAffordance:
+    # A hint for modal dialogs that the item should be triggered
+    # when the user cancels the dialog (e.g. by pressing the ESC
+    # key).
+    # 
+    # Note: this option is ignored for non-modal messages.
+    #
+    # JSON FLAGS: {"Name":"isCloseAffordance","Required":false,"Excluded":false}
+    IsCloseAffordance: ?bool
+
+    # my:
+    # Free-form custom data, preserved across a roundtrip.
+    #
+    # JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
+    My: ?[string:Any]
+
+
+
+
+# Options to configure the behavior of the input box UI.
+InputBoxOptions: class
+
+    # value:
+    # The value to prefill in the input box.
+    #
+    # JSON FLAGS: {"Name":"value","Required":false,"Excluded":false}
+    Value: ?string
+
+    # valueSelection:
+    # Selection of the prefilled [`value`](#InputBoxOptions.value). Defined as tuple of two number where the
+    # first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
+    # word will be selected, when empty (start equals end) only the cursor will be set,
+    # otherwise the defined range will be selected.
+    #
+    # JSON FLAGS: {"Name":"valueSelection","Required":false,"Excluded":false}
+    ValueSelection: ?[int,int]
+
+    # prompt:
+    # The text to display underneath the input box.
+    #
+    # JSON FLAGS: {"Name":"prompt","Required":false,"Excluded":false}
+    Prompt: ?string
+
+    # placeHolder:
+    # An optional string to show as place holder in the input box to guide the user what to type.
+    #
+    # JSON FLAGS: {"Name":"placeHolder","Required":false,"Excluded":false}
+    PlaceHolder: ?string
+
+    # password:
+    # Set to `true` to show a password prompt that will not show the typed value.
+    #
+    # JSON FLAGS: {"Name":"password","Required":false,"Excluded":false}
+    Password: ?bool
+
+    # ignoreFocusOut:
+    # Set to `true` to keep the input box open when focus moves to another part of the editor or to another window.
+    #
+    # JSON FLAGS: {"Name":"ignoreFocusOut","Required":false,"Excluded":false}
+    IgnoreFocusOut: ?bool
+
+    # validateInput:
+    # An optional function that will be called to validate input and to give a hint
+    # to the user.
+    # 
+    # `value` ── The current value of the input box.
+    # 
+    # `return` ── A human readable string which is presented as diagnostic message.
+    # Return `undefined`, `null`, or the empty string when 'value' is valid.
+    #
+    # JSON FLAGS: {"Name":"validateInput","Required":false,"Excluded":true}
+    ValidateInput: ?(string->?string)
+
+    # For internal runtime use only.
+    #
+    # JSON FLAGS: {"Name":"validateInput_AppzFuncId","Required":false,"Excluded":false}
+    ValidateInput_AppzFuncId: string
 
 
 

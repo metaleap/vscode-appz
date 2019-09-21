@@ -7,7 +7,7 @@ namespace VscAppz {
 	using Any = System.Object;
 
 	/// <summary>
-	/// Type Definition for Visual Studio Code 1.37 Extension API
+	/// Type Definition for Visual Studio Code 1.38 Extension API
 	/// See https://code.visualstudio.com/api for more information
 	/// </summary>
 	public interface IVscode {

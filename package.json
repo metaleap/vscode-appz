@@ -10,9 +10,9 @@
 	},
 	"displayName": "VS Code Appz",
 	"description": "Exposes Visual Studio Code as a GUI layer to your written-in-[Go|C#|Python|your-lang-here] programs (for that sweet spot where printf/TUIs no longer suffice but a full-fledged Native App or reactive SPA would be overkill).",
-	"version": "1.0.0",
+	"version": "1.38.1",
 	"engines": {
-		"vscode": "^1.37.1"
+		"vscode": "^1.38.1"
 	},
 	"categories": [
 		"Other"
@@ -55,13 +55,11 @@
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
-		"@types/mocha": "^5.2.7",
-		"@types/node": "^12.7.2",
-		"@types/vscode": "^1.37.0",
+		"@types/node": "^12.7.5",
+		"@types/vscode": "^1.38.0",
 		"glob": "^7.1.4",
-		"mocha": "^6.2.0",
-		"tslint": "^5.19.0",
-		"typescript": "^3.5.3",
+		"tslint": "^5.20.0",
+		"typescript": "^3.6.3",
 		"vscode-test": "^1.2.0"
 	}
 }

@@ -7,9 +7,6 @@ namespace VscAppz {
 	using Any = System.Object;
 	using Dict = Dictionary<string, Any>;
 
-	public interface IVscode {
-		IWindow Window;
-	}
 	public enum DiagnosticTag{
 		Unnecessary = 1,
 		Deprecated = 2,
@@ -19,6 +16,24 @@ namespace VscAppz {
 		Warning = 1,
 		Information = 2,
 		Hint = 3,
+	}
+	public interface IVscode {
+		IWindow Window;
+	}
+	public interface IWindow {
+		void ShowErrorMessage(string message = default, string[] items = default, Action<string> andThen = default);
+		void ShowErrorMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
+		void ShowErrorMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+		void ShowErrorMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+		void ShowInformationMessage(string message = default, string[] items = default, Action<string> andThen = default);
+		void ShowInformationMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
+		void ShowInformationMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+		void ShowInformationMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+		void ShowWarningMessage(string message = default, string[] items = default, Action<string> andThen = default);
+		void ShowWarningMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
+		void ShowWarningMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+		void ShowWarningMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+		void ShowInputBox(InputBoxOptions options = default, Action<string> andThen = default);
 	}
 	public partial class MessageOptions {
 		[JsonProperty("modal")]
@@ -50,413 +65,410 @@ namespace VscAppz {
 		[JsonProperty("validateInput_AppzFuncId")]
 		public string ValidateInput_AppzFuncId;
 	}
-	public interface IWindow {
-		void ShowErrorMessage(string message = default, string[] items = default, Action<string> andThen = default);
-		void ShowErrorMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
-		void ShowErrorMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
-		void ShowErrorMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
-		void ShowInformationMessage(string message = default, string[] items = default, Action<string> andThen = default);
-		void ShowInformationMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
-		void ShowInformationMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
-		void ShowInformationMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
-		void ShowWarningMessage(string message = default, string[] items = default, Action<string> andThen = default);
-		void ShowWarningMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
-		void ShowWarningMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
-		void ShowWarningMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
-		void ShowInputBox(InputBoxOptions options = default, Action<string> andThen = default);
-	}
 	internal partial class impl : IVscode, IWindow {
-
-
-		IVscode·Window: ( -> IWindow)
-			return this
-
-
-
-
-		IWindow·ShowErrorMessage: (message:string -> items:string[] -> andThen:Action<string> -> void)
-			var msg of ipcMsg
-			msg = ipcMsg·new
-			msg.QName = "window.showErrorMessage1"
-			msg.Data = dict·new(2)
-			msg.Data@"message" = message
-			msg.Data@"items" = items
-			var on of Func<Any, bool>
-			if (=?andThen)
-				on = (payload:Any -> bool)
-					var ok of bool
-					var result of string
-					if (=?payload)
-						[result,ok] = ((payload)·(string))
-						if (!ok)
-							return false
-					andThen(result)
-					return true
-				
-			this.send(msg, on)
-
-
-
-
-		IWindow·ShowErrorMessage: (message:string -> options:MessageOptions -> items:string[] -> andThen:Action<string> -> void)
-			var msg of ipcMsg
-			msg = ipcMsg·new
-			msg.QName = "window.showErrorMessage2"
-			msg.Data = dict·new(3)
-			msg.Data@"message" = message
-			msg.Data@"options" = options
-			msg.Data@"items" = items
-			var on of Func<Any, bool>
-			if (=?andThen)
-				on = (payload:Any -> bool)
-					var ok of bool
-					var result of string
-					if (=?payload)
-						[result,ok] = ((payload)·(string))
-						if (!ok)
-							return false
-					andThen(result)
-					return true
-				
-			this.send(msg, on)
-
-
-
-
-		IWindow·ShowErrorMessage: (message:string -> items:MessageItem[] -> andThen:Action<MessageItem> -> void)
-			var msg of ipcMsg
-			msg = ipcMsg·new
-			msg.QName = "window.showErrorMessage3"
-			msg.Data = dict·new(2)
-			msg.Data@"message" = message
-			msg.Data@"items" = items
-			var on of Func<Any, bool>
-			if (=?andThen)
-				on = (payload:Any -> bool)
-					var ok of bool
-					var result of MessageItem
-					if (=?payload)
-						result = MessageItem·new
-						ok = result.populateFrom(payload)
-						if (!ok)
-							return false
-					andThen(result)
-					return true
-				
-			this.send(msg, on)
-
-
-
-
-		IWindow·ShowErrorMessage: (message:string -> options:MessageOptions -> items:MessageItem[] -> andThen:Action<MessageItem> -> void)
-			var msg of ipcMsg
-			msg = ipcMsg·new
-			msg.QName = "window.showErrorMessage4"
-			msg.Data = dict·new(3)
-			msg.Data@"message" = message
-			msg.Data@"options" = options
-			msg.Data@"items" = items
-			var on of Func<Any, bool>
-			if (=?andThen)
-				on = (payload:Any -> bool)
-					var ok of bool
-					var result of MessageItem
-					if (=?payload)
-						result = MessageItem·new
-						ok = result.populateFrom(payload)
-						if (!ok)
-							return false
-					andThen(result)
-					return true
-				
-			this.send(msg, on)
-
-
-
-
-		IWindow·ShowInformationMessage: (message:string -> items:string[] -> andThen:Action<string> -> void)
-			var msg of ipcMsg
-			msg = ipcMsg·new
-			msg.QName = "window.showInformationMessage1"
-			msg.Data = dict·new(2)
-			msg.Data@"message" = message
-			msg.Data@"items" = items
-			var on of Func<Any, bool>
-			if (=?andThen)
-				on = (payload:Any -> bool)
-					var ok of bool
-					var result of string
-					if (=?payload)
-						[result,ok] = ((payload)·(string))
-						if (!ok)
-							return false
-					andThen(result)
-					return true
-				
-			this.send(msg, on)
-
-
-
-
-		IWindow·ShowInformationMessage: (message:string -> options:MessageOptions -> items:string[] -> andThen:Action<string> -> void)
-			var msg of ipcMsg
-			msg = ipcMsg·new
-			msg.QName = "window.showInformationMessage2"
-			msg.Data = dict·new(3)
-			msg.Data@"message" = message
-			msg.Data@"options" = options
-			msg.Data@"items" = items
-			var on of Func<Any, bool>
-			if (=?andThen)
-				on = (payload:Any -> bool)
-					var ok of bool
-					var result of string
-					if (=?payload)
-						[result,ok] = ((payload)·(string))
-						if (!ok)
-							return false
-					andThen(result)
-					return true
-				
-			this.send(msg, on)
-
-
-
-
-		IWindow·ShowInformationMessage: (message:string -> items:MessageItem[] -> andThen:Action<MessageItem> -> void)
-			var msg of ipcMsg
-			msg = ipcMsg·new
-			msg.QName = "window.showInformationMessage3"
-			msg.Data = dict·new(2)
-			msg.Data@"message" = message
-			msg.Data@"items" = items
-			var on of Func<Any, bool>
-			if (=?andThen)
-				on = (payload:Any -> bool)
-					var ok of bool
-					var result of MessageItem
-					if (=?payload)
-						result = MessageItem·new
-						ok = result.populateFrom(payload)
-						if (!ok)
-							return false
-					andThen(result)
-					return true
-				
-			this.send(msg, on)
-
-
-
-
-		IWindow·ShowInformationMessage: (message:string -> options:MessageOptions -> items:MessageItem[] -> andThen:Action<MessageItem> -> void)
-			var msg of ipcMsg
-			msg = ipcMsg·new
-			msg.QName = "window.showInformationMessage4"
-			msg.Data = dict·new(3)
-			msg.Data@"message" = message
-			msg.Data@"options" = options
-			msg.Data@"items" = items
-			var on of Func<Any, bool>
-			if (=?andThen)
-				on = (payload:Any -> bool)
-					var ok of bool
-					var result of MessageItem
-					if (=?payload)
-						result = MessageItem·new
-						ok = result.populateFrom(payload)
-						if (!ok)
-							return false
-					andThen(result)
-					return true
-				
-			this.send(msg, on)
-
-
-
-
-		IWindow·ShowWarningMessage: (message:string -> items:string[] -> andThen:Action<string> -> void)
-			var msg of ipcMsg
-			msg = ipcMsg·new
-			msg.QName = "window.showWarningMessage1"
-			msg.Data = dict·new(2)
-			msg.Data@"message" = message
-			msg.Data@"items" = items
-			var on of Func<Any, bool>
-			if (=?andThen)
-				on = (payload:Any -> bool)
-					var ok of bool
-					var result of string
-					if (=?payload)
-						[result,ok] = ((payload)·(string))
-						if (!ok)
-							return false
-					andThen(result)
-					return true
-				
-			this.send(msg, on)
-
-
-
-
-		IWindow·ShowWarningMessage: (message:string -> options:MessageOptions -> items:string[] -> andThen:Action<string> -> void)
-			var msg of ipcMsg
-			msg = ipcMsg·new
-			msg.QName = "window.showWarningMessage2"
-			msg.Data = dict·new(3)
-			msg.Data@"message" = message
-			msg.Data@"options" = options
-			msg.Data@"items" = items
-			var on of Func<Any, bool>
-			if (=?andThen)
-				on = (payload:Any -> bool)
-					var ok of bool
-					var result of string
-					if (=?payload)
-						[result,ok] = ((payload)·(string))
-						if (!ok)
-							return false
-					andThen(result)
-					return true
-				
-			this.send(msg, on)
-
-
-
-
-		IWindow·ShowWarningMessage: (message:string -> items:MessageItem[] -> andThen:Action<MessageItem> -> void)
-			var msg of ipcMsg
-			msg = ipcMsg·new
-			msg.QName = "window.showWarningMessage3"
-			msg.Data = dict·new(2)
-			msg.Data@"message" = message
-			msg.Data@"items" = items
-			var on of Func<Any, bool>
-			if (=?andThen)
-				on = (payload:Any -> bool)
-					var ok of bool
-					var result of MessageItem
-					if (=?payload)
-						result = MessageItem·new
-						ok = result.populateFrom(payload)
-						if (!ok)
-							return false
-					andThen(result)
-					return true
-				
-			this.send(msg, on)
-
-
-
-
-		IWindow·ShowWarningMessage: (message:string -> options:MessageOptions -> items:MessageItem[] -> andThen:Action<MessageItem> -> void)
-			var msg of ipcMsg
-			msg = ipcMsg·new
-			msg.QName = "window.showWarningMessage4"
-			msg.Data = dict·new(3)
-			msg.Data@"message" = message
-			msg.Data@"options" = options
-			msg.Data@"items" = items
-			var on of Func<Any, bool>
-			if (=?andThen)
-				on = (payload:Any -> bool)
-					var ok of bool
-					var result of MessageItem
-					if (=?payload)
-						result = MessageItem·new
-						ok = result.populateFrom(payload)
-						if (!ok)
-							return false
-					andThen(result)
-					return true
-				
-			this.send(msg, on)
-
-
-
-
-		IWindow·ShowInputBox: (options:InputBoxOptions -> andThen:Action<string> -> void)
-			var msg of ipcMsg
-			msg = ipcMsg·new
-			msg.QName = "window.showInputBox"
-			msg.Data = dict·new(1)
-			var fnids of List<string>
-			fnids = [string]·new(1)
-			lock this
-				if (=?options)
-					options.ValidateInput_AppzFuncId = ""
-					var fn of Func<string, string>
-					fn = options.ValidateInput
-					if (=?fn)
-						options.ValidateInput_AppzFuncId = this.nextFuncId()
-						fnids·add(options.ValidateInput_AppzFuncId)
-						this.cbOther@options.ValidateInput_AppzFuncId = (args:Any[] -> (Any, bool))
-							if (1 != args·len)
-								return [null,false]
-							else
-								var ok of bool
-								var __0 of string
-								if (=?args@0)
-									[__0,ok] = ((args@0)·(string))
-									if (!ok)
-										return [null,false]
-								return [fn(__0),true]
-						
-			msg.Data@"options" = options
-			var on of Func<Any, bool>
-			if (=?andThen)
-				on = (payload:Any -> bool)
-					var ok of bool
-					var result of string
-					if (=?payload)
-						[result,ok] = ((payload)·(string))
-						if (!ok)
-							return false
-					andThen(result)
-					return true
-				
-			this.send(msg, (payload:Any -> bool)
-				if (fnids·len != 0)
-					lock this
-						for fnid in fnids
-							this.cbOther·del(fnid)
-				return ((=!on) || on(payload))
-			)
-
-
+		IWindow IVscode.Window { get {
+			return this;
+		} }
+		void IWindow.ShowErrorMessage(string message, string[] items, Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showErrorMessage1";
+			msg.Data = new Dict(2);
+			msg.Data["message"] = message;
+			msg.Data["items"] = items;
+			Func<Any, bool> on = default;
+			if ((null != andThen)) {
+				on = (Any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+		void IWindow.ShowErrorMessage(string message, MessageOptions options, string[] items, Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showErrorMessage2";
+			msg.Data = new Dict(3);
+			msg.Data["message"] = message;
+			msg.Data["options"] = options;
+			msg.Data["items"] = items;
+			Func<Any, bool> on = default;
+			if ((null != andThen)) {
+				on = (Any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+		void IWindow.ShowErrorMessage(string message, MessageItem[] items, Action<MessageItem> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showErrorMessage3";
+			msg.Data = new Dict(2);
+			msg.Data["message"] = message;
+			msg.Data["items"] = items;
+			Func<Any, bool> on = default;
+			if ((null != andThen)) {
+				on = (Any payload) => {
+					bool ok = default;
+					MessageItem result = default;
+					if ((null != payload)) {
+						result = new MessageItem();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+		void IWindow.ShowErrorMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showErrorMessage4";
+			msg.Data = new Dict(3);
+			msg.Data["message"] = message;
+			msg.Data["options"] = options;
+			msg.Data["items"] = items;
+			Func<Any, bool> on = default;
+			if ((null != andThen)) {
+				on = (Any payload) => {
+					bool ok = default;
+					MessageItem result = default;
+					if ((null != payload)) {
+						result = new MessageItem();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+		void IWindow.ShowInformationMessage(string message, string[] items, Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showInformationMessage1";
+			msg.Data = new Dict(2);
+			msg.Data["message"] = message;
+			msg.Data["items"] = items;
+			Func<Any, bool> on = default;
+			if ((null != andThen)) {
+				on = (Any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+		void IWindow.ShowInformationMessage(string message, MessageOptions options, string[] items, Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showInformationMessage2";
+			msg.Data = new Dict(3);
+			msg.Data["message"] = message;
+			msg.Data["options"] = options;
+			msg.Data["items"] = items;
+			Func<Any, bool> on = default;
+			if ((null != andThen)) {
+				on = (Any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+		void IWindow.ShowInformationMessage(string message, MessageItem[] items, Action<MessageItem> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showInformationMessage3";
+			msg.Data = new Dict(2);
+			msg.Data["message"] = message;
+			msg.Data["items"] = items;
+			Func<Any, bool> on = default;
+			if ((null != andThen)) {
+				on = (Any payload) => {
+					bool ok = default;
+					MessageItem result = default;
+					if ((null != payload)) {
+						result = new MessageItem();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+		void IWindow.ShowInformationMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showInformationMessage4";
+			msg.Data = new Dict(3);
+			msg.Data["message"] = message;
+			msg.Data["options"] = options;
+			msg.Data["items"] = items;
+			Func<Any, bool> on = default;
+			if ((null != andThen)) {
+				on = (Any payload) => {
+					bool ok = default;
+					MessageItem result = default;
+					if ((null != payload)) {
+						result = new MessageItem();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+		void IWindow.ShowWarningMessage(string message, string[] items, Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showWarningMessage1";
+			msg.Data = new Dict(2);
+			msg.Data["message"] = message;
+			msg.Data["items"] = items;
+			Func<Any, bool> on = default;
+			if ((null != andThen)) {
+				on = (Any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+		void IWindow.ShowWarningMessage(string message, MessageOptions options, string[] items, Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showWarningMessage2";
+			msg.Data = new Dict(3);
+			msg.Data["message"] = message;
+			msg.Data["options"] = options;
+			msg.Data["items"] = items;
+			Func<Any, bool> on = default;
+			if ((null != andThen)) {
+				on = (Any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+		void IWindow.ShowWarningMessage(string message, MessageItem[] items, Action<MessageItem> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showWarningMessage3";
+			msg.Data = new Dict(2);
+			msg.Data["message"] = message;
+			msg.Data["items"] = items;
+			Func<Any, bool> on = default;
+			if ((null != andThen)) {
+				on = (Any payload) => {
+					bool ok = default;
+					MessageItem result = default;
+					if ((null != payload)) {
+						result = new MessageItem();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+		void IWindow.ShowWarningMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showWarningMessage4";
+			msg.Data = new Dict(3);
+			msg.Data["message"] = message;
+			msg.Data["options"] = options;
+			msg.Data["items"] = items;
+			Func<Any, bool> on = default;
+			if ((null != andThen)) {
+				on = (Any payload) => {
+					bool ok = default;
+					MessageItem result = default;
+					if ((null != payload)) {
+						result = new MessageItem();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+		void IWindow.ShowInputBox(InputBoxOptions options, Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showInputBox";
+			msg.Data = new Dict(1);
+			List<string> fnids = default;
+			fnids = new List<string>(1);
+			lock (this) {
+				if ((null != options)) {
+					options.ValidateInput_AppzFuncId = "";
+					Func<string, string> fn = default;
+					fn = options.ValidateInput;
+					if ((null != fn)) {
+						options.ValidateInput_AppzFuncId = this.nextFuncId();
+						fnids.Add(options.ValidateInput_AppzFuncId);
+						this.cbOther[options.ValidateInput_AppzFuncId] = (Any[] args) => {
+							if ((1 != args.Count)) {
+								return (null, false);
+							} else {
+								bool ok = default;
+								string __0 = default;
+								if ((null != args[0])) {
+									(__0, ok) = (args[0] is string) ? (((string)(args[0])), true) : (default, false);
+									if ((!ok)) {
+										return (null, false);
+									}
+								}
+								return (fn(__0), true);
+							}							
+						};
+					}
+				}
+			}
+			msg.Data["options"] = options;
+			Func<Any, bool> on = default;
+			if ((null != andThen)) {
+				on = (Any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, (Any payload) => {
+				if ((fnids.Count != 0)) {
+					lock (this) {
+						for (var fnid in fnids) {
+							this.cbOther.Delete(fnid);
+						}
+					}
+				}
+				return ((null == on) || on(payload));
+			});
+		}
 	}
-
-
-	MessageItem·populateFrom: (payload:Any -> bool)
-		var dict of Dict
-		var ok of bool
-		var val of Any
-		[dict,ok] = ((payload)·(Dict))
-		if (!ok)
-			return false
-		[val,ok] = dict@"title"
-		if ok
-			var title of string
-			[title,ok] = ((val)·(string))
-			if (!ok)
-				return false
-			this.Title = title
-		else
-			return false
-		[val,ok] = dict@"isCloseAffordance"
-		if ok
-			var isCloseAffordance of Nullable<bool>
-			[isCloseAffordance,ok] = ((val)·(Nullable<bool>))
-			if (!ok)
-				return false
-			this.IsCloseAffordance = isCloseAffordance
-		[val,ok] = dict@"my"
-		if ok
-			var my of Dict
-			[my,ok] = ((val)·(Dict))
-			if (!ok)
-				return false
-			this.My = my
-		return true
-
-
+	internal partial class MessageItem {
+		internal bool populateFrom(Any payload) {
+			Dict dict = default;
+			bool ok = default;
+			Any val = default;
+			(dict, ok) = (payload is Dict) ? (((Dict)(payload)), true) : (default, false);
+			if ((!ok)) {
+				return false;
+			}
+			(val, ok) = dict["title"];
+			if (ok) {
+				string title = default;
+				(title, ok) = (null == val) ? (default, true) : (val is string) ? (((string)(val)), true) : (default, false);
+				if ((!ok)) {
+					return false;
+				}
+				this.Title = title;
+			} else {
+				return false;
+			}			
+			(val, ok) = dict["isCloseAffordance"];
+			if (ok) {
+				Nullable<bool> isCloseAffordance = default;
+				(isCloseAffordance, ok) = (null == val) ? (default, true) : (val is bool) ? (((bool)(val)), true) : (default, false);
+				if ((!ok)) {
+					return false;
+				}
+				this.IsCloseAffordance = isCloseAffordance;
+			}
+			(val, ok) = dict["my"];
+			if (ok) {
+				Dict my = default;
+				(my, ok) = (null == val) ? (default, true) : (val is Dict) ? (((Dict)(val)), true) : (default, false);
+				if ((!ok)) {
+					return false;
+				}
+				this.My = my;
+			}
+			return true;
+		}		}
+	}
 }

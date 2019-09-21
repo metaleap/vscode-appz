@@ -6,7 +6,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <PackageId>metaleap_VscAppz</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.38.1</Version>
     <Title>VS Code Appz: dotnet binding</Title>
     <Authors>metaleap</Authors>
     <Company>metaleap</Company>
