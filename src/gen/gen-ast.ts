@@ -352,7 +352,7 @@ export class Builder {
 
 export class Gen extends gen.Gen implements gen.IGen {
     private src: string = ''
-    private indent: number = 0
+    private indents: number = 0
 
     protected b: Builder = null
 
@@ -373,24 +373,35 @@ export class Gen extends gen.Gen implements gen.IGen {
         idents: {
             curInst: "this",
             typeAny: "Any",
-        }
+        },
+        indent: '    '
     }
 
-    protected indented(andThen: () => void): Gen {
-        this.indent++
+    indented(andThen: () => void): Gen {
+        this.indents++
         andThen()
-        this.indent--
+        this.indents--
         return this
     }
 
-    protected ln(andThen: (() => void)): Gen {
-        this.src += "\t".repeat(this.indent)
+    indent(): Gen {
+        this.indents++
+        return this
+    }
+
+    outdent(): Gen {
+        this.indents--
+        return this
+    }
+
+    ln(andThen: (() => void)): Gen {
+        this.src += this.options.indent.repeat(this.indents)
         andThen()
         this.src += "\n"
         return this
     }
 
-    protected each<T>(arr: T[], joinBy: string, andThen: ((_: T) => void)): Gen {
+    each<T>(arr: T[], joinBy: string, andThen: ((_: T) => void)): Gen {
         for (let i = 0; i < arr.length; i++) {
             if (i > 0)
                 this.s(joinBy)
@@ -399,29 +410,29 @@ export class Gen extends gen.Gen implements gen.IGen {
         return this
     }
 
-    protected line(srcLn: string = ''): Gen {
+    line(srcLn: string = ''): Gen {
         return this.lines(srcLn)
     }
 
-    protected lines(...srcLns: string[]): Gen {
+    lines(...srcLns: string[]): Gen {
         for (const srcln of srcLns)
-            this.src += ((srcln && srcln.length) ? ("\t".repeat(this.indent) + srcln) : '') + "\n"
+            this.src += ((srcln && srcln.length) ? (this.options.indent.repeat(this.indents) + srcln) : '') + "\n"
         return this
     }
 
-    protected s(...s: string[]): Gen {
+    s(...s: string[]): Gen {
         for (const str of s)
             this.src += str
         return this
     }
 
-    protected when(check: any, ifTrue: () => void, ifFalse: () => void): Gen {
+    when(check: any, ifTrue: () => void, ifFalse: () => void): Gen {
         if (check) ifTrue()
         else ifFalse()
         return this
     }
 
-    protected emitDocs = (it: (WithDocs & WithName)): Gen => {
+    emitDocs(it: (WithDocs & WithName)): Gen {
         if (it.name && it.Name && it.name !== it.Name)
             this.line("# " + it.name + ":")
         for (const doc of it.Docs) {
@@ -433,7 +444,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         return this
     }
 
-    protected emitEnum = (it: TEnum) => {
+    emitEnum(it: TEnum) {
         this.lines('', '')
             .emitDocs(it)
             .line(it.Name + ": enum")
@@ -444,7 +455,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             .lines('', '')
     }
 
-    protected emitInterface = (it: TInterface) => {
+    emitInterface(it: TInterface) {
         this.lines('', '')
             .emitDocs(it)
             .line(it.Name + ": interface")
@@ -458,7 +469,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             })).lines('', '')
     }
 
-    protected emitStruct = (it: TStruct) => {
+    emitStruct(it: TStruct) {
         this.lines('', '')
             .emitDocs(it)
             .line(it.Name + ": class")
@@ -470,7 +481,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             })).lines('', '')
     }
 
-    protected emitTypeRef = (it: TypeRef): Gen => {
+    emitTypeRef(it: TypeRef): Gen {
         if (it === null)
             return this.s("void")
 
@@ -508,7 +519,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         throw it
     }
 
-    protected emitMethodImpl(iface: WithName, method: Method, fillBody: ((iface: WithName, method: Method, _: Builder, bodyToFill: Instr[]) => void)) {
+    emitMethodImpl(iface: WithName, method: Method, fillBody: ((iface: WithName, method: Method, _: Builder, bodyToFill: Instr[]) => void)) {
         const me: Func = {
             name: method.name, Name: method.Name, Type: iface, Func: {
                 Args: method.Args, Type: method.Type, Body: { Instrs: [] }
@@ -518,14 +529,14 @@ export class Gen extends gen.Gen implements gen.IGen {
         this.emitFuncImpl(me)
     }
 
-    protected emitFuncImpl = (it: Func) => {
+    emitFuncImpl(it: Func) {
         this.lines('', '')
             .ln(() => this.emitTypeRef(it.Type).s('·', it.Name, ': (').each(it.Func.Args, ' -> ', _ => this.s(_.Name, ':').emitTypeRef(_.Type)).s(' -> ').emitTypeRef(it.Func.Type).s(')'))
             .emitInstr(it.Func.Body)
             .lines('', '')
     }
 
-    protected emitInstr = (it: Instr): Gen => {
+    emitInstr(it: Instr): Gen {
         if (it) {
 
             const iret = it as IRet
@@ -581,11 +592,11 @@ export class Gen extends gen.Gen implements gen.IGen {
         return this
     }
 
-    protected emitExprs(joinBy: string, ...arr: Expr[]): Gen {
+    emitExprs(joinBy: string, ...arr: Expr[]): Gen {
         return this.each(arr, joinBy, (_) => this.emitExpr(_))
     }
 
-    protected emitExpr = (it: Expr): Gen => {
+    emitExpr(it: Expr): Gen {
         if (it === undefined)
             return this
         if (it === null)
@@ -640,7 +651,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 .s(' -> ').emitTypeRef(efn.Type)
                 .s(')\n')
                 .emitInstr(efn.Body)
-                .s('\t'.repeat(this.indent))
+                .s(this.options.indent.repeat(this.indents))
 
         const ename = it as EName
         if (ename && ename.Name !== undefined)
@@ -794,7 +805,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         )
     }
 
-    protected emitIntro = (): Gen => {
+    emitIntro(): Gen {
         return this.lines("#",
             "# NOTE, this is not a CoffeeScript file: the .coffee extension is solely",
             "# for the convenience of syntax-highlighting in editors & source viewers.",
@@ -809,7 +820,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             "#", "", "")
     }
 
-    protected emitOutro = (): Gen => {
+    emitOutro(): Gen {
         return this.lines("# override `emitOutro` for this trailing part..")
     }
 
