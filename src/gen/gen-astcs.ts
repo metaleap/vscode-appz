@@ -29,38 +29,56 @@ export class Gen extends gen_ast.Gen {
         return this.undent().lines("}")
     }
 
+    emitDocs(it: (gen_ast.WithDocs & gen_ast.WithName)): Gen {
+        if (it.Docs && it.Docs.length)
+            for (const doc of it.Docs)
+                if (doc.Lines && doc.Lines.length)
+                    if (doc.ForParam && doc.ForParam.length)
+                        this.line("/// <param name=\"" + doc.ForParam + "\">" + doc.Lines.join(" ") + "</param>")
+                    else if (doc.Lines.length > 1)
+                        this.line("/// <summary>")
+                            .lines(...doc.Lines.map(_ => "/// " + _))
+                            .line("/// </summary>")
+                    else
+                        this.line("/// <summary>" + doc.Lines[0] + "</summary>")
+        return this
+    }
+
     emitEnum(it: gen_ast.TEnum) {
-        this.line("public enum " + it.Name + "{")
-            .indented(() => this.each(it.Enumerants, "", e =>
-                this.line(e.Name + " = " + e.Value + ",")
+        this.emitDocs(it)
+            .line("public enum " + it.Name + " {")
+            .indented(() => this.each(it.Enumerants, "\n", e =>
+                this.emitDocs(e).line(e.Name + " = " + e.Value + ",")
             ))
-            .line("}")
+            .lines("}", "")
     }
 
     emitInterface(it: gen_ast.TInterface) {
-        this.line("public interface " + it.Name + " {")
-            .indented(() => this.each(it.Methods, "", m => this.ln(() =>
-                this.emitTypeRef(m.Type).s(" ", m.Name)
+        this.emitDocs(it)
+            .line("public interface " + it.Name + " {")
+            .indented(() => this.each(it.Methods, "\n", m =>
+                this.emitDocs(m).lf()
+                    .emitTypeRef(m.Type).s(" ", m.Name)
                     .when(m.Args && m.Args.length, () =>
                         this.s("(").each(m.Args, ", ", a =>
                             this.emitTypeRef(a.Type).s(" ", a.Name, " = default")
                         ).s(")"),
-                    ).s(";")
-            )))
-            .line("}")
+                    ).s(";").line()
+            ))
+            .lines("}", "")
     }
 
     emitStruct(it: gen_ast.TStruct) {
-        this.line("public partial class " + it.Name + " {")
-            .indented(() => this.each(it.Fields, "", fld =>
+        this.line("public partial class " + it.Name + " {").indented(() =>
+            this.each(it.Fields, "", fld =>
                 this.line(fld.Json.Excluded ? "[JsonIgnore]"
                     : `[JsonProperty("${fld.Json.Name}")` + (fld.Json.Required ? ", JsonRequired]" : "]")
                 ).ln(() => this
                     .s("public ")
-                    .emitTypeRef(typeRefUnMaybe(fld.Type, true, false, false))
+                    .emitTypeRef(fld.Type)
                     .s(" ", fld.Name, ";")
-                )))
-            .line("}")
+                ))
+        ).line("}")
     }
 
     onBeforeEmitImpls(...interfaces: gen_ast.TInterface[]) {
@@ -93,17 +111,14 @@ export class Gen extends gen_ast.Gen {
         if (struct)
             this.line("internal partial class " + struct.Name + " {")
                 .indented(() =>
-                    emitsigheadln()
-                        .emitInstr(it.Func.Body)
-                        .line("}")
-                )
-                .line("}")
+                    emitsigheadln().emitInstr(it.Func.Body).line()
+                ).line("}")
         else if (iface)
             emitsigheadln()
                 .emitInstr(it.Func.Body)
                 .s(isproperty ? " }" : "").line()
         else
-            super.emitFuncImpl(it)
+            throw it;
     }
 
     emitInstr(it: gen_ast.Instr): Gen {
@@ -237,6 +252,10 @@ export class Gen extends gen_ast.Gen {
             : this.s("Func<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(", ").emitTypeRef(tfun.To).s(">")
 
         return super.emitTypeRef(it)
+    }
+
+    typeRefForField(it: gen_ast.TypeRef): gen_ast.TypeRef {
+        return typeRefUnMaybe(it, true, false, false)
     }
 
 }

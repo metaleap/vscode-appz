@@ -228,7 +228,7 @@ export class Builder {
                 name: _.name,
                 Name: this.gen.nameRewriters.fields(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummaryFor.funcFields),
-                Type: this.typeRef(_.typeSpec, _.optional),
+                Type: this.gen.typeRefForField(this.typeRef(_.typeSpec, _.optional)),
                 Json: { Name: _.name, Required: !_.optional, Excluded: it.funcFields.some(ff => _.name === ff) },
             }))
         }
@@ -444,12 +444,13 @@ export class Gen extends gen.Gen implements gen.IGen {
     emitDocs(it: (WithDocs & WithName)): Gen {
         if (it.name && it.Name && it.name !== it.Name)
             this.line("# " + it.name + ":")
-        for (const doc of it.Docs) {
-            if (doc.ForParam && doc.ForParam.length)
-                this.lines('#', "# @" + doc.ForParam + ":")
-            for (const docln of doc.Lines)
-                this.line("# " + docln)
-        }
+        if (it.Docs && it.Docs.length)
+            for (const doc of it.Docs) {
+                if (doc.ForParam && doc.ForParam.length)
+                    this.lines('#', "# @" + doc.ForParam + ":")
+                for (const docln of doc.Lines)
+                    this.line("# " + docln)
+            }
         return this
     }
 
@@ -710,9 +711,9 @@ export class Gen extends gen.Gen implements gen.IGen {
                 body.push(
                     _.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdx(_.n('dict'), _.eLit(fld.Json.Name))),
                     _.iIf(_.n('ok'), [
-                        _.iVar(fld.name, fld.Type) as Instr,
+                        _.iVar(fld.name, this.typeRefForField(fld.Type)) as Instr,
                     ].concat(
-                        this.genConvertOrReturn(fld.name, _.n('val'), fld.Type, false),
+                        this.genConvertOrReturn(fld.name, _.n('val'), this.typeRefForField(fld.Type), false),
                         _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name)),
                     ),
                         fld.Json.Required ? [_.iRet(_.eLit(false))] : []
@@ -923,6 +924,10 @@ export class Gen extends gen.Gen implements gen.IGen {
     typeTup(typeRef: TypeRef): TypeRefTup {
         const me = typeRef as TypeRefTup
         return (me && me.TupOf && me.TupOf.length) ? me : null
+    }
+
+    typeRefForField(it: TypeRef): TypeRef {
+        return it
     }
 
 }

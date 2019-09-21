@@ -7,34 +7,272 @@ namespace VscAppz {
 	using Any = System.Object;
 	using Dict = Dictionary<string, Any>;
 
-	public enum DiagnosticTag{
+	/// <summary>Additional metadata about the type of a diagnostic.</summary>
+	public enum DiagnosticTag {
+		/// <summary>
+		/// Unused or unnecessary code.
+		/// 
+		/// Diagnostics with this tag are rendered faded out. The amount of fading
+		/// is controlled by the `"editorUnnecessaryCode.opacity"` theme color. For
+		/// example, `"editorUnnecessaryCode.opacity": "#000000c0"` will render the
+		/// code with 75% opacity. For high contrast themes, use the
+		/// `"editorUnnecessaryCode.border"` theme color to underline unnecessary code
+		/// instead of fading it out.
+		/// </summary>
 		Unnecessary = 1,
+
+		/// <summary>
+		/// Deprecated or obsolete code.
+		/// 
+		/// Diagnostics with this tag are rendered with a strike through.
+		/// </summary>
 		Deprecated = 2,
 	}
-	public enum DiagnosticSeverity{
+
+	/// <summary>Represents the severity of diagnostics.</summary>
+	public enum DiagnosticSeverity {
+		/// <summary>Something not allowed by the rules of a language or other means.</summary>
 		Error = 0,
+
+		/// <summary>Something suspicious but allowed.</summary>
 		Warning = 1,
+
+		/// <summary>Something to inform about but not a problem.</summary>
 		Information = 2,
+
+		/// <summary>
+		/// Something to hint to a better way of doing it, like proposing
+		/// a refactoring.
+		/// </summary>
 		Hint = 3,
 	}
+
+	/// <summary>
+	/// Type Definition for Visual Studio Code 1.38 Extension API
+	/// See https://code.visualstudio.com/api for more information
+	/// </summary>
 	public interface IVscode {
+		/// <summary>
+		/// Namespace for dealing with the current window of the editor. That is visible
+		/// and active editors, as well as, UI elements to show messages, selections, and
+		/// asking for user input.
+		/// </summary>
 		IWindow Window;
 	}
+
+	/// <summary>
+	/// Namespace for dealing with the current window of the editor. That is visible
+	/// and active editors, as well as, UI elements to show messages, selections, and
+	/// asking for user input.
+	/// </summary>
 	public interface IWindow {
+		/// <summary>
+		/// Show an error message.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
 		void ShowErrorMessage(string message = default, string[] items = default, Action<string> andThen = default);
+
+		/// <summary>
+		/// Show an error message.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `options` ── Configures the behaviour of the message.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="options">Configures the behaviour of the message.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
 		void ShowErrorMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
+
+		/// <summary>
+		/// Show an error message.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
 		void ShowErrorMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+
+		/// <summary>
+		/// Show an error message.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `options` ── Configures the behaviour of the message.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="options">Configures the behaviour of the message.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
 		void ShowErrorMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+
+		/// <summary>
+		/// Show an information message to users. Optionally provide an array of items which will be presented as
+		/// clickable buttons.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
 		void ShowInformationMessage(string message = default, string[] items = default, Action<string> andThen = default);
+
+		/// <summary>
+		/// Show an information message to users. Optionally provide an array of items which will be presented as
+		/// clickable buttons.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `options` ── Configures the behaviour of the message.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="options">Configures the behaviour of the message.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
 		void ShowInformationMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
+
+		/// <summary>
+		/// Show an information message.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
 		void ShowInformationMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+
+		/// <summary>
+		/// Show an information message.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `options` ── Configures the behaviour of the message.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="options">Configures the behaviour of the message.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
 		void ShowInformationMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+
+		/// <summary>
+		/// Show a warning message.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
 		void ShowWarningMessage(string message = default, string[] items = default, Action<string> andThen = default);
+
+		/// <summary>
+		/// Show a warning message.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `options` ── Configures the behaviour of the message.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="options">Configures the behaviour of the message.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
 		void ShowWarningMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
+
+		/// <summary>
+		/// Show a warning message.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
 		void ShowWarningMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+
+		/// <summary>
+		/// Show a warning message.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `options` ── Configures the behaviour of the message.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="options">Configures the behaviour of the message.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
 		void ShowWarningMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+
+		/// <summary>
+		/// Opens an input box to ask the user for input.
+		/// 
+		/// The returned value will be `undefined` if the input box was canceled (e.g. pressing ESC). Otherwise the
+		/// returned value will be the string typed by the user or an empty string if the user did not type
+		/// anything but dismissed the input box with OK.
+		/// 
+		/// `options` ── Configures the behavior of the input box.
+		/// 
+		/// `token` ── A token that can be used to signal cancellation.
+		/// 
+		/// `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
+		/// </summary>
+		/// <param name="options">Configures the behavior of the input box.</param>
+		/// <param name="token">A token that can be used to signal cancellation.</param>
+		/// <param name="andThen">A promise that resolves to a string the user provided or to `undefined` in case of dismissal.</param>
 		void ShowInputBox(InputBoxOptions options = default, Action<string> andThen = default);
 	}
+
 	public partial class MessageOptions {
 		[JsonProperty("modal")]
 		public bool Modal;
@@ -452,8 +690,8 @@ namespace VscAppz {
 			}			
 			(val, ok) = dict["isCloseAffordance"];
 			if (ok) {
-				Nullable<bool> isCloseAffordance = default;
-				(isCloseAffordance, ok) = (null == val) ? (default, true) : (val is bool) ? (((bool)(val)), true) : (default, false);
+				bool isCloseAffordance = default;
+				(isCloseAffordance, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
 				if ((!ok)) {
 					return false;
 				}
@@ -469,6 +707,6 @@ namespace VscAppz {
 				this.My = my;
 			}
 			return true;
-		}		}
+		}
 	}
 }

@@ -16,25 +16,40 @@ class Gen extends gen_ast.Gen {
     emitOutro() {
         return this.undent().lines("}");
     }
+    emitDocs(it) {
+        if (it.Docs && it.Docs.length)
+            for (const doc of it.Docs)
+                if (doc.Lines && doc.Lines.length)
+                    if (doc.ForParam && doc.ForParam.length)
+                        this.line("/// <param name=\"" + doc.ForParam + "\">" + doc.Lines.join(" ") + "</param>");
+                    else if (doc.Lines.length > 1)
+                        this.line("/// <summary>")
+                            .lines(...doc.Lines.map(_ => "/// " + _))
+                            .line("/// </summary>");
+                    else
+                        this.line("/// <summary>" + doc.Lines[0] + "</summary>");
+        return this;
+    }
     emitEnum(it) {
-        this.line("public enum " + it.Name + "{")
-            .indented(() => this.each(it.Enumerants, "", e => this.line(e.Name + " = " + e.Value + ",")))
-            .line("}");
+        this.emitDocs(it)
+            .line("public enum " + it.Name + " {")
+            .indented(() => this.each(it.Enumerants, "\n", e => this.emitDocs(e).line(e.Name + " = " + e.Value + ",")))
+            .lines("}", "");
     }
     emitInterface(it) {
-        this.line("public interface " + it.Name + " {")
-            .indented(() => this.each(it.Methods, "", m => this.ln(() => this.emitTypeRef(m.Type).s(" ", m.Name)
-            .when(m.Args && m.Args.length, () => this.s("(").each(m.Args, ", ", a => this.emitTypeRef(a.Type).s(" ", a.Name, " = default")).s(")")).s(";"))))
-            .line("}");
+        this.emitDocs(it)
+            .line("public interface " + it.Name + " {")
+            .indented(() => this.each(it.Methods, "\n", m => this.emitDocs(m).lf()
+            .emitTypeRef(m.Type).s(" ", m.Name)
+            .when(m.Args && m.Args.length, () => this.s("(").each(m.Args, ", ", a => this.emitTypeRef(a.Type).s(" ", a.Name, " = default")).s(")")).s(";").line()))
+            .lines("}", "");
     }
     emitStruct(it) {
-        this.line("public partial class " + it.Name + " {")
-            .indented(() => this.each(it.Fields, "", fld => this.line(fld.Json.Excluded ? "[JsonIgnore]"
+        this.line("public partial class " + it.Name + " {").indented(() => this.each(it.Fields, "", fld => this.line(fld.Json.Excluded ? "[JsonIgnore]"
             : `[JsonProperty("${fld.Json.Name}")` + (fld.Json.Required ? ", JsonRequired]" : "]")).ln(() => this
             .s("public ")
-            .emitTypeRef(typeRefUnMaybe(fld.Type, true, false, false))
-            .s(" ", fld.Name, ";"))))
-            .line("}");
+            .emitTypeRef(fld.Type)
+            .s(" ", fld.Name, ";")))).line("}");
     }
     onBeforeEmitImpls(...interfaces) {
         this.line("internal partial class "
@@ -55,16 +70,13 @@ class Gen extends gen_ast.Gen {
             .s(") "));
         if (struct)
             this.line("internal partial class " + struct.Name + " {")
-                .indented(() => emitsigheadln()
-                .emitInstr(it.Func.Body)
-                .line("}"))
-                .line("}");
+                .indented(() => emitsigheadln().emitInstr(it.Func.Body).line()).line("}");
         else if (iface)
             emitsigheadln()
                 .emitInstr(it.Func.Body)
                 .s(isproperty ? " }" : "").line();
         else
-            super.emitFuncImpl(it);
+            throw it;
     }
     emitInstr(it) {
         if (it) {
@@ -162,6 +174,9 @@ class Gen extends gen_ast.Gen {
                 ? this.s("Action<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(">")
                 : this.s("Func<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(", ").emitTypeRef(tfun.To).s(">");
         return super.emitTypeRef(it);
+    }
+    typeRefForField(it) {
+        return typeRefUnMaybe(it, true, false, false);
     }
 }
 exports.Gen = Gen;

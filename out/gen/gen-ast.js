@@ -118,7 +118,7 @@ class Builder {
                 name: _.name,
                 Name: this.gen.nameRewriters.fields(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummaryFor.funcFields),
-                Type: this.typeRef(_.typeSpec, _.optional),
+                Type: this.gen.typeRefForField(this.typeRef(_.typeSpec, _.optional)),
                 Json: { Name: _.name, Required: !_.optional, Excluded: it.funcFields.some(ff => _.name === ff) },
             }))
         };
@@ -310,12 +310,13 @@ class Gen extends gen.Gen {
     emitDocs(it) {
         if (it.name && it.Name && it.name !== it.Name)
             this.line("# " + it.name + ":");
-        for (const doc of it.Docs) {
-            if (doc.ForParam && doc.ForParam.length)
-                this.lines('#', "# @" + doc.ForParam + ":");
-            for (const docln of doc.Lines)
-                this.line("# " + docln);
-        }
+        if (it.Docs && it.Docs.length)
+            for (const doc of it.Docs) {
+                if (doc.ForParam && doc.ForParam.length)
+                    this.lines('#', "# @" + doc.ForParam + ":");
+                for (const docln of doc.Lines)
+                    this.line("# " + docln);
+            }
         return this;
     }
     emitEnum(it) {
@@ -517,8 +518,8 @@ class Gen extends gen.Gen {
         for (const fld of struct.Fields)
             if (!fld.Json.Excluded)
                 body.push(_.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdx(_.n('dict'), _.eLit(fld.Json.Name))), _.iIf(_.n('ok'), [
-                    _.iVar(fld.name, fld.Type),
-                ].concat(this.genConvertOrReturn(fld.name, _.n('val'), fld.Type, false), _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name))), fld.Json.Required ? [_.iRet(_.eLit(false))] : []));
+                    _.iVar(fld.name, this.typeRefForField(fld.Type)),
+                ].concat(this.genConvertOrReturn(fld.name, _.n('val'), this.typeRefForField(fld.Type), false), _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name))), fld.Json.Required ? [_.iRet(_.eLit(false))] : []));
         body.push(_.iRet(_.eLit(true)));
     }
     genMethodImpl_MessageDispatch(iface, method, _, body) {
@@ -646,6 +647,9 @@ class Gen extends gen.Gen {
     typeTup(typeRef) {
         const me = typeRef;
         return (me && me.TupOf && me.TupOf.length) ? me : null;
+    }
+    typeRefForField(it) {
+        return it;
     }
 }
 exports.Gen = Gen;
