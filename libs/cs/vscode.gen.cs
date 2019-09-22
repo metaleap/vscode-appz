@@ -4,8 +4,8 @@ namespace VscAppz {
 	using System.Collections.Generic;
 	using Newtonsoft.Json;
 
-	using Any = System.Object;
-	using Dict = System.Collections.Generic.Dictionary<string, object>;
+	using any = System.Object;
+	using dict = System.Collections.Generic.Dictionary<string, object>;
 
 	/// <summary>Additional metadata about the type of a diagnostic.</summary>
 	public enum DiagnosticTag {
@@ -301,7 +301,7 @@ namespace VscAppz {
 
 		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
 		[JsonProperty("my")]
-		public Dict My;
+		public dict My;
 	}
 
 	/// <summary>Options to configure the behavior of the input box UI.</summary>
@@ -363,12 +363,12 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showErrorMessage1";
-			msg.Data = new Dict(2);
+			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
-			Func<Any, bool> on = default;
+			Func<any, bool> on = default;
 			if ((null != andThen)) {
-				on = (Any payload) => {
+				on = (any payload) => {
 					bool ok = default;
 					string result = default;
 					if ((null != payload)) {
@@ -388,13 +388,13 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showErrorMessage2";
-			msg.Data = new Dict(3);
+			msg.Data = new dict(3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
-			Func<Any, bool> on = default;
+			Func<any, bool> on = default;
 			if ((null != andThen)) {
-				on = (Any payload) => {
+				on = (any payload) => {
 					bool ok = default;
 					string result = default;
 					if ((null != payload)) {
@@ -414,12 +414,12 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showErrorMessage3";
-			msg.Data = new Dict(2);
+			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
-			Func<Any, bool> on = default;
+			Func<any, bool> on = default;
 			if ((null != andThen)) {
-				on = (Any payload) => {
+				on = (any payload) => {
 					bool ok = default;
 					MessageItem result = default;
 					if ((null != payload)) {
@@ -440,13 +440,13 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showErrorMessage4";
-			msg.Data = new Dict(3);
+			msg.Data = new dict(3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
-			Func<Any, bool> on = default;
+			Func<any, bool> on = default;
 			if ((null != andThen)) {
-				on = (Any payload) => {
+				on = (any payload) => {
 					bool ok = default;
 					MessageItem result = default;
 					if ((null != payload)) {
@@ -467,12 +467,12 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInformationMessage1";
-			msg.Data = new Dict(2);
+			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
-			Func<Any, bool> on = default;
+			Func<any, bool> on = default;
 			if ((null != andThen)) {
-				on = (Any payload) => {
+				on = (any payload) => {
 					bool ok = default;
 					string result = default;
 					if ((null != payload)) {
@@ -492,13 +492,13 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInformationMessage2";
-			msg.Data = new Dict(3);
+			msg.Data = new dict(3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
-			Func<Any, bool> on = default;
+			Func<any, bool> on = default;
 			if ((null != andThen)) {
-				on = (Any payload) => {
+				on = (any payload) => {
 					bool ok = default;
 					string result = default;
 					if ((null != payload)) {
@@ -518,12 +518,12 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInformationMessage3";
-			msg.Data = new Dict(2);
+			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
-			Func<Any, bool> on = default;
+			Func<any, bool> on = default;
 			if ((null != andThen)) {
-				on = (Any payload) => {
+				on = (any payload) => {
 					bool ok = default;
 					MessageItem result = default;
 					if ((null != payload)) {
@@ -544,13 +544,13 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInformationMessage4";
-			msg.Data = new Dict(3);
+			msg.Data = new dict(3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
-			Func<Any, bool> on = default;
+			Func<any, bool> on = default;
 			if ((null != andThen)) {
-				on = (Any payload) => {
+				on = (any payload) => {
 					bool ok = default;
 					MessageItem result = default;
 					if ((null != payload)) {
@@ -571,12 +571,12 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showWarningMessage1";
-			msg.Data = new Dict(2);
+			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
-			Func<Any, bool> on = default;
+			Func<any, bool> on = default;
 			if ((null != andThen)) {
-				on = (Any payload) => {
+				on = (any payload) => {
 					bool ok = default;
 					string result = default;
 					if ((null != payload)) {
@@ -596,13 +596,13 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showWarningMessage2";
-			msg.Data = new Dict(3);
+			msg.Data = new dict(3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
-			Func<Any, bool> on = default;
+			Func<any, bool> on = default;
 			if ((null != andThen)) {
-				on = (Any payload) => {
+				on = (any payload) => {
 					bool ok = default;
 					string result = default;
 					if ((null != payload)) {
@@ -622,12 +622,12 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showWarningMessage3";
-			msg.Data = new Dict(2);
+			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
-			Func<Any, bool> on = default;
+			Func<any, bool> on = default;
 			if ((null != andThen)) {
-				on = (Any payload) => {
+				on = (any payload) => {
 					bool ok = default;
 					MessageItem result = default;
 					if ((null != payload)) {
@@ -648,13 +648,13 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showWarningMessage4";
-			msg.Data = new Dict(3);
+			msg.Data = new dict(3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
-			Func<Any, bool> on = default;
+			Func<any, bool> on = default;
 			if ((null != andThen)) {
-				on = (Any payload) => {
+				on = (any payload) => {
 					bool ok = default;
 					MessageItem result = default;
 					if ((null != payload)) {
@@ -675,7 +675,7 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInputBox";
-			msg.Data = new Dict(1);
+			msg.Data = new dict(1);
 			List<string> fnids = default;
 			fnids = new List<string>(1);
 			lock (this) {
@@ -686,7 +686,7 @@ namespace VscAppz {
 					if ((null != fn)) {
 						options.ValidateInput_AppzFuncId = this.nextFuncId();
 						fnids.Add(options.ValidateInput_AppzFuncId);
-						this.cbOther[options.ValidateInput_AppzFuncId] = (Any[] args) => {
+						this.cbOther[options.ValidateInput_AppzFuncId] = (any[] args) => {
 							if ((1 != args.Length)) {
 								return (null, false);
 							} else {
@@ -705,9 +705,9 @@ namespace VscAppz {
 				}
 			}
 			msg.Data["options"] = options;
-			Func<Any, bool> on = default;
+			Func<any, bool> on = default;
 			if ((null != andThen)) {
-				on = (Any payload) => {
+				on = (any payload) => {
 					bool ok = default;
 					string result = default;
 					if ((null != payload)) {
@@ -720,7 +720,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, (Any payload) => {
+			this.send(msg, (any payload) => {
 				if ((fnids.Count != 0)) {
 					lock (this) {
 						foreach (var fnid in fnids) {
@@ -735,15 +735,15 @@ namespace VscAppz {
 	}
 
 	public partial class MessageItem {
-		internal bool populateFrom(Any payload) {
-			Dict dict = default;
+		internal bool populateFrom(any payload) {
+			dict it = default;
 			bool ok = default;
-			Any val = default;
-			(dict, ok) = (payload is Dict) ? (((Dict)(payload)), true) : (default, false);
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
 			if ((!ok)) {
 				return false;
 			}
-			(val, ok) = (dict.TryGetValue("title", out var __) ? (__, true) : (default, false));
+			(val, ok) = (it.TryGetValue("title", out var __) ? (__, true) : (default, false));
 			if (ok) {
 				string title = default;
 				(title, ok) = (null == val) ? (default, true) : (val is string) ? (((string)(val)), true) : (default, false);
@@ -754,7 +754,7 @@ namespace VscAppz {
 			} else {
 				return false;
 			}			
-			(val, ok) = (dict.TryGetValue("isCloseAffordance", out var ___) ? (___, true) : (default, false));
+			(val, ok) = (it.TryGetValue("isCloseAffordance", out var ___) ? (___, true) : (default, false));
 			if (ok) {
 				bool isCloseAffordance = default;
 				(isCloseAffordance, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
@@ -763,10 +763,10 @@ namespace VscAppz {
 				}
 				this.IsCloseAffordance = isCloseAffordance;
 			}
-			(val, ok) = (dict.TryGetValue("my", out var ____) ? (____, true) : (default, false));
+			(val, ok) = (it.TryGetValue("my", out var ____) ? (____, true) : (default, false));
 			if (ok) {
-				Dict my = default;
-				(my, ok) = (null == val) ? (default, true) : (val is Dict) ? (((Dict)(val)), true) : (default, false);
+				dict my = default;
+				(my, ok) = (null == val) ? (default, true) : (val is dict) ? (((dict)(val)), true) : (default, false);
 				if ((!ok)) {
 					return false;
 				}

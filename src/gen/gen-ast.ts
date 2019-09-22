@@ -230,7 +230,7 @@ export class Builder {
                 name: _.name,
                 Name: this.gen.nameRewriters.fields(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummaryFor.funcFields),
-                Type: this.gen.typeRefForField(this.typeRef(_.typeSpec, _.optional)),
+                Type: this.gen.typeRefForField(this.typeRef(_.typeSpec, _.optional), _.optional),
                 Json: { Name: _.name, Required: !_.optional, Excluded: it.funcFields.some(ff => _.name === ff) },
             }))
         }
@@ -375,8 +375,8 @@ export class Gen extends gen.Gen implements gen.IGen {
         },
         idents: {
             curInst: "this",
-            typeAny: "Any",
-            typeDict: "Dict",
+            typeAny: "any",
+            typeDict: "dict",
             typeImpl: "impl",
         },
         oneIndent: '    ',
@@ -622,7 +622,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (ecollnew && ecollnew.Capacity !== undefined)
             return this.when(ecollnew.ElemTypeIfList,
                 () => this.s('[').emitTypeRef(ecollnew.ElemTypeIfList).s(']'),
-                () => this.s('dict')
+                () => this.s(this.options.idents.typeDict)
             ).s('·new(').emitExpr(ecollnew.Capacity).s(')')
 
         const enew = it as ENew
@@ -703,25 +703,26 @@ export class Gen extends gen.Gen implements gen.IGen {
 
     private genMethodImpl_PopulateFrom(struct: WithName, _method: Method, _: Builder, body: Instr[]) {
         body.push(
-            _.iVar('dict', TypeRefPrim.Dict),
+            _.iVar('it', TypeRefPrim.Dict),
             _.iVar('ok', TypeRefPrim.Bool),
             _.iVar('val', TypeRefPrim.Any),
         )
-        body.push(...this.genConvertOrReturn('dict', _.n('payload'), TypeRefPrim.Dict, true))
+        body.push(...this.genConvertOrReturn('it', _.n('payload'), TypeRefPrim.Dict, true))
         for (const fld of (struct as TStruct).Fields)
-            if (!fld.Json.Excluded)
+            if (!fld.Json.Excluded) {
+                const tfld = this.typeRefForField(fld.Type, fld.fromPrep && fld.fromPrep.optional)
                 body.push(
-                    _.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdxMay(_.n('dict'), _.eLit(fld.Json.Name))),
+                    _.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdxMay(_.n('it'), _.eLit(fld.Json.Name))),
                     _.iIf(_.n('ok'), [
-                        _.iVar(fld.name, this.typeRefForField(fld.Type)) as Instr,
+                        _.iVar(fld.name, tfld) as Instr,
                     ].concat(
-                        this.genConvertOrReturn(fld.name, _.n('val'), this.typeRefForField(fld.Type), false),
+                        this.genConvertOrReturn(fld.name, _.n('val'), tfld, false),
                         _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name)),
                     ),
                         fld.Json.Required ? [_.iRet(_.eLit(false))] : []
                     ),
                 )
-
+            }
         body.push(_.iRet(_.eLit(true)))
     }
 
@@ -928,7 +929,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         return (me && me.TupOf && me.TupOf.length && me.TupOf.length > 1) ? me : null
     }
 
-    typeRefForField(it: TypeRef): TypeRef {
+    typeRefForField(it: TypeRef, _optional: boolean): TypeRef {
         return it
     }
 

@@ -18,18 +18,20 @@ import (
 // `err` ── if an `error`, it occurred on the Go side (I/O or JSON), else some JSON-decoded Go value from whatever was transmitted as the problem data (if anything) by VS Code.
 //
 // `jsonMsg` ─ if a `string`, the incoming JSON message; if a `map[string]interface{}`, the outgoing one.
-var OnError func(this Vscode, err Any, jsonMsg Any)
+var OnError func(this Vscode, err any, jsonMsg any)
 
 var OnErrorDefaultOutputFormat = "err:\t%v\njson:\t%v\n\n"
 
-// Any is a type alias of `interface{}` for legibility reasons.
-type Any = interface { // just to reduce brackets-noise throughout
+type dict = map[string]any
+
+// any is a type alias of `interface{}` for legibility reasons.
+type any = interface { // just to reduce brackets-noise throughout
 	// must remain an `=` type alias or json stuff will fail at runtime not compile-time.
 }
 
 type ipcMsg struct {
 	QName string         `json:"qName,omitempty"` // eg. 'window.ShowInformationMessage3'
-	Data  map[string]Any `json:"data"`
+	Data  map[string]any `json:"data"`
 	CbId  string         `json:"cbId,omitempty"`
 }
 
@@ -41,15 +43,15 @@ type impl struct {
 		looping   bool
 		counter   uint64
 		callbacks struct {
-			waiting map[string]func(Any) bool
-			other   map[string]func(...Any) (Any, bool)
+			waiting map[string]func(any) bool
+			other   map[string]func(...any) (any, bool)
 		}
 	}
 }
 
 func init() {
 	var stderr sync.Mutex
-	OnError = func(_ Vscode, err Any, jsonmsg Any) {
+	OnError = func(_ Vscode, err any, jsonmsg any) {
 		stderr.Lock()
 		defer stderr.Unlock()
 		_, _ = os.Stderr.WriteString(fmt.Sprintf(OnErrorDefaultOutputFormat, err, jsonmsg))
@@ -68,8 +70,8 @@ func Vsc(stdIn io.Reader, stdOut io.Writer) Vscode {
 	me.readln.Buffer(make([]byte, 1024*1024), 8*1024*1024)
 	me.jsonOut.SetEscapeHTML(false)
 	me.jsonOut.SetIndent("", "")
-	me.state.callbacks.waiting = make(map[string]func(Any) bool, 8)
-	me.state.callbacks.other = make(map[string]func(...Any) (Any, bool), 8)
+	me.state.callbacks.waiting = make(map[string]func(any) bool, 8)
+	me.state.callbacks.other = make(map[string]func(...any) (any, bool), 8)
 	return me
 }
 
@@ -102,15 +104,15 @@ func (me *impl) loopReadln() {
 					}
 
 				} else if fn != nil {
-					var args []Any
-					var ret Any
+					var args []any
+					var ret any
 					fnargs, ok := inmsg.Data[""]
 					if ok {
-						if args, ok = fnargs.([]Any); ok {
+						if args, ok = fnargs.([]any); ok {
 							ret, ok = fn(args...)
 						}
 					}
-					outmsg := ipcMsg{CbId: inmsg.CbId, Data: make(map[string]Any, 1)}
+					outmsg := ipcMsg{CbId: inmsg.CbId, Data: make(map[string]any, 1)}
 					if ok {
 						outmsg.Data["yay"] = ret
 					} else {
@@ -126,7 +128,7 @@ func (me *impl) loopReadln() {
 	}
 }
 
-func (me *impl) send(msg *ipcMsg, on func(Any) bool) {
+func (me *impl) send(msg *ipcMsg, on func(any) bool) {
 	me.state.Lock()
 	var startloop bool
 	if startloop = !me.state.looping; startloop {

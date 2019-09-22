@@ -5,17 +5,18 @@ namespace VscAppz {
     using System.Reflection;
     using Newtonsoft.Json;
 
-    using Any = System.Object;
+    using any = System.Object;
+    using dict = System.Collections.Generic.Dictionary<string,object>;
 
     internal static class json {
         internal static readonly JsonSerializer serializer = new JsonSerializer();
 
-        internal static Any load(string jsonSrc) {
+        internal static any load(string jsonSrc) {
             using (StringReader jsonsrc = new StringReader(jsonSrc))
                 return load(new JsonTextReader(jsonsrc), jsonSrc, false);
         }
 
-        internal static Any load(JsonTextReader r, string origJsonSrcForErr, bool skipFirstRead) {
+        internal static any load(JsonTextReader r, string origJsonSrcForErr, bool skipFirstRead) {
             if ((!skipFirstRead) && !r.Read())
                 throw err();
             switch (r.TokenType) {
@@ -30,19 +31,19 @@ namespace VscAppz {
             case JsonToken.Float:
                 return (r.Value is double) ? (double)r.Value : double.Parse(r.Value.ToString());
             case JsonToken.StartArray:
-                List<Any> list = new List<Any>(8);
+                List<any> list = new List<any>(8);
                 while (r.Read() && r.TokenType != JsonToken.EndArray)
                     list.Add(load(r, origJsonSrcForErr, true));
                 return list.ToArray();
             case JsonToken.StartObject:
-                Dictionary<string, Any> dict = new Dictionary<string, Any>(8);
+                dict obj = new dict(8);
                 while (r.Read() && r.TokenType != JsonToken.EndObject) {
                     var key = r.Value;
                     if (r.TokenType != JsonToken.PropertyName || !r.Read())
                         throw err();
-                    dict.Add(key.ToString(), load(r, origJsonSrcForErr, true));
+                    obj.Add(key.ToString(), load(r, origJsonSrcForErr, true));
                 }
-                return dict;
+                return obj;
             }
             throw err();
             Exception err() => new JsonException(origJsonSrcForErr);
@@ -72,14 +73,14 @@ namespace VscAppz {
 
     internal partial class ipcMsg {
         internal static ipcMsg fromJson(string jsonSrc) {
-            Dictionary<string, Any> dict = json.load(jsonSrc) as Dictionary<string, Any>;
+            dict obj = json.load(jsonSrc) as dict;
             var ret = new ipcMsg();
-            if (dict.TryGetValue("qName", out var n))
+            if (obj.TryGetValue("qName", out var n))
                 ret.QName = (n == null) ? null : (string)n;
-            if (dict.TryGetValue("cbId", out var a))
+            if (obj.TryGetValue("cbId", out var a))
                 ret.CbId = (a == null) ? null : (string)a;
-            if (dict.TryGetValue("data", out var d) )
-                ret.Data = (d == null) ? null : (Dictionary<string, Any>)d;
+            if (obj.TryGetValue("data", out var d) )
+                ret.Data = (d == null) ? null : (dict)d;
             if (ret.Data == null || ret.Data.Count == 0)
                 throw new JsonException("field `data` is missing");
             return ret;

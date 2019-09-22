@@ -117,7 +117,7 @@ class Builder {
                 name: _.name,
                 Name: this.gen.nameRewriters.fields(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummaryFor.funcFields),
-                Type: this.gen.typeRefForField(this.typeRef(_.typeSpec, _.optional)),
+                Type: this.gen.typeRefForField(this.typeRef(_.typeSpec, _.optional), _.optional),
                 Json: { Name: _.name, Required: !_.optional, Excluded: it.funcFields.some(ff => _.name === ff) },
             }))
         };
@@ -246,8 +246,8 @@ class Gen extends gen.Gen {
             },
             idents: {
                 curInst: "this",
-                typeAny: "Any",
-                typeDict: "Dict",
+                typeAny: "any",
+                typeDict: "dict",
                 typeImpl: "impl",
             },
             oneIndent: '    ',
@@ -445,7 +445,7 @@ class Gen extends gen.Gen {
             return this.s(node_util.format("%j", elit.Lit));
         const ecollnew = it;
         if (ecollnew && ecollnew.Capacity !== undefined)
-            return this.when(ecollnew.ElemTypeIfList, () => this.s('[').emitTypeRef(ecollnew.ElemTypeIfList).s(']'), () => this.s('dict')).s('·new(').emitExpr(ecollnew.Capacity).s(')');
+            return this.when(ecollnew.ElemTypeIfList, () => this.s('[').emitTypeRef(ecollnew.ElemTypeIfList).s(']'), () => this.s(this.options.idents.typeDict)).s('·new(').emitExpr(ecollnew.Capacity).s(')');
         const enew = it;
         if (enew && enew.New)
             return this.emitTypeRef(enew.New).s("·new");
@@ -512,13 +512,15 @@ class Gen extends gen.Gen {
         body.push(_.iRet(_.n(this.options.idents.curInst)));
     }
     genMethodImpl_PopulateFrom(struct, _method, _, body) {
-        body.push(_.iVar('dict', TypeRefPrim.Dict), _.iVar('ok', TypeRefPrim.Bool), _.iVar('val', TypeRefPrim.Any));
-        body.push(...this.genConvertOrReturn('dict', _.n('payload'), TypeRefPrim.Dict, true));
+        body.push(_.iVar('it', TypeRefPrim.Dict), _.iVar('ok', TypeRefPrim.Bool), _.iVar('val', TypeRefPrim.Any));
+        body.push(...this.genConvertOrReturn('it', _.n('payload'), TypeRefPrim.Dict, true));
         for (const fld of struct.Fields)
-            if (!fld.Json.Excluded)
-                body.push(_.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdxMay(_.n('dict'), _.eLit(fld.Json.Name))), _.iIf(_.n('ok'), [
-                    _.iVar(fld.name, this.typeRefForField(fld.Type)),
-                ].concat(this.genConvertOrReturn(fld.name, _.n('val'), this.typeRefForField(fld.Type), false), _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name))), fld.Json.Required ? [_.iRet(_.eLit(false))] : []));
+            if (!fld.Json.Excluded) {
+                const tfld = this.typeRefForField(fld.Type, fld.fromPrep && fld.fromPrep.optional);
+                body.push(_.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdxMay(_.n('it'), _.eLit(fld.Json.Name))), _.iIf(_.n('ok'), [
+                    _.iVar(fld.name, tfld),
+                ].concat(this.genConvertOrReturn(fld.name, _.n('val'), tfld, false), _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name))), fld.Json.Required ? [_.iRet(_.eLit(false))] : []));
+            }
         body.push(_.iRet(_.eLit(true)));
     }
     genMethodImpl_MessageDispatch(iface, method, _, body) {
@@ -647,7 +649,7 @@ class Gen extends gen.Gen {
         const me = typeRef;
         return (me && me.TupOf && me.TupOf.length && me.TupOf.length > 1) ? me : null;
     }
-    typeRefForField(it) {
+    typeRefForField(it, _optional) {
         return it;
     }
 }

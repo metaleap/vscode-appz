@@ -125,7 +125,7 @@ class Gen extends gen_ast.Gen {
     emitExpr(it) {
         const ecollnew = it;
         if (ecollnew && ecollnew.Capacity !== undefined)
-            return this.when(ecollnew.ElemTypeIfList, () => this.s("new List<").emitTypeRef(ecollnew.ElemTypeIfList).s(">"), () => this.s("new Dict")).s("(").emitExpr(ecollnew.Capacity).s(")");
+            return this.when(ecollnew.ElemTypeIfList, () => this.s("new List<").emitTypeRef(ecollnew.ElemTypeIfList).s(">"), () => this.s("new " + this.options.idents.typeDict)).s("(").emitExpr(ecollnew.Capacity).s(")");
         const enew = it;
         if (enew && enew.New)
             return this.s("new ").emitTypeRef(enew.New).s("()");
@@ -178,7 +178,7 @@ class Gen extends gen_ast.Gen {
                 : this.s("Func<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(", ").emitTypeRef(tfun.To).s(">");
         return super.emitTypeRef(it);
     }
-    typeRefForField(it) {
+    typeRefForField(it, _optional) {
         return typeRefUnMaybe(it, true, false, false);
     }
 }

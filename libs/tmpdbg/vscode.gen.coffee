@@ -350,7 +350,7 @@ MessageItem: class
     # Free-form custom data, preserved across a roundtrip.
     #
     # JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
-    My: ?Dict
+    My: ?dict
 
 
 
@@ -430,9 +430,9 @@ Window·ShowErrorMessage1: (message:string -> items:[string] -> andThen:?(?strin
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
-    var on of (Any->bool)
+    var on of (any->bool)
     if (=?andThen)
-        on = (payload:Any -> bool)
+        on = (payload:any -> bool)
             var ok of bool
             var result of ?string
             if (=?payload)
@@ -455,9 +455,9 @@ Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[s
     msg.Data@"message" = message
     msg.Data@"options" = options
     msg.Data@"items" = items
-    var on of (Any->bool)
+    var on of (any->bool)
     if (=?andThen)
-        on = (payload:Any -> bool)
+        on = (payload:any -> bool)
             var ok of bool
             var result of ?string
             if (=?payload)
@@ -479,9 +479,9 @@ Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(?
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
-    var on of (Any->bool)
+    var on of (any->bool)
     if (=?andThen)
-        on = (payload:Any -> bool)
+        on = (payload:any -> bool)
             var ok of bool
             var result of ?MessageItem
             if (=?payload)
@@ -505,9 +505,9 @@ Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[M
     msg.Data@"message" = message
     msg.Data@"options" = options
     msg.Data@"items" = items
-    var on of (Any->bool)
+    var on of (any->bool)
     if (=?andThen)
-        on = (payload:Any -> bool)
+        on = (payload:any -> bool)
             var ok of bool
             var result of ?MessageItem
             if (=?payload)
@@ -530,9 +530,9 @@ Window·ShowInformationMessage1: (message:string -> items:[string] -> andThen:?(
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
-    var on of (Any->bool)
+    var on of (any->bool)
     if (=?andThen)
-        on = (payload:Any -> bool)
+        on = (payload:any -> bool)
             var ok of bool
             var result of ?string
             if (=?payload)
@@ -555,9 +555,9 @@ Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> it
     msg.Data@"message" = message
     msg.Data@"options" = options
     msg.Data@"items" = items
-    var on of (Any->bool)
+    var on of (any->bool)
     if (=?andThen)
-        on = (payload:Any -> bool)
+        on = (payload:any -> bool)
             var ok of bool
             var result of ?string
             if (=?payload)
@@ -579,9 +579,9 @@ Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> andTh
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
-    var on of (Any->bool)
+    var on of (any->bool)
     if (=?andThen)
-        on = (payload:Any -> bool)
+        on = (payload:any -> bool)
             var ok of bool
             var result of ?MessageItem
             if (=?payload)
@@ -605,9 +605,9 @@ Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> it
     msg.Data@"message" = message
     msg.Data@"options" = options
     msg.Data@"items" = items
-    var on of (Any->bool)
+    var on of (any->bool)
     if (=?andThen)
-        on = (payload:Any -> bool)
+        on = (payload:any -> bool)
             var ok of bool
             var result of ?MessageItem
             if (=?payload)
@@ -630,9 +630,9 @@ Window·ShowWarningMessage1: (message:string -> items:[string] -> andThen:?(?str
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
-    var on of (Any->bool)
+    var on of (any->bool)
     if (=?andThen)
-        on = (payload:Any -> bool)
+        on = (payload:any -> bool)
             var ok of bool
             var result of ?string
             if (=?payload)
@@ -655,9 +655,9 @@ Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:
     msg.Data@"message" = message
     msg.Data@"options" = options
     msg.Data@"items" = items
-    var on of (Any->bool)
+    var on of (any->bool)
     if (=?andThen)
-        on = (payload:Any -> bool)
+        on = (payload:any -> bool)
             var ok of bool
             var result of ?string
             if (=?payload)
@@ -679,9 +679,9 @@ Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
-    var on of (Any->bool)
+    var on of (any->bool)
     if (=?andThen)
-        on = (payload:Any -> bool)
+        on = (payload:any -> bool)
             var ok of bool
             var result of ?MessageItem
             if (=?payload)
@@ -705,9 +705,9 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
     msg.Data@"message" = message
     msg.Data@"options" = options
     msg.Data@"items" = items
-    var on of (Any->bool)
+    var on of (any->bool)
     if (=?andThen)
-        on = (payload:Any -> bool)
+        on = (payload:any -> bool)
             var ok of bool
             var result of ?MessageItem
             if (=?payload)
@@ -738,7 +738,7 @@ Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(?string->void) -> v
             if (=?fn)
                 options.ValidateInput_AppzFuncId = this.nextFuncId()
                 fnids·add(options.ValidateInput_AppzFuncId)
-                this.cbOther@options.ValidateInput_AppzFuncId = (args:[Any] -> [Any,bool])
+                this.cbOther@options.ValidateInput_AppzFuncId = (args:[any] -> [any,bool])
                     if (1 != args·len)
                         return [null,false]
                     else
@@ -751,9 +751,9 @@ Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(?string->void) -> v
                         return [fn(__0),true]
                 
     msg.Data@"options" = options
-    var on of (Any->bool)
+    var on of (any->bool)
     if (=?andThen)
-        on = (payload:Any -> bool)
+        on = (payload:any -> bool)
             var ok of bool
             var result of ?string
             if (=?payload)
@@ -763,7 +763,7 @@ Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(?string->void) -> v
             andThen(result)
             return true
         
-    this.send(msg, (payload:Any -> bool)
+    this.send(msg, (payload:any -> bool)
         if (fnids·len != 0)
             lock this
                 for fnid in fnids
@@ -774,14 +774,14 @@ Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(?string->void) -> v
 
 
 
-MessageItem·populateFrom: (payload:Any -> bool)
-    var dict of Dict
+MessageItem·populateFrom: (payload:any -> bool)
+    var it of dict
     var ok of bool
-    var val of Any
-    [dict,ok] = ((payload)·(Dict))
+    var val of any
+    [it,ok] = ((payload)·(dict))
     if (!ok)
         return false
-    [val,ok] = dict@?"title"
+    [val,ok] = it@?"title"
     if ok
         var title of string
         [title,ok] = ((val)·(string))
@@ -790,17 +790,17 @@ MessageItem·populateFrom: (payload:Any -> bool)
         this.Title = title
     else
         return false
-    [val,ok] = dict@?"isCloseAffordance"
+    [val,ok] = it@?"isCloseAffordance"
     if ok
         var isCloseAffordance of ?bool
         [isCloseAffordance,ok] = ((val)·(?bool))
         if (!ok)
             return false
         this.IsCloseAffordance = isCloseAffordance
-    [val,ok] = dict@?"my"
+    [val,ok] = it@?"my"
     if ok
-        var my of ?Dict
-        [my,ok] = ((val)·(?Dict))
+        var my of ?dict
+        [my,ok] = ((val)·(?dict))
         if (!ok)
             return false
         this.My = my

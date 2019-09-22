@@ -195,7 +195,7 @@ export class Gen extends gen_ast.Gen {
         if (ecollnew && ecollnew.Capacity !== undefined)
             return this.when(ecollnew.ElemTypeIfList,
                 () => this.s("new List<").emitTypeRef(ecollnew.ElemTypeIfList).s(">"),
-                () => this.s("new Dict")
+                () => this.s("new " + this.options.idents.typeDict)
             ).s("(").emitExpr(ecollnew.Capacity).s(")")
 
         const enew = it as gen_ast.ENew
@@ -262,7 +262,7 @@ export class Gen extends gen_ast.Gen {
         return super.emitTypeRef(it)
     }
 
-    typeRefForField(it: gen_ast.TypeRef): gen_ast.TypeRef {
+    typeRefForField(it: gen_ast.TypeRef, _optional: boolean): gen_ast.TypeRef {
         return typeRefUnMaybe(it, true, false, false)
     }
 

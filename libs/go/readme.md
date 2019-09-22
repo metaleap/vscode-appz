@@ -6,7 +6,7 @@
 ## Usage
 
 ```go
-var OnError func(this Vscode, err Any, jsonMsg Any)
+var OnError func(this Vscode, err any, jsonMsg any)
 ```
 Reports problems during the ongoing forever-looping stdin/stdout communication
 with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be
@@ -22,15 +22,6 @@ anything) by VS Code.
 ```go
 var OnErrorDefaultOutputFormat = "err:\t%v\njson:\t%v\n\n"
 ```
-
-#### type Any
-
-```go
-type Any = interface {
-}
-```
-
-Any is a type alias of `interface{}` for legibility reasons.
 
 #### type DiagnosticSeverity
 
@@ -122,7 +113,7 @@ type MessageItem struct {
 	IsCloseAffordance bool `json:"isCloseAffordance,omitempty"`
 
 	// Free-form custom data, preserved across a roundtrip.
-	My map[string]Any `json:"my,omitempty"`
+	My map[string]any `json:"my,omitempty"`
 }
 ```
 

@@ -3,16 +3,17 @@ namespace VscAppz {
     using System.IO;
     using System.Collections.Generic;
 
-    using Any = System.Object;
+    using any = System.Object;
+    using dict = System.Collections.Generic.Dictionary<string,object>;
 
     internal partial class ipcMsg {
         internal string QName = "";
-        internal Dictionary<string, Any> Data;
+        internal dict Data;
         internal string CbId;
 
         internal ipcMsg() { }
         internal ipcMsg(string qName, int numData, string contId = "") =>
-            (this.QName, Data, this.CbId) = (qName, new Dictionary<string, Any>(numData), contId);
+            (this.QName, Data, this.CbId) = (qName, new dict(numData), contId);
     }
 
     /// <summary>Everything related to the running of your app.</summary>
@@ -30,7 +31,7 @@ namespace VscAppz {
         ///
         /// `jsonMsg` ─ if a `string`, the incoming JSON message; if a `Dictionary&lt;string, object&gt;`, the outgoing one.
         /// </summary>
-        public static Action<IVscode,Any,Any> OnError = (self, err, jsonMsg) => {
+        public static Action<IVscode,any,any> OnError = (self, err, jsonMsg) => {
             Console.Error.Write(string.Format(OnErrorDefaultOutputFormat, err, jsonMsg));
         };
 
@@ -47,8 +48,8 @@ namespace VscAppz {
 
         internal bool looping = false;
         internal uint counter = 0;
-        internal readonly Dictionary<string, Func<Any, bool>> cbWaiting = new Dictionary<string, Func<Any, bool>>();
-        internal readonly Dictionary<string, Func<Any[], (Any, bool)>> cbOther = new Dictionary<string, Func<Any[], (Any, bool)>>();
+        internal readonly Dictionary<string, Func<any, bool>> cbWaiting = new Dictionary<string, Func<any, bool>>();
+        internal readonly Dictionary<string, Func<any[], (any, bool)>> cbOther = new Dictionary<string, Func<any[], (any, bool)>>();
 
         internal impl(TextReader stdIn, TextWriter stdOut) =>
             (this.stdIn, this.stdOut) = (stdIn ?? Console.In, stdOut ?? Console.Out);
@@ -63,8 +64,8 @@ namespace VscAppz {
                 if (!string.IsNullOrEmpty(jsonmsg = stdIn.ReadLine().Trim())) {
                     var msg = ipcMsg.fromJson(jsonmsg);
 
-                    Func<Any, bool> cb = null;
-                    Func<Any[], (Any, bool)> fn = null;
+                    Func<any, bool> cb = null;
+                    Func<any[], (any, bool)> fn = null;
                     lock (this)
                         if (cbWaiting.TryGetValue(msg.CbId, out cb))
                             _ = cbWaiting.Remove(msg.CbId);
@@ -80,11 +81,11 @@ namespace VscAppz {
                             throw new Exception("unexpected args: " + yay);
 
                     } else if (fn != null) {
-                        Any fnargs;
-                        Any ret = null;
+                        any fnargs;
+                        any ret = null;
                         var ok = msg.Data.TryGetValue("", out fnargs);
-                        if (ok = (ok && (fnargs is Any[])))
-                            (ret, ok) = fn((Any[])fnargs);
+                        if (ok = (ok && (fnargs is any[])))
+                            (ret, ok) = fn((any[])fnargs);
                         send(new ipcMsg("", 1, msg.CbId) { Data = {
                             [ok ? "yay" : "nay"] = ok ? ret : ("unexpected args: " + fnargs)
                         } }, null);
@@ -97,7 +98,7 @@ namespace VscAppz {
             }
         }
 
-        internal void send(ipcMsg msg, Func<Any, bool> on) {
+        internal void send(ipcMsg msg, Func<any, bool> on) {
             bool startloop;
             Exception err = null;
             lock (this) {
