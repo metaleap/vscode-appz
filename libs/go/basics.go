@@ -38,15 +38,12 @@ type ipcMsg struct {
 type impl struct {
 	readln  *bufio.Scanner
 	jsonOut *json.Encoder
-	state   struct {
-		sync.Mutex
-		looping   bool
-		counter   uint64
-		callbacks struct {
-			waiting map[string]func(any) bool
-			other   map[string]func(...any) (any, bool)
-		}
-	}
+
+	sync.Mutex
+	looping   bool
+	counter   uint64
+	cbWaiting map[string]func(any) bool
+	cbOther   map[string]func([]any) (any, bool)
 }
 
 func init() {
@@ -70,14 +67,14 @@ func Vsc(stdIn io.Reader, stdOut io.Writer) Vscode {
 	me.readln.Buffer(make([]byte, 1024*1024), 8*1024*1024)
 	me.jsonOut.SetEscapeHTML(false)
 	me.jsonOut.SetIndent("", "")
-	me.state.callbacks.waiting = make(map[string]func(any) bool, 8)
-	me.state.callbacks.other = make(map[string]func(...any) (any, bool), 8)
+	me.cbWaiting = make(map[string]func(any) bool, 8)
+	me.cbOther = make(map[string]func([]any) (any, bool), 8)
 	return me
 }
 
 func (me *impl) nextFuncId() string {
-	me.state.counter++
-	return strconv.FormatUint(me.state.counter, 36)
+	me.counter++
+	return strconv.FormatUint(me.counter, 36)
 }
 
 func (me *impl) loopReadln() {
@@ -89,10 +86,10 @@ func (me *impl) loopReadln() {
 			} else if inmsg.Data == nil || len(inmsg.Data) == 0 {
 				OnError(me, errors.New("field `data` is missing"), jsonmsg)
 			} else {
-				me.state.Lock()
-				cb, fn := me.state.callbacks.waiting[inmsg.CbId], me.state.callbacks.other[inmsg.CbId]
-				delete(me.state.callbacks.waiting, inmsg.CbId)
-				me.state.Unlock()
+				me.Lock()
+				cb, fn := me.cbWaiting[inmsg.CbId], me.cbOther[inmsg.CbId]
+				delete(me.cbWaiting, inmsg.CbId)
+				me.Unlock()
 
 				if cb != nil {
 					if nay, isnay := inmsg.Data["nay"]; isnay {
@@ -109,7 +106,7 @@ func (me *impl) loopReadln() {
 					fnargs, ok := inmsg.Data[""]
 					if ok {
 						if args, ok = fnargs.([]any); ok {
-							ret, ok = fn(args...)
+							ret, ok = fn(args)
 						}
 					}
 					outmsg := ipcMsg{CbId: inmsg.CbId, Data: make(map[string]any, 1)}
@@ -129,17 +126,17 @@ func (me *impl) loopReadln() {
 }
 
 func (me *impl) send(msg *ipcMsg, on func(any) bool) {
-	me.state.Lock()
+	me.Lock()
 	var startloop bool
-	if startloop = !me.state.looping; startloop {
-		me.state.looping = true
+	if startloop = !me.looping; startloop {
+		me.looping = true
 	}
 	if on != nil {
 		msg.CbId = me.nextFuncId()
-		me.state.callbacks.waiting[msg.CbId] = on
+		me.cbWaiting[msg.CbId] = on
 	}
 	err := me.jsonOut.Encode(msg)
-	me.state.Unlock()
+	me.Unlock()
 	if err != nil {
 		if msg.QName != "" {
 			msg.Data[""] = msg.QName

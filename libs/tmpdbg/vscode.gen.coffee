@@ -436,9 +436,11 @@ Window·ShowErrorMessage1: (message:string -> items:[string] -> andThen:?(?strin
             var ok of bool
             var result of ?string
             if (=?payload)
-                [result,ok] = ((payload)·(?string))
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
                 if (!ok)
                     return false
+                result = (&_result_)
             andThen(result)
             return true
         
@@ -461,9 +463,11 @@ Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[s
             var ok of bool
             var result of ?string
             if (=?payload)
-                [result,ok] = ((payload)·(?string))
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
                 if (!ok)
                     return false
+                result = (&_result_)
             andThen(result)
             return true
         
@@ -536,9 +540,11 @@ Window·ShowInformationMessage1: (message:string -> items:[string] -> andThen:?(
             var ok of bool
             var result of ?string
             if (=?payload)
-                [result,ok] = ((payload)·(?string))
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
                 if (!ok)
                     return false
+                result = (&_result_)
             andThen(result)
             return true
         
@@ -561,9 +567,11 @@ Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> it
             var ok of bool
             var result of ?string
             if (=?payload)
-                [result,ok] = ((payload)·(?string))
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
                 if (!ok)
                     return false
+                result = (&_result_)
             andThen(result)
             return true
         
@@ -636,9 +644,11 @@ Window·ShowWarningMessage1: (message:string -> items:[string] -> andThen:?(?str
             var ok of bool
             var result of ?string
             if (=?payload)
-                [result,ok] = ((payload)·(?string))
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
                 if (!ok)
                     return false
+                result = (&_result_)
             andThen(result)
             return true
         
@@ -661,9 +671,11 @@ Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:
             var ok of bool
             var result of ?string
             if (=?payload)
-                [result,ok] = ((payload)·(?string))
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
                 if (!ok)
                     return false
+                result = (&_result_)
             andThen(result)
             return true
         
@@ -757,9 +769,11 @@ Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(?string->void) -> v
             var ok of bool
             var result of ?string
             if (=?payload)
-                [result,ok] = ((payload)·(?string))
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
                 if (!ok)
                     return false
+                result = (&_result_)
             andThen(result)
             return true
         
@@ -795,9 +809,11 @@ MessageItem·populateFrom: (payload:any -> bool)
     if ok
         var isCloseAffordance of ?bool
         if (=?val)
-            [isCloseAffordance,ok] = ((val)·(?bool))
+            var _isCloseAffordance_ of bool
+            [_isCloseAffordance_,ok] = ((val)·(bool))
             if (!ok)
                 return false
+            isCloseAffordance = (&_isCloseAffordance_)
         this.IsCloseAffordance = isCloseAffordance
     [val,ok] = it@?"my"
     if ok

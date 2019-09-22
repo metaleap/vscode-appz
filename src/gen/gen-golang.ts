@@ -1,328 +1,231 @@
 import * as gen from './gen-basics'
+import * as gen_ast from './gen-ast'
 
-export class Gen extends gen.Gen implements gen.IGen {
+export class Gen extends gen_ast.Gen {
 
     gen(prep: gen.Prep) {
-        this.resetState()
-        let src = "package vscAppz\n\n// " + this.doNotEditComment("golang") + "\n\n"
-
-        const doclns = this.genDocLns(gen.docs(prep.fromOrig.fromOrig))
-        src += this.genDocSrc('', doclns)
-        src += `type ${this.caseUp(prep.fromOrig.moduleName)} interface {\n`
-        for (const it of prep.interfaces)
-            src += '\n' + this.genDocSrc('\t', this.genDocLns(gen.docs(it.fromOrig)))
-                + "\t" + this.caseUp(it.name) + "() " + this.caseUp(it.name) + "\n"
-        src += "}\n\n"
-        for (const it of prep.interfaces)
-            src += `func (me *impl) ${this.caseUp(it.name)}() ${this.caseUp(it.name)} { return me }\n\n`
-
-        for (const it of prep.enums)
-            src += this.genEnum(it)
-        for (const it of prep.structs)
-            src += this.genStruct(it)
-        for (const it of prep.interfaces)
-            src += this.genInterface(prep, it)
-
-        {
-            let anydec = true
-            while (anydec) {
-                anydec = false
-                for (const name in this.state.genPopulateFor)
-                    if (anydec = this.state.genPopulateFor[name]) {
-                        src += this.genPopulateFrom(prep, name)
-                        this.state.genPopulateFor[name] = false
-                    }
-            }
-        }
-
-        this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), src)
+        this.options.oneIndent = "\t"
+        this.options.doc.appendArgsToSummaryFor.funcFields = true
+        this.options.doc.appendArgsToSummaryFor.methods = true
+        this.options.idents.curInst = "me"
+        this.options.idents.null = "nil"
+        super.gen(prep)
     }
 
-    genEnum(it: gen.PrepEnum): string {
-        const name = this.caseUp(it.name)
-        const doclns = this.genDocLns(gen.docs(it.fromOrig.decl))
-        let src = this.genDocSrc('', doclns)
-        src += "type " + name + " int\n\nconst (\n"
-        for (const enumerant of it.enumerants)
-            src += "\t" + name + this.caseUp(enumerant.name) + " " + name + " = " + enumerant.value + "\n"
-        return src + ")\n\n"
+    emitIntro(): Gen {
+        return this.lines(
+            "package vscAppz",
+            "// " + this.doNotEditComment("golang"),
+            "")
     }
 
-    genStruct(it: gen.PrepStruct): string {
-        const doclns = this.genDocLns(gen.docs(it.fromOrig.decl))
-        let src = this.genDocSrc('', doclns)
-        src += "type " + this.caseUp(it.name) + " struct {\n"
-        for (const field of it.fields)
-            src += '\n' + (field.isExtBaggage ? ("\t// " + gen.docStrs.extBaggage + "\n") : this.genDocSrc('\t', this.genDocLns(gen.docs(field.fromOrig))))
-                + "\t" + this.caseUp(field.name) + " " + this.typeSpec(field.typeSpec)
-                + (gen.typeFun(field.typeSpec) ? " `json:\"-\"`" : (" `json:\"" + field.name + (field.optional ? ",omitempty" : "") + "\"`"))
-                + "\n"
-        for (const ff of it.funcFields)
-            src += "\n\t// " + gen.docStrs.internalOnly + "\n"
-                + "\t" + this.caseUp(ff) + "_AppzFuncId string `json:\"" + ff + "_AppzFuncId,omitempty\"`\n"
-        return src + "}\n\n"
+    emitOutro(): Gen { return this }
+
+    emitDocs(it: (gen_ast.WithDocs & gen_ast.WithName)): Gen {
+        if (it.Docs && it.Docs.length)
+            for (const doc of it.Docs)
+                if (doc.Lines && doc.Lines.length)
+                    if (!(doc.ForParam && doc.ForParam.length))
+                        this.lines(...doc.Lines.map(_ => "// " + _))
+        return this
     }
 
-    genInterface(prep: gen.Prep, it: gen.PrepInterface): string {
-        const doclns = this.genDocLns(gen.docs(it.fromOrig))
-        let src = this.genDocSrc('', doclns)
-        src += "type " + this.caseUp(it.name) + " interface {\n"
-        for (const method of it.methods) {
-            src += '\n' + this.genDocSrc('\t', this.genDocLns(gen.docs(method.fromOrig.decl, () => method.args.find(_ => _.isFromRetThenable))))
-                + "\t" + this.caseUp(method.name) + "("
-            for (const arg of method.args)
-                src += this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional) + ", "
-            src += ")\n"
-        }
-        src += "}\n\n"
-
-        for (const method of it.methods)
-            src += this.genImpl(prep, it, method)
-
-        return src
+    emitEnum(it: gen_ast.TEnum) {
+        this.emitDocs(it)
+            .line("type " + it.Name + " int")
+            .line("const (")
+            .indented(() => this.each(it.Enumerants, "\n", e =>
+                this.emitDocs(e).line(it.Name + e.Name + " " + it.Name + " = " + e.Value)
+            ))
+            .lines(")", "")
     }
 
-    genImpl(prep: gen.Prep, it: gen.PrepInterface, method: gen.PrepMethod): string {
-        const funcfields = gen.argsFuncFields(prep, method.args)
-        let
-            src = "func (me *impl) " + this.caseUp(method.name) + "("
-                + method.args.map(arg => this.caseLo(arg.name) + " " + this.typeSpecNilable(arg.typeSpec, arg.optional)).join(', ')
-                + ") {\n"
-
-        const numargs = method.args.filter(_ => !_.isFromRetThenable).length
-        const __ = gen.idents(method.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'resultptr')
-        src += `\t${__.msg} := ipcMsg{QName: "${it.name}.${method.name}", Data: make(map[string]Any, ${numargs})}\n`
-
-        if (funcfields.length) {
-            src += `\t${__.fnids} := make([]string, 0, ${funcfields.length})\n`
-            src += `\tme.state.Lock()\n`
-            for (const ff of funcfields) {
-                let facc = this.caseLo(ff.arg.name)
-                src += `\tif ${ff.arg.optional ? (facc + ' != nil') : 'true'} {\n`
-                facc += '.' + this.caseUp(ff.name)
-                src += `\t\t${facc}_AppzFuncId = ""\n`
-                src += `\t\tif ${__.fn} := ${facc}; ${__.fn} != nil {\n`
-                src += `\t\t\t${facc}_AppzFuncId = me.nextFuncId()\n`
-                src += `\t\t\t${__.fnids} = append(${__.fnids}, ${facc}_AppzFuncId)\n`
-                src += `\t\t\tme.state.callbacks.other[${facc}_AppzFuncId] = func(args...Any) (ret Any, ok bool) {\n`
-                const args = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)[0]
-                src += `\t\t\t\tif ok = (len(args) == ${args.length}); ok {\n`
-                for (let a = 0; a < args.length; a++) {
-                    const tspec = this.typeSpec(args[a])
-                    src += `\t\t\t\t\tvar a${a} ${tspec}\n`
-                    src += this.genDecodeFromAny(prep, "\t\t\t\t\t", "args[" + a + "]", "a" + a, tspec, true, true)
-                }
-                src += `\t\t\t\t\tret = ${__.fn}(${args.map((_, a) => 'a' + a).join(', ')})\n`
-                src += `\t\t\t\t}\n`
-                src += `\t\t\t\treturn\n`
-                src += `\t\t\t}\n`
-                src += `\t\t}\n`
-                src += `\t}\n`
-            }
-            src += `\tme.state.Unlock()\n`
-        }
-
-        for (const arg of method.args)
-            if (!arg.isFromRetThenable)
-                src += `\t${__.msg}.Data["${arg.name}"] = ${this.caseLo(arg.name)}\n`
-
-        src += `\n\tvar ${__.on} func(Any) bool\n`
-        const lastarg = method.args[method.args.length - 1]
-        if (lastarg.isFromRetThenable) {
-            let laname = this.caseLo(lastarg.name), tret = this.typeSpec(lastarg.typeSpec, true, true), hacky = (tret == "*string" || tret == "*int" || tret == "*bool") ? tret.slice(1) : ''
-            src += `\tif ${laname} != nil {\n`
-            src += `\t\t${__.on} = func(${__.payload} Any) (ok bool) {\n`
-            src += `\t\t\tvar ${__.result} ${hacky || tret}\n`
-            if (hacky)
-                src += `\t\t\tvar ${__.resultptr} ${tret}\n`
-            src += this.genDecodeFromAny(prep, "\t\t\t", __.payload, __.result, hacky || tret, true, true, hacky ? (__.resultptr + " = &" + __.result) : "")
-
-            src += `\t\t\t${laname}(${hacky ? __.resultptr : __.result})\n`
-            src += `\t\t\treturn true\n`
-            src += `\t\t}\n`
-            src += `\t}\n`
-        }
-        if (funcfields.length) {
-            src += `\n\tme.send(&${__.msg}, func(${__.payload} Any) bool {\n`
-            src += `\t\tif len(${__.fnids}) != 0 {\n`
-            src += `\t\t\tme.state.Lock()\n`
-            src += `\t\t\tfor _, ${__.fnid} := range ${__.fnids} {\n`
-            src += `\t\t\t\tdelete(me.state.callbacks.other, ${__.fnid})\n`
-            src += `\t\t\t}\n`
-            src += `\t\t\tme.state.Unlock()\n`
-            src += `\t\t}\n`
-            src += `\t\treturn ${__.on} == nil || ${__.on}(${__.payload})\n`
-            src += `\t})\n`
-        } else
-            src += `\n\tme.send(&${__.msg}, ${__.on})\n`
-
-        src += "}\n\n"
-        return src
-    }
-
-    genDecodeFromAny(prep: gen.Prep, pref: string, srcName: string, dstName: string, dstTypeGo: string, nilToZeroOk: boolean, haveOk: boolean = false, onOk: string = undefined): string {
-        if (dstTypeGo === 'interface{}' || dstTypeGo === 'Any')
-            return `${pref}${dstName} = ${srcName}\n`
-
-        let src = ""
-        if (nilToZeroOk)
-            [src, pref] = [src + `${pref}if ${srcName} != nil {\n`, pref + '\t']
-        src += haveOk ? "" : `${pref}var ok bool\n`
-        const dsttypego = dstTypeGo.startsWith('*') ? dstTypeGo.slice(1) : dstTypeGo
-        if (prep.structs.some(_ => _.name === dsttypego)) {
-            this.state.genPopulateFor[dsttypego] = true
-            if (dstTypeGo !== dsttypego)
-                src += `${pref}${dstName} = new(${dsttypego})\n`
-            src += `${pref}ok = ${dstName}.populateFrom(${srcName})\n`
-        } else
-            src += `${pref}${dstName}, ok = ${srcName}.(${dstTypeGo})\n`
-        src += `${pref}if !ok {\n`
-        src += `${pref}\treturn\n`
-        if (onOk && onOk.length) {
-            src += `${pref}} else {\n`
-            src += `${pref}\t${onOk}\n`
-            src += `${pref}}\n`
-        } else
-            src += `${pref}}\n`
-        if (nilToZeroOk)
-            src += pref.substr(0, pref.length - 1) + '}\n'
-        return src
-    }
-
-    genPopulateFrom(prep: gen.Prep, typeName: string): string {
-        const struct = prep.structs.find(_ => _.name === typeName)
-        if (!struct) throw (typeName)
-        let src = `func (me *${typeName}) populateFrom(payload Any) (ok bool) {\n`
-        src += "\tvar m map[string]Any\n"
-        src += "\tif m, ok = payload.(map[string]Any); ok && m != nil {\n"
-        for (const _ of struct.fields) {
-            src += "\t\t{\n"
-            src += `\t\t\tval, exists := m["${_.name}"]\n`
-            src += `\t\t\tif (exists) {\n`
-            src += `\t\t\t\tif val != nil {\n`
-            src += this.genDecodeFromAny(prep, "\t\t\t\t\t", "val", "me." + this.caseUp(_.name), this.typeSpec(_.typeSpec), false, true)
-            src += `\t\t\t\t} else if ${!_.optional} {\n`
-            src += `\t\t\t\t\treturn false\n`
-            src += `\t\t\t\t}\n`
-            src += `\t\t\t} else if ${!_.optional} {\n`
-            src += `\t\t\t\treturn false\n`
-            src += `\t\t\t}\n`
-            src += "\t\t}\n"
-        }
-        src += "\t\treturn true\n"
-        src += "\t}\n"
-        src += "\treturn false\n"
-        src += "}\n\n"
-        return src
-    }
-
-    genNonZeroCheck(name: string, from: gen.TypeSpec): string {
-        if (from) {
-            if (from === gen.ScriptPrimType.Boolean)
-                return `${name}`
-            if (from === gen.ScriptPrimType.String)
-                return `len(${name}) != 0`
-            if (from === gen.ScriptPrimType.Number)
-                return "${name} != 0"
-
-            const tarr = gen.typeArrOf(from)
-            if (tarr)
-                return `len(${name}) != 0`
-
-            const ttup = gen.typeTupOf(from)
-            if (ttup && ttup.length)
-                return `len(${name}) != 0`
-        }
-        return `${name} != nil`
-    }
-
-    genDocLns(docs: gen.Docs, isSub: boolean = false): string[] {
-        let ret: string[] = []
-        if (docs && docs.length) for (const doc of docs) {
-            if (doc.lines && doc.lines.length) {
-                ret.push("// ")
-                doc.lines.forEach((ln, idx) =>
-                    ret.push("// " + (idx ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.caseLo)))
+    emitInterface(it: gen_ast.TInterface) {
+        this.emitDocs(it)
+            .line("type " + it.Name + " interface {").indented(() =>
+                this.each(it.Methods, "\n", m =>
+                    emitTypeRet(this.emitDocs(m).lf()
+                        .s(m.Name)
+                        .s("(").each(m.Args, ", ", a =>
+                            this.s(a.Name, " ").emitTypeRef(a.Type))
+                        .s(") "), m.Type)
+                        .line()
                 )
-            }
-            if (doc.subs && doc.subs.length)
-                ret.push(...this.genDocLns(doc.subs, true))
-        }
-        return isSub ? ret : ret.slice(1)
-    }
-
-    typeSpecNilable(from: gen.TypeSpec, ensureNilable: boolean): string {
-        const nullableprefixes = ['*', '[]', 'map[', 'interface{', 'func(']
-        let src = this.typeSpec(from)
-        if (ensureNilable && (!nullableprefixes.some(_ => src.startsWith(_)))
-            && (!['Any', 'string'].some(_ => src === _))
-        )
-            src = "*" + src
-        return src
-    }
-
-    typeSpec(from: gen.TypeSpec, intoProm: boolean = false, ptrIfStruct: boolean = false, ptrIfNonNilable: boolean = false): string {
-        if (!from)
-            return ""
-
-        if (from === gen.ScriptPrimType.Any)
-            return "Any"
-        if (from === gen.ScriptPrimType.Boolean)
-            return ptrIfNonNilable ? "*bool" : "bool"
-        if (from === gen.ScriptPrimType.String)
-            return ptrIfNonNilable ? "*string" : "string"
-        if (from === gen.ScriptPrimType.Number)
-            return ptrIfNonNilable ? "*int" : "int"
-        if (from === gen.ScriptPrimType.Dict)
-            return "map[string]Any"
-        if (from === gen.ScriptPrimType.Null || from === gen.ScriptPrimType.Undefined)
-            throw (from)
-
-        const tarr = gen.typeArrOf(from)
-        if (tarr)
-            return "[]" + this.typeSpec(tarr)
-
-        const tfun = gen.typeFun(from)
-        if (tfun && tfun.length && tfun[0])
-            return "func(" + tfun[0].map(_ => this.typeSpec(_)).join(", ") + ") " + this.typeSpec(tfun[1])
-
-        let ttup = gen.typeTupOf(from)
-        if (ttup && ttup.length) {
-            let tname: string = null
-            for (const t of ttup) {
-                const tn = this.typeSpec(t, intoProm, ptrIfStruct, ptrIfNonNilable)
-                if (!tname)
-                    tname = tn
-                else if (tn !== tname) {
-                    tname = undefined
-                    break
-                }
-            }
-            return "[]" + (tname ? tname : "Any")
-        }
-
-        let tsum = gen.typeSumOf(from)
-        if (tsum && tsum.length) {
-            let hadnullorundef = false
-            tsum = tsum.filter(_ =>
-                (_ !== gen.ScriptPrimType.Null && _ !== gen.ScriptPrimType.Undefined && !gen.typeProm(_)) || /* false, but need to set: */ !(hadnullorundef = true)
             )
-            return this.parensIfJoin(tsum.map(_ => this.typeSpec(_, intoProm, ptrIfStruct, hadnullorundef)), '|')
-        }
-
-        const tprom = gen.typeProm(from)
-        if (tprom && tprom.length)
-            if (tprom.length > 1)
-                throw (from)
-            else if (intoProm)
-                return this.typeSpec(tprom[0], false, ptrIfStruct, ptrIfNonNilable)
-            else
-                return "func(" + this.typeSpec(tprom[0], false, true, false) + ")"
-
-        if (typeof from === 'string')
-            return ptrIfStruct ? ('*' + from) : from
-
-        return "Any"
+            .lines("}", "")
     }
 
+    emitStruct(it: gen_ast.TStruct) {
+        this.emitDocs(it)
+            .line("type " + it.Name + " struct {").indented(() =>
+                this.each(it.Fields, "\n", f => this.emitDocs(f).ln(() =>
+                    this.s(f.Name, " ").emitTypeRef(f.Type).s(" `json:\"")
+                        .when(f.Json.Excluded,
+                            () => this.s("-"),
+                            () => this.s(f.Json.Name + (f.Json.Required ? "" : ",omitempty"))
+                        ).s("\"`")
+                ))
+            ).lines("}", "")
+    }
+
+    emitFuncImpl(it: gen_ast.Func) {
+        let struct = it.Type as gen_ast.TStruct,
+            iface = it.Type as gen_ast.TInterface
+        [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null]
+
+        const emitsigheadln = () =>
+            this.lf("func (", this.options.idents.curInst, " *", struct ? struct.Name : this.options.idents.typeImpl, ") ",
+                it.Name, "(").each(it.Func.Args, ", ", a =>
+                    this.s(a.Name, " ").emitTypeRef(a.Type)
+                ).s(") ").when(it.Func.Type,
+                    () => emitTypeRet(this, it.Func.Type).s(" "),
+                )
+
+        if (struct)
+            emitsigheadln().emitInstr(it.Func.Body).lines("", "")
+        else if (iface)
+            emitsigheadln().emitInstr(it.Func.Body).lines("", "")
+    }
+
+    emitInstr(it: gen_ast.Instr): Gen {
+        if (it) {
+
+            const ivar = it as gen_ast.IVar
+            if (ivar && ivar.Name && ivar.Type) return this.ln(() =>
+                this.s("var ", ivar.Name, " ").emitTypeRef(this.typeNamed(ivar.Type) ? { Maybe: ivar.Type } : ivar.Type))
+
+            const idictdel = it as gen_ast.IDictDel
+            if (idictdel && idictdel.DelFrom && idictdel.DelWhat) return this.ln(() =>
+                this.s("delete(").emitExpr(idictdel.DelFrom).s(", ").emitExpr(idictdel.DelWhat).s(')'))
+
+            const icolladd = it as gen_ast.ICollAdd
+            if (icolladd && icolladd.AddTo && icolladd.AddWhat) return this.ln(() =>
+                this.emitExpr(icolladd.AddTo).s(" = append(").emitExpr(icolladd.AddTo).s(", ").emitExpr(icolladd.AddWhat).s(")"))
+
+            const iblock = it as gen_ast.IBlock
+            if (iblock && iblock.Instrs !== undefined) {
+                let endeol = false
+                if (endeol = iblock.Lock ? true : false)
+                    this.ln(() => this.emitExpr(iblock.Lock).s(".Lock()").line().lf("{"))
+                else if (endeol = (iblock.ForEach && iblock.ForEach.length) ? true : false)
+                    this.ln(() => this.s("for _, ", iblock.ForEach[0].Name, " := range ").emitExpr(iblock.ForEach[1]).s(" {"))
+                else if (endeol = (iblock.If && iblock.If.length) ? true : false)
+                    this.ln(() => this.s("if ").emitExpr(iblock.If[0]).s(" {"))
+                else
+                    this.s("{").line()
+
+                this.indented(() =>
+                    iblock.Instrs.forEach(_ => this.emitInstr(_)))
+
+                this.lf().s("}")
+
+                if (iblock.Lock)
+                    this.line().lf().emitExpr(iblock.Lock).s(".Unlock()")
+                else if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
+                    this.s(" else ").emitInstr(iblock.If[1]).lf()
+
+                return endeol ? this.line() : this
+            }
+
+        }
+        return super.emitInstr(it)
+    }
+
+    emitExpr(it: gen_ast.Expr): Gen {
+        if (it) {
+            const ecollnew = it as gen_ast.ECollNew
+            if (ecollnew && ecollnew.Capacity !== undefined)
+                if (ecollnew.ElemTypeIfList)
+                    return this.s("make([]").emitTypeRef(ecollnew.ElemTypeIfList).s(", 0, ").emitExpr(ecollnew.Capacity).s(")")
+                else
+                    return this.s("make(dict, ").emitExpr(ecollnew.Capacity).s(")")
+
+            const enew = it as gen_ast.ENew
+            if (enew && enew.New)
+                return this.s("new(").emitTypeRef(typeRefUnMaybe(enew.New)).s(")")
+
+            const etup = it as gen_ast.ETup
+            if (etup && etup.Items !== undefined)
+                return this.each(etup.Items, ", ", _ => { this.emitExpr(_) })
+
+            const elen = it as gen_ast.ELen
+            if (elen && elen.LenOf)
+                return this.s("len(").emitExpr(elen.LenOf).s(")")
+
+            const eop = it as gen_ast.EOp
+            if (eop && eop.Name && eop.Operands && eop.Operands.length)
+                if (eop.Name === gen_ast.BuilderOperators.Is)
+                    return this.s("(nil != ").emitExpr(eop.Operands[0]).s(")")
+                else if (eop.Name === gen_ast.BuilderOperators.Isnt)
+                    return this.s("(nil == ").emitExpr(eop.Operands[0]).s(")")
+                else if (eop.Name === gen_ast.BuilderOperators.Idx || eop.Name === gen_ast.BuilderOperators.IdxMay)
+                    return this.emitExpr(eop.Operands[0]).s("[").emitExprs("][", ...eop.Operands.slice(1)).s("]")
+
+            const efn = it as gen_ast.EFunc
+            if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
+                return emitTypeRet(this
+                    .s("func(")
+                    .each(efn.Args, ", ", _ => this.s(_.Name, " ").emitTypeRef(_.Type))
+                    .s(") "), efn.Type).s(efn.Type ? " " : "").emitInstr(efn.Body)
+
+            const econv = it as gen_ast.EConv
+            if (econv && econv.Conv && econv.To)
+                return this.emitExpr(econv.Conv).s(".(").emitTypeRef(econv.To).s(")")
+        }
+        return super.emitExpr(it)
+    }
+
+    emitTypeRef(it: gen_ast.TypeRef): Gen {
+        if (it === null)
+            return this
+
+        const ttup = this.typeTup(it)
+        if (ttup) // until multi-typed tuples arrive for real..
+            return this.s("[]").emitTypeRef(ttup.TupOf[0])
+
+        const tmay = this.typeMaybe(it)
+        if (tmay)
+            return this.s(typeRefNilable(this, tmay.Maybe) ? "" : "*").emitTypeRef(tmay.Maybe)
+
+        const tarr = this.typeArr(it)
+        if (tarr)
+            return this.s("[]").emitTypeRef(tarr.ArrOf)
+
+        const tfun = this.typeFunc(it)
+        if (tfun)
+            return this.s("func(").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(tfun.To ? ") " : ")").emitTypeRef(tfun.To)
+
+        return super.emitTypeRef(it)
+    }
+
+    typeRefForField(it: gen_ast.TypeRef, optional: boolean): gen_ast.TypeRef {
+        return typeRefUnMaybe(it, true, optional, optional)
+    }
+
+}
+
+function emitTypeRet(_: Gen, it: gen_ast.TypeRef) {
+    const ttup = _.typeTup(it)
+    if (ttup)
+        return _.s("(").each(ttup.TupOf, ", ", t => _.emitTypeRef(t)).s(")")
+    return _.emitTypeRef(it)
+}
+
+function typeRefNilable(_: Gen, it: gen_ast.TypeRef, forceTrueForBools: boolean = false, forceTrueForInts: boolean = false, forceTrueForStrings: boolean = false) {
+    return it === gen_ast.TypeRefPrim.Any || it === gen_ast.TypeRefPrim.Dict
+        || _.typeArr(it) || _.typeMaybe(it) || _.typeFunc(it) || _.typeTup(it)
+        || (forceTrueForBools && it === gen_ast.TypeRefPrim.Bool)
+        || (forceTrueForInts && it === gen_ast.TypeRefPrim.Int)
+        || (forceTrueForStrings && it === gen_ast.TypeRefPrim.String)
+}
+
+function typeRefUnMaybe(it: gen_ast.TypeRef, unMaybeBools: boolean = true, unMaybeInts: boolean = true, unMaybeStrings: boolean = true): gen_ast.TypeRef {
+    const tmay = it as gen_ast.TypeRefMaybe
+    if (tmay && tmay.Maybe
+        && (tmay.Maybe !== gen_ast.TypeRefPrim.String || unMaybeStrings)
+        && (tmay.Maybe !== gen_ast.TypeRefPrim.Bool || unMaybeBools)
+        && (tmay.Maybe !== gen_ast.TypeRefPrim.Int || unMaybeInts))
+        return typeRefUnMaybe(tmay.Maybe, unMaybeBools, unMaybeInts, unMaybeStrings)
+
+    return it
 }

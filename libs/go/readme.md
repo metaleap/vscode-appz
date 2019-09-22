@@ -33,10 +33,18 @@ Represents the severity of diagnostics.
 
 ```go
 const (
-	DiagnosticSeverityError       DiagnosticSeverity = 0
-	DiagnosticSeverityWarning     DiagnosticSeverity = 1
+	// Something not allowed by the rules of a language or other means.
+	DiagnosticSeverityError DiagnosticSeverity = 0
+
+	// Something suspicious but allowed.
+	DiagnosticSeverityWarning DiagnosticSeverity = 1
+
+	// Something to inform about but not a problem.
 	DiagnosticSeverityInformation DiagnosticSeverity = 2
-	DiagnosticSeverityHint        DiagnosticSeverity = 3
+
+	// Something to hint to a better way of doing it, like proposing
+	// a refactoring.
+	DiagnosticSeverityHint DiagnosticSeverity = 3
 )
 ```
 
@@ -50,8 +58,20 @@ Additional metadata about the type of a diagnostic.
 
 ```go
 const (
+	// Unused or unnecessary code.
+	//
+	// Diagnostics with this tag are rendered faded out. The amount of fading
+	// is controlled by the `"editorUnnecessaryCode.opacity"` theme color. For
+	// example, `"editorUnnecessaryCode.opacity": "#000000c0"` will render the
+	// code with 75% opacity. For high contrast themes, use the
+	// `"editorUnnecessaryCode.border"` theme color to underline unnecessary code
+	// instead of fading it out.
 	DiagnosticTagUnnecessary DiagnosticTag = 1
-	DiagnosticTagDeprecated  DiagnosticTag = 2
+
+	// Deprecated or obsolete code.
+	//
+	// Diagnostics with this tag are rendered with a strike through.
+	DiagnosticTagDeprecated DiagnosticTag = 2
 )
 ```
 
@@ -59,7 +79,6 @@ const (
 
 ```go
 type InputBoxOptions struct {
-
 	// The value to prefill in the input box.
 	Value string `json:"value,omitempty"`
 
@@ -101,7 +120,6 @@ Options to configure the behavior of the input box UI.
 
 ```go
 type MessageItem struct {
-
 	// A short title like 'Retry', 'Open Log' etc.
 	Title string `json:"title"`
 
@@ -113,7 +131,7 @@ type MessageItem struct {
 	IsCloseAffordance bool `json:"isCloseAffordance,omitempty"`
 
 	// Free-form custom data, preserved across a roundtrip.
-	My map[string]any `json:"my,omitempty"`
+	My dict `json:"my,omitempty"`
 }
 ```
 
@@ -124,7 +142,6 @@ message.
 
 ```go
 type MessageOptions struct {
-
 	// Indicates that this message should be modal.
 	Modal bool `json:"modal,omitempty"`
 }
@@ -136,7 +153,6 @@ Options to configure the behavior of the message.
 
 ```go
 type Vscode interface {
-
 	// Namespace for dealing with the current window of the editor. That is visible
 	// and active editors, as well as, UI elements to show messages, selections, and
 	// asking for user input.
@@ -162,7 +178,6 @@ first method invocation (which consequently never `return`s) on any of the
 
 ```go
 type Window interface {
-
 	// Show an error message.
 	//
 	// `message` ── The message to show.

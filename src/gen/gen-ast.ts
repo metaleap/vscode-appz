@@ -123,6 +123,7 @@ export enum BuilderOperators {
     Not = '!',
     Is = '=?',
     Isnt = '=!',
+    Addr = "&",
 }
 
 export class Builder {
@@ -159,6 +160,7 @@ export class Builder {
     oNeq(...args: Expr[]): EOp { return this.eOp(BuilderOperators.Neq, ...args) }
     oOr(...args: Expr[]): EOp { return this.eOp(BuilderOperators.Or, ...args) }
     oAnd(...args: Expr[]): EOp { return this.eOp(BuilderOperators.And, ...args) }
+    oAddr(arg: Expr): EOp { return this.eOp(BuilderOperators.Addr, arg) }
     oNot(arg: Expr): EOp { return this.eOp(BuilderOperators.Not, arg) }
     oIs(arg: Expr): EOp { return this.eOp(BuilderOperators.Is, arg) }
     oIsnt(arg: Expr): EOp { return this.eOp(BuilderOperators.Isnt, arg) }
@@ -373,6 +375,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             }
         },
         idents: {
+            null: "null",
             curInst: "this",
             typeAny: "any",
             typeDict: "dict",
@@ -426,8 +429,7 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     lf(...s: string[]): Gen {
-        this.src += this.options.oneIndent.repeat(this.indents)
-        this.src += s.join('')
+        this.src += (this.options.oneIndent.repeat(this.indents) + s.join(''))
         return this
     }
 
@@ -507,10 +509,6 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (it === TypeRefPrim.Dict)
             return this.s(this.options.idents.typeDict)
 
-        const tname = this.typeNamed(it)
-        if (tname)
-            return this.s(tname.Name)
-
         const ttup = this.typeTup(it)
         if (ttup)
             return this.s("[").each(ttup.TupOf, ',', _ => this.emitTypeRef(_)).s(']')
@@ -526,6 +524,10 @@ export class Gen extends gen.Gen implements gen.IGen {
         const tmay = this.typeMaybe(it)
         if (tmay)
             return this.s('?').emitTypeRef(tmay.Maybe)
+
+        const tname = this.typeNamed(it)
+        if (tname)
+            return this.s(tname.Name)
 
         throw it
     }
@@ -611,11 +613,11 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (it === undefined)
             return this
         if (it === null)
-            return this.s('null')
+            return this.s(this.options.idents.null)
 
         const elit = it as ELit
         if (elit && elit.Lit !== undefined)
-            return this.s(node_util.format("%j", elit.Lit))
+            return this.s((elit.Lit === null) ? this.options.idents.null : node_util.format("%j", elit.Lit))
 
         const ecollnew = it as ECollNew
         if (ecollnew && ecollnew.Capacity !== undefined)
@@ -676,21 +678,30 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (!onErrRet)
             onErrRet = _.eLit(false)
         const retifnotok = _.iIf(_.oNot(_.n(okBoolName)), [_.iRet(onErrRet),])
+
         const dstnamedtype = this.typeNamed(this.typeUnmaybe(dstType))
-        if (dstnamedtype && dstnamedtype.Name) {
-            if (dstnamedtype.Name === this.options.idents.typeAny)
-                return [_.iSet(_.n(dstVarName), src)]
-            else {
-                if (this.state.genPopulateFor[dstnamedtype.Name] !== false) // why this peculiar checking construct?..
-                    this.state.genPopulateFor[dstnamedtype.Name] = true // ..see the consumer of genDecoders to grasp it
-                return [
-                    _.iSet(_.n(dstVarName), _.eNew(dstType)),
-                    _.iSet(_.n(okBoolName), _.eCall(_.oDot(_.n(dstVarName), _.n('populateFrom')), src)),
-                    retifnotok,
-                ]
-            }
+        if (dstnamedtype) {
+            if (this.state.genPopulateFor[dstnamedtype.Name] !== false) // why this peculiar checking construct?..
+                this.state.genPopulateFor[dstnamedtype.Name] = true // ..see the consumer of genDecoders to grasp it
+            return [
+                _.iSet(_.n(dstVarName), _.eNew(dstType)),
+                _.iSet(_.n(okBoolName), _.eCall(_.oDot(_.n(dstVarName), _.n('populateFrom')), src)),
+                retifnotok,
+            ]
         }
-        return [
+
+        const dstmaybetype = this.typeMaybe(dstType)
+        if (dstmaybetype && (dstmaybetype.Maybe === TypeRefPrim.Bool || dstmaybetype.Maybe === TypeRefPrim.Int || dstmaybetype.Maybe === TypeRefPrim.String)) {
+            const tmpname = "_" + dstVarName + "_"
+            return [
+                _.iVar(tmpname, dstmaybetype.Maybe),
+                _.iSet(_.eTup(_.n(tmpname), _.n(okBoolName)), _.eConv(dstmaybetype.Maybe, src)),
+                retifnotok,
+                _.iSet(_.n(dstVarName), _.oAddr(_.n(tmpname))),
+            ]
+        }
+
+        return (dstType === TypeRefPrim.Any) ? [_.iSet(_.n(dstVarName), src)] : [
             _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(dstType, src)),
             retifnotok,
         ]

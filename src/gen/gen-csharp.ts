@@ -203,10 +203,8 @@ export class Gen extends gen_ast.Gen {
             return this.s("new ").emitTypeRef(enew.New).s("()")
 
         const econv = it as gen_ast.EConv
-        if (econv && econv.Conv && econv.To) {
-            const tval = typeRefUnMaybe(econv.To, true, true, true)
-            return this.s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(tval).s(") ? (((").emitTypeRef(tval).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)")
-        }
+        if (econv && econv.Conv && econv.To)
+            return this.s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(econv.To).s(") ? (((").emitTypeRef(econv.To).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)")
 
         const elen = it as gen_ast.ELen
         if (elen && elen.LenOf)
@@ -222,6 +220,8 @@ export class Gen extends gen_ast.Gen {
                 return this.s("(null != ").emitExpr(eop.Operands[0]).s(")")
             else if (eop.Name === gen_ast.BuilderOperators.Isnt)
                 return this.s("(null == ").emitExpr(eop.Operands[0]).s(")")
+            else if (eop.Name === gen_ast.BuilderOperators.Addr)
+                return this.emitExpr(eop.Operands[0])
             else if (eop.Name === gen_ast.BuilderOperators.Idx)
                 return this.emitExpr(eop.Operands[0]).s("[").emitExprs("][", ...eop.Operands.slice(1)).s("]")
             else if (eop.Name === gen_ast.BuilderOperators.IdxMay)
