@@ -13,7 +13,7 @@ class Gen extends gen_ast.Gen {
         super.gen(prep);
     }
     emitIntro() {
-        return this.lines("//" + this.doNotEditComment("csharp"), "namespace VscAppz {").indent().lines("using System;", "using System.Collections.Generic;", "using Newtonsoft.Json;", "", "using " + this.options.idents.typeAny + " = System.Object;", "using " + this.options.idents.typeDict + " = System.Collections.Generic.Dictionary<string, object>;", "");
+        return this.lines("// " + this.doNotEditComment("csharp"), "namespace VscAppz {").indent().lines("using System;", "using System.Collections.Generic;", "using Newtonsoft.Json;", "", "using " + this.options.idents.typeAny + " = System.Object;", "using " + this.options.idents.typeDict + " = System.Collections.Generic.Dictionary<string, object>;", "");
     }
     emitOutro() {
         return this.undent().lines("}");
@@ -159,8 +159,6 @@ class Gen extends gen_ast.Gen {
         return super.emitExpr(it);
     }
     emitTypeRef(it) {
-        if (it === gen_ast.TypeRefPrim.Dict)
-            return this.s(this.options.idents.typeDict);
         const tmay = this.typeMaybe(it);
         if (tmay)
             return this.emitTypeRef(tmay.Maybe)

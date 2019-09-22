@@ -506,7 +506,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (it === TypeRefPrim.String)
             return this.s("string")
         if (it === TypeRefPrim.Dict)
-            return this.s("[string:", this.options.idents.typeAny, "]")
+            return this.s(this.options.idents.typeDict)
 
         const tname = this.typeNamed(it)
         if (tname)
@@ -925,7 +925,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
     typeTup(typeRef: TypeRef): TypeRefTup {
         const me = typeRef as TypeRefTup
-        return (me && me.TupOf && me.TupOf.length) ? me : null
+        return (me && me.TupOf && me.TupOf.length && me.TupOf.length > 1) ? me : null
     }
 
     typeRefForField(it: TypeRef): TypeRef {

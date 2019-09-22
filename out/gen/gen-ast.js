@@ -361,7 +361,7 @@ class Gen extends gen.Gen {
         if (it === TypeRefPrim.String)
             return this.s("string");
         if (it === TypeRefPrim.Dict)
-            return this.s("[string:", this.options.idents.typeAny, "]");
+            return this.s(this.options.idents.typeDict);
         const tname = this.typeNamed(it);
         if (tname)
             return this.s(tname.Name);
@@ -645,7 +645,7 @@ class Gen extends gen.Gen {
     }
     typeTup(typeRef) {
         const me = typeRef;
-        return (me && me.TupOf && me.TupOf.length) ? me : null;
+        return (me && me.TupOf && me.TupOf.length && me.TupOf.length > 1) ? me : null;
     }
     typeRefForField(it) {
         return it;

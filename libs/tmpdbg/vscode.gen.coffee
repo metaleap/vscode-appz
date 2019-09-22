@@ -350,7 +350,7 @@ MessageItem: class
     # Free-form custom data, preserved across a roundtrip.
     #
     # JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
-    My: ?[string:Any]
+    My: ?Dict
 
 
 
@@ -775,10 +775,10 @@ Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(?string->void) -> v
 
 
 MessageItem·populateFrom: (payload:Any -> bool)
-    var dict of [string:Any]
+    var dict of Dict
     var ok of bool
     var val of Any
-    [dict,ok] = ((payload)·([string:Any]))
+    [dict,ok] = ((payload)·(Dict))
     if (!ok)
         return false
     [val,ok] = dict@?"title"
@@ -799,8 +799,8 @@ MessageItem·populateFrom: (payload:Any -> bool)
         this.IsCloseAffordance = isCloseAffordance
     [val,ok] = dict@?"my"
     if ok
-        var my of ?[string:Any]
-        [my,ok] = ((val)·(?[string:Any]))
+        var my of ?Dict
+        [my,ok] = ((val)·(?Dict))
         if (!ok)
             return false
         this.My = my

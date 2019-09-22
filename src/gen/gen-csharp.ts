@@ -19,7 +19,7 @@ export class Gen extends gen_ast.Gen {
 
     emitIntro(): Gen {
         return this.lines(
-            "//" + this.doNotEditComment("csharp"),
+            "// " + this.doNotEditComment("csharp"),
             "namespace VscAppz {",
         ).indent().lines(
             "using System;",
@@ -240,9 +240,6 @@ export class Gen extends gen_ast.Gen {
     }
 
     emitTypeRef(it: gen_ast.TypeRef): Gen {
-        if (it === gen_ast.TypeRefPrim.Dict)
-            return this.s(this.options.idents.typeDict)
-
         const tmay = this.typeMaybe(it)
         if (tmay) return this.emitTypeRef(tmay.Maybe)
             .s(typeRefNullable(tmay.Maybe) ? "" : "?")
