@@ -23,58 +23,6 @@ anything) by VS Code.
 var OnErrorDefaultOutputFormat = "err:\t%v\njson:\t%v\n\n"
 ```
 
-#### type DiagnosticSeverity
-
-```go
-type DiagnosticSeverity int
-```
-
-Represents the severity of diagnostics.
-
-```go
-const (
-	// Something not allowed by the rules of a language or other means.
-	DiagnosticSeverityError DiagnosticSeverity = 0
-
-	// Something suspicious but allowed.
-	DiagnosticSeverityWarning DiagnosticSeverity = 1
-
-	// Something to inform about but not a problem.
-	DiagnosticSeverityInformation DiagnosticSeverity = 2
-
-	// Something to hint to a better way of doing it, like proposing
-	// a refactoring.
-	DiagnosticSeverityHint DiagnosticSeverity = 3
-)
-```
-
-#### type DiagnosticTag
-
-```go
-type DiagnosticTag int
-```
-
-Additional metadata about the type of a diagnostic.
-
-```go
-const (
-	// Unused or unnecessary code.
-	//
-	// Diagnostics with this tag are rendered faded out. The amount of fading
-	// is controlled by the `"editorUnnecessaryCode.opacity"` theme color. For
-	// example, `"editorUnnecessaryCode.opacity": "#000000c0"` will render the
-	// code with 75% opacity. For high contrast themes, use the
-	// `"editorUnnecessaryCode.border"` theme color to underline unnecessary code
-	// instead of fading it out.
-	DiagnosticTagUnnecessary DiagnosticTag = 1
-
-	// Deprecated or obsolete code.
-	//
-	// Diagnostics with this tag are rendered with a strike through.
-	DiagnosticTagDeprecated DiagnosticTag = 2
-)
-```
-
 #### type InputBoxOptions
 
 ```go

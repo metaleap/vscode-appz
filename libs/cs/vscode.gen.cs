@@ -7,46 +7,6 @@ namespace VscAppz {
 	using any = System.Object;
 	using dict = System.Collections.Generic.Dictionary<string, object>;
 
-	/// <summary>Additional metadata about the type of a diagnostic.</summary>
-	public enum DiagnosticTag {
-		/// <summary>
-		/// Unused or unnecessary code.
-		/// 
-		/// Diagnostics with this tag are rendered faded out. The amount of fading
-		/// is controlled by the `"editorUnnecessaryCode.opacity"` theme color. For
-		/// example, `"editorUnnecessaryCode.opacity": "#000000c0"` will render the
-		/// code with 75% opacity. For high contrast themes, use the
-		/// `"editorUnnecessaryCode.border"` theme color to underline unnecessary code
-		/// instead of fading it out.
-		/// </summary>
-		Unnecessary = 1,
-
-		/// <summary>
-		/// Deprecated or obsolete code.
-		/// 
-		/// Diagnostics with this tag are rendered with a strike through.
-		/// </summary>
-		Deprecated = 2,
-	}
-
-	/// <summary>Represents the severity of diagnostics.</summary>
-	public enum DiagnosticSeverity {
-		/// <summary>Something not allowed by the rules of a language or other means.</summary>
-		Error = 0,
-
-		/// <summary>Something suspicious but allowed.</summary>
-		Warning = 1,
-
-		/// <summary>Something to inform about but not a problem.</summary>
-		Information = 2,
-
-		/// <summary>
-		/// Something to hint to a better way of doing it, like proposing
-		/// a refactoring.
-		/// </summary>
-		Hint = 3,
-	}
-
 	/// <summary>
 	/// Type Definition for Visual Studio Code 1.38 Extension API
 	/// See https://code.visualstudio.com/api for more information

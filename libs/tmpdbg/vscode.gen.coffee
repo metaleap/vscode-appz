@@ -14,46 +14,6 @@
 
 
 
-# Additional metadata about the type of a diagnostic.
-DiagnosticTag: enum
-
-    # Unused or unnecessary code.
-    # 
-    # Diagnostics with this tag are rendered faded out. The amount of fading
-    # is controlled by the `"editorUnnecessaryCode.opacity"` theme color. For
-    # example, `"editorUnnecessaryCode.opacity": "#000000c0"` will render the
-    # code with 75% opacity. For high contrast themes, use the
-    # `"editorUnnecessaryCode.border"` theme color to underline unnecessary code
-    # instead of fading it out.
-    Unnecessary: 1
-
-    # Deprecated or obsolete code.
-    # 
-    # Diagnostics with this tag are rendered with a strike through.
-    Deprecated: 2
-
-
-
-
-# Represents the severity of diagnostics.
-DiagnosticSeverity: enum
-
-    # Something not allowed by the rules of a language or other means.
-    Error: 0
-
-    # Something suspicious but allowed.
-    Warning: 1
-
-    # Something to inform about but not a problem.
-    Information: 2
-
-    # Something to hint to a better way of doing it, like proposing
-    # a refactoring.
-    Hint: 3
-
-
-
-
 # vscode:
 # Type Definition for Visual Studio Code 1.38 Extension API
 # See https://code.visualstudio.com/api for more information

@@ -79,7 +79,7 @@ class Gen extends gen_ast.Gen {
                 if (iblock.Lock)
                     this.line().lf().emitExpr(iblock.Lock).s(".Unlock()");
                 else if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
-                    this.s(" else ").emitInstr(iblock.If[1]).lf();
+                    this.s(" else ").emitInstr(iblock.If[1]);
                 return endeol ? this.line() : this;
             }
         }
