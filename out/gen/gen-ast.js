@@ -400,7 +400,7 @@ class Gen extends gen.Gen {
             if (iret && iret.Ret !== undefined)
                 return this.ln(() => this.s("return ").emitExpr((!iret.Ret) ? undefined : iret.Ret));
             const ivar = it;
-            if (ivar && ivar.Name)
+            if (ivar && ivar.Name && ivar.Type)
                 return this.ln(() => this.s("var ", ivar.Name, " of ").emitTypeRef(ivar.Type));
             const iset = it;
             if (iset && iset.SetWhat && iset.SetTo)
@@ -460,7 +460,7 @@ class Gen extends gen.Gen {
             return this.s('[').each(etup.Items, ',', _ => { this.emitExpr(_); }).s(']');
         const ecall = it;
         if (ecall && ecall.Call)
-            return this.emitExpr(ecall.Call).s("(").emitExprs(', ', ...ecall.Args).s(")");
+            return this.emitExpr(ecall.Call).s("(").emitExprs(", ", ...ecall.Args).s(")");
         const eop = it;
         if (eop && eop.Name && eop.Operands && eop.Operands.length) {
             const notactualoperator = (eop.Name === BuilderOperators.Idx || eop.Name === BuilderOperators.IdxMay || eop.Name === BuilderOperators.Dot);

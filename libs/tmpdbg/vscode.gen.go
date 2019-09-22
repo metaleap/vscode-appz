@@ -246,47 +246,419 @@ type InputBoxOptions struct {
 }
 
 func (me *impl) Window() Window {
+	return me
 }
 
 func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(*string)) {
+	var msg ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showErrorMessage1"
+	msg.Data = make(dict, 2)
+	msg.Data["message"] = message
+	msg.Data["items"] = items
+	var on func(any) bool
+	if ((nil != andThen)) {
+		on = func(payload any) bool{
+			var ok bool
+			var result *string
+			if ((nil != payload)) {
+				[result,ok] = (payload is string) ? (((string)(payload)), true) : (default, false)
+				if ((!ok)) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
 }
 
 func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
+	var msg ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showErrorMessage2"
+	msg.Data = make(dict, 3)
+	msg.Data["message"] = message
+	msg.Data["options"] = options
+	msg.Data["items"] = items
+	var on func(any) bool
+	if ((nil != andThen)) {
+		on = func(payload any) bool{
+			var ok bool
+			var result *string
+			if ((nil != payload)) {
+				[result,ok] = (payload is string) ? (((string)(payload)), true) : (default, false)
+				if ((!ok)) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
 }
 
 func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
+	var msg ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showErrorMessage3"
+	msg.Data = make(dict, 2)
+	msg.Data["message"] = message
+	msg.Data["items"] = items
+	var on func(any) bool
+	if ((nil != andThen)) {
+		on = func(payload any) bool{
+			var ok bool
+			var result *MessageItem
+			if ((nil != payload)) {
+				result = new(*MessageItem)
+				ok = result.populateFrom(payload)
+				if ((!ok)) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
 }
 
 func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
+	var msg ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showErrorMessage4"
+	msg.Data = make(dict, 3)
+	msg.Data["message"] = message
+	msg.Data["options"] = options
+	msg.Data["items"] = items
+	var on func(any) bool
+	if ((nil != andThen)) {
+		on = func(payload any) bool{
+			var ok bool
+			var result *MessageItem
+			if ((nil != payload)) {
+				result = new(*MessageItem)
+				ok = result.populateFrom(payload)
+				if ((!ok)) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
 }
 
 func (me *impl) ShowInformationMessage1(message string, items []string, andThen func(*string)) {
+	var msg ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showInformationMessage1"
+	msg.Data = make(dict, 2)
+	msg.Data["message"] = message
+	msg.Data["items"] = items
+	var on func(any) bool
+	if ((nil != andThen)) {
+		on = func(payload any) bool{
+			var ok bool
+			var result *string
+			if ((nil != payload)) {
+				[result,ok] = (payload is string) ? (((string)(payload)), true) : (default, false)
+				if ((!ok)) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
 }
 
 func (me *impl) ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
+	var msg ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showInformationMessage2"
+	msg.Data = make(dict, 3)
+	msg.Data["message"] = message
+	msg.Data["options"] = options
+	msg.Data["items"] = items
+	var on func(any) bool
+	if ((nil != andThen)) {
+		on = func(payload any) bool{
+			var ok bool
+			var result *string
+			if ((nil != payload)) {
+				[result,ok] = (payload is string) ? (((string)(payload)), true) : (default, false)
+				if ((!ok)) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
 }
 
 func (me *impl) ShowInformationMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
+	var msg ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showInformationMessage3"
+	msg.Data = make(dict, 2)
+	msg.Data["message"] = message
+	msg.Data["items"] = items
+	var on func(any) bool
+	if ((nil != andThen)) {
+		on = func(payload any) bool{
+			var ok bool
+			var result *MessageItem
+			if ((nil != payload)) {
+				result = new(*MessageItem)
+				ok = result.populateFrom(payload)
+				if ((!ok)) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
 }
 
 func (me *impl) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
+	var msg ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showInformationMessage4"
+	msg.Data = make(dict, 3)
+	msg.Data["message"] = message
+	msg.Data["options"] = options
+	msg.Data["items"] = items
+	var on func(any) bool
+	if ((nil != andThen)) {
+		on = func(payload any) bool{
+			var ok bool
+			var result *MessageItem
+			if ((nil != payload)) {
+				result = new(*MessageItem)
+				ok = result.populateFrom(payload)
+				if ((!ok)) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
 }
 
 func (me *impl) ShowWarningMessage1(message string, items []string, andThen func(*string)) {
+	var msg ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showWarningMessage1"
+	msg.Data = make(dict, 2)
+	msg.Data["message"] = message
+	msg.Data["items"] = items
+	var on func(any) bool
+	if ((nil != andThen)) {
+		on = func(payload any) bool{
+			var ok bool
+			var result *string
+			if ((nil != payload)) {
+				[result,ok] = (payload is string) ? (((string)(payload)), true) : (default, false)
+				if ((!ok)) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
 }
 
 func (me *impl) ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
+	var msg ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showWarningMessage2"
+	msg.Data = make(dict, 3)
+	msg.Data["message"] = message
+	msg.Data["options"] = options
+	msg.Data["items"] = items
+	var on func(any) bool
+	if ((nil != andThen)) {
+		on = func(payload any) bool{
+			var ok bool
+			var result *string
+			if ((nil != payload)) {
+				[result,ok] = (payload is string) ? (((string)(payload)), true) : (default, false)
+				if ((!ok)) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
 }
 
 func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
+	var msg ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showWarningMessage3"
+	msg.Data = make(dict, 2)
+	msg.Data["message"] = message
+	msg.Data["items"] = items
+	var on func(any) bool
+	if ((nil != andThen)) {
+		on = func(payload any) bool{
+			var ok bool
+			var result *MessageItem
+			if ((nil != payload)) {
+				result = new(*MessageItem)
+				ok = result.populateFrom(payload)
+				if ((!ok)) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
 }
 
 func (me *impl) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
+	var msg ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showWarningMessage4"
+	msg.Data = make(dict, 3)
+	msg.Data["message"] = message
+	msg.Data["options"] = options
+	msg.Data["items"] = items
+	var on func(any) bool
+	if ((nil != andThen)) {
+		on = func(payload any) bool{
+			var ok bool
+			var result *MessageItem
+			if ((nil != payload)) {
+				result = new(*MessageItem)
+				ok = result.populateFrom(payload)
+				if ((!ok)) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
 }
 
 func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(*string)) {
+	var msg ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showInputBox"
+	msg.Data = make(dict, 1)
+	var fnids []string
+	fnids = make([]string, 0, 1)
+	lock (me) {
+		if ((nil != options)) {
+			options.ValidateInput_AppzFuncId = ""
+			var fn func(string) *string
+			fn = options.ValidateInput
+			if ((nil != fn)) {
+				options.ValidateInput_AppzFuncId = me.nextFuncId()
+				fnids = append(fnids, options.ValidateInput_AppzFuncId)
+				me.cbOther[options.ValidateInput_AppzFuncId] = func(args []any) []any{
+					if ((1 != len(args))) {
+						return [null,false]
+					} else {
+						var ok bool
+						var __0 string
+						if ((nil != args[0])) {
+							[__0,ok] = (args[0] is string) ? (((string)(args[0])), true) : (default, false)
+							if ((!ok)) {
+								return [null,false]
+							}
+						}
+						return [fn(__0),true]
+					}					
+				}
+			}
+		}
+	}
+	msg.Data["options"] = options
+	var on func(any) bool
+	if ((nil != andThen)) {
+		on = func(payload any) bool{
+			var ok bool
+			var result *string
+			if ((nil != payload)) {
+				[result,ok] = (payload is string) ? (((string)(payload)), true) : (default, false)
+				if ((!ok)) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, func(payload any) bool{
+		if ((len(fnids) != 0)) {
+			lock (me) {
+				foreach (var fnid in fnids) {
+					delete(me.cbOther, fnid)
+				}
+			}
+		}
+		return ((nil == on) || on(payload))
+	})
 }
 
 func (me *MessageItem) populateFrom(payload any) bool {
+	var it dict
+	var ok bool
+	var val any
+	[it,ok] = (payload is dict) ? (((dict)(payload)), true) : (default, false)
+	if ((!ok)) {
+		return false
+	}
+	[val,ok] = it["title"]
+	if (ok) {
+		var title string
+		[title,ok] = (val is string) ? (((string)(val)), true) : (default, false)
+		if ((!ok)) {
+			return false
+		}
+		me.Title = title
+	} else {
+		return false
+	}	
+	[val,ok] = it["isCloseAffordance"]
+	if (ok) {
+		var isCloseAffordance bool
+		[isCloseAffordance,ok] = (val is bool) ? (((bool)(val)), true) : (default, false)
+		if ((!ok)) {
+			return false
+		}
+		me.IsCloseAffordance = isCloseAffordance
+	}
+	[val,ok] = it["my"]
+	if (ok) {
+		var my dict
+		[my,ok] = (null == val) ? (default, true) : (val is dict) ? (((dict)(val)), true) : (default, false)
+		if ((!ok)) {
+			return false
+		}
+		me.My = my
+	}
+	return true
 }
 

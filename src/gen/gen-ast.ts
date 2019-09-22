@@ -557,7 +557,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                     this.s("return ").emitExpr((!iret.Ret) ? undefined : iret.Ret))
 
             const ivar = it as IVar
-            if (ivar && ivar.Name)
+            if (ivar && ivar.Name && ivar.Type)
                 return this.ln(() =>
                     this.s("var ", ivar.Name, " of ").emitTypeRef(ivar.Type))
 
@@ -643,7 +643,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         const ecall = it as ECall
         if (ecall && ecall.Call)
-            return this.emitExpr(ecall.Call).s("(").emitExprs(', ', ...ecall.Args).s(")")
+            return this.emitExpr(ecall.Call).s("(").emitExprs(", ", ...ecall.Args).s(")")
 
         const eop = it as EOp
         if (eop && eop.Name && eop.Operands && eop.Operands.length) {
