@@ -35,7 +35,7 @@ class Builder {
     iIf(ifCond, thenInstrs, elseInstrs = undefined) { return { Instrs: thenInstrs, If: [ifCond, { Instrs: elseInstrs }] }; }
     iFor(iterVarName, iterable, ...instrs) { return { Instrs: instrs, ForEach: [iterVarName, iterable] }; }
     eNew(typeRef) { return { New: typeRef }; }
-    eConv(typeRef, conv, wontBeNull) { return { Conv: conv, To: typeRef, WontBeNull: wontBeNull }; }
+    eConv(typeRef, conv) { return { Conv: conv, To: typeRef }; }
     eTup(...items) { return { Items: items }; }
     eArr(...items) { return { Items: items, IsArr: true }; }
     eLen(lenOf, isArr) { return { LenOf: lenOf, IsArr: isArr }; }
@@ -484,7 +484,7 @@ class Gen extends gen.Gen {
             return this.s(ename.Name ? ename.Name : this.options.idents.curInst);
         throw "<expr>" + JSON.stringify(it);
     }
-    genConvertOrReturn(dstVarName, src, dstType, wontBeNull, okBoolName = 'ok', onErrRet = undefined) {
+    convOrRet(dstVarName, src, dstType, okBoolName = 'ok', onErrRet = undefined) {
         const _ = this.b;
         if (!onErrRet)
             onErrRet = _.eLit(false);
@@ -504,7 +504,7 @@ class Gen extends gen.Gen {
             }
         }
         return [
-            _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(dstType, src, wontBeNull)),
+            _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(dstType, src)),
             retifnotok,
         ];
     }
@@ -513,13 +513,15 @@ class Gen extends gen.Gen {
     }
     genMethodImpl_PopulateFrom(struct, _method, _, body) {
         body.push(_.iVar('it', TypeRefPrim.Dict), _.iVar('ok', TypeRefPrim.Bool), _.iVar('val', TypeRefPrim.Any));
-        body.push(...this.genConvertOrReturn('it', _.n('payload'), TypeRefPrim.Dict, true));
+        body.push(...this.convOrRet('it', _.n('payload'), TypeRefPrim.Dict));
         for (const fld of struct.Fields)
             if (!fld.Json.Excluded) {
                 const tfld = this.typeRefForField(fld.Type, fld.fromPrep && fld.fromPrep.optional);
                 body.push(_.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdxMay(_.n('it'), _.eLit(fld.Json.Name))), _.iIf(_.n('ok'), [
                     _.iVar(fld.name, tfld),
-                ].concat(this.genConvertOrReturn(fld.name, _.n('val'), tfld, false), _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name))), fld.Json.Required ? [_.iRet(_.eLit(false))] : []));
+                    _.iIf(_.oIs(_.n('val')), this.convOrRet(fld.name, _.n('val'), tfld)),
+                    _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name)),
+                ], fld.Json.Required ? [_.iRet(_.eLit(false))] : []));
             }
         body.push(_.iRet(_.eLit(true)));
     }
@@ -541,7 +543,7 @@ class Gen extends gen.Gen {
                             _.iRet(_.eTup(_.eNil(), _.eLit(false))),
                         ], [_.iVar(__.ok, TypeRefPrim.Bool)].concat(..._.EACH(fnargs, (fnarg, idx) => [
                             _.iVar('__' + idx, this.b.typeRef(fnarg)),
-                            _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))), this.genConvertOrReturn('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), true, __.ok, _.eTup(_.eNil(), _.eLit(false)))),
+                            _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))), this.convOrRet('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), __.ok, _.eTup(_.eNil(), _.eLit(false)))),
                             _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
                         ]))))),
                     ]),
@@ -555,7 +557,7 @@ class Gen extends gen.Gen {
         if (lastarg.fromPrep.isFromRetThenable) {
             const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, true, true);
             body.push(_.iIf(_.oIs(_.n(lastarg.Name)), [
-                _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iVar(__.ok, TypeRefPrim.Bool), _.iVar(__.result, dsttype), _.iIf(_.oIs(_.n(__.payload)), this.genConvertOrReturn(__.result, _.n(__.payload), dsttype, true, __.ok)), _.eCall(_.n(lastarg.Name), _.n(__.result)), _.iRet(_.eLit(true)))),
+                _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iVar(__.ok, TypeRefPrim.Bool), _.iVar(__.result, dsttype), _.iIf(_.oIs(_.n(__.payload)), this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok)), _.eCall(_.n(lastarg.Name), _.n(__.result)), _.iRet(_.eLit(true)))),
             ]));
         }
         if (!funcfields.length)

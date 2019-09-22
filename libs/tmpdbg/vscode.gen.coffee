@@ -784,25 +784,28 @@ MessageItem·populateFrom: (payload:any -> bool)
     [val,ok] = it@?"title"
     if ok
         var title of string
-        [title,ok] = ((val)·(string))
-        if (!ok)
-            return false
+        if (=?val)
+            [title,ok] = ((val)·(string))
+            if (!ok)
+                return false
         this.Title = title
     else
         return false
     [val,ok] = it@?"isCloseAffordance"
     if ok
         var isCloseAffordance of ?bool
-        [isCloseAffordance,ok] = ((val)·(?bool))
-        if (!ok)
-            return false
+        if (=?val)
+            [isCloseAffordance,ok] = ((val)·(?bool))
+            if (!ok)
+                return false
         this.IsCloseAffordance = isCloseAffordance
     [val,ok] = it@?"my"
     if ok
         var my of ?dict
-        [my,ok] = ((val)·(?dict))
-        if (!ok)
-            return false
+        if (=?val)
+            [my,ok] = ((val)·(?dict))
+            if (!ok)
+                return false
         this.My = my
     return true
 

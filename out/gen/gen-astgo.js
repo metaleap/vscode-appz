@@ -72,16 +72,18 @@ class Gen extends gen_ast.Gen {
                 else {
                     let endeol = false;
                     if (endeol = iblock.Lock ? true : false)
-                        this.ln(() => this.s("lock (").emitExpr(iblock.Lock).s(") {"));
+                        this.ln(() => this.emitExpr(iblock.Lock).s(".Lock()").line().lf("{"));
                     else if (endeol = (iblock.ForEach && iblock.ForEach.length) ? true : false)
-                        this.ln(() => this.s("foreach (var ", iblock.ForEach[0].Name, " in ").emitExpr(iblock.ForEach[1]).s(") {"));
+                        this.ln(() => this.s("for _, ", iblock.ForEach[0].Name, " := range ").emitExpr(iblock.ForEach[1]).s(" {"));
                     else if (endeol = (iblock.If && iblock.If.length) ? true : false)
-                        this.ln(() => this.s("if (").emitExpr(iblock.If[0]).s(") {"));
+                        this.ln(() => this.s("if ").emitExpr(iblock.If[0]).s(" {"));
                     else
                         this.s("{").line();
                     this.indented(() => iblock.Instrs.forEach(_ => this.emitInstr(_)));
                     this.lf().s("}");
-                    if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
+                    if (iblock.Lock)
+                        this.line().lf().emitExpr(iblock.Lock).s(".Unlock()");
+                    else if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
                         this.s(" else ").emitInstr(iblock.If[1]).lf();
                     return endeol ? this.line() : this;
                 }
@@ -99,7 +101,10 @@ class Gen extends gen_ast.Gen {
                 return this.s("make(dict, ").emitExpr(ecollnew.Capacity).s(")");
         const enew = it;
         if (enew && enew.New)
-            return this.s("new(").emitTypeRef(enew.New).s(")");
+            return this.s("new(").emitTypeRef(typeRefUnMaybe(enew.New)).s(")");
+        const etup = it;
+        if (etup && etup.Items !== undefined)
+            return this.each(etup.Items, ", ", _ => { this.emitExpr(_); });
         const elen = it;
         if (elen && elen.LenOf)
             return this.s("len(").emitExpr(elen.LenOf).s(")");
@@ -116,11 +121,11 @@ class Gen extends gen_ast.Gen {
             return this
                 .s("func(")
                 .each(efn.Args, ", ", _ => this.s(_.Name, " ").emitTypeRef(_.Type))
-                .s(") ").emitTypeRef(efn.Type).emitInstr(efn.Body);
+                .s(") ").emitTypeRef(efn.Type).s(efn.Type ? " " : "").emitInstr(efn.Body);
         const econv = it;
         if (econv && econv.Conv && econv.To) {
             const tval = typeRefUnMaybe(econv.To, true, true, true);
-            return this.when(typeRefNilable(this, econv.To) && !econv.WontBeNull, () => this.s("(null == ").emitExpr(econv.Conv).s(") ? (default, true) : ")).s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(tval).s(") ? (((").emitTypeRef(tval).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)");
+            return this.emitExpr(econv.Conv).s(".(").emitTypeRef(tval).s(")");
         }
         return super.emitExpr(it);
     }
@@ -153,13 +158,12 @@ function typeRefNilable(_, it, forceTrueForBools = false, forceTrueForInts = fal
         || (forceTrueForInts && it === gen_ast.TypeRefPrim.Int)
         || (forceTrueForStrings && it === gen_ast.TypeRefPrim.String);
 }
-function typeRefUnMaybe(it, unMaybeBools, unMaybeInts, unMaybeStrings) {
+function typeRefUnMaybe(it, unMaybeBools = true, unMaybeInts = true, unMaybeStrings = true) {
     const tmay = it;
-    if (tmay && tmay.Maybe) {
-        if ((unMaybeStrings && tmay.Maybe === gen_ast.TypeRefPrim.String)
-            || (unMaybeBools && tmay.Maybe === gen_ast.TypeRefPrim.Bool)
-            || (unMaybeInts && tmay.Maybe === gen_ast.TypeRefPrim.Int))
-            return typeRefUnMaybe(tmay.Maybe, unMaybeBools, unMaybeInts, unMaybeStrings);
-    }
+    if (tmay && tmay.Maybe
+        && (tmay.Maybe !== gen_ast.TypeRefPrim.String || unMaybeStrings)
+        && (tmay.Maybe !== gen_ast.TypeRefPrim.Bool || unMaybeBools)
+        && (tmay.Maybe !== gen_ast.TypeRefPrim.Int || unMaybeInts))
+        return typeRefUnMaybe(tmay.Maybe, unMaybeBools, unMaybeInts, unMaybeStrings);
     return it;
 }

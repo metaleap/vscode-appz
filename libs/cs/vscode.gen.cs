@@ -746,9 +746,11 @@ namespace VscAppz {
 			(val, ok) = (it.TryGetValue("title", out var __) ? (__, true) : (default, false));
 			if (ok) {
 				string title = default;
-				(title, ok) = (null == val) ? (default, true) : (val is string) ? (((string)(val)), true) : (default, false);
-				if ((!ok)) {
-					return false;
+				if ((null != val)) {
+					(title, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
 				}
 				this.Title = title;
 			} else {
@@ -757,18 +759,22 @@ namespace VscAppz {
 			(val, ok) = (it.TryGetValue("isCloseAffordance", out var ___) ? (___, true) : (default, false));
 			if (ok) {
 				bool isCloseAffordance = default;
-				(isCloseAffordance, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
-				if ((!ok)) {
-					return false;
+				if ((null != val)) {
+					(isCloseAffordance, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
 				}
 				this.IsCloseAffordance = isCloseAffordance;
 			}
 			(val, ok) = (it.TryGetValue("my", out var ____) ? (____, true) : (default, false));
 			if (ok) {
 				dict my = default;
-				(my, ok) = (null == val) ? (default, true) : (val is dict) ? (((dict)(val)), true) : (default, false);
-				if ((!ok)) {
-					return false;
+				if ((null != val)) {
+					(my, ok) = (val is dict) ? (((dict)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
 				}
 				this.My = my;
 			}

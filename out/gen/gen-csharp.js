@@ -132,7 +132,7 @@ class Gen extends gen_ast.Gen {
         const econv = it;
         if (econv && econv.Conv && econv.To) {
             const tval = typeRefUnMaybe(econv.To, true, true, true);
-            return this.when(typeRefNullable(econv.To) && !econv.WontBeNull, () => this.s("(null == ").emitExpr(econv.Conv).s(") ? (default, true) : ")).s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(tval).s(") ? (((").emitTypeRef(tval).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)");
+            return this.s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(tval).s(") ? (((").emitTypeRef(tval).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)");
         }
         const elen = it;
         if (elen && elen.LenOf)
