@@ -97,11 +97,11 @@ namespace VscAppz {
                 jw.WritePropertyName("data");
                 jw.WriteStartObject();
                 if (Data != null && Data.Count > 0)
-                    lock (json.serializer)
-                        foreach (var kvp in Data) {
-                            jw.WritePropertyName(kvp.Key);
-                            json.serializer.Serialize(jw, kvp.Value);
-                        }
+                    // lock (json.serializer) --- not needed as long as only caller is impl.send()
+                    foreach (var kvp in Data) {
+                        jw.WritePropertyName(kvp.Key);
+                        json.serializer.Serialize(jw, kvp.Value);
+                    }
                 jw.WriteEndObject();
                 if (!string.IsNullOrEmpty(CbId)) {
                     jw.WritePropertyName("cbId");

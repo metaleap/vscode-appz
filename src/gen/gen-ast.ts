@@ -11,7 +11,7 @@ export interface Doc { ForParam: string, Lines: string[] }
 export interface TEnum extends WithDocs, WithName, WithFrom<gen.PrepEnum> { Enumerants: Enumerant[] }
 export interface TInterface extends WithDocs, WithName, WithFrom<gen.PrepInterface> { Methods: Method[] }
 export interface Enumerant extends WithDocs, WithName, WithFrom<gen.PrepEnumerant> { Value: number }
-export interface TStruct extends WithDocs, WithName, WithFrom<gen.PrepStruct> { Fields: Field[] }
+export interface TStruct extends WithDocs, WithName, WithFrom<gen.PrepStruct> { Fields: Field[], Outgoing: boolean, Incoming: boolean }
 export interface Method extends WithDocs, WithName, WithType, WithFrom<gen.PrepMethod> { Args: Arg[] }
 export interface Arg extends WithDocs, WithName, WithType, WithFrom<gen.PrepArg> { }
 export interface Field extends WithDocs, WithName, WithType, WithFrom<gen.PrepField> {
@@ -226,6 +226,7 @@ export class Builder {
             name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
+            Outgoing: false, Incoming: false, // will be set once all ifaces & structs are known
             Fields: it.fields.map((_: gen.PrepField): Field => ({
                 fromPrep: _,
                 name: _.name,
@@ -381,6 +382,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             typeDict: "dict",
             typeImpl: "impl",
         },
+        unMaybeOutgoingTypes: [TypeRefPrim.String] as TypeRef[],
         oneIndent: '    ',
         funcOverloads: false,
     }
@@ -679,7 +681,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             onErrRet = _.eLit(false)
         const retifnotok = _.iIf(_.oNot(_.n(okBoolName)), [_.iRet(onErrRet),])
 
-        const dstnamedtype = this.typeNamed(this.typeUnmaybe(dstType))
+        const dstnamedtype = this.typeNamed(this.typeUnMaybe(dstType))
         if (dstnamedtype) {
             if (this.state.genPopulateFor[dstnamedtype.Name] !== false) // why this peculiar checking construct?..
                 this.state.genPopulateFor[dstnamedtype.Name] = true // ..see the consumer of genDecoders to grasp it
@@ -866,17 +868,43 @@ export class Gen extends gen.Gen implements gen.IGen {
             })),
         }
 
-        const enums = prep.enums.map(_ => build.enumFrom(_))
-        for (const it of enums) this.emitEnum(it)
-
-        const ifaces = [ifacetop].concat(...prep.interfaces.map(_ => build.interfaceFrom(_)))
-        for (const it of ifaces) this.emitInterface(it)
-
+        const enums = prep.enums.map(_ =>
+            build.enumFrom(_))
+        const ifaces = [ifacetop].concat(...prep.interfaces.map(_ =>
+            build.interfaceFrom(_)))
         const structs: { [_: string]: TStruct } = {}
         for (const it of prep.structs) {
             const struct = build.structFrom(it)
             structs[struct.Name] = struct
-            this.emitStruct(struct)
+        }
+
+        {   // set all structs' Outgoing & Incoming bools only now that all ifaces and structs are complete
+            const traverse = (t: TypeRef, forIncoming: boolean) =>
+                this.typeRefTraverse(t, argtype => {
+                    const tnamed = this.typeNamed(argtype)
+                    if (tnamed) {
+                        const tstruct = structs[tnamed.Name]
+                        if (tstruct) {
+                            if (forIncoming) tstruct.Incoming = true
+                            else tstruct.Outgoing = true
+                            for (const fld of tstruct.Fields)
+                                traverse(fld.Type, forIncoming)
+                        }
+                    }
+                })
+            for (const iface of ifaces)
+                for (const method of iface.Methods)
+                    for (const arg of method.Args)
+                        traverse(arg.Type, arg.fromPrep && arg.fromPrep.isFromRetThenable)
+        }
+
+        for (const it of enums)
+            this.emitEnum(it)
+        for (const it of ifaces)
+            this.emitInterface(it)
+        for (const structname in structs) {
+            console.log(structname, "out:", structs[structname].Outgoing, "in:", structs[structname].Incoming)
+            this.emitStruct(structs[structname])
         }
 
         this.onBeforeEmitImpls(...ifaces)
@@ -909,39 +937,127 @@ export class Gen extends gen.Gen implements gen.IGen {
     onBeforeEmitImpls(..._: TInterface[]) { }
     onAfterEmitImpls() { }
 
-    typeUnmaybe(typeRef: TypeRef): TypeRef {
-        const me = typeRef as TypeRefMaybe
-        return (me && me.Maybe) ? this.typeUnmaybe(me.Maybe) : typeRef
+    typeUnMaybeIfIn(it: TypeRef, onlyUnMaybeIfIn: TypeRef[]): TypeRef {
+        let tmay = this.typeMaybe(it)
+        if (tmay && onlyUnMaybeIfIn.includes(tmay.Maybe))
+            return tmay.Maybe
+
+        let tfun = this.typeFunc(it), fnptr = false
+        if ((!tfun) && tmay)
+            [fnptr, tfun] = [true, this.typeFunc(tmay.Maybe)]
+        if (tfun && tfun.To && (tmay = this.typeMaybe(tfun.To)) && onlyUnMaybeIfIn.includes(tmay.Maybe)) {
+            tfun = { From: tfun.From, To: tmay.Maybe }
+            return fnptr ? { Maybe: tfun } : tfun
+        }
+
+        return it
     }
 
-    typeNamed(typeRef: TypeRef): WithName {
-        const me = typeRef as WithName
+    typeUnMaybe(it: TypeRef): TypeRef {
+        const me = this.typeMaybe(it)
+        return me ? this.typeUnMaybe(me.Maybe) : it
+    }
+
+    typeNamed(it: TypeRef): WithName {
+        const me = it as WithName
         return (me && me.Name && me.Name.length) ? me : null
     }
 
-    typeMaybe(typeRef: TypeRef): TypeRefMaybe {
-        const me = typeRef as TypeRefMaybe
+    typeMaybe(it: TypeRef): TypeRefMaybe {
+        const me = it as TypeRefMaybe
         return (me && me.Maybe) ? me : null
     }
 
-    typeFunc(typeRef: TypeRef): TypeRefFunc {
-        const me = typeRef as TypeRefFunc
+    typeFunc(it: TypeRef): TypeRefFunc {
+        const me = it as TypeRefFunc
         return (me && me.From !== undefined) ? me : null
 
     }
 
-    typeArr(typeRef: TypeRef): TypeRefArr {
-        const me = typeRef as TypeRefArr
+    typeArr(it: TypeRef): TypeRefArr {
+        const me = it as TypeRefArr
         return (me && me.ArrOf) ? me : null
     }
 
-    typeTup(typeRef: TypeRef): TypeRefTup {
-        const me = typeRef as TypeRefTup
+    typeTup(it: TypeRef): TypeRefTup {
+        const me = it as TypeRefTup
         return (me && me.TupOf && me.TupOf.length && me.TupOf.length > 1) ? me : null
     }
 
     typeRefForField(it: TypeRef, _optional: boolean): TypeRef {
         return it
+    }
+
+    typeRefEq(t1: TypeRef, t2: TypeRef): boolean {
+        if (t1 === t2)
+            return true
+
+        const t1may = this.typeMaybe(t1), t2may = this.typeMaybe(t2)
+        if (t1may && t2may)
+            return this.typeRefEq(t1may.Maybe, t2may.Maybe)
+
+        const t1arr = this.typeArr(t1), t2arr = this.typeArr(t2)
+        if (t1arr && t2arr)
+            return this.typeRefEq(t1arr, t2arr)
+
+        const t1tup = this.typeTup(t1), t2tup = this.typeTup(t2)
+        if (t1tup && t2tup)
+            return t1tup.TupOf.length === t2tup.TupOf.length
+                && t1tup.TupOf.every((t, i) => this.typeRefEq(t, t2tup.TupOf[i]))
+
+        const t1fun = this.typeFunc(t1), t2fun = this.typeFunc(t2)
+        if (t1fun && t2fun)
+            return t1fun.From.length === t2fun.From.length
+                && this.typeRefEq(t1fun.To, t2fun.To)
+                && t1fun.From.every((t, i) => this.typeRefEq(t, t2fun.From[i]))
+
+        const t1n = this.typeNamed(t1), t2n = this.typeNamed(t2)
+        if (t1n && t2n) return t1n.Name === t2n.Name && t1n.name === t2n.name
+
+        return false
+    }
+
+    typeRefTraverse(it: TypeRef, on: (_: TypeRef) => void) {
+        on(it)
+        const tmay = this.typeMaybe(it)
+        if (tmay) {
+            this.typeRefTraverse(tmay.Maybe, on)
+            return
+        }
+        const tarr = this.typeArr(it)
+        if (tarr) {
+            this.typeRefTraverse(tarr.ArrOf, on)
+            return
+        }
+        const ttup = this.typeTup(it)
+        if (ttup) {
+            ttup.TupOf.forEach(t => this.typeRefTraverse(t, on))
+            return
+        }
+        const tfun = this.typeFunc(it)
+        if (tfun) {
+            tfun.From.forEach(t => this.typeRefTraverse(t, on))
+            this.typeRefTraverse(tfun.To, on)
+            return
+        }
+    }
+
+    typeRefersTo(it: TypeRef, to: TypeRef): boolean {
+        if (this.typeRefEq(it, to))
+            return true
+        const tmay = this.typeMaybe(it)
+        if (tmay)
+            return this.typeRefersTo(tmay.Maybe, to)
+        const tarr = this.typeArr(it)
+        if (tarr)
+            return this.typeRefersTo(tarr.ArrOf, to)
+        const ttup = this.typeTup(it)
+        if (ttup)
+            return ttup.TupOf.some(t => this.typeRefersTo(t, to))
+        const tfun = this.typeFunc(it)
+        if (tfun)
+            return this.typeRefersTo(tfun.To, to) || tfun.From.some(t => this.typeRefersTo(t, to))
+        return false
     }
 
 }

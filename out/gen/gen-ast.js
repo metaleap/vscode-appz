@@ -114,6 +114,7 @@ class Builder {
             name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
+            Outgoing: false, Incoming: false,
             Fields: it.fields.map((_) => ({
                 fromPrep: _,
                 name: _.name,
@@ -253,6 +254,7 @@ class Gen extends gen.Gen {
                 typeDict: "dict",
                 typeImpl: "impl",
             },
+            unMaybeOutgoingTypes: [TypeRefPrim.String],
             oneIndent: '    ',
             funcOverloads: false,
         };
@@ -491,7 +493,7 @@ class Gen extends gen.Gen {
         if (!onErrRet)
             onErrRet = _.eLit(false);
         const retifnotok = _.iIf(_.oNot(_.n(okBoolName)), [_.iRet(onErrRet),]);
-        const dstnamedtype = this.typeNamed(this.typeUnmaybe(dstType));
+        const dstnamedtype = this.typeNamed(this.typeUnMaybe(dstType));
         if (dstnamedtype) {
             if (this.state.genPopulateFor[dstnamedtype.Name] !== false)
                 this.state.genPopulateFor[dstnamedtype.Name] = true;
@@ -598,16 +600,39 @@ class Gen extends gen.Gen {
             })),
         };
         const enums = prep.enums.map(_ => build.enumFrom(_));
-        for (const it of enums)
-            this.emitEnum(it);
         const ifaces = [ifacetop].concat(...prep.interfaces.map(_ => build.interfaceFrom(_)));
-        for (const it of ifaces)
-            this.emitInterface(it);
         const structs = {};
         for (const it of prep.structs) {
             const struct = build.structFrom(it);
             structs[struct.Name] = struct;
-            this.emitStruct(struct);
+        }
+        {
+            const traverse = (t, forIncoming) => this.typeRefTraverse(t, argtype => {
+                const tnamed = this.typeNamed(argtype);
+                if (tnamed) {
+                    const tstruct = structs[tnamed.Name];
+                    if (tstruct) {
+                        if (forIncoming)
+                            tstruct.Incoming = true;
+                        else
+                            tstruct.Outgoing = true;
+                        for (const fld of tstruct.Fields)
+                            traverse(fld.Type, forIncoming);
+                    }
+                }
+            });
+            for (const iface of ifaces)
+                for (const method of iface.Methods)
+                    for (const arg of method.Args)
+                        traverse(arg.Type, arg.fromPrep && arg.fromPrep.isFromRetThenable);
+        }
+        for (const it of enums)
+            this.emitEnum(it);
+        for (const it of ifaces)
+            this.emitInterface(it);
+        for (const structname in structs) {
+            console.log(structname, "out:", structs[structname].Outgoing, "in:", structs[structname].Incoming);
+            this.emitStruct(structs[structname]);
         }
         this.onBeforeEmitImpls(...ifaces);
         for (const it of ifaces)
@@ -635,32 +660,109 @@ class Gen extends gen.Gen {
     }
     onBeforeEmitImpls(..._) { }
     onAfterEmitImpls() { }
-    typeUnmaybe(typeRef) {
-        const me = typeRef;
-        return (me && me.Maybe) ? this.typeUnmaybe(me.Maybe) : typeRef;
+    typeUnMaybeIfIn(it, onlyUnMaybeIfIn) {
+        let tmay = this.typeMaybe(it);
+        if (tmay && onlyUnMaybeIfIn.includes(tmay.Maybe))
+            return tmay.Maybe;
+        let tfun = this.typeFunc(it), fnptr = false;
+        if ((!tfun) && tmay)
+            [fnptr, tfun] = [true, this.typeFunc(tmay.Maybe)];
+        if (tfun && tfun.To && (tmay = this.typeMaybe(tfun.To)) && onlyUnMaybeIfIn.includes(tmay.Maybe)) {
+            tfun = { From: tfun.From, To: tmay.Maybe };
+            return fnptr ? { Maybe: tfun } : tfun;
+        }
+        return it;
     }
-    typeNamed(typeRef) {
-        const me = typeRef;
+    typeUnMaybe(it) {
+        const me = this.typeMaybe(it);
+        return me ? this.typeUnMaybe(me.Maybe) : it;
+    }
+    typeNamed(it) {
+        const me = it;
         return (me && me.Name && me.Name.length) ? me : null;
     }
-    typeMaybe(typeRef) {
-        const me = typeRef;
+    typeMaybe(it) {
+        const me = it;
         return (me && me.Maybe) ? me : null;
     }
-    typeFunc(typeRef) {
-        const me = typeRef;
+    typeFunc(it) {
+        const me = it;
         return (me && me.From !== undefined) ? me : null;
     }
-    typeArr(typeRef) {
-        const me = typeRef;
+    typeArr(it) {
+        const me = it;
         return (me && me.ArrOf) ? me : null;
     }
-    typeTup(typeRef) {
-        const me = typeRef;
+    typeTup(it) {
+        const me = it;
         return (me && me.TupOf && me.TupOf.length && me.TupOf.length > 1) ? me : null;
     }
     typeRefForField(it, _optional) {
         return it;
+    }
+    typeRefEq(t1, t2) {
+        if (t1 === t2)
+            return true;
+        const t1may = this.typeMaybe(t1), t2may = this.typeMaybe(t2);
+        if (t1may && t2may)
+            return this.typeRefEq(t1may.Maybe, t2may.Maybe);
+        const t1arr = this.typeArr(t1), t2arr = this.typeArr(t2);
+        if (t1arr && t2arr)
+            return this.typeRefEq(t1arr, t2arr);
+        const t1tup = this.typeTup(t1), t2tup = this.typeTup(t2);
+        if (t1tup && t2tup)
+            return t1tup.TupOf.length === t2tup.TupOf.length
+                && t1tup.TupOf.every((t, i) => this.typeRefEq(t, t2tup.TupOf[i]));
+        const t1fun = this.typeFunc(t1), t2fun = this.typeFunc(t2);
+        if (t1fun && t2fun)
+            return t1fun.From.length === t2fun.From.length
+                && this.typeRefEq(t1fun.To, t2fun.To)
+                && t1fun.From.every((t, i) => this.typeRefEq(t, t2fun.From[i]));
+        const t1n = this.typeNamed(t1), t2n = this.typeNamed(t2);
+        if (t1n && t2n)
+            return t1n.Name === t2n.Name && t1n.name === t2n.name;
+        return false;
+    }
+    typeRefTraverse(it, on) {
+        on(it);
+        const tmay = this.typeMaybe(it);
+        if (tmay) {
+            this.typeRefTraverse(tmay.Maybe, on);
+            return;
+        }
+        const tarr = this.typeArr(it);
+        if (tarr) {
+            this.typeRefTraverse(tarr.ArrOf, on);
+            return;
+        }
+        const ttup = this.typeTup(it);
+        if (ttup) {
+            ttup.TupOf.forEach(t => this.typeRefTraverse(t, on));
+            return;
+        }
+        const tfun = this.typeFunc(it);
+        if (tfun) {
+            tfun.From.forEach(t => this.typeRefTraverse(t, on));
+            this.typeRefTraverse(tfun.To, on);
+            return;
+        }
+    }
+    typeRefersTo(it, to) {
+        if (this.typeRefEq(it, to))
+            return true;
+        const tmay = this.typeMaybe(it);
+        if (tmay)
+            return this.typeRefersTo(tmay.Maybe, to);
+        const tarr = this.typeArr(it);
+        if (tarr)
+            return this.typeRefersTo(tarr.ArrOf, to);
+        const ttup = this.typeTup(it);
+        if (ttup)
+            return ttup.TupOf.some(t => this.typeRefersTo(t, to));
+        const tfun = this.typeFunc(it);
+        if (tfun)
+            return this.typeRefersTo(tfun.To, to) || tfun.From.some(t => this.typeRefersTo(t, to));
+        return false;
     }
 }
 exports.Gen = Gen;

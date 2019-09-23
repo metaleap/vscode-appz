@@ -50,7 +50,7 @@ class Gen extends gen_ast.Gen {
         this.emitDocs(it)
             .line("public partial class " + it.Name + " {").indented(() => this.each(it.Fields, "\n", f => this.emitDocs(f).line(f.Json.Excluded
             ? "[JsonIgnore]"
-            : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnmaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")).when((f.Type === gen_ast.TypeRefPrim.String && f.FuncFieldRel), () => this.line("[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]")).ln(() => this
+            : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnMaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")).when((f.Type === gen_ast.TypeRefPrim.String && f.FuncFieldRel), () => this.line("[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]")).ln(() => this
             .s("public ")
             .emitTypeRef(f.Type)
             .s(" ", f.Name, ";")))).lines("}", "");

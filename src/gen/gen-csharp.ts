@@ -81,7 +81,7 @@ export class Gen extends gen_ast.Gen {
                 this.each(it.Fields, "\n", f =>
                     this.emitDocs(f).line(f.Json.Excluded
                         ? "[JsonIgnore]"
-                        : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnmaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")
+                        : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnMaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")
                     ).when((f.Type === gen_ast.TypeRefPrim.String && f.FuncFieldRel),
                         () => this.line("[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]")
                     ).ln(() => this
