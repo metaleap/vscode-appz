@@ -203,7 +203,7 @@ type InputBoxOptions struct {
 	// 
 	// `return` ── A human readable string which is presented as diagnostic message.
 	// Return `undefined`, `null`, or the empty string when 'value' is valid.
-	ValidateInput func(string) *string `json:"-"`
+	ValidateInput func(string) string `json:"-"`
 
 	// For internal runtime use only.
 	ValidateInput_AppzFuncId string `json:"validateInput_AppzFuncId,omitempty"`
@@ -548,7 +548,7 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(*string)) {
 	{
 		if (nil != options) {
 			options.ValidateInput_AppzFuncId = ""
-			var fn func(string) *string
+			var fn func(string) string
 			fn = options.ValidateInput
 			if (nil != fn) {
 				options.ValidateInput_AppzFuncId = me.nextFuncId()

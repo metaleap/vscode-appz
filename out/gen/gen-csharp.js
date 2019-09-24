@@ -55,10 +55,10 @@ class Gen extends gen_ast.Gen {
             .emitTypeRef(f.Type)
             .s(" ", f.Name, ";")))).lines("}", "");
     }
-    onBeforeEmitImpls(...interfaces) {
+    onBeforeEmitImpls() {
         this.line("internal partial class "
             + this.options.idents.typeImpl + " : "
-            + interfaces.map(_ => _.Name).join(", ") + " {").line().indent();
+            + this.allInterfaces.map(_ => _.Name).join(", ") + " {").line().indent();
     }
     onAfterEmitImpls() {
         this.undent().lines("}", "");

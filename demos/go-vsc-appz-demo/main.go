@@ -38,10 +38,9 @@ func main() {
 					Value:          "Enter almost anything...",
 					ValueSelection: []int{6, 12},
 					Prompt:         "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
-					ValidateInput: func(input string) (complaint *string) {
+					ValidateInput: func(input string) (complaint string) {
 						if input = strings.ToLower(input); strings.Contains(input, "foo") || strings.Contains(input, "f0o") || strings.Contains(input, "fo0") || strings.Contains(input, "f00") {
-							var msg = "Contains something looking like `foo`."
-							complaint = &msg
+							complaint = "Contains something looking like `foo`."
 						}
 						return
 					},

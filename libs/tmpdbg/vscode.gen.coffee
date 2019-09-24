@@ -367,7 +367,7 @@ InputBoxOptions: class
     # Return `undefined`, `null`, or the empty string when 'value' is valid.
     #
     # JSON FLAGS: {"Name":"validateInput","Required":false,"Excluded":true}
-    ValidateInput: ?(string->?string)
+    ValidateInput: ?(string->string)
 
     # For internal runtime use only.
     #
@@ -705,7 +705,7 @@ Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(?string->void) -> v
     lock this
         if (=?options)
             options.ValidateInput_AppzFuncId = ""
-            var fn of ?(string->?string)
+            var fn of ?(string->string)
             fn = options.ValidateInput
             if (=?fn)
                 options.ValidateInput_AppzFuncId = this.nextFuncId()

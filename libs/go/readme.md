@@ -55,7 +55,7 @@ type InputBoxOptions struct {
 	//
 	// `return` ── A human readable string which is presented as diagnostic message.
 	// Return `undefined`, `null`, or the empty string when 'value' is valid.
-	ValidateInput func(string) *string `json:"-"`
+	ValidateInput func(string) string `json:"-"`
 
 	// For internal runtime use only.
 	ValidateInput_AppzFuncId string `json:"validateInput_AppzFuncId,omitempty"`

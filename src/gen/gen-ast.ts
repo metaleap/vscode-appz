@@ -360,6 +360,9 @@ export class Gen extends gen.Gen implements gen.IGen {
     private indents: number = 0
 
     protected b: Builder = null
+    protected allEnums: TEnum[] = null
+    protected allInterfaces: TInterface[] = null
+    protected allStructs: { [_: string]: TStruct } = null
 
     nameRewriters = {
         args: this.caseLo,
@@ -534,13 +537,13 @@ export class Gen extends gen.Gen implements gen.IGen {
         throw it
     }
 
-    emitMethodImpl(iface: WithName, method: Method, fillBody: ((iface: WithName, method: Method, _: Builder, bodyToFill: Instr[]) => void)) {
+    emitMethodImpl(interfaceOrStruct: WithName, method: Method, fillBody: ((interfaceOrStruct: WithName, method: Method, _: Builder, bodyToFill: Instr[]) => void)) {
         const me: Func = {
-            name: method.name, Name: method.Name, Type: iface, Func: {
+            name: method.name, Name: method.Name, Type: interfaceOrStruct, Func: {
                 Args: method.Args, Type: method.Type, Body: { Instrs: [] }
             }
         }
-        fillBody.call(this, iface, method, this.b, me.Func.Body.Instrs)
+        fillBody.call(this, interfaceOrStruct, method, this.b, me.Func.Body.Instrs)
         this.emitFuncImpl(me)
     }
 
@@ -758,31 +761,33 @@ export class Gen extends gen.Gen implements gen.IGen {
                 _.LET(this.nameRewriters.args(ff.arg.name), argname =>
                     _.LET(this.nameRewriters.fields(ff.name), ffname =>
                         _.LET(ff.struct.fields.find(_ => _.name === ff.name), ffld =>
-                            _.LET(gen.typeFun(ffld.typeSpec)[0], fnargs =>
-                                _.iIf((!ff.arg.optional) ? _.eLit(true) : _.oIs(_.n(argname)), [
-                                    _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eLit("")),
-                                    _.iVar(__.fn, _.typeRef(ffld.typeSpec, ffld.optional)),
-                                    _.iSet(_.n(__.fn), _.oDot(_.n(argname), _.n(ffname))),
-                                    _.iIf(_.oIs(_.n(__.fn)), [
-                                        _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eCall(_.oDot(_.n('nextFuncId')))),
-                                        _.iAdd(_.n(__.fnids), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
-                                        _.iSet(_.oIdx(_.oDot(_.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
-                                            _.eFunc([{ Name: __.args, Type: { ArrOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] },
-                                                _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args), true)), [
-                                                    _.iRet(_.eTup(_.eNil(), _.eLit(false))),
-                                                ], [_.iVar(__.ok, TypeRefPrim.Bool) as Instr].concat(
-                                                    ..._.EACH(fnargs, (fnarg, idx) => [
-                                                        _.iVar('__' + idx, this.b.typeRef(fnarg)),
-                                                        _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))),
-                                                            this.convOrRet('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), __.ok, _.eTup(_.eNil(), _.eLit(false))),
-                                                        ),
-                                                        _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
-                                                    ] as Instr[]))
-                                                ),
-                                            )
-                                        ),
-                                    ]),
-                                ])
+                            _.LET(this.allStructs[this.nameRewriters.types.structs(ff.struct.name)].Fields.find(_ => _.fromPrep === ffld), structfield =>
+                                _.LET(gen.typeFun(ffld.typeSpec)[0], fnargs =>
+                                    _.iIf((!ff.arg.optional) ? _.eLit(true) : _.oIs(_.n(argname)), [
+                                        _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eLit("")),
+                                        _.iVar(__.fn, structfield.Type),
+                                        _.iSet(_.n(__.fn), _.oDot(_.n(argname), _.n(ffname))),
+                                        _.iIf(_.oIs(_.n(__.fn)), [
+                                            _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eCall(_.oDot(_.n('nextFuncId')))),
+                                            _.iAdd(_.n(__.fnids), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
+                                            _.iSet(_.oIdx(_.oDot(_.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
+                                                _.eFunc([{ Name: __.args, Type: { ArrOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] },
+                                                    _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args), true)), [
+                                                        _.iRet(_.eTup(_.eNil(), _.eLit(false))),
+                                                    ], [_.iVar(__.ok, TypeRefPrim.Bool) as Instr].concat(
+                                                        ..._.EACH(fnargs, (fnarg, idx) => [
+                                                            _.iVar('__' + idx, this.b.typeRef(fnarg)),
+                                                            _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))),
+                                                                this.convOrRet('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), __.ok, _.eTup(_.eNil(), _.eLit(false))),
+                                                            ),
+                                                            _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
+                                                        ] as Instr[]))
+                                                    ),
+                                                )
+                                            ),
+                                        ]),
+                                    ])
+                                )
                             )
                         )
                     )
@@ -853,7 +858,6 @@ export class Gen extends gen.Gen implements gen.IGen {
     gen(prep: gen.Prep) {
         this.resetState()
         const build = (this.b = new Builder(prep, this))
-        this.emitIntro()
 
         const ifacetop: TInterface = {
             name: prep.fromOrig.moduleName,
@@ -868,14 +872,14 @@ export class Gen extends gen.Gen implements gen.IGen {
             })),
         }
 
-        const enums = prep.enums.map(_ =>
+        this.allEnums = prep.enums.map(_ =>
             build.enumFrom(_))
-        const ifaces = [ifacetop].concat(...prep.interfaces.map(_ =>
+        this.allInterfaces = [ifacetop].concat(...prep.interfaces.map(_ =>
             build.interfaceFrom(_)))
-        const structs: { [_: string]: TStruct } = {}
+        this.allStructs = {}
         for (const it of prep.structs) {
             const struct = build.structFrom(it)
-            structs[struct.Name] = struct
+            this.allStructs[struct.Name] = struct
         }
 
         {   // set all structs' Outgoing & Incoming bools only now that all ifaces and structs are complete
@@ -883,32 +887,47 @@ export class Gen extends gen.Gen implements gen.IGen {
                 this.typeRefTraverse(t, argtype => {
                     const tnamed = this.typeNamed(argtype)
                     if (tnamed) {
-                        const tstruct = structs[tnamed.Name]
+                        const tstruct = this.allStructs[tnamed.Name]
                         if (tstruct) {
                             if (forIncoming) tstruct.Incoming = true
                             else tstruct.Outgoing = true
-                            for (const fld of tstruct.Fields)
-                                traverse(fld.Type, forIncoming)
+                            for (const fld of tstruct.Fields) {
+                                const tfun = this.typeFunc(fld.Type)
+                                traverse(fld.Type, tfun ? false : forIncoming)
+                            }
                         }
                     }
+                    return undefined
                 })
-            for (const iface of ifaces)
+            for (const iface of this.allInterfaces)
                 for (const method of iface.Methods)
                     for (const arg of method.Args)
                         traverse(arg.Type, arg.fromPrep && arg.fromPrep.isFromRetThenable)
         }
-
-        for (const it of enums)
-            this.emitEnum(it)
-        for (const it of ifaces)
-            this.emitInterface(it)
-        for (const structname in structs) {
-            console.log(structname, "out:", structs[structname].Outgoing, "in:", structs[structname].Incoming)
-            this.emitStruct(structs[structname])
+        for (const structname in this.allStructs) {
+            const struct = this.allStructs[structname]
+            if (struct.Outgoing)
+                for (const fld of struct.Fields) {
+                    this.typeRefTraverse(fld.Type, t => {
+                        const tmay = this.typeMaybe(t)
+                        if (tmay && this.options.unMaybeOutgoingTypes.some(_ => this.typeRefEq(_, tmay.Maybe)))
+                            return tmay.Maybe
+                        return undefined
+                    })
+                }
         }
 
-        this.onBeforeEmitImpls(...ifaces)
-        for (const it of ifaces)
+        this.emitIntro()
+
+        for (const it of this.allEnums)
+            this.emitEnum(it)
+        for (const it of this.allInterfaces)
+            this.emitInterface(it)
+        for (const structname in this.allStructs)
+            this.emitStruct(this.allStructs[structname])
+
+        this.onBeforeEmitImpls()
+        for (const it of this.allInterfaces)
             for (const method of it.Methods)
                 this.emitMethodImpl(it, method, it === ifacetop
                     ? this.genMethodImpl_TopInterface
@@ -922,7 +941,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 for (const name in this.state.genPopulateFor)
                     if (anydecoderstogenerate = this.state.genPopulateFor[name]) {
                         this.state.genPopulateFor[name] = false
-                        this.emitMethodImpl(structs[name], {
+                        this.emitMethodImpl(this.allStructs[name], {
                             Name: "populateFrom", Type: TypeRefPrim.Bool,
                             Args: [{ Name: "payload", Type: TypeRefPrim.Any }]
                         }, this.genMethodImpl_PopulateFrom)
@@ -934,24 +953,8 @@ export class Gen extends gen.Gen implements gen.IGen {
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src)
     }
 
-    onBeforeEmitImpls(..._: TInterface[]) { }
+    onBeforeEmitImpls() { }
     onAfterEmitImpls() { }
-
-    typeUnMaybeIfIn(it: TypeRef, onlyUnMaybeIfIn: TypeRef[]): TypeRef {
-        let tmay = this.typeMaybe(it)
-        if (tmay && onlyUnMaybeIfIn.includes(tmay.Maybe))
-            return tmay.Maybe
-
-        let tfun = this.typeFunc(it), fnptr = false
-        if ((!tfun) && tmay)
-            [fnptr, tfun] = [true, this.typeFunc(tmay.Maybe)]
-        if (tfun && tfun.To && (tmay = this.typeMaybe(tfun.To)) && onlyUnMaybeIfIn.includes(tmay.Maybe)) {
-            tfun = { From: tfun.From, To: tmay.Maybe }
-            return fnptr ? { Maybe: tfun } : tfun
-        }
-
-        return it
-    }
 
     typeUnMaybe(it: TypeRef): TypeRef {
         const me = this.typeMaybe(it)
@@ -971,7 +974,6 @@ export class Gen extends gen.Gen implements gen.IGen {
     typeFunc(it: TypeRef): TypeRefFunc {
         const me = it as TypeRefFunc
         return (me && me.From !== undefined) ? me : null
-
     }
 
     typeArr(it: TypeRef): TypeRefArr {
@@ -1017,27 +1019,30 @@ export class Gen extends gen.Gen implements gen.IGen {
         return false
     }
 
-    typeRefTraverse(it: TypeRef, on: (_: TypeRef) => void) {
-        on(it)
+    typeRefTraverse(it: TypeRef, on?: (_: TypeRef) => TypeRef, set?: (_: TypeRef) => void) {
+        const tnew = on(it)
+        if (set && tnew !== undefined)
+            set(tnew)
+
         const tmay = this.typeMaybe(it)
         if (tmay) {
-            this.typeRefTraverse(tmay.Maybe, on)
+            this.typeRefTraverse(tmay.Maybe, on, _ => tmay.Maybe = _)
             return
         }
         const tarr = this.typeArr(it)
         if (tarr) {
-            this.typeRefTraverse(tarr.ArrOf, on)
+            this.typeRefTraverse(tarr.ArrOf, on, _ => tarr.ArrOf = _)
             return
         }
         const ttup = this.typeTup(it)
         if (ttup) {
-            ttup.TupOf.forEach(t => this.typeRefTraverse(t, on))
+            ttup.TupOf.forEach((t, i) => this.typeRefTraverse(t, on, _ => ttup.TupOf[i] = _))
             return
         }
         const tfun = this.typeFunc(it)
         if (tfun) {
-            tfun.From.forEach(t => this.typeRefTraverse(t, on))
-            this.typeRefTraverse(tfun.To, on)
+            tfun.From.forEach((t, i) => this.typeRefTraverse(t, on, _ => tfun.From[i] = _))
+            this.typeRefTraverse(tfun.To, on, _ => tfun.To = _)
             return
         }
     }

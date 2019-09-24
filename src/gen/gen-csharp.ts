@@ -92,10 +92,10 @@ export class Gen extends gen_ast.Gen {
             ).lines("}", "")
     }
 
-    onBeforeEmitImpls(...interfaces: gen_ast.TInterface[]) {
+    onBeforeEmitImpls() {
         this.line("internal partial class "
             + this.options.idents.typeImpl + " : "
-            + interfaces.map(_ => _.Name).join(", ") + " {").line().indent()
+            + this.allInterfaces.map(_ => _.Name).join(", ") + " {").line().indent()
     }
 
     onAfterEmitImpls() {
