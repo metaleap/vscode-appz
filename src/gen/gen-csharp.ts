@@ -185,7 +185,6 @@ export class Gen extends gen_ast.Gen {
 
                 return endeol ? this.line() : this
             }
-
         }
         return super.emitInstr(it)
     }

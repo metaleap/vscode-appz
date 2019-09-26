@@ -58,14 +58,27 @@ export class Gen extends gen_ast.Gen {
     emitStruct(it: gen_ast.TStruct) {
         this.emitDocs(it)
             .line("type " + it.Name + " struct {").indented(() =>
-                this.each(it.Fields, "\n", f => this.emitDocs(f).ln(() =>
-                    this.s(f.Name, " ").emitTypeRef(f.Type).s(" `json:\"")
-                        .when(f.Json.Excluded,
-                            () => this.s("-"),
-                            () => this.s(f.Json.Name + (f.Json.Required ? "" : ",omitempty"))
-                        ).s("\"`")
-                ))
+                this.each(it.Fields.filter(_ => (!_.FuncFieldRel) || _.Type !== gen_ast.TypeRefPrim.String),
+                    "\n", f => this.emitDocs(f).ln(() =>
+                        this.s(f.Name, " ").emitTypeRef(f.Type).s(" `json:\"")
+                            .when(f.Json.Excluded,
+                                () => this.s("-"),
+                                () => this.s(f.Json.Name + (f.Json.Required ? "" : ",omitempty"))
+                            ).s("\"`")
+                    )
+                )
             ).lines("}", "")
+
+        const fflds = it.Fields.filter(_ => _.FuncFieldRel && _.Type === gen_ast.TypeRefPrim.String)
+        if (fflds && fflds.length) {
+            it.OutgoingTwin = "_" + it.Name
+            this.line("type " + it.OutgoingTwin + " struct {").indented(() =>
+                this.lf().emitTypeRef({ Maybe: it }).line()
+                    .each(fflds, "", f => this.ln(() =>
+                        this.s(f.Name, " ").emitTypeRef(f.Type).s(" `json:\"", f.Json.Name, ",omitempty\"`")
+                    ))
+            ).lines("}", "")
+        }
     }
 
     emitFuncImpl(it: gen_ast.Func) {
@@ -89,7 +102,6 @@ export class Gen extends gen_ast.Gen {
 
     emitInstr(it: gen_ast.Instr): Gen {
         if (it) {
-
             const ivar = it as gen_ast.IVar
             if (ivar && ivar.Name && ivar.Type) return this.ln(() =>
                 this.s("var ", ivar.Name, " ").emitTypeRef(this.typeNamed(ivar.Type) ? { Maybe: ivar.Type } : ivar.Type))
@@ -126,7 +138,6 @@ export class Gen extends gen_ast.Gen {
 
                 return endeol ? this.line() : this
             }
-
         }
         return super.emitInstr(it)
     }

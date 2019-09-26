@@ -65,6 +65,9 @@ class Builder {
             me.push(...fn(from[idx], idx));
         return me;
     }
+    WHEN(check, ifTrue, ifFalse = null) {
+        return check ? ifTrue() : ifFalse ? ifFalse() : [];
+    }
     LET(value, andThen) {
         return andThen(value);
     }
@@ -543,9 +546,22 @@ class Gen extends gen.Gen {
         const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args);
         const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length;
         body.push(_.iVar(__.msg, _.n('ipcMsg')), _.iSet(_.n(__.msg), _.eNew(_.n('ipcMsg'))), _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(iface.name + '.' + method.fromPrep.name)), _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs))));
-        if (funcfields.length)
+        const twinargs = {};
+        if (funcfields.length) {
+            for (const ff of funcfields)
+                for (const structname in this.allStructs) {
+                    const struct = this.allStructs[structname];
+                    if (struct && struct.fromPrep && struct.fromPrep === ff.struct && struct.OutgoingTwin && struct.OutgoingTwin.length) {
+                        const twinarg = (twinargs[ff.arg.name] = { origStruct: struct, twinStructName: struct.OutgoingTwin, altName: "__" + ff.arg.name + "__" });
+                        body.push(_.iVar(twinarg.altName, { Maybe: { Name: twinarg.twinStructName } }));
+                        break;
+                    }
+                }
             body.push(_.iVar(__.fnids, { ArrOf: TypeRefPrim.String, AsList: true }), _.iSet(_.n(__.fnids), _.eCollNew(_.eLit(funcfields.length), TypeRefPrim.String)), _.iLock(_.eThis(), ..._.EACH(funcfields, ff => [
-                _.LET(this.nameRewriters.args(ff.arg.name), argname => _.LET(this.nameRewriters.fields(ff.name), ffname => _.LET(ff.struct.fields.find(_ => _.name === ff.name), ffld => _.LET(this.allStructs[this.nameRewriters.types.structs(ff.struct.name)].Fields.find(_ => _.fromPrep === ffld), structfield => _.LET(gen.typeFun(ffld.typeSpec)[0], fnargs => _.iIf((!ff.arg.optional) ? _.eLit(true) : _.oIs(_.n(argname)), [
+                _.LET(this.nameRewriters.fields(ff.name), ffname => _.LET(ff.struct.fields.find(_ => _.name === ff.name), ffld => _.LET(this.allStructs[this.nameRewriters.types.structs(ff.struct.name)].Fields.find(_ => _.fromPrep === ffld), structfield => _.LET(gen.typeFun(ffld.typeSpec)[0], fnargs => _.LET(twinargs[ff.arg.name], twinarg => _.LET(this.nameRewriters.args(ff.arg.name), origargname => _.LET((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : origargname, argname => _.iIf((!ff.arg.optional) ? _.eLit(true) : _.oIs(_.n(origargname)), _.WHEN(twinarg, () => [
+                    _.iSet(_.n(argname), _.eNew({ Name: twinarg.twinStructName })),
+                    _.iSet(_.oDot(_.n(argname), _.n(twinarg.origStruct.Name)), _.n(origargname)),
+                ]).concat([
                     _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eLit("")),
                     _.iVar(__.fn, structfield.Type),
                     _.iSet(_.n(__.fn), _.oDot(_.n(argname), _.n(ffname))),
@@ -560,11 +576,14 @@ class Gen extends gen.Gen {
                             _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
                         ]))))),
                     ]),
-                ])))))),
+                ]))))))))),
             ])));
+        }
         for (const arg of method.Args)
-            if (!arg.fromPrep.isFromRetThenable)
-                body.push(_.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), arg));
+            if (!arg.fromPrep.isFromRetThenable) {
+                const twinarg = twinargs[arg.Name];
+                body.push(_.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name)));
+            }
         const lastarg = method.Args[method.Args.length - 1];
         body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }));
         if (lastarg.fromPrep.isFromRetThenable) {

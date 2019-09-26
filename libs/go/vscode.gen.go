@@ -204,8 +204,10 @@ type InputBoxOptions struct {
 	// `return` ── A human readable string which is presented as diagnostic message.
 	// Return `undefined`, `null`, or the empty string when 'value' is valid.
 	ValidateInput func(string) string `json:"-"`
+}
 
-	// For internal runtime use only.
+type _InputBoxOptions struct {
+	*InputBoxOptions
 	ValidateInput_AppzFuncId string `json:"validateInput_AppzFuncId,omitempty"`
 }
 
@@ -542,18 +544,21 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(*string)) {
 	msg = new(ipcMsg)
 	msg.QName = "window.showInputBox"
 	msg.Data = make(dict, 1)
+	var __options__ *_InputBoxOptions
 	var fnids []string
 	fnids = make([]string, 0, 1)
 	me.Lock()
 	{
 		if (nil != options) {
-			options.ValidateInput_AppzFuncId = ""
+			__options__ = new(_InputBoxOptions)
+			__options__.InputBoxOptions = options
+			__options__.ValidateInput_AppzFuncId = ""
 			var fn func(string) string
-			fn = options.ValidateInput
+			fn = __options__.ValidateInput
 			if (nil != fn) {
-				options.ValidateInput_AppzFuncId = me.nextFuncId()
-				fnids = append(fnids, options.ValidateInput_AppzFuncId)
-				me.cbOther[options.ValidateInput_AppzFuncId] = func(args []any) (any, bool) {
+				__options__.ValidateInput_AppzFuncId = me.nextFuncId()
+				fnids = append(fnids, __options__.ValidateInput_AppzFuncId)
+				me.cbOther[__options__.ValidateInput_AppzFuncId] = func(args []any) (any, bool) {
 					if (1 != len(args)) {
 						return nil, false
 					} else {
@@ -572,7 +577,7 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(*string)) {
 		}
 	}
 	me.Unlock()
-	msg.Data["options"] = options
+	msg.Data["options"] = __options__
 	var on func(any) bool
 	if (nil != andThen) {
 		on = func(payload any) bool {
