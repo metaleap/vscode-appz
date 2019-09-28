@@ -5,10 +5,72 @@ const node_pipeio = require("readline");
 const vsc = require("vscode");
 const appz_1 = require("./appz");
 const vscgen = require("./vscode.gen");
+class Proc {
+    constructor(fullCmd, proc, stdoutPipe) {
+        this.stderrChan = undefined;
+        this.cancels = {};
+        this.bufsUntilPipeDrained = null;
+        [this.fullCmd, this.proc, this.stdoutPipe] = [fullCmd, proc, stdoutPipe];
+    }
+    dispose() {
+        for (const _ in this.cancels)
+            for (const cancel of this.cancels[_])
+                cancel.dispose();
+        if (this.stderrChan) {
+            if (cfgAutoCloseStderrOutputsOnProgExit())
+                this.stderrChan.dispose();
+            else
+                appz_1.vscCtx.subscriptions.push(this.stderrChan);
+            this.stderrChan = null;
+        }
+        if (this.stdoutPipe) {
+            try {
+                this.stdoutPipe.removeAllListeners();
+            }
+            catch (_) { }
+            try {
+                this.stdoutPipe.close();
+            }
+            catch (_) { }
+        }
+        try {
+            this.proc.removeAllListeners();
+        }
+        catch (_) { }
+        try {
+            this.proc.kill();
+        }
+        catch (_) { }
+        let proc;
+        for (const key in exports.procs)
+            if ((proc = exports.procs[key]) && proc.pid.toString() === this.proc.pid.toString())
+                delete exports.procs[key];
+    }
+    log(ln) {
+        if (this.stderrChan === undefined)
+            this.stderrChan = vsc.window.createOutputChannel("Appz: " + this.fullCmd);
+        if (this.stderrChan)
+            this.stderrChan.appendLine(ln);
+    }
+    onProgEnd() {
+        return (_code, _sig) => this.dispose();
+    }
+    onProcErr() {
+        return (err) => {
+            console.log(err);
+            this.dispose();
+        };
+    }
+}
+exports.Proc = Proc;
 const dbgLogJsonMsgs = true;
+exports.nuprocs = {};
 exports.procs = {};
 let pipes = {};
 function disposeAll() {
+    for (const _ in exports.nuprocs)
+        exports.nuprocs[_].dispose();
+    exports.nuprocs = {};
     let proc, both;
     const allprocs = exports.procs, allpipes = pipes;
     exports.procs = {};
@@ -43,10 +105,11 @@ function disposeProc(pId) {
     const both = pipes[pId];
     if (both && both.length) {
         delete pipes[pId];
-        if (both[1] && cfgAutoCloseStderrOutputsOnProgExit())
-            both[1].dispose();
-        else
-            appz_1.vscCtx.subscriptions.push(both[1]);
+        if (both[1])
+            if (cfgAutoCloseStderrOutputsOnProgExit())
+                both[1].dispose();
+            else
+                appz_1.vscCtx.subscriptions.push(both[1]);
         try {
             both[0].removeAllListeners();
         }
@@ -234,20 +297,20 @@ function onProcRecv(proc) {
         }
         catch (_) { }
         if (!msg)
-            vsc.window.showErrorMessage(ln);
+            vsc.window.showWarningMessage(ln);
         else if (msg.qName) {
             let sendret = false;
             const onfail = (err) => {
                 vsc.window.showErrorMessage(err);
                 if (msg && msg.cbId && !sendret)
-                    send(proc, { cbId: msg.cbId, data: { nay: (err === undefined) ? null : err } });
+                    send(proc, { cbId: msg.cbId, data: { nay: ensureWillBeInJson(err) } });
             };
             try {
                 const promise = vscgen.handle(msg, proc);
                 if (promise)
                     promise.then(ret => {
                         if (sendret = (proc.pid && pipes[proc.pid] && msg.cbId) ? true : false)
-                            send(proc, { cbId: msg.cbId, data: { yay: (ret === undefined) ? null : ret } });
+                            send(proc, { cbId: msg.cbId, data: { yay: ensureWillBeInJson(ret) } });
                     }, rej => onfail(rej));
             }
             catch (err) {
@@ -269,4 +332,7 @@ function onProcRecv(proc) {
 }
 function cfgAutoCloseStderrOutputsOnProgExit() {
     return vsc.workspace.getConfiguration("appz").get("autoCloseStderrOutputsOnProgExit", true);
+}
+function ensureWillBeInJson(_) {
+    return (_ === undefined) ? null : _;
 }

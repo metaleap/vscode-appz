@@ -26,11 +26,11 @@ function onCmdMain() {
 	const progs = vsc.workspace.getConfiguration("appz").get<string[]>("allProgs") || []
 	const items: pickItem[] = progs.map(_ => ({
 		prog: _, pid: 0, label: "RUN: " + _,
-		detail: ppio.procs[_] ? "Already running. Will kill and re-start." : "Not currently running" + (_.includes(' ') ? ' (at least not with those exact args)' : '') + "."
+		detail: ppio.OLDPROCS[_] ? "Already running. Will kill and re-start." : "Not currently running" + (_.includes(' ') ? ' (at least not with those exact args)' : '') + "."
 	}))
-	for (const _ in ppio.procs)
+	for (const _ in ppio.OLDPROCS)
 		items.push({
-			prog: _, label: "KILL: " + _, pid: ppio.procs[_].pid,
+			prog: _, label: "KILL: " + _, pid: ppio.OLDPROCS[_].pid,
 			detail: `Started ${getDurStr(_)} ago.`
 		})
 
@@ -45,10 +45,10 @@ function onCmdMain() {
 					strvar.Interpolate(_.prog, extDirPathStrVarProvider).then(
 						prog => {
 							if (prog && prog.length) {
-								const alreadyrunning = ppio.procs[prog]
+								const alreadyrunning = ppio.OLDPROCS[prog]
 								if (alreadyrunning)
 									ppio.disposeProc(alreadyrunning.pid)
-								if (ppio.proc(prog))
+								if (ppio.OLDPROC(prog))
 									appStartTimes[prog] = Date.now()
 							}
 						},

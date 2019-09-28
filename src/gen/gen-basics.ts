@@ -121,10 +121,10 @@ export class Prep {
             }
         })
 
-        this.interfaces.forEach(iface => iface.methods.forEach(method => {
-            method.args = method.args.filter(arg =>
-                arg.typeSpec !== 'CancellationToken')
-        }))
+        // this.interfaces.forEach(iface => iface.methods.forEach(method => {
+        //     method.args = method.args.filter(arg =>
+        //         arg.typeSpec !== 'CancellationToken')
+        // }))
 
         const printjson = (_: any) => console.log(JSON.stringify(_, function (this: any, key: string, val: any): any {
             return (key === 'parent') ? null : val
