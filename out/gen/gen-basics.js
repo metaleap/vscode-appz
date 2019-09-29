@@ -37,6 +37,9 @@ class Prep {
                 struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict });
             }
         });
+        this.interfaces.forEach(iface => iface.methods.forEach(method => {
+            method.args = method.args.filter(arg => arg.typeSpec !== 'CancellationToken');
+        }));
         const printjson = (_) => console.log(JSON.stringify(_, function (key, val) {
             return (key === 'parent') ? null : val;
         }, 2));

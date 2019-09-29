@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
-const ppio = require("./procspipeio");
 function handle(msg, proc) {
     const idxdot = msg.qName.lastIndexOf('.');
     const [apiname, methodname] = (idxdot > 0) ? [msg.qName.slice(0, idxdot), msg.qName.slice(idxdot + 1)] : ['', msg.qName];
@@ -77,7 +76,7 @@ function handle(msg, proc) {
                 case "showInputBox": {
                     const arg_options = (msg.data['options']);
                     if (arg_options.validateInput_AppzFuncId && arg_options.validateInput_AppzFuncId.length)
-                        arg_options.validateInput = (a0) => ppio.callBack(proc, arg_options.validateInput_AppzFuncId, a0);
+                        arg_options.validateInput = (a0) => proc.callBack(arg_options.validateInput_AppzFuncId, a0);
                     return vscode.window.showInputBox(arg_options);
                 }
                 default:

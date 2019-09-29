@@ -21,16 +21,16 @@ export function activate(ctx: vsc.ExtensionContext) {
 }
 
 function onCmdMain() {
-	interface pickItem extends vsc.QuickPickItem { prog: string, pid: number }
+	interface pickItem extends vsc.QuickPickItem { fullCmd: string }
 
 	const progs = vsc.workspace.getConfiguration("appz").get<string[]>("allProgs") || []
 	const items: pickItem[] = progs.map(_ => ({
-		prog: _, pid: 0, label: "RUN: " + _,
-		detail: ppio.OLDPROCS[_] ? "Already running. Will kill and re-start." : "Not currently running" + (_.includes(' ') ? ' (at least not with those exact args)' : '') + "."
+		fullCmd: _, label: "RUN: " + _,
+		detail: ppio.procs[_] ? "Already running. Will kill and re-start." : "Not currently running" + (_.includes(' ') ? ' (at least not with those exact args)' : '') + "."
 	}))
-	for (const _ in ppio.OLDPROCS)
+	for (const _ in ppio.procs)
 		items.push({
-			prog: _, label: "KILL: " + _, pid: ppio.OLDPROCS[_].pid,
+			fullCmd: _, label: "KILL: " + _,
 			detail: `Started ${getDurStr(_)} ago.`
 		})
 
@@ -38,22 +38,23 @@ function onCmdMain() {
 		vsc.window.showInformationMessage("Your current `settings.json` has no Appz configured under `appz.allProgs`.")
 	else
 		vsc.window.showQuickPick(items).then(_ => {
-			if (_ && _.prog)
-				if (_.pid)
-					ppio.disposeProc(_.pid)
+			if (_ && _.fullCmd) {
+				let alreadyrunning = ppio.procs[_.fullCmd]
+				if (alreadyrunning)
+					alreadyrunning.dispose()
 				else
-					strvar.Interpolate(_.prog, extDirPathStrVarProvider).then(
-						prog => {
-							if (prog && prog.length) {
-								const alreadyrunning = ppio.OLDPROCS[prog]
-								if (alreadyrunning)
-									ppio.disposeProc(alreadyrunning.pid)
-								if (ppio.OLDPROC(prog))
-									appStartTimes[prog] = Date.now()
+					strvar.Interpolate(_.fullCmd, extDirPathStrVarProvider).then(
+						fullcmd => {
+							if (fullcmd && fullcmd.length) {
+								if (alreadyrunning = ppio.procs[fullcmd])
+									alreadyrunning.dispose()
+								if (ppio.proc(fullcmd))
+									appStartTimes[fullcmd] = Date.now()
 							}
 						},
 						_failed => { /* ignore, but keep handler to prevent warn-logs */ }
 					)
+			}
 		})
 }
 

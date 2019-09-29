@@ -6,7 +6,7 @@ namespace VscAppz {
     using Newtonsoft.Json;
 
     using any = System.Object;
-    using dict = System.Collections.Generic.Dictionary<string,object>;
+    using dict = System.Collections.Generic.Dictionary<string, object>;
 
     internal static class json {
         internal static readonly JsonSerializer serializer = new JsonSerializer();

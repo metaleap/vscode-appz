@@ -6,12 +6,10 @@ class Gen extends gen.Gen {
         this.resetState();
         const pkgname = prep.fromOrig.moduleName;
         let src = "// " + this.doNotEditComment("vscext") + "\n\n";
-        src += "import * as node_proc from 'child_process'\n";
         src += `import * as ${pkgname} from '${pkgname}'\n\n`;
         src += "import * as ppio from './procspipeio'\n\n";
-        if (false)
-            for (const it of prep.enums)
-                src += "type " + it.name + " = " + pkgname + "." + it.name + "\n";
+        for (const it of prep.enums)
+            src += "type " + it.name + " = " + pkgname + "." + it.name + "\n";
         for (const it of prep.structs) {
             const fieldsextra = it.fields.filter(_ => _.isExtBaggage);
             if ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length)) {
@@ -25,7 +23,7 @@ class Gen extends gen.Gen {
             else
                 src += "type " + it.name + " = " + pkgname + "." + it.name + "\n";
         }
-        src += "\nexport function handle(msg: ppio.IpcMsg, proc: node_proc.ChildProcess): Thenable<any> {\n";
+        src += "\nexport function handle(msg: ppio.IpcMsg, proc: ppio.Proc): Thenable<any> {\n";
         src += "\tconst idxdot = msg.qName.lastIndexOf('.')\n";
         src += `\tconst [apiname, methodname] = (idxdot > 0) ? [msg.qName.slice(0, idxdot), msg.qName.slice(idxdot + 1)] : ['', msg.qName]\n`;
         src += "\tswitch (apiname) {\n";
@@ -44,7 +42,7 @@ class Gen extends gen.Gen {
                                 const tfn = gen.typeFun(struct.fields.find(_ => _.name === ff).typeSpec);
                                 if (tfn && tfn.length) {
                                     src += `\t\t\t\t\tif (arg_${arg.name}.${ff}_AppzFuncId && arg_${arg.name}.${ff}_AppzFuncId.length)\n`;
-                                    src += `\t\t\t\t\t\targ_${arg.name}.${ff} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => ppio.callBack(proc, arg_${arg.name}.${ff}_AppzFuncId, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`;
+                                    src += `\t\t\t\t\t\targ_${arg.name}.${ff} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => proc.callBack(arg_${arg.name}.${ff}_AppzFuncId, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`;
                                 }
                             }
                     }

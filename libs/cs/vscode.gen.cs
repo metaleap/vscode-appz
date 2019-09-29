@@ -230,7 +230,7 @@ namespace VscAppz {
 		/// <param name="options">Configures the behavior of the input box.</param>
 		/// <param name="token">A token that can be used to signal cancellation.</param>
 		/// <param name="andThen">A promise that resolves to a string the user provided or to `undefined` in case of dismissal.</param>
-		void ShowInputBox(InputBoxOptions options = default, CancellationToken token = default, Action<string> andThen = default);
+		void ShowInputBox(InputBoxOptions options = default, Action<string> andThen = default);
 	}
 
 	/// <summary>Options to configure the behavior of the message.</summary>
@@ -643,11 +643,11 @@ namespace VscAppz {
 			this.send(msg, on);
 		}
 
-		void IWindow.ShowInputBox(InputBoxOptions options, CancellationToken token, Action<string> andThen) {
+		void IWindow.ShowInputBox(InputBoxOptions options, Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInputBox";
-			msg.Data = new dict(2);
+			msg.Data = new dict(1);
 			List<string> fnids = default;
 			fnids = new List<string>(1);
 			lock (this) {
@@ -677,7 +677,6 @@ namespace VscAppz {
 				}
 			}
 			msg.Data["options"] = options;
-			msg.Data["token"] = token;
 			Func<any, bool> on = default;
 			if ((null != andThen)) {
 				on = (any payload) => {

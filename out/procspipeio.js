@@ -5,46 +5,58 @@ const node_pipeio = require("readline");
 const vsc = require("vscode");
 const appz_1 = require("./appz");
 const vscgen = require("./vscode.gen");
+const dbgLogJsonMsgs = true;
+exports.procs = {};
 class Proc {
     constructor(fullCmd, proc, stdoutPipe) {
         this.stderrChan = undefined;
-        this.cancels = {};
-        this.bufsUntilPipeDrained = null;
+        this.stdinBufsUntilPipeDrained = null;
+        this.cancellers = {};
+        this.callBacks = {};
         [this.fullCmd, this.proc, this.stdoutPipe] = [fullCmd, proc, stdoutPipe];
+        this.stdoutPipe.on('line', this.onRecv());
+        this.proc.on('error', this.onProcErr());
+        const ongone = this.onProcEnd();
+        this.proc.on('disconnect', ongone);
+        this.proc.on('close', ongone);
+        this.proc.on('exit', ongone);
+        if (this.proc.stderr)
+            this.proc.stderr.on('data', data => this.log(data));
     }
     dispose() {
-        for (const _ in this.cancels)
-            for (const cancel of this.cancels[_])
-                cancel.dispose();
-        if (this.stderrChan) {
-            if (cfgAutoCloseStderrOutputsOnProgExit())
-                this.stderrChan.dispose();
-            else
-                appz_1.vscCtx.subscriptions.push(this.stderrChan);
-            this.stderrChan = null;
-        }
-        if (this.stdoutPipe) {
+        if (this.proc) {
+            delete exports.procs[this.fullCmd];
+            for (const _ in this.cancellers)
+                for (const cancel of this.cancellers[_])
+                    cancel.dispose();
+            if (this.stderrChan) {
+                if (cfgAutoCloseStderrOutputsOnProgExit())
+                    this.stderrChan.dispose();
+                else
+                    appz_1.vscCtx.subscriptions.push(this.stderrChan);
+                this.stderrChan = null;
+            }
+            for (const pipe of [this.proc.stderr, this.proc.stdout, this.proc.stdin])
+                if (pipe)
+                    try {
+                        pipe.removeAllListeners();
+                    }
+                    catch (_) { }
+            if (this.stdoutPipe)
+                try {
+                    this.stdoutPipe.removeAllListeners().close();
+                }
+                catch (_) { }
             try {
-                this.stdoutPipe.removeAllListeners();
+                this.proc.removeAllListeners();
             }
             catch (_) { }
             try {
-                this.stdoutPipe.close();
+                this.proc.kill();
             }
             catch (_) { }
+            this.proc = null;
         }
-        try {
-            this.proc.removeAllListeners();
-        }
-        catch (_) { }
-        try {
-            this.proc.kill();
-        }
-        catch (_) { }
-        let proc;
-        for (const key in exports.procs)
-            if ((proc = exports.procs[key]) && proc.pid.toString() === this.proc.pid.toString())
-                delete exports.procs[key];
     }
     log(ln) {
         if (this.stderrChan === undefined)
@@ -52,7 +64,14 @@ class Proc {
         if (this.stderrChan)
             this.stderrChan.appendLine(ln);
     }
-    onProgEnd() {
+    callBack(fnId, ...args) {
+        const prom = new Promise((resolve, reject) => {
+            this.callBacks[fnId] = { resolve: resolve, reject: reject };
+        });
+        this.send({ cbId: fnId, data: { "": args } });
+        return prom;
+    }
+    onProcEnd() {
         return (_code, _sig) => this.dispose();
     }
     onProcErr() {
@@ -61,93 +80,99 @@ class Proc {
             this.dispose();
         };
     }
+    onProcPipeDrain(onMaybeFailed) {
+        let ondrain;
+        ondrain = () => {
+            const bufs = this.stdinBufsUntilPipeDrained;
+            this.stdinBufsUntilPipeDrained = null;
+            if (bufs && bufs.length)
+                for (let i = 0; i < bufs.length; i++)
+                    if (!this.proc.stdin.write(bufs[i], onMaybeFailed)) {
+                        this.stdinBufsUntilPipeDrained =
+                            (i === (bufs.length - 1)) ? [] : bufs.slice(i + 1);
+                        this.proc.stdin.once('drain', ondrain);
+                        break;
+                    }
+        };
+        return ondrain;
+    }
+    onRecv() {
+        return (ln) => {
+            if (dbgLogJsonMsgs)
+                console.log("IN:\n" + ln);
+            let msg;
+            try {
+                msg = JSON.parse(ln);
+            }
+            catch (_) { }
+            if (!msg)
+                vsc.window.showWarningMessage(ln);
+            else if (msg.qName) {
+                let sendret = false;
+                const onfail = (err) => {
+                    vsc.window.showErrorMessage(err);
+                    if (msg && msg.cbId && !sendret)
+                        this.send({ cbId: msg.cbId, data: { nay: ensureWillShowUpInJson(err) } });
+                };
+                try {
+                    const promise = vscgen.handle(msg, this);
+                    if (promise)
+                        promise.then(ret => {
+                            if (sendret = (this.proc && msg.cbId) ? true : false)
+                                this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } });
+                        }, rej => onfail(rej));
+                }
+                catch (err) {
+                    onfail(err);
+                }
+            }
+            else if (msg.cbId && msg.data) {
+                const [prom, yay, nay] = [this.callBacks[msg.cbId], msg.data['yay'], msg.data['nay']];
+                delete this.callBacks[msg.cbId];
+                if (prom)
+                    if (nay)
+                        prom.reject(nay);
+                    else
+                        prom.resolve(yay);
+            }
+            else
+                vsc.window.showErrorMessage(ln);
+        };
+    }
+    send(msgOut) {
+        const onmaybefailed = (err) => {
+            if (err && this.proc)
+                vsc.window.showErrorMessage(err + '');
+        };
+        try {
+            const jsonmsgout = JSON.stringify(msgOut) + '\n';
+            if (dbgLogJsonMsgs)
+                console.log("OUT:\n" + jsonmsgout);
+            if (this.stdinBufsUntilPipeDrained !== null)
+                this.stdinBufsUntilPipeDrained.push(jsonmsgout);
+            else if (this.proc && !this.proc.stdin.write(jsonmsgout, onmaybefailed)) {
+                this.stdinBufsUntilPipeDrained = [];
+                this.proc.stdin.once('drain', this.onProcPipeDrain(onmaybefailed));
+            }
+        }
+        catch (e) {
+            onmaybefailed(e);
+        }
+    }
 }
 exports.Proc = Proc;
-const dbgLogJsonMsgs = true;
-exports.nuprocs = {};
-exports.procs = {};
-let pipes = {};
 function disposeAll() {
-    for (const _ in exports.nuprocs)
-        exports.nuprocs[_].dispose();
-    exports.nuprocs = {};
-    let proc, both;
-    const allprocs = exports.procs, allpipes = pipes;
+    const allprocs = exports.procs;
     exports.procs = {};
-    pipes = {};
-    for (const pid in allpipes)
-        if ((both = allpipes[pid]) && both.length) {
-            if (both[1])
-                both[1].dispose();
-            try {
-                both[0].removeAllListeners();
-            }
-            catch (_) { }
-            try {
-                both[0].close();
-            }
-            catch (_) { }
-        }
-    for (const key in allprocs)
-        if (proc = allprocs[key]) {
-            try {
-                proc.removeAllListeners();
-            }
-            catch (_) { }
-            try {
-                proc.kill();
-            }
-            catch (_) { }
-        }
+    for (const _ in allprocs)
+        exports.procs[_].dispose();
 }
 exports.disposeAll = disposeAll;
-function disposeProc(pId) {
-    const both = pipes[pId];
-    if (both && both.length) {
-        delete pipes[pId];
-        if (both[1])
-            if (cfgAutoCloseStderrOutputsOnProgExit())
-                both[1].dispose();
-            else
-                appz_1.vscCtx.subscriptions.push(both[1]);
-        try {
-            both[0].removeAllListeners();
-        }
-        catch (_) { }
-        try {
-            both[0].close();
-        }
-        catch (_) { }
-    }
-    let proc;
-    for (const key in exports.procs)
-        if ((proc = exports.procs[key]) && proc.pid.toString() === pId.toString()) {
-            delete exports.procs[key];
-            try {
-                proc.removeAllListeners();
-            }
-            catch (_) { }
-            try {
-                proc.kill();
-            }
-            catch (_) { }
-            break;
-        }
-}
-exports.disposeProc = disposeProc;
-function onProgEnd(pId) {
-    return (_code, _sig) => disposeProc(pId);
-}
-function onProcErr(pId) {
-    return (err) => {
-        console.log(err);
-        disposeProc(pId);
-    };
-}
 function proc(fullCmd) {
-    let p = exports.procs[fullCmd];
-    if (!p) {
+    let me = exports.procs[fullCmd];
+    if (!me) {
         const [cmd, args] = cmdAndArgs(fullCmd);
+        let p, pipe;
         try {
             p = node_proc.spawn(cmd, args, { stdio: 'pipe', windowsHide: true, argv0: cmd });
         }
@@ -155,57 +180,19 @@ function proc(fullCmd) {
             vsc.window.showErrorMessage(e);
         }
         if (p)
-            if (!(p.pid && p.stdin && p.stdin.writable && p.stdout && p.stdout.readable))
+            if (p.pid && p.stdin && p.stdin.writable && p.stdout && p.stdout.readable && (pipe = node_pipeio.createInterface({ input: p.stdout, terminal: false, historySize: 0 })))
+                me = new Proc(fullCmd, p, pipe);
+            else
                 try {
-                    p.kill();
+                    p.removeAllListeners().kill();
                 }
                 catch (_) { }
-                finally {
-                    p = null;
-                }
-            else {
-                const pid = p.pid, pipe = node_pipeio.createInterface({
-                    input: p.stdout, terminal: false, historySize: 0
-                });
-                if (!pipe)
-                    try {
-                        p.kill();
-                    }
-                    catch (_) { }
-                    finally {
-                        p = null;
-                    }
-                else {
-                    pipe.setMaxListeners(0);
-                    pipe.on('line', onProcRecv(p));
-                    pipes[pid] = [pipe, null];
-                    p.on('error', onProcErr(pid));
-                    const ongone = onProgEnd(pid);
-                    p.on('disconnect', ongone);
-                    p.on('close', ongone);
-                    p.on('exit', ongone);
-                    if (p.stderr)
-                        p.stderr.on('data', _ => {
-                            const both = pipes[pid];
-                            if (both) {
-                                let vscout = both[1];
-                                if (!vscout) {
-                                    both[1] = vscout = vsc.window.createOutputChannel("Appz: " + fullCmd);
-                                    pipes[pid] = both;
-                                }
-                                vscout.appendLine(_);
-                            }
-                        });
-                }
-            }
-        if (p)
-            exports.procs[fullCmd] = p;
-        else {
-            delete exports.procs[fullCmd];
+        if (me)
+            exports.procs[fullCmd] = me;
+        else
             vsc.window.showErrorMessage('Unable to execute this exact command, any typos? ─── ' + fullCmd);
-        }
     }
-    return p;
+    return me;
 }
 exports.proc = proc;
 function cmdAndArgs(fullCmd) {
@@ -239,100 +226,9 @@ function cmdAndArgs(fullCmd) {
     }
     return [cmd, args];
 }
-function send(proc, msgOut) {
-    const onmaybefailed = (err) => {
-        if (err && proc.pid && pipes[proc.pid])
-            vsc.window.showErrorMessage(err + '');
-    };
-    try {
-        const jsonmsgout = JSON.stringify(msgOut) + '\n';
-        if (dbgLogJsonMsgs)
-            console.log("OUT:\n" + jsonmsgout);
-        const bufs = bufsUntilPipeDrained[proc.pid];
-        if (bufs)
-            bufs.push(jsonmsgout);
-        else if (pipes[proc.pid] && !proc.stdin.write(jsonmsgout, onmaybefailed)) {
-            bufsUntilPipeDrained[proc.pid] = [];
-            proc.stdin.once('drain', onProcPipeDrain(proc, onmaybefailed));
-        }
-    }
-    catch (e) {
-        onmaybefailed(e);
-    }
-}
-exports.send = send;
-const callBacks = {};
-function callBack(proc, fnId, ...args) {
-    const prom = new Promise((resolve, reject) => {
-        callBacks[fnId] = { resolve: resolve, reject: reject };
-    });
-    send(proc, { cbId: fnId, data: { "": args } });
-    return prom;
-}
-exports.callBack = callBack;
-const bufsUntilPipeDrained = {};
-function onProcPipeDrain(proc, onMaybeFailed) {
-    let ondrain;
-    ondrain = () => {
-        const bufs = bufsUntilPipeDrained[proc.pid];
-        delete bufsUntilPipeDrained[proc.pid];
-        if (bufs && bufs.length)
-            for (let i = 0; i < bufs.length && pipes[proc.pid]; i++)
-                if (!proc.stdin.write(bufs[i], onMaybeFailed)) {
-                    bufsUntilPipeDrained[proc.pid] =
-                        (i === (bufs.length - 1)) ? [] : bufs.slice(i + 1);
-                    proc.stdin.once('drain', ondrain);
-                    break;
-                }
-    };
-    return ondrain;
-}
-function onProcRecv(proc) {
-    return (ln) => {
-        if (dbgLogJsonMsgs)
-            console.log("IN:\n" + ln);
-        let msg;
-        try {
-            msg = JSON.parse(ln);
-        }
-        catch (_) { }
-        if (!msg)
-            vsc.window.showWarningMessage(ln);
-        else if (msg.qName) {
-            let sendret = false;
-            const onfail = (err) => {
-                vsc.window.showErrorMessage(err);
-                if (msg && msg.cbId && !sendret)
-                    send(proc, { cbId: msg.cbId, data: { nay: ensureWillBeInJson(err) } });
-            };
-            try {
-                const promise = vscgen.handle(msg, proc);
-                if (promise)
-                    promise.then(ret => {
-                        if (sendret = (proc.pid && pipes[proc.pid] && msg.cbId) ? true : false)
-                            send(proc, { cbId: msg.cbId, data: { yay: ensureWillBeInJson(ret) } });
-                    }, rej => onfail(rej));
-            }
-            catch (err) {
-                onfail(err);
-            }
-        }
-        else if (msg.cbId && msg.data) {
-            const [prom, yay, nay] = [callBacks[msg.cbId], msg.data['yay'], msg.data['nay']];
-            delete callBacks[msg.cbId];
-            if (prom)
-                if (nay)
-                    prom.reject(nay);
-                else
-                    prom.resolve(yay);
-        }
-        else
-            vsc.window.showErrorMessage(ln);
-    };
-}
 function cfgAutoCloseStderrOutputsOnProgExit() {
     return vsc.workspace.getConfiguration("appz").get("autoCloseStderrOutputsOnProgExit", true);
 }
-function ensureWillBeInJson(_) {
+function ensureWillShowUpInJson(_) {
     return (_ === undefined) ? null : _;
 }
