@@ -23,7 +23,7 @@ class Gen extends gen.Gen {
             else
                 src += "type " + it.name + " = " + pkgname + "." + it.name + "\n";
         }
-        src += "\nexport function handle(msg: ppio.IpcMsg, proc: ppio.Proc): Thenable<any> {\n";
+        src += "\nexport function handle(msg: ppio.IpcMsg, proc: ppio.Proc): [Thenable<any>, string[]] {\n";
         src += "\tconst idxdot = msg.qName.lastIndexOf('.')\n";
         src += `\tconst [apiname, methodname] = (idxdot > 0) ? [msg.qName.slice(0, idxdot), msg.qName.slice(idxdot + 1)] : ['', msg.qName]\n`;
         src += "\tswitch (apiname) {\n";
@@ -32,14 +32,20 @@ class Gen extends gen.Gen {
             src += "\t\t\tswitch (methodname) {\n";
             for (const method of it.methods) {
                 src += `\t\t\t\tcase "${method.name}": {\n`;
+                const ctoksname = gen.idents(method.args, 'ctoks')['ctoks'];
+                src += `\t\t\t\t\tlet ${ctoksname}: string[] = undefined\n`;
                 const lastarg = method.args[method.args.length - 1];
                 for (const arg of method.args)
                     if (arg !== lastarg) {
-                        src += `\t\t\t\t\tconst arg_${arg.name} = (msg.data['${arg.name}']${(gen.typeArrOf(arg.typeSpec) || gen.typeTupOf(arg.typeSpec)) ? ' || []' : ''}) as ${this.typeSpec(arg.typeSpec)}\n`;
-                        if (arg.isCancellationToken) {
-                            src += `\t\t\t\t\tlet ctok_${arg.name}: ${pkgname}.CancellationToken = undefined\n`;
-                            src += `\t\t\t\t\tif (arg_${arg.name} && arg_${arg.name}.length) {\n`;
-                            src += '\t\t\t\t\t}\n';
+                        if (arg.isCancellationToken === undefined)
+                            src += `\t\t\t\t\tconst arg_${arg.name} = (msg.data['${arg.name}']${(gen.typeArrOf(arg.typeSpec) || gen.typeTupOf(arg.typeSpec)) ? ' || []' : ''}) as ${this.typeSpec(arg.typeSpec)}\n`;
+                        else {
+                            src += `\t\t\t\t\tconst arg_${arg.name} = proc.canceller(msg.data['${arg.name}'])\n`;
+                            src += `\t\t\t\t\tif (arg_${arg.name}) {\n`;
+                            src += `\t\t\t\t\t\tif (${ctoksname} === undefined)\n`;
+                            src += `\t\t\t\t\t\t\t${ctoksname} = []\n`;
+                            src += `\t\t\t\t\t\t${ctoksname}.push(msg.data['${arg.name}'] as string)\n`;
+                            src += `\t\t\t\t\t}\n`;
                         }
                         const struct = prep.structs.find(_ => _.name === arg.typeSpec);
                         if (struct && struct.funcFields && struct.funcFields.length)
@@ -51,11 +57,11 @@ class Gen extends gen.Gen {
                                 }
                             }
                     }
-                src += `\t\t\t\t\treturn ${method.fromOrig.qName}(`;
+                src += `\t\t\t\t\treturn [${method.fromOrig.qName}(`;
                 for (const arg of method.args)
                     if (arg !== lastarg)
-                        src += (arg.spreads ? '...' : '') + (arg.isCancellationToken ? 'ctok_' : 'arg_') + arg.name + ', ';
-                src += ")\n\t\t\t\t}\n";
+                        src += (arg.spreads ? '...' : '') + 'arg_' + arg.name + ', ';
+                src += `), ${ctoksname}]\n\t\t\t\t}\n`;
             }
             src += "\t\t\t\tdefault:\n";
             src += "\t\t\t\t\tthrow (methodname)\n";
@@ -105,7 +111,7 @@ class Gen extends gen.Gen {
             else
                 return "Thenable<" + this.typeSpec(tprom[0]) + ">";
         if (typeof from === 'string')
-            return (from === 'Cancel') ? 'string' : from;
+            return from;
         return "any";
     }
 }

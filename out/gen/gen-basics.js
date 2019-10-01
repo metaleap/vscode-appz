@@ -38,9 +38,10 @@ class Prep {
             }
         });
         this.interfaces.forEach(iface => iface.methods.forEach(method => {
+            let n = 0;
             method.args.forEach(arg => {
                 if (arg.typeSpec === 'CancellationToken')
-                    [arg.isCancellationToken, arg.typeSpec] = [true, 'Cancel'];
+                    [arg.isCancellationToken, arg.typeSpec] = [n++, 'Cancel'];
             });
         }));
         const printjson = (_) => console.log(JSON.stringify(_, function (key, val) {

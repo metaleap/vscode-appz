@@ -84,7 +84,7 @@ export interface PrepArg {
     name: string
     typeSpec: TypeSpec
     optional: boolean
-    isCancellationToken?: boolean
+    isCancellationToken?: number
     isFromRetThenable: boolean
     spreads: boolean
 }
@@ -123,9 +123,10 @@ export class Prep {
         })
 
         this.interfaces.forEach(iface => iface.methods.forEach(method => {
+            let n: number = 0
             method.args.forEach(arg => {
                 if (arg.typeSpec === 'CancellationToken')
-                    [arg.isCancellationToken, arg.typeSpec] = [true, 'Cancel']
+                    [arg.isCancellationToken, arg.typeSpec] = [n++, 'Cancel']
             })
         }))
 

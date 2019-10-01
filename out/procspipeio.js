@@ -27,8 +27,7 @@ class Proc {
         if (this.proc) {
             delete exports.procs[this.fullCmd];
             for (const _ in this.cancellers)
-                for (const cancel of this.cancellers[_])
-                    cancel.dispose();
+                this.cancellers[_].dispose();
             if (this.stderrChan) {
                 if (cfgAutoCloseStderrOutputsOnProgExit())
                     this.stderrChan.dispose();
@@ -64,12 +63,20 @@ class Proc {
         if (this.stderrChan)
             this.stderrChan.appendLine(ln);
     }
-    callBack(fnId, ...args) {
+    callBack(fId, ...args) {
         const prom = new Promise((resolve, reject) => {
-            this.callBacks[fnId] = { resolve: resolve, reject: reject };
+            this.callBacks[fId] = { resolve: resolve, reject: reject };
         });
-        this.send({ cbId: fnId, data: { "": args } });
+        this.send({ cbId: fId, data: { "": args } });
         return prom;
+    }
+    canceller(fId) {
+        if (fId && (typeof fId === 'string') && fId.length) {
+            const cts = new vsc.CancellationTokenSource();
+            this.cancellers[fId] = cts;
+            return cts.token;
+        }
+        return undefined;
     }
     onProcEnd() {
         return (_code, _sig) => this.dispose();
@@ -115,12 +122,26 @@ class Proc {
                         this.send({ cbId: msg.cbId, data: { nay: ensureWillShowUpInJson(err) } });
                 };
                 try {
-                    const promise = vscgen.handle(msg, this);
+                    const [promise, cancels] = vscgen.handle(msg, this);
+                    let cleanup = () => { };
+                    if (cancels && cancels.length)
+                        cleanup = () => {
+                            cancels.forEach(_ => {
+                                const cancel = this.cancellers[_];
+                                if (cancel)
+                                    cancel.dispose();
+                                delete this.cancellers[_];
+                            });
+                        };
                     if (promise)
                         promise.then(ret => {
+                            cleanup();
                             if (sendret = (this.proc && msg.cbId) ? true : false)
                                 this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } });
-                        }, rej => onfail(rej));
+                        }, rej => {
+                            cleanup();
+                            onfail(rej);
+                        });
                 }
                 catch (err) {
                     onfail(err);

@@ -24,7 +24,7 @@ export class Proc {
     stdoutPipe: node_pipeio.ReadLine
     stderrChan: vsc.OutputChannel = undefined
     stdinBufsUntilPipeDrained: string[] = null
-    cancellers: { [_: string]: vsc.CancellationTokenSource[] } = {}
+    cancellers: { [_: string]: vsc.CancellationTokenSource } = {}
     callBacks: { [_: string]: { resolve: ((_: any) => void), reject: ((_?: any) => void) } } = {}
 
     constructor(fullCmd: string, proc: node_proc.ChildProcess, stdoutPipe: node_pipeio.ReadLine) {
@@ -45,8 +45,7 @@ export class Proc {
             delete procs[this.fullCmd]
 
             for (const _ in this.cancellers)
-                for (const cancel of this.cancellers[_])
-                    cancel.dispose()
+                this.cancellers[_].dispose()
 
             if (this.stderrChan) {
                 if (cfgAutoCloseStderrOutputsOnProgExit())
@@ -77,12 +76,21 @@ export class Proc {
             this.stderrChan.appendLine(ln)
     }
 
-    callBack<T>(fnId: string, ...args: any[]): Thenable<T> {
+    callBack<T>(fId: string, ...args: any[]): Thenable<T> {
         const prom = new Promise<T>((resolve, reject) => {
-            this.callBacks[fnId] = { resolve: resolve, reject: reject }
+            this.callBacks[fId] = { resolve: resolve, reject: reject }
         })
-        this.send({ cbId: fnId, data: { "": args } })
+        this.send({ cbId: fId, data: { "": args } })
         return prom
+    }
+
+    canceller(fId: any): vsc.CancellationToken | undefined {
+        if (fId && (typeof fId === 'string') && fId.length) {
+            const cts = new vsc.CancellationTokenSource()
+            this.cancellers[fId] = cts
+            return cts.token
+        }
+        return undefined
     }
 
     private onProcEnd() {
@@ -133,14 +141,27 @@ export class Proc {
                 }
 
                 try {
-                    const promise = vscgen.handle(msg, this)
+                    const [promise, cancels] = vscgen.handle(msg, this)
+                    let cleanup = () => { }
+                    if (cancels && cancels.length)
+                        cleanup = () => {
+                            cancels.forEach(_ => {
+                                const cancel = this.cancellers[_]
+                                if (cancel)
+                                    cancel.dispose();
+                                delete this.cancellers[_]
+                            })
+                        }
                     if (promise) promise.then(
                         ret => {
+                            cleanup()
                             if (sendret = (this.proc && msg.cbId) ? true : false)
                                 this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } })
                         },
-                        rej =>
-                            onfail(rej),
+                        rej => {
+                            cleanup()
+                            onfail(rej)
+                        },
                     )
                 } catch (err) { onfail(err) }
 
