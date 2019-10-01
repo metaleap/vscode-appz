@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 )
 
 // Reports problems during the ongoing forever-looping stdin/stdout communication
@@ -48,6 +49,22 @@ type impl struct {
 
 // Cancel allows later cancellation of ongoing / already-initiated interactions.
 type Cancel struct {
+	*impl
+	fnId string
+}
+
+func (me *Cancel) Now() {
+	if me.impl != nil {
+		me.impl.send(&ipcMsg{CbId: me.fnId}, nil)
+	}
+}
+
+func CancelIn(fromNow time.Duration) *Cancel {
+	cancel := &Cancel{}
+	_ = time.AfterFunc(fromNow, func() {
+		cancel.Now()
+	})
+	return cancel
 }
 
 func init() {

@@ -32,6 +32,102 @@ type Cancel struct {
 
 Cancel allows later cancellation of ongoing / already-initiated interactions.
 
+#### func  CancelIn
+
+```go
+func CancelIn(fromNow time.Duration) *Cancel
+```
+
+#### func (*Cancel) Now
+
+```go
+func (me *Cancel) Now()
+```
+
+#### func (Cancel) ShowErrorMessage1
+
+```go
+func (me Cancel) ShowErrorMessage1(message string, items []string, andThen func(*string))
+```
+
+#### func (Cancel) ShowErrorMessage2
+
+```go
+func (me Cancel) ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(*string))
+```
+
+#### func (Cancel) ShowErrorMessage3
+
+```go
+func (me Cancel) ShowErrorMessage3(message string, items []MessageItem, andThen func(*MessageItem))
+```
+
+#### func (Cancel) ShowErrorMessage4
+
+```go
+func (me Cancel) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem))
+```
+
+#### func (Cancel) ShowInformationMessage1
+
+```go
+func (me Cancel) ShowInformationMessage1(message string, items []string, andThen func(*string))
+```
+
+#### func (Cancel) ShowInformationMessage2
+
+```go
+func (me Cancel) ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(*string))
+```
+
+#### func (Cancel) ShowInformationMessage3
+
+```go
+func (me Cancel) ShowInformationMessage3(message string, items []MessageItem, andThen func(*MessageItem))
+```
+
+#### func (Cancel) ShowInformationMessage4
+
+```go
+func (me Cancel) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem))
+```
+
+#### func (Cancel) ShowInputBox
+
+```go
+func (me Cancel) ShowInputBox(options *InputBoxOptions, token *Cancel, andThen func(*string))
+```
+
+#### func (Cancel) ShowWarningMessage1
+
+```go
+func (me Cancel) ShowWarningMessage1(message string, items []string, andThen func(*string))
+```
+
+#### func (Cancel) ShowWarningMessage2
+
+```go
+func (me Cancel) ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(*string))
+```
+
+#### func (Cancel) ShowWarningMessage3
+
+```go
+func (me Cancel) ShowWarningMessage3(message string, items []MessageItem, andThen func(*MessageItem))
+```
+
+#### func (Cancel) ShowWarningMessage4
+
+```go
+func (me Cancel) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem))
+```
+
+#### func (Cancel) Window
+
+```go
+func (me Cancel) Window() Window
+```
+
 #### type InputBoxOptions
 
 ```go

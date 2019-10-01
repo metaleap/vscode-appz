@@ -76,18 +76,18 @@ export class Proc {
             this.stderrChan.appendLine(ln)
     }
 
-    callBack<T>(fId: string, ...args: any[]): Thenable<T> {
+    callBack<T>(fnId: string, ...args: any[]): Thenable<T> {
         const prom = new Promise<T>((resolve, reject) => {
-            this.callBacks[fId] = { resolve: resolve, reject: reject }
+            this.callBacks[fnId] = { resolve: resolve, reject: reject }
         })
-        this.send({ cbId: fId, data: { "": args } })
+        this.send({ cbId: fnId, data: { "": args } })
         return prom
     }
 
-    canceller(fId: any): vsc.CancellationToken | undefined {
-        if (fId && (typeof fId === 'string') && fId.length) {
+    canceller(fnId: any): vsc.CancellationToken | undefined {
+        if (fnId && (typeof fnId === 'string') && fnId.length) {
             const cts = new vsc.CancellationTokenSource()
-            this.cancellers[fId] = cts
+            this.cancellers[fnId] = cts
             return cts.token
         }
         return undefined
@@ -122,6 +122,16 @@ export class Proc {
         return ondrain
     }
 
+    private ditchCancellers(fnIds: string[]) {
+        if (fnIds && fnIds.length)
+            for (const fnid of fnIds) {
+                const cancel = this.cancellers[fnid]
+                if (cancel)
+                    cancel.dispose();
+                delete this.cancellers[fnid]
+            }
+    }
+
     private onRecv() {
         return (ln: string) => {
             if (dbgLogJsonMsgs)
@@ -141,38 +151,37 @@ export class Proc {
                 }
 
                 try {
-                    const [promise, cancels] = vscgen.handle(msg, this)
-                    let cleanup = () => { }
-                    if (cancels && cancels.length)
-                        cleanup = () => {
-                            cancels.forEach(_ => {
-                                const cancel = this.cancellers[_]
-                                if (cancel)
-                                    cancel.dispose();
-                                delete this.cancellers[_]
-                            })
-                        }
-                    if (promise) promise.then(
-                        ret => {
-                            cleanup()
-                            if (sendret = (this.proc && msg.cbId) ? true : false)
-                                this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } })
-                        },
-                        rej => {
-                            cleanup()
-                            onfail(rej)
-                        },
-                    )
+                    const [promise, cancelFnIds] = vscgen.handle(msg, this)
+                    if (!promise)
+                        this.ditchCancellers(cancelFnIds)
+                    else
+                        promise.then(
+                            ret => {
+                                this.ditchCancellers(cancelFnIds)
+                                if (sendret = (this.proc && msg.cbId) ? true : false)
+                                    this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } })
+                            },
+                            rej => {
+                                this.ditchCancellers(cancelFnIds)
+                                onfail(rej)
+                            },
+                        )
                 } catch (err) { onfail(err) }
 
-            } else if (msg.cbId && msg.data) { // response to an earlier remote-func-call of ours
-                const [prom, yay, nay] = [this.callBacks[msg.cbId], msg.data['yay'] as any, msg.data['nay']]
-                delete this.callBacks[msg.cbId]
-                if (prom)
-                    if (nay)
-                        prom.reject(nay)
-                    else
-                        prom.resolve(yay)
+            } else if (msg.cbId) { // response to an earlier remote-func-call of ours, or cancellation
+                if (msg.data) {
+                    const [prom, yay, nay] = [this.callBacks[msg.cbId], msg.data['yay'] as any, msg.data['nay']]
+                    delete this.callBacks[msg.cbId]
+                    if (prom)
+                        if (nay)
+                            prom.reject(nay)
+                        else
+                            prom.resolve(yay)
+                } else {
+                    const cts = this.cancellers[msg.cbId]
+                    if (cts)
+                        cts.cancel()
+                }
 
             } else
                 vsc.window.showErrorMessage(ln)

@@ -63,17 +63,17 @@ class Proc {
         if (this.stderrChan)
             this.stderrChan.appendLine(ln);
     }
-    callBack(fId, ...args) {
+    callBack(fnId, ...args) {
         const prom = new Promise((resolve, reject) => {
-            this.callBacks[fId] = { resolve: resolve, reject: reject };
+            this.callBacks[fnId] = { resolve: resolve, reject: reject };
         });
-        this.send({ cbId: fId, data: { "": args } });
+        this.send({ cbId: fnId, data: { "": args } });
         return prom;
     }
-    canceller(fId) {
-        if (fId && (typeof fId === 'string') && fId.length) {
+    canceller(fnId) {
+        if (fnId && (typeof fnId === 'string') && fnId.length) {
             const cts = new vsc.CancellationTokenSource();
-            this.cancellers[fId] = cts;
+            this.cancellers[fnId] = cts;
             return cts.token;
         }
         return undefined;
@@ -103,6 +103,15 @@ class Proc {
         };
         return ondrain;
     }
+    ditchCancellers(fnIds) {
+        if (fnIds && fnIds.length)
+            for (const fnid of fnIds) {
+                const cancel = this.cancellers[fnid];
+                if (cancel)
+                    cancel.dispose();
+                delete this.cancellers[fnid];
+            }
+    }
     onRecv() {
         return (ln) => {
             if (dbgLogJsonMsgs)
@@ -122,24 +131,16 @@ class Proc {
                         this.send({ cbId: msg.cbId, data: { nay: ensureWillShowUpInJson(err) } });
                 };
                 try {
-                    const [promise, cancels] = vscgen.handle(msg, this);
-                    let cleanup = () => { };
-                    if (cancels && cancels.length)
-                        cleanup = () => {
-                            cancels.forEach(_ => {
-                                const cancel = this.cancellers[_];
-                                if (cancel)
-                                    cancel.dispose();
-                                delete this.cancellers[_];
-                            });
-                        };
-                    if (promise)
+                    const [promise, cancelFnIds] = vscgen.handle(msg, this);
+                    if (!promise)
+                        this.ditchCancellers(cancelFnIds);
+                    else
                         promise.then(ret => {
-                            cleanup();
+                            this.ditchCancellers(cancelFnIds);
                             if (sendret = (this.proc && msg.cbId) ? true : false)
                                 this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } });
                         }, rej => {
-                            cleanup();
+                            this.ditchCancellers(cancelFnIds);
                             onfail(rej);
                         });
                 }
@@ -147,14 +148,21 @@ class Proc {
                     onfail(err);
                 }
             }
-            else if (msg.cbId && msg.data) {
-                const [prom, yay, nay] = [this.callBacks[msg.cbId], msg.data['yay'], msg.data['nay']];
-                delete this.callBacks[msg.cbId];
-                if (prom)
-                    if (nay)
-                        prom.reject(nay);
-                    else
-                        prom.resolve(yay);
+            else if (msg.cbId) {
+                if (msg.data) {
+                    const [prom, yay, nay] = [this.callBacks[msg.cbId], msg.data['yay'], msg.data['nay']];
+                    delete this.callBacks[msg.cbId];
+                    if (prom)
+                        if (nay)
+                            prom.reject(nay);
+                        else
+                            prom.resolve(yay);
+                }
+                else {
+                    const cts = this.cancellers[msg.cbId];
+                    if (cts)
+                        cts.cancel();
+                }
             }
             else
                 vsc.window.showErrorMessage(ln);
