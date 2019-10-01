@@ -88,7 +88,11 @@ export function handle(msg: ppio.IpcMsg, proc: ppio.Proc): Thenable<any> {
 					const arg_options = (msg.data['options']) as InputBoxOptions
 					if (arg_options.validateInput_AppzFuncId && arg_options.validateInput_AppzFuncId.length)
 						arg_options.validateInput = (a0) => proc.callBack(arg_options.validateInput_AppzFuncId, a0)
-					return vscode.window.showInputBox(arg_options, )
+					const arg_token = (msg.data['token']) as string
+					let ctok_token: vscode.CancellationToken = undefined
+					if (arg_token && arg_token.length) {
+					}
+					return vscode.window.showInputBox(arg_options, ctok_token, )
 				}
 				default:
 					throw (methodname)

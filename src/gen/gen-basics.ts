@@ -84,6 +84,7 @@ export interface PrepArg {
     name: string
     typeSpec: TypeSpec
     optional: boolean
+    isCancellationToken?: boolean
     isFromRetThenable: boolean
     spreads: boolean
 }
@@ -122,8 +123,10 @@ export class Prep {
         })
 
         this.interfaces.forEach(iface => iface.methods.forEach(method => {
-            method.args = method.args.filter(arg =>
-                arg.typeSpec !== 'CancellationToken')
+            method.args.forEach(arg => {
+                if (arg.typeSpec === 'CancellationToken')
+                    [arg.isCancellationToken, arg.typeSpec] = [true, 'Cancel']
+            })
         }))
 
         const printjson = (_: any) => console.log(JSON.stringify(_, function (this: any, key: string, val: any): any {

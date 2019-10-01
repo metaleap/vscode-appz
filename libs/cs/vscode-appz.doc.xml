@@ -4,6 +4,9 @@
         <name>vscode-appz</name>
     </assembly>
     <members>
+        <member name="T:VscAppz.Cancel">
+            <summary>Allows later cancellation of ongoing / already-initiated interactions.</summary>
+        </member>
         <member name="T:VscAppz.Vsc">
             <summary>Everything related to the running of your app.</summary>
         </member>
@@ -235,7 +238,7 @@
             <param name="items">A set of items that will be rendered as actions in the message.</param>
             <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
         </member>
-        <member name="M:VscAppz.IWindow.ShowInputBox(VscAppz.InputBoxOptions,System.Action{System.String})">
+        <member name="M:VscAppz.IWindow.ShowInputBox(VscAppz.InputBoxOptions,VscAppz.Cancel,System.Action{System.String})">
             <summary>
             Opens an input box to ask the user for input.
             

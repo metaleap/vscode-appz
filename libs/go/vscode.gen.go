@@ -147,7 +147,7 @@ type Window interface {
 	// `token` ── A token that can be used to signal cancellation.
 	// 
 	// `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
-	ShowInputBox(options *InputBoxOptions, andThen func(*string)) 
+	ShowInputBox(options *InputBoxOptions, token *Cancel, andThen func(*string)) 
 }
 
 // Options to configure the behavior of the message.
@@ -539,11 +539,11 @@ func (me *impl) ShowWarningMessage4(message string, options MessageOptions, item
 	me.send(msg, on)
 }
 
-func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(*string)) {
+func (me *impl) ShowInputBox(options *InputBoxOptions, token *Cancel, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInputBox"
-	msg.Data = make(dict, 1)
+	msg.Data = make(dict, 2)
 	var __options__ *_InputBoxOptions
 	var fnids []string
 	fnids = make([]string, 0, 1)
@@ -578,6 +578,7 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, andThen func(*string)) {
 	}
 	me.Unlock()
 	msg.Data["options"] = __options__
+	msg.Data["token"] = token
 	var on func(any) bool
 	if (nil != andThen) {
 		on = func(payload any) bool {

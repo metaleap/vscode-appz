@@ -37,6 +37,11 @@ export class Gen extends gen.Gen implements gen.IGen {
                 for (const arg of method.args)
                     if (arg !== lastarg) {
                         src += `\t\t\t\t\tconst arg_${arg.name} = (msg.data['${arg.name}']${(gen.typeArrOf(arg.typeSpec) || gen.typeTupOf(arg.typeSpec)) ? ' || []' : ''}) as ${this.typeSpec(arg.typeSpec)}\n`
+                        if (arg.isCancellationToken) {
+                            src += `\t\t\t\t\tlet ctok_${arg.name}: ${pkgname}.CancellationToken = undefined\n`
+                            src += `\t\t\t\t\tif (arg_${arg.name} && arg_${arg.name}.length) {\n`
+                            src += '\t\t\t\t\t}\n'
+                        }
                         const struct = prep.structs.find(_ => _.name === arg.typeSpec)
                         if (struct && struct.funcFields && struct.funcFields.length)
                             for (const ff of struct.funcFields) {
@@ -51,7 +56,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 src += `\t\t\t\t\treturn ${method.fromOrig.qName}(`
                 for (const arg of method.args)
                     if (arg !== lastarg)
-                        src += (arg.spreads ? '...' : '') + `arg_${arg.name}, `
+                        src += (arg.spreads ? '...' : '') + (arg.isCancellationToken ? 'ctok_' : 'arg_') + arg.name + ', '
                 src += ")\n\t\t\t\t}\n"
             }
             src += "\t\t\t\tdefault:\n"
@@ -112,7 +117,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 return "Thenable<" + this.typeSpec(tprom[0]) + ">"
 
         if (typeof from === 'string')
-            return from
+            return (from === 'Cancel') ? 'string' : from
 
         return "any"
     }

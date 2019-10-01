@@ -269,6 +269,7 @@ Window: interface
     # A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
     ShowInputBox: void
         options: ?InputBoxOptions
+        token: ?Cancel
         andThen: ?(?string->void)
 
 
@@ -695,11 +696,11 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
 
 
 
-Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(?string->void) -> void)
+Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> andThen:?(?string->void) -> void)
     var msg of ipcMsg
     msg = ipcMsg·new
     msg.QName = "window.showInputBox"
-    msg.Data = dict·new(1)
+    msg.Data = dict·new(2)
     var fnids of [string]
     fnids = [string]·new(1)
     lock this
@@ -723,6 +724,7 @@ Window·ShowInputBox: (options:?InputBoxOptions -> andThen:?(?string->void) -> v
                         return [fn(__0),true]
                 
     msg.Data@"options" = options
+    msg.Data@"token" = token
     var on of (any->bool)
     if (=?andThen)
         on = (payload:any -> bool)

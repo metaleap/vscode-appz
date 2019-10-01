@@ -23,6 +23,15 @@ anything) by VS Code.
 var OnErrorDefaultOutputFormat = "err:\t%v\njson:\t%v\n\n"
 ```
 
+#### type Cancel
+
+```go
+type Cancel struct {
+}
+```
+
+Cancel allows later cancellation of ongoing / already-initiated interactions.
+
 #### type InputBoxOptions
 
 ```go
@@ -256,7 +265,7 @@ type Window interface {
 	// `token` ── A token that can be used to signal cancellation.
 	//
 	// `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
-	ShowInputBox(options *InputBoxOptions, andThen func(*string))
+	ShowInputBox(options *InputBoxOptions, token *Cancel, andThen func(*string))
 }
 ```
 

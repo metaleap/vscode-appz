@@ -46,6 +46,10 @@ type impl struct {
 	cbOther   map[string]func([]any) (any, bool)
 }
 
+// Cancel allows later cancellation of ongoing / already-initiated interactions.
+type Cancel struct {
+}
+
 func init() {
 	var stderr sync.Mutex
 	OnError = func(_ Vscode, err any, jsonmsg any) {

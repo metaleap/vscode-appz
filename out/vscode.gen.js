@@ -77,7 +77,11 @@ function handle(msg, proc) {
                     const arg_options = (msg.data['options']);
                     if (arg_options.validateInput_AppzFuncId && arg_options.validateInput_AppzFuncId.length)
                         arg_options.validateInput = (a0) => proc.callBack(arg_options.validateInput_AppzFuncId, a0);
-                    return vscode.window.showInputBox(arg_options);
+                    const arg_token = (msg.data['token']);
+                    let ctok_token = undefined;
+                    if (arg_token && arg_token.length) {
+                    }
+                    return vscode.window.showInputBox(arg_options, ctok_token);
                 }
                 default:
                     throw (methodname);

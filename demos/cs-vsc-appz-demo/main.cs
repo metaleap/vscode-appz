@@ -36,7 +36,7 @@ namespace VscAppzDemo {
                             ValidateInput   = input => Array.Exists(foos, _ => input.ToLower().Contains(_))
                                                     ? "Contains something looking like `foo`."
                                                     : ""
-                        }, input => {
+                        },null, input => {
                             if (input == null)
                                 win.ShowWarningMessage("Cancelled input, bye now!", nil, exit);
                             else

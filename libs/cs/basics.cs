@@ -16,6 +16,10 @@ namespace VscAppz {
             (this.QName, Data, this.CbId) = (qName, new dict(numData), contId);
     }
 
+    /// <summary>Allows later cancellation of ongoing / already-initiated interactions.</summary>
+    public class Cancel {
+    }
+
     /// <summary>Everything related to the running of your app.</summary>
     public static class Vsc {
         /// <summary>Used by the default `OnError` handler to print error details to stderr (aka. `Console.Error`).</summary>

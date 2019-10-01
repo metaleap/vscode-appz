@@ -44,7 +44,7 @@ func main() {
 						}
 						return
 					},
-				}, func(input *string) {
+				}, nil, func(input *string) {
 					if input == nil {
 						win.ShowInformationMessage1("You cancelled, bye now!", nil, exit)
 					} else {
