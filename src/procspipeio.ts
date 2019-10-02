@@ -18,6 +18,11 @@ export interface IpcMsg {
     cbId?: string
 }
 
+class Canceller extends vsc.CancellationTokenSource {
+    num: number
+    constructor() { super(); this.num = 1 }
+}
+
 export class Proc {
     fullCmd: string
     proc: node_proc.ChildProcess
@@ -27,7 +32,7 @@ export class Proc {
     stderrChan: vsc.OutputChannel = undefined
     stderrKept: string = ''
     stdinBufsUntilPipeDrained: string[] = null
-    cancellers: { [_: string]: vsc.CancellationTokenSource } = {}
+    cancellers: { [_: string]: Canceller } = {}
     callBacks: { [_: string]: { resolve: ((_: any) => void), reject: ((_?: any) => void) } } = {}
 
     constructor(fullCmd: string, proc: node_proc.ChildProcess, stdoutPipe: node_pipeio.ReadLine) {
@@ -94,9 +99,15 @@ export class Proc {
 
     canceller(fnId: any): vsc.CancellationToken | undefined {
         if (fnId && (typeof fnId === 'string') && fnId.length) {
-            const cts = new vsc.CancellationTokenSource()
-            this.cancellers[fnId] = cts
-            return cts.token
+            const canceller = this.cancellers[fnId]
+            if (canceller) {
+                canceller.num++
+                return canceller.token
+            } else {
+                const me = new Canceller()
+                this.cancellers[fnId] = me
+                return me.token
+            }
         }
         return undefined
     }
@@ -140,10 +151,11 @@ export class Proc {
     private ditchCancellers(fnIds: string[]) {
         if (fnIds && fnIds.length)
             for (const fnid of fnIds) {
-                const cancel = this.cancellers[fnid]
-                if (cancel)
-                    cancel.dispose();
-                delete this.cancellers[fnid]
+                const canceller = this.cancellers[fnid]
+                if (canceller && 0 === (canceller.num = Math.max(0, canceller.num - 1))) {
+                    canceller.dispose()
+                    delete this.cancellers[fnid]
+                }
             }
     }
 

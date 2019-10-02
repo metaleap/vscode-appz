@@ -7,6 +7,9 @@ const appz_1 = require("./appz");
 const vscgen = require("./vscode.gen");
 const dbgLogJsonMsgs = true;
 exports.procs = {};
+class Canceller extends vsc.CancellationTokenSource {
+    constructor() { super(); this.num = 1; }
+}
 class Proc {
     constructor(fullCmd, proc, stdoutPipe) {
         this.stderrChan = undefined;
@@ -78,9 +81,16 @@ class Proc {
     }
     canceller(fnId) {
         if (fnId && (typeof fnId === 'string') && fnId.length) {
-            const cts = new vsc.CancellationTokenSource();
-            this.cancellers[fnId] = cts;
-            return cts.token;
+            const canceller = this.cancellers[fnId];
+            if (canceller) {
+                canceller.num++;
+                return canceller.token;
+            }
+            else {
+                const me = new Canceller();
+                this.cancellers[fnId] = me;
+                return me.token;
+            }
         }
         return undefined;
     }
@@ -120,10 +130,11 @@ class Proc {
     ditchCancellers(fnIds) {
         if (fnIds && fnIds.length)
             for (const fnid of fnIds) {
-                const cancel = this.cancellers[fnid];
-                if (cancel)
-                    cancel.dispose();
-                delete this.cancellers[fnid];
+                const canceller = this.cancellers[fnid];
+                if (canceller && 0 === (canceller.num = Math.max(0, canceller.num - 1))) {
+                    canceller.dispose();
+                    delete this.cancellers[fnid];
+                }
             }
     }
     onRecv() {
