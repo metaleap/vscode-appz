@@ -13,21 +13,22 @@ class Proc {
         this.stdinBufsUntilPipeDrained = null;
         this.cancellers = {};
         this.callBacks = {};
-        [this.fullCmd, this.proc, this.stdoutPipe] = [fullCmd, proc, stdoutPipe];
+        [this.startTime, this.fullCmd, this.proc, this.stdoutPipe] = [Date.now(), fullCmd, proc, stdoutPipe];
         this.stdoutPipe.on('line', this.onRecv());
+        if (this.proc.stderr)
+            this.proc.stderr.on('data', data => this.log(data));
         this.proc.on('error', this.onProcErr());
         const ongone = this.onProcEnd();
         this.proc.on('disconnect', ongone);
         this.proc.on('close', ongone);
         this.proc.on('exit', ongone);
-        if (this.proc.stderr)
-            this.proc.stderr.on('data', data => this.log(data));
     }
     dispose() {
         if (this.proc) {
             delete exports.procs[this.fullCmd];
             for (const _ in this.cancellers)
                 this.cancellers[_].dispose();
+            this.cancellers = {};
             if (this.stderrChan) {
                 if (cfgAutoCloseStderrOutputsOnProgExit())
                     this.stderrChan.dispose();
@@ -79,7 +80,11 @@ class Proc {
         return undefined;
     }
     onProcEnd() {
-        return (_code, _sig) => this.dispose();
+        return (code, _sig) => {
+            if (code && this.stderrChan)
+                this.stderrChan.show(true);
+            this.dispose();
+        };
     }
     onProcErr() {
         return (err) => {
@@ -126,7 +131,8 @@ class Proc {
             else if (msg.qName) {
                 let sendret = false;
                 const onfail = (err) => {
-                    vsc.window.showErrorMessage(err);
+                    if (err)
+                        vsc.window.showErrorMessage(err);
                     if (msg && msg.cbId && !sendret)
                         this.send({ cbId: msg.cbId, data: { nay: ensureWillShowUpInJson(err) } });
                 };
@@ -136,9 +142,16 @@ class Proc {
                         this.ditchCancellers(cancelFnIds);
                     else
                         promise.then(ret => {
-                            this.ditchCancellers(cancelFnIds);
-                            if (sendret = (this.proc && msg.cbId) ? true : false)
-                                this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } });
+                            if (!this.proc)
+                                vsc.window.showInformationMessage(appz_1.uxStr.tooLate, this.fullCmd).then(_ => {
+                                    if (_ && _.length && _ === this.fullCmd)
+                                        proc(this.fullCmd);
+                                });
+                            else {
+                                this.ditchCancellers(cancelFnIds);
+                                if (sendret = msg.cbId ? true : false)
+                                    this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } });
+                            }
                         }, rej => {
                             this.ditchCancellers(cancelFnIds);
                             onfail(rej);
@@ -216,12 +229,11 @@ function proc(fullCmd) {
                     p.removeAllListeners().kill();
                 }
                 catch (_) { }
-        if (me)
-            exports.procs[fullCmd] = me;
+        if (!me)
+            vsc.window.showErrorMessage(appz_1.uxStr.badProcCmd + fullCmd);
         else
-            vsc.window.showErrorMessage('Unable to execute this exact command, any typos? ─── ' + fullCmd);
+            exports.procs[fullCmd] = me;
     }
-    return me;
 }
 exports.proc = proc;
 function cmdAndArgs(fullCmd) {
@@ -256,7 +268,7 @@ function cmdAndArgs(fullCmd) {
     return [cmd, args];
 }
 function cfgAutoCloseStderrOutputsOnProgExit() {
-    return vsc.workspace.getConfiguration("appz").get("autoCloseStderrOutputsOnProgExit", true);
+    return false;
 }
 function ensureWillShowUpInJson(_) {
     return (_ === undefined) ? null : _;

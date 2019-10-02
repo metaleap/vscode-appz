@@ -2,7 +2,7 @@ import * as node_proc from 'child_process'
 import * as node_pipeio from 'readline'
 import * as vsc from 'vscode'
 
-import { vscCtx } from './appz'
+import { vscCtx, uxStr } from './appz'
 import * as vscgen from './vscode.gen'
 
 
@@ -21,6 +21,7 @@ export interface IpcMsg {
 export class Proc {
     fullCmd: string
     proc: node_proc.ChildProcess
+    startTime: number
     stdoutPipe: node_pipeio.ReadLine
     stderrChan: vsc.OutputChannel = undefined
     stdinBufsUntilPipeDrained: string[] = null
@@ -28,16 +29,16 @@ export class Proc {
     callBacks: { [_: string]: { resolve: ((_: any) => void), reject: ((_?: any) => void) } } = {}
 
     constructor(fullCmd: string, proc: node_proc.ChildProcess, stdoutPipe: node_pipeio.ReadLine) {
-        [this.fullCmd, this.proc, this.stdoutPipe] = [fullCmd, proc, stdoutPipe]
+        [this.startTime, this.fullCmd, this.proc, this.stdoutPipe] = [Date.now(), fullCmd, proc, stdoutPipe]
 
         this.stdoutPipe.on('line', this.onRecv())
+        if (this.proc.stderr)
+            this.proc.stderr.on('data', data => this.log(data))
         this.proc.on('error', this.onProcErr())
         const ongone = this.onProcEnd()
         this.proc.on('disconnect', ongone)
         this.proc.on('close', ongone)
         this.proc.on('exit', ongone)
-        if (this.proc.stderr)
-            this.proc.stderr.on('data', data => this.log(data))
     }
 
     dispose() {
@@ -46,6 +47,7 @@ export class Proc {
 
             for (const _ in this.cancellers)
                 this.cancellers[_].dispose()
+            this.cancellers = {}
 
             if (this.stderrChan) {
                 if (cfgAutoCloseStderrOutputsOnProgExit())
@@ -94,8 +96,11 @@ export class Proc {
     }
 
     private onProcEnd() {
-        return (_code: number, _sig: string) =>
+        return (code: number, _sig: string) => {
+            if (code && this.stderrChan)
+                this.stderrChan.show(true)
             this.dispose()
+        }
     }
 
     private onProcErr() {
@@ -145,7 +150,8 @@ export class Proc {
             else if (msg.qName) { // API request
                 let sendret = false
                 const onfail = (err: any) => {
-                    vsc.window.showErrorMessage(err)
+                    if (err)
+                        vsc.window.showErrorMessage(err)
                     if (msg && msg.cbId && !sendret)
                         this.send({ cbId: msg.cbId, data: { nay: ensureWillShowUpInJson(err) } })
                 }
@@ -157,9 +163,16 @@ export class Proc {
                     else
                         promise.then(
                             ret => {
-                                this.ditchCancellers(cancelFnIds)
-                                if (sendret = (this.proc && msg.cbId) ? true : false)
-                                    this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } })
+                                if (!this.proc)
+                                    vsc.window.showInformationMessage(uxStr.tooLate, this.fullCmd).then(_ => {
+                                        if (_ && _.length && _ === this.fullCmd)
+                                            proc(this.fullCmd)
+                                    })
+                                else {
+                                    this.ditchCancellers(cancelFnIds)
+                                    if (sendret = msg.cbId ? true : false)
+                                        this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } })
+                                }
                             },
                             rej => {
                                 this.ditchCancellers(cancelFnIds)
@@ -218,7 +231,7 @@ export function disposeAll() {
         procs[_].dispose()
 }
 
-export function proc(fullCmd: string): Proc {
+export function proc(fullCmd: string) {
     let me = procs[fullCmd]
     if (!me) {
         const [cmd, args] = cmdAndArgs(fullCmd)
@@ -234,12 +247,11 @@ export function proc(fullCmd: string): Proc {
             else
                 try { p.removeAllListeners().kill() } catch (_) { }
 
-        if (me)
-            procs[fullCmd] = me
+        if (!me)
+            vsc.window.showErrorMessage(uxStr.badProcCmd + fullCmd)
         else
-            vsc.window.showErrorMessage('Unable to execute this exact command, any typos? ─── ' + fullCmd)
+            procs[fullCmd] = me
     }
-    return me
 }
 
 function cmdAndArgs(fullCmd: string): [string, string[]] {
@@ -274,7 +286,7 @@ function cmdAndArgs(fullCmd: string): [string, string[]] {
 }
 
 function cfgAutoCloseStderrOutputsOnProgExit() {
-    return vsc.workspace.getConfiguration("appz").get<boolean>("autoCloseStderrOutputsOnProgExit", true)
+    return false // vsc.workspace.getConfiguration("appz").get<boolean>("autoCloseStderrOutputsOnProgExit", true)
 }
 
 function ensureWillShowUpInJson(_: any) {
