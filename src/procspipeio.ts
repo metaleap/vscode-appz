@@ -2,7 +2,7 @@ import * as node_proc from 'child_process'
 import * as node_pipeio from 'readline'
 import * as vsc from 'vscode'
 
-import { vscCtx, uxStr } from './appz'
+import { vscCtx, uxStr, onPromiseRejectedNoOp } from './appz'
 import * as vscgen from './vscode.gen'
 
 
@@ -78,14 +78,14 @@ export class Proc {
         }
     }
 
-    private onIncomingStderrOutput(data: any) {
-        const ln = data ? (data + '') : ''
-        this.stderrKept = this.hadOkJsonIncomingAtLeastOnce ? '' : (this.stderrKept + ln)
-        if (ln && ln.length) {
+    private onIncomingStderrOutput(incoming: any) {
+        const str = incoming ? (incoming + '') : ''
+        this.stderrKept = this.hadOkJsonIncomingAtLeastOnce ? '' : (this.stderrKept + str)
+        if (str && str.length) {
             if (this.stderrChan === undefined)
                 this.stderrChan = vsc.window.createOutputChannel(uxStr.appzPref + this.fullCmd)
             if (this.stderrChan)
-                this.stderrChan.append(ln)
+                this.stderrChan.append(str)
         }
     }
 
@@ -99,15 +99,12 @@ export class Proc {
 
     canceller(fnId: any): vsc.CancellationToken | undefined {
         if (fnId && (typeof fnId === 'string') && fnId.length) {
-            const canceller = this.cancellers[fnId]
-            if (canceller) {
-                canceller.num++
-                return canceller.token
-            } else {
-                const me = new Canceller()
-                this.cancellers[fnId] = me
-                return me.token
-            }
+            let it = this.cancellers[fnId]
+            if (it)
+                it.num++
+            else
+                this.cancellers[fnId] = (it = new Canceller())
+            return it.token
         }
         return undefined
     }
@@ -118,7 +115,7 @@ export class Proc {
                 if (this.stderrChan && !cfgAutoCloseStderrOutputsOnProgExit())
                     this.stderrChan.show(true)
                 else if (!this.hadOkJsonIncomingAtLeastOnce)
-                    vsc.window.showErrorMessage(this.stderrKept ? this.stderrKept : (uxStr.exitCodeNonZero.replace('_', code.toString()) + this.fullCmd))
+                    vsc.window.showWarningMessage(this.stderrKept ? this.stderrKept : (uxStr.exitCodeNonZero.replace('_', code.toString()) + this.fullCmd))
             this.dispose()
         }
     }
@@ -151,9 +148,9 @@ export class Proc {
     private ditchCancellers(fnIds: string[]) {
         if (fnIds && fnIds.length)
             for (const fnid of fnIds) {
-                const canceller = this.cancellers[fnid]
-                if (canceller && 0 === (canceller.num = Math.max(0, canceller.num - 1))) {
-                    canceller.dispose()
+                const it = this.cancellers[fnid]
+                if (it && 0 === (it.num = Math.max(0, it.num - 1))) {
+                    it.dispose()
                     delete this.cancellers[fnid]
                 }
             }
@@ -186,16 +183,12 @@ export class Proc {
                     else
                         promise.then(
                             ret => {
+                                this.ditchCancellers(cancelFnIds)
                                 if (!this.proc)
-                                    vsc.window.showInformationMessage(uxStr.tooLate, this.fullCmd).then(_ => {
-                                        if (_ && _.length && _ === this.fullCmd)
-                                            proc(this.fullCmd)
-                                    })
-                                else {
-                                    this.ditchCancellers(cancelFnIds)
-                                    if (sendret = msg.cbId ? true : false)
-                                        this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } })
-                                }
+                                    vsc.window.showInformationMessage(uxStr.tooLate, this.fullCmd)
+                                        .then(ensureProc, onPromiseRejectedNoOp)
+                                else if (sendret = msg.cbId ? true : false)
+                                    this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } })
                             },
                             rej => {
                                 this.ditchCancellers(cancelFnIds)
@@ -221,7 +214,7 @@ export class Proc {
                 }
 
             } else
-                vsc.window.showErrorMessage(ln)
+                vsc.window.showWarningMessage(ln)
         }
     }
 
@@ -255,7 +248,9 @@ export function disposeAll() {
         procs[_].dispose()
 }
 
-export function proc(fullCmd: string) {
+export function ensureProc(fullCmd: string) {
+    if (!(fullCmd && fullCmd.length))
+        return
     let me = procs[fullCmd]
     if (!me) {
         const [cmd, args] = cmdAndArgs(fullCmd)
@@ -272,7 +267,7 @@ export function proc(fullCmd: string) {
                 try { p.removeAllListeners().kill() } catch (_) { }
 
         if (!me)
-            vsc.window.showErrorMessage(uxStr.badProcCmd + fullCmd)
+            vsc.window.showInformationMessage(uxStr.badProcCmd + fullCmd)
         else
             procs[fullCmd] = me
     }

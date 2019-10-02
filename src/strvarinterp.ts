@@ -28,10 +28,10 @@ export function Interpolate(str: string, extras: { [_: string]: (_: string) => s
         return Promise.resolve(str)
 
     const fromProm = (_: Thenable<any>) => _.then(
-        (ret: any) =>
+        ret =>
             (ret === undefined) ? Promise.reject() : Interpolate(str.slice(0, idx1) + ret + str.slice(idx2 + 1), extras),
-        (err: any) =>
-            Promise.reject(err)
+        rej =>
+            Promise.reject(rej)
     )
     const expr = str.slice(idx1 + 2, idx2)
     let newval = ""

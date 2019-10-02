@@ -6,7 +6,7 @@ const strvar = require("./strvarinterp");
 const uxStrAppzPref = "[Appz] ";
 exports.uxStr = {
     appzPref: uxStrAppzPref,
-    tooLate: uxStrAppzPref + "Too late, program already ended: ",
+    tooLate: uxStrAppzPref + "Too late for that, program already ended. To launch it again: ",
     badProcCmd: uxStrAppzPref + "Couldn't run this exact command, any typos? ─── ",
     menuPrefRun: "RUN: ",
     menuPrefKill: "KILL: ",
@@ -50,11 +50,11 @@ function onCmdMain() {
                         if (fullcmd && fullcmd.length) {
                             if (alreadyrunning = ppio.procs[fullcmd])
                                 alreadyrunning.dispose();
-                            ppio.proc(fullcmd);
+                            ppio.ensureProc(fullcmd);
                         }
-                    }, _failed => { });
+                    }, onPromiseRejectedNoOp);
             }
-        });
+        }, onPromiseRejectedNoOp);
 }
 function getDurStr(fullCmd) {
     const proc = ppio.procs[fullCmd];
@@ -65,3 +65,5 @@ function getDurStr(fullCmd) {
         durstr = durstr.slice(0, durstr.indexOf('.')).slice(1 + durstr.indexOf('T'));
     return durstr;
 }
+function onPromiseRejectedNoOp(_failed) { }
+exports.onPromiseRejectedNoOp = onPromiseRejectedNoOp;

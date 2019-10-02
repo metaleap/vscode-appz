@@ -25,7 +25,7 @@ function Interpolate(str, extras = undefined, pickSplitSep = undefined) {
     const idx2 = str.indexOf('}', idx1);
     if (idx2 < 0)
         return Promise.resolve(str);
-    const fromProm = (_) => _.then((ret) => (ret === undefined) ? Promise.reject() : Interpolate(str.slice(0, idx1) + ret + str.slice(idx2 + 1), extras), (err) => Promise.reject(err));
+    const fromProm = (_) => _.then(ret => (ret === undefined) ? Promise.reject() : Interpolate(str.slice(0, idx1) + ret + str.slice(idx2 + 1), extras), rej => Promise.reject(rej));
     const expr = str.slice(idx1 + 2, idx2);
     let newval = "";
     if (expr.startsWith("env:"))

@@ -62,14 +62,14 @@ class Proc {
             this.proc = null;
         }
     }
-    onIncomingStderrOutput(data) {
-        const ln = data ? (data + '') : '';
-        this.stderrKept = this.hadOkJsonIncomingAtLeastOnce ? '' : (this.stderrKept + ln);
-        if (ln && ln.length) {
+    onIncomingStderrOutput(incoming) {
+        const str = incoming ? (incoming + '') : '';
+        this.stderrKept = this.hadOkJsonIncomingAtLeastOnce ? '' : (this.stderrKept + str);
+        if (str && str.length) {
             if (this.stderrChan === undefined)
                 this.stderrChan = vsc.window.createOutputChannel(appz_1.uxStr.appzPref + this.fullCmd);
             if (this.stderrChan)
-                this.stderrChan.append(ln);
+                this.stderrChan.append(str);
         }
     }
     callBack(fnId, ...args) {
@@ -81,16 +81,12 @@ class Proc {
     }
     canceller(fnId) {
         if (fnId && (typeof fnId === 'string') && fnId.length) {
-            const canceller = this.cancellers[fnId];
-            if (canceller) {
-                canceller.num++;
-                return canceller.token;
-            }
-            else {
-                const me = new Canceller();
-                this.cancellers[fnId] = me;
-                return me.token;
-            }
+            let it = this.cancellers[fnId];
+            if (it)
+                it.num++;
+            else
+                this.cancellers[fnId] = (it = new Canceller());
+            return it.token;
         }
         return undefined;
     }
@@ -100,7 +96,7 @@ class Proc {
                 if (this.stderrChan && !cfgAutoCloseStderrOutputsOnProgExit())
                     this.stderrChan.show(true);
                 else if (!this.hadOkJsonIncomingAtLeastOnce)
-                    vsc.window.showErrorMessage(this.stderrKept ? this.stderrKept : (appz_1.uxStr.exitCodeNonZero.replace('_', code.toString()) + this.fullCmd));
+                    vsc.window.showWarningMessage(this.stderrKept ? this.stderrKept : (appz_1.uxStr.exitCodeNonZero.replace('_', code.toString()) + this.fullCmd));
             this.dispose();
         };
     }
@@ -130,9 +126,9 @@ class Proc {
     ditchCancellers(fnIds) {
         if (fnIds && fnIds.length)
             for (const fnid of fnIds) {
-                const canceller = this.cancellers[fnid];
-                if (canceller && 0 === (canceller.num = Math.max(0, canceller.num - 1))) {
-                    canceller.dispose();
+                const it = this.cancellers[fnid];
+                if (it && 0 === (it.num = Math.max(0, it.num - 1))) {
+                    it.dispose();
                     delete this.cancellers[fnid];
                 }
             }
@@ -163,16 +159,12 @@ class Proc {
                         this.ditchCancellers(cancelFnIds);
                     else
                         promise.then(ret => {
+                            this.ditchCancellers(cancelFnIds);
                             if (!this.proc)
-                                vsc.window.showInformationMessage(appz_1.uxStr.tooLate, this.fullCmd).then(_ => {
-                                    if (_ && _.length && _ === this.fullCmd)
-                                        proc(this.fullCmd);
-                                });
-                            else {
-                                this.ditchCancellers(cancelFnIds);
-                                if (sendret = msg.cbId ? true : false)
-                                    this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } });
-                            }
+                                vsc.window.showInformationMessage(appz_1.uxStr.tooLate, this.fullCmd)
+                                    .then(ensureProc, appz_1.onPromiseRejectedNoOp);
+                            else if (sendret = msg.cbId ? true : false)
+                                this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } });
                         }, rej => {
                             this.ditchCancellers(cancelFnIds);
                             onfail(rej);
@@ -200,7 +192,7 @@ class Proc {
                 }
             }
             else
-                vsc.window.showErrorMessage(ln);
+                vsc.window.showWarningMessage(ln);
         };
     }
     send(msgOut) {
@@ -232,7 +224,9 @@ function disposeAll() {
         exports.procs[_].dispose();
 }
 exports.disposeAll = disposeAll;
-function proc(fullCmd) {
+function ensureProc(fullCmd) {
+    if (!(fullCmd && fullCmd.length))
+        return;
     let me = exports.procs[fullCmd];
     if (!me) {
         const [cmd, args] = cmdAndArgs(fullCmd);
@@ -252,12 +246,12 @@ function proc(fullCmd) {
                 }
                 catch (_) { }
         if (!me)
-            vsc.window.showErrorMessage(appz_1.uxStr.badProcCmd + fullCmd);
+            vsc.window.showInformationMessage(appz_1.uxStr.badProcCmd + fullCmd);
         else
             exports.procs[fullCmd] = me;
     }
 }
-exports.proc = proc;
+exports.ensureProc = ensureProc;
 function cmdAndArgs(fullCmd) {
     let cmd = (fullCmd + '').trim(), args = [];
     const idx = cmd.indexOf(' ');

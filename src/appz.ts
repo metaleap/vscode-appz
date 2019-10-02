@@ -9,7 +9,7 @@ export let vscCtx: vsc.ExtensionContext
 const uxStrAppzPref = "[Appz] "
 export let uxStr = {
 	appzPref: uxStrAppzPref,
-	tooLate: uxStrAppzPref + "Too late, program already ended: ",
+	tooLate: uxStrAppzPref + "Too late for that, program already ended. To launch it again: ",
 	badProcCmd: uxStrAppzPref + "Couldn't run this exact command, any typos? ─── ",
 	menuPrefRun: "RUN: ",
 	menuPrefKill: "KILL: ",
@@ -59,18 +59,15 @@ function onCmdMain() {
 				if (alreadyrunning)
 					alreadyrunning.dispose()
 				else
-					strvar.Interpolate(_.fullCmd, extDirPathStrVarProvider).then(
-						fullcmd => {
-							if (fullcmd && fullcmd.length) {
-								if (alreadyrunning = ppio.procs[fullcmd])
-									alreadyrunning.dispose()
-								ppio.proc(fullcmd)
-							}
-						},
-						_failed => { /* ignore, but keep handler to prevent warn-logs */ }
-					)
+					strvar.Interpolate(_.fullCmd, extDirPathStrVarProvider).then(fullcmd => {
+						if (fullcmd && fullcmd.length) {
+							if (alreadyrunning = ppio.procs[fullcmd])
+								alreadyrunning.dispose()
+							ppio.ensureProc(fullcmd)
+						}
+					}, onPromiseRejectedNoOp)
 			}
-		})
+		}, onPromiseRejectedNoOp)
 }
 
 function getDurStr(fullCmd: string): string {
@@ -82,3 +79,5 @@ function getDurStr(fullCmd: string): string {
 		durstr = durstr.slice(0, durstr.indexOf('.')).slice(1 + durstr.indexOf('T'))
 	return durstr
 }
+
+export function onPromiseRejectedNoOp(_failed: any) { }
