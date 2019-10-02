@@ -75,6 +75,9 @@ export class Proc {
             try { this.proc.kill() } catch (_) { }
 
             this.proc = null
+            for (const _ in this.callBacks)
+                this.callBacks[_].reject()
+            this.callBacks = {}
         }
     }
 
@@ -90,11 +93,14 @@ export class Proc {
     }
 
     callBack<T>(fnId: string, ...args: any[]): Thenable<T> {
-        const prom = new Promise<T>((resolve, reject) => {
-            this.callBacks[fnId] = { resolve: resolve, reject: reject }
+        return (!this.proc) ? Promise.reject() : new Promise<T>((resolve, reject) => {
+            if (!this.proc)
+                reject()
+            else {
+                this.callBacks[fnId] = { resolve: resolve, reject: reject ? reject : onPromiseRejectedNoOp }
+                this.send({ cbId: fnId, data: { "": args } })
+            }
         })
-        this.send({ cbId: fnId, data: { "": args } })
-        return prom
     }
 
     canceller(fnId: any): vsc.CancellationToken | undefined {
@@ -172,7 +178,7 @@ export class Proc {
                 const onfail = (err: any) => {
                     if (err)
                         vsc.window.showErrorMessage(err)
-                    if (msg && msg.cbId && !sendret)
+                    if (this.proc && msg && msg.cbId && !sendret)
                         this.send({ cbId: msg.cbId, data: { nay: ensureWillShowUpInJson(err) } })
                 }
 
@@ -223,20 +229,21 @@ export class Proc {
             if (err && this.proc)
                 vsc.window.showErrorMessage(err + '')
         }
-        try {
-            const jsonmsgout = JSON.stringify(msgOut) + '\n'
-            if (dbgLogJsonMsgs)
-                console.log("OUT:\n" + jsonmsgout)
+        if (this.proc)
+            try {
+                const jsonmsgout = JSON.stringify(msgOut) + '\n'
+                if (dbgLogJsonMsgs)
+                    console.log("OUT:\n" + jsonmsgout)
 
-            if (this.stdinBufsUntilPipeDrained !== null)
-                this.stdinBufsUntilPipeDrained.push(jsonmsgout)
-            else if (this.proc && !this.proc.stdin.write(jsonmsgout, onmaybefailed)) {
-                this.stdinBufsUntilPipeDrained = []
-                this.proc.stdin.once('drain', this.onProcPipeDrain(onmaybefailed))
+                if (this.stdinBufsUntilPipeDrained !== null)
+                    this.stdinBufsUntilPipeDrained.push(jsonmsgout)
+                else if (this.proc && !this.proc.stdin.write(jsonmsgout, onmaybefailed)) {
+                    this.stdinBufsUntilPipeDrained = []
+                    this.proc.stdin.once('drain', this.onProcPipeDrain(onmaybefailed))
+                }
+            } catch (e) {
+                onmaybefailed(e)
             }
-        } catch (e) {
-            onmaybefailed(e)
-        }
     }
 }
 
