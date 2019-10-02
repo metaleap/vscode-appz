@@ -36,13 +36,12 @@
 						"type": "array",
 						"default": [
 							"go run \"${appz}/demos/go-vsc-appz-demo\" \"${Enter name}\" \"${Pick greeting:|Hello|Hiya|Hola|}\"",
-							"dotnet run --project \"${appz}/demos/cs-vsc-appz-demo\" -- \"${Enter name} \" \"${Pick greeting:|Hola|Hiya|Hello|}\"",
-							"sh -y"
+							"dotnet run --project \"${appz}/demos/cs-vsc-appz-demo\" -- \"${Enter name} \" \"${Pick greeting:|Hola|Hiya|Hello|}\""
 						]
 					},
 					"appz.autoCloseStderrOutputsOnProgExit": {
 						"type": "boolean",
-						"description": "Appz that print to their stderr auto-open an Output panel that will auto-close when they exit (if ticked) or remain (if unticked).",
+						"description": "Appz that print to their stderr auto-open an Output panel that will either auto-close (if ticked) when they end, or remain (if unticked).",
 						"default": true
 					}
 				}

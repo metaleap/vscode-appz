@@ -6,16 +6,19 @@ import * as strvar from './strvarinterp'
 
 
 export let vscCtx: vsc.ExtensionContext
+const uxStrAppzPref = "[Appz] "
 export let uxStr = {
-	tooLate: "[Appz] Too late, program already ended: ",
-	badProcCmd: "[Appz] Couldn't run this exact command, any typos? ─── ",
+	appzPref: uxStrAppzPref,
+	tooLate: uxStrAppzPref + "Too late, program already ended: ",
+	badProcCmd: uxStrAppzPref + "Couldn't run this exact command, any typos? ─── ",
 	menuPrefRun: "RUN: ",
 	menuPrefKill: "KILL: ",
 	menuDescRunningYes: "Already running. Will kill and re-start.",
 	menuDescRunningNo: "Not currently running (at least not with those exact args).",
 	menuDescStartedAgo: "Started _ ago.",
 	menuDescStartedAgo_: "well over a day",
-	menuMsgNoAppz: "[Appz] Your current `settings.json` has no `appz.allProgs` array or it's empty.",
+	menuMsgNoAppz: uxStrAppzPref + "Your current `settings.json` has no `appz.allProgs` array or it's empty.",
+	exitCodeNonZero: uxStrAppzPref + "Exited with code _: ",
 }
 
 let extDirPathStrVarProvider: { [_: string]: ((_: string) => string) } = {

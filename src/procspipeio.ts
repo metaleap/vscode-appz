@@ -22,8 +22,10 @@ export class Proc {
     fullCmd: string
     proc: node_proc.ChildProcess
     startTime: number
+    hadOkJsonIncomingAtLeastOnce: boolean
     stdoutPipe: node_pipeio.ReadLine
     stderrChan: vsc.OutputChannel = undefined
+    stderrKept: string = ''
     stdinBufsUntilPipeDrained: string[] = null
     cancellers: { [_: string]: vsc.CancellationTokenSource } = {}
     callBacks: { [_: string]: { resolve: ((_: any) => void), reject: ((_?: any) => void) } } = {}
@@ -33,7 +35,7 @@ export class Proc {
 
         this.stdoutPipe.on('line', this.onRecv())
         if (this.proc.stderr)
-            this.proc.stderr.on('data', data => this.log(data))
+            this.proc.stderr.on('data', data => this.onIncomingStderrOutput(data))
         this.proc.on('error', this.onProcErr())
         const ongone = this.onProcEnd()
         this.proc.on('disconnect', ongone)
@@ -71,11 +73,15 @@ export class Proc {
         }
     }
 
-    private log(ln: any) {
-        if (this.stderrChan === undefined)
-            this.stderrChan = vsc.window.createOutputChannel("Appz: " + this.fullCmd)
-        if (this.stderrChan)
-            this.stderrChan.appendLine(ln)
+    private onIncomingStderrOutput(data: any) {
+        const ln = data ? (data + '') : ''
+        this.stderrKept = this.hadOkJsonIncomingAtLeastOnce ? '' : (this.stderrKept + ln)
+        if (ln && ln.length) {
+            if (this.stderrChan === undefined)
+                this.stderrChan = vsc.window.createOutputChannel(uxStr.appzPref + this.fullCmd)
+            if (this.stderrChan)
+                this.stderrChan.append(ln)
+        }
     }
 
     callBack<T>(fnId: string, ...args: any[]): Thenable<T> {
@@ -97,15 +103,19 @@ export class Proc {
 
     private onProcEnd() {
         return (code: number, _sig: string) => {
-            if (code && this.stderrChan)
-                this.stderrChan.show(true)
+            if (code)
+                if (this.stderrChan && !cfgAutoCloseStderrOutputsOnProgExit())
+                    this.stderrChan.show(true)
+                else if (!this.hadOkJsonIncomingAtLeastOnce)
+                    vsc.window.showErrorMessage(this.stderrKept ? this.stderrKept : (uxStr.exitCodeNonZero.replace('_', code.toString()) + this.fullCmd))
             this.dispose()
         }
     }
 
     private onProcErr() {
         return (err: Error) => {
-            console.log(err)
+            if (err)
+                vsc.window.showErrorMessage(err.name + ": " + err.message)
             this.dispose()
         }
     }
@@ -148,6 +158,7 @@ export class Proc {
                 vsc.window.showWarningMessage(ln)
 
             else if (msg.qName) { // API request
+                this.hadOkJsonIncomingAtLeastOnce = true
                 let sendret = false
                 const onfail = (err: any) => {
                     if (err)
@@ -182,6 +193,7 @@ export class Proc {
                 } catch (err) { onfail(err) }
 
             } else if (msg.cbId) { // response to an earlier remote-func-call of ours, or cancellation
+                this.hadOkJsonIncomingAtLeastOnce = true
                 if (msg.data) {
                     const [prom, yay, nay] = [this.callBacks[msg.cbId], msg.data['yay'] as any, msg.data['nay']]
                     delete this.callBacks[msg.cbId]
@@ -286,7 +298,7 @@ function cmdAndArgs(fullCmd: string): [string, string[]] {
 }
 
 function cfgAutoCloseStderrOutputsOnProgExit() {
-    return false // vsc.workspace.getConfiguration("appz").get<boolean>("autoCloseStderrOutputsOnProgExit", true)
+    return vsc.workspace.getConfiguration("appz").get<boolean>("autoCloseStderrOutputsOnProgExit", true)
 }
 
 function ensureWillShowUpInJson(_: any) {

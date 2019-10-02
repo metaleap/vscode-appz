@@ -10,13 +10,14 @@ exports.procs = {};
 class Proc {
     constructor(fullCmd, proc, stdoutPipe) {
         this.stderrChan = undefined;
+        this.stderrKept = '';
         this.stdinBufsUntilPipeDrained = null;
         this.cancellers = {};
         this.callBacks = {};
         [this.startTime, this.fullCmd, this.proc, this.stdoutPipe] = [Date.now(), fullCmd, proc, stdoutPipe];
         this.stdoutPipe.on('line', this.onRecv());
         if (this.proc.stderr)
-            this.proc.stderr.on('data', data => this.log(data));
+            this.proc.stderr.on('data', data => this.onIncomingStderrOutput(data));
         this.proc.on('error', this.onProcErr());
         const ongone = this.onProcEnd();
         this.proc.on('disconnect', ongone);
@@ -58,11 +59,15 @@ class Proc {
             this.proc = null;
         }
     }
-    log(ln) {
-        if (this.stderrChan === undefined)
-            this.stderrChan = vsc.window.createOutputChannel("Appz: " + this.fullCmd);
-        if (this.stderrChan)
-            this.stderrChan.appendLine(ln);
+    onIncomingStderrOutput(data) {
+        const ln = data ? (data + '') : '';
+        this.stderrKept = this.hadOkJsonIncomingAtLeastOnce ? '' : (this.stderrKept + ln);
+        if (ln && ln.length) {
+            if (this.stderrChan === undefined)
+                this.stderrChan = vsc.window.createOutputChannel(appz_1.uxStr.appzPref + this.fullCmd);
+            if (this.stderrChan)
+                this.stderrChan.append(ln);
+        }
     }
     callBack(fnId, ...args) {
         const prom = new Promise((resolve, reject) => {
@@ -81,14 +86,18 @@ class Proc {
     }
     onProcEnd() {
         return (code, _sig) => {
-            if (code && this.stderrChan)
-                this.stderrChan.show(true);
+            if (code)
+                if (this.stderrChan && !cfgAutoCloseStderrOutputsOnProgExit())
+                    this.stderrChan.show(true);
+                else if (!this.hadOkJsonIncomingAtLeastOnce)
+                    vsc.window.showErrorMessage(this.stderrKept ? this.stderrKept : (appz_1.uxStr.exitCodeNonZero.replace('_', code.toString()) + this.fullCmd));
             this.dispose();
         };
     }
     onProcErr() {
         return (err) => {
-            console.log(err);
+            if (err)
+                vsc.window.showErrorMessage(err.name + ": " + err.message);
             this.dispose();
         };
     }
@@ -129,6 +138,7 @@ class Proc {
             if (!msg)
                 vsc.window.showWarningMessage(ln);
             else if (msg.qName) {
+                this.hadOkJsonIncomingAtLeastOnce = true;
                 let sendret = false;
                 const onfail = (err) => {
                     if (err)
@@ -162,6 +172,7 @@ class Proc {
                 }
             }
             else if (msg.cbId) {
+                this.hadOkJsonIncomingAtLeastOnce = true;
                 if (msg.data) {
                     const [prom, yay, nay] = [this.callBacks[msg.cbId], msg.data['yay'], msg.data['nay']];
                     delete this.callBacks[msg.cbId];
@@ -268,7 +279,7 @@ function cmdAndArgs(fullCmd) {
     return [cmd, args];
 }
 function cfgAutoCloseStderrOutputsOnProgExit() {
-    return false;
+    return vsc.workspace.getConfiguration("appz").get("autoCloseStderrOutputsOnProgExit", true);
 }
 function ensureWillShowUpInJson(_) {
     return (_ === undefined) ? null : _;
