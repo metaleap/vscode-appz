@@ -340,7 +340,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="options">Options that control the dialog.</param>
 		/// <param name="andThen">A promise that resolves to the selected resource or `undefined`.</param>
-		void ShowSaveDialog(SaveDialogOptions options = default, Action<Uri> andThen = default);
+		void ShowSaveDialog(SaveDialogOptions options = default, Action<string> andThen = default);
 
 		/// <summary>
 		/// Shows a file open dialog to the user which allows to select a file
@@ -352,7 +352,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="options">Options that control the dialog.</param>
 		/// <param name="andThen">A promise that resolves to the selected resources or `undefined`.</param>
-		void ShowOpenDialog(OpenDialogOptions options = default, Action<Uri[]> andThen = default);
+		void ShowOpenDialog(OpenDialogOptions options = default, Action<string[]> andThen = default);
 	}
 
 	/// <summary>Options to configure the behavior of the message.</summary>
@@ -502,10 +502,6 @@ namespace VscAppz {
 
 	/// <summary>Options to configure the behaviour of a file save dialog.</summary>
 	public partial class SaveDialogOptions {
-		/// <summary>The resource the dialog shows when opened.</summary>
-		[JsonProperty("defaultUri")]
-		public Uri DefaultUri;
-
 		/// <summary>A human-readable string for the save button.</summary>
 		[JsonProperty("saveLabel")]
 		public string SaveLabel;
@@ -533,10 +529,6 @@ namespace VscAppz {
 	/// and the editor then silently adjusts the options to select files.
 	/// </summary>
 	public partial class OpenDialogOptions {
-		/// <summary>The resource the dialog shows when opened.</summary>
-		[JsonProperty("defaultUri")]
-		public Uri DefaultUri;
-
 		/// <summary>A human-readable string for the open button.</summary>
 		[JsonProperty("openLabel")]
 		public string OpenLabel;
@@ -1352,7 +1344,7 @@ namespace VscAppz {
 			this.send(msg, on);
 		}
 
-		void IWindow.ShowSaveDialog(SaveDialogOptions options, Action<Uri> andThen) {
+		void IWindow.ShowSaveDialog(SaveDialogOptions options, Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showSaveDialog";
@@ -1362,13 +1354,14 @@ namespace VscAppz {
 			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
-					Uri result = default;
+					string result = default;
 					if ((null != payload)) {
-						result = new Uri();
-						ok = result.populateFrom(payload);
+						string _result_ = default;
+						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
 						if ((!ok)) {
 							return false;
 						}
+						result = _result_;
 					}
 					andThen(result);
 					return true;
@@ -1377,7 +1370,7 @@ namespace VscAppz {
 			this.send(msg, on);
 		}
 
-		void IWindow.ShowOpenDialog(OpenDialogOptions options, Action<Uri[]> andThen) {
+		void IWindow.ShowOpenDialog(OpenDialogOptions options, Action<string[]> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showOpenDialog";
@@ -1387,20 +1380,19 @@ namespace VscAppz {
 			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
-					Uri[] result = default;
+					string[] result = default;
 					if ((null != payload)) {
 						any[] __coll__result = default;
 						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
 						if ((!ok)) {
 							return false;
 						}
-						result = new Uri[__coll__result.Length];
+						result = new string[__coll__result.Length];
 						int __idx__result = default;
 						__idx__result = 0;
 						foreach (var __item__result in __coll__result) {
-							Uri __val__result = default;
-							__val__result = new Uri();
-							ok = __val__result.populateFrom(__item__result);
+							string __val__result = default;
+							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
 							if ((!ok)) {
 								return false;
 							}

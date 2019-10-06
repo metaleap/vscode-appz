@@ -49,14 +49,6 @@ namespace VscAppz {
             Exception err() => new JsonException(origJsonSrcForErr);
         }
 
-        internal class uri : JsonConverter{
-            public override bool CanConvert(Type objectType) => true;
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)=>
-                throw new NotImplementedException();
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) =>
-                writer.WriteValue(((Uri)value).uri);
-        }
-
         internal class valueTuples : JsonConverter
         {
             public override bool CanRead { get => false;}

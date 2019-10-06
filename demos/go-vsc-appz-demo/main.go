@@ -101,6 +101,7 @@ func demoMenuAll() {
 		"Demo Pick Input",
 		"Demo Text Input",
 		"Demo File-Save Dialog",
+		"Demo File-Open Dialog",
 	}
 	win.ShowQuickPick2(menu, &QuickPickOptions{CanPickMany: false, IgnoreFocusOut: true}, nil,
 		func(menuitem *string) {
@@ -112,6 +113,8 @@ func demoMenuAll() {
 					demoInputText()
 				case menu[2]:
 					demoDialogFileSave()
+				case menu[3]:
+					demoDialogFileOpen()
 				}
 			}
 		},
@@ -123,12 +126,27 @@ func demoDialogFileSave() {
 		SaveLabel: "Note: won't write for real.", Filters: map[string][]string{
 			"All": {"*"}, "Dummy Filter": {"demo", "dummy"},
 		},
-	}, func(filepath *Uri) {
+	}, func(filepath *string) {
 		statusNoticeQuit()
 		if filepath == nil {
 			win.ShowWarningMessage1("Cancelled file-save dialog, bye now!", nil, quit)
 		} else {
-			win.ShowInformationMessage1("File path: `"+filepath.String()+"`, bye now!", nil, quit)
+			win.ShowInformationMessage1("File path: `"+*filepath+"`, bye now!", nil, quit)
+		}
+	})
+}
+
+func demoDialogFileOpen() {
+	win.ShowOpenDialog(OpenDialogOptions{
+		CanSelectFiles: true, CanSelectFolders: false, CanSelectMany: true,
+		OpenLabel: "Note: won't actually read selected file(s)",
+		Filters:   map[string][]string{"All": {"*"}, "Dummy Filter": {"demo", "dummy"}},
+	}, func(filepaths []string) {
+		statusNoticeQuit()
+		if filepaths == nil {
+			win.ShowWarningMessage1("Cancelled file-save dialog, bye now!", nil, quit)
+		} else {
+			win.ShowInformationMessage1("Selected "+strconv.Itoa(len(filepaths))+" file path(s), bye now!", nil, quit)
 		}
 	})
 }

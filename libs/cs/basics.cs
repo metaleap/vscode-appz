@@ -161,13 +161,4 @@ namespace VscAppz {
             impl.send(new ipcMsg("Dispose", 1) { Data = { [""] = id } }, null);
     }
 
-    [JsonConverter(typeof(json.uri))]
-    public class Uri {
-        internal string uri;
-        internal Uri () {}
-        internal bool populateFrom(any payload) =>
-            (payload is string s) && !string.IsNullOrEmpty(uri = s);
-        public override string ToString() => uri;
-    }
-
 }

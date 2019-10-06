@@ -136,9 +136,6 @@ Options to configure the behavior of the message.
 
 ```go
 type OpenDialogOptions struct {
-	// The resource the dialog shows when opened.
-	DefaultUri Uri `json:"defaultUri,omitempty"`
-
 	// A human-readable string for the open button.
 	OpenLabel string `json:"openLabel,omitempty"`
 
@@ -227,9 +224,6 @@ Options to configure the behavior of the quick pick UI.
 
 ```go
 type SaveDialogOptions struct {
-	// The resource the dialog shows when opened.
-	DefaultUri Uri `json:"defaultUri,omitempty"`
-
 	// A human-readable string for the save button.
 	SaveLabel string `json:"saveLabel,omitempty"`
 
@@ -246,19 +240,6 @@ type SaveDialogOptions struct {
 ```
 
 Options to configure the behaviour of a file save dialog.
-
-#### type Uri
-
-```go
-type Uri string
-```
-
-
-#### func (*Uri) String
-
-```go
-func (me *Uri) String() string
-```
 
 #### type Vscode
 
@@ -495,7 +476,7 @@ type Window interface {
 	// `options` ── Options that control the dialog.
 	//
 	// `andThen` ── A promise that resolves to the selected resource or `undefined`.
-	ShowSaveDialog(options SaveDialogOptions, andThen func(*Uri))
+	ShowSaveDialog(options SaveDialogOptions, andThen func(*string))
 
 	// Shows a file open dialog to the user which allows to select a file
 	// for opening-purposes.
@@ -503,7 +484,7 @@ type Window interface {
 	// `options` ── Options that control the dialog.
 	//
 	// `andThen` ── A promise that resolves to the selected resources or `undefined`.
-	ShowOpenDialog(options OpenDialogOptions, andThen func([]Uri))
+	ShowOpenDialog(options OpenDialogOptions, andThen func([]string))
 }
 ```
 

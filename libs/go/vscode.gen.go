@@ -220,7 +220,7 @@ type Window interface {
 	// `options` ── Options that control the dialog.
 	// 
 	// `andThen` ── A promise that resolves to the selected resource or `undefined`.
-	ShowSaveDialog(options SaveDialogOptions, andThen func(*Uri)) 
+	ShowSaveDialog(options SaveDialogOptions, andThen func(*string)) 
 
 	// Shows a file open dialog to the user which allows to select a file
 	// for opening-purposes.
@@ -228,7 +228,7 @@ type Window interface {
 	// `options` ── Options that control the dialog.
 	// 
 	// `andThen` ── A promise that resolves to the selected resources or `undefined`.
-	ShowOpenDialog(options OpenDialogOptions, andThen func([]Uri)) 
+	ShowOpenDialog(options OpenDialogOptions, andThen func([]string)) 
 }
 
 // Options to configure the behavior of the message.
@@ -343,9 +343,6 @@ type QuickPickItem struct {
 
 // Options to configure the behaviour of a file save dialog.
 type SaveDialogOptions struct {
-	// The resource the dialog shows when opened.
-	DefaultUri Uri `json:"defaultUri,omitempty"`
-
 	// A human-readable string for the save button.
 	SaveLabel string `json:"saveLabel,omitempty"`
 
@@ -367,9 +364,6 @@ type SaveDialogOptions struct {
 // * Note 2: Explicitly setting `canSelectFiles` and `canSelectFolders` to `false` is futile
 // and the editor then silently adjusts the options to select files.
 type OpenDialogOptions struct {
-	// The resource the dialog shows when opened.
-	DefaultUri Uri `json:"defaultUri,omitempty"`
-
 	// A human-readable string for the open button.
 	OpenLabel string `json:"openLabel,omitempty"`
 
@@ -1221,7 +1215,7 @@ func (me *impl) SetStatusBarMessage2(text string, andThen func(*Disposable)) {
 	me.send(msg, on)
 }
 
-func (me *impl) ShowSaveDialog(options SaveDialogOptions, andThen func(*Uri)) {
+func (me *impl) ShowSaveDialog(options SaveDialogOptions, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showSaveDialog"
@@ -1231,13 +1225,14 @@ func (me *impl) ShowSaveDialog(options SaveDialogOptions, andThen func(*Uri)) {
 	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
-			var result *Uri
+			var result *string
 			if (nil != payload) {
-				result = new(Uri)
-				ok = result.populateFrom(payload)
+				var _result_ string
+				_result_, ok = payload.(string)
 				if (!ok) {
 					return false
 				}
+				result = (&_result_)
 			}
 			andThen(result)
 			return true
@@ -1246,7 +1241,7 @@ func (me *impl) ShowSaveDialog(options SaveDialogOptions, andThen func(*Uri)) {
 	me.send(msg, on)
 }
 
-func (me *impl) ShowOpenDialog(options OpenDialogOptions, andThen func([]Uri)) {
+func (me *impl) ShowOpenDialog(options OpenDialogOptions, andThen func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showOpenDialog"
@@ -1256,20 +1251,19 @@ func (me *impl) ShowOpenDialog(options OpenDialogOptions, andThen func([]Uri)) {
 	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
-			var result []Uri
+			var result []string
 			if (nil != payload) {
 				var __coll__result []any
 				__coll__result, ok = payload.([]any)
 				if (!ok) {
 					return false
 				}
-				result = make([]Uri, len(__coll__result))
+				result = make([]string, len(__coll__result))
 				var __idx__result int
 				__idx__result = 0
 				for _, __item__result := range __coll__result {
-					var __val__result Uri
-					__val__result = */*sorryButSuchIsCodeGenSometimes...*/new(Uri)
-					ok = __val__result.populateFrom(__item__result)
+					var __val__result string
+					__val__result, ok = __item__result.(string)
 					if (!ok) {
 						return false
 					}

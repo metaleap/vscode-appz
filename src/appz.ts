@@ -51,6 +51,7 @@ function onCmdMain() {
 			fullCmd: _, label: uxStr.menuPrefEnd + _,
 			detail: uxStr.menuDescStartedAgo.replace('_', getDurStr(_))
 		})
+
 	if (!items.length)
 		vsc.window.showInformationMessage(uxStr.menuMsgNoAppz)
 	else

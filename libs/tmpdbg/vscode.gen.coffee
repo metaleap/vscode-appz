@@ -396,7 +396,7 @@ Window: interface
     # A promise that resolves to the selected resource or `undefined`.
     ShowSaveDialog: void
         options: SaveDialogOptions
-        andThen: ?(?Uri->void)
+        andThen: ?(?string->void)
 
     # showOpenDialog:
     # Shows a file open dialog to the user which allows to select a file
@@ -409,7 +409,7 @@ Window: interface
     # A promise that resolves to the selected resources or `undefined`.
     ShowOpenDialog: void
         options: OpenDialogOptions
-        andThen: ?(?[Uri]->void)
+        andThen: ?(?[string]->void)
 
 
 
@@ -611,12 +611,6 @@ QuickPickItem: class
 # Options to configure the behaviour of a file save dialog.
 SaveDialogOptions: class
 
-    # defaultUri:
-    # The resource the dialog shows when opened.
-    #
-    # JSON FLAGS: {"Name":"defaultUri","Required":false,"Excluded":false}
-    DefaultUri: ?Uri
-
     # saveLabel:
     # A human-readable string for the save button.
     #
@@ -646,12 +640,6 @@ SaveDialogOptions: class
 # * Note 2: Explicitly setting `canSelectFiles` and `canSelectFolders` to `false` is futile
 # and the editor then silently adjusts the options to select files.
 OpenDialogOptions: class
-
-    # defaultUri:
-    # The resource the dialog shows when opened.
-    #
-    # JSON FLAGS: {"Name":"defaultUri","Required":false,"Excluded":false}
-    DefaultUri: ?Uri
 
     # openLabel:
     # A human-readable string for the open button.
@@ -1395,7 +1383,7 @@ Window·SetStatusBarMessage2: (text:string -> andThen:?(?Disposable->void) -> vo
 
 
 
-Window·ShowSaveDialog: (options:SaveDialogOptions -> andThen:?(?Uri->void) -> void)
+Window·ShowSaveDialog: (options:SaveDialogOptions -> andThen:?(?string->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showSaveDialog"
@@ -1405,12 +1393,13 @@ Window·ShowSaveDialog: (options:SaveDialogOptions -> andThen:?(?Uri->void) -> v
     if (=?andThen)
         on = (payload:any -> bool)
             var ok of bool
-            var result of ?Uri
+            var result of ?string
             if (=?payload)
-                result = ?Uri·new
-                ok = result.populateFrom(payload)
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
                 if (!ok)
                     return false
+                result = (&_result_)
             andThen(result)
             return true
         
@@ -1419,7 +1408,7 @@ Window·ShowSaveDialog: (options:SaveDialogOptions -> andThen:?(?Uri->void) -> v
 
 
 
-Window·ShowOpenDialog: (options:OpenDialogOptions -> andThen:?(?[Uri]->void) -> void)
+Window·ShowOpenDialog: (options:OpenDialogOptions -> andThen:?(?[string]->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showOpenDialog"
@@ -1429,19 +1418,18 @@ Window·ShowOpenDialog: (options:OpenDialogOptions -> andThen:?(?[Uri]->void) ->
     if (=?andThen)
         on = (payload:any -> bool)
             var ok of bool
-            var result of ?[Uri]
+            var result of ?[string]
             if (=?payload)
                 var __coll__result of [any]
                 [__coll__result,ok] = ((payload)·([any]))
                 if (!ok)
                     return false
-                result = [Uri]·new(__coll__result·len)
+                result = [string]·new(__coll__result·len)
                 var __idx__result of int
                 __idx__result = 0
                 for __item__result in __coll__result
-                    var __val__result of Uri
-                    __val__result = Uri·new
-                    ok = __val__result.populateFrom(__item__result)
+                    var __val__result of string
+                    [__val__result,ok] = ((__item__result)·(string))
                     if (!ok)
                         return false
                     result@__idx__result = __val__result

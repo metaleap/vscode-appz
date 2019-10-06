@@ -71,7 +71,7 @@ class Prep {
         this.structs.push({
             fromOrig: structJob,
             name: qname.slice(1).join('_'),
-            fields: structJob.decl.members.map(_ => {
+            fields: structJob.decl.members.filter(_ => _.name.getText() !== 'defaultUri').map(_ => {
                 let tspec = null;
                 switch (_.kind) {
                     case ts.SyntaxKind.PropertySignature:

@@ -289,7 +289,8 @@ export class Prog {
             try {
                 const jsonmsgout = JSON.stringify(msgOut, (_key, val) => {
                     const uri = val as vsc.Uri
-                    return (uri && (uri.fsPath || uri.path)) ? ((uri.fsPath && uri.fsPath.length) ? uri.fsPath : uri.path) : val
+                    return (!(uri && (uri.fsPath || uri.path))) ? val :
+                        (uri.fsPath && uri.fsPath.length) ? uri.fsPath : uri.path
                 }) + '\n'
                 if (dbgLogJsonMsgs)
                     console.log("\n<<<OUT<<\n" + jsonmsgout)

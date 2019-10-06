@@ -224,7 +224,7 @@ class Builder {
             else
                 return { From: tprom.map(_ => this.typeRef(_)), To: null };
         if (typeof it === 'string')
-            return { Name: it };
+            return (it === 'Uri') ? TypeRefPrim.String : { Name: it };
         throw JSON.stringify(it);
     }
     docs(docs, extraSummaryLines = undefined, isMethod = false, appendArgsAndRetsToSummaryToo = true, retNameFallback = "return", into = undefined) {

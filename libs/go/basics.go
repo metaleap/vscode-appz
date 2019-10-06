@@ -195,13 +195,3 @@ func (me *Disposable) populateFrom(payload any) bool {
 func (me Disposable) Dispose() {
 	me.impl.send(&ipcMsg{QName: "Dispose", Data: dict{"": me.id}}, nil)
 }
-
-type Uri string
-
-func (me *Uri) populateFrom(payload any) bool {
-	s, ok := payload.(string)
-	*me = Uri(s)
-	return ok
-}
-
-func (me *Uri) String() string { return string(*me) }
