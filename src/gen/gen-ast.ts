@@ -11,7 +11,7 @@ export interface Doc { ForParam: string, Lines: string[] }
 export interface TEnum extends WithDocs, WithName, WithFrom<gen.PrepEnum> { Enumerants: Enumerant[] }
 export interface TInterface extends WithDocs, WithName, WithFrom<gen.PrepInterface> { Methods: Method[] }
 export interface Enumerant extends WithDocs, WithName, WithFrom<gen.PrepEnumerant> { Value: number }
-export interface TStruct extends WithDocs, WithName, WithFrom<gen.PrepStruct> { Fields: Field[], Outgoing: boolean, Incoming: boolean, OutgoingTwin?: string }
+export interface TStruct extends WithDocs, WithName, WithFrom<gen.PrepStruct> { Fields: Field[], IsOutgoing: boolean, IsIncoming: boolean, OutgoingTwin?: string }
 export interface Method extends WithDocs, WithName, WithType, WithFrom<gen.PrepMethod> { Args: Arg[] }
 export interface Arg extends WithDocs, WithName, WithType, WithFrom<gen.PrepArg> { }
 export interface Field extends WithDocs, WithName, WithType, WithFrom<gen.PrepField> {
@@ -234,7 +234,7 @@ export class Builder {
             name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
-            Outgoing: false, Incoming: false, // will be set once all ifaces & structs are known
+            IsOutgoing: false, IsIncoming: false, // will be set once all ifaces & structs are known
             Fields: it.fields.map((_: gen.PrepField): Field => ({
                 fromPrep: _,
                 name: _.name,
@@ -1009,8 +1009,8 @@ export class Gen extends gen.Gen implements gen.IGen {
                     if (tnamed) {
                         const tstruct = this.allStructs[tnamed.Name]
                         if (tstruct) {
-                            if (forIncoming) tstruct.Incoming = true
-                            else tstruct.Outgoing = true
+                            if (forIncoming) tstruct.IsIncoming = true
+                            else tstruct.IsOutgoing = true
                             for (const fld of tstruct.Fields) {
                                 const tfun = this.typeFunc(fld.Type)
                                 traverse(fld.Type, tfun ? false : forIncoming)
@@ -1026,7 +1026,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         }
         for (const structname in this.allStructs) {
             const struct = this.allStructs[structname]
-            if (struct.Outgoing)
+            if (struct.IsOutgoing)
                 for (const fld of struct.Fields) {
                     this.typeRefTraverse(fld.Type, t => {
                         const tmay = this.typeMaybe(t)

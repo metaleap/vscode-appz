@@ -35,6 +35,7 @@ const genApiSurface: genApiMember = {
                 'setStatusBarMessage',
                 'showSaveDialog',
                 'showOpenDialog',
+                'showWorkspaceFolderPick',
             ],
         },
     ],

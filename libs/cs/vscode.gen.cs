@@ -353,6 +353,18 @@ namespace VscAppz {
 		/// <param name="options">Options that control the dialog.</param>
 		/// <param name="andThen">A promise that resolves to the selected resources or `undefined`.</param>
 		void ShowOpenDialog(OpenDialogOptions options = default, Action<string[]> andThen = default);
+
+		/// <summary>
+		/// Shows a selection list of [workspace folders](#workspace.workspaceFolders) to pick from.
+		/// Returns `undefined` if no folder is open.
+		/// 
+		/// `options` ── Configures the behavior of the workspace folder list.
+		/// 
+		/// `andThen` ── A promise that resolves to the workspace folder or `undefined`.
+		/// </summary>
+		/// <param name="options">Configures the behavior of the workspace folder list.</param>
+		/// <param name="andThen">A promise that resolves to the workspace folder or `undefined`.</param>
+		void ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options = default, Action<WorkspaceFolder> andThen = default);
 	}
 
 	/// <summary>Options to configure the behavior of the message.</summary>
@@ -557,6 +569,43 @@ namespace VscAppz {
 		/// </summary>
 		[JsonProperty("filters")]
 		public Dictionary<string, string[]> Filters;
+	}
+
+	/// <summary>Options to configure the behaviour of the [workspace folder](#WorkspaceFolder) pick UI.</summary>
+	public partial class WorkspaceFolderPickOptions {
+		/// <summary>An optional string to show as place holder in the input box to guide the user what to pick on.</summary>
+		[JsonProperty("placeHolder")]
+		public string PlaceHolder;
+
+		/// <summary>Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.</summary>
+		[JsonProperty("ignoreFocusOut")]
+		public bool IgnoreFocusOut;
+	}
+
+	/// <summary>
+	/// A workspace folder is one of potentially many roots opened by the editor. All workspace folders
+	/// are equal which means there is no notion of an active or master workspace folder.
+	/// </summary>
+	public partial class WorkspaceFolder {
+		/// <summary>
+		/// The associated uri for this workspace folder.
+		/// 
+		/// *Note:* The [Uri](#Uri)-type was intentionally chosen such that future releases of the editor can support
+		/// workspace folders that are not stored on the local disk, e.g. `ftp://server/workspaces/foo`.
+		/// </summary>
+		[JsonProperty("uri"), JsonRequired]
+		public string Uri;
+
+		/// <summary>
+		/// The name of this workspace folder. Defaults to
+		/// the basename of its [uri-path](#Uri.path)
+		/// </summary>
+		[JsonProperty("name"), JsonRequired]
+		public string Name;
+
+		/// <summary>The ordinal number of this workspace folder.</summary>
+		[JsonProperty("index"), JsonRequired]
+		public int Index;
 	}
 
 	internal partial class impl : IVscode, IWindow {
@@ -1407,6 +1456,31 @@ namespace VscAppz {
 			this.send(msg, on);
 		}
 
+		void IWindow.ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options, Action<WorkspaceFolder> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showWorkspaceFolderPick";
+			msg.Data = new dict(1);
+			msg.Data["options"] = options;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					WorkspaceFolder result = default;
+					if ((null != payload)) {
+						result = new WorkspaceFolder();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
 	}
 
 	public partial class MessageItem {
@@ -1538,6 +1612,58 @@ namespace VscAppz {
 				}
 				this.My = my;
 			}
+			return true;
+		}
+	}
+
+	public partial class WorkspaceFolder {
+		internal bool populateFrom(any payload) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if ((!ok)) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("uri", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				string uri = default;
+				if ((null != val)) {
+					(uri, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+				}
+				this.Uri = uri;
+			} else {
+				return false;
+			}			
+			(val, ok) = (it.TryGetValue("name", out var ___) ? (___, true) : (default, false));
+			if (ok) {
+				string name = default;
+				if ((null != val)) {
+					(name, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+				}
+				this.Name = name;
+			} else {
+				return false;
+			}			
+			(val, ok) = (it.TryGetValue("index", out var ____) ? (____, true) : (default, false));
+			if (ok) {
+				int index = default;
+				if ((null != val)) {
+					(index, ok) = (val is int) ? (((int)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+				}
+				this.Index = index;
+			} else {
+				return false;
+			}			
 			return true;
 		}
 	}

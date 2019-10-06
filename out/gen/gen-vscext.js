@@ -10,19 +10,20 @@ class Gen extends gen.Gen {
         src += "import * as ppio from './procspipeio'\n\n";
         for (const it of prep.enums)
             src += "type " + it.name + " = " + pkgname + "." + it.name + "\n";
-        for (const it of prep.structs) {
-            const fieldsextra = it.fields.filter(_ => _.isExtBaggage);
-            if ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length)) {
-                src += "interface " + it.name + " extends " + pkgname + "." + it.name + " {\n";
-                for (const f of fieldsextra)
-                    src += `\t${f.name + (f.optional ? '?' : '')}: ${this.typeSpec(f.typeSpec)}\n`;
-                for (const ff of it.funcFields)
-                    src += `\t${ff}_AppzFuncId: string\n`;
-                src += "}\n";
+        for (const it of prep.structs)
+            if (it.isOutgoing) {
+                const fieldsextra = it.fields.filter(_ => _.isExtBaggage);
+                if ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length)) {
+                    src += "interface " + it.name + " extends " + pkgname + "." + it.name + " {\n";
+                    for (const f of fieldsextra)
+                        src += `\t${f.name + (f.optional ? '?' : '')}: ${this.typeSpec(f.typeSpec)}\n`;
+                    for (const ff of it.funcFields)
+                        src += `\t${ff}_AppzFuncId: string\n`;
+                    src += "}\n";
+                }
+                else
+                    src += "type " + it.name + " = " + pkgname + "." + it.name + "\n";
             }
-            else
-                src += "type " + it.name + " = " + pkgname + "." + it.name + "\n";
-        }
         src += `\nexport function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationTokens: string[]): Thenable<any> | ${pkgname}.Disposable {\n`;
         src += "\tconst idxdot = msg.qName.lastIndexOf('.')\n";
         src += `\tconst [apiname, methodname] = (idxdot > 0) ? [msg.qName.slice(0, idxdot), msg.qName.slice(idxdot + 1)] : ['', msg.qName]\n`;

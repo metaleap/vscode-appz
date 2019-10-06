@@ -118,7 +118,7 @@ class Builder {
             name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
             Docs: this.docs(gen.docs(it.fromOrig.decl)),
-            Outgoing: false, Incoming: false,
+            IsOutgoing: false, IsIncoming: false,
             Fields: it.fields.map((_) => ({
                 fromPrep: _,
                 name: _.name,
@@ -706,9 +706,9 @@ class Gen extends gen.Gen {
                     const tstruct = this.allStructs[tnamed.Name];
                     if (tstruct) {
                         if (forIncoming)
-                            tstruct.Incoming = true;
+                            tstruct.IsIncoming = true;
                         else
-                            tstruct.Outgoing = true;
+                            tstruct.IsOutgoing = true;
                         for (const fld of tstruct.Fields) {
                             const tfun = this.typeFunc(fld.Type);
                             traverse(fld.Type, tfun ? false : forIncoming);
@@ -724,7 +724,7 @@ class Gen extends gen.Gen {
         }
         for (const structname in this.allStructs) {
             const struct = this.allStructs[structname];
-            if (struct.Outgoing)
+            if (struct.IsOutgoing)
                 for (const fld of struct.Fields) {
                     this.typeRefTraverse(fld.Type, t => {
                         const tmay = this.typeMaybe(t);

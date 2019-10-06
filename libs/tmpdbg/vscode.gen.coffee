@@ -411,6 +411,19 @@ Window: interface
         options: OpenDialogOptions
         andThen: ?(?[string]->void)
 
+    # showWorkspaceFolderPick:
+    # Shows a selection list of [workspace folders](#workspace.workspaceFolders) to pick from.
+    # Returns `undefined` if no folder is open.
+    #
+    # @options:
+    # Configures the behavior of the workspace folder list.
+    #
+    # @andThen:
+    # A promise that resolves to the workspace folder or `undefined`.
+    ShowWorkspaceFolderPick: void
+        options: ?WorkspaceFolderPickOptions
+        andThen: ?(?WorkspaceFolder->void)
+
 
 
 
@@ -677,6 +690,53 @@ OpenDialogOptions: class
     #
     # JSON FLAGS: {"Name":"filters","Required":false,"Excluded":false}
     Filters: ?[[string]]
+
+
+
+
+# Options to configure the behaviour of the [workspace folder](#WorkspaceFolder) pick UI.
+WorkspaceFolderPickOptions: class
+
+    # placeHolder:
+    # An optional string to show as place holder in the input box to guide the user what to pick on.
+    #
+    # JSON FLAGS: {"Name":"placeHolder","Required":false,"Excluded":false}
+    PlaceHolder: ?string
+
+    # ignoreFocusOut:
+    # Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.
+    #
+    # JSON FLAGS: {"Name":"ignoreFocusOut","Required":false,"Excluded":false}
+    IgnoreFocusOut: ?bool
+
+
+
+
+# A workspace folder is one of potentially many roots opened by the editor. All workspace folders
+# are equal which means there is no notion of an active or master workspace folder.
+WorkspaceFolder: class
+
+    # uri:
+    # The associated uri for this workspace folder.
+    # 
+    # *Note:* The [Uri](#Uri)-type was intentionally chosen such that future releases of the editor can support
+    # workspace folders that are not stored on the local disk, e.g. `ftp://server/workspaces/foo`.
+    #
+    # JSON FLAGS: {"Name":"uri","Required":true,"Excluded":false}
+    Uri: string
+
+    # name:
+    # The name of this workspace folder. Defaults to
+    # the basename of its [uri-path](#Uri.path)
+    #
+    # JSON FLAGS: {"Name":"name","Required":true,"Excluded":false}
+    Name: string
+
+    # index:
+    # The ordinal number of this workspace folder.
+    #
+    # JSON FLAGS: {"Name":"index","Required":true,"Excluded":false}
+    Index: int
 
 
 
@@ -1442,6 +1502,30 @@ Window·ShowOpenDialog: (options:OpenDialogOptions -> andThen:?(?[string]->void)
 
 
 
+Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> andThen:?(?WorkspaceFolder->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "window.showWorkspaceFolderPick"
+    msg.Data = dict·new(1)
+    msg.Data@"options" = options
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?WorkspaceFolder
+            if (=?payload)
+                result = ?WorkspaceFolder·new
+                ok = result.populateFrom(payload)
+                if (!ok)
+                    return false
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
 MessageItem·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
@@ -1547,6 +1631,48 @@ QuickPickItem·populateFrom: (payload:any -> bool)
             if (!ok)
                 return false
         this.My = my
+    return true
+
+
+
+
+WorkspaceFolder·populateFrom: (payload:any -> bool)
+    var it of dict
+    var ok of bool
+    var val of any
+    [it,ok] = ((payload)·(dict))
+    if (!ok)
+        return false
+    [val,ok] = it@?"uri"
+    if ok
+        var uri of string
+        if (=?val)
+            [uri,ok] = ((val)·(string))
+            if (!ok)
+                return false
+        this.Uri = uri
+    else
+        return false
+    [val,ok] = it@?"name"
+    if ok
+        var name of string
+        if (=?val)
+            [name,ok] = ((val)·(string))
+            if (!ok)
+                return false
+        this.Name = name
+    else
+        return false
+    [val,ok] = it@?"index"
+    if ok
+        var index of int
+        if (=?val)
+            [index,ok] = ((val)·(int))
+            if (!ok)
+                return false
+        this.Index = index
+    else
+        return false
     return true
 
 

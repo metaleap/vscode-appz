@@ -28,6 +28,7 @@ const genApiSurface = {
                 'setStatusBarMessage',
                 'showSaveDialog',
                 'showOpenDialog',
+                'showWorkspaceFolderPick',
             ],
         },
     ],

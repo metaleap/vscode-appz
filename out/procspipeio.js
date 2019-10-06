@@ -5,7 +5,7 @@ const node_pipeio = require("readline");
 const vsc = require("vscode");
 const appz_1 = require("./appz");
 const vscgen = require("./vscode.gen");
-const dbgLogJsonMsgs = true;
+const dbgLogJsonMsgs = false;
 exports.progs = {};
 class Canceller extends vsc.CancellationTokenSource {
     constructor() { super(); this.num = 1; }

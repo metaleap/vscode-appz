@@ -367,6 +367,42 @@
             <param name="text">The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).</param>
             <param name="andThen">A disposable which hides the status bar message.</param>
         </member>
+        <member name="M:VscAppz.IWindow.ShowSaveDialog(VscAppz.SaveDialogOptions,System.Action{System.String})">
+            <summary>
+            Shows a file save dialog to the user which allows to select a file
+            for saving-purposes.
+            
+            `options` ── Options that control the dialog.
+            
+            `andThen` ── A promise that resolves to the selected resource or `undefined`.
+            </summary>
+            <param name="options">Options that control the dialog.</param>
+            <param name="andThen">A promise that resolves to the selected resource or `undefined`.</param>
+        </member>
+        <member name="M:VscAppz.IWindow.ShowOpenDialog(VscAppz.OpenDialogOptions,System.Action{System.String[]})">
+            <summary>
+            Shows a file open dialog to the user which allows to select a file
+            for opening-purposes.
+            
+            `options` ── Options that control the dialog.
+            
+            `andThen` ── A promise that resolves to the selected resources or `undefined`.
+            </summary>
+            <param name="options">Options that control the dialog.</param>
+            <param name="andThen">A promise that resolves to the selected resources or `undefined`.</param>
+        </member>
+        <member name="M:VscAppz.IWindow.ShowWorkspaceFolderPick(VscAppz.WorkspaceFolderPickOptions,System.Action{VscAppz.WorkspaceFolder})">
+            <summary>
+            Shows a selection list of [workspace folders](#workspace.workspaceFolders) to pick from.
+            Returns `undefined` if no folder is open.
+            
+            `options` ── Configures the behavior of the workspace folder list.
+            
+            `andThen` ── A promise that resolves to the workspace folder or `undefined`.
+            </summary>
+            <param name="options">Configures the behavior of the workspace folder list.</param>
+            <param name="andThen">A promise that resolves to the workspace folder or `undefined`.</param>
+        </member>
         <member name="T:VscAppz.MessageOptions">
             <summary>Options to configure the behavior of the message.</summary>
         </member>
@@ -484,6 +520,90 @@
         </member>
         <member name="F:VscAppz.QuickPickItem.My">
             <summary>Free-form custom data, preserved across a roundtrip.</summary>
+        </member>
+        <member name="T:VscAppz.SaveDialogOptions">
+            <summary>Options to configure the behaviour of a file save dialog.</summary>
+        </member>
+        <member name="F:VscAppz.SaveDialogOptions.SaveLabel">
+            <summary>A human-readable string for the save button.</summary>
+        </member>
+        <member name="F:VscAppz.SaveDialogOptions.Filters">
+            <summary>
+            A set of file filters that are used by the dialog. Each entry is a human readable label,
+            like "TypeScript", and an array of extensions, e.g.
+            ```ts
+            {
+             	'Images': ['png', 'jpg']
+             	'TypeScript': ['ts', 'tsx']
+            }
+            ```
+            </summary>
+        </member>
+        <member name="T:VscAppz.OpenDialogOptions">
+            <summary>
+            Options to configure the behaviour of a file open dialog.
+            
+            * Note 1: A dialog can select files, folders, or both. This is not true for Windows
+            which enforces to open either files or folder, but *not both*.
+            * Note 2: Explicitly setting `canSelectFiles` and `canSelectFolders` to `false` is futile
+            and the editor then silently adjusts the options to select files.
+            </summary>
+        </member>
+        <member name="F:VscAppz.OpenDialogOptions.OpenLabel">
+            <summary>A human-readable string for the open button.</summary>
+        </member>
+        <member name="F:VscAppz.OpenDialogOptions.CanSelectFiles">
+            <summary>Allow to select files, defaults to `true`.</summary>
+        </member>
+        <member name="F:VscAppz.OpenDialogOptions.CanSelectFolders">
+            <summary>Allow to select folders, defaults to `false`.</summary>
+        </member>
+        <member name="F:VscAppz.OpenDialogOptions.CanSelectMany">
+            <summary>Allow to select many files or folders.</summary>
+        </member>
+        <member name="F:VscAppz.OpenDialogOptions.Filters">
+            <summary>
+            A set of file filters that are used by the dialog. Each entry is a human readable label,
+            like "TypeScript", and an array of extensions, e.g.
+            ```ts
+            {
+             	'Images': ['png', 'jpg']
+             	'TypeScript': ['ts', 'tsx']
+            }
+            ```
+            </summary>
+        </member>
+        <member name="T:VscAppz.WorkspaceFolderPickOptions">
+            <summary>Options to configure the behaviour of the [workspace folder](#WorkspaceFolder) pick UI.</summary>
+        </member>
+        <member name="F:VscAppz.WorkspaceFolderPickOptions.PlaceHolder">
+            <summary>An optional string to show as place holder in the input box to guide the user what to pick on.</summary>
+        </member>
+        <member name="F:VscAppz.WorkspaceFolderPickOptions.IgnoreFocusOut">
+            <summary>Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.</summary>
+        </member>
+        <member name="T:VscAppz.WorkspaceFolder">
+            <summary>
+            A workspace folder is one of potentially many roots opened by the editor. All workspace folders
+            are equal which means there is no notion of an active or master workspace folder.
+            </summary>
+        </member>
+        <member name="F:VscAppz.WorkspaceFolder.Uri">
+            <summary>
+            The associated uri for this workspace folder.
+            
+            *Note:* The [Uri](#Uri)-type was intentionally chosen such that future releases of the editor can support
+            workspace folders that are not stored on the local disk, e.g. `ftp://server/workspaces/foo`.
+            </summary>
+        </member>
+        <member name="F:VscAppz.WorkspaceFolder.Name">
+            <summary>
+            The name of this workspace folder. Defaults to
+            the basename of its [uri-path](#Uri.path)
+            </summary>
+        </member>
+        <member name="F:VscAppz.WorkspaceFolder.Index">
+            <summary>The ordinal number of this workspace folder.</summary>
         </member>
     </members>
 </doc>

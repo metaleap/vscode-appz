@@ -229,6 +229,14 @@ type Window interface {
 	// 
 	// `andThen` ── A promise that resolves to the selected resources or `undefined`.
 	ShowOpenDialog(options OpenDialogOptions, andThen func([]string)) 
+
+	// Shows a selection list of [workspace folders](#workspace.workspaceFolders) to pick from.
+	// Returns `undefined` if no folder is open.
+	// 
+	// `options` ── Configures the behavior of the workspace folder list.
+	// 
+	// `andThen` ── A promise that resolves to the workspace folder or `undefined`.
+	ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, andThen func(*WorkspaceFolder)) 
 }
 
 // Options to configure the behavior of the message.
@@ -385,6 +393,32 @@ type OpenDialogOptions struct {
 	// }
 	// ```
 	Filters map[string][]string `json:"filters,omitempty"`
+}
+
+// Options to configure the behaviour of the [workspace folder](#WorkspaceFolder) pick UI.
+type WorkspaceFolderPickOptions struct {
+	// An optional string to show as place holder in the input box to guide the user what to pick on.
+	PlaceHolder string `json:"placeHolder,omitempty"`
+
+	// Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.
+	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
+}
+
+// A workspace folder is one of potentially many roots opened by the editor. All workspace folders
+// are equal which means there is no notion of an active or master workspace folder.
+type WorkspaceFolder struct {
+	// The associated uri for this workspace folder.
+	// 
+	// *Note:* The [Uri](#Uri)-type was intentionally chosen such that future releases of the editor can support
+	// workspace folders that are not stored on the local disk, e.g. `ftp://server/workspaces/foo`.
+	Uri string `json:"uri"`
+
+	// The name of this workspace folder. Defaults to
+	// the basename of its [uri-path](#Uri.path)
+	Name string `json:"name"`
+
+	// The ordinal number of this workspace folder.
+	Index int `json:"index"`
 }
 
 func (me *impl) Window() Window {
@@ -1278,6 +1312,31 @@ func (me *impl) ShowOpenDialog(options OpenDialogOptions, andThen func([]string)
 	me.send(msg, on)
 }
 
+func (me *impl) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, andThen func(*WorkspaceFolder)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showWorkspaceFolderPick"
+	msg.Data = make(dict, 1)
+	msg.Data["options"] = options
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *WorkspaceFolder
+			if (nil != payload) {
+				result = new(WorkspaceFolder)
+				ok = result.populateFrom(payload)
+				if (!ok) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
 func (me *MessageItem) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
@@ -1399,6 +1458,56 @@ func (me *QuickPickItem) populateFrom(payload any) bool {
 			}
 		}
 		me.My = my
+	}
+	return true
+}
+
+func (me *WorkspaceFolder) populateFrom(payload any) bool {
+	var it dict
+	var ok bool
+	var val any
+	it, ok = payload.(dict)
+	if (!ok) {
+		return false
+	}
+	val, ok = it["uri"]
+	if ok {
+		var uri string
+		if (nil != val) {
+			uri, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.Uri = uri
+	} else {
+		return false
+	}
+	val, ok = it["name"]
+	if ok {
+		var name string
+		if (nil != val) {
+			name, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.Name = name
+	} else {
+		return false
+	}
+	val, ok = it["index"]
+	if ok {
+		var index int
+		if (nil != val) {
+			index, ok = val.(int)
+			if (!ok) {
+				return false
+			}
+		}
+		me.Index = index
+	} else {
+		return false
 	}
 	return true
 }

@@ -56,6 +56,8 @@ export interface PrepStruct {
     name: string
     fields: PrepField[]
     funcFields: string[]
+    isOutgoing: boolean
+    isIncoming: boolean
 }
 
 export interface PrepField {
@@ -106,15 +108,14 @@ export class Prep {
             this.addFunc(funcjob)
 
         this.structs.forEach(struct => {
-            let isretarg = false
-            this.interfaces.forEach(iface => {
-                if (!isretarg) iface.methods.forEach(method => {
-                    if (!isretarg) method.args.forEach(arg => {
-                        isretarg = isretarg || (arg.isFromRetThenable && typeRefersTo(arg.typeSpec, struct.name))
-                    })
-                })
-            })
-            if (isretarg) {
+            let isretarg = false, isoutarg = false
+            for (const iface of this.interfaces) if (isretarg && isoutarg) break
+            else for (const method of iface.methods) if (isretarg && isoutarg) break
+            else for (const arg of method.args) if (isretarg && isoutarg) break
+            else if (typeRefersTo(arg.typeSpec, struct.name))
+                if (arg.isFromRetThenable) isretarg = true
+                else isoutarg = true
+            if ((struct.isOutgoing = isoutarg) && (struct.isIncoming = isretarg)) {
                 const fieldname = pickName('my', ['', 'tags', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields)
                 if (!fieldname)
                     throw (struct)
@@ -157,7 +158,7 @@ export class Prep {
     addStruct(structJob: GenJobStruct) {
         const qname = this.qName(structJob)
         this.structs.push({
-            fromOrig: structJob,
+            fromOrig: structJob, isOutgoing: false, isIncoming: false,
             name: qname.slice(1).join('_'),
             fields: structJob.decl.members.filter(_ => _.name.getText() !== 'defaultUri').map(_ => {
                 let tspec: TypeSpec = null

@@ -11,7 +11,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         for (const it of prep.enums)
             src += "type " + it.name + " = " + pkgname + "." + it.name + "\n"
-        for (const it of prep.structs) {
+        for (const it of prep.structs) if (it.isOutgoing) {
             const fieldsextra = it.fields.filter(_ => _.isExtBaggage)
             if ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length)) {
                 src += "interface " + it.name + " extends " + pkgname + "." + it.name + " {\n"

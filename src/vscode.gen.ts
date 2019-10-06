@@ -19,6 +19,7 @@ interface QuickPickItem extends vscode.QuickPickItem {
 }
 type SaveDialogOptions = vscode.SaveDialogOptions
 type OpenDialogOptions = vscode.OpenDialogOptions
+type WorkspaceFolderPickOptions = vscode.WorkspaceFolderPickOptions
 
 export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationTokens: string[]): Thenable<any> | vscode.Disposable {
 	const idxdot = msg.qName.lastIndexOf('.')
@@ -167,6 +168,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "showOpenDialog": {
 					const arg_options = (msg.data['options']) as OpenDialogOptions
 					return vscode.window.showOpenDialog(arg_options, )
+				}
+				case "showWorkspaceFolderPick": {
+					const arg_options = (msg.data['options']) as WorkspaceFolderPickOptions
+					return vscode.window.showWorkspaceFolderPick(arg_options, )
 				}
 				default:
 					throw (methodname)

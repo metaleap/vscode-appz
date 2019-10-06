@@ -7,7 +7,7 @@ import * as vscgen from './vscode.gen'
 
 
 
-const dbgLogJsonMsgs = true
+const dbgLogJsonMsgs = false
 export let progs: { [_: string]: Prog } = {}
 
 

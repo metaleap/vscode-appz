@@ -22,14 +22,17 @@
   - [ShowInformationMessage(message,items,andThen)](#M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
   - [ShowInformationMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
   - [ShowInputBox(options,token,andThen)](#M-VscAppz-IWindow-ShowInputBox-VscAppz-InputBoxOptions,VscAppz-Cancel,System-Action{System-String}- 'VscAppz.IWindow.ShowInputBox(VscAppz.InputBoxOptions,VscAppz.Cancel,System.Action{System.String})')
+  - [ShowOpenDialog(options,andThen)](#M-VscAppz-IWindow-ShowOpenDialog-VscAppz-OpenDialogOptions,System-Action{System-String[]}- 'VscAppz.IWindow.ShowOpenDialog(VscAppz.OpenDialogOptions,System.Action{System.String[]})')
   - [ShowQuickPick(items,options,token,andThen)](#M-VscAppz-IWindow-ShowQuickPick-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{System-String[]}- 'VscAppz.IWindow.ShowQuickPick(System.String[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{System.String[]})')
   - [ShowQuickPick(items,options,token,andThen)](#M-VscAppz-IWindow-ShowQuickPick-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{System-String}- 'VscAppz.IWindow.ShowQuickPick(System.String[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{System.String})')
   - [ShowQuickPick(items,options,token,andThen)](#M-VscAppz-IWindow-ShowQuickPick-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{VscAppz-QuickPickItem[]}- 'VscAppz.IWindow.ShowQuickPick(VscAppz.QuickPickItem[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{VscAppz.QuickPickItem[]})')
   - [ShowQuickPick(items,options,token,andThen)](#M-VscAppz-IWindow-ShowQuickPick-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{VscAppz-QuickPickItem}- 'VscAppz.IWindow.ShowQuickPick(VscAppz.QuickPickItem[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{VscAppz.QuickPickItem})')
+  - [ShowSaveDialog(options,andThen)](#M-VscAppz-IWindow-ShowSaveDialog-VscAppz-SaveDialogOptions,System-Action{System-String}- 'VscAppz.IWindow.ShowSaveDialog(VscAppz.SaveDialogOptions,System.Action{System.String})')
   - [ShowWarningMessage(message,items,andThen)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowWarningMessage(System.String,System.String[],System.Action{System.String})')
   - [ShowWarningMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
   - [ShowWarningMessage(message,items,andThen)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
   - [ShowWarningMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
+  - [ShowWorkspaceFolderPick(options,andThen)](#M-VscAppz-IWindow-ShowWorkspaceFolderPick-VscAppz-WorkspaceFolderPickOptions,System-Action{VscAppz-WorkspaceFolder}- 'VscAppz.IWindow.ShowWorkspaceFolderPick(VscAppz.WorkspaceFolderPickOptions,System.Action{VscAppz.WorkspaceFolder})')
 - [InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions')
   - [IgnoreFocusOut](#F-VscAppz-InputBoxOptions-IgnoreFocusOut 'VscAppz.InputBoxOptions.IgnoreFocusOut')
   - [Password](#F-VscAppz-InputBoxOptions-Password 'VscAppz.InputBoxOptions.Password')
@@ -45,6 +48,12 @@
   - [Title](#F-VscAppz-MessageItem-Title 'VscAppz.MessageItem.Title')
 - [MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions')
   - [Modal](#F-VscAppz-MessageOptions-Modal 'VscAppz.MessageOptions.Modal')
+- [OpenDialogOptions](#T-VscAppz-OpenDialogOptions 'VscAppz.OpenDialogOptions')
+  - [CanSelectFiles](#F-VscAppz-OpenDialogOptions-CanSelectFiles 'VscAppz.OpenDialogOptions.CanSelectFiles')
+  - [CanSelectFolders](#F-VscAppz-OpenDialogOptions-CanSelectFolders 'VscAppz.OpenDialogOptions.CanSelectFolders')
+  - [CanSelectMany](#F-VscAppz-OpenDialogOptions-CanSelectMany 'VscAppz.OpenDialogOptions.CanSelectMany')
+  - [Filters](#F-VscAppz-OpenDialogOptions-Filters 'VscAppz.OpenDialogOptions.Filters')
+  - [OpenLabel](#F-VscAppz-OpenDialogOptions-OpenLabel 'VscAppz.OpenDialogOptions.OpenLabel')
 - [QuickPickItem](#T-VscAppz-QuickPickItem 'VscAppz.QuickPickItem')
   - [AlwaysShow](#F-VscAppz-QuickPickItem-AlwaysShow 'VscAppz.QuickPickItem.AlwaysShow')
   - [Description](#F-VscAppz-QuickPickItem-Description 'VscAppz.QuickPickItem.Description')
@@ -60,10 +69,20 @@
   - [OnDidSelectItem](#F-VscAppz-QuickPickOptions-OnDidSelectItem 'VscAppz.QuickPickOptions.OnDidSelectItem')
   - [OnDidSelectItem_AppzFuncId](#F-VscAppz-QuickPickOptions-OnDidSelectItem_AppzFuncId 'VscAppz.QuickPickOptions.OnDidSelectItem_AppzFuncId')
   - [PlaceHolder](#F-VscAppz-QuickPickOptions-PlaceHolder 'VscAppz.QuickPickOptions.PlaceHolder')
+- [SaveDialogOptions](#T-VscAppz-SaveDialogOptions 'VscAppz.SaveDialogOptions')
+  - [Filters](#F-VscAppz-SaveDialogOptions-Filters 'VscAppz.SaveDialogOptions.Filters')
+  - [SaveLabel](#F-VscAppz-SaveDialogOptions-SaveLabel 'VscAppz.SaveDialogOptions.SaveLabel')
 - [Vsc](#T-VscAppz-Vsc 'VscAppz.Vsc')
   - [OnError](#F-VscAppz-Vsc-OnError 'VscAppz.Vsc.OnError')
   - [OnErrorDefaultOutputFormat](#F-VscAppz-Vsc-OnErrorDefaultOutputFormat 'VscAppz.Vsc.OnErrorDefaultOutputFormat')
   - [InOut(stdIn,stdOut)](#M-VscAppz-Vsc-InOut-System-IO-TextReader,System-IO-TextWriter- 'VscAppz.Vsc.InOut(System.IO.TextReader,System.IO.TextWriter)')
+- [WorkspaceFolder](#T-VscAppz-WorkspaceFolder 'VscAppz.WorkspaceFolder')
+  - [Index](#F-VscAppz-WorkspaceFolder-Index 'VscAppz.WorkspaceFolder.Index')
+  - [Name](#F-VscAppz-WorkspaceFolder-Name 'VscAppz.WorkspaceFolder.Name')
+  - [Uri](#F-VscAppz-WorkspaceFolder-Uri 'VscAppz.WorkspaceFolder.Uri')
+- [WorkspaceFolderPickOptions](#T-VscAppz-WorkspaceFolderPickOptions 'VscAppz.WorkspaceFolderPickOptions')
+  - [IgnoreFocusOut](#F-VscAppz-WorkspaceFolderPickOptions-IgnoreFocusOut 'VscAppz.WorkspaceFolderPickOptions.IgnoreFocusOut')
+  - [PlaceHolder](#F-VscAppz-WorkspaceFolderPickOptions-PlaceHolder 'VscAppz.WorkspaceFolderPickOptions.PlaceHolder')
 
 <a name='T-VscAppz-Cancel'></a>
 ## Cancel `type`
@@ -405,6 +424,25 @@ anything but dismissed the input box with OK.
 | token | [VscAppz.Cancel](#T-VscAppz-Cancel 'VscAppz.Cancel') | A token that can be used to signal cancellation. |
 | andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A promise that resolves to a string the user provided or to `undefined` in case of dismissal. |
 
+<a name='M-VscAppz-IWindow-ShowOpenDialog-VscAppz-OpenDialogOptions,System-Action{System-String[]}-'></a>
+### ShowOpenDialog(options,andThen) `method`
+
+##### Summary
+
+Shows a file open dialog to the user which allows to select a file
+for opening-purposes.
+
+`options` ── Options that control the dialog.
+
+`andThen` ── A promise that resolves to the selected resources or `undefined`.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| options | [VscAppz.OpenDialogOptions](#T-VscAppz-OpenDialogOptions 'VscAppz.OpenDialogOptions') | Options that control the dialog. |
+| andThen | [System.Action{System.String[]}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String[]}') | A promise that resolves to the selected resources or `undefined`. |
+
 <a name='M-VscAppz-IWindow-ShowQuickPick-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{System-String[]}-'></a>
 ### ShowQuickPick(items,options,token,andThen) `method`
 
@@ -501,6 +539,25 @@ Shows a selection list.
 | token | [VscAppz.Cancel](#T-VscAppz-Cancel 'VscAppz.Cancel') | A token that can be used to signal cancellation. |
 | andThen | [System.Action{VscAppz.QuickPickItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem}') | A promise that resolves to the selected item or `undefined`. |
 
+<a name='M-VscAppz-IWindow-ShowSaveDialog-VscAppz-SaveDialogOptions,System-Action{System-String}-'></a>
+### ShowSaveDialog(options,andThen) `method`
+
+##### Summary
+
+Shows a file save dialog to the user which allows to select a file
+for saving-purposes.
+
+`options` ── Options that control the dialog.
+
+`andThen` ── A promise that resolves to the selected resource or `undefined`.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| options | [VscAppz.SaveDialogOptions](#T-VscAppz-SaveDialogOptions 'VscAppz.SaveDialogOptions') | Options that control the dialog. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A promise that resolves to the selected resource or `undefined`. |
+
 <a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,System-String[],System-Action{System-String}-'></a>
 ### ShowWarningMessage(message,items,andThen) `method`
 
@@ -590,6 +647,25 @@ Show a warning message.
 | options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
 | items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
 | andThen | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
+
+<a name='M-VscAppz-IWindow-ShowWorkspaceFolderPick-VscAppz-WorkspaceFolderPickOptions,System-Action{VscAppz-WorkspaceFolder}-'></a>
+### ShowWorkspaceFolderPick(options,andThen) `method`
+
+##### Summary
+
+Shows a selection list of [workspace folders](#workspace.workspaceFolders) to pick from.
+Returns `undefined` if no folder is open.
+
+`options` ── Configures the behavior of the workspace folder list.
+
+`andThen` ── A promise that resolves to the workspace folder or `undefined`.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| options | [VscAppz.WorkspaceFolderPickOptions](#T-VscAppz-WorkspaceFolderPickOptions 'VscAppz.WorkspaceFolderPickOptions') | Configures the behavior of the workspace folder list. |
+| andThen | [System.Action{VscAppz.WorkspaceFolder}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.WorkspaceFolder}') | A promise that resolves to the workspace folder or `undefined`. |
 
 <a name='T-VscAppz-InputBoxOptions'></a>
 ## InputBoxOptions `type`
@@ -722,6 +798,64 @@ Options to configure the behavior of the message.
 
 Indicates that this message should be modal.
 
+<a name='T-VscAppz-OpenDialogOptions'></a>
+## OpenDialogOptions `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Options to configure the behaviour of a file open dialog.
+
+* Note 1: A dialog can select files, folders, or both. This is not true for Windows
+which enforces to open either files or folder, but *not both*.
+* Note 2: Explicitly setting `canSelectFiles` and `canSelectFolders` to `false` is futile
+and the editor then silently adjusts the options to select files.
+
+<a name='F-VscAppz-OpenDialogOptions-CanSelectFiles'></a>
+### CanSelectFiles `constants`
+
+##### Summary
+
+Allow to select files, defaults to `true`.
+
+<a name='F-VscAppz-OpenDialogOptions-CanSelectFolders'></a>
+### CanSelectFolders `constants`
+
+##### Summary
+
+Allow to select folders, defaults to `false`.
+
+<a name='F-VscAppz-OpenDialogOptions-CanSelectMany'></a>
+### CanSelectMany `constants`
+
+##### Summary
+
+Allow to select many files or folders.
+
+<a name='F-VscAppz-OpenDialogOptions-Filters'></a>
+### Filters `constants`
+
+##### Summary
+
+A set of file filters that are used by the dialog. Each entry is a human readable label,
+like "TypeScript", and an array of extensions, e.g.
+```ts
+{
+ 	'Images': ['png', 'jpg']
+ 	'TypeScript': ['ts', 'tsx']
+}
+```
+
+<a name='F-VscAppz-OpenDialogOptions-OpenLabel'></a>
+### OpenLabel `constants`
+
+##### Summary
+
+A human-readable string for the open button.
+
 <a name='T-VscAppz-QuickPickItem'></a>
 ## QuickPickItem `type`
 
@@ -837,6 +971,38 @@ For internal runtime use only.
 
 An optional string to show as place holder in the input box to guide the user what to pick on.
 
+<a name='T-VscAppz-SaveDialogOptions'></a>
+## SaveDialogOptions `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Options to configure the behaviour of a file save dialog.
+
+<a name='F-VscAppz-SaveDialogOptions-Filters'></a>
+### Filters `constants`
+
+##### Summary
+
+A set of file filters that are used by the dialog. Each entry is a human readable label,
+like "TypeScript", and an array of extensions, e.g.
+```ts
+{
+ 	'Images': ['png', 'jpg']
+ 	'TypeScript': ['ts', 'tsx']
+}
+```
+
+<a name='F-VscAppz-SaveDialogOptions-SaveLabel'></a>
+### SaveLabel `constants`
+
+##### Summary
+
+A human-readable string for the save button.
+
 <a name='T-VscAppz-Vsc'></a>
 ## Vsc `type`
 
@@ -883,3 +1049,65 @@ Returns an `IVscode` implementation that communicates via the specified input an
 | ---- | ---- | ----------- |
 | stdIn | [System.IO.TextReader](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.IO.TextReader 'System.IO.TextReader') | If `null`, defaults to `Console.In`. |
 | stdOut | [System.IO.TextWriter](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.IO.TextWriter 'System.IO.TextWriter') | If `null`, defaults to `Console.Out` |
+
+<a name='T-VscAppz-WorkspaceFolder'></a>
+## WorkspaceFolder `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+A workspace folder is one of potentially many roots opened by the editor. All workspace folders
+are equal which means there is no notion of an active or master workspace folder.
+
+<a name='F-VscAppz-WorkspaceFolder-Index'></a>
+### Index `constants`
+
+##### Summary
+
+The ordinal number of this workspace folder.
+
+<a name='F-VscAppz-WorkspaceFolder-Name'></a>
+### Name `constants`
+
+##### Summary
+
+The name of this workspace folder. Defaults to
+the basename of its [uri-path](#Uri.path)
+
+<a name='F-VscAppz-WorkspaceFolder-Uri'></a>
+### Uri `constants`
+
+##### Summary
+
+The associated uri for this workspace folder.
+
+*Note:* The [Uri](#Uri)-type was intentionally chosen such that future releases of the editor can support
+workspace folders that are not stored on the local disk, e.g. `ftp://server/workspaces/foo`.
+
+<a name='T-VscAppz-WorkspaceFolderPickOptions'></a>
+## WorkspaceFolderPickOptions `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Options to configure the behaviour of the [workspace folder](#WorkspaceFolder) pick UI.
+
+<a name='F-VscAppz-WorkspaceFolderPickOptions-IgnoreFocusOut'></a>
+### IgnoreFocusOut `constants`
+
+##### Summary
+
+Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.
+
+<a name='F-VscAppz-WorkspaceFolderPickOptions-PlaceHolder'></a>
+### PlaceHolder `constants`
+
+##### Summary
+
+An optional string to show as place holder in the input box to guide the user what to pick on.

@@ -28,7 +28,7 @@ func main() {
 	win.SetStatusBarMessage2("Choosing a demo WILL HIDE this", func(statusitem *Disposable) {
 		buttons := []string{"Demo Pick Input", "Demo Text Input", "All Demos"}
 		win.ShowInformationMessage1(
-			greethow+", "+greetname+"! What to try out?",
+			greethow+", "+greetname+"! What to try out? (If you cancel, I quit.)",
 			buttons,
 			func(btn *string) {
 				statusitem.Dispose()
@@ -43,12 +43,46 @@ func main() {
 					case buttons[2]:
 						demoMenuAll()
 					default:
-						win.ShowErrorMessage1("Unknown: `"+button+"`", nil, quit)
+						win.ShowErrorMessage1("Unknown: `"+button+"`, bye now!", nil, quit)
 					}
 				}
 			},
 		)
 	})
+}
+
+func demoMenuAll() {
+	menu := []string{
+		"Demo Pick Input",
+		"Demo Text Input",
+		"Demo File-Save Dialog",
+		"Demo File-Open Dialog",
+		"Demo Workspace-Folder Pick Input",
+	}
+	win.ShowQuickPick2(menu, &QuickPickOptions{
+		CanPickMany: false, IgnoreFocusOut: true, PlaceHolder: "Dismissing this menu will quit the prog.",
+	}, nil,
+		func(menuitem *string) {
+			if menuitem == nil {
+				quit(menuitem)
+			} else {
+				switch menuitem := *menuitem; menuitem {
+				case menu[0]:
+					demoInputPick()
+				case menu[1]:
+					demoInputText()
+				case menu[2]:
+					demoDialogFileSave()
+				case menu[3]:
+					demoDialogFileOpen()
+				case menu[4]:
+					demoWorkspaceFolderPick()
+				default:
+					win.ShowErrorMessage1("Unknown: `"+menuitem+"`, bye now!", nil, quit)
+				}
+			}
+		},
+	)
 }
 
 func demoInputPick() {
@@ -96,36 +130,10 @@ func demoInputText() {
 	})
 }
 
-func demoMenuAll() {
-	menu := []string{
-		"Demo Pick Input",
-		"Demo Text Input",
-		"Demo File-Save Dialog",
-		"Demo File-Open Dialog",
-	}
-	win.ShowQuickPick2(menu, &QuickPickOptions{CanPickMany: false, IgnoreFocusOut: true}, nil,
-		func(menuitem *string) {
-			if menuitem != nil {
-				switch menuitem := *menuitem; menuitem {
-				case menu[0]:
-					demoInputPick()
-				case menu[1]:
-					demoInputText()
-				case menu[2]:
-					demoDialogFileSave()
-				case menu[3]:
-					demoDialogFileOpen()
-				}
-			}
-		},
-	)
-}
-
 func demoDialogFileSave() {
 	win.ShowSaveDialog(SaveDialogOptions{
-		SaveLabel: "Note: won't write for real.", Filters: map[string][]string{
-			"All": {"*"}, "Dummy Filter": {"demo", "dummy"},
-		},
+		SaveLabel: "Note: won't actually write to specified file path",
+		Filters:   map[string][]string{"All": {"*"}, "Dummy Filter": {"demo", "dummy"}},
 	}, func(filepath *string) {
 		statusNoticeQuit()
 		if filepath == nil {
@@ -139,7 +147,7 @@ func demoDialogFileSave() {
 func demoDialogFileOpen() {
 	win.ShowOpenDialog(OpenDialogOptions{
 		CanSelectFiles: true, CanSelectFolders: false, CanSelectMany: true,
-		OpenLabel: "Note: won't actually read selected file(s)",
+		OpenLabel: "Note: won't actually read from specified file path(s)",
 		Filters:   map[string][]string{"All": {"*"}, "Dummy Filter": {"demo", "dummy"}},
 	}, func(filepaths []string) {
 		statusNoticeQuit()
@@ -147,6 +155,18 @@ func demoDialogFileOpen() {
 			win.ShowWarningMessage1("Cancelled file-save dialog, bye now!", nil, quit)
 		} else {
 			win.ShowInformationMessage1("Selected "+strconv.Itoa(len(filepaths))+" file path(s), bye now!", nil, quit)
+		}
+	})
+}
+
+func demoWorkspaceFolderPick() {
+	win.ShowWorkspaceFolderPick(&WorkspaceFolderPickOptions{
+		IgnoreFocusOut: true, PlaceHolder: "Reminder, all local-FS-related 'URIs' at the VSCode side turn into standard (non-URI) file-path strings at the prog side.",
+	}, func(picked *WorkspaceFolder) {
+		if picked == nil {
+			win.ShowWarningMessage1("Cancelled pick input, bye now!", nil, quit)
+		} else {
+			win.ShowInformationMessage1("Selected `"+picked.Name+"` located at `"+picked.Uri+"`, bye now!", nil, quit)
 		}
 	})
 }

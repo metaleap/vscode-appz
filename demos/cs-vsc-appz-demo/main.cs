@@ -1,6 +1,6 @@
 namespace VscAppzDemo {
     using System;
-    using System .Timers;
+    using System.Collections.Generic;
     using VscAppz;
 
     public static class App {
@@ -23,22 +23,49 @@ namespace VscAppzDemo {
 
             win = Vsc.InOut().Window;
             win.SetStatusBarMessage("Choosing a demo WILL HIDE this", statusitem => {
-                var buttons = new[] {"Show Quick Pick...", "Show Input Box..."};
+                var buttons = new[] {"Demo Pick Input", "Demo Text Input", "All Demos"};
                 win.ShowInformationMessage(
-                    greethow + ", " + greetname + "! What to try out?",
+                    greethow + ", " + greetname + "! What to try out? (If you cancel, I quit.)",
                     buttons,
                     button => {
                         statusitem.Dispose();
-                        if (string.IsNullOrEmpty(button))
+                        if (button == null)
                             quit();
                         else if (button == buttons[0])
                             demoInputPick();
                         else if (button == buttons[1])
                             demoInputText();
+                        else if (button == buttons[2])
+                            demoMenuAll();
                         else
-                            win.ShowErrorMessage("Unknown: " + button, nil, quit);
+                            win.ShowErrorMessage($"Unknown: `{button}`, bye now!", nil, quit);
                     }
                 );
+            });
+        }
+
+        private static void demoMenuAll(){
+            var menu = new[] {
+                "Demo Pick Input",
+                "Demo Text Input",
+                "Demo File-Save Dialog",
+                "Demo File-Open Dialog",
+            };
+            win.ShowQuickPick(menu, new QuickPickOptions() {
+                CanPickMany = false, IgnoreFocusOut = true
+            }, null, (string menuitem) => {
+                if (menuitem == null)
+                    quit();
+                else if (menuitem == menu[0])
+                    demoInputPick();
+                else if (menuitem == menu[1])
+                    demoInputText();
+                else if (menuitem == menu[2])
+                    demoDialogFileSave();
+                else if (menuitem == menu[3])
+                    demoDialogFileOpen();
+                else
+                    win.ShowErrorMessage($"Unknown: `{menuitem}`, bye now!", nil, quit);
             });
         }
 
@@ -56,7 +83,7 @@ namespace VscAppzDemo {
                     return null;
                 },
             }, Cancel.In(TimeSpan.FromSeconds(42)), (QuickPickItem[] pickeditems) => {
-                win.SetStatusBarMessage("Reacting to the 'bye now' will terminate the prog.", 4242);
+                statusNoticeQuit();
                 if (pickeditems == null)
                     win.ShowWarningMessage("Cancelled pick input, bye now!", nil, quit);
                 else
@@ -77,12 +104,41 @@ namespace VscAppzDemo {
                 Prompt          = "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
                 ValidateInput   = val
             }, null, input => {
-                win.SetStatusBarMessage("Reacting to the 'bye now' will terminate the prog.", 4242);
+                statusNoticeQuit();
                 if (input == null)
                     win.ShowWarningMessage("Cancelled text input, bye now!", nil, quit);
                 else
                     win.ShowInformationMessage("You entered: `"+input+"`, bye now!", nil, quit);
             });
+        }
+
+        private static void demoDialogFileSave() {
+            win.ShowSaveDialog(new SaveDialogOptions() {
+                SaveLabel = "Note: won't actually write to specified file path",
+                Filters = new Dictionary<string, string[]>() { ["All"] = new[] {"*"}, ["Dummy Filter"] = new[] {"demo", "dummy"} }
+            }, filepath => {
+                if (filepath == null)
+                    win.ShowWarningMessage("Cancelled file-save dialog, bye now!", nil, quit);
+                else
+                    win.ShowInformationMessage($"File path: `{filepath}`, bye now!", nil, quit);
+            });
+        }
+
+        private static void demoDialogFileOpen() {
+            win.ShowOpenDialog(new OpenDialogOptions() {
+                CanSelectFiles = true, CanSelectFolders = false, CanSelectMany = true,
+                OpenLabel = "Note: won't actually read from specified file path(s)",
+                Filters = new Dictionary<string, string[]>() { ["All"] = new[] {"*"}, ["Dummy Filter"] = new[] {"demo", "dummy"} }
+            }, filepaths => {
+                if (filepaths == null)
+                    win.ShowWarningMessage("Cancelled file-open dialog, bye now!", nil, quit);
+                else
+                    win.ShowInformationMessage($"Selected {filepaths.Length} file path(s), bye now!", nil, quit);
+            });
+        }
+
+        private static void statusNoticeQuit() {
+            win.SetStatusBarMessage("Reacting to the 'bye now' will terminate the prog.", 4242);
         }
 
     }
