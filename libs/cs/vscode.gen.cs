@@ -231,6 +231,128 @@ namespace VscAppz {
 		/// <param name="token">A token that can be used to signal cancellation.</param>
 		/// <param name="andThen">A promise that resolves to a string the user provided or to `undefined` in case of dismissal.</param>
 		void ShowInputBox(InputBoxOptions options = default, Cancel token = default, Action<string> andThen = default);
+
+		/// <summary>
+		/// Shows a selection list allowing multiple selections.
+		/// 
+		/// `items` ── An array of strings, or a promise that resolves to an array of strings.
+		/// 
+		/// `options` ── Configures the behavior of the selection list.
+		/// 
+		/// `token` ── A token that can be used to signal cancellation.
+		/// 
+		/// `andThen` ── A promise that resolves to the selected items or `undefined`.
+		/// </summary>
+		/// <param name="items">An array of strings, or a promise that resolves to an array of strings.</param>
+		/// <param name="options">Configures the behavior of the selection list.</param>
+		/// <param name="token">A token that can be used to signal cancellation.</param>
+		/// <param name="andThen">A promise that resolves to the selected items or `undefined`.</param>
+		void ShowQuickPick(string[] items = default, QuickPickOptions options = default, Cancel token = default, Action<string[]> andThen = default);
+
+		/// <summary>
+		/// Shows a selection list.
+		/// 
+		/// `items` ── An array of strings, or a promise that resolves to an array of strings.
+		/// 
+		/// `options` ── Configures the behavior of the selection list.
+		/// 
+		/// `token` ── A token that can be used to signal cancellation.
+		/// 
+		/// `andThen` ── A promise that resolves to the selection or `undefined`.
+		/// </summary>
+		/// <param name="items">An array of strings, or a promise that resolves to an array of strings.</param>
+		/// <param name="options">Configures the behavior of the selection list.</param>
+		/// <param name="token">A token that can be used to signal cancellation.</param>
+		/// <param name="andThen">A promise that resolves to the selection or `undefined`.</param>
+		void ShowQuickPick(string[] items = default, QuickPickOptions options = default, Cancel token = default, Action<string> andThen = default);
+
+		/// <summary>
+		/// Shows a selection list allowing multiple selections.
+		/// 
+		/// `items` ── An array of items, or a promise that resolves to an array of items.
+		/// 
+		/// `options` ── Configures the behavior of the selection list.
+		/// 
+		/// `token` ── A token that can be used to signal cancellation.
+		/// 
+		/// `andThen` ── A promise that resolves to the selected items or `undefined`.
+		/// </summary>
+		/// <param name="items">An array of items, or a promise that resolves to an array of items.</param>
+		/// <param name="options">Configures the behavior of the selection list.</param>
+		/// <param name="token">A token that can be used to signal cancellation.</param>
+		/// <param name="andThen">A promise that resolves to the selected items or `undefined`.</param>
+		void ShowQuickPick(QuickPickItem[] items = default, QuickPickOptions options = default, Cancel token = default, Action<QuickPickItem[]> andThen = default);
+
+		/// <summary>
+		/// Shows a selection list.
+		/// 
+		/// `items` ── An array of items, or a promise that resolves to an array of items.
+		/// 
+		/// `options` ── Configures the behavior of the selection list.
+		/// 
+		/// `token` ── A token that can be used to signal cancellation.
+		/// 
+		/// `andThen` ── A promise that resolves to the selected item or `undefined`.
+		/// </summary>
+		/// <param name="items">An array of items, or a promise that resolves to an array of items.</param>
+		/// <param name="options">Configures the behavior of the selection list.</param>
+		/// <param name="token">A token that can be used to signal cancellation.</param>
+		/// <param name="andThen">A promise that resolves to the selected item or `undefined`.</param>
+		void ShowQuickPick(QuickPickItem[] items = default, QuickPickOptions options = default, Cancel token = default, Action<QuickPickItem> andThen = default);
+
+		/// <summary>
+		/// Set a message to the status bar. This is a short hand for the more powerful
+		/// status bar [items](#window.createStatusBarItem).
+		/// 
+		/// `text` ── The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
+		/// 
+		/// `hideAfterTimeout` ── Timeout in milliseconds after which the message will be disposed.
+		/// 
+		/// `andThen` ── A disposable which hides the status bar message.
+		/// </summary>
+		/// <param name="text">The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).</param>
+		/// <param name="hideAfterTimeout">Timeout in milliseconds after which the message will be disposed.</param>
+		/// <param name="andThen">A disposable which hides the status bar message.</param>
+		void SetStatusBarMessage(string text = default, int hideAfterTimeout = default, Action<Disposable> andThen = default);
+
+		/// <summary>
+		/// Set a message to the status bar. This is a short hand for the more powerful
+		/// status bar [items](#window.createStatusBarItem).
+		/// 
+		/// *Note* that status bar messages stack and that they must be disposed when no
+		/// longer used.
+		/// 
+		/// `text` ── The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
+		/// 
+		/// `andThen` ── A disposable which hides the status bar message.
+		/// </summary>
+		/// <param name="text">The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).</param>
+		/// <param name="andThen">A disposable which hides the status bar message.</param>
+		void SetStatusBarMessage(string text = default, Action<Disposable> andThen = default);
+
+		/// <summary>
+		/// Shows a file save dialog to the user which allows to select a file
+		/// for saving-purposes.
+		/// 
+		/// `options` ── Options that control the dialog.
+		/// 
+		/// `andThen` ── A promise that resolves to the selected resource or `undefined`.
+		/// </summary>
+		/// <param name="options">Options that control the dialog.</param>
+		/// <param name="andThen">A promise that resolves to the selected resource or `undefined`.</param>
+		void ShowSaveDialog(SaveDialogOptions options = default, Action<Uri> andThen = default);
+
+		/// <summary>
+		/// Shows a file open dialog to the user which allows to select a file
+		/// for opening-purposes.
+		/// 
+		/// `options` ── Options that control the dialog.
+		/// 
+		/// `andThen` ── A promise that resolves to the selected resources or `undefined`.
+		/// </summary>
+		/// <param name="options">Options that control the dialog.</param>
+		/// <param name="andThen">A promise that resolves to the selected resources or `undefined`.</param>
+		void ShowOpenDialog(OpenDialogOptions options = default, Action<Uri[]> andThen = default);
 	}
 
 	/// <summary>Options to configure the behavior of the message.</summary>
@@ -311,6 +433,138 @@ namespace VscAppz {
 		[JsonProperty("validateInput_AppzFuncId")]
 		[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
 		public string ValidateInput_AppzFuncId;
+	}
+
+	/// <summary>Options to configure the behavior of the quick pick UI.</summary>
+	public partial class QuickPickOptions {
+		/// <summary>An optional flag to include the description when filtering the picks.</summary>
+		[JsonProperty("matchOnDescription")]
+		public bool MatchOnDescription;
+
+		/// <summary>An optional flag to include the detail when filtering the picks.</summary>
+		[JsonProperty("matchOnDetail")]
+		public bool MatchOnDetail;
+
+		/// <summary>An optional string to show as place holder in the input box to guide the user what to pick on.</summary>
+		[JsonProperty("placeHolder")]
+		public string PlaceHolder;
+
+		/// <summary>Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.</summary>
+		[JsonProperty("ignoreFocusOut")]
+		public bool IgnoreFocusOut;
+
+		/// <summary>An optional flag to make the picker accept multiple selections, if true the result is an array of picks.</summary>
+		[JsonProperty("canPickMany")]
+		public bool CanPickMany;
+
+		/// <summary>An optional function that is invoked whenever an item is selected.</summary>
+		[JsonIgnore]
+		public Func<QuickPickItem, any> OnDidSelectItem;
+
+		/// <summary>For internal runtime use only.</summary>
+		[JsonProperty("onDidSelectItem_AppzFuncId")]
+		[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+		public string OnDidSelectItem_AppzFuncId;
+	}
+
+	/// <summary>
+	/// Represents an item that can be selected from
+	/// a list of items.
+	/// </summary>
+	public partial class QuickPickItem {
+		/// <summary>A human readable string which is rendered prominent.</summary>
+		[JsonProperty("label"), JsonRequired]
+		public string Label;
+
+		/// <summary>A human readable string which is rendered less prominent.</summary>
+		[JsonProperty("description")]
+		public string Description;
+
+		/// <summary>A human readable string which is rendered less prominent.</summary>
+		[JsonProperty("detail")]
+		public string Detail;
+
+		/// <summary>
+		/// Optional flag indicating if this item is picked initially.
+		/// (Only honored when the picker allows multiple selections.)
+		/// </summary>
+		[JsonProperty("picked")]
+		public bool Picked;
+
+		/// <summary>Always show this item.</summary>
+		[JsonProperty("alwaysShow")]
+		public bool AlwaysShow;
+
+		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
+		[JsonProperty("my")]
+		public dict My;
+	}
+
+	/// <summary>Options to configure the behaviour of a file save dialog.</summary>
+	public partial class SaveDialogOptions {
+		/// <summary>The resource the dialog shows when opened.</summary>
+		[JsonProperty("defaultUri")]
+		public Uri DefaultUri;
+
+		/// <summary>A human-readable string for the save button.</summary>
+		[JsonProperty("saveLabel")]
+		public string SaveLabel;
+
+		/// <summary>
+		/// A set of file filters that are used by the dialog. Each entry is a human readable label,
+		/// like "TypeScript", and an array of extensions, e.g.
+		/// ```ts
+		/// {
+		///  	'Images': ['png', 'jpg']
+		///  	'TypeScript': ['ts', 'tsx']
+		/// }
+		/// ```
+		/// </summary>
+		[JsonProperty("filters")]
+		public Dictionary<string, string[]> Filters;
+	}
+
+	/// <summary>
+	/// Options to configure the behaviour of a file open dialog.
+	/// 
+	/// * Note 1: A dialog can select files, folders, or both. This is not true for Windows
+	/// which enforces to open either files or folder, but *not both*.
+	/// * Note 2: Explicitly setting `canSelectFiles` and `canSelectFolders` to `false` is futile
+	/// and the editor then silently adjusts the options to select files.
+	/// </summary>
+	public partial class OpenDialogOptions {
+		/// <summary>The resource the dialog shows when opened.</summary>
+		[JsonProperty("defaultUri")]
+		public Uri DefaultUri;
+
+		/// <summary>A human-readable string for the open button.</summary>
+		[JsonProperty("openLabel")]
+		public string OpenLabel;
+
+		/// <summary>Allow to select files, defaults to `true`.</summary>
+		[JsonProperty("canSelectFiles")]
+		public bool CanSelectFiles;
+
+		/// <summary>Allow to select folders, defaults to `false`.</summary>
+		[JsonProperty("canSelectFolders")]
+		public bool CanSelectFolders;
+
+		/// <summary>Allow to select many files or folders.</summary>
+		[JsonProperty("canSelectMany")]
+		public bool CanSelectMany;
+
+		/// <summary>
+		/// A set of file filters that are used by the dialog. Each entry is a human readable label,
+		/// like "TypeScript", and an array of extensions, e.g.
+		/// ```ts
+		/// {
+		///  	'Images': ['png', 'jpg']
+		///  	'TypeScript': ['ts', 'tsx']
+		/// }
+		/// ```
+		/// </summary>
+		[JsonProperty("filters")]
+		public Dictionary<string, string[]> Filters;
 	}
 
 	internal partial class impl : IVscode, IWindow {
@@ -650,12 +904,12 @@ namespace VscAppz {
 			msg.Data = new dict(2);
 			List<string> fnids = default;
 			fnids = new List<string>(1);
-			lock (this) {
-				if ((null != options)) {
-					options.ValidateInput_AppzFuncId = "";
-					Func<string, string> fn = default;
-					fn = options.ValidateInput;
-					if ((null != fn)) {
+			if ((null != options)) {
+				options.ValidateInput_AppzFuncId = "";
+				Func<string, string> fn = default;
+				fn = options.ValidateInput;
+				if ((null != fn)) {
+					lock (this) {
 						options.ValidateInput_AppzFuncId = this.nextFuncId();
 						fnids.Add(options.ValidateInput_AppzFuncId);
 						this.cbOther[options.ValidateInput_AppzFuncId] = (any[] args) => {
@@ -677,7 +931,15 @@ namespace VscAppz {
 				}
 			}
 			msg.Data["options"] = options;
-			msg.Data["token"] = token;
+			if ((null != token)) {
+				token.impl = this;
+				if (("" == token.fnId)) {
+					lock (this) {
+						token.fnId = this.nextFuncId();
+					}
+				}
+				msg.Data["token"] = token.fnId;
+			}
 			Func<any, bool> on = default;
 			if ((null != andThen)) {
 				on = (any payload) => {
@@ -705,6 +967,452 @@ namespace VscAppz {
 				}
 				return ((null == on) || on(payload));
 			});
+		}
+
+		void IWindow.ShowQuickPick(string[] items, QuickPickOptions options, Cancel token, Action<string[]> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showQuickPick1";
+			msg.Data = new dict(3);
+			List<string> fnids = default;
+			fnids = new List<string>(1);
+			if (true) {
+				options.OnDidSelectItem_AppzFuncId = "";
+				Func<QuickPickItem, any> fn = default;
+				fn = options.OnDidSelectItem;
+				if ((null != fn)) {
+					lock (this) {
+						options.OnDidSelectItem_AppzFuncId = this.nextFuncId();
+						fnids.Add(options.OnDidSelectItem_AppzFuncId);
+						this.cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
+							if ((1 != args.Length)) {
+								return (null, false);
+							} else {
+								bool ok = default;
+								QuickPickItem __0 = default;
+								if ((null != args[0])) {
+									__0 = new QuickPickItem();
+									ok = __0.populateFrom(args[0]);
+									if ((!ok)) {
+										return (null, false);
+									}
+								} else {
+									return (null, false);
+								}								
+								return (fn(__0), true);
+							}							
+						};
+					}
+				}
+			}
+			msg.Data["items"] = items;
+			options.CanPickMany = true;
+			msg.Data["options"] = options;
+			if ((null != token)) {
+				token.impl = this;
+				if (("" == token.fnId)) {
+					lock (this) {
+						token.fnId = this.nextFuncId();
+					}
+				}
+				msg.Data["token"] = token.fnId;
+			}
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string[] result = default;
+					if ((null != payload)) {
+						any[] __coll__result = default;
+						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = new string[__coll__result.Length];
+						int __idx__result = default;
+						__idx__result = 0;
+						foreach (var __item__result in __coll__result) {
+							string __val__result = default;
+							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
+							if ((!ok)) {
+								return false;
+							}
+							result[__idx__result] = __val__result;
+							__idx__result = (__idx__result + 1);
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, (any payload) => {
+				if ((fnids.Count != 0)) {
+					lock (this) {
+						foreach (var fnid in fnids) {
+							this.cbOther.Remove(fnid);
+						}
+					}
+				}
+				return ((null == on) || on(payload));
+			});
+		}
+
+		void IWindow.ShowQuickPick(string[] items, QuickPickOptions options, Cancel token, Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showQuickPick2";
+			msg.Data = new dict(3);
+			List<string> fnids = default;
+			fnids = new List<string>(1);
+			if ((null != options)) {
+				options.OnDidSelectItem_AppzFuncId = "";
+				Func<QuickPickItem, any> fn = default;
+				fn = options.OnDidSelectItem;
+				if ((null != fn)) {
+					lock (this) {
+						options.OnDidSelectItem_AppzFuncId = this.nextFuncId();
+						fnids.Add(options.OnDidSelectItem_AppzFuncId);
+						this.cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
+							if ((1 != args.Length)) {
+								return (null, false);
+							} else {
+								bool ok = default;
+								QuickPickItem __0 = default;
+								if ((null != args[0])) {
+									__0 = new QuickPickItem();
+									ok = __0.populateFrom(args[0]);
+									if ((!ok)) {
+										return (null, false);
+									}
+								} else {
+									return (null, false);
+								}								
+								return (fn(__0), true);
+							}							
+						};
+					}
+				}
+			}
+			msg.Data["items"] = items;
+			msg.Data["options"] = options;
+			if ((null != token)) {
+				token.impl = this;
+				if (("" == token.fnId)) {
+					lock (this) {
+						token.fnId = this.nextFuncId();
+					}
+				}
+				msg.Data["token"] = token.fnId;
+			}
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						string _result_ = default;
+						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = _result_;
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, (any payload) => {
+				if ((fnids.Count != 0)) {
+					lock (this) {
+						foreach (var fnid in fnids) {
+							this.cbOther.Remove(fnid);
+						}
+					}
+				}
+				return ((null == on) || on(payload));
+			});
+		}
+
+		void IWindow.ShowQuickPick(QuickPickItem[] items, QuickPickOptions options, Cancel token, Action<QuickPickItem[]> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showQuickPick3";
+			msg.Data = new dict(3);
+			List<string> fnids = default;
+			fnids = new List<string>(1);
+			if (true) {
+				options.OnDidSelectItem_AppzFuncId = "";
+				Func<QuickPickItem, any> fn = default;
+				fn = options.OnDidSelectItem;
+				if ((null != fn)) {
+					lock (this) {
+						options.OnDidSelectItem_AppzFuncId = this.nextFuncId();
+						fnids.Add(options.OnDidSelectItem_AppzFuncId);
+						this.cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
+							if ((1 != args.Length)) {
+								return (null, false);
+							} else {
+								bool ok = default;
+								QuickPickItem __0 = default;
+								if ((null != args[0])) {
+									__0 = new QuickPickItem();
+									ok = __0.populateFrom(args[0]);
+									if ((!ok)) {
+										return (null, false);
+									}
+								} else {
+									return (null, false);
+								}								
+								return (fn(__0), true);
+							}							
+						};
+					}
+				}
+			}
+			msg.Data["items"] = items;
+			options.CanPickMany = true;
+			msg.Data["options"] = options;
+			if ((null != token)) {
+				token.impl = this;
+				if (("" == token.fnId)) {
+					lock (this) {
+						token.fnId = this.nextFuncId();
+					}
+				}
+				msg.Data["token"] = token.fnId;
+			}
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					QuickPickItem[] result = default;
+					if ((null != payload)) {
+						any[] __coll__result = default;
+						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = new QuickPickItem[__coll__result.Length];
+						int __idx__result = default;
+						__idx__result = 0;
+						foreach (var __item__result in __coll__result) {
+							QuickPickItem __val__result = default;
+							__val__result = new QuickPickItem();
+							ok = __val__result.populateFrom(__item__result);
+							if ((!ok)) {
+								return false;
+							}
+							result[__idx__result] = __val__result;
+							__idx__result = (__idx__result + 1);
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, (any payload) => {
+				if ((fnids.Count != 0)) {
+					lock (this) {
+						foreach (var fnid in fnids) {
+							this.cbOther.Remove(fnid);
+						}
+					}
+				}
+				return ((null == on) || on(payload));
+			});
+		}
+
+		void IWindow.ShowQuickPick(QuickPickItem[] items, QuickPickOptions options, Cancel token, Action<QuickPickItem> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showQuickPick4";
+			msg.Data = new dict(3);
+			List<string> fnids = default;
+			fnids = new List<string>(1);
+			if ((null != options)) {
+				options.OnDidSelectItem_AppzFuncId = "";
+				Func<QuickPickItem, any> fn = default;
+				fn = options.OnDidSelectItem;
+				if ((null != fn)) {
+					lock (this) {
+						options.OnDidSelectItem_AppzFuncId = this.nextFuncId();
+						fnids.Add(options.OnDidSelectItem_AppzFuncId);
+						this.cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
+							if ((1 != args.Length)) {
+								return (null, false);
+							} else {
+								bool ok = default;
+								QuickPickItem __0 = default;
+								if ((null != args[0])) {
+									__0 = new QuickPickItem();
+									ok = __0.populateFrom(args[0]);
+									if ((!ok)) {
+										return (null, false);
+									}
+								} else {
+									return (null, false);
+								}								
+								return (fn(__0), true);
+							}							
+						};
+					}
+				}
+			}
+			msg.Data["items"] = items;
+			msg.Data["options"] = options;
+			if ((null != token)) {
+				token.impl = this;
+				if (("" == token.fnId)) {
+					lock (this) {
+						token.fnId = this.nextFuncId();
+					}
+				}
+				msg.Data["token"] = token.fnId;
+			}
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					QuickPickItem result = default;
+					if ((null != payload)) {
+						result = new QuickPickItem();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, (any payload) => {
+				if ((fnids.Count != 0)) {
+					lock (this) {
+						foreach (var fnid in fnids) {
+							this.cbOther.Remove(fnid);
+						}
+					}
+				}
+				return ((null == on) || on(payload));
+			});
+		}
+
+		void IWindow.SetStatusBarMessage(string text, int hideAfterTimeout, Action<Disposable> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.setStatusBarMessage1";
+			msg.Data = new dict(2);
+			msg.Data["text"] = text;
+			msg.Data["hideAfterTimeout"] = hideAfterTimeout;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					Disposable result = default;
+					if ((null != payload)) {
+						result = new Disposable();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					} else {
+						return false;
+					}					
+					andThen(result.bindTo(this));
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IWindow.SetStatusBarMessage(string text, Action<Disposable> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.setStatusBarMessage2";
+			msg.Data = new dict(1);
+			msg.Data["text"] = text;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					Disposable result = default;
+					if ((null != payload)) {
+						result = new Disposable();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					} else {
+						return false;
+					}					
+					andThen(result.bindTo(this));
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IWindow.ShowSaveDialog(SaveDialogOptions options, Action<Uri> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showSaveDialog";
+			msg.Data = new dict(1);
+			msg.Data["options"] = options;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					Uri result = default;
+					if ((null != payload)) {
+						result = new Uri();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IWindow.ShowOpenDialog(OpenDialogOptions options, Action<Uri[]> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.showOpenDialog";
+			msg.Data = new dict(1);
+			msg.Data["options"] = options;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					Uri[] result = default;
+					if ((null != payload)) {
+						any[] __coll__result = default;
+						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = new Uri[__coll__result.Length];
+						int __idx__result = default;
+						__idx__result = 0;
+						foreach (var __item__result in __coll__result) {
+							Uri __val__result = default;
+							__val__result = new Uri();
+							ok = __val__result.populateFrom(__item__result);
+							if ((!ok)) {
+								return false;
+							}
+							result[__idx__result] = __val__result;
+							__idx__result = (__idx__result + 1);
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
 		}
 
 	}
@@ -743,6 +1451,91 @@ namespace VscAppz {
 				this.IsCloseAffordance = isCloseAffordance;
 			}
 			(val, ok) = (it.TryGetValue("my", out var ____) ? (____, true) : (default, false));
+			if (ok) {
+				dict my = default;
+				if ((null != val)) {
+					(my, ok) = (val is dict) ? (((dict)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+				}
+				this.My = my;
+			}
+			return true;
+		}
+	}
+
+	public partial class QuickPickItem {
+		internal bool populateFrom(any payload) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if ((!ok)) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("label", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				string label = default;
+				if ((null != val)) {
+					(label, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+				}
+				this.Label = label;
+			} else {
+				return false;
+			}			
+			(val, ok) = (it.TryGetValue("description", out var ___) ? (___, true) : (default, false));
+			if (ok) {
+				string description = default;
+				if ((null != val)) {
+					string _description_ = default;
+					(_description_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					description = _description_;
+				}
+				this.Description = description;
+			}
+			(val, ok) = (it.TryGetValue("detail", out var ____) ? (____, true) : (default, false));
+			if (ok) {
+				string detail = default;
+				if ((null != val)) {
+					string _detail_ = default;
+					(_detail_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					detail = _detail_;
+				}
+				this.Detail = detail;
+			}
+			(val, ok) = (it.TryGetValue("picked", out var _____) ? (_____, true) : (default, false));
+			if (ok) {
+				bool picked = default;
+				if ((null != val)) {
+					(picked, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+				}
+				this.Picked = picked;
+			}
+			(val, ok) = (it.TryGetValue("alwaysShow", out var ______) ? (______, true) : (default, false));
+			if (ok) {
+				bool alwaysShow = default;
+				if ((null != val)) {
+					(alwaysShow, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+				}
+				this.AlwaysShow = alwaysShow;
+			}
+			(val, ok) = (it.TryGetValue("my", out var _______) ? (_______, true) : (default, false));
 			if (ok) {
 				dict my = default;
 				if ((null != val)) {

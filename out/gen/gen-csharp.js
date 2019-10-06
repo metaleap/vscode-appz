@@ -64,6 +64,7 @@ class Gen extends gen_ast.Gen {
         this.undent().lines("}", "");
     }
     emitFuncImpl(it) {
+        anonVarCounter = 1;
         let struct = it.Type, iface = it.Type;
         [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null];
         const isproperty = !(it.Func.Args && it.Func.Args.length);
@@ -124,8 +125,15 @@ class Gen extends gen_ast.Gen {
     }
     emitExpr(it) {
         const ecollnew = it;
-        if (ecollnew && ecollnew.Capacity !== undefined)
-            return this.when(ecollnew.ElemTypeIfList, () => this.s("new List<").emitTypeRef(ecollnew.ElemTypeIfList).s(">"), () => this.s("new " + this.options.idents.typeDict)).s("(").emitExpr(ecollnew.Capacity).s(")");
+        if (ecollnew && (ecollnew.Cap !== undefined || ecollnew.Len !== undefined))
+            if (!ecollnew.ElemType)
+                return this.s("new ", this.options.idents.typeDict, "(").emitExpr(ecollnew.Cap).s(")");
+            else if (ecollnew.Len !== undefined)
+                return this.s("new ").emitTypeRef(ecollnew.ElemType).s("[").emitExpr(ecollnew.Len).s("]");
+            else if (ecollnew.Cap !== undefined)
+                return this.s("new List<").emitTypeRef(ecollnew.ElemType).s(">(").emitExpr(ecollnew.Cap).s(")");
+            else
+                throw ecollnew;
         const enew = it;
         if (enew && enew.New)
             return this.s("new ").emitTypeRef(enew.New).s("()");
@@ -144,7 +152,7 @@ class Gen extends gen_ast.Gen {
                 return this.s("(null != ").emitExpr(eop.Operands[0]).s(")");
             else if (eop.Name === gen_ast.BuilderOperators.Isnt)
                 return this.s("(null == ").emitExpr(eop.Operands[0]).s(")");
-            else if (eop.Name === gen_ast.BuilderOperators.Addr)
+            else if (eop.Name === gen_ast.BuilderOperators.Addr || eop.Name === gen_ast.BuilderOperators.Deref)
                 return this.emitExpr(eop.Operands[0]);
             else if (eop.Name === gen_ast.BuilderOperators.Idx)
                 return this.emitExpr(eop.Operands[0]).s("[").emitExprs("][", ...eop.Operands.slice(1)).s("]");
@@ -163,11 +171,11 @@ class Gen extends gen_ast.Gen {
         if (tmay)
             return this.emitTypeRef(tmay.Maybe)
                 .s(typeRefNullable(tmay.Maybe) ? "" : "?");
-        const tarr = this.typeArr(it);
-        if (tarr)
-            return (tarr.AsList)
-                ? this.s("List<").emitTypeRef(tarr.ArrOf).s(">")
-                : this.emitTypeRef(tarr.ArrOf).s("[]");
+        const tcoll = this.typeColl(it);
+        if (tcoll)
+            return (tcoll.KeysOf === null) ? this.s("List<").emitTypeRef(tcoll.ValsOf).s(">") :
+                (tcoll.KeysOf === undefined) ? this.emitTypeRef(tcoll.ValsOf).s("[]") :
+                    this.s("Dictionary<").emitTypeRef(tcoll.KeysOf).s(", ").emitTypeRef(tcoll.ValsOf).s(">");
         const ttup = this.typeTup(it);
         if (ttup)
             return this.s("(").each(ttup.TupOf, ", ", t => this.emitTypeRef(t)).s(")");

@@ -272,6 +272,145 @@ Window: interface
         token: ?Cancel
         andThen: ?(?string->void)
 
+    # showQuickPick:
+    # Shows a selection list allowing multiple selections.
+    #
+    # @items:
+    # An array of strings, or a promise that resolves to an array of strings.
+    #
+    # @options:
+    # Configures the behavior of the selection list.
+    #
+    # @token:
+    # A token that can be used to signal cancellation.
+    #
+    # @andThen:
+    # A promise that resolves to the selected items or `undefined`.
+    ShowQuickPick1: void
+        items: [string]
+        options: QuickPickOptions
+        token: ?Cancel
+        andThen: ?(?[string]->void)
+
+    # showQuickPick:
+    # Shows a selection list.
+    #
+    # @items:
+    # An array of strings, or a promise that resolves to an array of strings.
+    #
+    # @options:
+    # Configures the behavior of the selection list.
+    #
+    # @token:
+    # A token that can be used to signal cancellation.
+    #
+    # @andThen:
+    # A promise that resolves to the selection or `undefined`.
+    ShowQuickPick2: void
+        items: [string]
+        options: ?QuickPickOptions
+        token: ?Cancel
+        andThen: ?(?string->void)
+
+    # showQuickPick:
+    # Shows a selection list allowing multiple selections.
+    #
+    # @items:
+    # An array of items, or a promise that resolves to an array of items.
+    #
+    # @options:
+    # Configures the behavior of the selection list.
+    #
+    # @token:
+    # A token that can be used to signal cancellation.
+    #
+    # @andThen:
+    # A promise that resolves to the selected items or `undefined`.
+    ShowQuickPick3: void
+        items: [QuickPickItem]
+        options: QuickPickOptions
+        token: ?Cancel
+        andThen: ?(?[QuickPickItem]->void)
+
+    # showQuickPick:
+    # Shows a selection list.
+    #
+    # @items:
+    # An array of items, or a promise that resolves to an array of items.
+    #
+    # @options:
+    # Configures the behavior of the selection list.
+    #
+    # @token:
+    # A token that can be used to signal cancellation.
+    #
+    # @andThen:
+    # A promise that resolves to the selected item or `undefined`.
+    ShowQuickPick4: void
+        items: [QuickPickItem]
+        options: ?QuickPickOptions
+        token: ?Cancel
+        andThen: ?(?QuickPickItem->void)
+
+    # setStatusBarMessage:
+    # Set a message to the status bar. This is a short hand for the more powerful
+    # status bar [items](#window.createStatusBarItem).
+    #
+    # @text:
+    # The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
+    #
+    # @hideAfterTimeout:
+    # Timeout in milliseconds after which the message will be disposed.
+    #
+    # @andThen:
+    # A disposable which hides the status bar message.
+    SetStatusBarMessage1: void
+        text: string
+        hideAfterTimeout: int
+        andThen: ?(?Disposable->void)
+
+    # setStatusBarMessage:
+    # Set a message to the status bar. This is a short hand for the more powerful
+    # status bar [items](#window.createStatusBarItem).
+    # 
+    # *Note* that status bar messages stack and that they must be disposed when no
+    # longer used.
+    #
+    # @text:
+    # The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
+    #
+    # @andThen:
+    # A disposable which hides the status bar message.
+    SetStatusBarMessage2: void
+        text: string
+        andThen: ?(?Disposable->void)
+
+    # showSaveDialog:
+    # Shows a file save dialog to the user which allows to select a file
+    # for saving-purposes.
+    #
+    # @options:
+    # Options that control the dialog.
+    #
+    # @andThen:
+    # A promise that resolves to the selected resource or `undefined`.
+    ShowSaveDialog: void
+        options: SaveDialogOptions
+        andThen: ?(?Uri->void)
+
+    # showOpenDialog:
+    # Shows a file open dialog to the user which allows to select a file
+    # for opening-purposes.
+    #
+    # @options:
+    # Options that control the dialog.
+    #
+    # @andThen:
+    # A promise that resolves to the selected resources or `undefined`.
+    ShowOpenDialog: void
+        options: OpenDialogOptions
+        andThen: ?(?[Uri]->void)
+
 
 
 
@@ -378,6 +517,182 @@ InputBoxOptions: class
 
 
 
+# Options to configure the behavior of the quick pick UI.
+QuickPickOptions: class
+
+    # matchOnDescription:
+    # An optional flag to include the description when filtering the picks.
+    #
+    # JSON FLAGS: {"Name":"matchOnDescription","Required":false,"Excluded":false}
+    MatchOnDescription: ?bool
+
+    # matchOnDetail:
+    # An optional flag to include the detail when filtering the picks.
+    #
+    # JSON FLAGS: {"Name":"matchOnDetail","Required":false,"Excluded":false}
+    MatchOnDetail: ?bool
+
+    # placeHolder:
+    # An optional string to show as place holder in the input box to guide the user what to pick on.
+    #
+    # JSON FLAGS: {"Name":"placeHolder","Required":false,"Excluded":false}
+    PlaceHolder: ?string
+
+    # ignoreFocusOut:
+    # Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.
+    #
+    # JSON FLAGS: {"Name":"ignoreFocusOut","Required":false,"Excluded":false}
+    IgnoreFocusOut: ?bool
+
+    # canPickMany:
+    # An optional flag to make the picker accept multiple selections, if true the result is an array of picks.
+    #
+    # JSON FLAGS: {"Name":"canPickMany","Required":false,"Excluded":false}
+    CanPickMany: ?bool
+
+    # onDidSelectItem:
+    # An optional function that is invoked whenever an item is selected.
+    #
+    # JSON FLAGS: {"Name":"onDidSelectItem","Required":false,"Excluded":true}
+    OnDidSelectItem: ?(QuickPickItem->any)
+
+    # For internal runtime use only.
+    #
+    # JSON FLAGS: {"Name":"onDidSelectItem_AppzFuncId","Required":false,"Excluded":false}
+    OnDidSelectItem_AppzFuncId: string
+
+
+
+
+# Represents an item that can be selected from
+# a list of items.
+QuickPickItem: class
+
+    # label:
+    # A human readable string which is rendered prominent.
+    #
+    # JSON FLAGS: {"Name":"label","Required":true,"Excluded":false}
+    Label: string
+
+    # description:
+    # A human readable string which is rendered less prominent.
+    #
+    # JSON FLAGS: {"Name":"description","Required":false,"Excluded":false}
+    Description: ?string
+
+    # detail:
+    # A human readable string which is rendered less prominent.
+    #
+    # JSON FLAGS: {"Name":"detail","Required":false,"Excluded":false}
+    Detail: ?string
+
+    # picked:
+    # Optional flag indicating if this item is picked initially.
+    # (Only honored when the picker allows multiple selections.)
+    #
+    # JSON FLAGS: {"Name":"picked","Required":false,"Excluded":false}
+    Picked: ?bool
+
+    # alwaysShow:
+    # Always show this item.
+    #
+    # JSON FLAGS: {"Name":"alwaysShow","Required":false,"Excluded":false}
+    AlwaysShow: ?bool
+
+    # my:
+    # Free-form custom data, preserved across a roundtrip.
+    #
+    # JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
+    My: ?dict
+
+
+
+
+# Options to configure the behaviour of a file save dialog.
+SaveDialogOptions: class
+
+    # defaultUri:
+    # The resource the dialog shows when opened.
+    #
+    # JSON FLAGS: {"Name":"defaultUri","Required":false,"Excluded":false}
+    DefaultUri: ?Uri
+
+    # saveLabel:
+    # A human-readable string for the save button.
+    #
+    # JSON FLAGS: {"Name":"saveLabel","Required":false,"Excluded":false}
+    SaveLabel: ?string
+
+    # filters:
+    # A set of file filters that are used by the dialog. Each entry is a human readable label,
+    # like "TypeScript", and an array of extensions, e.g.
+    # ```ts
+    # {
+    #  	'Images': ['png', 'jpg']
+    #  	'TypeScript': ['ts', 'tsx']
+    # }
+    # ```
+    #
+    # JSON FLAGS: {"Name":"filters","Required":false,"Excluded":false}
+    Filters: ?[[string]]
+
+
+
+
+# Options to configure the behaviour of a file open dialog.
+# 
+# * Note 1: A dialog can select files, folders, or both. This is not true for Windows
+# which enforces to open either files or folder, but *not both*.
+# * Note 2: Explicitly setting `canSelectFiles` and `canSelectFolders` to `false` is futile
+# and the editor then silently adjusts the options to select files.
+OpenDialogOptions: class
+
+    # defaultUri:
+    # The resource the dialog shows when opened.
+    #
+    # JSON FLAGS: {"Name":"defaultUri","Required":false,"Excluded":false}
+    DefaultUri: ?Uri
+
+    # openLabel:
+    # A human-readable string for the open button.
+    #
+    # JSON FLAGS: {"Name":"openLabel","Required":false,"Excluded":false}
+    OpenLabel: ?string
+
+    # canSelectFiles:
+    # Allow to select files, defaults to `true`.
+    #
+    # JSON FLAGS: {"Name":"canSelectFiles","Required":false,"Excluded":false}
+    CanSelectFiles: ?bool
+
+    # canSelectFolders:
+    # Allow to select folders, defaults to `false`.
+    #
+    # JSON FLAGS: {"Name":"canSelectFolders","Required":false,"Excluded":false}
+    CanSelectFolders: ?bool
+
+    # canSelectMany:
+    # Allow to select many files or folders.
+    #
+    # JSON FLAGS: {"Name":"canSelectMany","Required":false,"Excluded":false}
+    CanSelectMany: ?bool
+
+    # filters:
+    # A set of file filters that are used by the dialog. Each entry is a human readable label,
+    # like "TypeScript", and an array of extensions, e.g.
+    # ```ts
+    # {
+    #  	'Images': ['png', 'jpg']
+    #  	'TypeScript': ['ts', 'tsx']
+    # }
+    # ```
+    #
+    # JSON FLAGS: {"Name":"filters","Required":false,"Excluded":false}
+    Filters: ?[[string]]
+
+
+
+
 Vscode·Window: ( -> Window)
     return this
 
@@ -385,8 +700,8 @@ Vscode·Window: ( -> Window)
 
 
 Window·ShowErrorMessage1: (message:string -> items:[string] -> andThen:?(?string->void) -> void)
-    var msg of ipcMsg
-    msg = ipcMsg·new
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
     msg.QName = "window.showErrorMessage1"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
@@ -411,8 +726,8 @@ Window·ShowErrorMessage1: (message:string -> items:[string] -> andThen:?(?strin
 
 
 Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(?string->void) -> void)
-    var msg of ipcMsg
-    msg = ipcMsg·new
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
     msg.QName = "window.showErrorMessage2"
     msg.Data = dict·new(3)
     msg.Data@"message" = message
@@ -438,8 +753,8 @@ Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[s
 
 
 Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
-    var msg of ipcMsg
-    msg = ipcMsg·new
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
     msg.QName = "window.showErrorMessage3"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
@@ -463,8 +778,8 @@ Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> andThen:?(?
 
 
 Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
-    var msg of ipcMsg
-    msg = ipcMsg·new
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
     msg.QName = "window.showErrorMessage4"
     msg.Data = dict·new(3)
     msg.Data@"message" = message
@@ -489,8 +804,8 @@ Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[M
 
 
 Window·ShowInformationMessage1: (message:string -> items:[string] -> andThen:?(?string->void) -> void)
-    var msg of ipcMsg
-    msg = ipcMsg·new
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
     msg.QName = "window.showInformationMessage1"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
@@ -515,8 +830,8 @@ Window·ShowInformationMessage1: (message:string -> items:[string] -> andThen:?(
 
 
 Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(?string->void) -> void)
-    var msg of ipcMsg
-    msg = ipcMsg·new
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
     msg.QName = "window.showInformationMessage2"
     msg.Data = dict·new(3)
     msg.Data@"message" = message
@@ -542,8 +857,8 @@ Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> it
 
 
 Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
-    var msg of ipcMsg
-    msg = ipcMsg·new
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
     msg.QName = "window.showInformationMessage3"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
@@ -567,8 +882,8 @@ Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> andTh
 
 
 Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
-    var msg of ipcMsg
-    msg = ipcMsg·new
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
     msg.QName = "window.showInformationMessage4"
     msg.Data = dict·new(3)
     msg.Data@"message" = message
@@ -593,8 +908,8 @@ Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> it
 
 
 Window·ShowWarningMessage1: (message:string -> items:[string] -> andThen:?(?string->void) -> void)
-    var msg of ipcMsg
-    msg = ipcMsg·new
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
     msg.QName = "window.showWarningMessage1"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
@@ -619,8 +934,8 @@ Window·ShowWarningMessage1: (message:string -> items:[string] -> andThen:?(?str
 
 
 Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:[string] -> andThen:?(?string->void) -> void)
-    var msg of ipcMsg
-    msg = ipcMsg·new
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
     msg.QName = "window.showWarningMessage2"
     msg.Data = dict·new(3)
     msg.Data@"message" = message
@@ -646,8 +961,8 @@ Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:
 
 
 Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
-    var msg of ipcMsg
-    msg = ipcMsg·new
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
     msg.QName = "window.showWarningMessage3"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
@@ -671,8 +986,8 @@ Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> andThen:?
 
 
 Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> andThen:?(?MessageItem->void) -> void)
-    var msg of ipcMsg
-    msg = ipcMsg·new
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
     msg.QName = "window.showWarningMessage4"
     msg.Data = dict·new(3)
     msg.Data@"message" = message
@@ -697,18 +1012,18 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
 
 
 Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> andThen:?(?string->void) -> void)
-    var msg of ipcMsg
-    msg = ipcMsg·new
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
     msg.QName = "window.showInputBox"
     msg.Data = dict·new(2)
     var fnids of [string]
     fnids = [string]·new(1)
-    lock this
-        if (=?options)
-            options.ValidateInput_AppzFuncId = ""
-            var fn of ?(string->string)
-            fn = options.ValidateInput
-            if (=?fn)
+    if (=?options)
+        options.ValidateInput_AppzFuncId = ""
+        var fn of ?(string->string)
+        fn = options.ValidateInput
+        if (=?fn)
+            lock this
                 options.ValidateInput_AppzFuncId = this.nextFuncId()
                 fnids·add(options.ValidateInput_AppzFuncId)
                 this.cbOther@options.ValidateInput_AppzFuncId = (args:[any] -> [any,bool])
@@ -724,7 +1039,12 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> andThen:?(?s
                         return [fn(__0),true]
                 
     msg.Data@"options" = options
-    msg.Data@"token" = token
+    if (=?token)
+        token.impl = this
+        if ("" == token.fnId)
+            lock this
+                token.fnId = this.nextFuncId()
+        msg.Data@"token" = token.fnId
     var on of (any->bool)
     if (=?andThen)
         on = (payload:any -> bool)
@@ -746,6 +1066,390 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> andThen:?(?s
                     this.cbOther·del(fnid)
         return ((=!on) || on(payload))
     )
+
+
+
+
+Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Cancel -> andThen:?(?[string]->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "window.showQuickPick1"
+    msg.Data = dict·new(3)
+    var fnids of [string]
+    fnids = [string]·new(1)
+    if true
+        options.OnDidSelectItem_AppzFuncId = ""
+        var fn of ?(QuickPickItem->any)
+        fn = options.OnDidSelectItem
+        if (=?fn)
+            lock this
+                options.OnDidSelectItem_AppzFuncId = this.nextFuncId()
+                fnids·add(options.OnDidSelectItem_AppzFuncId)
+                this.cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
+                    if (1 != args·len)
+                        return [null,false]
+                    else
+                        var ok of bool
+                        var __0 of QuickPickItem
+                        if (=?args@0)
+                            __0 = QuickPickItem·new
+                            ok = __0.populateFrom(args@0)
+                            if (!ok)
+                                return [null,false]
+                        else
+                            return [null,false]
+                        return [fn(__0),true]
+                
+    msg.Data@"items" = items
+    options.CanPickMany = true
+    msg.Data@"options" = options
+    if (=?token)
+        token.impl = this
+        if ("" == token.fnId)
+            lock this
+                token.fnId = this.nextFuncId()
+        msg.Data@"token" = token.fnId
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?[string]
+            if (=?payload)
+                var __coll__result of [any]
+                [__coll__result,ok] = ((payload)·([any]))
+                if (!ok)
+                    return false
+                result = [string]·new(__coll__result·len)
+                var __idx__result of int
+                __idx__result = 0
+                for __item__result in __coll__result
+                    var __val__result of string
+                    [__val__result,ok] = ((__item__result)·(string))
+                    if (!ok)
+                        return false
+                    result@__idx__result = __val__result
+                    __idx__result = (__idx__result + 1)
+            andThen(result)
+            return true
+        
+    this.send(msg, (payload:any -> bool)
+        if (fnids·len != 0)
+            lock this
+                for fnid in fnids
+                    this.cbOther·del(fnid)
+        return ((=!on) || on(payload))
+    )
+
+
+
+
+Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?Cancel -> andThen:?(?string->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "window.showQuickPick2"
+    msg.Data = dict·new(3)
+    var fnids of [string]
+    fnids = [string]·new(1)
+    if (=?options)
+        options.OnDidSelectItem_AppzFuncId = ""
+        var fn of ?(QuickPickItem->any)
+        fn = options.OnDidSelectItem
+        if (=?fn)
+            lock this
+                options.OnDidSelectItem_AppzFuncId = this.nextFuncId()
+                fnids·add(options.OnDidSelectItem_AppzFuncId)
+                this.cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
+                    if (1 != args·len)
+                        return [null,false]
+                    else
+                        var ok of bool
+                        var __0 of QuickPickItem
+                        if (=?args@0)
+                            __0 = QuickPickItem·new
+                            ok = __0.populateFrom(args@0)
+                            if (!ok)
+                                return [null,false]
+                        else
+                            return [null,false]
+                        return [fn(__0),true]
+                
+    msg.Data@"items" = items
+    msg.Data@"options" = options
+    if (=?token)
+        token.impl = this
+        if ("" == token.fnId)
+            lock this
+                token.fnId = this.nextFuncId()
+        msg.Data@"token" = token.fnId
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?string
+            if (=?payload)
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
+                if (!ok)
+                    return false
+                result = (&_result_)
+            andThen(result)
+            return true
+        
+    this.send(msg, (payload:any -> bool)
+        if (fnids·len != 0)
+            lock this
+                for fnid in fnids
+                    this.cbOther·del(fnid)
+        return ((=!on) || on(payload))
+    )
+
+
+
+
+Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> token:?Cancel -> andThen:?(?[QuickPickItem]->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "window.showQuickPick3"
+    msg.Data = dict·new(3)
+    var fnids of [string]
+    fnids = [string]·new(1)
+    if true
+        options.OnDidSelectItem_AppzFuncId = ""
+        var fn of ?(QuickPickItem->any)
+        fn = options.OnDidSelectItem
+        if (=?fn)
+            lock this
+                options.OnDidSelectItem_AppzFuncId = this.nextFuncId()
+                fnids·add(options.OnDidSelectItem_AppzFuncId)
+                this.cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
+                    if (1 != args·len)
+                        return [null,false]
+                    else
+                        var ok of bool
+                        var __0 of QuickPickItem
+                        if (=?args@0)
+                            __0 = QuickPickItem·new
+                            ok = __0.populateFrom(args@0)
+                            if (!ok)
+                                return [null,false]
+                        else
+                            return [null,false]
+                        return [fn(__0),true]
+                
+    msg.Data@"items" = items
+    options.CanPickMany = true
+    msg.Data@"options" = options
+    if (=?token)
+        token.impl = this
+        if ("" == token.fnId)
+            lock this
+                token.fnId = this.nextFuncId()
+        msg.Data@"token" = token.fnId
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?[QuickPickItem]
+            if (=?payload)
+                var __coll__result of [any]
+                [__coll__result,ok] = ((payload)·([any]))
+                if (!ok)
+                    return false
+                result = [QuickPickItem]·new(__coll__result·len)
+                var __idx__result of int
+                __idx__result = 0
+                for __item__result in __coll__result
+                    var __val__result of QuickPickItem
+                    __val__result = QuickPickItem·new
+                    ok = __val__result.populateFrom(__item__result)
+                    if (!ok)
+                        return false
+                    result@__idx__result = __val__result
+                    __idx__result = (__idx__result + 1)
+            andThen(result)
+            return true
+        
+    this.send(msg, (payload:any -> bool)
+        if (fnids·len != 0)
+            lock this
+                for fnid in fnids
+                    this.cbOther·del(fnid)
+        return ((=!on) || on(payload))
+    )
+
+
+
+
+Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> token:?Cancel -> andThen:?(?QuickPickItem->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "window.showQuickPick4"
+    msg.Data = dict·new(3)
+    var fnids of [string]
+    fnids = [string]·new(1)
+    if (=?options)
+        options.OnDidSelectItem_AppzFuncId = ""
+        var fn of ?(QuickPickItem->any)
+        fn = options.OnDidSelectItem
+        if (=?fn)
+            lock this
+                options.OnDidSelectItem_AppzFuncId = this.nextFuncId()
+                fnids·add(options.OnDidSelectItem_AppzFuncId)
+                this.cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
+                    if (1 != args·len)
+                        return [null,false]
+                    else
+                        var ok of bool
+                        var __0 of QuickPickItem
+                        if (=?args@0)
+                            __0 = QuickPickItem·new
+                            ok = __0.populateFrom(args@0)
+                            if (!ok)
+                                return [null,false]
+                        else
+                            return [null,false]
+                        return [fn(__0),true]
+                
+    msg.Data@"items" = items
+    msg.Data@"options" = options
+    if (=?token)
+        token.impl = this
+        if ("" == token.fnId)
+            lock this
+                token.fnId = this.nextFuncId()
+        msg.Data@"token" = token.fnId
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?QuickPickItem
+            if (=?payload)
+                result = ?QuickPickItem·new
+                ok = result.populateFrom(payload)
+                if (!ok)
+                    return false
+            andThen(result)
+            return true
+        
+    this.send(msg, (payload:any -> bool)
+        if (fnids·len != 0)
+            lock this
+                for fnid in fnids
+                    this.cbOther·del(fnid)
+        return ((=!on) || on(payload))
+    )
+
+
+
+
+Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> andThen:?(?Disposable->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "window.setStatusBarMessage1"
+    msg.Data = dict·new(2)
+    msg.Data@"text" = text
+    msg.Data@"hideAfterTimeout" = hideAfterTimeout
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?Disposable
+            if (=?payload)
+                result = ?Disposable·new
+                ok = result.populateFrom(payload)
+                if (!ok)
+                    return false
+            else
+                return false
+            andThen(result.bindTo(this))
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Window·SetStatusBarMessage2: (text:string -> andThen:?(?Disposable->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "window.setStatusBarMessage2"
+    msg.Data = dict·new(1)
+    msg.Data@"text" = text
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?Disposable
+            if (=?payload)
+                result = ?Disposable·new
+                ok = result.populateFrom(payload)
+                if (!ok)
+                    return false
+            else
+                return false
+            andThen(result.bindTo(this))
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Window·ShowSaveDialog: (options:SaveDialogOptions -> andThen:?(?Uri->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "window.showSaveDialog"
+    msg.Data = dict·new(1)
+    msg.Data@"options" = options
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?Uri
+            if (=?payload)
+                result = ?Uri·new
+                ok = result.populateFrom(payload)
+                if (!ok)
+                    return false
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Window·ShowOpenDialog: (options:OpenDialogOptions -> andThen:?(?[Uri]->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "window.showOpenDialog"
+    msg.Data = dict·new(1)
+    msg.Data@"options" = options
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?[Uri]
+            if (=?payload)
+                var __coll__result of [any]
+                [__coll__result,ok] = ((payload)·([any]))
+                if (!ok)
+                    return false
+                result = [Uri]·new(__coll__result·len)
+                var __idx__result of int
+                __idx__result = 0
+                for __item__result in __coll__result
+                    var __val__result of Uri
+                    __val__result = Uri·new
+                    ok = __val__result.populateFrom(__item__result)
+                    if (!ok)
+                        return false
+                    result@__idx__result = __val__result
+                    __idx__result = (__idx__result + 1)
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
 
 
 
@@ -777,6 +1481,76 @@ MessageItem·populateFrom: (payload:any -> bool)
                 return false
             isCloseAffordance = (&_isCloseAffordance_)
         this.IsCloseAffordance = isCloseAffordance
+    [val,ok] = it@?"my"
+    if ok
+        var my of ?dict
+        if (=?val)
+            [my,ok] = ((val)·(?dict))
+            if (!ok)
+                return false
+        this.My = my
+    return true
+
+
+
+
+QuickPickItem·populateFrom: (payload:any -> bool)
+    var it of dict
+    var ok of bool
+    var val of any
+    [it,ok] = ((payload)·(dict))
+    if (!ok)
+        return false
+    [val,ok] = it@?"label"
+    if ok
+        var label of string
+        if (=?val)
+            [label,ok] = ((val)·(string))
+            if (!ok)
+                return false
+        this.Label = label
+    else
+        return false
+    [val,ok] = it@?"description"
+    if ok
+        var description of ?string
+        if (=?val)
+            var _description_ of string
+            [_description_,ok] = ((val)·(string))
+            if (!ok)
+                return false
+            description = (&_description_)
+        this.Description = description
+    [val,ok] = it@?"detail"
+    if ok
+        var detail of ?string
+        if (=?val)
+            var _detail_ of string
+            [_detail_,ok] = ((val)·(string))
+            if (!ok)
+                return false
+            detail = (&_detail_)
+        this.Detail = detail
+    [val,ok] = it@?"picked"
+    if ok
+        var picked of ?bool
+        if (=?val)
+            var _picked_ of bool
+            [_picked_,ok] = ((val)·(bool))
+            if (!ok)
+                return false
+            picked = (&_picked_)
+        this.Picked = picked
+    [val,ok] = it@?"alwaysShow"
+    if ok
+        var alwaysShow of ?bool
+        if (=?val)
+            var _alwaysShow_ of bool
+            [_alwaysShow_,ok] = ((val)·(bool))
+            if (!ok)
+                return false
+            alwaysShow = (&_alwaysShow_)
+        this.AlwaysShow = alwaysShow
     [val,ok] = it@?"my"
     if ok
         var my of ?dict

@@ -1,11 +1,18 @@
 namespace VscAppzDemo {
     using System;
+    using System .Timers;
     using VscAppz;
 
     public static class App {
 
+        private static readonly string[] nil = new string[0];
+        private static IWindow win;
+
+        private static void quit(string _unused = default) =>
+            Environment.Exit(0);
+
         public static void Main(string[] args) {
-            var (greethow, greetname, nil) = ("Hallo", "Welt", new string[0]);
+            var (greethow, greetname) = ("Hallo", "Welt");
             if (args != null && args.Length > 0) {
                 // why all the Trims? dotnet doesnt seem to fill in explicitly-specified-as-empty-via-quotes args, unlike other runtimes... sheesh
                 if (!string.IsNullOrEmpty(args[0].Trim()))
@@ -14,40 +21,68 @@ namespace VscAppzDemo {
                     greethow = args[1].Trim();
             }
 
-            var win = Vsc.InOut().Window;
-            Action<string> exit = (_unused) => Environment.Exit(0);
-
-            var buttons = new[] {"Show Quick Pick...", "Show Input Box..."};
-            win.ShowInformationMessage(greethow + ", " + greetname + "! What to try out?",
-                buttons, button => {
-                    if (string.IsNullOrEmpty(button))
-                        exit("");
-
-                    else if (button == buttons[0])
-                        win.ShowWarningMessage("Not yet implemented", nil, exit);
-
-                    else if (button == buttons[1]) {
-                        var foos = new[] {"foo", "f00", "fo0", "f0o"};
-                        win.ShowInputBox(new InputBoxOptions() {
-                            IgnoreFocusOut  = true,
-                            Value           = "Enter almost anything...",
-                            ValueSelection  = (6, 12),
-                            Prompt          = "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
-                            ValidateInput   = input => Array.Exists(foos, _ => input.ToLower().Contains(_))
-                                                    ? "Contains something looking like `foo`."
-                                                    : ""
-                        }, null, input => {
-                            if (input == null)
-                                win.ShowWarningMessage("Cancelled input, bye now!", nil, exit);
-                            else
-                                win.ShowInformationMessage("You entered: `"+input+"`, bye now!", nil, exit);
-                        });
+            win = Vsc.InOut().Window;
+            win.SetStatusBarMessage("Choosing a demo WILL HIDE this", statusitem => {
+                var buttons = new[] {"Show Quick Pick...", "Show Input Box..."};
+                win.ShowInformationMessage(
+                    greethow + ", " + greetname + "! What to try out?",
+                    buttons,
+                    button => {
+                        statusitem.Dispose();
+                        if (string.IsNullOrEmpty(button))
+                            quit();
+                        else if (button == buttons[0])
+                            demoInputPick();
+                        else if (button == buttons[1])
+                            demoInputText();
+                        else
+                            win.ShowErrorMessage("Unknown: " + button, nil, quit);
                     }
+                );
+            });
+        }
 
-                    else
-                        win.ShowErrorMessage("Unknown: " + button, nil, exit);
-                }
-            );
+        private static void demoInputPick() {
+            win.ShowQuickPick(new[] {
+                new QuickPickItem() { Label = "One", Description = "The first", Detail = "Das erste" },
+                new QuickPickItem() { Label = "Two", Description = "The second", Detail = "Das zweite" },
+                new QuickPickItem() { Label = "Three", Description = "The third", Detail = "Das dritte" },
+                new QuickPickItem() { Label = "Four", Description = "The fourth", Detail = "Das vierte" },
+            }, new QuickPickOptions() {
+                IgnoreFocusOut = true, MatchOnDescription = true, MatchOnDetail = true,
+                PlaceHolder = "You have 42 seconds before auto-cancellation!",
+                OnDidSelectItem = _ => {
+                    Console.Error.WriteLine("hand-(un)picked: " + _.Label);
+                    return null;
+                },
+            }, Cancel.In(TimeSpan.FromSeconds(42)), (QuickPickItem[] pickeditems) => {
+                win.SetStatusBarMessage("Reacting to the 'bye now' will terminate the prog.", 4242);
+                if (pickeditems == null)
+                    win.ShowWarningMessage("Cancelled pick input, bye now!", nil, quit);
+                else
+                    win.ShowInformationMessage($"You picked {pickeditems.Length} item(s), bye now!", nil, quit);
+            });
+        }
+
+        private static void demoInputText() {
+            var foos = new[] {"foo", "f00", "fo0", "f0o"};
+            Func<string,string> val = textinput =>
+                                        Array.Exists(foos, _ => textinput.ToLower().Contains(_))
+                                            ? "Contains something looking like `foo`."
+                                            : "";
+            win.ShowInputBox(new InputBoxOptions() {
+                IgnoreFocusOut  = true,
+                Value           = "Enter almost anything...",
+                ValueSelection  = (6, 12),
+                Prompt          = "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
+                ValidateInput   = val
+            }, null, input => {
+                win.SetStatusBarMessage("Reacting to the 'bye now' will terminate the prog.", 4242);
+                if (input == null)
+                    win.ShowWarningMessage("Cancelled text input, bye now!", nil, quit);
+                else
+                    win.ShowInformationMessage("You entered: `"+input+"`, bye now!", nil, quit);
+            });
         }
 
     }

@@ -31,6 +31,10 @@ const genApiSurface: genApiMember = {
                 'showInformationMessage',
                 'showWarningMessage',
                 'showInputBox',
+                'showQuickPick',
+                'setStatusBarMessage',
+                'showSaveDialog',
+                'showOpenDialog',
             ],
         },
     ],
@@ -80,8 +84,14 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
             const members: ts.Node[] = []
             astNode.forEachChild(n => {
                 const decl = n as ts.DeclarationStatement
-                if (decl && decl.name && decl.name.text === item)
-                    members.push(n)
+                if (decl && decl.name && decl.name.text === item) {
+                    const declfun = decl as ts.FunctionDeclaration
+                    if ((!declfun) || (!declfun.parameters) || !declfun.parameters.find(_ => {
+                        const t = _.type as ts.TypeReferenceNode
+                        return (t && t.typeName && t.typeName.getText() === 'Thenable')
+                    }))
+                        members.push(n)
+                }
             })
             if (!members.length)
                 throw ("GONE FROM API:\texport named `" + prefixes.join('.') + '.' + item + '`')
@@ -103,26 +113,48 @@ function gatherMember(into: gen.GenJob, member: ts.Node, overload: number, ...pr
             gatherStruct(into, member as ts.InterfaceDeclaration, ...prefixes)
             break
         case ts.SyntaxKind.TupleType:
-            (member as ts.TupleTypeNode).elementTypes.forEach(_ => gatherFrom(into, _))
+            (member as ts.TupleTypeNode).elementTypes.forEach(_ => gatherFromTypeNode(into, _))
             break
         default:
             throw (member.kind + '\t' + member.getText())
     }
 }
 
-function gatherFrom(into: gen.GenJob, typeNode: ts.TypeNode, typeParams: ts.NodeArray<ts.TypeParameterDeclaration> = undefined) {
-    switch (typeNode.kind) {
+function gatherFromTypeElem(into: gen.GenJob, it: ts.TypeElement, typeParams: ts.NodeArray<ts.TypeParameterDeclaration> = undefined) {
+    if (ts.isPropertySignature(it))
+        gatherFromTypeNode(into, (it as ts.PropertySignature).type, typeParams)
+    else if (ts.isCallSignatureDeclaration(it) || ts.isConstructSignatureDeclaration(it) || ts.isMethodSignature(it) || ts.isIndexSignatureDeclaration(it)) {
+        if (it.type)
+            gatherFromTypeNode(into, it.type, (it.typeParameters && it.typeParameters.length) ? it.typeParameters : typeParams)
+        for (const _ of it.parameters)
+            gatherFromTypeNode(into, _.type, typeParams)
+    }
+}
+
+function gatherFromTypeNode(into: gen.GenJob, it: ts.TypeNode, typeParams: ts.NodeArray<ts.TypeParameterDeclaration> = undefined) {
+    switch (it.kind) {
         case ts.SyntaxKind.ArrayType:
-            gatherFrom(into, (typeNode as ts.ArrayTypeNode).elementType, typeParams)
+            gatherFromTypeNode(into, (it as ts.ArrayTypeNode).elementType, typeParams)
             break
         case ts.SyntaxKind.TupleType:
-            (typeNode as ts.TupleTypeNode).elementTypes.forEach(_ => gatherFrom(into, _, typeParams))
+            (it as ts.TupleTypeNode).elementTypes.forEach(_ => gatherFromTypeNode(into, _, typeParams))
             break
         case ts.SyntaxKind.UnionType:
-            (typeNode as ts.UnionTypeNode).types.forEach(_ => gatherFrom(into, _, typeParams))
+            (it as ts.UnionTypeNode).types.forEach(_ => gatherFromTypeNode(into, _, typeParams))
+            break
+        case ts.SyntaxKind.IntersectionType:
+            (it as ts.IntersectionTypeNode).types.forEach(_ => gatherFromTypeNode(into, _, typeParams))
+            break
+        case ts.SyntaxKind.TypeLiteral:
+            (it as ts.TypeLiteralNode).members.forEach(_ => gatherFromTypeElem(into, _, typeParams))
+            break
+        case ts.SyntaxKind.LiteralType:
+            const lit = (it as ts.LiteralTypeNode).literal
+            if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(lit.kind))
+                throw (lit.kind + '\t' + it.getText())
             break
         case ts.SyntaxKind.TypeReference:
-            const tref = typeNode as ts.TypeReferenceNode,
+            const tref = it as ts.TypeReferenceNode,
                 tname = tref.typeName.getText()
             const tparam = (!typeParams) ? null : typeParams.find(_ => _.name.getText() === tname)
             if (tparam) {
@@ -130,13 +162,13 @@ function gatherFrom(into: gen.GenJob, typeNode: ts.TypeNode, typeParams: ts.Node
                 if (tnode)
                     gatherAll(into, into.fromOrig.body, [tnode.getText()], into.moduleName)
             } else if (tname === 'Thenable')
-                tref.typeArguments.forEach(_ => gatherFrom(into, _, typeParams))
-            else if (tname !== 'CancellationToken')
+                tref.typeArguments.forEach(_ => gatherFromTypeNode(into, _, typeParams))
+            else if (tname !== 'Uri' && tname !== 'CancellationToken' && tname !== 'Disposable')
                 gatherAll(into, into.fromOrig.body, [tname], into.moduleName)
             break
         default:
-            if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(typeNode.kind))
-                throw (typeNode.kind + '\t' + typeNode.getText())
+            if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(it.kind))
+                throw (it.kind + '\t' + it.getText())
     }
 }
 
@@ -145,8 +177,8 @@ function gatherFunc(into: gen.GenJob, decl: ts.FunctionDeclaration, overload: nu
     if (into.funcs.some(_ => _.qName === qname && _.overload === overload))
         return
     into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] })
-    decl.parameters.forEach(_ => gatherFrom(into, _.type, decl.typeParameters))
-    gatherFrom(into, decl.type, decl.typeParameters)
+    decl.parameters.forEach(_ => gatherFromTypeNode(into, _.type, decl.typeParameters))
+    gatherFromTypeNode(into, decl.type, decl.typeParameters)
 }
 
 function gatherEnum(into: gen.GenJob, decl: ts.EnumDeclaration, ...prefixes: string[]) {
@@ -165,17 +197,17 @@ function gatherStruct(into: gen.GenJob, decl: ts.InterfaceDeclaration, ...prefix
         switch (member.kind) {
             case ts.SyntaxKind.PropertySignature:
                 const prop = member as ts.PropertySignature
-                gatherFrom(into, prop.type)
+                gatherFromTypeNode(into, prop.type)
                 break
             case ts.SyntaxKind.MethodSignature:
                 const method = member as ts.MethodSignature
-                gatherFrom(into, method.type, method.typeParameters)
-                method.parameters.forEach(_ => gatherFrom(into, _.type, method.typeParameters))
+                gatherFromTypeNode(into, method.type, method.typeParameters)
+                method.parameters.forEach(_ => gatherFromTypeNode(into, _.type, method.typeParameters))
                 break
             case ts.SyntaxKind.CallSignature:
                 const sig = member as ts.CallSignatureDeclaration
-                gatherFrom(into, sig.type, sig.typeParameters)
-                sig.parameters.forEach(_ => gatherFrom(into, _.type, sig.typeParameters))
+                gatherFromTypeNode(into, sig.type, sig.typeParameters)
+                sig.parameters.forEach(_ => gatherFromTypeNode(into, _.type, sig.typeParameters))
                 break
             default:
                 throw (member.kind + '\t' + member.getText())

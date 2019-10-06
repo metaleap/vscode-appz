@@ -104,7 +104,7 @@ export class Gen extends gen_ast.Gen {
         if (it) {
             const ivar = it as gen_ast.IVar
             if (ivar && ivar.Name && ivar.Type) return this.ln(() =>
-                this.s("var ", ivar.Name, " ").emitTypeRef(this.typeNamed(ivar.Type) ? { Maybe: ivar.Type } : ivar.Type))
+                this.s("var ", ivar.Name, " ").emitTypeRef(ivar.Type))
 
             const idictdel = it as gen_ast.IDictDel
             if (idictdel && idictdel.DelFrom && idictdel.DelWhat) return this.ln(() =>
@@ -145,15 +145,22 @@ export class Gen extends gen_ast.Gen {
     emitExpr(it: gen_ast.Expr): Gen {
         if (it) {
             const ecollnew = it as gen_ast.ECollNew
-            if (ecollnew && ecollnew.Capacity !== undefined)
-                if (ecollnew.ElemTypeIfList)
-                    return this.s("make([]").emitTypeRef(ecollnew.ElemTypeIfList).s(", 0, ").emitExpr(ecollnew.Capacity).s(")")
-                else
-                    return this.s("make(dict, ").emitExpr(ecollnew.Capacity).s(")")
+            if (ecollnew && (ecollnew.Cap !== undefined || ecollnew.Len !== undefined))
+                if (!ecollnew.ElemType)
+                    return this.s("make(dict, ").emitExpr(ecollnew.Cap).s(")")
+                else if (ecollnew.Cap !== undefined)
+                    return this.s("make([]").emitTypeRef(ecollnew.ElemType).s(", 0, ").emitExpr(ecollnew.Cap).s(")")
+                else if (ecollnew.Len !== undefined)
+                    return this.s("make([]").emitTypeRef(ecollnew.ElemType).s(", ").emitExpr(ecollnew.Len).s(")")
+                else // newly introduced bug
+                    throw ecollnew
 
             const enew = it as gen_ast.ENew
             if (enew && enew.New)
-                return this.s("new(").emitTypeRef(typeRefUnMaybe(enew.New)).s(")")
+                if (this.typeMaybe(enew.New))
+                    return this.s("new(").emitTypeRef(typeRefUnMaybe(enew.New)).s(")")
+                else
+                    return this.s("*/*sorryButSuchIsCodeGenSometimes...*/new(").emitTypeRef(typeRefUnMaybe(enew.New)).s(")")
 
             const etup = it as gen_ast.ETup
             if (etup && etup.Items !== undefined)
@@ -198,9 +205,10 @@ export class Gen extends gen_ast.Gen {
         if (tmay)
             return this.s(typeRefNilable(this, tmay.Maybe) ? "" : "*").emitTypeRef(tmay.Maybe)
 
-        const tarr = this.typeArr(it)
-        if (tarr)
-            return this.s("[]").emitTypeRef(tarr.ArrOf)
+        const tcoll = this.typeColl(it)
+        if (tcoll)
+            return (!tcoll.KeysOf) ? this.s("[]").emitTypeRef(tcoll.ValsOf)
+                : this.s("map[").emitTypeRef(tcoll.KeysOf).s("]").emitTypeRef(tcoll.ValsOf)
 
         const tfun = this.typeFunc(it)
         if (tfun)
@@ -224,7 +232,7 @@ function emitTypeRet(_: Gen, it: gen_ast.TypeRef) {
 
 function typeRefNilable(_: Gen, it: gen_ast.TypeRef, forceTrueForBools: boolean = false, forceTrueForInts: boolean = false, forceTrueForStrings: boolean = false) {
     return it === gen_ast.TypeRefPrim.Any || it === gen_ast.TypeRefPrim.Dict
-        || _.typeArr(it) || _.typeMaybe(it) || _.typeFunc(it) || _.typeTup(it)
+        || _.typeColl(it) || _.typeMaybe(it) || _.typeFunc(it) || _.typeTup(it)
         || (forceTrueForBools && it === gen_ast.TypeRefPrim.Bool)
         || (forceTrueForInts && it === gen_ast.TypeRefPrim.Int)
         || (forceTrueForStrings && it === gen_ast.TypeRefPrim.String)

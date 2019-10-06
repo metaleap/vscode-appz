@@ -49,6 +49,14 @@ namespace VscAppz {
             Exception err() => new JsonException(origJsonSrcForErr);
         }
 
+        internal class uri : JsonConverter{
+            public override bool CanConvert(Type objectType) => true;
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)=>
+                throw new NotImplementedException();
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) =>
+                writer.WriteValue(((Uri)value).uri);
+        }
+
         internal class valueTuples : JsonConverter
         {
             public override bool CanRead { get => false;}
@@ -95,14 +103,17 @@ namespace VscAppz {
                     jw.WriteValue(QName);
                 }
                 jw.WritePropertyName("data");
-                jw.WriteStartObject();
-                if (Data != null && Data.Count > 0)
+                if (Data == null)
+                    jw.WriteNull();
+                else {
+                    jw.WriteStartObject();
                     // lock (json.serializer) --- not needed as long as only caller is impl.send()
                     foreach (var kvp in Data) {
                         jw.WritePropertyName(kvp.Key);
                         json.serializer.Serialize(jw, kvp.Value);
                     }
-                jw.WriteEndObject();
+                    jw.WriteEndObject();
+                }
                 if (!string.IsNullOrEmpty(CbId)) {
                     jw.WritePropertyName("cbId");
                     jw.WriteValue(CbId);

@@ -24,6 +24,10 @@ const genApiSurface = {
                 'showInformationMessage',
                 'showWarningMessage',
                 'showInputBox',
+                'showQuickPick',
+                'setStatusBarMessage',
+                'showSaveDialog',
+                'showOpenDialog',
             ],
         },
     ],
@@ -71,8 +75,14 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
             const members = [];
             astNode.forEachChild(n => {
                 const decl = n;
-                if (decl && decl.name && decl.name.text === item)
-                    members.push(n);
+                if (decl && decl.name && decl.name.text === item) {
+                    const declfun = decl;
+                    if ((!declfun) || (!declfun.parameters) || !declfun.parameters.find(_ => {
+                        const t = _.type;
+                        return (t && t.typeName && t.typeName.getText() === 'Thenable');
+                    }))
+                        members.push(n);
+                }
             });
             if (!members.length)
                 throw ("GONE FROM API:\texport named `" + prefixes.join('.') + '.' + item + '`');
@@ -93,25 +103,46 @@ function gatherMember(into, member, overload, ...prefixes) {
             gatherStruct(into, member, ...prefixes);
             break;
         case ts.SyntaxKind.TupleType:
-            member.elementTypes.forEach(_ => gatherFrom(into, _));
+            member.elementTypes.forEach(_ => gatherFromTypeNode(into, _));
             break;
         default:
             throw (member.kind + '\t' + member.getText());
     }
 }
-function gatherFrom(into, typeNode, typeParams = undefined) {
-    switch (typeNode.kind) {
+function gatherFromTypeElem(into, it, typeParams = undefined) {
+    if (ts.isPropertySignature(it))
+        gatherFromTypeNode(into, it.type, typeParams);
+    else if (ts.isCallSignatureDeclaration(it) || ts.isConstructSignatureDeclaration(it) || ts.isMethodSignature(it) || ts.isIndexSignatureDeclaration(it)) {
+        if (it.type)
+            gatherFromTypeNode(into, it.type, (it.typeParameters && it.typeParameters.length) ? it.typeParameters : typeParams);
+        for (const _ of it.parameters)
+            gatherFromTypeNode(into, _.type, typeParams);
+    }
+}
+function gatherFromTypeNode(into, it, typeParams = undefined) {
+    switch (it.kind) {
         case ts.SyntaxKind.ArrayType:
-            gatherFrom(into, typeNode.elementType, typeParams);
+            gatherFromTypeNode(into, it.elementType, typeParams);
             break;
         case ts.SyntaxKind.TupleType:
-            typeNode.elementTypes.forEach(_ => gatherFrom(into, _, typeParams));
+            it.elementTypes.forEach(_ => gatherFromTypeNode(into, _, typeParams));
             break;
         case ts.SyntaxKind.UnionType:
-            typeNode.types.forEach(_ => gatherFrom(into, _, typeParams));
+            it.types.forEach(_ => gatherFromTypeNode(into, _, typeParams));
+            break;
+        case ts.SyntaxKind.IntersectionType:
+            it.types.forEach(_ => gatherFromTypeNode(into, _, typeParams));
+            break;
+        case ts.SyntaxKind.TypeLiteral:
+            it.members.forEach(_ => gatherFromTypeElem(into, _, typeParams));
+            break;
+        case ts.SyntaxKind.LiteralType:
+            const lit = it.literal;
+            if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(lit.kind))
+                throw (lit.kind + '\t' + it.getText());
             break;
         case ts.SyntaxKind.TypeReference:
-            const tref = typeNode, tname = tref.typeName.getText();
+            const tref = it, tname = tref.typeName.getText();
             const tparam = (!typeParams) ? null : typeParams.find(_ => _.name.getText() === tname);
             if (tparam) {
                 const tnode = ts.getEffectiveConstraintOfTypeParameter(tparam);
@@ -119,13 +150,13 @@ function gatherFrom(into, typeNode, typeParams = undefined) {
                     gatherAll(into, into.fromOrig.body, [tnode.getText()], into.moduleName);
             }
             else if (tname === 'Thenable')
-                tref.typeArguments.forEach(_ => gatherFrom(into, _, typeParams));
-            else if (tname !== 'CancellationToken')
+                tref.typeArguments.forEach(_ => gatherFromTypeNode(into, _, typeParams));
+            else if (tname !== 'Uri' && tname !== 'CancellationToken' && tname !== 'Disposable')
                 gatherAll(into, into.fromOrig.body, [tname], into.moduleName);
             break;
         default:
-            if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(typeNode.kind))
-                throw (typeNode.kind + '\t' + typeNode.getText());
+            if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(it.kind))
+                throw (it.kind + '\t' + it.getText());
     }
 }
 function gatherFunc(into, decl, overload, ...prefixes) {
@@ -133,8 +164,8 @@ function gatherFunc(into, decl, overload, ...prefixes) {
     if (into.funcs.some(_ => _.qName === qname && _.overload === overload))
         return;
     into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] });
-    decl.parameters.forEach(_ => gatherFrom(into, _.type, decl.typeParameters));
-    gatherFrom(into, decl.type, decl.typeParameters);
+    decl.parameters.forEach(_ => gatherFromTypeNode(into, _.type, decl.typeParameters));
+    gatherFromTypeNode(into, decl.type, decl.typeParameters);
 }
 function gatherEnum(into, decl, ...prefixes) {
     const qname = prefixes.concat(decl.name.text).join('.');
@@ -150,17 +181,17 @@ function gatherStruct(into, decl, ...prefixes) {
         switch (member.kind) {
             case ts.SyntaxKind.PropertySignature:
                 const prop = member;
-                gatherFrom(into, prop.type);
+                gatherFromTypeNode(into, prop.type);
                 break;
             case ts.SyntaxKind.MethodSignature:
                 const method = member;
-                gatherFrom(into, method.type, method.typeParameters);
-                method.parameters.forEach(_ => gatherFrom(into, _.type, method.typeParameters));
+                gatherFromTypeNode(into, method.type, method.typeParameters);
+                method.parameters.forEach(_ => gatherFromTypeNode(into, _.type, method.typeParameters));
                 break;
             case ts.SyntaxKind.CallSignature:
                 const sig = member;
-                gatherFrom(into, sig.type, sig.typeParameters);
-                sig.parameters.forEach(_ => gatherFrom(into, _.type, sig.typeParameters));
+                gatherFromTypeNode(into, sig.type, sig.typeParameters);
+                sig.parameters.forEach(_ => gatherFromTypeNode(into, _.type, sig.typeParameters));
                 break;
             default:
                 throw (member.kind + '\t' + member.getText());

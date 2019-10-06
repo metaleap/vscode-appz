@@ -23,6 +23,7 @@ var BuilderOperators;
     BuilderOperators["Is"] = "=?";
     BuilderOperators["Isnt"] = "=!";
     BuilderOperators["Addr"] = "&";
+    BuilderOperators["Deref"] = "*";
 })(BuilderOperators = exports.BuilderOperators || (exports.BuilderOperators = {}));
 class Builder {
     constructor(prep, gen) { [this.prep, this.gen] = [prep, gen]; }
@@ -38,9 +39,8 @@ class Builder {
     eNew(typeRef) { return { New: typeRef }; }
     eConv(typeRef, conv) { return { Conv: conv, To: typeRef }; }
     eTup(...items) { return { Items: items }; }
-    eArr(...items) { return { Items: items, IsArr: true }; }
     eLen(lenOf, isArr) { return { LenOf: lenOf, IsArr: isArr }; }
-    eCollNew(cap, listElemType = undefined) { return { ElemTypeIfList: listElemType, Capacity: cap }; }
+    eCollNew(capOrLen, arrOrListElemType = undefined, isArr = false) { return { ElemType: arrOrListElemType, Cap: (arrOrListElemType && isArr) ? undefined : capOrLen, Len: (arrOrListElemType && isArr) ? capOrLen : undefined }; }
     eFunc(args, retType, ...instrs) { return { Args: args, Type: retType, Body: { Instrs: instrs } }; }
     eCall(callee, ...args) { return { Call: callee, Args: args }; }
     n(name) { return { Name: name }; }
@@ -55,6 +55,7 @@ class Builder {
     oOr(...args) { return this.eOp(BuilderOperators.Or, ...args); }
     oAnd(...args) { return this.eOp(BuilderOperators.And, ...args); }
     oAddr(arg) { return this.eOp(BuilderOperators.Addr, arg); }
+    oDeref(arg) { return this.eOp(BuilderOperators.Deref, arg); }
     oNot(arg) { return this.eOp(BuilderOperators.Not, arg); }
     oIs(arg) { return this.eOp(BuilderOperators.Is, arg); }
     oIsnt(arg) { return this.eOp(BuilderOperators.Isnt, arg); }
@@ -152,7 +153,7 @@ class Builder {
             return null;
         if (needMaybe)
             return this.typeRefEnsureMaybe(this.typeRef(it, false, intoProm));
-        if (it === gen.ScriptPrimType.Boolean)
+        if (it === gen.ScriptPrimType.Boolean || it === gen.ScriptPrimType.BooleanTrue || it === gen.ScriptPrimType.BooleanFalse)
             return TypeRefPrim.Bool;
         if (it === gen.ScriptPrimType.Number)
             return TypeRefPrim.Int;
@@ -162,16 +163,16 @@ class Builder {
             return TypeRefPrim.Dict;
         if (it === gen.ScriptPrimType.Any)
             return TypeRefPrim.Any;
-        const tarr = gen.typeArrOf(it);
+        const tarr = gen.typeArr(it);
         if (tarr)
-            return { ArrOf: this.typeRef(tarr), AsList: false };
-        const ttup = gen.typeTupOf(it);
+            return { ValsOf: this.typeRef(tarr) };
+        const ttup = gen.typeTup(it);
         if (ttup && ttup.length)
             return { TupOf: ttup.map(_ => this.typeRef(_)) };
         const tfun = gen.typeFun(it);
         if (tfun && tfun.length)
             return { From: tfun[0].map(_ => this.typeRef(_)), To: this.typeRef(tfun[1]) };
-        let tsum = gen.typeSumOf(it);
+        let tsum = gen.typeSum(it);
         if (tsum && tsum.length) {
             let hadoptional = false;
             tsum = tsum.filter(_ => {
@@ -179,22 +180,52 @@ class Builder {
                 hadoptional = hadoptional || optional;
                 return (!optional) && !gen.typeProm(_);
             });
+            if (tsum.length > 1)
+                tsum = tsum.filter(_ => _ !== gen.ScriptPrimType.String);
             if (tsum.length !== 1)
                 throw it;
             let ret = this.typeRef(tsum[0]);
             return hadoptional ? this.typeRefEnsureMaybe(ret) : ret;
         }
+        const tmul = gen.typeMul(it);
+        if (tmul && tmul.length && typeof tmul[0] === 'string') {
+            const ands = {};
+            for (const _ of tmul.slice(1)) {
+                let tobj = gen.typeObj(_);
+                if (!(tobj && tobj.length))
+                    throw _;
+                for (const tup of tobj)
+                    if (tup[1] === gen.ScriptPrimType.BooleanTrue)
+                        ands[tup[0]] = this.eLit(true);
+                    else if (tup[1] === gen.ScriptPrimType.BooleanFalse)
+                        ands[tup[0]] = this.eLit(false);
+                    else
+                        throw (tup[1]);
+            }
+            return { Name: tmul[0], Ands: ands };
+        }
+        const tobj = gen.typeObj(it);
+        if (tobj && tobj.length)
+            if (tobj.length === 1 && tobj[0] && tobj[0][0] === '' && tobj[0].length && tobj[0].length === 2) {
+                const tfun = gen.typeFun(tobj[0][1]);
+                if (tfun.length === 2 && tfun[0] && tfun[0].length === 1) {
+                    const tdictkey = tfun[0][0], tdictval = tfun[1];
+                    return { ValsOf: this.typeRef(tdictval), KeysOf: this.typeRef(tdictkey) };
+                }
+            }
         const tprom = gen.typeProm(it);
         if (tprom && tprom.length)
             if (tprom.length > 1)
                 throw it;
             else if (intoProm)
                 return this.typeRef(tprom[0]);
+            else if (tprom.length === 1 && tprom[0] === 'Disposable')
+                return { From: [{ Maybe: { Name: 'Disposable' } }], To: null };
             else
                 return { From: tprom.map(_ => this.typeRef(_)), To: null };
         if (typeof it === 'string')
             return { Name: it };
-        throw it;
+        throw JSON.stringify(it);
     }
     docs(docs, extraSummaryLines = undefined, isMethod = false, appendArgsAndRetsToSummaryToo = true, retNameFallback = "return", into = undefined) {
         const istop = (into === undefined);
@@ -375,16 +406,16 @@ class Gen extends gen.Gen {
         const ttup = this.typeTup(it);
         if (ttup)
             return this.s("[").each(ttup.TupOf, ',', _ => this.emitTypeRef(_)).s(']');
-        const tarr = this.typeArr(it);
+        const tarr = this.typeColl(it);
         if (tarr)
-            return this.s('[').emitTypeRef(tarr.ArrOf).s(']');
+            return this.s('[').emitTypeRef(tarr.ValsOf).s(']');
         const tfun = this.typeFunc(it);
         if (tfun)
             return this.s('(').each(tfun.From, '->', _ => this.emitTypeRef(_)).s('->').emitTypeRef(tfun.To).s(')');
         const tmay = this.typeMaybe(it);
         if (tmay)
             return this.s('?').emitTypeRef(tmay.Maybe);
-        const tname = this.typeNamed(it);
+        const tname = this.typeOwn(it);
         if (tname)
             return this.s(tname.Name);
         throw it;
@@ -454,8 +485,8 @@ class Gen extends gen.Gen {
         if (elit && elit.Lit !== undefined)
             return this.s((elit.Lit === null) ? this.options.idents.null : node_util.format("%j", elit.Lit));
         const ecollnew = it;
-        if (ecollnew && ecollnew.Capacity !== undefined)
-            return this.when(ecollnew.ElemTypeIfList, () => this.s('[').emitTypeRef(ecollnew.ElemTypeIfList).s(']'), () => this.s(this.options.idents.typeDict)).s('·new(').emitExpr(ecollnew.Capacity).s(')');
+        if (ecollnew && (ecollnew.Cap !== undefined || ecollnew.Len !== undefined))
+            return this.when(ecollnew.ElemType, () => this.s('[').emitTypeRef(ecollnew.ElemType).s(']'), () => this.s(this.options.idents.typeDict)).s('·new(').emitExpr(ecollnew.Cap ? ecollnew.Cap : ecollnew.Len).s(')');
         const enew = it;
         if (enew && enew.New)
             return this.emitTypeRef(enew.New).s("·new");
@@ -499,24 +530,40 @@ class Gen extends gen.Gen {
         if (!onErrRet)
             onErrRet = _.eLit(false);
         const retifnotok = _.iIf(_.oNot(_.n(okBoolName)), [_.iRet(onErrRet),]);
-        const dstnamedtype = this.typeNamed(this.typeUnMaybe(dstType));
-        if (dstnamedtype) {
-            if (this.state.genPopulateFor[dstnamedtype.Name] !== false)
-                this.state.genPopulateFor[dstnamedtype.Name] = true;
+        const tdstnamed = this.typeOwn(this.typeUnMaybe(dstType));
+        if (tdstnamed) {
+            if (tdstnamed.Name !== 'Disposable' && tdstnamed.Name !== 'Uri' && this.state.genPopulateFor[tdstnamed.Name] !== false)
+                this.state.genPopulateFor[tdstnamed.Name] = true;
             return [
                 _.iSet(_.n(dstVarName), _.eNew(dstType)),
                 _.iSet(_.n(okBoolName), _.eCall(_.oDot(_.n(dstVarName), _.n('populateFrom')), src)),
                 retifnotok,
             ];
         }
-        const dstmaybetype = this.typeMaybe(dstType);
-        if (dstmaybetype && (dstmaybetype.Maybe === TypeRefPrim.Bool || dstmaybetype.Maybe === TypeRefPrim.Int || dstmaybetype.Maybe === TypeRefPrim.String)) {
+        const tdstmaybe = this.typeMaybe(dstType);
+        if (tdstmaybe && (tdstmaybe.Maybe === TypeRefPrim.Bool || tdstmaybe.Maybe === TypeRefPrim.Int || tdstmaybe.Maybe === TypeRefPrim.String)) {
             const tmpname = "_" + dstVarName + "_";
             return [
-                _.iVar(tmpname, dstmaybetype.Maybe),
-                _.iSet(_.eTup(_.n(tmpname), _.n(okBoolName)), _.eConv(dstmaybetype.Maybe, src)),
+                _.iVar(tmpname, tdstmaybe.Maybe),
+                _.iSet(_.eTup(_.n(tmpname), _.n(okBoolName)), _.eConv(tdstmaybe.Maybe, src)),
                 retifnotok,
                 _.iSet(_.n(dstVarName), _.oAddr(_.n(tmpname))),
+            ];
+        }
+        const tdstcoll = this.typeColl(this.typeUnMaybe(dstType));
+        if (tdstcoll && tdstcoll.ValsOf && tdstcoll.KeysOf === undefined) {
+            const tcoll = { ValsOf: TypeRefPrim.Any };
+            const tncoll = "__coll__" + dstVarName, tnidx = "__idx__" + dstVarName, tnitem = "__item__" + dstVarName, tnval = "__val__" + dstVarName;
+            return [
+                _.iVar(tncoll, tcoll),
+                _.iSet(_.eTup(_.n(tncoll), _.n(okBoolName)), _.eConv(tcoll, src)),
+                retifnotok,
+                _.iSet(_.n(dstVarName), _.eCollNew(_.eLen(_.n(tncoll), true), tdstcoll.ValsOf, true)),
+                _.iVar(tnidx, TypeRefPrim.Int),
+                _.iSet(_.n(tnidx), _.eLit(0)),
+                _.iFor(_.n(tnitem), _.n(tncoll), ...[
+                    _.iVar(tnval, tdstcoll.ValsOf),
+                ].concat(...this.convOrRet(tnval, _.n(tnitem), tdstcoll.ValsOf, okBoolName, onErrRet)).concat(_.iSet(_.oIdx(_.n(dstVarName), _.n(tnidx)), _.n(tnval)), _.iSet(_.n(tnidx), _.eOp('+', _.n(tnidx), _.eLit(1))))),
             ];
         }
         return (dstType === TypeRefPrim.Any) ? [_.iSet(_.n(dstVarName), src)] : [
@@ -530,7 +577,10 @@ class Gen extends gen.Gen {
     genMethodImpl_PopulateFrom(struct, _method, _, body) {
         body.push(_.iVar('it', TypeRefPrim.Dict), _.iVar('ok', TypeRefPrim.Bool), _.iVar('val', TypeRefPrim.Any));
         body.push(...this.convOrRet('it', _.n('payload'), TypeRefPrim.Dict));
-        for (const fld of struct.Fields)
+        const tstruct = struct;
+        if (!(tstruct && tstruct.Fields))
+            throw struct;
+        for (const fld of tstruct.Fields)
             if (!fld.Json.Excluded) {
                 const tfld = this.typeRefForField(fld.Type, fld.fromPrep && fld.fromPrep.optional);
                 body.push(_.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdxMay(_.n('it'), _.eLit(fld.Json.Name))), _.iIf(_.n('ok'), [
@@ -545,7 +595,7 @@ class Gen extends gen.Gen {
         const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok');
         const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args);
         const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length;
-        body.push(_.iVar(__.msg, _.n('ipcMsg')), _.iSet(_.n(__.msg), _.eNew(_.n('ipcMsg'))), _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(iface.name + '.' + method.fromPrep.name)), _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs))));
+        body.push(_.iVar(__.msg, { Maybe: { Name: 'ipcMsg' } }), _.iSet(_.n(__.msg), _.eNew({ Maybe: { Name: 'ipcMsg' } })), _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(iface.name + '.' + method.fromPrep.name)), _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs))));
         const twinargs = {};
         if (funcfields.length) {
             for (const ff of funcfields)
@@ -557,39 +607,61 @@ class Gen extends gen.Gen {
                         break;
                     }
                 }
-            body.push(_.iVar(__.fnids, { ArrOf: TypeRefPrim.String, AsList: true }), _.iSet(_.n(__.fnids), _.eCollNew(_.eLit(funcfields.length), TypeRefPrim.String)), _.iLock(_.eThis(), ..._.EACH(funcfields, ff => [
-                _.LET(this.nameRewriters.fields(ff.name), ffname => _.LET(ff.struct.fields.find(_ => _.name === ff.name), ffld => _.LET(this.allStructs[this.nameRewriters.types.structs(ff.struct.name)].Fields.find(_ => _.fromPrep === ffld), structfield => _.LET(gen.typeFun(ffld.typeSpec)[0], fnargs => _.LET(twinargs[ff.arg.name], twinarg => _.LET(this.nameRewriters.args(ff.arg.name), origargname => _.LET((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : origargname, argname => _.iIf((!ff.arg.optional) ? _.eLit(true) : _.oIs(_.n(origargname)), _.WHEN(twinarg, () => [
-                    _.iSet(_.n(argname), _.eNew({ Name: twinarg.twinStructName })),
-                    _.iSet(_.oDot(_.n(argname), _.n(twinarg.origStruct.Name)), _.n(origargname)),
-                ]).concat([
-                    _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eLit("")),
-                    _.iVar(__.fn, structfield.Type),
-                    _.iSet(_.n(__.fn), _.oDot(_.n(argname), _.n(ffname))),
-                    _.iIf(_.oIs(_.n(__.fn)), [
-                        _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eCall(_.oDot(_.n('nextFuncId')))),
-                        _.iAdd(_.n(__.fnids), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
-                        _.iSet(_.oIdx(_.oDot(_.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))), _.eFunc([{ Name: __.args, Type: { ArrOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] }, _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args), true)), [
+            body.push(_.iVar(__.fnids, { ValsOf: TypeRefPrim.String, KeysOf: null }), _.iSet(_.n(__.fnids), _.eCollNew(_.eLit(funcfields.length), TypeRefPrim.String)));
+            for (const ff of funcfields) {
+                let ffname = this.nameRewriters.fields(ff.name), ffld = ff.struct.fields.find(_ => _.name === ff.name), structfield = this.allStructs[this.nameRewriters.types.structs(ff.struct.name)].Fields.find(_ => _.fromPrep === ffld), fnargs = gen.typeFun(ffld.typeSpec)[0], twinarg = twinargs[ff.arg.name], origargname = this.nameRewriters.args(ff.arg.name), argname = (twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : origargname;
+                body.push(_.iIf((!ff.arg.optional) ? _.eLit(true) : _.oIs(_.n(origargname)), _.WHEN(twinarg, () => [
+                    _.iSet(_.n(argname), _.eNew({ Maybe: { Name: twinarg.twinStructName } })),
+                    _.iSet(_.oDot(_.n(argname), _.n(twinarg.origStruct.Name)), ff.arg.optional ? _.n(origargname) : _.oAddr(_.n(origargname))),
+                ]).concat(_.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eLit("")), _.iVar(__.fn, structfield.Type), _.iSet(_.n(__.fn), _.oDot(_.n(argname), _.n(ffname))), _.iIf(_.oIs(_.n(__.fn)), [_.iLock(_.eThis(), _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eCall(_.oDot(_.n('nextFuncId')))), _.iAdd(_.n(__.fnids), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))), _.iSet(_.oIdx(_.oDot(_.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))), _.eFunc([{ Name: __.args, Type: { ValsOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] }, _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args), true)), [
+                        _.iRet(_.eTup(_.eNil(), _.eLit(false))),
+                    ], [_.iVar(__.ok, TypeRefPrim.Bool)].concat(..._.EACH(fnargs, (fnarg, idx) => [
+                        _.iVar('__' + idx, this.b.typeRef(fnarg)),
+                        _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))), this.convOrRet('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), __.ok, _.eTup(_.eNil(), _.eLit(false))), (fnarg === gen.ScriptPrimType.Number || this.typeOwn(this.b.typeRef(fnarg))) ? [
                             _.iRet(_.eTup(_.eNil(), _.eLit(false))),
-                        ], [_.iVar(__.ok, TypeRefPrim.Bool)].concat(..._.EACH(fnargs, (fnarg, idx) => [
-                            _.iVar('__' + idx, this.b.typeRef(fnarg)),
-                            _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))), this.convOrRet('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), __.ok, _.eTup(_.eNil(), _.eLit(false)))),
-                            _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
-                        ]))))),
-                    ]),
-                ]))))))))),
-            ])));
+                        ] : []),
+                        _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
+                    ]))))))]))));
+            }
         }
         for (const arg of method.Args)
-            if (!arg.fromPrep.isFromRetThenable) {
-                const twinarg = twinargs[arg.Name];
-                body.push(_.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name)));
-            }
+            if (!arg.fromPrep.isFromRetThenable)
+                if (arg.fromPrep.isCancellationToken !== undefined)
+                    body.push(_.iIf(_.oIs(_.n(arg.Name)), [
+                        _.iSet(_.oDot(_.n(arg.Name), _.n("impl")), _.eThis()),
+                        _.iIf(_.oEq(_.eLit(""), _.oDot(_.n(arg.Name), _.n("fnId"))), [
+                            _.iLock(_.eThis(), _.iSet(_.oDot(_.n(arg.Name), _.n("fnId")), _.eCall(_.oDot(_.eThis(), _.n("nextFuncId"))))),
+                        ]),
+                        _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.oDot(_.n(arg.Name), _.n("fnId"))),
+                    ]));
+                else {
+                    let town = this.typeOwn(arg.Type);
+                    if (town && town.Ands) {
+                        let tstructmul;
+                        for (const structname in this.allStructs)
+                            if (structname === town.Name) {
+                                tstructmul = this.allStructs[structname];
+                                break;
+                            }
+                        if (tstructmul)
+                            for (const and in town.Ands)
+                                for (const fld of tstructmul.Fields.filter(_ => _.name === and))
+                                    body.push(_.iSet(_.oDot(_.n(arg.Name), _.n(fld.Name)), town.Ands[and]));
+                    }
+                    const twinarg = twinargs[arg.Name];
+                    body.push(_.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name)));
+                }
         const lastarg = method.Args[method.Args.length - 1];
         body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }));
         if (lastarg.fromPrep.isFromRetThenable) {
+            const isdisp = gen.typePromOf(lastarg.fromPrep.typeSpec, 'Disposable');
             const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, true, true);
             body.push(_.iIf(_.oIs(_.n(lastarg.Name)), [
-                _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iVar(__.ok, TypeRefPrim.Bool), _.iVar(__.result, dsttype), _.iIf(_.oIs(_.n(__.payload)), this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok)), _.eCall(_.n(lastarg.Name), _.n(__.result)), _.iRet(_.eLit(true)))),
+                _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iVar(__.ok, TypeRefPrim.Bool), _.iVar(__.result, dsttype), _.iIf(_.oIs(_.n(__.payload)), this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok), _.WHEN(isdisp, () => [_.iRet(_.eLit(false))], () => [])), _.WHEN(isdisp, () => [
+                    _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bindTo')), _.eThis())),
+                ], () => [
+                    _.eCall(_.n(lastarg.Name), _.n(__.result)),
+                ])[0], _.iRet(_.eLit(true)))),
             ]));
         }
         if (!funcfields.length)
@@ -629,7 +701,7 @@ class Gen extends gen.Gen {
         }
         {
             const traverse = (t, forIncoming) => this.typeRefTraverse(t, argtype => {
-                const tnamed = this.typeNamed(argtype);
+                const tnamed = this.typeOwn(argtype);
                 if (tnamed) {
                     const tstruct = this.allStructs[tnamed.Name];
                     if (tstruct) {
@@ -699,7 +771,7 @@ class Gen extends gen.Gen {
         const me = this.typeMaybe(it);
         return me ? this.typeUnMaybe(me.Maybe) : it;
     }
-    typeNamed(it) {
+    typeOwn(it) {
         const me = it;
         return (me && me.Name && me.Name.length) ? me : null;
     }
@@ -711,9 +783,9 @@ class Gen extends gen.Gen {
         const me = it;
         return (me && me.From !== undefined) ? me : null;
     }
-    typeArr(it) {
+    typeColl(it) {
         const me = it;
-        return (me && me.ArrOf) ? me : null;
+        return (me && me.ValsOf) ? me : null;
     }
     typeTup(it) {
         const me = it;
@@ -728,9 +800,9 @@ class Gen extends gen.Gen {
         const t1may = this.typeMaybe(t1), t2may = this.typeMaybe(t2);
         if (t1may && t2may)
             return this.typeRefEq(t1may.Maybe, t2may.Maybe);
-        const t1arr = this.typeArr(t1), t2arr = this.typeArr(t2);
-        if (t1arr && t2arr)
-            return this.typeRefEq(t1arr, t2arr);
+        const t1coll = this.typeColl(t1), t2coll = this.typeColl(t2);
+        if (t1coll && t2coll)
+            return this.typeRefEq(t1coll, t2coll);
         const t1tup = this.typeTup(t1), t2tup = this.typeTup(t2);
         if (t1tup && t2tup)
             return t1tup.TupOf.length === t2tup.TupOf.length
@@ -740,7 +812,7 @@ class Gen extends gen.Gen {
             return t1fun.From.length === t2fun.From.length
                 && this.typeRefEq(t1fun.To, t2fun.To)
                 && t1fun.From.every((t, i) => this.typeRefEq(t, t2fun.From[i]));
-        const t1n = this.typeNamed(t1), t2n = this.typeNamed(t2);
+        const t1n = this.typeOwn(t1), t2n = this.typeOwn(t2);
         if (t1n && t2n)
             return t1n.Name === t2n.Name && t1n.name === t2n.name;
         return false;
@@ -754,9 +826,9 @@ class Gen extends gen.Gen {
             this.typeRefTraverse(tmay.Maybe, on, _ => tmay.Maybe = _);
             return;
         }
-        const tarr = this.typeArr(it);
-        if (tarr) {
-            this.typeRefTraverse(tarr.ArrOf, on, _ => tarr.ArrOf = _);
+        const tcoll = this.typeColl(it);
+        if (tcoll) {
+            this.typeRefTraverse(tcoll.ValsOf, on, _ => tcoll.ValsOf = _);
             return;
         }
         const ttup = this.typeTup(it);
@@ -777,9 +849,9 @@ class Gen extends gen.Gen {
         const tmay = this.typeMaybe(it);
         if (tmay)
             return this.typeRefersTo(tmay.Maybe, to);
-        const tarr = this.typeArr(it);
-        if (tarr)
-            return this.typeRefersTo(tarr.ArrOf, to);
+        const tcoll = this.typeColl(it);
+        if (tcoll)
+            return this.typeRefersTo(tcoll.ValsOf, to);
         const ttup = this.typeTup(it);
         if (ttup)
             return ttup.TupOf.some(t => this.typeRefersTo(t, to));

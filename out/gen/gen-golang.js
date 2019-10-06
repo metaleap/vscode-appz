@@ -62,7 +62,7 @@ class Gen extends gen_ast.Gen {
         if (it) {
             const ivar = it;
             if (ivar && ivar.Name && ivar.Type)
-                return this.ln(() => this.s("var ", ivar.Name, " ").emitTypeRef(this.typeNamed(ivar.Type) ? { Maybe: ivar.Type } : ivar.Type));
+                return this.ln(() => this.s("var ", ivar.Name, " ").emitTypeRef(ivar.Type));
             const idictdel = it;
             if (idictdel && idictdel.DelFrom && idictdel.DelWhat)
                 return this.ln(() => this.s("delete(").emitExpr(idictdel.DelFrom).s(", ").emitExpr(idictdel.DelWhat).s(')'));
@@ -94,14 +94,21 @@ class Gen extends gen_ast.Gen {
     emitExpr(it) {
         if (it) {
             const ecollnew = it;
-            if (ecollnew && ecollnew.Capacity !== undefined)
-                if (ecollnew.ElemTypeIfList)
-                    return this.s("make([]").emitTypeRef(ecollnew.ElemTypeIfList).s(", 0, ").emitExpr(ecollnew.Capacity).s(")");
+            if (ecollnew && (ecollnew.Cap !== undefined || ecollnew.Len !== undefined))
+                if (!ecollnew.ElemType)
+                    return this.s("make(dict, ").emitExpr(ecollnew.Cap).s(")");
+                else if (ecollnew.Cap !== undefined)
+                    return this.s("make([]").emitTypeRef(ecollnew.ElemType).s(", 0, ").emitExpr(ecollnew.Cap).s(")");
+                else if (ecollnew.Len !== undefined)
+                    return this.s("make([]").emitTypeRef(ecollnew.ElemType).s(", ").emitExpr(ecollnew.Len).s(")");
                 else
-                    return this.s("make(dict, ").emitExpr(ecollnew.Capacity).s(")");
+                    throw ecollnew;
             const enew = it;
             if (enew && enew.New)
-                return this.s("new(").emitTypeRef(typeRefUnMaybe(enew.New)).s(")");
+                if (this.typeMaybe(enew.New))
+                    return this.s("new(").emitTypeRef(typeRefUnMaybe(enew.New)).s(")");
+                else
+                    return this.s("*/*sorryButSuchIsCodeGenSometimes...*/new(").emitTypeRef(typeRefUnMaybe(enew.New)).s(")");
             const etup = it;
             if (etup && etup.Items !== undefined)
                 return this.each(etup.Items, ", ", _ => { this.emitExpr(_); });
@@ -137,9 +144,10 @@ class Gen extends gen_ast.Gen {
         const tmay = this.typeMaybe(it);
         if (tmay)
             return this.s(typeRefNilable(this, tmay.Maybe) ? "" : "*").emitTypeRef(tmay.Maybe);
-        const tarr = this.typeArr(it);
-        if (tarr)
-            return this.s("[]").emitTypeRef(tarr.ArrOf);
+        const tcoll = this.typeColl(it);
+        if (tcoll)
+            return (!tcoll.KeysOf) ? this.s("[]").emitTypeRef(tcoll.ValsOf)
+                : this.s("map[").emitTypeRef(tcoll.KeysOf).s("]").emitTypeRef(tcoll.ValsOf);
         const tfun = this.typeFunc(it);
         if (tfun)
             return this.s("func(").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(tfun.To ? ") " : ")").emitTypeRef(tfun.To);
@@ -158,7 +166,7 @@ function emitTypeRet(_, it) {
 }
 function typeRefNilable(_, it, forceTrueForBools = false, forceTrueForInts = false, forceTrueForStrings = false) {
     return it === gen_ast.TypeRefPrim.Any || it === gen_ast.TypeRefPrim.Dict
-        || _.typeArr(it) || _.typeMaybe(it) || _.typeFunc(it) || _.typeTup(it)
+        || _.typeColl(it) || _.typeMaybe(it) || _.typeFunc(it) || _.typeTup(it)
         || (forceTrueForBools && it === gen_ast.TypeRefPrim.Bool)
         || (forceTrueForInts && it === gen_ast.TypeRefPrim.Int)
         || (forceTrueForStrings && it === gen_ast.TypeRefPrim.String);

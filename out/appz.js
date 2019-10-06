@@ -9,11 +9,12 @@ exports.uxStr = {
     tooLate: uxStrAppzPref + "Too late for that, program already ended. To launch it again: ",
     badProcCmd: uxStrAppzPref + "Couldn't run this exact command, any typos? ─── ",
     menuPrefRun: "RUN: ",
-    menuPrefKill: "KILL: ",
-    menuDescRunningYes: "Already running. Will kill and re-start.",
+    menuPrefEnd: "END: ",
+    menuDescRunningYes: "Already running. Will end and re-start.",
     menuDescRunningNo: "Not currently running (at least not with those exact args).",
     menuDescStartedAgo: "Started _ ago.",
     menuDescStartedAgo_: "well over a day",
+    menuPrompt: "Found _ in `appz.allProgs` array of your current `settings.json`:",
     menuMsgNoAppz: uxStrAppzPref + "Your current `settings.json` has no `appz.allProgs` array or it's empty.",
     exitCodeNonZero: uxStrAppzPref + "Exited with code _: ",
 };
@@ -30,34 +31,38 @@ function onCmdMain() {
     const progs = vsc.workspace.getConfiguration("appz").get("allProgs") || [];
     const items = progs.map(_ => ({
         fullCmd: _, label: exports.uxStr.menuPrefRun + _,
-        detail: ppio.procs[_] ? exports.uxStr.menuDescRunningYes : exports.uxStr.menuDescRunningNo
+        detail: ppio.progs[_] ? exports.uxStr.menuDescRunningYes : exports.uxStr.menuDescRunningNo
     }));
-    for (const _ in ppio.procs)
+    const prognum = items.length;
+    for (const _ in ppio.progs)
         items.push({
-            fullCmd: _, label: exports.uxStr.menuPrefKill + _,
+            fullCmd: _, label: exports.uxStr.menuPrefEnd + _,
             detail: exports.uxStr.menuDescStartedAgo.replace('_', getDurStr(_))
         });
     if (!items.length)
         vsc.window.showInformationMessage(exports.uxStr.menuMsgNoAppz);
     else
-        vsc.window.showQuickPick(items).then(_ => {
+        vsc.window.showQuickPick(items, {
+            placeHolder: exports.uxStr.menuPrompt.replace('_', prognum.toString()),
+            canPickMany: false, ignoreFocusOut: true, matchOnDescription: true, matchOnDetail: true,
+        }).then(_ => {
             if (_ && _.fullCmd) {
-                let alreadyrunning = ppio.procs[_.fullCmd];
+                let alreadyrunning = ppio.progs[_.fullCmd];
                 if (alreadyrunning)
                     alreadyrunning.dispose();
                 else
                     strvar.Interpolate(_.fullCmd, extDirPathStrVarProvider).then(fullcmd => {
                         if (fullcmd && fullcmd.length) {
-                            if (alreadyrunning = ppio.procs[fullcmd])
+                            if (alreadyrunning = ppio.progs[fullcmd])
                                 alreadyrunning.dispose();
-                            ppio.ensureProc(fullcmd);
+                            ppio.ensureProg(fullcmd);
                         }
                     }, onPromiseRejectedNoOp);
             }
         }, onPromiseRejectedNoOp);
 }
 function getDurStr(fullCmd) {
-    const proc = ppio.procs[fullCmd];
+    const proc = ppio.progs[fullCmd];
     let durstr = new Date(Date.now() - proc.startTime).toISOString();
     if (!durstr.startsWith("1970-01-01T"))
         durstr = exports.uxStr.menuDescStartedAgo_;

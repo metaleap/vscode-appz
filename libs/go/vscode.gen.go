@@ -148,6 +148,87 @@ type Window interface {
 	// 
 	// `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
 	ShowInputBox(options *InputBoxOptions, token *Cancel, andThen func(*string)) 
+
+	// Shows a selection list allowing multiple selections.
+	// 
+	// `items` ── An array of strings, or a promise that resolves to an array of strings.
+	// 
+	// `options` ── Configures the behavior of the selection list.
+	// 
+	// `token` ── A token that can be used to signal cancellation.
+	// 
+	// `andThen` ── A promise that resolves to the selected items or `undefined`.
+	ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel, andThen func([]string)) 
+
+	// Shows a selection list.
+	// 
+	// `items` ── An array of strings, or a promise that resolves to an array of strings.
+	// 
+	// `options` ── Configures the behavior of the selection list.
+	// 
+	// `token` ── A token that can be used to signal cancellation.
+	// 
+	// `andThen` ── A promise that resolves to the selection or `undefined`.
+	ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel, andThen func(*string)) 
+
+	// Shows a selection list allowing multiple selections.
+	// 
+	// `items` ── An array of items, or a promise that resolves to an array of items.
+	// 
+	// `options` ── Configures the behavior of the selection list.
+	// 
+	// `token` ── A token that can be used to signal cancellation.
+	// 
+	// `andThen` ── A promise that resolves to the selected items or `undefined`.
+	ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel, andThen func([]QuickPickItem)) 
+
+	// Shows a selection list.
+	// 
+	// `items` ── An array of items, or a promise that resolves to an array of items.
+	// 
+	// `options` ── Configures the behavior of the selection list.
+	// 
+	// `token` ── A token that can be used to signal cancellation.
+	// 
+	// `andThen` ── A promise that resolves to the selected item or `undefined`.
+	ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel, andThen func(*QuickPickItem)) 
+
+	// Set a message to the status bar. This is a short hand for the more powerful
+	// status bar [items](#window.createStatusBarItem).
+	// 
+	// `text` ── The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
+	// 
+	// `hideAfterTimeout` ── Timeout in milliseconds after which the message will be disposed.
+	// 
+	// `andThen` ── A disposable which hides the status bar message.
+	SetStatusBarMessage1(text string, hideAfterTimeout int, andThen func(*Disposable)) 
+
+	// Set a message to the status bar. This is a short hand for the more powerful
+	// status bar [items](#window.createStatusBarItem).
+	// 
+	// *Note* that status bar messages stack and that they must be disposed when no
+	// longer used.
+	// 
+	// `text` ── The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
+	// 
+	// `andThen` ── A disposable which hides the status bar message.
+	SetStatusBarMessage2(text string, andThen func(*Disposable)) 
+
+	// Shows a file save dialog to the user which allows to select a file
+	// for saving-purposes.
+	// 
+	// `options` ── Options that control the dialog.
+	// 
+	// `andThen` ── A promise that resolves to the selected resource or `undefined`.
+	ShowSaveDialog(options SaveDialogOptions, andThen func(*Uri)) 
+
+	// Shows a file open dialog to the user which allows to select a file
+	// for opening-purposes.
+	// 
+	// `options` ── Options that control the dialog.
+	// 
+	// `andThen` ── A promise that resolves to the selected resources or `undefined`.
+	ShowOpenDialog(options OpenDialogOptions, andThen func([]Uri)) 
 }
 
 // Options to configure the behavior of the message.
@@ -209,6 +290,107 @@ type InputBoxOptions struct {
 type _InputBoxOptions struct {
 	*InputBoxOptions
 	ValidateInput_AppzFuncId string `json:"validateInput_AppzFuncId,omitempty"`
+}
+
+// Options to configure the behavior of the quick pick UI.
+type QuickPickOptions struct {
+	// An optional flag to include the description when filtering the picks.
+	MatchOnDescription bool `json:"matchOnDescription,omitempty"`
+
+	// An optional flag to include the detail when filtering the picks.
+	MatchOnDetail bool `json:"matchOnDetail,omitempty"`
+
+	// An optional string to show as place holder in the input box to guide the user what to pick on.
+	PlaceHolder string `json:"placeHolder,omitempty"`
+
+	// Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.
+	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
+
+	// An optional flag to make the picker accept multiple selections, if true the result is an array of picks.
+	CanPickMany bool `json:"canPickMany,omitempty"`
+
+	// An optional function that is invoked whenever an item is selected.
+	OnDidSelectItem func(QuickPickItem) any `json:"-"`
+}
+
+type _QuickPickOptions struct {
+	*QuickPickOptions
+	OnDidSelectItem_AppzFuncId string `json:"onDidSelectItem_AppzFuncId,omitempty"`
+}
+
+// Represents an item that can be selected from
+// a list of items.
+type QuickPickItem struct {
+	// A human readable string which is rendered prominent.
+	Label string `json:"label"`
+
+	// A human readable string which is rendered less prominent.
+	Description string `json:"description,omitempty"`
+
+	// A human readable string which is rendered less prominent.
+	Detail string `json:"detail,omitempty"`
+
+	// Optional flag indicating if this item is picked initially.
+	// (Only honored when the picker allows multiple selections.)
+	Picked bool `json:"picked,omitempty"`
+
+	// Always show this item.
+	AlwaysShow bool `json:"alwaysShow,omitempty"`
+
+	// Free-form custom data, preserved across a roundtrip.
+	My dict `json:"my,omitempty"`
+}
+
+// Options to configure the behaviour of a file save dialog.
+type SaveDialogOptions struct {
+	// The resource the dialog shows when opened.
+	DefaultUri Uri `json:"defaultUri,omitempty"`
+
+	// A human-readable string for the save button.
+	SaveLabel string `json:"saveLabel,omitempty"`
+
+	// A set of file filters that are used by the dialog. Each entry is a human readable label,
+	// like "TypeScript", and an array of extensions, e.g.
+	// ```ts
+	// {
+	//  	'Images': ['png', 'jpg']
+	//  	'TypeScript': ['ts', 'tsx']
+	// }
+	// ```
+	Filters map[string][]string `json:"filters,omitempty"`
+}
+
+// Options to configure the behaviour of a file open dialog.
+// 
+// * Note 1: A dialog can select files, folders, or both. This is not true for Windows
+// which enforces to open either files or folder, but *not both*.
+// * Note 2: Explicitly setting `canSelectFiles` and `canSelectFolders` to `false` is futile
+// and the editor then silently adjusts the options to select files.
+type OpenDialogOptions struct {
+	// The resource the dialog shows when opened.
+	DefaultUri Uri `json:"defaultUri,omitempty"`
+
+	// A human-readable string for the open button.
+	OpenLabel string `json:"openLabel,omitempty"`
+
+	// Allow to select files, defaults to `true`.
+	CanSelectFiles bool `json:"canSelectFiles,omitempty"`
+
+	// Allow to select folders, defaults to `false`.
+	CanSelectFolders bool `json:"canSelectFolders,omitempty"`
+
+	// Allow to select many files or folders.
+	CanSelectMany bool `json:"canSelectMany,omitempty"`
+
+	// A set of file filters that are used by the dialog. Each entry is a human readable label,
+	// like "TypeScript", and an array of extensions, e.g.
+	// ```ts
+	// {
+	//  	'Images': ['png', 'jpg']
+	//  	'TypeScript': ['ts', 'tsx']
+	// }
+	// ```
+	Filters map[string][]string `json:"filters,omitempty"`
 }
 
 func (me *impl) Window() Window {
@@ -547,15 +729,15 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, token *Cancel, andThen fu
 	var __options__ *_InputBoxOptions
 	var fnids []string
 	fnids = make([]string, 0, 1)
-	me.Lock()
-	{
-		if (nil != options) {
-			__options__ = new(_InputBoxOptions)
-			__options__.InputBoxOptions = options
-			__options__.ValidateInput_AppzFuncId = ""
-			var fn func(string) string
-			fn = __options__.ValidateInput
-			if (nil != fn) {
+	if (nil != options) {
+		__options__ = new(_InputBoxOptions)
+		__options__.InputBoxOptions = options
+		__options__.ValidateInput_AppzFuncId = ""
+		var fn func(string) string
+		fn = __options__.ValidateInput
+		if (nil != fn) {
+			me.Lock()
+			{
 				__options__.ValidateInput_AppzFuncId = me.nextFuncId()
 				fnids = append(fnids, __options__.ValidateInput_AppzFuncId)
 				me.cbOther[__options__.ValidateInput_AppzFuncId] = func(args []any) (any, bool) {
@@ -574,11 +756,21 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, token *Cancel, andThen fu
 					}
 				}
 			}
+			me.Unlock()
 		}
 	}
-	me.Unlock()
 	msg.Data["options"] = __options__
-	msg.Data["token"] = token
+	if (nil != token) {
+		token.impl = me
+		if ("" == token.fnId) {
+			me.Lock()
+			{
+				token.fnId = me.nextFuncId()
+			}
+			me.Unlock()
+		}
+		msg.Data["token"] = token.fnId
+	}
 	var on func(any) bool
 	if (nil != andThen) {
 		on = func(payload any) bool {
@@ -608,6 +800,488 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, token *Cancel, andThen fu
 		}
 		return ((nil == on) || on(payload))
 	})
+}
+
+func (me *impl) ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel, andThen func([]string)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showQuickPick1"
+	msg.Data = make(dict, 3)
+	var __options__ *_QuickPickOptions
+	var fnids []string
+	fnids = make([]string, 0, 1)
+	if true {
+		__options__ = new(_QuickPickOptions)
+		__options__.QuickPickOptions = (&options)
+		__options__.OnDidSelectItem_AppzFuncId = ""
+		var fn func(QuickPickItem) any
+		fn = __options__.OnDidSelectItem
+		if (nil != fn) {
+			me.Lock()
+			{
+				__options__.OnDidSelectItem_AppzFuncId = me.nextFuncId()
+				fnids = append(fnids, __options__.OnDidSelectItem_AppzFuncId)
+				me.cbOther[__options__.OnDidSelectItem_AppzFuncId] = func(args []any) (any, bool) {
+					if (1 != len(args)) {
+						return nil, false
+					} else {
+						var ok bool
+						var __0 QuickPickItem
+						if (nil != args[0]) {
+							__0 = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
+							ok = __0.populateFrom(args[0])
+							if (!ok) {
+								return nil, false
+							}
+						} else {
+							return nil, false
+						}
+						return fn(__0), true
+					}
+				}
+			}
+			me.Unlock()
+		}
+	}
+	msg.Data["items"] = items
+	options.CanPickMany = true
+	msg.Data["options"] = __options__
+	if (nil != token) {
+		token.impl = me
+		if ("" == token.fnId) {
+			me.Lock()
+			{
+				token.fnId = me.nextFuncId()
+			}
+			me.Unlock()
+		}
+		msg.Data["token"] = token.fnId
+	}
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result []string
+			if (nil != payload) {
+				var __coll__result []any
+				__coll__result, ok = payload.([]any)
+				if (!ok) {
+					return false
+				}
+				result = make([]string, len(__coll__result))
+				var __idx__result int
+				__idx__result = 0
+				for _, __item__result := range __coll__result {
+					var __val__result string
+					__val__result, ok = __item__result.(string)
+					if (!ok) {
+						return false
+					}
+					result[__idx__result] = __val__result
+					__idx__result = (__idx__result + 1)
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, func(payload any) bool {
+		if (len(fnids) != 0) {
+			me.Lock()
+			{
+				for _, fnid := range fnids {
+					delete(me.cbOther, fnid)
+				}
+			}
+			me.Unlock()
+		}
+		return ((nil == on) || on(payload))
+	})
+}
+
+func (me *impl) ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel, andThen func(*string)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showQuickPick2"
+	msg.Data = make(dict, 3)
+	var __options__ *_QuickPickOptions
+	var fnids []string
+	fnids = make([]string, 0, 1)
+	if (nil != options) {
+		__options__ = new(_QuickPickOptions)
+		__options__.QuickPickOptions = options
+		__options__.OnDidSelectItem_AppzFuncId = ""
+		var fn func(QuickPickItem) any
+		fn = __options__.OnDidSelectItem
+		if (nil != fn) {
+			me.Lock()
+			{
+				__options__.OnDidSelectItem_AppzFuncId = me.nextFuncId()
+				fnids = append(fnids, __options__.OnDidSelectItem_AppzFuncId)
+				me.cbOther[__options__.OnDidSelectItem_AppzFuncId] = func(args []any) (any, bool) {
+					if (1 != len(args)) {
+						return nil, false
+					} else {
+						var ok bool
+						var __0 QuickPickItem
+						if (nil != args[0]) {
+							__0 = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
+							ok = __0.populateFrom(args[0])
+							if (!ok) {
+								return nil, false
+							}
+						} else {
+							return nil, false
+						}
+						return fn(__0), true
+					}
+				}
+			}
+			me.Unlock()
+		}
+	}
+	msg.Data["items"] = items
+	msg.Data["options"] = __options__
+	if (nil != token) {
+		token.impl = me
+		if ("" == token.fnId) {
+			me.Lock()
+			{
+				token.fnId = me.nextFuncId()
+			}
+			me.Unlock()
+		}
+		msg.Data["token"] = token.fnId
+	}
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *string
+			if (nil != payload) {
+				var _result_ string
+				_result_, ok = payload.(string)
+				if (!ok) {
+					return false
+				}
+				result = (&_result_)
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, func(payload any) bool {
+		if (len(fnids) != 0) {
+			me.Lock()
+			{
+				for _, fnid := range fnids {
+					delete(me.cbOther, fnid)
+				}
+			}
+			me.Unlock()
+		}
+		return ((nil == on) || on(payload))
+	})
+}
+
+func (me *impl) ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel, andThen func([]QuickPickItem)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showQuickPick3"
+	msg.Data = make(dict, 3)
+	var __options__ *_QuickPickOptions
+	var fnids []string
+	fnids = make([]string, 0, 1)
+	if true {
+		__options__ = new(_QuickPickOptions)
+		__options__.QuickPickOptions = (&options)
+		__options__.OnDidSelectItem_AppzFuncId = ""
+		var fn func(QuickPickItem) any
+		fn = __options__.OnDidSelectItem
+		if (nil != fn) {
+			me.Lock()
+			{
+				__options__.OnDidSelectItem_AppzFuncId = me.nextFuncId()
+				fnids = append(fnids, __options__.OnDidSelectItem_AppzFuncId)
+				me.cbOther[__options__.OnDidSelectItem_AppzFuncId] = func(args []any) (any, bool) {
+					if (1 != len(args)) {
+						return nil, false
+					} else {
+						var ok bool
+						var __0 QuickPickItem
+						if (nil != args[0]) {
+							__0 = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
+							ok = __0.populateFrom(args[0])
+							if (!ok) {
+								return nil, false
+							}
+						} else {
+							return nil, false
+						}
+						return fn(__0), true
+					}
+				}
+			}
+			me.Unlock()
+		}
+	}
+	msg.Data["items"] = items
+	options.CanPickMany = true
+	msg.Data["options"] = __options__
+	if (nil != token) {
+		token.impl = me
+		if ("" == token.fnId) {
+			me.Lock()
+			{
+				token.fnId = me.nextFuncId()
+			}
+			me.Unlock()
+		}
+		msg.Data["token"] = token.fnId
+	}
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result []QuickPickItem
+			if (nil != payload) {
+				var __coll__result []any
+				__coll__result, ok = payload.([]any)
+				if (!ok) {
+					return false
+				}
+				result = make([]QuickPickItem, len(__coll__result))
+				var __idx__result int
+				__idx__result = 0
+				for _, __item__result := range __coll__result {
+					var __val__result QuickPickItem
+					__val__result = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
+					ok = __val__result.populateFrom(__item__result)
+					if (!ok) {
+						return false
+					}
+					result[__idx__result] = __val__result
+					__idx__result = (__idx__result + 1)
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, func(payload any) bool {
+		if (len(fnids) != 0) {
+			me.Lock()
+			{
+				for _, fnid := range fnids {
+					delete(me.cbOther, fnid)
+				}
+			}
+			me.Unlock()
+		}
+		return ((nil == on) || on(payload))
+	})
+}
+
+func (me *impl) ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel, andThen func(*QuickPickItem)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showQuickPick4"
+	msg.Data = make(dict, 3)
+	var __options__ *_QuickPickOptions
+	var fnids []string
+	fnids = make([]string, 0, 1)
+	if (nil != options) {
+		__options__ = new(_QuickPickOptions)
+		__options__.QuickPickOptions = options
+		__options__.OnDidSelectItem_AppzFuncId = ""
+		var fn func(QuickPickItem) any
+		fn = __options__.OnDidSelectItem
+		if (nil != fn) {
+			me.Lock()
+			{
+				__options__.OnDidSelectItem_AppzFuncId = me.nextFuncId()
+				fnids = append(fnids, __options__.OnDidSelectItem_AppzFuncId)
+				me.cbOther[__options__.OnDidSelectItem_AppzFuncId] = func(args []any) (any, bool) {
+					if (1 != len(args)) {
+						return nil, false
+					} else {
+						var ok bool
+						var __0 QuickPickItem
+						if (nil != args[0]) {
+							__0 = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
+							ok = __0.populateFrom(args[0])
+							if (!ok) {
+								return nil, false
+							}
+						} else {
+							return nil, false
+						}
+						return fn(__0), true
+					}
+				}
+			}
+			me.Unlock()
+		}
+	}
+	msg.Data["items"] = items
+	msg.Data["options"] = __options__
+	if (nil != token) {
+		token.impl = me
+		if ("" == token.fnId) {
+			me.Lock()
+			{
+				token.fnId = me.nextFuncId()
+			}
+			me.Unlock()
+		}
+		msg.Data["token"] = token.fnId
+	}
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *QuickPickItem
+			if (nil != payload) {
+				result = new(QuickPickItem)
+				ok = result.populateFrom(payload)
+				if (!ok) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, func(payload any) bool {
+		if (len(fnids) != 0) {
+			me.Lock()
+			{
+				for _, fnid := range fnids {
+					delete(me.cbOther, fnid)
+				}
+			}
+			me.Unlock()
+		}
+		return ((nil == on) || on(payload))
+	})
+}
+
+func (me *impl) SetStatusBarMessage1(text string, hideAfterTimeout int, andThen func(*Disposable)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.setStatusBarMessage1"
+	msg.Data = make(dict, 2)
+	msg.Data["text"] = text
+	msg.Data["hideAfterTimeout"] = hideAfterTimeout
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *Disposable
+			if (nil != payload) {
+				result = new(Disposable)
+				ok = result.populateFrom(payload)
+				if (!ok) {
+					return false
+				}
+			} else {
+				return false
+			}
+			andThen(result.bindTo(me))
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
+func (me *impl) SetStatusBarMessage2(text string, andThen func(*Disposable)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.setStatusBarMessage2"
+	msg.Data = make(dict, 1)
+	msg.Data["text"] = text
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *Disposable
+			if (nil != payload) {
+				result = new(Disposable)
+				ok = result.populateFrom(payload)
+				if (!ok) {
+					return false
+				}
+			} else {
+				return false
+			}
+			andThen(result.bindTo(me))
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
+func (me *impl) ShowSaveDialog(options SaveDialogOptions, andThen func(*Uri)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showSaveDialog"
+	msg.Data = make(dict, 1)
+	msg.Data["options"] = options
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *Uri
+			if (nil != payload) {
+				result = new(Uri)
+				ok = result.populateFrom(payload)
+				if (!ok) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
+func (me *impl) ShowOpenDialog(options OpenDialogOptions, andThen func([]Uri)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.showOpenDialog"
+	msg.Data = make(dict, 1)
+	msg.Data["options"] = options
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result []Uri
+			if (nil != payload) {
+				var __coll__result []any
+				__coll__result, ok = payload.([]any)
+				if (!ok) {
+					return false
+				}
+				result = make([]Uri, len(__coll__result))
+				var __idx__result int
+				__idx__result = 0
+				for _, __item__result := range __coll__result {
+					var __val__result Uri
+					__val__result = */*sorryButSuchIsCodeGenSometimes...*/new(Uri)
+					ok = __val__result.populateFrom(__item__result)
+					if (!ok) {
+						return false
+					}
+					result[__idx__result] = __val__result
+					__idx__result = (__idx__result + 1)
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
 }
 
 func (me *MessageItem) populateFrom(payload any) bool {
@@ -641,6 +1315,85 @@ func (me *MessageItem) populateFrom(payload any) bool {
 			}
 		}
 		me.IsCloseAffordance = isCloseAffordance
+	}
+	val, ok = it["my"]
+	if ok {
+		var my dict
+		if (nil != val) {
+			my, ok = val.(dict)
+			if (!ok) {
+				return false
+			}
+		}
+		me.My = my
+	}
+	return true
+}
+
+func (me *QuickPickItem) populateFrom(payload any) bool {
+	var it dict
+	var ok bool
+	var val any
+	it, ok = payload.(dict)
+	if (!ok) {
+		return false
+	}
+	val, ok = it["label"]
+	if ok {
+		var label string
+		if (nil != val) {
+			label, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.Label = label
+	} else {
+		return false
+	}
+	val, ok = it["description"]
+	if ok {
+		var description string
+		if (nil != val) {
+			description, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.Description = description
+	}
+	val, ok = it["detail"]
+	if ok {
+		var detail string
+		if (nil != val) {
+			detail, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.Detail = detail
+	}
+	val, ok = it["picked"]
+	if ok {
+		var picked bool
+		if (nil != val) {
+			picked, ok = val.(bool)
+			if (!ok) {
+				return false
+			}
+		}
+		me.Picked = picked
+	}
+	val, ok = it["alwaysShow"]
+	if ok {
+		var alwaysShow bool
+		if (nil != val) {
+			alwaysShow, ok = val.(bool)
+			if (!ok) {
+				return false
+			}
+		}
+		me.AlwaysShow = alwaysShow
 	}
 	val, ok = it["my"]
 	if ok {

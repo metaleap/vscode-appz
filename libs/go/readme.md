@@ -10,7 +10,7 @@ var OnError func(this Vscode, err any, jsonMsg any)
 ```
 Reports problems during the ongoing forever-looping stdin/stdout communication
 with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be
-`nil`.
+`nil`. Any of its args must be checked for `nil`-ness by the `OnError` handler.
 
 `err` ── if an `error`, it occurred on the Go side (I/O or JSON), else some
 JSON-decoded Go value from whatever was transmitted as the problem data (if
@@ -30,102 +30,35 @@ type Cancel struct {
 }
 ```
 
-Cancel allows later cancellation of ongoing / already-initiated interactions.
+Cancel allows belated cancellation of ongoing / already-initiated interactions.
 
 #### func  CancelIn
 
 ```go
 func CancelIn(fromNow time.Duration) *Cancel
 ```
+CancelIn returns a new `Cancel` with its `Now` already scheduled to be called in
+`fromNow` duration.
 
 #### func (*Cancel) Now
 
 ```go
 func (me *Cancel) Now()
 ```
+Now signals cancellation to the counterparty.
 
-#### func (Cancel) ShowErrorMessage1
+#### type Disposable
 
 ```go
-func (me Cancel) ShowErrorMessage1(message string, items []string, andThen func(*string))
+type Disposable struct {
+}
 ```
 
-#### func (Cancel) ShowErrorMessage2
+
+#### func (Disposable) Dispose
 
 ```go
-func (me Cancel) ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(*string))
-```
-
-#### func (Cancel) ShowErrorMessage3
-
-```go
-func (me Cancel) ShowErrorMessage3(message string, items []MessageItem, andThen func(*MessageItem))
-```
-
-#### func (Cancel) ShowErrorMessage4
-
-```go
-func (me Cancel) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem))
-```
-
-#### func (Cancel) ShowInformationMessage1
-
-```go
-func (me Cancel) ShowInformationMessage1(message string, items []string, andThen func(*string))
-```
-
-#### func (Cancel) ShowInformationMessage2
-
-```go
-func (me Cancel) ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(*string))
-```
-
-#### func (Cancel) ShowInformationMessage3
-
-```go
-func (me Cancel) ShowInformationMessage3(message string, items []MessageItem, andThen func(*MessageItem))
-```
-
-#### func (Cancel) ShowInformationMessage4
-
-```go
-func (me Cancel) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem))
-```
-
-#### func (Cancel) ShowInputBox
-
-```go
-func (me Cancel) ShowInputBox(options *InputBoxOptions, token *Cancel, andThen func(*string))
-```
-
-#### func (Cancel) ShowWarningMessage1
-
-```go
-func (me Cancel) ShowWarningMessage1(message string, items []string, andThen func(*string))
-```
-
-#### func (Cancel) ShowWarningMessage2
-
-```go
-func (me Cancel) ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(*string))
-```
-
-#### func (Cancel) ShowWarningMessage3
-
-```go
-func (me Cancel) ShowWarningMessage3(message string, items []MessageItem, andThen func(*MessageItem))
-```
-
-#### func (Cancel) ShowWarningMessage4
-
-```go
-func (me Cancel) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem))
-```
-
-#### func (Cancel) Window
-
-```go
-func (me Cancel) Window() Window
+func (me Disposable) Dispose()
 ```
 
 #### type InputBoxOptions
@@ -198,6 +131,134 @@ type MessageOptions struct {
 ```
 
 Options to configure the behavior of the message.
+
+#### type OpenDialogOptions
+
+```go
+type OpenDialogOptions struct {
+	// The resource the dialog shows when opened.
+	DefaultUri Uri `json:"defaultUri,omitempty"`
+
+	// A human-readable string for the open button.
+	OpenLabel string `json:"openLabel,omitempty"`
+
+	// Allow to select files, defaults to `true`.
+	CanSelectFiles bool `json:"canSelectFiles,omitempty"`
+
+	// Allow to select folders, defaults to `false`.
+	CanSelectFolders bool `json:"canSelectFolders,omitempty"`
+
+	// Allow to select many files or folders.
+	CanSelectMany bool `json:"canSelectMany,omitempty"`
+
+	// A set of file filters that are used by the dialog. Each entry is a human readable label,
+	// like "TypeScript", and an array of extensions, e.g.
+	// ```ts
+	// {
+	//  	'Images': ['png', 'jpg']
+	//  	'TypeScript': ['ts', 'tsx']
+	// }
+	// ```
+	Filters map[string][]string `json:"filters,omitempty"`
+}
+```
+
+Options to configure the behaviour of a file open dialog.
+
+* Note 1: A dialog can select files, folders, or both. This is not true for
+Windows which enforces to open either files or folder, but *not both*. * Note 2:
+Explicitly setting `canSelectFiles` and `canSelectFolders` to `false` is futile
+and the editor then silently adjusts the options to select files.
+
+#### type QuickPickItem
+
+```go
+type QuickPickItem struct {
+	// A human readable string which is rendered prominent.
+	Label string `json:"label"`
+
+	// A human readable string which is rendered less prominent.
+	Description string `json:"description,omitempty"`
+
+	// A human readable string which is rendered less prominent.
+	Detail string `json:"detail,omitempty"`
+
+	// Optional flag indicating if this item is picked initially.
+	// (Only honored when the picker allows multiple selections.)
+	Picked bool `json:"picked,omitempty"`
+
+	// Always show this item.
+	AlwaysShow bool `json:"alwaysShow,omitempty"`
+
+	// Free-form custom data, preserved across a roundtrip.
+	My dict `json:"my,omitempty"`
+}
+```
+
+Represents an item that can be selected from a list of items.
+
+#### type QuickPickOptions
+
+```go
+type QuickPickOptions struct {
+	// An optional flag to include the description when filtering the picks.
+	MatchOnDescription bool `json:"matchOnDescription,omitempty"`
+
+	// An optional flag to include the detail when filtering the picks.
+	MatchOnDetail bool `json:"matchOnDetail,omitempty"`
+
+	// An optional string to show as place holder in the input box to guide the user what to pick on.
+	PlaceHolder string `json:"placeHolder,omitempty"`
+
+	// Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.
+	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
+
+	// An optional flag to make the picker accept multiple selections, if true the result is an array of picks.
+	CanPickMany bool `json:"canPickMany,omitempty"`
+
+	// An optional function that is invoked whenever an item is selected.
+	OnDidSelectItem func(QuickPickItem) any `json:"-"`
+}
+```
+
+Options to configure the behavior of the quick pick UI.
+
+#### type SaveDialogOptions
+
+```go
+type SaveDialogOptions struct {
+	// The resource the dialog shows when opened.
+	DefaultUri Uri `json:"defaultUri,omitempty"`
+
+	// A human-readable string for the save button.
+	SaveLabel string `json:"saveLabel,omitempty"`
+
+	// A set of file filters that are used by the dialog. Each entry is a human readable label,
+	// like "TypeScript", and an array of extensions, e.g.
+	// ```ts
+	// {
+	//  	'Images': ['png', 'jpg']
+	//  	'TypeScript': ['ts', 'tsx']
+	// }
+	// ```
+	Filters map[string][]string `json:"filters,omitempty"`
+}
+```
+
+Options to configure the behaviour of a file save dialog.
+
+#### type Uri
+
+```go
+type Uri string
+```
+
+
+#### func (*Uri) String
+
+```go
+func (me *Uri) String() string
+```
 
 #### type Vscode
 
@@ -362,6 +423,87 @@ type Window interface {
 	//
 	// `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
 	ShowInputBox(options *InputBoxOptions, token *Cancel, andThen func(*string))
+
+	// Shows a selection list allowing multiple selections.
+	//
+	// `items` ── An array of strings, or a promise that resolves to an array of strings.
+	//
+	// `options` ── Configures the behavior of the selection list.
+	//
+	// `token` ── A token that can be used to signal cancellation.
+	//
+	// `andThen` ── A promise that resolves to the selected items or `undefined`.
+	ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel, andThen func([]string))
+
+	// Shows a selection list.
+	//
+	// `items` ── An array of strings, or a promise that resolves to an array of strings.
+	//
+	// `options` ── Configures the behavior of the selection list.
+	//
+	// `token` ── A token that can be used to signal cancellation.
+	//
+	// `andThen` ── A promise that resolves to the selection or `undefined`.
+	ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel, andThen func(*string))
+
+	// Shows a selection list allowing multiple selections.
+	//
+	// `items` ── An array of items, or a promise that resolves to an array of items.
+	//
+	// `options` ── Configures the behavior of the selection list.
+	//
+	// `token` ── A token that can be used to signal cancellation.
+	//
+	// `andThen` ── A promise that resolves to the selected items or `undefined`.
+	ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel, andThen func([]QuickPickItem))
+
+	// Shows a selection list.
+	//
+	// `items` ── An array of items, or a promise that resolves to an array of items.
+	//
+	// `options` ── Configures the behavior of the selection list.
+	//
+	// `token` ── A token that can be used to signal cancellation.
+	//
+	// `andThen` ── A promise that resolves to the selected item or `undefined`.
+	ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel, andThen func(*QuickPickItem))
+
+	// Set a message to the status bar. This is a short hand for the more powerful
+	// status bar [items](#window.createStatusBarItem).
+	//
+	// `text` ── The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
+	//
+	// `hideAfterTimeout` ── Timeout in milliseconds after which the message will be disposed.
+	//
+	// `andThen` ── A disposable which hides the status bar message.
+	SetStatusBarMessage1(text string, hideAfterTimeout int, andThen func(*Disposable))
+
+	// Set a message to the status bar. This is a short hand for the more powerful
+	// status bar [items](#window.createStatusBarItem).
+	//
+	// *Note* that status bar messages stack and that they must be disposed when no
+	// longer used.
+	//
+	// `text` ── The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
+	//
+	// `andThen` ── A disposable which hides the status bar message.
+	SetStatusBarMessage2(text string, andThen func(*Disposable))
+
+	// Shows a file save dialog to the user which allows to select a file
+	// for saving-purposes.
+	//
+	// `options` ── Options that control the dialog.
+	//
+	// `andThen` ── A promise that resolves to the selected resource or `undefined`.
+	ShowSaveDialog(options SaveDialogOptions, andThen func(*Uri))
+
+	// Shows a file open dialog to the user which allows to select a file
+	// for opening-purposes.
+	//
+	// `options` ── Options that control the dialog.
+	//
+	// `andThen` ── A promise that resolves to the selected resources or `undefined`.
+	ShowOpenDialog(options OpenDialogOptions, andThen func([]Uri))
 }
 ```
 

@@ -1,23 +1,20 @@
 namespace VscAppz {
     using System;
-    using System.IO;
     using System.Collections.Generic;
-
+    using System.IO;
+    using System.Timers;
+    using Newtonsoft.Json;
     using any = System.Object;
-    using dict = System.Collections.Generic.Dictionary<string,object>;
+    using dict = System.Collections.Generic.Dictionary<string, object>;
 
     internal partial class ipcMsg {
-        internal string QName = "";
+        internal string QName;
         internal dict Data;
         internal string CbId;
 
         internal ipcMsg() { }
         internal ipcMsg(string qName, int numData, string contId = "") =>
             (this.QName, Data, this.CbId) = (qName, new dict(numData), contId);
-    }
-
-    /// <summary>Allows later cancellation of ongoing / already-initiated interactions.</summary>
-    public class Cancel {
     }
 
     /// <summary>Everything related to the running of your app.</summary>
@@ -28,14 +25,15 @@ namespace VscAppz {
         /// <summary>
         /// Reports problems during the ongoing forever-looping stdin/stdout communication
         /// with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be `null`.
+        /// Any of its args must be checked for `null`-ness by the `OnError` handler.
         ///
-        /// `self`── the caller, an `IVscode` instance that encountered the problem being reported.
+        /// `IVscode self`── the caller that encountered the problem being reported.
         ///
-        /// `err` ── if an `Exception`, it occurred on the C# side (I/O or JSON), else some JSON-decoded C# value from whatever was transmitted as the problem data (if anything) by VS Code.
+        /// `object err` ── if an `Exception`, it occurred on the C# side (I/O or JSON), else some JSON-decoded C# value from whatever was transmitted as the problem data (if anything) by VS Code.
         ///
-        /// `jsonMsg` ─ if a `string`, the incoming JSON message; if a `Dictionary&lt;string, object&gt;`, the outgoing one.
+        /// `object jsonMsg` ─ if a `string`, the incoming JSON message; if a `Dictionary&lt;string, object&gt;`, the outgoing one.
         /// </summary>
-        public static Action<IVscode,any,any> OnError = (self, err, jsonMsg) => {
+        public static Action<IVscode, any, any> OnError = (_, err, jsonMsg) => {
             Console.Error.Write(string.Format(OnErrorDefaultOutputFormat, err, jsonMsg));
         };
 
@@ -120,6 +118,56 @@ namespace VscAppz {
             if (startloop)
                 loopReadln();
         }
-
     }
+
+    /// <summary>Allows belated cancellation of ongoing / already-initiated interactions.</summary>
+    public class Cancel {
+        internal impl impl;
+        internal string fnId = "";
+        /// <summary>Cancel.Now signals cancellation to the counterparty.</summary>
+        public void Now(){
+            if (impl == null || string.IsNullOrEmpty(fnId))
+                Vsc.OnError(impl, new Exception("vscode-appz/libs/cs#Cancel.Now called before the Cancel was sent to the counterparty."), null);
+            else
+                impl.send(new ipcMsg(){CbId=fnId},null);
+        }
+        /// <summary>Cancel.In returns a new `Cancel` with its `Now` already scheduled to be called in `fromNow` duration.</summary>
+        public static Cancel In(TimeSpan fromNow) {
+            Cancel me = new Cancel();
+            Timer timer = new Timer(fromNow.TotalMilliseconds);
+            timer.AutoReset = false;
+            timer.Elapsed += (evtsender, evtargs) => {
+                timer.Stop();
+                timer.Close();
+                timer.Dispose();
+                me.Now();
+            };
+            timer.Start();
+            return me;
+        }
+    }
+
+    /// <summary>Disposable represents an non-transient object identity lifetimed at the counterparty.</summary>
+    public class Disposable {
+        internal impl impl;
+        internal string id;
+        internal Disposable() {}
+        internal Disposable bindTo(impl impl) { this.impl = impl; return this; }
+        internal bool populateFrom(any payload) =>
+            (payload is any[] arr) && (arr != null) && (arr.Length == 2)
+                && (arr[0] is string s) && !string.IsNullOrEmpty(id = s);
+        /// <summary>Dispose signals to the counterparty to destroy the object.</summary>
+        public void Dispose() =>
+            impl.send(new ipcMsg("Dispose", 1) { Data = { [""] = id } }, null);
+    }
+
+    [JsonConverter(typeof(json.uri))]
+    public class Uri {
+        internal string uri;
+        internal Uri () {}
+        internal bool populateFrom(any payload) =>
+            (payload is string s) && !string.IsNullOrEmpty(uri = s);
+        public override string ToString() => uri;
+    }
+
 }

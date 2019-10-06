@@ -52,7 +52,7 @@ class Prep {
         if (dbgJsonPrintStructs)
             printjson(this.structs);
         if (dbgJsonPrintIfaces)
-            printjson(this.structs);
+            printjson(this.interfaces);
     }
     addEnum(enumJob) {
         const qname = this.qName(enumJob);
@@ -115,7 +115,10 @@ class Prep {
                 spreads: _.dotDotDotToken ? true : false,
             })),
         });
-        const tret = this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters);
+        let tret = this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters);
+        const tprom = typeProm(tret);
+        if (!(tprom && tprom.length))
+            tret = { Thens: [tret] };
         if (tret) {
             const method = iface.methods[iface.methods.length - 1];
             const argname = pickName('', ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args);
@@ -131,13 +134,20 @@ class Prep {
         return qname;
     }
     typeSpec(tNode, tParams) {
-        if (ts.isMethodSignature(tNode)) {
-            const tp = tNode.typeParameters ? ts.createNodeArray(tNode.typeParameters.concat(...tParams), tParams.hasTrailingComma) : tParams;
-            const rfun = {
-                From: tNode.parameters.map(_ => this.typeSpec(_.type, tp)),
-                To: this.typeSpec(tNode.type, tp)
-            };
-            return rfun;
+        if (ts.isTypeElement(tNode)) {
+            if (ts.isPropertySignature(tNode)) {
+                return this.typeSpec(tNode.type, tParams);
+            }
+            else if (ts.isMethodSignature(tNode) || ts.isCallSignatureDeclaration(tNode) || ts.isConstructSignatureDeclaration(tNode) || ts.isIndexSignatureDeclaration(tNode)) {
+                const tp = tNode.typeParameters ? ts.createNodeArray(tNode.typeParameters.concat(...tParams), tParams.hasTrailingComma) : tParams;
+                const rfun = {
+                    From: tNode.parameters.map(_ => this.typeSpec(_.type, tp)),
+                    To: this.typeSpec(tNode.type, tp)
+                };
+                return rfun;
+            }
+            else
+                throw tNode.getText();
         }
         switch (tNode.kind) {
             case ts.SyntaxKind.AnyKeyword:
@@ -148,6 +158,10 @@ class Prep {
                 return ScriptPrimType.Number;
             case ts.SyntaxKind.BooleanKeyword:
                 return ScriptPrimType.Boolean;
+            case ts.SyntaxKind.TrueKeyword:
+                return ScriptPrimType.BooleanTrue;
+            case ts.SyntaxKind.FalseKeyword:
+                return ScriptPrimType.BooleanFalse;
             case ts.SyntaxKind.NullKeyword:
                 return ScriptPrimType.Null;
             case ts.SyntaxKind.UndefinedKeyword:
@@ -167,6 +181,16 @@ class Prep {
                     SumOf: tNode.types.map(_ => this.typeSpec(_, tParams))
                 };
                 return rsum;
+            case ts.SyntaxKind.IntersectionType:
+                const rmul = {
+                    ProdOf: tNode.types.map(_ => this.typeSpec(_, tParams))
+                };
+                return rmul;
+            case ts.SyntaxKind.TypeLiteral:
+                const robj = {
+                    Members: tNode.members.map(_ => [_.name ? _.name.getText() : '', this.typeSpec(_, tParams)])
+                };
+                return robj;
             case ts.SyntaxKind.TypeReference:
                 const tref = tNode, tname = tref.typeName.getText();
                 const tparam = (!tParams) ? null : tParams.find(_ => _.name.getText() === tname);
@@ -185,8 +209,19 @@ class Prep {
                 }
                 else
                     return tname;
+            case ts.SyntaxKind.LiteralType:
+                const lit = tNode.literal;
+                switch (lit.kind) {
+                    case ts.SyntaxKind.BooleanKeyword:
+                        return ScriptPrimType.Boolean;
+                    case ts.SyntaxKind.TrueKeyword:
+                        return ScriptPrimType.BooleanTrue;
+                    case ts.SyntaxKind.FalseKeyword:
+                        return ScriptPrimType.BooleanFalse;
+                }
+                throw (lit.kind + "\t" + lit.getText());
             default:
-                throw (tNode.kind);
+                throw (tNode.kind + "\t" + tNode.getText());
         }
     }
 }
@@ -197,6 +232,8 @@ var ScriptPrimType;
     ScriptPrimType[ScriptPrimType["String"] = 139] = "String";
     ScriptPrimType[ScriptPrimType["Number"] = 136] = "Number";
     ScriptPrimType[ScriptPrimType["Boolean"] = 124] = "Boolean";
+    ScriptPrimType[ScriptPrimType["BooleanTrue"] = 103] = "BooleanTrue";
+    ScriptPrimType[ScriptPrimType["BooleanFalse"] = 88] = "BooleanFalse";
     ScriptPrimType[ScriptPrimType["Undefined"] = 142] = "Undefined";
     ScriptPrimType[ScriptPrimType["Null"] = 97] = "Null";
     ScriptPrimType[ScriptPrimType["Dict"] = 189] = "Dict";
@@ -232,21 +269,36 @@ class Gen {
     }
 }
 exports.Gen = Gen;
-function typeArrOf(typeSpec) {
+function typeArr(typeSpec) {
     const tarr = typeSpec;
     return (tarr && tarr.ArrOf) ? tarr.ArrOf : null;
 }
-exports.typeArrOf = typeArrOf;
-function typeTupOf(typeSpec) {
+exports.typeArr = typeArr;
+function typeTup(typeSpec) {
     const ttup = typeSpec;
     return (ttup && ttup.TupOf) ? ttup.TupOf : null;
 }
-exports.typeTupOf = typeTupOf;
-function typeSumOf(typeSpec) {
+exports.typeTup = typeTup;
+function typeSum(typeSpec) {
     const tsum = typeSpec;
     return (tsum && tsum.SumOf) ? tsum.SumOf : null;
 }
-exports.typeSumOf = typeSumOf;
+exports.typeSum = typeSum;
+function typeMul(typeSpec) {
+    const tmul = typeSpec;
+    return (tmul && tmul.ProdOf) ? tmul.ProdOf : null;
+}
+exports.typeMul = typeMul;
+function typeObj(typeSpec) {
+    const tobj = typeSpec;
+    return (tobj && tobj.Members) ? tobj.Members : null;
+}
+exports.typeObj = typeObj;
+function typePromOf(typeSpec, promOf) {
+    const tprom = typeProm(typeSpec);
+    return (tprom && tprom.length && tprom[0] === promOf);
+}
+exports.typePromOf = typePromOf;
 function typeProm(typeSpec) {
     const tprom = typeSpec;
     return (tprom && tprom.Thens) ? tprom.Thens : null;
@@ -258,15 +310,21 @@ function typeFun(typeSpec) {
 }
 exports.typeFun = typeFun;
 function typeRefersTo(typeSpec, name) {
-    const tarr = typeArrOf(typeSpec);
+    const tarr = typeArr(typeSpec);
     if (tarr)
         return typeRefersTo(tarr, name);
-    const ttup = typeTupOf(typeSpec);
+    const ttup = typeTup(typeSpec);
     if (ttup)
         return ttup.some(_ => typeRefersTo(_, name));
-    const tsum = typeSumOf(typeSpec);
+    const tsum = typeSum(typeSpec);
     if (tsum)
         return tsum.some(_ => typeRefersTo(_, name));
+    const tmul = typeMul(typeSpec);
+    if (tmul)
+        return tmul.some(_ => typeRefersTo(_, name));
+    const tobj = typeObj(typeSpec);
+    if (tobj)
+        return tobj.some(_ => typeRefersTo(_[1], name));
     const tfun = typeFun(typeSpec);
     if (tfun)
         return typeRefersTo(tfun[1], name) || tfun[0].some(_ => typeRefersTo(_, name));
@@ -277,11 +335,17 @@ function typeRefersTo(typeSpec, name) {
 }
 function argsFuncFields(prep, args) {
     const funcfields = [];
-    for (const arg of args)
-        for (const struct of prep.structs.filter(_ => _.name === arg.typeSpec))
-            if (struct.funcFields && struct.funcFields.length)
-                for (const funcfield of struct.funcFields)
-                    funcfields.push({ arg: arg, struct: struct, name: funcfield });
+    for (const arg of args) {
+        let targ = arg.typeSpec;
+        const tmul = typeMul(targ);
+        if (tmul && tmul.length)
+            targ = tmul[0];
+        if (typeof targ === 'string')
+            for (const struct of prep.structs.filter(_ => _.name === targ))
+                if (struct.funcFields && struct.funcFields.length)
+                    for (const funcfield of struct.funcFields)
+                        funcfields.push({ arg: arg, struct: struct, name: funcfield });
+    }
     return funcfields;
 }
 exports.argsFuncFields = argsFuncFields;

@@ -11,103 +11,162 @@ interface MessageItem extends vscode.MessageItem {
 interface InputBoxOptions extends vscode.InputBoxOptions {
 	validateInput_AppzFuncId: string
 }
+interface QuickPickOptions extends vscode.QuickPickOptions {
+	onDidSelectItem_AppzFuncId: string
+}
+interface QuickPickItem extends vscode.QuickPickItem {
+	my?: { [_: string]: any }
+}
+type SaveDialogOptions = vscode.SaveDialogOptions
+type OpenDialogOptions = vscode.OpenDialogOptions
 
-export function handle(msg: ppio.IpcMsg, proc: ppio.Proc): [Thenable<any>, string[]] {
+export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationTokens: string[]): Thenable<any> | vscode.Disposable {
 	const idxdot = msg.qName.lastIndexOf('.')
 	const [apiname, methodname] = (idxdot > 0) ? [msg.qName.slice(0, idxdot), msg.qName.slice(idxdot + 1)] : ['', msg.qName]
 	switch (apiname) {
 		case "window":
 			switch (methodname) {
 				case "showErrorMessage1": {
-					let ctoks: string[] = undefined
 					const arg_message = (msg.data['message']) as string
 					const arg_items = (msg.data['items'] || []) as string[]
-					return [vscode.window.showErrorMessage(arg_message, ...arg_items, ), ctoks]
+					return vscode.window.showErrorMessage(arg_message, ...arg_items, )
 				}
 				case "showErrorMessage2": {
-					let ctoks: string[] = undefined
 					const arg_message = (msg.data['message']) as string
 					const arg_options = (msg.data['options']) as MessageOptions
 					const arg_items = (msg.data['items'] || []) as string[]
-					return [vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items, ), ctoks]
+					return vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items, )
 				}
 				case "showErrorMessage3": {
-					let ctoks: string[] = undefined
 					const arg_message = (msg.data['message']) as string
 					const arg_items = (msg.data['items'] || []) as MessageItem[]
-					return [vscode.window.showErrorMessage(arg_message, ...arg_items, ), ctoks]
+					return vscode.window.showErrorMessage(arg_message, ...arg_items, )
 				}
 				case "showErrorMessage4": {
-					let ctoks: string[] = undefined
 					const arg_message = (msg.data['message']) as string
 					const arg_options = (msg.data['options']) as MessageOptions
 					const arg_items = (msg.data['items'] || []) as MessageItem[]
-					return [vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items, ), ctoks]
+					return vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items, )
 				}
 				case "showInformationMessage1": {
-					let ctoks: string[] = undefined
 					const arg_message = (msg.data['message']) as string
 					const arg_items = (msg.data['items'] || []) as string[]
-					return [vscode.window.showInformationMessage(arg_message, ...arg_items, ), ctoks]
+					return vscode.window.showInformationMessage(arg_message, ...arg_items, )
 				}
 				case "showInformationMessage2": {
-					let ctoks: string[] = undefined
 					const arg_message = (msg.data['message']) as string
 					const arg_options = (msg.data['options']) as MessageOptions
 					const arg_items = (msg.data['items'] || []) as string[]
-					return [vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items, ), ctoks]
+					return vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items, )
 				}
 				case "showInformationMessage3": {
-					let ctoks: string[] = undefined
 					const arg_message = (msg.data['message']) as string
 					const arg_items = (msg.data['items'] || []) as MessageItem[]
-					return [vscode.window.showInformationMessage(arg_message, ...arg_items, ), ctoks]
+					return vscode.window.showInformationMessage(arg_message, ...arg_items, )
 				}
 				case "showInformationMessage4": {
-					let ctoks: string[] = undefined
 					const arg_message = (msg.data['message']) as string
 					const arg_options = (msg.data['options']) as MessageOptions
 					const arg_items = (msg.data['items'] || []) as MessageItem[]
-					return [vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items, ), ctoks]
+					return vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items, )
 				}
 				case "showWarningMessage1": {
-					let ctoks: string[] = undefined
 					const arg_message = (msg.data['message']) as string
 					const arg_items = (msg.data['items'] || []) as string[]
-					return [vscode.window.showWarningMessage(arg_message, ...arg_items, ), ctoks]
+					return vscode.window.showWarningMessage(arg_message, ...arg_items, )
 				}
 				case "showWarningMessage2": {
-					let ctoks: string[] = undefined
 					const arg_message = (msg.data['message']) as string
 					const arg_options = (msg.data['options']) as MessageOptions
 					const arg_items = (msg.data['items'] || []) as string[]
-					return [vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items, ), ctoks]
+					return vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items, )
 				}
 				case "showWarningMessage3": {
-					let ctoks: string[] = undefined
 					const arg_message = (msg.data['message']) as string
 					const arg_items = (msg.data['items'] || []) as MessageItem[]
-					return [vscode.window.showWarningMessage(arg_message, ...arg_items, ), ctoks]
+					return vscode.window.showWarningMessage(arg_message, ...arg_items, )
 				}
 				case "showWarningMessage4": {
-					let ctoks: string[] = undefined
 					const arg_message = (msg.data['message']) as string
 					const arg_options = (msg.data['options']) as MessageOptions
 					const arg_items = (msg.data['items'] || []) as MessageItem[]
-					return [vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items, ), ctoks]
+					return vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items, )
 				}
 				case "showInputBox": {
-					let ctoks: string[] = undefined
 					const arg_options = (msg.data['options']) as InputBoxOptions
 					if (arg_options.validateInput_AppzFuncId && arg_options.validateInput_AppzFuncId.length)
-						arg_options.validateInput = (a0) => proc.callBack(arg_options.validateInput_AppzFuncId, a0)
-					const arg_token = proc.canceller(msg.data['token'])
-					if (arg_token) {
-						if (ctoks === undefined)
-							ctoks = []
-						ctoks.push(msg.data['token'] as string)
-					}
-					return [vscode.window.showInputBox(arg_options, arg_token, ), ctoks]
+						arg_options.validateInput = (a0) => prog.callBack(arg_options.validateInput_AppzFuncId, a0)
+					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
+					if (!arg_token)
+						arg_token = prog.cancellers[''].token
+					else 
+						remoteCancellationTokens.push(ctid)
+					return vscode.window.showInputBox(arg_options, arg_token, )
+				}
+				case "showQuickPick1": {
+					const arg_items = (msg.data['items']) as string[]
+					const arg_options = (msg.data['options']) as QuickPickOptions
+					if (arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
+						arg_options.onDidSelectItem = (a0) => prog.callBack(arg_options.onDidSelectItem_AppzFuncId, a0)
+					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
+					if (!arg_token)
+						arg_token = prog.cancellers[''].token
+					else 
+						remoteCancellationTokens.push(ctid)
+					return vscode.window.showQuickPick(arg_items, arg_options, arg_token, )
+				}
+				case "showQuickPick2": {
+					const arg_items = (msg.data['items']) as string[]
+					const arg_options = (msg.data['options']) as QuickPickOptions
+					if (arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
+						arg_options.onDidSelectItem = (a0) => prog.callBack(arg_options.onDidSelectItem_AppzFuncId, a0)
+					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
+					if (!arg_token)
+						arg_token = prog.cancellers[''].token
+					else 
+						remoteCancellationTokens.push(ctid)
+					return vscode.window.showQuickPick(arg_items, arg_options, arg_token, )
+				}
+				case "showQuickPick3": {
+					const arg_items = (msg.data['items']) as QuickPickItem[]
+					const arg_options = (msg.data['options']) as QuickPickOptions
+					if (arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
+						arg_options.onDidSelectItem = (a0) => prog.callBack(arg_options.onDidSelectItem_AppzFuncId, a0)
+					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
+					if (!arg_token)
+						arg_token = prog.cancellers[''].token
+					else 
+						remoteCancellationTokens.push(ctid)
+					return vscode.window.showQuickPick(arg_items, arg_options, arg_token, )
+				}
+				case "showQuickPick4": {
+					const arg_items = (msg.data['items']) as QuickPickItem[]
+					const arg_options = (msg.data['options']) as QuickPickOptions
+					if (arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
+						arg_options.onDidSelectItem = (a0) => prog.callBack(arg_options.onDidSelectItem_AppzFuncId, a0)
+					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
+					if (!arg_token)
+						arg_token = prog.cancellers[''].token
+					else 
+						remoteCancellationTokens.push(ctid)
+					return vscode.window.showQuickPick(arg_items, arg_options, arg_token, )
+				}
+				case "setStatusBarMessage1": {
+					const arg_text = (msg.data['text']) as string
+					const arg_hideAfterTimeout = (msg.data['hideAfterTimeout']) as number
+					return vscode.window.setStatusBarMessage(arg_text, arg_hideAfterTimeout, )
+				}
+				case "setStatusBarMessage2": {
+					const arg_text = (msg.data['text']) as string
+					return vscode.window.setStatusBarMessage(arg_text, )
+				}
+				case "showSaveDialog": {
+					const arg_options = (msg.data['options']) as SaveDialogOptions
+					return vscode.window.showSaveDialog(arg_options, )
+				}
+				case "showOpenDialog": {
+					const arg_options = (msg.data['options']) as OpenDialogOptions
+					return vscode.window.showOpenDialog(arg_options, )
 				}
 				default:
 					throw (methodname)

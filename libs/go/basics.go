@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"sync"
@@ -15,6 +16,7 @@ import (
 
 // Reports problems during the ongoing forever-looping stdin/stdout communication
 // with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be `nil`.
+// Any of its args must be checked for `nil`-ness by the `OnError` handler.
 //
 // `err` ── if an `error`, it occurred on the Go side (I/O or JSON), else some JSON-decoded Go value from whatever was transmitted as the problem data (if anything) by VS Code.
 //
@@ -45,26 +47,6 @@ type impl struct {
 	counter   uint64
 	cbWaiting map[string]func(any) bool
 	cbOther   map[string]func([]any) (any, bool)
-}
-
-// Cancel allows later cancellation of ongoing / already-initiated interactions.
-type Cancel struct {
-	*impl
-	fnId string
-}
-
-func (me *Cancel) Now() {
-	if me.impl != nil {
-		me.impl.send(&ipcMsg{CbId: me.fnId}, nil)
-	}
-}
-
-func CancelIn(fromNow time.Duration) *Cancel {
-	cancel := &Cancel{}
-	_ = time.AfterFunc(fromNow, func() {
-		cancel.Now()
-	})
-	return cancel
 }
 
 func init() {
@@ -107,6 +89,7 @@ func (me *impl) loopReadln() {
 			} else if inmsg.Data == nil || len(inmsg.Data) == 0 {
 				OnError(me, errors.New("field `data` is missing"), jsonmsg)
 			} else {
+
 				me.Lock()
 				cb, fn := me.cbWaiting[inmsg.CbId], me.cbOther[inmsg.CbId]
 				delete(me.cbWaiting, inmsg.CbId)
@@ -168,3 +151,57 @@ func (me *impl) send(msg *ipcMsg, on func(any) bool) {
 		me.loopReadln()
 	}
 }
+
+// Cancel allows belated cancellation of ongoing / already-initiated interactions.
+type Cancel struct {
+	impl *impl
+	fnId string
+}
+
+// Now signals cancellation to the counterparty.
+func (me *Cancel) Now() {
+	if me.impl == nil || me.fnId == "" {
+		OnError(me.impl, errors.New("vscode-appz/libs/go#Cancel.Now called before the Cancel was sent to the counterparty.\n"+string(debug.Stack())), nil)
+	} else {
+		me.impl.send(&ipcMsg{CbId: me.fnId}, nil)
+	}
+}
+
+// CancelIn returns a new `Cancel` with its `Now` already scheduled to be called in `fromNow` duration.
+func CancelIn(fromNow time.Duration) *Cancel {
+	cancel := &Cancel{}
+	_ = time.AfterFunc(fromNow, cancel.Now)
+	return cancel
+}
+
+type Disposable struct {
+	impl *impl
+	id   string
+}
+
+func (me *Disposable) bindTo(impl *impl) *Disposable {
+	me.impl = impl
+	return me
+}
+
+func (me *Disposable) populateFrom(payload any) bool {
+	if arr, ok := payload.([]any); ok && len(arr) == 2 {
+		me.id, ok = arr[0].(string)
+		return ok && me.id != ""
+	}
+	return false
+}
+
+func (me Disposable) Dispose() {
+	me.impl.send(&ipcMsg{QName: "Dispose", Data: dict{"": me.id}}, nil)
+}
+
+type Uri string
+
+func (me *Uri) populateFrom(payload any) bool {
+	s, ok := payload.(string)
+	*me = Uri(s)
+	return ok
+}
+
+func (me *Uri) String() string { return string(*me) }

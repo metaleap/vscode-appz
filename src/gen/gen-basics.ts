@@ -138,7 +138,7 @@ export class Prep {
         if (dbgJsonPrintStructs)
             printjson(this.structs)
         if (dbgJsonPrintIfaces)
-            printjson(this.structs)
+            printjson(this.interfaces)
     }
 
     addEnum(enumJob: GenJobEnum) {
@@ -204,7 +204,10 @@ export class Prep {
                 spreads: _.dotDotDotToken ? true : false,
             })),
         })
-        const tret = this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters)
+        let tret = this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters)
+        const tprom = typeProm(tret)
+        if (!(tprom && tprom.length))
+            tret = { Thens: [tret] }
         if (tret) {
             const method = iface.methods[iface.methods.length - 1]
             const argname = pickName('', ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args)
@@ -221,14 +224,19 @@ export class Prep {
         return qname
     }
 
-    typeSpec(tNode: ts.TypeNode | ts.MethodSignature, tParams: ts.NodeArray<ts.TypeParameterDeclaration>, ): TypeSpec {
-        if (ts.isMethodSignature(tNode)) {
-            const tp = tNode.typeParameters ? ts.createNodeArray(tNode.typeParameters.concat(...tParams), tParams.hasTrailingComma) : tParams
-            const rfun: TypeSpecFun = {
-                From: tNode.parameters.map(_ => this.typeSpec(_.type, tp)),
-                To: this.typeSpec(tNode.type, tp)
-            }
-            return rfun
+    typeSpec(tNode: ts.TypeNode | ts.TypeElement, tParams: ts.NodeArray<ts.TypeParameterDeclaration>, ): TypeSpec {
+        if (ts.isTypeElement(tNode)) {
+            if (ts.isPropertySignature(tNode)) {
+                return this.typeSpec(tNode.type, tParams)
+            } else if (ts.isMethodSignature(tNode) || ts.isCallSignatureDeclaration(tNode) || ts.isConstructSignatureDeclaration(tNode) || ts.isIndexSignatureDeclaration(tNode)) {
+                const tp = tNode.typeParameters ? ts.createNodeArray(tNode.typeParameters.concat(...tParams), tParams.hasTrailingComma) : tParams
+                const rfun: TypeSpecFun = {
+                    From: tNode.parameters.map(_ => this.typeSpec(_.type, tp)),
+                    To: this.typeSpec(tNode.type, tp)
+                }
+                return rfun
+            } else
+                throw tNode.getText()
         }
         switch (tNode.kind) {
             case ts.SyntaxKind.AnyKeyword:
@@ -239,6 +247,10 @@ export class Prep {
                 return ScriptPrimType.Number
             case ts.SyntaxKind.BooleanKeyword:
                 return ScriptPrimType.Boolean
+            case ts.SyntaxKind.TrueKeyword:
+                return ScriptPrimType.BooleanTrue
+            case ts.SyntaxKind.FalseKeyword:
+                return ScriptPrimType.BooleanFalse
             case ts.SyntaxKind.NullKeyword:
                 return ScriptPrimType.Null
             case ts.SyntaxKind.UndefinedKeyword:
@@ -258,6 +270,16 @@ export class Prep {
                     SumOf: (tNode as ts.UnionTypeNode).types.map(_ => this.typeSpec(_, tParams))
                 }
                 return rsum
+            case ts.SyntaxKind.IntersectionType:
+                const rmul: TypeSpecMul = {
+                    ProdOf: (tNode as ts.IntersectionTypeNode).types.map(_ => this.typeSpec(_, tParams))
+                }
+                return rmul
+            case ts.SyntaxKind.TypeLiteral:
+                const robj: TypeSpecObj = {
+                    Members: (tNode as ts.TypeLiteralNode).members.map(_ => [_.name ? _.name.getText() : '', this.typeSpec(_, tParams)])
+                }
+                return robj
             case ts.SyntaxKind.TypeReference:
                 const tref = tNode as ts.TypeReferenceNode,
                     tname = tref.typeName.getText()
@@ -275,13 +297,24 @@ export class Prep {
                     return tprom
                 } else
                     return tname
+            case ts.SyntaxKind.LiteralType:
+                const lit = (tNode as ts.LiteralTypeNode).literal
+                switch (lit.kind) {
+                    case ts.SyntaxKind.BooleanKeyword:
+                        return ScriptPrimType.Boolean
+                    case ts.SyntaxKind.TrueKeyword:
+                        return ScriptPrimType.BooleanTrue
+                    case ts.SyntaxKind.FalseKeyword:
+                        return ScriptPrimType.BooleanFalse
+                }
+                throw (lit.kind + "\t" + lit.getText())
             default:
-                throw (tNode.kind)
+                throw (tNode.kind + "\t" + tNode.getText())
         }
     }
 }
 
-export type TypeSpec = ScriptPrimType | string | TypeSpecArr | TypeSpecTup | TypeSpecSum | TypeSpecFun | TypeSpecProm
+export type TypeSpec = ScriptPrimType | string | TypeSpecArr | TypeSpecTup | TypeSpecSum | TypeSpecMul | TypeSpecObj | TypeSpecFun | TypeSpecProm
 
 export interface TypeSpecArr {
     ArrOf: TypeSpec
@@ -289,6 +322,14 @@ export interface TypeSpecArr {
 
 export interface TypeSpecSum {
     SumOf: TypeSpec[]
+}
+
+export interface TypeSpecMul {
+    ProdOf: TypeSpec[]
+}
+
+export interface TypeSpecObj {
+    Members: [string, TypeSpec][]
 }
 
 export interface TypeSpecTup {
@@ -309,6 +350,8 @@ export enum ScriptPrimType {
     String = ts.SyntaxKind.StringKeyword,
     Number = ts.SyntaxKind.NumberKeyword,
     Boolean = ts.SyntaxKind.BooleanKeyword,
+    BooleanTrue = ts.SyntaxKind.TrueKeyword,
+    BooleanFalse = ts.SyntaxKind.FalseKeyword,
     Undefined = ts.SyntaxKind.UndefinedKeyword,
     Null = ts.SyntaxKind.NullKeyword,
     Dict = ts.SyntaxKind.ObjectLiteralExpression,
@@ -362,19 +405,34 @@ export abstract class Gen {
 
 }
 
-export function typeArrOf(typeSpec: TypeSpec): TypeSpec {
+export function typeArr(typeSpec: TypeSpec): TypeSpec {
     const tarr = typeSpec as TypeSpecArr
     return (tarr && tarr.ArrOf) ? tarr.ArrOf : null
 }
 
-export function typeTupOf(typeSpec: TypeSpec): TypeSpec[] {
+export function typeTup(typeSpec: TypeSpec): TypeSpec[] {
     const ttup = typeSpec as TypeSpecTup
     return (ttup && ttup.TupOf) ? ttup.TupOf : null
 }
 
-export function typeSumOf(typeSpec: TypeSpec): TypeSpec[] {
+export function typeSum(typeSpec: TypeSpec): TypeSpec[] {
     const tsum = typeSpec as TypeSpecSum
     return (tsum && tsum.SumOf) ? tsum.SumOf : null
+}
+
+export function typeMul(typeSpec: TypeSpec): TypeSpec[] {
+    const tmul = typeSpec as TypeSpecMul
+    return (tmul && tmul.ProdOf) ? tmul.ProdOf : null
+}
+
+export function typeObj(typeSpec: TypeSpec): [string, TypeSpec][] {
+    const tobj = typeSpec as TypeSpecObj
+    return (tobj && tobj.Members) ? tobj.Members : null
+}
+
+export function typePromOf(typeSpec: TypeSpec, promOf: TypeSpec): boolean {
+    const tprom = typeProm(typeSpec)
+    return (tprom && tprom.length && tprom[0] === promOf)
 }
 
 export function typeProm(typeSpec: TypeSpec): TypeSpec[] {
@@ -388,14 +446,20 @@ export function typeFun(typeSpec: TypeSpec): [TypeSpec[], TypeSpec] {
 }
 
 function typeRefersTo(typeSpec: TypeSpec, name: string): boolean {
-    const tarr = typeArrOf(typeSpec)
+    const tarr = typeArr(typeSpec)
     if (tarr) return typeRefersTo(tarr, name)
 
-    const ttup = typeTupOf(typeSpec)
+    const ttup = typeTup(typeSpec)
     if (ttup) return ttup.some(_ => typeRefersTo(_, name))
 
-    const tsum = typeSumOf(typeSpec)
+    const tsum = typeSum(typeSpec)
     if (tsum) return tsum.some(_ => typeRefersTo(_, name))
+
+    const tmul = typeMul(typeSpec)
+    if (tmul) return tmul.some(_ => typeRefersTo(_, name))
+
+    const tobj = typeObj(typeSpec)
+    if (tobj) return tobj.some(_ => typeRefersTo(_[1], name))
 
     const tfun = typeFun(typeSpec)
     if (tfun) return typeRefersTo(tfun[1], name) || tfun[0].some(_ => typeRefersTo(_, name))
@@ -408,11 +472,17 @@ function typeRefersTo(typeSpec: TypeSpec, name: string): boolean {
 
 export function argsFuncFields(prep: Prep, args: PrepArg[]) {
     const funcfields: { arg: PrepArg, struct: PrepStruct, name: string }[] = []
-    for (const arg of args)
-        for (const struct of prep.structs.filter(_ => _.name === arg.typeSpec))
-            if (struct.funcFields && struct.funcFields.length)
-                for (const funcfield of struct.funcFields)
-                    funcfields.push({ arg: arg, struct: struct, name: funcfield })
+    for (const arg of args) {
+        let targ = arg.typeSpec
+        const tmul = typeMul(targ)
+        if (tmul && tmul.length)
+            targ = tmul[0]
+        if (typeof targ === 'string')
+            for (const struct of prep.structs.filter(_ => _.name === targ))
+                if (struct.funcFields && struct.funcFields.length)
+                    for (const funcfield of struct.funcFields)
+                        funcfields.push({ arg: arg, struct: struct, name: funcfield })
+    }
     return funcfields
 }
 
