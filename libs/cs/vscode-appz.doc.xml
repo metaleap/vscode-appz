@@ -36,6 +36,7 @@
         </member>
         <member name="M:VscAppz.Cancel.In(System.TimeSpan)">
             <summary>Cancel.In returns a new `Cancel` with its `Now` already scheduled to be called in `fromNow` duration.</summary>
+            <param name="fromNow"></param>
         </member>
         <member name="T:VscAppz.Disposable">
             <summary>Disposable represents an non-transient object identity lifetimed at the counterparty.</summary>

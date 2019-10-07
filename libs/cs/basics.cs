@@ -3,7 +3,6 @@ namespace VscAppz {
     using System.Collections.Generic;
     using System.IO;
     using System.Timers;
-    using Newtonsoft.Json;
     using any = System.Object;
     using dict = System.Collections.Generic.Dictionary<string, object>;
 
@@ -132,6 +131,7 @@ namespace VscAppz {
                 impl.send(new ipcMsg(){CbId=fnId},null);
         }
         /// <summary>Cancel.In returns a new `Cancel` with its `Now` already scheduled to be called in `fromNow` duration.</summary>
+        /// <param name="fromNow"></param>
         public static Cancel In(TimeSpan fromNow) {
             Cancel me = new Cancel();
             Timer timer = new Timer(fromNow.TotalMilliseconds);
@@ -148,7 +148,7 @@ namespace VscAppz {
     }
 
     /// <summary>Disposable represents an non-transient object identity lifetimed at the counterparty.</summary>
-    public class Disposable {
+    public class Disposable:IDisposable {
         internal impl impl;
         internal string id;
         internal Disposable() {}

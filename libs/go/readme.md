@@ -54,12 +54,15 @@ type Disposable struct {
 }
 ```
 
+Disposable represents an non-transient object identity lifetimed at the
+counterparty.
 
 #### func (Disposable) Dispose
 
 ```go
 func (me Disposable) Dispose()
 ```
+Dispose signals to the counterparty to destroy the object.
 
 #### type InputBoxOptions
 

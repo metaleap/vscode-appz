@@ -174,6 +174,7 @@ func CancelIn(fromNow time.Duration) *Cancel {
 	return cancel
 }
 
+// Disposable represents an non-transient object identity lifetimed at the counterparty.
 type Disposable struct {
 	impl *impl
 	id   string
@@ -192,6 +193,7 @@ func (me *Disposable) populateFrom(payload any) bool {
 	return false
 }
 
+// Dispose signals to the counterparty to destroy the object.
 func (me Disposable) Dispose() {
 	me.impl.send(&ipcMsg{QName: "Dispose", Data: dict{"": me.id}}, nil)
 }

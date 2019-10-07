@@ -940,7 +940,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }))
         if (lastarg.fromPrep.isFromRetThenable) {
             const isdisp = gen.typePromOf(lastarg.fromPrep.typeSpec, 'Disposable')
-            const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, true, true) as TypeRefMaybe
+            const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, true, true)
 
             body.push(
                 _.iIf(_.oIs(_.n(lastarg.Name)), [

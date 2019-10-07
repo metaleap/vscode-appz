@@ -4,7 +4,7 @@
 ## Contents
 
 - [Cancel](#T-VscAppz-Cancel 'VscAppz.Cancel')
-  - [In()](#M-VscAppz-Cancel-In-System-TimeSpan- 'VscAppz.Cancel.In(System.TimeSpan)')
+  - [In(fromNow)](#M-VscAppz-Cancel-In-System-TimeSpan- 'VscAppz.Cancel.In(System.TimeSpan)')
   - [Now()](#M-VscAppz-Cancel-Now 'VscAppz.Cancel.Now')
 - [Disposable](#T-VscAppz-Disposable 'VscAppz.Disposable')
   - [Dispose()](#M-VscAppz-Disposable-Dispose 'VscAppz.Disposable.Dispose')
@@ -99,7 +99,7 @@ VscAppz
 Allows belated cancellation of ongoing / already-initiated interactions.
 
 <a name='M-VscAppz-Cancel-In-System-TimeSpan-'></a>
-### In() `method`
+### In(fromNow) `method`
 
 ##### Summary
 
@@ -107,7 +107,9 @@ Cancel.In returns a new `Cancel` with its `Now` already scheduled to be called i
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| fromNow | [System.TimeSpan](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.TimeSpan 'System.TimeSpan') |  |
 
 <a name='M-VscAppz-Cancel-Now'></a>
 ### Now() `method`
