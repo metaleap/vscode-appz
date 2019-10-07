@@ -403,6 +403,9 @@
             <param name="options">Configures the behavior of the workspace folder list.</param>
             <param name="andThen">A promise that resolves to the workspace folder or `undefined`.</param>
         </member>
+        <member name="M:VscAppz.IWindow.State(System.Action{VscAppz.WindowState})">
+            <summary>Represents the current window's state.</summary>
+        </member>
         <member name="T:VscAppz.MessageOptions">
             <summary>Options to configure the behavior of the message.</summary>
         </member>
@@ -604,6 +607,12 @@
         </member>
         <member name="F:VscAppz.WorkspaceFolder.Index">
             <summary>The ordinal number of this workspace folder.</summary>
+        </member>
+        <member name="T:VscAppz.WindowState">
+            <summary>Represents the state of a window.</summary>
+        </member>
+        <member name="F:VscAppz.WindowState.Focused">
+            <summary>Whether the current window is focused.</summary>
         </member>
     </members>
 </doc>

@@ -495,7 +495,7 @@ type Window interface {
 	ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, andThen func(*WorkspaceFolder))
 
 	// Represents the current window's state.
-	State(andThen func(WindowState))
+	State(andThen func(*WindowState))
 }
 ```
 

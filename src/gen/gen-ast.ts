@@ -261,10 +261,10 @@ export class Builder {
         return ret
     }
 
-    typeRefEnsureMaybe(of: TypeRef): TypeRefMaybe {
-        let maybe: TypeRefMaybe = of as TypeRefMaybe
+    typeRefEnsureMaybe(it: TypeRef): TypeRefMaybe {
+        let maybe: TypeRefMaybe = it as TypeRefMaybe
         if (!(maybe && maybe.Maybe))
-            maybe = { Maybe: of }
+            maybe = { Maybe: it }
         return maybe
     }
 
@@ -351,7 +351,7 @@ export class Builder {
             else if (tprom.length === 1 && tprom[0] === 'Disposable')
                 return { From: [{ Maybe: { Name: 'Disposable' } }], To: null }
             else
-                return { From: tprom.map(_ => this.typeRef(_)), To: null }
+                return { From: tprom.map(_ => this.typeRef(_, true)), To: null }
 
         if (typeof it === 'string')
             return (it === 'Uri') ? TypeRefPrim.String : { Name: it }
@@ -940,7 +940,8 @@ export class Gen extends gen.Gen implements gen.IGen {
         body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }))
         if (lastarg.fromPrep.isFromRetThenable) {
             const isdisp = gen.typePromOf(lastarg.fromPrep.typeSpec, 'Disposable')
-            const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, true, true)
+            const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, true, true) as TypeRefMaybe
+
             body.push(
                 _.iIf(_.oIs(_.n(lastarg.Name)), [
                     _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool,

@@ -143,10 +143,10 @@ class Builder {
         }
         return ret;
     }
-    typeRefEnsureMaybe(of) {
-        let maybe = of;
+    typeRefEnsureMaybe(it) {
+        let maybe = it;
         if (!(maybe && maybe.Maybe))
-            maybe = { Maybe: of };
+            maybe = { Maybe: it };
         return maybe;
     }
     typeRef(it, needMaybe = false, intoProm = false) {
@@ -223,7 +223,7 @@ class Builder {
             else if (tprom.length === 1 && tprom[0] === 'Disposable')
                 return { From: [{ Maybe: { Name: 'Disposable' } }], To: null };
             else
-                return { From: tprom.map(_ => this.typeRef(_)), To: null };
+                return { From: tprom.map(_ => this.typeRef(_, true)), To: null };
         if (typeof it === 'string')
             return (it === 'Uri') ? TypeRefPrim.String : { Name: it };
         throw JSON.stringify(it);

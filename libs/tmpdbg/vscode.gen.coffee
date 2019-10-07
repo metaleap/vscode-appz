@@ -427,7 +427,7 @@ Window: interface
     # state:
     # Represents the current window's state.
     State: void
-        andThen: ?(WindowState->void)
+        andThen: ?(?WindowState->void)
 
 
 
@@ -1543,7 +1543,7 @@ Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> andThen
 
 
 
-Window·State: (andThen:?(WindowState->void) -> void)
+Window·State: (andThen:?(?WindowState->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.state"
