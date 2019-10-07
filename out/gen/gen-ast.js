@@ -7,6 +7,7 @@ var TypeRefPrim;
     TypeRefPrim[TypeRefPrim["Any"] = 121] = "Any";
     TypeRefPrim[TypeRefPrim["Bool"] = 124] = "Bool";
     TypeRefPrim[TypeRefPrim["Int"] = 136] = "Int";
+    TypeRefPrim[TypeRefPrim["Real"] = -1] = "Real";
     TypeRefPrim[TypeRefPrim["String"] = 139] = "String";
     TypeRefPrim[TypeRefPrim["Dict"] = 189] = "Dict";
 })(TypeRefPrim = exports.TypeRefPrim || (exports.TypeRefPrim = {}));
@@ -37,7 +38,7 @@ class Builder {
     iIf(ifCond, thenInstrs, elseInstrs = undefined) { return { Instrs: thenInstrs, If: [ifCond, { Instrs: elseInstrs }] }; }
     iFor(iterVarName, iterable, ...instrs) { return { Instrs: instrs, ForEach: [iterVarName, iterable] }; }
     eNew(typeRef) { return { New: typeRef }; }
-    eConv(typeRef, conv) { return { Conv: conv, To: typeRef }; }
+    eConv(typeRef, conv, cast = false) { return { Conv: conv, To: typeRef, Cast: cast }; }
     eTup(...items) { return { Items: items }; }
     eLen(lenOf, isArr) { return { LenOf: lenOf, IsArr: isArr }; }
     eCollNew(capOrLen, arrOrListElemType = undefined, isArr = false) { return { ElemType: arrOrListElemType, Cap: (arrOrListElemType && isArr) ? undefined : capOrLen, Len: (arrOrListElemType && isArr) ? capOrLen : undefined }; }
@@ -399,6 +400,8 @@ class Gen extends gen.Gen {
             return this.s("bool");
         if (it === TypeRefPrim.Int)
             return this.s("int");
+        if (it === TypeRefPrim.Real)
+            return this.s("real");
         if (it === TypeRefPrim.String)
             return this.s("string");
         if (it === TypeRefPrim.Dict)
@@ -541,7 +544,7 @@ class Gen extends gen.Gen {
             ];
         }
         const tdstmaybe = this.typeMaybe(dstType);
-        if (tdstmaybe && (tdstmaybe.Maybe === TypeRefPrim.Bool || tdstmaybe.Maybe === TypeRefPrim.Int || tdstmaybe.Maybe === TypeRefPrim.String)) {
+        if (tdstmaybe && (tdstmaybe.Maybe === TypeRefPrim.Bool || tdstmaybe.Maybe === TypeRefPrim.Int || tdstmaybe.Maybe === TypeRefPrim.Real || tdstmaybe.Maybe === TypeRefPrim.String)) {
             const tmpname = "_" + dstVarName + "_";
             return [
                 _.iVar(tmpname, tdstmaybe.Maybe),
@@ -566,7 +569,22 @@ class Gen extends gen.Gen {
                 ].concat(...this.convOrRet(tnval, _.n(tnitem), tdstcoll.ValsOf, okBoolName, onErrRet)).concat(_.iSet(_.oIdx(_.n(dstVarName), _.n(tnidx)), _.n(tnval)), _.iSet(_.n(tnidx), _.eOp('+', _.n(tnidx), _.eLit(1))))),
             ];
         }
-        return (dstType === TypeRefPrim.Any) ? [_.iSet(_.n(dstVarName), src)] : [
+        if (dstType === TypeRefPrim.Any)
+            return [_.iSet(_.n(dstVarName), src)];
+        if (dstType === TypeRefPrim.Int || dstType === TypeRefPrim.Real) {
+            const alttype = (dstType === TypeRefPrim.Int) ? TypeRefPrim.Real : TypeRefPrim.Int;
+            const altname = "__" + dstVarName + "__";
+            return [
+                _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(dstType, src)),
+                _.iIf(_.oNot(_.n(okBoolName)), [
+                    _.iVar(altname, alttype),
+                    _.iSet(_.eTup(_.n(altname), _.n(okBoolName)), _.eConv(alttype, src)),
+                    retifnotok,
+                    _.iSet(_.n(dstVarName), _.eConv(dstType, _.n(altname), true)),
+                ]),
+            ];
+        }
+        return [
             _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(dstType, src)),
             retifnotok,
         ];

@@ -139,7 +139,9 @@ class Gen extends gen_ast.Gen {
             return this.s("new ").emitTypeRef(enew.New).s("()");
         const econv = it;
         if (econv && econv.Conv && econv.To)
-            return this.s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(econv.To).s(") ? (((").emitTypeRef(econv.To).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)");
+            return econv.Cast
+                ? this.s("((").emitTypeRef(econv.To).s(")(").emitExpr(econv.Conv).s("))")
+                : this.s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(econv.To).s(") ? (((").emitTypeRef(econv.To).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)");
         const elen = it;
         if (elen && elen.LenOf)
             return this.emitExpr(elen.LenOf).s(elen.IsArr ? ".Length" : ".Count");
@@ -184,6 +186,8 @@ class Gen extends gen_ast.Gen {
             return (!tfun.To)
                 ? this.s("Action<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(">")
                 : this.s("Func<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(", ").emitTypeRef(tfun.To).s(">");
+        if (it === gen_ast.TypeRefPrim.Real)
+            return this.s("double");
         return super.emitTypeRef(it);
     }
     typeRefForField(it, _optional) {
@@ -191,21 +195,21 @@ class Gen extends gen_ast.Gen {
     }
 }
 exports.Gen = Gen;
-function typeRefNullable(it, forceTrueForBools = false, forceTrueForInts = false, forceTrueForTups = false) {
+function typeRefNullable(it, forceTrueForBools = false, forceTrueForNums = false, forceTrueForTups = false) {
     const ttup = it;
     const isvt = ((it === gen_ast.TypeRefPrim.Bool && !forceTrueForBools)
-        || (it === gen_ast.TypeRefPrim.Int && !forceTrueForInts)
+        || ((it === gen_ast.TypeRefPrim.Int || it === gen_ast.TypeRefPrim.Real) && !forceTrueForNums)
         || (ttup && ttup.TupOf && ttup.TupOf.length && !forceTrueForTups));
     return !isvt;
 }
-function typeRefUnMaybe(it, unMaybeBools, unMaybeInts, unMaybeTuples) {
+function typeRefUnMaybe(it, unMaybeBools, unMaybeNums, unMaybeTuples) {
     const tmay = it;
     if (tmay && tmay.Maybe) {
         const ttup = tmay.Maybe;
         if ((unMaybeTuples && ttup && ttup.TupOf && ttup.TupOf.length)
             || (unMaybeBools && tmay.Maybe === gen_ast.TypeRefPrim.Bool)
-            || (unMaybeInts && tmay.Maybe === gen_ast.TypeRefPrim.Int))
-            return typeRefUnMaybe(tmay.Maybe, unMaybeBools, unMaybeInts, unMaybeTuples);
+            || (unMaybeNums && (tmay.Maybe === gen_ast.TypeRefPrim.Int || tmay.Maybe === gen_ast.TypeRefPrim.Real)))
+            return typeRefUnMaybe(tmay.Maybe, unMaybeBools, unMaybeNums, unMaybeTuples);
     }
     return it;
 }

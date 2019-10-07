@@ -1669,7 +1669,11 @@ WorkspaceFolder·populateFrom: (payload:any -> bool)
         if (=?val)
             [index,ok] = ((val)·(int))
             if (!ok)
-                return false
+                var __index__ of real
+                [__index__,ok] = ((val)·(real))
+                if (!ok)
+                    return false
+                index = ((__index__)·(int))
         this.Index = index
     else
         return false

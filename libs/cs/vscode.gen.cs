@@ -1657,7 +1657,12 @@ namespace VscAppz {
 				if ((null != val)) {
 					(index, ok) = (val is int) ? (((int)(val)), true) : (default, false);
 					if ((!ok)) {
-						return false;
+						double __index__ = default;
+						(__index__, ok) = (val is double) ? (((double)(val)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						index = ((int)(__index__));
 					}
 				}
 				this.Index = index;

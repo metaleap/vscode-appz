@@ -1502,7 +1502,12 @@ func (me *WorkspaceFolder) populateFrom(payload any) bool {
 		if (nil != val) {
 			index, ok = val.(int)
 			if (!ok) {
-				return false
+				var __index__ float64
+				__index__, ok = val.(float64)
+				if (!ok) {
+					return false
+				}
+				index = int(__index__)
 			}
 		}
 		me.Index = index

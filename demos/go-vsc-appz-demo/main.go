@@ -161,12 +161,12 @@ func demoDialogFileOpen() {
 
 func demoWorkspaceFolderPick() {
 	win.ShowWorkspaceFolderPick(&WorkspaceFolderPickOptions{
-		IgnoreFocusOut: true, PlaceHolder: "Reminder, all local-FS-related 'URIs' at the VSCode side turn into standard (non-URI) file-path strings at the prog side.",
-	}, func(picked *WorkspaceFolder) {
-		if picked == nil {
+		IgnoreFocusOut: true, PlaceHolder: "Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side.",
+	}, func(pickedfolder *WorkspaceFolder) {
+		if pickedfolder == nil {
 			win.ShowWarningMessage1("Cancelled pick input, bye now!", nil, quit)
 		} else {
-			win.ShowInformationMessage1("Selected `"+picked.Name+"` located at `"+picked.Uri+"`, bye now!", nil, quit)
+			win.ShowInformationMessage1("Selected `"+pickedfolder.Name+"` located at `"+pickedfolder.Uri+"`, bye now!", nil, quit)
 		}
 	})
 }

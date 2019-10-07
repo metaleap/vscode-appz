@@ -24,6 +24,7 @@ export enum TypeRefPrim {
     Any = gen.ScriptPrimType.Any,
     Bool = gen.ScriptPrimType.Boolean,
     Int = gen.ScriptPrimType.Number,
+    Real = -1,
     String = gen.ScriptPrimType.String,
     Dict = gen.ScriptPrimType.Dict,
 }
@@ -80,6 +81,7 @@ export interface ELen {
 export interface EConv {
     Conv: Expr
     To: TypeRef
+    Cast?: boolean
 }
 export interface ENew {
     New: TypeRef
@@ -146,7 +148,7 @@ export class Builder {
     iIf(ifCond: Expr, thenInstrs: Instr[], elseInstrs: Instr[] = undefined): IBlock { return { Instrs: thenInstrs, If: [ifCond, { Instrs: elseInstrs }] } }
     iFor(iterVarName: EName, iterable: Expr, ...instrs: Instr[]): IBlock { return { Instrs: instrs, ForEach: [iterVarName, iterable] } }
     eNew(typeRef: TypeRef): ENew { return { New: typeRef } }
-    eConv(typeRef: TypeRef, conv: Expr): EConv { return { Conv: conv, To: typeRef } }
+    eConv(typeRef: TypeRef, conv: Expr, cast: boolean = false): EConv { return { Conv: conv, To: typeRef, Cast: cast } }
     eTup(...items: Expr[]): ETup { return { Items: items } }
     eLen(lenOf: Expr, isArr: boolean): ELen { return { LenOf: lenOf, IsArr: isArr } }
     eCollNew(capOrLen: Expr, arrOrListElemType: TypeRef = undefined, isArr: boolean = false): ECollNew { return { ElemType: arrOrListElemType, Cap: (arrOrListElemType && isArr) ? undefined : capOrLen, Len: (arrOrListElemType && isArr) ? capOrLen : undefined } }
@@ -549,6 +551,8 @@ export class Gen extends gen.Gen implements gen.IGen {
             return this.s("bool")
         if (it === TypeRefPrim.Int)
             return this.s("int")
+        if (it === TypeRefPrim.Real)
+            return this.s("real")
         if (it === TypeRefPrim.String)
             return this.s("string")
         if (it === TypeRefPrim.Dict)
@@ -736,7 +740,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         }
 
         const tdstmaybe = this.typeMaybe(dstType)
-        if (tdstmaybe && (tdstmaybe.Maybe === TypeRefPrim.Bool || tdstmaybe.Maybe === TypeRefPrim.Int || tdstmaybe.Maybe === TypeRefPrim.String)) {
+        if (tdstmaybe && (tdstmaybe.Maybe === TypeRefPrim.Bool || tdstmaybe.Maybe === TypeRefPrim.Int || tdstmaybe.Maybe === TypeRefPrim.Real || tdstmaybe.Maybe === TypeRefPrim.String)) {
             const tmpname = "_" + dstVarName + "_"
             return [
                 _.iVar(tmpname, tdstmaybe.Maybe),
@@ -770,7 +774,24 @@ export class Gen extends gen.Gen implements gen.IGen {
             ]
         }
 
-        return (dstType === TypeRefPrim.Any) ? [_.iSet(_.n(dstVarName), src)] : [
+        if (dstType === TypeRefPrim.Any)
+            return [_.iSet(_.n(dstVarName), src)]
+
+        if (dstType === TypeRefPrim.Int || dstType === TypeRefPrim.Real) {
+            const alttype = (dstType === TypeRefPrim.Int) ? TypeRefPrim.Real : TypeRefPrim.Int
+            const altname = "__" + dstVarName + "__"
+            return [
+                _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(dstType, src)),
+                _.iIf(_.oNot(_.n(okBoolName)), [
+                    _.iVar(altname, alttype),
+                    _.iSet(_.eTup(_.n(altname), _.n(okBoolName)), _.eConv(alttype, src)),
+                    retifnotok,
+                    _.iSet(_.n(dstVarName), _.eConv(dstType, _.n(altname), true)),
+                ]),
+            ]
+        }
+
+        return [
             _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(dstType, src)),
             retifnotok,
         ]

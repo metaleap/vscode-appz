@@ -50,6 +50,7 @@ namespace VscAppzDemo {
                 "Demo Text Input",
                 "Demo File-Save Dialog",
                 "Demo File-Open Dialog",
+                "Demo Workspace-Folder Pick Input",
             };
             win.ShowQuickPick(menu, new QuickPickOptions() {
                 CanPickMany = false, IgnoreFocusOut = true
@@ -64,6 +65,8 @@ namespace VscAppzDemo {
                     demoDialogFileSave();
                 else if (menuitem == menu[3])
                     demoDialogFileOpen();
+                else if (menuitem == menu[4])
+                    demoWorkspaceFolderPick();
                 else
                     win.ShowErrorMessage($"Unknown: `{menuitem}`, bye now!", nil, quit);
             });
@@ -134,6 +137,17 @@ namespace VscAppzDemo {
                     win.ShowWarningMessage("Cancelled file-open dialog, bye now!", nil, quit);
                 else
                     win.ShowInformationMessage($"Selected {filepaths.Length} file path(s), bye now!", nil, quit);
+            });
+        }
+
+        private static void demoWorkspaceFolderPick() {
+            win.ShowWorkspaceFolderPick(new WorkspaceFolderPickOptions(){
+                IgnoreFocusOut = true, PlaceHolder = "Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side."
+            }, pickedfolder => {
+                if (pickedfolder == null)
+                    win.ShowWarningMessage("Cancelled pick input, bye now!", nil, quit);
+                else
+                    win.ShowInformationMessage($"Selected `{pickedfolder.Name}` located at `{pickedfolder.Uri}`, bye now!", nil, quit);
             });
         }
 

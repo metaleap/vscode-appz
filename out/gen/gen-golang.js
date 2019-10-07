@@ -131,7 +131,9 @@ class Gen extends gen_ast.Gen {
                     .s(") "), efn.Type).s(efn.Type ? " " : "").emitInstr(efn.Body);
             const econv = it;
             if (econv && econv.Conv && econv.To)
-                return this.emitExpr(econv.Conv).s(".(").emitTypeRef(econv.To).s(")");
+                return econv.Cast
+                    ? this.emitTypeRef(econv.To).s("(").emitExpr(econv.Conv).s(")")
+                    : this.emitExpr(econv.Conv).s(".(").emitTypeRef(econv.To).s(")");
         }
         return super.emitExpr(it);
     }
@@ -151,6 +153,8 @@ class Gen extends gen_ast.Gen {
         const tfun = this.typeFunc(it);
         if (tfun)
             return this.s("func(").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(tfun.To ? ") " : ")").emitTypeRef(tfun.To);
+        if (it === gen_ast.TypeRefPrim.Real)
+            return this.s("float64");
         return super.emitTypeRef(it);
     }
     typeRefForField(it, optional) {
@@ -164,19 +168,19 @@ function emitTypeRet(_, it) {
         return _.s("(").each(ttup.TupOf, ", ", t => _.emitTypeRef(t)).s(")");
     return _.emitTypeRef(it);
 }
-function typeRefNilable(_, it, forceTrueForBools = false, forceTrueForInts = false, forceTrueForStrings = false) {
+function typeRefNilable(_, it, forceTrueForBools = false, forceTrueForNums = false, forceTrueForStrings = false) {
     return it === gen_ast.TypeRefPrim.Any || it === gen_ast.TypeRefPrim.Dict
         || _.typeColl(it) || _.typeMaybe(it) || _.typeFunc(it) || _.typeTup(it)
         || (forceTrueForBools && it === gen_ast.TypeRefPrim.Bool)
-        || (forceTrueForInts && it === gen_ast.TypeRefPrim.Int)
+        || (forceTrueForNums && (it === gen_ast.TypeRefPrim.Int || it === gen_ast.TypeRefPrim.Real))
         || (forceTrueForStrings && it === gen_ast.TypeRefPrim.String);
 }
-function typeRefUnMaybe(it, unMaybeBools = true, unMaybeInts = true, unMaybeStrings = true) {
+function typeRefUnMaybe(it, unMaybeBools = true, unMaybeNums = true, unMaybeStrings = true) {
     const tmay = it;
     if (tmay && tmay.Maybe
         && (tmay.Maybe !== gen_ast.TypeRefPrim.String || unMaybeStrings)
         && (tmay.Maybe !== gen_ast.TypeRefPrim.Bool || unMaybeBools)
-        && (tmay.Maybe !== gen_ast.TypeRefPrim.Int || unMaybeInts))
-        return typeRefUnMaybe(tmay.Maybe, unMaybeBools, unMaybeInts, unMaybeStrings);
+        && ((tmay.Maybe !== gen_ast.TypeRefPrim.Int && tmay.Maybe !== gen_ast.TypeRefPrim.Real) || unMaybeNums))
+        return typeRefUnMaybe(tmay.Maybe, unMaybeBools, unMaybeNums, unMaybeStrings);
     return it;
 }

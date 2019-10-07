@@ -208,7 +208,9 @@ export class Gen extends gen_ast.Gen {
 
         const econv = it as gen_ast.EConv
         if (econv && econv.Conv && econv.To)
-            return this.s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(econv.To).s(") ? (((").emitTypeRef(econv.To).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)")
+            return econv.Cast
+                ? this.s("((").emitTypeRef(econv.To).s(")(").emitExpr(econv.Conv).s("))")
+                : this.s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(econv.To).s(") ? (((").emitTypeRef(econv.To).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)")
 
         const elen = it as gen_ast.ELen
         if (elen && elen.LenOf)
@@ -262,6 +264,9 @@ export class Gen extends gen_ast.Gen {
             ? this.s("Action<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(">")
             : this.s("Func<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(", ").emitTypeRef(tfun.To).s(">")
 
+        if (it === gen_ast.TypeRefPrim.Real)
+            return this.s("double")
+
         return super.emitTypeRef(it)
     }
 
@@ -271,23 +276,23 @@ export class Gen extends gen_ast.Gen {
 
 }
 
-function typeRefNullable(it: gen_ast.TypeRef, forceTrueForBools: boolean = false, forceTrueForInts: boolean = false, forceTrueForTups: boolean = false) {
+function typeRefNullable(it: gen_ast.TypeRef, forceTrueForBools: boolean = false, forceTrueForNums: boolean = false, forceTrueForTups: boolean = false) {
     const ttup = it as gen_ast.TypeRefTup
     const isvt = ((it === gen_ast.TypeRefPrim.Bool && !forceTrueForBools)
-        || (it === gen_ast.TypeRefPrim.Int && !forceTrueForInts)
+        || ((it === gen_ast.TypeRefPrim.Int || it === gen_ast.TypeRefPrim.Real) && !forceTrueForNums)
         || (ttup && ttup.TupOf && ttup.TupOf.length && !forceTrueForTups)
     )
     return !isvt
 }
 
-function typeRefUnMaybe(it: gen_ast.TypeRef, unMaybeBools: boolean, unMaybeInts: boolean, unMaybeTuples: boolean): gen_ast.TypeRef {
+function typeRefUnMaybe(it: gen_ast.TypeRef, unMaybeBools: boolean, unMaybeNums: boolean, unMaybeTuples: boolean): gen_ast.TypeRef {
     const tmay = it as gen_ast.TypeRefMaybe
     if (tmay && tmay.Maybe) {
         const ttup = tmay.Maybe as gen_ast.TypeRefTup
         if ((unMaybeTuples && ttup && ttup.TupOf && ttup.TupOf.length)
             || (unMaybeBools && tmay.Maybe === gen_ast.TypeRefPrim.Bool)
-            || (unMaybeInts && tmay.Maybe === gen_ast.TypeRefPrim.Int))
-            return typeRefUnMaybe(tmay.Maybe, unMaybeBools, unMaybeInts, unMaybeTuples)
+            || (unMaybeNums && (tmay.Maybe === gen_ast.TypeRefPrim.Int || tmay.Maybe === gen_ast.TypeRefPrim.Real)))
+            return typeRefUnMaybe(tmay.Maybe, unMaybeBools, unMaybeNums, unMaybeTuples)
     }
     return it
 }
