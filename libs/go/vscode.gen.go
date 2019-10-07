@@ -421,6 +421,12 @@ type WorkspaceFolder struct {
 	Index int `json:"index"`
 }
 
+// Represents the state of a window.
+type WindowState struct {
+	// Whether the current window is focused.
+	Focused bool `json:"focused"`
+}
+
 func (me *impl) Window() Window {
 	return me
 }

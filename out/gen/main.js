@@ -29,6 +29,7 @@ const genApiSurface = {
                 'showSaveDialog',
                 'showOpenDialog',
                 'showWorkspaceFolderPick',
+                'state',
             ],
         },
     ],
@@ -92,11 +93,20 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                             if ((!members.length) && nsub.kind === ts.SyntaxKind.VariableDeclarationList)
                                 nsub.forEachChild(nsubsub => {
                                     if ((!members.length) && nsubsub.kind === ts.SyntaxKind.VariableDeclaration) {
-                                        const nname = nsubsub.getChildAt(0), ntype = nsubsub.getChildAt(2);
-                                        if (nname && ntype && nname.getText() === item && ntype.typeName && ntype.typeName.getText() === 'Event' && ntype.typeArguments && ntype.typeArguments.length) {
-                                            const n = nsubsub;
-                                            [n.EvtName, n.EvtType] = [item, ntype];
-                                            members.push(n);
+                                        const nname = nsubsub.getChildAt(0);
+                                        if (nname && nname.getText() === item) {
+                                            const ntype = nsubsub.getChildAt(2);
+                                            if (ntype && ntype.typeName)
+                                                if (ntype.typeName.getText() === 'Event' && ntype.typeArguments && ntype.typeArguments.length) {
+                                                    const n = nsubsub;
+                                                    [n.EvtName, n.EvtType] = [item, ntype];
+                                                    members.push(n);
+                                                }
+                                                else {
+                                                    const n = nsubsub;
+                                                    [n.PropName, n.PropType] = [item, ntype];
+                                                    members.push(n);
+                                                }
                                         }
                                     }
                                 });
@@ -111,9 +121,11 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
         }
 }
 function gatherMember(into, member, overload, ...prefixes) {
-    const evt = member;
+    const evt = member, prop = member;
     if (evt && evt.EvtName && evt.EvtType)
         gatherEvent(into, evt, ...prefixes);
+    else if (prop && prop.PropName && prop.PropType)
+        gatherProp(into, prop, ...prefixes);
     else
         switch (member.kind) {
             case ts.SyntaxKind.EnumDeclaration:
@@ -189,6 +201,12 @@ function gatherFunc(into, decl, overload, ...prefixes) {
     into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] });
     decl.parameters.forEach(_ => gatherFromTypeNode(into, _.type, decl.typeParameters));
     gatherFromTypeNode(into, decl.type, decl.typeParameters);
+}
+function gatherProp(into, decl, ...prefixes) {
+    const qname = prefixes.concat(decl.PropName).join('.');
+    if (into.funcs.some(_ => _.qName === qname))
+        return;
+    gatherFromTypeNode(into, decl.PropType);
 }
 function gatherEvent(into, decl, ...prefixes) {
     const qname = prefixes.concat(decl.EvtName).join('.');

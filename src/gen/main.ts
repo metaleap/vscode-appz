@@ -28,6 +28,11 @@ interface evtMember extends ts.VariableDeclaration {
     EvtType: ts.TypeReferenceNode
 }
 
+interface propMember extends ts.VariableDeclaration {
+    PropName: string
+    PropType: ts.TypeReferenceNode
+}
+
 const genApiSurface: genApiMember = {
     'vscode': [
         {
@@ -41,7 +46,7 @@ const genApiSurface: genApiMember = {
                 'showSaveDialog',
                 'showOpenDialog',
                 'showWorkspaceFolderPick',
-                // 'state',
+                'state',
                 // 'onDidChangeWindowState',
             ],
         },
@@ -102,7 +107,7 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                         members.push(n)
                 }
             })
-            // second: search for events to be modeled as pretend API methods
+            // second: search for events/props to be modeled as pretend API methods
             if (!members.length) {
                 astNode.forEachChild(ntop => {
                     if ((!members.length) && ntop.kind === 220 && ntop.getText().includes(item))
@@ -110,13 +115,21 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                             if ((!members.length) && nsub.kind === ts.SyntaxKind.VariableDeclarationList)
                                 nsub.forEachChild(nsubsub => {
                                     if ((!members.length) && nsubsub.kind === ts.SyntaxKind.VariableDeclaration) {
-                                        const nname = nsubsub.getChildAt(0) as ts.Identifier,
-                                            ntype = nsubsub.getChildAt(2) as ts.TypeReferenceNode
-                                        if (nname && ntype && nname.getText() === item && ntype.typeName && ntype.typeName.getText() === 'Event' && ntype.typeArguments && ntype.typeArguments.length) {
-                                            const n: evtMember = nsubsub as evtMember
-                                            [n.EvtName, n.EvtType] = [item, ntype]
-                                            members.push(n)
+                                        const nname = nsubsub.getChildAt(0) as ts.Identifier
+                                        if (nname && nname.getText() === item) {
+                                            const ntype = nsubsub.getChildAt(2) as ts.TypeReferenceNode
+                                            if (ntype && ntype.typeName)
+                                                if (ntype.typeName.getText() === 'Event' && ntype.typeArguments && ntype.typeArguments.length) {
+                                                    const n: evtMember = nsubsub as evtMember
+                                                    [n.EvtName, n.EvtType] = [item, ntype]
+                                                    members.push(n)
+                                                } else {
+                                                    const n: propMember = nsubsub as propMember
+                                                    [n.PropName, n.PropType] = [item, ntype]
+                                                    members.push(n)
+                                                }
                                         }
+
                                     }
                                 })
                         })
@@ -131,9 +144,11 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
 }
 
 function gatherMember(into: gen.GenJob, member: ts.Node, overload: number, ...prefixes: string[]) {
-    const evt = member as evtMember
+    const evt = member as evtMember, prop = member as propMember
     if (evt && evt.EvtName && evt.EvtType)
         gatherEvent(into, evt, ...prefixes)
+    else if (prop && prop.PropName && prop.PropType)
+        gatherProp(into, prop, ...prefixes)
     else
         switch (member.kind) {
             case ts.SyntaxKind.EnumDeclaration:
@@ -212,6 +227,14 @@ function gatherFunc(into: gen.GenJob, decl: ts.FunctionDeclaration, overload: nu
     into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] })
     decl.parameters.forEach(_ => gatherFromTypeNode(into, _.type, decl.typeParameters))
     gatherFromTypeNode(into, decl.type, decl.typeParameters)
+}
+
+function gatherProp(into: gen.GenJob, decl: propMember, ...prefixes: string[]) {
+    const qname = prefixes.concat(decl.PropName).join('.')
+    if (into.funcs.some(_ => _.qName === qname))
+        return
+    // into.funcs.push({ qName: qname, overload: 0, decl: null, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] })
+    gatherFromTypeNode(into, decl.PropType)
 }
 
 function gatherEvent(into: gen.GenJob, decl: evtMember, ...prefixes: string[]) {

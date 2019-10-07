@@ -608,6 +608,13 @@ namespace VscAppz {
 		public int Index;
 	}
 
+	/// <summary>Represents the state of a window.</summary>
+	public partial class WindowState {
+		/// <summary>Whether the current window is focused.</summary>
+		[JsonProperty("focused"), JsonRequired]
+		public bool Focused;
+	}
+
 	internal partial class impl : IVscode, IWindow {
 
 		IWindow IVscode.Window { get {

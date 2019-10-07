@@ -741,6 +741,18 @@ WorkspaceFolder: class
 
 
 
+# Represents the state of a window.
+WindowState: class
+
+    # focused:
+    # Whether the current window is focused.
+    #
+    # JSON FLAGS: {"Name":"focused","Required":true,"Excluded":false}
+    Focused: bool
+
+
+
+
 Vscode·Window: ( -> Window)
     return this
 
