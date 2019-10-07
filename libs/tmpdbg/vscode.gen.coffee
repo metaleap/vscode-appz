@@ -425,6 +425,7 @@ Window: interface
         andThen: ?(?WorkspaceFolder->void)
 
     # state:
+    # Represents the current window's state.
     State: void
         andThen: ?(WindowState->void)
 

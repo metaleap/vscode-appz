@@ -366,6 +366,7 @@ namespace VscAppz {
 		/// <param name="andThen">A promise that resolves to the workspace folder or `undefined`.</param>
 		void ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options = default, Action<WorkspaceFolder> andThen = default);
 
+		/// <summary>Represents the current window's state.</summary>
 		void State(Action<WindowState> andThen = default);
 	}
 

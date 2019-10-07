@@ -557,8 +557,7 @@ function jsDocs(from: ts.Node): ts.JSDoc[] {
         const have = (from as any) as { jsDoc: ts.JSDoc[] }
         if (have && have.jsDoc && have.jsDoc.length)
             return have.jsDoc
-        return null
-        // from = from.parent
+        from = from.parent
     }
     return null
 }

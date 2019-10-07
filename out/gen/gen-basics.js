@@ -416,7 +416,7 @@ function jsDocs(from) {
         const have = from;
         if (have && have.jsDoc && have.jsDoc.length)
             return have.jsDoc;
-        return null;
+        from = from.parent;
     }
     return null;
 }

@@ -493,6 +493,9 @@ type Window interface {
 	//
 	// `andThen` ── A promise that resolves to the workspace folder or `undefined`.
 	ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, andThen func(*WorkspaceFolder))
+
+	// Represents the current window's state.
+	State(andThen func(WindowState))
 }
 ```
 
