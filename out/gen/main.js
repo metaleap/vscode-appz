@@ -85,30 +85,52 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                         members.push(n);
                 }
             });
+            if (!members.length) {
+                astNode.forEachChild(ntop => {
+                    if ((!members.length) && ntop.kind === 220 && ntop.getText().includes(item))
+                        ntop.forEachChild(nsub => {
+                            if ((!members.length) && nsub.kind === ts.SyntaxKind.VariableDeclarationList)
+                                nsub.forEachChild(nsubsub => {
+                                    if ((!members.length) && nsubsub.kind === ts.SyntaxKind.VariableDeclaration) {
+                                        const nname = nsubsub.getChildAt(0), ntype = nsubsub.getChildAt(2);
+                                        if (nname && ntype && nname.getText() === item && ntype.typeName && ntype.typeName.getText() === 'Event' && ntype.typeArguments && ntype.typeArguments.length) {
+                                            const n = nsubsub;
+                                            [n.EvtName, n.EvtType] = [item, ntype];
+                                            members.push(n);
+                                        }
+                                    }
+                                });
+                        });
+                });
+            }
             if (!members.length)
-                throw ("GONE FROM API:\texport named `" + prefixes.join('.') + '.' + item + '`');
+                throw ("GONE FROM API:\texport `" + prefixes.join('.') + '.' + item + '`');
             else
                 for (let i = 0; i < members.length; i++)
                     gatherMember(into, members[i], (members.length === 1) ? 0 : (i + 1), ...prefixes);
         }
 }
 function gatherMember(into, member, overload, ...prefixes) {
-    switch (member.kind) {
-        case ts.SyntaxKind.EnumDeclaration:
-            gatherEnum(into, member, ...prefixes);
-            break;
-        case ts.SyntaxKind.FunctionDeclaration:
-            gatherFunc(into, member, overload, ...prefixes);
-            break;
-        case ts.SyntaxKind.InterfaceDeclaration:
-            gatherStruct(into, member, ...prefixes);
-            break;
-        case ts.SyntaxKind.TupleType:
-            member.elementTypes.forEach(_ => gatherFromTypeNode(into, _));
-            break;
-        default:
-            throw (member.kind + '\t' + member.getText());
-    }
+    const evt = member;
+    if (evt && evt.EvtName && evt.EvtType)
+        gatherEvent(into, evt, ...prefixes);
+    else
+        switch (member.kind) {
+            case ts.SyntaxKind.EnumDeclaration:
+                gatherEnum(into, member, ...prefixes);
+                break;
+            case ts.SyntaxKind.FunctionDeclaration:
+                gatherFunc(into, member, overload, ...prefixes);
+                break;
+            case ts.SyntaxKind.InterfaceDeclaration:
+                gatherStruct(into, member, ...prefixes);
+                break;
+            case ts.SyntaxKind.TupleType:
+                member.elementTypes.forEach(_ => gatherFromTypeNode(into, _));
+                break;
+            default:
+                throw (member.kind + '\t' + member.getText());
+        }
 }
 function gatherFromTypeElem(into, it, typeParams = undefined) {
     if (ts.isPropertySignature(it))
@@ -167,6 +189,12 @@ function gatherFunc(into, decl, overload, ...prefixes) {
     into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] });
     decl.parameters.forEach(_ => gatherFromTypeNode(into, _.type, decl.typeParameters));
     gatherFromTypeNode(into, decl.type, decl.typeParameters);
+}
+function gatherEvent(into, decl, ...prefixes) {
+    const qname = prefixes.concat(decl.EvtName).join('.');
+    if (into.funcs.some(_ => _.qName === qname))
+        return;
+    decl.EvtType.typeArguments.forEach(_ => gatherFromTypeNode(into, _));
 }
 function gatherEnum(into, decl, ...prefixes) {
     const qname = prefixes.concat(decl.name.text).join('.');

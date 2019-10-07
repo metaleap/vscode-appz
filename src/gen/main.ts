@@ -23,6 +23,11 @@ const gens: gen.IGen[] = [
 type genApiMember = { [_: string]: genApiMembers }
 type genApiMembers = (string | genApiMember)[]
 
+interface evtMember extends ts.VariableDeclaration {
+    EvtName: string
+    EvtType: ts.TypeReferenceNode
+}
+
 const genApiSurface: genApiMember = {
     'vscode': [
         {
@@ -36,6 +41,8 @@ const genApiSurface: genApiMember = {
                 'showSaveDialog',
                 'showOpenDialog',
                 'showWorkspaceFolderPick',
+                // 'state',
+                // 'onDidChangeWindowState',
             ],
         },
     ],
@@ -83,6 +90,7 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
             }
         } else {
             const members: ts.Node[] = []
+            // first: search for API methods
             astNode.forEachChild(n => {
                 const decl = n as ts.DeclarationStatement
                 if (decl && decl.name && decl.name.text === item) {
@@ -94,8 +102,28 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                         members.push(n)
                 }
             })
+            // second: search for events to be modeled as pretend API methods
+            if (!members.length) {
+                astNode.forEachChild(ntop => {
+                    if ((!members.length) && ntop.kind === 220 && ntop.getText().includes(item))
+                        ntop.forEachChild(nsub => {
+                            if ((!members.length) && nsub.kind === ts.SyntaxKind.VariableDeclarationList)
+                                nsub.forEachChild(nsubsub => {
+                                    if ((!members.length) && nsubsub.kind === ts.SyntaxKind.VariableDeclaration) {
+                                        const nname = nsubsub.getChildAt(0) as ts.Identifier,
+                                            ntype = nsubsub.getChildAt(2) as ts.TypeReferenceNode
+                                        if (nname && ntype && nname.getText() === item && ntype.typeName && ntype.typeName.getText() === 'Event' && ntype.typeArguments && ntype.typeArguments.length) {
+                                            const n: evtMember = nsubsub as evtMember
+                                            [n.EvtName, n.EvtType] = [item, ntype]
+                                            members.push(n)
+                                        }
+                                    }
+                                })
+                        })
+                })
+            }
             if (!members.length)
-                throw ("GONE FROM API:\texport named `" + prefixes.join('.') + '.' + item + '`')
+                throw ("GONE FROM API:\texport `" + prefixes.join('.') + '.' + item + '`')
             else
                 for (let i = 0; i < members.length; i++)
                     gatherMember(into, members[i], (members.length === 1) ? 0 : (i + 1), ...prefixes)
@@ -103,22 +131,26 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
 }
 
 function gatherMember(into: gen.GenJob, member: ts.Node, overload: number, ...prefixes: string[]) {
-    switch (member.kind) {
-        case ts.SyntaxKind.EnumDeclaration:
-            gatherEnum(into, member as ts.EnumDeclaration, ...prefixes)
-            break
-        case ts.SyntaxKind.FunctionDeclaration:
-            gatherFunc(into, member as ts.FunctionDeclaration, overload, ...prefixes)
-            break
-        case ts.SyntaxKind.InterfaceDeclaration:
-            gatherStruct(into, member as ts.InterfaceDeclaration, ...prefixes)
-            break
-        case ts.SyntaxKind.TupleType:
-            (member as ts.TupleTypeNode).elementTypes.forEach(_ => gatherFromTypeNode(into, _))
-            break
-        default:
-            throw (member.kind + '\t' + member.getText())
-    }
+    const evt = member as evtMember
+    if (evt && evt.EvtName && evt.EvtType)
+        gatherEvent(into, evt, ...prefixes)
+    else
+        switch (member.kind) {
+            case ts.SyntaxKind.EnumDeclaration:
+                gatherEnum(into, member as ts.EnumDeclaration, ...prefixes)
+                break
+            case ts.SyntaxKind.FunctionDeclaration:
+                gatherFunc(into, member as ts.FunctionDeclaration, overload, ...prefixes)
+                break
+            case ts.SyntaxKind.InterfaceDeclaration:
+                gatherStruct(into, member as ts.InterfaceDeclaration, ...prefixes)
+                break
+            case ts.SyntaxKind.TupleType:
+                (member as ts.TupleTypeNode).elementTypes.forEach(_ => gatherFromTypeNode(into, _))
+                break
+            default:
+                throw (member.kind + '\t' + member.getText())
+        }
 }
 
 function gatherFromTypeElem(into: gen.GenJob, it: ts.TypeElement, typeParams: ts.NodeArray<ts.TypeParameterDeclaration> = undefined) {
@@ -180,6 +212,14 @@ function gatherFunc(into: gen.GenJob, decl: ts.FunctionDeclaration, overload: nu
     into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] })
     decl.parameters.forEach(_ => gatherFromTypeNode(into, _.type, decl.typeParameters))
     gatherFromTypeNode(into, decl.type, decl.typeParameters)
+}
+
+function gatherEvent(into: gen.GenJob, decl: evtMember, ...prefixes: string[]) {
+    const qname = prefixes.concat(decl.EvtName).join('.')
+    if (into.funcs.some(_ => _.qName === qname))
+        return
+    // into.funcs.push({ qName: qname, overload: 0, decl: null, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] })
+    decl.EvtType.typeArguments.forEach(_ => gatherFromTypeNode(into, _))
 }
 
 function gatherEnum(into: gen.GenJob, decl: ts.EnumDeclaration, ...prefixes: string[]) {

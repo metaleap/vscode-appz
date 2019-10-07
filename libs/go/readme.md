@@ -500,6 +500,17 @@ Namespace for dealing with the current window of the editor. That is visible and
 active editors, as well as, UI elements to show messages, selections, and asking
 for user input.
 
+#### type WindowState
+
+```go
+type WindowState struct {
+	// Whether the current window is focused.
+	Focused bool `json:"focused"`
+}
+```
+
+Represents the state of a window.
+
 #### type WorkspaceFolder
 
 ```go
