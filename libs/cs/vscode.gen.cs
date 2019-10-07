@@ -365,6 +365,8 @@ namespace VscAppz {
 		/// <param name="options">Configures the behavior of the workspace folder list.</param>
 		/// <param name="andThen">A promise that resolves to the workspace folder or `undefined`.</param>
 		void ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options = default, Action<WorkspaceFolder> andThen = default);
+
+		void State(Action<WindowState> andThen = default);
 	}
 
 	/// <summary>Options to configure the behavior of the message.</summary>
@@ -1488,6 +1490,30 @@ namespace VscAppz {
 			this.send(msg, on);
 		}
 
+		void IWindow.State(Action<WindowState> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.state";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					WindowState result = default;
+					if ((null != payload)) {
+						result = new WindowState();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
 	}
 
 	public partial class MessageItem {
@@ -1673,6 +1699,32 @@ namespace VscAppz {
 					}
 				}
 				this.Index = index;
+			} else {
+				return false;
+			}			
+			return true;
+		}
+	}
+
+	public partial class WindowState {
+		internal bool populateFrom(any payload) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if ((!ok)) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("focused", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				bool focused = default;
+				if ((null != val)) {
+					(focused, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+				}
+				this.Focused = focused;
 			} else {
 				return false;
 			}			

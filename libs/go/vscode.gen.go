@@ -237,6 +237,8 @@ type Window interface {
 	// 
 	// `andThen` ── A promise that resolves to the workspace folder or `undefined`.
 	ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, andThen func(*WorkspaceFolder)) 
+
+	State(andThen func(WindowState)) 
 }
 
 // Options to configure the behavior of the message.
@@ -1343,6 +1345,30 @@ func (me *impl) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, and
 	me.send(msg, on)
 }
 
+func (me *impl) State(andThen func(WindowState)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.state"
+	msg.Data = make(dict, 0)
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *WindowState
+			if (nil != payload) {
+				result = new(WindowState)
+				ok = result.populateFrom(payload)
+				if (!ok) {
+					return false
+				}
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
 func (me *MessageItem) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
@@ -1517,6 +1543,30 @@ func (me *WorkspaceFolder) populateFrom(payload any) bool {
 			}
 		}
 		me.Index = index
+	} else {
+		return false
+	}
+	return true
+}
+
+func (me *WindowState) populateFrom(payload any) bool {
+	var it dict
+	var ok bool
+	var val any
+	it, ok = payload.(dict)
+	if (!ok) {
+		return false
+	}
+	val, ok = it["focused"]
+	if ok {
+		var focused bool
+		if (nil != val) {
+			focused, ok = val.(bool)
+			if (!ok) {
+				return false
+			}
+		}
+		me.Focused = focused
 	} else {
 		return false
 	}

@@ -28,7 +28,7 @@ interface GenJobNamed {
 export interface GenJobFunc extends GenJobNamed {
     ifaceNs: ts.NamespaceDeclaration
     overload: number
-    decl: ts.FunctionDeclaration
+    decl: ts.FunctionDeclaration | MemberProp
 }
 
 export interface GenJobEnum extends GenJobNamed {
@@ -37,6 +37,16 @@ export interface GenJobEnum extends GenJobNamed {
 
 export interface GenJobStruct extends GenJobNamed {
     decl: ts.InterfaceDeclaration
+}
+
+export interface MemberEvent extends ts.VariableDeclaration {
+    EvtName: string
+    EvtType: ts.TypeReferenceNode
+}
+
+export interface MemberProp extends ts.VariableDeclaration {
+    PropName: string
+    PropType: ts.TypeReferenceNode
 }
 
 export interface PrepEnum {
@@ -192,20 +202,24 @@ export class Prep {
         let iface = this.interfaces.find(_ => _.name === ifacename)
         if (!iface)
             this.interfaces.push(iface = { name: ifacename, methods: [], fromOrig: funcJob.ifaceNs })
+        const declf = funcJob.decl as ts.FunctionDeclaration, declp = funcJob.decl as MemberProp
         iface.methods.push({
             fromOrig: funcJob,
             nameOrig: qname[qname.length - 1],
             name: qname[qname.length - 1] + ((funcJob.overload > 0) ? funcJob.overload : ''),
-            args: funcJob.decl.parameters.map(_ => ({
-                fromOrig: _,
-                name: _.name.getText(),
-                typeSpec: this.typeSpec(_.type, funcJob.decl.typeParameters),
-                optional: _.questionToken ? true : false,
-                isFromRetThenable: false,
-                spreads: _.dotDotDotToken ? true : false,
-            })),
+            args: (declf && declf.parameters && declf.parameters.length) ?
+                declf.parameters.map(_ => ({
+                    fromOrig: _,
+                    name: _.name.getText(),
+                    typeSpec: this.typeSpec(_.type, declf.typeParameters),
+                    optional: _.questionToken ? true : false,
+                    isFromRetThenable: false,
+                    spreads: _.dotDotDotToken ? true : false,
+                })) : [],
         })
-        let tret = this.typeSpec(funcJob.decl.type, funcJob.decl.typeParameters)
+        let tret = (declp && declp.PropType) ?
+            this.typeSpec(declp.PropType, ts.createNodeArray()) :
+            this.typeSpec(declf.type, declf.typeParameters)
         const tprom = typeProm(tret)
         if (!(tprom && tprom.length))
             tret = { Thens: [tret] }
@@ -539,8 +553,14 @@ export function idents(dontCollideWith: { name: string }[], ...names: string[]) 
 }
 
 function jsDocs(from: ts.Node): ts.JSDoc[] {
-    const have = (from as any) as { jsDoc: ts.JSDoc[] }
-    return (have && have.jsDoc && have.jsDoc.length) ? have.jsDoc : null
+    while (from) {
+        const have = (from as any) as { jsDoc: ts.JSDoc[] }
+        if (have && have.jsDoc && have.jsDoc.length)
+            return have.jsDoc
+        return null
+        // from = from.parent
+    }
+    return null
 }
 
 function pickName(forcePrefix: string, pickFrom: string[], dontCollideWith: { name: string }[]): string {

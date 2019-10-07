@@ -32,34 +32,40 @@ export class Gen extends gen.Gen implements gen.IGen {
             src += `\t\tcase "${it.name}":\n`
             src += "\t\t\tswitch (methodname) {\n"
             for (const method of it.methods) {
+                const isprop = method.fromOrig.decl as gen.MemberProp
                 src += `\t\t\t\tcase "${method.name}": {\n`
-                const lastarg = method.args[method.args.length - 1]
-                for (const arg of method.args)
-                    if (arg !== lastarg)
-                        if (arg.isCancellationToken !== undefined) {
-                            src += `\t\t\t\t\tlet ctid = msg.data['${arg.name}'] as string, arg_${arg.name} = prog.cancellerToken(ctid)\n`
-                            src += `\t\t\t\t\tif (!arg_${arg.name})\n`
-                            src += `\t\t\t\t\t\targ_${arg.name} = prog.cancellers[''].token\n`
-                            src += `\t\t\t\t\telse \n`
-                            src += `\t\t\t\t\t\tremoteCancellationTokens.push(ctid)\n`
-                        } else {
-                            src += `\t\t\t\t\tconst arg_${arg.name} = (msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}) as ${this.typeSpec(arg.typeSpec)}\n`
-                            const funcfields = gen.argsFuncFields(prep, [arg])
-                            if (funcfields && funcfields.length)
-                                for (const ff of funcfields) {
-                                    const tfn = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)
-                                    if (tfn && tfn.length) {
-                                        src += `\t\t\t\t\tif (arg_${arg.name}.${ff.name}_AppzFuncId && arg_${arg.name}.${ff.name}_AppzFuncId.length)\n`
-                                        src += `\t\t\t\t\t\targ_${arg.name}.${ff.name} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => prog.callBack(arg_${arg.name}.${ff.name}_AppzFuncId, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`
+                if (isprop && isprop.PropName && isprop.PropType)
+                    src += `\t\t\t\t\treturn Promise.resolve(${method.fromOrig.qName})\n`
+                else {
+                    const lastarg = method.args[method.args.length - 1]
+                    for (const arg of method.args)
+                        if (arg !== lastarg)
+                            if (arg.isCancellationToken !== undefined) {
+                                src += `\t\t\t\t\tlet ctid = msg.data['${arg.name}'] as string, arg_${arg.name} = prog.cancellerToken(ctid)\n`
+                                src += `\t\t\t\t\tif (!arg_${arg.name})\n`
+                                src += `\t\t\t\t\t\targ_${arg.name} = prog.cancellers[''].token\n`
+                                src += `\t\t\t\t\telse \n`
+                                src += `\t\t\t\t\t\tremoteCancellationTokens.push(ctid)\n`
+                            } else {
+                                src += `\t\t\t\t\tconst arg_${arg.name} = (msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}) as ${this.typeSpec(arg.typeSpec)}\n`
+                                const funcfields = gen.argsFuncFields(prep, [arg])
+                                if (funcfields && funcfields.length)
+                                    for (const ff of funcfields) {
+                                        const tfn = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)
+                                        if (tfn && tfn.length) {
+                                            src += `\t\t\t\t\tif (arg_${arg.name}.${ff.name}_AppzFuncId && arg_${arg.name}.${ff.name}_AppzFuncId.length)\n`
+                                            src += `\t\t\t\t\t\targ_${arg.name}.${ff.name} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => prog.callBack(arg_${arg.name}.${ff.name}_AppzFuncId, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`
+                                        }
                                     }
-                                }
-                        }
+                            }
 
-                src += `\t\t\t\t\treturn ${method.fromOrig.qName}(`
-                for (const arg of method.args)
-                    if (arg !== lastarg)
-                        src += (arg.spreads ? '...' : '') + 'arg_' + arg.name + ', '
-                src += `)\n\t\t\t\t}\n`
+                    src += `\t\t\t\t\treturn ${method.fromOrig.qName}(`
+                    for (const arg of method.args)
+                        if (arg !== lastarg)
+                            src += (arg.spreads ? '...' : '') + 'arg_' + arg.name + ', '
+                    src += ")\n"
+                }
+                src += `\t\t\t\t}\n`
             }
             src += "\t\t\t\tdefault:\n"
             src += "\t\t\t\t\tthrow (methodname)\n"

@@ -206,6 +206,7 @@ function gatherProp(into, decl, ...prefixes) {
     const qname = prefixes.concat(decl.PropName).join('.');
     if (into.funcs.some(_ => _.qName === qname))
         return;
+    into.funcs.push({ qName: qname, overload: 0, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] });
     gatherFromTypeNode(into, decl.PropType);
 }
 function gatherEvent(into, decl, ...prefixes) {

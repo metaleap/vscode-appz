@@ -23,16 +23,6 @@ const gens: gen.IGen[] = [
 type genApiMember = { [_: string]: genApiMembers }
 type genApiMembers = (string | genApiMember)[]
 
-interface evtMember extends ts.VariableDeclaration {
-    EvtName: string
-    EvtType: ts.TypeReferenceNode
-}
-
-interface propMember extends ts.VariableDeclaration {
-    PropName: string
-    PropType: ts.TypeReferenceNode
-}
-
 const genApiSurface: genApiMember = {
     'vscode': [
         {
@@ -120,11 +110,11 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                                             const ntype = nsubsub.getChildAt(2) as ts.TypeReferenceNode
                                             if (ntype && ntype.typeName)
                                                 if (ntype.typeName.getText() === 'Event' && ntype.typeArguments && ntype.typeArguments.length) {
-                                                    const n: evtMember = nsubsub as evtMember
+                                                    const n: gen.MemberEvent = nsubsub as gen.MemberEvent
                                                     [n.EvtName, n.EvtType] = [item, ntype]
                                                     members.push(n)
                                                 } else {
-                                                    const n: propMember = nsubsub as propMember
+                                                    const n: gen.MemberProp = nsubsub as gen.MemberProp
                                                     [n.PropName, n.PropType] = [item, ntype]
                                                     members.push(n)
                                                 }
@@ -144,7 +134,7 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
 }
 
 function gatherMember(into: gen.GenJob, member: ts.Node, overload: number, ...prefixes: string[]) {
-    const evt = member as evtMember, prop = member as propMember
+    const evt = member as gen.MemberEvent, prop = member as gen.MemberProp
     if (evt && evt.EvtName && evt.EvtType)
         gatherEvent(into, evt, ...prefixes)
     else if (prop && prop.PropName && prop.PropType)
@@ -229,15 +219,15 @@ function gatherFunc(into: gen.GenJob, decl: ts.FunctionDeclaration, overload: nu
     gatherFromTypeNode(into, decl.type, decl.typeParameters)
 }
 
-function gatherProp(into: gen.GenJob, decl: propMember, ...prefixes: string[]) {
+function gatherProp(into: gen.GenJob, decl: gen.MemberProp, ...prefixes: string[]) {
     const qname = prefixes.concat(decl.PropName).join('.')
     if (into.funcs.some(_ => _.qName === qname))
         return
-    // into.funcs.push({ qName: qname, overload: 0, decl: null, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] })
+    into.funcs.push({ qName: qname, overload: 0, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] })
     gatherFromTypeNode(into, decl.PropType)
 }
 
-function gatherEvent(into: gen.GenJob, decl: evtMember, ...prefixes: string[]) {
+function gatherEvent(into: gen.GenJob, decl: gen.MemberEvent, ...prefixes: string[]) {
     const qname = prefixes.concat(decl.EvtName).join('.')
     if (into.funcs.some(_ => _.qName === qname))
         return

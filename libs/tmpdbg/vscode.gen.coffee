@@ -424,6 +424,10 @@ Window: interface
         options: ?WorkspaceFolderPickOptions
         andThen: ?(?WorkspaceFolder->void)
 
+    # state:
+    State: void
+        andThen: ?(WindowState->void)
+
 
 
 
@@ -1538,6 +1542,29 @@ Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> andThen
 
 
 
+Window·State: (andThen:?(WindowState->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "window.state"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?WindowState
+            if (=?payload)
+                result = ?WindowState·new
+                ok = result.populateFrom(payload)
+                if (!ok)
+                    return false
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
 MessageItem·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
@@ -1687,6 +1714,28 @@ WorkspaceFolder·populateFrom: (payload:any -> bool)
                     return false
                 index = ((__index__)·(int))
         this.Index = index
+    else
+        return false
+    return true
+
+
+
+
+WindowState·populateFrom: (payload:any -> bool)
+    var it of dict
+    var ok of bool
+    var val of any
+    [it,ok] = ((payload)·(dict))
+    if (!ok)
+        return false
+    [val,ok] = it@?"focused"
+    if ok
+        var focused of bool
+        if (=?val)
+            [focused,ok] = ((val)·(bool))
+            if (!ok)
+                return false
+        this.Focused = focused
     else
         return false
     return true

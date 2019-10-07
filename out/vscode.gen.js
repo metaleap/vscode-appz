@@ -153,6 +153,9 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const arg_options = (msg.data['options']);
                     return vscode.window.showWorkspaceFolderPick(arg_options);
                 }
+                case "state": {
+                    return Promise.resolve(vscode.window.state);
+                }
                 default:
                     throw (methodname);
             }
