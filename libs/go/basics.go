@@ -82,6 +82,14 @@ func (me *impl) nextFuncId() string {
 	return strconv.FormatUint(me.counter, 36)
 }
 
+func (me *impl) nextSub(subscriber func([]any) bool) (fnId string) {
+	me.Lock()
+	fnId = me.nextFuncId()
+	me.cbListeners[fnId] = subscriber
+	me.Unlock()
+	return
+}
+
 func (me *impl) loopReadln() {
 	for me.readln.Scan() {
 		if jsonmsg := strings.TrimSpace(me.readln.Text()); jsonmsg != "" {
@@ -190,12 +198,13 @@ func CancelIn(fromNow time.Duration) *Cancel {
 
 // Disposable represents an non-transient object identity lifetimed at the counterparty.
 type Disposable struct {
-	impl *impl
-	id   string
+	impl    *impl
+	id      string
+	subFnId string
 }
 
-func (me *Disposable) bindTo(impl *impl) *Disposable {
-	me.impl = impl
+func (me *Disposable) bindTo(impl *impl, subFnId string) *Disposable {
+	me.impl, me.subFnId = impl, subFnId
 	return me
 }
 
@@ -210,4 +219,9 @@ func (me *Disposable) populateFrom(payload any) bool {
 // Dispose signals to the counterparty to destroy the object.
 func (me Disposable) Dispose() {
 	me.impl.send(&ipcMsg{QName: "Dispose", Data: dict{"": me.id}}, nil)
+	if me.subFnId != "" {
+		me.impl.Lock()
+		delete(me.impl.cbListeners, me.subFnId)
+		me.impl.Unlock()
+	}
 }

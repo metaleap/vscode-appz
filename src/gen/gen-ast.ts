@@ -156,7 +156,7 @@ export class Builder {
     eCall(callee: Expr, ...args: Expr[]): ECall { return { Call: callee, Args: args } }
     n(name: string): EName { return { Name: name } }
     eLit(litVal: string | number | boolean | null): ELit { return { Lit: litVal } }
-    eNil(): ELit { return this.eLit(null) }
+    eZilch(): ELit { return this.eLit(null) }
     eThis(): EName { return this.n(null) }
     eOp(op: string, ...args: Expr[]): EOp { return { Name: op, Operands: args } }
     oIdx(...args: Expr[]): EOp { return this.eOp(BuilderOperators.Idx, ...args) }
@@ -881,14 +881,14 @@ export class Gen extends gen.Gen implements gen.IGen {
                             _.iSet(_.oIdx(_.oDot(_.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
                                 _.eFunc([{ Name: __.args, Type: { ValsOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] },
                                     _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args), true)), [
-                                        _.iRet(_.eTup(_.eNil(), _.eLit(false))),
+                                        _.iRet(_.eTup(_.eZilch(), _.eLit(false))),
                                     ], [_.iVar(__.ok, TypeRefPrim.Bool) as Instr].concat(
                                         ..._.EACH(fnargs, (fnarg, idx) => [
                                             _.iVar('__' + idx, this.b.typeRef(fnarg)),
                                             _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))),
-                                                this.convOrRet('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), __.ok, _.eTup(_.eNil(), _.eLit(false))),
+                                                this.convOrRet('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), __.ok, _.eTup(_.eZilch(), _.eLit(false))),
                                                 (fnarg === gen.ScriptPrimType.Number || this.typeOwn(this.b.typeRef(fnarg))) ? [
-                                                    _.iRet(_.eTup(_.eNil(), _.eLit(false))),
+                                                    _.iRet(_.eTup(_.eZilch(), _.eLit(false))),
                                                 ] : [],
                                             ),
                                             _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
@@ -902,39 +902,73 @@ export class Gen extends gen.Gen implements gen.IGen {
             }
         }
 
-        for (const arg of method.Args)
-            if (!arg.fromPrep.isFromRetThenable)
-                if (arg.fromPrep.isCancellationToken !== undefined)
-                    body.push(_.iIf(_.oIs(_.n(arg.Name)), [
-                        _.iSet(_.oDot(_.n(arg.Name), _.n("impl")), _.eThis()),
-                        _.iIf(_.oEq(_.eLit(""), _.oDot(_.n(arg.Name), _.n("fnId"))), [
-                            _.iLock(_.eThis(),
-                                _.iSet(_.oDot(_.n(arg.Name), _.n("fnId")), _.eCall(_.oDot(_.eThis(), _.n("nextFuncId")))),
-                            ),
-                        ]),
-                        _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.oDot(_.n(arg.Name), _.n("fnId"))),
-                    ]))
-                else {
-                    let town = this.typeOwn(arg.Type)
-                    if (town && town.Ands) {
-                        let tstructmul: TStruct
-                        for (const structname in this.allStructs)
-                            if (structname === town.Name) {
-                                tstructmul = this.allStructs[structname]
-                                break
-                            }
-                        if (tstructmul)
-                            for (const and in town.Ands)
-                                for (const fld of tstructmul.Fields.filter(_ => _.name === and))
-                                    body.push(_.iSet(_.oDot(_.n(arg.Name), _.n(fld.Name)), town.Ands[and]))
-                    }
+        const isevt: gen.MemberEvent = method.fromPrep ? method.fromPrep.fromOrig.decl as gen.MemberEvent : null
+        let nameevtsub: string = undefined
+        if (isevt && isevt.EvtArgs && isevt.EvtArgs.length) {
+            const arg = method.Args[0]
+            nameevtsub = "_fnid_" + arg.Name
+            body.push(
+                _.iVar(nameevtsub, TypeRefPrim.String),
+                _.iIf(_.oIsnt(_.n(arg.Name)), [
+                    _.eCall(_.n("OnError"), _.eThis(), _.eLit(`${iface.Name}.${method.Name}: the '${arg.Name}' arg (which is not optional but required) was not passed by the caller`), _.eZilch()),
+                    _.iRet(null),
+                ], [
+                    _.iSet(_.n(nameevtsub), _.eCall(_.oDot(_.eThis(), _.n("nextSub")),
+                        _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Bool,
+                            ...[_.iVar(__.ok, TypeRefPrim.Bool) as Instr, _.iIf(_.oNeq(_.eLit(isevt.EvtArgs.length), _.eLen(_.n("args"), true)), [
+                                _.iRet(_.eLit(false)),
+                            ]) as Instr].concat(
+                                _.EACH(isevt.EvtArgs, (t, i): Instr[] =>
+                                    _.LET(`_a_${i}_`, aname =>
+                                        _.LET(this.b.typeRef(this.b.prep.typeSpec(t)), atype =>
+                                            [_.iVar(aname, atype) as Instr].concat(
+                                                this.convOrRet(aname, _.oIdx(_.n("args"), _.eLit(i)), atype),
+                                            )
+                                        )
+                                    ),
+                                )).concat(
+                                    _.eCall(_.n(arg.Name), ...isevt.EvtArgs.map((_a, i) => _.n(`_a_${i}_`))),
+                                    _.iRet(_.eLit(true)),
+                                ),
+                        ),
+                    )),
+                    _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n(nameevtsub)),
+                ])
+            )
+        } else
+            for (const arg of method.Args)
+                if (!arg.fromPrep.isFromRetThenable)
+                    if (arg.fromPrep.isCancellationToken !== undefined)
+                        body.push(_.iIf(_.oIs(_.n(arg.Name)), [
+                            _.iSet(_.oDot(_.n(arg.Name), _.n("impl")), _.eThis()),
+                            _.iIf(_.oEq(_.eLit(""), _.oDot(_.n(arg.Name), _.n("fnId"))), [
+                                _.iLock(_.eThis(),
+                                    _.iSet(_.oDot(_.n(arg.Name), _.n("fnId")), _.eCall(_.oDot(_.eThis(), _.n("nextFuncId")))),
+                                ),
+                            ]),
+                            _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.oDot(_.n(arg.Name), _.n("fnId"))),
+                        ]))
+                    else {
+                        let town = this.typeOwn(arg.Type)
+                        if (town && town.Ands) {
+                            let tstructmul: TStruct
+                            for (const structname in this.allStructs)
+                                if (structname === town.Name) {
+                                    tstructmul = this.allStructs[structname]
+                                    break
+                                }
+                            if (tstructmul)
+                                for (const and in town.Ands)
+                                    for (const fld of tstructmul.Fields.filter(_ => _.name === and))
+                                        body.push(_.iSet(_.oDot(_.n(arg.Name), _.n(fld.Name)), town.Ands[and]))
+                        }
 
-                    const twinarg = twinargs[arg.Name]
-                    body.push(_.iSet(
-                        _.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)),
-                        _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name),
-                    ))
-                }
+                        const twinarg = twinargs[arg.Name]
+                        body.push(_.iSet(
+                            _.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)),
+                            _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name),
+                        ))
+                    }
 
         const lastarg = method.Args[method.Args.length - 1]
         body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }))
@@ -952,7 +986,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                             _.WHEN(isdisp, () => [_.iRet(_.eLit(false))], () => []),
                         ),
                         _.WHEN(isdisp, () => [
-                            _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bindTo')), _.eThis())),
+                            _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bindTo')), _.eThis(), nameevtsub ? _.n(nameevtsub) : _.eLit(""))),
                         ], () => [
                             _.eCall(_.n(lastarg.Name), _.n(__.result)),
                         ])[0],

@@ -49,14 +49,22 @@ namespace VscAppz {
 
         internal bool looping = false;
         internal uint counter = 0;
-        internal readonly Dictionary<string, Func<any, bool>> cbWaiting = new Dictionary<string, Func<any, bool>>();
-        internal readonly Dictionary<string, Func<any[], (any, bool)>> cbOther = new Dictionary<string, Func<any[], (any, bool)>>();
+        internal readonly Dictionary<string, Func<any, bool>> cbWaiting = new Dictionary<string, Func<any, bool>>(8);
+        internal readonly Dictionary<string,Func<any[],bool>>cbListeners = new Dictionary<string, Func<any[], bool>>(8);
+        internal readonly Dictionary<string, Func<any[], (any, bool)>> cbOther = new Dictionary<string, Func<any[], (any, bool)>>(8);
 
         internal impl(TextReader stdIn, TextWriter stdOut) =>
             (this.stdIn, this.stdOut) = (stdIn ?? Console.In, stdOut ?? Console.Out);
 
         internal string nextFuncId() =>
             (++counter).ToString();
+
+        internal string nextSub(Func<any[], bool> subscriber) {
+            lock (this) {
+                var fnid = nextFuncId();
+                return fnid;
+            }
+        }
 
         internal void loopReadln() {
             string jsonmsg = "";
@@ -65,28 +73,37 @@ namespace VscAppz {
                 if (!string.IsNullOrEmpty(jsonmsg = stdIn.ReadLine().Trim())) {
                     var msg = ipcMsg.fromJson(jsonmsg);
 
-                    Func<any, bool> cb = null;
-                    Func<any[], (any, bool)> fn = null;
+                    Func<any, bool> cbprom = null;
+                    Func <any[], bool> cbevt = null;
+                    Func<any[], (any, bool)> cbmisc = null;
                     lock (this)
-                        if (cbWaiting.TryGetValue(msg.CbId, out cb))
+                        if (cbWaiting.TryGetValue(msg.CbId, out cbprom))
                             _ = cbWaiting.Remove(msg.CbId);
-                        else
-                            _ = cbOther.TryGetValue(msg.CbId, out fn);
+                        else if (!cbOther.TryGetValue(msg.CbId, out cbmisc))
+                            _ = cbListeners.TryGetValue(msg.CbId, out cbevt);
 
-                    if (cb != null) {
+                    if (cbprom != null) {
                         if (msg.Data.TryGetValue("nay", out var nay))
-                            Vsc.OnError(this, nay, jsonmsg);
+                            OnError(this, nay, jsonmsg);
                         else if (!msg.Data.TryGetValue("yay", out var yay))
                             throw new Exception("field `data` must have either `yay` or `nay` member");
-                        else if (!cb(yay))
+                        else if (!cbprom(yay))
                             throw new Exception("unexpected args: " + yay);
 
-                    } else if (fn != null) {
+                    } else if (cbevt != null) {
+                        any fnargs;
+                        var ok = msg.Data.TryGetValue("", out fnargs);
+                        if (ok && (fnargs is any[] args))
+                            ok = cbevt(args);
+                        if (!ok)
+                            OnError(this, new Exception("unexpected args: " + fnargs), jsonmsg);
+
+                    } else if (cbmisc != null) {
                         any fnargs;
                         any ret = null;
                         var ok = msg.Data.TryGetValue("", out fnargs);
-                        if (ok = (ok && (fnargs is any[])))
-                            (ret, ok) = fn((any[])fnargs);
+                        if (ok && (fnargs is any[] args))
+                            (ret, ok) = cbmisc(args);
                         send(new ipcMsg("", 1, msg.CbId) { Data = {
                             [ok ? "yay" : "nay"] = ok ? ret : ("unexpected args: " + fnargs)
                         } }, null);
@@ -95,7 +112,7 @@ namespace VscAppz {
                         throw new Exception("specified `cbId` not known locally");
                 }
             } catch (Exception err) {
-                Vsc.OnError(this, err, jsonmsg);
+                OnError(this, err, jsonmsg);
             }
         }
 
@@ -112,11 +129,13 @@ namespace VscAppz {
             }
             if (err != null ) {
                 msg.Data[""] = msg.QName;
-                Vsc.OnError(this, err, msg.Data);
+                OnError(this, err, msg.Data);
             }
             if (startloop)
                 loopReadln();
         }
+
+        internal Action<IVscode, any, any> OnError {get=>Vsc.OnError;}
     }
 
     /// <summary>Allows belated cancellation of ongoing / already-initiated interactions.</summary>
@@ -151,14 +170,20 @@ namespace VscAppz {
     public class Disposable:IDisposable {
         internal impl impl;
         internal string id;
+        internal string subFnId;
         internal Disposable() {}
-        internal Disposable bindTo(impl impl) { this.impl = impl; return this; }
+        internal Disposable bindTo(impl impl,string subFnId) {
+            (this.impl, this.subFnId) = (impl, subFnId); return this; }
         internal bool populateFrom(any payload) =>
             (payload is any[] arr) && (arr != null) && (arr.Length == 2)
                 && (arr[0] is string s) && !string.IsNullOrEmpty(id = s);
         /// <summary>Dispose signals to the counterparty to destroy the object.</summary>
-        public void Dispose() =>
+        public void Dispose() {
             impl.send(new ipcMsg("Dispose", 1) { Data = { [""] = id } }, null);
+            if (!string.IsNullOrEmpty(subFnId))
+                lock (this)
+                    impl.cbListeners.Remove(subFnId);
+        }
     }
 
 }

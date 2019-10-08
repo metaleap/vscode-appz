@@ -11,6 +11,7 @@
 - [IVscode](#T-VscAppz-IVscode 'VscAppz.IVscode')
   - [Window](#P-VscAppz-IVscode-Window 'VscAppz.IVscode.Window')
 - [IWindow](#T-VscAppz-IWindow 'VscAppz.IWindow')
+  - [OnDidChangeWindowState()](#M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState},System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState},System.Action{VscAppz.Disposable})')
   - [SetStatusBarMessage(text,hideAfterTimeout,andThen)](#M-VscAppz-IWindow-SetStatusBarMessage-System-String,System-Int32,System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.SetStatusBarMessage(System.String,System.Int32,System.Action{VscAppz.Disposable})')
   - [SetStatusBarMessage(text,andThen)](#M-VscAppz-IWindow-SetStatusBarMessage-System-String,System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.SetStatusBarMessage(System.String,System.Action{VscAppz.Disposable})')
   - [ShowErrorMessage(message,items,andThen)](#M-VscAppz-IWindow-ShowErrorMessage-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowErrorMessage(System.String,System.String[],System.Action{System.String})')
@@ -177,6 +178,18 @@ VscAppz
 Namespace for dealing with the current window of the editor. That is visible
 and active editors, as well as, UI elements to show messages, selections, and
 asking for user input.
+
+<a name='M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState},System-Action{VscAppz-Disposable}-'></a>
+### OnDidChangeWindowState() `method`
+
+##### Summary
+
+An [event](#Event) which fires when the focus state of the current window
+changes. The value of the event represents whether the window is focused.
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='M-VscAppz-IWindow-SetStatusBarMessage-System-String,System-Int32,System-Action{VscAppz-Disposable}-'></a>
 ### SetStatusBarMessage(text,hideAfterTimeout,andThen) `method`

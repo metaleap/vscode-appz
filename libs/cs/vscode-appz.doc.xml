@@ -407,6 +407,12 @@
         <member name="M:VscAppz.IWindow.State(System.Action{VscAppz.WindowState})">
             <summary>Represents the current window's state.</summary>
         </member>
+        <member name="M:VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState},System.Action{VscAppz.Disposable})">
+            <summary>
+            An [event](#Event) which fires when the focus state of the current window
+            changes. The value of the event represents whether the window is focused.
+            </summary>
+        </member>
         <member name="T:VscAppz.MessageOptions">
             <summary>Options to configure the behavior of the message.</summary>
         </member>
