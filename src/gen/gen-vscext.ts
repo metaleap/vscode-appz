@@ -39,14 +39,6 @@ export class Gen extends gen.Gen implements gen.IGen {
                 if (isprop && isprop.PropName && isprop.PropType)
                     src += `\t\t\t\t\treturn Promise.resolve(${method.fromOrig.qName})\n`
                 else if (isevt && isevt.EvtArgs && isevt.EvtArgs.length) {
-                    /*
-					const arg_listener = (msg.data['listener'] as string)
-					if (arg_listener && arg_listener.length)
-						return vscode.window.onDidChangeWindowState((a0) => {
-							if (prog && prog.proc)
-								prog.callBack(arg_listener, a0)
-						})
-                    */
                     const fnid = "_fnid_" + method.args[0].name
                     src += `\t\t\t\t\tconst ${fnid} = msg.data['${method.args[0].name}'] as string\n`
                     src += `\t\t\t\t\treturn (!(${fnid} && ${fnid}.length))\n`

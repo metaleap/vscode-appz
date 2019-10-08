@@ -118,14 +118,16 @@ export class Prep {
             this.addFunc(funcjob)
 
         this.structs.forEach(struct => {
-            let isretarg = false, isoutarg = false
-            for (const iface of this.interfaces) if (isretarg && isoutarg) break
-            else for (const method of iface.methods) if (isretarg && isoutarg) break
-            else for (const arg of method.args) if (isretarg && isoutarg) break
-            else if (typeRefersTo(arg.typeSpec, struct.name))
-                if (arg.isFromRetThenable) isretarg = true
-                else isoutarg = !typeFun(arg.typeSpec)
-            if ((struct.isOutgoing = isoutarg) && (struct.isIncoming = isretarg)) {
+            let isargout = false, isargin = false
+            for (const iface of this.interfaces) if (isargin && isargout) break
+            else for (const method of iface.methods) if (isargin && isargout) break
+            else for (const arg of method.args) if (isargin && isargout) break
+            else if (typeRefersTo(arg.typeSpec, struct.name)) {
+                const isinfunc = typeFun(arg.typeSpec) ? true : false
+                if (arg.isFromRetThenable || isinfunc) isargin = true
+                if (!arg.isFromRetThenable) isargout = !isinfunc
+            }
+            if ((struct.isOutgoing = isargout) && (struct.isIncoming = isargin)) {
                 const fieldname = pickName('my', ['', 'tags', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields)
                 if (!fieldname)
                     throw (struct)
