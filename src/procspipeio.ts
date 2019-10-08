@@ -118,12 +118,13 @@ export class Prog {
         }
     }
 
-    callBack<T>(fnId: string, ...args: any[]): Thenable<T> {
+    callBack<T>(willRet: boolean, fnId: string, ...args: any[]): Thenable<T> {
         return (!this.proc) ? Promise.reject() : new Promise<T>((resolve, reject) => {
             if (!this.proc)
                 reject()
             else {
-                this.callBacks[fnId] = { resolve: resolve, reject: reject }
+                if (willRet)
+                    this.callBacks[fnId] = { resolve: resolve, reject: reject }
                 this.send({ cbId: fnId, data: { "": args } })
             }
         })

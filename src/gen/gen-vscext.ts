@@ -7,7 +7,8 @@ export class Gen extends gen.Gen implements gen.IGen {
         const pkgname = prep.fromOrig.moduleName
         let src = "// " + this.doNotEditComment("vscext") + "\n\n"
         src += `import * as ${pkgname} from '${pkgname}'\n\n`
-        src += "import * as ppio from './procspipeio'\n\n"
+        src += "import * as ppio from './procspipeio'\n\n\n\n"
+        src += "const noOp = (_:any) => {}\n\n\n"
 
         for (const it of prep.enums)
             src += "type " + it.name + " = " + pkgname + "." + it.name + "\n"
@@ -37,9 +38,24 @@ export class Gen extends gen.Gen implements gen.IGen {
                 src += `\t\t\t\tcase "${method.name}": {\n`
                 if (isprop && isprop.PropName && isprop.PropType)
                     src += `\t\t\t\t\treturn Promise.resolve(${method.fromOrig.qName})\n`
-                else if (isevt && isevt.EvtArgs && isevt.EvtArgs.length)
-                    src += `\t\t\t\t\treturn Promise.resolve(${method.fromOrig.qName})\n`
-                else {
+                else if (isevt && isevt.EvtArgs && isevt.EvtArgs.length) {
+                    /*
+					const arg_listener = (msg.data['listener'] as string)
+					if (arg_listener && arg_listener.length)
+						return vscode.window.onDidChangeWindowState((a0) => {
+							if (prog && prog.proc)
+								prog.callBack(arg_listener, a0)
+						})
+                    */
+                    const fnid = "_fnid_" + method.args[0].name
+                    src += `\t\t\t\t\tconst ${fnid} = msg.data['${method.args[0].name}'] as string\n`
+                    src += `\t\t\t\t\treturn (!(${fnid} && ${fnid}.length))\n`
+                    src += `\t\t\t\t\t\t? Promise.reject(msg.data)\n`
+                    src += `\t\t\t\t\t\t: ${method.fromOrig.qName}((a0) => {\n`
+                    src += `\t\t\t\t\t\t\tif (prog && prog.proc)\n`
+                    src += `\t\t\t\t\t\t\t\tprog.callBack(false, ${fnid}, a0).then(noOp, noOp)\n`
+                    src += `\t\t\t\t\t\t})\n`
+                } else {
                     const lastarg = method.args[method.args.length - 1]
                     for (const arg of method.args)
                         if (arg !== lastarg)
@@ -57,7 +73,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                                         const tfn = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)
                                         if (tfn && tfn.length) {
                                             src += `\t\t\t\t\tif (arg_${arg.name}.${ff.name}_AppzFuncId && arg_${arg.name}.${ff.name}_AppzFuncId.length)\n`
-                                            src += `\t\t\t\t\t\targ_${arg.name}.${ff.name} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => prog.callBack(arg_${arg.name}.${ff.name}_AppzFuncId, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`
+                                            src += `\t\t\t\t\t\targ_${arg.name}.${ff.name} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => prog.callBack(true, arg_${arg.name}.${ff.name}_AppzFuncId, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`
                                         }
                                     }
                             }

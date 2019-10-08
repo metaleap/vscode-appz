@@ -203,7 +203,7 @@ type Disposable struct {
 	subFnId string
 }
 
-func (me *Disposable) bindTo(impl *impl, subFnId string) *Disposable {
+func (me *Disposable) bind(impl *impl, subFnId string) *Disposable {
 	me.impl, me.subFnId = impl, subFnId
 	return me
 }
@@ -223,5 +223,6 @@ func (me Disposable) Dispose() {
 		me.impl.Lock()
 		delete(me.impl.cbListeners, me.subFnId)
 		me.impl.Unlock()
+		me.subFnId = ""
 	}
 }

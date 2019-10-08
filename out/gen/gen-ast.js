@@ -650,12 +650,9 @@ class Gen extends gen.Gen {
             body.push(_.iVar(nameevtsub, TypeRefPrim.String), _.iIf(_.oIsnt(_.n(arg.Name)), [
                 _.eCall(_.n("OnError"), _.eThis(), _.eLit(`${iface.Name}.${method.Name}: the '${arg.Name}' arg (which is not optional but required) was not passed by the caller`), _.eZilch()),
                 _.iRet(null),
-            ], [
-                _.iSet(_.n(nameevtsub), _.eCall(_.oDot(_.eThis(), _.n("nextSub")), _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Bool, ...[_.iVar(__.ok, TypeRefPrim.Bool), _.iIf(_.oNeq(_.eLit(isevt.EvtArgs.length), _.eLen(_.n("args"), true)), [
-                        _.iRet(_.eLit(false)),
-                    ])].concat(_.EACH(isevt.EvtArgs, (t, i) => _.LET(`_a_${i}_`, aname => _.LET(this.b.typeRef(this.b.prep.typeSpec(t)), atype => [_.iVar(aname, atype)].concat(this.convOrRet(aname, _.oIdx(_.n("args"), _.eLit(i)), atype)))))).concat(_.eCall(_.n(arg.Name), ...isevt.EvtArgs.map((_a, i) => _.n(`_a_${i}_`))), _.iRet(_.eLit(true)))))),
-                _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n(nameevtsub)),
-            ]));
+            ]), _.iSet(_.n(nameevtsub), _.eCall(_.oDot(_.eThis(), _.n("nextSub")), _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Bool, ...[_.iVar(__.ok, TypeRefPrim.Bool), _.iIf(_.oNeq(_.eLit(isevt.EvtArgs.length), _.eLen(_.n("args"), true)), [
+                    _.iRet(_.eLit(false)),
+                ])].concat(_.EACH(isevt.EvtArgs, (t, i) => _.LET(`_a_${i}_`, aname => _.LET(this.b.typeRef(this.b.prep.typeSpec(t)), atype => [_.iVar(aname, atype)].concat(this.convOrRet(aname, _.oIdx(_.n("args"), _.eLit(i)), atype)))))).concat(_.eCall(_.n(arg.Name), ...isevt.EvtArgs.map((_a, i) => _.n(`_a_${i}_`))), _.iRet(_.eLit(true)))))), _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n(nameevtsub)));
         }
         else
             for (const arg of method.Args)
@@ -692,7 +689,7 @@ class Gen extends gen.Gen {
             const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, true, true);
             body.push(_.iIf(_.oIs(_.n(lastarg.Name)), [
                 _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iVar(__.ok, TypeRefPrim.Bool), _.iVar(__.result, dsttype), _.iIf(_.oIs(_.n(__.payload)), this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok), _.WHEN(isdisp, () => [_.iRet(_.eLit(false))], () => [])), _.WHEN(isdisp, () => [
-                    _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bindTo')), _.eThis(), nameevtsub ? _.n(nameevtsub) : _.eLit(""))),
+                    _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bind')), _.eThis(), nameevtsub ? _.n(nameevtsub) : _.eLit(""))),
                 ], () => [
                     _.eCall(_.n(lastarg.Name), _.n(__.result)),
                 ])[0], _.iRet(_.eLit(true)))),

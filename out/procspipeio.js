@@ -101,12 +101,13 @@ class Prog {
                 this.stderrChan.append(str);
         }
     }
-    callBack(fnId, ...args) {
+    callBack(willRet, fnId, ...args) {
         return (!this.proc) ? Promise.reject() : new Promise((resolve, reject) => {
             if (!this.proc)
                 reject();
             else {
-                this.callBacks[fnId] = { resolve: resolve, reject: reject };
+                if (willRet)
+                    this.callBacks[fnId] = { resolve: resolve, reject: reject };
                 this.send({ cbId: fnId, data: { "": args } });
             }
         });

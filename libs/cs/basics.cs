@@ -62,6 +62,7 @@ namespace VscAppz {
         internal string nextSub(Func<any[], bool> subscriber) {
             lock (this) {
                 var fnid = nextFuncId();
+                cbListeners[fnid] = subscriber;
                 return fnid;
             }
         }
@@ -172,7 +173,7 @@ namespace VscAppz {
         internal string id;
         internal string subFnId;
         internal Disposable() {}
-        internal Disposable bindTo(impl impl,string subFnId) {
+        internal Disposable bind(impl impl,string subFnId) {
             (this.impl, this.subFnId) = (impl, subFnId); return this; }
         internal bool populateFrom(any payload) =>
             (payload is any[] arr) && (arr != null) && (arr.Length == 2)
@@ -180,9 +181,11 @@ namespace VscAppz {
         /// <summary>Dispose signals to the counterparty to destroy the object.</summary>
         public void Dispose() {
             impl.send(new ipcMsg("Dispose", 1) { Data = { [""] = id } }, null);
-            if (!string.IsNullOrEmpty(subFnId))
+            if (!string.IsNullOrEmpty(subFnId)) {
                 lock (this)
                     impl.cbListeners.Remove(subFnId);
+                subFnId = "";
+            }
         }
     }
 

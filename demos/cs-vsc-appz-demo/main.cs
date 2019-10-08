@@ -23,6 +23,10 @@ namespace VscAppzDemo {
 
             win = Vsc.InOut().Window;
             win.SetStatusBarMessage("Choosing a demo WILL HIDE this", statusitem => {
+                win.OnDidChangeWindowState(_ => {
+                    win.SetStatusBarMessage($"Am I focused? {_.Focused}.", 1234);
+                });
+
                 var buttons = new[] {"Demo Pick Input", "Demo Text Input", "All Demos"};
                 win.ShowInformationMessage(
                     greethow + ", " + greetname + "! What to try out? (If you cancel, I quit.)",

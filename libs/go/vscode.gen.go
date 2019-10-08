@@ -1228,7 +1228,7 @@ func (me *impl) SetStatusBarMessage1(text string, hideAfterTimeout int, andThen 
 			} else {
 				return false
 			}
-			andThen(result.bindTo(me, ""))
+			andThen(result.bind(me, ""))
 			return true
 		}
 	}
@@ -1255,7 +1255,7 @@ func (me *impl) SetStatusBarMessage2(text string, andThen func(*Disposable)) {
 			} else {
 				return false
 			}
-			andThen(result.bindTo(me, ""))
+			andThen(result.bind(me, ""))
 			return true
 		}
 	}
@@ -1383,23 +1383,22 @@ func (me *impl) OnDidChangeWindowState(listener func(WindowState), andThen func(
 	if (nil == listener) {
 		OnError(me, "Window.OnDidChangeWindowState: the 'listener' arg (which is not optional but required) was not passed by the caller", nil)
 		return 
-	} else {
-		_fnid_listener = me.nextSub(func(args []any) bool {
-			var ok bool
-			if (1 != len(args)) {
-				return false
-			}
-			var _a_0_ WindowState
-			_a_0_ = */*sorryButSuchIsCodeGenSometimes...*/new(WindowState)
-			ok = _a_0_.populateFrom(args[0])
-			if (!ok) {
-				return false
-			}
-			listener(_a_0_)
-			return true
-		})
-		msg.Data["listener"] = _fnid_listener
 	}
+	_fnid_listener = me.nextSub(func(args []any) bool {
+		var ok bool
+		if (1 != len(args)) {
+			return false
+		}
+		var _a_0_ WindowState
+		_a_0_ = */*sorryButSuchIsCodeGenSometimes...*/new(WindowState)
+		ok = _a_0_.populateFrom(args[0])
+		if (!ok) {
+			return false
+		}
+		listener(_a_0_)
+		return true
+	})
+	msg.Data["listener"] = _fnid_listener
 	var on func(any) bool
 	if (nil != andThen) {
 		on = func(payload any) bool {
@@ -1414,7 +1413,7 @@ func (me *impl) OnDidChangeWindowState(listener func(WindowState), andThen func(
 			} else {
 				return false
 			}
-			andThen(result.bindTo(me, _fnid_listener))
+			andThen(result.bind(me, _fnid_listener))
 			return true
 		}
 	}

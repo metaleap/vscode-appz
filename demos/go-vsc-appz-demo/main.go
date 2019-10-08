@@ -26,6 +26,10 @@ func main() {
 
 	win = Vsc(nil, nil).Window()
 	win.SetStatusBarMessage2("Choosing a demo WILL HIDE this", func(statusitem *Disposable) {
+		win.OnDidChangeWindowState(func(evt WindowState) {
+			win.SetStatusBarMessage1("Am I focused? "+strconv.FormatBool(evt.Focused)+".", 1234, nil)
+		}, nil)
+
 		buttons := []string{"Demo Pick Input", "Demo Text Input", "All Demos"}
 		win.ShowInformationMessage1(
 			greethow+", "+greetname+"! What to try out? (If you cancel, I quit.)",

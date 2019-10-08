@@ -1433,7 +1433,7 @@ Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> andThen:?(
                     return false
             else
                 return false
-            andThen(result.bindTo(this, ""))
+            andThen(result.bind(this, ""))
             return true
         
     this.send(msg, on)
@@ -1459,7 +1459,7 @@ Window·SetStatusBarMessage2: (text:string -> andThen:?(?Disposable->void) -> vo
                     return false
             else
                 return false
-            andThen(result.bindTo(this, ""))
+            andThen(result.bind(this, ""))
             return true
         
     this.send(msg, on)
@@ -1582,20 +1582,19 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> andThen:?(?Disp
     if (=!listener)
         OnError(this, "Window.OnDidChangeWindowState: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
         return 
-    else
-        _fnid_listener = this.nextSub((args:[any] -> bool)
-            var ok of bool
-            if (1 != args·len)
-                return false
-            var _a_0_ of WindowState
-            _a_0_ = WindowState·new
-            ok = _a_0_.populateFrom(args@0)
-            if (!ok)
-                return false
-            listener(_a_0_)
-            return true
-        )
-        msg.Data@"listener" = _fnid_listener
+    _fnid_listener = this.nextSub((args:[any] -> bool)
+        var ok of bool
+        if (1 != args·len)
+            return false
+        var _a_0_ of WindowState
+        _a_0_ = WindowState·new
+        ok = _a_0_.populateFrom(args@0)
+        if (!ok)
+            return false
+        listener(_a_0_)
+        return true
+    )
+    msg.Data@"listener" = _fnid_listener
     var on of (any->bool)
     if (=?andThen)
         on = (payload:any -> bool)
@@ -1608,7 +1607,7 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> andThen:?(?Disp
                     return false
             else
                 return false
-            andThen(result.bindTo(this, _fnid_listener))
+            andThen(result.bind(this, _fnid_listener))
             return true
         
     this.send(msg, on)
