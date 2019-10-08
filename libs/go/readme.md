@@ -499,6 +499,10 @@ type Window interface {
 
 	// Represents the current window's state.
 	State(andThen func(*WindowState))
+
+	// An [event](#Event) which fires when the focus state of the current window
+	// changes. The value of the event represents whether the window is focused.
+	OnDidChangeWindowState(listener func(WindowState), andThen func(*Disposable))
 }
 ```
 

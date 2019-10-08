@@ -37,7 +37,7 @@ const genApiSurface: genApiMember = {
                 'showOpenDialog',
                 'showWorkspaceFolderPick',
                 'state',
-                // 'onDidChangeWindowState',
+                'onDidChangeWindowState',
             ],
         },
     ],
@@ -111,7 +111,7 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                                             if (ntype && ntype.typeName)
                                                 if (ntype.typeName.getText() === 'Event' && ntype.typeArguments && ntype.typeArguments.length) {
                                                     const n: gen.MemberEvent = nsubsub as gen.MemberEvent
-                                                    [n.EvtName, n.EvtType] = [item, ntype]
+                                                    [n.EvtName, n.EvtArgs] = [item, ntype.typeArguments.map(_ => _)]
                                                     members.push(n)
                                                 } else {
                                                     const n: gen.MemberProp = nsubsub as gen.MemberProp
@@ -135,7 +135,7 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
 
 function gatherMember(into: gen.GenJob, member: ts.Node, overload: number, ...prefixes: string[]) {
     const evt = member as gen.MemberEvent, prop = member as gen.MemberProp
-    if (evt && evt.EvtName && evt.EvtType)
+    if (evt && evt.EvtName && evt.EvtArgs && evt.EvtArgs.length)
         gatherEvent(into, evt, ...prefixes)
     else if (prop && prop.PropName && prop.PropType)
         gatherProp(into, prop, ...prefixes)
@@ -231,8 +231,9 @@ function gatherEvent(into: gen.GenJob, decl: gen.MemberEvent, ...prefixes: strin
     const qname = prefixes.concat(decl.EvtName).join('.')
     if (into.funcs.some(_ => _.qName === qname))
         return
-    // into.funcs.push({ qName: qname, overload: 0, decl: null, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] })
-    decl.EvtType.typeArguments.forEach(_ => gatherFromTypeNode(into, _))
+    into.funcs.push({ qName: qname, overload: 0, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] })
+    for (const _ of decl.EvtArgs)
+        gatherFromTypeNode(into, _)
 }
 
 function gatherEnum(into: gen.GenJob, decl: ts.EnumDeclaration, ...prefixes: string[]) {

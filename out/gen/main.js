@@ -30,6 +30,7 @@ const genApiSurface = {
                 'showOpenDialog',
                 'showWorkspaceFolderPick',
                 'state',
+                'onDidChangeWindowState',
             ],
         },
     ],
@@ -99,7 +100,7 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                                             if (ntype && ntype.typeName)
                                                 if (ntype.typeName.getText() === 'Event' && ntype.typeArguments && ntype.typeArguments.length) {
                                                     const n = nsubsub;
-                                                    [n.EvtName, n.EvtType] = [item, ntype];
+                                                    [n.EvtName, n.EvtArgs] = [item, ntype.typeArguments.map(_ => _)];
                                                     members.push(n);
                                                 }
                                                 else {
@@ -122,7 +123,7 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
 }
 function gatherMember(into, member, overload, ...prefixes) {
     const evt = member, prop = member;
-    if (evt && evt.EvtName && evt.EvtType)
+    if (evt && evt.EvtName && evt.EvtArgs && evt.EvtArgs.length)
         gatherEvent(into, evt, ...prefixes);
     else if (prop && prop.PropName && prop.PropType)
         gatherProp(into, prop, ...prefixes);
@@ -213,7 +214,9 @@ function gatherEvent(into, decl, ...prefixes) {
     const qname = prefixes.concat(decl.EvtName).join('.');
     if (into.funcs.some(_ => _.qName === qname))
         return;
-    decl.EvtType.typeArguments.forEach(_ => gatherFromTypeNode(into, _));
+    into.funcs.push({ qName: qname, overload: 0, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] });
+    for (const _ of decl.EvtArgs)
+        gatherFromTypeNode(into, _);
 }
 function gatherEnum(into, decl, ...prefixes) {
     const qname = prefixes.concat(decl.name.text).join('.');

@@ -240,6 +240,10 @@ type Window interface {
 
 	// Represents the current window's state.
 	State(andThen func(*WindowState)) 
+
+	// An [event](#Event) which fires when the focus state of the current window
+	// changes. The value of the event represents whether the window is focused.
+	OnDidChangeWindowState(listener func(WindowState), andThen func(*Disposable)) 
 }
 
 // Options to configure the behavior of the message.
@@ -1364,6 +1368,33 @@ func (me *impl) State(andThen func(*WindowState)) {
 				}
 			}
 			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
+func (me *impl) OnDidChangeWindowState(listener func(WindowState), andThen func(*Disposable)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.onDidChangeWindowState"
+	msg.Data = make(dict, 1)
+	msg.Data["listener"] = listener
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *Disposable
+			if (nil != payload) {
+				result = new(Disposable)
+				ok = result.populateFrom(payload)
+				if (!ok) {
+					return false
+				}
+			} else {
+				return false
+			}
+			andThen(result.bindTo(me))
 			return true
 		}
 	}

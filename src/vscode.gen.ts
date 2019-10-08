@@ -176,6 +176,9 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "state": {
 					return Promise.resolve(vscode.window.state)
 				}
+				case "onDidChangeWindowState": {
+					return Promise.resolve(vscode.window.onDidChangeWindowState)
+				}
 				default:
 					throw (methodname)
 			}

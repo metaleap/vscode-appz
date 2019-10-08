@@ -43,10 +43,11 @@ type impl struct {
 	jsonOut *json.Encoder
 
 	sync.Mutex
-	looping   bool
-	counter   uint64
-	cbWaiting map[string]func(any) bool
-	cbOther   map[string]func([]any) (any, bool)
+	looping     bool
+	counter     uint64
+	cbWaiting   map[string]func(any) bool
+	cbOther     map[string]func([]any) (any, bool)
+	cbListeners map[string]func([]any) bool
 }
 
 func init() {
@@ -72,6 +73,7 @@ func Vsc(stdIn io.Reader, stdOut io.Writer) Vscode {
 	me.jsonOut.SetIndent("", "")
 	me.cbWaiting = make(map[string]func(any) bool, 8)
 	me.cbOther = make(map[string]func([]any) (any, bool), 8)
+	me.cbListeners = make(map[string]func([]any) bool, 8)
 	return me
 }
 
@@ -91,26 +93,38 @@ func (me *impl) loopReadln() {
 			} else {
 
 				me.Lock()
-				cb, fn := me.cbWaiting[inmsg.CbId], me.cbOther[inmsg.CbId]
-				delete(me.cbWaiting, inmsg.CbId)
+				cbprom, cbevt, cbmisc := me.cbWaiting[inmsg.CbId], me.cbListeners[inmsg.CbId], me.cbOther[inmsg.CbId]
+				if cbprom != nil {
+					delete(me.cbWaiting, inmsg.CbId)
+				}
 				me.Unlock()
 
-				if cb != nil {
+				if cbprom != nil {
 					if nay, isnay := inmsg.Data["nay"]; isnay {
 						OnError(me, nay, jsonmsg)
 					} else if yay, isyay := inmsg.Data["yay"]; !isyay {
 						OnError(me, errors.New("field `data` must have either `yay` or `nay` member"), jsonmsg)
-					} else if !cb(yay) {
+					} else if !cbprom(yay) {
 						OnError(me, fmt.Errorf("unexpected args: %v", yay), jsonmsg)
 					}
-
-				} else if fn != nil {
+				} else if cbevt != nil {
+					var args []any
+					fnargs, ok := inmsg.Data[""]
+					if ok {
+						if args, ok = fnargs.([]any); ok {
+							ok = cbevt(args)
+						}
+					}
+					if !ok {
+						OnError(me, errors.New("unexpected args: "+fmt.Sprintf("%v", args)), jsonmsg)
+					}
+				} else if cbmisc != nil {
 					var args []any
 					var ret any
 					fnargs, ok := inmsg.Data[""]
 					if ok {
 						if args, ok = fnargs.([]any); ok {
-							ret, ok = fn(args)
+							ret, ok = cbmisc(args)
 						}
 					}
 					outmsg := ipcMsg{CbId: inmsg.CbId, Data: make(map[string]any, 1)}

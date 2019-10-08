@@ -28,7 +28,7 @@ interface GenJobNamed {
 export interface GenJobFunc extends GenJobNamed {
     ifaceNs: ts.NamespaceDeclaration
     overload: number
-    decl: ts.FunctionDeclaration | MemberProp
+    decl: ts.FunctionDeclaration | MemberProp | MemberEvent
 }
 
 export interface GenJobEnum extends GenJobNamed {
@@ -41,7 +41,7 @@ export interface GenJobStruct extends GenJobNamed {
 
 export interface MemberEvent extends ts.VariableDeclaration {
     EvtName: string
-    EvtType: ts.TypeReferenceNode
+    EvtArgs: ts.TypeNode[]
 }
 
 export interface MemberProp extends ts.VariableDeclaration {
@@ -97,8 +97,8 @@ export interface PrepArg {
     typeSpec: TypeSpec
     optional: boolean
     isCancellationToken?: number
-    isFromRetThenable: boolean
-    spreads: boolean
+    isFromRetThenable?: boolean
+    spreads?: boolean
 }
 
 export class Prep {
@@ -124,7 +124,7 @@ export class Prep {
             else for (const arg of method.args) if (isretarg && isoutarg) break
             else if (typeRefersTo(arg.typeSpec, struct.name))
                 if (arg.isFromRetThenable) isretarg = true
-                else isoutarg = true
+                else isoutarg = !typeFun(arg.typeSpec)
             if ((struct.isOutgoing = isoutarg) && (struct.isIncoming = isretarg)) {
                 const fieldname = pickName('my', ['', 'tags', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields)
                 if (!fieldname)
@@ -202,8 +202,8 @@ export class Prep {
         let iface = this.interfaces.find(_ => _.name === ifacename)
         if (!iface)
             this.interfaces.push(iface = { name: ifacename, methods: [], fromOrig: funcJob.ifaceNs })
-        const declf = funcJob.decl as ts.FunctionDeclaration, declp = funcJob.decl as MemberProp
-        iface.methods.push({
+        const declf = funcJob.decl as ts.FunctionDeclaration, declp = funcJob.decl as MemberProp, decle = funcJob.decl as MemberEvent
+        const me: PrepMethod = {
             fromOrig: funcJob,
             nameOrig: qname[qname.length - 1],
             name: qname[qname.length - 1] + ((funcJob.overload > 0) ? funcJob.overload : ''),
@@ -216,19 +216,26 @@ export class Prep {
                     isFromRetThenable: false,
                     spreads: _.dotDotDotToken ? true : false,
                 })) : [],
-        })
+        }
+        iface.methods.push(me)
+        if (decle && decle.EvtName && decle.EvtArgs && decle.EvtArgs.length)
+            me.args.push({
+                name: pickName('', ['listener', 'handler', 'eventHandler', 'onEvent', 'onEventRaised', 'onEventFired', 'onEventTriggered', 'onFired', 'onTriggered', 'onRaised'], me.args),
+                optional: false, typeSpec: { From: decle.EvtArgs.map(_ => this.typeSpec(_)), To: null },
+            })
         let tret = (declp && declp.PropType) ?
-            this.typeSpec(declp.PropType, ts.createNodeArray()) :
-            this.typeSpec(declf.type, declf.typeParameters)
+            this.typeSpec(declp.PropType) :
+            (decle && decle.EvtArgs && decle.EvtArgs.length) ?
+                "Disposable" :
+                this.typeSpec(declf.type, declf.typeParameters)
         const tprom = typeProm(tret)
         if (!(tprom && tprom.length))
             tret = { Thens: [tret] }
         if (tret) {
-            const method = iface.methods[iface.methods.length - 1]
-            const argname = pickName('', ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args)
+            const argname = pickName('', ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], me.args)
             if (!argname)
-                throw (method)
-            method.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, spreads: false })
+                throw (me)
+            me.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, spreads: false })
         }
     }
 
@@ -239,12 +246,12 @@ export class Prep {
         return qname
     }
 
-    typeSpec(tNode: ts.TypeNode | ts.TypeElement, tParams: ts.NodeArray<ts.TypeParameterDeclaration>, ): TypeSpec {
+    typeSpec(tNode: ts.TypeNode | ts.TypeElement, tParams?: ts.NodeArray<ts.TypeParameterDeclaration>, ): TypeSpec {
         if (ts.isTypeElement(tNode)) {
             if (ts.isPropertySignature(tNode)) {
                 return this.typeSpec(tNode.type, tParams)
             } else if (ts.isMethodSignature(tNode) || ts.isCallSignatureDeclaration(tNode) || ts.isConstructSignatureDeclaration(tNode) || ts.isIndexSignatureDeclaration(tNode)) {
-                const tp = tNode.typeParameters ? ts.createNodeArray(tNode.typeParameters.concat(...tParams), tParams.hasTrailingComma) : tParams
+                const tp = tNode.typeParameters ? ts.createNodeArray(tNode.typeParameters.concat(...(tParams ? tParams : [])), tParams && tParams.hasTrailingComma) : tParams
                 const rfun: TypeSpecFun = {
                     From: tNode.parameters.map(_ => this.typeSpec(_.type, tp)),
                     To: this.typeSpec(tNode.type, tp)

@@ -36,7 +36,7 @@ class Prep {
                                     if (arg.isFromRetThenable)
                                         isretarg = true;
                                     else
-                                        isoutarg = true;
+                                        isoutarg = !typeFun(arg.typeSpec);
             if ((struct.isOutgoing = isoutarg) && (struct.isIncoming = isretarg)) {
                 const fieldname = pickName('my', ['', 'tags', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields);
                 if (!fieldname)
@@ -109,8 +109,8 @@ class Prep {
         let iface = this.interfaces.find(_ => _.name === ifacename);
         if (!iface)
             this.interfaces.push(iface = { name: ifacename, methods: [], fromOrig: funcJob.ifaceNs });
-        const declf = funcJob.decl, declp = funcJob.decl;
-        iface.methods.push({
+        const declf = funcJob.decl, declp = funcJob.decl, decle = funcJob.decl;
+        const me = {
             fromOrig: funcJob,
             nameOrig: qname[qname.length - 1],
             name: qname[qname.length - 1] + ((funcJob.overload > 0) ? funcJob.overload : ''),
@@ -123,19 +123,26 @@ class Prep {
                     isFromRetThenable: false,
                     spreads: _.dotDotDotToken ? true : false,
                 })) : [],
-        });
+        };
+        iface.methods.push(me);
+        if (decle && decle.EvtName && decle.EvtArgs && decle.EvtArgs.length)
+            me.args.push({
+                name: pickName('', ['listener', 'handler', 'eventHandler', 'onEvent', 'onEventRaised', 'onEventFired', 'onEventTriggered', 'onFired', 'onTriggered', 'onRaised'], me.args),
+                optional: false, typeSpec: { From: decle.EvtArgs.map(_ => this.typeSpec(_)), To: null },
+            });
         let tret = (declp && declp.PropType) ?
-            this.typeSpec(declp.PropType, ts.createNodeArray()) :
-            this.typeSpec(declf.type, declf.typeParameters);
+            this.typeSpec(declp.PropType) :
+            (decle && decle.EvtArgs && decle.EvtArgs.length) ?
+                "Disposable" :
+                this.typeSpec(declf.type, declf.typeParameters);
         const tprom = typeProm(tret);
         if (!(tprom && tprom.length))
             tret = { Thens: [tret] };
         if (tret) {
-            const method = iface.methods[iface.methods.length - 1];
-            const argname = pickName('', ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], method.args);
+            const argname = pickName('', ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], me.args);
             if (!argname)
-                throw (method);
-            method.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, spreads: false });
+                throw (me);
+            me.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, spreads: false });
         }
     }
     qName(memJob) {
@@ -150,7 +157,7 @@ class Prep {
                 return this.typeSpec(tNode.type, tParams);
             }
             else if (ts.isMethodSignature(tNode) || ts.isCallSignatureDeclaration(tNode) || ts.isConstructSignatureDeclaration(tNode) || ts.isIndexSignatureDeclaration(tNode)) {
-                const tp = tNode.typeParameters ? ts.createNodeArray(tNode.typeParameters.concat(...tParams), tParams.hasTrailingComma) : tParams;
+                const tp = tNode.typeParameters ? ts.createNodeArray(tNode.typeParameters.concat(...(tParams ? tParams : [])), tParams && tParams.hasTrailingComma) : tParams;
                 const rfun = {
                     From: tNode.parameters.map(_ => this.typeSpec(_.type, tp)),
                     To: this.typeSpec(tNode.type, tp)

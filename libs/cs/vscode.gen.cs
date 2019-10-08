@@ -368,6 +368,12 @@ namespace VscAppz {
 
 		/// <summary>Represents the current window's state.</summary>
 		void State(Action<WindowState> andThen = default);
+
+		/// <summary>
+		/// An [event](#Event) which fires when the focus state of the current window
+		/// changes. The value of the event represents whether the window is focused.
+		/// </summary>
+		void OnDidChangeWindowState(Action<WindowState> listener = default, Action<Disposable> andThen = default);
 	}
 
 	/// <summary>Options to configure the behavior of the message.</summary>
@@ -1509,6 +1515,33 @@ namespace VscAppz {
 						}
 					}
 					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IWindow.OnDidChangeWindowState(Action<WindowState> listener, Action<Disposable> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.onDidChangeWindowState";
+			msg.Data = new dict(1);
+			msg.Data["listener"] = listener;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					Disposable result = default;
+					if ((null != payload)) {
+						result = new Disposable();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					} else {
+						return false;
+					}					
+					andThen(result.bindTo(this));
 					return true;
 				};
 			}

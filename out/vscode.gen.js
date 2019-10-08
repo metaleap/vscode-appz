@@ -156,6 +156,9 @@ function handle(msg, prog, remoteCancellationTokens) {
                 case "state": {
                     return Promise.resolve(vscode.window.state);
                 }
+                case "onDidChangeWindowState": {
+                    return Promise.resolve(vscode.window.onDidChangeWindowState);
+                }
                 default:
                     throw (methodname);
             }

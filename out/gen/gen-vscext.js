@@ -32,9 +32,11 @@ class Gen extends gen.Gen {
             src += `\t\tcase "${it.name}":\n`;
             src += "\t\t\tswitch (methodname) {\n";
             for (const method of it.methods) {
-                const isprop = method.fromOrig.decl;
+                const isprop = method.fromOrig.decl, isevt = method.fromOrig.decl;
                 src += `\t\t\t\tcase "${method.name}": {\n`;
                 if (isprop && isprop.PropName && isprop.PropType)
+                    src += `\t\t\t\t\treturn Promise.resolve(${method.fromOrig.qName})\n`;
+                else if (isevt && isevt.EvtArgs && isevt.EvtArgs.length)
                     src += `\t\t\t\t\treturn Promise.resolve(${method.fromOrig.qName})\n`;
                 else {
                     const lastarg = method.args[method.args.length - 1];

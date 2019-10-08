@@ -429,6 +429,13 @@ Window: interface
     State: void
         andThen: ?(?WindowState->void)
 
+    # onDidChangeWindowState:
+    # An [event](#Event) which fires when the focus state of the current window
+    # changes. The value of the event represents whether the window is focused.
+    OnDidChangeWindowState: void
+        listener: (WindowState->void)
+        andThen: ?(?Disposable->void)
+
 
 
 
@@ -1559,6 +1566,32 @@ Window·State: (andThen:?(?WindowState->void) -> void)
                 if (!ok)
                     return false
             andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Window·OnDidChangeWindowState: (listener:(WindowState->void) -> andThen:?(?Disposable->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "window.onDidChangeWindowState"
+    msg.Data = dict·new(1)
+    msg.Data@"listener" = listener
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?Disposable
+            if (=?payload)
+                result = ?Disposable·new
+                ok = result.populateFrom(payload)
+                if (!ok)
+                    return false
+            else
+                return false
+            andThen(result.bindTo(this))
             return true
         
     this.send(msg, on)
