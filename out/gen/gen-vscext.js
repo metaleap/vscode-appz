@@ -34,7 +34,15 @@ class Gen extends gen.Gen {
             src += `\t\tcase "${it.name}":\n`;
             src += "\t\t\tswitch (methodname) {\n";
             for (const method of it.methods)
-                if (method.fromOrig) {
+                if (method.isProps) {
+                    src += `\t\t\t\tcase "${method.name}": {\n`;
+                    src += `\t\t\t\t\treturn Promise.resolve({\n`;
+                    for (const fld of method.isProps.fields)
+                        src += `\t\t\t\t\t\t${fld.name}: ${pkgname}.${it.name}.${fld.name},\n`;
+                    src += `\t\t\t\t\t})\n`;
+                    src += `\t\t\t\t}\n`;
+                }
+                else if (method.fromOrig) {
                     const isprop = method.fromOrig.decl, isevt = method.fromOrig.decl;
                     src += `\t\t\t\tcase "${method.name}": {\n`;
                     if (isprop && isprop.PropName && isprop.PropType)

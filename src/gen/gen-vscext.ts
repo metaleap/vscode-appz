@@ -33,58 +33,66 @@ export class Gen extends gen.Gen implements gen.IGen {
         for (const it of prep.interfaces) {
             src += `\t\tcase "${it.name}":\n`
             src += "\t\t\tswitch (methodname) {\n"
-            for (const method of it.methods) if (method.fromOrig) {
-                const isprop = method.fromOrig.decl as gen.MemberProp,
-                    isevt = method.fromOrig.decl as gen.MemberEvent
-                src += `\t\t\t\tcase "${method.name}": {\n`
-                if (isprop && isprop.PropName && isprop.PropType)
-                    src += `\t\t\t\t\treturn Promise.resolve(${method.fromOrig.qName})\n`
-                else if (isevt && isevt.EvtArgs && isevt.EvtArgs.length) {
-                    const fnid = "_fnid_" + method.args[0].name
-                    src += `\t\t\t\t\tconst ${fnid} = msg.data['${method.args[0].name}'] as string\n`
-                    src += `\t\t\t\t\treturn (!(${fnid} && ${fnid}.length))\n`
-                    src += `\t\t\t\t\t\t? Promise.reject(msg.data)\n`
-                    src += `\t\t\t\t\t\t: ${method.fromOrig.qName}((a0) => {\n`
-                    src += `\t\t\t\t\t\t\tif (prog && prog.proc)\n`
-                    src += `\t\t\t\t\t\t\t\tprog.callBack(false, ${fnid}, a0).then(noOp, noOp)\n`
-                    src += `\t\t\t\t\t\t})\n`
-                } else {
-                    const lastarg = method.args[method.args.length - 1]
-                    for (const arg of method.args)
-                        if (arg !== lastarg)
-                            if (arg.isCancellationToken !== undefined) {
-                                src += `\t\t\t\t\tlet ctid = msg.data['${arg.name}'] as string, arg_${arg.name} = prog.cancellerToken(ctid)\n`
-                                src += `\t\t\t\t\tif (!arg_${arg.name})\n`
-                                src += `\t\t\t\t\t\targ_${arg.name} = prog.cancellers[''].token\n`
-                                src += `\t\t\t\t\telse \n`
-                                src += `\t\t\t\t\t\tremoteCancellationTokens.push(ctid)\n`
-                            } else {
-                                if (arg.typeSpec !== 'Uri')
-                                    src += `\t\t\t\t\tconst arg_${arg.name} = (msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}) as ${this.typeSpec(arg.typeSpec)}\n`
-                                else {
-                                    src += `\t\t\t\t\tlet arg_${arg.name}: ${pkgname}.Uri\n`
-                                    src += `\t\t\t\t\ttry { arg_${arg.name} = ${pkgname}.Uri.parse(msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}, true) }\n`
-                                    src += `\t\t\t\t\tcatch (_) { try { arg_${arg.name} = ${pkgname}.Uri.file(msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}) } catch (_) { try { arg_${arg.name} = ${pkgname}.Uri.parse(msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}, false) } catch (_) { return Promise.reject(msg.data['${arg.name}']) } } }\n`
-                                }
-                                const funcfields = gen.argsFuncFields(prep, [arg])
-                                if (funcfields && funcfields.length)
-                                    for (const ff of funcfields) {
-                                        const tfn = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)
-                                        if (tfn && tfn.length) {
-                                            src += `\t\t\t\t\tif (arg_${arg.name}.${ff.name}_AppzFuncId && arg_${arg.name}.${ff.name}_AppzFuncId.length)\n`
-                                            src += `\t\t\t\t\t\targ_${arg.name}.${ff.name} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => prog.callBack(true, arg_${arg.name}.${ff.name}_AppzFuncId, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`
-                                        }
+            for (const method of it.methods)
+                if (method.isProps) {
+                    src += `\t\t\t\tcase "${method.name}": {\n`
+                    src += `\t\t\t\t\treturn Promise.resolve({\n`
+                    for (const fld of method.isProps.fields)
+                        src += `\t\t\t\t\t\t${fld.name}: ${pkgname}.${it.name}.${fld.name},\n`
+                    src += `\t\t\t\t\t})\n`
+                    src += `\t\t\t\t}\n`
+                } else if (method.fromOrig) {
+                    const isprop = method.fromOrig.decl as gen.MemberProp,
+                        isevt = method.fromOrig.decl as gen.MemberEvent
+                    src += `\t\t\t\tcase "${method.name}": {\n`
+                    if (isprop && isprop.PropName && isprop.PropType)
+                        src += `\t\t\t\t\treturn Promise.resolve(${method.fromOrig.qName})\n`
+                    else if (isevt && isevt.EvtArgs && isevt.EvtArgs.length) {
+                        const fnid = "_fnid_" + method.args[0].name
+                        src += `\t\t\t\t\tconst ${fnid} = msg.data['${method.args[0].name}'] as string\n`
+                        src += `\t\t\t\t\treturn (!(${fnid} && ${fnid}.length))\n`
+                        src += `\t\t\t\t\t\t? Promise.reject(msg.data)\n`
+                        src += `\t\t\t\t\t\t: ${method.fromOrig.qName}((a0) => {\n`
+                        src += `\t\t\t\t\t\t\tif (prog && prog.proc)\n`
+                        src += `\t\t\t\t\t\t\t\tprog.callBack(false, ${fnid}, a0).then(noOp, noOp)\n`
+                        src += `\t\t\t\t\t\t})\n`
+                    } else {
+                        const lastarg = method.args[method.args.length - 1]
+                        for (const arg of method.args)
+                            if (arg !== lastarg)
+                                if (arg.isCancellationToken !== undefined) {
+                                    src += `\t\t\t\t\tlet ctid = msg.data['${arg.name}'] as string, arg_${arg.name} = prog.cancellerToken(ctid)\n`
+                                    src += `\t\t\t\t\tif (!arg_${arg.name})\n`
+                                    src += `\t\t\t\t\t\targ_${arg.name} = prog.cancellers[''].token\n`
+                                    src += `\t\t\t\t\telse \n`
+                                    src += `\t\t\t\t\t\tremoteCancellationTokens.push(ctid)\n`
+                                } else {
+                                    if (arg.typeSpec !== 'Uri')
+                                        src += `\t\t\t\t\tconst arg_${arg.name} = (msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}) as ${this.typeSpec(arg.typeSpec)}\n`
+                                    else {
+                                        src += `\t\t\t\t\tlet arg_${arg.name}: ${pkgname}.Uri\n`
+                                        src += `\t\t\t\t\ttry { arg_${arg.name} = ${pkgname}.Uri.parse(msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}, true) }\n`
+                                        src += `\t\t\t\t\tcatch (_) { try { arg_${arg.name} = ${pkgname}.Uri.file(msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}) } catch (_) { try { arg_${arg.name} = ${pkgname}.Uri.parse(msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}, false) } catch (_) { return Promise.reject(msg.data['${arg.name}']) } } }\n`
                                     }
-                            }
+                                    const funcfields = gen.argsFuncFields(prep, [arg])
+                                    if (funcfields && funcfields.length)
+                                        for (const ff of funcfields) {
+                                            const tfn = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)
+                                            if (tfn && tfn.length) {
+                                                src += `\t\t\t\t\tif (arg_${arg.name}.${ff.name}_AppzFuncId && arg_${arg.name}.${ff.name}_AppzFuncId.length)\n`
+                                                src += `\t\t\t\t\t\targ_${arg.name}.${ff.name} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => prog.callBack(true, arg_${arg.name}.${ff.name}_AppzFuncId, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`
+                                            }
+                                        }
+                                }
 
-                    src += `\t\t\t\t\treturn ${method.fromOrig.qName}(`
-                    for (const arg of method.args)
-                        if (arg !== lastarg)
-                            src += (arg.spreads ? '...' : '') + 'arg_' + arg.name + ', '
-                    src += ")\n"
+                        src += `\t\t\t\t\treturn ${method.fromOrig.qName}(`
+                        for (const arg of method.args)
+                            if (arg !== lastarg)
+                                src += (arg.spreads ? '...' : '') + 'arg_' + arg.name + ', '
+                        src += ")\n"
+                    }
+                    src += `\t\t\t\t}\n`
                 }
-                src += `\t\t\t\t}\n`
-            }
             src += "\t\t\t\tdefault:\n"
             src += "\t\t\t\t\tthrow (methodname)\n"
             src += "\t\t\t}\n"

@@ -215,6 +215,18 @@ function handle(msg, prog, remoteCancellationTokens) {
                 case "uriScheme": {
                     return Promise.resolve(vscode.env.uriScheme);
                 }
+                case "Properties": {
+                    return Promise.resolve({
+                        appName: vscode.env.appName,
+                        appRoot: vscode.env.appRoot,
+                        language: vscode.env.language,
+                        machineId: vscode.env.machineId,
+                        remoteName: vscode.env.remoteName,
+                        sessionId: vscode.env.sessionId,
+                        shell: vscode.env.shell,
+                        uriScheme: vscode.env.uriScheme,
+                    });
+                }
                 default:
                     throw (methodname);
             }

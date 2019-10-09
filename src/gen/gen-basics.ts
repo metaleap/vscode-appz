@@ -90,7 +90,7 @@ export interface PrepMethod {
     name: string
     args: PrepArg[]
     nameOrig?: string
-    isProps?: boolean
+    isProps?: PrepStruct
 }
 
 export interface PrepArg {
@@ -144,7 +144,7 @@ export class Prep {
                 this.structs.push(struct)
                 iface.methods.push({
                     name: pickName("", ['Properties', 'Props', 'Info', 'Current', 'Self', 'It', 'Cur'], iface.methods),
-                    isProps: true, args: [{
+                    isProps: struct, args: [{
                         isFromRetThenable: true, name: "andThen", optional: false,
                         typeSpec: { Thens: [struct.name] },
                     }],
