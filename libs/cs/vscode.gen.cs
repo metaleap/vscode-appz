@@ -1667,12 +1667,10 @@ namespace VscAppz {
 					bool ok = default;
 					string result = default;
 					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
 						if ((!ok)) {
 							return false;
 						}
-						result = _result_;
 					}
 					andThen(result);
 					return true;
@@ -1692,12 +1690,10 @@ namespace VscAppz {
 					bool ok = default;
 					string result = default;
 					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
 						if ((!ok)) {
 							return false;
 						}
-						result = _result_;
 					}
 					andThen(result);
 					return true;
@@ -1717,12 +1713,10 @@ namespace VscAppz {
 					bool ok = default;
 					string result = default;
 					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
 						if ((!ok)) {
 							return false;
 						}
-						result = _result_;
 					}
 					andThen(result);
 					return true;
@@ -1742,12 +1736,10 @@ namespace VscAppz {
 					bool ok = default;
 					string result = default;
 					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
 						if ((!ok)) {
 							return false;
 						}
-						result = _result_;
 					}
 					andThen(result);
 					return true;
@@ -1792,12 +1784,10 @@ namespace VscAppz {
 					bool ok = default;
 					string result = default;
 					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
 						if ((!ok)) {
 							return false;
 						}
-						result = _result_;
 					}
 					andThen(result);
 					return true;
@@ -1817,12 +1807,10 @@ namespace VscAppz {
 					bool ok = default;
 					string result = default;
 					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
 						if ((!ok)) {
 							return false;
 						}
-						result = _result_;
 					}
 					andThen(result);
 					return true;
@@ -1842,12 +1830,10 @@ namespace VscAppz {
 					bool ok = default;
 					string result = default;
 					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
 						if ((!ok)) {
 							return false;
 						}
-						result = _result_;
 					}
 					andThen(result);
 					return true;

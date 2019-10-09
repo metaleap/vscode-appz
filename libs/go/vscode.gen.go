@@ -242,7 +242,7 @@ type Window interface {
 	ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, andThen func(*WorkspaceFolder)) 
 
 	// Represents the current window's state.
-	State(andThen func(*WindowState)) 
+	State(andThen func(WindowState)) 
 
 	// An [event](#Event) which fires when the focus state of the current window
 	// changes. The value of the event represents whether the window is focused.
@@ -263,16 +263,16 @@ type Env interface {
 	OpenExternal(target string, andThen func(bool)) 
 
 	// The application name of the editor, like 'VS Code'.
-	AppName(andThen func(*string)) 
+	AppName(andThen func(string)) 
 
 	// The application root folder from which the editor is running.
-	AppRoot(andThen func(*string)) 
+	AppRoot(andThen func(string)) 
 
 	// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
-	Language(andThen func(*string)) 
+	Language(andThen func(string)) 
 
 	// A unique identifier for the computer.
-	MachineId(andThen func(*string)) 
+	MachineId(andThen func(string)) 
 
 	// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
 	// Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
@@ -285,14 +285,14 @@ type Env interface {
 
 	// A unique identifier for the current session.
 	// Changes each time the editor is started.
-	SessionId(andThen func(*string)) 
+	SessionId(andThen func(string)) 
 
 	// The detected default shell for the extension host, this is overridden by the
 	// `terminal.integrated.shell` setting for the extension host's platform.
-	Shell(andThen func(*string)) 
+	Shell(andThen func(string)) 
 
 	// The custom uri scheme the editor registers to in the operating system.
-	UriScheme(andThen func(*string)) 
+	UriScheme(andThen func(string)) 
 }
 
 // Options to configure the behavior of the message.
@@ -1403,7 +1403,7 @@ func (me *impl) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, and
 	me.send(msg, on)
 }
 
-func (me *impl) State(andThen func(*WindowState)) {
+func (me *impl) State(andThen func(WindowState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.state"
@@ -1412,9 +1412,9 @@ func (me *impl) State(andThen func(*WindowState)) {
 	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
-			var result *WindowState
+			var result WindowState
 			if (nil != payload) {
-				result = new(WindowState)
+				result = */*sorryButSuchIsCodeGenSometimes...*/new(WindowState)
 				ok = result.populateFrom(payload)
 				if (!ok) {
 					return false
@@ -1499,7 +1499,7 @@ func (me *impl) OpenExternal(target string, andThen func(bool)) {
 	me.send(msg, on)
 }
 
-func (me *impl) AppName(andThen func(*string)) {
+func (me *impl) AppName(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.appName"
@@ -1508,14 +1508,12 @@ func (me *impl) AppName(andThen func(*string)) {
 	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
-			var result *string
+			var result string
 			if (nil != payload) {
-				var _result_ string
-				_result_, ok = payload.(string)
+				result, ok = payload.(string)
 				if (!ok) {
 					return false
 				}
-				result = (&_result_)
 			}
 			andThen(result)
 			return true
@@ -1524,7 +1522,7 @@ func (me *impl) AppName(andThen func(*string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) AppRoot(andThen func(*string)) {
+func (me *impl) AppRoot(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.appRoot"
@@ -1533,14 +1531,12 @@ func (me *impl) AppRoot(andThen func(*string)) {
 	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
-			var result *string
+			var result string
 			if (nil != payload) {
-				var _result_ string
-				_result_, ok = payload.(string)
+				result, ok = payload.(string)
 				if (!ok) {
 					return false
 				}
-				result = (&_result_)
 			}
 			andThen(result)
 			return true
@@ -1549,7 +1545,7 @@ func (me *impl) AppRoot(andThen func(*string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) Language(andThen func(*string)) {
+func (me *impl) Language(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.language"
@@ -1558,14 +1554,12 @@ func (me *impl) Language(andThen func(*string)) {
 	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
-			var result *string
+			var result string
 			if (nil != payload) {
-				var _result_ string
-				_result_, ok = payload.(string)
+				result, ok = payload.(string)
 				if (!ok) {
 					return false
 				}
-				result = (&_result_)
 			}
 			andThen(result)
 			return true
@@ -1574,7 +1568,7 @@ func (me *impl) Language(andThen func(*string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) MachineId(andThen func(*string)) {
+func (me *impl) MachineId(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.machineId"
@@ -1583,14 +1577,12 @@ func (me *impl) MachineId(andThen func(*string)) {
 	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
-			var result *string
+			var result string
 			if (nil != payload) {
-				var _result_ string
-				_result_, ok = payload.(string)
+				result, ok = payload.(string)
 				if (!ok) {
 					return false
 				}
-				result = (&_result_)
 			}
 			andThen(result)
 			return true
@@ -1624,7 +1616,7 @@ func (me *impl) RemoteName(andThen func(*string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) SessionId(andThen func(*string)) {
+func (me *impl) SessionId(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.sessionId"
@@ -1633,14 +1625,12 @@ func (me *impl) SessionId(andThen func(*string)) {
 	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
-			var result *string
+			var result string
 			if (nil != payload) {
-				var _result_ string
-				_result_, ok = payload.(string)
+				result, ok = payload.(string)
 				if (!ok) {
 					return false
 				}
-				result = (&_result_)
 			}
 			andThen(result)
 			return true
@@ -1649,7 +1639,7 @@ func (me *impl) SessionId(andThen func(*string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) Shell(andThen func(*string)) {
+func (me *impl) Shell(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.shell"
@@ -1658,14 +1648,12 @@ func (me *impl) Shell(andThen func(*string)) {
 	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
-			var result *string
+			var result string
 			if (nil != payload) {
-				var _result_ string
-				_result_, ok = payload.(string)
+				result, ok = payload.(string)
 				if (!ok) {
 					return false
 				}
-				result = (&_result_)
 			}
 			andThen(result)
 			return true
@@ -1674,7 +1662,7 @@ func (me *impl) Shell(andThen func(*string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) UriScheme(andThen func(*string)) {
+func (me *impl) UriScheme(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.uriScheme"
@@ -1683,14 +1671,12 @@ func (me *impl) UriScheme(andThen func(*string)) {
 	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
-			var result *string
+			var result string
 			if (nil != payload) {
-				var _result_ string
-				_result_, ok = payload.(string)
+				result, ok = payload.(string)
 				if (!ok) {
 					return false
 				}
-				result = (&_result_)
 			}
 			andThen(result)
 			return true

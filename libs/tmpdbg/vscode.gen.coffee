@@ -431,7 +431,7 @@ Window: interface
     # state:
     # Represents the current window's state.
     State: void
-        andThen: ?(?WindowState->void)
+        andThen: ?(WindowState->void)
 
     # onDidChangeWindowState:
     # An [event](#Event) which fires when the focus state of the current window
@@ -466,22 +466,22 @@ Env: interface
     # appName:
     # The application name of the editor, like 'VS Code'.
     AppName: void
-        andThen: ?(?string->void)
+        andThen: ?(string->void)
 
     # appRoot:
     # The application root folder from which the editor is running.
     AppRoot: void
-        andThen: ?(?string->void)
+        andThen: ?(string->void)
 
     # language:
     # Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
     Language: void
-        andThen: ?(?string->void)
+        andThen: ?(string->void)
 
     # machineId:
     # A unique identifier for the computer.
     MachineId: void
-        andThen: ?(?string->void)
+        andThen: ?(string->void)
 
     # remoteName:
     # The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
@@ -498,18 +498,18 @@ Env: interface
     # A unique identifier for the current session.
     # Changes each time the editor is started.
     SessionId: void
-        andThen: ?(?string->void)
+        andThen: ?(string->void)
 
     # shell:
     # The detected default shell for the extension host, this is overridden by the
     # `terminal.integrated.shell` setting for the extension host's platform.
     Shell: void
-        andThen: ?(?string->void)
+        andThen: ?(string->void)
 
     # uriScheme:
     # The custom uri scheme the editor registers to in the operating system.
     UriScheme: void
-        andThen: ?(?string->void)
+        andThen: ?(string->void)
 
 
 
@@ -1631,7 +1631,7 @@ Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> andThen
 
 
 
-Window·State: (andThen:?(?WindowState->void) -> void)
+Window·State: (andThen:?(WindowState->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.state"
@@ -1640,9 +1640,9 @@ Window·State: (andThen:?(?WindowState->void) -> void)
     if (=?andThen)
         on = (payload:any -> bool)
             var ok of bool
-            var result of ?WindowState
+            var result of WindowState
             if (=?payload)
-                result = ?WindowState·new
+                result = WindowState·new
                 ok = result.populateFrom(payload)
                 if (!ok)
                     return false
@@ -1721,7 +1721,7 @@ Env·OpenExternal: (target:string -> andThen:?(bool->void) -> void)
 
 
 
-Env·AppName: (andThen:?(?string->void) -> void)
+Env·AppName: (andThen:?(string->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.appName"
@@ -1730,13 +1730,11 @@ Env·AppName: (andThen:?(?string->void) -> void)
     if (=?andThen)
         on = (payload:any -> bool)
             var ok of bool
-            var result of ?string
+            var result of string
             if (=?payload)
-                var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [result,ok] = ((payload)·(string))
                 if (!ok)
                     return false
-                result = (&_result_)
             andThen(result)
             return true
         
@@ -1745,7 +1743,7 @@ Env·AppName: (andThen:?(?string->void) -> void)
 
 
 
-Env·AppRoot: (andThen:?(?string->void) -> void)
+Env·AppRoot: (andThen:?(string->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.appRoot"
@@ -1754,13 +1752,11 @@ Env·AppRoot: (andThen:?(?string->void) -> void)
     if (=?andThen)
         on = (payload:any -> bool)
             var ok of bool
-            var result of ?string
+            var result of string
             if (=?payload)
-                var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [result,ok] = ((payload)·(string))
                 if (!ok)
                     return false
-                result = (&_result_)
             andThen(result)
             return true
         
@@ -1769,7 +1765,7 @@ Env·AppRoot: (andThen:?(?string->void) -> void)
 
 
 
-Env·Language: (andThen:?(?string->void) -> void)
+Env·Language: (andThen:?(string->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.language"
@@ -1778,13 +1774,11 @@ Env·Language: (andThen:?(?string->void) -> void)
     if (=?andThen)
         on = (payload:any -> bool)
             var ok of bool
-            var result of ?string
+            var result of string
             if (=?payload)
-                var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [result,ok] = ((payload)·(string))
                 if (!ok)
                     return false
-                result = (&_result_)
             andThen(result)
             return true
         
@@ -1793,7 +1787,7 @@ Env·Language: (andThen:?(?string->void) -> void)
 
 
 
-Env·MachineId: (andThen:?(?string->void) -> void)
+Env·MachineId: (andThen:?(string->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.machineId"
@@ -1802,13 +1796,11 @@ Env·MachineId: (andThen:?(?string->void) -> void)
     if (=?andThen)
         on = (payload:any -> bool)
             var ok of bool
-            var result of ?string
+            var result of string
             if (=?payload)
-                var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [result,ok] = ((payload)·(string))
                 if (!ok)
                     return false
-                result = (&_result_)
             andThen(result)
             return true
         
@@ -1841,7 +1833,7 @@ Env·RemoteName: (andThen:?(?string->void) -> void)
 
 
 
-Env·SessionId: (andThen:?(?string->void) -> void)
+Env·SessionId: (andThen:?(string->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.sessionId"
@@ -1850,13 +1842,11 @@ Env·SessionId: (andThen:?(?string->void) -> void)
     if (=?andThen)
         on = (payload:any -> bool)
             var ok of bool
-            var result of ?string
+            var result of string
             if (=?payload)
-                var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [result,ok] = ((payload)·(string))
                 if (!ok)
                     return false
-                result = (&_result_)
             andThen(result)
             return true
         
@@ -1865,7 +1855,7 @@ Env·SessionId: (andThen:?(?string->void) -> void)
 
 
 
-Env·Shell: (andThen:?(?string->void) -> void)
+Env·Shell: (andThen:?(string->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.shell"
@@ -1874,13 +1864,11 @@ Env·Shell: (andThen:?(?string->void) -> void)
     if (=?andThen)
         on = (payload:any -> bool)
             var ok of bool
-            var result of ?string
+            var result of string
             if (=?payload)
-                var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [result,ok] = ((payload)·(string))
                 if (!ok)
                     return false
-                result = (&_result_)
             andThen(result)
             return true
         
@@ -1889,7 +1877,7 @@ Env·Shell: (andThen:?(?string->void) -> void)
 
 
 
-Env·UriScheme: (andThen:?(?string->void) -> void)
+Env·UriScheme: (andThen:?(string->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.uriScheme"
@@ -1898,13 +1886,11 @@ Env·UriScheme: (andThen:?(?string->void) -> void)
     if (=?andThen)
         on = (payload:any -> bool)
             var ok of bool
-            var result of ?string
+            var result of string
             if (=?payload)
-                var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [result,ok] = ((payload)·(string))
                 if (!ok)
                     return false
-                result = (&_result_)
             andThen(result)
             return true
         

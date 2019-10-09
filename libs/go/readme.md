@@ -80,16 +80,16 @@ type Env interface {
 	OpenExternal(target string, andThen func(bool))
 
 	// The application name of the editor, like 'VS Code'.
-	AppName(andThen func(*string))
+	AppName(andThen func(string))
 
 	// The application root folder from which the editor is running.
-	AppRoot(andThen func(*string))
+	AppRoot(andThen func(string))
 
 	// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
-	Language(andThen func(*string))
+	Language(andThen func(string))
 
 	// A unique identifier for the computer.
-	MachineId(andThen func(*string))
+	MachineId(andThen func(string))
 
 	// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
 	// Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
@@ -102,14 +102,14 @@ type Env interface {
 
 	// A unique identifier for the current session.
 	// Changes each time the editor is started.
-	SessionId(andThen func(*string))
+	SessionId(andThen func(string))
 
 	// The detected default shell for the extension host, this is overridden by the
 	// `terminal.integrated.shell` setting for the extension host's platform.
-	Shell(andThen func(*string))
+	Shell(andThen func(string))
 
 	// The custom uri scheme the editor registers to in the operating system.
-	UriScheme(andThen func(*string))
+	UriScheme(andThen func(string))
 }
 ```
 
@@ -552,7 +552,7 @@ type Window interface {
 	ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, andThen func(*WorkspaceFolder))
 
 	// Represents the current window's state.
-	State(andThen func(*WindowState))
+	State(andThen func(WindowState))
 
 	// An [event](#Event) which fires when the focus state of the current window
 	// changes. The value of the event represents whether the window is focused.
