@@ -110,6 +110,49 @@ type Env interface {
 
 	// The custom uri scheme the editor registers to in the operating system.
 	UriScheme(andThen func(string))
+
+	// Provides single-call access to numerous individual `Env` properties at once.
+	Properties(andThen func(EnvProperties))
+}
+```
+
+Namespace describing the environment the editor runs in.
+
+#### type EnvProperties
+
+```go
+type EnvProperties struct {
+	// The application name of the editor, like 'VS Code'.
+	AppName string `json:"appName,omitempty"`
+
+	// The application root folder from which the editor is running.
+	AppRoot string `json:"appRoot,omitempty"`
+
+	// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
+	Language string `json:"language,omitempty"`
+
+	// A unique identifier for the computer.
+	MachineId string `json:"machineId,omitempty"`
+
+	// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
+	// Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
+	//
+	// *Note* that the value is `undefined` when there is no remote extension host but that the
+	// value is defined in all extension hosts (local and remote) in case a remote extension host
+	// exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
+	// a specific extension runs remote or not.
+	RemoteName string `json:"remoteName,omitempty"`
+
+	// A unique identifier for the current session.
+	// Changes each time the editor is started.
+	SessionId string `json:"sessionId,omitempty"`
+
+	// The detected default shell for the extension host, this is overridden by the
+	// `terminal.integrated.shell` setting for the extension host's platform.
+	Shell string `json:"shell,omitempty"`
+
+	// The custom uri scheme the editor registers to in the operating system.
+	UriScheme string `json:"uriScheme,omitempty"`
 }
 ```
 

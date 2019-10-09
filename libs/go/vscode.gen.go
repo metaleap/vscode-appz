@@ -293,6 +293,9 @@ type Env interface {
 
 	// The custom uri scheme the editor registers to in the operating system.
 	UriScheme(andThen func(string)) 
+
+	// Provides single-call access to numerous individual `Env` properties at once.
+	Properties(andThen func(EnvProperties)) 
 }
 
 // Options to configure the behavior of the message.
@@ -481,6 +484,41 @@ type WorkspaceFolder struct {
 type WindowState struct {
 	// Whether the current window is focused.
 	Focused bool `json:"focused"`
+}
+
+// Namespace describing the environment the editor runs in.
+type EnvProperties struct {
+	// The application name of the editor, like 'VS Code'.
+	AppName string `json:"appName,omitempty"`
+
+	// The application root folder from which the editor is running.
+	AppRoot string `json:"appRoot,omitempty"`
+
+	// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
+	Language string `json:"language,omitempty"`
+
+	// A unique identifier for the computer.
+	MachineId string `json:"machineId,omitempty"`
+
+	// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
+	// Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
+	// 
+	// *Note* that the value is `undefined` when there is no remote extension host but that the
+	// value is defined in all extension hosts (local and remote) in case a remote extension host
+	// exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
+	// a specific extension runs remote or not.
+	RemoteName string `json:"remoteName,omitempty"`
+
+	// A unique identifier for the current session.
+	// Changes each time the editor is started.
+	SessionId string `json:"sessionId,omitempty"`
+
+	// The detected default shell for the extension host, this is overridden by the
+	// `terminal.integrated.shell` setting for the extension host's platform.
+	Shell string `json:"shell,omitempty"`
+
+	// The custom uri scheme the editor registers to in the operating system.
+	UriScheme string `json:"uriScheme,omitempty"`
 }
 
 func (me *impl) Window() Window {
@@ -1685,6 +1723,32 @@ func (me *impl) UriScheme(andThen func(string)) {
 	me.send(msg, on)
 }
 
+func (me *impl) Properties(andThen func(EnvProperties)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "env.Properties"
+	msg.Data = make(dict, 0)
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result EnvProperties
+			if (nil != payload) {
+				result = */*sorryButSuchIsCodeGenSometimes...*/new(EnvProperties)
+				ok = result.populateFrom(payload)
+				if (!ok) {
+					return false
+				}
+			} else {
+				return false
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
 func (me *MessageItem) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
@@ -1885,6 +1949,105 @@ func (me *WindowState) populateFrom(payload any) bool {
 		me.Focused = focused
 	} else {
 		return false
+	}
+	return true
+}
+
+func (me *EnvProperties) populateFrom(payload any) bool {
+	var it dict
+	var ok bool
+	var val any
+	it, ok = payload.(dict)
+	if (!ok) {
+		return false
+	}
+	val, ok = it["appName"]
+	if ok {
+		var appName string
+		if (nil != val) {
+			appName, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.AppName = appName
+	}
+	val, ok = it["appRoot"]
+	if ok {
+		var appRoot string
+		if (nil != val) {
+			appRoot, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.AppRoot = appRoot
+	}
+	val, ok = it["language"]
+	if ok {
+		var language string
+		if (nil != val) {
+			language, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.Language = language
+	}
+	val, ok = it["machineId"]
+	if ok {
+		var machineId string
+		if (nil != val) {
+			machineId, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.MachineId = machineId
+	}
+	val, ok = it["remoteName"]
+	if ok {
+		var remoteName string
+		if (nil != val) {
+			remoteName, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.RemoteName = remoteName
+	}
+	val, ok = it["sessionId"]
+	if ok {
+		var sessionId string
+		if (nil != val) {
+			sessionId, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.SessionId = sessionId
+	}
+	val, ok = it["shell"]
+	if ok {
+		var shell string
+		if (nil != val) {
+			shell, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.Shell = shell
+	}
+	val, ok = it["uriScheme"]
+	if ok {
+		var uriScheme string
+		if (nil != val) {
+			uriScheme, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.UriScheme = uriScheme
 	}
 	return true
 }

@@ -19,6 +19,38 @@ class Prep {
             this.addStruct(structjob);
         for (const funcjob of job.funcs)
             this.addFunc(funcjob);
+        for (const iface of this.interfaces) {
+            const propmethods = [];
+            for (const method of iface.methods) {
+                let n = 0;
+                for (const arg of method.args)
+                    if (arg.typeSpec === 'CancellationToken')
+                        [arg.isCancellationToken, arg.typeSpec] = [n++, 'Cancel'];
+                const fromprop = method.fromOrig.decl;
+                if (fromprop && fromprop.PropType)
+                    propmethods.push(method);
+            }
+            if (propmethods.length > 1) {
+                const struct = {
+                    isPropsOf: iface, name: iface.name + "Properties", funcFields: [],
+                    fields: propmethods.map(me => ({
+                        fromOrig: me.fromOrig.decl,
+                        name: me.name,
+                        typeSpec: typeProm(me.args[0].typeSpec)[0],
+                        optional: true,
+                        isExtBaggage: false,
+                    })),
+                };
+                this.structs.push(struct);
+                iface.methods.push({
+                    name: pickName("", ['Properties', 'Props', 'Info', 'Current', 'Self', 'It', 'Cur'], iface.methods),
+                    isProps: true, args: [{
+                            isFromRetThenable: true, name: "andThen", optional: false,
+                            typeSpec: { Thens: [struct.name] },
+                        }],
+                });
+            }
+        }
         this.structs.forEach(struct => {
             let isargout = false, isargin = false;
             for (const iface of this.interfaces)
@@ -46,13 +78,6 @@ class Prep {
                 struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict });
             }
         });
-        this.interfaces.forEach(iface => iface.methods.forEach(method => {
-            let n = 0;
-            method.args.forEach(arg => {
-                if (arg.typeSpec === 'CancellationToken')
-                    [arg.isCancellationToken, arg.typeSpec] = [n++, 'Cancel'];
-            });
-        }));
         const printjson = (_) => console.log(JSON.stringify(_, function (key, val) {
             return (key === 'parent') ? null : val;
         }, 2));

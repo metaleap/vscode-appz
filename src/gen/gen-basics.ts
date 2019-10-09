@@ -62,16 +62,17 @@ export interface PrepEnumerant {
 }
 
 export interface PrepStruct {
-    fromOrig: GenJobStruct
+    fromOrig?: GenJobStruct
     name: string
     fields: PrepField[]
     funcFields: string[]
-    isOutgoing: boolean
-    isIncoming: boolean
+    isOutgoing?: boolean
+    isIncoming?: boolean
+    isPropsOf?: PrepInterface
 }
 
 export interface PrepField {
-    fromOrig?: ts.MethodSignature | ts.PropertySignature
+    fromOrig?: ts.MethodSignature | ts.PropertySignature | ts.FunctionDeclaration | MemberProp | MemberEvent
     name: string
     typeSpec: TypeSpec
     optional: boolean
@@ -85,10 +86,11 @@ export interface PrepInterface {
 }
 
 export interface PrepMethod {
-    fromOrig: GenJobFunc
+    fromOrig?: GenJobFunc
     name: string
     args: PrepArg[]
-    nameOrig: string
+    nameOrig?: string
+    isProps?: boolean
 }
 
 export interface PrepArg {
@@ -117,6 +119,39 @@ export class Prep {
         for (const funcjob of job.funcs)
             this.addFunc(funcjob)
 
+        for (const iface of this.interfaces) {
+            const propmethods: PrepMethod[] = []
+            for (const method of iface.methods) {
+                let n: number = 0
+                for (const arg of method.args)
+                    if (arg.typeSpec === 'CancellationToken')
+                        [arg.isCancellationToken, arg.typeSpec] = [n++, 'Cancel']
+                const fromprop = method.fromOrig.decl as MemberProp
+                if (fromprop && fromprop.PropType)
+                    propmethods.push(method)
+            }
+            if (propmethods.length > 1) {
+                const struct: PrepStruct = {
+                    isPropsOf: iface, name: iface.name + "Properties", funcFields: [],
+                    fields: propmethods.map(me => ({
+                        fromOrig: me.fromOrig.decl,
+                        name: me.name,
+                        typeSpec: typeProm(me.args[0].typeSpec)[0],
+                        optional: true,
+                        isExtBaggage: false,
+                    })),
+                }
+                this.structs.push(struct)
+                iface.methods.push({
+                    name: pickName("", ['Properties', 'Props', 'Info', 'Current', 'Self', 'It', 'Cur'], iface.methods),
+                    isProps: true, args: [{
+                        isFromRetThenable: true, name: "andThen", optional: false,
+                        typeSpec: { Thens: [struct.name] },
+                    }],
+                })
+            }
+        }
+
         this.structs.forEach(struct => {
             let isargout = false, isargin = false
             for (const iface of this.interfaces) if (isargin && isargout) break
@@ -134,14 +169,6 @@ export class Prep {
                 struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict })
             }
         })
-
-        this.interfaces.forEach(iface => iface.methods.forEach(method => {
-            let n: number = 0
-            method.args.forEach(arg => {
-                if (arg.typeSpec === 'CancellationToken')
-                    [arg.isCancellationToken, arg.typeSpec] = [n++, 'Cancel']
-            })
-        }))
 
         const printjson = (_: any) => console.log(JSON.stringify(_, function (this: any, key: string, val: any): any {
             return (key === 'parent') ? null : val

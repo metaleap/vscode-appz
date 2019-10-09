@@ -433,6 +433,9 @@ namespace VscAppz {
 
 		/// <summary>The custom uri scheme the editor registers to in the operating system.</summary>
 		void UriScheme(Action<string> andThen = default);
+
+		/// <summary>Provides single-call access to numerous individual `IEnv` properties at once.</summary>
+		void Properties(Action<EnvProperties> andThen = default);
 	}
 
 	/// <summary>Options to configure the behavior of the message.</summary>
@@ -681,6 +684,55 @@ namespace VscAppz {
 		/// <summary>Whether the current window is focused.</summary>
 		[JsonProperty("focused"), JsonRequired]
 		public bool Focused;
+	}
+
+	/// <summary>Namespace describing the environment the editor runs in.</summary>
+	public partial class EnvProperties {
+		/// <summary>The application name of the editor, like 'VS Code'.</summary>
+		[JsonProperty("appName")]
+		public string AppName;
+
+		/// <summary>The application root folder from which the editor is running.</summary>
+		[JsonProperty("appRoot")]
+		public string AppRoot;
+
+		/// <summary>Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.</summary>
+		[JsonProperty("language")]
+		public string Language;
+
+		/// <summary>A unique identifier for the computer.</summary>
+		[JsonProperty("machineId")]
+		public string MachineId;
+
+		/// <summary>
+		/// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
+		/// Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
+		/// 
+		/// *Note* that the value is `undefined` when there is no remote extension host but that the
+		/// value is defined in all extension hosts (local and remote) in case a remote extension host
+		/// exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
+		/// a specific extension runs remote or not.
+		/// </summary>
+		[JsonProperty("remoteName")]
+		public string RemoteName;
+
+		/// <summary>
+		/// A unique identifier for the current session.
+		/// Changes each time the editor is started.
+		/// </summary>
+		[JsonProperty("sessionId")]
+		public string SessionId;
+
+		/// <summary>
+		/// The detected default shell for the extension host, this is overridden by the
+		/// `terminal.integrated.shell` setting for the extension host's platform.
+		/// </summary>
+		[JsonProperty("shell")]
+		public string Shell;
+
+		/// <summary>The custom uri scheme the editor registers to in the operating system.</summary>
+		[JsonProperty("uriScheme")]
+		public string UriScheme;
 	}
 
 	internal partial class impl : IVscode, IWindow, IEnv {
@@ -1842,6 +1894,32 @@ namespace VscAppz {
 			this.send(msg, on);
 		}
 
+		void IEnv.Properties(Action<EnvProperties> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "env.Properties";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					EnvProperties result = default;
+					if ((null != payload)) {
+						result = new EnvProperties();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					} else {
+						return false;
+					}					
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
 	}
 
 	public partial class MessageItem {
@@ -2056,6 +2134,123 @@ namespace VscAppz {
 			} else {
 				return false;
 			}			
+			return true;
+		}
+	}
+
+	public partial class EnvProperties {
+		internal bool populateFrom(any payload) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if ((!ok)) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("appName", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				string appName = default;
+				if ((null != val)) {
+					string _appName_ = default;
+					(_appName_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					appName = _appName_;
+				}
+				this.AppName = appName;
+			}
+			(val, ok) = (it.TryGetValue("appRoot", out var ___) ? (___, true) : (default, false));
+			if (ok) {
+				string appRoot = default;
+				if ((null != val)) {
+					string _appRoot_ = default;
+					(_appRoot_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					appRoot = _appRoot_;
+				}
+				this.AppRoot = appRoot;
+			}
+			(val, ok) = (it.TryGetValue("language", out var ____) ? (____, true) : (default, false));
+			if (ok) {
+				string language = default;
+				if ((null != val)) {
+					string _language_ = default;
+					(_language_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					language = _language_;
+				}
+				this.Language = language;
+			}
+			(val, ok) = (it.TryGetValue("machineId", out var _____) ? (_____, true) : (default, false));
+			if (ok) {
+				string machineId = default;
+				if ((null != val)) {
+					string _machineId_ = default;
+					(_machineId_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					machineId = _machineId_;
+				}
+				this.MachineId = machineId;
+			}
+			(val, ok) = (it.TryGetValue("remoteName", out var ______) ? (______, true) : (default, false));
+			if (ok) {
+				string remoteName = default;
+				if ((null != val)) {
+					string _remoteName_ = default;
+					(_remoteName_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					remoteName = _remoteName_;
+				}
+				this.RemoteName = remoteName;
+			}
+			(val, ok) = (it.TryGetValue("sessionId", out var _______) ? (_______, true) : (default, false));
+			if (ok) {
+				string sessionId = default;
+				if ((null != val)) {
+					string _sessionId_ = default;
+					(_sessionId_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					sessionId = _sessionId_;
+				}
+				this.SessionId = sessionId;
+			}
+			(val, ok) = (it.TryGetValue("shell", out var ________) ? (________, true) : (default, false));
+			if (ok) {
+				string shell = default;
+				if ((null != val)) {
+					string _shell_ = default;
+					(_shell_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					shell = _shell_;
+				}
+				this.Shell = shell;
+			}
+			(val, ok) = (it.TryGetValue("uriScheme", out var _________) ? (_________, true) : (default, false));
+			if (ok) {
+				string uriScheme = default;
+				if ((null != val)) {
+					string _uriScheme_ = default;
+					(_uriScheme_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					uriScheme = _uriScheme_;
+				}
+				this.UriScheme = uriScheme;
+			}
 			return true;
 		}
 	}

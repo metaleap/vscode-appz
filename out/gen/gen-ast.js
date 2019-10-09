@@ -99,16 +99,18 @@ class Builder {
             Docs: this.docs(gen.docs(it.fromOrig)),
             Methods: it.methods.map((method) => ({
                 fromPrep: method,
-                name: method.nameOrig,
-                Name: this.gen.nameRewriters.methods(this.gen.options.funcOverloads ? method.nameOrig : method.name),
-                Docs: this.docs(gen.docs(method.fromOrig.decl, () => method.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
+                name: (method.nameOrig && method.nameOrig.length) ? method.nameOrig : method.name,
+                Name: this.gen.nameRewriters.methods((this.gen.options.funcOverloads && method.nameOrig && method.nameOrig.length) ? method.nameOrig : method.name),
+                Docs: method.isProps
+                    ? [{ Lines: ["Provides single-call access to numerous individual `" + this.gen.nameRewriters.types.interfaces(it.name) + "` properties at once."], ForParam: "" }]
+                    : this.docs(gen.docs(method.fromOrig ? method.fromOrig.decl : it.fromOrig, () => method.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
                 Type: null,
                 Args: method.args.map((arg) => ({
                     fromPrep: arg,
                     name: arg.name,
                     Name: this.gen.nameRewriters.args(arg.name),
                     Docs: this.docs(gen.docs(arg.fromOrig)),
-                    Type: this.typeRef(arg.typeSpec, arg.optional, false, method.fromOrig.decl),
+                    Type: this.typeRef(arg.typeSpec, arg.optional, false, ((method.fromOrig && method.fromOrig.decl && method.fromOrig.decl && method.fromOrig.decl.PropType) || method.isProps) ? true : false),
                 })),
             })),
         };
@@ -118,7 +120,7 @@ class Builder {
             fromPrep: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
-            Docs: this.docs(gen.docs(it.fromOrig.decl)),
+            Docs: this.docs(gen.docs(it.fromOrig ? it.fromOrig.decl : it.isPropsOf.fromOrig)),
             IsOutgoing: false, IsIncoming: false,
             Fields: it.fields.map((_) => ({
                 fromPrep: _,
@@ -149,11 +151,11 @@ class Builder {
             maybe = { Maybe: it };
         return maybe;
     }
-    typeRef(it, needMaybe = false, intoProm = false, propOfArgsMethod) {
+    typeRef(it, needMaybe = false, intoProm = false, propsRelated) {
         if (!it)
             return null;
         if (needMaybe)
-            return this.typeRefEnsureMaybe(this.typeRef(it, false, intoProm, propOfArgsMethod));
+            return this.typeRefEnsureMaybe(this.typeRef(it, false, intoProm, propsRelated));
         if (it === gen.ScriptPrimType.Boolean || it === gen.ScriptPrimType.BooleanTrue || it === gen.ScriptPrimType.BooleanFalse)
             return TypeRefPrim.Bool;
         if (it === gen.ScriptPrimType.Number)
@@ -185,7 +187,7 @@ class Builder {
                 tsum = tsum.filter(_ => _ !== gen.ScriptPrimType.String);
             if (tsum.length !== 1)
                 throw it;
-            let ret = this.typeRef(tsum[0], needMaybe, intoProm, propOfArgsMethod);
+            let ret = this.typeRef(tsum[0], needMaybe, intoProm, propsRelated);
             return hadoptional ? this.typeRefEnsureMaybe(ret) : ret;
         }
         const tmul = gen.typeMul(it);
@@ -223,9 +225,9 @@ class Builder {
             else if (tprom[0] === 'Disposable')
                 return { From: [{ Maybe: { Name: 'Disposable' } }], To: null };
             else
-                return { From: tprom.map(_ => this.typeRef(_, !(_ === gen.ScriptPrimType.Boolean || (propOfArgsMethod && propOfArgsMethod.PropType)))), To: null };
+                return { From: tprom.map(_ => this.typeRef(_, !(_ === gen.ScriptPrimType.Boolean || propsRelated))), To: null };
         if (typeof it === 'string')
-            return (it === 'Uri') ? TypeRefPrim.String : { Name: it };
+            return (it === 'Uri') ? TypeRefPrim.String : { Name: this.gen.nameRewriters.types.structs(it) };
         throw JSON.stringify(it);
     }
     docs(docs, extraSummaryLines = undefined, isMethod = false, appendArgsAndRetsToSummaryToo = true, retNameFallback = "return", into = undefined) {
@@ -642,7 +644,7 @@ class Gen extends gen.Gen {
                     ]))))))]))));
             }
         }
-        const isevt = method.fromPrep ? method.fromPrep.fromOrig.decl : null;
+        const isevt = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl : null;
         let nameevtsub = undefined;
         if (isevt && isevt.EvtArgs && isevt.EvtArgs.length) {
             const arg = method.Args[0];
@@ -686,12 +688,13 @@ class Gen extends gen.Gen {
         body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }));
         if (lastarg.fromPrep.isFromRetThenable) {
             const isdisp = gen.typePromOf(lastarg.fromPrep.typeSpec, 'Disposable');
-            const meprop = method.fromPrep ? method.fromPrep.fromOrig.decl : null;
+            const meprop = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl : null;
             const isprop = meprop && meprop.PropType;
+            const isprops = method.fromPrep && method.fromPrep.isProps;
             const isval = gen.typePromOf(lastarg.fromPrep.typeSpec, gen.ScriptPrimType.Boolean) || gen.typePromOf(lastarg.fromPrep.typeSpec, gen.ScriptPrimType.Number);
-            const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, !(isval || isprop), true);
+            const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, !(isval || isprop || isprops), true);
             body.push(_.iIf(_.oIs(_.n(lastarg.Name)), [
-                _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iVar(__.ok, TypeRefPrim.Bool), _.iVar(__.result, dsttype), _.iIf(_.oIs(_.n(__.payload)), this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok), _.WHEN(isdisp || isval, () => [_.iRet(_.eLit(false))], () => [])), _.WHEN(isdisp, () => [
+                _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iVar(__.ok, TypeRefPrim.Bool), _.iVar(__.result, dsttype), _.iIf(_.oIs(_.n(__.payload)), this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok), _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => [])), _.WHEN(isdisp, () => [
                     _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bind')), _.eThis(), nameevtsub ? _.n(nameevtsub) : _.eLit(""))),
                 ], () => [
                     _.eCall(_.n(lastarg.Name), _.n(__.result)),
@@ -789,10 +792,12 @@ class Gen extends gen.Gen {
                 for (const name in this.state.genPopulateFor)
                     if (anydecoderstogenerate = this.state.genPopulateFor[name]) {
                         this.state.genPopulateFor[name] = false;
-                        this.emitMethodImpl(this.allStructs[name], {
-                            Name: "populateFrom", Type: TypeRefPrim.Bool,
-                            Args: [{ Name: "payload", Type: TypeRefPrim.Any }]
-                        }, this.genMethodImpl_PopulateFrom);
+                        const struct = this.allStructs[name];
+                        if (struct)
+                            this.emitMethodImpl(struct, {
+                                Name: "populateFrom", Type: TypeRefPrim.Bool,
+                                Args: [{ Name: "payload", Type: TypeRefPrim.Any }]
+                            }, this.genMethodImpl_PopulateFrom);
                     }
             }
         }

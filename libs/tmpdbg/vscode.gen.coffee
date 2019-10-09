@@ -511,6 +511,10 @@ Env: interface
     UriScheme: void
         andThen: ?(string->void)
 
+    # Provides single-call access to numerous individual `Env` properties at once.
+    Properties: void
+        andThen: (EnvProperties->void)
+
 
 
 
@@ -836,6 +840,69 @@ WindowState: class
     #
     # JSON FLAGS: {"Name":"focused","Required":true,"Excluded":false}
     Focused: bool
+
+
+
+
+# envProperties:
+# Namespace describing the environment the editor runs in.
+EnvProperties: class
+
+    # appName:
+    # The application name of the editor, like 'VS Code'.
+    #
+    # JSON FLAGS: {"Name":"appName","Required":false,"Excluded":false}
+    AppName: ?string
+
+    # appRoot:
+    # The application root folder from which the editor is running.
+    #
+    # JSON FLAGS: {"Name":"appRoot","Required":false,"Excluded":false}
+    AppRoot: ?string
+
+    # language:
+    # Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
+    #
+    # JSON FLAGS: {"Name":"language","Required":false,"Excluded":false}
+    Language: ?string
+
+    # machineId:
+    # A unique identifier for the computer.
+    #
+    # JSON FLAGS: {"Name":"machineId","Required":false,"Excluded":false}
+    MachineId: ?string
+
+    # remoteName:
+    # The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
+    # Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
+    # 
+    # *Note* that the value is `undefined` when there is no remote extension host but that the
+    # value is defined in all extension hosts (local and remote) in case a remote extension host
+    # exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
+    # a specific extension runs remote or not.
+    #
+    # JSON FLAGS: {"Name":"remoteName","Required":false,"Excluded":false}
+    RemoteName: ?string
+
+    # sessionId:
+    # A unique identifier for the current session.
+    # Changes each time the editor is started.
+    #
+    # JSON FLAGS: {"Name":"sessionId","Required":false,"Excluded":false}
+    SessionId: ?string
+
+    # shell:
+    # The detected default shell for the extension host, this is overridden by the
+    # `terminal.integrated.shell` setting for the extension host's platform.
+    #
+    # JSON FLAGS: {"Name":"shell","Required":false,"Excluded":false}
+    Shell: ?string
+
+    # uriScheme:
+    # The custom uri scheme the editor registers to in the operating system.
+    #
+    # JSON FLAGS: {"Name":"uriScheme","Required":false,"Excluded":false}
+    UriScheme: ?string
 
 
 
@@ -1899,6 +1966,31 @@ Env·UriScheme: (andThen:?(string->void) -> void)
 
 
 
+Env·Properties: (andThen:(EnvProperties->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "env.Properties"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of EnvProperties
+            if (=?payload)
+                result = EnvProperties·new
+                ok = result.populateFrom(payload)
+                if (!ok)
+                    return false
+            else
+                return false
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
 MessageItem·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
@@ -2072,6 +2164,98 @@ WindowState·populateFrom: (payload:any -> bool)
         this.Focused = focused
     else
         return false
+    return true
+
+
+
+
+EnvProperties·populateFrom: (payload:any -> bool)
+    var it of dict
+    var ok of bool
+    var val of any
+    [it,ok] = ((payload)·(dict))
+    if (!ok)
+        return false
+    [val,ok] = it@?"appName"
+    if ok
+        var appName of ?string
+        if (=?val)
+            var _appName_ of string
+            [_appName_,ok] = ((val)·(string))
+            if (!ok)
+                return false
+            appName = (&_appName_)
+        this.AppName = appName
+    [val,ok] = it@?"appRoot"
+    if ok
+        var appRoot of ?string
+        if (=?val)
+            var _appRoot_ of string
+            [_appRoot_,ok] = ((val)·(string))
+            if (!ok)
+                return false
+            appRoot = (&_appRoot_)
+        this.AppRoot = appRoot
+    [val,ok] = it@?"language"
+    if ok
+        var language of ?string
+        if (=?val)
+            var _language_ of string
+            [_language_,ok] = ((val)·(string))
+            if (!ok)
+                return false
+            language = (&_language_)
+        this.Language = language
+    [val,ok] = it@?"machineId"
+    if ok
+        var machineId of ?string
+        if (=?val)
+            var _machineId_ of string
+            [_machineId_,ok] = ((val)·(string))
+            if (!ok)
+                return false
+            machineId = (&_machineId_)
+        this.MachineId = machineId
+    [val,ok] = it@?"remoteName"
+    if ok
+        var remoteName of ?string
+        if (=?val)
+            var _remoteName_ of string
+            [_remoteName_,ok] = ((val)·(string))
+            if (!ok)
+                return false
+            remoteName = (&_remoteName_)
+        this.RemoteName = remoteName
+    [val,ok] = it@?"sessionId"
+    if ok
+        var sessionId of ?string
+        if (=?val)
+            var _sessionId_ of string
+            [_sessionId_,ok] = ((val)·(string))
+            if (!ok)
+                return false
+            sessionId = (&_sessionId_)
+        this.SessionId = sessionId
+    [val,ok] = it@?"shell"
+    if ok
+        var shell of ?string
+        if (=?val)
+            var _shell_ of string
+            [_shell_,ok] = ((val)·(string))
+            if (!ok)
+                return false
+            shell = (&_shell_)
+        this.Shell = shell
+    [val,ok] = it@?"uriScheme"
+    if ok
+        var uriScheme of ?string
+        if (=?val)
+            var _uriScheme_ of string
+            [_uriScheme_,ok] = ((val)·(string))
+            if (!ok)
+                return false
+            uriScheme = (&_uriScheme_)
+        this.UriScheme = uriScheme
     return true
 
 

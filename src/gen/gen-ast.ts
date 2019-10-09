@@ -215,16 +215,18 @@ export class Builder {
             Docs: this.docs(gen.docs(it.fromOrig)),
             Methods: it.methods.map((method: gen.PrepMethod): Method => ({
                 fromPrep: method,
-                name: method.nameOrig,
-                Name: this.gen.nameRewriters.methods(this.gen.options.funcOverloads ? method.nameOrig : method.name),
-                Docs: this.docs(gen.docs(method.fromOrig.decl, () => method.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
+                name: (method.nameOrig && method.nameOrig.length) ? method.nameOrig : method.name,
+                Name: this.gen.nameRewriters.methods((this.gen.options.funcOverloads && method.nameOrig && method.nameOrig.length) ? method.nameOrig : method.name),
+                Docs: method.isProps
+                    ? [{ Lines: ["Provides single-call access to numerous individual `" + this.gen.nameRewriters.types.interfaces(it.name) + "` properties at once."], ForParam: "" }]
+                    : this.docs(gen.docs(method.fromOrig ? method.fromOrig.decl : it.fromOrig, () => method.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
                 Type: null,
                 Args: method.args.map((arg: gen.PrepArg): Arg => ({
                     fromPrep: arg,
                     name: arg.name,
                     Name: this.gen.nameRewriters.args(arg.name),
                     Docs: this.docs(gen.docs(arg.fromOrig)),
-                    Type: this.typeRef(arg.typeSpec, arg.optional, false, method.fromOrig.decl as gen.MemberProp),
+                    Type: this.typeRef(arg.typeSpec, arg.optional, false, ((method.fromOrig && method.fromOrig.decl && (method.fromOrig.decl as gen.MemberProp) && (method.fromOrig.decl as gen.MemberProp).PropType) || method.isProps) ? true : false),
                 })),
             })),
         }
@@ -235,7 +237,7 @@ export class Builder {
             fromPrep: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
-            Docs: this.docs(gen.docs(it.fromOrig.decl)),
+            Docs: this.docs(gen.docs(it.fromOrig ? it.fromOrig.decl : it.isPropsOf.fromOrig)),
             IsOutgoing: false, IsIncoming: false, // will be set once all ifaces & structs are known
             Fields: it.fields.map((_: gen.PrepField): Field => ({
                 fromPrep: _,
@@ -268,12 +270,12 @@ export class Builder {
         return maybe
     }
 
-    typeRef(it: gen.TypeSpec, needMaybe: boolean = false, intoProm: boolean = false, propOfArgsMethod?: gen.MemberProp): TypeRef {
+    typeRef(it: gen.TypeSpec, needMaybe: boolean = false, intoProm: boolean = false, propsRelated?: boolean): TypeRef {
         if (!it)
             return null
 
         if (needMaybe)
-            return this.typeRefEnsureMaybe(this.typeRef(it, false, intoProm, propOfArgsMethod))
+            return this.typeRefEnsureMaybe(this.typeRef(it, false, intoProm, propsRelated))
 
         if (it === gen.ScriptPrimType.Boolean || it === gen.ScriptPrimType.BooleanTrue || it === gen.ScriptPrimType.BooleanFalse)
             return TypeRefPrim.Bool
@@ -310,7 +312,7 @@ export class Builder {
                 tsum = tsum.filter(_ => _ !== gen.ScriptPrimType.String)
             if (tsum.length !== 1)
                 throw it
-            let ret = this.typeRef(tsum[0], needMaybe, intoProm, propOfArgsMethod)
+            let ret = this.typeRef(tsum[0], needMaybe, intoProm, propsRelated)
             return hadoptional ? this.typeRefEnsureMaybe(ret) : ret
         }
 
@@ -351,10 +353,10 @@ export class Builder {
             else if (tprom[0] === 'Disposable')
                 return { From: [{ Maybe: { Name: 'Disposable' } }], To: null }
             else
-                return { From: tprom.map(_ => this.typeRef(_, !(_ === gen.ScriptPrimType.Boolean || (propOfArgsMethod && propOfArgsMethod.PropType)))), To: null }
+                return { From: tprom.map(_ => this.typeRef(_, !(_ === gen.ScriptPrimType.Boolean || propsRelated))), To: null }
 
         if (typeof it === 'string')
-            return (it === 'Uri') ? TypeRefPrim.String : { Name: it }
+            return (it === 'Uri') ? TypeRefPrim.String : { Name: this.gen.nameRewriters.types.structs(it) }
 
         throw JSON.stringify(it)
     }
@@ -902,7 +904,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             }
         }
 
-        const isevt: gen.MemberEvent = method.fromPrep ? method.fromPrep.fromOrig.decl as gen.MemberEvent : null
+        const isevt: gen.MemberEvent = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl as gen.MemberEvent : null
         let nameevtsub: string = undefined
         if (isevt && isevt.EvtArgs && isevt.EvtArgs.length) {
             const arg = method.Args[0]
@@ -973,10 +975,11 @@ export class Gen extends gen.Gen implements gen.IGen {
         body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }))
         if (lastarg.fromPrep.isFromRetThenable) {
             const isdisp = gen.typePromOf(lastarg.fromPrep.typeSpec, 'Disposable')
-            const meprop = method.fromPrep ? method.fromPrep.fromOrig.decl as gen.MemberProp : null
+            const meprop = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl as gen.MemberProp : null
             const isprop = meprop && meprop.PropType
+            const isprops = method.fromPrep && method.fromPrep.isProps
             const isval = gen.typePromOf(lastarg.fromPrep.typeSpec, gen.ScriptPrimType.Boolean) || gen.typePromOf(lastarg.fromPrep.typeSpec, gen.ScriptPrimType.Number)
-            const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, !(isval || isprop), true)
+            const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, !(isval || isprop || isprops), true)
 
             body.push(
                 _.iIf(_.oIs(_.n(lastarg.Name)), [
@@ -985,7 +988,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                         _.iVar(__.result, dsttype),
                         _.iIf(_.oIs(_.n(__.payload)),
                             this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok),
-                            _.WHEN(isdisp || isval, () => [_.iRet(_.eLit(false))], () => []),
+                            _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => []),
                         ),
                         _.WHEN(isdisp, () => [
                             _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bind')), _.eThis(), nameevtsub ? _.n(nameevtsub) : _.eLit(""))),
@@ -1119,10 +1122,12 @@ export class Gen extends gen.Gen implements gen.IGen {
                 for (const name in this.state.genPopulateFor)
                     if (anydecoderstogenerate = this.state.genPopulateFor[name]) {
                         this.state.genPopulateFor[name] = false
-                        this.emitMethodImpl(this.allStructs[name], {
-                            Name: "populateFrom", Type: TypeRefPrim.Bool,
-                            Args: [{ Name: "payload", Type: TypeRefPrim.Any }]
-                        }, this.genMethodImpl_PopulateFrom)
+                        const struct = this.allStructs[name]
+                        if (struct)
+                            this.emitMethodImpl(struct, {
+                                Name: "populateFrom", Type: TypeRefPrim.Bool,
+                                Args: [{ Name: "payload", Type: TypeRefPrim.Any }]
+                            }, this.genMethodImpl_PopulateFrom)
                     }
             }
         }
