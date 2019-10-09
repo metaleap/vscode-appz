@@ -60,6 +60,119 @@
         <member name="P:VscAppz.IVscode.Env">
             <summary>Namespace describing the environment the editor runs in.</summary>
         </member>
+        <member name="P:VscAppz.IVscode.Workspace">
+            <summary>
+            Namespace for dealing with the current workspace. A workspace is the representation
+            of the folder that has been opened. There is no workspace when just a file but not a
+            folder has been opened.
+            
+            The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
+            events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+            the editor-process so that they should be always used instead of nodejs-equivalents.
+            </summary>
+        </member>
+        <member name="P:VscAppz.IVscode.Languages">
+            <summary>
+            Namespace for participating in language-specific editor [features](https://code.visualstudio.com/docs/editor/editingevolved),
+            like IntelliSense, code actions, diagnostics etc.
+            
+            Many programming languages exist and there is huge variety in syntaxes, semantics, and paradigms. Despite that, features
+            like automatic word-completion, code navigation, or code checking have become popular across different tools for different
+            programming languages.
+            
+            The editor provides an API that makes it simple to provide such common features by having all UI and actions already in place and
+            by allowing you to participate by providing data only. For instance, to contribute a hover all you have to do is provide a function
+            that can be called with a [TextDocument](#TextDocument) and a [Position](#Position) returning hover info. The rest, like tracking the
+            mouse, positioning the hover, keeping the hover stable etc. is taken care of by the editor.
+            
+            ```javascript
+            languages.registerHoverProvider('javascript', {
+             	provideHover(document, position, token) {
+             		return new Hover('I am a hover!');
+             	}
+            });
+            ```
+            
+            Registration is done using a [document selector](#DocumentSelector) which is either a language id, like `javascript` or
+            a more complex [filter](#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
+            a selector will result in a [score](#languages.match) that is used to determine if and how a provider shall be used. When
+            scores are equal the provider that came last wins. For features that allow full arity, like [hover](#languages.registerHoverProvider),
+            the score is only checked to be `>0`, for other features, like [IntelliSense](#languages.registerCompletionItemProvider) the
+            score is used for determining the order in which providers are asked to participate.
+            </summary>
+        </member>
+        <member name="P:VscAppz.IVscode.Extensions">
+            <summary>
+            Namespace for dealing with installed extensions. Extensions are represented
+            by an [extension](#Extension)-interface which enables reflection on them.
+            
+            Extension writers can provide APIs to other extensions by returning their API public
+            surface from the `activate`-call.
+            
+            ```javascript
+            export function activate(context: vscode.ExtensionContext) {
+             	let api = {
+             		sum(a, b) {
+             			return a + b;
+             		},
+             		mul(a, b) {
+             			return a * b;
+             		}
+             	};
+             	// 'export' public api-surface
+             	return api;
+            }
+            ```
+            When depending on the API of another extension add an `extensionDependency`-entry
+            to `package.json`, and use the [getExtension](#extensions.getExtension)-function
+            and the [exports](#Extension.exports)-property, like below:
+            
+            ```javascript
+            let mathExt = extensions.getExtension('genius.math');
+            let importedApi = mathExt.exports;
+            
+            console.log(importedApi.mul(42, 1));
+            ```
+            </summary>
+        </member>
+        <member name="P:VscAppz.IVscode.Commands">
+            <summary>
+            Namespace for dealing with commands. In short, a command is a function with a
+            unique identifier. The function is sometimes also called _command handler_.
+            
+            Commands can be added to the editor using the [registerCommand](#commands.registerCommand)
+            and [registerTextEditorCommand](#commands.registerTextEditorCommand) functions. Commands
+            can be executed [manually](#commands.executeCommand) or from a UI gesture. Those are:
+            
+            * palette - Use the `commands`-section in `package.json` to make a command show in
+            the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette).
+            * keybinding - Use the `keybindings`-section in `package.json` to enable
+            [keybindings](https://code.visualstudio.com/docs/getstarted/keybindings#_customizing-shortcuts)
+            for your extension.
+            
+            Commands from other extensions and from the editor itself are accessible to an extension. However,
+            when invoking an editor command not all argument types are supported.
+            
+            This is a sample that registers a command handler and adds an entry for that command to the palette. First
+            register a command handler with the identifier `extension.sayHello`.
+            ```javascript
+            commands.registerCommand('extension.sayHello', () => {
+             	window.showInformationMessage('Hello World!');
+            });
+            ```
+            Second, bind the command identifier to a title under which it will show in the palette (`package.json`).
+            ```json
+            {
+             	"contributes": {
+             		"commands": [{
+             			"command": "extension.sayHello",
+             			"title": "Hello World"
+             		}]
+             	}
+            }
+            ```
+            </summary>
+        </member>
         <member name="T:VscAppz.IWindow">
             <summary>
             Namespace for dealing with the current window of the editor. That is visible
@@ -475,6 +588,171 @@
         <member name="M:VscAppz.IEnv.Properties(System.Action{VscAppz.EnvProperties})">
             <summary>Provides single-call access to numerous individual `IEnv` properties at once.</summary>
         </member>
+        <member name="T:VscAppz.IWorkspace">
+            <summary>
+            Namespace for dealing with the current workspace. A workspace is the representation
+            of the folder that has been opened. There is no workspace when just a file but not a
+            folder has been opened.
+            
+            The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
+            events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+            the editor-process so that they should be always used instead of nodejs-equivalents.
+            </summary>
+        </member>
+        <member name="M:VscAppz.IWorkspace.Name(System.Action{System.String})">
+            <summary>
+            The name of the workspace. `undefined` when no folder
+            has been opened.
+            </summary>
+        </member>
+        <member name="M:VscAppz.IWorkspace.SaveAll(System.Boolean,System.Action{System.Boolean})">
+            <summary>
+            Save all dirty files.
+            
+            `includeUntitled` ── Also save files that have been created during this session.
+            
+            `andThen` ── A thenable that resolves when the files have been saved.
+            </summary>
+            <param name="includeUntitled">Also save files that have been created during this session.</param>
+            <param name="andThen">A thenable that resolves when the files have been saved.</param>
+        </member>
+        <member name="M:VscAppz.IWorkspace.OnDidChangeWorkspaceFolders(System.Action{VscAppz.WorkspaceFoldersChangeEvent},System.Action{VscAppz.Disposable})">
+            <summary>An event that is emitted when a workspace folder is added or removed.</summary>
+        </member>
+        <member name="T:VscAppz.ILanguages">
+            <summary>
+            Namespace for participating in language-specific editor [features](https://code.visualstudio.com/docs/editor/editingevolved),
+            like IntelliSense, code actions, diagnostics etc.
+            
+            Many programming languages exist and there is huge variety in syntaxes, semantics, and paradigms. Despite that, features
+            like automatic word-completion, code navigation, or code checking have become popular across different tools for different
+            programming languages.
+            
+            The editor provides an API that makes it simple to provide such common features by having all UI and actions already in place and
+            by allowing you to participate by providing data only. For instance, to contribute a hover all you have to do is provide a function
+            that can be called with a [TextDocument](#TextDocument) and a [Position](#Position) returning hover info. The rest, like tracking the
+            mouse, positioning the hover, keeping the hover stable etc. is taken care of by the editor.
+            
+            ```javascript
+            languages.registerHoverProvider('javascript', {
+             	provideHover(document, position, token) {
+             		return new Hover('I am a hover!');
+             	}
+            });
+            ```
+            
+            Registration is done using a [document selector](#DocumentSelector) which is either a language id, like `javascript` or
+            a more complex [filter](#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
+            a selector will result in a [score](#languages.match) that is used to determine if and how a provider shall be used. When
+            scores are equal the provider that came last wins. For features that allow full arity, like [hover](#languages.registerHoverProvider),
+            the score is only checked to be `>0`, for other features, like [IntelliSense](#languages.registerCompletionItemProvider) the
+            score is used for determining the order in which providers are asked to participate.
+            </summary>
+        </member>
+        <member name="M:VscAppz.ILanguages.GetLanguages(System.Action{System.String[]})">
+            <summary>
+            Return the identifiers of all known languages.
+            
+            `andThen` ── Promise resolving to an array of identifier strings.
+            </summary>
+            <param name="andThen">Promise resolving to an array of identifier strings.</param>
+        </member>
+        <member name="M:VscAppz.ILanguages.OnDidChangeDiagnostics(System.Action{VscAppz.DiagnosticChangeEvent},System.Action{VscAppz.Disposable})">
+            <summary>
+            An [event](#Event) which fires when the global set of diagnostics changes. This is
+            newly added and removed diagnostics.
+            </summary>
+        </member>
+        <member name="T:VscAppz.IExtensions">
+            <summary>
+            Namespace for dealing with installed extensions. Extensions are represented
+            by an [extension](#Extension)-interface which enables reflection on them.
+            
+            Extension writers can provide APIs to other extensions by returning their API public
+            surface from the `activate`-call.
+            
+            ```javascript
+            export function activate(context: vscode.ExtensionContext) {
+             	let api = {
+             		sum(a, b) {
+             			return a + b;
+             		},
+             		mul(a, b) {
+             			return a * b;
+             		}
+             	};
+             	// 'export' public api-surface
+             	return api;
+            }
+            ```
+            When depending on the API of another extension add an `extensionDependency`-entry
+            to `package.json`, and use the [getExtension](#extensions.getExtension)-function
+            and the [exports](#Extension.exports)-property, like below:
+            
+            ```javascript
+            let mathExt = extensions.getExtension('genius.math');
+            let importedApi = mathExt.exports;
+            
+            console.log(importedApi.mul(42, 1));
+            ```
+            </summary>
+        </member>
+        <member name="M:VscAppz.IExtensions.OnDidChange(System.Action,System.Action{VscAppz.Disposable})">
+            <summary>
+            An event which fires when `extensions.all` changes. This can happen when extensions are
+            installed, uninstalled, enabled or disabled.
+            </summary>
+        </member>
+        <member name="T:VscAppz.ICommands">
+            <summary>
+            Namespace for dealing with commands. In short, a command is a function with a
+            unique identifier. The function is sometimes also called _command handler_.
+            
+            Commands can be added to the editor using the [registerCommand](#commands.registerCommand)
+            and [registerTextEditorCommand](#commands.registerTextEditorCommand) functions. Commands
+            can be executed [manually](#commands.executeCommand) or from a UI gesture. Those are:
+            
+            * palette - Use the `commands`-section in `package.json` to make a command show in
+            the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette).
+            * keybinding - Use the `keybindings`-section in `package.json` to enable
+            [keybindings](https://code.visualstudio.com/docs/getstarted/keybindings#_customizing-shortcuts)
+            for your extension.
+            
+            Commands from other extensions and from the editor itself are accessible to an extension. However,
+            when invoking an editor command not all argument types are supported.
+            
+            This is a sample that registers a command handler and adds an entry for that command to the palette. First
+            register a command handler with the identifier `extension.sayHello`.
+            ```javascript
+            commands.registerCommand('extension.sayHello', () => {
+             	window.showInformationMessage('Hello World!');
+            });
+            ```
+            Second, bind the command identifier to a title under which it will show in the palette (`package.json`).
+            ```json
+            {
+             	"contributes": {
+             		"commands": [{
+             			"command": "extension.sayHello",
+             			"title": "Hello World"
+             		}]
+             	}
+            }
+            ```
+            </summary>
+        </member>
+        <member name="M:VscAppz.ICommands.GetCommands(System.Boolean,System.Action{System.String[]})">
+            <summary>
+            Retrieve the list of all available commands. Commands starting an underscore are
+            treated as internal commands.
+            
+            `filterInternal` ── Set `true` to not see internal commands (starting with an underscore)
+            
+            `andThen` ── Thenable that resolves to a list of command ids.
+            </summary>
+            <param name="filterInternal">Set `true` to not see internal commands (starting with an underscore)</param>
+            <param name="andThen">Thenable that resolves to a list of command ids.</param>
+        </member>
         <member name="T:VscAppz.MessageOptions">
             <summary>Options to configure the behavior of the message.</summary>
         </member>
@@ -682,6 +960,21 @@
         </member>
         <member name="F:VscAppz.WindowState.Focused">
             <summary>Whether the current window is focused.</summary>
+        </member>
+        <member name="T:VscAppz.WorkspaceFoldersChangeEvent">
+            <summary>An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).</summary>
+        </member>
+        <member name="F:VscAppz.WorkspaceFoldersChangeEvent.Added">
+            <summary>Added workspace folders.</summary>
+        </member>
+        <member name="F:VscAppz.WorkspaceFoldersChangeEvent.Removed">
+            <summary>Removed workspace folders.</summary>
+        </member>
+        <member name="T:VscAppz.DiagnosticChangeEvent">
+            <summary>The event that is fired when diagnostics change.</summary>
+        </member>
+        <member name="F:VscAppz.DiagnosticChangeEvent.Uris">
+            <summary>An array of resources for which diagnostics have changed.</summary>
         </member>
         <member name="T:VscAppz.EnvProperties">
             <summary>Namespace describing the environment the editor runs in.</summary>

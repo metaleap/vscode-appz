@@ -76,7 +76,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                 }
                 case "showInputBox": {
                     const arg_options = (msg.data['options']);
-                    if (arg_options.validateInput_AppzFuncId && arg_options.validateInput_AppzFuncId.length)
+                    if (arg_options && arg_options.validateInput_AppzFuncId && arg_options.validateInput_AppzFuncId.length)
                         arg_options.validateInput = (a0) => prog.callBack(true, arg_options.validateInput_AppzFuncId, a0);
                     let ctid = msg.data['token'], arg_token = prog.cancellerToken(ctid);
                     if (!arg_token)
@@ -88,7 +88,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                 case "showQuickPick1": {
                     const arg_items = (msg.data['items']);
                     const arg_options = (msg.data['options']);
-                    if (arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
+                    if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
                         arg_options.onDidSelectItem = (a0) => prog.callBack(true, arg_options.onDidSelectItem_AppzFuncId, a0);
                     let ctid = msg.data['token'], arg_token = prog.cancellerToken(ctid);
                     if (!arg_token)
@@ -100,7 +100,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                 case "showQuickPick2": {
                     const arg_items = (msg.data['items']);
                     const arg_options = (msg.data['options']);
-                    if (arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
+                    if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
                         arg_options.onDidSelectItem = (a0) => prog.callBack(true, arg_options.onDidSelectItem_AppzFuncId, a0);
                     let ctid = msg.data['token'], arg_token = prog.cancellerToken(ctid);
                     if (!arg_token)
@@ -112,7 +112,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                 case "showQuickPick3": {
                     const arg_items = (msg.data['items']);
                     const arg_options = (msg.data['options']);
-                    if (arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
+                    if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
                         arg_options.onDidSelectItem = (a0) => prog.callBack(true, arg_options.onDidSelectItem_AppzFuncId, a0);
                     let ctid = msg.data['token'], arg_token = prog.cancellerToken(ctid);
                     if (!arg_token)
@@ -124,7 +124,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                 case "showQuickPick4": {
                     const arg_items = (msg.data['items']);
                     const arg_options = (msg.data['options']);
-                    if (arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
+                    if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
                         arg_options.onDidSelectItem = (a0) => prog.callBack(true, arg_options.onDidSelectItem_AppzFuncId, a0);
                     let ctid = msg.data['token'], arg_token = prog.cancellerToken(ctid);
                     if (!arg_token)
@@ -226,6 +226,67 @@ function handle(msg, prog, remoteCancellationTokens) {
                         shell: vscode.env.shell,
                         uriScheme: vscode.env.uriScheme,
                     });
+                }
+                default:
+                    throw (methodname);
+            }
+        case "workspace":
+            switch (methodname) {
+                case "name": {
+                    return Promise.resolve(vscode.workspace.name);
+                }
+                case "saveAll": {
+                    const arg_includeUntitled = (msg.data['includeUntitled']);
+                    return vscode.workspace.saveAll(arg_includeUntitled);
+                }
+                case "onDidChangeWorkspaceFolders": {
+                    const _fnid_listener = msg.data['listener'];
+                    return (!(_fnid_listener && _fnid_listener.length))
+                        ? Promise.reject(msg.data)
+                        : vscode.workspace.onDidChangeWorkspaceFolders((a0) => {
+                            if (prog && prog.proc)
+                                prog.callBack(false, _fnid_listener, a0).then(noOp, noOp);
+                        });
+                }
+                default:
+                    throw (methodname);
+            }
+        case "languages":
+            switch (methodname) {
+                case "getLanguages": {
+                    return vscode.languages.getLanguages();
+                }
+                case "onDidChangeDiagnostics": {
+                    const _fnid_listener = msg.data['listener'];
+                    return (!(_fnid_listener && _fnid_listener.length))
+                        ? Promise.reject(msg.data)
+                        : vscode.languages.onDidChangeDiagnostics((a0) => {
+                            if (prog && prog.proc)
+                                prog.callBack(false, _fnid_listener, a0).then(noOp, noOp);
+                        });
+                }
+                default:
+                    throw (methodname);
+            }
+        case "extensions":
+            switch (methodname) {
+                case "onDidChange": {
+                    const _fnid_listener = msg.data['listener'];
+                    return (!(_fnid_listener && _fnid_listener.length))
+                        ? Promise.reject(msg.data)
+                        : vscode.extensions.onDidChange(() => {
+                            if (prog && prog.proc)
+                                prog.callBack(false, _fnid_listener).then(noOp, noOp);
+                        });
+                }
+                default:
+                    throw (methodname);
+            }
+        case "commands":
+            switch (methodname) {
+                case "getCommands": {
+                    const arg_filterInternal = (msg.data['filterInternal']);
+                    return vscode.commands.getCommands(arg_filterInternal);
                 }
                 default:
                     throw (methodname);

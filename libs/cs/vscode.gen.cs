@@ -21,6 +21,119 @@ namespace VscAppz {
 
 		/// <summary>Namespace describing the environment the editor runs in.</summary>
 		IEnv Env { get; }
+
+		/// <summary>
+		/// Namespace for dealing with the current workspace. A workspace is the representation
+		/// of the folder that has been opened. There is no workspace when just a file but not a
+		/// folder has been opened.
+		/// 
+		/// The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
+		/// events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+		/// the editor-process so that they should be always used instead of nodejs-equivalents.
+		/// </summary>
+		IWorkspace Workspace { get; }
+
+		/// <summary>
+		/// Namespace for participating in language-specific editor [features](https://code.visualstudio.com/docs/editor/editingevolved),
+		/// like IntelliSense, code actions, diagnostics etc.
+		/// 
+		/// Many programming languages exist and there is huge variety in syntaxes, semantics, and paradigms. Despite that, features
+		/// like automatic word-completion, code navigation, or code checking have become popular across different tools for different
+		/// programming languages.
+		/// 
+		/// The editor provides an API that makes it simple to provide such common features by having all UI and actions already in place and
+		/// by allowing you to participate by providing data only. For instance, to contribute a hover all you have to do is provide a function
+		/// that can be called with a [TextDocument](#TextDocument) and a [Position](#Position) returning hover info. The rest, like tracking the
+		/// mouse, positioning the hover, keeping the hover stable etc. is taken care of by the editor.
+		/// 
+		/// ```javascript
+		/// languages.registerHoverProvider('javascript', {
+		///  	provideHover(document, position, token) {
+		///  		return new Hover('I am a hover!');
+		///  	}
+		/// });
+		/// ```
+		/// 
+		/// Registration is done using a [document selector](#DocumentSelector) which is either a language id, like `javascript` or
+		/// a more complex [filter](#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
+		/// a selector will result in a [score](#languages.match) that is used to determine if and how a provider shall be used. When
+		/// scores are equal the provider that came last wins. For features that allow full arity, like [hover](#languages.registerHoverProvider),
+		/// the score is only checked to be `>0`, for other features, like [IntelliSense](#languages.registerCompletionItemProvider) the
+		/// score is used for determining the order in which providers are asked to participate.
+		/// </summary>
+		ILanguages Languages { get; }
+
+		/// <summary>
+		/// Namespace for dealing with installed extensions. Extensions are represented
+		/// by an [extension](#Extension)-interface which enables reflection on them.
+		/// 
+		/// Extension writers can provide APIs to other extensions by returning their API public
+		/// surface from the `activate`-call.
+		/// 
+		/// ```javascript
+		/// export function activate(context: vscode.ExtensionContext) {
+		///  	let api = {
+		///  		sum(a, b) {
+		///  			return a + b;
+		///  		},
+		///  		mul(a, b) {
+		///  			return a * b;
+		///  		}
+		///  	};
+		///  	// 'export' public api-surface
+		///  	return api;
+		/// }
+		/// ```
+		/// When depending on the API of another extension add an `extensionDependency`-entry
+		/// to `package.json`, and use the [getExtension](#extensions.getExtension)-function
+		/// and the [exports](#Extension.exports)-property, like below:
+		/// 
+		/// ```javascript
+		/// let mathExt = extensions.getExtension('genius.math');
+		/// let importedApi = mathExt.exports;
+		/// 
+		/// console.log(importedApi.mul(42, 1));
+		/// ```
+		/// </summary>
+		IExtensions Extensions { get; }
+
+		/// <summary>
+		/// Namespace for dealing with commands. In short, a command is a function with a
+		/// unique identifier. The function is sometimes also called _command handler_.
+		/// 
+		/// Commands can be added to the editor using the [registerCommand](#commands.registerCommand)
+		/// and [registerTextEditorCommand](#commands.registerTextEditorCommand) functions. Commands
+		/// can be executed [manually](#commands.executeCommand) or from a UI gesture. Those are:
+		/// 
+		/// * palette - Use the `commands`-section in `package.json` to make a command show in
+		/// the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette).
+		/// * keybinding - Use the `keybindings`-section in `package.json` to enable
+		/// [keybindings](https://code.visualstudio.com/docs/getstarted/keybindings#_customizing-shortcuts)
+		/// for your extension.
+		/// 
+		/// Commands from other extensions and from the editor itself are accessible to an extension. However,
+		/// when invoking an editor command not all argument types are supported.
+		/// 
+		/// This is a sample that registers a command handler and adds an entry for that command to the palette. First
+		/// register a command handler with the identifier `extension.sayHello`.
+		/// ```javascript
+		/// commands.registerCommand('extension.sayHello', () => {
+		///  	window.showInformationMessage('Hello World!');
+		/// });
+		/// ```
+		/// Second, bind the command identifier to a title under which it will show in the palette (`package.json`).
+		/// ```json
+		/// {
+		///  	"contributes": {
+		///  		"commands": [{
+		///  			"command": "extension.sayHello",
+		///  			"title": "Hello World"
+		///  		}]
+		///  	}
+		/// }
+		/// ```
+		/// </summary>
+		ICommands Commands { get; }
 	}
 
 	/// <summary>
@@ -438,6 +551,171 @@ namespace VscAppz {
 		void Properties(Action<EnvProperties> andThen = default);
 	}
 
+	/// <summary>
+	/// Namespace for dealing with the current workspace. A workspace is the representation
+	/// of the folder that has been opened. There is no workspace when just a file but not a
+	/// folder has been opened.
+	/// 
+	/// The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
+	/// events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+	/// the editor-process so that they should be always used instead of nodejs-equivalents.
+	/// </summary>
+	public interface IWorkspace {
+		/// <summary>
+		/// The name of the workspace. `undefined` when no folder
+		/// has been opened.
+		/// </summary>
+		void Name(Action<string> andThen = default);
+
+		/// <summary>
+		/// Save all dirty files.
+		/// 
+		/// `includeUntitled` ── Also save files that have been created during this session.
+		/// 
+		/// `andThen` ── A thenable that resolves when the files have been saved.
+		/// </summary>
+		/// <param name="includeUntitled">Also save files that have been created during this session.</param>
+		/// <param name="andThen">A thenable that resolves when the files have been saved.</param>
+		void SaveAll(bool includeUntitled = default, Action<bool> andThen = default);
+
+		/// <summary>An event that is emitted when a workspace folder is added or removed.</summary>
+		void OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener = default, Action<Disposable> andThen = default);
+	}
+
+	/// <summary>
+	/// Namespace for participating in language-specific editor [features](https://code.visualstudio.com/docs/editor/editingevolved),
+	/// like IntelliSense, code actions, diagnostics etc.
+	/// 
+	/// Many programming languages exist and there is huge variety in syntaxes, semantics, and paradigms. Despite that, features
+	/// like automatic word-completion, code navigation, or code checking have become popular across different tools for different
+	/// programming languages.
+	/// 
+	/// The editor provides an API that makes it simple to provide such common features by having all UI and actions already in place and
+	/// by allowing you to participate by providing data only. For instance, to contribute a hover all you have to do is provide a function
+	/// that can be called with a [TextDocument](#TextDocument) and a [Position](#Position) returning hover info. The rest, like tracking the
+	/// mouse, positioning the hover, keeping the hover stable etc. is taken care of by the editor.
+	/// 
+	/// ```javascript
+	/// languages.registerHoverProvider('javascript', {
+	///  	provideHover(document, position, token) {
+	///  		return new Hover('I am a hover!');
+	///  	}
+	/// });
+	/// ```
+	/// 
+	/// Registration is done using a [document selector](#DocumentSelector) which is either a language id, like `javascript` or
+	/// a more complex [filter](#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
+	/// a selector will result in a [score](#languages.match) that is used to determine if and how a provider shall be used. When
+	/// scores are equal the provider that came last wins. For features that allow full arity, like [hover](#languages.registerHoverProvider),
+	/// the score is only checked to be `>0`, for other features, like [IntelliSense](#languages.registerCompletionItemProvider) the
+	/// score is used for determining the order in which providers are asked to participate.
+	/// </summary>
+	public interface ILanguages {
+		/// <summary>
+		/// Return the identifiers of all known languages.
+		/// 
+		/// `andThen` ── Promise resolving to an array of identifier strings.
+		/// </summary>
+		/// <param name="andThen">Promise resolving to an array of identifier strings.</param>
+		void GetLanguages(Action<string[]> andThen = default);
+
+		/// <summary>
+		/// An [event](#Event) which fires when the global set of diagnostics changes. This is
+		/// newly added and removed diagnostics.
+		/// </summary>
+		void OnDidChangeDiagnostics(Action<DiagnosticChangeEvent> listener = default, Action<Disposable> andThen = default);
+	}
+
+	/// <summary>
+	/// Namespace for dealing with installed extensions. Extensions are represented
+	/// by an [extension](#Extension)-interface which enables reflection on them.
+	/// 
+	/// Extension writers can provide APIs to other extensions by returning their API public
+	/// surface from the `activate`-call.
+	/// 
+	/// ```javascript
+	/// export function activate(context: vscode.ExtensionContext) {
+	///  	let api = {
+	///  		sum(a, b) {
+	///  			return a + b;
+	///  		},
+	///  		mul(a, b) {
+	///  			return a * b;
+	///  		}
+	///  	};
+	///  	// 'export' public api-surface
+	///  	return api;
+	/// }
+	/// ```
+	/// When depending on the API of another extension add an `extensionDependency`-entry
+	/// to `package.json`, and use the [getExtension](#extensions.getExtension)-function
+	/// and the [exports](#Extension.exports)-property, like below:
+	/// 
+	/// ```javascript
+	/// let mathExt = extensions.getExtension('genius.math');
+	/// let importedApi = mathExt.exports;
+	/// 
+	/// console.log(importedApi.mul(42, 1));
+	/// ```
+	/// </summary>
+	public interface IExtensions {
+		/// <summary>
+		/// An event which fires when `extensions.all` changes. This can happen when extensions are
+		/// installed, uninstalled, enabled or disabled.
+		/// </summary>
+		void OnDidChange(Action listener = default, Action<Disposable> andThen = default);
+	}
+
+	/// <summary>
+	/// Namespace for dealing with commands. In short, a command is a function with a
+	/// unique identifier. The function is sometimes also called _command handler_.
+	/// 
+	/// Commands can be added to the editor using the [registerCommand](#commands.registerCommand)
+	/// and [registerTextEditorCommand](#commands.registerTextEditorCommand) functions. Commands
+	/// can be executed [manually](#commands.executeCommand) or from a UI gesture. Those are:
+	/// 
+	/// * palette - Use the `commands`-section in `package.json` to make a command show in
+	/// the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette).
+	/// * keybinding - Use the `keybindings`-section in `package.json` to enable
+	/// [keybindings](https://code.visualstudio.com/docs/getstarted/keybindings#_customizing-shortcuts)
+	/// for your extension.
+	/// 
+	/// Commands from other extensions and from the editor itself are accessible to an extension. However,
+	/// when invoking an editor command not all argument types are supported.
+	/// 
+	/// This is a sample that registers a command handler and adds an entry for that command to the palette. First
+	/// register a command handler with the identifier `extension.sayHello`.
+	/// ```javascript
+	/// commands.registerCommand('extension.sayHello', () => {
+	///  	window.showInformationMessage('Hello World!');
+	/// });
+	/// ```
+	/// Second, bind the command identifier to a title under which it will show in the palette (`package.json`).
+	/// ```json
+	/// {
+	///  	"contributes": {
+	///  		"commands": [{
+	///  			"command": "extension.sayHello",
+	///  			"title": "Hello World"
+	///  		}]
+	///  	}
+	/// }
+	/// ```
+	/// </summary>
+	public interface ICommands {
+		/// <summary>
+		/// Retrieve the list of all available commands. Commands starting an underscore are
+		/// treated as internal commands.
+		/// 
+		/// `filterInternal` ── Set `true` to not see internal commands (starting with an underscore)
+		/// 
+		/// `andThen` ── Thenable that resolves to a list of command ids.
+		/// </summary>
+		/// <param name="filterInternal">Set `true` to not see internal commands (starting with an underscore)</param>
+		/// <param name="andThen">Thenable that resolves to a list of command ids.</param>
+		void GetCommands(bool filterInternal = default, Action<string[]> andThen = default);
+	}
+
 	/// <summary>Options to configure the behavior of the message.</summary>
 	public partial class MessageOptions {
 		/// <summary>Indicates that this message should be modal.</summary>
@@ -686,6 +964,24 @@ namespace VscAppz {
 		public bool Focused;
 	}
 
+	/// <summary>An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).</summary>
+	public partial class WorkspaceFoldersChangeEvent {
+		/// <summary>Added workspace folders.</summary>
+		[JsonProperty("added"), JsonRequired]
+		public WorkspaceFolder[] Added;
+
+		/// <summary>Removed workspace folders.</summary>
+		[JsonProperty("removed"), JsonRequired]
+		public WorkspaceFolder[] Removed;
+	}
+
+	/// <summary>The event that is fired when diagnostics change.</summary>
+	public partial class DiagnosticChangeEvent {
+		/// <summary>An array of resources for which diagnostics have changed.</summary>
+		[JsonProperty("uris"), JsonRequired]
+		public string[] Uris;
+	}
+
 	/// <summary>Namespace describing the environment the editor runs in.</summary>
 	public partial class EnvProperties {
 		/// <summary>The application name of the editor, like 'VS Code'.</summary>
@@ -735,13 +1031,29 @@ namespace VscAppz {
 		public string UriScheme;
 	}
 
-	internal partial class impl : IVscode, IWindow, IEnv {
+	internal partial class impl : IVscode, IWindow, IEnv, IWorkspace, ILanguages, IExtensions, ICommands {
 
 		IWindow IVscode.Window { get {
 			return this;
 		} }
 
 		IEnv IVscode.Env { get {
+			return this;
+		} }
+
+		IWorkspace IVscode.Workspace { get {
+			return this;
+		} }
+
+		ILanguages IVscode.Languages { get {
+			return this;
+		} }
+
+		IExtensions IVscode.Extensions { get {
+			return this;
+		} }
+
+		ICommands IVscode.Commands { get {
 			return this;
 		} }
 
@@ -1649,7 +1961,7 @@ namespace VscAppz {
 			_fnid_listener = this.nextSub((any[] args) => {
 				bool ok = default;
 				if ((1 != args.Length)) {
-					return false;
+					return ok;
 				}
 				WindowState _a_0_ = default;
 				_a_0_ = new WindowState();
@@ -1913,6 +2225,262 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IWorkspace.Name(Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "workspace.name";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						string _result_ = default;
+						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = _result_;
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IWorkspace.SaveAll(bool includeUntitled, Action<bool> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "workspace.saveAll";
+			msg.Data = new dict(1);
+			msg.Data["includeUntitled"] = includeUntitled;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					bool result = default;
+					if ((null != payload)) {
+						(result, ok) = (payload is bool) ? (((bool)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+					} else {
+						return false;
+					}					
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IWorkspace.OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener, Action<Disposable> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "workspace.onDidChangeWorkspaceFolders";
+			msg.Data = new dict(1);
+			string _fnid_listener = default;
+			if ((null == listener)) {
+				OnError(this, "IWorkspace.OnDidChangeWorkspaceFolders: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
+				return ;
+			}
+			_fnid_listener = this.nextSub((any[] args) => {
+				bool ok = default;
+				if ((1 != args.Length)) {
+					return ok;
+				}
+				WorkspaceFoldersChangeEvent _a_0_ = default;
+				_a_0_ = new WorkspaceFoldersChangeEvent();
+				ok = _a_0_.populateFrom(args[0]);
+				if ((!ok)) {
+					return false;
+				}
+				listener(_a_0_);
+				return true;
+			});
+			msg.Data["listener"] = _fnid_listener;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					Disposable result = default;
+					if ((null != payload)) {
+						result = new Disposable();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					} else {
+						return false;
+					}					
+					andThen(result.bind(this, _fnid_listener));
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void ILanguages.GetLanguages(Action<string[]> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "languages.getLanguages";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string[] result = default;
+					if ((null != payload)) {
+						any[] __coll__result = default;
+						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = new string[__coll__result.Length];
+						int __idx__result = default;
+						__idx__result = 0;
+						foreach (var __item__result in __coll__result) {
+							string __val__result = default;
+							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
+							if ((!ok)) {
+								return false;
+							}
+							result[__idx__result] = __val__result;
+							__idx__result = (__idx__result + 1);
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void ILanguages.OnDidChangeDiagnostics(Action<DiagnosticChangeEvent> listener, Action<Disposable> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "languages.onDidChangeDiagnostics";
+			msg.Data = new dict(1);
+			string _fnid_listener = default;
+			if ((null == listener)) {
+				OnError(this, "ILanguages.OnDidChangeDiagnostics: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
+				return ;
+			}
+			_fnid_listener = this.nextSub((any[] args) => {
+				bool ok = default;
+				if ((1 != args.Length)) {
+					return ok;
+				}
+				DiagnosticChangeEvent _a_0_ = default;
+				_a_0_ = new DiagnosticChangeEvent();
+				ok = _a_0_.populateFrom(args[0]);
+				if ((!ok)) {
+					return false;
+				}
+				listener(_a_0_);
+				return true;
+			});
+			msg.Data["listener"] = _fnid_listener;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					Disposable result = default;
+					if ((null != payload)) {
+						result = new Disposable();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					} else {
+						return false;
+					}					
+					andThen(result.bind(this, _fnid_listener));
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IExtensions.OnDidChange(Action listener, Action<Disposable> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "extensions.onDidChange";
+			msg.Data = new dict(1);
+			string _fnid_listener = default;
+			if ((null == listener)) {
+				OnError(this, "IExtensions.OnDidChange: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
+				return ;
+			}
+			_fnid_listener = this.nextSub((any[] args) => {
+				bool ok = default;
+				if ((0 != args.Length)) {
+					return ok;
+				}
+				listener();
+				return true;
+			});
+			msg.Data["listener"] = _fnid_listener;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					Disposable result = default;
+					if ((null != payload)) {
+						result = new Disposable();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					} else {
+						return false;
+					}					
+					andThen(result.bind(this, _fnid_listener));
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void ICommands.GetCommands(bool filterInternal, Action<string[]> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "commands.getCommands";
+			msg.Data = new dict(1);
+			msg.Data["filterInternal"] = filterInternal;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string[] result = default;
+					if ((null != payload)) {
+						any[] __coll__result = default;
+						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = new string[__coll__result.Length];
+						int __idx__result = default;
+						__idx__result = 0;
+						foreach (var __item__result in __coll__result) {
+							string __val__result = default;
+							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
+							if ((!ok)) {
+								return false;
+							}
+							result[__idx__result] = __val__result;
+							__idx__result = (__idx__result + 1);
+						}
+					}
 					andThen(result);
 					return true;
 				};
@@ -2251,6 +2819,112 @@ namespace VscAppz {
 				}
 				this.UriScheme = uriScheme;
 			}
+			return true;
+		}
+	}
+
+	public partial class WorkspaceFoldersChangeEvent {
+		internal bool populateFrom(any payload) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if ((!ok)) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("added", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				WorkspaceFolder[] added = default;
+				if ((null != val)) {
+					any[] __coll__added = default;
+					(__coll__added, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					added = new WorkspaceFolder[__coll__added.Length];
+					int __idx__added = default;
+					__idx__added = 0;
+					foreach (var __item__added in __coll__added) {
+						WorkspaceFolder __val__added = default;
+						__val__added = new WorkspaceFolder();
+						ok = __val__added.populateFrom(__item__added);
+						if ((!ok)) {
+							return false;
+						}
+						added[__idx__added] = __val__added;
+						__idx__added = (__idx__added + 1);
+					}
+				}
+				this.Added = added;
+			} else {
+				return false;
+			}			
+			(val, ok) = (it.TryGetValue("removed", out var ___) ? (___, true) : (default, false));
+			if (ok) {
+				WorkspaceFolder[] removed = default;
+				if ((null != val)) {
+					any[] __coll__removed = default;
+					(__coll__removed, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					removed = new WorkspaceFolder[__coll__removed.Length];
+					int __idx__removed = default;
+					__idx__removed = 0;
+					foreach (var __item__removed in __coll__removed) {
+						WorkspaceFolder __val__removed = default;
+						__val__removed = new WorkspaceFolder();
+						ok = __val__removed.populateFrom(__item__removed);
+						if ((!ok)) {
+							return false;
+						}
+						removed[__idx__removed] = __val__removed;
+						__idx__removed = (__idx__removed + 1);
+					}
+				}
+				this.Removed = removed;
+			} else {
+				return false;
+			}			
+			return true;
+		}
+	}
+
+	public partial class DiagnosticChangeEvent {
+		internal bool populateFrom(any payload) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if ((!ok)) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("uris", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				string[] uris = default;
+				if ((null != val)) {
+					any[] __coll__uris = default;
+					(__coll__uris, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					uris = new string[__coll__uris.Length];
+					int __idx__uris = default;
+					__idx__uris = 0;
+					foreach (var __item__uris in __coll__uris) {
+						string __val__uris = default;
+						(__val__uris, ok) = (__item__uris is string) ? (((string)(__item__uris)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						uris[__idx__uris] = __val__uris;
+						__idx__uris = (__idx__uris + 1);
+					}
+				}
+				this.Uris = uris;
+			} else {
+				return false;
+			}			
 			return true;
 		}
 	}

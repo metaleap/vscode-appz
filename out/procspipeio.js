@@ -5,7 +5,7 @@ const node_pipeio = require("readline");
 const vsc = require("vscode");
 const appz_1 = require("./appz");
 const vscgen = require("./vscode.gen");
-const dbgLogJsonMsgs = false;
+const dbgLogJsonMsgs = true;
 exports.progs = {};
 class Canceller extends vsc.CancellationTokenSource {
     constructor() { super(); this.num = 1; }
@@ -108,7 +108,7 @@ class Prog {
             else {
                 if (willRet)
                     this.callBacks[fnId] = { resolve: resolve, reject: reject };
-                this.send({ cbId: fnId, data: { "": args } });
+                this.send({ cbId: fnId, data: { "": args ? args : [] } });
             }
         });
     }

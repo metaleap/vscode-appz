@@ -29,7 +29,10 @@ func main() {
 	win = vsc.Window()
 	win.SetStatusBarMessage2("Choosing a demo WILL HIDE this", func(statusitem *Disposable) {
 		win.OnDidChangeWindowState(func(evt WindowState) {
-			win.SetStatusBarMessage1("Am I focused? "+strconv.FormatBool(evt.Focused)+".", 1234, nil)
+			win.SetStatusBarMessage1("Am I focused? "+strconv.FormatBool(evt.Focused)+".", 2345, nil)
+		}, nil)
+		vsc.Extensions().OnDidChange(func() {
+			win.SetStatusBarMessage1("Some extension(s) were just (un)installed or (de)activated.", 4242, nil)
 		}, nil)
 
 		buttons := []string{"Demo Pick Input", "Demo Text Input", "All Demos"}
@@ -66,6 +69,8 @@ func demoMenuAll() {
 		"window.showWorkspaceFolderPick",
 		"env.openExternal",
 		"env.Properties",
+		"commands.getCommands",
+		"languages.getLanguages",
 	}
 	win.ShowQuickPick2(menu, &QuickPickOptions{
 		CanPickMany: false, IgnoreFocusOut: true, PlaceHolder: "Dismissing this menu will quit the prog.",
@@ -89,6 +94,10 @@ func demoMenuAll() {
 					demo_Env_OpenExternal()
 				case menu[6]:
 					demo_Env_Properties()
+				case menu[7]:
+					demo_Commands_GetCommands()
+				case menu[8]:
+					demo_Languages_GetLanguages()
 				default:
 					win.ShowErrorMessage1("Unknown: `"+menuitem+"`, bye now!", nil, quit)
 				}
@@ -213,6 +222,18 @@ func demo_Env_Properties() {
 			"Shell:\t\t" + props.Shell,
 			"UriScheme:\t" + props.UriScheme,
 		}, &QuickPickOptions{IgnoreFocusOut: true}, nil, quit)
+	})
+}
+
+func demo_Commands_GetCommands() {
+	vsc.Commands().GetCommands(false, func(cmds []string) {
+		win.ShowQuickPick2(cmds, &QuickPickOptions{PlaceHolder: strconv.Itoa(len(cmds)) + " is quite a number!"}, nil, quit)
+	})
+}
+
+func demo_Languages_GetLanguages() {
+	vsc.Languages().GetLanguages(func(langs []string) {
+		win.ShowQuickPick2(langs, &QuickPickOptions{PlaceHolder: strconv.Itoa(len(langs)) + " is quite a number!"}, nil, quit)
 	})
 }
 

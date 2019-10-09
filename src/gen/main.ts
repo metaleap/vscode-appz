@@ -49,7 +49,30 @@ const genApiSurface: genApiMember = {
                 'sessionId',
                 'shell',
                 'uriScheme',
-            ]
+            ],
+            'workspace': [
+                'name',
+                // 'workspaceFile',
+                'saveAll',
+
+                'onDidChangeWorkspaceFolders',
+                // 'getWorkspaceFolder',
+                // 'workspaceFolders',
+                // 'openTextDocument',
+                // 'findFiles',
+                // 'asRelativePath',
+            ],
+            'languages': [
+                'getLanguages',
+                'onDidChangeDiagnostics',
+                // 'getDiagnostics',
+            ],
+            'extensions': [
+                'onDidChange',
+            ],
+            'commands': [
+                'getCommands',
+            ],
         },
     ],
 }
@@ -122,7 +145,7 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                                             const ntyperef = nsubsub.getChildAt(2) as ts.TypeReferenceNode
                                             if (ntyperef && ntyperef.typeName && ntyperef.typeName.getText() === 'Event' && ntyperef.typeArguments && ntyperef.typeArguments.length) {
                                                 const n: gen.MemberEvent = nsubsub as gen.MemberEvent
-                                                [n.EvtName, n.EvtArgs] = [item, ntyperef.typeArguments.map(_ => _)]
+                                                [n.EvtName, n.EvtArgs] = [item, ntyperef.typeArguments.filter(_ => _.kind !== ts.SyntaxKind.VoidKeyword).map(_ => _)]
                                                 members.push(n)
                                             } else {
                                                 const n: gen.MemberProp = nsubsub as gen.MemberProp
@@ -145,7 +168,7 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
 
 function gatherMember(into: gen.GenJob, member: ts.Node, overload: number, ...prefixes: string[]) {
     const evt = member as gen.MemberEvent, prop = member as gen.MemberProp
-    if (evt && evt.EvtName && evt.EvtArgs && evt.EvtArgs.length)
+    if (evt && evt.EvtName && evt.EvtName.length)
         gatherEvent(into, evt, ...prefixes)
     else if (prop && prop.PropName && prop.PropType)
         gatherProp(into, prop, ...prefixes)
@@ -209,13 +232,13 @@ function gatherFromTypeNode(into: gen.GenJob, it: ts.TypeNode, typeParams: ts.No
                 const tnode = ts.getEffectiveConstraintOfTypeParameter(tparam)
                 if (tnode)
                     gatherAll(into, into.fromOrig.body, [tnode.getText()], into.moduleName)
-            } else if (tname === 'Thenable')
+            } else if (tname === 'Thenable' || tname === 'ReadonlyArray')
                 tref.typeArguments.forEach(_ => gatherFromTypeNode(into, _, typeParams))
             else if (tname !== 'Uri' && tname !== 'CancellationToken' && tname !== 'Disposable')
                 gatherAll(into, into.fromOrig.body, [tname], into.moduleName)
             break
         default:
-            if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(it.kind))
+            if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.VoidKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(it.kind))
                 throw (it.kind + '\t' + it.getText())
     }
 }

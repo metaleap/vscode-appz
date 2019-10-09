@@ -6,6 +6,8 @@
 - [Cancel](#T-VscAppz-Cancel 'VscAppz.Cancel')
   - [In(fromNow)](#M-VscAppz-Cancel-In-System-TimeSpan- 'VscAppz.Cancel.In(System.TimeSpan)')
   - [Now()](#M-VscAppz-Cancel-Now 'VscAppz.Cancel.Now')
+- [DiagnosticChangeEvent](#T-VscAppz-DiagnosticChangeEvent 'VscAppz.DiagnosticChangeEvent')
+  - [Uris](#F-VscAppz-DiagnosticChangeEvent-Uris 'VscAppz.DiagnosticChangeEvent.Uris')
 - [Disposable](#T-VscAppz-Disposable 'VscAppz.Disposable')
   - [Dispose()](#M-VscAppz-Disposable-Dispose 'VscAppz.Disposable.Dispose')
 - [EnvProperties](#T-VscAppz-EnvProperties 'VscAppz.EnvProperties')
@@ -17,6 +19,8 @@
   - [SessionId](#F-VscAppz-EnvProperties-SessionId 'VscAppz.EnvProperties.SessionId')
   - [Shell](#F-VscAppz-EnvProperties-Shell 'VscAppz.EnvProperties.Shell')
   - [UriScheme](#F-VscAppz-EnvProperties-UriScheme 'VscAppz.EnvProperties.UriScheme')
+- [ICommands](#T-VscAppz-ICommands 'VscAppz.ICommands')
+  - [GetCommands(filterInternal,andThen)](#M-VscAppz-ICommands-GetCommands-System-Boolean,System-Action{System-String[]}- 'VscAppz.ICommands.GetCommands(System.Boolean,System.Action{System.String[]})')
 - [IEnv](#T-VscAppz-IEnv 'VscAppz.IEnv')
   - [AppName()](#M-VscAppz-IEnv-AppName-System-Action{System-String}- 'VscAppz.IEnv.AppName(System.Action{System.String})')
   - [AppRoot()](#M-VscAppz-IEnv-AppRoot-System-Action{System-String}- 'VscAppz.IEnv.AppRoot(System.Action{System.String})')
@@ -28,9 +32,18 @@
   - [SessionId()](#M-VscAppz-IEnv-SessionId-System-Action{System-String}- 'VscAppz.IEnv.SessionId(System.Action{System.String})')
   - [Shell()](#M-VscAppz-IEnv-Shell-System-Action{System-String}- 'VscAppz.IEnv.Shell(System.Action{System.String})')
   - [UriScheme()](#M-VscAppz-IEnv-UriScheme-System-Action{System-String}- 'VscAppz.IEnv.UriScheme(System.Action{System.String})')
+- [IExtensions](#T-VscAppz-IExtensions 'VscAppz.IExtensions')
+  - [OnDidChange()](#M-VscAppz-IExtensions-OnDidChange-System-Action,System-Action{VscAppz-Disposable}- 'VscAppz.IExtensions.OnDidChange(System.Action,System.Action{VscAppz.Disposable})')
+- [ILanguages](#T-VscAppz-ILanguages 'VscAppz.ILanguages')
+  - [GetLanguages(andThen)](#M-VscAppz-ILanguages-GetLanguages-System-Action{System-String[]}- 'VscAppz.ILanguages.GetLanguages(System.Action{System.String[]})')
+  - [OnDidChangeDiagnostics()](#M-VscAppz-ILanguages-OnDidChangeDiagnostics-System-Action{VscAppz-DiagnosticChangeEvent},System-Action{VscAppz-Disposable}- 'VscAppz.ILanguages.OnDidChangeDiagnostics(System.Action{VscAppz.DiagnosticChangeEvent},System.Action{VscAppz.Disposable})')
 - [IVscode](#T-VscAppz-IVscode 'VscAppz.IVscode')
+  - [Commands](#P-VscAppz-IVscode-Commands 'VscAppz.IVscode.Commands')
   - [Env](#P-VscAppz-IVscode-Env 'VscAppz.IVscode.Env')
+  - [Extensions](#P-VscAppz-IVscode-Extensions 'VscAppz.IVscode.Extensions')
+  - [Languages](#P-VscAppz-IVscode-Languages 'VscAppz.IVscode.Languages')
   - [Window](#P-VscAppz-IVscode-Window 'VscAppz.IVscode.Window')
+  - [Workspace](#P-VscAppz-IVscode-Workspace 'VscAppz.IVscode.Workspace')
 - [IWindow](#T-VscAppz-IWindow 'VscAppz.IWindow')
   - [OnDidChangeWindowState()](#M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState},System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState},System.Action{VscAppz.Disposable})')
   - [SetStatusBarMessage(text,hideAfterTimeout,andThen)](#M-VscAppz-IWindow-SetStatusBarMessage-System-String,System-Int32,System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.SetStatusBarMessage(System.String,System.Int32,System.Action{VscAppz.Disposable})')
@@ -56,6 +69,10 @@
   - [ShowWarningMessage(message,options,items,andThen)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
   - [ShowWorkspaceFolderPick(options,andThen)](#M-VscAppz-IWindow-ShowWorkspaceFolderPick-VscAppz-WorkspaceFolderPickOptions,System-Action{VscAppz-WorkspaceFolder}- 'VscAppz.IWindow.ShowWorkspaceFolderPick(VscAppz.WorkspaceFolderPickOptions,System.Action{VscAppz.WorkspaceFolder})')
   - [State()](#M-VscAppz-IWindow-State-System-Action{VscAppz-WindowState}- 'VscAppz.IWindow.State(System.Action{VscAppz.WindowState})')
+- [IWorkspace](#T-VscAppz-IWorkspace 'VscAppz.IWorkspace')
+  - [Name()](#M-VscAppz-IWorkspace-Name-System-Action{System-String}- 'VscAppz.IWorkspace.Name(System.Action{System.String})')
+  - [OnDidChangeWorkspaceFolders()](#M-VscAppz-IWorkspace-OnDidChangeWorkspaceFolders-System-Action{VscAppz-WorkspaceFoldersChangeEvent},System-Action{VscAppz-Disposable}- 'VscAppz.IWorkspace.OnDidChangeWorkspaceFolders(System.Action{VscAppz.WorkspaceFoldersChangeEvent},System.Action{VscAppz.Disposable})')
+  - [SaveAll(includeUntitled,andThen)](#M-VscAppz-IWorkspace-SaveAll-System-Boolean,System-Action{System-Boolean}- 'VscAppz.IWorkspace.SaveAll(System.Boolean,System.Action{System.Boolean})')
 - [InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions')
   - [IgnoreFocusOut](#F-VscAppz-InputBoxOptions-IgnoreFocusOut 'VscAppz.InputBoxOptions.IgnoreFocusOut')
   - [Password](#F-VscAppz-InputBoxOptions-Password 'VscAppz.InputBoxOptions.Password')
@@ -108,6 +125,9 @@
 - [WorkspaceFolderPickOptions](#T-VscAppz-WorkspaceFolderPickOptions 'VscAppz.WorkspaceFolderPickOptions')
   - [IgnoreFocusOut](#F-VscAppz-WorkspaceFolderPickOptions-IgnoreFocusOut 'VscAppz.WorkspaceFolderPickOptions.IgnoreFocusOut')
   - [PlaceHolder](#F-VscAppz-WorkspaceFolderPickOptions-PlaceHolder 'VscAppz.WorkspaceFolderPickOptions.PlaceHolder')
+- [WorkspaceFoldersChangeEvent](#T-VscAppz-WorkspaceFoldersChangeEvent 'VscAppz.WorkspaceFoldersChangeEvent')
+  - [Added](#F-VscAppz-WorkspaceFoldersChangeEvent-Added 'VscAppz.WorkspaceFoldersChangeEvent.Added')
+  - [Removed](#F-VscAppz-WorkspaceFoldersChangeEvent-Removed 'VscAppz.WorkspaceFoldersChangeEvent.Removed')
 
 <a name='T-VscAppz-Cancel'></a>
 ## Cancel `type`
@@ -143,6 +163,24 @@ Cancel.Now signals cancellation to the counterparty.
 ##### Parameters
 
 This method has no parameters.
+
+<a name='T-VscAppz-DiagnosticChangeEvent'></a>
+## DiagnosticChangeEvent `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+The event that is fired when diagnostics change.
+
+<a name='F-VscAppz-DiagnosticChangeEvent-Uris'></a>
+### Uris `constants`
+
+##### Summary
+
+An array of resources for which diagnostics have changed.
 
 <a name='T-VscAppz-Disposable'></a>
 ## Disposable `type`
@@ -240,6 +278,69 @@ The detected default shell for the extension host, this is overridden by the
 ##### Summary
 
 The custom uri scheme the editor registers to in the operating system.
+
+<a name='T-VscAppz-ICommands'></a>
+## ICommands `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Namespace for dealing with commands. In short, a command is a function with a
+unique identifier. The function is sometimes also called _command handler_.
+
+Commands can be added to the editor using the [registerCommand](#commands.registerCommand)
+and [registerTextEditorCommand](#commands.registerTextEditorCommand) functions. Commands
+can be executed [manually](#commands.executeCommand) or from a UI gesture. Those are:
+
+* palette - Use the `commands`-section in `package.json` to make a command show in
+the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette).
+* keybinding - Use the `keybindings`-section in `package.json` to enable
+[keybindings](https://code.visualstudio.com/docs/getstarted/keybindings#_customizing-shortcuts)
+for your extension.
+
+Commands from other extensions and from the editor itself are accessible to an extension. However,
+when invoking an editor command not all argument types are supported.
+
+This is a sample that registers a command handler and adds an entry for that command to the palette. First
+register a command handler with the identifier `extension.sayHello`.
+```javascript
+commands.registerCommand('extension.sayHello', () => {
+ 	window.showInformationMessage('Hello World!');
+});
+```
+Second, bind the command identifier to a title under which it will show in the palette (`package.json`).
+```json
+{
+ 	"contributes": {
+ 		"commands": [{
+ 			"command": "extension.sayHello",
+ 			"title": "Hello World"
+ 		}]
+ 	}
+}
+```
+
+<a name='M-VscAppz-ICommands-GetCommands-System-Boolean,System-Action{System-String[]}-'></a>
+### GetCommands(filterInternal,andThen) `method`
+
+##### Summary
+
+Retrieve the list of all available commands. Commands starting an underscore are
+treated as internal commands.
+
+`filterInternal` ── Set `true` to not see internal commands (starting with an underscore)
+
+`andThen` ── Thenable that resolves to a list of command ids.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| filterInternal | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Set `true` to not see internal commands (starting with an underscore) |
+| andThen | [System.Action{System.String[]}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String[]}') | Thenable that resolves to a list of command ids. |
 
 <a name='T-VscAppz-IEnv'></a>
 ## IEnv `type`
@@ -381,6 +482,121 @@ The custom uri scheme the editor registers to in the operating system.
 
 This method has no parameters.
 
+<a name='T-VscAppz-IExtensions'></a>
+## IExtensions `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Namespace for dealing with installed extensions. Extensions are represented
+by an [extension](#Extension)-interface which enables reflection on them.
+
+Extension writers can provide APIs to other extensions by returning their API public
+surface from the `activate`-call.
+
+```javascript
+export function activate(context: vscode.ExtensionContext) {
+ 	let api = {
+ 		sum(a, b) {
+ 			return a + b;
+ 		},
+ 		mul(a, b) {
+ 			return a * b;
+ 		}
+ 	};
+ 	// 'export' public api-surface
+ 	return api;
+}
+```
+When depending on the API of another extension add an `extensionDependency`-entry
+to `package.json`, and use the [getExtension](#extensions.getExtension)-function
+and the [exports](#Extension.exports)-property, like below:
+
+```javascript
+let mathExt = extensions.getExtension('genius.math');
+let importedApi = mathExt.exports;
+
+console.log(importedApi.mul(42, 1));
+```
+
+<a name='M-VscAppz-IExtensions-OnDidChange-System-Action,System-Action{VscAppz-Disposable}-'></a>
+### OnDidChange() `method`
+
+##### Summary
+
+An event which fires when `extensions.all` changes. This can happen when extensions are
+installed, uninstalled, enabled or disabled.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='T-VscAppz-ILanguages'></a>
+## ILanguages `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Namespace for participating in language-specific editor [features](https://code.visualstudio.com/docs/editor/editingevolved),
+like IntelliSense, code actions, diagnostics etc.
+
+Many programming languages exist and there is huge variety in syntaxes, semantics, and paradigms. Despite that, features
+like automatic word-completion, code navigation, or code checking have become popular across different tools for different
+programming languages.
+
+The editor provides an API that makes it simple to provide such common features by having all UI and actions already in place and
+by allowing you to participate by providing data only. For instance, to contribute a hover all you have to do is provide a function
+that can be called with a [TextDocument](#TextDocument) and a [Position](#Position) returning hover info. The rest, like tracking the
+mouse, positioning the hover, keeping the hover stable etc. is taken care of by the editor.
+
+```javascript
+languages.registerHoverProvider('javascript', {
+ 	provideHover(document, position, token) {
+ 		return new Hover('I am a hover!');
+ 	}
+});
+```
+
+Registration is done using a [document selector](#DocumentSelector) which is either a language id, like `javascript` or
+a more complex [filter](#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
+a selector will result in a [score](#languages.match) that is used to determine if and how a provider shall be used. When
+scores are equal the provider that came last wins. For features that allow full arity, like [hover](#languages.registerHoverProvider),
+the score is only checked to be `>0`, for other features, like [IntelliSense](#languages.registerCompletionItemProvider) the
+score is used for determining the order in which providers are asked to participate.
+
+<a name='M-VscAppz-ILanguages-GetLanguages-System-Action{System-String[]}-'></a>
+### GetLanguages(andThen) `method`
+
+##### Summary
+
+Return the identifiers of all known languages.
+
+`andThen` ── Promise resolving to an array of identifier strings.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| andThen | [System.Action{System.String[]}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String[]}') | Promise resolving to an array of identifier strings. |
+
+<a name='M-VscAppz-ILanguages-OnDidChangeDiagnostics-System-Action{VscAppz-DiagnosticChangeEvent},System-Action{VscAppz-Disposable}-'></a>
+### OnDidChangeDiagnostics() `method`
+
+##### Summary
+
+An [event](#Event) which fires when the global set of diagnostics changes. This is
+newly added and removed diagnostics.
+
+##### Parameters
+
+This method has no parameters.
+
 <a name='T-VscAppz-IVscode'></a>
 ## IVscode `type`
 
@@ -393,12 +609,120 @@ VscAppz
 Type Definition for Visual Studio Code 1.38 Extension API
 See https://code.visualstudio.com/api for more information
 
+<a name='P-VscAppz-IVscode-Commands'></a>
+### Commands `property`
+
+##### Summary
+
+Namespace for dealing with commands. In short, a command is a function with a
+unique identifier. The function is sometimes also called _command handler_.
+
+Commands can be added to the editor using the [registerCommand](#commands.registerCommand)
+and [registerTextEditorCommand](#commands.registerTextEditorCommand) functions. Commands
+can be executed [manually](#commands.executeCommand) or from a UI gesture. Those are:
+
+* palette - Use the `commands`-section in `package.json` to make a command show in
+the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette).
+* keybinding - Use the `keybindings`-section in `package.json` to enable
+[keybindings](https://code.visualstudio.com/docs/getstarted/keybindings#_customizing-shortcuts)
+for your extension.
+
+Commands from other extensions and from the editor itself are accessible to an extension. However,
+when invoking an editor command not all argument types are supported.
+
+This is a sample that registers a command handler and adds an entry for that command to the palette. First
+register a command handler with the identifier `extension.sayHello`.
+```javascript
+commands.registerCommand('extension.sayHello', () => {
+ 	window.showInformationMessage('Hello World!');
+});
+```
+Second, bind the command identifier to a title under which it will show in the palette (`package.json`).
+```json
+{
+ 	"contributes": {
+ 		"commands": [{
+ 			"command": "extension.sayHello",
+ 			"title": "Hello World"
+ 		}]
+ 	}
+}
+```
+
 <a name='P-VscAppz-IVscode-Env'></a>
 ### Env `property`
 
 ##### Summary
 
 Namespace describing the environment the editor runs in.
+
+<a name='P-VscAppz-IVscode-Extensions'></a>
+### Extensions `property`
+
+##### Summary
+
+Namespace for dealing with installed extensions. Extensions are represented
+by an [extension](#Extension)-interface which enables reflection on them.
+
+Extension writers can provide APIs to other extensions by returning their API public
+surface from the `activate`-call.
+
+```javascript
+export function activate(context: vscode.ExtensionContext) {
+ 	let api = {
+ 		sum(a, b) {
+ 			return a + b;
+ 		},
+ 		mul(a, b) {
+ 			return a * b;
+ 		}
+ 	};
+ 	// 'export' public api-surface
+ 	return api;
+}
+```
+When depending on the API of another extension add an `extensionDependency`-entry
+to `package.json`, and use the [getExtension](#extensions.getExtension)-function
+and the [exports](#Extension.exports)-property, like below:
+
+```javascript
+let mathExt = extensions.getExtension('genius.math');
+let importedApi = mathExt.exports;
+
+console.log(importedApi.mul(42, 1));
+```
+
+<a name='P-VscAppz-IVscode-Languages'></a>
+### Languages `property`
+
+##### Summary
+
+Namespace for participating in language-specific editor [features](https://code.visualstudio.com/docs/editor/editingevolved),
+like IntelliSense, code actions, diagnostics etc.
+
+Many programming languages exist and there is huge variety in syntaxes, semantics, and paradigms. Despite that, features
+like automatic word-completion, code navigation, or code checking have become popular across different tools for different
+programming languages.
+
+The editor provides an API that makes it simple to provide such common features by having all UI and actions already in place and
+by allowing you to participate by providing data only. For instance, to contribute a hover all you have to do is provide a function
+that can be called with a [TextDocument](#TextDocument) and a [Position](#Position) returning hover info. The rest, like tracking the
+mouse, positioning the hover, keeping the hover stable etc. is taken care of by the editor.
+
+```javascript
+languages.registerHoverProvider('javascript', {
+ 	provideHover(document, position, token) {
+ 		return new Hover('I am a hover!');
+ 	}
+});
+```
+
+Registration is done using a [document selector](#DocumentSelector) which is either a language id, like `javascript` or
+a more complex [filter](#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
+a selector will result in a [score](#languages.match) that is used to determine if and how a provider shall be used. When
+scores are equal the provider that came last wins. For features that allow full arity, like [hover](#languages.registerHoverProvider),
+the score is only checked to be `>0`, for other features, like [IntelliSense](#languages.registerCompletionItemProvider) the
+score is used for determining the order in which providers are asked to participate.
 
 <a name='P-VscAppz-IVscode-Window'></a>
 ### Window `property`
@@ -408,6 +732,19 @@ Namespace describing the environment the editor runs in.
 Namespace for dealing with the current window of the editor. That is visible
 and active editors, as well as, UI elements to show messages, selections, and
 asking for user input.
+
+<a name='P-VscAppz-IVscode-Workspace'></a>
+### Workspace `property`
+
+##### Summary
+
+Namespace for dealing with the current workspace. A workspace is the representation
+of the folder that has been opened. There is no workspace when just a file but not a
+folder has been opened.
+
+The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
+events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+the editor-process so that they should be always used instead of nodejs-equivalents.
 
 <a name='T-VscAppz-IWindow'></a>
 ## IWindow `type`
@@ -939,6 +1276,64 @@ Represents the current window's state.
 
 This method has no parameters.
 
+<a name='T-VscAppz-IWorkspace'></a>
+## IWorkspace `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Namespace for dealing with the current workspace. A workspace is the representation
+of the folder that has been opened. There is no workspace when just a file but not a
+folder has been opened.
+
+The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
+events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+the editor-process so that they should be always used instead of nodejs-equivalents.
+
+<a name='M-VscAppz-IWorkspace-Name-System-Action{System-String}-'></a>
+### Name() `method`
+
+##### Summary
+
+The name of the workspace. `undefined` when no folder
+has been opened.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-IWorkspace-OnDidChangeWorkspaceFolders-System-Action{VscAppz-WorkspaceFoldersChangeEvent},System-Action{VscAppz-Disposable}-'></a>
+### OnDidChangeWorkspaceFolders() `method`
+
+##### Summary
+
+An event that is emitted when a workspace folder is added or removed.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-IWorkspace-SaveAll-System-Boolean,System-Action{System-Boolean}-'></a>
+### SaveAll(includeUntitled,andThen) `method`
+
+##### Summary
+
+Save all dirty files.
+
+`includeUntitled` ── Also save files that have been created during this session.
+
+`andThen` ── A thenable that resolves when the files have been saved.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| includeUntitled | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Also save files that have been created during this session. |
+| andThen | [System.Action{System.Boolean}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.Boolean}') | A thenable that resolves when the files have been saved. |
+
 <a name='T-VscAppz-InputBoxOptions'></a>
 ## InputBoxOptions `type`
 
@@ -1401,3 +1796,28 @@ Set to `true` to keep the picker open when focus moves to another part of the ed
 ##### Summary
 
 An optional string to show as place holder in the input box to guide the user what to pick on.
+
+<a name='T-VscAppz-WorkspaceFoldersChangeEvent'></a>
+## WorkspaceFoldersChangeEvent `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).
+
+<a name='F-VscAppz-WorkspaceFoldersChangeEvent-Added'></a>
+### Added `constants`
+
+##### Summary
+
+Added workspace folders.
+
+<a name='F-VscAppz-WorkspaceFoldersChangeEvent-Removed'></a>
+### Removed `constants`
+
+##### Summary
+
+Removed workspace folders.

@@ -7,7 +7,7 @@ import * as vscgen from './vscode.gen'
 
 
 
-const dbgLogJsonMsgs = false
+const dbgLogJsonMsgs = true
 export let progs: { [_: string]: Prog } = {}
 
 
@@ -125,7 +125,7 @@ export class Prog {
             else {
                 if (willRet)
                     this.callBacks[fnId] = { resolve: resolve, reject: reject }
-                this.send({ cbId: fnId, data: { "": args } })
+                this.send({ cbId: fnId, data: { "": args ? args : [] } })
             }
         })
     }

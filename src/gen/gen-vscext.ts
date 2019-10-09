@@ -47,14 +47,14 @@ export class Gen extends gen.Gen implements gen.IGen {
                     src += `\t\t\t\tcase "${method.name}": {\n`
                     if (isprop && isprop.PropName && isprop.PropType)
                         src += `\t\t\t\t\treturn Promise.resolve(${method.fromOrig.qName})\n`
-                    else if (isevt && isevt.EvtArgs && isevt.EvtArgs.length) {
+                    else if (isevt && isevt.EvtName && isevt.EvtName.length) {
                         const fnid = "_fnid_" + method.args[0].name
                         src += `\t\t\t\t\tconst ${fnid} = msg.data['${method.args[0].name}'] as string\n`
                         src += `\t\t\t\t\treturn (!(${fnid} && ${fnid}.length))\n`
                         src += `\t\t\t\t\t\t? Promise.reject(msg.data)\n`
-                        src += `\t\t\t\t\t\t: ${method.fromOrig.qName}((a0) => {\n`
+                        src += `\t\t\t\t\t\t: ${method.fromOrig.qName}((${isevt.EvtArgs.map((_ea, i) => 'a' + i).join(', ')}) => {\n`
                         src += `\t\t\t\t\t\t\tif (prog && prog.proc)\n`
-                        src += `\t\t\t\t\t\t\t\tprog.callBack(false, ${fnid}, a0).then(noOp, noOp)\n`
+                        src += `\t\t\t\t\t\t\t\tprog.callBack(false, ${fnid}, ${isevt.EvtArgs.map((_ea, i) => 'a' + i).join(', ')}).then(noOp, noOp)\n`
                         src += `\t\t\t\t\t\t})\n`
                     } else {
                         const lastarg = method.args[method.args.length - 1]
@@ -79,7 +79,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                                         for (const ff of funcfields) {
                                             const tfn = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)
                                             if (tfn && tfn.length) {
-                                                src += `\t\t\t\t\tif (arg_${arg.name}.${ff.name}_AppzFuncId && arg_${arg.name}.${ff.name}_AppzFuncId.length)\n`
+                                                src += `\t\t\t\t\tif (arg_${arg.name} && arg_${arg.name}.${ff.name}_AppzFuncId && arg_${arg.name}.${ff.name}_AppzFuncId.length)\n`
                                                 src += `\t\t\t\t\t\targ_${arg.name}.${ff.name} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => prog.callBack(true, arg_${arg.name}.${ff.name}_AppzFuncId, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`
                                             }
                                         }

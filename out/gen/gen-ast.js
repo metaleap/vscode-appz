@@ -646,15 +646,18 @@ class Gen extends gen.Gen {
         }
         const isevt = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl : null;
         let nameevtsub = undefined;
-        if (isevt && isevt.EvtArgs && isevt.EvtArgs.length) {
+        if (isevt && isevt.EvtName && isevt.EvtName.length) {
             const arg = method.Args[0];
             nameevtsub = "_fnid_" + arg.Name;
             body.push(_.iVar(nameevtsub, TypeRefPrim.String), _.iIf(_.oIsnt(_.n(arg.Name)), [
                 _.eCall(_.n("OnError"), _.eThis(), _.eLit(`${iface.Name}.${method.Name}: the '${arg.Name}' arg (which is not optional but required) was not passed by the caller`), _.eZilch()),
                 _.iRet(null),
-            ]), _.iSet(_.n(nameevtsub), _.eCall(_.oDot(_.eThis(), _.n("nextSub")), _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Bool, ...[_.iVar(__.ok, TypeRefPrim.Bool), _.iIf(_.oNeq(_.eLit(isevt.EvtArgs.length), _.eLen(_.n("args"), true)), [
-                    _.iRet(_.eLit(false)),
-                ])].concat(_.EACH(isevt.EvtArgs, (t, i) => _.LET(`_a_${i}_`, aname => _.LET(this.b.typeRef(this.b.prep.typeSpec(t)), atype => [_.iVar(aname, atype)].concat(this.convOrRet(aname, _.oIdx(_.n("args"), _.eLit(i)), atype)))))).concat(_.eCall(_.n(arg.Name), ...isevt.EvtArgs.map((_a, i) => _.n(`_a_${i}_`))), _.iRet(_.eLit(true)))))), _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n(nameevtsub)));
+            ]), _.iSet(_.n(nameevtsub), _.eCall(_.oDot(_.eThis(), _.n("nextSub")), _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Bool, ...[
+                _.iVar(__.ok, TypeRefPrim.Bool),
+                _.iIf(_.oNeq(_.eLit(isevt.EvtArgs.length), _.eLen(_.n("args"), true)), [
+                    _.iRet(_.n(__.ok)),
+                ]),
+            ].concat(_.EACH(isevt.EvtArgs, (t, i) => _.LET(`_a_${i}_`, aname => _.LET(this.b.typeRef(this.b.prep.typeSpec(t)), atype => [_.iVar(aname, atype)].concat(this.convOrRet(aname, _.oIdx(_.n("args"), _.eLit(i)), atype)))))).concat(_.eCall(_.n(arg.Name), ...isevt.EvtArgs.map((_a, i) => _.n(`_a_${i}_`))), _.iRet(_.eLit(true)))))), _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n(nameevtsub)));
         }
         else
             for (const arg of method.Args)

@@ -261,7 +261,7 @@ export class Gen extends gen_ast.Gen {
 
         const tfun = this.typeFunc(it)
         if (tfun) return (!tfun.To)
-            ? this.s("Action<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(">")
+            ? this.s(tfun.From.length ? "Action<" : "Action").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(tfun.From.length ? ">" : "")
             : this.s("Func<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(", ").emitTypeRef(tfun.To).s(">")
 
         if (it === gen_ast.TypeRefPrim.Real)

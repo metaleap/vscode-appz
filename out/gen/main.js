@@ -42,7 +42,22 @@ const genApiSurface = {
                 'sessionId',
                 'shell',
                 'uriScheme',
-            ]
+            ],
+            'workspace': [
+                'name',
+                'saveAll',
+                'onDidChangeWorkspaceFolders',
+            ],
+            'languages': [
+                'getLanguages',
+                'onDidChangeDiagnostics',
+            ],
+            'extensions': [
+                'onDidChange',
+            ],
+            'commands': [
+                'getCommands',
+            ],
         },
     ],
 };
@@ -111,7 +126,7 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                                             const ntyperef = nsubsub.getChildAt(2);
                                             if (ntyperef && ntyperef.typeName && ntyperef.typeName.getText() === 'Event' && ntyperef.typeArguments && ntyperef.typeArguments.length) {
                                                 const n = nsubsub;
-                                                [n.EvtName, n.EvtArgs] = [item, ntyperef.typeArguments.map(_ => _)];
+                                                [n.EvtName, n.EvtArgs] = [item, ntyperef.typeArguments.filter(_ => _.kind !== ts.SyntaxKind.VoidKeyword).map(_ => _)];
                                                 members.push(n);
                                             }
                                             else {
@@ -134,7 +149,7 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
 }
 function gatherMember(into, member, overload, ...prefixes) {
     const evt = member, prop = member;
-    if (evt && evt.EvtName && evt.EvtArgs && evt.EvtArgs.length)
+    if (evt && evt.EvtName && evt.EvtName.length)
         gatherEvent(into, evt, ...prefixes);
     else if (prop && prop.PropName && prop.PropType)
         gatherProp(into, prop, ...prefixes);
@@ -196,13 +211,13 @@ function gatherFromTypeNode(into, it, typeParams = undefined) {
                 if (tnode)
                     gatherAll(into, into.fromOrig.body, [tnode.getText()], into.moduleName);
             }
-            else if (tname === 'Thenable')
+            else if (tname === 'Thenable' || tname === 'ReadonlyArray')
                 tref.typeArguments.forEach(_ => gatherFromTypeNode(into, _, typeParams));
             else if (tname !== 'Uri' && tname !== 'CancellationToken' && tname !== 'Disposable')
                 gatherAll(into, into.fromOrig.body, [tname], into.moduleName);
             break;
         default:
-            if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(it.kind))
+            if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.VoidKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(it.kind))
                 throw (it.kind + '\t' + it.getText());
     }
 }

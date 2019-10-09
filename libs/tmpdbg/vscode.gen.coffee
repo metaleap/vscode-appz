@@ -29,6 +29,115 @@ Vscode: interface
     # Namespace describing the environment the editor runs in.
     Env: Env
 
+    # workspace:
+    # Namespace for dealing with the current workspace. A workspace is the representation
+    # of the folder that has been opened. There is no workspace when just a file but not a
+    # folder has been opened.
+    # 
+    # The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
+    # events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+    # the editor-process so that they should be always used instead of nodejs-equivalents.
+    Workspace: Workspace
+
+    # languages:
+    # Namespace for participating in language-specific editor [features](https://code.visualstudio.com/docs/editor/editingevolved),
+    # like IntelliSense, code actions, diagnostics etc.
+    # 
+    # Many programming languages exist and there is huge variety in syntaxes, semantics, and paradigms. Despite that, features
+    # like automatic word-completion, code navigation, or code checking have become popular across different tools for different
+    # programming languages.
+    # 
+    # The editor provides an API that makes it simple to provide such common features by having all UI and actions already in place and
+    # by allowing you to participate by providing data only. For instance, to contribute a hover all you have to do is provide a function
+    # that can be called with a [TextDocument](#TextDocument) and a [Position](#Position) returning hover info. The rest, like tracking the
+    # mouse, positioning the hover, keeping the hover stable etc. is taken care of by the editor.
+    # 
+    # ```javascript
+    # languages.registerHoverProvider('javascript', {
+    #  	provideHover(document, position, token) {
+    #  		return new Hover('I am a hover!');
+    #  	}
+    # });
+    # ```
+    # 
+    # Registration is done using a [document selector](#DocumentSelector) which is either a language id, like `javascript` or
+    # a more complex [filter](#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
+    # a selector will result in a [score](#languages.match) that is used to determine if and how a provider shall be used. When
+    # scores are equal the provider that came last wins. For features that allow full arity, like [hover](#languages.registerHoverProvider),
+    # the score is only checked to be `>0`, for other features, like [IntelliSense](#languages.registerCompletionItemProvider) the
+    # score is used for determining the order in which providers are asked to participate.
+    Languages: Languages
+
+    # extensions:
+    # Namespace for dealing with installed extensions. Extensions are represented
+    # by an [extension](#Extension)-interface which enables reflection on them.
+    # 
+    # Extension writers can provide APIs to other extensions by returning their API public
+    # surface from the `activate`-call.
+    # 
+    # ```javascript
+    # export function activate(context: vscode.ExtensionContext) {
+    #  	let api = {
+    #  		sum(a, b) {
+    #  			return a + b;
+    #  		},
+    #  		mul(a, b) {
+    #  			return a * b;
+    #  		}
+    #  	};
+    #  	// 'export' public api-surface
+    #  	return api;
+    # }
+    # ```
+    # When depending on the API of another extension add an `extensionDependency`-entry
+    # to `package.json`, and use the [getExtension](#extensions.getExtension)-function
+    # and the [exports](#Extension.exports)-property, like below:
+    # 
+    # ```javascript
+    # let mathExt = extensions.getExtension('genius.math');
+    # let importedApi = mathExt.exports;
+    # 
+    # console.log(importedApi.mul(42, 1));
+    # ```
+    Extensions: Extensions
+
+    # commands:
+    # Namespace for dealing with commands. In short, a command is a function with a
+    # unique identifier. The function is sometimes also called _command handler_.
+    # 
+    # Commands can be added to the editor using the [registerCommand](#commands.registerCommand)
+    # and [registerTextEditorCommand](#commands.registerTextEditorCommand) functions. Commands
+    # can be executed [manually](#commands.executeCommand) or from a UI gesture. Those are:
+    # 
+    # * palette - Use the `commands`-section in `package.json` to make a command show in
+    # the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette).
+    # * keybinding - Use the `keybindings`-section in `package.json` to enable
+    # [keybindings](https://code.visualstudio.com/docs/getstarted/keybindings#_customizing-shortcuts)
+    # for your extension.
+    # 
+    # Commands from other extensions and from the editor itself are accessible to an extension. However,
+    # when invoking an editor command not all argument types are supported.
+    # 
+    # This is a sample that registers a command handler and adds an entry for that command to the palette. First
+    # register a command handler with the identifier `extension.sayHello`.
+    # ```javascript
+    # commands.registerCommand('extension.sayHello', () => {
+    #  	window.showInformationMessage('Hello World!');
+    # });
+    # ```
+    # Second, bind the command identifier to a title under which it will show in the palette (`package.json`).
+    # ```json
+    # {
+    #  	"contributes": {
+    #  		"commands": [{
+    #  			"command": "extension.sayHello",
+    #  			"title": "Hello World"
+    #  		}]
+    #  	}
+    # }
+    # ```
+    Commands: Commands
+
 
 
 
@@ -518,6 +627,186 @@ Env: interface
 
 
 
+# workspace:
+# Namespace for dealing with the current workspace. A workspace is the representation
+# of the folder that has been opened. There is no workspace when just a file but not a
+# folder has been opened.
+# 
+# The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
+# events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+# the editor-process so that they should be always used instead of nodejs-equivalents.
+Workspace: interface
+
+    # name:
+    # The name of the workspace. `undefined` when no folder
+    # has been opened.
+    Name: void
+        andThen: ?(?string->void)
+
+    # saveAll:
+    # Save all dirty files.
+    #
+    # @includeUntitled:
+    # Also save files that have been created during this session.
+    #
+    # @andThen:
+    # A thenable that resolves when the files have been saved.
+    SaveAll: void
+        includeUntitled: bool
+        andThen: ?(bool->void)
+
+    # onDidChangeWorkspaceFolders:
+    # An event that is emitted when a workspace folder is added or removed.
+    OnDidChangeWorkspaceFolders: void
+        listener: (WorkspaceFoldersChangeEvent->void)
+        andThen: ?(?Disposable->void)
+
+
+
+
+# languages:
+# Namespace for participating in language-specific editor [features](https://code.visualstudio.com/docs/editor/editingevolved),
+# like IntelliSense, code actions, diagnostics etc.
+# 
+# Many programming languages exist and there is huge variety in syntaxes, semantics, and paradigms. Despite that, features
+# like automatic word-completion, code navigation, or code checking have become popular across different tools for different
+# programming languages.
+# 
+# The editor provides an API that makes it simple to provide such common features by having all UI and actions already in place and
+# by allowing you to participate by providing data only. For instance, to contribute a hover all you have to do is provide a function
+# that can be called with a [TextDocument](#TextDocument) and a [Position](#Position) returning hover info. The rest, like tracking the
+# mouse, positioning the hover, keeping the hover stable etc. is taken care of by the editor.
+# 
+# ```javascript
+# languages.registerHoverProvider('javascript', {
+#  	provideHover(document, position, token) {
+#  		return new Hover('I am a hover!');
+#  	}
+# });
+# ```
+# 
+# Registration is done using a [document selector](#DocumentSelector) which is either a language id, like `javascript` or
+# a more complex [filter](#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
+# a selector will result in a [score](#languages.match) that is used to determine if and how a provider shall be used. When
+# scores are equal the provider that came last wins. For features that allow full arity, like [hover](#languages.registerHoverProvider),
+# the score is only checked to be `>0`, for other features, like [IntelliSense](#languages.registerCompletionItemProvider) the
+# score is used for determining the order in which providers are asked to participate.
+Languages: interface
+
+    # getLanguages:
+    # Return the identifiers of all known languages.
+    #
+    # @andThen:
+    # Promise resolving to an array of identifier strings.
+    GetLanguages: void
+        andThen: ?(?[string]->void)
+
+    # onDidChangeDiagnostics:
+    # An [event](#Event) which fires when the global set of diagnostics changes. This is
+    # newly added and removed diagnostics.
+    OnDidChangeDiagnostics: void
+        listener: (DiagnosticChangeEvent->void)
+        andThen: ?(?Disposable->void)
+
+
+
+
+# extensions:
+# Namespace for dealing with installed extensions. Extensions are represented
+# by an [extension](#Extension)-interface which enables reflection on them.
+# 
+# Extension writers can provide APIs to other extensions by returning their API public
+# surface from the `activate`-call.
+# 
+# ```javascript
+# export function activate(context: vscode.ExtensionContext) {
+#  	let api = {
+#  		sum(a, b) {
+#  			return a + b;
+#  		},
+#  		mul(a, b) {
+#  			return a * b;
+#  		}
+#  	};
+#  	// 'export' public api-surface
+#  	return api;
+# }
+# ```
+# When depending on the API of another extension add an `extensionDependency`-entry
+# to `package.json`, and use the [getExtension](#extensions.getExtension)-function
+# and the [exports](#Extension.exports)-property, like below:
+# 
+# ```javascript
+# let mathExt = extensions.getExtension('genius.math');
+# let importedApi = mathExt.exports;
+# 
+# console.log(importedApi.mul(42, 1));
+# ```
+Extensions: interface
+
+    # onDidChange:
+    # An event which fires when `extensions.all` changes. This can happen when extensions are
+    # installed, uninstalled, enabled or disabled.
+    OnDidChange: void
+        listener: (->void)
+        andThen: ?(?Disposable->void)
+
+
+
+
+# commands:
+# Namespace for dealing with commands. In short, a command is a function with a
+# unique identifier. The function is sometimes also called _command handler_.
+# 
+# Commands can be added to the editor using the [registerCommand](#commands.registerCommand)
+# and [registerTextEditorCommand](#commands.registerTextEditorCommand) functions. Commands
+# can be executed [manually](#commands.executeCommand) or from a UI gesture. Those are:
+# 
+# * palette - Use the `commands`-section in `package.json` to make a command show in
+# the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette).
+# * keybinding - Use the `keybindings`-section in `package.json` to enable
+# [keybindings](https://code.visualstudio.com/docs/getstarted/keybindings#_customizing-shortcuts)
+# for your extension.
+# 
+# Commands from other extensions and from the editor itself are accessible to an extension. However,
+# when invoking an editor command not all argument types are supported.
+# 
+# This is a sample that registers a command handler and adds an entry for that command to the palette. First
+# register a command handler with the identifier `extension.sayHello`.
+# ```javascript
+# commands.registerCommand('extension.sayHello', () => {
+#  	window.showInformationMessage('Hello World!');
+# });
+# ```
+# Second, bind the command identifier to a title under which it will show in the palette (`package.json`).
+# ```json
+# {
+#  	"contributes": {
+#  		"commands": [{
+#  			"command": "extension.sayHello",
+#  			"title": "Hello World"
+#  		}]
+#  	}
+# }
+# ```
+Commands: interface
+
+    # getCommands:
+    # Retrieve the list of all available commands. Commands starting an underscore are
+    # treated as internal commands.
+    #
+    # @filterInternal:
+    # Set `true` to not see internal commands (starting with an underscore)
+    #
+    # @andThen:
+    # Thenable that resolves to a list of command ids.
+    GetCommands: void
+        filterInternal: bool
+        andThen: ?(?[string]->void)
+
+
+
+
 # Options to configure the behavior of the message.
 MessageOptions: class
 
@@ -844,6 +1133,36 @@ WindowState: class
 
 
 
+# An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).
+WorkspaceFoldersChangeEvent: class
+
+    # added:
+    # Added workspace folders.
+    #
+    # JSON FLAGS: {"Name":"added","Required":true,"Excluded":false}
+    Added: [WorkspaceFolder]
+
+    # removed:
+    # Removed workspace folders.
+    #
+    # JSON FLAGS: {"Name":"removed","Required":true,"Excluded":false}
+    Removed: [WorkspaceFolder]
+
+
+
+
+# The event that is fired when diagnostics change.
+DiagnosticChangeEvent: class
+
+    # uris:
+    # An array of resources for which diagnostics have changed.
+    #
+    # JSON FLAGS: {"Name":"uris","Required":true,"Excluded":false}
+    Uris: [string]
+
+
+
+
 # envProperties:
 # Namespace describing the environment the editor runs in.
 EnvProperties: class
@@ -914,6 +1233,30 @@ Vscode·Window: ( -> Window)
 
 
 Vscode·Env: ( -> Env)
+    return this
+
+
+
+
+Vscode·Workspace: ( -> Workspace)
+    return this
+
+
+
+
+Vscode·Languages: ( -> Languages)
+    return this
+
+
+
+
+Vscode·Extensions: ( -> Extensions)
+    return this
+
+
+
+
+Vscode·Commands: ( -> Commands)
     return this
 
 
@@ -1733,7 +2076,7 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> andThen:?(?Disp
     _fnid_listener = this.nextSub((args:[any] -> bool)
         var ok of bool
         if (1 != args·len)
-            return false
+            return ok
         var _a_0_ of WindowState
         _a_0_ = WindowState·new
         ok = _a_0_.populateFrom(args@0)
@@ -1983,6 +2326,243 @@ Env·Properties: (andThen:(EnvProperties->void) -> void)
                     return false
             else
                 return false
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Workspace·Name: (andThen:?(?string->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "workspace.name"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?string
+            if (=?payload)
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
+                if (!ok)
+                    return false
+                result = (&_result_)
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Workspace·SaveAll: (includeUntitled:bool -> andThen:?(bool->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "workspace.saveAll"
+    msg.Data = dict·new(1)
+    msg.Data@"includeUntitled" = includeUntitled
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of bool
+            if (=?payload)
+                [result,ok] = ((payload)·(bool))
+                if (!ok)
+                    return false
+            else
+                return false
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->void) -> andThen:?(?Disposable->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "workspace.onDidChangeWorkspaceFolders"
+    msg.Data = dict·new(1)
+    var _fnid_listener of string
+    if (=!listener)
+        OnError(this, "Workspace.OnDidChangeWorkspaceFolders: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
+        return 
+    _fnid_listener = this.nextSub((args:[any] -> bool)
+        var ok of bool
+        if (1 != args·len)
+            return ok
+        var _a_0_ of WorkspaceFoldersChangeEvent
+        _a_0_ = WorkspaceFoldersChangeEvent·new
+        ok = _a_0_.populateFrom(args@0)
+        if (!ok)
+            return false
+        listener(_a_0_)
+        return true
+    )
+    msg.Data@"listener" = _fnid_listener
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?Disposable
+            if (=?payload)
+                result = ?Disposable·new
+                ok = result.populateFrom(payload)
+                if (!ok)
+                    return false
+            else
+                return false
+            andThen(result.bind(this, _fnid_listener))
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Languages·GetLanguages: (andThen:?(?[string]->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "languages.getLanguages"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?[string]
+            if (=?payload)
+                var __coll__result of [any]
+                [__coll__result,ok] = ((payload)·([any]))
+                if (!ok)
+                    return false
+                result = [string]·new(__coll__result·len)
+                var __idx__result of int
+                __idx__result = 0
+                for __item__result in __coll__result
+                    var __val__result of string
+                    [__val__result,ok] = ((__item__result)·(string))
+                    if (!ok)
+                        return false
+                    result@__idx__result = __val__result
+                    __idx__result = (__idx__result + 1)
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> andThen:?(?Disposable->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "languages.onDidChangeDiagnostics"
+    msg.Data = dict·new(1)
+    var _fnid_listener of string
+    if (=!listener)
+        OnError(this, "Languages.OnDidChangeDiagnostics: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
+        return 
+    _fnid_listener = this.nextSub((args:[any] -> bool)
+        var ok of bool
+        if (1 != args·len)
+            return ok
+        var _a_0_ of DiagnosticChangeEvent
+        _a_0_ = DiagnosticChangeEvent·new
+        ok = _a_0_.populateFrom(args@0)
+        if (!ok)
+            return false
+        listener(_a_0_)
+        return true
+    )
+    msg.Data@"listener" = _fnid_listener
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?Disposable
+            if (=?payload)
+                result = ?Disposable·new
+                ok = result.populateFrom(payload)
+                if (!ok)
+                    return false
+            else
+                return false
+            andThen(result.bind(this, _fnid_listener))
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Extensions·OnDidChange: (listener:(->void) -> andThen:?(?Disposable->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "extensions.onDidChange"
+    msg.Data = dict·new(1)
+    var _fnid_listener of string
+    if (=!listener)
+        OnError(this, "Extensions.OnDidChange: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
+        return 
+    _fnid_listener = this.nextSub((args:[any] -> bool)
+        var ok of bool
+        if (0 != args·len)
+            return ok
+        listener()
+        return true
+    )
+    msg.Data@"listener" = _fnid_listener
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?Disposable
+            if (=?payload)
+                result = ?Disposable·new
+                ok = result.populateFrom(payload)
+                if (!ok)
+                    return false
+            else
+                return false
+            andThen(result.bind(this, _fnid_listener))
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Commands·GetCommands: (filterInternal:bool -> andThen:?(?[string]->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "commands.getCommands"
+    msg.Data = dict·new(1)
+    msg.Data@"filterInternal" = filterInternal
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?[string]
+            if (=?payload)
+                var __coll__result of [any]
+                [__coll__result,ok] = ((payload)·([any]))
+                if (!ok)
+                    return false
+                result = [string]·new(__coll__result·len)
+                var __idx__result of int
+                __idx__result = 0
+                for __item__result in __coll__result
+                    var __val__result of string
+                    [__val__result,ok] = ((__item__result)·(string))
+                    if (!ok)
+                        return false
+                    result@__idx__result = __val__result
+                    __idx__result = (__idx__result + 1)
             andThen(result)
             return true
         
@@ -2256,6 +2836,95 @@ EnvProperties·populateFrom: (payload:any -> bool)
                 return false
             uriScheme = (&_uriScheme_)
         this.UriScheme = uriScheme
+    return true
+
+
+
+
+WorkspaceFoldersChangeEvent·populateFrom: (payload:any -> bool)
+    var it of dict
+    var ok of bool
+    var val of any
+    [it,ok] = ((payload)·(dict))
+    if (!ok)
+        return false
+    [val,ok] = it@?"added"
+    if ok
+        var added of [WorkspaceFolder]
+        if (=?val)
+            var __coll__added of [any]
+            [__coll__added,ok] = ((val)·([any]))
+            if (!ok)
+                return false
+            added = [WorkspaceFolder]·new(__coll__added·len)
+            var __idx__added of int
+            __idx__added = 0
+            for __item__added in __coll__added
+                var __val__added of WorkspaceFolder
+                __val__added = WorkspaceFolder·new
+                ok = __val__added.populateFrom(__item__added)
+                if (!ok)
+                    return false
+                added@__idx__added = __val__added
+                __idx__added = (__idx__added + 1)
+        this.Added = added
+    else
+        return false
+    [val,ok] = it@?"removed"
+    if ok
+        var removed of [WorkspaceFolder]
+        if (=?val)
+            var __coll__removed of [any]
+            [__coll__removed,ok] = ((val)·([any]))
+            if (!ok)
+                return false
+            removed = [WorkspaceFolder]·new(__coll__removed·len)
+            var __idx__removed of int
+            __idx__removed = 0
+            for __item__removed in __coll__removed
+                var __val__removed of WorkspaceFolder
+                __val__removed = WorkspaceFolder·new
+                ok = __val__removed.populateFrom(__item__removed)
+                if (!ok)
+                    return false
+                removed@__idx__removed = __val__removed
+                __idx__removed = (__idx__removed + 1)
+        this.Removed = removed
+    else
+        return false
+    return true
+
+
+
+
+DiagnosticChangeEvent·populateFrom: (payload:any -> bool)
+    var it of dict
+    var ok of bool
+    var val of any
+    [it,ok] = ((payload)·(dict))
+    if (!ok)
+        return false
+    [val,ok] = it@?"uris"
+    if ok
+        var uris of [string]
+        if (=?val)
+            var __coll__uris of [any]
+            [__coll__uris,ok] = ((val)·([any]))
+            if (!ok)
+                return false
+            uris = [string]·new(__coll__uris·len)
+            var __idx__uris of int
+            __idx__uris = 0
+            for __item__uris in __coll__uris
+                var __val__uris of string
+                [__val__uris,ok] = ((__item__uris)·(string))
+                if (!ok)
+                    return false
+                uris@__idx__uris = __val__uris
+                __idx__uris = (__idx__uris + 1)
+        this.Uris = uris
+    else
+        return false
     return true
 
 

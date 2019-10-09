@@ -241,20 +241,20 @@ export class Prep {
                     fromOrig: _,
                     name: _.name.getText(),
                     typeSpec: this.typeSpec(_.type, declf.typeParameters),
-                    optional: _.questionToken ? true : false,
+                    optional: (_.questionToken && _.type.kind !== ts.SyntaxKind.BooleanKeyword) ? true : false,
                     isFromRetThenable: false,
                     spreads: _.dotDotDotToken ? true : false,
                 })) : [],
         }
         iface.methods.push(me)
-        if (decle && decle.EvtName && decle.EvtArgs && decle.EvtArgs.length)
+        if (decle && decle.EvtName && decle.EvtName.length)
             me.args.push({
                 name: pickName('', ['listener', 'handler', 'eventHandler', 'onEvent', 'onEventRaised', 'onEventFired', 'onEventTriggered', 'onFired', 'onTriggered', 'onRaised'], me.args),
                 optional: false, typeSpec: { From: decle.EvtArgs.map(_ => this.typeSpec(_)), To: null },
             })
         let tret = (declp && declp.PropType) ?
             this.typeSpec(declp.PropType) :
-            (decle && decle.EvtArgs && decle.EvtArgs.length) ?
+            (decle && decle.EvtName && decle.EvtName.length) ?
                 "Disposable" :
                 this.typeSpec(declf.type, declf.typeParameters)
         const tprom = typeProm(tret)
@@ -290,6 +290,8 @@ export class Prep {
                 throw tNode.getText()
         }
         switch (tNode.kind) {
+            case ts.SyntaxKind.VoidKeyword:
+                return null
             case ts.SyntaxKind.AnyKeyword:
                 return ScriptPrimType.Any
             case ts.SyntaxKind.StringKeyword:
@@ -346,6 +348,11 @@ export class Prep {
                         Thens: tref.typeArguments.map(_ => this.typeSpec(_, tParams))
                     }
                     return tprom
+                } else if (tname === 'ReadonlyArray' && tref.typeArguments && tref.typeArguments.length === 1) {
+                    const tarr: TypeSpecArr = {
+                        ArrOf: this.typeSpec(tref.typeArguments[0], tParams)
+                    }
+                    return tarr
                 } else
                     return tname
             case ts.SyntaxKind.LiteralType:

@@ -906,7 +906,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         const isevt: gen.MemberEvent = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl as gen.MemberEvent : null
         let nameevtsub: string = undefined
-        if (isevt && isevt.EvtArgs && isevt.EvtArgs.length) {
+        if (isevt && isevt.EvtName && isevt.EvtName.length) {
             const arg = method.Args[0]
             nameevtsub = "_fnid_" + arg.Name
             body.push(
@@ -917,9 +917,12 @@ export class Gen extends gen.Gen implements gen.IGen {
                 ]),
                 _.iSet(_.n(nameevtsub), _.eCall(_.oDot(_.eThis(), _.n("nextSub")),
                     _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Bool,
-                        ...[_.iVar(__.ok, TypeRefPrim.Bool) as Instr, _.iIf(_.oNeq(_.eLit(isevt.EvtArgs.length), _.eLen(_.n("args"), true)), [
-                            _.iRet(_.eLit(false)),
-                        ]) as Instr].concat(
+                        ...[
+                            _.iVar(__.ok, TypeRefPrim.Bool) as Instr,
+                            _.iIf(_.oNeq(_.eLit(isevt.EvtArgs.length), _.eLen(_.n("args"), true)), [
+                                _.iRet(_.n(__.ok)),
+                            ]) as Instr,
+                        ].concat(
                             _.EACH(isevt.EvtArgs, (t, i): Instr[] =>
                                 _.LET(`_a_${i}_`, aname =>
                                     _.LET(this.b.typeRef(this.b.prep.typeSpec(t)), atype =>
