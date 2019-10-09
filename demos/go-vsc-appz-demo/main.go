@@ -65,6 +65,7 @@ func demoMenuAll() {
 		"window.showOpenDialog",
 		"window.showWorkspaceFolderPick",
 		"env.openExternal",
+		"env.Properties",
 	}
 	win.ShowQuickPick2(menu, &QuickPickOptions{
 		CanPickMany: false, IgnoreFocusOut: true, PlaceHolder: "Dismissing this menu will quit the prog.",
@@ -86,6 +87,8 @@ func demoMenuAll() {
 					demo_Window_ShowWorkspaceFolderPick()
 				case menu[5]:
 					demo_Env_OpenExternal()
+				case menu[6]:
+					demo_Env_Properties()
 				default:
 					win.ShowErrorMessage1("Unknown: `"+menuitem+"`, bye now!", nil, quit)
 				}
@@ -195,6 +198,21 @@ func demo_Env_OpenExternal() {
 				win.ShowInformationMessage1(did+" succeed in opening `"+*uri+"`, bye now!", nil, quit)
 			})
 		}
+	})
+}
+
+func demo_Env_Properties() {
+	vsc.Env().Properties(func(props EnvProperties) {
+		win.ShowQuickPick2([]string{
+			"AppName:\t" + props.AppName,
+			"AppRoot:\t" + props.AppRoot,
+			"Language:\t" + props.Language,
+			"MachineId:\t" + props.MachineId,
+			"RemoteName:\t" + props.RemoteName,
+			"SessionId:\t" + props.SessionId,
+			"Shell:\t\t" + props.Shell,
+			"UriScheme:\t" + props.UriScheme,
+		}, &QuickPickOptions{IgnoreFocusOut: true}, nil, quit)
 	})
 }
 

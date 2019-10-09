@@ -51,7 +51,7 @@ namespace VscAppzDemo {
             });
         }
 
-        private static void demoMenuAll(){
+        private static void demoMenuAll() {
             var menu = new[] {
                 "window.showQuickPick",
                 "window.showInputBox",
@@ -59,6 +59,7 @@ namespace VscAppzDemo {
                 "window.showOpenDialog",
                 "window.showWorkspaceFolderPick",
                 "env.openExternal",
+                "env.Properties",
             };
             win.ShowQuickPick(menu, new QuickPickOptions() {
                 CanPickMany = false, IgnoreFocusOut = true
@@ -77,6 +78,8 @@ namespace VscAppzDemo {
                     demo_Window_ShowWorkspaceFolderPick();
                 else if (menuitem == menu[5])
                     demo_Env_OpenExternal();
+                else if (menuitem == menu[6])
+                    demo_Env_Properties();
                 else
                     win.ShowErrorMessage($"Unknown: `{menuitem}`, bye now!", nil, quit);
             });
@@ -151,7 +154,7 @@ namespace VscAppzDemo {
         }
 
         private static void demo_Window_ShowWorkspaceFolderPick() {
-            win.ShowWorkspaceFolderPick(new WorkspaceFolderPickOptions(){
+            win.ShowWorkspaceFolderPick(new WorkspaceFolderPickOptions() {
                 IgnoreFocusOut = true, PlaceHolder = "Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side."
             }, pickedfolder => {
                 if (pickedfolder == null)
@@ -171,6 +174,21 @@ namespace VscAppzDemo {
                     vsc.Env.OpenExternal(uri, ok => {
                         win.ShowInformationMessage((ok ? "Did" : "Did not") + $" succeed in opening `{uri}`, bye now!", nil, quit);
                     });
+            });
+        }
+
+        private static void demo_Env_Properties() {
+            vsc.Env.Properties(props => {
+                win.ShowQuickPick(new[] {
+                    "AppName:\t" + props.AppName,
+                    "AppRoot:\t" + props.AppRoot,
+                    "Language:\t" + props.Language,
+                    "MachineId:\t" + props.MachineId,
+                    "RemoteName:\t" + props.RemoteName,
+                    "SessionId:\t" + props.SessionId,
+                    "Shell:\t\t" + props.Shell,
+                    "UriScheme:\t" + props.UriScheme,
+                }, new QuickPickOptions() { IgnoreFocusOut = true }, null, quit);
             });
         }
 

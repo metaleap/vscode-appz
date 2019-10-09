@@ -32,7 +32,7 @@
 			"problemMatcher": "$tsc"
 		},
 		{
-			"label": "build_on_save",
+			"label": "dotnet-build the C# lib and demo app",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/libs/cs"

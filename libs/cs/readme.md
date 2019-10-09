@@ -8,8 +8,26 @@
   - [Now()](#M-VscAppz-Cancel-Now 'VscAppz.Cancel.Now')
 - [Disposable](#T-VscAppz-Disposable 'VscAppz.Disposable')
   - [Dispose()](#M-VscAppz-Disposable-Dispose 'VscAppz.Disposable.Dispose')
+- [EnvProperties](#T-VscAppz-EnvProperties 'VscAppz.EnvProperties')
+  - [AppName](#F-VscAppz-EnvProperties-AppName 'VscAppz.EnvProperties.AppName')
+  - [AppRoot](#F-VscAppz-EnvProperties-AppRoot 'VscAppz.EnvProperties.AppRoot')
+  - [Language](#F-VscAppz-EnvProperties-Language 'VscAppz.EnvProperties.Language')
+  - [MachineId](#F-VscAppz-EnvProperties-MachineId 'VscAppz.EnvProperties.MachineId')
+  - [RemoteName](#F-VscAppz-EnvProperties-RemoteName 'VscAppz.EnvProperties.RemoteName')
+  - [SessionId](#F-VscAppz-EnvProperties-SessionId 'VscAppz.EnvProperties.SessionId')
+  - [Shell](#F-VscAppz-EnvProperties-Shell 'VscAppz.EnvProperties.Shell')
+  - [UriScheme](#F-VscAppz-EnvProperties-UriScheme 'VscAppz.EnvProperties.UriScheme')
 - [IEnv](#T-VscAppz-IEnv 'VscAppz.IEnv')
+  - [AppName()](#M-VscAppz-IEnv-AppName-System-Action{System-String}- 'VscAppz.IEnv.AppName(System.Action{System.String})')
+  - [AppRoot()](#M-VscAppz-IEnv-AppRoot-System-Action{System-String}- 'VscAppz.IEnv.AppRoot(System.Action{System.String})')
+  - [Language()](#M-VscAppz-IEnv-Language-System-Action{System-String}- 'VscAppz.IEnv.Language(System.Action{System.String})')
+  - [MachineId()](#M-VscAppz-IEnv-MachineId-System-Action{System-String}- 'VscAppz.IEnv.MachineId(System.Action{System.String})')
   - [OpenExternal(target,andThen)](#M-VscAppz-IEnv-OpenExternal-System-String,System-Action{System-Boolean}- 'VscAppz.IEnv.OpenExternal(System.String,System.Action{System.Boolean})')
+  - [Properties()](#M-VscAppz-IEnv-Properties-System-Action{VscAppz-EnvProperties}- 'VscAppz.IEnv.Properties(System.Action{VscAppz.EnvProperties})')
+  - [RemoteName()](#M-VscAppz-IEnv-RemoteName-System-Action{System-String}- 'VscAppz.IEnv.RemoteName(System.Action{System.String})')
+  - [SessionId()](#M-VscAppz-IEnv-SessionId-System-Action{System-String}- 'VscAppz.IEnv.SessionId(System.Action{System.String})')
+  - [Shell()](#M-VscAppz-IEnv-Shell-System-Action{System-String}- 'VscAppz.IEnv.Shell(System.Action{System.String})')
+  - [UriScheme()](#M-VscAppz-IEnv-UriScheme-System-Action{System-String}- 'VscAppz.IEnv.UriScheme(System.Action{System.String})')
 - [IVscode](#T-VscAppz-IVscode 'VscAppz.IVscode')
   - [Env](#P-VscAppz-IVscode-Env 'VscAppz.IVscode.Env')
   - [Window](#P-VscAppz-IVscode-Window 'VscAppz.IVscode.Window')
@@ -148,6 +166,81 @@ Dispose signals to the counterparty to destroy the object.
 
 This method has no parameters.
 
+<a name='T-VscAppz-EnvProperties'></a>
+## EnvProperties `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Namespace describing the environment the editor runs in.
+
+<a name='F-VscAppz-EnvProperties-AppName'></a>
+### AppName `constants`
+
+##### Summary
+
+The application name of the editor, like 'VS Code'.
+
+<a name='F-VscAppz-EnvProperties-AppRoot'></a>
+### AppRoot `constants`
+
+##### Summary
+
+The application root folder from which the editor is running.
+
+<a name='F-VscAppz-EnvProperties-Language'></a>
+### Language `constants`
+
+##### Summary
+
+Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
+
+<a name='F-VscAppz-EnvProperties-MachineId'></a>
+### MachineId `constants`
+
+##### Summary
+
+A unique identifier for the computer.
+
+<a name='F-VscAppz-EnvProperties-RemoteName'></a>
+### RemoteName `constants`
+
+##### Summary
+
+The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
+Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
+
+*Note* that the value is `undefined` when there is no remote extension host but that the
+value is defined in all extension hosts (local and remote) in case a remote extension host
+exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
+a specific extension runs remote or not.
+
+<a name='F-VscAppz-EnvProperties-SessionId'></a>
+### SessionId `constants`
+
+##### Summary
+
+A unique identifier for the current session.
+Changes each time the editor is started.
+
+<a name='F-VscAppz-EnvProperties-Shell'></a>
+### Shell `constants`
+
+##### Summary
+
+The detected default shell for the extension host, this is overridden by the
+`terminal.integrated.shell` setting for the extension host's platform.
+
+<a name='F-VscAppz-EnvProperties-UriScheme'></a>
+### UriScheme `constants`
+
+##### Summary
+
+The custom uri scheme the editor registers to in the operating system.
+
 <a name='T-VscAppz-IEnv'></a>
 ## IEnv `type`
 
@@ -158,6 +251,50 @@ VscAppz
 ##### Summary
 
 Namespace describing the environment the editor runs in.
+
+<a name='M-VscAppz-IEnv-AppName-System-Action{System-String}-'></a>
+### AppName() `method`
+
+##### Summary
+
+The application name of the editor, like 'VS Code'.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-IEnv-AppRoot-System-Action{System-String}-'></a>
+### AppRoot() `method`
+
+##### Summary
+
+The application root folder from which the editor is running.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-IEnv-Language-System-Action{System-String}-'></a>
+### Language() `method`
+
+##### Summary
+
+Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-IEnv-MachineId-System-Action{System-String}-'></a>
+### MachineId() `method`
+
+##### Summary
+
+A unique identifier for the computer.
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='M-VscAppz-IEnv-OpenExternal-System-String,System-Action{System-Boolean}-'></a>
 ### OpenExternal(target,andThen) `method`
@@ -180,6 +317,69 @@ way to open a text document inside the editor, not this function.
 | ---- | ---- | ----------- |
 | target | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The uri that should be opened. |
 | andThen | [System.Action{System.Boolean}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.Boolean}') | A promise indicating if open was successful. |
+
+<a name='M-VscAppz-IEnv-Properties-System-Action{VscAppz-EnvProperties}-'></a>
+### Properties() `method`
+
+##### Summary
+
+Provides single-call access to numerous individual `IEnv` properties at once.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-IEnv-RemoteName-System-Action{System-String}-'></a>
+### RemoteName() `method`
+
+##### Summary
+
+The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
+Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
+
+*Note* that the value is `undefined` when there is no remote extension host but that the
+value is defined in all extension hosts (local and remote) in case a remote extension host
+exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
+a specific extension runs remote or not.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-IEnv-SessionId-System-Action{System-String}-'></a>
+### SessionId() `method`
+
+##### Summary
+
+A unique identifier for the current session.
+Changes each time the editor is started.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-IEnv-Shell-System-Action{System-String}-'></a>
+### Shell() `method`
+
+##### Summary
+
+The detected default shell for the extension host, this is overridden by the
+`terminal.integrated.shell` setting for the extension host's platform.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-IEnv-UriScheme-System-Action{System-String}-'></a>
+### UriScheme() `method`
+
+##### Summary
+
+The custom uri scheme the editor registers to in the operating system.
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='T-VscAppz-IVscode'></a>
 ## IVscode `type`

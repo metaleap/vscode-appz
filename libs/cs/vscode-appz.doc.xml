@@ -434,6 +434,47 @@
             <param name="target">The uri that should be opened.</param>
             <param name="andThen">A promise indicating if open was successful.</param>
         </member>
+        <member name="M:VscAppz.IEnv.AppName(System.Action{System.String})">
+            <summary>The application name of the editor, like 'VS Code'.</summary>
+        </member>
+        <member name="M:VscAppz.IEnv.AppRoot(System.Action{System.String})">
+            <summary>The application root folder from which the editor is running.</summary>
+        </member>
+        <member name="M:VscAppz.IEnv.Language(System.Action{System.String})">
+            <summary>Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.</summary>
+        </member>
+        <member name="M:VscAppz.IEnv.MachineId(System.Action{System.String})">
+            <summary>A unique identifier for the computer.</summary>
+        </member>
+        <member name="M:VscAppz.IEnv.RemoteName(System.Action{System.String})">
+            <summary>
+            The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
+            Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
+            
+            *Note* that the value is `undefined` when there is no remote extension host but that the
+            value is defined in all extension hosts (local and remote) in case a remote extension host
+            exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
+            a specific extension runs remote or not.
+            </summary>
+        </member>
+        <member name="M:VscAppz.IEnv.SessionId(System.Action{System.String})">
+            <summary>
+            A unique identifier for the current session.
+            Changes each time the editor is started.
+            </summary>
+        </member>
+        <member name="M:VscAppz.IEnv.Shell(System.Action{System.String})">
+            <summary>
+            The detected default shell for the extension host, this is overridden by the
+            `terminal.integrated.shell` setting for the extension host's platform.
+            </summary>
+        </member>
+        <member name="M:VscAppz.IEnv.UriScheme(System.Action{System.String})">
+            <summary>The custom uri scheme the editor registers to in the operating system.</summary>
+        </member>
+        <member name="M:VscAppz.IEnv.Properties(System.Action{VscAppz.EnvProperties})">
+            <summary>Provides single-call access to numerous individual `IEnv` properties at once.</summary>
+        </member>
         <member name="T:VscAppz.MessageOptions">
             <summary>Options to configure the behavior of the message.</summary>
         </member>
@@ -641,6 +682,47 @@
         </member>
         <member name="F:VscAppz.WindowState.Focused">
             <summary>Whether the current window is focused.</summary>
+        </member>
+        <member name="T:VscAppz.EnvProperties">
+            <summary>Namespace describing the environment the editor runs in.</summary>
+        </member>
+        <member name="F:VscAppz.EnvProperties.AppName">
+            <summary>The application name of the editor, like 'VS Code'.</summary>
+        </member>
+        <member name="F:VscAppz.EnvProperties.AppRoot">
+            <summary>The application root folder from which the editor is running.</summary>
+        </member>
+        <member name="F:VscAppz.EnvProperties.Language">
+            <summary>Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.</summary>
+        </member>
+        <member name="F:VscAppz.EnvProperties.MachineId">
+            <summary>A unique identifier for the computer.</summary>
+        </member>
+        <member name="F:VscAppz.EnvProperties.RemoteName">
+            <summary>
+            The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
+            Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
+            
+            *Note* that the value is `undefined` when there is no remote extension host but that the
+            value is defined in all extension hosts (local and remote) in case a remote extension host
+            exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
+            a specific extension runs remote or not.
+            </summary>
+        </member>
+        <member name="F:VscAppz.EnvProperties.SessionId">
+            <summary>
+            A unique identifier for the current session.
+            Changes each time the editor is started.
+            </summary>
+        </member>
+        <member name="F:VscAppz.EnvProperties.Shell">
+            <summary>
+            The detected default shell for the extension host, this is overridden by the
+            `terminal.integrated.shell` setting for the extension host's platform.
+            </summary>
+        </member>
+        <member name="F:VscAppz.EnvProperties.UriScheme">
+            <summary>The custom uri scheme the editor registers to in the operating system.</summary>
         </member>
     </members>
 </doc>
