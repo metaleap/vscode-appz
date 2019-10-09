@@ -46,7 +46,7 @@ export interface MemberEvent extends ts.VariableDeclaration {
 
 export interface MemberProp extends ts.VariableDeclaration {
     PropName: string
-    PropType: ts.TypeReferenceNode
+    PropType: ts.Node
 }
 
 export interface PrepEnum {
@@ -248,7 +248,7 @@ export class Prep {
         return qname
     }
 
-    typeSpec(tNode: ts.TypeNode | ts.TypeElement, tParams?: ts.NodeArray<ts.TypeParameterDeclaration>, ): TypeSpec {
+    typeSpec(tNode: ts.Node, tParams?: ts.NodeArray<ts.TypeParameterDeclaration>, ): TypeSpec {
         if (ts.isTypeElement(tNode)) {
             if (ts.isPropertySignature(tNode)) {
                 return this.typeSpec(tNode.type, tParams)

@@ -344,14 +344,14 @@ export class Builder {
 
         const tprom = gen.typeProm(it)
         if (tprom && tprom.length)
-            if (tprom.length > 1)
+            if (tprom.length !== 1 && (intoProm || tprom[0] === 'Disposable'))
                 throw it
             else if (intoProm)
                 return this.typeRef(tprom[0])
-            else if (tprom.length === 1 && tprom[0] === 'Disposable')
+            else if (tprom[0] === 'Disposable')
                 return { From: [{ Maybe: { Name: 'Disposable' } }], To: null }
             else
-                return { From: tprom.map(_ => this.typeRef(_, true)), To: null }
+                return { From: tprom.map(_ => this.typeRef(_, _ !== gen.ScriptPrimType.Boolean)), To: null }
 
         if (typeof it === 'string')
             return (it === 'Uri') ? TypeRefPrim.String : { Name: it }
@@ -973,7 +973,8 @@ export class Gen extends gen.Gen implements gen.IGen {
         body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }))
         if (lastarg.fromPrep.isFromRetThenable) {
             const isdisp = gen.typePromOf(lastarg.fromPrep.typeSpec, 'Disposable')
-            const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, true, true)
+            const isval = gen.typePromOf(lastarg.fromPrep.typeSpec, gen.ScriptPrimType.Boolean)
+            const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, !isval, true)
 
             body.push(
                 _.iIf(_.oIs(_.n(lastarg.Name)), [
@@ -982,7 +983,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                         _.iVar(__.result, dsttype),
                         _.iIf(_.oIs(_.n(__.payload)),
                             this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok),
-                            _.WHEN(isdisp, () => [_.iRet(_.eLit(false))], () => []),
+                            _.WHEN(isdisp || isval, () => [_.iRet(_.eLit(false))], () => []),
                         ),
                         _.WHEN(isdisp, () => [
                             _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bind')), _.eThis(), nameevtsub ? _.n(nameevtsub) : _.eLit(""))),

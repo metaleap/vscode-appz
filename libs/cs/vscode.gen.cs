@@ -18,6 +18,9 @@ namespace VscAppz {
 		/// asking for user input.
 		/// </summary>
 		IWindow Window { get; }
+
+		/// <summary>Namespace describing the environment the editor runs in.</summary>
+		IEnv Env { get; }
 	}
 
 	/// <summary>
@@ -376,6 +379,62 @@ namespace VscAppz {
 		void OnDidChangeWindowState(Action<WindowState> listener = default, Action<Disposable> andThen = default);
 	}
 
+	/// <summary>Namespace describing the environment the editor runs in.</summary>
+	public interface IEnv {
+		/// <summary>
+		/// Opens an *external* item, e.g. a http(s) or mailto-link, using the
+		/// default application.
+		/// 
+		/// *Note* that [`showTextDocument`](#window.showTextDocument) is the right
+		/// way to open a text document inside the editor, not this function.
+		/// 
+		/// `target` ── The uri that should be opened.
+		/// 
+		/// `andThen` ── A promise indicating if open was successful.
+		/// </summary>
+		/// <param name="target">The uri that should be opened.</param>
+		/// <param name="andThen">A promise indicating if open was successful.</param>
+		void OpenExternal(string target = default, Action<bool> andThen = default);
+
+		/// <summary>The application name of the editor, like 'VS Code'.</summary>
+		void AppName(Action<string> andThen = default);
+
+		/// <summary>The application root folder from which the editor is running.</summary>
+		void AppRoot(Action<string> andThen = default);
+
+		/// <summary>Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.</summary>
+		void Language(Action<string> andThen = default);
+
+		/// <summary>A unique identifier for the computer.</summary>
+		void MachineId(Action<string> andThen = default);
+
+		/// <summary>
+		/// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
+		/// Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
+		/// 
+		/// *Note* that the value is `undefined` when there is no remote extension host but that the
+		/// value is defined in all extension hosts (local and remote) in case a remote extension host
+		/// exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
+		/// a specific extension runs remote or not.
+		/// </summary>
+		void RemoteName(Action<string> andThen = default);
+
+		/// <summary>
+		/// A unique identifier for the current session.
+		/// Changes each time the editor is started.
+		/// </summary>
+		void SessionId(Action<string> andThen = default);
+
+		/// <summary>
+		/// The detected default shell for the extension host, this is overridden by the
+		/// `terminal.integrated.shell` setting for the extension host's platform.
+		/// </summary>
+		void Shell(Action<string> andThen = default);
+
+		/// <summary>The custom uri scheme the editor registers to in the operating system.</summary>
+		void UriScheme(Action<string> andThen = default);
+	}
+
 	/// <summary>Options to configure the behavior of the message.</summary>
 	public partial class MessageOptions {
 		/// <summary>Indicates that this message should be modal.</summary>
@@ -624,9 +683,13 @@ namespace VscAppz {
 		public bool Focused;
 	}
 
-	internal partial class impl : IVscode, IWindow {
+	internal partial class impl : IVscode, IWindow, IEnv {
 
 		IWindow IVscode.Window { get {
+			return this;
+		} }
+
+		IEnv IVscode.Env { get {
 			return this;
 		} }
 
@@ -1561,6 +1624,232 @@ namespace VscAppz {
 						return false;
 					}					
 					andThen(result.bind(this, _fnid_listener));
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IEnv.OpenExternal(string target, Action<bool> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "env.openExternal";
+			msg.Data = new dict(1);
+			msg.Data["target"] = target;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					bool result = default;
+					if ((null != payload)) {
+						(result, ok) = (payload is bool) ? (((bool)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+					} else {
+						return false;
+					}					
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IEnv.AppName(Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "env.appName";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						string _result_ = default;
+						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = _result_;
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IEnv.AppRoot(Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "env.appRoot";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						string _result_ = default;
+						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = _result_;
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IEnv.Language(Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "env.language";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						string _result_ = default;
+						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = _result_;
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IEnv.MachineId(Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "env.machineId";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						string _result_ = default;
+						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = _result_;
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IEnv.RemoteName(Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "env.remoteName";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						string _result_ = default;
+						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = _result_;
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IEnv.SessionId(Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "env.sessionId";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						string _result_ = default;
+						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = _result_;
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IEnv.Shell(Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "env.shell";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						string _result_ = default;
+						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = _result_;
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IEnv.UriScheme(Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "env.uriScheme";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						string _result_ = default;
+						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = _result_;
+					}
+					andThen(result);
 					return true;
 				};
 			}

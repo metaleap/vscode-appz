@@ -25,6 +25,10 @@ Vscode: interface
     # asking for user input.
     Window: Window
 
+    # env:
+    # Namespace describing the environment the editor runs in.
+    Env: Env
+
 
 
 
@@ -439,6 +443,77 @@ Window: interface
 
 
 
+# env:
+# Namespace describing the environment the editor runs in.
+Env: interface
+
+    # openExternal:
+    # Opens an *external* item, e.g. a http(s) or mailto-link, using the
+    # default application.
+    # 
+    # *Note* that [`showTextDocument`](#window.showTextDocument) is the right
+    # way to open a text document inside the editor, not this function.
+    #
+    # @target:
+    # The uri that should be opened.
+    #
+    # @andThen:
+    # A promise indicating if open was successful.
+    OpenExternal: void
+        target: string
+        andThen: ?(bool->void)
+
+    # appName:
+    # The application name of the editor, like 'VS Code'.
+    AppName: void
+        andThen: ?(?string->void)
+
+    # appRoot:
+    # The application root folder from which the editor is running.
+    AppRoot: void
+        andThen: ?(?string->void)
+
+    # language:
+    # Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
+    Language: void
+        andThen: ?(?string->void)
+
+    # machineId:
+    # A unique identifier for the computer.
+    MachineId: void
+        andThen: ?(?string->void)
+
+    # remoteName:
+    # The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
+    # Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
+    # 
+    # *Note* that the value is `undefined` when there is no remote extension host but that the
+    # value is defined in all extension hosts (local and remote) in case a remote extension host
+    # exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
+    # a specific extension runs remote or not.
+    RemoteName: void
+        andThen: ?(?string->void)
+
+    # sessionId:
+    # A unique identifier for the current session.
+    # Changes each time the editor is started.
+    SessionId: void
+        andThen: ?(?string->void)
+
+    # shell:
+    # The detected default shell for the extension host, this is overridden by the
+    # `terminal.integrated.shell` setting for the extension host's platform.
+    Shell: void
+        andThen: ?(?string->void)
+
+    # uriScheme:
+    # The custom uri scheme the editor registers to in the operating system.
+    UriScheme: void
+        andThen: ?(?string->void)
+
+
+
+
 # Options to configure the behavior of the message.
 MessageOptions: class
 
@@ -766,6 +841,12 @@ WindowState: class
 
 
 Vscode·Window: ( -> Window)
+    return this
+
+
+
+
+Vscode·Env: ( -> Env)
     return this
 
 
@@ -1608,6 +1689,223 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> andThen:?(?Disp
             else
                 return false
             andThen(result.bind(this, _fnid_listener))
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Env·OpenExternal: (target:string -> andThen:?(bool->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "env.openExternal"
+    msg.Data = dict·new(1)
+    msg.Data@"target" = target
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of bool
+            if (=?payload)
+                [result,ok] = ((payload)·(bool))
+                if (!ok)
+                    return false
+            else
+                return false
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Env·AppName: (andThen:?(?string->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "env.appName"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?string
+            if (=?payload)
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
+                if (!ok)
+                    return false
+                result = (&_result_)
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Env·AppRoot: (andThen:?(?string->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "env.appRoot"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?string
+            if (=?payload)
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
+                if (!ok)
+                    return false
+                result = (&_result_)
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Env·Language: (andThen:?(?string->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "env.language"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?string
+            if (=?payload)
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
+                if (!ok)
+                    return false
+                result = (&_result_)
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Env·MachineId: (andThen:?(?string->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "env.machineId"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?string
+            if (=?payload)
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
+                if (!ok)
+                    return false
+                result = (&_result_)
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Env·RemoteName: (andThen:?(?string->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "env.remoteName"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?string
+            if (=?payload)
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
+                if (!ok)
+                    return false
+                result = (&_result_)
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Env·SessionId: (andThen:?(?string->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "env.sessionId"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?string
+            if (=?payload)
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
+                if (!ok)
+                    return false
+                result = (&_result_)
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Env·Shell: (andThen:?(?string->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "env.shell"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?string
+            if (=?payload)
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
+                if (!ok)
+                    return false
+                result = (&_result_)
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Env·UriScheme: (andThen:?(?string->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "env.uriScheme"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?string
+            if (=?payload)
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
+                if (!ok)
+                    return false
+                result = (&_result_)
+            andThen(result)
             return true
         
     this.send(msg, on)

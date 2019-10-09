@@ -39,6 +39,17 @@ const genApiSurface: genApiMember = {
                 'state',
                 'onDidChangeWindowState',
             ],
+            'env': [
+                'openExternal',
+                'appName',
+                'appRoot',
+                'language',
+                'machineId',
+                'remoteName',
+                'sessionId',
+                'shell',
+                'uriScheme',
+            ]
         },
     ],
 }
@@ -102,24 +113,23 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                 astNode.forEachChild(ntop => {
                     if ((!members.length) && ntop.kind === 220 && ntop.getText().includes(item))
                         ntop.forEachChild(nsub => {
-                            if ((!members.length) && nsub.kind === ts.SyntaxKind.VariableDeclarationList)
+                            if ((!members.length) && nsub.getText().includes(item) && nsub.kind === ts.SyntaxKind.VariableDeclarationList)
                                 nsub.forEachChild(nsubsub => {
-                                    if ((!members.length) && nsubsub.kind === ts.SyntaxKind.VariableDeclaration) {
+                                    if ((!members.length) && nsubsub.getChildCount() && nsubsub.getText().includes(item) && nsubsub.kind === ts.SyntaxKind.VariableDeclaration) {
                                         const nname = nsubsub.getChildAt(0) as ts.Identifier
-                                        if (nname && nname.getText() === item) {
-                                            const ntype = nsubsub.getChildAt(2) as ts.TypeReferenceNode
-                                            if (ntype && ntype.typeName)
-                                                if (ntype.typeName.getText() === 'Event' && ntype.typeArguments && ntype.typeArguments.length) {
-                                                    const n: gen.MemberEvent = nsubsub as gen.MemberEvent
-                                                    [n.EvtName, n.EvtArgs] = [item, ntype.typeArguments.map(_ => _)]
-                                                    members.push(n)
-                                                } else {
-                                                    const n: gen.MemberProp = nsubsub as gen.MemberProp
-                                                    [n.PropName, n.PropType] = [item, ntype]
-                                                    members.push(n)
-                                                }
+                                        if (nname && nname.getText() === item && nsubsub.getChildCount() > 2) {
+                                            const ntype = nsubsub.getChildAt(2)
+                                            const ntyperef = nsubsub.getChildAt(2) as ts.TypeReferenceNode
+                                            if (ntyperef && ntyperef.typeName && ntyperef.typeName.getText() === 'Event' && ntyperef.typeArguments && ntyperef.typeArguments.length) {
+                                                const n: gen.MemberEvent = nsubsub as gen.MemberEvent
+                                                [n.EvtName, n.EvtArgs] = [item, ntyperef.typeArguments.map(_ => _)]
+                                                members.push(n)
+                                            } else {
+                                                const n: gen.MemberProp = nsubsub as gen.MemberProp
+                                                [n.PropName, n.PropType] = [item, ntype]
+                                                members.push(n)
+                                            }
                                         }
-
                                     }
                                 })
                         })
@@ -224,7 +234,8 @@ function gatherProp(into: gen.GenJob, decl: gen.MemberProp, ...prefixes: string[
     if (into.funcs.some(_ => _.qName === qname))
         return
     into.funcs.push({ qName: qname, overload: 0, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] })
-    gatherFromTypeNode(into, decl.PropType)
+    if (ts.isTypeNode(decl.PropType))
+        gatherFromTypeNode(into, decl.PropType)
 }
 
 function gatherEvent(into: gen.GenJob, decl: gen.MemberEvent, ...prefixes: string[]) {

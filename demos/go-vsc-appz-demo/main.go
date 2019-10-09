@@ -9,6 +9,7 @@ import (
 	. "github.com/metaleap/vscode-appz/libs/go"
 )
 
+var vsc Vscode
 var win Window
 
 func quit(*string) { os.Exit(0) }
@@ -24,7 +25,8 @@ func main() {
 		}
 	}
 
-	win = Vsc(nil, nil).Window()
+	vsc = Vsc(nil, nil)
+	win = vsc.Window()
 	win.SetStatusBarMessage2("Choosing a demo WILL HIDE this", func(statusitem *Disposable) {
 		win.OnDidChangeWindowState(func(evt WindowState) {
 			win.SetStatusBarMessage1("Am I focused? "+strconv.FormatBool(evt.Focused)+".", 1234, nil)
@@ -41,9 +43,9 @@ func main() {
 				} else {
 					switch button := *btn; button {
 					case buttons[0]:
-						demoInputPick()
+						demo_Window_ShowQuickPick()
 					case buttons[1]:
-						demoInputText()
+						demo_Window_ShowInputBox()
 					case buttons[2]:
 						demoMenuAll()
 					default:
@@ -57,11 +59,12 @@ func main() {
 
 func demoMenuAll() {
 	menu := []string{
-		"Demo Pick Input",
-		"Demo Text Input",
-		"Demo File-Save Dialog",
-		"Demo File-Open Dialog",
-		"Demo Workspace-Folder Pick Input",
+		"window.showQuickPick",
+		"window.showInputBox",
+		"window.showSaveDialog",
+		"window.showOpenDialog",
+		"window.showWorkspaceFolderPick",
+		"env.openExternal",
 	}
 	win.ShowQuickPick2(menu, &QuickPickOptions{
 		CanPickMany: false, IgnoreFocusOut: true, PlaceHolder: "Dismissing this menu will quit the prog.",
@@ -72,15 +75,17 @@ func demoMenuAll() {
 			} else {
 				switch menuitem := *menuitem; menuitem {
 				case menu[0]:
-					demoInputPick()
+					demo_Window_ShowQuickPick()
 				case menu[1]:
-					demoInputText()
+					demo_Window_ShowInputBox()
 				case menu[2]:
-					demoDialogFileSave()
+					demo_Window_ShowSaveDialog()
 				case menu[3]:
-					demoDialogFileOpen()
+					demo_Window_ShowOpenDialog()
 				case menu[4]:
-					demoWorkspaceFolderPick()
+					demo_Window_ShowWorkspaceFolderPick()
+				case menu[5]:
+					demo_Env_OpenExternal()
 				default:
 					win.ShowErrorMessage1("Unknown: `"+menuitem+"`, bye now!", nil, quit)
 				}
@@ -89,7 +94,7 @@ func demoMenuAll() {
 	)
 }
 
-func demoInputPick() {
+func demo_Window_ShowQuickPick() {
 	win.ShowQuickPick3([]QuickPickItem{
 		{Label: "One", Description: "The first", Detail: "Das erste"},
 		{Label: "Two", Description: "The second", Detail: "Das zweite"},
@@ -112,7 +117,7 @@ func demoInputPick() {
 	})
 }
 
-func demoInputText() {
+func demo_Window_ShowInputBox() {
 	win.ShowInputBox(&InputBoxOptions{
 		IgnoreFocusOut: true,
 		Value:          "Enter almost anything...",
@@ -134,7 +139,7 @@ func demoInputText() {
 	})
 }
 
-func demoDialogFileSave() {
+func demo_Window_ShowSaveDialog() {
 	win.ShowSaveDialog(SaveDialogOptions{
 		SaveLabel: "Note: won't actually write to specified file path",
 		Filters:   map[string][]string{"All": {"*"}, "Dummy Filter": {"demo", "dummy"}},
@@ -148,7 +153,7 @@ func demoDialogFileSave() {
 	})
 }
 
-func demoDialogFileOpen() {
+func demo_Window_ShowOpenDialog() {
 	win.ShowOpenDialog(OpenDialogOptions{
 		CanSelectFiles: true, CanSelectFolders: false, CanSelectMany: true,
 		OpenLabel: "Note: won't actually read from specified file path(s)",
@@ -163,7 +168,7 @@ func demoDialogFileOpen() {
 	})
 }
 
-func demoWorkspaceFolderPick() {
+func demo_Window_ShowWorkspaceFolderPick() {
 	win.ShowWorkspaceFolderPick(&WorkspaceFolderPickOptions{
 		IgnoreFocusOut: true, PlaceHolder: "Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side.",
 	}, func(pickedfolder *WorkspaceFolder) {
@@ -171,6 +176,24 @@ func demoWorkspaceFolderPick() {
 			win.ShowWarningMessage1("Cancelled pick input, bye now!", nil, quit)
 		} else {
 			win.ShowInformationMessage1("Selected `"+pickedfolder.Name+"` located at `"+pickedfolder.Uri+"`, bye now!", nil, quit)
+		}
+	})
+}
+
+func demo_Env_OpenExternal() {
+	win.ShowInputBox(&InputBoxOptions{
+		Value: "http://github.com/metaleap/vscode-appz", Prompt: "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol.", IgnoreFocusOut: true,
+	}, nil, func(uri *string) {
+		if uri == nil || *uri == "" {
+			win.ShowWarningMessage1("Cancelled, bye now!", nil, quit)
+		} else {
+			vsc.Env().OpenExternal(*uri, func(ok bool) {
+				did := "Did"
+				if !ok {
+					did += " not"
+				}
+				win.ShowInformationMessage1(did+" succeed in opening `"+*uri+"`, bye now!", nil, quit)
+			})
 		}
 	})
 }

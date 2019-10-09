@@ -6,6 +6,8 @@ namespace VscAppzDemo {
     public static class App {
 
         private static readonly string[] nil = new string[0];
+
+        private static IVscode vsc;
         private static IWindow win;
 
         private static void quit(string _unused = default) =>
@@ -21,7 +23,8 @@ namespace VscAppzDemo {
                     greethow = args[1].Trim();
             }
 
-            win = Vsc.InOut().Window;
+            vsc = Vsc.InOut();
+            win = vsc.Window;
             win.SetStatusBarMessage("Choosing a demo WILL HIDE this", statusitem => {
                 win.OnDidChangeWindowState(_ => {
                     win.SetStatusBarMessage($"Am I focused? {_.Focused}.", 1234);
@@ -36,9 +39,9 @@ namespace VscAppzDemo {
                         if (button == null)
                             quit();
                         else if (button == buttons[0])
-                            demoInputPick();
+                            demo_Window_ShowQuickPick();
                         else if (button == buttons[1])
-                            demoInputText();
+                            demo_Window_ShowInputBox();
                         else if (button == buttons[2])
                             demoMenuAll();
                         else
@@ -50,11 +53,12 @@ namespace VscAppzDemo {
 
         private static void demoMenuAll(){
             var menu = new[] {
-                "Demo Pick Input",
-                "Demo Text Input",
-                "Demo File-Save Dialog",
-                "Demo File-Open Dialog",
-                "Demo Workspace-Folder Pick Input",
+                "window.showQuickPick",
+                "window.showInputBox",
+                "window.showSaveDialog",
+                "window.showOpenDialog",
+                "window.showWorkspaceFolderPick",
+                "env.openExternal",
             };
             win.ShowQuickPick(menu, new QuickPickOptions() {
                 CanPickMany = false, IgnoreFocusOut = true
@@ -62,21 +66,23 @@ namespace VscAppzDemo {
                 if (menuitem == null)
                     quit();
                 else if (menuitem == menu[0])
-                    demoInputPick();
+                    demo_Window_ShowQuickPick();
                 else if (menuitem == menu[1])
-                    demoInputText();
+                    demo_Window_ShowInputBox();
                 else if (menuitem == menu[2])
-                    demoDialogFileSave();
+                    demo_Window_ShowSaveDialog();
                 else if (menuitem == menu[3])
-                    demoDialogFileOpen();
+                    demo_Window_ShowOpenDialog();
                 else if (menuitem == menu[4])
-                    demoWorkspaceFolderPick();
+                    demo_Window_ShowWorkspaceFolderPick();
+                else if (menuitem == menu[5])
+                    demo_Env_OpenExternal();
                 else
                     win.ShowErrorMessage($"Unknown: `{menuitem}`, bye now!", nil, quit);
             });
         }
 
-        private static void demoInputPick() {
+        private static void demo_Window_ShowQuickPick() {
             win.ShowQuickPick(new[] {
                 new QuickPickItem() { Label = "One", Description = "The first", Detail = "Das erste" },
                 new QuickPickItem() { Label = "Two", Description = "The second", Detail = "Das zweite" },
@@ -98,7 +104,7 @@ namespace VscAppzDemo {
             });
         }
 
-        private static void demoInputText() {
+        private static void demo_Window_ShowInputBox() {
             var foos = new[] {"foo", "f00", "fo0", "f0o"};
             Func<string,string> val = textinput =>
                                         Array.Exists(foos, _ => textinput.ToLower().Contains(_))
@@ -119,7 +125,7 @@ namespace VscAppzDemo {
             });
         }
 
-        private static void demoDialogFileSave() {
+        private static void demo_Window_ShowSaveDialog() {
             win.ShowSaveDialog(new SaveDialogOptions() {
                 SaveLabel = "Note: won't actually write to specified file path",
                 Filters = new Dictionary<string, string[]>() { ["All"] = new[] {"*"}, ["Dummy Filter"] = new[] {"demo", "dummy"} }
@@ -131,7 +137,7 @@ namespace VscAppzDemo {
             });
         }
 
-        private static void demoDialogFileOpen() {
+        private static void demo_Window_ShowOpenDialog() {
             win.ShowOpenDialog(new OpenDialogOptions() {
                 CanSelectFiles = true, CanSelectFolders = false, CanSelectMany = true,
                 OpenLabel = "Note: won't actually read from specified file path(s)",
@@ -144,7 +150,7 @@ namespace VscAppzDemo {
             });
         }
 
-        private static void demoWorkspaceFolderPick() {
+        private static void demo_Window_ShowWorkspaceFolderPick() {
             win.ShowWorkspaceFolderPick(new WorkspaceFolderPickOptions(){
                 IgnoreFocusOut = true, PlaceHolder = "Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side."
             }, pickedfolder => {
@@ -152,6 +158,19 @@ namespace VscAppzDemo {
                     win.ShowWarningMessage("Cancelled pick input, bye now!", nil, quit);
                 else
                     win.ShowInformationMessage($"Selected `{pickedfolder.Name}` located at `{pickedfolder.Uri}`, bye now!", nil, quit);
+            });
+        }
+
+        private static void demo_Env_OpenExternal() {
+            win.ShowInputBox(new InputBoxOptions() {
+                Value = "http://github.com/metaleap/vscode-appz", Prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol.", IgnoreFocusOut = true,
+            }, null, uri => {
+                if (string.IsNullOrEmpty(uri))
+                    win.ShowWarningMessage("Cancelled, bye now!", nil, quit);
+                else
+                    vsc.Env.OpenExternal(uri, ok => {
+                        win.ShowInformationMessage((ok ? "Did" : "Did not") + $" succeed in opening `{uri}`, bye now!", nil, quit);
+                    });
             });
         }
 

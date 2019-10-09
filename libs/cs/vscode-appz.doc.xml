@@ -57,6 +57,9 @@
             asking for user input.
             </summary>
         </member>
+        <member name="P:VscAppz.IVscode.Env">
+            <summary>Namespace describing the environment the editor runs in.</summary>
+        </member>
         <member name="T:VscAppz.IWindow">
             <summary>
             Namespace for dealing with the current window of the editor. That is visible
@@ -412,6 +415,24 @@
             An [event](#Event) which fires when the focus state of the current window
             changes. The value of the event represents whether the window is focused.
             </summary>
+        </member>
+        <member name="T:VscAppz.IEnv">
+            <summary>Namespace describing the environment the editor runs in.</summary>
+        </member>
+        <member name="M:VscAppz.IEnv.OpenExternal(System.String,System.Action{System.Boolean})">
+            <summary>
+            Opens an *external* item, e.g. a http(s) or mailto-link, using the
+            default application.
+            
+            *Note* that [`showTextDocument`](#window.showTextDocument) is the right
+            way to open a text document inside the editor, not this function.
+            
+            `target` ── The uri that should be opened.
+            
+            `andThen` ── A promise indicating if open was successful.
+            </summary>
+            <param name="target">The uri that should be opened.</param>
+            <param name="andThen">A promise indicating if open was successful.</param>
         </member>
         <member name="T:VscAppz.MessageOptions">
             <summary>Options to configure the behavior of the message.</summary>

@@ -59,7 +59,13 @@ class Gen extends gen.Gen {
                                 src += `\t\t\t\t\t\tremoteCancellationTokens.push(ctid)\n`;
                             }
                             else {
-                                src += `\t\t\t\t\tconst arg_${arg.name} = (msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}) as ${this.typeSpec(arg.typeSpec)}\n`;
+                                if (arg.typeSpec !== 'Uri')
+                                    src += `\t\t\t\t\tconst arg_${arg.name} = (msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}) as ${this.typeSpec(arg.typeSpec)}\n`;
+                                else {
+                                    src += `\t\t\t\t\tlet arg_${arg.name}: ${pkgname}.Uri\n`;
+                                    src += `\t\t\t\t\ttry { arg_${arg.name} = ${pkgname}.Uri.parse(msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}, true) }\n`;
+                                    src += `\t\t\t\t\tcatch (_) { try { arg_${arg.name} = ${pkgname}.Uri.file(msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}) } catch (_) { try { arg_${arg.name} = ${pkgname}.Uri.parse(msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}, false) } catch (_) { return Promise.reject(msg.data['${arg.name}']) } } }\n`;
+                                }
                                 const funcfields = gen.argsFuncFields(prep, [arg]);
                                 if (funcfields && funcfields.length)
                                     for (const ff of funcfields) {

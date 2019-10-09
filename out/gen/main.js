@@ -32,6 +32,17 @@ const genApiSurface = {
                 'state',
                 'onDidChangeWindowState',
             ],
+            'env': [
+                'openExternal',
+                'appName',
+                'appRoot',
+                'language',
+                'machineId',
+                'remoteName',
+                'sessionId',
+                'shell',
+                'uriScheme',
+            ]
         },
     ],
 };
@@ -91,23 +102,23 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                 astNode.forEachChild(ntop => {
                     if ((!members.length) && ntop.kind === 220 && ntop.getText().includes(item))
                         ntop.forEachChild(nsub => {
-                            if ((!members.length) && nsub.kind === ts.SyntaxKind.VariableDeclarationList)
+                            if ((!members.length) && nsub.getText().includes(item) && nsub.kind === ts.SyntaxKind.VariableDeclarationList)
                                 nsub.forEachChild(nsubsub => {
-                                    if ((!members.length) && nsubsub.kind === ts.SyntaxKind.VariableDeclaration) {
+                                    if ((!members.length) && nsubsub.getChildCount() && nsubsub.getText().includes(item) && nsubsub.kind === ts.SyntaxKind.VariableDeclaration) {
                                         const nname = nsubsub.getChildAt(0);
-                                        if (nname && nname.getText() === item) {
+                                        if (nname && nname.getText() === item && nsubsub.getChildCount() > 2) {
                                             const ntype = nsubsub.getChildAt(2);
-                                            if (ntype && ntype.typeName)
-                                                if (ntype.typeName.getText() === 'Event' && ntype.typeArguments && ntype.typeArguments.length) {
-                                                    const n = nsubsub;
-                                                    [n.EvtName, n.EvtArgs] = [item, ntype.typeArguments.map(_ => _)];
-                                                    members.push(n);
-                                                }
-                                                else {
-                                                    const n = nsubsub;
-                                                    [n.PropName, n.PropType] = [item, ntype];
-                                                    members.push(n);
-                                                }
+                                            const ntyperef = nsubsub.getChildAt(2);
+                                            if (ntyperef && ntyperef.typeName && ntyperef.typeName.getText() === 'Event' && ntyperef.typeArguments && ntyperef.typeArguments.length) {
+                                                const n = nsubsub;
+                                                [n.EvtName, n.EvtArgs] = [item, ntyperef.typeArguments.map(_ => _)];
+                                                members.push(n);
+                                            }
+                                            else {
+                                                const n = nsubsub;
+                                                [n.PropName, n.PropType] = [item, ntype];
+                                                members.push(n);
+                                            }
                                         }
                                     }
                                 });
@@ -208,7 +219,8 @@ function gatherProp(into, decl, ...prefixes) {
     if (into.funcs.some(_ => _.qName === qname))
         return;
     into.funcs.push({ qName: qname, overload: 0, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] });
-    gatherFromTypeNode(into, decl.PropType);
+    if (ts.isTypeNode(decl.PropType))
+        gatherFromTypeNode(into, decl.PropType);
 }
 function gatherEvent(into, decl, ...prefixes) {
     const qname = prefixes.concat(decl.EvtName).join('.');

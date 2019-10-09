@@ -8,7 +8,10 @@
   - [Now()](#M-VscAppz-Cancel-Now 'VscAppz.Cancel.Now')
 - [Disposable](#T-VscAppz-Disposable 'VscAppz.Disposable')
   - [Dispose()](#M-VscAppz-Disposable-Dispose 'VscAppz.Disposable.Dispose')
+- [IEnv](#T-VscAppz-IEnv 'VscAppz.IEnv')
+  - [OpenExternal(target,andThen)](#M-VscAppz-IEnv-OpenExternal-System-String,System-Action{System-Boolean}- 'VscAppz.IEnv.OpenExternal(System.String,System.Action{System.Boolean})')
 - [IVscode](#T-VscAppz-IVscode 'VscAppz.IVscode')
+  - [Env](#P-VscAppz-IVscode-Env 'VscAppz.IVscode.Env')
   - [Window](#P-VscAppz-IVscode-Window 'VscAppz.IVscode.Window')
 - [IWindow](#T-VscAppz-IWindow 'VscAppz.IWindow')
   - [OnDidChangeWindowState()](#M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState},System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState},System.Action{VscAppz.Disposable})')
@@ -145,6 +148,39 @@ Dispose signals to the counterparty to destroy the object.
 
 This method has no parameters.
 
+<a name='T-VscAppz-IEnv'></a>
+## IEnv `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Namespace describing the environment the editor runs in.
+
+<a name='M-VscAppz-IEnv-OpenExternal-System-String,System-Action{System-Boolean}-'></a>
+### OpenExternal(target,andThen) `method`
+
+##### Summary
+
+Opens an *external* item, e.g. a http(s) or mailto-link, using the
+default application.
+
+*Note* that [`showTextDocument`](#window.showTextDocument) is the right
+way to open a text document inside the editor, not this function.
+
+`target` ── The uri that should be opened.
+
+`andThen` ── A promise indicating if open was successful.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| target | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The uri that should be opened. |
+| andThen | [System.Action{System.Boolean}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.Boolean}') | A promise indicating if open was successful. |
+
 <a name='T-VscAppz-IVscode'></a>
 ## IVscode `type`
 
@@ -156,6 +192,13 @@ VscAppz
 
 Type Definition for Visual Studio Code 1.38 Extension API
 See https://code.visualstudio.com/api for more information
+
+<a name='P-VscAppz-IVscode-Env'></a>
+### Env `property`
+
+##### Summary
+
+Namespace describing the environment the editor runs in.
 
 <a name='P-VscAppz-IVscode-Window'></a>
 ### Window `property`

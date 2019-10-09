@@ -8,6 +8,9 @@ type Vscode interface {
 	// and active editors, as well as, UI elements to show messages, selections, and
 	// asking for user input.
 	Window() Window
+
+	// Namespace describing the environment the editor runs in.
+	Env() Env
 }
 
 // Namespace for dealing with the current window of the editor. That is visible
@@ -246,6 +249,52 @@ type Window interface {
 	OnDidChangeWindowState(listener func(WindowState), andThen func(*Disposable)) 
 }
 
+// Namespace describing the environment the editor runs in.
+type Env interface {
+	// Opens an *external* item, e.g. a http(s) or mailto-link, using the
+	// default application.
+	// 
+	// *Note* that [`showTextDocument`](#window.showTextDocument) is the right
+	// way to open a text document inside the editor, not this function.
+	// 
+	// `target` ── The uri that should be opened.
+	// 
+	// `andThen` ── A promise indicating if open was successful.
+	OpenExternal(target string, andThen func(bool)) 
+
+	// The application name of the editor, like 'VS Code'.
+	AppName(andThen func(*string)) 
+
+	// The application root folder from which the editor is running.
+	AppRoot(andThen func(*string)) 
+
+	// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
+	Language(andThen func(*string)) 
+
+	// A unique identifier for the computer.
+	MachineId(andThen func(*string)) 
+
+	// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
+	// Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
+	// 
+	// *Note* that the value is `undefined` when there is no remote extension host but that the
+	// value is defined in all extension hosts (local and remote) in case a remote extension host
+	// exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
+	// a specific extension runs remote or not.
+	RemoteName(andThen func(*string)) 
+
+	// A unique identifier for the current session.
+	// Changes each time the editor is started.
+	SessionId(andThen func(*string)) 
+
+	// The detected default shell for the extension host, this is overridden by the
+	// `terminal.integrated.shell` setting for the extension host's platform.
+	Shell(andThen func(*string)) 
+
+	// The custom uri scheme the editor registers to in the operating system.
+	UriScheme(andThen func(*string)) 
+}
+
 // Options to configure the behavior of the message.
 type MessageOptions struct {
 	// Indicates that this message should be modal.
@@ -435,6 +484,10 @@ type WindowState struct {
 }
 
 func (me *impl) Window() Window {
+	return me
+}
+
+func (me *impl) Env() Env {
 	return me
 }
 
@@ -1414,6 +1467,232 @@ func (me *impl) OnDidChangeWindowState(listener func(WindowState), andThen func(
 				return false
 			}
 			andThen(result.bind(me, _fnid_listener))
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
+func (me *impl) OpenExternal(target string, andThen func(bool)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "env.openExternal"
+	msg.Data = make(dict, 1)
+	msg.Data["target"] = target
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result bool
+			if (nil != payload) {
+				result, ok = payload.(bool)
+				if (!ok) {
+					return false
+				}
+			} else {
+				return false
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
+func (me *impl) AppName(andThen func(*string)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "env.appName"
+	msg.Data = make(dict, 0)
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *string
+			if (nil != payload) {
+				var _result_ string
+				_result_, ok = payload.(string)
+				if (!ok) {
+					return false
+				}
+				result = (&_result_)
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
+func (me *impl) AppRoot(andThen func(*string)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "env.appRoot"
+	msg.Data = make(dict, 0)
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *string
+			if (nil != payload) {
+				var _result_ string
+				_result_, ok = payload.(string)
+				if (!ok) {
+					return false
+				}
+				result = (&_result_)
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
+func (me *impl) Language(andThen func(*string)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "env.language"
+	msg.Data = make(dict, 0)
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *string
+			if (nil != payload) {
+				var _result_ string
+				_result_, ok = payload.(string)
+				if (!ok) {
+					return false
+				}
+				result = (&_result_)
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
+func (me *impl) MachineId(andThen func(*string)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "env.machineId"
+	msg.Data = make(dict, 0)
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *string
+			if (nil != payload) {
+				var _result_ string
+				_result_, ok = payload.(string)
+				if (!ok) {
+					return false
+				}
+				result = (&_result_)
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
+func (me *impl) RemoteName(andThen func(*string)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "env.remoteName"
+	msg.Data = make(dict, 0)
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *string
+			if (nil != payload) {
+				var _result_ string
+				_result_, ok = payload.(string)
+				if (!ok) {
+					return false
+				}
+				result = (&_result_)
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
+func (me *impl) SessionId(andThen func(*string)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "env.sessionId"
+	msg.Data = make(dict, 0)
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *string
+			if (nil != payload) {
+				var _result_ string
+				_result_, ok = payload.(string)
+				if (!ok) {
+					return false
+				}
+				result = (&_result_)
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
+func (me *impl) Shell(andThen func(*string)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "env.shell"
+	msg.Data = make(dict, 0)
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *string
+			if (nil != payload) {
+				var _result_ string
+				_result_, ok = payload.(string)
+				if (!ok) {
+					return false
+				}
+				result = (&_result_)
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
+func (me *impl) UriScheme(andThen func(*string)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "env.uriScheme"
+	msg.Data = make(dict, 0)
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *string
+			if (nil != payload) {
+				var _result_ string
+				_result_, ok = payload.(string)
+				if (!ok) {
+					return false
+				}
+				result = (&_result_)
+			}
+			andThen(result)
 			return true
 		}
 	}

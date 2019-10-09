@@ -193,6 +193,41 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				default:
 					throw (methodname)
 			}
+		case "env":
+			switch (methodname) {
+				case "openExternal": {
+					let arg_target: vscode.Uri
+					try { arg_target = vscode.Uri.parse(msg.data['target'], true) }
+					catch (_) { try { arg_target = vscode.Uri.file(msg.data['target']) } catch (_) { try { arg_target = vscode.Uri.parse(msg.data['target'], false) } catch (_) { return Promise.reject(msg.data['target']) } } }
+					return vscode.env.openExternal(arg_target, )
+				}
+				case "appName": {
+					return Promise.resolve(vscode.env.appName)
+				}
+				case "appRoot": {
+					return Promise.resolve(vscode.env.appRoot)
+				}
+				case "language": {
+					return Promise.resolve(vscode.env.language)
+				}
+				case "machineId": {
+					return Promise.resolve(vscode.env.machineId)
+				}
+				case "remoteName": {
+					return Promise.resolve(vscode.env.remoteName)
+				}
+				case "sessionId": {
+					return Promise.resolve(vscode.env.sessionId)
+				}
+				case "shell": {
+					return Promise.resolve(vscode.env.shell)
+				}
+				case "uriScheme": {
+					return Promise.resolve(vscode.env.uriScheme)
+				}
+				default:
+					throw (methodname)
+			}
 		default:
 			throw (apiname)
 	}
