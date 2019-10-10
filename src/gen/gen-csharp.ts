@@ -25,6 +25,7 @@ export class Gen extends gen_ast.Gen {
             "using System;",
             "using System.Collections.Generic;",
             "using Newtonsoft.Json;", "",
+            "using GlobPattern = System.String;",
             "using " + this.options.idents.typeAny + " = System.Object;",
             "using " + this.options.idents.typeDict + " = System.Collections.Generic.Dictionary<string, object>;", ""
         )

@@ -102,29 +102,29 @@ class Prep {
     }
     addStruct(structJob) {
         const qname = this.qName(structJob);
+        const fields = [];
+        for (const _ of structJob.decl.members)
+            if (_.name) {
+                let tspec = null;
+                const mtyped = _;
+                const mtparams = (_.kind === ts.SyntaxKind.MethodSignature || _.kind === ts.SyntaxKind.MethodDeclaration) ? _ : null;
+                if ((!mtparams) && mtyped && mtyped.type)
+                    tspec = this.typeSpec(mtyped.type, structJob.decl.typeParameters);
+                else if ((mtparams) && ts.isInterfaceDeclaration(structJob.decl))
+                    tspec = this.typeSpec(_, ts.createNodeArray((mtparams.typeParameters || []).concat(...(structJob.decl.typeParameters || []))));
+                if (tspec)
+                    fields.push({
+                        fromOrig: _,
+                        name: _.name.getText(),
+                        typeSpec: tspec,
+                        optional: (ts.isTypeElement(_) && _.questionToken) ? true : false,
+                        isExtBaggage: false,
+                    });
+            }
         this.structs.push({
             fromOrig: structJob, isOutgoing: false, isIncoming: false,
             name: qname.slice(1).join('_'),
-            fields: structJob.decl.members.filter(_ => _.name.getText() !== 'defaultUri').map(_ => {
-                let tspec = null;
-                switch (_.kind) {
-                    case ts.SyntaxKind.PropertySignature:
-                        tspec = this.typeSpec(_.type, structJob.decl.typeParameters);
-                        break;
-                    case ts.SyntaxKind.MethodSignature:
-                        tspec = this.typeSpec(_, structJob.decl.typeParameters);
-                        break;
-                    default:
-                        throw (_.kind);
-                }
-                return {
-                    fromOrig: (_.kind === ts.SyntaxKind.PropertySignature) ? _ : _,
-                    name: _.name.getText(),
-                    typeSpec: tspec,
-                    optional: _.questionToken ? true : false,
-                    isExtBaggage: false,
-                };
-            }),
+            fields: fields,
             funcFields: []
         });
         const struct = this.structs[this.structs.length - 1];
@@ -184,7 +184,7 @@ class Prep {
                 return this.typeSpec(tNode.type, tParams);
             }
             else if (ts.isMethodSignature(tNode) || ts.isCallSignatureDeclaration(tNode) || ts.isConstructSignatureDeclaration(tNode) || ts.isIndexSignatureDeclaration(tNode)) {
-                const tp = tNode.typeParameters ? ts.createNodeArray(tNode.typeParameters.concat(...(tParams ? tParams : [])), tParams && tParams.hasTrailingComma) : tParams;
+                const tp = tNode.typeParameters ? ts.createNodeArray(tNode.typeParameters.concat(...(tParams ? tParams : []))) : tParams;
                 const rfun = {
                     From: tNode.parameters.map(_ => this.typeSpec(_.type, tp)),
                     To: this.typeSpec(tNode.type, tp)
@@ -224,8 +224,9 @@ class Prep {
                 };
                 return rtup;
             case ts.SyntaxKind.UnionType:
+                const tunion = tNode;
                 const rsum = {
-                    SumOf: tNode.types.map(_ => this.typeSpec(_, tParams))
+                    SumOf: tunion.types.map(_ => this.typeSpec(_, tParams))
                 };
                 return rsum;
             case ts.SyntaxKind.IntersectionType:

@@ -692,6 +692,77 @@ Workspace: interface
         listener: (WorkspaceFoldersChangeEvent->void)
         andThen: ?(?Disposable->void)
 
+    # getWorkspaceFolder:
+    # Returns the [workspace folder](#WorkspaceFolder) that contains a given uri.
+    # * returns `undefined` when the given uri doesn't match any workspace folder
+    # * returns the *input* when the given uri is a workspace folder itself
+    #
+    # @uri:
+    # An uri.
+    #
+    # @andThen:
+    # A workspace folder or `undefined`
+    GetWorkspaceFolder: void
+        uri: string
+        andThen: ?(?WorkspaceFolder->void)
+
+    # workspaceFolders:
+    # List of workspace folders or `undefined` when no folder is open.
+    # *Note* that the first entry corresponds to the value of `rootPath`.
+    WorkspaceFolders: void
+        andThen: ?(?[WorkspaceFolder]->void)
+
+    # findFiles:
+    # Find files across all [workspace folders](#workspace.workspaceFolders) in the workspace.
+    # `findFiles('**​/*.js', '**​/node_modules/**', 10)`
+    #
+    # @include:
+    # A [glob pattern](#GlobPattern) that defines the files to search for. The glob pattern
+    # will be matched against the file paths of resulting matches relative to their workspace. Use a [relative pattern](#RelativePattern)
+    # to restrict the search results to a [workspace folder](#WorkspaceFolder).
+    #
+    # @exclude:
+    # A [glob pattern](#GlobPattern) that defines files and folders to exclude. The glob pattern
+    # will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will
+    # apply, when `null` no excludes will apply.
+    #
+    # @maxResults:
+    # An upper-bound for the result.
+    #
+    # @token:
+    # A token that can be used to signal cancellation to the underlying search engine.
+    #
+    # @andThen:
+    # A thenable that resolves to an array of resource identifiers. Will return no results if no
+    # [workspace folders](#workspace.workspaceFolders) are opened.
+    FindFiles: void
+        include: GlobPattern
+        exclude: ?GlobPattern
+        maxResults: ?int
+        token: ?Cancel
+        andThen: ?(?[string]->void)
+
+    # asRelativePath:
+    # Returns a path that is relative to the workspace folder or folders.
+    # 
+    # When there are no [workspace folders](#workspace.workspaceFolders) or when the path
+    # is not contained in them, the input is returned.
+    #
+    # @pathOrUri:
+    # A path or uri. When a uri is given its [fsPath](#Uri.fsPath) is used.
+    #
+    # @includeWorkspaceFolder:
+    # When `true` and when the given path is contained inside a
+    # workspace folder the name of the workspace is prepended. Defaults to `true` when there are
+    # multiple workspace folders and `false` otherwise.
+    #
+    # @andThen:
+    # A path relative to the root or the input.
+    AsRelativePath: void
+        pathOrUri: string
+        includeWorkspaceFolder: bool
+        andThen: ?(?string->void)
+
     # Provides single-call access to numerous individual `Workspace` properties at once.
     Properties: void
         andThen: (WorkspaceProperties->void)
@@ -1039,6 +1110,12 @@ QuickPickItem: class
 # Options to configure the behaviour of a file save dialog.
 SaveDialogOptions: class
 
+    # defaultUri:
+    # The resource the dialog shows when opened.
+    #
+    # JSON FLAGS: {"Name":"defaultUri","Required":false,"Excluded":false}
+    DefaultUri: ?string
+
     # saveLabel:
     # A human-readable string for the save button.
     #
@@ -1068,6 +1145,12 @@ SaveDialogOptions: class
 # * Note 2: Explicitly setting `canSelectFiles` and `canSelectFolders` to `false` is futile
 # and the editor then silently adjusts the options to select files.
 OpenDialogOptions: class
+
+    # defaultUri:
+    # The resource the dialog shows when opened.
+    #
+    # JSON FLAGS: {"Name":"defaultUri","Required":false,"Excluded":false}
+    DefaultUri: ?string
 
     # openLabel:
     # A human-readable string for the open button.
@@ -1309,6 +1392,13 @@ WorkspaceProperties: class
     #
     # JSON FLAGS: {"Name":"workspaceFile","Required":false,"Excluded":false}
     WorkspaceFile: ?string
+
+    # workspaceFolders:
+    # List of workspace folders or `undefined` when no folder is open.
+    # *Note* that the first entry corresponds to the value of `rootPath`.
+    #
+    # JSON FLAGS: {"Name":"workspaceFolders","Required":false,"Excluded":false}
+    WorkspaceFolders: ?[WorkspaceFolder]
 
 
 
@@ -2536,6 +2626,132 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
 
 
 
+Workspace·GetWorkspaceFolder: (uri:string -> andThen:?(?WorkspaceFolder->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "workspace.getWorkspaceFolder"
+    msg.Data = dict·new(1)
+    msg.Data@"uri" = uri
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?WorkspaceFolder
+            if (=?payload)
+                result = ?WorkspaceFolder·new
+                ok = result.populateFrom(payload)
+                if (!ok)
+                    return false
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Workspace·WorkspaceFolders: (andThen:?(?[WorkspaceFolder]->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "workspace.workspaceFolders"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?[WorkspaceFolder]
+            if (=?payload)
+                var __coll__result of [any]
+                [__coll__result,ok] = ((payload)·([any]))
+                if (!ok)
+                    return false
+                result = [WorkspaceFolder]·new(__coll__result·len)
+                var __idx__result of int
+                __idx__result = 0
+                for __item__result in __coll__result
+                    var __val__result of WorkspaceFolder
+                    __val__result = WorkspaceFolder·new
+                    ok = __val__result.populateFrom(__item__result)
+                    if (!ok)
+                        return false
+                    result@__idx__result = __val__result
+                    __idx__result = (__idx__result + 1)
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Workspace·FindFiles: (include:GlobPattern -> exclude:?GlobPattern -> maxResults:?int -> token:?Cancel -> andThen:?(?[string]->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "workspace.findFiles"
+    msg.Data = dict·new(4)
+    msg.Data@"include" = include
+    msg.Data@"exclude" = exclude
+    msg.Data@"maxResults" = maxResults
+    if (=?token)
+        token.impl = this.Impl()
+        if ("" == token.fnId)
+            lock this
+                token.fnId = this.nextFuncId()
+        msg.Data@"token" = token.fnId
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?[string]
+            if (=?payload)
+                var __coll__result of [any]
+                [__coll__result,ok] = ((payload)·([any]))
+                if (!ok)
+                    return false
+                result = [string]·new(__coll__result·len)
+                var __idx__result of int
+                __idx__result = 0
+                for __item__result in __coll__result
+                    var __val__result of string
+                    [__val__result,ok] = ((__item__result)·(string))
+                    if (!ok)
+                        return false
+                    result@__idx__result = __val__result
+                    __idx__result = (__idx__result + 1)
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Workspace·AsRelativePath: (pathOrUri:string -> includeWorkspaceFolder:bool -> andThen:?(?string->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "workspace.asRelativePath"
+    msg.Data = dict·new(2)
+    msg.Data@"pathOrUri" = pathOrUri
+    msg.Data@"includeWorkspaceFolder" = includeWorkspaceFolder
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?string
+            if (=?payload)
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
+                if (!ok)
+                    return false
+                result = (&_result_)
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
 Workspace·Properties: (andThen:(WorkspaceProperties->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
@@ -3060,6 +3276,26 @@ WorkspaceProperties·populateFrom: (payload:any -> bool)
                 return false
             workspaceFile = (&_workspaceFile_)
         this.WorkspaceFile = workspaceFile
+    [val,ok] = it@?"workspaceFolders"
+    if ok
+        var workspaceFolders of ?[WorkspaceFolder]
+        if (=?val)
+            var __coll__workspaceFolders of [any]
+            [__coll__workspaceFolders,ok] = ((val)·([any]))
+            if (!ok)
+                return false
+            workspaceFolders = [WorkspaceFolder]·new(__coll__workspaceFolders·len)
+            var __idx__workspaceFolders of int
+            __idx__workspaceFolders = 0
+            for __item__workspaceFolders in __coll__workspaceFolders
+                var __val__workspaceFolders of WorkspaceFolder
+                __val__workspaceFolders = WorkspaceFolder·new
+                ok = __val__workspaceFolders.populateFrom(__item__workspaceFolders)
+                if (!ok)
+                    return false
+                workspaceFolders@__idx__workspaceFolders = __val__workspaceFolders
+                __idx__workspaceFolders = (__idx__workspaceFolders + 1)
+        this.WorkspaceFolders = workspaceFolders
     return true
 
 

@@ -56,16 +56,15 @@ const genApiSurface: genApiMember = {
                 'saveAll',
 
                 'onDidChangeWorkspaceFolders',
-                // 'getWorkspaceFolder',
-                // 'workspaceFolders',
+                'getWorkspaceFolder',
+                'workspaceFolders',
                 // 'openTextDocument',
-                // 'findFiles',
-                // 'asRelativePath',
+                'findFiles',
+                'asRelativePath',
             ],
             'languages': [
                 'getLanguages',
                 'onDidChangeDiagnostics',
-                // 'getDiagnostics',
             ],
             'extensions': [
                 'onDidChange',
@@ -186,6 +185,13 @@ function gatherMember(into: gen.GenJob, member: ts.Node, overload: number, ...pr
             case ts.SyntaxKind.TupleType:
                 (member as ts.TupleTypeNode).elementTypes.forEach(_ => gatherFromTypeNode(into, _))
                 break
+            case ts.SyntaxKind.ClassDeclaration:
+                gatherStruct(into, member as ts.ClassDeclaration, ...prefixes)
+                break
+            case ts.SyntaxKind.TypeAliasDeclaration:
+                const talias = member as ts.TypeAliasDeclaration
+                gatherFromTypeNode(into, talias.type, talias.typeParameters)
+                break
             default:
                 throw (member.kind + '\t' + member.getText())
         }
@@ -211,7 +217,9 @@ function gatherFromTypeNode(into: gen.GenJob, it: ts.TypeNode, typeParams: ts.No
             (it as ts.TupleTypeNode).elementTypes.forEach(_ => gatherFromTypeNode(into, _, typeParams))
             break
         case ts.SyntaxKind.UnionType:
-            (it as ts.UnionTypeNode).types.forEach(_ => gatherFromTypeNode(into, _, typeParams))
+            const tunion = it as ts.UnionTypeNode
+            if (tunion && tunion.types && tunion.types.length && !tunion.types.find(_ => _.kind === ts.SyntaxKind.StringKeyword))
+                (it as ts.UnionTypeNode).types.forEach(_ => gatherFromTypeNode(into, _, typeParams))
             break
         case ts.SyntaxKind.IntersectionType:
             (it as ts.IntersectionTypeNode).types.forEach(_ => gatherFromTypeNode(into, _, typeParams))
@@ -276,31 +284,20 @@ function gatherEnum(into: gen.GenJob, decl: ts.EnumDeclaration, ...prefixes: str
         into.enums.push({ qName: qname, decl: decl })
 }
 
-function gatherStruct(into: gen.GenJob, decl: ts.InterfaceDeclaration, ...prefixes: string[]) {
+function gatherStruct(into: gen.GenJob, decl: ts.InterfaceDeclaration | ts.ClassDeclaration, ...prefixes: string[]) {
     const qname = prefixes.concat(decl.name.text).join('.')
     if (into.structs.some(_ => _.qName === qname))
         return
 
     into.structs.push({ qName: qname, decl: decl })
-    decl.members.forEach(member => {
-        switch (member.kind) {
-            case ts.SyntaxKind.PropertySignature:
-                const prop = member as ts.PropertySignature
-                gatherFromTypeNode(into, prop.type)
-                break
-            case ts.SyntaxKind.MethodSignature:
-                const method = member as ts.MethodSignature
-                gatherFromTypeNode(into, method.type, method.typeParameters)
-                method.parameters.forEach(_ => gatherFromTypeNode(into, _.type, method.typeParameters))
-                break
-            case ts.SyntaxKind.CallSignature:
-                const sig = member as ts.CallSignatureDeclaration
-                gatherFromTypeNode(into, sig.type, sig.typeParameters)
-                sig.parameters.forEach(_ => gatherFromTypeNode(into, _.type, sig.typeParameters))
-                break
-            default:
-                throw (member.kind + '\t' + member.getText())
-        }
+    decl.members.forEach((member: ts.NamedDeclaration) => {
+        const memtype = member as gen.TsNodeWithType
+        const memtparams = member as gen.TsNodeWithTypeParams
+        const memparams = member as any as gen.TsNodeWithParams
+        if (memtype && memtype.type)
+            gatherFromTypeNode(into, memtype.type, memtparams ? memtparams.typeParameters : undefined)
+        if (memparams && memparams.parameters && memparams.parameters.length)
+            memparams.parameters.forEach(_ => gatherFromTypeNode(into, _.type, memtparams ? memtparams.typeParameters : undefined))
     })
 }
 

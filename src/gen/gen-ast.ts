@@ -1068,12 +1068,14 @@ export class Gen extends gen.Gen implements gen.IGen {
         }
 
         {   // set all structs' Outgoing & Incoming bools only now that all ifaces and structs are complete
-            const traverse = (t: TypeRef, forIncoming: boolean) =>
+            const traversed: { [_: string]: boolean } = {}
+            const traverse = (t: TypeRef, forIncoming: boolean) => {
                 this.typeRefTraverse(t, argtype => {
                     const tnamed = this.typeOwn(argtype)
                     if (tnamed) {
                         const tstruct = this.allStructs[tnamed.Name]
-                        if (tstruct) {
+                        if (tstruct && !traversed[tnamed.Name]) {
+                            traversed[tnamed.Name] = true
                             if (forIncoming) tstruct.IsIncoming = true
                             else tstruct.IsOutgoing = true
                             for (const fld of tstruct.Fields) {
@@ -1084,6 +1086,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                     }
                     return undefined
                 })
+            }
             for (const iface of this.allInterfaces)
                 for (const method of iface.Methods)
                     for (const arg of method.Args)

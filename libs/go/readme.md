@@ -261,6 +261,13 @@ importedApi = mathExt.exports;
 
 console.log(importedApi.mul(42, 1)); ```
 
+#### type GlobPattern
+
+```go
+type GlobPattern = string
+```
+
+
 #### type InputBoxOptions
 
 ```go
@@ -387,6 +394,9 @@ Options to configure the behavior of the message.
 
 ```go
 type OpenDialogOptions struct {
+	// The resource the dialog shows when opened.
+	DefaultUri string `json:"defaultUri,omitempty"`
+
 	// A human-readable string for the open button.
 	OpenLabel string `json:"openLabel,omitempty"`
 
@@ -475,6 +485,9 @@ Options to configure the behavior of the quick pick UI.
 
 ```go
 type SaveDialogOptions struct {
+	// The resource the dialog shows when opened.
+	DefaultUri string `json:"defaultUri,omitempty"`
+
 	// A human-readable string for the save button.
 	SaveLabel string `json:"saveLabel,omitempty"`
 
@@ -924,6 +937,52 @@ type Workspace interface {
 	// An event that is emitted when a workspace folder is added or removed.
 	OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent), andThen func(*Disposable))
 
+	// Returns the [workspace folder](#WorkspaceFolder) that contains a given uri.
+	// * returns `undefined` when the given uri doesn't match any workspace folder
+	// * returns the *input* when the given uri is a workspace folder itself
+	//
+	// `uri` ── An uri.
+	//
+	// `andThen` ── A workspace folder or `undefined`
+	GetWorkspaceFolder(uri string, andThen func(*WorkspaceFolder))
+
+	// List of workspace folders or `undefined` when no folder is open.
+	// *Note* that the first entry corresponds to the value of `rootPath`.
+	WorkspaceFolders(andThen func([]WorkspaceFolder))
+
+	// Find files across all [workspace folders](#workspace.workspaceFolders) in the workspace.
+	// `findFiles('**​/*.js', '**​/node_modules/**', 10)`
+	//
+	// `include` ── A [glob pattern](#GlobPattern) that defines the files to search for. The glob pattern
+	// will be matched against the file paths of resulting matches relative to their workspace. Use a [relative pattern](#RelativePattern)
+	// to restrict the search results to a [workspace folder](#WorkspaceFolder).
+	//
+	// `exclude` ── A [glob pattern](#GlobPattern) that defines files and folders to exclude. The glob pattern
+	// will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will
+	// apply, when `null` no excludes will apply.
+	//
+	// `maxResults` ── An upper-bound for the result.
+	//
+	// `token` ── A token that can be used to signal cancellation to the underlying search engine.
+	//
+	// `andThen` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
+	// [workspace folders](#workspace.workspaceFolders) are opened.
+	FindFiles(include GlobPattern, exclude *GlobPattern, maxResults *int, token *Cancel, andThen func([]string))
+
+	// Returns a path that is relative to the workspace folder or folders.
+	//
+	// When there are no [workspace folders](#workspace.workspaceFolders) or when the path
+	// is not contained in them, the input is returned.
+	//
+	// `pathOrUri` ── A path or uri. When a uri is given its [fsPath](#Uri.fsPath) is used.
+	//
+	// `includeWorkspaceFolder` ── When `true` and when the given path is contained inside a
+	// workspace folder the name of the workspace is prepended. Defaults to `true` when there are
+	// multiple workspace folders and `false` otherwise.
+	//
+	// `andThen` ── A path relative to the root or the input.
+	AsRelativePath(pathOrUri string, includeWorkspaceFolder bool, andThen func(*string))
+
 	// Provides single-call access to numerous individual `Workspace` properties at once.
 	Properties(andThen func(WorkspaceProperties))
 }
@@ -1027,6 +1086,10 @@ type WorkspaceProperties struct {
 	// for that purpose which will work both when a single folder is opened as
 	// well as an untitled or saved workspace.
 	WorkspaceFile string `json:"workspaceFile,omitempty"`
+
+	// List of workspace folders or `undefined` when no folder is open.
+	// *Note* that the first entry corresponds to the value of `rootPath`.
+	WorkspaceFolders []WorkspaceFolder `json:"workspaceFolders,omitempty"`
 }
 ```
 

@@ -70,11 +70,15 @@
   - [ShowWorkspaceFolderPick(options,andThen)](#M-VscAppz-IWindow-ShowWorkspaceFolderPick-VscAppz-WorkspaceFolderPickOptions,System-Action{VscAppz-WorkspaceFolder}- 'VscAppz.IWindow.ShowWorkspaceFolderPick(VscAppz.WorkspaceFolderPickOptions,System.Action{VscAppz.WorkspaceFolder})')
   - [State()](#M-VscAppz-IWindow-State-System-Action{VscAppz-WindowState}- 'VscAppz.IWindow.State(System.Action{VscAppz.WindowState})')
 - [IWorkspace](#T-VscAppz-IWorkspace 'VscAppz.IWorkspace')
+  - [AsRelativePath(pathOrUri,includeWorkspaceFolder,andThen)](#M-VscAppz-IWorkspace-AsRelativePath-System-String,System-Boolean,System-Action{System-String}- 'VscAppz.IWorkspace.AsRelativePath(System.String,System.Boolean,System.Action{System.String})')
+  - [FindFiles(include,exclude,maxResults,token,andThen)](#M-VscAppz-IWorkspace-FindFiles-System-String,System-String,System-Nullable{System-Int32},VscAppz-Cancel,System-Action{System-String[]}- 'VscAppz.IWorkspace.FindFiles(System.String,System.String,System.Nullable{System.Int32},VscAppz.Cancel,System.Action{System.String[]})')
+  - [GetWorkspaceFolder(uri,andThen)](#M-VscAppz-IWorkspace-GetWorkspaceFolder-System-String,System-Action{VscAppz-WorkspaceFolder}- 'VscAppz.IWorkspace.GetWorkspaceFolder(System.String,System.Action{VscAppz.WorkspaceFolder})')
   - [Name()](#M-VscAppz-IWorkspace-Name-System-Action{System-String}- 'VscAppz.IWorkspace.Name(System.Action{System.String})')
   - [OnDidChangeWorkspaceFolders()](#M-VscAppz-IWorkspace-OnDidChangeWorkspaceFolders-System-Action{VscAppz-WorkspaceFoldersChangeEvent},System-Action{VscAppz-Disposable}- 'VscAppz.IWorkspace.OnDidChangeWorkspaceFolders(System.Action{VscAppz.WorkspaceFoldersChangeEvent},System.Action{VscAppz.Disposable})')
   - [Properties()](#M-VscAppz-IWorkspace-Properties-System-Action{VscAppz-WorkspaceProperties}- 'VscAppz.IWorkspace.Properties(System.Action{VscAppz.WorkspaceProperties})')
   - [SaveAll(includeUntitled,andThen)](#M-VscAppz-IWorkspace-SaveAll-System-Boolean,System-Action{System-Boolean}- 'VscAppz.IWorkspace.SaveAll(System.Boolean,System.Action{System.Boolean})')
   - [WorkspaceFile()](#M-VscAppz-IWorkspace-WorkspaceFile-System-Action{System-String}- 'VscAppz.IWorkspace.WorkspaceFile(System.Action{System.String})')
+  - [WorkspaceFolders()](#M-VscAppz-IWorkspace-WorkspaceFolders-System-Action{VscAppz-WorkspaceFolder[]}- 'VscAppz.IWorkspace.WorkspaceFolders(System.Action{VscAppz.WorkspaceFolder[]})')
 - [InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions')
   - [IgnoreFocusOut](#F-VscAppz-InputBoxOptions-IgnoreFocusOut 'VscAppz.InputBoxOptions.IgnoreFocusOut')
   - [Password](#F-VscAppz-InputBoxOptions-Password 'VscAppz.InputBoxOptions.Password')
@@ -94,6 +98,7 @@
   - [CanSelectFiles](#F-VscAppz-OpenDialogOptions-CanSelectFiles 'VscAppz.OpenDialogOptions.CanSelectFiles')
   - [CanSelectFolders](#F-VscAppz-OpenDialogOptions-CanSelectFolders 'VscAppz.OpenDialogOptions.CanSelectFolders')
   - [CanSelectMany](#F-VscAppz-OpenDialogOptions-CanSelectMany 'VscAppz.OpenDialogOptions.CanSelectMany')
+  - [DefaultUri](#F-VscAppz-OpenDialogOptions-DefaultUri 'VscAppz.OpenDialogOptions.DefaultUri')
   - [Filters](#F-VscAppz-OpenDialogOptions-Filters 'VscAppz.OpenDialogOptions.Filters')
   - [OpenLabel](#F-VscAppz-OpenDialogOptions-OpenLabel 'VscAppz.OpenDialogOptions.OpenLabel')
 - [QuickPickItem](#T-VscAppz-QuickPickItem 'VscAppz.QuickPickItem')
@@ -112,6 +117,7 @@
   - [OnDidSelectItem_AppzFuncId](#F-VscAppz-QuickPickOptions-OnDidSelectItem_AppzFuncId 'VscAppz.QuickPickOptions.OnDidSelectItem_AppzFuncId')
   - [PlaceHolder](#F-VscAppz-QuickPickOptions-PlaceHolder 'VscAppz.QuickPickOptions.PlaceHolder')
 - [SaveDialogOptions](#T-VscAppz-SaveDialogOptions 'VscAppz.SaveDialogOptions')
+  - [DefaultUri](#F-VscAppz-SaveDialogOptions-DefaultUri 'VscAppz.SaveDialogOptions.DefaultUri')
   - [Filters](#F-VscAppz-SaveDialogOptions-Filters 'VscAppz.SaveDialogOptions.Filters')
   - [SaveLabel](#F-VscAppz-SaveDialogOptions-SaveLabel 'VscAppz.SaveDialogOptions.SaveLabel')
 - [Vsc](#T-VscAppz-Vsc 'VscAppz.Vsc')
@@ -133,6 +139,7 @@
 - [WorkspaceProperties](#T-VscAppz-WorkspaceProperties 'VscAppz.WorkspaceProperties')
   - [Name](#F-VscAppz-WorkspaceProperties-Name 'VscAppz.WorkspaceProperties.Name')
   - [WorkspaceFile](#F-VscAppz-WorkspaceProperties-WorkspaceFile 'VscAppz.WorkspaceProperties.WorkspaceFile')
+  - [WorkspaceFolders](#F-VscAppz-WorkspaceProperties-WorkspaceFolders 'VscAppz.WorkspaceProperties.WorkspaceFolders')
 
 <a name='T-VscAppz-Cancel'></a>
 ## Cancel `type`
@@ -1298,6 +1305,85 @@ The workspace offers support for [listening](#workspace.createFileSystemWatcher)
 events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
 the editor-process so that they should be always used instead of nodejs-equivalents.
 
+<a name='M-VscAppz-IWorkspace-AsRelativePath-System-String,System-Boolean,System-Action{System-String}-'></a>
+### AsRelativePath(pathOrUri,includeWorkspaceFolder,andThen) `method`
+
+##### Summary
+
+Returns a path that is relative to the workspace folder or folders.
+
+When there are no [workspace folders](#workspace.workspaceFolders) or when the path
+is not contained in them, the input is returned.
+
+`pathOrUri` ── A path or uri. When a uri is given its [fsPath](#Uri.fsPath) is used.
+
+`includeWorkspaceFolder` ── When `true` and when the given path is contained inside a
+workspace folder the name of the workspace is prepended. Defaults to `true` when there are
+multiple workspace folders and `false` otherwise.
+
+`andThen` ── A path relative to the root or the input.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| pathOrUri | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | A path or uri. When a uri is given its [fsPath](#Uri.fsPath) is used. |
+| includeWorkspaceFolder | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | When `true` and when the given path is contained inside a workspace folder the name of the workspace is prepended. Defaults to `true` when there are multiple workspace folders and `false` otherwise. |
+| andThen | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A path relative to the root or the input. |
+
+<a name='M-VscAppz-IWorkspace-FindFiles-System-String,System-String,System-Nullable{System-Int32},VscAppz-Cancel,System-Action{System-String[]}-'></a>
+### FindFiles(include,exclude,maxResults,token,andThen) `method`
+
+##### Summary
+
+Find files across all [workspace folders](#workspace.workspaceFolders) in the workspace.
+`findFiles('**​/*.js', '**​/node_modules/**', 10)`
+
+`include` ── A [glob pattern](#GlobPattern) that defines the files to search for. The glob pattern
+will be matched against the file paths of resulting matches relative to their workspace. Use a [relative pattern](#RelativePattern)
+to restrict the search results to a [workspace folder](#WorkspaceFolder).
+
+`exclude` ── A [glob pattern](#GlobPattern) that defines files and folders to exclude. The glob pattern
+will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will
+apply, when `null` no excludes will apply.
+
+`maxResults` ── An upper-bound for the result.
+
+`token` ── A token that can be used to signal cancellation to the underlying search engine.
+
+`andThen` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
+[workspace folders](#workspace.workspaceFolders) are opened.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| include | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | A [glob pattern](#GlobPattern) that defines the files to search for. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. Use a [relative pattern](#RelativePattern) to restrict the search results to a [workspace folder](#WorkspaceFolder). |
+| exclude | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | A [glob pattern](#GlobPattern) that defines files and folders to exclude. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will apply, when `null` no excludes will apply. |
+| maxResults | [System.Nullable{System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.Int32}') | An upper-bound for the result. |
+| token | [VscAppz.Cancel](#T-VscAppz-Cancel 'VscAppz.Cancel') | A token that can be used to signal cancellation to the underlying search engine. |
+| andThen | [System.Action{System.String[]}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String[]}') | A thenable that resolves to an array of resource identifiers. Will return no results if no [workspace folders](#workspace.workspaceFolders) are opened. |
+
+<a name='M-VscAppz-IWorkspace-GetWorkspaceFolder-System-String,System-Action{VscAppz-WorkspaceFolder}-'></a>
+### GetWorkspaceFolder(uri,andThen) `method`
+
+##### Summary
+
+Returns the [workspace folder](#WorkspaceFolder) that contains a given uri.
+* returns `undefined` when the given uri doesn't match any workspace folder
+* returns the *input* when the given uri is a workspace folder itself
+
+`uri` ── An uri.
+
+`andThen` ── A workspace folder or `undefined`
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| uri | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | An uri. |
+| andThen | [System.Action{VscAppz.WorkspaceFolder}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.WorkspaceFolder}') | A workspace folder or `undefined` |
+
 <a name='M-VscAppz-IWorkspace-Name-System-Action{System-String}-'></a>
 ### Name() `method`
 
@@ -1382,6 +1468,18 @@ vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
 configuration data into the file. You can use `workspace.getConfiguration().update()`
 for that purpose which will work both when a single folder is opened as
 well as an untitled or saved workspace.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-IWorkspace-WorkspaceFolders-System-Action{VscAppz-WorkspaceFolder[]}-'></a>
+### WorkspaceFolders() `method`
+
+##### Summary
+
+List of workspace folders or `undefined` when no folder is open.
+*Note* that the first entry corresponds to the value of `rootPath`.
 
 ##### Parameters
 
@@ -1555,6 +1653,13 @@ Allow to select folders, defaults to `false`.
 
 Allow to select many files or folders.
 
+<a name='F-VscAppz-OpenDialogOptions-DefaultUri'></a>
+### DefaultUri `constants`
+
+##### Summary
+
+The resource the dialog shows when opened.
+
 <a name='F-VscAppz-OpenDialogOptions-Filters'></a>
 ### Filters `constants`
 
@@ -1701,6 +1806,13 @@ VscAppz
 ##### Summary
 
 Options to configure the behaviour of a file save dialog.
+
+<a name='F-VscAppz-SaveDialogOptions-DefaultUri'></a>
+### DefaultUri `constants`
+
+##### Summary
+
+The resource the dialog shows when opened.
 
 <a name='F-VscAppz-SaveDialogOptions-Filters'></a>
 ### Filters `constants`
@@ -1932,3 +2044,11 @@ vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
 configuration data into the file. You can use `workspace.getConfiguration().update()`
 for that purpose which will work both when a single folder is opened as
 well as an untitled or saved workspace.
+
+<a name='F-VscAppz-WorkspaceProperties-WorkspaceFolders'></a>
+### WorkspaceFolders `constants`
+
+##### Summary
+
+List of workspace folders or `undefined` when no folder is open.
+*Note* that the first entry corresponds to the value of `rootPath`.

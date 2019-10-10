@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
+const ppio = require("./procspipeio");
 const noOp = (_) => { };
 function handle(msg, prog, remoteCancellationTokens) {
     const idxdot = msg.qName.lastIndexOf('.');
@@ -11,68 +12,104 @@ function handle(msg, prog, remoteCancellationTokens) {
                 case "showErrorMessage1": {
                     const arg_message = (msg.data['message']);
                     const arg_items = (msg.data['items'] || []);
-                    return vscode.window.showErrorMessage(arg_message, ...arg_items);
+                    const ret = vscode.window.showErrorMessage(arg_message, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showErrorMessage2": {
                     const arg_message = (msg.data['message']);
                     const arg_options = (msg.data['options']);
                     const arg_items = (msg.data['items'] || []);
-                    return vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items);
+                    const ret = vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showErrorMessage3": {
                     const arg_message = (msg.data['message']);
                     const arg_items = (msg.data['items'] || []);
-                    return vscode.window.showErrorMessage(arg_message, ...arg_items);
+                    const ret = vscode.window.showErrorMessage(arg_message, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showErrorMessage4": {
                     const arg_message = (msg.data['message']);
                     const arg_options = (msg.data['options']);
                     const arg_items = (msg.data['items'] || []);
-                    return vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items);
+                    const ret = vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showInformationMessage1": {
                     const arg_message = (msg.data['message']);
                     const arg_items = (msg.data['items'] || []);
-                    return vscode.window.showInformationMessage(arg_message, ...arg_items);
+                    const ret = vscode.window.showInformationMessage(arg_message, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showInformationMessage2": {
                     const arg_message = (msg.data['message']);
                     const arg_options = (msg.data['options']);
                     const arg_items = (msg.data['items'] || []);
-                    return vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items);
+                    const ret = vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showInformationMessage3": {
                     const arg_message = (msg.data['message']);
                     const arg_items = (msg.data['items'] || []);
-                    return vscode.window.showInformationMessage(arg_message, ...arg_items);
+                    const ret = vscode.window.showInformationMessage(arg_message, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showInformationMessage4": {
                     const arg_message = (msg.data['message']);
                     const arg_options = (msg.data['options']);
                     const arg_items = (msg.data['items'] || []);
-                    return vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items);
+                    const ret = vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showWarningMessage1": {
                     const arg_message = (msg.data['message']);
                     const arg_items = (msg.data['items'] || []);
-                    return vscode.window.showWarningMessage(arg_message, ...arg_items);
+                    const ret = vscode.window.showWarningMessage(arg_message, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showWarningMessage2": {
                     const arg_message = (msg.data['message']);
                     const arg_options = (msg.data['options']);
                     const arg_items = (msg.data['items'] || []);
-                    return vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items);
+                    const ret = vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showWarningMessage3": {
                     const arg_message = (msg.data['message']);
                     const arg_items = (msg.data['items'] || []);
-                    return vscode.window.showWarningMessage(arg_message, ...arg_items);
+                    const ret = vscode.window.showWarningMessage(arg_message, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showWarningMessage4": {
                     const arg_message = (msg.data['message']);
                     const arg_options = (msg.data['options']);
                     const arg_items = (msg.data['items'] || []);
-                    return vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items);
+                    const ret = vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showInputBox": {
                     const arg_options = (msg.data['options']);
@@ -83,7 +120,10 @@ function handle(msg, prog, remoteCancellationTokens) {
                         arg_token = prog.cancellers[''].token;
                     else
                         remoteCancellationTokens.push(ctid);
-                    return vscode.window.showInputBox(arg_options, arg_token);
+                    const ret = vscode.window.showInputBox(arg_options, arg_token);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showQuickPick1": {
                     const arg_items = (msg.data['items']);
@@ -95,7 +135,10 @@ function handle(msg, prog, remoteCancellationTokens) {
                         arg_token = prog.cancellers[''].token;
                     else
                         remoteCancellationTokens.push(ctid);
-                    return vscode.window.showQuickPick(arg_items, arg_options, arg_token);
+                    const ret = vscode.window.showQuickPick(arg_items, arg_options, arg_token);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showQuickPick2": {
                     const arg_items = (msg.data['items']);
@@ -107,7 +150,10 @@ function handle(msg, prog, remoteCancellationTokens) {
                         arg_token = prog.cancellers[''].token;
                     else
                         remoteCancellationTokens.push(ctid);
-                    return vscode.window.showQuickPick(arg_items, arg_options, arg_token);
+                    const ret = vscode.window.showQuickPick(arg_items, arg_options, arg_token);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showQuickPick3": {
                     const arg_items = (msg.data['items']);
@@ -119,7 +165,10 @@ function handle(msg, prog, remoteCancellationTokens) {
                         arg_token = prog.cancellers[''].token;
                     else
                         remoteCancellationTokens.push(ctid);
-                    return vscode.window.showQuickPick(arg_items, arg_options, arg_token);
+                    const ret = vscode.window.showQuickPick(arg_items, arg_options, arg_token);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showQuickPick4": {
                     const arg_items = (msg.data['items']);
@@ -131,28 +180,46 @@ function handle(msg, prog, remoteCancellationTokens) {
                         arg_token = prog.cancellers[''].token;
                     else
                         remoteCancellationTokens.push(ctid);
-                    return vscode.window.showQuickPick(arg_items, arg_options, arg_token);
+                    const ret = vscode.window.showQuickPick(arg_items, arg_options, arg_token);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "setStatusBarMessage1": {
                     const arg_text = (msg.data['text']);
                     const arg_hideAfterTimeout = (msg.data['hideAfterTimeout']);
-                    return vscode.window.setStatusBarMessage(arg_text, arg_hideAfterTimeout);
+                    const ret = vscode.window.setStatusBarMessage(arg_text, arg_hideAfterTimeout);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "setStatusBarMessage2": {
                     const arg_text = (msg.data['text']);
-                    return vscode.window.setStatusBarMessage(arg_text);
+                    const ret = vscode.window.setStatusBarMessage(arg_text);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showSaveDialog": {
                     const arg_options = (msg.data['options']);
-                    return vscode.window.showSaveDialog(arg_options);
+                    const ret = vscode.window.showSaveDialog(arg_options);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showOpenDialog": {
                     const arg_options = (msg.data['options']);
-                    return vscode.window.showOpenDialog(arg_options);
+                    const ret = vscode.window.showOpenDialog(arg_options);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "showWorkspaceFolderPick": {
                     const arg_options = (msg.data['options']);
-                    return vscode.window.showWorkspaceFolderPick(arg_options);
+                    const ret = vscode.window.showWorkspaceFolderPick(arg_options);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "state": {
                     return Promise.resolve(vscode.window.state);
@@ -172,24 +239,13 @@ function handle(msg, prog, remoteCancellationTokens) {
         case "env":
             switch (methodname) {
                 case "openExternal": {
-                    let arg_target;
-                    try {
-                        arg_target = vscode.Uri.parse(msg.data['target'], true);
-                    }
-                    catch (_) {
-                        try {
-                            arg_target = vscode.Uri.file(msg.data['target']);
-                        }
-                        catch (_) {
-                            try {
-                                arg_target = vscode.Uri.parse(msg.data['target'], false);
-                            }
-                            catch (_) {
-                                return Promise.reject(msg.data['target']);
-                            }
-                        }
-                    }
-                    return vscode.env.openExternal(arg_target);
+                    const arg_target = ppio.tryUnmarshalUri(msg.data['target']);
+                    if (!arg_target)
+                        return Promise.reject(msg.data['target']);
+                    const ret = vscode.env.openExternal(arg_target);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "appName": {
                     return Promise.resolve(vscode.env.appName);
@@ -240,7 +296,10 @@ function handle(msg, prog, remoteCancellationTokens) {
                 }
                 case "saveAll": {
                     const arg_includeUntitled = (msg.data['includeUntitled']);
-                    return vscode.workspace.saveAll(arg_includeUntitled);
+                    const ret = vscode.workspace.saveAll(arg_includeUntitled);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "onDidChangeWorkspaceFolders": {
                     const _fnid_listener = msg.data['listener'];
@@ -251,10 +310,45 @@ function handle(msg, prog, remoteCancellationTokens) {
                                 prog.callBack(false, _fnid_listener, a0).then(noOp, noOp);
                         });
                 }
+                case "getWorkspaceFolder": {
+                    const arg_uri = ppio.tryUnmarshalUri(msg.data['uri']);
+                    if (!arg_uri)
+                        return Promise.reject(msg.data['uri']);
+                    const ret = vscode.workspace.getWorkspaceFolder(arg_uri);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "workspaceFolders": {
+                    return Promise.resolve(vscode.workspace.workspaceFolders);
+                }
+                case "findFiles": {
+                    const arg_include = (msg.data['include']);
+                    const arg_exclude = (msg.data['exclude']);
+                    const arg_maxResults = (msg.data['maxResults']);
+                    let ctid = msg.data['token'], arg_token = prog.cancellerToken(ctid);
+                    if (!arg_token)
+                        arg_token = prog.cancellers[''].token;
+                    else
+                        remoteCancellationTokens.push(ctid);
+                    const ret = vscode.workspace.findFiles(arg_include, arg_exclude, arg_maxResults, arg_token);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "asRelativePath": {
+                    const arg_pathOrUri = (msg.data['pathOrUri']);
+                    const arg_includeWorkspaceFolder = (msg.data['includeWorkspaceFolder']);
+                    const ret = vscode.workspace.asRelativePath(arg_pathOrUri, arg_includeWorkspaceFolder);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
                 case "Properties": {
                     return Promise.resolve({
                         name: vscode.workspace.name,
                         workspaceFile: vscode.workspace.workspaceFile,
+                        workspaceFolders: vscode.workspace.workspaceFolders,
                     });
                 }
                 default:
@@ -263,7 +357,10 @@ function handle(msg, prog, remoteCancellationTokens) {
         case "languages":
             switch (methodname) {
                 case "getLanguages": {
-                    return vscode.languages.getLanguages();
+                    const ret = vscode.languages.getLanguages();
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "onDidChangeDiagnostics": {
                     const _fnid_listener = msg.data['listener'];
@@ -295,7 +392,10 @@ function handle(msg, prog, remoteCancellationTokens) {
             switch (methodname) {
                 case "getCommands": {
                     const arg_filterInternal = (msg.data['filterInternal']);
-                    return vscode.commands.getCommands(arg_filterInternal);
+                    const ret = vscode.commands.getCommands(arg_filterInternal);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 default:
                     throw (methodname);

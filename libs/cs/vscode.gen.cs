@@ -4,6 +4,7 @@ namespace VscAppz {
 	using System.Collections.Generic;
 	using Newtonsoft.Json;
 
+	using GlobPattern = System.String;
 	using any = System.Object;
 	using dict = System.Collections.Generic.Dictionary<string, object>;
 
@@ -612,6 +613,70 @@ namespace VscAppz {
 		/// <summary>An event that is emitted when a workspace folder is added or removed.</summary>
 		void OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener = default, Action<Disposable> andThen = default);
 
+		/// <summary>
+		/// Returns the [workspace folder](#WorkspaceFolder) that contains a given uri.
+		/// * returns `undefined` when the given uri doesn't match any workspace folder
+		/// * returns the *input* when the given uri is a workspace folder itself
+		/// 
+		/// `uri` ── An uri.
+		/// 
+		/// `andThen` ── A workspace folder or `undefined`
+		/// </summary>
+		/// <param name="uri">An uri.</param>
+		/// <param name="andThen">A workspace folder or `undefined`</param>
+		void GetWorkspaceFolder(string uri = default, Action<WorkspaceFolder> andThen = default);
+
+		/// <summary>
+		/// List of workspace folders or `undefined` when no folder is open.
+		/// *Note* that the first entry corresponds to the value of `rootPath`.
+		/// </summary>
+		void WorkspaceFolders(Action<WorkspaceFolder[]> andThen = default);
+
+		/// <summary>
+		/// Find files across all [workspace folders](#workspace.workspaceFolders) in the workspace.
+		/// `findFiles('**​/*.js', '**​/node_modules/**', 10)`
+		/// 
+		/// `include` ── A [glob pattern](#GlobPattern) that defines the files to search for. The glob pattern
+		/// will be matched against the file paths of resulting matches relative to their workspace. Use a [relative pattern](#RelativePattern)
+		/// to restrict the search results to a [workspace folder](#WorkspaceFolder).
+		/// 
+		/// `exclude` ── A [glob pattern](#GlobPattern) that defines files and folders to exclude. The glob pattern
+		/// will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will
+		/// apply, when `null` no excludes will apply.
+		/// 
+		/// `maxResults` ── An upper-bound for the result.
+		/// 
+		/// `token` ── A token that can be used to signal cancellation to the underlying search engine.
+		/// 
+		/// `andThen` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
+		/// [workspace folders](#workspace.workspaceFolders) are opened.
+		/// </summary>
+		/// <param name="include">A [glob pattern](#GlobPattern) that defines the files to search for. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. Use a [relative pattern](#RelativePattern) to restrict the search results to a [workspace folder](#WorkspaceFolder).</param>
+		/// <param name="exclude">A [glob pattern](#GlobPattern) that defines files and folders to exclude. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will apply, when `null` no excludes will apply.</param>
+		/// <param name="maxResults">An upper-bound for the result.</param>
+		/// <param name="token">A token that can be used to signal cancellation to the underlying search engine.</param>
+		/// <param name="andThen">A thenable that resolves to an array of resource identifiers. Will return no results if no [workspace folders](#workspace.workspaceFolders) are opened.</param>
+		void FindFiles(GlobPattern include = default, GlobPattern exclude = default, int? maxResults = default, Cancel token = default, Action<string[]> andThen = default);
+
+		/// <summary>
+		/// Returns a path that is relative to the workspace folder or folders.
+		/// 
+		/// When there are no [workspace folders](#workspace.workspaceFolders) or when the path
+		/// is not contained in them, the input is returned.
+		/// 
+		/// `pathOrUri` ── A path or uri. When a uri is given its [fsPath](#Uri.fsPath) is used.
+		/// 
+		/// `includeWorkspaceFolder` ── When `true` and when the given path is contained inside a
+		/// workspace folder the name of the workspace is prepended. Defaults to `true` when there are
+		/// multiple workspace folders and `false` otherwise.
+		/// 
+		/// `andThen` ── A path relative to the root or the input.
+		/// </summary>
+		/// <param name="pathOrUri">A path or uri. When a uri is given its [fsPath](#Uri.fsPath) is used.</param>
+		/// <param name="includeWorkspaceFolder">When `true` and when the given path is contained inside a workspace folder the name of the workspace is prepended. Defaults to `true` when there are multiple workspace folders and `false` otherwise.</param>
+		/// <param name="andThen">A path relative to the root or the input.</param>
+		void AsRelativePath(string pathOrUri = default, bool includeWorkspaceFolder = default, Action<string> andThen = default);
+
 		/// <summary>Provides single-call access to numerous individual `IWorkspace` properties at once.</summary>
 		void Properties(Action<WorkspaceProperties> andThen = default);
 	}
@@ -897,6 +962,10 @@ namespace VscAppz {
 
 	/// <summary>Options to configure the behaviour of a file save dialog.</summary>
 	public partial class SaveDialogOptions {
+		/// <summary>The resource the dialog shows when opened.</summary>
+		[JsonProperty("defaultUri")]
+		public string DefaultUri;
+
 		/// <summary>A human-readable string for the save button.</summary>
 		[JsonProperty("saveLabel")]
 		public string SaveLabel;
@@ -924,6 +993,10 @@ namespace VscAppz {
 	/// and the editor then silently adjusts the options to select files.
 	/// </summary>
 	public partial class OpenDialogOptions {
+		/// <summary>The resource the dialog shows when opened.</summary>
+		[JsonProperty("defaultUri")]
+		public string DefaultUri;
+
 		/// <summary>A human-readable string for the open button.</summary>
 		[JsonProperty("openLabel")]
 		public string OpenLabel;
@@ -1113,6 +1186,13 @@ namespace VscAppz {
 		/// </summary>
 		[JsonProperty("workspaceFile")]
 		public string WorkspaceFile;
+
+		/// <summary>
+		/// List of workspace folders or `undefined` when no folder is open.
+		/// *Note* that the first entry corresponds to the value of `rootPath`.
+		/// </summary>
+		[JsonProperty("workspaceFolders")]
+		public WorkspaceFolder[] WorkspaceFolders;
 	}
 
 	internal partial class impl : IVscode, IWindow, IEnv, IWorkspace, ILanguages, IExtensions, ICommands {
@@ -2438,6 +2518,143 @@ namespace VscAppz {
 			this.send(msg, on);
 		}
 
+		void IWorkspace.GetWorkspaceFolder(string uri, Action<WorkspaceFolder> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "workspace.getWorkspaceFolder";
+			msg.Data = new dict(1);
+			msg.Data["uri"] = uri;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					WorkspaceFolder result = default;
+					if ((null != payload)) {
+						result = new WorkspaceFolder();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IWorkspace.WorkspaceFolders(Action<WorkspaceFolder[]> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "workspace.workspaceFolders";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					WorkspaceFolder[] result = default;
+					if ((null != payload)) {
+						any[] __coll__result = default;
+						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = new WorkspaceFolder[__coll__result.Length];
+						int __idx__result = default;
+						__idx__result = 0;
+						foreach (var __item__result in __coll__result) {
+							WorkspaceFolder __val__result = default;
+							__val__result = new WorkspaceFolder();
+							ok = __val__result.populateFrom(__item__result);
+							if ((!ok)) {
+								return false;
+							}
+							result[__idx__result] = __val__result;
+							__idx__result = (__idx__result + 1);
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IWorkspace.FindFiles(GlobPattern include, GlobPattern exclude, int? maxResults, Cancel token, Action<string[]> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "workspace.findFiles";
+			msg.Data = new dict(4);
+			msg.Data["include"] = include;
+			msg.Data["exclude"] = exclude;
+			msg.Data["maxResults"] = maxResults;
+			if ((null != token)) {
+				token.impl = this.Impl();
+				if (("" == token.fnId)) {
+					lock (this) {
+						token.fnId = this.nextFuncId();
+					}
+				}
+				msg.Data["token"] = token.fnId;
+			}
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string[] result = default;
+					if ((null != payload)) {
+						any[] __coll__result = default;
+						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = new string[__coll__result.Length];
+						int __idx__result = default;
+						__idx__result = 0;
+						foreach (var __item__result in __coll__result) {
+							string __val__result = default;
+							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
+							if ((!ok)) {
+								return false;
+							}
+							result[__idx__result] = __val__result;
+							__idx__result = (__idx__result + 1);
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IWorkspace.AsRelativePath(string pathOrUri, bool includeWorkspaceFolder, Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "workspace.asRelativePath";
+			msg.Data = new dict(2);
+			msg.Data["pathOrUri"] = pathOrUri;
+			msg.Data["includeWorkspaceFolder"] = includeWorkspaceFolder;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						string _result_ = default;
+						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = _result_;
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
 		void IWorkspace.Properties(Action<WorkspaceProperties> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -3059,6 +3276,31 @@ namespace VscAppz {
 					workspaceFile = _workspaceFile_;
 				}
 				this.WorkspaceFile = workspaceFile;
+			}
+			(val, ok) = (it.TryGetValue("workspaceFolders", out var ____) ? (____, true) : (default, false));
+			if (ok) {
+				WorkspaceFolder[] workspaceFolders = default;
+				if ((null != val)) {
+					any[] __coll__workspaceFolders = default;
+					(__coll__workspaceFolders, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					workspaceFolders = new WorkspaceFolder[__coll__workspaceFolders.Length];
+					int __idx__workspaceFolders = default;
+					__idx__workspaceFolders = 0;
+					foreach (var __item__workspaceFolders in __coll__workspaceFolders) {
+						WorkspaceFolder __val__workspaceFolders = default;
+						__val__workspaceFolders = new WorkspaceFolder();
+						ok = __val__workspaceFolders.populateFrom(__item__workspaceFolders);
+						if ((!ok)) {
+							return false;
+						}
+						workspaceFolders[__idx__workspaceFolders] = __val__workspaceFolders;
+						__idx__workspaceFolders = (__idx__workspaceFolders + 1);
+					}
+				}
+				this.WorkspaceFolders = workspaceFolders;
 			}
 			return true;
 		}

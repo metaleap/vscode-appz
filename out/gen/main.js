@@ -48,6 +48,10 @@ const genApiSurface = {
                 'workspaceFile',
                 'saveAll',
                 'onDidChangeWorkspaceFolders',
+                'getWorkspaceFolder',
+                'workspaceFolders',
+                'findFiles',
+                'asRelativePath',
             ],
             'languages': [
                 'getLanguages',
@@ -168,6 +172,13 @@ function gatherMember(into, member, overload, ...prefixes) {
             case ts.SyntaxKind.TupleType:
                 member.elementTypes.forEach(_ => gatherFromTypeNode(into, _));
                 break;
+            case ts.SyntaxKind.ClassDeclaration:
+                gatherStruct(into, member, ...prefixes);
+                break;
+            case ts.SyntaxKind.TypeAliasDeclaration:
+                const talias = member;
+                gatherFromTypeNode(into, talias.type, talias.typeParameters);
+                break;
             default:
                 throw (member.kind + '\t' + member.getText());
         }
@@ -191,7 +202,9 @@ function gatherFromTypeNode(into, it, typeParams = undefined) {
             it.elementTypes.forEach(_ => gatherFromTypeNode(into, _, typeParams));
             break;
         case ts.SyntaxKind.UnionType:
-            it.types.forEach(_ => gatherFromTypeNode(into, _, typeParams));
+            const tunion = it;
+            if (tunion && tunion.types && tunion.types.length && !tunion.types.find(_ => _.kind === ts.SyntaxKind.StringKeyword))
+                it.types.forEach(_ => gatherFromTypeNode(into, _, typeParams));
             break;
         case ts.SyntaxKind.IntersectionType:
             it.types.forEach(_ => gatherFromTypeNode(into, _, typeParams));
@@ -256,25 +269,14 @@ function gatherStruct(into, decl, ...prefixes) {
     if (into.structs.some(_ => _.qName === qname))
         return;
     into.structs.push({ qName: qname, decl: decl });
-    decl.members.forEach(member => {
-        switch (member.kind) {
-            case ts.SyntaxKind.PropertySignature:
-                const prop = member;
-                gatherFromTypeNode(into, prop.type);
-                break;
-            case ts.SyntaxKind.MethodSignature:
-                const method = member;
-                gatherFromTypeNode(into, method.type, method.typeParameters);
-                method.parameters.forEach(_ => gatherFromTypeNode(into, _.type, method.typeParameters));
-                break;
-            case ts.SyntaxKind.CallSignature:
-                const sig = member;
-                gatherFromTypeNode(into, sig.type, sig.typeParameters);
-                sig.parameters.forEach(_ => gatherFromTypeNode(into, _.type, sig.typeParameters));
-                break;
-            default:
-                throw (member.kind + '\t' + member.getText());
-        }
+    decl.members.forEach((member) => {
+        const memtype = member;
+        const memtparams = member;
+        const memparams = member;
+        if (memtype && memtype.type)
+            gatherFromTypeNode(into, memtype.type, memtparams ? memtparams.typeParameters : undefined);
+        if (memparams && memparams.parameters && memparams.parameters.length)
+            memparams.parameters.forEach(_ => gatherFromTypeNode(into, _.type, memtparams ? memtparams.typeParameters : undefined));
     });
 }
 main();

@@ -6,9 +6,10 @@ export class Gen extends gen.Gen implements gen.IGen {
         this.resetState()
         const pkgname = prep.fromOrig.moduleName
         let src = "// " + this.doNotEditComment("vscext") + "\n\n"
-        src += `import * as ${pkgname} from '${pkgname}'\n\n`
-        src += "import * as ppio from './procspipeio'\n\n\n\n"
-        src += "const noOp = (_:any) => {}\n\n\n"
+        src += `import * as ${pkgname} from '${pkgname}'\n`
+        src += "import * as ppio from './procspipeio'\n"
+        src += "type GlobPattern = string\n\n"
+        src += "const noOp = (_:any) => {}\n"
 
         for (const it of prep.enums)
             src += "type " + it.name + " = " + pkgname + "." + it.name + "\n"
@@ -70,9 +71,9 @@ export class Gen extends gen.Gen implements gen.IGen {
                                     if (arg.typeSpec !== 'Uri')
                                         src += `\t\t\t\t\tconst arg_${arg.name} = (msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}) as ${this.typeSpec(arg.typeSpec)}\n`
                                     else {
-                                        src += `\t\t\t\t\tlet arg_${arg.name}: ${pkgname}.Uri\n`
-                                        src += `\t\t\t\t\ttry { arg_${arg.name} = ${pkgname}.Uri.parse(msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}, true) }\n`
-                                        src += `\t\t\t\t\tcatch (_) { try { arg_${arg.name} = ${pkgname}.Uri.file(msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}) } catch (_) { try { arg_${arg.name} = ${pkgname}.Uri.parse(msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}, false) } catch (_) { return Promise.reject(msg.data['${arg.name}']) } } }\n`
+                                        src += `\t\t\t\t\tconst arg_${arg.name} = ppio.tryUnmarshalUri(msg.data['${arg.name}'])\n`
+                                        src += `\t\t\t\t\tif (!arg_${arg.name})\n`
+                                        src += `\t\t\t\t\t\treturn Promise.reject(msg.data['${arg.name}'])\n`
                                     }
                                     const funcfields = gen.argsFuncFields(prep, [arg])
                                     if (funcfields && funcfields.length)
@@ -85,11 +86,14 @@ export class Gen extends gen.Gen implements gen.IGen {
                                         }
                                 }
 
-                        src += `\t\t\t\t\treturn ${method.fromOrig.qName}(`
+                        src += `\t\t\t\t\tconst ret = ${method.fromOrig.qName}(`
                         for (const arg of method.args)
                             if (arg !== lastarg)
                                 src += (arg.spreads ? '...' : '') + 'arg_' + arg.name + ', '
                         src += ")\n"
+                        src += `\t\t\t\t\tconst retdisp = ret as any as ${pkgname}.Disposable\n`
+                        src += `\t\t\t\t\tconst retprom = ret as any as Thenable<any>\n`
+                        src += `\t\t\t\t\treturn (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))\n`
                     }
                     src += `\t\t\t\t}\n`
                 }

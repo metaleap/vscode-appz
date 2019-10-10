@@ -362,3 +362,21 @@ function cfgAutoCloseStderrOutputsOnProgExit() {
 function ensureWillShowUpInJson(_) {
     return (_ === undefined) ? null : _;
 }
+function tryUnmarshalUri(data) {
+    try {
+        return vsc.Uri.parse(data, true);
+    }
+    catch (_) {
+        try {
+            return vsc.Uri.file(data);
+        }
+        catch (_) {
+            try {
+                return vsc.Uri.parse(data, false);
+            }
+            catch (_) { }
+        }
+    }
+    return null;
+}
+exports.tryUnmarshalUri = tryUnmarshalUri;

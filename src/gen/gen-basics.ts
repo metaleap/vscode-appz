@@ -8,6 +8,10 @@ export const docStrs = {
     internalOnly: "For internal runtime use only."
 }
 
+export interface TsNodeWithType { type?: ts.TypeNode }
+export interface TsNodeWithTypeParams { typeParameters?: ts.NodeArray<ts.TypeParameterDeclaration> }
+export interface TsNodeWithParams { parameters: ts.NodeArray<ts.ParameterDeclaration> }
+
 export interface IGen {
     gen(prep: Prep): void
 }
@@ -36,7 +40,7 @@ export interface GenJobEnum extends GenJobNamed {
 }
 
 export interface GenJobStruct extends GenJobNamed {
-    decl: ts.InterfaceDeclaration
+    decl: ts.InterfaceDeclaration | ts.ClassDeclaration
 }
 
 export interface MemberEvent extends ts.VariableDeclaration {
@@ -72,7 +76,7 @@ export interface PrepStruct {
 }
 
 export interface PrepField {
-    fromOrig?: ts.MethodSignature | ts.PropertySignature | ts.FunctionDeclaration | MemberProp | MemberEvent
+    fromOrig?: ts.Node
     name: string
     typeSpec: TypeSpec
     optional: boolean
@@ -196,29 +200,29 @@ export class Prep {
 
     addStruct(structJob: GenJobStruct) {
         const qname = this.qName(structJob)
+        const fields: PrepField[] = []
+        for (const _ of structJob.decl.members)
+            if (_.name) {
+                let tspec: TypeSpec = null
+                const mtyped = _ as TsNodeWithType
+                const mtparams = (_.kind === ts.SyntaxKind.MethodSignature || _.kind === ts.SyntaxKind.MethodDeclaration) ? _ as TsNodeWithTypeParams : null
+                if ((!mtparams) && mtyped && mtyped.type)
+                    tspec = this.typeSpec(mtyped.type, structJob.decl.typeParameters)
+                else if ((mtparams) && ts.isInterfaceDeclaration(structJob.decl))
+                    tspec = this.typeSpec(_, ts.createNodeArray<ts.TypeParameterDeclaration>((mtparams.typeParameters || []).concat(...(structJob.decl.typeParameters || []))))
+                if (tspec)
+                    fields.push({
+                        fromOrig: _,
+                        name: _.name.getText(),
+                        typeSpec: tspec,
+                        optional: (ts.isTypeElement(_) && _.questionToken) ? true : false,
+                        isExtBaggage: false,
+                    })
+            }
         this.structs.push({
             fromOrig: structJob, isOutgoing: false, isIncoming: false,
             name: qname.slice(1).join('_'),
-            fields: structJob.decl.members.filter(_ => _.name.getText() !== 'defaultUri').map(_ => {
-                let tspec: TypeSpec = null
-                switch (_.kind) {
-                    case ts.SyntaxKind.PropertySignature:
-                        tspec = this.typeSpec((_ as ts.PropertySignature).type, structJob.decl.typeParameters)
-                        break
-                    case ts.SyntaxKind.MethodSignature:
-                        tspec = this.typeSpec((_ as ts.MethodSignature), structJob.decl.typeParameters)
-                        break
-                    default:
-                        throw (_.kind)
-                }
-                return {
-                    fromOrig: (_.kind === ts.SyntaxKind.PropertySignature) ? (_ as ts.PropertySignature) : (_ as ts.MethodSignature),
-                    name: _.name.getText(),
-                    typeSpec: tspec,
-                    optional: _.questionToken ? true : false,
-                    isExtBaggage: false,
-                }
-            }),
+            fields: fields,
             funcFields: []
         })
         const struct = this.structs[this.structs.length - 1]
@@ -280,7 +284,7 @@ export class Prep {
             if (ts.isPropertySignature(tNode)) {
                 return this.typeSpec(tNode.type, tParams)
             } else if (ts.isMethodSignature(tNode) || ts.isCallSignatureDeclaration(tNode) || ts.isConstructSignatureDeclaration(tNode) || ts.isIndexSignatureDeclaration(tNode)) {
-                const tp = tNode.typeParameters ? ts.createNodeArray(tNode.typeParameters.concat(...(tParams ? tParams : [])), tParams && tParams.hasTrailingComma) : tParams
+                const tp = tNode.typeParameters ? ts.createNodeArray(tNode.typeParameters.concat(...(tParams ? tParams : []))) : tParams
                 const rfun: TypeSpecFun = {
                     From: tNode.parameters.map(_ => this.typeSpec(_.type, tp)),
                     To: this.typeSpec(tNode.type, tp)
@@ -319,8 +323,9 @@ export class Prep {
                 }
                 return rtup
             case ts.SyntaxKind.UnionType:
+                const tunion = tNode as ts.UnionTypeNode
                 const rsum: TypeSpecSum = {
-                    SumOf: (tNode as ts.UnionTypeNode).types.map(_ => this.typeSpec(_, tParams))
+                    SumOf: tunion.types.map(_ => this.typeSpec(_, tParams))
                 }
                 return rsum
             case ts.SyntaxKind.IntersectionType:

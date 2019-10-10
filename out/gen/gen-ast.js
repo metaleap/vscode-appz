@@ -741,23 +741,27 @@ class Gen extends gen.Gen {
             this.allStructs[struct.Name] = struct;
         }
         {
-            const traverse = (t, forIncoming) => this.typeRefTraverse(t, argtype => {
-                const tnamed = this.typeOwn(argtype);
-                if (tnamed) {
-                    const tstruct = this.allStructs[tnamed.Name];
-                    if (tstruct) {
-                        if (forIncoming)
-                            tstruct.IsIncoming = true;
-                        else
-                            tstruct.IsOutgoing = true;
-                        for (const fld of tstruct.Fields) {
-                            const tfun = this.typeFunc(fld.Type);
-                            traverse(fld.Type, tfun ? false : forIncoming);
+            const traversed = {};
+            const traverse = (t, forIncoming) => {
+                this.typeRefTraverse(t, argtype => {
+                    const tnamed = this.typeOwn(argtype);
+                    if (tnamed) {
+                        const tstruct = this.allStructs[tnamed.Name];
+                        if (tstruct && !traversed[tnamed.Name]) {
+                            traversed[tnamed.Name] = true;
+                            if (forIncoming)
+                                tstruct.IsIncoming = true;
+                            else
+                                tstruct.IsOutgoing = true;
+                            for (const fld of tstruct.Fields) {
+                                const tfun = this.typeFunc(fld.Type);
+                                traverse(fld.Type, tfun ? false : forIncoming);
+                            }
                         }
                     }
-                }
-                return undefined;
-            });
+                    return undefined;
+                });
+            };
             for (const iface of this.allInterfaces)
                 for (const method of iface.Methods)
                     for (const arg of method.Args)
