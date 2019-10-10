@@ -56,6 +56,8 @@ namespace VscAppz {
         internal impl(TextReader stdIn, TextWriter stdOut) =>
             (this.stdIn, this.stdOut) = (stdIn ?? Console.In, stdOut ?? Console.Out);
 
+        internal impl Impl() => this;
+
         internal string nextFuncId() =>
             (++counter).ToString();
 

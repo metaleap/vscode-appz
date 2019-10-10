@@ -207,10 +207,14 @@ export class Gen extends gen_ast.Gen {
             return this.s("new ").emitTypeRef(enew.New).s("()")
 
         const econv = it as gen_ast.EConv
-        if (econv && econv.Conv && econv.To)
+        if (econv && econv.Conv && econv.To) {
+            const tnamed = econv.To as gen_ast.TypeRefOwn
             return econv.Cast
                 ? this.s("((").emitTypeRef(econv.To).s(")(").emitExpr(econv.Conv).s("))")
-                : this.s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(econv.To).s(") ? (((").emitTypeRef(econv.To).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)")
+                : (tnamed && tnamed.Name)
+                    ? this.emitExpr(this.b.eThis())
+                    : this.s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(econv.To).s(") ? (((").emitTypeRef(econv.To).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)")
+        }
 
         const elen = it as gen_ast.ELen
         if (elen && elen.LenOf)

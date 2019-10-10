@@ -9,7 +9,7 @@ export interface WithDocs { Docs?: Doc[] }
 export interface Doc { ForParam: string, Lines: string[] }
 
 export interface TEnum extends WithDocs, WithName, WithFrom<gen.PrepEnum> { Enumerants: Enumerant[] }
-export interface TInterface extends WithDocs, WithName, WithFrom<gen.PrepInterface> { Methods: Method[] }
+export interface TInterface extends WithDocs, WithName, WithFrom<gen.PrepInterface> { Methods: Method[], IsTop?: boolean }
 export interface Enumerant extends WithDocs, WithName, WithFrom<gen.PrepEnumerant> { Value: number }
 export interface TStruct extends WithDocs, WithName, WithFrom<gen.PrepStruct> { Fields: Field[], IsOutgoing: boolean, IsIncoming: boolean, OutgoingTwin?: string }
 export interface Method extends WithDocs, WithName, WithType, WithFrom<gen.PrepMethod> { Args: Arg[] }
@@ -799,8 +799,8 @@ export class Gen extends gen.Gen implements gen.IGen {
         ]
     }
 
-    private genMethodImpl_TopInterface(_iface: TypeRefOwn, _method: Method, _: Builder, body: Instr[]) {
-        body.push(_.iRet(_.n(this.options.idents.curInst)))
+    private genMethodImpl_TopInterface(_iface: TypeRefOwn, method: Method, _: Builder, body: Instr[]) {
+        body.push(_.iRet(_.eConv({ Name: this.options.idents.typeImpl + method.Name }, _.n(this.options.idents.curInst))))
     }
 
     private genMethodImpl_PopulateFrom(struct: TypeRefOwn, _method: Method, _: Builder, body: Instr[]) {
@@ -944,7 +944,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 if (!arg.fromPrep.isFromRetThenable)
                     if (arg.fromPrep.isCancellationToken !== undefined)
                         body.push(_.iIf(_.oIs(_.n(arg.Name)), [
-                            _.iSet(_.oDot(_.n(arg.Name), _.n("impl")), _.eThis()),
+                            _.iSet(_.oDot(_.n(arg.Name), _.n("impl")), _.eCall(_.oDot(_.eThis(), _.n("Impl")))),
                             _.iIf(_.oEq(_.eLit(""), _.oDot(_.n(arg.Name), _.n("fnId"))), [
                                 _.iLock(_.eThis(),
                                     _.iSet(_.oDot(_.n(arg.Name), _.n("fnId")), _.eCall(_.oDot(_.eThis(), _.n("nextFuncId")))),
@@ -994,7 +994,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                             _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => []),
                         ),
                         _.WHEN(isdisp, () => [
-                            _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bind')), _.eThis(), nameevtsub ? _.n(nameevtsub) : _.eLit(""))),
+                            _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bind')), _.eCall(_.oDot(_.eThis(), _.n("Impl"))), nameevtsub ? _.n(nameevtsub) : _.eLit(""))),
                         ], () => [
                             _.eCall(_.n(lastarg.Name), _.n(__.result)),
                         ])[0],
@@ -1054,6 +1054,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 Type: build.typeRef(this.nameRewriters.types.interfaces(_.name)),
                 Args: [],
             })),
+            IsTop: true,
         }
 
         this.allEnums = prep.enums.map(_ =>

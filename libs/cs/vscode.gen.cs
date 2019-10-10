@@ -1416,7 +1416,7 @@ namespace VscAppz {
 			}
 			msg.Data["options"] = options;
 			if ((null != token)) {
-				token.impl = this;
+				token.impl = this.Impl();
 				if (("" == token.fnId)) {
 					lock (this) {
 						token.fnId = this.nextFuncId();
@@ -1493,7 +1493,7 @@ namespace VscAppz {
 			options.CanPickMany = true;
 			msg.Data["options"] = options;
 			if ((null != token)) {
-				token.impl = this;
+				token.impl = this.Impl();
 				if (("" == token.fnId)) {
 					lock (this) {
 						token.fnId = this.nextFuncId();
@@ -1580,7 +1580,7 @@ namespace VscAppz {
 			msg.Data["items"] = items;
 			msg.Data["options"] = options;
 			if ((null != token)) {
-				token.impl = this;
+				token.impl = this.Impl();
 				if (("" == token.fnId)) {
 					lock (this) {
 						token.fnId = this.nextFuncId();
@@ -1657,7 +1657,7 @@ namespace VscAppz {
 			options.CanPickMany = true;
 			msg.Data["options"] = options;
 			if ((null != token)) {
-				token.impl = this;
+				token.impl = this.Impl();
 				if (("" == token.fnId)) {
 					lock (this) {
 						token.fnId = this.nextFuncId();
@@ -1745,7 +1745,7 @@ namespace VscAppz {
 			msg.Data["items"] = items;
 			msg.Data["options"] = options;
 			if ((null != token)) {
-				token.impl = this;
+				token.impl = this.Impl();
 				if (("" == token.fnId)) {
 					lock (this) {
 						token.fnId = this.nextFuncId();
@@ -1802,7 +1802,7 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
-					andThen(result.bind(this, ""));
+					andThen(result.bind(this.Impl(), ""));
 					return true;
 				};
 			}
@@ -1829,7 +1829,7 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
-					andThen(result.bind(this, ""));
+					andThen(result.bind(this.Impl(), ""));
 					return true;
 				};
 			}
@@ -1987,7 +1987,7 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
-					andThen(result.bind(this, _fnid_listener));
+					andThen(result.bind(this.Impl(), _fnid_listener));
 					return true;
 				};
 			}
@@ -2322,7 +2322,7 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
-					andThen(result.bind(this, _fnid_listener));
+					andThen(result.bind(this.Impl(), _fnid_listener));
 					return true;
 				};
 			}
@@ -2404,7 +2404,7 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
-					andThen(result.bind(this, _fnid_listener));
+					andThen(result.bind(this.Impl(), _fnid_listener));
 					return true;
 				};
 			}
@@ -2444,7 +2444,7 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
-					andThen(result.bind(this, _fnid_listener));
+					andThen(result.bind(this.Impl(), _fnid_listener));
 					return true;
 				};
 			}

@@ -36,7 +36,9 @@ class Gen extends gen_ast.Gen {
             .s("(").each(m.Args, ", ", a => this.s(a.Name, " ").emitTypeRef(a.Type))
             .s(") "), m.Type)
             .line()))
-            .lines("}", "");
+            .line("}")
+            .when(!it.IsTop, () => this.line("type " + this.options.idents.typeImpl + it.Name + " struct{ *" + this.options.idents.typeImpl + " }"))
+            .line("");
     }
     emitStruct(it) {
         this.emitDocs(it)
@@ -52,11 +54,13 @@ class Gen extends gen_ast.Gen {
     emitFuncImpl(it) {
         let struct = it.Type, iface = it.Type;
         [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null];
-        const emitsigheadln = () => this.lf("func (", this.options.idents.curInst, " *", struct ? struct.Name : this.options.idents.typeImpl, ") ", it.Name, "(").each(it.Func.Args, ", ", a => this.s(a.Name, " ").emitTypeRef(a.Type)).s(") ").when(it.Func.Type, () => emitTypeRet(this, it.Func.Type).s(" "));
+        const emitsigheadln = () => this.lf("func (", this.options.idents.curInst, " ", struct ? ("*" + struct.Name) : iface.IsTop ? ("*" + this.options.idents.typeImpl) : (this.options.idents.typeImpl + iface.Name), ") ", it.Name, "(").each(it.Func.Args, ", ", a => this.s(a.Name, " ").emitTypeRef(a.Type)).s(") ").when(it.Func.Type, () => emitTypeRet(this, it.Func.Type).s(" "));
         if (struct)
             emitsigheadln().emitInstr(it.Func.Body).lines("", "");
         else if (iface)
             emitsigheadln().emitInstr(it.Func.Body).lines("", "");
+        else
+            throw it.Type;
     }
     emitInstr(it) {
         if (it) {
@@ -130,10 +134,14 @@ class Gen extends gen_ast.Gen {
                     .each(efn.Args, ", ", _ => this.s(_.Name, " ").emitTypeRef(_.Type))
                     .s(") "), efn.Type).s(efn.Type ? " " : "").emitInstr(efn.Body);
             const econv = it;
-            if (econv && econv.Conv && econv.To)
+            if (econv && econv.Conv && econv.To) {
+                const tnamed = econv.To;
                 return econv.Cast
                     ? this.emitTypeRef(econv.To).s("(").emitExpr(econv.Conv).s(")")
-                    : this.emitExpr(econv.Conv).s(".(").emitTypeRef(econv.To).s(")");
+                    : (tnamed && tnamed.Name)
+                        ? this.s(tnamed.Name, "{").emitExpr(econv.Conv).s("}")
+                        : this.emitExpr(econv.Conv).s(".(").emitTypeRef(econv.To).s(")");
+            }
         }
         return super.emitExpr(it);
     }

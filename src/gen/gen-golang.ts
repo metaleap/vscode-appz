@@ -52,7 +52,11 @@ export class Gen extends gen_ast.Gen {
                         .line()
                 )
             )
-            .lines("}", "")
+            .line("}")
+            .when(!it.IsTop, () => this.line(
+                "type " + this.options.idents.typeImpl + it.Name + " struct{ *" + this.options.idents.typeImpl + " }",
+            ))
+            .line("")
     }
 
     emitStruct(it: gen_ast.TStruct) {
@@ -87,7 +91,7 @@ export class Gen extends gen_ast.Gen {
         [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null]
 
         const emitsigheadln = () =>
-            this.lf("func (", this.options.idents.curInst, " *", struct ? struct.Name : this.options.idents.typeImpl, ") ",
+            this.lf("func (", this.options.idents.curInst, " ", struct ? ("*" + struct.Name) : iface.IsTop ? ("*" + this.options.idents.typeImpl) : (this.options.idents.typeImpl + iface.Name), ") ",
                 it.Name, "(").each(it.Func.Args, ", ", a =>
                     this.s(a.Name, " ").emitTypeRef(a.Type)
                 ).s(") ").when(it.Func.Type,
@@ -98,6 +102,8 @@ export class Gen extends gen_ast.Gen {
             emitsigheadln().emitInstr(it.Func.Body).lines("", "")
         else if (iface)
             emitsigheadln().emitInstr(it.Func.Body).lines("", "")
+        else
+            throw it.Type
     }
 
     emitInstr(it: gen_ast.Instr): Gen {
@@ -187,10 +193,14 @@ export class Gen extends gen_ast.Gen {
                     .s(") "), efn.Type).s(efn.Type ? " " : "").emitInstr(efn.Body)
 
             const econv = it as gen_ast.EConv
-            if (econv && econv.Conv && econv.To)
+            if (econv && econv.Conv && econv.To) {
+                const tnamed = econv.To as gen_ast.TypeRefOwn
                 return econv.Cast
                     ? this.emitTypeRef(econv.To).s("(").emitExpr(econv.Conv).s(")")
-                    : this.emitExpr(econv.Conv).s(".(").emitTypeRef(econv.To).s(")")
+                    : (tnamed && tnamed.Name)
+                        ? this.s(tnamed.Name, "{").emitExpr(econv.Conv).s("}")
+                        : this.emitExpr(econv.Conv).s(".(").emitTypeRef(econv.To).s(")")
+            }
         }
         return super.emitExpr(it)
     }

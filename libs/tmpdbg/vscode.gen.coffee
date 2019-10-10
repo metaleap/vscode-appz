@@ -1227,37 +1227,37 @@ EnvProperties: class
 
 
 Vscode·Window: ( -> Window)
-    return this
+    return ((this)·(implWindow))
 
 
 
 
 Vscode·Env: ( -> Env)
-    return this
+    return ((this)·(implEnv))
 
 
 
 
 Vscode·Workspace: ( -> Workspace)
-    return this
+    return ((this)·(implWorkspace))
 
 
 
 
 Vscode·Languages: ( -> Languages)
-    return this
+    return ((this)·(implLanguages))
 
 
 
 
 Vscode·Extensions: ( -> Extensions)
-    return this
+    return ((this)·(implExtensions))
 
 
 
 
 Vscode·Commands: ( -> Commands)
-    return this
+    return ((this)·(implCommands))
 
 
 
@@ -1603,7 +1603,7 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> andThen:?(?s
                 
     msg.Data@"options" = options
     if (=?token)
-        token.impl = this
+        token.impl = this.Impl()
         if ("" == token.fnId)
             lock this
                 token.fnId = this.nextFuncId()
@@ -1667,7 +1667,7 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
     options.CanPickMany = true
     msg.Data@"options" = options
     if (=?token)
-        token.impl = this
+        token.impl = this.Impl()
         if ("" == token.fnId)
             lock this
                 token.fnId = this.nextFuncId()
@@ -1739,7 +1739,7 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
     msg.Data@"items" = items
     msg.Data@"options" = options
     if (=?token)
-        token.impl = this
+        token.impl = this.Impl()
         if ("" == token.fnId)
             lock this
                 token.fnId = this.nextFuncId()
@@ -1803,7 +1803,7 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
     options.CanPickMany = true
     msg.Data@"options" = options
     if (=?token)
-        token.impl = this
+        token.impl = this.Impl()
         if ("" == token.fnId)
             lock this
                 token.fnId = this.nextFuncId()
@@ -1876,7 +1876,7 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
     msg.Data@"items" = items
     msg.Data@"options" = options
     if (=?token)
-        token.impl = this
+        token.impl = this.Impl()
         if ("" == token.fnId)
             lock this
                 token.fnId = this.nextFuncId()
@@ -1924,7 +1924,7 @@ Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> andThen:?(
                     return false
             else
                 return false
-            andThen(result.bind(this, ""))
+            andThen(result.bind(this.Impl(), ""))
             return true
         
     this.send(msg, on)
@@ -1950,7 +1950,7 @@ Window·SetStatusBarMessage2: (text:string -> andThen:?(?Disposable->void) -> vo
                     return false
             else
                 return false
-            andThen(result.bind(this, ""))
+            andThen(result.bind(this.Impl(), ""))
             return true
         
     this.send(msg, on)
@@ -2098,7 +2098,7 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> andThen:?(?Disp
                     return false
             else
                 return false
-            andThen(result.bind(this, _fnid_listener))
+            andThen(result.bind(this.Impl(), _fnid_listener))
             return true
         
     this.send(msg, on)
@@ -2417,7 +2417,7 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
                     return false
             else
                 return false
-            andThen(result.bind(this, _fnid_listener))
+            andThen(result.bind(this.Impl(), _fnid_listener))
             return true
         
     this.send(msg, on)
@@ -2492,7 +2492,7 @@ Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> an
                     return false
             else
                 return false
-            andThen(result.bind(this, _fnid_listener))
+            andThen(result.bind(this.Impl(), _fnid_listener))
             return true
         
     this.send(msg, on)
@@ -2529,7 +2529,7 @@ Extensions·OnDidChange: (listener:(->void) -> andThen:?(?Disposable->void) -> v
                     return false
             else
                 return false
-            andThen(result.bind(this, _fnid_listener))
+            andThen(result.bind(this.Impl(), _fnid_listener))
             return true
         
     this.send(msg, on)

@@ -353,6 +353,7 @@ type Window interface {
 	// changes. The value of the event represents whether the window is focused.
 	OnDidChangeWindowState(listener func(WindowState), andThen func(*Disposable)) 
 }
+type implWindow struct{ *impl }
 
 // Namespace describing the environment the editor runs in.
 type Env interface {
@@ -402,6 +403,7 @@ type Env interface {
 	// Provides single-call access to numerous individual `Env` properties at once.
 	Properties(andThen func(EnvProperties)) 
 }
+type implEnv struct{ *impl }
 
 // Namespace for dealing with the current workspace. A workspace is the representation
 // of the folder that has been opened. There is no workspace when just a file but not a
@@ -425,6 +427,7 @@ type Workspace interface {
 	// An event that is emitted when a workspace folder is added or removed.
 	OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent), andThen func(*Disposable)) 
 }
+type implWorkspace struct{ *impl }
 
 // Namespace for participating in language-specific editor [features](https://code.visualstudio.com/docs/editor/editingevolved),
 // like IntelliSense, code actions, diagnostics etc.
@@ -462,6 +465,7 @@ type Languages interface {
 	// newly added and removed diagnostics.
 	OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent), andThen func(*Disposable)) 
 }
+type implLanguages struct{ *impl }
 
 // Namespace for dealing with installed extensions. Extensions are represented
 // by an [extension](#Extension)-interface which enables reflection on them.
@@ -498,6 +502,7 @@ type Extensions interface {
 	// installed, uninstalled, enabled or disabled.
 	OnDidChange(listener func(), andThen func(*Disposable)) 
 }
+type implExtensions struct{ *impl }
 
 // Namespace for dealing with commands. In short, a command is a function with a
 // unique identifier. The function is sometimes also called _command handler_.
@@ -542,6 +547,7 @@ type Commands interface {
 	// `andThen` ── Thenable that resolves to a list of command ids.
 	GetCommands(filterInternal bool, andThen func([]string)) 
 }
+type implCommands struct{ *impl }
 
 // Options to configure the behavior of the message.
 type MessageOptions struct {
@@ -782,30 +788,30 @@ type EnvProperties struct {
 }
 
 func (me *impl) Window() Window {
-	return me
+	return implWindow{me}
 }
 
 func (me *impl) Env() Env {
-	return me
+	return implEnv{me}
 }
 
 func (me *impl) Workspace() Workspace {
-	return me
+	return implWorkspace{me}
 }
 
 func (me *impl) Languages() Languages {
-	return me
+	return implLanguages{me}
 }
 
 func (me *impl) Extensions() Extensions {
-	return me
+	return implExtensions{me}
 }
 
 func (me *impl) Commands() Commands {
-	return me
+	return implCommands{me}
 }
 
-func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(*string)) {
+func (me implWindow) ShowErrorMessage1(message string, items []string, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showErrorMessage1"
@@ -832,7 +838,7 @@ func (me *impl) ShowErrorMessage1(message string, items []string, andThen func(*
 	me.send(msg, on)
 }
 
-func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
+func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showErrorMessage2"
@@ -860,7 +866,7 @@ func (me *impl) ShowErrorMessage2(message string, options MessageOptions, items 
 	me.send(msg, on)
 }
 
-func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
+func (me implWindow) ShowErrorMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showErrorMessage3"
@@ -886,7 +892,7 @@ func (me *impl) ShowErrorMessage3(message string, items []MessageItem, andThen f
 	me.send(msg, on)
 }
 
-func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
+func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showErrorMessage4"
@@ -913,7 +919,7 @@ func (me *impl) ShowErrorMessage4(message string, options MessageOptions, items 
 	me.send(msg, on)
 }
 
-func (me *impl) ShowInformationMessage1(message string, items []string, andThen func(*string)) {
+func (me implWindow) ShowInformationMessage1(message string, items []string, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInformationMessage1"
@@ -940,7 +946,7 @@ func (me *impl) ShowInformationMessage1(message string, items []string, andThen 
 	me.send(msg, on)
 }
 
-func (me *impl) ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
+func (me implWindow) ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInformationMessage2"
@@ -968,7 +974,7 @@ func (me *impl) ShowInformationMessage2(message string, options MessageOptions, 
 	me.send(msg, on)
 }
 
-func (me *impl) ShowInformationMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
+func (me implWindow) ShowInformationMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInformationMessage3"
@@ -994,7 +1000,7 @@ func (me *impl) ShowInformationMessage3(message string, items []MessageItem, and
 	me.send(msg, on)
 }
 
-func (me *impl) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
+func (me implWindow) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInformationMessage4"
@@ -1021,7 +1027,7 @@ func (me *impl) ShowInformationMessage4(message string, options MessageOptions, 
 	me.send(msg, on)
 }
 
-func (me *impl) ShowWarningMessage1(message string, items []string, andThen func(*string)) {
+func (me implWindow) ShowWarningMessage1(message string, items []string, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWarningMessage1"
@@ -1048,7 +1054,7 @@ func (me *impl) ShowWarningMessage1(message string, items []string, andThen func
 	me.send(msg, on)
 }
 
-func (me *impl) ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
+func (me implWindow) ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWarningMessage2"
@@ -1076,7 +1082,7 @@ func (me *impl) ShowWarningMessage2(message string, options MessageOptions, item
 	me.send(msg, on)
 }
 
-func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
+func (me implWindow) ShowWarningMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWarningMessage3"
@@ -1102,7 +1108,7 @@ func (me *impl) ShowWarningMessage3(message string, items []MessageItem, andThen
 	me.send(msg, on)
 }
 
-func (me *impl) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
+func (me implWindow) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWarningMessage4"
@@ -1129,7 +1135,7 @@ func (me *impl) ShowWarningMessage4(message string, options MessageOptions, item
 	me.send(msg, on)
 }
 
-func (me *impl) ShowInputBox(options *InputBoxOptions, token *Cancel, andThen func(*string)) {
+func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInputBox"
@@ -1169,7 +1175,7 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, token *Cancel, andThen fu
 	}
 	msg.Data["options"] = __options__
 	if (nil != token) {
-		token.impl = me
+		token.impl = me.Impl()
 		if ("" == token.fnId) {
 			me.Lock()
 			{
@@ -1210,7 +1216,7 @@ func (me *impl) ShowInputBox(options *InputBoxOptions, token *Cancel, andThen fu
 	})
 }
 
-func (me *impl) ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel, andThen func([]string)) {
+func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel, andThen func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showQuickPick1"
@@ -1255,7 +1261,7 @@ func (me *impl) ShowQuickPick1(items []string, options QuickPickOptions, token *
 	options.CanPickMany = true
 	msg.Data["options"] = __options__
 	if (nil != token) {
-		token.impl = me
+		token.impl = me.Impl()
 		if ("" == token.fnId) {
 			me.Lock()
 			{
@@ -1307,7 +1313,7 @@ func (me *impl) ShowQuickPick1(items []string, options QuickPickOptions, token *
 	})
 }
 
-func (me *impl) ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel, andThen func(*string)) {
+func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showQuickPick2"
@@ -1351,7 +1357,7 @@ func (me *impl) ShowQuickPick2(items []string, options *QuickPickOptions, token 
 	msg.Data["items"] = items
 	msg.Data["options"] = __options__
 	if (nil != token) {
-		token.impl = me
+		token.impl = me.Impl()
 		if ("" == token.fnId) {
 			me.Lock()
 			{
@@ -1392,7 +1398,7 @@ func (me *impl) ShowQuickPick2(items []string, options *QuickPickOptions, token 
 	})
 }
 
-func (me *impl) ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel, andThen func([]QuickPickItem)) {
+func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel, andThen func([]QuickPickItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showQuickPick3"
@@ -1437,7 +1443,7 @@ func (me *impl) ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, 
 	options.CanPickMany = true
 	msg.Data["options"] = __options__
 	if (nil != token) {
-		token.impl = me
+		token.impl = me.Impl()
 		if ("" == token.fnId) {
 			me.Lock()
 			{
@@ -1490,7 +1496,7 @@ func (me *impl) ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, 
 	})
 }
 
-func (me *impl) ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel, andThen func(*QuickPickItem)) {
+func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel, andThen func(*QuickPickItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showQuickPick4"
@@ -1534,7 +1540,7 @@ func (me *impl) ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions,
 	msg.Data["items"] = items
 	msg.Data["options"] = __options__
 	if (nil != token) {
-		token.impl = me
+		token.impl = me.Impl()
 		if ("" == token.fnId) {
 			me.Lock()
 			{
@@ -1574,7 +1580,7 @@ func (me *impl) ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions,
 	})
 }
 
-func (me *impl) SetStatusBarMessage1(text string, hideAfterTimeout int, andThen func(*Disposable)) {
+func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int, andThen func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.setStatusBarMessage1"
@@ -1595,14 +1601,14 @@ func (me *impl) SetStatusBarMessage1(text string, hideAfterTimeout int, andThen 
 			} else {
 				return false
 			}
-			andThen(result.bind(me, ""))
+			andThen(result.bind(me.Impl(), ""))
 			return true
 		}
 	}
 	me.send(msg, on)
 }
 
-func (me *impl) SetStatusBarMessage2(text string, andThen func(*Disposable)) {
+func (me implWindow) SetStatusBarMessage2(text string, andThen func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.setStatusBarMessage2"
@@ -1622,14 +1628,14 @@ func (me *impl) SetStatusBarMessage2(text string, andThen func(*Disposable)) {
 			} else {
 				return false
 			}
-			andThen(result.bind(me, ""))
+			andThen(result.bind(me.Impl(), ""))
 			return true
 		}
 	}
 	me.send(msg, on)
 }
 
-func (me *impl) ShowSaveDialog(options SaveDialogOptions, andThen func(*string)) {
+func (me implWindow) ShowSaveDialog(options SaveDialogOptions, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showSaveDialog"
@@ -1655,7 +1661,7 @@ func (me *impl) ShowSaveDialog(options SaveDialogOptions, andThen func(*string))
 	me.send(msg, on)
 }
 
-func (me *impl) ShowOpenDialog(options OpenDialogOptions, andThen func([]string)) {
+func (me implWindow) ShowOpenDialog(options OpenDialogOptions, andThen func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showOpenDialog"
@@ -1692,7 +1698,7 @@ func (me *impl) ShowOpenDialog(options OpenDialogOptions, andThen func([]string)
 	me.send(msg, on)
 }
 
-func (me *impl) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, andThen func(*WorkspaceFolder)) {
+func (me implWindow) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, andThen func(*WorkspaceFolder)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWorkspaceFolderPick"
@@ -1717,7 +1723,7 @@ func (me *impl) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, and
 	me.send(msg, on)
 }
 
-func (me *impl) State(andThen func(WindowState)) {
+func (me implWindow) State(andThen func(WindowState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.state"
@@ -1741,7 +1747,7 @@ func (me *impl) State(andThen func(WindowState)) {
 	me.send(msg, on)
 }
 
-func (me *impl) OnDidChangeWindowState(listener func(WindowState), andThen func(*Disposable)) {
+func (me implWindow) OnDidChangeWindowState(listener func(WindowState), andThen func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.onDidChangeWindowState"
@@ -1780,14 +1786,14 @@ func (me *impl) OnDidChangeWindowState(listener func(WindowState), andThen func(
 			} else {
 				return false
 			}
-			andThen(result.bind(me, _fnid_listener))
+			andThen(result.bind(me.Impl(), _fnid_listener))
 			return true
 		}
 	}
 	me.send(msg, on)
 }
 
-func (me *impl) OpenExternal(target string, andThen func(bool)) {
+func (me implEnv) OpenExternal(target string, andThen func(bool)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.openExternal"
@@ -1813,7 +1819,7 @@ func (me *impl) OpenExternal(target string, andThen func(bool)) {
 	me.send(msg, on)
 }
 
-func (me *impl) AppName(andThen func(string)) {
+func (me implEnv) AppName(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.appName"
@@ -1836,7 +1842,7 @@ func (me *impl) AppName(andThen func(string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) AppRoot(andThen func(string)) {
+func (me implEnv) AppRoot(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.appRoot"
@@ -1859,7 +1865,7 @@ func (me *impl) AppRoot(andThen func(string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) Language(andThen func(string)) {
+func (me implEnv) Language(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.language"
@@ -1882,7 +1888,7 @@ func (me *impl) Language(andThen func(string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) MachineId(andThen func(string)) {
+func (me implEnv) MachineId(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.machineId"
@@ -1905,7 +1911,7 @@ func (me *impl) MachineId(andThen func(string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) RemoteName(andThen func(*string)) {
+func (me implEnv) RemoteName(andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.remoteName"
@@ -1930,7 +1936,7 @@ func (me *impl) RemoteName(andThen func(*string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) SessionId(andThen func(string)) {
+func (me implEnv) SessionId(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.sessionId"
@@ -1953,7 +1959,7 @@ func (me *impl) SessionId(andThen func(string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) Shell(andThen func(string)) {
+func (me implEnv) Shell(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.shell"
@@ -1976,7 +1982,7 @@ func (me *impl) Shell(andThen func(string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) UriScheme(andThen func(string)) {
+func (me implEnv) UriScheme(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.uriScheme"
@@ -1999,7 +2005,7 @@ func (me *impl) UriScheme(andThen func(string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) Properties(andThen func(EnvProperties)) {
+func (me implEnv) Properties(andThen func(EnvProperties)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.Properties"
@@ -2025,7 +2031,7 @@ func (me *impl) Properties(andThen func(EnvProperties)) {
 	me.send(msg, on)
 }
 
-func (me *impl) Name(andThen func(*string)) {
+func (me implWorkspace) Name(andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.name"
@@ -2050,7 +2056,7 @@ func (me *impl) Name(andThen func(*string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) SaveAll(includeUntitled bool, andThen func(bool)) {
+func (me implWorkspace) SaveAll(includeUntitled bool, andThen func(bool)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.saveAll"
@@ -2076,7 +2082,7 @@ func (me *impl) SaveAll(includeUntitled bool, andThen func(bool)) {
 	me.send(msg, on)
 }
 
-func (me *impl) OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent), andThen func(*Disposable)) {
+func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent), andThen func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.onDidChangeWorkspaceFolders"
@@ -2115,14 +2121,14 @@ func (me *impl) OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChange
 			} else {
 				return false
 			}
-			andThen(result.bind(me, _fnid_listener))
+			andThen(result.bind(me.Impl(), _fnid_listener))
 			return true
 		}
 	}
 	me.send(msg, on)
 }
 
-func (me *impl) GetLanguages(andThen func([]string)) {
+func (me implLanguages) GetLanguages(andThen func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "languages.getLanguages"
@@ -2158,7 +2164,7 @@ func (me *impl) GetLanguages(andThen func([]string)) {
 	me.send(msg, on)
 }
 
-func (me *impl) OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent), andThen func(*Disposable)) {
+func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent), andThen func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "languages.onDidChangeDiagnostics"
@@ -2197,14 +2203,14 @@ func (me *impl) OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent), and
 			} else {
 				return false
 			}
-			andThen(result.bind(me, _fnid_listener))
+			andThen(result.bind(me.Impl(), _fnid_listener))
 			return true
 		}
 	}
 	me.send(msg, on)
 }
 
-func (me *impl) OnDidChange(listener func(), andThen func(*Disposable)) {
+func (me implExtensions) OnDidChange(listener func(), andThen func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "extensions.onDidChange"
@@ -2237,14 +2243,14 @@ func (me *impl) OnDidChange(listener func(), andThen func(*Disposable)) {
 			} else {
 				return false
 			}
-			andThen(result.bind(me, _fnid_listener))
+			andThen(result.bind(me.Impl(), _fnid_listener))
 			return true
 		}
 	}
 	me.send(msg, on)
 }
 
-func (me *impl) GetCommands(filterInternal bool, andThen func([]string)) {
+func (me implCommands) GetCommands(filterInternal bool, andThen func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "commands.getCommands"

@@ -591,8 +591,8 @@ class Gen extends gen.Gen {
             retifnotok,
         ];
     }
-    genMethodImpl_TopInterface(_iface, _method, _, body) {
-        body.push(_.iRet(_.n(this.options.idents.curInst)));
+    genMethodImpl_TopInterface(_iface, method, _, body) {
+        body.push(_.iRet(_.eConv({ Name: this.options.idents.typeImpl + method.Name }, _.n(this.options.idents.curInst))));
     }
     genMethodImpl_PopulateFrom(struct, _method, _, body) {
         body.push(_.iVar('it', TypeRefPrim.Dict), _.iVar('ok', TypeRefPrim.Bool), _.iVar('val', TypeRefPrim.Any));
@@ -664,7 +664,7 @@ class Gen extends gen.Gen {
                 if (!arg.fromPrep.isFromRetThenable)
                     if (arg.fromPrep.isCancellationToken !== undefined)
                         body.push(_.iIf(_.oIs(_.n(arg.Name)), [
-                            _.iSet(_.oDot(_.n(arg.Name), _.n("impl")), _.eThis()),
+                            _.iSet(_.oDot(_.n(arg.Name), _.n("impl")), _.eCall(_.oDot(_.eThis(), _.n("Impl")))),
                             _.iIf(_.oEq(_.eLit(""), _.oDot(_.n(arg.Name), _.n("fnId"))), [
                                 _.iLock(_.eThis(), _.iSet(_.oDot(_.n(arg.Name), _.n("fnId")), _.eCall(_.oDot(_.eThis(), _.n("nextFuncId"))))),
                             ]),
@@ -698,7 +698,7 @@ class Gen extends gen.Gen {
             const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, !(isval || isprop || isprops), true);
             body.push(_.iIf(_.oIs(_.n(lastarg.Name)), [
                 _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iVar(__.ok, TypeRefPrim.Bool), _.iVar(__.result, dsttype), _.iIf(_.oIs(_.n(__.payload)), this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok), _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => [])), _.WHEN(isdisp, () => [
-                    _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bind')), _.eThis(), nameevtsub ? _.n(nameevtsub) : _.eLit(""))),
+                    _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bind')), _.eCall(_.oDot(_.eThis(), _.n("Impl"))), nameevtsub ? _.n(nameevtsub) : _.eLit(""))),
                 ], () => [
                     _.eCall(_.n(lastarg.Name), _.n(__.result)),
                 ])[0], _.iRet(_.eLit(true)))),
@@ -731,6 +731,7 @@ class Gen extends gen.Gen {
                 Type: build.typeRef(this.nameRewriters.types.interfaces(_.name)),
                 Args: [],
             })),
+            IsTop: true,
         };
         this.allEnums = prep.enums.map(_ => build.enumFrom(_));
         this.allInterfaces = [ifacetop].concat(...prep.interfaces.map(_ => build.interfaceFrom(_)));

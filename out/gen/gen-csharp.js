@@ -138,10 +138,14 @@ class Gen extends gen_ast.Gen {
         if (enew && enew.New)
             return this.s("new ").emitTypeRef(enew.New).s("()");
         const econv = it;
-        if (econv && econv.Conv && econv.To)
+        if (econv && econv.Conv && econv.To) {
+            const tnamed = econv.To;
             return econv.Cast
                 ? this.s("((").emitTypeRef(econv.To).s(")(").emitExpr(econv.Conv).s("))")
-                : this.s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(econv.To).s(") ? (((").emitTypeRef(econv.To).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)");
+                : (tnamed && tnamed.Name)
+                    ? this.emitExpr(this.b.eThis())
+                    : this.s("(").emitExpr(econv.Conv).s(" is ").emitTypeRef(econv.To).s(") ? (((").emitTypeRef(econv.To).s(")(").emitExpr(econv.Conv).s(")), true) : (default, false)");
+        }
         const elen = it;
         if (elen && elen.LenOf)
             return this.emitExpr(elen.LenOf).s(elen.IsArr ? ".Length" : ".Count");

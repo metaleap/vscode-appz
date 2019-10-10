@@ -77,6 +77,8 @@ func Vsc(stdIn io.Reader, stdOut io.Writer) Vscode {
 	return me
 }
 
+func (me *impl) Impl() *impl { return me }
+
 func (me *impl) nextFuncId() string {
 	me.counter++
 	return strconv.FormatUint(me.counter, 36)
