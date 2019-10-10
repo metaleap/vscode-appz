@@ -643,6 +643,37 @@ Workspace: interface
     Name: void
         andThen: ?(?string->void)
 
+    # workspaceFile:
+    # The location of the workspace file, for example:
+    # 
+    # `file:///Users/name/Development/myProject.code-workspace`
+    # 
+    # or
+    # 
+    # `untitled:1555503116870`
+    # 
+    # for a workspace that is untitled and not yet saved.
+    # 
+    # Depending on the workspace that is opened, the value will be:
+    #   * `undefined` when no workspace or  a single folder is opened
+    #   * the path of the workspace file as `Uri` otherwise. if the workspace
+    # is untitled, the returned URI will use the `untitled:` scheme
+    # 
+    # The location can e.g. be used with the `vscode.openFolder` command to
+    # open the workspace again after it has been closed.
+    # 
+    # **Example:**
+    # ```typescript
+    # vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
+    # ```
+    # 
+    # **Note:** it is not advised to use `workspace.workspaceFile` to write
+    # configuration data into the file. You can use `workspace.getConfiguration().update()`
+    # for that purpose which will work both when a single folder is opened as
+    # well as an untitled or saved workspace.
+    WorkspaceFile: void
+        andThen: ?(?string->void)
+
     # saveAll:
     # Save all dirty files.
     #
@@ -660,6 +691,10 @@ Workspace: interface
     OnDidChangeWorkspaceFolders: void
         listener: (WorkspaceFoldersChangeEvent->void)
         andThen: ?(?Disposable->void)
+
+    # Provides single-call access to numerous individual `Workspace` properties at once.
+    Properties: void
+        andThen: (WorkspaceProperties->void)
 
 
 
@@ -1222,6 +1257,58 @@ EnvProperties: class
     #
     # JSON FLAGS: {"Name":"uriScheme","Required":false,"Excluded":false}
     UriScheme: ?string
+
+
+
+
+# workspaceProperties:
+# Namespace for dealing with the current workspace. A workspace is the representation
+# of the folder that has been opened. There is no workspace when just a file but not a
+# folder has been opened.
+# 
+# The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
+# events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+# the editor-process so that they should be always used instead of nodejs-equivalents.
+WorkspaceProperties: class
+
+    # name:
+    # The name of the workspace. `undefined` when no folder
+    # has been opened.
+    #
+    # JSON FLAGS: {"Name":"name","Required":false,"Excluded":false}
+    Name: ?string
+
+    # workspaceFile:
+    # The location of the workspace file, for example:
+    # 
+    # `file:///Users/name/Development/myProject.code-workspace`
+    # 
+    # or
+    # 
+    # `untitled:1555503116870`
+    # 
+    # for a workspace that is untitled and not yet saved.
+    # 
+    # Depending on the workspace that is opened, the value will be:
+    #   * `undefined` when no workspace or  a single folder is opened
+    #   * the path of the workspace file as `Uri` otherwise. if the workspace
+    # is untitled, the returned URI will use the `untitled:` scheme
+    # 
+    # The location can e.g. be used with the `vscode.openFolder` command to
+    # open the workspace again after it has been closed.
+    # 
+    # **Example:**
+    # ```typescript
+    # vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
+    # ```
+    # 
+    # **Note:** it is not advised to use `workspace.workspaceFile` to write
+    # configuration data into the file. You can use `workspace.getConfiguration().update()`
+    # for that purpose which will work both when a single folder is opened as
+    # well as an untitled or saved workspace.
+    #
+    # JSON FLAGS: {"Name":"workspaceFile","Required":false,"Excluded":false}
+    WorkspaceFile: ?string
 
 
 
@@ -2358,6 +2445,30 @@ Workspace·Name: (andThen:?(?string->void) -> void)
 
 
 
+Workspace·WorkspaceFile: (andThen:?(?string->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "workspace.workspaceFile"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?string
+            if (=?payload)
+                var _result_ of string
+                [_result_,ok] = ((payload)·(string))
+                if (!ok)
+                    return false
+                result = (&_result_)
+            andThen(result)
+            return true
+        
+    this.send(msg, on)
+
+
+
+
 Workspace·SaveAll: (includeUntitled:bool -> andThen:?(bool->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
@@ -2418,6 +2529,31 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
             else
                 return false
             andThen(result.bind(this.Impl(), _fnid_listener))
+            return true
+        
+    this.send(msg, on)
+
+
+
+
+Workspace·Properties: (andThen:(WorkspaceProperties->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "workspace.Properties"
+    msg.Data = dict·new(0)
+    var on of (any->bool)
+    if (=?andThen)
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of WorkspaceProperties
+            if (=?payload)
+                result = WorkspaceProperties·new
+                ok = result.populateFrom(payload)
+                if (!ok)
+                    return false
+            else
+                return false
+            andThen(result)
             return true
         
     this.send(msg, on)
@@ -2892,6 +3028,38 @@ WorkspaceFoldersChangeEvent·populateFrom: (payload:any -> bool)
         this.Removed = removed
     else
         return false
+    return true
+
+
+
+
+WorkspaceProperties·populateFrom: (payload:any -> bool)
+    var it of dict
+    var ok of bool
+    var val of any
+    [it,ok] = ((payload)·(dict))
+    if (!ok)
+        return false
+    [val,ok] = it@?"name"
+    if ok
+        var name of ?string
+        if (=?val)
+            var _name_ of string
+            [_name_,ok] = ((val)·(string))
+            if (!ok)
+                return false
+            name = (&_name_)
+        this.Name = name
+    [val,ok] = it@?"workspaceFile"
+    if ok
+        var workspaceFile of ?string
+        if (=?val)
+            var _workspaceFile_ of string
+            [_workspaceFile_,ok] = ((val)·(string))
+            if (!ok)
+                return false
+            workspaceFile = (&_workspaceFile_)
+        this.WorkspaceFile = workspaceFile
     return true
 
 

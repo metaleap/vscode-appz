@@ -245,6 +245,9 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "name": {
 					return Promise.resolve(vscode.workspace.name)
 				}
+				case "workspaceFile": {
+					return Promise.resolve(vscode.workspace.workspaceFile)
+				}
 				case "saveAll": {
 					const arg_includeUntitled = (msg.data['includeUntitled']) as boolean
 					return vscode.workspace.saveAll(arg_includeUntitled, )
@@ -257,6 +260,12 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 							if (prog && prog.proc)
 								prog.callBack(false, _fnid_listener, a0).then(noOp, noOp)
 						})
+				}
+				case "Properties": {
+					return Promise.resolve({
+						name: vscode.workspace.name,
+						workspaceFile: vscode.workspace.workspaceFile,
+					})
 				}
 				default:
 					throw (methodname)

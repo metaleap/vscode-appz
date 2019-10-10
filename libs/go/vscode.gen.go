@@ -417,6 +417,35 @@ type Workspace interface {
 	// has been opened.
 	Name(andThen func(*string)) 
 
+	// The location of the workspace file, for example:
+	// 
+	// `file:///Users/name/Development/myProject.code-workspace`
+	// 
+	// or
+	// 
+	// `untitled:1555503116870`
+	// 
+	// for a workspace that is untitled and not yet saved.
+	// 
+	// Depending on the workspace that is opened, the value will be:
+	//   * `undefined` when no workspace or  a single folder is opened
+	//   * the path of the workspace file as `Uri` otherwise. if the workspace
+	// is untitled, the returned URI will use the `untitled:` scheme
+	// 
+	// The location can e.g. be used with the `vscode.openFolder` command to
+	// open the workspace again after it has been closed.
+	// 
+	// **Example:**
+	// ```typescript
+	// vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
+	// ```
+	// 
+	// **Note:** it is not advised to use `workspace.workspaceFile` to write
+	// configuration data into the file. You can use `workspace.getConfiguration().update()`
+	// for that purpose which will work both when a single folder is opened as
+	// well as an untitled or saved workspace.
+	WorkspaceFile(andThen func(*string)) 
+
 	// Save all dirty files.
 	// 
 	// `includeUntitled` ── Also save files that have been created during this session.
@@ -426,6 +455,9 @@ type Workspace interface {
 
 	// An event that is emitted when a workspace folder is added or removed.
 	OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent), andThen func(*Disposable)) 
+
+	// Provides single-call access to numerous individual `Workspace` properties at once.
+	Properties(andThen func(WorkspaceProperties)) 
 }
 type implWorkspace struct{ *impl }
 
@@ -785,6 +817,48 @@ type EnvProperties struct {
 
 	// The custom uri scheme the editor registers to in the operating system.
 	UriScheme string `json:"uriScheme,omitempty"`
+}
+
+// Namespace for dealing with the current workspace. A workspace is the representation
+// of the folder that has been opened. There is no workspace when just a file but not a
+// folder has been opened.
+// 
+// The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
+// events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+// the editor-process so that they should be always used instead of nodejs-equivalents.
+type WorkspaceProperties struct {
+	// The name of the workspace. `undefined` when no folder
+	// has been opened.
+	Name string `json:"name,omitempty"`
+
+	// The location of the workspace file, for example:
+	// 
+	// `file:///Users/name/Development/myProject.code-workspace`
+	// 
+	// or
+	// 
+	// `untitled:1555503116870`
+	// 
+	// for a workspace that is untitled and not yet saved.
+	// 
+	// Depending on the workspace that is opened, the value will be:
+	//   * `undefined` when no workspace or  a single folder is opened
+	//   * the path of the workspace file as `Uri` otherwise. if the workspace
+	// is untitled, the returned URI will use the `untitled:` scheme
+	// 
+	// The location can e.g. be used with the `vscode.openFolder` command to
+	// open the workspace again after it has been closed.
+	// 
+	// **Example:**
+	// ```typescript
+	// vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
+	// ```
+	// 
+	// **Note:** it is not advised to use `workspace.workspaceFile` to write
+	// configuration data into the file. You can use `workspace.getConfiguration().update()`
+	// for that purpose which will work both when a single folder is opened as
+	// well as an untitled or saved workspace.
+	WorkspaceFile string `json:"workspaceFile,omitempty"`
 }
 
 func (me *impl) Window() Window {
@@ -2056,6 +2130,31 @@ func (me implWorkspace) Name(andThen func(*string)) {
 	me.send(msg, on)
 }
 
+func (me implWorkspace) WorkspaceFile(andThen func(*string)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "workspace.workspaceFile"
+	msg.Data = make(dict, 0)
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *string
+			if (nil != payload) {
+				var _result_ string
+				_result_, ok = payload.(string)
+				if (!ok) {
+					return false
+				}
+				result = (&_result_)
+			}
+			andThen(result)
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
 func (me implWorkspace) SaveAll(includeUntitled bool, andThen func(bool)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -2122,6 +2221,32 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 				return false
 			}
 			andThen(result.bind(me.Impl(), _fnid_listener))
+			return true
+		}
+	}
+	me.send(msg, on)
+}
+
+func (me implWorkspace) Properties(andThen func(WorkspaceProperties)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "workspace.Properties"
+	msg.Data = make(dict, 0)
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result WorkspaceProperties
+			if (nil != payload) {
+				result = */*sorryButSuchIsCodeGenSometimes...*/new(WorkspaceProperties)
+				ok = result.populateFrom(payload)
+				if (!ok) {
+					return false
+				}
+			} else {
+				return false
+			}
+			andThen(result)
 			return true
 		}
 	}
@@ -2651,6 +2776,39 @@ func (me *WorkspaceFoldersChangeEvent) populateFrom(payload any) bool {
 		me.Removed = removed
 	} else {
 		return false
+	}
+	return true
+}
+
+func (me *WorkspaceProperties) populateFrom(payload any) bool {
+	var it dict
+	var ok bool
+	var val any
+	it, ok = payload.(dict)
+	if (!ok) {
+		return false
+	}
+	val, ok = it["name"]
+	if ok {
+		var name string
+		if (nil != val) {
+			name, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.Name = name
+	}
+	val, ok = it["workspaceFile"]
+	if ok {
+		var workspaceFile string
+		if (nil != val) {
+			workspaceFile, ok = val.(string)
+			if (!ok) {
+				return false
+			}
+		}
+		me.WorkspaceFile = workspaceFile
 	}
 	return true
 }

@@ -235,6 +235,9 @@ function handle(msg, prog, remoteCancellationTokens) {
                 case "name": {
                     return Promise.resolve(vscode.workspace.name);
                 }
+                case "workspaceFile": {
+                    return Promise.resolve(vscode.workspace.workspaceFile);
+                }
                 case "saveAll": {
                     const arg_includeUntitled = (msg.data['includeUntitled']);
                     return vscode.workspace.saveAll(arg_includeUntitled);
@@ -247,6 +250,12 @@ function handle(msg, prog, remoteCancellationTokens) {
                             if (prog && prog.proc)
                                 prog.callBack(false, _fnid_listener, a0).then(noOp, noOp);
                         });
+                }
+                case "Properties": {
+                    return Promise.resolve({
+                        name: vscode.workspace.name,
+                        workspaceFile: vscode.workspace.workspaceFile,
+                    });
                 }
                 default:
                     throw (methodname);

@@ -568,6 +568,37 @@ namespace VscAppz {
 		void Name(Action<string> andThen = default);
 
 		/// <summary>
+		/// The location of the workspace file, for example:
+		/// 
+		/// `file:///Users/name/Development/myProject.code-workspace`
+		/// 
+		/// or
+		/// 
+		/// `untitled:1555503116870`
+		/// 
+		/// for a workspace that is untitled and not yet saved.
+		/// 
+		/// Depending on the workspace that is opened, the value will be:
+		///   * `undefined` when no workspace or  a single folder is opened
+		///   * the path of the workspace file as `Uri` otherwise. if the workspace
+		/// is untitled, the returned URI will use the `untitled:` scheme
+		/// 
+		/// The location can e.g. be used with the `vscode.openFolder` command to
+		/// open the workspace again after it has been closed.
+		/// 
+		/// **Example:**
+		/// ```typescript
+		/// vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
+		/// ```
+		/// 
+		/// **Note:** it is not advised to use `workspace.workspaceFile` to write
+		/// configuration data into the file. You can use `workspace.getConfiguration().update()`
+		/// for that purpose which will work both when a single folder is opened as
+		/// well as an untitled or saved workspace.
+		/// </summary>
+		void WorkspaceFile(Action<string> andThen = default);
+
+		/// <summary>
 		/// Save all dirty files.
 		/// 
 		/// `includeUntitled` ── Also save files that have been created during this session.
@@ -580,6 +611,9 @@ namespace VscAppz {
 
 		/// <summary>An event that is emitted when a workspace folder is added or removed.</summary>
 		void OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener = default, Action<Disposable> andThen = default);
+
+		/// <summary>Provides single-call access to numerous individual `IWorkspace` properties at once.</summary>
+		void Properties(Action<WorkspaceProperties> andThen = default);
 	}
 
 	/// <summary>
@@ -1029,6 +1063,56 @@ namespace VscAppz {
 		/// <summary>The custom uri scheme the editor registers to in the operating system.</summary>
 		[JsonProperty("uriScheme")]
 		public string UriScheme;
+	}
+
+	/// <summary>
+	/// Namespace for dealing with the current workspace. A workspace is the representation
+	/// of the folder that has been opened. There is no workspace when just a file but not a
+	/// folder has been opened.
+	/// 
+	/// The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
+	/// events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+	/// the editor-process so that they should be always used instead of nodejs-equivalents.
+	/// </summary>
+	public partial class WorkspaceProperties {
+		/// <summary>
+		/// The name of the workspace. `undefined` when no folder
+		/// has been opened.
+		/// </summary>
+		[JsonProperty("name")]
+		public string Name;
+
+		/// <summary>
+		/// The location of the workspace file, for example:
+		/// 
+		/// `file:///Users/name/Development/myProject.code-workspace`
+		/// 
+		/// or
+		/// 
+		/// `untitled:1555503116870`
+		/// 
+		/// for a workspace that is untitled and not yet saved.
+		/// 
+		/// Depending on the workspace that is opened, the value will be:
+		///   * `undefined` when no workspace or  a single folder is opened
+		///   * the path of the workspace file as `Uri` otherwise. if the workspace
+		/// is untitled, the returned URI will use the `untitled:` scheme
+		/// 
+		/// The location can e.g. be used with the `vscode.openFolder` command to
+		/// open the workspace again after it has been closed.
+		/// 
+		/// **Example:**
+		/// ```typescript
+		/// vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
+		/// ```
+		/// 
+		/// **Note:** it is not advised to use `workspace.workspaceFile` to write
+		/// configuration data into the file. You can use `workspace.getConfiguration().update()`
+		/// for that purpose which will work both when a single folder is opened as
+		/// well as an untitled or saved workspace.
+		/// </summary>
+		[JsonProperty("workspaceFile")]
+		public string WorkspaceFile;
 	}
 
 	internal partial class impl : IVscode, IWindow, IEnv, IWorkspace, ILanguages, IExtensions, ICommands {
@@ -2257,6 +2341,31 @@ namespace VscAppz {
 			this.send(msg, on);
 		}
 
+		void IWorkspace.WorkspaceFile(Action<string> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "workspace.workspaceFile";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					string result = default;
+					if ((null != payload)) {
+						string _result_ = default;
+						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+						if ((!ok)) {
+							return false;
+						}
+						result = _result_;
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
 		void IWorkspace.SaveAll(bool includeUntitled, Action<bool> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -2323,6 +2432,32 @@ namespace VscAppz {
 						return false;
 					}					
 					andThen(result.bind(this.Impl(), _fnid_listener));
+					return true;
+				};
+			}
+			this.send(msg, on);
+		}
+
+		void IWorkspace.Properties(Action<WorkspaceProperties> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "workspace.Properties";
+			msg.Data = new dict(0);
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					WorkspaceProperties result = default;
+					if ((null != payload)) {
+						result = new WorkspaceProperties();
+						ok = result.populateFrom(payload);
+						if ((!ok)) {
+							return false;
+						}
+					} else {
+						return false;
+					}					
+					andThen(result);
 					return true;
 				};
 			}
@@ -2886,6 +3021,45 @@ namespace VscAppz {
 			} else {
 				return false;
 			}			
+			return true;
+		}
+	}
+
+	public partial class WorkspaceProperties {
+		internal bool populateFrom(any payload) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if ((!ok)) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("name", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				string name = default;
+				if ((null != val)) {
+					string _name_ = default;
+					(_name_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					name = _name_;
+				}
+				this.Name = name;
+			}
+			(val, ok) = (it.TryGetValue("workspaceFile", out var ___) ? (___, true) : (default, false));
+			if (ok) {
+				string workspaceFile = default;
+				if ((null != val)) {
+					string _workspaceFile_ = default;
+					(_workspaceFile_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if ((!ok)) {
+						return false;
+					}
+					workspaceFile = _workspaceFile_;
+				}
+				this.WorkspaceFile = workspaceFile;
+			}
 			return true;
 		}
 	}

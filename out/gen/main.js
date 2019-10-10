@@ -45,6 +45,7 @@ const genApiSurface = {
             ],
             'workspace': [
                 'name',
+                'workspaceFile',
                 'saveAll',
                 'onDidChangeWorkspaceFolders',
             ],

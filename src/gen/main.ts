@@ -52,7 +52,7 @@ const genApiSurface: genApiMember = {
             ],
             'workspace': [
                 'name',
-                // 'workspaceFile',
+                'workspaceFile',
                 'saveAll',
 
                 'onDidChangeWorkspaceFolders',

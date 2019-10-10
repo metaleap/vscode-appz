@@ -72,7 +72,9 @@
 - [IWorkspace](#T-VscAppz-IWorkspace 'VscAppz.IWorkspace')
   - [Name()](#M-VscAppz-IWorkspace-Name-System-Action{System-String}- 'VscAppz.IWorkspace.Name(System.Action{System.String})')
   - [OnDidChangeWorkspaceFolders()](#M-VscAppz-IWorkspace-OnDidChangeWorkspaceFolders-System-Action{VscAppz-WorkspaceFoldersChangeEvent},System-Action{VscAppz-Disposable}- 'VscAppz.IWorkspace.OnDidChangeWorkspaceFolders(System.Action{VscAppz.WorkspaceFoldersChangeEvent},System.Action{VscAppz.Disposable})')
+  - [Properties()](#M-VscAppz-IWorkspace-Properties-System-Action{VscAppz-WorkspaceProperties}- 'VscAppz.IWorkspace.Properties(System.Action{VscAppz.WorkspaceProperties})')
   - [SaveAll(includeUntitled,andThen)](#M-VscAppz-IWorkspace-SaveAll-System-Boolean,System-Action{System-Boolean}- 'VscAppz.IWorkspace.SaveAll(System.Boolean,System.Action{System.Boolean})')
+  - [WorkspaceFile()](#M-VscAppz-IWorkspace-WorkspaceFile-System-Action{System-String}- 'VscAppz.IWorkspace.WorkspaceFile(System.Action{System.String})')
 - [InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions')
   - [IgnoreFocusOut](#F-VscAppz-InputBoxOptions-IgnoreFocusOut 'VscAppz.InputBoxOptions.IgnoreFocusOut')
   - [Password](#F-VscAppz-InputBoxOptions-Password 'VscAppz.InputBoxOptions.Password')
@@ -128,6 +130,9 @@
 - [WorkspaceFoldersChangeEvent](#T-VscAppz-WorkspaceFoldersChangeEvent 'VscAppz.WorkspaceFoldersChangeEvent')
   - [Added](#F-VscAppz-WorkspaceFoldersChangeEvent-Added 'VscAppz.WorkspaceFoldersChangeEvent.Added')
   - [Removed](#F-VscAppz-WorkspaceFoldersChangeEvent-Removed 'VscAppz.WorkspaceFoldersChangeEvent.Removed')
+- [WorkspaceProperties](#T-VscAppz-WorkspaceProperties 'VscAppz.WorkspaceProperties')
+  - [Name](#F-VscAppz-WorkspaceProperties-Name 'VscAppz.WorkspaceProperties.Name')
+  - [WorkspaceFile](#F-VscAppz-WorkspaceProperties-WorkspaceFile 'VscAppz.WorkspaceProperties.WorkspaceFile')
 
 <a name='T-VscAppz-Cancel'></a>
 ## Cancel `type`
@@ -1316,6 +1321,17 @@ An event that is emitted when a workspace folder is added or removed.
 
 This method has no parameters.
 
+<a name='M-VscAppz-IWorkspace-Properties-System-Action{VscAppz-WorkspaceProperties}-'></a>
+### Properties() `method`
+
+##### Summary
+
+Provides single-call access to numerous individual `IWorkspace` properties at once.
+
+##### Parameters
+
+This method has no parameters.
+
 <a name='M-VscAppz-IWorkspace-SaveAll-System-Boolean,System-Action{System-Boolean}-'></a>
 ### SaveAll(includeUntitled,andThen) `method`
 
@@ -1333,6 +1349,43 @@ Save all dirty files.
 | ---- | ---- | ----------- |
 | includeUntitled | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Also save files that have been created during this session. |
 | andThen | [System.Action{System.Boolean}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.Boolean}') | A thenable that resolves when the files have been saved. |
+
+<a name='M-VscAppz-IWorkspace-WorkspaceFile-System-Action{System-String}-'></a>
+### WorkspaceFile() `method`
+
+##### Summary
+
+The location of the workspace file, for example:
+
+`file:///Users/name/Development/myProject.code-workspace`
+
+or
+
+`untitled:1555503116870`
+
+for a workspace that is untitled and not yet saved.
+
+Depending on the workspace that is opened, the value will be:
+  * `undefined` when no workspace or  a single folder is opened
+  * the path of the workspace file as `Uri` otherwise. if the workspace
+is untitled, the returned URI will use the `untitled:` scheme
+
+The location can e.g. be used with the `vscode.openFolder` command to
+open the workspace again after it has been closed.
+
+**Example:**
+```typescript
+vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
+```
+
+**Note:** it is not advised to use `workspace.workspaceFile` to write
+configuration data into the file. You can use `workspace.getConfiguration().update()`
+for that purpose which will work both when a single folder is opened as
+well as an untitled or saved workspace.
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='T-VscAppz-InputBoxOptions'></a>
 ## InputBoxOptions `type`
@@ -1821,3 +1874,61 @@ Added workspace folders.
 ##### Summary
 
 Removed workspace folders.
+
+<a name='T-VscAppz-WorkspaceProperties'></a>
+## WorkspaceProperties `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Namespace for dealing with the current workspace. A workspace is the representation
+of the folder that has been opened. There is no workspace when just a file but not a
+folder has been opened.
+
+The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
+events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+the editor-process so that they should be always used instead of nodejs-equivalents.
+
+<a name='F-VscAppz-WorkspaceProperties-Name'></a>
+### Name `constants`
+
+##### Summary
+
+The name of the workspace. `undefined` when no folder
+has been opened.
+
+<a name='F-VscAppz-WorkspaceProperties-WorkspaceFile'></a>
+### WorkspaceFile `constants`
+
+##### Summary
+
+The location of the workspace file, for example:
+
+`file:///Users/name/Development/myProject.code-workspace`
+
+or
+
+`untitled:1555503116870`
+
+for a workspace that is untitled and not yet saved.
+
+Depending on the workspace that is opened, the value will be:
+  * `undefined` when no workspace or  a single folder is opened
+  * the path of the workspace file as `Uri` otherwise. if the workspace
+is untitled, the returned URI will use the `untitled:` scheme
+
+The location can e.g. be used with the `vscode.openFolder` command to
+open the workspace again after it has been closed.
+
+**Example:**
+```typescript
+vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
+```
+
+**Note:** it is not advised to use `workspace.workspaceFile` to write
+configuration data into the file. You can use `workspace.getConfiguration().update()`
+for that purpose which will work both when a single folder is opened as
+well as an untitled or saved workspace.

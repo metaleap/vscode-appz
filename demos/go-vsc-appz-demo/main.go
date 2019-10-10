@@ -63,9 +63,11 @@ func demoMenuAll() {
 		"window.showOpenDialog",
 		"window.showWorkspaceFolderPick",
 		"env.openExternal",
-		"env.Properties",
 		"commands.getCommands",
 		"languages.getLanguages",
+
+		"env.Properties",
+		"workspace.Properties",
 	}
 	win.ShowQuickPick2(menu, &QuickPickOptions{
 		CanPickMany: false, IgnoreFocusOut: true, PlaceHolder: "Dismissing this menu will quit the prog.",
@@ -88,11 +90,14 @@ func demoMenuAll() {
 				case menu[5]:
 					demo_Env_OpenExternal()
 				case menu[6]:
-					demo_Env_Properties()
-				case menu[7]:
 					demo_Commands_GetCommands()
-				case menu[8]:
+				case menu[7]:
 					demo_Languages_GetLanguages()
+
+				case menu[len(menu)-2]:
+					demo_Env_Properties()
+				case menu[len(menu)-1]:
+					demo_Workspace_Properties()
 				default:
 					win.ShowErrorMessage1("Unknown: `"+menuitem+"`, bye now!", nil, quit)
 				}
@@ -216,6 +221,15 @@ func demo_Env_Properties() {
 			"SessionId:\t" + props.SessionId,
 			"Shell:\t\t" + props.Shell,
 			"UriScheme:\t" + props.UriScheme,
+		}, &QuickPickOptions{IgnoreFocusOut: true}, nil, quit)
+	})
+}
+
+func demo_Workspace_Properties() {
+	vsc.Workspace().Properties(func(props WorkspaceProperties) {
+		win.ShowQuickPick2([]string{
+			"Name:\t\t" + props.Name,
+			"WorkspaceFile:\t" + props.WorkspaceFile,
 		}, &QuickPickOptions{IgnoreFocusOut: true}, nil, quit)
 	})
 }
