@@ -28,12 +28,7 @@ func main() {
 	vsc = Vsc(nil, nil)
 	win = vsc.Window()
 	win.SetStatusBarMessage2("Choosing a demo WILL HIDE this", func(statusitem *Disposable) {
-		win.OnDidChangeWindowState(func(evt WindowState) {
-			win.SetStatusBarMessage1("Am I focused? "+strconv.FormatBool(evt.Focused)+".", 2345, nil)
-		}, nil)
-		vsc.Extensions().OnDidChange(func() {
-			win.SetStatusBarMessage1("Some extension(s) were just (un)installed or (de)activated.", 4242, nil)
-		}, nil)
+		subscribeToMiscEvents()
 
 		buttons := []string{"Demo Pick Input", "Demo Text Input", "All Demos"}
 		win.ShowInformationMessage1(
@@ -235,6 +230,18 @@ func demo_Languages_GetLanguages() {
 	vsc.Languages().GetLanguages(func(langs []string) {
 		win.ShowQuickPick2(langs, &QuickPickOptions{PlaceHolder: strconv.Itoa(len(langs)) + " is quite a number!"}, nil, quit)
 	})
+}
+
+func subscribeToMiscEvents() {
+	win.OnDidChangeWindowState(func(evt WindowState) {
+		win.SetStatusBarMessage1("Am I focused? "+strconv.FormatBool(evt.Focused)+".", 4242, nil)
+	}, nil)
+	vsc.Extensions().OnDidChange(func() {
+		win.SetStatusBarMessage1("Some extension(s) were just (un)installed or (de)activated.", 4242, nil)
+	}, nil)
+	vsc.Languages().OnDidChangeDiagnostics(func(evt DiagnosticChangeEvent) {
+		win.SetStatusBarMessage1("Diags changed for: "+strings.Join(evt.Uris, ", "), 4242, nil)
+	}, nil)
 }
 
 func statusNoticeQuit() {
