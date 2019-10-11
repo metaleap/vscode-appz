@@ -140,9 +140,11 @@ class Gen extends gen.Gen {
             return "[" + ttup.map(_ => this.typeSpec(_)).join(', ') + "]";
         let tsum = gen.typeSum(from);
         if (tsum && tsum.length)
+            // return this.parensIfJoin(tsum.map(_ => '(' + this.typeSpec(_) + ')'), ' | ')
             return this.typeSpec(tsum[0]);
         let tmul = gen.typeMul(from);
         if (tmul && tmul.length)
+            // return this.parensIfJoin(tmul.map(_ => '(' + this.typeSpec(_) + ')'), ' & ')
             return this.typeSpec(tmul[0]);
         let tobj = gen.typeObj(from);
         if (tobj)

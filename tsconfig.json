@@ -1,4 +1,5 @@
 {
+	"compileOnSave": true,
 	"compilerOptions": {
 		"module": "commonjs",
 		"target": "es2020",
@@ -6,6 +7,11 @@
 		"lib": [
 			"es2020"
 		],
+		"emitBOM": false,
+		"moduleResolution": "node",
+		"noErrorTruncation": true,
+		"strictBindCallApply": true,
+		"strictFunctionTypes": true,
 		"watch": true,
 		"sourceMap": false,
 		"rootDir": "src",
@@ -20,13 +26,12 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"preserveConstEnums": false,
-		"pretty": false,
-		"removeComments": true,
+		"pretty": true,
+		"removeComments": false,
 		"strict": true,
 		"strictNullChecks": false
 	},
-	"exclude": [
-		"node_modules",
-		".vscode-test"
+	"include": [
+		"src"
 	]
 }

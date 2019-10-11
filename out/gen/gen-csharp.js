@@ -132,7 +132,7 @@ class Gen extends gen_ast.Gen {
                 return this.s("new ").emitTypeRef(ecollnew.ElemType).s("[").emitExpr(ecollnew.Len).s("]");
             else if (ecollnew.Cap !== undefined)
                 return this.s("new List<").emitTypeRef(ecollnew.ElemType).s(">(").emitExpr(ecollnew.Cap).s(")");
-            else
+            else // newly introduced bug
                 throw ecollnew;
         const enew = it;
         if (enew && enew.New)

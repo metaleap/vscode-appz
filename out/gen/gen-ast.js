@@ -512,7 +512,7 @@ class Gen extends gen.Gen {
             const notactualoperator = (eop.Name === BuilderOperators.Idx || eop.Name === BuilderOperators.IdxMay || eop.Name === BuilderOperators.Dot);
             return this
                 .s((notactualoperator ? '' : '(')
-                + ((eop.Operands.length > 1) ? '' : eop.Name))
+                + ((eop.Operands.length > 1) ? '' : /* unary*/ eop.Name))
                 .emitExprs(notactualoperator ? eop.Name : (' ' + eop.Name + ' '), ...eop.Operands)
                 .s(notactualoperator ? '' : ')');
         }
@@ -537,8 +537,8 @@ class Gen extends gen.Gen {
         const retifnotok = _.iIf(_.oNot(_.n(okBoolName)), [_.iRet(onErrRet),]);
         const tdstnamed = this.typeOwn(this.typeUnMaybe(dstType));
         if (tdstnamed) {
-            if (tdstnamed.Name !== 'Disposable' && tdstnamed.Name !== 'Uri' && this.state.genPopulateFor[tdstnamed.Name] !== false)
-                this.state.genPopulateFor[tdstnamed.Name] = true;
+            if (tdstnamed.Name !== 'Disposable' && tdstnamed.Name !== 'Uri' && this.state.genPopulateFor[tdstnamed.Name] !== false) // why this peculiar checking construct?..
+                this.state.genPopulateFor[tdstnamed.Name] = true; // ..see the consumer of genDecoders to grasp it
             return [
                 _.iSet(_.n(dstVarName), _.eNew(dstType)),
                 _.iSet(_.n(okBoolName), _.eCall(_.oDot(_.n(dstVarName), _.n('populateFrom')), src)),
@@ -740,7 +740,7 @@ class Gen extends gen.Gen {
             const struct = build.structFrom(it);
             this.allStructs[struct.Name] = struct;
         }
-        {
+        { // set all structs' Outgoing & Incoming bools only now that all ifaces and structs are complete
             const traversed = {};
             const traverse = (t, forIncoming) => {
                 this.typeRefTraverse(t, argtype => {

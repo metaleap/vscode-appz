@@ -105,7 +105,7 @@ class Gen extends gen_ast.Gen {
                     return this.s("make([]").emitTypeRef(ecollnew.ElemType).s(", 0, ").emitExpr(ecollnew.Cap).s(")");
                 else if (ecollnew.Len !== undefined)
                     return this.s("make([]").emitTypeRef(ecollnew.ElemType).s(", ").emitExpr(ecollnew.Len).s(")");
-                else
+                else // newly introduced bug
                     throw ecollnew;
             const enew = it;
             if (enew && enew.New)
@@ -149,7 +149,7 @@ class Gen extends gen_ast.Gen {
         if (it === null)
             return this;
         const ttup = this.typeTup(it);
-        if (ttup)
+        if (ttup) // until multi-typed tuples arrive for real..
             return this.s("[]").emitTypeRef(ttup.TupOf[0]);
         const tmay = this.typeMaybe(it);
         if (tmay)

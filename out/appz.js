@@ -64,7 +64,7 @@ function onCmdMain() {
 function getDurStr(fullCmd) {
     const proc = ppio.progs[fullCmd];
     let durstr = new Date(Date.now() - proc.startTime).toISOString();
-    if (!durstr.startsWith("1970-01-01T"))
+    if (!durstr.startsWith("1970-01-01T")) // YYYY-MM-DDTHH:mm:ss.sssZ
         durstr = exports.uxStr.menuDescStartedAgo_;
     else
         durstr = durstr.slice(0, durstr.indexOf('.')).slice(1 + durstr.indexOf('T'));

@@ -1,5 +1,3 @@
-// See https://go.microsoft.com/fwlink/?LinkId=733558
-// for the documentation about the tasks.json format
 {
 	"version": "2.0.0",
 	"tasks": [
@@ -9,12 +7,11 @@
 			"problemMatcher": "$tsc-watch",
 			"isBackground": true,
 			"presentation": {
-				"reveal": "never"
+				"reveal": "never",
+				"clear": true,
+				"panel": "dedicated"
 			},
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
+			"group": "build"
 		},
 		{
 			"label": "Re-gen all *.gen.* files",
@@ -25,8 +22,8 @@
 			"command": "node out/gen/main.js",
 			"presentation": {
 				"reveal": "silent",
-				"showReuseMessage": true,
-				"clear": true
+				"clear": true,
+				"panel": "dedicated"
 			},
 			"group": "build",
 			"problemMatcher": "$tsc"
@@ -43,15 +40,27 @@
 				"&& cd ../../demos/cs-vsc-appz-demo",
 				"&& dotnet build -c Release"
 			],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
+			"group": "build",
 			"presentation": {
 				"reveal": "silent",
-				"clear": true
+				"clear": true,
+				"panel": "dedicated"
 			},
 			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "tsc libs/js/src/*.ts -> libs/js/*.js",
+			"group": "build",
+			"type": "typescript",
+			"tsconfig": "libs/js/tsconfig.json",
+			"options": {
+				"cwd": "libs/js"
+			},
+			"presentation": {
+				"reveal": "never",
+				"clear": true,
+				"panel": "dedicated"
+			}
 		}
 	]
 }

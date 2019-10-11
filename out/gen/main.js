@@ -7,12 +7,14 @@ const gen_ast = require("./gen-ast");
 const gen_golang = require("./gen-golang");
 const gen_csharp = require("./gen-csharp");
 const gen_python = require("./gen-python");
+const gen_nodejs = require("./gen-nodejs");
 const gen_vscext = require("./gen-vscext");
 const filePathDts = 'node_modules/@types/vscode/index.d.ts';
 const gens = [
     new gen_ast.Gen('libs/tmpdbg/', '.gen.coffee'),
     new gen_golang.Gen('libs/go/', '.gen.go'),
     new gen_csharp.Gen('libs/cs/', '.gen.cs'),
+    new gen_nodejs.Gen('libs/js/', '.gen.js'),
     new gen_python.Gen('libs/py/', '.gen.py'),
     new gen_vscext.Gen('src/', '.gen.ts'),
 ];
@@ -50,6 +52,7 @@ const genApiSurface = {
                 'onDidChangeWorkspaceFolders',
                 'getWorkspaceFolder',
                 'workspaceFolders',
+                // 'openTextDocument',
                 'findFiles',
                 'asRelativePath',
             ],
@@ -107,6 +110,7 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
         }
         else {
             const members = [];
+            // first: search for API methods
             astNode.forEachChild(n => {
                 const decl = n;
                 if (decl && decl.name && decl.name.text === item) {
@@ -118,6 +122,7 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                         members.push(n);
                 }
             });
+            // second: search for events/props to be modeled as pretend API methods
             if (!members.length) {
                 astNode.forEachChild(ntop => {
                     if ((!members.length) && ntop.kind === 220 && ntop.getText().includes(item))

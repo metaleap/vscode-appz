@@ -1,0 +1,17 @@
+{
+    "extends": "../../tsconfig.json",
+    "exclude": [],
+    "include": [
+        "*.ts",
+        "src/*.ts"
+    ],
+    "compilerOptions": {
+        "watch": false,
+        "module": "commonjs",
+        "rootDir": "src",
+        "outDir": ".",
+        "types": [
+            "node"
+        ]
+    }
+}
