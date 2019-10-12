@@ -1,25 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const vsc = require("./basics");
-class implBase {
-    constructor(impl) { this.impl = impl; }
-    send(msg, on) {
-        this.impl.send(msg, on);
-    }
-}
+const aux_1 = require("./aux");
 class impl {
     constructor() {
         this.window = new implWindow(this);
     }
 }
 exports.impl = impl;
+class implBase {
+    constructor(impl) { this.impl = impl; }
+    send(msg, on) {
+        this.impl.send(msg, on);
+    }
+}
 class implWindow extends implBase {
     constructor(impl) {
         super(impl);
     }
     showErrorMessage(message, items, then) {
         let msg;
-        msg = new vsc.ipcMsg();
+        msg = new aux_1.ipcMsg();
         msg.qName = 'window.showErrorMessage1';
         msg.data = {};
         msg.data['message'] = message;
@@ -42,4 +42,3 @@ class implWindow extends implBase {
         this.send(msg, on);
     }
 }
-exports.implWindow = implWindow;

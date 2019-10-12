@@ -1,13 +1,52 @@
-import * as vsc from './vscode'
+import * as appz from './vsc-appz'
+import * as vscgen from './vscode'
+
+
+export class Cancel {
+    impl: impl
+    fnId: string
+
+    static In(msFromNow: number) {
+        const me = new Cancel()
+        setTimeout(() => me.Now(), msFromNow)
+        return me
+    }
+
+    Now() {
+        if (!(this.impl && this.fnId))
+            appz.OnError(this.impl, "vscode-appz/libs/js#Cancel.Now called before the Cancel was announced to the counterparty.\n")
+        else
+            this.impl.send(new ipcMsg(undefined, undefined, this.fnId))
+    }
+}
+
+export class Disposable {
+    impl: impl
+    id: string
+    subFnId: string
+
+    bind(impl: impl, subFnId: string) {
+        [this.impl, this.subFnId] = [impl, subFnId]
+    }
+
+    populateFrom(payload: any): boolean {
+        const arr = payload as any[]
+        return (arr && arr.length === 2 && arr[0] && (typeof arr[0] === 'string')
+            && ((this.id = arr[0]).length > 0))
+    }
+
+    Dispose() {
+        this.impl.send(new ipcMsg('Dispose', { '': this.id }))
+        if (this.subFnId && this.subFnId.length) {
+            delete this.impl.cbListeners[this.subFnId]
+            this.subFnId = null
+        }
+    }
+}
+
 
 
 type dict = { [_: string]: any }
-
-export let OnError = (_this: vsc.Vscode, err: any, jsonMsg?: any): void => {
-    process.stderr.write("err:\t" + err + "\njson:\t"
-        + ((typeof jsonMsg === 'string') ? jsonMsg : JSON.stringify(jsonMsg))
-        + "\n\n")
-}
 
 export class ipcMsg {
     qName: string
@@ -19,16 +58,10 @@ export class ipcMsg {
     }
 }
 
-export function Vsc(stdIn?: NodeJS.ReadStream, stdOut?: NodeJS.WriteStream): vsc.Vscode {
-    return new impl(stdIn, stdOut)
-}
-
-
-export class impl extends vsc.impl {
+export class impl extends vscgen.impl {
     readln: NodeJS.ReadStream
     jsonOut: NodeJS.WriteStream
     counter: number = 0
-    listening: boolean = false
 
     cbWaiting: { [_: string]: (_: any) => boolean } = {}
     cbListeners: { [_: string]: (_: any[]) => boolean } = {}
@@ -38,6 +71,7 @@ export class impl extends vsc.impl {
         super()
         this.readln = stdIn ? stdIn : process.stdin
         this.jsonOut = stdOut ? stdOut : process.stdout
+        this.setupReadLn()
     }
 
     nextFuncId() {
@@ -53,11 +87,6 @@ export class impl extends vsc.impl {
     }
 
     send(msg: ipcMsg, on?: (_: any) => boolean): void {
-        if (!this.listening) {
-            this.listening = true
-            this.setupReadLn()
-        }
-
         if (on) {
             msg.cbId = this.nextFuncId()
             this.cbWaiting[msg.cbId] = on
@@ -70,14 +99,14 @@ export class impl extends vsc.impl {
         } catch (err) {
             if (msg.qName && msg.qName.length)
                 msg.data[""] = msg.qName
-            OnError(this, err, msg)
+            appz.OnError(this, err, msg)
         }
     }
 
     setupReadLn() {
         let buf: string = ''
         this.readln.setEncoding('utf8')
-        this.readln.on('error', (err: Error) => OnError(this, err))
+        this.readln.on('error', (err: Error) => appz.OnError(this, err))
         this.readln.on('data', (chunk: string) => {
             buf += chunk
             for (let i = buf.indexOf('\n'); i >= 0; i = buf.indexOf('\n')) {
@@ -118,51 +147,9 @@ export class impl extends vsc.impl {
                         } else
                             throw "specified `cbId` not known locally"
                     } catch (err) {
-                        OnError(this, err, jsonmsg)
+                        appz.OnError(this, err, jsonmsg)
                     }
             }
         })
-    }
-}
-
-export class Cancel {
-    impl: impl
-    fnId: string
-
-    static In(msFromNow: number) {
-        const me = new Cancel()
-        setTimeout(() => me.Now(), msFromNow)
-        return me
-    }
-
-    Now() {
-        if (!(this.impl && this.fnId))
-            OnError(this.impl, "vscode-appz/libs/js#Cancel.Now called before the Cancel was announced to the counterparty.\n")
-        else
-            this.impl.send(new ipcMsg(undefined, undefined, this.fnId))
-    }
-}
-
-export class Disposable {
-    impl: impl
-    id: string
-    subFnId: string
-
-    bind(impl: impl, subFnId: string) {
-        [this.impl, this.subFnId] = [impl, subFnId]
-    }
-
-    populateFrom(payload: any): boolean {
-        const arr = payload as any[]
-        return (arr && arr.length === 2 && arr[0] && (typeof arr[0] === 'string')
-            && ((this.id = arr[0]).length > 0))
-    }
-
-    Dispose() {
-        this.impl.send(new ipcMsg('Dispose', { '': this.id }))
-        if (this.subFnId && this.subFnId.length) {
-            delete this.impl.cbListeners[this.subFnId]
-            this.subFnId = null
-        }
     }
 }

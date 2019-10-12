@@ -43,8 +43,10 @@ export class Prog {
             [Date.now(), fullCmd, proc, stdoutPipe, { "": new Canceller() }, onAliveOrDead]
 
         this.stdoutPipe.on('line', this.onRecv())
-        if (this.proc.stderr)
+        if (this.proc.stderr) {
+            this.proc.stderr.setEncoding('utf8')
             this.proc.stderr.on('data', data => this.onIncomingStderrOutput(data))
+        }
         this.proc.on('error', this.onProcErr())
         const ongone = this.onProcEnd()
         this.proc.on('disconnect', ongone)
@@ -343,7 +345,7 @@ export function ensureProg(fullCmd: string) {
                         try { proc.removeAllListeners().kill() } catch (_) { }
 
                 if (!me)
-                    reject(vsc.window.showInformationMessage(uxStr.badProcCmd + fullCmd))
+                    reject(vsc.window.showInformationMessage(uxStr.badProcCmd.replace('_', cmd)))
                 else
                     progs[fullCmd] = me
             })

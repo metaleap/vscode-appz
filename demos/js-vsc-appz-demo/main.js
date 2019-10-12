@@ -1,6 +1,6 @@
-const vscode = require("../../libs/js/basics")
+const vscAppz = require("../../libs/js/vsc-appz")
 
-const vsc = vscode.Vsc()
+const vsc = vscAppz.Vsc()
 const win = vsc.window
 
 main()

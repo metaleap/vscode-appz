@@ -1,10 +1,22 @@
 import * as gen from './gen-basics'
+import * as gen_ast from './gen-ast'
 
-export class Gen extends gen.Gen implements gen.IGen {
+
+export class Gen extends gen_ast.Gen {
 
     gen(prep: gen.Prep) {
-        this.resetState()
-        console.log(`Ts\t${this.outFilePathPref}${prep.fromOrig.moduleName}${this.outFilePathSuff}`)
+        this.options.oneIndent = "\t"
+        this.options.doc.appendArgsToSummaryFor.funcFields = true
+        this.options.doc.appendArgsToSummaryFor.methods = true
+        this.options.funcOverloads = false
+        this.nameRewriters.types.interfaces = _ => this.caseUp(_)
+        super.gen(prep)
+    }
+
+    emitIntro(): Gen {
+        return this
+            .s("import { ipcMsg } from './aux'\n\n")
+            .s("")
     }
 
 }

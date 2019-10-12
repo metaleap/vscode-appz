@@ -7,7 +7,7 @@ const uxStrAppzPref = "[Appz] ";
 exports.uxStr = {
     appzPref: uxStrAppzPref,
     tooLate: uxStrAppzPref + "Too late for that, program already ended. To launch it again: ",
-    badProcCmd: uxStrAppzPref + "Couldn't run this exact command, any typos? ─── ",
+    badProcCmd: uxStrAppzPref + "Could not run `_`, verify that there are no typos in the path or name and that it is executable.",
     menuPrefRun: "RUN: ",
     menuPrefEnd: "END: ",
     menuDescRunningYes: "Already running. Will end and re-start.",

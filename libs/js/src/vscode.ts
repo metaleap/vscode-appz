@@ -1,5 +1,4 @@
-import * as vsc from './basics'
-
+import { ipcMsg } from './aux'
 
 export interface Vscode {
     readonly window: Window
@@ -9,16 +8,6 @@ export interface Window {
     readonly showErrorMessage: (message: string, items: string[], then: (_: string) => void) => void
 }
 
-class implBase {
-    impl: impl
-
-    constructor(impl: impl) { this.impl = impl }
-
-    send(msg: vsc.ipcMsg, on: (_: any) => boolean) {
-        this.impl.send(msg, on)
-    }
-}
-
 export abstract class impl implements Vscode {
     window: Window
 
@@ -26,18 +15,28 @@ export abstract class impl implements Vscode {
         this.window = new implWindow(this)
     }
 
-    abstract send(msg: vsc.ipcMsg, on: (_: any) => boolean): void;
+    abstract send(msg: ipcMsg, on: (_: any) => boolean): void;
 }
 
-export class implWindow extends implBase implements Window {
+class implBase {
+    impl: impl
+
+    constructor(impl: impl) { this.impl = impl }
+
+    send(msg: ipcMsg, on: (_: any) => boolean) {
+        this.impl.send(msg, on)
+    }
+}
+
+class implWindow extends implBase implements Window {
 
     constructor(impl: impl) {
         super(impl)
     }
 
     showErrorMessage(message: string, items: string[], then: (_: string) => void) {
-        let msg: vsc.ipcMsg
-        msg = new vsc.ipcMsg()
+        let msg: ipcMsg
+        msg = new ipcMsg()
         msg.qName = 'window.showErrorMessage1'
         msg.data = {}
         msg.data['message'] = message

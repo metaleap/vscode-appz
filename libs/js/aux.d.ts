@@ -1,20 +1,32 @@
 /// <reference types="node" />
-import * as vsc from './vscode';
+import * as vscgen from './vscode';
+export declare class Cancel {
+    impl: impl;
+    fnId: string;
+    static In(msFromNow: number): Cancel;
+    Now(): void;
+}
+export declare class Disposable {
+    impl: impl;
+    id: string;
+    subFnId: string;
+    bind(impl: impl, subFnId: string): void;
+    populateFrom(payload: any): boolean;
+    Dispose(): void;
+}
 declare type dict = {
     [_: string]: any;
 };
-export declare let OnError: (_this: vsc.Vscode, err: any, jsonMsg?: any) => void;
 export declare class ipcMsg {
     qName: string;
     data: dict;
     cbId: string;
+    constructor(qName?: string, data?: dict, cbId?: string);
 }
-export declare function Vsc(stdIn?: NodeJS.ReadStream, stdOut?: NodeJS.WriteStream): vsc.Vscode;
-export declare class impl extends vsc.impl {
+export declare class impl extends vscgen.impl {
     readln: NodeJS.ReadStream;
     jsonOut: NodeJS.WriteStream;
     counter: number;
-    listening: boolean;
     cbWaiting: {
         [_: string]: (_: any) => boolean;
     };
@@ -26,7 +38,8 @@ export declare class impl extends vsc.impl {
     };
     constructor(stdIn?: NodeJS.ReadStream, stdOut?: NodeJS.WriteStream);
     nextFuncId(): string;
-    send(msg: ipcMsg, on: (_: any) => boolean): void;
+    nextSub(subscriber: (_: any[]) => boolean): string;
+    send(msg: ipcMsg, on?: (_: any) => boolean): void;
     setupReadLn(): void;
 }
 export {};
