@@ -13,6 +13,10 @@ export class ipcMsg {
     qName: string
     data: dict
     cbId: string
+
+    constructor(qName?: string, data?: dict, cbId?: string) {
+        [this.qName, this.data, this.cbId] = [qName, data, cbId]
+    }
 }
 
 export function Vsc(stdIn?: NodeJS.ReadStream, stdOut?: NodeJS.WriteStream): vsc.Vscode {
@@ -42,7 +46,13 @@ export class impl extends vsc.impl {
         ).toString()
     }
 
-    send(msg: ipcMsg, on: (_: any) => boolean): void {
+    nextSub(subscriber: (_: any[]) => boolean) {
+        const fnid = this.nextFuncId()
+        this.cbListeners[fnid] = subscriber
+        return fnid
+    }
+
+    send(msg: ipcMsg, on?: (_: any) => boolean): void {
         if (!this.listening) {
             this.listening = true
             this.setupReadLn()
@@ -86,11 +96,25 @@ export class impl extends vsc.impl {
                             else if (yay === undefined)
                                 throw "field `data` must have either `yay` or `nay` member"
                             else if (!cbprom(yay))
-                                throw `unexpected args: ${yay}`
+                                throw "unexpected args: " + JSON.stringify(yay)
                         } else if (cbevt) {
-
+                            const fnargs = inmsg.data['']
+                            const args = fnargs as any[]
+                            if (args === undefined || args === null
+                                || !cbevt(args)
+                            ) throw "unexpected args: " + JSON.stringify(fnargs)
                         } else if (cbmisc) {
-
+                            const fnargs = inmsg.data['']
+                            const args = fnargs as any[]
+                            let ret: any
+                            let ok = (args !== undefined && args !== null)
+                            if (ok)
+                                [ret, ok] = cbmisc(args)
+                            this.send(new ipcMsg(undefined,
+                                (ok ? { yay: ret }
+                                    : { nay: "unexpected args: " + JSON.stringify(fnargs) }),
+                                inmsg.cbId)
+                            )
                         } else
                             throw "specified `cbId` not known locally"
                     } catch (err) {
@@ -99,5 +123,46 @@ export class impl extends vsc.impl {
             }
         })
     }
+}
 
+export class Cancel {
+    impl: impl
+    fnId: string
+
+    static In(msFromNow: number) {
+        const me = new Cancel()
+        setTimeout(() => me.Now(), msFromNow)
+        return me
+    }
+
+    Now() {
+        if (!(this.impl && this.fnId))
+            OnError(this.impl, "vscode-appz/libs/js#Cancel.Now called before the Cancel was announced to the counterparty.\n")
+        else
+            this.impl.send(new ipcMsg(undefined, undefined, this.fnId))
+    }
+}
+
+export class Disposable {
+    impl: impl
+    id: string
+    subFnId: string
+
+    bind(impl: impl, subFnId: string) {
+        [this.impl, this.subFnId] = [impl, subFnId]
+    }
+
+    populateFrom(payload: any): boolean {
+        const arr = payload as any[]
+        return (arr && arr.length === 2 && arr[0] && (typeof arr[0] === 'string')
+            && ((this.id = arr[0]).length > 0))
+    }
+
+    Dispose() {
+        this.impl.send(new ipcMsg('Dispose', { '': this.id }))
+        if (this.subFnId && this.subFnId.length) {
+            delete this.impl.cbListeners[this.subFnId]
+            this.subFnId = null
+        }
+    }
 }

@@ -126,7 +126,7 @@ func (me *impl) loopReadln() {
 						}
 					}
 					if !ok {
-						OnError(me, errors.New("unexpected args: "+fmt.Sprintf("%v", args)), jsonmsg)
+						OnError(me, fmt.Errorf("unexpected args: %v", fnargs), jsonmsg)
 					}
 				} else if cbmisc != nil {
 					var args []any
@@ -141,7 +141,7 @@ func (me *impl) loopReadln() {
 					if ok {
 						outmsg.Data["yay"] = ret
 					} else {
-						outmsg.Data["nay"] = "unexpected args: " + fmt.Sprintf("%v", args)
+						outmsg.Data["nay"] = fmt.Errorf("unexpected args: %v", fnargs)
 					}
 					me.send(&outmsg, nil)
 
@@ -185,7 +185,7 @@ type Cancel struct {
 // Now signals cancellation to the counterparty.
 func (me *Cancel) Now() {
 	if me.impl == nil || me.fnId == "" {
-		OnError(me.impl, errors.New("vscode-appz/libs/go#Cancel.Now called before the Cancel was sent to the counterparty.\n"+string(debug.Stack())), nil)
+		OnError(me.impl, errors.New("vscode-appz/libs/go#Cancel.Now called before the Cancel was announced to the counterparty.\n"+string(debug.Stack())), nil)
 	} else {
 		me.impl.send(&ipcMsg{CbId: me.fnId}, nil)
 	}

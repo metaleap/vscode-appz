@@ -148,7 +148,7 @@ namespace VscAppz {
         /// <summary>Cancel.Now signals cancellation to the counterparty.</summary>
         public void Now(){
             if (impl == null || string.IsNullOrEmpty(fnId))
-                Vsc.OnError(impl, new Exception("vscode-appz/libs/cs#Cancel.Now called before the Cancel was sent to the counterparty."), null);
+                Vsc.OnError(impl, new Exception("vscode-appz/libs/cs#Cancel.Now called before the Cancel was announced to the counterparty."), null);
             else
                 impl.send(new ipcMsg(){CbId=fnId},null);
         }
