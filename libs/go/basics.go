@@ -46,8 +46,8 @@ type impl struct {
 	looping     bool
 	counter     uint64
 	cbWaiting   map[string]func(any) bool
-	cbOther     map[string]func([]any) (any, bool)
 	cbListeners map[string]func([]any) bool
+	cbOther     map[string]func([]any) (any, bool)
 }
 
 func init() {
@@ -72,8 +72,8 @@ func Vsc(stdIn io.Reader, stdOut io.Writer) Vscode {
 	me.jsonOut.SetEscapeHTML(false)
 	me.jsonOut.SetIndent("", "")
 	me.cbWaiting = make(map[string]func(any) bool, 8)
-	me.cbOther = make(map[string]func([]any) (any, bool), 8)
 	me.cbListeners = make(map[string]func([]any) bool, 8)
+	me.cbOther = make(map[string]func([]any) (any, bool), 8)
 	return me
 }
 
