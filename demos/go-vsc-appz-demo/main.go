@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -234,18 +235,6 @@ func demo_Workspace_Properties() {
 	})
 }
 
-func demo_Commands_GetCommands() {
-	vsc.Commands().GetCommands(false, func(cmds []string) {
-		win.ShowQuickPick2(cmds, &QuickPickOptions{PlaceHolder: strconv.Itoa(len(cmds)) + " is quite a number!"}, nil, quit)
-	})
-}
-
-func demo_Languages_GetLanguages() {
-	vsc.Languages().GetLanguages(func(langs []string) {
-		win.ShowQuickPick2(langs, &QuickPickOptions{PlaceHolder: strconv.Itoa(len(langs)) + " is quite a number!"}, nil, quit)
-	})
-}
-
 func subscribeToMiscEvents() {
 	win.OnDidChangeWindowState(func(evt WindowState) {
 		win.SetStatusBarMessage1("Am I focused? "+strconv.FormatBool(evt.Focused)+".", 4242, nil)
@@ -260,4 +249,11 @@ func subscribeToMiscEvents() {
 
 func statusNoticeQuit() {
 	win.SetStatusBarMessage1("Reacting to the 'bye now' will terminate the prog.", 4242, nil)
+}
+
+func strFmt(s string, args ...interface{}) string {
+	for i := range args {
+		s = strings.Replace(s, "{"+strconv.Itoa(i)+"}", fmt.Sprintf("%v", args[i]), -1)
+	}
+	return s
 }

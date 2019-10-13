@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const node_fs = require("fs");
 const node_util = require("util");
-const gen = require("./gen-basics");
+const gen = require("./gen");
+const gen_demos = require("./gen-syn-demos");
 var TypeRefPrim;
 (function (TypeRefPrim) {
     TypeRefPrim[TypeRefPrim["Any"] = 121] = "Any";
@@ -44,8 +46,9 @@ class Builder {
     eCollNew(capOrLen, arrOrListElemType = undefined, isArr = false) { return { ElemType: arrOrListElemType, Cap: (arrOrListElemType && isArr) ? undefined : capOrLen, Len: (arrOrListElemType && isArr) ? capOrLen : undefined }; }
     eFunc(args, retType, ...instrs) { return { Args: args, Type: retType, Body: { Instrs: instrs } }; }
     eCall(callee, ...args) { return { Call: callee, Args: args }; }
+    eProp(callee, ...args) { return { Call: callee, Args: args, Prop: true }; }
     n(name) { return { Name: name }; }
-    eLit(litVal) { return { Lit: litVal }; }
+    eLit(litVal, ...fmtArgs) { return { Lit: litVal, FmtArgs: fmtArgs }; }
     eZilch() { return this.eLit(null); }
     eThis() { return this.n(null); }
     eOp(op, ...args) { return { Name: op, Operands: args }; }
@@ -266,14 +269,16 @@ class Builder {
 }
 exports.Builder = Builder;
 class Gen extends gen.Gen {
-    constructor() {
-        super(...arguments);
+    constructor(outFilePath, demoOutFilePath = "") {
+        super(outFilePath);
         this.src = '';
         this.indents = 0;
         this.b = null;
         this.allEnums = null;
         this.allInterfaces = null;
         this.allStructs = null;
+        this.isDemos = false;
+        this.opDepth = 0;
         this.nameRewriters = {
             args: this.caseLo,
             fields: this.caseUp,
@@ -298,7 +303,10 @@ class Gen extends gen.Gen {
             unMaybeOutgoingTypes: [TypeRefPrim.String],
             oneIndent: '    ',
             funcOverloads: false,
+            haveProps: true,
+            demoOutFilePath: ""
         };
+        this.options.demoOutFilePath = demoOutFilePath;
     }
     indented(then) {
         this.indents++;
@@ -306,12 +314,12 @@ class Gen extends gen.Gen {
         this.indents--;
         return this;
     }
-    indent() {
-        this.indents++;
+    indent(n = 1) {
+        this.indents += n;
         return this;
     }
-    undent() {
-        this.indents--;
+    undent(n = 1) {
+        this.indents -= n;
         return this;
     }
     ln(then) {
@@ -515,15 +523,18 @@ class Gen extends gen.Gen {
             return this.s('[').each(etup.Items, ', ', _ => { this.emitExpr(_); }).s(']');
         const ecall = it;
         if (ecall && ecall.Call)
-            return this.emitExpr(ecall.Call).s("(").emitExprs(", ", ...ecall.Args).s(")");
+            return (ecall.Prop && this.options.haveProps && !(ecall.Args && ecall.Args.length))
+                ? this.emitExpr(ecall.Call)
+                : this.emitExpr(ecall.Call).s("(").emitExprs(", ", ...ecall.Args).s(")");
         const eop = it;
         if (eop && eop.Name && eop.Operands && eop.Operands.length) {
+            this.opDepth++;
             const notactualoperator = (eop.Name === BuilderOperators.Idx || eop.Name === BuilderOperators.IdxMay || eop.Name === BuilderOperators.Dot);
-            return this
-                .s((notactualoperator ? '' : '(')
-                + ((eop.Operands.length > 1) ? '' : /* unary*/ eop.Name))
+            this.s(((this.opDepth === 1 || notactualoperator) ? '' : '(') + ((eop.Operands.length > 1) ? '' : /* unary*/ eop.Name))
                 .emitExprs(notactualoperator ? eop.Name : (' ' + eop.Name + ' '), ...eop.Operands)
-                .s(notactualoperator ? '' : ')');
+                .s((this.opDepth === 1 || notactualoperator) ? '' : ')');
+            this.opDepth--;
+            return this;
         }
         const efn = it;
         if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
@@ -610,7 +621,7 @@ class Gen extends gen.Gen {
         if (!(tstruct && tstruct.Fields))
             throw struct;
         for (const fld of tstruct.Fields)
-            if (!fld.Json.Excluded) {
+            if (fld.Json && !fld.Json.Excluded) {
                 const tfld = this.typeRefForField(fld.Type, fld.fromPrep && fld.fromPrep.optional);
                 body.push(_.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdxMay(_.n('it'), _.eLit(fld.Json.Name))), _.iIf(_.n('ok'), [
                     _.iVar(fld.name, tfld),
@@ -726,8 +737,11 @@ class Gen extends gen.Gen {
     emitOutro() {
         return this.lines("# override `emitOutro` for this trailing part..");
     }
+    onBeforeEmitImpls(_structs) { }
+    onAfterEmitImpls(_structs) { }
     gen(prep) {
         this.resetState();
+        this.isDemos = false;
         const build = (this.b = new Builder(prep, this));
         const ifacetop = {
             name: prep.fromOrig.moduleName,
@@ -820,9 +834,16 @@ class Gen extends gen.Gen {
         this.onAfterEmitImpls(true);
         this.emitOutro();
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src);
+        if (this.options.demoOutFilePath && this.options.demoOutFilePath.length)
+            this.genDemos();
     }
-    onBeforeEmitImpls(_structs) { }
-    onAfterEmitImpls(_structs) { }
+    genDemos() {
+        this.isDemos = true;
+        this.src = "";
+        this.resetState();
+        new gen_demos.GenDemos(this, this.b).genDemos();
+        node_fs.writeFileSync(this.options.demoOutFilePath, this.src);
+    }
     typeUnMaybe(it) {
         const me = this.typeMaybe(it);
         return me ? this.typeUnMaybe(me.Maybe) : it;

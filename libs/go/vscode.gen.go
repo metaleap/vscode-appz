@@ -956,10 +956,10 @@ func (me implWindow) ShowInformationMessage1(message string, items []string, the
 			if (nil != payload) {
 				var _result_ string
 				_result_, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
-				result = (&_result_)
+				result = &_result_
 			}
 			then(result)
 			return true
@@ -984,10 +984,10 @@ func (me implWindow) ShowInformationMessage2(message string, options MessageOpti
 			if (nil != payload) {
 				var _result_ string
 				_result_, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
-				result = (&_result_)
+				result = &_result_
 			}
 			then(result)
 			return true
@@ -1011,7 +1011,7 @@ func (me implWindow) ShowInformationMessage3(message string, items []MessageItem
 			if (nil != payload) {
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -1038,7 +1038,7 @@ func (me implWindow) ShowInformationMessage4(message string, options MessageOpti
 			if (nil != payload) {
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -1064,10 +1064,10 @@ func (me implWindow) ShowWarningMessage1(message string, items []string, then fu
 			if (nil != payload) {
 				var _result_ string
 				_result_, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
-				result = (&_result_)
+				result = &_result_
 			}
 			then(result)
 			return true
@@ -1092,10 +1092,10 @@ func (me implWindow) ShowWarningMessage2(message string, options MessageOptions,
 			if (nil != payload) {
 				var _result_ string
 				_result_, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
-				result = (&_result_)
+				result = &_result_
 			}
 			then(result)
 			return true
@@ -1119,7 +1119,7 @@ func (me implWindow) ShowWarningMessage3(message string, items []MessageItem, th
 			if (nil != payload) {
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -1146,7 +1146,7 @@ func (me implWindow) ShowWarningMessage4(message string, options MessageOptions,
 			if (nil != payload) {
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -1172,10 +1172,10 @@ func (me implWindow) ShowErrorMessage1(message string, items []string, then func
 			if (nil != payload) {
 				var _result_ string
 				_result_, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
-				result = (&_result_)
+				result = &_result_
 			}
 			then(result)
 			return true
@@ -1200,10 +1200,10 @@ func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, i
 			if (nil != payload) {
 				var _result_ string
 				_result_, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
-				result = (&_result_)
+				result = &_result_
 			}
 			then(result)
 			return true
@@ -1227,7 +1227,7 @@ func (me implWindow) ShowErrorMessage3(message string, items []MessageItem, then
 			if (nil != payload) {
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -1254,7 +1254,7 @@ func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, i
 			if (nil != payload) {
 				result = new(MessageItem)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -1285,14 +1285,14 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel, then 
 				__options__.ValidateInput_AppzFuncId = me.Impl().nextFuncId()
 				fnids = append(fnids, __options__.ValidateInput_AppzFuncId)
 				me.Impl().cbOther[__options__.ValidateInput_AppzFuncId] = func(args []any) (any, bool) {
-					if (1 != len(args)) {
+					if 1 != len(args) {
 						return nil, false
 					} else {
 						var ok bool
 						var __0 string
 						if (nil != args[0]) {
 							__0, ok = args[0].(string)
-							if (!ok) {
+							if !ok {
 								return nil, false
 							}
 						}
@@ -1306,7 +1306,7 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel, then 
 	msg.Data["options"] = __options__
 	if (nil != token) {
 		token.impl = me.Impl()
-		if ("" == token.fnId) {
+		if "" == token.fnId {
 			me.Lock()
 			{
 				token.fnId = me.Impl().nextFuncId()
@@ -1323,17 +1323,17 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel, then 
 			if (nil != payload) {
 				var _result_ string
 				_result_, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
-				result = (&_result_)
+				result = &_result_
 			}
 			then(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, func(payload any) bool {
-		if (len(fnids) != 0) {
+		if len(fnids) != 0 {
 			me.Lock()
 			{
 				for _, fnid := range fnids {
@@ -1342,7 +1342,7 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel, then 
 			}
 			me.Unlock()
 		}
-		return ((nil == on) || on(payload))
+		return (nil == on) || on(payload)
 	})
 }
 
@@ -1356,7 +1356,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 	fnids = make([]string, 0, 1)
 	if true {
 		__options__ = new(_QuickPickOptions)
-		__options__.QuickPickOptions = (&options)
+		__options__.QuickPickOptions = &options
 		__options__.OnDidSelectItem_AppzFuncId = ""
 		var fn func(QuickPickItem) any
 		fn = __options__.OnDidSelectItem
@@ -1366,7 +1366,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 				__options__.OnDidSelectItem_AppzFuncId = me.Impl().nextFuncId()
 				fnids = append(fnids, __options__.OnDidSelectItem_AppzFuncId)
 				me.Impl().cbOther[__options__.OnDidSelectItem_AppzFuncId] = func(args []any) (any, bool) {
-					if (1 != len(args)) {
+					if 1 != len(args) {
 						return nil, false
 					} else {
 						var ok bool
@@ -1374,7 +1374,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 						if (nil != args[0]) {
 							__0 = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
 							ok = __0.populateFrom(args[0])
-							if (!ok) {
+							if !ok {
 								return nil, false
 							}
 						} else {
@@ -1392,7 +1392,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 	msg.Data["options"] = __options__
 	if (nil != token) {
 		token.impl = me.Impl()
-		if ("" == token.fnId) {
+		if "" == token.fnId {
 			me.Lock()
 			{
 				token.fnId = me.Impl().nextFuncId()
@@ -1409,7 +1409,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 			if (nil != payload) {
 				var __coll__result []any
 				__coll__result, ok = payload.([]any)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 				result = make([]string, len(__coll__result))
@@ -1418,11 +1418,11 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 				for _, __item__result := range __coll__result {
 					var __val__result string
 					__val__result, ok = __item__result.(string)
-					if (!ok) {
+					if !ok {
 						return false
 					}
 					result[__idx__result] = __val__result
-					__idx__result = (__idx__result + 1)
+					__idx__result = __idx__result + 1
 				}
 			}
 			then(result)
@@ -1430,7 +1430,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 		}
 	}
 	me.Impl().send(msg, func(payload any) bool {
-		if (len(fnids) != 0) {
+		if len(fnids) != 0 {
 			me.Lock()
 			{
 				for _, fnid := range fnids {
@@ -1439,7 +1439,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 			}
 			me.Unlock()
 		}
-		return ((nil == on) || on(payload))
+		return (nil == on) || on(payload)
 	})
 }
 
@@ -1463,7 +1463,7 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 				__options__.OnDidSelectItem_AppzFuncId = me.Impl().nextFuncId()
 				fnids = append(fnids, __options__.OnDidSelectItem_AppzFuncId)
 				me.Impl().cbOther[__options__.OnDidSelectItem_AppzFuncId] = func(args []any) (any, bool) {
-					if (1 != len(args)) {
+					if 1 != len(args) {
 						return nil, false
 					} else {
 						var ok bool
@@ -1471,7 +1471,7 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 						if (nil != args[0]) {
 							__0 = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
 							ok = __0.populateFrom(args[0])
-							if (!ok) {
+							if !ok {
 								return nil, false
 							}
 						} else {
@@ -1488,7 +1488,7 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 	msg.Data["options"] = __options__
 	if (nil != token) {
 		token.impl = me.Impl()
-		if ("" == token.fnId) {
+		if "" == token.fnId {
 			me.Lock()
 			{
 				token.fnId = me.Impl().nextFuncId()
@@ -1505,17 +1505,17 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 			if (nil != payload) {
 				var _result_ string
 				_result_, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
-				result = (&_result_)
+				result = &_result_
 			}
 			then(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, func(payload any) bool {
-		if (len(fnids) != 0) {
+		if len(fnids) != 0 {
 			me.Lock()
 			{
 				for _, fnid := range fnids {
@@ -1524,7 +1524,7 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 			}
 			me.Unlock()
 		}
-		return ((nil == on) || on(payload))
+		return (nil == on) || on(payload)
 	})
 }
 
@@ -1538,7 +1538,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 	fnids = make([]string, 0, 1)
 	if true {
 		__options__ = new(_QuickPickOptions)
-		__options__.QuickPickOptions = (&options)
+		__options__.QuickPickOptions = &options
 		__options__.OnDidSelectItem_AppzFuncId = ""
 		var fn func(QuickPickItem) any
 		fn = __options__.OnDidSelectItem
@@ -1548,7 +1548,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 				__options__.OnDidSelectItem_AppzFuncId = me.Impl().nextFuncId()
 				fnids = append(fnids, __options__.OnDidSelectItem_AppzFuncId)
 				me.Impl().cbOther[__options__.OnDidSelectItem_AppzFuncId] = func(args []any) (any, bool) {
-					if (1 != len(args)) {
+					if 1 != len(args) {
 						return nil, false
 					} else {
 						var ok bool
@@ -1556,7 +1556,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 						if (nil != args[0]) {
 							__0 = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
 							ok = __0.populateFrom(args[0])
-							if (!ok) {
+							if !ok {
 								return nil, false
 							}
 						} else {
@@ -1574,7 +1574,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 	msg.Data["options"] = __options__
 	if (nil != token) {
 		token.impl = me.Impl()
-		if ("" == token.fnId) {
+		if "" == token.fnId {
 			me.Lock()
 			{
 				token.fnId = me.Impl().nextFuncId()
@@ -1591,7 +1591,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 			if (nil != payload) {
 				var __coll__result []any
 				__coll__result, ok = payload.([]any)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 				result = make([]QuickPickItem, len(__coll__result))
@@ -1601,11 +1601,11 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 					var __val__result QuickPickItem
 					__val__result = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
 					ok = __val__result.populateFrom(__item__result)
-					if (!ok) {
+					if !ok {
 						return false
 					}
 					result[__idx__result] = __val__result
-					__idx__result = (__idx__result + 1)
+					__idx__result = __idx__result + 1
 				}
 			}
 			then(result)
@@ -1613,7 +1613,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 		}
 	}
 	me.Impl().send(msg, func(payload any) bool {
-		if (len(fnids) != 0) {
+		if len(fnids) != 0 {
 			me.Lock()
 			{
 				for _, fnid := range fnids {
@@ -1622,7 +1622,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 			}
 			me.Unlock()
 		}
-		return ((nil == on) || on(payload))
+		return (nil == on) || on(payload)
 	})
 }
 
@@ -1646,7 +1646,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 				__options__.OnDidSelectItem_AppzFuncId = me.Impl().nextFuncId()
 				fnids = append(fnids, __options__.OnDidSelectItem_AppzFuncId)
 				me.Impl().cbOther[__options__.OnDidSelectItem_AppzFuncId] = func(args []any) (any, bool) {
-					if (1 != len(args)) {
+					if 1 != len(args) {
 						return nil, false
 					} else {
 						var ok bool
@@ -1654,7 +1654,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 						if (nil != args[0]) {
 							__0 = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
 							ok = __0.populateFrom(args[0])
-							if (!ok) {
+							if !ok {
 								return nil, false
 							}
 						} else {
@@ -1671,7 +1671,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 	msg.Data["options"] = __options__
 	if (nil != token) {
 		token.impl = me.Impl()
-		if ("" == token.fnId) {
+		if "" == token.fnId {
 			me.Lock()
 			{
 				token.fnId = me.Impl().nextFuncId()
@@ -1688,7 +1688,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 			if (nil != payload) {
 				result = new(QuickPickItem)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -1697,7 +1697,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 		}
 	}
 	me.Impl().send(msg, func(payload any) bool {
-		if (len(fnids) != 0) {
+		if len(fnids) != 0 {
 			me.Lock()
 			{
 				for _, fnid := range fnids {
@@ -1706,7 +1706,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 			}
 			me.Unlock()
 		}
-		return ((nil == on) || on(payload))
+		return (nil == on) || on(payload)
 	})
 }
 
@@ -1725,7 +1725,7 @@ func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int, the
 			if (nil != payload) {
 				result = new(Disposable)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			} else {
@@ -1752,7 +1752,7 @@ func (me implWindow) SetStatusBarMessage2(text string, then func(*Disposable)) {
 			if (nil != payload) {
 				result = new(Disposable)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			} else {
@@ -1779,10 +1779,10 @@ func (me implWindow) ShowSaveDialog(options SaveDialogOptions, then func(*string
 			if (nil != payload) {
 				var _result_ string
 				_result_, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
-				result = (&_result_)
+				result = &_result_
 			}
 			then(result)
 			return true
@@ -1805,7 +1805,7 @@ func (me implWindow) ShowOpenDialog(options OpenDialogOptions, then func([]strin
 			if (nil != payload) {
 				var __coll__result []any
 				__coll__result, ok = payload.([]any)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 				result = make([]string, len(__coll__result))
@@ -1814,11 +1814,11 @@ func (me implWindow) ShowOpenDialog(options OpenDialogOptions, then func([]strin
 				for _, __item__result := range __coll__result {
 					var __val__result string
 					__val__result, ok = __item__result.(string)
-					if (!ok) {
+					if !ok {
 						return false
 					}
 					result[__idx__result] = __val__result
-					__idx__result = (__idx__result + 1)
+					__idx__result = __idx__result + 1
 				}
 			}
 			then(result)
@@ -1842,7 +1842,7 @@ func (me implWindow) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions
 			if (nil != payload) {
 				result = new(WorkspaceFolder)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -1866,7 +1866,7 @@ func (me implWindow) State(then func(WindowState)) {
 			if (nil != payload) {
 				result = */*sorryButSuchIsCodeGenSometimes...*/new(WindowState)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -1889,13 +1889,13 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState), then fun
 	}
 	_fnid_listener = me.Impl().nextSub(func(args []any) bool {
 		var ok bool
-		if (1 != len(args)) {
+		if 1 != len(args) {
 			return ok
 		}
 		var _a_0_ WindowState
 		_a_0_ = */*sorryButSuchIsCodeGenSometimes...*/new(WindowState)
 		ok = _a_0_.populateFrom(args[0])
-		if (!ok) {
+		if !ok {
 			return false
 		}
 		listener(_a_0_)
@@ -1910,7 +1910,7 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState), then fun
 			if (nil != payload) {
 				result = new(Disposable)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			} else {
@@ -1936,7 +1936,7 @@ func (me implEnv) OpenExternal(target string, then func(bool)) {
 			var result bool
 			if (nil != payload) {
 				result, ok = payload.(bool)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			} else {
@@ -1961,7 +1961,7 @@ func (me implEnv) AppName(then func(string)) {
 			var result string
 			if (nil != payload) {
 				result, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -1984,7 +1984,7 @@ func (me implEnv) AppRoot(then func(string)) {
 			var result string
 			if (nil != payload) {
 				result, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -2007,7 +2007,7 @@ func (me implEnv) Language(then func(string)) {
 			var result string
 			if (nil != payload) {
 				result, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -2030,7 +2030,7 @@ func (me implEnv) MachineId(then func(string)) {
 			var result string
 			if (nil != payload) {
 				result, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -2054,10 +2054,10 @@ func (me implEnv) RemoteName(then func(*string)) {
 			if (nil != payload) {
 				var _result_ string
 				_result_, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
-				result = (&_result_)
+				result = &_result_
 			}
 			then(result)
 			return true
@@ -2078,7 +2078,7 @@ func (me implEnv) SessionId(then func(string)) {
 			var result string
 			if (nil != payload) {
 				result, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -2101,7 +2101,7 @@ func (me implEnv) Shell(then func(string)) {
 			var result string
 			if (nil != payload) {
 				result, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -2124,7 +2124,7 @@ func (me implEnv) UriScheme(then func(string)) {
 			var result string
 			if (nil != payload) {
 				result, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -2148,7 +2148,7 @@ func (me implEnv) Properties(then func(EnvProperties)) {
 			if (nil != payload) {
 				result = */*sorryButSuchIsCodeGenSometimes...*/new(EnvProperties)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			} else {
@@ -2174,10 +2174,10 @@ func (me implWorkspace) Name(then func(*string)) {
 			if (nil != payload) {
 				var _result_ string
 				_result_, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
-				result = (&_result_)
+				result = &_result_
 			}
 			then(result)
 			return true
@@ -2199,10 +2199,10 @@ func (me implWorkspace) WorkspaceFile(then func(*string)) {
 			if (nil != payload) {
 				var _result_ string
 				_result_, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
-				result = (&_result_)
+				result = &_result_
 			}
 			then(result)
 			return true
@@ -2224,7 +2224,7 @@ func (me implWorkspace) SaveAll(includeUntitled bool, then func(bool)) {
 			var result bool
 			if (nil != payload) {
 				result, ok = payload.(bool)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			} else {
@@ -2249,13 +2249,13 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 	}
 	_fnid_listener = me.Impl().nextSub(func(args []any) bool {
 		var ok bool
-		if (1 != len(args)) {
+		if 1 != len(args) {
 			return ok
 		}
 		var _a_0_ WorkspaceFoldersChangeEvent
 		_a_0_ = */*sorryButSuchIsCodeGenSometimes...*/new(WorkspaceFoldersChangeEvent)
 		ok = _a_0_.populateFrom(args[0])
-		if (!ok) {
+		if !ok {
 			return false
 		}
 		listener(_a_0_)
@@ -2270,7 +2270,7 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 			if (nil != payload) {
 				result = new(Disposable)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			} else {
@@ -2297,7 +2297,7 @@ func (me implWorkspace) GetWorkspaceFolder(uri string, then func(*WorkspaceFolde
 			if (nil != payload) {
 				result = new(WorkspaceFolder)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			}
@@ -2321,7 +2321,7 @@ func (me implWorkspace) WorkspaceFolders(then func([]WorkspaceFolder)) {
 			if (nil != payload) {
 				var __coll__result []any
 				__coll__result, ok = payload.([]any)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 				result = make([]WorkspaceFolder, len(__coll__result))
@@ -2331,11 +2331,11 @@ func (me implWorkspace) WorkspaceFolders(then func([]WorkspaceFolder)) {
 					var __val__result WorkspaceFolder
 					__val__result = */*sorryButSuchIsCodeGenSometimes...*/new(WorkspaceFolder)
 					ok = __val__result.populateFrom(__item__result)
-					if (!ok) {
+					if !ok {
 						return false
 					}
 					result[__idx__result] = __val__result
-					__idx__result = (__idx__result + 1)
+					__idx__result = __idx__result + 1
 				}
 			}
 			then(result)
@@ -2355,7 +2355,7 @@ func (me implWorkspace) FindFiles(include string, exclude *string, maxResults *i
 	msg.Data["maxResults"] = maxResults
 	if (nil != token) {
 		token.impl = me.Impl()
-		if ("" == token.fnId) {
+		if "" == token.fnId {
 			me.Lock()
 			{
 				token.fnId = me.Impl().nextFuncId()
@@ -2372,7 +2372,7 @@ func (me implWorkspace) FindFiles(include string, exclude *string, maxResults *i
 			if (nil != payload) {
 				var __coll__result []any
 				__coll__result, ok = payload.([]any)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 				result = make([]string, len(__coll__result))
@@ -2381,11 +2381,11 @@ func (me implWorkspace) FindFiles(include string, exclude *string, maxResults *i
 				for _, __item__result := range __coll__result {
 					var __val__result string
 					__val__result, ok = __item__result.(string)
-					if (!ok) {
+					if !ok {
 						return false
 					}
 					result[__idx__result] = __val__result
-					__idx__result = (__idx__result + 1)
+					__idx__result = __idx__result + 1
 				}
 			}
 			then(result)
@@ -2410,10 +2410,10 @@ func (me implWorkspace) AsRelativePath(pathOrUri string, includeWorkspaceFolder 
 			if (nil != payload) {
 				var _result_ string
 				_result_, ok = payload.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
-				result = (&_result_)
+				result = &_result_
 			}
 			then(result)
 			return true
@@ -2435,7 +2435,7 @@ func (me implWorkspace) Properties(then func(WorkspaceProperties)) {
 			if (nil != payload) {
 				result = */*sorryButSuchIsCodeGenSometimes...*/new(WorkspaceProperties)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			} else {
@@ -2461,7 +2461,7 @@ func (me implLanguages) GetLanguages(then func([]string)) {
 			if (nil != payload) {
 				var __coll__result []any
 				__coll__result, ok = payload.([]any)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 				result = make([]string, len(__coll__result))
@@ -2470,11 +2470,11 @@ func (me implLanguages) GetLanguages(then func([]string)) {
 				for _, __item__result := range __coll__result {
 					var __val__result string
 					__val__result, ok = __item__result.(string)
-					if (!ok) {
+					if !ok {
 						return false
 					}
 					result[__idx__result] = __val__result
-					__idx__result = (__idx__result + 1)
+					__idx__result = __idx__result + 1
 				}
 			}
 			then(result)
@@ -2496,13 +2496,13 @@ func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEve
 	}
 	_fnid_listener = me.Impl().nextSub(func(args []any) bool {
 		var ok bool
-		if (1 != len(args)) {
+		if 1 != len(args) {
 			return ok
 		}
 		var _a_0_ DiagnosticChangeEvent
 		_a_0_ = */*sorryButSuchIsCodeGenSometimes...*/new(DiagnosticChangeEvent)
 		ok = _a_0_.populateFrom(args[0])
-		if (!ok) {
+		if !ok {
 			return false
 		}
 		listener(_a_0_)
@@ -2517,7 +2517,7 @@ func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEve
 			if (nil != payload) {
 				result = new(Disposable)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			} else {
@@ -2542,7 +2542,7 @@ func (me implExtensions) OnDidChange(listener func(), then func(*Disposable)) {
 	}
 	_fnid_listener = me.Impl().nextSub(func(args []any) bool {
 		var ok bool
-		if (0 != len(args)) {
+		if 0 != len(args) {
 			return ok
 		}
 		listener()
@@ -2557,7 +2557,7 @@ func (me implExtensions) OnDidChange(listener func(), then func(*Disposable)) {
 			if (nil != payload) {
 				result = new(Disposable)
 				ok = result.populateFrom(payload)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 			} else {
@@ -2584,7 +2584,7 @@ func (me implCommands) GetCommands(filterInternal bool, then func([]string)) {
 			if (nil != payload) {
 				var __coll__result []any
 				__coll__result, ok = payload.([]any)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 				result = make([]string, len(__coll__result))
@@ -2593,11 +2593,11 @@ func (me implCommands) GetCommands(filterInternal bool, then func([]string)) {
 				for _, __item__result := range __coll__result {
 					var __val__result string
 					__val__result, ok = __item__result.(string)
-					if (!ok) {
+					if !ok {
 						return false
 					}
 					result[__idx__result] = __val__result
-					__idx__result = (__idx__result + 1)
+					__idx__result = __idx__result + 1
 				}
 			}
 			then(result)
@@ -2612,7 +2612,7 @@ func (me *MessageItem) populateFrom(payload any) bool {
 	var ok bool
 	var val any
 	it, ok = payload.(dict)
-	if (!ok) {
+	if !ok {
 		return false
 	}
 	val, ok = it["title"]
@@ -2620,7 +2620,7 @@ func (me *MessageItem) populateFrom(payload any) bool {
 		var title string
 		if (nil != val) {
 			title, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2633,7 +2633,7 @@ func (me *MessageItem) populateFrom(payload any) bool {
 		var isCloseAffordance bool
 		if (nil != val) {
 			isCloseAffordance, ok = val.(bool)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2644,7 +2644,7 @@ func (me *MessageItem) populateFrom(payload any) bool {
 		var my dict
 		if (nil != val) {
 			my, ok = val.(dict)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2658,7 +2658,7 @@ func (me *QuickPickItem) populateFrom(payload any) bool {
 	var ok bool
 	var val any
 	it, ok = payload.(dict)
-	if (!ok) {
+	if !ok {
 		return false
 	}
 	val, ok = it["label"]
@@ -2666,7 +2666,7 @@ func (me *QuickPickItem) populateFrom(payload any) bool {
 		var label string
 		if (nil != val) {
 			label, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2679,7 +2679,7 @@ func (me *QuickPickItem) populateFrom(payload any) bool {
 		var description string
 		if (nil != val) {
 			description, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2690,7 +2690,7 @@ func (me *QuickPickItem) populateFrom(payload any) bool {
 		var detail string
 		if (nil != val) {
 			detail, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2701,7 +2701,7 @@ func (me *QuickPickItem) populateFrom(payload any) bool {
 		var picked bool
 		if (nil != val) {
 			picked, ok = val.(bool)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2712,7 +2712,7 @@ func (me *QuickPickItem) populateFrom(payload any) bool {
 		var alwaysShow bool
 		if (nil != val) {
 			alwaysShow, ok = val.(bool)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2723,7 +2723,7 @@ func (me *QuickPickItem) populateFrom(payload any) bool {
 		var my dict
 		if (nil != val) {
 			my, ok = val.(dict)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2737,7 +2737,7 @@ func (me *WorkspaceFolder) populateFrom(payload any) bool {
 	var ok bool
 	var val any
 	it, ok = payload.(dict)
-	if (!ok) {
+	if !ok {
 		return false
 	}
 	val, ok = it["uri"]
@@ -2745,7 +2745,7 @@ func (me *WorkspaceFolder) populateFrom(payload any) bool {
 		var uri string
 		if (nil != val) {
 			uri, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2758,7 +2758,7 @@ func (me *WorkspaceFolder) populateFrom(payload any) bool {
 		var name string
 		if (nil != val) {
 			name, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2771,10 +2771,10 @@ func (me *WorkspaceFolder) populateFrom(payload any) bool {
 		var index int
 		if (nil != val) {
 			index, ok = val.(int)
-			if (!ok) {
+			if !ok {
 				var __index__ float64
 				__index__, ok = val.(float64)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 				index = int(__index__)
@@ -2792,7 +2792,7 @@ func (me *WindowState) populateFrom(payload any) bool {
 	var ok bool
 	var val any
 	it, ok = payload.(dict)
-	if (!ok) {
+	if !ok {
 		return false
 	}
 	val, ok = it["focused"]
@@ -2800,7 +2800,7 @@ func (me *WindowState) populateFrom(payload any) bool {
 		var focused bool
 		if (nil != val) {
 			focused, ok = val.(bool)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2816,7 +2816,7 @@ func (me *EnvProperties) populateFrom(payload any) bool {
 	var ok bool
 	var val any
 	it, ok = payload.(dict)
-	if (!ok) {
+	if !ok {
 		return false
 	}
 	val, ok = it["appName"]
@@ -2824,7 +2824,7 @@ func (me *EnvProperties) populateFrom(payload any) bool {
 		var appName string
 		if (nil != val) {
 			appName, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2835,7 +2835,7 @@ func (me *EnvProperties) populateFrom(payload any) bool {
 		var appRoot string
 		if (nil != val) {
 			appRoot, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2846,7 +2846,7 @@ func (me *EnvProperties) populateFrom(payload any) bool {
 		var language string
 		if (nil != val) {
 			language, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2857,7 +2857,7 @@ func (me *EnvProperties) populateFrom(payload any) bool {
 		var machineId string
 		if (nil != val) {
 			machineId, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2868,7 +2868,7 @@ func (me *EnvProperties) populateFrom(payload any) bool {
 		var remoteName string
 		if (nil != val) {
 			remoteName, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2879,7 +2879,7 @@ func (me *EnvProperties) populateFrom(payload any) bool {
 		var sessionId string
 		if (nil != val) {
 			sessionId, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2890,7 +2890,7 @@ func (me *EnvProperties) populateFrom(payload any) bool {
 		var shell string
 		if (nil != val) {
 			shell, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2901,7 +2901,7 @@ func (me *EnvProperties) populateFrom(payload any) bool {
 		var uriScheme string
 		if (nil != val) {
 			uriScheme, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2915,7 +2915,7 @@ func (me *WorkspaceFoldersChangeEvent) populateFrom(payload any) bool {
 	var ok bool
 	var val any
 	it, ok = payload.(dict)
-	if (!ok) {
+	if !ok {
 		return false
 	}
 	val, ok = it["added"]
@@ -2924,7 +2924,7 @@ func (me *WorkspaceFoldersChangeEvent) populateFrom(payload any) bool {
 		if (nil != val) {
 			var __coll__added []any
 			__coll__added, ok = val.([]any)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 			added = make([]WorkspaceFolder, len(__coll__added))
@@ -2934,11 +2934,11 @@ func (me *WorkspaceFoldersChangeEvent) populateFrom(payload any) bool {
 				var __val__added WorkspaceFolder
 				__val__added = */*sorryButSuchIsCodeGenSometimes...*/new(WorkspaceFolder)
 				ok = __val__added.populateFrom(__item__added)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 				added[__idx__added] = __val__added
-				__idx__added = (__idx__added + 1)
+				__idx__added = __idx__added + 1
 			}
 		}
 		me.Added = added
@@ -2951,7 +2951,7 @@ func (me *WorkspaceFoldersChangeEvent) populateFrom(payload any) bool {
 		if (nil != val) {
 			var __coll__removed []any
 			__coll__removed, ok = val.([]any)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 			removed = make([]WorkspaceFolder, len(__coll__removed))
@@ -2961,11 +2961,11 @@ func (me *WorkspaceFoldersChangeEvent) populateFrom(payload any) bool {
 				var __val__removed WorkspaceFolder
 				__val__removed = */*sorryButSuchIsCodeGenSometimes...*/new(WorkspaceFolder)
 				ok = __val__removed.populateFrom(__item__removed)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 				removed[__idx__removed] = __val__removed
-				__idx__removed = (__idx__removed + 1)
+				__idx__removed = __idx__removed + 1
 			}
 		}
 		me.Removed = removed
@@ -2980,7 +2980,7 @@ func (me *WorkspaceProperties) populateFrom(payload any) bool {
 	var ok bool
 	var val any
 	it, ok = payload.(dict)
-	if (!ok) {
+	if !ok {
 		return false
 	}
 	val, ok = it["name"]
@@ -2988,7 +2988,7 @@ func (me *WorkspaceProperties) populateFrom(payload any) bool {
 		var name string
 		if (nil != val) {
 			name, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -2999,7 +2999,7 @@ func (me *WorkspaceProperties) populateFrom(payload any) bool {
 		var workspaceFile string
 		if (nil != val) {
 			workspaceFile, ok = val.(string)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 		}
@@ -3011,7 +3011,7 @@ func (me *WorkspaceProperties) populateFrom(payload any) bool {
 		if (nil != val) {
 			var __coll__workspaceFolders []any
 			__coll__workspaceFolders, ok = val.([]any)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 			workspaceFolders = make([]WorkspaceFolder, len(__coll__workspaceFolders))
@@ -3021,11 +3021,11 @@ func (me *WorkspaceProperties) populateFrom(payload any) bool {
 				var __val__workspaceFolders WorkspaceFolder
 				__val__workspaceFolders = */*sorryButSuchIsCodeGenSometimes...*/new(WorkspaceFolder)
 				ok = __val__workspaceFolders.populateFrom(__item__workspaceFolders)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 				workspaceFolders[__idx__workspaceFolders] = __val__workspaceFolders
-				__idx__workspaceFolders = (__idx__workspaceFolders + 1)
+				__idx__workspaceFolders = __idx__workspaceFolders + 1
 			}
 		}
 		me.WorkspaceFolders = workspaceFolders
@@ -3038,7 +3038,7 @@ func (me *DiagnosticChangeEvent) populateFrom(payload any) bool {
 	var ok bool
 	var val any
 	it, ok = payload.(dict)
-	if (!ok) {
+	if !ok {
 		return false
 	}
 	val, ok = it["uris"]
@@ -3047,7 +3047,7 @@ func (me *DiagnosticChangeEvent) populateFrom(payload any) bool {
 		if (nil != val) {
 			var __coll__uris []any
 			__coll__uris, ok = val.([]any)
-			if (!ok) {
+			if !ok {
 				return false
 			}
 			uris = make([]string, len(__coll__uris))
@@ -3056,11 +3056,11 @@ func (me *DiagnosticChangeEvent) populateFrom(payload any) bool {
 			for _, __item__uris := range __coll__uris {
 				var __val__uris string
 				__val__uris, ok = __item__uris.(string)
-				if (!ok) {
+				if !ok {
 					return false
 				}
 				uris[__idx__uris] = __val__uris
-				__idx__uris = (__idx__uris + 1)
+				__idx__uris = __idx__uris + 1
 			}
 		}
 		me.Uris = uris

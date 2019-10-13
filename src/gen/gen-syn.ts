@@ -1,5 +1,7 @@
+import * as node_fs from 'fs'
 import * as node_util from 'util'
-import * as gen from './gen-basics'
+import * as gen from './gen'
+import * as gen_demos from './gen-syn-demos'
 
 
 export interface WithName { Name: string, name?: string }
@@ -15,7 +17,7 @@ export interface TStruct extends WithDocs, WithName, WithFrom<gen.PrepStruct> { 
 export interface Method extends WithDocs, WithName, WithType, WithFrom<gen.PrepMethod> { Args: Arg[] }
 export interface Arg extends WithDocs, WithName, WithType, WithFrom<gen.PrepArg> { }
 export interface Field extends WithDocs, WithName, WithType, WithFrom<gen.PrepField> {
-    FuncFieldRel?: Field, Json: { Excluded: boolean, Name: string, Required: boolean }
+    FuncFieldRel?: Field, Json?: { Excluded: boolean, Name: string, Required: boolean }
 }
 export interface Func extends WithName, WithType { Func: EFunc }
 
@@ -49,12 +51,14 @@ export interface TypeRefMaybe {
 export type Expr = ELit | EName | ECall | EOp | EFunc | ECollNew | ELen | EConv | ENew | ETup
 export interface ELit {
     Lit: boolean | number | string | null
+    FmtArgs?: Expr[]
 }
 export interface EName extends WithName {
 }
 export interface ECall {
     Call: Expr
     Args: Expr[]
+    Prop?: boolean
 }
 export interface EOp extends WithName {
     Operands: Expr[]
@@ -154,8 +158,9 @@ export class Builder {
     eCollNew(capOrLen: Expr, arrOrListElemType: TypeRef = undefined, isArr: boolean = false): ECollNew { return { ElemType: arrOrListElemType, Cap: (arrOrListElemType && isArr) ? undefined : capOrLen, Len: (arrOrListElemType && isArr) ? capOrLen : undefined } }
     eFunc(args: Arg[], retType: TypeRef, ...instrs: Instr[]): EFunc { return { Args: args, Type: retType, Body: { Instrs: instrs } } }
     eCall(callee: Expr, ...args: Expr[]): ECall { return { Call: callee, Args: args } }
+    eProp(callee: Expr, ...args: Expr[]): ECall { return { Call: callee, Args: args, Prop: true } }
     n(name: string): EName { return { Name: name } }
-    eLit(litVal: string | number | boolean | null): ELit { return { Lit: litVal } }
+    eLit(litVal: string | number | boolean | null, ...fmtArgs: Expr[]): ELit { return { Lit: litVal, FmtArgs: fmtArgs } }
     eZilch(): ELit { return this.eLit(null) }
     eThis(): EName { return this.n(null) }
     eOp(op: string, ...args: Expr[]): EOp { return { Name: op, Operands: args } }
@@ -408,6 +413,8 @@ export class Gen extends gen.Gen implements gen.IGen {
     protected allEnums: TEnum[] = null
     protected allInterfaces: TInterface[] = null
     protected allStructs: { [_: string]: TStruct } = null
+    protected isDemos: boolean = false
+    protected opDepth: number = 0
 
     nameRewriters = {
         args: this.caseLo,
@@ -433,6 +440,13 @@ export class Gen extends gen.Gen implements gen.IGen {
         unMaybeOutgoingTypes: [TypeRefPrim.String] as TypeRef[],
         oneIndent: '    ',
         funcOverloads: false,
+        haveProps: true,
+        demoOutFilePath: ""
+    }
+
+    constructor(outFilePath: [string, string], demoOutFilePath: string = "") {
+        super(outFilePath)
+        this.options.demoOutFilePath = demoOutFilePath
     }
 
     indented(then: () => void): Gen {
@@ -442,13 +456,13 @@ export class Gen extends gen.Gen implements gen.IGen {
         return this
     }
 
-    indent(): Gen {
-        this.indents++
+    indent(n: number = 1): Gen {
+        this.indents += n
         return this
     }
 
-    undent(): Gen {
-        this.indents--
+    undent(n: number = 1): Gen {
+        this.indents -= n
         return this
     }
 
@@ -705,16 +719,19 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         const ecall = it as ECall
         if (ecall && ecall.Call)
-            return this.emitExpr(ecall.Call).s("(").emitExprs(", ", ...ecall.Args).s(")")
+            return (ecall.Prop && this.options.haveProps && !(ecall.Args && ecall.Args.length))
+                ? this.emitExpr(ecall.Call)
+                : this.emitExpr(ecall.Call).s("(").emitExprs(", ", ...ecall.Args).s(")")
 
         const eop = it as EOp
         if (eop && eop.Name && eop.Operands && eop.Operands.length) {
+            this.opDepth++
             const notactualoperator = (eop.Name === BuilderOperators.Idx || eop.Name === BuilderOperators.IdxMay || eop.Name === BuilderOperators.Dot)
-            return this
-                .s((notactualoperator ? '' : '(')
-                    + ((eop.Operands.length > 1) ? '' : /* unary*/ eop.Name))
+            this.s(((this.opDepth === 1 || notactualoperator) ? '' : '(') + ((eop.Operands.length > 1) ? '' : /* unary*/ eop.Name))
                 .emitExprs(notactualoperator ? eop.Name : (' ' + eop.Name + ' '), ...eop.Operands)
-                .s(notactualoperator ? '' : ')')
+                .s((this.opDepth === 1 || notactualoperator) ? '' : ')')
+            this.opDepth--
+            return this
         }
 
         const efn = it as EFunc
@@ -825,7 +842,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (!(tstruct && tstruct.Fields))
             throw struct
         for (const fld of tstruct.Fields)
-            if (!fld.Json.Excluded) {
+            if (fld.Json && !fld.Json.Excluded) {
                 const tfld = this.typeRefForField(fld.Type, fld.fromPrep && fld.fromPrep.optional)
                 body.push(
                     _.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdxMay(_.n('it'), _.eLit(fld.Json.Name))),
@@ -1049,8 +1066,12 @@ export class Gen extends gen.Gen implements gen.IGen {
         return this.lines("# override `emitOutro` for this trailing part..")
     }
 
+    onBeforeEmitImpls(_structs: boolean) { }
+    onAfterEmitImpls(_structs: boolean) { }
+
     gen(prep: gen.Prep) {
         this.resetState()
+        this.isDemos = false
         const build = (this.b = new Builder(prep, this))
 
         const ifacetop: TInterface = {
@@ -1151,10 +1172,18 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         this.emitOutro()
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src)
+
+        if (this.options.demoOutFilePath && this.options.demoOutFilePath.length)
+            this.genDemos()
     }
 
-    onBeforeEmitImpls(_structs: boolean) { }
-    onAfterEmitImpls(_structs: boolean) { }
+    genDemos() {
+        this.isDemos = true
+        this.src = ""
+        this.resetState()
+        new gen_demos.GenDemos(this, this.b).genDemos()
+        node_fs.writeFileSync(this.options.demoOutFilePath, this.src)
+    }
 
     typeUnMaybe(it: TypeRef): TypeRef {
         const me = this.typeMaybe(it)
@@ -1264,5 +1293,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             return this.typeRefersTo(tfun.To, to) || tfun.From.some(t => this.typeRefersTo(t, to))
         return false
     }
+
+
 
 }

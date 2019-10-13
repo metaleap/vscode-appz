@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const gen_ast = require("./gen-ast");
+const gen_syn = require("./gen-syn");
 let anonVarCounter;
-class Gen extends gen_ast.Gen {
+class Gen extends gen_syn.Gen {
     gen(prep) {
         anonVarCounter = 1;
         this.options.oneIndent = "\t";
@@ -13,10 +13,10 @@ class Gen extends gen_ast.Gen {
         super.gen(prep);
     }
     emitIntro() {
-        return this.lines("// " + this.doNotEditComment("csharp"), "namespace VscAppz {").indent().lines("using System;", "using System.Collections.Generic;", "using Newtonsoft.Json;", "", "using " + this.options.idents.typeAny + " = System.Object;", "using " + this.options.idents.typeDict + " = System.Collections.Generic.Dictionary<string, object>;", "");
+        return this.lines("// " + this.doNotEditComment("csharp"), "namespace " + (this.isDemos ? "VscAppzDemo" : "VscAppz") + " {").indent().lines("using System;", "using System.Collections.Generic;", (this.isDemos ? "using VscAppz;" : "using Newtonsoft.Json;"), "using " + this.options.idents.typeAny + " = System.Object;", "using " + this.options.idents.typeDict + " = System.Collections.Generic.Dictionary<string, object>;", "").when(this.isDemos, () => this.line("public static partial class App {").indent());
     }
     emitOutro() {
-        return this.undent().lines("}");
+        return this.undent(this.isDemos ? 2 : 1).lines("}".repeat(this.isDemos ? 2 : 1));
     }
     emitDocs(it) {
         if (it.Docs && it.Docs.length)
@@ -48,9 +48,11 @@ class Gen extends gen_ast.Gen {
     }
     emitStruct(it) {
         this.emitDocs(it)
-            .line("public partial class " + it.Name + " {").indented(() => this.each(it.Fields, "\n", f => this.emitDocs(f).line(f.Json.Excluded
+            .line("public partial class " + it.Name + " {").indented(() => this.each(it.Fields, "\n", f => this.emitDocs(f)
+            .when(f.Json, () => this.line(f.Json.Excluded
             ? "[JsonIgnore]"
-            : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnMaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")).when((f.Type === gen_ast.TypeRefPrim.String && f.FuncFieldRel), () => this.line("[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]")).ln(() => this
+            : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnMaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")))
+            .when((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel), () => this.line("[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]")).ln(() => this
             .s("public ")
             .emitTypeRef(f.Type)
             .s(" ", f.Name, ";")))).lines("}", "");
@@ -69,8 +71,9 @@ class Gen extends gen_ast.Gen {
         anonVarCounter = 1;
         let struct = it.Type, iface = it.Type;
         [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null];
-        const isproperty = !(it.Func.Args && it.Func.Args.length);
-        const emitsigheadln = () => this.lf(iface ? "" : "internal ").emitTypeRef(it.Func.Type)
+        const isproperty = it.Func.Type && !(it.Func.Args && it.Func.Args.length);
+        const emitsigheadln = () => this.lf(iface ? "" : struct ? "internal " : "private static ")
+            .emitTypeRef(it.Func.Type)
             .s(" ", (iface ? (iface.Name + ".") : "") + it.Name)
             .when(isproperty, () => this.s(" { get "), () => this.s("(")
             .each(it.Func.Args, ", ", a => this.emitTypeRef(a.Type).s(" ", a.Name))
@@ -83,7 +86,7 @@ class Gen extends gen_ast.Gen {
                 .emitInstr(it.Func.Body)
                 .s(isproperty ? " }" : "").lines("", "");
         else
-            throw it;
+            emitsigheadln().emitInstr(it.Func.Body).line();
     }
     emitInstr(it) {
         if (it) {
@@ -156,15 +159,15 @@ class Gen extends gen_ast.Gen {
             return this.s("(").each(etup.Items, ", ", _ => { this.emitExpr(_); }).s(")");
         const eop = it;
         if (eop && eop.Name && eop.Operands && eop.Operands.length)
-            if (eop.Name === gen_ast.BuilderOperators.Is)
+            if (eop.Name === gen_syn.BuilderOperators.Is)
                 return this.s("(null != ").emitExpr(eop.Operands[0]).s(")");
-            else if (eop.Name === gen_ast.BuilderOperators.Isnt)
+            else if (eop.Name === gen_syn.BuilderOperators.Isnt)
                 return this.s("(null == ").emitExpr(eop.Operands[0]).s(")");
-            else if (eop.Name === gen_ast.BuilderOperators.Addr || eop.Name === gen_ast.BuilderOperators.Deref)
+            else if (eop.Name === gen_syn.BuilderOperators.Addr || eop.Name === gen_syn.BuilderOperators.Deref)
                 return this.emitExpr(eop.Operands[0]);
-            else if (eop.Name === gen_ast.BuilderOperators.Idx)
+            else if (eop.Name === gen_syn.BuilderOperators.Idx)
                 return this.emitExpr(eop.Operands[0]).s("[").emitExprs("][", ...eop.Operands.slice(1)).s("]");
-            else if (eop.Name === gen_ast.BuilderOperators.IdxMay)
+            else if (eop.Name === gen_syn.BuilderOperators.IdxMay)
                 return this.s("(").emitExpr(eop.Operands[0]).s(".TryGetValue(").emitExpr(eop.Operands[1]).s(", out var " + "_".repeat(++anonVarCounter) + ") ? (" + "_".repeat(anonVarCounter) + ", true) : (default, false))");
         const efn = it;
         if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
@@ -172,6 +175,10 @@ class Gen extends gen_ast.Gen {
                 .s("(")
                 .each(efn.Args, ", ", _ => this.emitTypeRef(_.Type).s(" ").s(_.Name))
                 .s(") => ").emitInstr(efn.Body);
+        const elit = it;
+        if (elit && elit.FmtArgs && elit.FmtArgs.length && (typeof elit.Lit === 'string'))
+            return this.s("strFmt(").emitExpr(this.b.eLit(elit.Lit)).s(", ")
+                .each(elit.FmtArgs, ", ", _ => this.emitExpr(_)).s(")");
         return super.emitExpr(it);
     }
     emitTypeRef(it) {
@@ -192,7 +199,7 @@ class Gen extends gen_ast.Gen {
             return (!tfun.To)
                 ? this.s(tfun.From.length ? "Action<" : "Action").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(tfun.From.length ? ">" : "")
                 : this.s("Func<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(", ").emitTypeRef(tfun.To).s(">");
-        if (it === gen_ast.TypeRefPrim.Real)
+        if (it === gen_syn.TypeRefPrim.Real)
             return this.s("double");
         return super.emitTypeRef(it);
     }
@@ -203,8 +210,8 @@ class Gen extends gen_ast.Gen {
 exports.Gen = Gen;
 function typeRefNullable(it, forceTrueForBools = false, forceTrueForNums = false, forceTrueForTups = false) {
     const ttup = it;
-    const isvt = ((it === gen_ast.TypeRefPrim.Bool && !forceTrueForBools)
-        || ((it === gen_ast.TypeRefPrim.Int || it === gen_ast.TypeRefPrim.Real) && !forceTrueForNums)
+    const isvt = ((it === gen_syn.TypeRefPrim.Bool && !forceTrueForBools)
+        || ((it === gen_syn.TypeRefPrim.Int || it === gen_syn.TypeRefPrim.Real) && !forceTrueForNums)
         || (ttup && ttup.TupOf && ttup.TupOf.length && !forceTrueForTups));
     return !isvt;
 }
@@ -213,8 +220,8 @@ function typeRefUnMaybe(it, unMaybeBools, unMaybeNums, unMaybeTuples) {
     if (tmay && tmay.Maybe) {
         const ttup = tmay.Maybe;
         if ((unMaybeTuples && ttup && ttup.TupOf && ttup.TupOf.length)
-            || (unMaybeBools && tmay.Maybe === gen_ast.TypeRefPrim.Bool)
-            || (unMaybeNums && (tmay.Maybe === gen_ast.TypeRefPrim.Int || tmay.Maybe === gen_ast.TypeRefPrim.Real)))
+            || (unMaybeBools && tmay.Maybe === gen_syn.TypeRefPrim.Bool)
+            || (unMaybeNums && (tmay.Maybe === gen_syn.TypeRefPrim.Int || tmay.Maybe === gen_syn.TypeRefPrim.Real)))
             return typeRefUnMaybe(tmay.Maybe, unMaybeBools, unMaybeNums, unMaybeTuples);
     }
     return it;

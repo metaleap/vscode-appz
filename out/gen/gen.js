@@ -305,8 +305,8 @@ var ScriptPrimType;
     ScriptPrimType[ScriptPrimType["Dict"] = 189] = "Dict";
 })(ScriptPrimType = exports.ScriptPrimType || (exports.ScriptPrimType = {}));
 class Gen {
-    constructor(outFilePathPref, outFilePathSuff) {
-        [this.outFilePathPref, this.outFilePathSuff] = [outFilePathPref, outFilePathSuff];
+    constructor(outFilePath) {
+        [this.outFilePathPref, this.outFilePathSuff] = [outFilePath[0], outFilePath[1]];
         this.resetState();
     }
     resetState() {

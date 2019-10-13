@@ -1,8 +1,8 @@
 import * as node_fs from 'fs'
 import * as ts from 'typescript'
 
-import * as gen from './gen-basics'
-import * as gen_ast from './gen-ast'
+import * as gen from './gen'
+import * as gen_syn from './gen-syn'
 import * as gen_golang from './gen-golang'
 import * as gen_csharp from './gen-csharp'
 import * as gen_python from './gen-python'
@@ -14,12 +14,12 @@ import * as gen_vscext from './gen-vscext'
 const filePathDts = 'node_modules/@types/vscode/index.d.ts'
 
 const gens: gen.IGen[] = [
-    new gen_ast.Gen('libs/tmpdbg/', '.gen.coffee'),
-    new gen_golang.Gen('libs/go/', '.gen.go'),
-    new gen_csharp.Gen('libs/cs/', '.gen.cs'),
-    new gen_nodets.Gen('libs/js/src/', '.gen.ts'),
-    new gen_python.Gen('libs/py/', '.gen.py'),
-    new gen_vscext.Gen('src/', '.gen.ts'),
+    new gen_syn.Gen(['libs/tmpdbg/', '.gen.coffee']),
+    new gen_golang.Gen(['libs/go/', '.gen.go'], 'demos/go-vsc-appz-demo/miscdemos.gen.go'),
+    new gen_csharp.Gen(['libs/cs/', '.gen.cs'], 'demos/cs-vsc-appz-demo/miscdemos.gen.cs'),
+    new gen_nodets.Gen(['libs/js/src/', '.gen.ts']),
+    new gen_python.Gen(['libs/py/', '.gen.py']),
+    new gen_vscext.Gen(['src/', '.gen.ts']),
 ]
 
 type genApiMember = { [_: string]: genApiMembers }

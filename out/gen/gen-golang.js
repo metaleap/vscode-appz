@@ -1,17 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const gen_ast = require("./gen-ast");
-class Gen extends gen_ast.Gen {
+const gen_syn = require("./gen-syn");
+class Gen extends gen_syn.Gen {
     gen(prep) {
         this.options.oneIndent = "\t";
         this.options.doc.appendArgsToSummaryFor.funcFields = true;
         this.options.doc.appendArgsToSummaryFor.methods = true;
         this.options.idents.curInst = "me";
         this.options.idents.null = "nil";
+        this.options.haveProps = false;
         super.gen(prep);
     }
     emitIntro() {
-        return this.lines("package vscAppz", "// " + this.doNotEditComment("golang"), "");
+        return this.lines("package " + (this.isDemos ? "main" : "vscAppz"), "// " + this.doNotEditComment("golang"), (this.isDemos ? '\nimport (\n\t. "github.com/metaleap/vscode-appz/libs/go"\n)\n' : ""));
     }
     emitOutro() { return this; }
     emitDocs(it) {
@@ -42,25 +43,23 @@ class Gen extends gen_ast.Gen {
     }
     emitStruct(it) {
         this.emitDocs(it)
-            .line("type " + it.Name + " struct {").indented(() => this.each(it.Fields.filter(_ => (!_.FuncFieldRel) || _.Type !== gen_ast.TypeRefPrim.String), "\n", f => this.emitDocs(f).ln(() => this.s(f.Name, " ").emitTypeRef(f.Type).s(" `json:\"")
-            .when(f.Json.Excluded, () => this.s("-"), () => this.s(f.Json.Name + (f.Json.Required ? "" : ",omitempty"))).s("\"`")))).lines("}", "");
-        const fflds = it.Fields.filter(_ => _.FuncFieldRel && _.Type === gen_ast.TypeRefPrim.String);
+            .line("type " + it.Name + " struct {").indented(() => this.each(it.Fields.filter(_ => (!_.FuncFieldRel) || _.Type !== gen_syn.TypeRefPrim.String), "\n", f => this.emitDocs(f).ln(() => this.s(f.Name, " ").emitTypeRef(f.Type).when(f.Json, () => this.s(" `json:\"")
+            .when(f.Json.Excluded, () => this.s("-"), () => this.s(f.Json.Name + (f.Json.Required ? "" : ",omitempty"))).s("\"`"))))).lines("}", "");
+        const fflds = it.Fields.filter(_ => _.FuncFieldRel && _.Type === gen_syn.TypeRefPrim.String);
         if (fflds && fflds.length) {
             it.OutgoingTwin = "_" + it.Name;
             this.line("type " + it.OutgoingTwin + " struct {").indented(() => this.lf().emitTypeRef({ Maybe: it }).line()
-                .each(fflds, "", f => this.ln(() => this.s(f.Name, " ").emitTypeRef(f.Type).s(" `json:\"", f.Json.Name, ",omitempty\"`")))).lines("}", "");
+                .each(fflds, "", f => this.ln(() => this.s(f.Name, " ").emitTypeRef(f.Type).s(!f.Json ? "" : (" `json:\"" + f.Json.Name + ",omitempty\"`"))))).lines("}", "");
         }
     }
     emitFuncImpl(it) {
         let struct = it.Type, iface = it.Type;
         [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null];
-        const emitsigheadln = () => this.lf("func (", this.options.idents.curInst, " ", struct ? ("*" + struct.Name) : iface.IsTop ? ("*" + this.options.idents.typeImpl) : (this.options.idents.typeImpl + iface.Name), ") ", it.Name, "(").each(it.Func.Args, ", ", a => this.s(a.Name, " ").emitTypeRef(a.Type)).s(") ").when(it.Func.Type, () => emitTypeRet(this, it.Func.Type).s(" "));
-        if (struct)
-            emitsigheadln().emitInstr(it.Func.Body).lines("", "");
-        else if (iface)
-            emitsigheadln().emitInstr(it.Func.Body).lines("", "");
-        else
-            throw it.Type;
+        this
+            .lf("func ", (!(struct || iface)) ? ""
+            : ("(" + this.options.idents.curInst + " " + (struct ? ("*" + struct.Name) : iface.IsTop ? ("*" + this.options.idents.typeImpl) : (this.options.idents.typeImpl + iface.Name)) + ") "), it.Name, "(")
+            .each(it.Func.Args, ", ", a => this.s(a.Name, " ").emitTypeRef(a.Type)).s(") ").when(it.Func.Type, () => emitTypeRet(this, it.Func.Type).s(" "))
+            .emitInstr(it.Func.Body).lines("", "");
     }
     emitInstr(it) {
         if (it) {
@@ -121,11 +120,11 @@ class Gen extends gen_ast.Gen {
                 return this.s("len(").emitExpr(elen.LenOf).s(")");
             const eop = it;
             if (eop && eop.Name && eop.Operands && eop.Operands.length)
-                if (eop.Name === gen_ast.BuilderOperators.Is)
+                if (eop.Name === gen_syn.BuilderOperators.Is)
                     return this.s("(nil != ").emitExpr(eop.Operands[0]).s(")");
-                else if (eop.Name === gen_ast.BuilderOperators.Isnt)
+                else if (eop.Name === gen_syn.BuilderOperators.Isnt)
                     return this.s("(nil == ").emitExpr(eop.Operands[0]).s(")");
-                else if (eop.Name === gen_ast.BuilderOperators.Idx || eop.Name === gen_ast.BuilderOperators.IdxMay)
+                else if (eop.Name === gen_syn.BuilderOperators.Idx || eop.Name === gen_syn.BuilderOperators.IdxMay)
                     return this.emitExpr(eop.Operands[0]).s("[").emitExprs("][", ...eop.Operands.slice(1)).s("]");
             const efn = it;
             if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
@@ -133,6 +132,10 @@ class Gen extends gen_ast.Gen {
                     .s("func(")
                     .each(efn.Args, ", ", _ => this.s(_.Name, " ").emitTypeRef(_.Type))
                     .s(") "), efn.Type).s(efn.Type ? " " : "").emitInstr(efn.Body);
+            const elit = it;
+            if (elit && elit.FmtArgs && elit.FmtArgs.length && (typeof elit.Lit === 'string'))
+                return this.s("strFmt(").emitExpr(this.b.eLit(elit.Lit)).s(", ")
+                    .each(elit.FmtArgs, ", ", _ => this.emitExpr(_)).s(")");
             const econv = it;
             if (econv && econv.Conv && econv.To) {
                 const tnamed = econv.To;
@@ -161,7 +164,7 @@ class Gen extends gen_ast.Gen {
         const tfun = this.typeFunc(it);
         if (tfun)
             return this.s("func(").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(tfun.To ? ") " : ")").emitTypeRef(tfun.To);
-        if (it === gen_ast.TypeRefPrim.Real)
+        if (it === gen_syn.TypeRefPrim.Real)
             return this.s("float64");
         return super.emitTypeRef(it);
     }
@@ -177,18 +180,18 @@ function emitTypeRet(_, it) {
     return _.emitTypeRef(it);
 }
 function typeRefNilable(_, it, forceTrueForBools = false, forceTrueForNums = false, forceTrueForStrings = false) {
-    return it === gen_ast.TypeRefPrim.Any || it === gen_ast.TypeRefPrim.Dict
+    return it === gen_syn.TypeRefPrim.Any || it === gen_syn.TypeRefPrim.Dict
         || _.typeColl(it) || _.typeMaybe(it) || _.typeFunc(it) || _.typeTup(it)
-        || (forceTrueForBools && it === gen_ast.TypeRefPrim.Bool)
-        || (forceTrueForNums && (it === gen_ast.TypeRefPrim.Int || it === gen_ast.TypeRefPrim.Real))
-        || (forceTrueForStrings && it === gen_ast.TypeRefPrim.String);
+        || (forceTrueForBools && it === gen_syn.TypeRefPrim.Bool)
+        || (forceTrueForNums && (it === gen_syn.TypeRefPrim.Int || it === gen_syn.TypeRefPrim.Real))
+        || (forceTrueForStrings && it === gen_syn.TypeRefPrim.String);
 }
 function typeRefUnMaybe(it, unMaybeBools = true, unMaybeNums = true, unMaybeStrings = true) {
     const tmay = it;
     if (tmay && tmay.Maybe
-        && (tmay.Maybe !== gen_ast.TypeRefPrim.String || unMaybeStrings)
-        && (tmay.Maybe !== gen_ast.TypeRefPrim.Bool || unMaybeBools)
-        && ((tmay.Maybe !== gen_ast.TypeRefPrim.Int && tmay.Maybe !== gen_ast.TypeRefPrim.Real) || unMaybeNums))
+        && (tmay.Maybe !== gen_syn.TypeRefPrim.String || unMaybeStrings)
+        && (tmay.Maybe !== gen_syn.TypeRefPrim.Bool || unMaybeBools)
+        && ((tmay.Maybe !== gen_syn.TypeRefPrim.Int && tmay.Maybe !== gen_syn.TypeRefPrim.Real) || unMaybeNums))
         return typeRefUnMaybe(tmay.Maybe, unMaybeBools, unMaybeNums, unMaybeStrings);
     return it;
 }

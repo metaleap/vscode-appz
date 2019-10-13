@@ -3,7 +3,7 @@ namespace VscAppzDemo {
     using System.Collections.Generic;
     using VscAppz;
 
-    public static class App {
+    public static partial class App {
 
         private static readonly string[] nil = new string[0];
 
@@ -59,6 +59,8 @@ namespace VscAppzDemo {
                 "window.showOpenDialog",
                 "window.showWorkspaceFolderPick",
                 "env.openExternal",
+                "commands.getCommands",
+                "languages.getLanguages",
                 "env.Properties",
             };
             win.ShowQuickPick(menu, new QuickPickOptions() {
@@ -79,6 +81,10 @@ namespace VscAppzDemo {
                 else if (menuitem == menu[5])
                     demo_Env_OpenExternal();
                 else if (menuitem == menu[6])
+                    demo_Commands_GetCommands();
+                else if (menuitem == menu[7])
+                    demo_Languages_GetLanguages();
+                else if (menuitem == menu[8])
                     demo_Env_Properties();
                 else
                     win.ShowErrorMessage($"Unknown: `{menuitem}`, bye now!", nil, quit);
@@ -195,6 +201,9 @@ namespace VscAppzDemo {
         private static void statusNoticeQuit() {
             win.SetStatusBarMessage("Reacting to the 'bye now' will terminate the prog.", 4242);
         }
+
+        private static string strFmt(string s , params object[] args)=>
+            string.Format(s,args);
 
     }
 

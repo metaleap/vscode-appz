@@ -3,7 +3,6 @@ namespace VscAppz {
 	using System;
 	using System.Collections.Generic;
 	using Newtonsoft.Json;
-
 	using any = System.Object;
 	using dict = System.Collections.Generic.Dictionary<string, object>;
 
@@ -1235,7 +1234,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						string _result_ = default;
 						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = _result_;
@@ -1263,7 +1262,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						string _result_ = default;
 						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = _result_;
@@ -1290,7 +1289,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new MessageItem();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -1317,7 +1316,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new MessageItem();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -1343,7 +1342,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						string _result_ = default;
 						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = _result_;
@@ -1371,7 +1370,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						string _result_ = default;
 						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = _result_;
@@ -1398,7 +1397,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new MessageItem();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -1425,7 +1424,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new MessageItem();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -1451,7 +1450,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						string _result_ = default;
 						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = _result_;
@@ -1479,7 +1478,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						string _result_ = default;
 						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = _result_;
@@ -1506,7 +1505,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new MessageItem();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -1533,7 +1532,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new MessageItem();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -1560,14 +1559,14 @@ namespace VscAppz {
 						options.ValidateInput_AppzFuncId = this.Impl().nextFuncId();
 						fnids.Add(options.ValidateInput_AppzFuncId);
 						this.Impl().cbOther[options.ValidateInput_AppzFuncId] = (any[] args) => {
-							if ((1 != args.Length)) {
+							if (1 != args.Length) {
 								return (null, false);
 							} else {
 								bool ok = default;
 								string __0 = default;
 								if ((null != args[0])) {
 									(__0, ok) = (args[0] is string) ? (((string)(args[0])), true) : (default, false);
-									if ((!ok)) {
+									if (!ok) {
 										return (null, false);
 									}
 								}
@@ -1580,7 +1579,7 @@ namespace VscAppz {
 			msg.Data["options"] = options;
 			if ((null != token)) {
 				token.impl = this.Impl();
-				if (("" == token.fnId)) {
+				if ("" == token.fnId) {
 					lock (this) {
 						token.fnId = this.Impl().nextFuncId();
 					}
@@ -1595,7 +1594,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						string _result_ = default;
 						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = _result_;
@@ -1605,14 +1604,14 @@ namespace VscAppz {
 				};
 			}
 			this.Impl().send(msg, (any payload) => {
-				if ((fnids.Count != 0)) {
+				if (fnids.Count != 0) {
 					lock (this) {
 						foreach (var fnid in fnids) {
 							this.Impl().cbOther.Remove(fnid);
 						}
 					}
 				}
-				return ((null == on) || on(payload));
+				return (null == on) || on(payload);
 			});
 		}
 
@@ -1632,7 +1631,7 @@ namespace VscAppz {
 						options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId();
 						fnids.Add(options.OnDidSelectItem_AppzFuncId);
 						this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
-							if ((1 != args.Length)) {
+							if (1 != args.Length) {
 								return (null, false);
 							} else {
 								bool ok = default;
@@ -1640,7 +1639,7 @@ namespace VscAppz {
 								if ((null != args[0])) {
 									__0 = new QuickPickItem();
 									ok = __0.populateFrom(args[0]);
-									if ((!ok)) {
+									if (!ok) {
 										return (null, false);
 									}
 								} else {
@@ -1657,7 +1656,7 @@ namespace VscAppz {
 			msg.Data["options"] = options;
 			if ((null != token)) {
 				token.impl = this.Impl();
-				if (("" == token.fnId)) {
+				if ("" == token.fnId) {
 					lock (this) {
 						token.fnId = this.Impl().nextFuncId();
 					}
@@ -1672,7 +1671,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						any[] __coll__result = default;
 						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = new string[__coll__result.Length];
@@ -1681,11 +1680,11 @@ namespace VscAppz {
 						foreach (var __item__result in __coll__result) {
 							string __val__result = default;
 							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
-							if ((!ok)) {
+							if (!ok) {
 								return false;
 							}
 							result[__idx__result] = __val__result;
-							__idx__result = (__idx__result + 1);
+							__idx__result = __idx__result + 1;
 						}
 					}
 					then(result);
@@ -1693,14 +1692,14 @@ namespace VscAppz {
 				};
 			}
 			this.Impl().send(msg, (any payload) => {
-				if ((fnids.Count != 0)) {
+				if (fnids.Count != 0) {
 					lock (this) {
 						foreach (var fnid in fnids) {
 							this.Impl().cbOther.Remove(fnid);
 						}
 					}
 				}
-				return ((null == on) || on(payload));
+				return (null == on) || on(payload);
 			});
 		}
 
@@ -1720,7 +1719,7 @@ namespace VscAppz {
 						options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId();
 						fnids.Add(options.OnDidSelectItem_AppzFuncId);
 						this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
-							if ((1 != args.Length)) {
+							if (1 != args.Length) {
 								return (null, false);
 							} else {
 								bool ok = default;
@@ -1728,7 +1727,7 @@ namespace VscAppz {
 								if ((null != args[0])) {
 									__0 = new QuickPickItem();
 									ok = __0.populateFrom(args[0]);
-									if ((!ok)) {
+									if (!ok) {
 										return (null, false);
 									}
 								} else {
@@ -1744,7 +1743,7 @@ namespace VscAppz {
 			msg.Data["options"] = options;
 			if ((null != token)) {
 				token.impl = this.Impl();
-				if (("" == token.fnId)) {
+				if ("" == token.fnId) {
 					lock (this) {
 						token.fnId = this.Impl().nextFuncId();
 					}
@@ -1759,7 +1758,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						string _result_ = default;
 						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = _result_;
@@ -1769,14 +1768,14 @@ namespace VscAppz {
 				};
 			}
 			this.Impl().send(msg, (any payload) => {
-				if ((fnids.Count != 0)) {
+				if (fnids.Count != 0) {
 					lock (this) {
 						foreach (var fnid in fnids) {
 							this.Impl().cbOther.Remove(fnid);
 						}
 					}
 				}
-				return ((null == on) || on(payload));
+				return (null == on) || on(payload);
 			});
 		}
 
@@ -1796,7 +1795,7 @@ namespace VscAppz {
 						options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId();
 						fnids.Add(options.OnDidSelectItem_AppzFuncId);
 						this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
-							if ((1 != args.Length)) {
+							if (1 != args.Length) {
 								return (null, false);
 							} else {
 								bool ok = default;
@@ -1804,7 +1803,7 @@ namespace VscAppz {
 								if ((null != args[0])) {
 									__0 = new QuickPickItem();
 									ok = __0.populateFrom(args[0]);
-									if ((!ok)) {
+									if (!ok) {
 										return (null, false);
 									}
 								} else {
@@ -1821,7 +1820,7 @@ namespace VscAppz {
 			msg.Data["options"] = options;
 			if ((null != token)) {
 				token.impl = this.Impl();
-				if (("" == token.fnId)) {
+				if ("" == token.fnId) {
 					lock (this) {
 						token.fnId = this.Impl().nextFuncId();
 					}
@@ -1836,7 +1835,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						any[] __coll__result = default;
 						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = new QuickPickItem[__coll__result.Length];
@@ -1846,11 +1845,11 @@ namespace VscAppz {
 							QuickPickItem __val__result = default;
 							__val__result = new QuickPickItem();
 							ok = __val__result.populateFrom(__item__result);
-							if ((!ok)) {
+							if (!ok) {
 								return false;
 							}
 							result[__idx__result] = __val__result;
-							__idx__result = (__idx__result + 1);
+							__idx__result = __idx__result + 1;
 						}
 					}
 					then(result);
@@ -1858,14 +1857,14 @@ namespace VscAppz {
 				};
 			}
 			this.Impl().send(msg, (any payload) => {
-				if ((fnids.Count != 0)) {
+				if (fnids.Count != 0) {
 					lock (this) {
 						foreach (var fnid in fnids) {
 							this.Impl().cbOther.Remove(fnid);
 						}
 					}
 				}
-				return ((null == on) || on(payload));
+				return (null == on) || on(payload);
 			});
 		}
 
@@ -1885,7 +1884,7 @@ namespace VscAppz {
 						options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId();
 						fnids.Add(options.OnDidSelectItem_AppzFuncId);
 						this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
-							if ((1 != args.Length)) {
+							if (1 != args.Length) {
 								return (null, false);
 							} else {
 								bool ok = default;
@@ -1893,7 +1892,7 @@ namespace VscAppz {
 								if ((null != args[0])) {
 									__0 = new QuickPickItem();
 									ok = __0.populateFrom(args[0]);
-									if ((!ok)) {
+									if (!ok) {
 										return (null, false);
 									}
 								} else {
@@ -1909,7 +1908,7 @@ namespace VscAppz {
 			msg.Data["options"] = options;
 			if ((null != token)) {
 				token.impl = this.Impl();
-				if (("" == token.fnId)) {
+				if ("" == token.fnId) {
 					lock (this) {
 						token.fnId = this.Impl().nextFuncId();
 					}
@@ -1924,7 +1923,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new QuickPickItem();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -1933,14 +1932,14 @@ namespace VscAppz {
 				};
 			}
 			this.Impl().send(msg, (any payload) => {
-				if ((fnids.Count != 0)) {
+				if (fnids.Count != 0) {
 					lock (this) {
 						foreach (var fnid in fnids) {
 							this.Impl().cbOther.Remove(fnid);
 						}
 					}
 				}
-				return ((null == on) || on(payload));
+				return (null == on) || on(payload);
 			});
 		}
 
@@ -1959,7 +1958,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new Disposable();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					} else {
@@ -1986,7 +1985,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new Disposable();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					} else {
@@ -2013,7 +2012,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						string _result_ = default;
 						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = _result_;
@@ -2039,7 +2038,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						any[] __coll__result = default;
 						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = new string[__coll__result.Length];
@@ -2048,11 +2047,11 @@ namespace VscAppz {
 						foreach (var __item__result in __coll__result) {
 							string __val__result = default;
 							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
-							if ((!ok)) {
+							if (!ok) {
 								return false;
 							}
 							result[__idx__result] = __val__result;
-							__idx__result = (__idx__result + 1);
+							__idx__result = __idx__result + 1;
 						}
 					}
 					then(result);
@@ -2076,7 +2075,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new WorkspaceFolder();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -2100,7 +2099,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new WindowState();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -2123,13 +2122,13 @@ namespace VscAppz {
 			}
 			_fnid_listener = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
-				if ((1 != args.Length)) {
+				if (1 != args.Length) {
 					return ok;
 				}
 				WindowState _a_0_ = default;
 				_a_0_ = new WindowState();
 				ok = _a_0_.populateFrom(args[0]);
-				if ((!ok)) {
+				if (!ok) {
 					return false;
 				}
 				listener(_a_0_);
@@ -2144,7 +2143,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new Disposable();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					} else {
@@ -2170,7 +2169,7 @@ namespace VscAppz {
 					bool result = default;
 					if ((null != payload)) {
 						(result, ok) = (payload is bool) ? (((bool)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					} else {
@@ -2195,7 +2194,7 @@ namespace VscAppz {
 					string result = default;
 					if ((null != payload)) {
 						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -2218,7 +2217,7 @@ namespace VscAppz {
 					string result = default;
 					if ((null != payload)) {
 						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -2241,7 +2240,7 @@ namespace VscAppz {
 					string result = default;
 					if ((null != payload)) {
 						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -2264,7 +2263,7 @@ namespace VscAppz {
 					string result = default;
 					if ((null != payload)) {
 						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -2288,7 +2287,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						string _result_ = default;
 						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = _result_;
@@ -2312,7 +2311,7 @@ namespace VscAppz {
 					string result = default;
 					if ((null != payload)) {
 						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -2335,7 +2334,7 @@ namespace VscAppz {
 					string result = default;
 					if ((null != payload)) {
 						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -2358,7 +2357,7 @@ namespace VscAppz {
 					string result = default;
 					if ((null != payload)) {
 						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -2382,7 +2381,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new EnvProperties();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					} else {
@@ -2408,7 +2407,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						string _result_ = default;
 						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = _result_;
@@ -2433,7 +2432,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						string _result_ = default;
 						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = _result_;
@@ -2458,7 +2457,7 @@ namespace VscAppz {
 					bool result = default;
 					if ((null != payload)) {
 						(result, ok) = (payload is bool) ? (((bool)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					} else {
@@ -2483,13 +2482,13 @@ namespace VscAppz {
 			}
 			_fnid_listener = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
-				if ((1 != args.Length)) {
+				if (1 != args.Length) {
 					return ok;
 				}
 				WorkspaceFoldersChangeEvent _a_0_ = default;
 				_a_0_ = new WorkspaceFoldersChangeEvent();
 				ok = _a_0_.populateFrom(args[0]);
-				if ((!ok)) {
+				if (!ok) {
 					return false;
 				}
 				listener(_a_0_);
@@ -2504,7 +2503,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new Disposable();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					} else {
@@ -2531,7 +2530,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new WorkspaceFolder();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					}
@@ -2555,7 +2554,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						any[] __coll__result = default;
 						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = new WorkspaceFolder[__coll__result.Length];
@@ -2565,11 +2564,11 @@ namespace VscAppz {
 							WorkspaceFolder __val__result = default;
 							__val__result = new WorkspaceFolder();
 							ok = __val__result.populateFrom(__item__result);
-							if ((!ok)) {
+							if (!ok) {
 								return false;
 							}
 							result[__idx__result] = __val__result;
-							__idx__result = (__idx__result + 1);
+							__idx__result = __idx__result + 1;
 						}
 					}
 					then(result);
@@ -2589,7 +2588,7 @@ namespace VscAppz {
 			msg.Data["maxResults"] = maxResults;
 			if ((null != token)) {
 				token.impl = this.Impl();
-				if (("" == token.fnId)) {
+				if ("" == token.fnId) {
 					lock (this) {
 						token.fnId = this.Impl().nextFuncId();
 					}
@@ -2604,7 +2603,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						any[] __coll__result = default;
 						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = new string[__coll__result.Length];
@@ -2613,11 +2612,11 @@ namespace VscAppz {
 						foreach (var __item__result in __coll__result) {
 							string __val__result = default;
 							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
-							if ((!ok)) {
+							if (!ok) {
 								return false;
 							}
 							result[__idx__result] = __val__result;
-							__idx__result = (__idx__result + 1);
+							__idx__result = __idx__result + 1;
 						}
 					}
 					then(result);
@@ -2642,7 +2641,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						string _result_ = default;
 						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = _result_;
@@ -2667,7 +2666,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new WorkspaceProperties();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					} else {
@@ -2693,7 +2692,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						any[] __coll__result = default;
 						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = new string[__coll__result.Length];
@@ -2702,11 +2701,11 @@ namespace VscAppz {
 						foreach (var __item__result in __coll__result) {
 							string __val__result = default;
 							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
-							if ((!ok)) {
+							if (!ok) {
 								return false;
 							}
 							result[__idx__result] = __val__result;
-							__idx__result = (__idx__result + 1);
+							__idx__result = __idx__result + 1;
 						}
 					}
 					then(result);
@@ -2728,13 +2727,13 @@ namespace VscAppz {
 			}
 			_fnid_listener = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
-				if ((1 != args.Length)) {
+				if (1 != args.Length) {
 					return ok;
 				}
 				DiagnosticChangeEvent _a_0_ = default;
 				_a_0_ = new DiagnosticChangeEvent();
 				ok = _a_0_.populateFrom(args[0]);
-				if ((!ok)) {
+				if (!ok) {
 					return false;
 				}
 				listener(_a_0_);
@@ -2749,7 +2748,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new Disposable();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					} else {
@@ -2774,7 +2773,7 @@ namespace VscAppz {
 			}
 			_fnid_listener = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
-				if ((0 != args.Length)) {
+				if (0 != args.Length) {
 					return ok;
 				}
 				listener();
@@ -2789,7 +2788,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						result = new Disposable();
 						ok = result.populateFrom(payload);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 					} else {
@@ -2816,7 +2815,7 @@ namespace VscAppz {
 					if ((null != payload)) {
 						any[] __coll__result = default;
 						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						result = new string[__coll__result.Length];
@@ -2825,11 +2824,11 @@ namespace VscAppz {
 						foreach (var __item__result in __coll__result) {
 							string __val__result = default;
 							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
-							if ((!ok)) {
+							if (!ok) {
 								return false;
 							}
 							result[__idx__result] = __val__result;
-							__idx__result = (__idx__result + 1);
+							__idx__result = __idx__result + 1;
 						}
 					}
 					then(result);
@@ -2847,7 +2846,7 @@ namespace VscAppz {
 			bool ok = default;
 			any val = default;
 			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
-			if ((!ok)) {
+			if (!ok) {
 				return false;
 			}
 			(val, ok) = (it.TryGetValue("title", out var __) ? (__, true) : (default, false));
@@ -2855,7 +2854,7 @@ namespace VscAppz {
 				string title = default;
 				if ((null != val)) {
 					(title, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 				}
@@ -2868,7 +2867,7 @@ namespace VscAppz {
 				bool isCloseAffordance = default;
 				if ((null != val)) {
 					(isCloseAffordance, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 				}
@@ -2879,7 +2878,7 @@ namespace VscAppz {
 				dict my = default;
 				if ((null != val)) {
 					(my, ok) = (val is dict) ? (((dict)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 				}
@@ -2895,7 +2894,7 @@ namespace VscAppz {
 			bool ok = default;
 			any val = default;
 			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
-			if ((!ok)) {
+			if (!ok) {
 				return false;
 			}
 			(val, ok) = (it.TryGetValue("label", out var __) ? (__, true) : (default, false));
@@ -2903,7 +2902,7 @@ namespace VscAppz {
 				string label = default;
 				if ((null != val)) {
 					(label, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 				}
@@ -2917,7 +2916,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					string _description_ = default;
 					(_description_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					description = _description_;
@@ -2930,7 +2929,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					string _detail_ = default;
 					(_detail_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					detail = _detail_;
@@ -2942,7 +2941,7 @@ namespace VscAppz {
 				bool picked = default;
 				if ((null != val)) {
 					(picked, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 				}
@@ -2953,7 +2952,7 @@ namespace VscAppz {
 				bool alwaysShow = default;
 				if ((null != val)) {
 					(alwaysShow, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 				}
@@ -2964,7 +2963,7 @@ namespace VscAppz {
 				dict my = default;
 				if ((null != val)) {
 					(my, ok) = (val is dict) ? (((dict)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 				}
@@ -2980,7 +2979,7 @@ namespace VscAppz {
 			bool ok = default;
 			any val = default;
 			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
-			if ((!ok)) {
+			if (!ok) {
 				return false;
 			}
 			(val, ok) = (it.TryGetValue("uri", out var __) ? (__, true) : (default, false));
@@ -2988,7 +2987,7 @@ namespace VscAppz {
 				string uri = default;
 				if ((null != val)) {
 					(uri, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 				}
@@ -3001,7 +3000,7 @@ namespace VscAppz {
 				string name = default;
 				if ((null != val)) {
 					(name, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 				}
@@ -3014,10 +3013,10 @@ namespace VscAppz {
 				int index = default;
 				if ((null != val)) {
 					(index, ok) = (val is int) ? (((int)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						double __index__ = default;
 						(__index__, ok) = (val is double) ? (((double)(val)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						index = ((int)(__index__));
@@ -3037,7 +3036,7 @@ namespace VscAppz {
 			bool ok = default;
 			any val = default;
 			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
-			if ((!ok)) {
+			if (!ok) {
 				return false;
 			}
 			(val, ok) = (it.TryGetValue("focused", out var __) ? (__, true) : (default, false));
@@ -3045,7 +3044,7 @@ namespace VscAppz {
 				bool focused = default;
 				if ((null != val)) {
 					(focused, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 				}
@@ -3063,7 +3062,7 @@ namespace VscAppz {
 			bool ok = default;
 			any val = default;
 			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
-			if ((!ok)) {
+			if (!ok) {
 				return false;
 			}
 			(val, ok) = (it.TryGetValue("appName", out var __) ? (__, true) : (default, false));
@@ -3072,7 +3071,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					string _appName_ = default;
 					(_appName_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					appName = _appName_;
@@ -3085,7 +3084,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					string _appRoot_ = default;
 					(_appRoot_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					appRoot = _appRoot_;
@@ -3098,7 +3097,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					string _language_ = default;
 					(_language_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					language = _language_;
@@ -3111,7 +3110,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					string _machineId_ = default;
 					(_machineId_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					machineId = _machineId_;
@@ -3124,7 +3123,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					string _remoteName_ = default;
 					(_remoteName_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					remoteName = _remoteName_;
@@ -3137,7 +3136,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					string _sessionId_ = default;
 					(_sessionId_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					sessionId = _sessionId_;
@@ -3150,7 +3149,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					string _shell_ = default;
 					(_shell_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					shell = _shell_;
@@ -3163,7 +3162,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					string _uriScheme_ = default;
 					(_uriScheme_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					uriScheme = _uriScheme_;
@@ -3180,7 +3179,7 @@ namespace VscAppz {
 			bool ok = default;
 			any val = default;
 			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
-			if ((!ok)) {
+			if (!ok) {
 				return false;
 			}
 			(val, ok) = (it.TryGetValue("added", out var __) ? (__, true) : (default, false));
@@ -3189,7 +3188,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					any[] __coll__added = default;
 					(__coll__added, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					added = new WorkspaceFolder[__coll__added.Length];
@@ -3199,11 +3198,11 @@ namespace VscAppz {
 						WorkspaceFolder __val__added = default;
 						__val__added = new WorkspaceFolder();
 						ok = __val__added.populateFrom(__item__added);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						added[__idx__added] = __val__added;
-						__idx__added = (__idx__added + 1);
+						__idx__added = __idx__added + 1;
 					}
 				}
 				this.Added = added;
@@ -3216,7 +3215,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					any[] __coll__removed = default;
 					(__coll__removed, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					removed = new WorkspaceFolder[__coll__removed.Length];
@@ -3226,11 +3225,11 @@ namespace VscAppz {
 						WorkspaceFolder __val__removed = default;
 						__val__removed = new WorkspaceFolder();
 						ok = __val__removed.populateFrom(__item__removed);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						removed[__idx__removed] = __val__removed;
-						__idx__removed = (__idx__removed + 1);
+						__idx__removed = __idx__removed + 1;
 					}
 				}
 				this.Removed = removed;
@@ -3247,7 +3246,7 @@ namespace VscAppz {
 			bool ok = default;
 			any val = default;
 			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
-			if ((!ok)) {
+			if (!ok) {
 				return false;
 			}
 			(val, ok) = (it.TryGetValue("name", out var __) ? (__, true) : (default, false));
@@ -3256,7 +3255,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					string _name_ = default;
 					(_name_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					name = _name_;
@@ -3269,7 +3268,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					string _workspaceFile_ = default;
 					(_workspaceFile_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					workspaceFile = _workspaceFile_;
@@ -3282,7 +3281,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					any[] __coll__workspaceFolders = default;
 					(__coll__workspaceFolders, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					workspaceFolders = new WorkspaceFolder[__coll__workspaceFolders.Length];
@@ -3292,11 +3291,11 @@ namespace VscAppz {
 						WorkspaceFolder __val__workspaceFolders = default;
 						__val__workspaceFolders = new WorkspaceFolder();
 						ok = __val__workspaceFolders.populateFrom(__item__workspaceFolders);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						workspaceFolders[__idx__workspaceFolders] = __val__workspaceFolders;
-						__idx__workspaceFolders = (__idx__workspaceFolders + 1);
+						__idx__workspaceFolders = __idx__workspaceFolders + 1;
 					}
 				}
 				this.WorkspaceFolders = workspaceFolders;
@@ -3311,7 +3310,7 @@ namespace VscAppz {
 			bool ok = default;
 			any val = default;
 			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
-			if ((!ok)) {
+			if (!ok) {
 				return false;
 			}
 			(val, ok) = (it.TryGetValue("uris", out var __) ? (__, true) : (default, false));
@@ -3320,7 +3319,7 @@ namespace VscAppz {
 				if ((null != val)) {
 					any[] __coll__uris = default;
 					(__coll__uris, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
-					if ((!ok)) {
+					if (!ok) {
 						return false;
 					}
 					uris = new string[__coll__uris.Length];
@@ -3329,11 +3328,11 @@ namespace VscAppz {
 					foreach (var __item__uris in __coll__uris) {
 						string __val__uris = default;
 						(__val__uris, ok) = (__item__uris is string) ? (((string)(__item__uris)), true) : (default, false);
-						if ((!ok)) {
+						if (!ok) {
 							return false;
 						}
 						uris[__idx__uris] = __val__uris;
-						__idx__uris = (__idx__uris + 1);
+						__idx__uris = __idx__uris + 1;
 					}
 				}
 				this.Uris = uris;

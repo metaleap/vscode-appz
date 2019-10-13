@@ -77,7 +77,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let _result_;
                     [_result_, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = _result_;
@@ -104,7 +104,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let _result_;
                     [_result_, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = _result_;
@@ -130,7 +130,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_MessageItem();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -156,7 +156,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_MessageItem();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -181,7 +181,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let _result_;
                     [_result_, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = _result_;
@@ -208,7 +208,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let _result_;
                     [_result_, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = _result_;
@@ -234,7 +234,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_MessageItem();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -260,7 +260,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_MessageItem();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -285,7 +285,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let _result_;
                     [_result_, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = _result_;
@@ -312,7 +312,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let _result_;
                     [_result_, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = _result_;
@@ -338,7 +338,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_MessageItem();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -364,7 +364,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_MessageItem();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -398,7 +398,7 @@ class implWindow extends implBase {
                             let __0;
                             if ((undefined !== args[0] && null !== args[0])) {
                                 [__0, ok] = [args[0], typeof args[0] === "string"];
-                                if ((!ok)) {
+                                if (!ok) {
                                     return [null, false];
                                 }
                             }
@@ -426,7 +426,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let _result_;
                     [_result_, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = _result_;
@@ -443,7 +443,7 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return ((undefined === on || null === on) || on(payload));
+            return (undefined === on || null === on) || on(payload);
         });
     }
     ShowQuickPick1(items, options, token, then) {
@@ -471,7 +471,7 @@ class implWindow extends implBase {
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = new_QuickPickItem();
                                 ok = __0.populateFrom(args[0]);
-                                if ((!ok)) {
+                                if (!ok) {
                                     return [null, false];
                                 }
                             }
@@ -504,7 +504,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let __coll__result;
                     [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = new Array(__coll__result.length);
@@ -513,11 +513,11 @@ class implWindow extends implBase {
                     for (const __item__result of __coll__result) {
                         let __val__result;
                         [__val__result, ok] = [__item__result, typeof __item__result === "string"];
-                        if ((!ok)) {
+                        if (!ok) {
                             return false;
                         }
                         result[__idx__result] = __val__result;
-                        __idx__result = (__idx__result + 1);
+                        __idx__result = __idx__result + 1;
                     }
                 }
                 then(result);
@@ -532,7 +532,7 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return ((undefined === on || null === on) || on(payload));
+            return (undefined === on || null === on) || on(payload);
         });
     }
     ShowQuickPick2(items, options, token, then) {
@@ -560,7 +560,7 @@ class implWindow extends implBase {
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = new_QuickPickItem();
                                 ok = __0.populateFrom(args[0]);
-                                if ((!ok)) {
+                                if (!ok) {
                                     return [null, false];
                                 }
                             }
@@ -592,7 +592,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let _result_;
                     [_result_, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = _result_;
@@ -609,7 +609,7 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return ((undefined === on || null === on) || on(payload));
+            return (undefined === on || null === on) || on(payload);
         });
     }
     ShowQuickPick3(items, options, token, then) {
@@ -637,7 +637,7 @@ class implWindow extends implBase {
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = new_QuickPickItem();
                                 ok = __0.populateFrom(args[0]);
-                                if ((!ok)) {
+                                if (!ok) {
                                     return [null, false];
                                 }
                             }
@@ -670,7 +670,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let __coll__result;
                     [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = new Array(__coll__result.length);
@@ -680,11 +680,11 @@ class implWindow extends implBase {
                         let __val__result;
                         __val__result = new_QuickPickItem();
                         ok = __val__result.populateFrom(__item__result);
-                        if ((!ok)) {
+                        if (!ok) {
                             return false;
                         }
                         result[__idx__result] = __val__result;
-                        __idx__result = (__idx__result + 1);
+                        __idx__result = __idx__result + 1;
                     }
                 }
                 then(result);
@@ -699,7 +699,7 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return ((undefined === on || null === on) || on(payload));
+            return (undefined === on || null === on) || on(payload);
         });
     }
     ShowQuickPick4(items, options, token, then) {
@@ -727,7 +727,7 @@ class implWindow extends implBase {
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = new_QuickPickItem();
                                 ok = __0.populateFrom(args[0]);
-                                if ((!ok)) {
+                                if (!ok) {
                                     return [null, false];
                                 }
                             }
@@ -759,7 +759,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_QuickPickItem();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -775,7 +775,7 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return ((undefined === on || null === on) || on(payload));
+            return (undefined === on || null === on) || on(payload);
         });
     }
     SetStatusBarMessage1(text, hideAfterTimeout, then) {
@@ -793,7 +793,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_Disposable();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -820,7 +820,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_Disposable();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -847,7 +847,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let _result_;
                     [_result_, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = _result_;
@@ -872,7 +872,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let __coll__result;
                     [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = new Array(__coll__result.length);
@@ -881,11 +881,11 @@ class implWindow extends implBase {
                     for (const __item__result of __coll__result) {
                         let __val__result;
                         [__val__result, ok] = [__item__result, typeof __item__result === "string"];
-                        if ((!ok)) {
+                        if (!ok) {
                             return false;
                         }
                         result[__idx__result] = __val__result;
-                        __idx__result = (__idx__result + 1);
+                        __idx__result = __idx__result + 1;
                     }
                 }
                 then(result);
@@ -908,7 +908,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_WorkspaceFolder();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -931,7 +931,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_WindowState();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -959,7 +959,7 @@ class implWindow extends implBase {
             let _a_0_;
             _a_0_ = new_WindowState();
             ok = _a_0_.populateFrom(args[0]);
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             listener(_a_0_);
@@ -974,7 +974,7 @@ class implWindow extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_Disposable();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1003,7 +1003,7 @@ class implEnv extends implBase {
                 let result;
                 if ((undefined !== payload && null !== payload)) {
                     [result, ok] = [payload, typeof payload === "boolean"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1028,7 +1028,7 @@ class implEnv extends implBase {
                 let result;
                 if ((undefined !== payload && null !== payload)) {
                     [result, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1050,7 +1050,7 @@ class implEnv extends implBase {
                 let result;
                 if ((undefined !== payload && null !== payload)) {
                     [result, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1072,7 +1072,7 @@ class implEnv extends implBase {
                 let result;
                 if ((undefined !== payload && null !== payload)) {
                     [result, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1094,7 +1094,7 @@ class implEnv extends implBase {
                 let result;
                 if ((undefined !== payload && null !== payload)) {
                     [result, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1117,7 +1117,7 @@ class implEnv extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let _result_;
                     [_result_, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = _result_;
@@ -1140,7 +1140,7 @@ class implEnv extends implBase {
                 let result;
                 if ((undefined !== payload && null !== payload)) {
                     [result, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1162,7 +1162,7 @@ class implEnv extends implBase {
                 let result;
                 if ((undefined !== payload && null !== payload)) {
                     [result, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1184,7 +1184,7 @@ class implEnv extends implBase {
                 let result;
                 if ((undefined !== payload && null !== payload)) {
                     [result, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1207,7 +1207,7 @@ class implEnv extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_EnvProperties();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1236,7 +1236,7 @@ class implWorkspace extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let _result_;
                     [_result_, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = _result_;
@@ -1260,7 +1260,7 @@ class implWorkspace extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let _result_;
                     [_result_, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = _result_;
@@ -1284,7 +1284,7 @@ class implWorkspace extends implBase {
                 let result;
                 if ((undefined !== payload && null !== payload)) {
                     [result, ok] = [payload, typeof payload === "boolean"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1315,7 +1315,7 @@ class implWorkspace extends implBase {
             let _a_0_;
             _a_0_ = new_WorkspaceFoldersChangeEvent();
             ok = _a_0_.populateFrom(args[0]);
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             listener(_a_0_);
@@ -1330,7 +1330,7 @@ class implWorkspace extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_Disposable();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1357,7 +1357,7 @@ class implWorkspace extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_WorkspaceFolder();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1380,7 +1380,7 @@ class implWorkspace extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let __coll__result;
                     [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = new Array(__coll__result.length);
@@ -1390,11 +1390,11 @@ class implWorkspace extends implBase {
                         let __val__result;
                         __val__result = new_WorkspaceFolder();
                         ok = __val__result.populateFrom(__item__result);
-                        if ((!ok)) {
+                        if (!ok) {
                             return false;
                         }
                         result[__idx__result] = __val__result;
-                        __idx__result = (__idx__result + 1);
+                        __idx__result = __idx__result + 1;
                     }
                 }
                 then(result);
@@ -1428,7 +1428,7 @@ class implWorkspace extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let __coll__result;
                     [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = new Array(__coll__result.length);
@@ -1437,11 +1437,11 @@ class implWorkspace extends implBase {
                     for (const __item__result of __coll__result) {
                         let __val__result;
                         [__val__result, ok] = [__item__result, typeof __item__result === "string"];
-                        if ((!ok)) {
+                        if (!ok) {
                             return false;
                         }
                         result[__idx__result] = __val__result;
-                        __idx__result = (__idx__result + 1);
+                        __idx__result = __idx__result + 1;
                     }
                 }
                 then(result);
@@ -1465,7 +1465,7 @@ class implWorkspace extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let _result_;
                     [_result_, ok] = [payload, typeof payload === "string"];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = _result_;
@@ -1489,7 +1489,7 @@ class implWorkspace extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_WorkspaceProperties();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1518,7 +1518,7 @@ class implLanguages extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let __coll__result;
                     [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = new Array(__coll__result.length);
@@ -1527,11 +1527,11 @@ class implLanguages extends implBase {
                     for (const __item__result of __coll__result) {
                         let __val__result;
                         [__val__result, ok] = [__item__result, typeof __item__result === "string"];
-                        if ((!ok)) {
+                        if (!ok) {
                             return false;
                         }
                         result[__idx__result] = __val__result;
-                        __idx__result = (__idx__result + 1);
+                        __idx__result = __idx__result + 1;
                     }
                 }
                 then(result);
@@ -1558,7 +1558,7 @@ class implLanguages extends implBase {
             let _a_0_;
             _a_0_ = new_DiagnosticChangeEvent();
             ok = _a_0_.populateFrom(args[0]);
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             listener(_a_0_);
@@ -1573,7 +1573,7 @@ class implLanguages extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_Disposable();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1616,7 +1616,7 @@ class implExtensions extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     result = new_Disposable();
                     ok = result.populateFrom(payload);
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                 }
@@ -1646,7 +1646,7 @@ class implCommands extends implBase {
                 if ((undefined !== payload && null !== payload)) {
                     let __coll__result;
                     [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
-                    if ((!ok)) {
+                    if (!ok) {
                         return false;
                     }
                     result = new Array(__coll__result.length);
@@ -1655,11 +1655,11 @@ class implCommands extends implBase {
                     for (const __item__result of __coll__result) {
                         let __val__result;
                         [__val__result, ok] = [__item__result, typeof __item__result === "string"];
-                        if ((!ok)) {
+                        if (!ok) {
                             return false;
                         }
                         result[__idx__result] = __val__result;
-                        __idx__result = (__idx__result + 1);
+                        __idx__result = __idx__result + 1;
                     }
                 }
                 then(result);
@@ -1674,7 +1674,7 @@ function MessageItem_populateFrom(payload) {
     let ok;
     let val;
     [it, ok] = [payload, typeof payload === "object"];
-    if ((!ok)) {
+    if (!ok) {
         return false;
     }
     [val, ok] = [it["title"], undefined !== it["title"]];
@@ -1682,7 +1682,7 @@ function MessageItem_populateFrom(payload) {
         let title;
         if ((undefined !== val && null !== val)) {
             [title, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
         }
@@ -1697,7 +1697,7 @@ function MessageItem_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _isCloseAffordance_;
             [_isCloseAffordance_, ok] = [val, typeof val === "boolean"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             isCloseAffordance = _isCloseAffordance_;
@@ -1709,7 +1709,7 @@ function MessageItem_populateFrom(payload) {
         let my;
         if ((undefined !== val && null !== val)) {
             [my, ok] = [val, typeof val === "object"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
         }
@@ -1722,7 +1722,7 @@ function QuickPickItem_populateFrom(payload) {
     let ok;
     let val;
     [it, ok] = [payload, typeof payload === "object"];
-    if ((!ok)) {
+    if (!ok) {
         return false;
     }
     [val, ok] = [it["label"], undefined !== it["label"]];
@@ -1730,7 +1730,7 @@ function QuickPickItem_populateFrom(payload) {
         let label;
         if ((undefined !== val && null !== val)) {
             [label, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
         }
@@ -1745,7 +1745,7 @@ function QuickPickItem_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _description_;
             [_description_, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             description = _description_;
@@ -1758,7 +1758,7 @@ function QuickPickItem_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _detail_;
             [_detail_, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             detail = _detail_;
@@ -1771,7 +1771,7 @@ function QuickPickItem_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _picked_;
             [_picked_, ok] = [val, typeof val === "boolean"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             picked = _picked_;
@@ -1784,7 +1784,7 @@ function QuickPickItem_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _alwaysShow_;
             [_alwaysShow_, ok] = [val, typeof val === "boolean"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             alwaysShow = _alwaysShow_;
@@ -1796,7 +1796,7 @@ function QuickPickItem_populateFrom(payload) {
         let my;
         if ((undefined !== val && null !== val)) {
             [my, ok] = [val, typeof val === "object"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
         }
@@ -1809,7 +1809,7 @@ function WorkspaceFolder_populateFrom(payload) {
     let ok;
     let val;
     [it, ok] = [payload, typeof payload === "object"];
-    if ((!ok)) {
+    if (!ok) {
         return false;
     }
     [val, ok] = [it["uri"], undefined !== it["uri"]];
@@ -1817,7 +1817,7 @@ function WorkspaceFolder_populateFrom(payload) {
         let uri;
         if ((undefined !== val && null !== val)) {
             [uri, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
         }
@@ -1831,7 +1831,7 @@ function WorkspaceFolder_populateFrom(payload) {
         let name;
         if ((undefined !== val && null !== val)) {
             [name, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
         }
@@ -1845,10 +1845,10 @@ function WorkspaceFolder_populateFrom(payload) {
         let index;
         if ((undefined !== val && null !== val)) {
             [index, ok] = [val, typeof val === "number"];
-            if ((!ok)) {
+            if (!ok) {
                 let __index__;
                 [__index__, ok] = [val, typeof val === "number"];
-                if ((!ok)) {
+                if (!ok) {
                     return false;
                 }
                 index = __index__;
@@ -1866,7 +1866,7 @@ function WindowState_populateFrom(payload) {
     let ok;
     let val;
     [it, ok] = [payload, typeof payload === "object"];
-    if ((!ok)) {
+    if (!ok) {
         return false;
     }
     [val, ok] = [it["focused"], undefined !== it["focused"]];
@@ -1874,7 +1874,7 @@ function WindowState_populateFrom(payload) {
         let focused;
         if ((undefined !== val && null !== val)) {
             [focused, ok] = [val, typeof val === "boolean"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
         }
@@ -1890,7 +1890,7 @@ function EnvProperties_populateFrom(payload) {
     let ok;
     let val;
     [it, ok] = [payload, typeof payload === "object"];
-    if ((!ok)) {
+    if (!ok) {
         return false;
     }
     [val, ok] = [it["appName"], undefined !== it["appName"]];
@@ -1899,7 +1899,7 @@ function EnvProperties_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _appName_;
             [_appName_, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             appName = _appName_;
@@ -1912,7 +1912,7 @@ function EnvProperties_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _appRoot_;
             [_appRoot_, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             appRoot = _appRoot_;
@@ -1925,7 +1925,7 @@ function EnvProperties_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _language_;
             [_language_, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             language = _language_;
@@ -1938,7 +1938,7 @@ function EnvProperties_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _machineId_;
             [_machineId_, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             machineId = _machineId_;
@@ -1951,7 +1951,7 @@ function EnvProperties_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _remoteName_;
             [_remoteName_, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             remoteName = _remoteName_;
@@ -1964,7 +1964,7 @@ function EnvProperties_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _sessionId_;
             [_sessionId_, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             sessionId = _sessionId_;
@@ -1977,7 +1977,7 @@ function EnvProperties_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _shell_;
             [_shell_, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             shell = _shell_;
@@ -1990,7 +1990,7 @@ function EnvProperties_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _uriScheme_;
             [_uriScheme_, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             uriScheme = _uriScheme_;
@@ -2004,7 +2004,7 @@ function WorkspaceFoldersChangeEvent_populateFrom(payload) {
     let ok;
     let val;
     [it, ok] = [payload, typeof payload === "object"];
-    if ((!ok)) {
+    if (!ok) {
         return false;
     }
     [val, ok] = [it["added"], undefined !== it["added"]];
@@ -2013,7 +2013,7 @@ function WorkspaceFoldersChangeEvent_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let __coll__added;
             [__coll__added, ok] = [val, (typeof val === "object") && (typeof val["length"] === "number")];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             added = new Array(__coll__added.length);
@@ -2023,11 +2023,11 @@ function WorkspaceFoldersChangeEvent_populateFrom(payload) {
                 let __val__added;
                 __val__added = new_WorkspaceFolder();
                 ok = __val__added.populateFrom(__item__added);
-                if ((!ok)) {
+                if (!ok) {
                     return false;
                 }
                 added[__idx__added] = __val__added;
-                __idx__added = (__idx__added + 1);
+                __idx__added = __idx__added + 1;
             }
         }
         this.Added = added;
@@ -2041,7 +2041,7 @@ function WorkspaceFoldersChangeEvent_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let __coll__removed;
             [__coll__removed, ok] = [val, (typeof val === "object") && (typeof val["length"] === "number")];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             removed = new Array(__coll__removed.length);
@@ -2051,11 +2051,11 @@ function WorkspaceFoldersChangeEvent_populateFrom(payload) {
                 let __val__removed;
                 __val__removed = new_WorkspaceFolder();
                 ok = __val__removed.populateFrom(__item__removed);
-                if ((!ok)) {
+                if (!ok) {
                     return false;
                 }
                 removed[__idx__removed] = __val__removed;
-                __idx__removed = (__idx__removed + 1);
+                __idx__removed = __idx__removed + 1;
             }
         }
         this.Removed = removed;
@@ -2070,7 +2070,7 @@ function WorkspaceProperties_populateFrom(payload) {
     let ok;
     let val;
     [it, ok] = [payload, typeof payload === "object"];
-    if ((!ok)) {
+    if (!ok) {
         return false;
     }
     [val, ok] = [it["name"], undefined !== it["name"]];
@@ -2079,7 +2079,7 @@ function WorkspaceProperties_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _name_;
             [_name_, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             name = _name_;
@@ -2092,7 +2092,7 @@ function WorkspaceProperties_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let _workspaceFile_;
             [_workspaceFile_, ok] = [val, typeof val === "string"];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             workspaceFile = _workspaceFile_;
@@ -2105,7 +2105,7 @@ function WorkspaceProperties_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let __coll__workspaceFolders;
             [__coll__workspaceFolders, ok] = [val, (typeof val === "object") && (typeof val["length"] === "number")];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             workspaceFolders = new Array(__coll__workspaceFolders.length);
@@ -2115,11 +2115,11 @@ function WorkspaceProperties_populateFrom(payload) {
                 let __val__workspaceFolders;
                 __val__workspaceFolders = new_WorkspaceFolder();
                 ok = __val__workspaceFolders.populateFrom(__item__workspaceFolders);
-                if ((!ok)) {
+                if (!ok) {
                     return false;
                 }
                 workspaceFolders[__idx__workspaceFolders] = __val__workspaceFolders;
-                __idx__workspaceFolders = (__idx__workspaceFolders + 1);
+                __idx__workspaceFolders = __idx__workspaceFolders + 1;
             }
         }
         this.WorkspaceFolders = workspaceFolders;
@@ -2131,7 +2131,7 @@ function DiagnosticChangeEvent_populateFrom(payload) {
     let ok;
     let val;
     [it, ok] = [payload, typeof payload === "object"];
-    if ((!ok)) {
+    if (!ok) {
         return false;
     }
     [val, ok] = [it["uris"], undefined !== it["uris"]];
@@ -2140,7 +2140,7 @@ function DiagnosticChangeEvent_populateFrom(payload) {
         if ((undefined !== val && null !== val)) {
             let __coll__uris;
             [__coll__uris, ok] = [val, (typeof val === "object") && (typeof val["length"] === "number")];
-            if ((!ok)) {
+            if (!ok) {
                 return false;
             }
             uris = new Array(__coll__uris.length);
@@ -2149,11 +2149,11 @@ function DiagnosticChangeEvent_populateFrom(payload) {
             for (const __item__uris of __coll__uris) {
                 let __val__uris;
                 [__val__uris, ok] = [__item__uris, typeof __item__uris === "string"];
-                if ((!ok)) {
+                if (!ok) {
                     return false;
                 }
                 uris[__idx__uris] = __val__uris;
-                __idx__uris = (__idx__uris + 1);
+                __idx__uris = __idx__uris + 1;
             }
         }
         this.Uris = uris;

@@ -442,8 +442,8 @@ export abstract class Gen {
         genPopulateFor: { [_: string]: boolean }
     }
 
-    constructor(outFilePathPref: string, outFilePathSuff: string) {
-        [this.outFilePathPref, this.outFilePathSuff] = [outFilePathPref, outFilePathSuff]
+    constructor(outFilePath: [string, string]) {
+        [this.outFilePathPref, this.outFilePathSuff] = [outFilePath[0], outFilePath[1]]
         this.resetState()
     }
 

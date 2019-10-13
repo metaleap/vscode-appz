@@ -1,4 +1,4 @@
-import * as gen from './gen-basics'
+import * as gen from './gen'
 
 export class Gen extends gen.Gen implements gen.IGen {
 

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const gen_ast = require("./gen-ast");
+const gen_syn = require("./gen-syn");
 let prevImplTypeName;
-class Gen extends gen_ast.Gen {
+class Gen extends gen_syn.Gen {
     gen(prep) {
         this.options.oneIndent = " ".repeat(4);
         this.options.doc.appendArgsToSummaryFor.funcFields = true;
@@ -132,19 +132,19 @@ class Gen extends gen_ast.Gen {
                 return this.emitExpr(elen.LenOf).s(".length");
             const eop = it;
             if (eop && eop.Name && eop.Operands && eop.Operands.length)
-                if (eop.Name === gen_ast.BuilderOperators.Is)
+                if (eop.Name === gen_syn.BuilderOperators.Is)
                     return this.s("(undefined !== ").emitExpr(eop.Operands[0]).s(" && null !== ").emitExpr(eop.Operands[0]).s(")");
-                else if (eop.Name === gen_ast.BuilderOperators.Isnt)
+                else if (eop.Name === gen_syn.BuilderOperators.Isnt)
                     return this.s("(undefined === ").emitExpr(eop.Operands[0]).s(" || null === ").emitExpr(eop.Operands[0]).s(")");
-                else if (eop.Name === gen_ast.BuilderOperators.Addr || eop.Name === gen_ast.BuilderOperators.Deref)
+                else if (eop.Name === gen_syn.BuilderOperators.Addr || eop.Name === gen_syn.BuilderOperators.Deref)
                     return this.emitExpr(eop.Operands[0]);
-                else if (eop.Name === gen_ast.BuilderOperators.Idx)
+                else if (eop.Name === gen_syn.BuilderOperators.Idx)
                     return this.emitExpr(eop.Operands[0]).s("[").emitExprs("][", ...eop.Operands.slice(1)).s("]");
-                else if (eop.Name === gen_ast.BuilderOperators.IdxMay)
+                else if (eop.Name === gen_syn.BuilderOperators.IdxMay)
                     return this.s("[").emitExpr(eop.Operands[0]).s("[").emitExprs("][", ...eop.Operands.slice(1)).s("]").s(", undefined !== ").emitExpr(eop.Operands[0]).s("[").emitExprs("][", ...eop.Operands.slice(1)).s("]").s("]");
-                else if (eop.Name === gen_ast.BuilderOperators.Eq)
+                else if (eop.Name === gen_syn.BuilderOperators.Eq)
                     return this.emitExprs(' === ', ...eop.Operands);
-                else if (eop.Name === gen_ast.BuilderOperators.Neq)
+                else if (eop.Name === gen_syn.BuilderOperators.Neq)
                     return this.emitExprs(' !== ', ...eop.Operands);
             const efn = it;
             if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
@@ -163,10 +163,10 @@ class Gen extends gen_ast.Gen {
                     const iscoll = this.typeColl(t);
                     return this.s('[').emitExpr(econv.Conv).s(' as ').emitTypeRef(t).s(', ')
                         .caseOf([iscoll, () => this.s('(typeof ').emitExpr(econv.Conv).s(' === "object") && ').when(iscoll.KeysOf, () => this.s('true'), () => this.s('(typeof ').emitExpr(econv.Conv).s('["length"] === "number")'))
-                    ], [t === gen_ast.TypeRefPrim.Dict, () => this.s('typeof ').emitExpr(econv.Conv).s(' === "object"')
-                    ], [t === gen_ast.TypeRefPrim.Bool, () => this.s('typeof ').emitExpr(econv.Conv).s(' === "boolean"')
-                    ], [t === gen_ast.TypeRefPrim.Int || t === gen_ast.TypeRefPrim.Real, () => this.s('typeof ').emitExpr(econv.Conv).s(' === "number"')
-                    ], [t === gen_ast.TypeRefPrim.String, () => this.s('typeof ').emitExpr(econv.Conv).s(' === "string"')
+                    ], [t === gen_syn.TypeRefPrim.Dict, () => this.s('typeof ').emitExpr(econv.Conv).s(' === "object"')
+                    ], [t === gen_syn.TypeRefPrim.Bool, () => this.s('typeof ').emitExpr(econv.Conv).s(' === "boolean"')
+                    ], [t === gen_syn.TypeRefPrim.Int || t === gen_syn.TypeRefPrim.Real, () => this.s('typeof ').emitExpr(econv.Conv).s(' === "number"')
+                    ], [t === gen_syn.TypeRefPrim.String, () => this.s('typeof ').emitExpr(econv.Conv).s(' === "string"')
                     ], [true, () => this.s('true')])
                         .s(']');
                 }
@@ -220,11 +220,11 @@ class Gen extends gen_ast.Gen {
             return this.s("(")
                 .each(tfun.From, ", ", t => this.s("_").s(": ").emitTypeRef(t))
                 .s(") => ").emitTypeRef(tfun.To);
-        if (it === gen_ast.TypeRefPrim.Real || it === gen_ast.TypeRefPrim.Int)
+        if (it === gen_syn.TypeRefPrim.Real || it === gen_syn.TypeRefPrim.Int)
             return this.s("number");
-        if (it === gen_ast.TypeRefPrim.Bool)
+        if (it === gen_syn.TypeRefPrim.Bool)
             return this.s("boolean");
-        if (it === gen_ast.TypeRefPrim.Dict)
+        if (it === gen_syn.TypeRefPrim.Dict)
             return this.s("{ [_: string]: any}");
         return super.emitTypeRef(it);
     }
