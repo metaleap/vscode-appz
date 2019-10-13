@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import * as vscgen from './vscode';
+import * as vscgen from './vscode.gen';
 declare type dict = {
     [_: string]: any;
 };
@@ -43,7 +43,7 @@ export declare class Disposable {
     impl: impl;
     id: string;
     subFnId: string;
-    bind(impl: impl, subFnId: string): void;
+    bind(impl: impl, subFnId: string): this;
     populateFrom(payload: any): boolean;
     Dispose(): void;
 }

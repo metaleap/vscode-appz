@@ -701,7 +701,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         const etup = it as ETup
         if (etup && etup.Items !== undefined)
-            return this.s('[').each(etup.Items, ',', _ => { this.emitExpr(_) }).s(']')
+            return this.s('[').each(etup.Items, ', ', _ => { this.emitExpr(_) }).s(']')
 
         const ecall = it as ECall
         if (ecall && ecall.Call)

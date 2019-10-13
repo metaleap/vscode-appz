@@ -1,5 +1,5 @@
 import * as aux from './aux'
-import * as vscgen from './vscode'
+import * as vscgen from './vscode.gen'
 
 
 export let OnError = (_this: vscgen.Vscode, err: any, jsonMsg?: any): void => {

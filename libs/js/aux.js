@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const appz = require("./vsc-appz");
-const vscgen = require("./vscode");
+const vscgen = require("./vscode.gen");
 class ipcMsg {
     constructor(qName, data, cbId) {
         [this.QName, this.Data, this.CbId] = [qName, data, cbId];
@@ -120,6 +120,7 @@ exports.Cancel = Cancel;
 class Disposable {
     bind(impl, subFnId) {
         [this.impl, this.subFnId] = [impl, subFnId];
+        return this;
     }
     populateFrom(payload) {
         const arr = payload;

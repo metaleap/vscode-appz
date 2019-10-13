@@ -512,7 +512,7 @@ class Gen extends gen.Gen {
             return this.emitExpr(elen.LenOf).s("·len");
         const etup = it;
         if (etup && etup.Items !== undefined)
-            return this.s('[').each(etup.Items, ',', _ => { this.emitExpr(_); }).s(']');
+            return this.s('[').each(etup.Items, ', ', _ => { this.emitExpr(_); }).s(']');
         const ecall = it;
         if (ecall && ecall.Call)
             return this.emitExpr(ecall.Call).s("(").emitExprs(", ", ...ecall.Args).s(")");

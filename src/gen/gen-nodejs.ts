@@ -174,7 +174,8 @@ export class Gen extends gen_ast.Gen {
         if (it) {
             const ecollnew = it as gen_ast.ECollNew
             if (ecollnew && (ecollnew.Cap !== undefined || ecollnew.Len !== undefined))
-                return this.s(ecollnew.ElemType ? "[]" : "{}")
+                return (ecollnew.Len !== undefined) ? this.s("new Array(").emitExpr(ecollnew.Len).s(")")
+                    : this.s(ecollnew.ElemType ? "[]" : "{}")
 
             const enew = it as gen_ast.ENew
             if (enew && enew.New)
@@ -192,8 +193,14 @@ export class Gen extends gen_ast.Gen {
                     return this.s("(undefined === ").emitExpr(eop.Operands[0]).s(" || null === ").emitExpr(eop.Operands[0]).s(")")
                 else if (eop.Name === gen_ast.BuilderOperators.Addr || eop.Name === gen_ast.BuilderOperators.Deref)
                     return this.emitExpr(eop.Operands[0])
-                else if (eop.Name === gen_ast.BuilderOperators.Idx || eop.Name === gen_ast.BuilderOperators.IdxMay)
+                else if (eop.Name === gen_ast.BuilderOperators.Idx)
                     return this.emitExpr(eop.Operands[0]).s("[").emitExprs("][", ...eop.Operands.slice(1)).s("]")
+                else if (eop.Name === gen_ast.BuilderOperators.IdxMay)
+                    return this.s("[").emitExpr(eop.Operands[0]).s("[").emitExprs("][", ...eop.Operands.slice(1)).s("]").s(", undefined !== ").emitExpr(eop.Operands[0]).s("[").emitExprs("][", ...eop.Operands.slice(1)).s("]").s("]")
+                else if (eop.Name === gen_ast.BuilderOperators.Eq)
+                    return this.emitExprs(' === ', ...eop.Operands)
+                else if (eop.Name === gen_ast.BuilderOperators.Neq)
+                    return this.emitExprs(' !== ', ...eop.Operands)
 
             const efn = it as gen_ast.EFunc
             if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
@@ -206,14 +213,34 @@ export class Gen extends gen_ast.Gen {
                     .emitInstr(efn.Body)
 
             const econv = it as gen_ast.EConv
-            if (econv && econv.Conv && econv.To) {
-                return this.s('[').emitExpr(econv.Conv).s(', ')
-                    .caseOf(
-                        [this.typeColl(econv.To), () => this.s('false')],
-                        [true, () => this.s('true')],
-                    )
-                    .s(']')
-            }
+            if (econv && econv.Conv && econv.To)
+                if (econv.Cast)
+                    return this.emitExpr(econv.Conv)
+                else {
+                    const t = this.typeUnMaybe(econv.To)
+                    const iscoll = this.typeColl(t)
+                    return this.s('[').emitExpr(econv.Conv).s(' as ').emitTypeRef(t).s(', ')
+                        .caseOf(
+                            [iscoll, () =>
+                                this.s('(typeof ').emitExpr(econv.Conv).s(' === "object") && ').when(
+                                    iscoll.KeysOf, () => this.s('true'), () => this.s('(typeof ').emitExpr(econv.Conv).s('["length"] === "number")'))
+                            ],
+                            [t === gen_ast.TypeRefPrim.Dict, () =>
+                                this.s('typeof ').emitExpr(econv.Conv).s(' === "object"')
+                            ],
+                            [t === gen_ast.TypeRefPrim.Bool, () =>
+                                this.s('typeof ').emitExpr(econv.Conv).s(' === "boolean"')
+                            ],
+                            [t === gen_ast.TypeRefPrim.Int || t === gen_ast.TypeRefPrim.Real, () =>
+                                this.s('typeof ').emitExpr(econv.Conv).s(' === "number"')
+                            ],
+                            [t === gen_ast.TypeRefPrim.String, () =>
+                                this.s('typeof ').emitExpr(econv.Conv).s(' === "string"')
+                            ],
+                            [true, () => this.s('true')],
+                        )
+                        .s(']')
+                }
         }
         return super.emitExpr(it)
     }

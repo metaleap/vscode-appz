@@ -1453,7 +1453,7 @@ Window·ShowInformationMessage1: (message:string -> items:[string] -> then:?(?st
             var result of ?string
             if (=?payload)
                 var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [_result_, ok] = ((payload)·(string))
                 if (!ok)
                     return false
                 result = (&_result_)
@@ -1480,7 +1480,7 @@ Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> it
             var result of ?string
             if (=?payload)
                 var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [_result_, ok] = ((payload)·(string))
                 if (!ok)
                     return false
                 result = (&_result_)
@@ -1557,7 +1557,7 @@ Window·ShowWarningMessage1: (message:string -> items:[string] -> then:?(?string
             var result of ?string
             if (=?payload)
                 var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [_result_, ok] = ((payload)·(string))
                 if (!ok)
                     return false
                 result = (&_result_)
@@ -1584,7 +1584,7 @@ Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:
             var result of ?string
             if (=?payload)
                 var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [_result_, ok] = ((payload)·(string))
                 if (!ok)
                     return false
                 result = (&_result_)
@@ -1661,7 +1661,7 @@ Window·ShowErrorMessage1: (message:string -> items:[string] -> then:?(?string->
             var result of ?string
             if (=?payload)
                 var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [_result_, ok] = ((payload)·(string))
                 if (!ok)
                     return false
                 result = (&_result_)
@@ -1688,7 +1688,7 @@ Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[s
             var result of ?string
             if (=?payload)
                 var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [_result_, ok] = ((payload)·(string))
                 if (!ok)
                     return false
                 result = (&_result_)
@@ -1768,15 +1768,15 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> then:?(?stri
                 fnids·add(options.ValidateInput_AppzFuncId)
                 this.Impl().cbOther@options.ValidateInput_AppzFuncId = (args:[any] -> [any,bool])
                     if (1 != args·len)
-                        return [null,false]
+                        return [null, false]
                     else
                         var ok of bool
                         var __0 of string
                         if (=?args@0)
-                            [__0,ok] = ((args@0)·(string))
+                            [__0, ok] = ((args@0)·(string))
                             if (!ok)
-                                return [null,false]
-                        return [fn(__0),true]
+                                return [null, false]
+                        return [fn(__0), true]
                 
     msg.Data@"options" = options
     if (=?token)
@@ -1792,7 +1792,7 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> then:?(?stri
             var result of ?string
             if (=?payload)
                 var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [_result_, ok] = ((payload)·(string))
                 if (!ok)
                     return false
                 result = (&_result_)
@@ -1827,7 +1827,7 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
                 fnids·add(options.OnDidSelectItem_AppzFuncId)
                 this.Impl().cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
                     if (1 != args·len)
-                        return [null,false]
+                        return [null, false]
                     else
                         var ok of bool
                         var __0 of QuickPickItem
@@ -1835,10 +1835,10 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
                             __0 = QuickPickItem·new
                             ok = __0.populateFrom(args@0)
                             if (!ok)
-                                return [null,false]
+                                return [null, false]
                         else
-                            return [null,false]
-                        return [fn(__0),true]
+                            return [null, false]
+                        return [fn(__0), true]
                 
     msg.Data@"items" = items
     options.CanPickMany = true
@@ -1856,7 +1856,7 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
             var result of ?[string]
             if (=?payload)
                 var __coll__result of [any]
-                [__coll__result,ok] = ((payload)·([any]))
+                [__coll__result, ok] = ((payload)·([any]))
                 if (!ok)
                     return false
                 result = [string]·new(__coll__result·len)
@@ -1864,7 +1864,7 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
                 __idx__result = 0
                 for __item__result in __coll__result
                     var __val__result of string
-                    [__val__result,ok] = ((__item__result)·(string))
+                    [__val__result, ok] = ((__item__result)·(string))
                     if (!ok)
                         return false
                     result@__idx__result = __val__result
@@ -1900,7 +1900,7 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
                 fnids·add(options.OnDidSelectItem_AppzFuncId)
                 this.Impl().cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
                     if (1 != args·len)
-                        return [null,false]
+                        return [null, false]
                     else
                         var ok of bool
                         var __0 of QuickPickItem
@@ -1908,10 +1908,10 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
                             __0 = QuickPickItem·new
                             ok = __0.populateFrom(args@0)
                             if (!ok)
-                                return [null,false]
+                                return [null, false]
                         else
-                            return [null,false]
-                        return [fn(__0),true]
+                            return [null, false]
+                        return [fn(__0), true]
                 
     msg.Data@"items" = items
     msg.Data@"options" = options
@@ -1928,7 +1928,7 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
             var result of ?string
             if (=?payload)
                 var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [_result_, ok] = ((payload)·(string))
                 if (!ok)
                     return false
                 result = (&_result_)
@@ -1963,7 +1963,7 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
                 fnids·add(options.OnDidSelectItem_AppzFuncId)
                 this.Impl().cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
                     if (1 != args·len)
-                        return [null,false]
+                        return [null, false]
                     else
                         var ok of bool
                         var __0 of QuickPickItem
@@ -1971,10 +1971,10 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
                             __0 = QuickPickItem·new
                             ok = __0.populateFrom(args@0)
                             if (!ok)
-                                return [null,false]
+                                return [null, false]
                         else
-                            return [null,false]
-                        return [fn(__0),true]
+                            return [null, false]
+                        return [fn(__0), true]
                 
     msg.Data@"items" = items
     options.CanPickMany = true
@@ -1992,7 +1992,7 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
             var result of ?[QuickPickItem]
             if (=?payload)
                 var __coll__result of [any]
-                [__coll__result,ok] = ((payload)·([any]))
+                [__coll__result, ok] = ((payload)·([any]))
                 if (!ok)
                     return false
                 result = [QuickPickItem]·new(__coll__result·len)
@@ -2037,7 +2037,7 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
                 fnids·add(options.OnDidSelectItem_AppzFuncId)
                 this.Impl().cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
                     if (1 != args·len)
-                        return [null,false]
+                        return [null, false]
                     else
                         var ok of bool
                         var __0 of QuickPickItem
@@ -2045,10 +2045,10 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
                             __0 = QuickPickItem·new
                             ok = __0.populateFrom(args@0)
                             if (!ok)
-                                return [null,false]
+                                return [null, false]
                         else
-                            return [null,false]
-                        return [fn(__0),true]
+                            return [null, false]
+                        return [fn(__0), true]
                 
     msg.Data@"items" = items
     msg.Data@"options" = options
@@ -2148,7 +2148,7 @@ Window·ShowSaveDialog: (options:SaveDialogOptions -> then:?(?string->void) -> v
             var result of ?string
             if (=?payload)
                 var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [_result_, ok] = ((payload)·(string))
                 if (!ok)
                     return false
                 result = (&_result_)
@@ -2173,7 +2173,7 @@ Window·ShowOpenDialog: (options:OpenDialogOptions -> then:?(?[string]->void) ->
             var result of ?[string]
             if (=?payload)
                 var __coll__result of [any]
-                [__coll__result,ok] = ((payload)·([any]))
+                [__coll__result, ok] = ((payload)·([any]))
                 if (!ok)
                     return false
                 result = [string]·new(__coll__result·len)
@@ -2181,7 +2181,7 @@ Window·ShowOpenDialog: (options:OpenDialogOptions -> then:?(?[string]->void) ->
                 __idx__result = 0
                 for __item__result in __coll__result
                     var __val__result of string
-                    [__val__result,ok] = ((__item__result)·(string))
+                    [__val__result, ok] = ((__item__result)·(string))
                     if (!ok)
                         return false
                     result@__idx__result = __val__result
@@ -2295,7 +2295,7 @@ Env·OpenExternal: (target:string -> then:?(bool->void) -> void)
             var ok of bool
             var result of bool
             if (=?payload)
-                [result,ok] = ((payload)·(bool))
+                [result, ok] = ((payload)·(bool))
                 if (!ok)
                     return false
             else
@@ -2319,7 +2319,7 @@ Env·AppName: (then:?(string->void) -> void)
             var ok of bool
             var result of string
             if (=?payload)
-                [result,ok] = ((payload)·(string))
+                [result, ok] = ((payload)·(string))
                 if (!ok)
                     return false
             then(result)
@@ -2341,7 +2341,7 @@ Env·AppRoot: (then:?(string->void) -> void)
             var ok of bool
             var result of string
             if (=?payload)
-                [result,ok] = ((payload)·(string))
+                [result, ok] = ((payload)·(string))
                 if (!ok)
                     return false
             then(result)
@@ -2363,7 +2363,7 @@ Env·Language: (then:?(string->void) -> void)
             var ok of bool
             var result of string
             if (=?payload)
-                [result,ok] = ((payload)·(string))
+                [result, ok] = ((payload)·(string))
                 if (!ok)
                     return false
             then(result)
@@ -2385,7 +2385,7 @@ Env·MachineId: (then:?(string->void) -> void)
             var ok of bool
             var result of string
             if (=?payload)
-                [result,ok] = ((payload)·(string))
+                [result, ok] = ((payload)·(string))
                 if (!ok)
                     return false
             then(result)
@@ -2408,7 +2408,7 @@ Env·RemoteName: (then:?(?string->void) -> void)
             var result of ?string
             if (=?payload)
                 var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [_result_, ok] = ((payload)·(string))
                 if (!ok)
                     return false
                 result = (&_result_)
@@ -2431,7 +2431,7 @@ Env·SessionId: (then:?(string->void) -> void)
             var ok of bool
             var result of string
             if (=?payload)
-                [result,ok] = ((payload)·(string))
+                [result, ok] = ((payload)·(string))
                 if (!ok)
                     return false
             then(result)
@@ -2453,7 +2453,7 @@ Env·Shell: (then:?(string->void) -> void)
             var ok of bool
             var result of string
             if (=?payload)
-                [result,ok] = ((payload)·(string))
+                [result, ok] = ((payload)·(string))
                 if (!ok)
                     return false
             then(result)
@@ -2475,7 +2475,7 @@ Env·UriScheme: (then:?(string->void) -> void)
             var ok of bool
             var result of string
             if (=?payload)
-                [result,ok] = ((payload)·(string))
+                [result, ok] = ((payload)·(string))
                 if (!ok)
                     return false
             then(result)
@@ -2523,7 +2523,7 @@ Workspace·Name: (then:?(?string->void) -> void)
             var result of ?string
             if (=?payload)
                 var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [_result_, ok] = ((payload)·(string))
                 if (!ok)
                     return false
                 result = (&_result_)
@@ -2547,7 +2547,7 @@ Workspace·WorkspaceFile: (then:?(?string->void) -> void)
             var result of ?string
             if (=?payload)
                 var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [_result_, ok] = ((payload)·(string))
                 if (!ok)
                     return false
                 result = (&_result_)
@@ -2571,7 +2571,7 @@ Workspace·SaveAll: (includeUntitled:bool -> then:?(bool->void) -> void)
             var ok of bool
             var result of bool
             if (=?payload)
-                [result,ok] = ((payload)·(bool))
+                [result, ok] = ((payload)·(bool))
                 if (!ok)
                     return false
             else
@@ -2662,7 +2662,7 @@ Workspace·WorkspaceFolders: (then:?(?[WorkspaceFolder]->void) -> void)
             var result of ?[WorkspaceFolder]
             if (=?payload)
                 var __coll__result of [any]
-                [__coll__result,ok] = ((payload)·([any]))
+                [__coll__result, ok] = ((payload)·([any]))
                 if (!ok)
                     return false
                 result = [WorkspaceFolder]·new(__coll__result·len)
@@ -2705,7 +2705,7 @@ Workspace·FindFiles: (include:string -> exclude:?string -> maxResults:?int -> t
             var result of ?[string]
             if (=?payload)
                 var __coll__result of [any]
-                [__coll__result,ok] = ((payload)·([any]))
+                [__coll__result, ok] = ((payload)·([any]))
                 if (!ok)
                     return false
                 result = [string]·new(__coll__result·len)
@@ -2713,7 +2713,7 @@ Workspace·FindFiles: (include:string -> exclude:?string -> maxResults:?int -> t
                 __idx__result = 0
                 for __item__result in __coll__result
                     var __val__result of string
-                    [__val__result,ok] = ((__item__result)·(string))
+                    [__val__result, ok] = ((__item__result)·(string))
                     if (!ok)
                         return false
                     result@__idx__result = __val__result
@@ -2740,7 +2740,7 @@ Workspace·AsRelativePath: (pathOrUri:string -> includeWorkspaceFolder:bool -> t
             var result of ?string
             if (=?payload)
                 var _result_ of string
-                [_result_,ok] = ((payload)·(string))
+                [_result_, ok] = ((payload)·(string))
                 if (!ok)
                     return false
                 result = (&_result_)
@@ -2789,7 +2789,7 @@ Languages·GetLanguages: (then:?(?[string]->void) -> void)
             var result of ?[string]
             if (=?payload)
                 var __coll__result of [any]
-                [__coll__result,ok] = ((payload)·([any]))
+                [__coll__result, ok] = ((payload)·([any]))
                 if (!ok)
                     return false
                 result = [string]·new(__coll__result·len)
@@ -2797,7 +2797,7 @@ Languages·GetLanguages: (then:?(?[string]->void) -> void)
                 __idx__result = 0
                 for __item__result in __coll__result
                     var __val__result of string
-                    [__val__result,ok] = ((__item__result)·(string))
+                    [__val__result, ok] = ((__item__result)·(string))
                     if (!ok)
                         return false
                     result@__idx__result = __val__result
@@ -2902,7 +2902,7 @@ Commands·GetCommands: (filterInternal:bool -> then:?(?[string]->void) -> void)
             var result of ?[string]
             if (=?payload)
                 var __coll__result of [any]
-                [__coll__result,ok] = ((payload)·([any]))
+                [__coll__result, ok] = ((payload)·([any]))
                 if (!ok)
                     return false
                 result = [string]·new(__coll__result·len)
@@ -2910,7 +2910,7 @@ Commands·GetCommands: (filterInternal:bool -> then:?(?[string]->void) -> void)
                 __idx__result = 0
                 for __item__result in __coll__result
                     var __val__result of string
-                    [__val__result,ok] = ((__item__result)·(string))
+                    [__val__result, ok] = ((__item__result)·(string))
                     if (!ok)
                         return false
                     result@__idx__result = __val__result
@@ -2927,34 +2927,34 @@ MessageItem·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
-    [it,ok] = ((payload)·(dict))
+    [it, ok] = ((payload)·(dict))
     if (!ok)
         return false
-    [val,ok] = it@?"title"
+    [val, ok] = it@?"title"
     if ok
         var title of string
         if (=?val)
-            [title,ok] = ((val)·(string))
+            [title, ok] = ((val)·(string))
             if (!ok)
                 return false
         this.Title = title
     else
         return false
-    [val,ok] = it@?"isCloseAffordance"
+    [val, ok] = it@?"isCloseAffordance"
     if ok
         var isCloseAffordance of ?bool
         if (=?val)
             var _isCloseAffordance_ of bool
-            [_isCloseAffordance_,ok] = ((val)·(bool))
+            [_isCloseAffordance_, ok] = ((val)·(bool))
             if (!ok)
                 return false
             isCloseAffordance = (&_isCloseAffordance_)
         this.IsCloseAffordance = isCloseAffordance
-    [val,ok] = it@?"my"
+    [val, ok] = it@?"my"
     if ok
         var my of ?dict
         if (=?val)
-            [my,ok] = ((val)·(?dict))
+            [my, ok] = ((val)·(?dict))
             if (!ok)
                 return false
         this.My = my
@@ -2967,64 +2967,64 @@ QuickPickItem·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
-    [it,ok] = ((payload)·(dict))
+    [it, ok] = ((payload)·(dict))
     if (!ok)
         return false
-    [val,ok] = it@?"label"
+    [val, ok] = it@?"label"
     if ok
         var label of string
         if (=?val)
-            [label,ok] = ((val)·(string))
+            [label, ok] = ((val)·(string))
             if (!ok)
                 return false
         this.Label = label
     else
         return false
-    [val,ok] = it@?"description"
+    [val, ok] = it@?"description"
     if ok
         var description of ?string
         if (=?val)
             var _description_ of string
-            [_description_,ok] = ((val)·(string))
+            [_description_, ok] = ((val)·(string))
             if (!ok)
                 return false
             description = (&_description_)
         this.Description = description
-    [val,ok] = it@?"detail"
+    [val, ok] = it@?"detail"
     if ok
         var detail of ?string
         if (=?val)
             var _detail_ of string
-            [_detail_,ok] = ((val)·(string))
+            [_detail_, ok] = ((val)·(string))
             if (!ok)
                 return false
             detail = (&_detail_)
         this.Detail = detail
-    [val,ok] = it@?"picked"
+    [val, ok] = it@?"picked"
     if ok
         var picked of ?bool
         if (=?val)
             var _picked_ of bool
-            [_picked_,ok] = ((val)·(bool))
+            [_picked_, ok] = ((val)·(bool))
             if (!ok)
                 return false
             picked = (&_picked_)
         this.Picked = picked
-    [val,ok] = it@?"alwaysShow"
+    [val, ok] = it@?"alwaysShow"
     if ok
         var alwaysShow of ?bool
         if (=?val)
             var _alwaysShow_ of bool
-            [_alwaysShow_,ok] = ((val)·(bool))
+            [_alwaysShow_, ok] = ((val)·(bool))
             if (!ok)
                 return false
             alwaysShow = (&_alwaysShow_)
         this.AlwaysShow = alwaysShow
-    [val,ok] = it@?"my"
+    [val, ok] = it@?"my"
     if ok
         var my of ?dict
         if (=?val)
-            [my,ok] = ((val)·(?dict))
+            [my, ok] = ((val)·(?dict))
             if (!ok)
                 return false
         this.My = my
@@ -3037,37 +3037,37 @@ WorkspaceFolder·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
-    [it,ok] = ((payload)·(dict))
+    [it, ok] = ((payload)·(dict))
     if (!ok)
         return false
-    [val,ok] = it@?"uri"
+    [val, ok] = it@?"uri"
     if ok
         var uri of string
         if (=?val)
-            [uri,ok] = ((val)·(string))
+            [uri, ok] = ((val)·(string))
             if (!ok)
                 return false
         this.Uri = uri
     else
         return false
-    [val,ok] = it@?"name"
+    [val, ok] = it@?"name"
     if ok
         var name of string
         if (=?val)
-            [name,ok] = ((val)·(string))
+            [name, ok] = ((val)·(string))
             if (!ok)
                 return false
         this.Name = name
     else
         return false
-    [val,ok] = it@?"index"
+    [val, ok] = it@?"index"
     if ok
         var index of int
         if (=?val)
-            [index,ok] = ((val)·(int))
+            [index, ok] = ((val)·(int))
             if (!ok)
                 var __index__ of real
-                [__index__,ok] = ((val)·(real))
+                [__index__, ok] = ((val)·(real))
                 if (!ok)
                     return false
                 index = ((__index__)·(int))
@@ -3083,14 +3083,14 @@ WindowState·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
-    [it,ok] = ((payload)·(dict))
+    [it, ok] = ((payload)·(dict))
     if (!ok)
         return false
-    [val,ok] = it@?"focused"
+    [val, ok] = it@?"focused"
     if ok
         var focused of bool
         if (=?val)
-            [focused,ok] = ((val)·(bool))
+            [focused, ok] = ((val)·(bool))
             if (!ok)
                 return false
         this.Focused = focused
@@ -3105,85 +3105,85 @@ EnvProperties·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
-    [it,ok] = ((payload)·(dict))
+    [it, ok] = ((payload)·(dict))
     if (!ok)
         return false
-    [val,ok] = it@?"appName"
+    [val, ok] = it@?"appName"
     if ok
         var appName of ?string
         if (=?val)
             var _appName_ of string
-            [_appName_,ok] = ((val)·(string))
+            [_appName_, ok] = ((val)·(string))
             if (!ok)
                 return false
             appName = (&_appName_)
         this.AppName = appName
-    [val,ok] = it@?"appRoot"
+    [val, ok] = it@?"appRoot"
     if ok
         var appRoot of ?string
         if (=?val)
             var _appRoot_ of string
-            [_appRoot_,ok] = ((val)·(string))
+            [_appRoot_, ok] = ((val)·(string))
             if (!ok)
                 return false
             appRoot = (&_appRoot_)
         this.AppRoot = appRoot
-    [val,ok] = it@?"language"
+    [val, ok] = it@?"language"
     if ok
         var language of ?string
         if (=?val)
             var _language_ of string
-            [_language_,ok] = ((val)·(string))
+            [_language_, ok] = ((val)·(string))
             if (!ok)
                 return false
             language = (&_language_)
         this.Language = language
-    [val,ok] = it@?"machineId"
+    [val, ok] = it@?"machineId"
     if ok
         var machineId of ?string
         if (=?val)
             var _machineId_ of string
-            [_machineId_,ok] = ((val)·(string))
+            [_machineId_, ok] = ((val)·(string))
             if (!ok)
                 return false
             machineId = (&_machineId_)
         this.MachineId = machineId
-    [val,ok] = it@?"remoteName"
+    [val, ok] = it@?"remoteName"
     if ok
         var remoteName of ?string
         if (=?val)
             var _remoteName_ of string
-            [_remoteName_,ok] = ((val)·(string))
+            [_remoteName_, ok] = ((val)·(string))
             if (!ok)
                 return false
             remoteName = (&_remoteName_)
         this.RemoteName = remoteName
-    [val,ok] = it@?"sessionId"
+    [val, ok] = it@?"sessionId"
     if ok
         var sessionId of ?string
         if (=?val)
             var _sessionId_ of string
-            [_sessionId_,ok] = ((val)·(string))
+            [_sessionId_, ok] = ((val)·(string))
             if (!ok)
                 return false
             sessionId = (&_sessionId_)
         this.SessionId = sessionId
-    [val,ok] = it@?"shell"
+    [val, ok] = it@?"shell"
     if ok
         var shell of ?string
         if (=?val)
             var _shell_ of string
-            [_shell_,ok] = ((val)·(string))
+            [_shell_, ok] = ((val)·(string))
             if (!ok)
                 return false
             shell = (&_shell_)
         this.Shell = shell
-    [val,ok] = it@?"uriScheme"
+    [val, ok] = it@?"uriScheme"
     if ok
         var uriScheme of ?string
         if (=?val)
             var _uriScheme_ of string
-            [_uriScheme_,ok] = ((val)·(string))
+            [_uriScheme_, ok] = ((val)·(string))
             if (!ok)
                 return false
             uriScheme = (&_uriScheme_)
@@ -3197,15 +3197,15 @@ WorkspaceFoldersChangeEvent·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
-    [it,ok] = ((payload)·(dict))
+    [it, ok] = ((payload)·(dict))
     if (!ok)
         return false
-    [val,ok] = it@?"added"
+    [val, ok] = it@?"added"
     if ok
         var added of [WorkspaceFolder]
         if (=?val)
             var __coll__added of [any]
-            [__coll__added,ok] = ((val)·([any]))
+            [__coll__added, ok] = ((val)·([any]))
             if (!ok)
                 return false
             added = [WorkspaceFolder]·new(__coll__added·len)
@@ -3222,12 +3222,12 @@ WorkspaceFoldersChangeEvent·populateFrom: (payload:any -> bool)
         this.Added = added
     else
         return false
-    [val,ok] = it@?"removed"
+    [val, ok] = it@?"removed"
     if ok
         var removed of [WorkspaceFolder]
         if (=?val)
             var __coll__removed of [any]
-            [__coll__removed,ok] = ((val)·([any]))
+            [__coll__removed, ok] = ((val)·([any]))
             if (!ok)
                 return false
             removed = [WorkspaceFolder]·new(__coll__removed·len)
@@ -3253,35 +3253,35 @@ WorkspaceProperties·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
-    [it,ok] = ((payload)·(dict))
+    [it, ok] = ((payload)·(dict))
     if (!ok)
         return false
-    [val,ok] = it@?"name"
+    [val, ok] = it@?"name"
     if ok
         var name of ?string
         if (=?val)
             var _name_ of string
-            [_name_,ok] = ((val)·(string))
+            [_name_, ok] = ((val)·(string))
             if (!ok)
                 return false
             name = (&_name_)
         this.Name = name
-    [val,ok] = it@?"workspaceFile"
+    [val, ok] = it@?"workspaceFile"
     if ok
         var workspaceFile of ?string
         if (=?val)
             var _workspaceFile_ of string
-            [_workspaceFile_,ok] = ((val)·(string))
+            [_workspaceFile_, ok] = ((val)·(string))
             if (!ok)
                 return false
             workspaceFile = (&_workspaceFile_)
         this.WorkspaceFile = workspaceFile
-    [val,ok] = it@?"workspaceFolders"
+    [val, ok] = it@?"workspaceFolders"
     if ok
         var workspaceFolders of ?[WorkspaceFolder]
         if (=?val)
             var __coll__workspaceFolders of [any]
-            [__coll__workspaceFolders,ok] = ((val)·([any]))
+            [__coll__workspaceFolders, ok] = ((val)·([any]))
             if (!ok)
                 return false
             workspaceFolders = [WorkspaceFolder]·new(__coll__workspaceFolders·len)
@@ -3305,15 +3305,15 @@ DiagnosticChangeEvent·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
-    [it,ok] = ((payload)·(dict))
+    [it, ok] = ((payload)·(dict))
     if (!ok)
         return false
-    [val,ok] = it@?"uris"
+    [val, ok] = it@?"uris"
     if ok
         var uris of [string]
         if (=?val)
             var __coll__uris of [any]
-            [__coll__uris,ok] = ((val)·([any]))
+            [__coll__uris, ok] = ((val)·([any]))
             if (!ok)
                 return false
             uris = [string]·new(__coll__uris·len)
@@ -3321,7 +3321,7 @@ DiagnosticChangeEvent·populateFrom: (payload:any -> bool)
             __idx__uris = 0
             for __item__uris in __coll__uris
                 var __val__uris of string
-                [__val__uris,ok] = ((__item__uris)·(string))
+                [__val__uris, ok] = ((__item__uris)·(string))
                 if (!ok)
                     return false
                 uris@__idx__uris = __val__uris

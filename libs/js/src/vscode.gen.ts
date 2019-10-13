@@ -1290,7 +1290,7 @@ class implWindow extends implBase implements Window {
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
                     let _result_: string
-                    [_result_,ok] = [payload, true]
+                    [_result_, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -1318,7 +1318,7 @@ class implWindow extends implBase implements Window {
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
                     let _result_: string
-                    [_result_,ok] = [payload, true]
+                    [_result_, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -1398,7 +1398,7 @@ class implWindow extends implBase implements Window {
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
                     let _result_: string
-                    [_result_,ok] = [payload, true]
+                    [_result_, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -1426,7 +1426,7 @@ class implWindow extends implBase implements Window {
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
                     let _result_: string
-                    [_result_,ok] = [payload, true]
+                    [_result_, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -1506,7 +1506,7 @@ class implWindow extends implBase implements Window {
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
                     let _result_: string
-                    [_result_,ok] = [payload, true]
+                    [_result_, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -1534,7 +1534,7 @@ class implWindow extends implBase implements Window {
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
                     let _result_: string
-                    [_result_,ok] = [payload, true]
+                    [_result_, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -1616,18 +1616,18 @@ class implWindow extends implBase implements Window {
                     options.ValidateInput_AppzFuncId = this.Impl().nextFuncId()
                     fnids.push(options.ValidateInput_AppzFuncId)
                     this.Impl().cbOther[options.ValidateInput_AppzFuncId] = (args: any[]): [any, boolean] => {
-                        if ((1 != args.length)) {
-                            return [null,false]
+                        if (1 !== args.length) {
+                            return [null, false]
                         } else {
                             let ok: boolean
                             let __0: string
                             if ((undefined !== args[0] && null !== args[0])) {
-                                [__0,ok] = [args[0], true]
+                                [__0, ok] = [args[0] as string, typeof args[0] === "string"]
                                 if ((!ok)) {
-                                    return [null,false]
+                                    return [null, false]
                                 }
                             }
-                            return [fn(__0),true]
+                            return [fn(__0), true]
                         }                        
                     }
                 }
@@ -1636,7 +1636,7 @@ class implWindow extends implBase implements Window {
         msg.Data["options"] = options
         if ((undefined !== token && null !== token)) {
             token.impl = this.Impl()
-            if (("" == token.fnId)) {
+            if ("" === token.fnId) {
                 {
                     token.fnId = this.Impl().nextFuncId()
                 }
@@ -1650,7 +1650,7 @@ class implWindow extends implBase implements Window {
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
                     let _result_: string
-                    [_result_,ok] = [payload, true]
+                    [_result_, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -1661,7 +1661,7 @@ class implWindow extends implBase implements Window {
             }
         }
         this.Impl().send(msg, (payload: any): boolean => {
-            if ((fnids.length != 0)) {
+            if (fnids.length !== 0) {
                 {
                     for (const fnid of fnids) {
                         delete this.Impl().cbOther[fnid]
@@ -1688,8 +1688,8 @@ class implWindow extends implBase implements Window {
                     options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId()
                     fnids.push(options.OnDidSelectItem_AppzFuncId)
                     this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (args: any[]): [any, boolean] => {
-                        if ((1 != args.length)) {
-                            return [null,false]
+                        if (1 !== args.length) {
+                            return [null, false]
                         } else {
                             let ok: boolean
                             let __0: QuickPickItem
@@ -1697,12 +1697,12 @@ class implWindow extends implBase implements Window {
                                 __0 = new_QuickPickItem()
                                 ok = __0.populateFrom(args[0])
                                 if ((!ok)) {
-                                    return [null,false]
+                                    return [null, false]
                                 }
                             } else {
-                                return [null,false]
+                                return [null, false]
                             }                            
-                            return [fn(__0),true]
+                            return [fn(__0), true]
                         }                        
                     }
                 }
@@ -1713,7 +1713,7 @@ class implWindow extends implBase implements Window {
         msg.Data["options"] = options
         if ((undefined !== token && null !== token)) {
             token.impl = this.Impl()
-            if (("" == token.fnId)) {
+            if ("" === token.fnId) {
                 {
                     token.fnId = this.Impl().nextFuncId()
                 }
@@ -1727,16 +1727,16 @@ class implWindow extends implBase implements Window {
                 let result: string[]
                 if ((undefined !== payload && null !== payload)) {
                     let __coll__result: any[]
-                    [__coll__result,ok] = [payload, false]
+                    [__coll__result, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
                     if ((!ok)) {
                         return false
                     }
-                    result = []
+                    result = new Array(__coll__result.length)
                     let __idx__result: number
                     __idx__result = 0
                     for (const __item__result of __coll__result) {
                         let __val__result: string
-                        [__val__result,ok] = [__item__result, true]
+                        [__val__result, ok] = [__item__result as string, typeof __item__result === "string"]
                         if ((!ok)) {
                             return false
                         }
@@ -1749,7 +1749,7 @@ class implWindow extends implBase implements Window {
             }
         }
         this.Impl().send(msg, (payload: any): boolean => {
-            if ((fnids.length != 0)) {
+            if (fnids.length !== 0) {
                 {
                     for (const fnid of fnids) {
                         delete this.Impl().cbOther[fnid]
@@ -1776,8 +1776,8 @@ class implWindow extends implBase implements Window {
                     options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId()
                     fnids.push(options.OnDidSelectItem_AppzFuncId)
                     this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (args: any[]): [any, boolean] => {
-                        if ((1 != args.length)) {
-                            return [null,false]
+                        if (1 !== args.length) {
+                            return [null, false]
                         } else {
                             let ok: boolean
                             let __0: QuickPickItem
@@ -1785,12 +1785,12 @@ class implWindow extends implBase implements Window {
                                 __0 = new_QuickPickItem()
                                 ok = __0.populateFrom(args[0])
                                 if ((!ok)) {
-                                    return [null,false]
+                                    return [null, false]
                                 }
                             } else {
-                                return [null,false]
+                                return [null, false]
                             }                            
-                            return [fn(__0),true]
+                            return [fn(__0), true]
                         }                        
                     }
                 }
@@ -1800,7 +1800,7 @@ class implWindow extends implBase implements Window {
         msg.Data["options"] = options
         if ((undefined !== token && null !== token)) {
             token.impl = this.Impl()
-            if (("" == token.fnId)) {
+            if ("" === token.fnId) {
                 {
                     token.fnId = this.Impl().nextFuncId()
                 }
@@ -1814,7 +1814,7 @@ class implWindow extends implBase implements Window {
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
                     let _result_: string
-                    [_result_,ok] = [payload, true]
+                    [_result_, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -1825,7 +1825,7 @@ class implWindow extends implBase implements Window {
             }
         }
         this.Impl().send(msg, (payload: any): boolean => {
-            if ((fnids.length != 0)) {
+            if (fnids.length !== 0) {
                 {
                     for (const fnid of fnids) {
                         delete this.Impl().cbOther[fnid]
@@ -1852,8 +1852,8 @@ class implWindow extends implBase implements Window {
                     options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId()
                     fnids.push(options.OnDidSelectItem_AppzFuncId)
                     this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (args: any[]): [any, boolean] => {
-                        if ((1 != args.length)) {
-                            return [null,false]
+                        if (1 !== args.length) {
+                            return [null, false]
                         } else {
                             let ok: boolean
                             let __0: QuickPickItem
@@ -1861,12 +1861,12 @@ class implWindow extends implBase implements Window {
                                 __0 = new_QuickPickItem()
                                 ok = __0.populateFrom(args[0])
                                 if ((!ok)) {
-                                    return [null,false]
+                                    return [null, false]
                                 }
                             } else {
-                                return [null,false]
+                                return [null, false]
                             }                            
-                            return [fn(__0),true]
+                            return [fn(__0), true]
                         }                        
                     }
                 }
@@ -1877,7 +1877,7 @@ class implWindow extends implBase implements Window {
         msg.Data["options"] = options
         if ((undefined !== token && null !== token)) {
             token.impl = this.Impl()
-            if (("" == token.fnId)) {
+            if ("" === token.fnId) {
                 {
                     token.fnId = this.Impl().nextFuncId()
                 }
@@ -1891,11 +1891,11 @@ class implWindow extends implBase implements Window {
                 let result: QuickPickItem[]
                 if ((undefined !== payload && null !== payload)) {
                     let __coll__result: any[]
-                    [__coll__result,ok] = [payload, false]
+                    [__coll__result, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
                     if ((!ok)) {
                         return false
                     }
-                    result = []
+                    result = new Array(__coll__result.length)
                     let __idx__result: number
                     __idx__result = 0
                     for (const __item__result of __coll__result) {
@@ -1914,7 +1914,7 @@ class implWindow extends implBase implements Window {
             }
         }
         this.Impl().send(msg, (payload: any): boolean => {
-            if ((fnids.length != 0)) {
+            if (fnids.length !== 0) {
                 {
                     for (const fnid of fnids) {
                         delete this.Impl().cbOther[fnid]
@@ -1941,8 +1941,8 @@ class implWindow extends implBase implements Window {
                     options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId()
                     fnids.push(options.OnDidSelectItem_AppzFuncId)
                     this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (args: any[]): [any, boolean] => {
-                        if ((1 != args.length)) {
-                            return [null,false]
+                        if (1 !== args.length) {
+                            return [null, false]
                         } else {
                             let ok: boolean
                             let __0: QuickPickItem
@@ -1950,12 +1950,12 @@ class implWindow extends implBase implements Window {
                                 __0 = new_QuickPickItem()
                                 ok = __0.populateFrom(args[0])
                                 if ((!ok)) {
-                                    return [null,false]
+                                    return [null, false]
                                 }
                             } else {
-                                return [null,false]
+                                return [null, false]
                             }                            
-                            return [fn(__0),true]
+                            return [fn(__0), true]
                         }                        
                     }
                 }
@@ -1965,7 +1965,7 @@ class implWindow extends implBase implements Window {
         msg.Data["options"] = options
         if ((undefined !== token && null !== token)) {
             token.impl = this.Impl()
-            if (("" == token.fnId)) {
+            if ("" === token.fnId) {
                 {
                     token.fnId = this.Impl().nextFuncId()
                 }
@@ -1989,7 +1989,7 @@ class implWindow extends implBase implements Window {
             }
         }
         this.Impl().send(msg, (payload: any): boolean => {
-            if ((fnids.length != 0)) {
+            if (fnids.length !== 0) {
                 {
                     for (const fnid of fnids) {
                         delete this.Impl().cbOther[fnid]
@@ -2068,7 +2068,7 @@ class implWindow extends implBase implements Window {
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
                     let _result_: string
-                    [_result_,ok] = [payload, true]
+                    [_result_, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -2094,16 +2094,16 @@ class implWindow extends implBase implements Window {
                 let result: string[]
                 if ((undefined !== payload && null !== payload)) {
                     let __coll__result: any[]
-                    [__coll__result,ok] = [payload, false]
+                    [__coll__result, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
                     if ((!ok)) {
                         return false
                     }
-                    result = []
+                    result = new Array(__coll__result.length)
                     let __idx__result: number
                     __idx__result = 0
                     for (const __item__result of __coll__result) {
                         let __val__result: string
-                        [__val__result,ok] = [__item__result, true]
+                        [__val__result, ok] = [__item__result as string, typeof __item__result === "string"]
                         if ((!ok)) {
                             return false
                         }
@@ -2179,7 +2179,7 @@ class implWindow extends implBase implements Window {
         }
         _fnid_listener = this.Impl().nextSub((args: any[]): boolean => {
             let ok: boolean
-            if ((1 != args.length)) {
+            if (1 !== args.length) {
                 return ok
             }
             let _a_0_: WindowState
@@ -2229,7 +2229,7 @@ class implEnv extends implBase implements Env {
                 let ok: boolean
                 let result: boolean
                 if ((undefined !== payload && null !== payload)) {
-                    [result,ok] = [payload, true]
+                    [result, ok] = [payload as boolean, typeof payload === "boolean"]
                     if ((!ok)) {
                         return false
                     }
@@ -2254,7 +2254,7 @@ class implEnv extends implBase implements Env {
                 let ok: boolean
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
-                    [result,ok] = [payload, true]
+                    [result, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -2277,7 +2277,7 @@ class implEnv extends implBase implements Env {
                 let ok: boolean
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
-                    [result,ok] = [payload, true]
+                    [result, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -2300,7 +2300,7 @@ class implEnv extends implBase implements Env {
                 let ok: boolean
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
-                    [result,ok] = [payload, true]
+                    [result, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -2323,7 +2323,7 @@ class implEnv extends implBase implements Env {
                 let ok: boolean
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
-                    [result,ok] = [payload, true]
+                    [result, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -2347,7 +2347,7 @@ class implEnv extends implBase implements Env {
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
                     let _result_: string
-                    [_result_,ok] = [payload, true]
+                    [_result_, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -2371,7 +2371,7 @@ class implEnv extends implBase implements Env {
                 let ok: boolean
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
-                    [result,ok] = [payload, true]
+                    [result, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -2394,7 +2394,7 @@ class implEnv extends implBase implements Env {
                 let ok: boolean
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
-                    [result,ok] = [payload, true]
+                    [result, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -2417,7 +2417,7 @@ class implEnv extends implBase implements Env {
                 let ok: boolean
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
-                    [result,ok] = [payload, true]
+                    [result, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -2471,7 +2471,7 @@ class implWorkspace extends implBase implements Workspace {
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
                     let _result_: string
-                    [_result_,ok] = [payload, true]
+                    [_result_, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -2496,7 +2496,7 @@ class implWorkspace extends implBase implements Workspace {
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
                     let _result_: string
-                    [_result_,ok] = [payload, true]
+                    [_result_, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -2521,7 +2521,7 @@ class implWorkspace extends implBase implements Workspace {
                 let ok: boolean
                 let result: boolean
                 if ((undefined !== payload && null !== payload)) {
-                    [result,ok] = [payload, true]
+                    [result, ok] = [payload as boolean, typeof payload === "boolean"]
                     if ((!ok)) {
                         return false
                     }
@@ -2547,7 +2547,7 @@ class implWorkspace extends implBase implements Workspace {
         }
         _fnid_listener = this.Impl().nextSub((args: any[]): boolean => {
             let ok: boolean
-            if ((1 != args.length)) {
+            if (1 !== args.length) {
                 return ok
             }
             let _a_0_: WorkspaceFoldersChangeEvent
@@ -2618,11 +2618,11 @@ class implWorkspace extends implBase implements Workspace {
                 let result: WorkspaceFolder[]
                 if ((undefined !== payload && null !== payload)) {
                     let __coll__result: any[]
-                    [__coll__result,ok] = [payload, false]
+                    [__coll__result, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
                     if ((!ok)) {
                         return false
                     }
-                    result = []
+                    result = new Array(__coll__result.length)
                     let __idx__result: number
                     __idx__result = 0
                     for (const __item__result of __coll__result) {
@@ -2653,7 +2653,7 @@ class implWorkspace extends implBase implements Workspace {
         msg.Data["maxResults"] = maxResults
         if ((undefined !== token && null !== token)) {
             token.impl = this.Impl()
-            if (("" == token.fnId)) {
+            if ("" === token.fnId) {
                 {
                     token.fnId = this.Impl().nextFuncId()
                 }
@@ -2667,16 +2667,16 @@ class implWorkspace extends implBase implements Workspace {
                 let result: string[]
                 if ((undefined !== payload && null !== payload)) {
                     let __coll__result: any[]
-                    [__coll__result,ok] = [payload, false]
+                    [__coll__result, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
                     if ((!ok)) {
                         return false
                     }
-                    result = []
+                    result = new Array(__coll__result.length)
                     let __idx__result: number
                     __idx__result = 0
                     for (const __item__result of __coll__result) {
                         let __val__result: string
-                        [__val__result,ok] = [__item__result, true]
+                        [__val__result, ok] = [__item__result as string, typeof __item__result === "string"]
                         if ((!ok)) {
                             return false
                         }
@@ -2705,7 +2705,7 @@ class implWorkspace extends implBase implements Workspace {
                 let result: string
                 if ((undefined !== payload && null !== payload)) {
                     let _result_: string
-                    [_result_,ok] = [payload, true]
+                    [_result_, ok] = [payload as string, typeof payload === "string"]
                     if ((!ok)) {
                         return false
                     }
@@ -2760,16 +2760,16 @@ class implLanguages extends implBase implements Languages {
                 let result: string[]
                 if ((undefined !== payload && null !== payload)) {
                     let __coll__result: any[]
-                    [__coll__result,ok] = [payload, false]
+                    [__coll__result, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
                     if ((!ok)) {
                         return false
                     }
-                    result = []
+                    result = new Array(__coll__result.length)
                     let __idx__result: number
                     __idx__result = 0
                     for (const __item__result of __coll__result) {
                         let __val__result: string
-                        [__val__result,ok] = [__item__result, true]
+                        [__val__result, ok] = [__item__result as string, typeof __item__result === "string"]
                         if ((!ok)) {
                             return false
                         }
@@ -2796,7 +2796,7 @@ class implLanguages extends implBase implements Languages {
         }
         _fnid_listener = this.Impl().nextSub((args: any[]): boolean => {
             let ok: boolean
-            if ((1 != args.length)) {
+            if (1 !== args.length) {
                 return ok
             }
             let _a_0_: DiagnosticChangeEvent
@@ -2846,7 +2846,7 @@ class implExtensions extends implBase implements Extensions {
         }
         _fnid_listener = this.Impl().nextSub((args: any[]): boolean => {
             let ok: boolean
-            if ((0 != args.length)) {
+            if (0 !== args.length) {
                 return ok
             }
             listener()
@@ -2891,16 +2891,16 @@ class implCommands extends implBase implements Commands {
                 let result: string[]
                 if ((undefined !== payload && null !== payload)) {
                     let __coll__result: any[]
-                    [__coll__result,ok] = [payload, false]
+                    [__coll__result, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
                     if ((!ok)) {
                         return false
                     }
-                    result = []
+                    result = new Array(__coll__result.length)
                     let __idx__result: number
                     __idx__result = 0
                     for (const __item__result of __coll__result) {
                         let __val__result: string
-                        [__val__result,ok] = [__item__result, true]
+                        [__val__result, ok] = [__item__result as string, typeof __item__result === "string"]
                         if ((!ok)) {
                             return false
                         }
@@ -2921,15 +2921,15 @@ function MessageItem_populateFrom(this: MessageItem, payload: any): boolean {
     let it: { [_: string]: any}
     let ok: boolean
     let val: any
-    [it,ok] = [payload, true]
+    [it, ok] = [payload as { [_: string]: any}, typeof payload === "object"]
     if ((!ok)) {
         return false
     }
-    [val,ok] = it["title"]
+    [val, ok] = [it["title"], undefined !== it["title"]]
     if (ok) {
         let title: string
         if ((undefined !== val && null !== val)) {
-            [title,ok] = [val, true]
+            [title, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -2938,12 +2938,12 @@ function MessageItem_populateFrom(this: MessageItem, payload: any): boolean {
     } else {
         return false
     }    
-    [val,ok] = it["isCloseAffordance"]
+    [val, ok] = [it["isCloseAffordance"], undefined !== it["isCloseAffordance"]]
     if (ok) {
         let isCloseAffordance: boolean
         if ((undefined !== val && null !== val)) {
             let _isCloseAffordance_: boolean
-            [_isCloseAffordance_,ok] = [val, true]
+            [_isCloseAffordance_, ok] = [val as boolean, typeof val === "boolean"]
             if ((!ok)) {
                 return false
             }
@@ -2951,11 +2951,11 @@ function MessageItem_populateFrom(this: MessageItem, payload: any): boolean {
         }
         this.IsCloseAffordance = isCloseAffordance
     }
-    [val,ok] = it["my"]
+    [val, ok] = [it["my"], undefined !== it["my"]]
     if (ok) {
         let my: { [_: string]: any}
         if ((undefined !== val && null !== val)) {
-            [my,ok] = [val, true]
+            [my, ok] = [val as { [_: string]: any}, typeof val === "object"]
             if ((!ok)) {
                 return false
             }
@@ -2969,15 +2969,15 @@ function QuickPickItem_populateFrom(this: QuickPickItem, payload: any): boolean 
     let it: { [_: string]: any}
     let ok: boolean
     let val: any
-    [it,ok] = [payload, true]
+    [it, ok] = [payload as { [_: string]: any}, typeof payload === "object"]
     if ((!ok)) {
         return false
     }
-    [val,ok] = it["label"]
+    [val, ok] = [it["label"], undefined !== it["label"]]
     if (ok) {
         let label: string
         if ((undefined !== val && null !== val)) {
-            [label,ok] = [val, true]
+            [label, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -2986,12 +2986,12 @@ function QuickPickItem_populateFrom(this: QuickPickItem, payload: any): boolean 
     } else {
         return false
     }    
-    [val,ok] = it["description"]
+    [val, ok] = [it["description"], undefined !== it["description"]]
     if (ok) {
         let description: string
         if ((undefined !== val && null !== val)) {
             let _description_: string
-            [_description_,ok] = [val, true]
+            [_description_, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -2999,12 +2999,12 @@ function QuickPickItem_populateFrom(this: QuickPickItem, payload: any): boolean 
         }
         this.Description = description
     }
-    [val,ok] = it["detail"]
+    [val, ok] = [it["detail"], undefined !== it["detail"]]
     if (ok) {
         let detail: string
         if ((undefined !== val && null !== val)) {
             let _detail_: string
-            [_detail_,ok] = [val, true]
+            [_detail_, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -3012,12 +3012,12 @@ function QuickPickItem_populateFrom(this: QuickPickItem, payload: any): boolean 
         }
         this.Detail = detail
     }
-    [val,ok] = it["picked"]
+    [val, ok] = [it["picked"], undefined !== it["picked"]]
     if (ok) {
         let picked: boolean
         if ((undefined !== val && null !== val)) {
             let _picked_: boolean
-            [_picked_,ok] = [val, true]
+            [_picked_, ok] = [val as boolean, typeof val === "boolean"]
             if ((!ok)) {
                 return false
             }
@@ -3025,12 +3025,12 @@ function QuickPickItem_populateFrom(this: QuickPickItem, payload: any): boolean 
         }
         this.Picked = picked
     }
-    [val,ok] = it["alwaysShow"]
+    [val, ok] = [it["alwaysShow"], undefined !== it["alwaysShow"]]
     if (ok) {
         let alwaysShow: boolean
         if ((undefined !== val && null !== val)) {
             let _alwaysShow_: boolean
-            [_alwaysShow_,ok] = [val, true]
+            [_alwaysShow_, ok] = [val as boolean, typeof val === "boolean"]
             if ((!ok)) {
                 return false
             }
@@ -3038,11 +3038,11 @@ function QuickPickItem_populateFrom(this: QuickPickItem, payload: any): boolean 
         }
         this.AlwaysShow = alwaysShow
     }
-    [val,ok] = it["my"]
+    [val, ok] = [it["my"], undefined !== it["my"]]
     if (ok) {
         let my: { [_: string]: any}
         if ((undefined !== val && null !== val)) {
-            [my,ok] = [val, true]
+            [my, ok] = [val as { [_: string]: any}, typeof val === "object"]
             if ((!ok)) {
                 return false
             }
@@ -3056,15 +3056,15 @@ function WorkspaceFolder_populateFrom(this: WorkspaceFolder, payload: any): bool
     let it: { [_: string]: any}
     let ok: boolean
     let val: any
-    [it,ok] = [payload, true]
+    [it, ok] = [payload as { [_: string]: any}, typeof payload === "object"]
     if ((!ok)) {
         return false
     }
-    [val,ok] = it["uri"]
+    [val, ok] = [it["uri"], undefined !== it["uri"]]
     if (ok) {
         let uri: string
         if ((undefined !== val && null !== val)) {
-            [uri,ok] = [val, true]
+            [uri, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -3073,11 +3073,11 @@ function WorkspaceFolder_populateFrom(this: WorkspaceFolder, payload: any): bool
     } else {
         return false
     }    
-    [val,ok] = it["name"]
+    [val, ok] = [it["name"], undefined !== it["name"]]
     if (ok) {
         let name: string
         if ((undefined !== val && null !== val)) {
-            [name,ok] = [val, true]
+            [name, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -3086,18 +3086,18 @@ function WorkspaceFolder_populateFrom(this: WorkspaceFolder, payload: any): bool
     } else {
         return false
     }    
-    [val,ok] = it["index"]
+    [val, ok] = [it["index"], undefined !== it["index"]]
     if (ok) {
         let index: number
         if ((undefined !== val && null !== val)) {
-            [index,ok] = [val, true]
+            [index, ok] = [val as number, typeof val === "number"]
             if ((!ok)) {
                 let __index__: number
-                [__index__,ok] = [val, true]
+                [__index__, ok] = [val as number, typeof val === "number"]
                 if ((!ok)) {
                     return false
                 }
-                index = [__index__, true]
+                index = __index__
             }
         }
         this.Index = index
@@ -3111,15 +3111,15 @@ function WindowState_populateFrom(this: WindowState, payload: any): boolean {
     let it: { [_: string]: any}
     let ok: boolean
     let val: any
-    [it,ok] = [payload, true]
+    [it, ok] = [payload as { [_: string]: any}, typeof payload === "object"]
     if ((!ok)) {
         return false
     }
-    [val,ok] = it["focused"]
+    [val, ok] = [it["focused"], undefined !== it["focused"]]
     if (ok) {
         let focused: boolean
         if ((undefined !== val && null !== val)) {
-            [focused,ok] = [val, true]
+            [focused, ok] = [val as boolean, typeof val === "boolean"]
             if ((!ok)) {
                 return false
             }
@@ -3135,16 +3135,16 @@ function EnvProperties_populateFrom(this: EnvProperties, payload: any): boolean 
     let it: { [_: string]: any}
     let ok: boolean
     let val: any
-    [it,ok] = [payload, true]
+    [it, ok] = [payload as { [_: string]: any}, typeof payload === "object"]
     if ((!ok)) {
         return false
     }
-    [val,ok] = it["appName"]
+    [val, ok] = [it["appName"], undefined !== it["appName"]]
     if (ok) {
         let appName: string
         if ((undefined !== val && null !== val)) {
             let _appName_: string
-            [_appName_,ok] = [val, true]
+            [_appName_, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -3152,12 +3152,12 @@ function EnvProperties_populateFrom(this: EnvProperties, payload: any): boolean 
         }
         this.AppName = appName
     }
-    [val,ok] = it["appRoot"]
+    [val, ok] = [it["appRoot"], undefined !== it["appRoot"]]
     if (ok) {
         let appRoot: string
         if ((undefined !== val && null !== val)) {
             let _appRoot_: string
-            [_appRoot_,ok] = [val, true]
+            [_appRoot_, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -3165,12 +3165,12 @@ function EnvProperties_populateFrom(this: EnvProperties, payload: any): boolean 
         }
         this.AppRoot = appRoot
     }
-    [val,ok] = it["language"]
+    [val, ok] = [it["language"], undefined !== it["language"]]
     if (ok) {
         let language: string
         if ((undefined !== val && null !== val)) {
             let _language_: string
-            [_language_,ok] = [val, true]
+            [_language_, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -3178,12 +3178,12 @@ function EnvProperties_populateFrom(this: EnvProperties, payload: any): boolean 
         }
         this.Language = language
     }
-    [val,ok] = it["machineId"]
+    [val, ok] = [it["machineId"], undefined !== it["machineId"]]
     if (ok) {
         let machineId: string
         if ((undefined !== val && null !== val)) {
             let _machineId_: string
-            [_machineId_,ok] = [val, true]
+            [_machineId_, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -3191,12 +3191,12 @@ function EnvProperties_populateFrom(this: EnvProperties, payload: any): boolean 
         }
         this.MachineId = machineId
     }
-    [val,ok] = it["remoteName"]
+    [val, ok] = [it["remoteName"], undefined !== it["remoteName"]]
     if (ok) {
         let remoteName: string
         if ((undefined !== val && null !== val)) {
             let _remoteName_: string
-            [_remoteName_,ok] = [val, true]
+            [_remoteName_, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -3204,12 +3204,12 @@ function EnvProperties_populateFrom(this: EnvProperties, payload: any): boolean 
         }
         this.RemoteName = remoteName
     }
-    [val,ok] = it["sessionId"]
+    [val, ok] = [it["sessionId"], undefined !== it["sessionId"]]
     if (ok) {
         let sessionId: string
         if ((undefined !== val && null !== val)) {
             let _sessionId_: string
-            [_sessionId_,ok] = [val, true]
+            [_sessionId_, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -3217,12 +3217,12 @@ function EnvProperties_populateFrom(this: EnvProperties, payload: any): boolean 
         }
         this.SessionId = sessionId
     }
-    [val,ok] = it["shell"]
+    [val, ok] = [it["shell"], undefined !== it["shell"]]
     if (ok) {
         let shell: string
         if ((undefined !== val && null !== val)) {
             let _shell_: string
-            [_shell_,ok] = [val, true]
+            [_shell_, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -3230,12 +3230,12 @@ function EnvProperties_populateFrom(this: EnvProperties, payload: any): boolean 
         }
         this.Shell = shell
     }
-    [val,ok] = it["uriScheme"]
+    [val, ok] = [it["uriScheme"], undefined !== it["uriScheme"]]
     if (ok) {
         let uriScheme: string
         if ((undefined !== val && null !== val)) {
             let _uriScheme_: string
-            [_uriScheme_,ok] = [val, true]
+            [_uriScheme_, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -3250,20 +3250,20 @@ function WorkspaceFoldersChangeEvent_populateFrom(this: WorkspaceFoldersChangeEv
     let it: { [_: string]: any}
     let ok: boolean
     let val: any
-    [it,ok] = [payload, true]
+    [it, ok] = [payload as { [_: string]: any}, typeof payload === "object"]
     if ((!ok)) {
         return false
     }
-    [val,ok] = it["added"]
+    [val, ok] = [it["added"], undefined !== it["added"]]
     if (ok) {
         let added: WorkspaceFolder[]
         if ((undefined !== val && null !== val)) {
             let __coll__added: any[]
-            [__coll__added,ok] = [val, false]
+            [__coll__added, ok] = [val as any[], (typeof val === "object") && (typeof val["length"] === "number")]
             if ((!ok)) {
                 return false
             }
-            added = []
+            added = new Array(__coll__added.length)
             let __idx__added: number
             __idx__added = 0
             for (const __item__added of __coll__added) {
@@ -3281,16 +3281,16 @@ function WorkspaceFoldersChangeEvent_populateFrom(this: WorkspaceFoldersChangeEv
     } else {
         return false
     }    
-    [val,ok] = it["removed"]
+    [val, ok] = [it["removed"], undefined !== it["removed"]]
     if (ok) {
         let removed: WorkspaceFolder[]
         if ((undefined !== val && null !== val)) {
             let __coll__removed: any[]
-            [__coll__removed,ok] = [val, false]
+            [__coll__removed, ok] = [val as any[], (typeof val === "object") && (typeof val["length"] === "number")]
             if ((!ok)) {
                 return false
             }
-            removed = []
+            removed = new Array(__coll__removed.length)
             let __idx__removed: number
             __idx__removed = 0
             for (const __item__removed of __coll__removed) {
@@ -3315,16 +3315,16 @@ function WorkspaceProperties_populateFrom(this: WorkspaceProperties, payload: an
     let it: { [_: string]: any}
     let ok: boolean
     let val: any
-    [it,ok] = [payload, true]
+    [it, ok] = [payload as { [_: string]: any}, typeof payload === "object"]
     if ((!ok)) {
         return false
     }
-    [val,ok] = it["name"]
+    [val, ok] = [it["name"], undefined !== it["name"]]
     if (ok) {
         let name: string
         if ((undefined !== val && null !== val)) {
             let _name_: string
-            [_name_,ok] = [val, true]
+            [_name_, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -3332,12 +3332,12 @@ function WorkspaceProperties_populateFrom(this: WorkspaceProperties, payload: an
         }
         this.Name = name
     }
-    [val,ok] = it["workspaceFile"]
+    [val, ok] = [it["workspaceFile"], undefined !== it["workspaceFile"]]
     if (ok) {
         let workspaceFile: string
         if ((undefined !== val && null !== val)) {
             let _workspaceFile_: string
-            [_workspaceFile_,ok] = [val, true]
+            [_workspaceFile_, ok] = [val as string, typeof val === "string"]
             if ((!ok)) {
                 return false
             }
@@ -3345,16 +3345,16 @@ function WorkspaceProperties_populateFrom(this: WorkspaceProperties, payload: an
         }
         this.WorkspaceFile = workspaceFile
     }
-    [val,ok] = it["workspaceFolders"]
+    [val, ok] = [it["workspaceFolders"], undefined !== it["workspaceFolders"]]
     if (ok) {
         let workspaceFolders: WorkspaceFolder[]
         if ((undefined !== val && null !== val)) {
             let __coll__workspaceFolders: any[]
-            [__coll__workspaceFolders,ok] = [val, false]
+            [__coll__workspaceFolders, ok] = [val as any[], (typeof val === "object") && (typeof val["length"] === "number")]
             if ((!ok)) {
                 return false
             }
-            workspaceFolders = []
+            workspaceFolders = new Array(__coll__workspaceFolders.length)
             let __idx__workspaceFolders: number
             __idx__workspaceFolders = 0
             for (const __item__workspaceFolders of __coll__workspaceFolders) {
@@ -3377,25 +3377,25 @@ function DiagnosticChangeEvent_populateFrom(this: DiagnosticChangeEvent, payload
     let it: { [_: string]: any}
     let ok: boolean
     let val: any
-    [it,ok] = [payload, true]
+    [it, ok] = [payload as { [_: string]: any}, typeof payload === "object"]
     if ((!ok)) {
         return false
     }
-    [val,ok] = it["uris"]
+    [val, ok] = [it["uris"], undefined !== it["uris"]]
     if (ok) {
         let uris: string[]
         if ((undefined !== val && null !== val)) {
             let __coll__uris: any[]
-            [__coll__uris,ok] = [val, false]
+            [__coll__uris, ok] = [val as any[], (typeof val === "object") && (typeof val["length"] === "number")]
             if ((!ok)) {
                 return false
             }
-            uris = []
+            uris = new Array(__coll__uris.length)
             let __idx__uris: number
             __idx__uris = 0
             for (const __item__uris of __coll__uris) {
                 let __val__uris: string
-                [__val__uris,ok] = [__item__uris, true]
+                [__val__uris, ok] = [__item__uris as string, typeof __item__uris === "string"]
                 if ((!ok)) {
                     return false
                 }

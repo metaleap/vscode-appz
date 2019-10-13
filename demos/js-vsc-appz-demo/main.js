@@ -1,12 +1,12 @@
 const vscAppz = require("../../libs/js/vsc-appz")
 
 const vsc = vscAppz.Vsc()
-const win = vsc.window
+const win = vsc.Window
 
 main()
 
 function main() {
-    win.showErrorMessage("Hola Welt", ["bye", "ciao"], _ => {
-        win.showErrorMessage(_, [], _ => { process.exit(0) })
+    win.ShowInformationMessage1("Hola Welt", ["bye", "ciao"], _ => {
+        win.ShowWarningMessage1(_, [], _ => { process.exit(0) })
     })
 }

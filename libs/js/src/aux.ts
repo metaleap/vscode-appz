@@ -1,5 +1,5 @@
 import * as appz from './vsc-appz'
-import * as vscgen from './vscode'
+import * as vscgen from './vscode.gen'
 
 
 type dict = { [_: string]: any }
