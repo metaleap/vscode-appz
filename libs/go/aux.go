@@ -27,10 +27,8 @@ var OnErrorDefaultOutputFormat = "err:\t%v\njson:\t%v\n\n"
 
 type dict = map[string]any
 
-// any is a type alias of `interface{}` for legibility reasons.
-type any = interface { // just to reduce brackets-noise throughout
-	// must remain an `=` type alias or json stuff will fail at runtime not compile-time.
-}
+// any is a type alias of `interface{}` for legibility reasons (just to reduce brackets-noise throughout).
+type any = interface{}
 
 type ipcMsg struct {
 	QName string         `json:"qName,omitempty"` // eg. 'window.ShowInformationMessage3'

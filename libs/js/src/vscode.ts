@@ -15,7 +15,7 @@ export abstract class impl implements Vscode {
         this.window = new implWindow(this)
     }
 
-    abstract send(msg: ipcMsg, on: (_: any) => boolean): void;
+    abstract send(msg: ipcMsg, on: (_: any) => boolean): void
 }
 
 class implBase {
