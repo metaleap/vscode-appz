@@ -6,22 +6,22 @@ import (
 )
 
 func demo_Commands_GetCommands() {
-	vsc.Commands().GetCommands(false, func(cmds []string) {
+	vsc.Commands().GetCommands(false, func(items []string) {
 		var opts QuickPickOptions
 		opts = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickOptions)
 		opts.IgnoreFocusOut = true
-		opts.PlaceHolder = strFmt("Retrieved {0} command IDs:", len(cmds))
-		vsc.Window().ShowQuickPick2(cmds, &opts, nil, quit)
+		opts.PlaceHolder = strFmt("Retrieved {0} command ID(s)", len(items))
+		vsc.Window().ShowQuickPick2(items, &opts, nil, quit)
 	})
 }
 
 func demo_Languages_GetLanguages() {
-	vsc.Languages().GetLanguages(func(langs []string) {
+	vsc.Languages().GetLanguages(func(items []string) {
 		var opts QuickPickOptions
 		opts = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickOptions)
 		opts.IgnoreFocusOut = true
-		opts.PlaceHolder = strFmt("Retrieved {0} language IDs:", len(langs))
-		vsc.Window().ShowQuickPick2(langs, &opts, nil, quit)
+		opts.PlaceHolder = strFmt("Retrieved {0} language ID(s)", len(items))
+		vsc.Window().ShowQuickPick2(items, &opts, nil, quit)
 	})
 }
 

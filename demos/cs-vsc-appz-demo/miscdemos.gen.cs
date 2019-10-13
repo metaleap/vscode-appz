@@ -8,21 +8,21 @@ namespace VscAppzDemo {
 
 	public static partial class App {
 		private static void demo_Commands_GetCommands() {
-			vsc.Commands.GetCommands(false, (string[] cmds) => {
+			vsc.Commands.GetCommands(false, (string[] items) => {
 				QuickPickOptions opts = default;
 				opts = new QuickPickOptions();
 				opts.IgnoreFocusOut = true;
-				opts.PlaceHolder = strFmt("Retrieved {0} command IDs:", cmds.Length);
-				vsc.Window.ShowQuickPick(cmds, opts, null, quit);
+				opts.PlaceHolder = strFmt("Retrieved {0} command ID(s)", items.Length);
+				vsc.Window.ShowQuickPick(items, opts, null, quit);
 			});
 		}
 		private static void demo_Languages_GetLanguages() {
-			vsc.Languages.GetLanguages((string[] langs) => {
+			vsc.Languages.GetLanguages((string[] items) => {
 				QuickPickOptions opts = default;
 				opts = new QuickPickOptions();
 				opts.IgnoreFocusOut = true;
-				opts.PlaceHolder = strFmt("Retrieved {0} language IDs:", langs.Length);
-				vsc.Window.ShowQuickPick(langs, opts, null, quit);
+				opts.PlaceHolder = strFmt("Retrieved {0} language ID(s)", items.Length);
+				vsc.Window.ShowQuickPick(items, opts, null, quit);
 			});
 		}
 }}
