@@ -25,3 +25,42 @@ func demo_Languages_GetLanguages() {
 	})
 }
 
+func demo_Env_Properties() {
+	vsc.Env().Properties(func(props EnvProperties) {
+		var items []string
+		items = make([]string, 8)
+		{
+			items[0] = strFmt("AppName\t\t\t{0}", props.AppName)
+			items[1] = strFmt("AppRoot\t\t\t{0}", props.AppRoot)
+			items[2] = strFmt("Language\t\t{0}", props.Language)
+			items[3] = strFmt("MachineId\t\t{0}", props.MachineId)
+			items[4] = strFmt("RemoteName\t\t{0}", props.RemoteName)
+			items[5] = strFmt("SessionId\t\t{0}", props.SessionId)
+			items[6] = strFmt("Shell\t\t\t{0}", props.Shell)
+			items[7] = strFmt("UriScheme\t\t{0}", props.UriScheme)
+		}
+		var opts QuickPickOptions
+		opts = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickOptions)
+		opts.IgnoreFocusOut = true
+		opts.PlaceHolder = strFmt("Env has {0} properties:", len(items))
+		vsc.Window().ShowQuickPick2(items, &opts, nil, quit)
+	})
+}
+
+func demo_Workspace_Properties() {
+	vsc.Workspace().Properties(func(props WorkspaceProperties) {
+		var items []string
+		items = make([]string, 3)
+		{
+			items[0] = strFmt("Name\t\t\t{0}", props.Name)
+			items[1] = strFmt("WorkspaceFile\t\t{0}", props.WorkspaceFile)
+			items[2] = strFmt("WorkspaceFolders\t{0}", props.WorkspaceFolders)
+		}
+		var opts QuickPickOptions
+		opts = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickOptions)
+		opts.IgnoreFocusOut = true
+		opts.PlaceHolder = strFmt("Workspace has {0} properties:", len(items))
+		vsc.Window().ShowQuickPick2(items, &opts, nil, quit)
+	})
+}
+

@@ -25,4 +25,41 @@ namespace VscAppzDemo {
 				vsc.Window.ShowQuickPick(items, opts, null, quit);
 			});
 		}
+		private static void demo_Env_Properties() {
+			vsc.Env.Properties((EnvProperties props) => {
+				string[] items = default;
+				items = new string[8];
+				{
+					items[0] = strFmt("AppName\t\t\t{0}", props.AppName);
+					items[1] = strFmt("AppRoot\t\t\t{0}", props.AppRoot);
+					items[2] = strFmt("Language\t\t{0}", props.Language);
+					items[3] = strFmt("MachineId\t\t{0}", props.MachineId);
+					items[4] = strFmt("RemoteName\t\t{0}", props.RemoteName);
+					items[5] = strFmt("SessionId\t\t{0}", props.SessionId);
+					items[6] = strFmt("Shell\t\t\t{0}", props.Shell);
+					items[7] = strFmt("UriScheme\t\t{0}", props.UriScheme);
+				}
+				QuickPickOptions opts = default;
+				opts = new QuickPickOptions();
+				opts.IgnoreFocusOut = true;
+				opts.PlaceHolder = strFmt("Env has {0} properties:", items.Length);
+				vsc.Window.ShowQuickPick(items, opts, null, quit);
+			});
+		}
+		private static void demo_Workspace_Properties() {
+			vsc.Workspace.Properties((WorkspaceProperties props) => {
+				string[] items = default;
+				items = new string[3];
+				{
+					items[0] = strFmt("Name\t\t\t{0}", props.Name);
+					items[1] = strFmt("WorkspaceFile\t\t{0}", props.WorkspaceFile);
+					items[2] = strFmt("WorkspaceFolders\t{0}", props.WorkspaceFolders);
+				}
+				QuickPickOptions opts = default;
+				opts = new QuickPickOptions();
+				opts.IgnoreFocusOut = true;
+				opts.PlaceHolder = strFmt("Workspace has {0} properties:", items.Length);
+				vsc.Window.ShowQuickPick(items, opts, null, quit);
+			});
+		}
 }}

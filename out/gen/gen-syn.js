@@ -274,11 +274,11 @@ class Gen extends gen.Gen {
         this.src = '';
         this.indents = 0;
         this.b = null;
+        this.isDemos = false;
+        this.opDepth = 0;
         this.allEnums = null;
         this.allInterfaces = null;
         this.allStructs = null;
-        this.isDemos = false;
-        this.opDepth = 0;
         this.nameRewriters = {
             args: this.caseLo,
             fields: this.caseUp,
@@ -457,7 +457,7 @@ class Gen extends gen.Gen {
             .emitInstr(it.Func.Body)
             .lines('', '');
     }
-    emitInstr(it) {
+    emitInstr(it, _inBlock = false) {
         if (it) {
             const iret = it;
             if (iret && iret.Ret !== undefined)
@@ -485,7 +485,7 @@ class Gen extends gen.Gen {
                     this.ln(() => this.s("for ", iblock.ForEach[0].Name, " in ").emitExpr(iblock.ForEach[1]));
                 else if (iblock.If && iblock.If.length)
                     this.ln(() => this.s("if ").emitExpr(iblock.If[0]));
-                this.indented(() => iblock.Instrs.forEach(_ => this.emitInstr(_)));
+                this.indented(() => iblock.Instrs.forEach(_ => this.emitInstr(_, true)));
                 if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
                     this.line("else")
                         .emitInstr(iblock.If[1]);

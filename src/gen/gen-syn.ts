@@ -410,11 +410,12 @@ export class Gen extends gen.Gen implements gen.IGen {
     private indents: number = 0
 
     protected b: Builder = null
-    protected allEnums: TEnum[] = null
-    protected allInterfaces: TInterface[] = null
-    protected allStructs: { [_: string]: TStruct } = null
     protected isDemos: boolean = false
     protected opDepth: number = 0
+
+    allEnums: TEnum[] = null
+    allInterfaces: TInterface[] = null
+    allStructs: { [_: string]: TStruct } = null
 
     nameRewriters = {
         args: this.caseLo,
@@ -624,7 +625,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             .lines('', '')
     }
 
-    emitInstr(it: Instr): Gen {
+    emitInstr(it: Instr, _inBlock: boolean = false): Gen {
         if (it) {
 
             const iret = it as IRet
@@ -667,7 +668,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                     this.ln(() => this.s("if ").emitExpr(iblock.If[0]))
 
                 this.indented(() =>
-                    iblock.Instrs.forEach(_ => this.emitInstr(_)))
+                    iblock.Instrs.forEach(_ => this.emitInstr(_, true)))
 
                 if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
                     this.line("else")

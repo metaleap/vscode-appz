@@ -173,7 +173,7 @@ class Gen extends gen_syn.Gen {
         }
         return super.emitExpr(it);
     }
-    emitInstr(it) {
+    emitInstr(it, inBlock = false) {
         if (it) {
             const ivar = it;
             if (ivar && ivar.Name && ivar.Type)
@@ -193,16 +193,19 @@ class Gen extends gen_syn.Gen {
                     this.ln(() => this.s("for (const ", iblock.ForEach[0].Name, " of ").emitExpr(iblock.ForEach[1]).s(") {"));
                 else if (endeol = (iblock.If && iblock.If.length) ? true : false)
                     this.ln(() => this.s("if (").emitExpr(iblock.If[0]).s(") {"));
-                else
+                else {
+                    if (endeol = inBlock)
+                        this.lf();
                     this.s("{").line();
-                this.indented(() => iblock.Instrs.forEach(_ => this.emitInstr(_)));
+                }
+                this.indented(() => iblock.Instrs.forEach(_ => this.emitInstr(_, true)));
                 this.lf().s("}");
                 if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
                     this.s(" else ").emitInstr(iblock.If[1]).lf();
                 return endeol ? this.line() : this;
             }
         }
-        return super.emitInstr(it);
+        return super.emitInstr(it, inBlock);
     }
     emitTypeRef(it) {
         const tmay = this.typeMaybe(it);

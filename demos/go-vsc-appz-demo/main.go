@@ -211,30 +211,6 @@ func demo_Env_OpenExternal() {
 	})
 }
 
-func demo_Env_Properties() {
-	vsc.Env().Properties(func(props EnvProperties) {
-		win.ShowQuickPick2([]string{
-			"AppName:\t" + props.AppName,
-			"AppRoot:\t" + props.AppRoot,
-			"Language:\t" + props.Language,
-			"MachineId:\t" + props.MachineId,
-			"RemoteName:\t" + props.RemoteName,
-			"SessionId:\t" + props.SessionId,
-			"Shell:\t\t" + props.Shell,
-			"UriScheme:\t" + props.UriScheme,
-		}, &QuickPickOptions{IgnoreFocusOut: true}, nil, quit)
-	})
-}
-
-func demo_Workspace_Properties() {
-	vsc.Workspace().Properties(func(props WorkspaceProperties) {
-		win.ShowQuickPick2([]string{
-			"Name:\t\t" + props.Name,
-			"WorkspaceFile:\t" + props.WorkspaceFile,
-		}, &QuickPickOptions{IgnoreFocusOut: true}, nil, quit)
-	})
-}
-
 func subscribeToMiscEvents() {
 	win.OnDidChangeWindowState(func(evt WindowState) {
 		win.SetStatusBarMessage1("Am I focused? "+strconv.FormatBool(evt.Focused)+".", 4242, nil)

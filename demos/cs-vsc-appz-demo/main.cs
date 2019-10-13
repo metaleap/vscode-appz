@@ -62,6 +62,7 @@ namespace VscAppzDemo {
                 "commands.getCommands",
                 "languages.getLanguages",
                 "env.Properties",
+                "workspace.Properties",
             };
             win.ShowQuickPick(menu, new QuickPickOptions() {
                 CanPickMany = false, IgnoreFocusOut = true
@@ -86,6 +87,8 @@ namespace VscAppzDemo {
                     demo_Languages_GetLanguages();
                 else if (menuitem == menu[8])
                     demo_Env_Properties();
+                else if (menuitem == menu[9])
+                    demo_Workspace_Properties();
                 else
                     win.ShowErrorMessage($"Unknown: `{menuitem}`, bye now!", nil, quit);
             });
@@ -180,21 +183,6 @@ namespace VscAppzDemo {
                     vsc.Env.OpenExternal(uri, ok => {
                         win.ShowInformationMessage((ok ? "Did" : "Did not") + $" succeed in opening `{uri}`, bye now!", nil, quit);
                     });
-            });
-        }
-
-        private static void demo_Env_Properties() {
-            vsc.Env.Properties(props => {
-                win.ShowQuickPick(new[] {
-                    "AppName:\t" + props.AppName,
-                    "AppRoot:\t" + props.AppRoot,
-                    "Language:\t" + props.Language,
-                    "MachineId:\t" + props.MachineId,
-                    "RemoteName:\t" + props.RemoteName,
-                    "SessionId:\t" + props.SessionId,
-                    "Shell:\t\t" + props.Shell,
-                    "UriScheme:\t" + props.UriScheme,
-                }, new QuickPickOptions() { IgnoreFocusOut = true }, null, quit);
             });
         }
 

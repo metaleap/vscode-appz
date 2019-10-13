@@ -88,7 +88,7 @@ class Gen extends gen_syn.Gen {
         else
             emitsigheadln().emitInstr(it.Func.Body).line();
     }
-    emitInstr(it) {
+    emitInstr(it, inBlock = false) {
         if (it) {
             const iret = it;
             if (iret && iret.Ret !== undefined)
@@ -117,16 +117,19 @@ class Gen extends gen_syn.Gen {
                     this.ln(() => this.s("foreach (var ", iblock.ForEach[0].Name, " in ").emitExpr(iblock.ForEach[1]).s(") {"));
                 else if (endeol = (iblock.If && iblock.If.length) ? true : false)
                     this.ln(() => this.s("if (").emitExpr(iblock.If[0]).s(") {"));
-                else
+                else {
+                    if (endeol = inBlock)
+                        this.lf();
                     this.s("{").line();
-                this.indented(() => iblock.Instrs.forEach(_ => this.emitInstr(_)));
+                }
+                this.indented(() => iblock.Instrs.forEach(_ => this.emitInstr(_, true)));
                 this.lf().s("}");
                 if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
                     this.s(" else ").emitInstr(iblock.If[1]).lf();
                 return endeol ? this.line() : this;
             }
         }
-        return super.emitInstr(it);
+        return super.emitInstr(it, inBlock);
     }
     emitExpr(it) {
         const ecollnew = it;

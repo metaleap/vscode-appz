@@ -61,7 +61,7 @@ class Gen extends gen_syn.Gen {
             .each(it.Func.Args, ", ", a => this.s(a.Name, " ").emitTypeRef(a.Type)).s(") ").when(it.Func.Type, () => emitTypeRet(this, it.Func.Type).s(" "))
             .emitInstr(it.Func.Body).lines("", "");
     }
-    emitInstr(it) {
+    emitInstr(it, inBlock = false) {
         if (it) {
             const ivar = it;
             if (ivar && ivar.Name && ivar.Type)
@@ -81,9 +81,12 @@ class Gen extends gen_syn.Gen {
                     this.ln(() => this.s("for _, ", iblock.ForEach[0].Name, " := range ").emitExpr(iblock.ForEach[1]).s(" {"));
                 else if (endeol = (iblock.If && iblock.If.length) ? true : false)
                     this.ln(() => this.s("if ").emitExpr(iblock.If[0]).s(" {"));
-                else
+                else {
+                    if (endeol = inBlock)
+                        this.lf();
                     this.s("{").line();
-                this.indented(() => iblock.Instrs.forEach(_ => this.emitInstr(_)));
+                }
+                this.indented(() => iblock.Instrs.forEach(_ => this.emitInstr(_, true)));
                 this.lf().s("}");
                 if (iblock.Lock)
                     this.line().lf().emitExpr(iblock.Lock).s(".Unlock()");
@@ -92,7 +95,7 @@ class Gen extends gen_syn.Gen {
                 return endeol ? this.line() : this;
             }
         }
-        return super.emitInstr(it);
+        return super.emitInstr(it, inBlock);
     }
     emitExpr(it) {
         if (it) {

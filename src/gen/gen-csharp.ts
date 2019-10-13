@@ -139,7 +139,7 @@ export class Gen extends gen_syn.Gen {
             emitsigheadln().emitInstr(it.Func.Body).line()
     }
 
-    emitInstr(it: gen_syn.Instr): Gen {
+    emitInstr(it: gen_syn.Instr, inBlock: boolean = false): Gen {
         if (it) {
             const iret = it as gen_syn.IRet
             if (iret && iret.Ret !== undefined)
@@ -180,11 +180,14 @@ export class Gen extends gen_syn.Gen {
                     this.ln(() => this.s("foreach (var ", iblock.ForEach[0].Name, " in ").emitExpr(iblock.ForEach[1]).s(") {"))
                 else if (endeol = (iblock.If && iblock.If.length) ? true : false)
                     this.ln(() => this.s("if (").emitExpr(iblock.If[0]).s(") {"))
-                else
+                else {
+                    if (endeol = inBlock)
+                        this.lf()
                     this.s("{").line()
+                }
 
                 this.indented(() =>
-                    iblock.Instrs.forEach(_ => this.emitInstr(_)))
+                    iblock.Instrs.forEach(_ => this.emitInstr(_, true)))
 
                 this.lf().s("}")
 
@@ -194,7 +197,7 @@ export class Gen extends gen_syn.Gen {
                 return endeol ? this.line() : this
             }
         }
-        return super.emitInstr(it)
+        return super.emitInstr(it, inBlock)
     }
 
     emitExpr(it: gen_syn.Expr): Gen {

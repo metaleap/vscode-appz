@@ -245,7 +245,7 @@ export class Gen extends gen_syn.Gen {
         return super.emitExpr(it)
     }
 
-    emitInstr(it: gen_syn.Instr): Gen {
+    emitInstr(it: gen_syn.Instr, inBlock: boolean = false): Gen {
         if (it) {
             const ivar = it as gen_syn.IVar
             if (ivar && ivar.Name && ivar.Type)
@@ -271,11 +271,14 @@ export class Gen extends gen_syn.Gen {
                     this.ln(() => this.s("for (const ", iblock.ForEach[0].Name, " of ").emitExpr(iblock.ForEach[1]).s(") {"))
                 else if (endeol = (iblock.If && iblock.If.length) ? true : false)
                     this.ln(() => this.s("if (").emitExpr(iblock.If[0]).s(") {"))
-                else
+                else {
+                    if (endeol = inBlock)
+                        this.lf()
                     this.s("{").line()
+                }
 
                 this.indented(() =>
-                    iblock.Instrs.forEach(_ => this.emitInstr(_)))
+                    iblock.Instrs.forEach(_ => this.emitInstr(_, true)))
 
                 this.lf().s("}")
 
@@ -285,7 +288,7 @@ export class Gen extends gen_syn.Gen {
                 return endeol ? this.line() : this
             }
         }
-        return super.emitInstr(it)
+        return super.emitInstr(it, inBlock)
     }
 
     emitTypeRef(it: gen_syn.TypeRef): Gen {
