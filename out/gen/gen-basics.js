@@ -45,7 +45,7 @@ class Prep {
                 iface.methods.push({
                     name: pickName("", ['Properties', 'Props', 'Info', 'Current', 'Self', 'It', 'Cur'], iface.methods),
                     isProps: struct, args: [{
-                            isFromRetThenable: true, name: "andThen", optional: false,
+                            isFromRetThenable: true, name: "then", optional: false,
                             typeSpec: { Thens: [struct.name] },
                         }],
                 });
@@ -166,7 +166,7 @@ class Prep {
         if (!(tprom && tprom.length))
             tret = { Thens: [tret] };
         if (tret) {
-            const argname = pickName('', ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], me.args);
+            const argname = pickName('', ['then', 'andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], me.args);
             if (!argname)
                 throw (me);
             me.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, spreads: false });

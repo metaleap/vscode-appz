@@ -20,10 +20,10 @@ class implWindow extends implBase {
     showErrorMessage(message, items, then) {
         let msg;
         msg = new aux_1.ipcMsg();
-        msg.qName = 'window.showErrorMessage1';
-        msg.data = {};
-        msg.data['message'] = message;
-        msg.data['items'] = items;
+        msg.QName = 'window.showErrorMessage1';
+        msg.Data = {};
+        msg.Data['message'] = message;
+        msg.Data['items'] = items;
         let on;
         if (then !== undefined && then !== null) {
             on = (payload) => {

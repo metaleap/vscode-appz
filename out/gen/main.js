@@ -14,7 +14,7 @@ const gens = [
     new gen_ast.Gen('libs/tmpdbg/', '.gen.coffee'),
     new gen_golang.Gen('libs/go/', '.gen.go'),
     new gen_csharp.Gen('libs/cs/', '.gen.cs'),
-    new gen_nodets.Gen('libs/js/src', '.gen.ts'),
+    new gen_nodets.Gen('libs/js/src/', '.gen.ts'),
     new gen_python.Gen('libs/py/', '.gen.py'),
     new gen_vscext.Gen('src/', '.gen.ts'),
 ];
@@ -22,9 +22,9 @@ const genApiSurface = {
     'vscode': [
         {
             'window': [
-                'showErrorMessage',
                 'showInformationMessage',
                 'showWarningMessage',
+                'showErrorMessage',
                 'showInputBox',
                 'showQuickPick',
                 'setStatusBarMessage',
@@ -52,7 +52,6 @@ const genApiSurface = {
                 'onDidChangeWorkspaceFolders',
                 'getWorkspaceFolder',
                 'workspaceFolders',
-                // 'openTextDocument',
                 'findFiles',
                 'asRelativePath',
             ],

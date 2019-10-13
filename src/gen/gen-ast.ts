@@ -183,12 +183,12 @@ export class Builder {
         return check ? ifTrue() : ifFalse ? ifFalse() : []
     }
 
-    LET<TIn, TOut>(value: TIn, andThen: ((_: TIn) => TOut)) {
-        return andThen(value)
+    LET<TIn, TOut>(value: TIn, then: ((_: TIn) => TOut)) {
+        return then(value)
     }
 
-    LETS<TIn, TOut>(values: TIn[], andThen: ((..._: TIn[]) => TOut)) {
-        return andThen(...values)
+    LETS<TIn, TOut>(values: TIn[], then: ((..._: TIn[]) => TOut)) {
+        return then(...values)
     }
 
     enumFrom(it: gen.PrepEnum): TEnum {
@@ -434,9 +434,9 @@ export class Gen extends gen.Gen implements gen.IGen {
         funcOverloads: false,
     }
 
-    indented(andThen: () => void): Gen {
+    indented(then: () => void): Gen {
         this.indents++
-        andThen()
+        then()
         this.indents--
         return this
     }
@@ -451,18 +451,18 @@ export class Gen extends gen.Gen implements gen.IGen {
         return this
     }
 
-    ln(andThen: (() => void)): Gen {
+    ln(then: (() => void)): Gen {
         this.src += this.options.oneIndent.repeat(this.indents)
-        andThen()
+        then()
         this.src += "\n"
         return this
     }
 
-    each<T>(arr: T[], joinBy: string, andThen: ((_: T) => void)): Gen {
+    each<T>(arr: T[], joinBy: string, then: ((_: T) => void)): Gen {
         for (let i = 0; i < arr.length; i++) {
             if (i > 0)
                 this.s(joinBy)
-            andThen(arr[i])
+            then(arr[i])
         }
         return this
     }

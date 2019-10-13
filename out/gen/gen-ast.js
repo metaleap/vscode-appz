@@ -70,11 +70,11 @@ class Builder {
     WHEN(check, ifTrue, ifFalse = null) {
         return check ? ifTrue() : ifFalse ? ifFalse() : [];
     }
-    LET(value, andThen) {
-        return andThen(value);
+    LET(value, then) {
+        return then(value);
     }
-    LETS(values, andThen) {
-        return andThen(...values);
+    LETS(values, then) {
+        return then(...values);
     }
     enumFrom(it) {
         return {
@@ -299,9 +299,9 @@ class Gen extends gen.Gen {
             funcOverloads: false,
         };
     }
-    indented(andThen) {
+    indented(then) {
         this.indents++;
-        andThen();
+        then();
         this.indents--;
         return this;
     }
@@ -313,17 +313,17 @@ class Gen extends gen.Gen {
         this.indents--;
         return this;
     }
-    ln(andThen) {
+    ln(then) {
         this.src += this.options.oneIndent.repeat(this.indents);
-        andThen();
+        then();
         this.src += "\n";
         return this;
     }
-    each(arr, joinBy, andThen) {
+    each(arr, joinBy, then) {
         for (let i = 0; i < arr.length; i++) {
             if (i > 0)
                 this.s(joinBy);
-            andThen(arr[i]);
+            then(arr[i]);
         }
         return this;
     }

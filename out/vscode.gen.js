@@ -10,40 +10,6 @@ function handle(msg, prog, remoteCancellationTokens) {
     switch (apiname) {
         case "window":
             switch (methodname) {
-                case "showErrorMessage1": {
-                    const arg_message = (msg.data['message']);
-                    const arg_items = (msg.data['items'] || []);
-                    const ret = vscode.window.showErrorMessage(arg_message, ...arg_items);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "showErrorMessage2": {
-                    const arg_message = (msg.data['message']);
-                    const arg_options = (msg.data['options']);
-                    const arg_items = (msg.data['items'] || []);
-                    const ret = vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "showErrorMessage3": {
-                    const arg_message = (msg.data['message']);
-                    const arg_items = (msg.data['items'] || []);
-                    const ret = vscode.window.showErrorMessage(arg_message, ...arg_items);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "showErrorMessage4": {
-                    const arg_message = (msg.data['message']);
-                    const arg_options = (msg.data['options']);
-                    const arg_items = (msg.data['items'] || []);
-                    const ret = vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
                 case "showInformationMessage1": {
                     const arg_message = (msg.data['message']);
                     const arg_items = (msg.data['items'] || []);
@@ -108,6 +74,40 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const arg_options = (msg.data['options']);
                     const arg_items = (msg.data['items'] || []);
                     const ret = vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "showErrorMessage1": {
+                    const arg_message = (msg.data['message']);
+                    const arg_items = (msg.data['items'] || []);
+                    const ret = vscode.window.showErrorMessage(arg_message, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "showErrorMessage2": {
+                    const arg_message = (msg.data['message']);
+                    const arg_options = (msg.data['options']);
+                    const arg_items = (msg.data['items'] || []);
+                    const ret = vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "showErrorMessage3": {
+                    const arg_message = (msg.data['message']);
+                    const arg_items = (msg.data['items'] || []);
+                    const ret = vscode.window.showErrorMessage(arg_message, ...arg_items);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "showErrorMessage4": {
+                    const arg_message = (msg.data['message']);
+                    const arg_options = (msg.data['options']);
+                    const arg_items = (msg.data['items'] || []);
+                    const ret = vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items);
                     const retdisp = ret;
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));

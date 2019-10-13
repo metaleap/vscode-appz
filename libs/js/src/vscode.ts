@@ -20,9 +20,7 @@ export abstract class impl implements Vscode {
 
 class implBase {
     impl: impl
-
     constructor(impl: impl) { this.impl = impl }
-
     send(msg: ipcMsg, on: (_: any) => boolean) {
         this.impl.send(msg, on)
     }
@@ -37,10 +35,10 @@ class implWindow extends implBase implements Window {
     showErrorMessage(message: string, items: string[], then: (_: string) => void) {
         let msg: ipcMsg
         msg = new ipcMsg()
-        msg.qName = 'window.showErrorMessage1'
-        msg.data = {}
-        msg.data['message'] = message
-        msg.data['items'] = items
+        msg.QName = 'window.showErrorMessage1'
+        msg.Data = {}
+        msg.Data['message'] = message
+        msg.Data['items'] = items
         let on: (_: any) => boolean
         if (then !== undefined && then !== null) {
             on = (payload: any): boolean => {

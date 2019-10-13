@@ -28,40 +28,6 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 	switch (apiname) {
 		case "window":
 			switch (methodname) {
-				case "showErrorMessage1": {
-					const arg_message = (msg.data['message']) as string
-					const arg_items = (msg.data['items'] || []) as string[]
-					const ret = vscode.window.showErrorMessage(arg_message, ...arg_items, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "showErrorMessage2": {
-					const arg_message = (msg.data['message']) as string
-					const arg_options = (msg.data['options']) as MessageOptions
-					const arg_items = (msg.data['items'] || []) as string[]
-					const ret = vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "showErrorMessage3": {
-					const arg_message = (msg.data['message']) as string
-					const arg_items = (msg.data['items'] || []) as MessageItem[]
-					const ret = vscode.window.showErrorMessage(arg_message, ...arg_items, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "showErrorMessage4": {
-					const arg_message = (msg.data['message']) as string
-					const arg_options = (msg.data['options']) as MessageOptions
-					const arg_items = (msg.data['items'] || []) as MessageItem[]
-					const ret = vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
 				case "showInformationMessage1": {
 					const arg_message = (msg.data['message']) as string
 					const arg_items = (msg.data['items'] || []) as string[]
@@ -126,6 +92,40 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const arg_options = (msg.data['options']) as MessageOptions
 					const arg_items = (msg.data['items'] || []) as MessageItem[]
 					const ret = vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "showErrorMessage1": {
+					const arg_message = (msg.data['message']) as string
+					const arg_items = (msg.data['items'] || []) as string[]
+					const ret = vscode.window.showErrorMessage(arg_message, ...arg_items, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "showErrorMessage2": {
+					const arg_message = (msg.data['message']) as string
+					const arg_options = (msg.data['options']) as MessageOptions
+					const arg_items = (msg.data['items'] || []) as string[]
+					const ret = vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "showErrorMessage3": {
+					const arg_message = (msg.data['message']) as string
+					const arg_items = (msg.data['items'] || []) as MessageItem[]
+					const ret = vscode.window.showErrorMessage(arg_message, ...arg_items, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "showErrorMessage4": {
+					const arg_message = (msg.data['message']) as string
+					const arg_options = (msg.data['options']) as MessageOptions
+					const arg_items = (msg.data['items'] || []) as MessageItem[]
+					const ret = vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items, )
 					const retdisp = ret as any as vscode.Disposable
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
