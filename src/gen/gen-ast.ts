@@ -238,7 +238,8 @@ export class Builder {
             name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
             Docs: this.docs(gen.docs(it.fromOrig ? it.fromOrig.decl : it.isPropsOf.fromOrig)),
-            IsOutgoing: false, IsIncoming: false, // will be set once all ifaces & structs are known
+            IsOutgoing: it.isOutgoing ? true : false,
+            IsIncoming: it.isIncoming ? true : false,
             Fields: it.fields.map((_: gen.PrepField): Field => ({
                 fromPrep: _,
                 name: _.name,
@@ -484,6 +485,15 @@ export class Gen extends gen.Gen implements gen.IGen {
 
     s(...s: string[]): Gen {
         this.src += s.join('')
+        return this
+    }
+
+    caseOf(...cases: [any, () => void][]): Gen {
+        for (const caseof of cases)
+            if (caseof[0]) {
+                caseof[1]()
+                break
+            }
         return this
     }
 
@@ -878,9 +888,9 @@ export class Gen extends gen.Gen implements gen.IGen {
                         _.iVar(__.fn, structfield.Type),
                         _.iSet(_.n(__.fn), _.oDot(_.n(argname), _.n(ffname))),
                         _.iIf(_.oIs(_.n(__.fn)), [_.iLock(_.eThis(),
-                            _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eCall(_.oDot(_.n('nextFuncId')))),
+                            _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eCall(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n('nextFuncId')))),
                             _.iAdd(_.n(__.fnids), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
-                            _.iSet(_.oIdx(_.oDot(_.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
+                            _.iSet(_.oIdx(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))),
                                 _.eFunc([{ Name: __.args, Type: { ValsOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] },
                                     _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args), true)), [
                                         _.iRet(_.eTup(_.eZilch(), _.eLit(false))),
@@ -912,10 +922,10 @@ export class Gen extends gen.Gen implements gen.IGen {
             body.push(
                 _.iVar(nameevtsub, TypeRefPrim.String),
                 _.iIf(_.oIsnt(_.n(arg.Name)), [
-                    _.eCall(_.n("OnError"), _.eThis(), _.eLit(`${iface.Name}.${method.Name}: the '${arg.Name}' arg (which is not optional but required) was not passed by the caller`), _.eZilch()),
+                    _.eCall(_.n("OnError"), _.eCall(_.oDot(_.n('Impl'))), _.eLit(`${iface.Name}.${method.Name}: the '${arg.Name}' arg (which is not optional but required) was not passed by the caller`), _.eZilch()),
                     _.iRet(null),
                 ]),
-                _.iSet(_.n(nameevtsub), _.eCall(_.oDot(_.eThis(), _.n("nextSub")),
+                _.iSet(_.n(nameevtsub), _.eCall(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n("nextSub")),
                     _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Bool,
                         ...[
                             _.iVar(__.ok, TypeRefPrim.Bool) as Instr,
@@ -947,7 +957,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                             _.iSet(_.oDot(_.n(arg.Name), _.n("impl")), _.eCall(_.oDot(_.eThis(), _.n("Impl")))),
                             _.iIf(_.oEq(_.eLit(""), _.oDot(_.n(arg.Name), _.n("fnId"))), [
                                 _.iLock(_.eThis(),
-                                    _.iSet(_.oDot(_.n(arg.Name), _.n("fnId")), _.eCall(_.oDot(_.eThis(), _.n("nextFuncId")))),
+                                    _.iSet(_.oDot(_.n(arg.Name), _.n("fnId")), _.eCall(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n("nextFuncId")))),
                                 ),
                             ]),
                             _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.oDot(_.n(arg.Name), _.n("fnId"))),
@@ -1004,14 +1014,14 @@ export class Gen extends gen.Gen implements gen.IGen {
             )
         }
         if (!funcfields.length) body.push(
-            _.eCall(_.oDot(_.n('send')), _.n(__.msg), _.n(__.on)),
+            _.eCall(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n('send')), _.n(__.msg), _.n(__.on)),
         )
         else body.push(
-            _.eCall(_.oDot(_.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool,
+            _.eCall(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool,
                 _.iIf(_.oNeq(_.eLen(_.n(__.fnids), false), _.eLit(0)), [
                     _.iLock(_.eThis(),
                         _.iFor(_.n(__.fnid), _.n(__.fnids),
-                            _.iDel(_.oDot(_.n('cbOther')), _.n(__.fnid)),
+                            _.iDel(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n('cbOther')), _.n(__.fnid)),
                         ),
                     ),
                 ]),
@@ -1114,37 +1124,37 @@ export class Gen extends gen.Gen implements gen.IGen {
         for (const structname in this.allStructs)
             this.emitStruct(this.allStructs[structname])
 
-        this.onBeforeEmitImpls()
+        this.onBeforeEmitImpls(false)
         for (const it of this.allInterfaces)
             for (const method of it.Methods)
                 this.emitMethodImpl(it, method, it === ifacetop
                     ? this.genMethodImpl_TopInterface
                     : this.genMethodImpl_MessageDispatch)
-        this.onAfterEmitImpls()
+        this.onAfterEmitImpls(false)
 
-        {
-            let anydecoderstogenerate = true
-            while (anydecoderstogenerate) {
-                anydecoderstogenerate = false
-                for (const name in this.state.genPopulateFor)
-                    if (anydecoderstogenerate = this.state.genPopulateFor[name]) {
-                        this.state.genPopulateFor[name] = false
-                        const struct = this.allStructs[name]
-                        if (struct)
-                            this.emitMethodImpl(struct, {
-                                Name: "populateFrom", Type: TypeRefPrim.Bool,
-                                Args: [{ Name: "payload", Type: TypeRefPrim.Any }]
-                            }, this.genMethodImpl_PopulateFrom)
-                    }
-            }
+        this.onBeforeEmitImpls(true)
+        let anydecoderstogenerate = true
+        while (anydecoderstogenerate) {
+            anydecoderstogenerate = false
+            for (const name in this.state.genPopulateFor)
+                if (anydecoderstogenerate = this.state.genPopulateFor[name]) {
+                    this.state.genPopulateFor[name] = false
+                    const struct = this.allStructs[name]
+                    if (struct)
+                        this.emitMethodImpl(struct, {
+                            Name: "populateFrom", Type: TypeRefPrim.Bool,
+                            Args: [{ Name: "payload", Type: TypeRefPrim.Any }]
+                        }, this.genMethodImpl_PopulateFrom)
+                }
         }
+        this.onAfterEmitImpls(true)
 
         this.emitOutro()
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src)
     }
 
-    onBeforeEmitImpls() { }
-    onAfterEmitImpls() { }
+    onBeforeEmitImpls(_structs: boolean) { }
+    onAfterEmitImpls(_structs: boolean) { }
 
     typeUnMaybe(it: TypeRef): TypeRef {
         const me = this.typeMaybe(it)

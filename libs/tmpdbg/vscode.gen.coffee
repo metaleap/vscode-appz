@@ -736,8 +736,8 @@ Workspace: interface
     # A thenable that resolves to an array of resource identifiers. Will return no results if no
     # [workspace folders](#workspace.workspaceFolders) are opened.
     FindFiles: void
-        include: GlobPattern
-        exclude: ?GlobPattern
+        include: string
+        exclude: ?string
         maxResults: ?int
         token: ?Cancel
         then: ?(?[string]->void)
@@ -1460,7 +1460,7 @@ Window·ShowInformationMessage1: (message:string -> items:[string] -> then:?(?st
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -1487,7 +1487,7 @@ Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> it
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -1512,7 +1512,7 @@ Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> then:
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -1538,7 +1538,7 @@ Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> it
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -1564,7 +1564,7 @@ Window·ShowWarningMessage1: (message:string -> items:[string] -> then:?(?string
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -1591,7 +1591,7 @@ Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -1616,7 +1616,7 @@ Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> then:?(?M
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -1642,7 +1642,7 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -1668,7 +1668,7 @@ Window·ShowErrorMessage1: (message:string -> items:[string] -> then:?(?string->
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -1695,7 +1695,7 @@ Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[s
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -1720,7 +1720,7 @@ Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> then:?(?Mes
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -1746,7 +1746,7 @@ Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[M
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -1764,9 +1764,9 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> then:?(?stri
         fn = options.ValidateInput
         if (=?fn)
             lock this
-                options.ValidateInput_AppzFuncId = this.nextFuncId()
+                options.ValidateInput_AppzFuncId = this.Impl().nextFuncId()
                 fnids·add(options.ValidateInput_AppzFuncId)
-                this.cbOther@options.ValidateInput_AppzFuncId = (args:[any] -> [any,bool])
+                this.Impl().cbOther@options.ValidateInput_AppzFuncId = (args:[any] -> [any,bool])
                     if (1 != args·len)
                         return [null,false]
                     else
@@ -1783,7 +1783,7 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> then:?(?stri
         token.impl = this.Impl()
         if ("" == token.fnId)
             lock this
-                token.fnId = this.nextFuncId()
+                token.fnId = this.Impl().nextFuncId()
         msg.Data@"token" = token.fnId
     var on of (any->bool)
     if (=?then)
@@ -1799,11 +1799,11 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> then:?(?stri
             then(result)
             return true
         
-    this.send(msg, (payload:any -> bool)
+    this.Impl().send(msg, (payload:any -> bool)
         if (fnids·len != 0)
             lock this
                 for fnid in fnids
-                    this.cbOther·del(fnid)
+                    this.Impl().cbOther·del(fnid)
         return ((=!on) || on(payload))
     )
 
@@ -1823,9 +1823,9 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
         fn = options.OnDidSelectItem
         if (=?fn)
             lock this
-                options.OnDidSelectItem_AppzFuncId = this.nextFuncId()
+                options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId()
                 fnids·add(options.OnDidSelectItem_AppzFuncId)
-                this.cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
+                this.Impl().cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
                     if (1 != args·len)
                         return [null,false]
                     else
@@ -1847,7 +1847,7 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
         token.impl = this.Impl()
         if ("" == token.fnId)
             lock this
-                token.fnId = this.nextFuncId()
+                token.fnId = this.Impl().nextFuncId()
         msg.Data@"token" = token.fnId
     var on of (any->bool)
     if (=?then)
@@ -1872,11 +1872,11 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
             then(result)
             return true
         
-    this.send(msg, (payload:any -> bool)
+    this.Impl().send(msg, (payload:any -> bool)
         if (fnids·len != 0)
             lock this
                 for fnid in fnids
-                    this.cbOther·del(fnid)
+                    this.Impl().cbOther·del(fnid)
         return ((=!on) || on(payload))
     )
 
@@ -1896,9 +1896,9 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
         fn = options.OnDidSelectItem
         if (=?fn)
             lock this
-                options.OnDidSelectItem_AppzFuncId = this.nextFuncId()
+                options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId()
                 fnids·add(options.OnDidSelectItem_AppzFuncId)
-                this.cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
+                this.Impl().cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
                     if (1 != args·len)
                         return [null,false]
                     else
@@ -1919,7 +1919,7 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
         token.impl = this.Impl()
         if ("" == token.fnId)
             lock this
-                token.fnId = this.nextFuncId()
+                token.fnId = this.Impl().nextFuncId()
         msg.Data@"token" = token.fnId
     var on of (any->bool)
     if (=?then)
@@ -1935,11 +1935,11 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
             then(result)
             return true
         
-    this.send(msg, (payload:any -> bool)
+    this.Impl().send(msg, (payload:any -> bool)
         if (fnids·len != 0)
             lock this
                 for fnid in fnids
-                    this.cbOther·del(fnid)
+                    this.Impl().cbOther·del(fnid)
         return ((=!on) || on(payload))
     )
 
@@ -1959,9 +1959,9 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
         fn = options.OnDidSelectItem
         if (=?fn)
             lock this
-                options.OnDidSelectItem_AppzFuncId = this.nextFuncId()
+                options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId()
                 fnids·add(options.OnDidSelectItem_AppzFuncId)
-                this.cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
+                this.Impl().cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
                     if (1 != args·len)
                         return [null,false]
                     else
@@ -1983,7 +1983,7 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
         token.impl = this.Impl()
         if ("" == token.fnId)
             lock this
-                token.fnId = this.nextFuncId()
+                token.fnId = this.Impl().nextFuncId()
         msg.Data@"token" = token.fnId
     var on of (any->bool)
     if (=?then)
@@ -2009,11 +2009,11 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
             then(result)
             return true
         
-    this.send(msg, (payload:any -> bool)
+    this.Impl().send(msg, (payload:any -> bool)
         if (fnids·len != 0)
             lock this
                 for fnid in fnids
-                    this.cbOther·del(fnid)
+                    this.Impl().cbOther·del(fnid)
         return ((=!on) || on(payload))
     )
 
@@ -2033,9 +2033,9 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
         fn = options.OnDidSelectItem
         if (=?fn)
             lock this
-                options.OnDidSelectItem_AppzFuncId = this.nextFuncId()
+                options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId()
                 fnids·add(options.OnDidSelectItem_AppzFuncId)
-                this.cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
+                this.Impl().cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
                     if (1 != args·len)
                         return [null,false]
                     else
@@ -2056,7 +2056,7 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
         token.impl = this.Impl()
         if ("" == token.fnId)
             lock this
-                token.fnId = this.nextFuncId()
+                token.fnId = this.Impl().nextFuncId()
         msg.Data@"token" = token.fnId
     var on of (any->bool)
     if (=?then)
@@ -2071,11 +2071,11 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
             then(result)
             return true
         
-    this.send(msg, (payload:any -> bool)
+    this.Impl().send(msg, (payload:any -> bool)
         if (fnids·len != 0)
             lock this
                 for fnid in fnids
-                    this.cbOther·del(fnid)
+                    this.Impl().cbOther·del(fnid)
         return ((=!on) || on(payload))
     )
 
@@ -2104,7 +2104,7 @@ Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> then:?(?Di
             then(result.bind(this.Impl(), ""))
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2130,7 +2130,7 @@ Window·SetStatusBarMessage2: (text:string -> then:?(?Disposable->void) -> void)
             then(result.bind(this.Impl(), ""))
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2155,7 +2155,7 @@ Window·ShowSaveDialog: (options:SaveDialogOptions -> then:?(?string->void) -> v
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2189,7 +2189,7 @@ Window·ShowOpenDialog: (options:OpenDialogOptions -> then:?(?[string]->void) ->
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2213,7 +2213,7 @@ Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> then:?(
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2236,7 +2236,7 @@ Window·State: (then:?(WindowState->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2248,9 +2248,9 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> then:?(?Disposa
     msg.Data = dict·new(1)
     var _fnid_listener of string
     if (=!listener)
-        OnError(this, "Window.OnDidChangeWindowState: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.Impl(), "Window.OnDidChangeWindowState: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
         return 
-    _fnid_listener = this.nextSub((args:[any] -> bool)
+    _fnid_listener = this.Impl().nextSub((args:[any] -> bool)
         var ok of bool
         if (1 != args·len)
             return ok
@@ -2278,7 +2278,7 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> then:?(?Disposa
             then(result.bind(this.Impl(), _fnid_listener))
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2303,7 +2303,7 @@ Env·OpenExternal: (target:string -> then:?(bool->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2325,7 +2325,7 @@ Env·AppName: (then:?(string->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2347,7 +2347,7 @@ Env·AppRoot: (then:?(string->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2369,7 +2369,7 @@ Env·Language: (then:?(string->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2391,7 +2391,7 @@ Env·MachineId: (then:?(string->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2415,7 +2415,7 @@ Env·RemoteName: (then:?(?string->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2437,7 +2437,7 @@ Env·SessionId: (then:?(string->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2459,7 +2459,7 @@ Env·Shell: (then:?(string->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2481,7 +2481,7 @@ Env·UriScheme: (then:?(string->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2506,7 +2506,7 @@ Env·Properties: (then:(EnvProperties->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2530,7 +2530,7 @@ Workspace·Name: (then:?(?string->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2554,7 +2554,7 @@ Workspace·WorkspaceFile: (then:?(?string->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2579,7 +2579,7 @@ Workspace·SaveAll: (includeUntitled:bool -> then:?(bool->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2591,9 +2591,9 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
     msg.Data = dict·new(1)
     var _fnid_listener of string
     if (=!listener)
-        OnError(this, "Workspace.OnDidChangeWorkspaceFolders: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.Impl(), "Workspace.OnDidChangeWorkspaceFolders: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
         return 
-    _fnid_listener = this.nextSub((args:[any] -> bool)
+    _fnid_listener = this.Impl().nextSub((args:[any] -> bool)
         var ok of bool
         if (1 != args·len)
             return ok
@@ -2621,7 +2621,7 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
             then(result.bind(this.Impl(), _fnid_listener))
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2645,7 +2645,7 @@ Workspace·GetWorkspaceFolder: (uri:string -> then:?(?WorkspaceFolder->void) -> 
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2679,12 +2679,12 @@ Workspace·WorkspaceFolders: (then:?(?[WorkspaceFolder]->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
 
-Workspace·FindFiles: (include:GlobPattern -> exclude:?GlobPattern -> maxResults:?int -> token:?Cancel -> then:?(?[string]->void) -> void)
+Workspace·FindFiles: (include:string -> exclude:?string -> maxResults:?int -> token:?Cancel -> then:?(?[string]->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.findFiles"
@@ -2696,7 +2696,7 @@ Workspace·FindFiles: (include:GlobPattern -> exclude:?GlobPattern -> maxResults
         token.impl = this.Impl()
         if ("" == token.fnId)
             lock this
-                token.fnId = this.nextFuncId()
+                token.fnId = this.Impl().nextFuncId()
         msg.Data@"token" = token.fnId
     var on of (any->bool)
     if (=?then)
@@ -2721,7 +2721,7 @@ Workspace·FindFiles: (include:GlobPattern -> exclude:?GlobPattern -> maxResults
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2747,7 +2747,7 @@ Workspace·AsRelativePath: (pathOrUri:string -> includeWorkspaceFolder:bool -> t
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2772,7 +2772,7 @@ Workspace·Properties: (then:(WorkspaceProperties->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2805,7 +2805,7 @@ Languages·GetLanguages: (then:?(?[string]->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2817,9 +2817,9 @@ Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> th
     msg.Data = dict·new(1)
     var _fnid_listener of string
     if (=!listener)
-        OnError(this, "Languages.OnDidChangeDiagnostics: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.Impl(), "Languages.OnDidChangeDiagnostics: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
         return 
-    _fnid_listener = this.nextSub((args:[any] -> bool)
+    _fnid_listener = this.Impl().nextSub((args:[any] -> bool)
         var ok of bool
         if (1 != args·len)
             return ok
@@ -2847,7 +2847,7 @@ Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> th
             then(result.bind(this.Impl(), _fnid_listener))
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2859,9 +2859,9 @@ Extensions·OnDidChange: (listener:(->void) -> then:?(?Disposable->void) -> void
     msg.Data = dict·new(1)
     var _fnid_listener of string
     if (=!listener)
-        OnError(this, "Extensions.OnDidChange: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.Impl(), "Extensions.OnDidChange: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
         return 
-    _fnid_listener = this.nextSub((args:[any] -> bool)
+    _fnid_listener = this.Impl().nextSub((args:[any] -> bool)
         var ok of bool
         if (0 != args·len)
             return ok
@@ -2884,7 +2884,7 @@ Extensions·OnDidChange: (listener:(->void) -> then:?(?Disposable->void) -> void
             then(result.bind(this.Impl(), _fnid_listener))
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 
@@ -2918,7 +2918,7 @@ Commands·GetCommands: (filterInternal:bool -> then:?(?[string]->void) -> void)
             then(result)
             return true
         
-    this.send(msg, on)
+    this.Impl().send(msg, on)
 
 
 

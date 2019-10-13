@@ -4,7 +4,6 @@ namespace VscAppz {
 	using System.Collections.Generic;
 	using Newtonsoft.Json;
 
-	using GlobPattern = System.String;
 	using any = System.Object;
 	using dict = System.Collections.Generic.Dictionary<string, object>;
 
@@ -656,7 +655,7 @@ namespace VscAppz {
 		/// <param name="maxResults">An upper-bound for the result.</param>
 		/// <param name="token">A token that can be used to signal cancellation to the underlying search engine.</param>
 		/// <param name="then">A thenable that resolves to an array of resource identifiers. Will return no results if no [workspace folders](#workspace.workspaceFolders) are opened.</param>
-		void FindFiles(GlobPattern include = default, GlobPattern exclude = default, int? maxResults = default, Cancel token = default, Action<string[]> then = default);
+		void FindFiles(string include = default, string exclude = default, int? maxResults = default, Cancel token = default, Action<string[]> then = default);
 
 		/// <summary>
 		/// Returns a path that is relative to the workspace folder or folders.
@@ -1245,7 +1244,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowInformationMessage(string message, MessageOptions options, string[] items, Action<string> then) {
@@ -1273,7 +1272,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowInformationMessage(string message, MessageItem[] items, Action<MessageItem> then) {
@@ -1299,7 +1298,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowInformationMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> then) {
@@ -1326,7 +1325,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowWarningMessage(string message, string[] items, Action<string> then) {
@@ -1353,7 +1352,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowWarningMessage(string message, MessageOptions options, string[] items, Action<string> then) {
@@ -1381,7 +1380,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowWarningMessage(string message, MessageItem[] items, Action<MessageItem> then) {
@@ -1407,7 +1406,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowWarningMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> then) {
@@ -1434,7 +1433,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowErrorMessage(string message, string[] items, Action<string> then) {
@@ -1461,7 +1460,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowErrorMessage(string message, MessageOptions options, string[] items, Action<string> then) {
@@ -1489,7 +1488,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowErrorMessage(string message, MessageItem[] items, Action<MessageItem> then) {
@@ -1515,7 +1514,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowErrorMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> then) {
@@ -1542,7 +1541,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowInputBox(InputBoxOptions options, Cancel token, Action<string> then) {
@@ -1558,9 +1557,9 @@ namespace VscAppz {
 				fn = options.ValidateInput;
 				if ((null != fn)) {
 					lock (this) {
-						options.ValidateInput_AppzFuncId = this.nextFuncId();
+						options.ValidateInput_AppzFuncId = this.Impl().nextFuncId();
 						fnids.Add(options.ValidateInput_AppzFuncId);
-						this.cbOther[options.ValidateInput_AppzFuncId] = (any[] args) => {
+						this.Impl().cbOther[options.ValidateInput_AppzFuncId] = (any[] args) => {
 							if ((1 != args.Length)) {
 								return (null, false);
 							} else {
@@ -1583,7 +1582,7 @@ namespace VscAppz {
 				token.impl = this.Impl();
 				if (("" == token.fnId)) {
 					lock (this) {
-						token.fnId = this.nextFuncId();
+						token.fnId = this.Impl().nextFuncId();
 					}
 				}
 				msg.Data["token"] = token.fnId;
@@ -1605,11 +1604,11 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, (any payload) => {
+			this.Impl().send(msg, (any payload) => {
 				if ((fnids.Count != 0)) {
 					lock (this) {
 						foreach (var fnid in fnids) {
-							this.cbOther.Remove(fnid);
+							this.Impl().cbOther.Remove(fnid);
 						}
 					}
 				}
@@ -1630,9 +1629,9 @@ namespace VscAppz {
 				fn = options.OnDidSelectItem;
 				if ((null != fn)) {
 					lock (this) {
-						options.OnDidSelectItem_AppzFuncId = this.nextFuncId();
+						options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId();
 						fnids.Add(options.OnDidSelectItem_AppzFuncId);
-						this.cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
+						this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
 							if ((1 != args.Length)) {
 								return (null, false);
 							} else {
@@ -1660,7 +1659,7 @@ namespace VscAppz {
 				token.impl = this.Impl();
 				if (("" == token.fnId)) {
 					lock (this) {
-						token.fnId = this.nextFuncId();
+						token.fnId = this.Impl().nextFuncId();
 					}
 				}
 				msg.Data["token"] = token.fnId;
@@ -1693,11 +1692,11 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, (any payload) => {
+			this.Impl().send(msg, (any payload) => {
 				if ((fnids.Count != 0)) {
 					lock (this) {
 						foreach (var fnid in fnids) {
-							this.cbOther.Remove(fnid);
+							this.Impl().cbOther.Remove(fnid);
 						}
 					}
 				}
@@ -1718,9 +1717,9 @@ namespace VscAppz {
 				fn = options.OnDidSelectItem;
 				if ((null != fn)) {
 					lock (this) {
-						options.OnDidSelectItem_AppzFuncId = this.nextFuncId();
+						options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId();
 						fnids.Add(options.OnDidSelectItem_AppzFuncId);
-						this.cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
+						this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
 							if ((1 != args.Length)) {
 								return (null, false);
 							} else {
@@ -1747,7 +1746,7 @@ namespace VscAppz {
 				token.impl = this.Impl();
 				if (("" == token.fnId)) {
 					lock (this) {
-						token.fnId = this.nextFuncId();
+						token.fnId = this.Impl().nextFuncId();
 					}
 				}
 				msg.Data["token"] = token.fnId;
@@ -1769,11 +1768,11 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, (any payload) => {
+			this.Impl().send(msg, (any payload) => {
 				if ((fnids.Count != 0)) {
 					lock (this) {
 						foreach (var fnid in fnids) {
-							this.cbOther.Remove(fnid);
+							this.Impl().cbOther.Remove(fnid);
 						}
 					}
 				}
@@ -1794,9 +1793,9 @@ namespace VscAppz {
 				fn = options.OnDidSelectItem;
 				if ((null != fn)) {
 					lock (this) {
-						options.OnDidSelectItem_AppzFuncId = this.nextFuncId();
+						options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId();
 						fnids.Add(options.OnDidSelectItem_AppzFuncId);
-						this.cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
+						this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
 							if ((1 != args.Length)) {
 								return (null, false);
 							} else {
@@ -1824,7 +1823,7 @@ namespace VscAppz {
 				token.impl = this.Impl();
 				if (("" == token.fnId)) {
 					lock (this) {
-						token.fnId = this.nextFuncId();
+						token.fnId = this.Impl().nextFuncId();
 					}
 				}
 				msg.Data["token"] = token.fnId;
@@ -1858,11 +1857,11 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, (any payload) => {
+			this.Impl().send(msg, (any payload) => {
 				if ((fnids.Count != 0)) {
 					lock (this) {
 						foreach (var fnid in fnids) {
-							this.cbOther.Remove(fnid);
+							this.Impl().cbOther.Remove(fnid);
 						}
 					}
 				}
@@ -1883,9 +1882,9 @@ namespace VscAppz {
 				fn = options.OnDidSelectItem;
 				if ((null != fn)) {
 					lock (this) {
-						options.OnDidSelectItem_AppzFuncId = this.nextFuncId();
+						options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId();
 						fnids.Add(options.OnDidSelectItem_AppzFuncId);
-						this.cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
+						this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
 							if ((1 != args.Length)) {
 								return (null, false);
 							} else {
@@ -1912,7 +1911,7 @@ namespace VscAppz {
 				token.impl = this.Impl();
 				if (("" == token.fnId)) {
 					lock (this) {
-						token.fnId = this.nextFuncId();
+						token.fnId = this.Impl().nextFuncId();
 					}
 				}
 				msg.Data["token"] = token.fnId;
@@ -1933,11 +1932,11 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, (any payload) => {
+			this.Impl().send(msg, (any payload) => {
 				if ((fnids.Count != 0)) {
 					lock (this) {
 						foreach (var fnid in fnids) {
-							this.cbOther.Remove(fnid);
+							this.Impl().cbOther.Remove(fnid);
 						}
 					}
 				}
@@ -1970,7 +1969,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.SetStatusBarMessage(string text, Action<Disposable> then) {
@@ -1997,7 +1996,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowSaveDialog(SaveDialogOptions options, Action<string> then) {
@@ -2023,7 +2022,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowOpenDialog(OpenDialogOptions options, Action<string[]> then) {
@@ -2060,7 +2059,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options, Action<WorkspaceFolder> then) {
@@ -2085,7 +2084,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.State(Action<WindowState> then) {
@@ -2109,7 +2108,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWindow.OnDidChangeWindowState(Action<WindowState> listener, Action<Disposable> then) {
@@ -2119,10 +2118,10 @@ namespace VscAppz {
 			msg.Data = new dict(1);
 			string _fnid_listener = default;
 			if ((null == listener)) {
-				OnError(this, "IWindow.OnDidChangeWindowState: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
+				OnError(this.Impl(), "IWindow.OnDidChangeWindowState: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
 				return ;
 			}
-			_fnid_listener = this.nextSub((any[] args) => {
+			_fnid_listener = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
 				if ((1 != args.Length)) {
 					return ok;
@@ -2155,7 +2154,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IEnv.OpenExternal(string target, Action<bool> then) {
@@ -2181,7 +2180,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IEnv.AppName(Action<string> then) {
@@ -2204,7 +2203,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IEnv.AppRoot(Action<string> then) {
@@ -2227,7 +2226,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IEnv.Language(Action<string> then) {
@@ -2250,7 +2249,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IEnv.MachineId(Action<string> then) {
@@ -2273,7 +2272,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IEnv.RemoteName(Action<string> then) {
@@ -2298,7 +2297,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IEnv.SessionId(Action<string> then) {
@@ -2321,7 +2320,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IEnv.Shell(Action<string> then) {
@@ -2344,7 +2343,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IEnv.UriScheme(Action<string> then) {
@@ -2367,7 +2366,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IEnv.Properties(Action<EnvProperties> then) {
@@ -2393,7 +2392,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWorkspace.Name(Action<string> then) {
@@ -2418,7 +2417,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWorkspace.WorkspaceFile(Action<string> then) {
@@ -2443,7 +2442,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWorkspace.SaveAll(bool includeUntitled, Action<bool> then) {
@@ -2469,7 +2468,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWorkspace.OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener, Action<Disposable> then) {
@@ -2479,10 +2478,10 @@ namespace VscAppz {
 			msg.Data = new dict(1);
 			string _fnid_listener = default;
 			if ((null == listener)) {
-				OnError(this, "IWorkspace.OnDidChangeWorkspaceFolders: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
+				OnError(this.Impl(), "IWorkspace.OnDidChangeWorkspaceFolders: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
 				return ;
 			}
-			_fnid_listener = this.nextSub((any[] args) => {
+			_fnid_listener = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
 				if ((1 != args.Length)) {
 					return ok;
@@ -2515,7 +2514,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWorkspace.GetWorkspaceFolder(string uri, Action<WorkspaceFolder> then) {
@@ -2540,7 +2539,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWorkspace.WorkspaceFolders(Action<WorkspaceFolder[]> then) {
@@ -2577,10 +2576,10 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
-		void IWorkspace.FindFiles(GlobPattern include, GlobPattern exclude, int? maxResults, Cancel token, Action<string[]> then) {
+		void IWorkspace.FindFiles(string include, string exclude, int? maxResults, Cancel token, Action<string[]> then) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.findFiles";
@@ -2592,7 +2591,7 @@ namespace VscAppz {
 				token.impl = this.Impl();
 				if (("" == token.fnId)) {
 					lock (this) {
-						token.fnId = this.nextFuncId();
+						token.fnId = this.Impl().nextFuncId();
 					}
 				}
 				msg.Data["token"] = token.fnId;
@@ -2625,7 +2624,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWorkspace.AsRelativePath(string pathOrUri, bool includeWorkspaceFolder, Action<string> then) {
@@ -2652,7 +2651,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IWorkspace.Properties(Action<WorkspaceProperties> then) {
@@ -2678,7 +2677,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void ILanguages.GetLanguages(Action<string[]> then) {
@@ -2714,7 +2713,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void ILanguages.OnDidChangeDiagnostics(Action<DiagnosticChangeEvent> listener, Action<Disposable> then) {
@@ -2724,10 +2723,10 @@ namespace VscAppz {
 			msg.Data = new dict(1);
 			string _fnid_listener = default;
 			if ((null == listener)) {
-				OnError(this, "ILanguages.OnDidChangeDiagnostics: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
+				OnError(this.Impl(), "ILanguages.OnDidChangeDiagnostics: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
 				return ;
 			}
-			_fnid_listener = this.nextSub((any[] args) => {
+			_fnid_listener = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
 				if ((1 != args.Length)) {
 					return ok;
@@ -2760,7 +2759,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void IExtensions.OnDidChange(Action listener, Action<Disposable> then) {
@@ -2770,10 +2769,10 @@ namespace VscAppz {
 			msg.Data = new dict(1);
 			string _fnid_listener = default;
 			if ((null == listener)) {
-				OnError(this, "IExtensions.OnDidChange: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
+				OnError(this.Impl(), "IExtensions.OnDidChange: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
 				return ;
 			}
-			_fnid_listener = this.nextSub((any[] args) => {
+			_fnid_listener = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
 				if ((0 != args.Length)) {
 					return ok;
@@ -2800,7 +2799,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 		void ICommands.GetCommands(bool filterInternal, Action<string[]> then) {
@@ -2837,7 +2836,7 @@ namespace VscAppz {
 					return true;
 				};
 			}
-			this.send(msg, on);
+			this.Impl().send(msg, on);
 		}
 
 	}

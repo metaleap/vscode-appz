@@ -16,8 +16,6 @@ export class Gen extends gen_ast.Gen {
         return this.lines(
             "package vscAppz",
             "// " + this.doNotEditComment("golang"),
-            "",
-            "type GlobPattern = string",
             "")
     }
 

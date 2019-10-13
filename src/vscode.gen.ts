@@ -2,8 +2,6 @@
 
 import * as vscode from 'vscode'
 import * as ppio from './procspipeio'
-type GlobPattern = string
-
 const noOp = (_:any) => {}
 type MessageOptions = vscode.MessageOptions
 interface MessageItem extends vscode.MessageItem {
@@ -342,8 +340,8 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					return Promise.resolve(vscode.workspace.workspaceFolders)
 				}
 				case "findFiles": {
-					const arg_include = (msg.data['include']) as GlobPattern
-					const arg_exclude = (msg.data['exclude']) as GlobPattern
+					const arg_include = (msg.data['include']) as string
+					const arg_exclude = (msg.data['exclude']) as string
 					const arg_maxResults = (msg.data['maxResults']) as number
 					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
 					if (!arg_token)

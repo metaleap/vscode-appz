@@ -261,13 +261,6 @@ importedApi = mathExt.exports;
 
 console.log(importedApi.mul(42, 1)); ```
 
-#### type GlobPattern
-
-```go
-type GlobPattern = string
-```
-
-
 #### type InputBoxOptions
 
 ```go
@@ -967,7 +960,7 @@ type Workspace interface {
 	//
 	// `then` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
 	// [workspace folders](#workspace.workspaceFolders) are opened.
-	FindFiles(include GlobPattern, exclude *GlobPattern, maxResults *int, token *Cancel, then func([]string))
+	FindFiles(include string, exclude *string, maxResults *int, token *Cancel, then func([]string))
 
 	// Returns a path that is relative to the workspace folder or folders.
 	//

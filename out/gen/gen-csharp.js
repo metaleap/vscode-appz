@@ -13,7 +13,7 @@ class Gen extends gen_ast.Gen {
         super.gen(prep);
     }
     emitIntro() {
-        return this.lines("// " + this.doNotEditComment("csharp"), "namespace VscAppz {").indent().lines("using System;", "using System.Collections.Generic;", "using Newtonsoft.Json;", "", "using GlobPattern = System.String;", "using " + this.options.idents.typeAny + " = System.Object;", "using " + this.options.idents.typeDict + " = System.Collections.Generic.Dictionary<string, object>;", "");
+        return this.lines("// " + this.doNotEditComment("csharp"), "namespace VscAppz {").indent().lines("using System;", "using System.Collections.Generic;", "using Newtonsoft.Json;", "", "using " + this.options.idents.typeAny + " = System.Object;", "using " + this.options.idents.typeDict + " = System.Collections.Generic.Dictionary<string, object>;", "");
     }
     emitOutro() {
         return this.undent().lines("}");
@@ -55,13 +55,15 @@ class Gen extends gen_ast.Gen {
             .emitTypeRef(f.Type)
             .s(" ", f.Name, ";")))).lines("}", "");
     }
-    onBeforeEmitImpls() {
-        this.line("internal partial class "
-            + this.options.idents.typeImpl + " : "
-            + this.allInterfaces.map(_ => _.Name).join(", ") + " {").line().indent();
+    onBeforeEmitImpls(structs) {
+        if (!structs)
+            this.line("internal partial class "
+                + this.options.idents.typeImpl + " : "
+                + this.allInterfaces.map(_ => _.Name).join(", ") + " {").line().indent();
     }
-    onAfterEmitImpls() {
-        this.undent().lines("}", "");
+    onAfterEmitImpls(structs) {
+        if (!structs)
+            this.undent().lines("}", "");
     }
     emitFuncImpl(it) {
         anonVarCounter = 1;

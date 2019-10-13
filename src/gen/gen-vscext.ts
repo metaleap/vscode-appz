@@ -8,7 +8,6 @@ export class Gen extends gen.Gen implements gen.IGen {
         let src = "// " + this.doNotEditComment("vscext") + "\n\n"
         src += `import * as ${pkgname} from '${pkgname}'\n`
         src += "import * as ppio from './procspipeio'\n"
-        src += "type GlobPattern = string\n\n"
         src += "const noOp = (_:any) => {}\n"
 
         for (const it of prep.enums)

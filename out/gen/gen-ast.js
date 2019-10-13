@@ -121,7 +121,8 @@ class Builder {
             name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
             Docs: this.docs(gen.docs(it.fromOrig ? it.fromOrig.decl : it.isPropsOf.fromOrig)),
-            IsOutgoing: false, IsIncoming: false,
+            IsOutgoing: it.isOutgoing ? true : false,
+            IsIncoming: it.isIncoming ? true : false,
             Fields: it.fields.map((_) => ({
                 fromPrep: _,
                 name: _.name,
@@ -341,6 +342,14 @@ class Gen extends gen.Gen {
     }
     s(...s) {
         this.src += s.join('');
+        return this;
+    }
+    caseOf(...cases) {
+        for (const caseof of cases)
+            if (caseof[0]) {
+                caseof[1]();
+                break;
+            }
         return this;
     }
     when(check, ifTrue, ifFalse = undefined) {
@@ -633,7 +642,7 @@ class Gen extends gen.Gen {
                 body.push(_.iIf((!ff.arg.optional) ? _.eLit(true) : _.oIs(_.n(origargname)), _.WHEN(twinarg, () => [
                     _.iSet(_.n(argname), _.eNew({ Maybe: { Name: twinarg.twinStructName } })),
                     _.iSet(_.oDot(_.n(argname), _.n(twinarg.origStruct.Name)), ff.arg.optional ? _.n(origargname) : _.oAddr(_.n(origargname))),
-                ]).concat(_.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eLit("")), _.iVar(__.fn, structfield.Type), _.iSet(_.n(__.fn), _.oDot(_.n(argname), _.n(ffname))), _.iIf(_.oIs(_.n(__.fn)), [_.iLock(_.eThis(), _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eCall(_.oDot(_.n('nextFuncId')))), _.iAdd(_.n(__.fnids), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))), _.iSet(_.oIdx(_.oDot(_.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))), _.eFunc([{ Name: __.args, Type: { ValsOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] }, _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args), true)), [
+                ]).concat(_.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eLit("")), _.iVar(__.fn, structfield.Type), _.iSet(_.n(__.fn), _.oDot(_.n(argname), _.n(ffname))), _.iIf(_.oIs(_.n(__.fn)), [_.iLock(_.eThis(), _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eCall(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n('nextFuncId')))), _.iAdd(_.n(__.fnids), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))), _.iSet(_.oIdx(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))), _.eFunc([{ Name: __.args, Type: { ValsOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] }, _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args), true)), [
                         _.iRet(_.eTup(_.eZilch(), _.eLit(false))),
                     ], [_.iVar(__.ok, TypeRefPrim.Bool)].concat(..._.EACH(fnargs, (fnarg, idx) => [
                         _.iVar('__' + idx, this.b.typeRef(fnarg)),
@@ -650,9 +659,9 @@ class Gen extends gen.Gen {
             const arg = method.Args[0];
             nameevtsub = "_fnid_" + arg.Name;
             body.push(_.iVar(nameevtsub, TypeRefPrim.String), _.iIf(_.oIsnt(_.n(arg.Name)), [
-                _.eCall(_.n("OnError"), _.eThis(), _.eLit(`${iface.Name}.${method.Name}: the '${arg.Name}' arg (which is not optional but required) was not passed by the caller`), _.eZilch()),
+                _.eCall(_.n("OnError"), _.eCall(_.oDot(_.n('Impl'))), _.eLit(`${iface.Name}.${method.Name}: the '${arg.Name}' arg (which is not optional but required) was not passed by the caller`), _.eZilch()),
                 _.iRet(null),
-            ]), _.iSet(_.n(nameevtsub), _.eCall(_.oDot(_.eThis(), _.n("nextSub")), _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Bool, ...[
+            ]), _.iSet(_.n(nameevtsub), _.eCall(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n("nextSub")), _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Bool, ...[
                 _.iVar(__.ok, TypeRefPrim.Bool),
                 _.iIf(_.oNeq(_.eLit(isevt.EvtArgs.length), _.eLen(_.n("args"), true)), [
                     _.iRet(_.n(__.ok)),
@@ -666,7 +675,7 @@ class Gen extends gen.Gen {
                         body.push(_.iIf(_.oIs(_.n(arg.Name)), [
                             _.iSet(_.oDot(_.n(arg.Name), _.n("impl")), _.eCall(_.oDot(_.eThis(), _.n("Impl")))),
                             _.iIf(_.oEq(_.eLit(""), _.oDot(_.n(arg.Name), _.n("fnId"))), [
-                                _.iLock(_.eThis(), _.iSet(_.oDot(_.n(arg.Name), _.n("fnId")), _.eCall(_.oDot(_.eThis(), _.n("nextFuncId"))))),
+                                _.iLock(_.eThis(), _.iSet(_.oDot(_.n(arg.Name), _.n("fnId")), _.eCall(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n("nextFuncId"))))),
                             ]),
                             _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.oDot(_.n(arg.Name), _.n("fnId"))),
                         ]));
@@ -705,10 +714,10 @@ class Gen extends gen.Gen {
             ]));
         }
         if (!funcfields.length)
-            body.push(_.eCall(_.oDot(_.n('send')), _.n(__.msg), _.n(__.on)));
+            body.push(_.eCall(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n('send')), _.n(__.msg), _.n(__.on)));
         else
-            body.push(_.eCall(_.oDot(_.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iIf(_.oNeq(_.eLen(_.n(__.fnids), false), _.eLit(0)), [
-                _.iLock(_.eThis(), _.iFor(_.n(__.fnid), _.n(__.fnids), _.iDel(_.oDot(_.n('cbOther')), _.n(__.fnid)))),
+            body.push(_.eCall(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iIf(_.oNeq(_.eLen(_.n(__.fnids), false), _.eLit(0)), [
+                _.iLock(_.eThis(), _.iFor(_.n(__.fnid), _.n(__.fnids), _.iDel(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n('cbOther')), _.n(__.fnid)))),
             ]), _.iRet(_.oOr(_.oIsnt(_.n(__.on)), _.eCall(_.n(__.on), _.n(__.payload)))))));
     }
     emitIntro() {
@@ -786,34 +795,34 @@ class Gen extends gen.Gen {
             this.emitInterface(it);
         for (const structname in this.allStructs)
             this.emitStruct(this.allStructs[structname]);
-        this.onBeforeEmitImpls();
+        this.onBeforeEmitImpls(false);
         for (const it of this.allInterfaces)
             for (const method of it.Methods)
                 this.emitMethodImpl(it, method, it === ifacetop
                     ? this.genMethodImpl_TopInterface
                     : this.genMethodImpl_MessageDispatch);
-        this.onAfterEmitImpls();
-        {
-            let anydecoderstogenerate = true;
-            while (anydecoderstogenerate) {
-                anydecoderstogenerate = false;
-                for (const name in this.state.genPopulateFor)
-                    if (anydecoderstogenerate = this.state.genPopulateFor[name]) {
-                        this.state.genPopulateFor[name] = false;
-                        const struct = this.allStructs[name];
-                        if (struct)
-                            this.emitMethodImpl(struct, {
-                                Name: "populateFrom", Type: TypeRefPrim.Bool,
-                                Args: [{ Name: "payload", Type: TypeRefPrim.Any }]
-                            }, this.genMethodImpl_PopulateFrom);
-                    }
-            }
+        this.onAfterEmitImpls(false);
+        this.onBeforeEmitImpls(true);
+        let anydecoderstogenerate = true;
+        while (anydecoderstogenerate) {
+            anydecoderstogenerate = false;
+            for (const name in this.state.genPopulateFor)
+                if (anydecoderstogenerate = this.state.genPopulateFor[name]) {
+                    this.state.genPopulateFor[name] = false;
+                    const struct = this.allStructs[name];
+                    if (struct)
+                        this.emitMethodImpl(struct, {
+                            Name: "populateFrom", Type: TypeRefPrim.Bool,
+                            Args: [{ Name: "payload", Type: TypeRefPrim.Any }]
+                        }, this.genMethodImpl_PopulateFrom);
+                }
         }
+        this.onAfterEmitImpls(true);
         this.emitOutro();
         this.writeFileSync(this.caseLo(prep.fromOrig.moduleName), this.src);
     }
-    onBeforeEmitImpls() { }
-    onAfterEmitImpls() { }
+    onBeforeEmitImpls(_structs) { }
+    onAfterEmitImpls(_structs) { }
     typeUnMaybe(it) {
         const me = this.typeMaybe(it);
         return me ? this.typeUnMaybe(me.Maybe) : it;

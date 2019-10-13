@@ -71,7 +71,7 @@ class Prep {
                                     if (!arg.isFromRetThenable)
                                         isargout = !isinfunc;
                                 }
-            if ((struct.isOutgoing = isargout) && (struct.isIncoming = isargin)) {
+            if ((struct.isOutgoing = struct.isOutgoing || isargout) && (struct.isIncoming = struct.isIncoming || isargin)) {
                 const fieldname = pickName('my', ['', 'tags', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields);
                 if (!fieldname)
                     throw (struct);
@@ -152,11 +152,22 @@ class Prep {
                 })) : [],
         };
         iface.methods.push(me);
-        if (decle && decle.EvtName && decle.EvtName.length)
+        if (decle && decle.EvtName && decle.EvtName.length) {
+            const evtargs = [];
+            for (const _ of decle.EvtArgs) {
+                const typespec = this.typeSpec(_);
+                evtargs.push(typespec);
+                if (typeof typespec === 'string') {
+                    const struct = this.structs.find(_ => _.name === typespec);
+                    if (struct)
+                        struct.isIncoming = true;
+                }
+            }
             me.args.push({
                 name: pickName('', ['listener', 'handler', 'eventHandler', 'onEvent', 'onEventRaised', 'onEventFired', 'onEventTriggered', 'onFired', 'onTriggered', 'onRaised'], me.args),
-                optional: false, typeSpec: { From: decle.EvtArgs.map(_ => this.typeSpec(_)), To: null },
+                optional: false, typeSpec: { From: decle.EvtArgs.map((_, i) => evtargs[i]), To: null },
             });
+        }
         let tret = (declp && declp.PropType) ?
             this.typeSpec(declp.PropType) :
             (decle && decle.EvtName && decle.EvtName.length) ?
@@ -261,8 +272,9 @@ class Prep {
                     };
                     return tarr;
                 }
-                else
-                    return tname;
+                else if (tname === 'GlobPattern')
+                    return ScriptPrimType.String;
+                return tname;
             case ts.SyntaxKind.LiteralType:
                 const lit = tNode.literal;
                 switch (lit.kind) {

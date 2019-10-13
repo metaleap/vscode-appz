@@ -25,7 +25,6 @@ export class Gen extends gen_ast.Gen {
             "using System;",
             "using System.Collections.Generic;",
             "using Newtonsoft.Json;", "",
-            "using GlobPattern = System.String;",
             "using " + this.options.idents.typeAny + " = System.Object;",
             "using " + this.options.idents.typeDict + " = System.Collections.Generic.Dictionary<string, object>;", ""
         )
@@ -93,14 +92,16 @@ export class Gen extends gen_ast.Gen {
             ).lines("}", "")
     }
 
-    onBeforeEmitImpls() {
-        this.line("internal partial class "
-            + this.options.idents.typeImpl + " : "
-            + this.allInterfaces.map(_ => _.Name).join(", ") + " {").line().indent()
+    onBeforeEmitImpls(structs: boolean) {
+        if (!structs)
+            this.line("internal partial class "
+                + this.options.idents.typeImpl + " : "
+                + this.allInterfaces.map(_ => _.Name).join(", ") + " {").line().indent()
     }
 
-    onAfterEmitImpls() {
-        this.undent().lines("}", "")
+    onAfterEmitImpls(structs: boolean) {
+        if (!structs)
+            this.undent().lines("}", "")
     }
 
     emitFuncImpl(it: gen_ast.Func) {

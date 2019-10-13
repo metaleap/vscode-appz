@@ -13,7 +13,7 @@ class Gen extends gen_ast.Gen {
         super.gen(prep);
     }
     emitIntro() {
-        return this.lines("// " + this.doNotEditComment("nodesjs"), "import { ipcMsg } from './aux'\n\n", "", "class implBase {", "    impl: impl", "    constructor(impl: impl) { this.impl = impl }", "    send(msg: ipcMsg, on: (_: any) => boolean) { this.impl.send(msg, on) }", "}", "");
+        return this.lines("// " + this.doNotEditComment("nodesjs"), "import * as aux from './aux'", "import { OnError } from './vsc-appz'", "type ipcMsg = aux.ipcMsg", "type Cancel = aux.Cancel", "type Disposable = aux.Disposable", "interface fromJson { populateFrom: (_: any) => boolean }", "", "abstract class implBase {", "    impl: impl", "    constructor(impl: impl) { this.impl = impl }", "    Impl() { return this.impl as any as aux.impl /* crikey, codegen life.. */ }", "}", "", "function new_ipcMsg() { return new aux.ipcMsg() }", "function new_Disposable() { return new aux.Disposable() }", "");
     }
     emitOutro() { return this; }
     emitDocs(it) {
@@ -53,51 +53,70 @@ class Gen extends gen_ast.Gen {
     }
     emitStruct(it) {
         this.emitDocs(it)
-            .line("export interface " + it.Name + " {").indented(() => {
+            .line("export interface " + it.Name + (it.IsIncoming ? " extends fromJson {" : " {")).indented(() => {
             this.each(it.Fields, "\n", f => this.emitDocs(f)
                 .ln(() => {
-                this.s(f.Json.Name ? f.Json.Name : f.Name)
+                this.s(f.Name)
                     .s((f.fromPrep && f.fromPrep.optional) ? "?: " : ": ")
                     .emitTypeRef(f.Type);
             }));
         })
             .lines("}", "");
+        if (it.IsIncoming)
+            this.lines("function new_" + it.Name + " () {", "    let me: " + it.Name, "    me = { populateFrom: _ => " + it.Name + "_populateFrom.call(me, _) } as " + it.Name, "    return me", "}", "");
     }
-    onBeforeEmitImpls() {
-        const itop = this.allInterfaces.find(_ => _.IsTop);
-        this
-            .line("export abstract class impl implements " + itop.Name + " {")
-            .indented(() => {
-            for (const iface of this.allInterfaces)
-                if (iface !== itop)
-                    this.line(iface.Name + ": " + iface.Name);
-            this.line("constructor() {").indented(() => {
+    onBeforeEmitImpls(structs) {
+        if (!structs) {
+            const itop = this.allInterfaces.find(_ => _.IsTop);
+            this
+                .line("export abstract class impl implements " + itop.Name + " {")
+                .indented(() => {
                 for (const iface of this.allInterfaces)
                     if (iface !== itop)
-                        this.line(`this.${iface.Name} = new impl${iface.Name}(this)`);
-            }).lines("}", "abstract send(msg: ipcMsg, on: (_: any) => boolean): void");
-        })
-            .lines("}", "");
+                        this.line(iface.Name + ": " + iface.Name);
+                this.line("constructor() {").indented(() => {
+                    for (const iface of this.allInterfaces)
+                        if (iface !== itop)
+                            this.line(`this.${iface.Name} = new impl${iface.Name}(this)`);
+                }).lines("}");
+            })
+                .lines("}", "");
+        }
     }
-    onAfterEmitImpls() {
-        if (prevImplTypeName && prevImplTypeName.length)
-            this.undent().lines("}", "");
+    onAfterEmitImpls(structs) {
+        if (!structs) {
+            if (prevImplTypeName && prevImplTypeName.length)
+                this.undent().lines("}", "");
+            prevImplTypeName = "";
+        }
     }
     emitMethodImpl(it, method, fillBody) {
-        if (it === this.allInterfaces[0])
-            return;
-        if (it.Name !== prevImplTypeName) {
-            if (prevImplTypeName && prevImplTypeName.length)
-                this.lines("}", "");
-            prevImplTypeName = it.Name;
-            this.line("class impl" + it.Name + " extends implBase implements " + it.Name + " {")
-                .indent()
-                .line("constructor(impl: impl) { super(impl) }");
+        const iface = this.allInterfaces.find(_ => _.Name === it.Name);
+        if (iface) {
+            if (iface.IsTop)
+                return;
+            if (it.Name !== prevImplTypeName) {
+                if (prevImplTypeName && prevImplTypeName.length)
+                    this.undent().lines("}", "");
+                prevImplTypeName = it.Name;
+                if (iface)
+                    this.line("class impl" + it.Name + " extends implBase implements " + it.Name + " {")
+                        .indent()
+                        .line("constructor(impl: impl) { super(impl) }");
+            }
         }
         super.emitMethodImpl(it, method, fillBody);
     }
     emitFuncImpl(it) {
-        super.emitFuncImpl(it);
+        const tnamed = it.Type;
+        const struct = (tnamed && tnamed.Name && tnamed.Name.length) ? this.allStructs[tnamed.Name] : null;
+        this.lf().s((struct ? ("function " + struct.Name + "_") : "") + it.Name + "(")
+            .s(struct ? ("this: " + struct.Name + ", ") : "")
+            .each(it.Func.Args, ", ", a => this.s(a.Name, (a.fromPrep && a.fromPrep.optional) ? "?: " : ": ").emitTypeRef(a.Type))
+            .s("): ")
+            .emitTypeRef(it.Func.Type).s(" ")
+            .emitInstr(it.Func.Body)
+            .lines("", "");
     }
     emitExpr(it) {
         if (it) {
@@ -106,10 +125,7 @@ class Gen extends gen_ast.Gen {
                 return this.s(ecollnew.ElemType ? "[]" : "{}");
             const enew = it;
             if (enew && enew.New)
-                return this.s("new ").emitTypeRef(enew.New).s("()");
-            const econv = it;
-            if (econv && econv.Conv && econv.To)
-                return this.emitExpr(econv.Conv);
+                return this.s("new_").emitTypeRef(enew.New).s("()");
             const elen = it;
             if (elen && elen.LenOf)
                 return this.emitExpr(elen.LenOf).s(".length");
@@ -129,8 +145,14 @@ class Gen extends gen_ast.Gen {
                     .s("(")
                     .each(efn.Args, ", ", _ => this.s(_.Name, (_.fromPrep && _.fromPrep.optional) ? "?: " : ": ")
                     .emitTypeRef(_.Type))
-                    .s("): ").emitTypeRef(efn.Type).s(" ")
+                    .s("): ").emitTypeRef(efn.Type).s(" => ")
                     .emitInstr(efn.Body);
+            const econv = it;
+            if (econv && econv.Conv && econv.To) {
+                return this.s('[').emitExpr(econv.Conv).s(', ')
+                    .caseOf([this.typeColl(econv.To), () => this.s('false')], [true, () => this.s('true')])
+                    .s(']');
+            }
         }
         return super.emitExpr(it);
     }
@@ -186,7 +208,7 @@ class Gen extends gen_ast.Gen {
         if (it === gen_ast.TypeRefPrim.Bool)
             return this.s("boolean");
         if (it === gen_ast.TypeRefPrim.Dict)
-            return this.s("{ [_:string]:any}");
+            return this.s("{ [_: string]: any}");
         return super.emitTypeRef(it);
     }
 }

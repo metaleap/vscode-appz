@@ -11,7 +11,7 @@ class Gen extends gen_ast.Gen {
         super.gen(prep);
     }
     emitIntro() {
-        return this.lines("package vscAppz", "// " + this.doNotEditComment("golang"), "", "type GlobPattern = string", "");
+        return this.lines("package vscAppz", "// " + this.doNotEditComment("golang"), "");
     }
     emitOutro() { return this; }
     emitDocs(it) {

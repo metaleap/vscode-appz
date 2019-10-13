@@ -143,6 +143,7 @@ export class Disposable {
 
     bind(impl: impl, subFnId: string) {
         [this.impl, this.subFnId] = [impl, subFnId]
+        return this
     }
 
     populateFrom(payload: any): boolean {
