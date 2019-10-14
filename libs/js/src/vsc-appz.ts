@@ -1,4 +1,4 @@
-import * as aux from './aux'
+import * as core from './core'
 import * as vscgen from './vscode.gen'
 
 
@@ -9,5 +9,9 @@ export let OnError = (_this: vscgen.Vscode, err: any, jsonMsg?: any): void => {
 }
 
 export function Vsc(stdIn?: NodeJS.ReadStream, stdOut?: NodeJS.WriteStream): vscgen.Vscode {
-    return new aux.impl(stdIn, stdOut)
+    return new core.impl(stdIn, stdOut)
+}
+
+export function CancelIn(msFromNow: number) {
+    return core.Cancel.In(msFromNow)
 }

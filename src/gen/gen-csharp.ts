@@ -180,6 +180,8 @@ export class Gen extends gen_syn.Gen {
                     this.ln(() => this.s("foreach (var ", iblock.ForEach[0].Name, " in ").emitExpr(iblock.ForEach[1]).s(") {"))
                 else if (endeol = (iblock.If && iblock.If.length) ? true : false)
                     this.ln(() => this.s("if (").emitExpr(iblock.If[0]).s(") {"))
+                else if (!iblock.Instrs.length)
+                    return this
                 else {
                     if (endeol = inBlock)
                         this.lf()
@@ -203,7 +205,9 @@ export class Gen extends gen_syn.Gen {
     emitExpr(it: gen_syn.Expr): Gen {
         const ecollnew = it as gen_syn.ECollNew
         if (ecollnew && (ecollnew.Cap !== undefined || ecollnew.Len !== undefined))
-            if (!ecollnew.ElemType)
+            if (ecollnew.KeyType && ecollnew.ElemType)
+                return this.s("new Dictionary<").emitTypeRef(ecollnew.KeyType).s(", ").emitTypeRef(ecollnew.ElemType).s(">(").emitExpr(ecollnew.Cap).s(")")
+            else if (!ecollnew.ElemType)
                 return this.s("new ", this.options.idents.typeDict, "(").emitExpr(ecollnew.Cap).s(")")
             else if (ecollnew.Len !== undefined)
                 return this.s("new ").emitTypeRef(ecollnew.ElemType).s("[").emitExpr(ecollnew.Len).s("]")
@@ -255,9 +259,14 @@ export class Gen extends gen_syn.Gen {
                 .s(") => ").emitInstr(efn.Body)
 
         const elit = it as gen_syn.ELit
-        if (elit && elit.FmtArgs && elit.FmtArgs.length && (typeof elit.Lit === 'string'))
-            return this.s("strFmt(").emitExpr(this.b.eLit(elit.Lit)).s(", ")
-                .each(elit.FmtArgs, ", ", _ => this.emitExpr(_)).s(")")
+        if (elit) {
+            const earr = elit.Lit as string[]
+            if ((typeof elit.Lit !== 'string') && earr && earr.length !== undefined)
+                return this.s("new[] { ").each(earr, ", ", _ => this.emitExpr({ Lit: _ })).s(" }")
+            if ((typeof elit.Lit === 'string') && elit.FmtArgs && elit.FmtArgs.length)
+                return this.s("strFmt(").emitExpr(this.b.eLit(elit.Lit)).s(", ")
+                    .each(elit.FmtArgs, ", ", _ => this.emitExpr(_)).s(")")
+        }
 
         return super.emitExpr(it)
     }

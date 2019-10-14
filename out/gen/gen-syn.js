@@ -770,25 +770,26 @@ class Gen extends gen.Gen {
                     const tnamed = this.typeOwn(argtype);
                     if (tnamed) {
                         const tstruct = this.allStructs[tnamed.Name];
-                        if (tstruct && !traversed[tnamed.Name]) {
-                            traversed[tnamed.Name] = true;
+                        if (tstruct && !traversed[tnamed.Name + forIncoming]) {
+                            traversed[tnamed.Name + forIncoming] = true;
                             if (forIncoming)
                                 tstruct.IsIncoming = true;
                             else
                                 tstruct.IsOutgoing = true;
-                            for (const fld of tstruct.Fields) {
-                                const tfun = this.typeFunc(fld.Type);
-                                traverse(fld.Type, tfun ? false : forIncoming);
-                            }
+                            for (const fld of tstruct.Fields)
+                                traverse(fld.Type, this.typeFunc(fld.Type) ? false : forIncoming);
                         }
                     }
                     return undefined;
                 });
             };
+            let evtsub;
             for (const iface of this.allInterfaces)
-                for (const method of iface.Methods)
+                for (const method of iface.Methods) {
+                    const isevtsub = (method.fromPrep && method.fromPrep.fromOrig && (evtsub = method.fromPrep.fromOrig.decl) && evtsub.EvtName && evtsub.EvtName.length) ? true : false;
                     for (const arg of method.Args)
-                        traverse(arg.Type, arg.fromPrep && arg.fromPrep.isFromRetThenable);
+                        traverse(arg.Type, (arg.fromPrep && arg.fromPrep.isFromRetThenable) || isevtsub);
+                }
         }
         for (const structname in this.allStructs) {
             const struct = this.allStructs[structname];
@@ -841,7 +842,7 @@ class Gen extends gen.Gen {
         this.isDemos = true;
         this.src = "";
         this.resetState();
-        new gen_demos.GenDemos(this, this.b).genDemos();
+        new gen_demos.GenDemos(this, this.b, "demo_Window_ShowInputBox").genDemos();
         node_fs.writeFileSync(this.options.demoOutFilePath, this.src);
     }
     typeUnMaybe(it) {

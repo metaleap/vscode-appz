@@ -10,10 +10,10 @@ import (
 	. "github.com/metaleap/vscode-appz/libs/go"
 )
 
+type any = interface{}
+
 var vsc Vscode
 var win Window
-
-func quit(*string) { os.Exit(0) }
 
 func main() {
 	greethow, greetname := "Hallo", "Welt"
@@ -46,87 +46,13 @@ func main() {
 					case buttons[1]:
 						demo_Window_ShowInputBox()
 					case buttons[2]:
-						demoMenuAll()
+						demosMenu()
 					default:
 						win.ShowErrorMessage1("Unknown: `"+button+"`, bye now!", nil, quit)
 					}
 				}
 			},
 		)
-	})
-}
-
-func demoMenuAll() {
-	menu := []string{
-		"window.showQuickPick",
-		"window.showInputBox",
-		"window.showSaveDialog",
-		"window.showOpenDialog",
-		"window.showWorkspaceFolderPick",
-		"env.openExternal",
-		"commands.getCommands",
-		"languages.getLanguages",
-
-		"env.Properties",
-		"workspace.Properties",
-	}
-	win.ShowQuickPick2(menu, &QuickPickOptions{
-		CanPickMany: false, IgnoreFocusOut: true, PlaceHolder: "Dismissing this menu will quit the prog.",
-	}, nil,
-		func(menuitem *string) {
-			if menuitem == nil {
-				quit(menuitem)
-			} else {
-				switch menuitem := *menuitem; menuitem {
-				case menu[0]:
-					demo_Window_ShowQuickPick()
-				case menu[1]:
-					demo_Window_ShowInputBox()
-				case menu[2]:
-					demo_Window_ShowSaveDialog()
-				case menu[3]:
-					demo_Window_ShowOpenDialog()
-				case menu[4]:
-					demo_Window_ShowWorkspaceFolderPick()
-				case menu[5]:
-					demo_Env_OpenExternal()
-				case menu[6]:
-					demo_Commands_GetCommands()
-				case menu[7]:
-					demo_Languages_GetLanguages()
-
-				case menu[len(menu)-2]:
-					demo_Env_Properties()
-				case menu[len(menu)-1]:
-					demo_Workspace_Properties()
-				default:
-					win.ShowErrorMessage1("Unknown: `"+menuitem+"`, bye now!", nil, quit)
-				}
-			}
-		},
-	)
-}
-
-func demo_Window_ShowQuickPick() {
-	win.ShowQuickPick3([]QuickPickItem{
-		{Label: "One", Description: "The first", Detail: "Das erste"},
-		{Label: "Two", Description: "The second", Detail: "Das zweite"},
-		{Label: "Three", Description: "The third", Detail: "Das dritte"},
-		{Label: "Four", Description: "The fourth", Detail: "Das vierte"},
-	}, QuickPickOptions{
-		IgnoreFocusOut: true, MatchOnDescription: true, MatchOnDetail: true,
-		PlaceHolder: "You have 42 seconds before auto-cancellation!",
-		OnDidSelectItem: func(item QuickPickItem) interface{} {
-			println("hand-(un)picked: " + item.Label)
-			return nil
-		},
-	}, CancelIn(42*time.Second), func(items []QuickPickItem) {
-		statusNoticeQuit()
-		if items == nil {
-			win.ShowWarningMessage1("Cancelled pick input, bye now!", nil, quit)
-		} else {
-			win.ShowInformationMessage1("You picked "+strconv.Itoa(len(items))+" item(s), bye now!", nil, quit)
-		}
 	})
 }
 
@@ -152,82 +78,13 @@ func demo_Window_ShowInputBox() {
 	})
 }
 
-func demo_Window_ShowSaveDialog() {
-	win.ShowSaveDialog(SaveDialogOptions{
-		SaveLabel: "Note: won't actually write to specified file path",
-		Filters:   map[string][]string{"All": {"*"}, "Dummy Filter": {"demo", "dummy"}},
-	}, func(filepath *string) {
-		statusNoticeQuit()
-		if filepath == nil {
-			win.ShowWarningMessage1("Cancelled file-save dialog, bye now!", nil, quit)
-		} else {
-			win.ShowInformationMessage1("File path: `"+*filepath+"`, bye now!", nil, quit)
-		}
-	})
+func quit(*string) { os.Exit(0) }
+
+func cancelIn(seconds int64) *Cancel {
+	return CancelIn(time.Duration(seconds * int64(time.Second)))
 }
 
-func demo_Window_ShowOpenDialog() {
-	win.ShowOpenDialog(OpenDialogOptions{
-		CanSelectFiles: true, CanSelectFolders: false, CanSelectMany: true,
-		OpenLabel: "Note: won't actually read from specified file path(s)",
-		Filters:   map[string][]string{"All": {"*"}, "Dummy Filter": {"demo", "dummy"}},
-	}, func(filepaths []string) {
-		statusNoticeQuit()
-		if filepaths == nil {
-			win.ShowWarningMessage1("Cancelled file-save dialog, bye now!", nil, quit)
-		} else {
-			win.ShowInformationMessage1("Selected "+strconv.Itoa(len(filepaths))+" file path(s), bye now!", nil, quit)
-		}
-	})
-}
-
-func demo_Window_ShowWorkspaceFolderPick() {
-	win.ShowWorkspaceFolderPick(&WorkspaceFolderPickOptions{
-		IgnoreFocusOut: true, PlaceHolder: "Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side.",
-	}, func(pickedfolder *WorkspaceFolder) {
-		if pickedfolder == nil {
-			win.ShowWarningMessage1("Cancelled pick input, bye now!", nil, quit)
-		} else {
-			win.ShowInformationMessage1("Selected `"+pickedfolder.Name+"` located at `"+pickedfolder.Uri+"`, bye now!", nil, quit)
-		}
-	})
-}
-
-func demo_Env_OpenExternal() {
-	win.ShowInputBox(&InputBoxOptions{
-		Value: "http://github.com/metaleap/vscode-appz", Prompt: "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol.", IgnoreFocusOut: true,
-	}, nil, func(uri *string) {
-		if uri == nil || *uri == "" {
-			win.ShowWarningMessage1("Cancelled, bye now!", nil, quit)
-		} else {
-			vsc.Env().OpenExternal(*uri, func(ok bool) {
-				did := "Did"
-				if !ok {
-					did += " not"
-				}
-				win.ShowInformationMessage1(did+" succeed in opening `"+*uri+"`, bye now!", nil, quit)
-			})
-		}
-	})
-}
-
-func subscribeToMiscEvents() {
-	win.OnDidChangeWindowState(func(evt WindowState) {
-		win.SetStatusBarMessage1("Am I focused? "+strconv.FormatBool(evt.Focused)+".", 4242, nil)
-	}, nil)
-	vsc.Extensions().OnDidChange(func() {
-		win.SetStatusBarMessage1("Some extension(s) were just (un)installed or (de)activated.", 4242, nil)
-	}, nil)
-	vsc.Languages().OnDidChangeDiagnostics(func(evt DiagnosticChangeEvent) {
-		win.SetStatusBarMessage1("Diags changed for: "+strings.Join(evt.Uris, ", "), 4242, nil)
-	}, nil)
-}
-
-func statusNoticeQuit() {
-	win.SetStatusBarMessage1("Reacting to the 'bye now' will terminate the prog.", 4242, nil)
-}
-
-func strFmt(s string, args ...interface{}) string {
+func strFmt(s string, args ...any) string {
 	for i := range args {
 		s = strings.Replace(s, "{"+strconv.Itoa(i)+"}", fmt.Sprintf("%v", args[i]), -1)
 	}

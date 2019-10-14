@@ -50,7 +50,7 @@ export interface TypeRefMaybe {
 
 export type Expr = ELit | EName | ECall | EOp | EFunc | ECollNew | ELen | EConv | ENew | ETup
 export interface ELit {
-    Lit: boolean | number | string | null
+    Lit: boolean | number | string | null | string[]
     FmtArgs?: Expr[]
 }
 export interface EName extends WithName {
@@ -75,6 +75,7 @@ export interface EDeref {
 }
 export interface ECollNew {
     ElemType?: TypeRef // else it's std dict (string-to-any)
+    KeyType?: TypeRef // unless KeyType, then a dict even if ElemType
     Cap?: Expr // if so (and ElemType), a list not an array
     Len?: Expr // if so (and ElemType), an array not a list
 }
@@ -160,7 +161,7 @@ export class Builder {
     eCall(callee: Expr, ...args: Expr[]): ECall { return { Call: callee, Args: args } }
     eProp(callee: Expr, ...args: Expr[]): ECall { return { Call: callee, Args: args, Prop: true } }
     n(name: string): EName { return { Name: name } }
-    eLit(litVal: string | number | boolean | null, ...fmtArgs: Expr[]): ELit { return { Lit: litVal, FmtArgs: fmtArgs } }
+    eLit(litVal: string | number | boolean | null | string[], ...fmtArgs: Expr[]): ELit { return { Lit: litVal, FmtArgs: fmtArgs } }
     eZilch(): ELit { return this.eLit(null) }
     eThis(): EName { return this.n(null) }
     eOp(op: string, ...args: Expr[]): EOp { return { Name: op, Operands: args } }
@@ -1106,23 +1107,26 @@ export class Gen extends gen.Gen implements gen.IGen {
                     const tnamed = this.typeOwn(argtype)
                     if (tnamed) {
                         const tstruct = this.allStructs[tnamed.Name]
-                        if (tstruct && !traversed[tnamed.Name]) {
-                            traversed[tnamed.Name] = true
-                            if (forIncoming) tstruct.IsIncoming = true
-                            else tstruct.IsOutgoing = true
-                            for (const fld of tstruct.Fields) {
-                                const tfun = this.typeFunc(fld.Type)
-                                traverse(fld.Type, tfun ? false : forIncoming)
-                            }
+                        if (tstruct && !traversed[tnamed.Name + forIncoming]) {
+                            traversed[tnamed.Name + forIncoming] = true
+                            if (forIncoming)
+                                tstruct.IsIncoming = true
+                            else
+                                tstruct.IsOutgoing = true
+                            for (const fld of tstruct.Fields)
+                                traverse(fld.Type, this.typeFunc(fld.Type) ? false : forIncoming)
                         }
                     }
                     return undefined
                 })
             }
+            let evtsub: gen.MemberEvent
             for (const iface of this.allInterfaces)
-                for (const method of iface.Methods)
+                for (const method of iface.Methods) {
+                    const isevtsub = (method.fromPrep && method.fromPrep.fromOrig && (evtsub = method.fromPrep.fromOrig.decl as gen.MemberEvent) && evtsub.EvtName && evtsub.EvtName.length) ? true : false
                     for (const arg of method.Args)
-                        traverse(arg.Type, arg.fromPrep && arg.fromPrep.isFromRetThenable)
+                        traverse(arg.Type, (arg.fromPrep && arg.fromPrep.isFromRetThenable) || isevtsub)
+                }
         }
         for (const structname in this.allStructs) {
             const struct = this.allStructs[structname]
@@ -1182,7 +1186,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         this.isDemos = true
         this.src = ""
         this.resetState()
-        new gen_demos.GenDemos(this, this.b).genDemos()
+        new gen_demos.GenDemos(this, this.b, "demo_Window_ShowInputBox").genDemos()
         node_fs.writeFileSync(this.options.demoOutFilePath, this.src)
     }
 

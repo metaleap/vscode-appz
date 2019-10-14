@@ -1,6 +1,6 @@
-import * as aux from './aux';
-declare type Cancel = aux.Cancel;
-declare type Disposable = aux.Disposable;
+import * as core from './core';
+declare type Cancel = core.Cancel;
+declare type Disposable = core.Disposable;
 interface fromJson {
     populateFrom: (_: any) => boolean;
 }
@@ -664,7 +664,7 @@ export interface MessageOptions {
      * Indicates that this message should be modal.
 
      */
-    Modal?: boolean;
+    modal?: boolean;
 }
 /**
  * Represents an action that is shown with an information, warning, or
@@ -676,7 +676,7 @@ export interface MessageItem extends fromJson {
      * A short title like 'Retry', 'Open Log' etc.
 
      */
-    Title: string;
+    title: string;
     /**
      * A hint for modal dialogs that the item should be triggered
      * when the user cancels the dialog (e.g. by pressing the ESC
@@ -685,15 +685,16 @@ export interface MessageItem extends fromJson {
      * Note: this option is ignored for non-modal messages.
 
      */
-    IsCloseAffordance?: boolean;
+    isCloseAffordance?: boolean;
     /**
      * Free-form custom data, preserved across a roundtrip.
 
      */
-    My?: {
+    my?: {
         [_: string]: any;
     };
 }
+export declare function newMessageItem(): MessageItem;
 /**
  * Options to configure the behavior of the input box UI.
 
@@ -703,7 +704,7 @@ export interface InputBoxOptions {
      * The value to prefill in the input box.
 
      */
-    Value?: string;
+    value?: string;
     /**
      * Selection of the prefilled [`value`](#InputBoxOptions.value). Defined as tuple of two number where the
      * first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
@@ -711,27 +712,27 @@ export interface InputBoxOptions {
      * otherwise the defined range will be selected.
 
      */
-    ValueSelection?: [number, number];
+    valueSelection?: [number, number];
     /**
      * The text to display underneath the input box.
 
      */
-    Prompt?: string;
+    prompt?: string;
     /**
      * An optional string to show as place holder in the input box to guide the user what to type.
 
      */
-    PlaceHolder?: string;
+    placeHolder?: string;
     /**
      * Set to `true` to show a password prompt that will not show the typed value.
 
      */
-    Password?: boolean;
+    password?: boolean;
     /**
      * Set to `true` to keep the input box open when focus moves to another part of the editor or to another window.
 
      */
-    IgnoreFocusOut?: boolean;
+    ignoreFocusOut?: boolean;
     /**
      * An optional function that will be called to validate input and to give a hint
      * to the user.
@@ -742,12 +743,12 @@ export interface InputBoxOptions {
      * Return `undefined`, `null`, or the empty string when 'value' is valid.
 
      */
-    ValidateInput?: (_: string) => string;
+    validateInput?: (_: string) => string;
     /**
      * For internal runtime use only.
 
      */
-    ValidateInput_AppzFuncId: string;
+    validateInput_AppzFuncId: string;
 }
 /**
  * Options to configure the behavior of the quick pick UI.
@@ -758,37 +759,37 @@ export interface QuickPickOptions {
      * An optional flag to include the description when filtering the picks.
 
      */
-    MatchOnDescription?: boolean;
+    matchOnDescription?: boolean;
     /**
      * An optional flag to include the detail when filtering the picks.
 
      */
-    MatchOnDetail?: boolean;
+    matchOnDetail?: boolean;
     /**
      * An optional string to show as place holder in the input box to guide the user what to pick on.
 
      */
-    PlaceHolder?: string;
+    placeHolder?: string;
     /**
      * Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.
 
      */
-    IgnoreFocusOut?: boolean;
+    ignoreFocusOut?: boolean;
     /**
      * An optional flag to make the picker accept multiple selections, if true the result is an array of picks.
 
      */
-    CanPickMany?: boolean;
+    canPickMany?: boolean;
     /**
      * An optional function that is invoked whenever an item is selected.
 
      */
-    OnDidSelectItem?: (_: QuickPickItem) => any;
+    onDidSelectItem?: (_: QuickPickItem) => any;
     /**
      * For internal runtime use only.
 
      */
-    OnDidSelectItem_AppzFuncId: string;
+    onDidSelectItem_AppzFuncId: string;
 }
 /**
  * Represents an item that can be selected from
@@ -800,36 +801,37 @@ export interface QuickPickItem extends fromJson {
      * A human readable string which is rendered prominent.
 
      */
-    Label: string;
+    label: string;
     /**
      * A human readable string which is rendered less prominent.
 
      */
-    Description?: string;
+    description?: string;
     /**
      * A human readable string which is rendered less prominent.
 
      */
-    Detail?: string;
+    detail?: string;
     /**
      * Optional flag indicating if this item is picked initially.
      * (Only honored when the picker allows multiple selections.)
 
      */
-    Picked?: boolean;
+    picked?: boolean;
     /**
      * Always show this item.
 
      */
-    AlwaysShow?: boolean;
+    alwaysShow?: boolean;
     /**
      * Free-form custom data, preserved across a roundtrip.
 
      */
-    My?: {
+    my?: {
         [_: string]: any;
     };
 }
+export declare function newQuickPickItem(): QuickPickItem;
 /**
  * Options to configure the behaviour of a file save dialog.
 
@@ -839,12 +841,12 @@ export interface SaveDialogOptions {
      * The resource the dialog shows when opened.
 
      */
-    DefaultUri?: string;
+    defaultUri?: string;
     /**
      * A human-readable string for the save button.
 
      */
-    SaveLabel?: string;
+    saveLabel?: string;
     /**
      * A set of file filters that are used by the dialog. Each entry is a human readable label,
      * like "TypeScript", and an array of extensions, e.g.
@@ -856,7 +858,7 @@ export interface SaveDialogOptions {
      * ```
 
      */
-    Filters?: {
+    filters?: {
         [_: string]: string[];
     };
 }
@@ -874,27 +876,27 @@ export interface OpenDialogOptions {
      * The resource the dialog shows when opened.
 
      */
-    DefaultUri?: string;
+    defaultUri?: string;
     /**
      * A human-readable string for the open button.
 
      */
-    OpenLabel?: string;
+    openLabel?: string;
     /**
      * Allow to select files, defaults to `true`.
 
      */
-    CanSelectFiles?: boolean;
+    canSelectFiles?: boolean;
     /**
      * Allow to select folders, defaults to `false`.
 
      */
-    CanSelectFolders?: boolean;
+    canSelectFolders?: boolean;
     /**
      * Allow to select many files or folders.
 
      */
-    CanSelectMany?: boolean;
+    canSelectMany?: boolean;
     /**
      * A set of file filters that are used by the dialog. Each entry is a human readable label,
      * like "TypeScript", and an array of extensions, e.g.
@@ -906,7 +908,7 @@ export interface OpenDialogOptions {
      * ```
 
      */
-    Filters?: {
+    filters?: {
         [_: string]: string[];
     };
 }
@@ -919,12 +921,12 @@ export interface WorkspaceFolderPickOptions {
      * An optional string to show as place holder in the input box to guide the user what to pick on.
 
      */
-    PlaceHolder?: string;
+    placeHolder?: string;
     /**
      * Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.
 
      */
-    IgnoreFocusOut?: boolean;
+    ignoreFocusOut?: boolean;
 }
 /**
  * A workspace folder is one of potentially many roots opened by the editor. All workspace folders
@@ -939,18 +941,18 @@ export interface WorkspaceFolder extends fromJson {
      * workspace folders that are not stored on the local disk, e.g. `ftp://server/workspaces/foo`.
 
      */
-    Uri: string;
+    uri: string;
     /**
      * The name of this workspace folder. Defaults to
      * the basename of its [uri-path](#Uri.path)
 
      */
-    Name: string;
+    name: string;
     /**
      * The ordinal number of this workspace folder.
 
      */
-    Index: number;
+    index: number;
 }
 /**
  * Represents the state of a window.
@@ -961,7 +963,7 @@ export interface WindowState extends fromJson {
      * Whether the current window is focused.
 
      */
-    Focused: boolean;
+    focused: boolean;
 }
 /**
  * An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).
@@ -972,12 +974,12 @@ export interface WorkspaceFoldersChangeEvent extends fromJson {
      * Added workspace folders.
 
      */
-    Added: WorkspaceFolder[];
+    added: WorkspaceFolder[];
     /**
      * Removed workspace folders.
 
      */
-    Removed: WorkspaceFolder[];
+    removed: WorkspaceFolder[];
 }
 /**
  * The event that is fired when diagnostics change.
@@ -988,7 +990,7 @@ export interface DiagnosticChangeEvent extends fromJson {
      * An array of resources for which diagnostics have changed.
 
      */
-    Uris: string[];
+    uris: string[];
 }
 /**
  * Namespace describing the environment the editor runs in.
@@ -999,22 +1001,22 @@ export interface EnvProperties extends fromJson {
      * The application name of the editor, like 'VS Code'.
 
      */
-    AppName?: string;
+    appName?: string;
     /**
      * The application root folder from which the editor is running.
 
      */
-    AppRoot?: string;
+    appRoot?: string;
     /**
      * Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
      */
-    Language?: string;
+    language?: string;
     /**
      * A unique identifier for the computer.
 
      */
-    MachineId?: string;
+    machineId?: string;
     /**
      * The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
      * Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
@@ -1025,24 +1027,24 @@ export interface EnvProperties extends fromJson {
      * a specific extension runs remote or not.
 
      */
-    RemoteName?: string;
+    remoteName?: string;
     /**
      * A unique identifier for the current session.
      * Changes each time the editor is started.
 
      */
-    SessionId?: string;
+    sessionId?: string;
     /**
      * The detected default shell for the extension host, this is overridden by the
      * `terminal.integrated.shell` setting for the extension host's platform.
 
      */
-    Shell?: string;
+    shell?: string;
     /**
      * The custom uri scheme the editor registers to in the operating system.
 
      */
-    UriScheme?: string;
+    uriScheme?: string;
 }
 /**
  * Namespace for dealing with the current workspace. A workspace is the representation
@@ -1060,7 +1062,7 @@ export interface WorkspaceProperties extends fromJson {
      * has been opened.
 
      */
-    Name?: string;
+    name?: string;
     /**
      * The location of the workspace file, for example:
      *
@@ -1091,13 +1093,13 @@ export interface WorkspaceProperties extends fromJson {
      * well as an untitled or saved workspace.
 
      */
-    WorkspaceFile?: string;
+    workspaceFile?: string;
     /**
      * List of workspace folders or `undefined` when no folder is open.
      * *Note* that the first entry corresponds to the value of `rootPath`.
 
      */
-    WorkspaceFolders?: WorkspaceFolder[];
+    workspaceFolders?: WorkspaceFolder[];
 }
 export declare abstract class impl implements Vscode {
     Window: Window;

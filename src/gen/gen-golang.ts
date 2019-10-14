@@ -130,6 +130,8 @@ export class Gen extends gen_syn.Gen {
                     this.ln(() => this.s("for _, ", iblock.ForEach[0].Name, " := range ").emitExpr(iblock.ForEach[1]).s(" {"))
                 else if (endeol = (iblock.If && iblock.If.length) ? true : false)
                     this.ln(() => this.s("if ").emitExpr(iblock.If[0]).s(" {"))
+                else if (!iblock.Instrs.length)
+                    return this
                 else {
                     if (endeol = inBlock)
                         this.lf()
@@ -156,7 +158,9 @@ export class Gen extends gen_syn.Gen {
         if (it) {
             const ecollnew = it as gen_syn.ECollNew
             if (ecollnew && (ecollnew.Cap !== undefined || ecollnew.Len !== undefined))
-                if (!ecollnew.ElemType)
+                if (ecollnew.KeyType && ecollnew.ElemType)
+                    return this.s("make(map[").emitTypeRef(ecollnew.KeyType).s("]").emitTypeRef(ecollnew.ElemType).s(", ").emitExpr(ecollnew.Cap).s(")")
+                else if (!ecollnew.ElemType)
                     return this.s("make(dict, ").emitExpr(ecollnew.Cap).s(")")
                 else if (ecollnew.Cap !== undefined)
                     return this.s("make([]").emitTypeRef(ecollnew.ElemType).s(", 0, ").emitExpr(ecollnew.Cap).s(")")
@@ -197,9 +201,14 @@ export class Gen extends gen_syn.Gen {
                     .s(") "), efn.Type).s(efn.Type ? " " : "").emitInstr(efn.Body)
 
             const elit = it as gen_syn.ELit
-            if (elit && elit.FmtArgs && elit.FmtArgs.length && (typeof elit.Lit === 'string'))
-                return this.s("strFmt(").emitExpr(this.b.eLit(elit.Lit)).s(", ")
-                    .each(elit.FmtArgs, ", ", _ => this.emitExpr(_)).s(")")
+            if (elit) {
+                const earr = elit.Lit as string[]
+                if ((typeof elit.Lit !== 'string') && earr && earr.length !== undefined)
+                    return this.s("[]string{").each(earr, ", ", _ => this.emitExpr({ Lit: _ })).s("}")
+                if ((typeof elit.Lit === 'string') && elit.FmtArgs && elit.FmtArgs.length)
+                    return this.s("strFmt(").emitExpr(this.b.eLit(elit.Lit)).s(", ")
+                        .each(elit.FmtArgs, ", ", _ => this.emitExpr(_)).s(")")
+            }
 
             const econv = it as gen_syn.EConv
             if (econv && econv.Conv && econv.To) {
