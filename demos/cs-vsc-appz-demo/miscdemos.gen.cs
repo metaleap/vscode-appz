@@ -117,7 +117,7 @@ namespace VscAppzDemo {
 			InputBoxOptions opts = default;
 			opts = new InputBoxOptions();
 			opts.IgnoreFocusOut = true;
-			opts.Value = "http://";
+			opts.Value = "http://github.com/metaleap/vscode-appz";
 			opts.Prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol.";
 			vsc.Window.ShowInputBox(opts, null, (string uri) => {
 				statusNoticeQuit();
@@ -161,7 +161,7 @@ namespace VscAppzDemo {
 			opts.MatchOnDetail = true;
 			opts.PlaceHolder = "You have 42 seconds before auto-cancellation!";
 			opts.OnDidSelectItem = (QuickPickItem item) => {
-				vsc.Window.SetStatusBarMessage(strFmt("Just selected: {0} (picked? {1}.)", item.Label, item.Picked), 4242, null);
+				vsc.Window.SetStatusBarMessage(strFmt("Just selected: {0}", item.Label), 4242, null);
 				return null;
 			};
 			vsc.Window.ShowQuickPick(items, opts, cancelIn(42), (QuickPickItem[] pickeditems) => {

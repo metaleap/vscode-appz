@@ -122,7 +122,7 @@ func demo_Env_OpenExternal() {
 	var opts *InputBoxOptions
 	opts = new(InputBoxOptions)
 	opts.IgnoreFocusOut = true
-	opts.Value = "http://"
+	opts.Value = "http://github.com/metaleap/vscode-appz"
 	opts.Prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."
 	vsc.Window().ShowInputBox(opts, nil, func(uri *string) {
 		statusNoticeQuit()
@@ -167,7 +167,7 @@ func demo_Window_ShowQuickPick() {
 	opts.MatchOnDetail = true
 	opts.PlaceHolder = "You have 42 seconds before auto-cancellation!"
 	opts.OnDidSelectItem = func(item QuickPickItem) any {
-		vsc.Window().SetStatusBarMessage1(strFmt("Just selected: {0} (picked? {1}.)", item.Label, item.Picked), 4242, nil)
+		vsc.Window().SetStatusBarMessage1(strFmt("Just selected: {0}", item.Label), 4242, nil)
 		return nil
 	}
 	vsc.Window().ShowQuickPick3(items, opts, cancelIn(42), func(pickeditems []QuickPickItem) {

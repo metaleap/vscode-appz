@@ -19,18 +19,18 @@ namespace VscAppzDemo {
                 win.ShowInformationMessage(
                     "What to try out? (If you cancel, I quit.)",
                     buttons,
-                    button => {
+                    btn => {
                         statusitem.Dispose();
-                        if (button == null)
+                        if (btn == null)
                             quit();
-                        else if (button == buttons[0])
+                        else if (btn == buttons[0])
                             demo_Window_ShowQuickPick();
-                        else if (button == buttons[1])
+                        else if (btn == buttons[1])
                             demo_Window_ShowInputBox();
-                        else if (button == buttons[2])
+                        else if (btn == buttons[2])
                             demosMenu();
                         else
-                            win.ShowErrorMessage($"Unknown: `{button}`, bye now!", nil, quit);
+                            win.ShowErrorMessage($"Unknown: `{btn}`, bye now!", nil, quit);
                     }
                 );
             });

@@ -99,8 +99,10 @@ class Prog {
         if (str && str.length) {
             if (this.stderrChan === undefined)
                 this.stderrChan = vsc.window.createOutputChannel(appz_1.uxStr.appzPref + this.fullCmd);
-            if (this.stderrChan)
+            if (this.stderrChan) {
+                this.stderrChan.show(true);
                 this.stderrChan.append(str);
+            }
         }
     }
     callBack(willRet, fnId, ...args) {

@@ -30,10 +30,11 @@ export class Gen extends gen_syn.Gen {
             "const main = require('./main')",
             'Object.defineProperty(exports, "__esModule", { value: true })',
             "// " + this.doNotEditComment("nodejs"),
-            "let vsc, strFmt, quit, cancelIn",
+            "let vsc, strFmt, quit, cancelIn, demo_Window_ShowInputBox",
             "exports.demosMenu = demosMenu",
             "exports.subscribeToMiscEvents = subscribeToMiscEvents",
-            "exports.onReady = () => { vsc = main.vsc; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; }",
+            "exports.statusNoticeQuit = statusNoticeQuit",
+            "exports.onReady = () => { vsc = main.vsc; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox }",
             "",
         ) : this.lines(
             "// " + this.doNotEditComment("nodejs"),
