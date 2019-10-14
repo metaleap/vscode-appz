@@ -17,7 +17,7 @@ const gens: gen.IGen[] = [
     new gen_syn.Gen(['libs/tmpdbg/', '.gen.coffee']),
     new gen_golang.Gen(['libs/go/', '.gen.go'], 'demos/go-vsc-appz-demo/miscdemos.gen.go'),
     new gen_csharp.Gen(['libs/cs/', '.gen.cs'], 'demos/cs-vsc-appz-demo/miscdemos.gen.cs'),
-    new gen_nodets.Gen(['libs/js/src/', '.gen.ts'], 'demos/js-vsc-appz-demo/miscdemos.gen.js'),
+    new gen_nodets.Gen(['libs/js/src/', '.gen.ts'], 'demos/nodejs-vsc-appz-demo/miscdemos.gen.js'),
     new gen_python.Gen(['libs/py/', '.gen.py']),
     new gen_vscext.Gen(['src/', '.gen.ts']),
 ]
