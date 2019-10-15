@@ -241,6 +241,9 @@ export class Prog {
                 const retprom = ret as Thenable<any>
                 const retdisp = ret as vsc.Disposable
 
+                if (retprom && retprom.then && retdisp && retdisp.dispose)
+                    throw ret // just in case this ever begins occurring, we'll thusly find out stat
+
                 if (retdisp && retdisp.dispose) {
                     this.ditchCancellers(cancelFnIds)
                     const id = this.nextId()
@@ -248,21 +251,27 @@ export class Prog {
                     if (sendret = msg.cbId ? true : false)
                         this.send({ cbId: msg.cbId, data: { yay: [id, ret] } })
 
-                } else if (retprom && retprom.then)
-                    retprom.then(
-                        ret => {
+                } else if (retprom && retprom.then) {
+                    let onret: (_: any) => void, onrej: (_: any) => void
+                    onrej = rej => {
+                        this.ditchCancellers(cancelFnIds)
+                        onfail(rej)
+                    }
+                    onret = ret => {
+                        const next = ret as Thenable<any>
+                        if (next && next.then)
+                            next.then(onret, onrej)
+                        else {
                             this.ditchCancellers(cancelFnIds)
                             if (!this.proc)
                                 vsc.window.showInformationMessage(uxStr.tooLate, this.fullCmd)
                                     .then(ensureProg, onPromiseRejectedNoOp)
                             else if (sendret = msg.cbId ? true : false)
                                 this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } })
-                        },
-                        rej => {
-                            this.ditchCancellers(cancelFnIds)
-                            onfail(rej)
-                        },
-                    )
+                        }
+                    }
+                    retprom.then(onret, onrej)
+                }
 
                 else
                     this.ditchCancellers(cancelFnIds)

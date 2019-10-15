@@ -208,8 +208,8 @@ export class Prep {
                 const mtparams = (_.kind === ts.SyntaxKind.MethodSignature || _.kind === ts.SyntaxKind.MethodDeclaration) ? _ as TsNodeWithTypeParams : null
                 if ((!mtparams) && mtyped && mtyped.type)
                     tspec = this.typeSpec(mtyped.type, structJob.decl.typeParameters)
-                else if ((mtparams) && ts.isInterfaceDeclaration(structJob.decl))
-                    tspec = this.typeSpec(_, ts.createNodeArray<ts.TypeParameterDeclaration>((mtparams.typeParameters || []).concat(...(structJob.decl.typeParameters || []))))
+                else if (mtparams && ts.isInterfaceDeclaration(structJob.decl))
+                    tspec = this.typeSpec(_, combine(structJob.decl.typeParameters, mtparams.typeParameters))
                 if (tspec)
                     fields.push({
                         fromOrig: _,
@@ -241,7 +241,7 @@ export class Prep {
             nameOrig: qname[qname.length - 1],
             name: qname[qname.length - 1] + ((funcJob.overload > 0) ? funcJob.overload : ''),
             args: (declf && declf.parameters && declf.parameters.length) ?
-                declf.parameters.map(_ => ({
+                declf.parameters.filter(_ => _.name.getText() !== 'thisArg').map(_ => ({
                     fromOrig: _,
                     name: _.name.getText(),
                     typeSpec: this.typeSpec(_.type, declf.typeParameters),
@@ -276,7 +276,7 @@ export class Prep {
         if (!(tprom && tprom.length))
             tret = { Thens: [tret] }
         if (tret) {
-            const argname = pickName('', ['then', 'andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], me.args)
+            const argname = pickName('', ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], me.args)
             if (!argname)
                 throw (me)
             me.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, spreads: false })
@@ -290,15 +290,15 @@ export class Prep {
         return qname
     }
 
-    typeSpec(tNode: ts.Node, tParams?: ts.NodeArray<ts.TypeParameterDeclaration>, ): TypeSpec {
+    typeSpec(tNode: ts.Node, tParams?: ts.NodeArray<ts.TypeParameterDeclaration>): TypeSpec {
         if (ts.isTypeElement(tNode)) {
             if (ts.isPropertySignature(tNode)) {
                 return this.typeSpec(tNode.type, tParams)
             } else if (ts.isMethodSignature(tNode) || ts.isCallSignatureDeclaration(tNode) || ts.isConstructSignatureDeclaration(tNode) || ts.isIndexSignatureDeclaration(tNode)) {
-                const tp = tNode.typeParameters ? ts.createNodeArray(tNode.typeParameters.concat(...(tParams ? tParams : []))) : tParams
+                const tps = combine(tParams, tNode.typeParameters)
                 const rfun: TypeSpecFun = {
-                    From: tNode.parameters.map(_ => this.typeSpec(_.type, tp)),
-                    To: this.typeSpec(tNode.type, tp)
+                    From: tNode.parameters.map(_ => this.typeSpec(_.type, tps)),
+                    To: this.typeSpec(tNode.type, tps)
                 }
                 return rfun
             } else
@@ -380,6 +380,13 @@ export class Prep {
                         return ScriptPrimType.BooleanFalse
                 }
                 throw (lit.kind + "\t" + lit.getText())
+            case ts.SyntaxKind.FunctionType:
+                const tfun = tNode as ts.FunctionTypeNode
+                if (tfun) {
+                    const tparams = combine(tParams, tfun.typeParameters)
+                    return { From: tfun.parameters.map(_ => this.typeSpec(_.type, tparams)), To: this.typeSpec(tfun.type, tparams) }
+                }
+                throw tNode
             default:
                 throw (tNode.kind + "\t" + tNode.getText())
         }
@@ -559,13 +566,15 @@ export function argsFuncFields(prep: Prep, args: PrepArg[]) {
 }
 
 function docFrom(from: ts.JSDoc, retName: () => { name: string }): Doc {
-    let ret: Doc = null, txt: string
+    let ret: Doc = null, txt: string, argname: string
     if (from) {
         ret = { fromOrig: from, subs: [], lines: [] }
         if (txt = from.comment) {
-            if (ts.isJSDocParameterTag(from))
-                ret.isForArg = from.name.getText()
-            else if (ts.isJSDocReturnTag(from)) {
+            if (ts.isJSDocParameterTag(from)) {
+                if ('thisArg' === (argname = from.name.getText()))
+                    return null
+                ret.isForArg = argname
+            } else if (ts.isJSDocReturnTag(from)) {
                 const rn = retName ? retName() : null
                 ret.isForRet = (rn && rn.name && rn.name.length) ? rn.name : ""
             }
@@ -573,7 +582,8 @@ function docFrom(from: ts.JSDoc, retName: () => { name: string }): Doc {
         }
         from.forEachChild(_ => {
             const sub = docFrom(_ as ts.JSDoc, retName)
-            if (sub) ret.subs.push(sub)
+            if (sub)
+                ret.subs.push(sub)
         })
     }
     return ret
@@ -582,7 +592,9 @@ function docFrom(from: ts.JSDoc, retName: () => { name: string }): Doc {
 export function docs(from: ts.Node, retName: () => { name: string } = undefined): Docs {
     const docs = jsDocs(from), ret: Docs = []
     if (docs && docs.length)
-        ret.push(...docs.map(_ => docFrom(_, retName)))
+        for (const _ of docs.map(_ => docFrom(_, retName)))
+            if (_)
+                ret.push(_)
     return ret
 }
 
@@ -639,4 +651,19 @@ function pickName(forcePrefix: string, pickFrom: string[], dontCollideWith: { na
                     return name
             }
     return undefined
+}
+
+export function combine<T extends ts.Node>(...arrs: (T[] | ts.NodeArray<T>)[]) {
+    const all: T[] = []
+    let only: ts.NodeArray<T> = null
+    for (const arr of arrs)
+        if (arr && arr.length) {
+            all.push(...arr)
+            const narr = arr as ts.NodeArray<T>
+            if (only !== null)
+                only = undefined
+            else if (narr && (narr.hasTrailingComma !== undefined || narr.pos !== undefined || narr.end !== undefined))
+                only = narr
+        }
+    return only ? only : (all.length ? ts.createNodeArray<T>(all) : undefined)
 }

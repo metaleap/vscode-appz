@@ -391,6 +391,21 @@ function handle(msg, prog, remoteCancellationTokens) {
             }
         case "commands":
             switch (methodname) {
+                case "registerCommand": {
+                    const arg_command = (msg.data['command']);
+                    const _fnid_callback = msg.data['callback'];
+                    if (!(_fnid_callback && _fnid_callback.length))
+                        return Promise.reject(msg.data);
+                    const arg_callback = (_0) => {
+                        if (prog && prog.proc)
+                            return prog.callBack(true, _fnid_callback, _0);
+                        return undefined;
+                    };
+                    const ret = vscode.commands.registerCommand(arg_command, arg_callback);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
                 case "executeCommand": {
                     const arg_command = (msg.data['command']);
                     const arg_rest = (msg.data['rest'] || []);

@@ -129,8 +129,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage1(message string, items []string, then func(*string)) 
+	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowInformationMessage1(message string, items []string, andThen func(*string)) 
 
 	// Show an information message to users. Optionally provide an array of items which will be presented as
 	// clickable buttons.
@@ -141,8 +141,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage2(message string, options MessageOptions, items []string, then func(*string)) 
+	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(*string)) 
 
 	// Show an information message.
 	// 
@@ -150,8 +150,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage3(message string, items []MessageItem, then func(*MessageItem)) 
+	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowInformationMessage3(message string, items []MessageItem, andThen func(*MessageItem)) 
 
 	// Show an information message.
 	// 
@@ -161,8 +161,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, then func(*MessageItem)) 
+	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) 
 
 	// Show a warning message.
 	// 
@@ -170,28 +170,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage1(message string, items []string, then func(*string)) 
-
-	// Show a warning message.
-	// 
-	// `message` ── The message to show.
-	// 
-	// `options` ── Configures the behaviour of the message.
-	// 
-	// `items` ── A set of items that will be rendered as actions in the message.
-	// 
-	// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage2(message string, options MessageOptions, items []string, then func(*string)) 
-
-	// Show a warning message.
-	// 
-	// `message` ── The message to show.
-	// 
-	// `items` ── A set of items that will be rendered as actions in the message.
-	// 
-	// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage3(message string, items []MessageItem, then func(*MessageItem)) 
+	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowWarningMessage1(message string, items []string, andThen func(*string)) 
 
 	// Show a warning message.
 	// 
@@ -201,8 +181,28 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, then func(*MessageItem)) 
+	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(*string)) 
+
+	// Show a warning message.
+	// 
+	// `message` ── The message to show.
+	// 
+	// `items` ── A set of items that will be rendered as actions in the message.
+	// 
+	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowWarningMessage3(message string, items []MessageItem, andThen func(*MessageItem)) 
+
+	// Show a warning message.
+	// 
+	// `message` ── The message to show.
+	// 
+	// `options` ── Configures the behaviour of the message.
+	// 
+	// `items` ── A set of items that will be rendered as actions in the message.
+	// 
+	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) 
 
 	// Show an error message.
 	// 
@@ -210,8 +210,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage1(message string, items []string, then func(*string)) 
+	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowErrorMessage1(message string, items []string, andThen func(*string)) 
 
 	// Show an error message.
 	// 
@@ -221,8 +221,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage2(message string, options MessageOptions, items []string, then func(*string)) 
+	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(*string)) 
 
 	// Show an error message.
 	// 
@@ -230,8 +230,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage3(message string, items []MessageItem, then func(*MessageItem)) 
+	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowErrorMessage3(message string, items []MessageItem, andThen func(*MessageItem)) 
 
 	// Show an error message.
 	// 
@@ -241,8 +241,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, then func(*MessageItem)) 
+	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) 
 
 	// Opens an input box to ask the user for input.
 	// 
@@ -254,8 +254,8 @@ type Window interface {
 	// 
 	// `token` ── A token that can be used to signal cancellation.
 	// 
-	// `then` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
-	ShowInputBox(options *InputBoxOptions, token *Cancel, then func(*string)) 
+	// `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
+	ShowInputBox(options *InputBoxOptions, token *Cancel, andThen func(*string)) 
 
 	// Shows a selection list allowing multiple selections.
 	// 
@@ -265,8 +265,8 @@ type Window interface {
 	// 
 	// `token` ── A token that can be used to signal cancellation.
 	// 
-	// `then` ── A promise that resolves to the selected items or `undefined`.
-	ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel, then func([]string)) 
+	// `andThen` ── A promise that resolves to the selected items or `undefined`.
+	ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel, andThen func([]string)) 
 
 	// Shows a selection list.
 	// 
@@ -276,8 +276,8 @@ type Window interface {
 	// 
 	// `token` ── A token that can be used to signal cancellation.
 	// 
-	// `then` ── A promise that resolves to the selection or `undefined`.
-	ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel, then func(*string)) 
+	// `andThen` ── A promise that resolves to the selection or `undefined`.
+	ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel, andThen func(*string)) 
 
 	// Shows a selection list allowing multiple selections.
 	// 
@@ -287,8 +287,8 @@ type Window interface {
 	// 
 	// `token` ── A token that can be used to signal cancellation.
 	// 
-	// `then` ── A promise that resolves to the selected items or `undefined`.
-	ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel, then func([]QuickPickItem)) 
+	// `andThen` ── A promise that resolves to the selected items or `undefined`.
+	ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel, andThen func([]QuickPickItem)) 
 
 	// Shows a selection list.
 	// 
@@ -298,8 +298,8 @@ type Window interface {
 	// 
 	// `token` ── A token that can be used to signal cancellation.
 	// 
-	// `then` ── A promise that resolves to the selected item or `undefined`.
-	ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel, then func(*QuickPickItem)) 
+	// `andThen` ── A promise that resolves to the selected item or `undefined`.
+	ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel, andThen func(*QuickPickItem)) 
 
 	// Set a message to the status bar. This is a short hand for the more powerful
 	// status bar [items](#window.createStatusBarItem).
@@ -308,8 +308,8 @@ type Window interface {
 	// 
 	// `hideAfterTimeout` ── Timeout in milliseconds after which the message will be disposed.
 	// 
-	// `then` ── A disposable which hides the status bar message.
-	SetStatusBarMessage1(text string, hideAfterTimeout int, then func(*Disposable)) 
+	// `andThen` ── A disposable which hides the status bar message.
+	SetStatusBarMessage1(text string, hideAfterTimeout int, andThen func(*Disposable)) 
 
 	// Set a message to the status bar. This is a short hand for the more powerful
 	// status bar [items](#window.createStatusBarItem).
@@ -319,39 +319,39 @@ type Window interface {
 	// 
 	// `text` ── The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
 	// 
-	// `then` ── A disposable which hides the status bar message.
-	SetStatusBarMessage2(text string, then func(*Disposable)) 
+	// `andThen` ── A disposable which hides the status bar message.
+	SetStatusBarMessage2(text string, andThen func(*Disposable)) 
 
 	// Shows a file save dialog to the user which allows to select a file
 	// for saving-purposes.
 	// 
 	// `options` ── Options that control the dialog.
 	// 
-	// `then` ── A promise that resolves to the selected resource or `undefined`.
-	ShowSaveDialog(options SaveDialogOptions, then func(*string)) 
+	// `andThen` ── A promise that resolves to the selected resource or `undefined`.
+	ShowSaveDialog(options SaveDialogOptions, andThen func(*string)) 
 
 	// Shows a file open dialog to the user which allows to select a file
 	// for opening-purposes.
 	// 
 	// `options` ── Options that control the dialog.
 	// 
-	// `then` ── A promise that resolves to the selected resources or `undefined`.
-	ShowOpenDialog(options OpenDialogOptions, then func([]string)) 
+	// `andThen` ── A promise that resolves to the selected resources or `undefined`.
+	ShowOpenDialog(options OpenDialogOptions, andThen func([]string)) 
 
 	// Shows a selection list of [workspace folders](#workspace.workspaceFolders) to pick from.
 	// Returns `undefined` if no folder is open.
 	// 
 	// `options` ── Configures the behavior of the workspace folder list.
 	// 
-	// `then` ── A promise that resolves to the workspace folder or `undefined`.
-	ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, then func(*WorkspaceFolder)) 
+	// `andThen` ── A promise that resolves to the workspace folder or `undefined`.
+	ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, andThen func(*WorkspaceFolder)) 
 
 	// Represents the current window's state.
-	State(then func(WindowState)) 
+	State(andThen func(WindowState)) 
 
 	// An [event](#Event) which fires when the focus state of the current window
 	// changes. The value of the event represents whether the window is focused.
-	OnDidChangeWindowState(listener func(WindowState), then func(*Disposable)) 
+	OnDidChangeWindowState(listener func(WindowState), andThen func(*Disposable)) 
 }
 type implWindow struct{ *impl }
 
@@ -365,20 +365,20 @@ type Env interface {
 	// 
 	// `target` ── The uri that should be opened.
 	// 
-	// `then` ── A promise indicating if open was successful.
-	OpenExternal(target string, then func(bool)) 
+	// `andThen` ── A promise indicating if open was successful.
+	OpenExternal(target string, andThen func(bool)) 
 
 	// The application name of the editor, like 'VS Code'.
-	AppName(then func(string)) 
+	AppName(andThen func(string)) 
 
 	// The application root folder from which the editor is running.
-	AppRoot(then func(string)) 
+	AppRoot(andThen func(string)) 
 
 	// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
-	Language(then func(string)) 
+	Language(andThen func(string)) 
 
 	// A unique identifier for the computer.
-	MachineId(then func(string)) 
+	MachineId(andThen func(string)) 
 
 	// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
 	// Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
@@ -387,18 +387,18 @@ type Env interface {
 	// value is defined in all extension hosts (local and remote) in case a remote extension host
 	// exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
 	// a specific extension runs remote or not.
-	RemoteName(then func(*string)) 
+	RemoteName(andThen func(*string)) 
 
 	// A unique identifier for the current session.
 	// Changes each time the editor is started.
-	SessionId(then func(string)) 
+	SessionId(andThen func(string)) 
 
 	// The detected default shell for the extension host, this is overridden by the
 	// `terminal.integrated.shell` setting for the extension host's platform.
-	Shell(then func(string)) 
+	Shell(andThen func(string)) 
 
 	// The custom uri scheme the editor registers to in the operating system.
-	UriScheme(then func(string)) 
+	UriScheme(andThen func(string)) 
 
 	// Provides single-call access to numerous individual `Env` properties at once.
 	Properties(then func(EnvProperties)) 
@@ -415,7 +415,7 @@ type implEnv struct{ *impl }
 type Workspace interface {
 	// The name of the workspace. `undefined` when no folder
 	// has been opened.
-	Name(then func(*string)) 
+	Name(andThen func(*string)) 
 
 	// The location of the workspace file, for example:
 	// 
@@ -444,17 +444,17 @@ type Workspace interface {
 	// configuration data into the file. You can use `workspace.getConfiguration().update()`
 	// for that purpose which will work both when a single folder is opened as
 	// well as an untitled or saved workspace.
-	WorkspaceFile(then func(*string)) 
+	WorkspaceFile(andThen func(*string)) 
 
 	// Save all dirty files.
 	// 
 	// `includeUntitled` ── Also save files that have been created during this session.
 	// 
-	// `then` ── A thenable that resolves when the files have been saved.
-	SaveAll(includeUntitled bool, then func(bool)) 
+	// `andThen` ── A thenable that resolves when the files have been saved.
+	SaveAll(includeUntitled bool, andThen func(bool)) 
 
 	// An event that is emitted when a workspace folder is added or removed.
-	OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent), then func(*Disposable)) 
+	OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent), andThen func(*Disposable)) 
 
 	// Returns the [workspace folder](#WorkspaceFolder) that contains a given uri.
 	// * returns `undefined` when the given uri doesn't match any workspace folder
@@ -462,12 +462,12 @@ type Workspace interface {
 	// 
 	// `uri` ── An uri.
 	// 
-	// `then` ── A workspace folder or `undefined`
-	GetWorkspaceFolder(uri string, then func(*WorkspaceFolder)) 
+	// `andThen` ── A workspace folder or `undefined`
+	GetWorkspaceFolder(uri string, andThen func(*WorkspaceFolder)) 
 
 	// List of workspace folders or `undefined` when no folder is open.
 	// *Note* that the first entry corresponds to the value of `rootPath`.
-	WorkspaceFolders(then func([]WorkspaceFolder)) 
+	WorkspaceFolders(andThen func([]WorkspaceFolder)) 
 
 	// Find files across all [workspace folders](#workspace.workspaceFolders) in the workspace.
 	// `findFiles('**​/*.js', '**​/node_modules/**', 10)`
@@ -484,9 +484,9 @@ type Workspace interface {
 	// 
 	// `token` ── A token that can be used to signal cancellation to the underlying search engine.
 	// 
-	// `then` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
+	// `andThen` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
 	// [workspace folders](#workspace.workspaceFolders) are opened.
-	FindFiles(include string, exclude *string, maxResults *int, token *Cancel, then func([]string)) 
+	FindFiles(include string, exclude *string, maxResults *int, token *Cancel, andThen func([]string)) 
 
 	// Returns a path that is relative to the workspace folder or folders.
 	// 
@@ -499,8 +499,8 @@ type Workspace interface {
 	// workspace folder the name of the workspace is prepended. Defaults to `true` when there are
 	// multiple workspace folders and `false` otherwise.
 	// 
-	// `then` ── A path relative to the root or the input.
-	AsRelativePath(pathOrUri string, includeWorkspaceFolder bool, then func(*string)) 
+	// `andThen` ── A path relative to the root or the input.
+	AsRelativePath(pathOrUri string, includeWorkspaceFolder bool, andThen func(*string)) 
 
 	// Provides single-call access to numerous individual `Workspace` properties at once.
 	Properties(then func(WorkspaceProperties)) 
@@ -536,12 +536,12 @@ type implWorkspace struct{ *impl }
 type Languages interface {
 	// Return the identifiers of all known languages.
 	// 
-	// `then` ── Promise resolving to an array of identifier strings.
-	GetLanguages(then func([]string)) 
+	// `andThen` ── Promise resolving to an array of identifier strings.
+	GetLanguages(andThen func([]string)) 
 
 	// An [event](#Event) which fires when the global set of diagnostics changes. This is
 	// newly added and removed diagnostics.
-	OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent), then func(*Disposable)) 
+	OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent), andThen func(*Disposable)) 
 }
 type implLanguages struct{ *impl }
 
@@ -578,7 +578,7 @@ type implLanguages struct{ *impl }
 type Extensions interface {
 	// An event which fires when `extensions.all` changes. This can happen when extensions are
 	// installed, uninstalled, enabled or disabled.
-	OnDidChange(listener func(), then func(*Disposable)) 
+	OnDidChange(listener func(), andThen func(*Disposable)) 
 }
 type implExtensions struct{ *impl }
 
@@ -617,6 +617,19 @@ type implExtensions struct{ *impl }
 // }
 // ```
 type Commands interface {
+	// Registers a command that can be invoked via a keyboard shortcut,
+	// a menu item, an action, or directly.
+	// 
+	// Registering a command with an existing command identifier twice
+	// will cause an error.
+	// 
+	// `command` ── A unique identifier for the command.
+	// 
+	// `callback` ── A command handler function.
+	// 
+	// `andThen` ── Disposable which unregisters this command on disposal.
+	RegisterCommand(command string, callback func([]any) any, andThen func(*Disposable)) 
+
 	// Executes the command denoted by the given command identifier.
 	// 
 	// * *Note 1:* When executing an editor command not all types are allowed to
@@ -629,17 +642,17 @@ type Commands interface {
 	// 
 	// `rest` ── Parameters passed to the command function.
 	// 
-	// `then` ── A thenable that resolves to the returned value of the given command. `undefined` when
+	// `andThen` ── A thenable that resolves to the returned value of the given command. `undefined` when
 	// the command handler function doesn't return anything.
-	ExecuteCommand(command string, rest []any, then func(any)) 
+	ExecuteCommand(command string, rest []any, andThen func(any)) 
 
 	// Retrieve the list of all available commands. Commands starting an underscore are
 	// treated as internal commands.
 	// 
 	// `filterInternal` ── Set `true` to not see internal commands (starting with an underscore)
 	// 
-	// `then` ── Thenable that resolves to a list of command ids.
-	GetCommands(filterInternal bool, then func([]string)) 
+	// `andThen` ── Thenable that resolves to a list of command ids.
+	GetCommands(filterInternal bool, andThen func([]string)) 
 }
 type implCommands struct{ *impl }
 
@@ -957,7 +970,7 @@ func (me *impl) Commands() Commands {
 	return implCommands{me}
 }
 
-func (me implWindow) ShowInformationMessage1(message string, items []string, then func(*string)) {
+func (me implWindow) ShowInformationMessage1(message string, items []string, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInformationMessage1"
@@ -965,7 +978,7 @@ func (me implWindow) ShowInformationMessage1(message string, items []string, the
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *string
@@ -977,14 +990,14 @@ func (me implWindow) ShowInformationMessage1(message string, items []string, the
 				}
 				result = &_result_
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowInformationMessage2(message string, options MessageOptions, items []string, then func(*string)) {
+func (me implWindow) ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInformationMessage2"
@@ -993,7 +1006,7 @@ func (me implWindow) ShowInformationMessage2(message string, options MessageOpti
 	msg.Data["options"] = options
 	msg.Data["items"] = items
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *string
@@ -1005,14 +1018,14 @@ func (me implWindow) ShowInformationMessage2(message string, options MessageOpti
 				}
 				result = &_result_
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowInformationMessage3(message string, items []MessageItem, then func(*MessageItem)) {
+func (me implWindow) ShowInformationMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInformationMessage3"
@@ -1020,7 +1033,7 @@ func (me implWindow) ShowInformationMessage3(message string, items []MessageItem
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *MessageItem
@@ -1031,14 +1044,14 @@ func (me implWindow) ShowInformationMessage3(message string, items []MessageItem
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, then func(*MessageItem)) {
+func (me implWindow) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInformationMessage4"
@@ -1047,7 +1060,7 @@ func (me implWindow) ShowInformationMessage4(message string, options MessageOpti
 	msg.Data["options"] = options
 	msg.Data["items"] = items
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *MessageItem
@@ -1058,14 +1071,14 @@ func (me implWindow) ShowInformationMessage4(message string, options MessageOpti
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowWarningMessage1(message string, items []string, then func(*string)) {
+func (me implWindow) ShowWarningMessage1(message string, items []string, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWarningMessage1"
@@ -1073,7 +1086,7 @@ func (me implWindow) ShowWarningMessage1(message string, items []string, then fu
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *string
@@ -1085,14 +1098,14 @@ func (me implWindow) ShowWarningMessage1(message string, items []string, then fu
 				}
 				result = &_result_
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowWarningMessage2(message string, options MessageOptions, items []string, then func(*string)) {
+func (me implWindow) ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWarningMessage2"
@@ -1101,7 +1114,7 @@ func (me implWindow) ShowWarningMessage2(message string, options MessageOptions,
 	msg.Data["options"] = options
 	msg.Data["items"] = items
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *string
@@ -1113,14 +1126,14 @@ func (me implWindow) ShowWarningMessage2(message string, options MessageOptions,
 				}
 				result = &_result_
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowWarningMessage3(message string, items []MessageItem, then func(*MessageItem)) {
+func (me implWindow) ShowWarningMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWarningMessage3"
@@ -1128,7 +1141,7 @@ func (me implWindow) ShowWarningMessage3(message string, items []MessageItem, th
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *MessageItem
@@ -1139,14 +1152,14 @@ func (me implWindow) ShowWarningMessage3(message string, items []MessageItem, th
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, then func(*MessageItem)) {
+func (me implWindow) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWarningMessage4"
@@ -1155,7 +1168,7 @@ func (me implWindow) ShowWarningMessage4(message string, options MessageOptions,
 	msg.Data["options"] = options
 	msg.Data["items"] = items
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *MessageItem
@@ -1166,14 +1179,14 @@ func (me implWindow) ShowWarningMessage4(message string, options MessageOptions,
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowErrorMessage1(message string, items []string, then func(*string)) {
+func (me implWindow) ShowErrorMessage1(message string, items []string, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showErrorMessage1"
@@ -1181,7 +1194,7 @@ func (me implWindow) ShowErrorMessage1(message string, items []string, then func
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *string
@@ -1193,14 +1206,14 @@ func (me implWindow) ShowErrorMessage1(message string, items []string, then func
 				}
 				result = &_result_
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, items []string, then func(*string)) {
+func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showErrorMessage2"
@@ -1209,7 +1222,7 @@ func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, i
 	msg.Data["options"] = options
 	msg.Data["items"] = items
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *string
@@ -1221,14 +1234,14 @@ func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, i
 				}
 				result = &_result_
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowErrorMessage3(message string, items []MessageItem, then func(*MessageItem)) {
+func (me implWindow) ShowErrorMessage3(message string, items []MessageItem, andThen func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showErrorMessage3"
@@ -1236,7 +1249,7 @@ func (me implWindow) ShowErrorMessage3(message string, items []MessageItem, then
 	msg.Data["message"] = message
 	msg.Data["items"] = items
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *MessageItem
@@ -1247,14 +1260,14 @@ func (me implWindow) ShowErrorMessage3(message string, items []MessageItem, then
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, then func(*MessageItem)) {
+func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showErrorMessage4"
@@ -1263,7 +1276,7 @@ func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, i
 	msg.Data["options"] = options
 	msg.Data["items"] = items
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *MessageItem
@@ -1274,14 +1287,14 @@ func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, i
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel, then func(*string)) {
+func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInputBox"
@@ -1332,7 +1345,7 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel, then 
 		msg.Data["token"] = token.fnId
 	}
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *string
@@ -1344,7 +1357,7 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel, then 
 				}
 				result = &_result_
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
@@ -1362,7 +1375,7 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel, then 
 	})
 }
 
-func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel, then func([]string)) {
+func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel, andThen func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showQuickPick1"
@@ -1418,7 +1431,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 		msg.Data["token"] = token.fnId
 	}
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result []string
@@ -1441,7 +1454,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 					__idx__result = __idx__result + 1
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
@@ -1459,7 +1472,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 	})
 }
 
-func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel, then func(*string)) {
+func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showQuickPick2"
@@ -1514,7 +1527,7 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 		msg.Data["token"] = token.fnId
 	}
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *string
@@ -1526,7 +1539,7 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 				}
 				result = &_result_
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
@@ -1544,7 +1557,7 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 	})
 }
 
-func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel, then func([]QuickPickItem)) {
+func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel, andThen func([]QuickPickItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showQuickPick3"
@@ -1600,7 +1613,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 		msg.Data["token"] = token.fnId
 	}
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result []QuickPickItem
@@ -1624,7 +1637,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 					__idx__result = __idx__result + 1
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
@@ -1642,7 +1655,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 	})
 }
 
-func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel, then func(*QuickPickItem)) {
+func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel, andThen func(*QuickPickItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showQuickPick4"
@@ -1697,7 +1710,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 		msg.Data["token"] = token.fnId
 	}
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *QuickPickItem
@@ -1708,7 +1721,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
@@ -1726,7 +1739,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 	})
 }
 
-func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int, then func(*Disposable)) {
+func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int, andThen func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.setStatusBarMessage1"
@@ -1734,7 +1747,7 @@ func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int, the
 	msg.Data["text"] = text
 	msg.Data["hideAfterTimeout"] = hideAfterTimeout
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *Disposable
@@ -1747,21 +1760,21 @@ func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int, the
 			} else {
 				return false
 			}
-			then(result.bind(me.Impl(), ""))
+			andThen(result.bind(me.Impl()))
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) SetStatusBarMessage2(text string, then func(*Disposable)) {
+func (me implWindow) SetStatusBarMessage2(text string, andThen func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.setStatusBarMessage2"
 	msg.Data = make(dict, 1)
 	msg.Data["text"] = text
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *Disposable
@@ -1774,21 +1787,21 @@ func (me implWindow) SetStatusBarMessage2(text string, then func(*Disposable)) {
 			} else {
 				return false
 			}
-			then(result.bind(me.Impl(), ""))
+			andThen(result.bind(me.Impl()))
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowSaveDialog(options SaveDialogOptions, then func(*string)) {
+func (me implWindow) ShowSaveDialog(options SaveDialogOptions, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showSaveDialog"
 	msg.Data = make(dict, 1)
 	msg.Data["options"] = options
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *string
@@ -1800,21 +1813,21 @@ func (me implWindow) ShowSaveDialog(options SaveDialogOptions, then func(*string
 				}
 				result = &_result_
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowOpenDialog(options OpenDialogOptions, then func([]string)) {
+func (me implWindow) ShowOpenDialog(options OpenDialogOptions, andThen func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showOpenDialog"
 	msg.Data = make(dict, 1)
 	msg.Data["options"] = options
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result []string
@@ -1837,21 +1850,21 @@ func (me implWindow) ShowOpenDialog(options OpenDialogOptions, then func([]strin
 					__idx__result = __idx__result + 1
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, then func(*WorkspaceFolder)) {
+func (me implWindow) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, andThen func(*WorkspaceFolder)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWorkspaceFolderPick"
 	msg.Data = make(dict, 1)
 	msg.Data["options"] = options
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *WorkspaceFolder
@@ -1862,20 +1875,20 @@ func (me implWindow) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) State(then func(WindowState)) {
+func (me implWindow) State(andThen func(WindowState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.state"
 	msg.Data = make(dict, 0)
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result WindowState
@@ -1886,14 +1899,14 @@ func (me implWindow) State(then func(WindowState)) {
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWindow) OnDidChangeWindowState(listener func(WindowState), then func(*Disposable)) {
+func (me implWindow) OnDidChangeWindowState(listener func(WindowState), andThen func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.onDidChangeWindowState"
@@ -1916,10 +1929,10 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState), then fun
 		}
 		listener(_a_0_)
 		return true
-	})
+	}, nil)
 	msg.Data["listener"] = _fnid_listener
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *Disposable
@@ -1932,21 +1945,21 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState), then fun
 			} else {
 				return false
 			}
-			then(result.bind(me.Impl(), _fnid_listener))
+			andThen(result.bind(me.Impl(), _fnid_listener))
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implEnv) OpenExternal(target string, then func(bool)) {
+func (me implEnv) OpenExternal(target string, andThen func(bool)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.openExternal"
 	msg.Data = make(dict, 1)
 	msg.Data["target"] = target
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result bool
@@ -1958,20 +1971,20 @@ func (me implEnv) OpenExternal(target string, then func(bool)) {
 			} else {
 				return false
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implEnv) AppName(then func(string)) {
+func (me implEnv) AppName(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.appName"
 	msg.Data = make(dict, 0)
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result string
@@ -1981,20 +1994,20 @@ func (me implEnv) AppName(then func(string)) {
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implEnv) AppRoot(then func(string)) {
+func (me implEnv) AppRoot(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.appRoot"
 	msg.Data = make(dict, 0)
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result string
@@ -2004,20 +2017,20 @@ func (me implEnv) AppRoot(then func(string)) {
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implEnv) Language(then func(string)) {
+func (me implEnv) Language(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.language"
 	msg.Data = make(dict, 0)
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result string
@@ -2027,20 +2040,20 @@ func (me implEnv) Language(then func(string)) {
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implEnv) MachineId(then func(string)) {
+func (me implEnv) MachineId(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.machineId"
 	msg.Data = make(dict, 0)
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result string
@@ -2050,20 +2063,20 @@ func (me implEnv) MachineId(then func(string)) {
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implEnv) RemoteName(then func(*string)) {
+func (me implEnv) RemoteName(andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.remoteName"
 	msg.Data = make(dict, 0)
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *string
@@ -2075,20 +2088,20 @@ func (me implEnv) RemoteName(then func(*string)) {
 				}
 				result = &_result_
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implEnv) SessionId(then func(string)) {
+func (me implEnv) SessionId(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.sessionId"
 	msg.Data = make(dict, 0)
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result string
@@ -2098,20 +2111,20 @@ func (me implEnv) SessionId(then func(string)) {
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implEnv) Shell(then func(string)) {
+func (me implEnv) Shell(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.shell"
 	msg.Data = make(dict, 0)
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result string
@@ -2121,20 +2134,20 @@ func (me implEnv) Shell(then func(string)) {
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implEnv) UriScheme(then func(string)) {
+func (me implEnv) UriScheme(andThen func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.uriScheme"
 	msg.Data = make(dict, 0)
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result string
@@ -2144,7 +2157,7 @@ func (me implEnv) UriScheme(then func(string)) {
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
@@ -2177,13 +2190,13 @@ func (me implEnv) Properties(then func(EnvProperties)) {
 	me.Impl().send(msg, on)
 }
 
-func (me implWorkspace) Name(then func(*string)) {
+func (me implWorkspace) Name(andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.name"
 	msg.Data = make(dict, 0)
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *string
@@ -2195,20 +2208,20 @@ func (me implWorkspace) Name(then func(*string)) {
 				}
 				result = &_result_
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWorkspace) WorkspaceFile(then func(*string)) {
+func (me implWorkspace) WorkspaceFile(andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.workspaceFile"
 	msg.Data = make(dict, 0)
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *string
@@ -2220,21 +2233,21 @@ func (me implWorkspace) WorkspaceFile(then func(*string)) {
 				}
 				result = &_result_
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWorkspace) SaveAll(includeUntitled bool, then func(bool)) {
+func (me implWorkspace) SaveAll(includeUntitled bool, andThen func(bool)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.saveAll"
 	msg.Data = make(dict, 1)
 	msg.Data["includeUntitled"] = includeUntitled
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result bool
@@ -2246,14 +2259,14 @@ func (me implWorkspace) SaveAll(includeUntitled bool, then func(bool)) {
 			} else {
 				return false
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent), then func(*Disposable)) {
+func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent), andThen func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.onDidChangeWorkspaceFolders"
@@ -2276,10 +2289,10 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 		}
 		listener(_a_0_)
 		return true
-	})
+	}, nil)
 	msg.Data["listener"] = _fnid_listener
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *Disposable
@@ -2292,21 +2305,21 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 			} else {
 				return false
 			}
-			then(result.bind(me.Impl(), _fnid_listener))
+			andThen(result.bind(me.Impl(), _fnid_listener))
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWorkspace) GetWorkspaceFolder(uri string, then func(*WorkspaceFolder)) {
+func (me implWorkspace) GetWorkspaceFolder(uri string, andThen func(*WorkspaceFolder)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.getWorkspaceFolder"
 	msg.Data = make(dict, 1)
 	msg.Data["uri"] = uri
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *WorkspaceFolder
@@ -2317,20 +2330,20 @@ func (me implWorkspace) GetWorkspaceFolder(uri string, then func(*WorkspaceFolde
 					return false
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWorkspace) WorkspaceFolders(then func([]WorkspaceFolder)) {
+func (me implWorkspace) WorkspaceFolders(andThen func([]WorkspaceFolder)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.workspaceFolders"
 	msg.Data = make(dict, 0)
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result []WorkspaceFolder
@@ -2354,14 +2367,14 @@ func (me implWorkspace) WorkspaceFolders(then func([]WorkspaceFolder)) {
 					__idx__result = __idx__result + 1
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWorkspace) FindFiles(include string, exclude *string, maxResults *int, token *Cancel, then func([]string)) {
+func (me implWorkspace) FindFiles(include string, exclude *string, maxResults *int, token *Cancel, andThen func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.findFiles"
@@ -2381,7 +2394,7 @@ func (me implWorkspace) FindFiles(include string, exclude *string, maxResults *i
 		msg.Data["token"] = token.fnId
 	}
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result []string
@@ -2404,14 +2417,14 @@ func (me implWorkspace) FindFiles(include string, exclude *string, maxResults *i
 					__idx__result = __idx__result + 1
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implWorkspace) AsRelativePath(pathOrUri string, includeWorkspaceFolder bool, then func(*string)) {
+func (me implWorkspace) AsRelativePath(pathOrUri string, includeWorkspaceFolder bool, andThen func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.asRelativePath"
@@ -2419,7 +2432,7 @@ func (me implWorkspace) AsRelativePath(pathOrUri string, includeWorkspaceFolder 
 	msg.Data["pathOrUri"] = pathOrUri
 	msg.Data["includeWorkspaceFolder"] = includeWorkspaceFolder
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *string
@@ -2431,7 +2444,7 @@ func (me implWorkspace) AsRelativePath(pathOrUri string, includeWorkspaceFolder 
 				}
 				result = &_result_
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
@@ -2464,13 +2477,13 @@ func (me implWorkspace) Properties(then func(WorkspaceProperties)) {
 	me.Impl().send(msg, on)
 }
 
-func (me implLanguages) GetLanguages(then func([]string)) {
+func (me implLanguages) GetLanguages(andThen func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "languages.getLanguages"
 	msg.Data = make(dict, 0)
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result []string
@@ -2493,14 +2506,14 @@ func (me implLanguages) GetLanguages(then func([]string)) {
 					__idx__result = __idx__result + 1
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent), then func(*Disposable)) {
+func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent), andThen func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "languages.onDidChangeDiagnostics"
@@ -2523,10 +2536,10 @@ func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEve
 		}
 		listener(_a_0_)
 		return true
-	})
+	}, nil)
 	msg.Data["listener"] = _fnid_listener
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *Disposable
@@ -2539,14 +2552,14 @@ func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEve
 			} else {
 				return false
 			}
-			then(result.bind(me.Impl(), _fnid_listener))
+			andThen(result.bind(me.Impl(), _fnid_listener))
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implExtensions) OnDidChange(listener func(), then func(*Disposable)) {
+func (me implExtensions) OnDidChange(listener func(), andThen func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "extensions.onDidChange"
@@ -2563,10 +2576,10 @@ func (me implExtensions) OnDidChange(listener func(), then func(*Disposable)) {
 		}
 		listener()
 		return true
-	})
+	}, nil)
 	msg.Data["listener"] = _fnid_listener
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result *Disposable
@@ -2579,14 +2592,61 @@ func (me implExtensions) OnDidChange(listener func(), then func(*Disposable)) {
 			} else {
 				return false
 			}
-			then(result.bind(me.Impl(), _fnid_listener))
+			andThen(result.bind(me.Impl(), _fnid_listener))
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implCommands) ExecuteCommand(command string, rest []any, then func(any)) {
+func (me implCommands) RegisterCommand(command string, callback func([]any) any, andThen func(*Disposable)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "commands.registerCommand"
+	msg.Data = make(dict, 2)
+	msg.Data["command"] = command
+	var _fnid_callback string
+	if (nil == callback) {
+		OnError(me.Impl(), "Commands.RegisterCommand: the 'callback' arg (which is not optional but required) was not passed by the caller", nil)
+		return 
+	}
+	_fnid_callback = me.Impl().nextSub(nil, func(args []any) (any, bool) {
+		var ok bool
+		if 1 != len(args) {
+			return nil, ok
+		}
+		var ret any
+		var _a_0_ []any
+		_a_0_, ok = args[0].([]any)
+		if !ok {
+			return nil, false
+		}
+		ret = callback(_a_0_)
+		return ret, true
+	})
+	msg.Data["callback"] = _fnid_callback
+	var on func(any) bool
+	if (nil != andThen) {
+		on = func(payload any) bool {
+			var ok bool
+			var result *Disposable
+			if (nil != payload) {
+				result = new(Disposable)
+				ok = result.populateFrom(payload)
+				if !ok {
+					return false
+				}
+			} else {
+				return false
+			}
+			andThen(result.bind(me.Impl(), _fnid_callback))
+			return true
+		}
+	}
+	me.Impl().send(msg, on)
+}
+
+func (me implCommands) ExecuteCommand(command string, rest []any, andThen func(any)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "commands.executeCommand"
@@ -2594,7 +2654,7 @@ func (me implCommands) ExecuteCommand(command string, rest []any, then func(any)
 	msg.Data["command"] = command
 	msg.Data["rest"] = rest
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result any
@@ -2603,21 +2663,21 @@ func (me implCommands) ExecuteCommand(command string, rest []any, then func(any)
 				if ok {
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}
 	me.Impl().send(msg, on)
 }
 
-func (me implCommands) GetCommands(filterInternal bool, then func([]string)) {
+func (me implCommands) GetCommands(filterInternal bool, andThen func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "commands.getCommands"
 	msg.Data = make(dict, 1)
 	msg.Data["filterInternal"] = filterInternal
 	var on func(any) bool
-	if (nil != then) {
+	if (nil != andThen) {
 		on = func(payload any) bool {
 			var ok bool
 			var result []string
@@ -2640,7 +2700,7 @@ func (me implCommands) GetCommands(filterInternal bool, then func([]string)) {
 					__idx__result = __idx__result + 1
 				}
 			}
-			then(result)
+			andThen(result)
 			return true
 		}
 	}

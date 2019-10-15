@@ -63,6 +63,7 @@ const genApiSurface = {
                 'onDidChange',
             ],
             'commands': [
+                'registerCommand',
                 'executeCommand',
                 'getCommands',
             ],
@@ -234,6 +235,15 @@ function gatherFromTypeNode(into, it, typeParams = undefined) {
                 tref.typeArguments.forEach(_ => gatherFromTypeNode(into, _, typeParams));
             else if (tname !== 'Uri' && tname !== 'CancellationToken' && tname !== 'Disposable')
                 gatherAll(into, into.fromOrig.body, [tname], into.moduleName);
+            break;
+        case ts.SyntaxKind.FunctionType:
+            const tfun = it;
+            if (tfun) {
+                if (tfun.type)
+                    gatherFromTypeNode(into, tfun.type, gen.combine(typeParams, tfun.typeParameters));
+                if (tfun.parameters)
+                    tfun.parameters.forEach(_ => gatherFromTypeNode(into, _.type, typeParams));
+            }
             break;
         default:
             if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.VoidKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(it.kind))

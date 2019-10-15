@@ -121,8 +121,8 @@ class Cancel {
 }
 exports.Cancel = Cancel;
 class Disposable {
-    bind(impl, subFnId) {
-        [this.impl, this.subFnId] = [impl, subFnId];
+    bind(impl, ...subFnIds) {
+        [this.impl, this.subFnIds] = [impl, subFnIds];
         return this;
     }
     populateFrom(payload) {
@@ -132,9 +132,10 @@ class Disposable {
     }
     Dispose() {
         this.impl.send(new ipcMsg('Dispose', { '': this.id }));
-        if (this.subFnId && this.subFnId.length) {
-            delete this.impl.cbListeners[this.subFnId];
-            this.subFnId = null;
+        if (this.subFnIds && this.subFnIds.length) {
+            for (const subfnid of this.subFnIds)
+                delete this.impl.cbListeners[subfnid];
+            this.subFnIds = null;
         }
     }
 }

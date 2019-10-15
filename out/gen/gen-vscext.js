@@ -59,6 +59,7 @@ class Gen extends gen.Gen {
                     }
                     else {
                         const lastarg = method.args[method.args.length - 1];
+                        let tfunc;
                         for (const arg of method.args)
                             if (arg !== lastarg)
                                 if (arg.isCancellationToken !== undefined) {
@@ -67,6 +68,17 @@ class Gen extends gen.Gen {
                                     src += `\t\t\t\t\t\targ_${arg.name} = prog.cancellers[''].token\n`;
                                     src += `\t\t\t\t\telse \n`;
                                     src += `\t\t\t\t\t\tremoteCancellationTokens.push(ctid)\n`;
+                                }
+                                else if ((tfunc = gen.typeFun(arg.typeSpec)) && (tfunc.length)) {
+                                    const fnid = "_fnid_" + arg.name;
+                                    src += `\t\t\t\t\tconst ${fnid} = msg.data['${arg.name}'] as string\n`;
+                                    src += `\t\t\t\t\tif (!(${fnid} && ${fnid}.length))\n`;
+                                    src += "\t\t\t\t\t\treturn Promise.reject(msg.data)\n";
+                                    src += `\t\t\t\t\tconst arg_${arg.name} = (${tfunc[0].map((_, i) => '_' + i + ': ' + this.typeSpec(_)).join(', ')}): ${this.typeSpec(tfunc[1])} => {\n`;
+                                    src += "\t\t\t\t\t\tif (prog && prog.proc)\n";
+                                    src += `\t\t\t\t\t\t\treturn prog.callBack(true, ${fnid}, ${tfunc[0].map((_, i) => '_' + i).join(', ')})\n`;
+                                    src += "\t\t\t\t\t\treturn undefined\n";
+                                    src += "\t\t\t\t\t}\n";
                                 }
                                 else {
                                     if (arg.typeSpec !== 'Uri')

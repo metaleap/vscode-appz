@@ -584,7 +584,10 @@ class Gen extends gen.Gen {
         if (tdstcoll && tdstcoll.ValsOf && tdstcoll.KeysOf === undefined) {
             const tcoll = { ValsOf: TypeRefPrim.Any };
             const tncoll = "__coll__" + dstVarName, tnidx = "__idx__" + dstVarName, tnitem = "__item__" + dstVarName, tnval = "__val__" + dstVarName;
-            return [
+            return (tdstcoll.ValsOf === TypeRefPrim.Any) ? [
+                _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(tcoll, src)),
+                retifnotok,
+            ] : [
                 _.iVar(tncoll, tcoll),
                 _.iSet(_.eTup(_.n(tncoll), _.n(okBoolName)), _.eConv(tcoll, src)),
                 retifnotok,
@@ -635,7 +638,7 @@ class Gen extends gen.Gen {
         body.push(_.iRet(_.eLit(true)));
     }
     genMethodImpl_MessageDispatch(iface, method, _, body) {
-        const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok');
+        const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok', 'ret');
         const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args);
         const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length;
         body.push(_.iVar(__.msg, { Maybe: { Name: 'ipcMsg' } }), _.iSet(_.n(__.msg), _.eNew({ Maybe: { Name: 'ipcMsg' } })), _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(iface.name + '.' + method.fromPrep.name)), _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs))));
@@ -667,21 +670,36 @@ class Gen extends gen.Gen {
                     ]))))))]))));
             }
         }
-        const isevt = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl : null;
-        let nameevtsub = undefined;
-        if (isevt && isevt.EvtName && isevt.EvtName.length) {
-            const arg = method.Args[0];
-            nameevtsub = "_fnid_" + arg.Name;
-            body.push(_.iVar(nameevtsub, TypeRefPrim.String), _.iIf(_.oIsnt(_.n(arg.Name)), [
+        let evtsubfnids = [];
+        const eventlike = (arg) => {
+            const fnid = "_fnid_" + arg.Name;
+            const tfun = this.typeFunc(arg.Type);
+            evtsubfnids.push(fnid);
+            const numargs = (isevt && isevt.EvtArgs) ? isevt.EvtArgs.length : tfun.From.length;
+            const argtypes = (!(isevt && isevt.EvtArgs)) ? tfun.From : isevt.EvtArgs.map(t => this.b.typeRef(this.b.prep.typeSpec(t)));
+            const rettype = tfun ? tfun.To : null;
+            let call = _.eCall(_.n(arg.Name), ...argtypes.map((_a, i) => _.n(`_a_${i}_`)));
+            let onerrret;
+            if (rettype)
+                [call, onerrret] = [_.iSet(_.n(__.ret), call), _.eTup(_.eZilch(), _.eLit(false))];
+            const handler = _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], rettype ? { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] } : TypeRefPrim.Bool, ...[
+                _.iVar(__.ok, TypeRefPrim.Bool),
+                _.iIf(_.oNeq(_.eLit(numargs), _.eLen(_.n("args"), true)), [
+                    _.iRet(rettype ? _.eTup(_.eZilch(), _.n(__.ok)) : _.n(__.ok)),
+                ]),
+            ].concat(..._.WHEN(rettype, () => [
+                _.iVar(__.ret, TypeRefPrim.Any),
+            ])).concat(_.EACH(argtypes, (atype, i) => _.LET(`_a_${i}_`, aname => [_.iVar(aname, atype)].concat(this.convOrRet(aname, _.oIdx(_.n("args"), _.eLit(i)), atype, __.ok, onerrret))))).concat(call, _.iRet(rettype ? _.eTup(_.n(__.ret), _.eLit(true)) : _.eLit(true))));
+            body.push(_.iVar(fnid, TypeRefPrim.String), _.iIf(_.oIsnt(_.n(arg.Name)), [
                 _.eCall(_.n("OnError"), _.eCall(_.oDot(_.n('Impl'))), _.eLit(`${iface.Name}.${method.Name}: the '${arg.Name}' arg (which is not optional but required) was not passed by the caller`), _.eZilch()),
                 _.iRet(null),
-            ]), _.iSet(_.n(nameevtsub), _.eCall(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n("nextSub")), _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Bool, ...[
-                _.iVar(__.ok, TypeRefPrim.Bool),
-                _.iIf(_.oNeq(_.eLit(isevt.EvtArgs.length), _.eLen(_.n("args"), true)), [
-                    _.iRet(_.n(__.ok)),
-                ]),
-            ].concat(_.EACH(isevt.EvtArgs, (t, i) => _.LET(`_a_${i}_`, aname => _.LET(this.b.typeRef(this.b.prep.typeSpec(t)), atype => [_.iVar(aname, atype)].concat(this.convOrRet(aname, _.oIdx(_.n("args"), _.eLit(i)), atype)))))).concat(_.eCall(_.n(arg.Name), ...isevt.EvtArgs.map((_a, i) => _.n(`_a_${i}_`))), _.iRet(_.eLit(true)))))), _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n(nameevtsub)));
-        }
+            ]), _.iSet(_.n(fnid), _.eCall(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n("nextSub")), rettype ? _.eZilch() : handler, rettype ? handler : _.eZilch())), _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n(fnid)));
+        };
+        const lastarg = method.Args[method.Args.length - 1];
+        const isdisp = lastarg && lastarg.fromPrep && lastarg.fromPrep.isFromRetThenable && gen.typePromOf(lastarg.fromPrep.typeSpec, 'Disposable');
+        const isevt = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl : null;
+        if (isevt && isevt.EvtName && isevt.EvtName.length)
+            eventlike(method.Args[0]);
         else
             for (const arg of method.Args)
                 if (!arg.fromPrep.isFromRetThenable)
@@ -693,6 +711,8 @@ class Gen extends gen.Gen {
                             ]),
                             _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.oDot(_.n(arg.Name), _.n("fnId"))),
                         ]));
+                    else if (this.typeFunc(arg.Type))
+                        eventlike(arg);
                     else {
                         let town = this.typeOwn(arg.Type);
                         if (town && town.Ands) {
@@ -710,10 +730,8 @@ class Gen extends gen.Gen {
                         const twinarg = twinargs[arg.Name];
                         body.push(_.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name)));
                     }
-        const lastarg = method.Args[method.Args.length - 1];
         body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }));
         if (lastarg.fromPrep.isFromRetThenable) {
-            const isdisp = gen.typePromOf(lastarg.fromPrep.typeSpec, 'Disposable');
             const meprop = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl : null;
             const isprop = meprop && meprop.PropType;
             const isprops = method.fromPrep && method.fromPrep.isProps;
@@ -721,7 +739,7 @@ class Gen extends gen.Gen {
             const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, !(isval || isprop || isprops), true);
             body.push(_.iIf(_.oIs(_.n(lastarg.Name)), [
                 _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iVar(__.ok, TypeRefPrim.Bool), _.iVar(__.result, dsttype), _.iIf(_.oIs(_.n(__.payload)), this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok), _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => [])), _.WHEN(isdisp, () => [
-                    _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bind')), _.eCall(_.oDot(_.eThis(), _.n("Impl"))), nameevtsub ? _.n(nameevtsub) : _.eLit(""))),
+                    _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bind')), ...[_.eCall(_.oDot(_.eThis(), _.n("Impl")))].concat(...evtsubfnids.map(fnid => _.n(fnid))))),
                 ], () => [
                     _.eCall(_.n(lastarg.Name), _.n(__.result)),
                 ])[0], _.iRet(_.eLit(true)))),

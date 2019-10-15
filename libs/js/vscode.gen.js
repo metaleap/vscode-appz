@@ -64,7 +64,7 @@ class impl {
 exports.impl = impl;
 class implWindow extends implBase {
     constructor(impl) { super(impl); }
-    ShowInformationMessage1(message, items, then) {
+    ShowInformationMessage1(message, items, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showInformationMessage1";
@@ -72,7 +72,7 @@ class implWindow extends implBase {
         msg.Data["message"] = message;
         msg.Data["items"] = items;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -84,13 +84,13 @@ class implWindow extends implBase {
                     }
                     result = _result_;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowInformationMessage2(message, options, items, then) {
+    ShowInformationMessage2(message, options, items, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showInformationMessage2";
@@ -99,7 +99,7 @@ class implWindow extends implBase {
         msg.Data["options"] = options;
         msg.Data["items"] = items;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -111,13 +111,13 @@ class implWindow extends implBase {
                     }
                     result = _result_;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowInformationMessage3(message, items, then) {
+    ShowInformationMessage3(message, items, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showInformationMessage3";
@@ -125,7 +125,7 @@ class implWindow extends implBase {
         msg.Data["message"] = message;
         msg.Data["items"] = items;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -136,13 +136,13 @@ class implWindow extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowInformationMessage4(message, options, items, then) {
+    ShowInformationMessage4(message, options, items, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showInformationMessage4";
@@ -151,7 +151,7 @@ class implWindow extends implBase {
         msg.Data["options"] = options;
         msg.Data["items"] = items;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -162,13 +162,13 @@ class implWindow extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowWarningMessage1(message, items, then) {
+    ShowWarningMessage1(message, items, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showWarningMessage1";
@@ -176,7 +176,7 @@ class implWindow extends implBase {
         msg.Data["message"] = message;
         msg.Data["items"] = items;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -188,13 +188,13 @@ class implWindow extends implBase {
                     }
                     result = _result_;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowWarningMessage2(message, options, items, then) {
+    ShowWarningMessage2(message, options, items, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showWarningMessage2";
@@ -203,7 +203,7 @@ class implWindow extends implBase {
         msg.Data["options"] = options;
         msg.Data["items"] = items;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -215,13 +215,13 @@ class implWindow extends implBase {
                     }
                     result = _result_;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowWarningMessage3(message, items, then) {
+    ShowWarningMessage3(message, items, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showWarningMessage3";
@@ -229,7 +229,7 @@ class implWindow extends implBase {
         msg.Data["message"] = message;
         msg.Data["items"] = items;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -240,13 +240,13 @@ class implWindow extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowWarningMessage4(message, options, items, then) {
+    ShowWarningMessage4(message, options, items, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showWarningMessage4";
@@ -255,7 +255,7 @@ class implWindow extends implBase {
         msg.Data["options"] = options;
         msg.Data["items"] = items;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -266,13 +266,13 @@ class implWindow extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowErrorMessage1(message, items, then) {
+    ShowErrorMessage1(message, items, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showErrorMessage1";
@@ -280,7 +280,7 @@ class implWindow extends implBase {
         msg.Data["message"] = message;
         msg.Data["items"] = items;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -292,13 +292,13 @@ class implWindow extends implBase {
                     }
                     result = _result_;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowErrorMessage2(message, options, items, then) {
+    ShowErrorMessage2(message, options, items, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showErrorMessage2";
@@ -307,7 +307,7 @@ class implWindow extends implBase {
         msg.Data["options"] = options;
         msg.Data["items"] = items;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -319,13 +319,13 @@ class implWindow extends implBase {
                     }
                     result = _result_;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowErrorMessage3(message, items, then) {
+    ShowErrorMessage3(message, items, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showErrorMessage3";
@@ -333,7 +333,7 @@ class implWindow extends implBase {
         msg.Data["message"] = message;
         msg.Data["items"] = items;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -344,13 +344,13 @@ class implWindow extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowErrorMessage4(message, options, items, then) {
+    ShowErrorMessage4(message, options, items, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showErrorMessage4";
@@ -359,7 +359,7 @@ class implWindow extends implBase {
         msg.Data["options"] = options;
         msg.Data["items"] = items;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -370,13 +370,13 @@ class implWindow extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowInputBox(options, token, then) {
+    ShowInputBox(options, token, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showInputBox";
@@ -421,7 +421,7 @@ class implWindow extends implBase {
             msg.Data["token"] = token.fnId;
         }
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -433,7 +433,7 @@ class implWindow extends implBase {
                     }
                     result = _result_;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
@@ -448,7 +448,7 @@ class implWindow extends implBase {
             return (undefined === on || null === on) || on(payload);
         });
     }
-    ShowQuickPick1(items, options, token, then) {
+    ShowQuickPick1(items, options, token, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showQuickPick1";
@@ -499,7 +499,7 @@ class implWindow extends implBase {
             msg.Data["token"] = token.fnId;
         }
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -522,7 +522,7 @@ class implWindow extends implBase {
                         __idx__result = __idx__result + 1;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
@@ -537,7 +537,7 @@ class implWindow extends implBase {
             return (undefined === on || null === on) || on(payload);
         });
     }
-    ShowQuickPick2(items, options, token, then) {
+    ShowQuickPick2(items, options, token, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showQuickPick2";
@@ -587,7 +587,7 @@ class implWindow extends implBase {
             msg.Data["token"] = token.fnId;
         }
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -599,7 +599,7 @@ class implWindow extends implBase {
                     }
                     result = _result_;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
@@ -614,7 +614,7 @@ class implWindow extends implBase {
             return (undefined === on || null === on) || on(payload);
         });
     }
-    ShowQuickPick3(items, options, token, then) {
+    ShowQuickPick3(items, options, token, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showQuickPick3";
@@ -665,7 +665,7 @@ class implWindow extends implBase {
             msg.Data["token"] = token.fnId;
         }
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -689,7 +689,7 @@ class implWindow extends implBase {
                         __idx__result = __idx__result + 1;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
@@ -704,7 +704,7 @@ class implWindow extends implBase {
             return (undefined === on || null === on) || on(payload);
         });
     }
-    ShowQuickPick4(items, options, token, then) {
+    ShowQuickPick4(items, options, token, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showQuickPick4";
@@ -754,7 +754,7 @@ class implWindow extends implBase {
             msg.Data["token"] = token.fnId;
         }
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -765,7 +765,7 @@ class implWindow extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
@@ -780,7 +780,7 @@ class implWindow extends implBase {
             return (undefined === on || null === on) || on(payload);
         });
     }
-    SetStatusBarMessage1(text, hideAfterTimeout, then) {
+    SetStatusBarMessage1(text, hideAfterTimeout, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.setStatusBarMessage1";
@@ -788,7 +788,7 @@ class implWindow extends implBase {
         msg.Data["text"] = text;
         msg.Data["hideAfterTimeout"] = hideAfterTimeout;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -802,20 +802,20 @@ class implWindow extends implBase {
                 else {
                     return false;
                 }
-                then(result.bind(this.Impl(), ""));
+                andThen(result.bind(this.Impl()));
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    SetStatusBarMessage2(text, then) {
+    SetStatusBarMessage2(text, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.setStatusBarMessage2";
         msg.Data = {};
         msg.Data["text"] = text;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -829,20 +829,20 @@ class implWindow extends implBase {
                 else {
                     return false;
                 }
-                then(result.bind(this.Impl(), ""));
+                andThen(result.bind(this.Impl()));
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowSaveDialog(options, then) {
+    ShowSaveDialog(options, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showSaveDialog";
         msg.Data = {};
         msg.Data["options"] = options;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -854,20 +854,20 @@ class implWindow extends implBase {
                     }
                     result = _result_;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowOpenDialog(options, then) {
+    ShowOpenDialog(options, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showOpenDialog";
         msg.Data = {};
         msg.Data["options"] = options;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -890,20 +890,20 @@ class implWindow extends implBase {
                         __idx__result = __idx__result + 1;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    ShowWorkspaceFolderPick(options, then) {
+    ShowWorkspaceFolderPick(options, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showWorkspaceFolderPick";
         msg.Data = {};
         msg.Data["options"] = options;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -914,19 +914,19 @@ class implWindow extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    State(then) {
+    State(andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.state";
         msg.Data = {};
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -937,13 +937,13 @@ class implWindow extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    OnDidChangeWindowState(listener, then) {
+    OnDidChangeWindowState(listener, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.onDidChangeWindowState";
@@ -969,7 +969,7 @@ class implWindow extends implBase {
         });
         msg.Data["listener"] = _fnid_listener;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -983,7 +983,7 @@ class implWindow extends implBase {
                 else {
                     return false;
                 }
-                then(result.bind(this.Impl(), _fnid_listener));
+                andThen(result.bind(this.Impl(), _fnid_listener));
                 return true;
             };
         }
@@ -992,14 +992,14 @@ class implWindow extends implBase {
 }
 class implEnv extends implBase {
     constructor(impl) { super(impl); }
-    OpenExternal(target, then) {
+    OpenExternal(target, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.openExternal";
         msg.Data = {};
         msg.Data["target"] = target;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1012,19 +1012,19 @@ class implEnv extends implBase {
                 else {
                     return false;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    AppName(then) {
+    AppName(andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.appName";
         msg.Data = {};
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1034,19 +1034,19 @@ class implEnv extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    AppRoot(then) {
+    AppRoot(andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.appRoot";
         msg.Data = {};
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1056,19 +1056,19 @@ class implEnv extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    Language(then) {
+    Language(andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.language";
         msg.Data = {};
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1078,19 +1078,19 @@ class implEnv extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    MachineId(then) {
+    MachineId(andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.machineId";
         msg.Data = {};
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1100,19 +1100,19 @@ class implEnv extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    RemoteName(then) {
+    RemoteName(andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.remoteName";
         msg.Data = {};
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1124,19 +1124,19 @@ class implEnv extends implBase {
                     }
                     result = _result_;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    SessionId(then) {
+    SessionId(andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.sessionId";
         msg.Data = {};
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1146,19 +1146,19 @@ class implEnv extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    Shell(then) {
+    Shell(andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.shell";
         msg.Data = {};
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1168,19 +1168,19 @@ class implEnv extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    UriScheme(then) {
+    UriScheme(andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.uriScheme";
         msg.Data = {};
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1190,7 +1190,7 @@ class implEnv extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
@@ -1225,13 +1225,13 @@ class implEnv extends implBase {
 }
 class implWorkspace extends implBase {
     constructor(impl) { super(impl); }
-    Name(then) {
+    Name(andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.name";
         msg.Data = {};
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1243,19 +1243,19 @@ class implWorkspace extends implBase {
                     }
                     result = _result_;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    WorkspaceFile(then) {
+    WorkspaceFile(andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.workspaceFile";
         msg.Data = {};
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1267,20 +1267,20 @@ class implWorkspace extends implBase {
                     }
                     result = _result_;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    SaveAll(includeUntitled, then) {
+    SaveAll(includeUntitled, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.saveAll";
         msg.Data = {};
         msg.Data["includeUntitled"] = includeUntitled;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1293,13 +1293,13 @@ class implWorkspace extends implBase {
                 else {
                     return false;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    OnDidChangeWorkspaceFolders(listener, then) {
+    OnDidChangeWorkspaceFolders(listener, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.onDidChangeWorkspaceFolders";
@@ -1325,7 +1325,7 @@ class implWorkspace extends implBase {
         });
         msg.Data["listener"] = _fnid_listener;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1339,20 +1339,20 @@ class implWorkspace extends implBase {
                 else {
                     return false;
                 }
-                then(result.bind(this.Impl(), _fnid_listener));
+                andThen(result.bind(this.Impl(), _fnid_listener));
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    GetWorkspaceFolder(uri, then) {
+    GetWorkspaceFolder(uri, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.getWorkspaceFolder";
         msg.Data = {};
         msg.Data["uri"] = uri;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1363,19 +1363,19 @@ class implWorkspace extends implBase {
                         return false;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    WorkspaceFolders(then) {
+    WorkspaceFolders(andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.workspaceFolders";
         msg.Data = {};
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1399,13 +1399,13 @@ class implWorkspace extends implBase {
                         __idx__result = __idx__result + 1;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    FindFiles(include, exclude, maxResults, token, then) {
+    FindFiles(include, exclude, maxResults, token, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.findFiles";
@@ -1423,7 +1423,7 @@ class implWorkspace extends implBase {
             msg.Data["token"] = token.fnId;
         }
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1446,13 +1446,13 @@ class implWorkspace extends implBase {
                         __idx__result = __idx__result + 1;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    AsRelativePath(pathOrUri, includeWorkspaceFolder, then) {
+    AsRelativePath(pathOrUri, includeWorkspaceFolder, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.asRelativePath";
@@ -1460,7 +1460,7 @@ class implWorkspace extends implBase {
         msg.Data["pathOrUri"] = pathOrUri;
         msg.Data["includeWorkspaceFolder"] = includeWorkspaceFolder;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1472,7 +1472,7 @@ class implWorkspace extends implBase {
                     }
                     result = _result_;
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
@@ -1507,13 +1507,13 @@ class implWorkspace extends implBase {
 }
 class implLanguages extends implBase {
     constructor(impl) { super(impl); }
-    GetLanguages(then) {
+    GetLanguages(andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "languages.getLanguages";
         msg.Data = {};
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1536,13 +1536,13 @@ class implLanguages extends implBase {
                         __idx__result = __idx__result + 1;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    OnDidChangeDiagnostics(listener, then) {
+    OnDidChangeDiagnostics(listener, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "languages.onDidChangeDiagnostics";
@@ -1568,7 +1568,7 @@ class implLanguages extends implBase {
         });
         msg.Data["listener"] = _fnid_listener;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1582,7 +1582,7 @@ class implLanguages extends implBase {
                 else {
                     return false;
                 }
-                then(result.bind(this.Impl(), _fnid_listener));
+                andThen(result.bind(this.Impl(), _fnid_listener));
                 return true;
             };
         }
@@ -1591,7 +1591,7 @@ class implLanguages extends implBase {
 }
 class implExtensions extends implBase {
     constructor(impl) { super(impl); }
-    OnDidChange(listener, then) {
+    OnDidChange(listener, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "extensions.onDidChange";
@@ -1611,7 +1611,7 @@ class implExtensions extends implBase {
         });
         msg.Data["listener"] = _fnid_listener;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1625,7 +1625,7 @@ class implExtensions extends implBase {
                 else {
                     return false;
                 }
-                then(result.bind(this.Impl(), _fnid_listener));
+                andThen(result.bind(this.Impl(), _fnid_listener));
                 return true;
             };
         }
@@ -1634,7 +1634,35 @@ class implExtensions extends implBase {
 }
 class implCommands extends implBase {
     constructor(impl) { super(impl); }
-    ExecuteCommand(command, rest, then) {
+    RegisterCommand(command, callback, andThen) {
+        let msg;
+        msg = newipcMsg();
+        msg.QName = "commands.registerCommand";
+        msg.Data = {};
+        msg.Data["command"] = command;
+        msg.Data["callback"] = callback;
+        let on;
+        if ((undefined !== andThen && null !== andThen)) {
+            on = (payload) => {
+                let ok;
+                let result;
+                if ((undefined !== payload && null !== payload)) {
+                    result = newDisposable();
+                    ok = result.populateFrom(payload);
+                    if (!ok) {
+                        return false;
+                    }
+                }
+                else {
+                    return false;
+                }
+                andThen(result.bind(this.Impl()));
+                return true;
+            };
+        }
+        this.Impl().send(msg, on);
+    }
+    ExecuteCommand(command, rest, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "commands.executeCommand";
@@ -1642,7 +1670,7 @@ class implCommands extends implBase {
         msg.Data["command"] = command;
         msg.Data["rest"] = rest;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1651,20 +1679,20 @@ class implCommands extends implBase {
                     if (ok) {
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }
         this.Impl().send(msg, on);
     }
-    GetCommands(filterInternal, then) {
+    GetCommands(filterInternal, andThen) {
         let msg;
         msg = newipcMsg();
         msg.QName = "commands.getCommands";
         msg.Data = {};
         msg.Data["filterInternal"] = filterInternal;
         let on;
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
                 let ok;
                 let result;
@@ -1687,7 +1715,7 @@ class implCommands extends implBase {
                         __idx__result = __idx__result + 1;
                     }
                 }
-                then(result);
+                andThen(result);
                 return true;
             };
         }

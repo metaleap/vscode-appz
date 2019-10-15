@@ -407,6 +407,21 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 			}
 		case "commands":
 			switch (methodname) {
+				case "registerCommand": {
+					const arg_command = (msg.data['command']) as string
+					const _fnid_callback = msg.data['callback'] as string
+					if (!(_fnid_callback && _fnid_callback.length))
+						return Promise.reject(msg.data)
+					const arg_callback = (_0: any[]): any => {
+						if (prog && prog.proc)
+							return prog.callBack(true, _fnid_callback, _0)
+						return undefined
+					}
+					const ret = vscode.commands.registerCommand(arg_command, arg_callback, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
 				case "executeCommand": {
 					const arg_command = (msg.data['command']) as string
 					const arg_rest = (msg.data['rest'] || []) as any[]

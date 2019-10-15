@@ -110,8 +110,8 @@ class Prep {
                 const mtparams = (_.kind === ts.SyntaxKind.MethodSignature || _.kind === ts.SyntaxKind.MethodDeclaration) ? _ : null;
                 if ((!mtparams) && mtyped && mtyped.type)
                     tspec = this.typeSpec(mtyped.type, structJob.decl.typeParameters);
-                else if ((mtparams) && ts.isInterfaceDeclaration(structJob.decl))
-                    tspec = this.typeSpec(_, ts.createNodeArray((mtparams.typeParameters || []).concat(...(structJob.decl.typeParameters || []))));
+                else if (mtparams && ts.isInterfaceDeclaration(structJob.decl))
+                    tspec = this.typeSpec(_, combine(structJob.decl.typeParameters, mtparams.typeParameters));
                 if (tspec)
                     fields.push({
                         fromOrig: _,
@@ -142,7 +142,7 @@ class Prep {
             nameOrig: qname[qname.length - 1],
             name: qname[qname.length - 1] + ((funcJob.overload > 0) ? funcJob.overload : ''),
             args: (declf && declf.parameters && declf.parameters.length) ?
-                declf.parameters.map(_ => ({
+                declf.parameters.filter(_ => _.name.getText() !== 'thisArg').map(_ => ({
                     fromOrig: _,
                     name: _.name.getText(),
                     typeSpec: this.typeSpec(_.type, declf.typeParameters),
@@ -177,7 +177,7 @@ class Prep {
         if (!(tprom && tprom.length))
             tret = { Thens: [tret] };
         if (tret) {
-            const argname = pickName('', ['then', 'andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], me.args);
+            const argname = pickName('', ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], me.args);
             if (!argname)
                 throw (me);
             me.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, spreads: false });
@@ -195,10 +195,10 @@ class Prep {
                 return this.typeSpec(tNode.type, tParams);
             }
             else if (ts.isMethodSignature(tNode) || ts.isCallSignatureDeclaration(tNode) || ts.isConstructSignatureDeclaration(tNode) || ts.isIndexSignatureDeclaration(tNode)) {
-                const tp = tNode.typeParameters ? ts.createNodeArray(tNode.typeParameters.concat(...(tParams ? tParams : []))) : tParams;
+                const tps = combine(tParams, tNode.typeParameters);
                 const rfun = {
-                    From: tNode.parameters.map(_ => this.typeSpec(_.type, tp)),
-                    To: this.typeSpec(tNode.type, tp)
+                    From: tNode.parameters.map(_ => this.typeSpec(_.type, tps)),
+                    To: this.typeSpec(tNode.type, tps)
                 };
                 return rfun;
             }
@@ -283,6 +283,13 @@ class Prep {
                         return ScriptPrimType.BooleanFalse;
                 }
                 throw (lit.kind + "\t" + lit.getText());
+            case ts.SyntaxKind.FunctionType:
+                const tfun = tNode;
+                if (tfun) {
+                    const tparams = combine(tParams, tfun.typeParameters);
+                    return { From: tfun.parameters.map(_ => this.typeSpec(_.type, tparams)), To: this.typeSpec(tfun.type, tparams) };
+                }
+                throw tNode;
             default:
                 throw (tNode.kind + "\t" + tNode.getText());
         }
@@ -413,12 +420,15 @@ function argsFuncFields(prep, args) {
 }
 exports.argsFuncFields = argsFuncFields;
 function docFrom(from, retName) {
-    let ret = null, txt;
+    let ret = null, txt, argname;
     if (from) {
         ret = { fromOrig: from, subs: [], lines: [] };
         if (txt = from.comment) {
-            if (ts.isJSDocParameterTag(from))
-                ret.isForArg = from.name.getText();
+            if (ts.isJSDocParameterTag(from)) {
+                if ('thisArg' === (argname = from.name.getText()))
+                    return null;
+                ret.isForArg = argname;
+            }
             else if (ts.isJSDocReturnTag(from)) {
                 const rn = retName ? retName() : null;
                 ret.isForRet = (rn && rn.name && rn.name.length) ? rn.name : "";
@@ -436,7 +446,9 @@ function docFrom(from, retName) {
 function docs(from, retName = undefined) {
     const docs = jsDocs(from), ret = [];
     if (docs && docs.length)
-        ret.push(...docs.map(_ => docFrom(_, retName)));
+        for (const _ of docs.map(_ => docFrom(_, retName)))
+            if (_)
+                ret.push(_);
     return ret;
 }
 exports.docs = docs;
@@ -493,3 +505,18 @@ function pickName(forcePrefix, pickFrom, dontCollideWith) {
             }
     return undefined;
 }
+function combine(...arrs) {
+    const all = [];
+    let only = null;
+    for (const arr of arrs)
+        if (arr && arr.length) {
+            all.push(...arr);
+            const narr = arr;
+            if (only !== null)
+                only = undefined;
+            else if (narr && (narr.hasTrailingComma !== undefined || narr.pos !== undefined || narr.end !== undefined))
+                only = narr;
+        }
+    return only ? only : (all.length ? ts.createNodeArray(all) : undefined);
+}
+exports.combine = combine;

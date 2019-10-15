@@ -149,12 +149,12 @@ namespace VscAppz {
 		/// 
 		/// `items` ── A set of items that will be rendered as actions in the message.
 		/// 
-		/// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
 		/// <param name="message">The message to show.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowInformationMessage(string message = default, string[] items = default, Action<string> then = default);
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+		void ShowInformationMessage(string message = default, string[] items = default, Action<string> andThen = default);
 
 		/// <summary>
 		/// Show an information message to users. Optionally provide an array of items which will be presented as
@@ -166,13 +166,13 @@ namespace VscAppz {
 		/// 
 		/// `items` ── A set of items that will be rendered as actions in the message.
 		/// 
-		/// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
 		/// <param name="message">The message to show.</param>
 		/// <param name="options">Configures the behaviour of the message.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowInformationMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> then = default);
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+		void ShowInformationMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
 
 		/// <summary>
 		/// Show an information message.
@@ -181,12 +181,12 @@ namespace VscAppz {
 		/// 
 		/// `items` ── A set of items that will be rendered as actions in the message.
 		/// 
-		/// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
 		/// <param name="message">The message to show.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowInformationMessage(string message = default, MessageItem[] items = default, Action<MessageItem> then = default);
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+		void ShowInformationMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
 
 		/// <summary>
 		/// Show an information message.
@@ -197,13 +197,13 @@ namespace VscAppz {
 		/// 
 		/// `items` ── A set of items that will be rendered as actions in the message.
 		/// 
-		/// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
 		/// <param name="message">The message to show.</param>
 		/// <param name="options">Configures the behaviour of the message.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowInformationMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> then = default);
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+		void ShowInformationMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
 
 		/// <summary>
 		/// Show a warning message.
@@ -212,43 +212,12 @@ namespace VscAppz {
 		/// 
 		/// `items` ── A set of items that will be rendered as actions in the message.
 		/// 
-		/// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
 		/// <param name="message">The message to show.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowWarningMessage(string message = default, string[] items = default, Action<string> then = default);
-
-		/// <summary>
-		/// Show a warning message.
-		/// 
-		/// `message` ── The message to show.
-		/// 
-		/// `options` ── Configures the behaviour of the message.
-		/// 
-		/// `items` ── A set of items that will be rendered as actions in the message.
-		/// 
-		/// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-		/// </summary>
-		/// <param name="message">The message to show.</param>
-		/// <param name="options">Configures the behaviour of the message.</param>
-		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowWarningMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> then = default);
-
-		/// <summary>
-		/// Show a warning message.
-		/// 
-		/// `message` ── The message to show.
-		/// 
-		/// `items` ── A set of items that will be rendered as actions in the message.
-		/// 
-		/// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-		/// </summary>
-		/// <param name="message">The message to show.</param>
-		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowWarningMessage(string message = default, MessageItem[] items = default, Action<MessageItem> then = default);
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+		void ShowWarningMessage(string message = default, string[] items = default, Action<string> andThen = default);
 
 		/// <summary>
 		/// Show a warning message.
@@ -259,13 +228,44 @@ namespace VscAppz {
 		/// 
 		/// `items` ── A set of items that will be rendered as actions in the message.
 		/// 
-		/// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
 		/// <param name="message">The message to show.</param>
 		/// <param name="options">Configures the behaviour of the message.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowWarningMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> then = default);
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+		void ShowWarningMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
+
+		/// <summary>
+		/// Show a warning message.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+		void ShowWarningMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
+
+		/// <summary>
+		/// Show a warning message.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `options` ── Configures the behaviour of the message.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="options">Configures the behaviour of the message.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+		void ShowWarningMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
 
 		/// <summary>
 		/// Show an error message.
@@ -274,12 +274,12 @@ namespace VscAppz {
 		/// 
 		/// `items` ── A set of items that will be rendered as actions in the message.
 		/// 
-		/// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
 		/// <param name="message">The message to show.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowErrorMessage(string message = default, string[] items = default, Action<string> then = default);
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+		void ShowErrorMessage(string message = default, string[] items = default, Action<string> andThen = default);
 
 		/// <summary>
 		/// Show an error message.
@@ -290,13 +290,13 @@ namespace VscAppz {
 		/// 
 		/// `items` ── A set of items that will be rendered as actions in the message.
 		/// 
-		/// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
 		/// <param name="message">The message to show.</param>
 		/// <param name="options">Configures the behaviour of the message.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowErrorMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> then = default);
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+		void ShowErrorMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> andThen = default);
 
 		/// <summary>
 		/// Show an error message.
@@ -305,12 +305,12 @@ namespace VscAppz {
 		/// 
 		/// `items` ── A set of items that will be rendered as actions in the message.
 		/// 
-		/// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
 		/// <param name="message">The message to show.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowErrorMessage(string message = default, MessageItem[] items = default, Action<MessageItem> then = default);
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+		void ShowErrorMessage(string message = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
 
 		/// <summary>
 		/// Show an error message.
@@ -321,13 +321,13 @@ namespace VscAppz {
 		/// 
 		/// `items` ── A set of items that will be rendered as actions in the message.
 		/// 
-		/// `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 		/// </summary>
 		/// <param name="message">The message to show.</param>
 		/// <param name="options">Configures the behaviour of the message.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowErrorMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> then = default);
+		/// <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+		void ShowErrorMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> andThen = default);
 
 		/// <summary>
 		/// Opens an input box to ask the user for input.
@@ -340,12 +340,12 @@ namespace VscAppz {
 		/// 
 		/// `token` ── A token that can be used to signal cancellation.
 		/// 
-		/// `then` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
+		/// `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
 		/// </summary>
 		/// <param name="options">Configures the behavior of the input box.</param>
 		/// <param name="token">A token that can be used to signal cancellation.</param>
-		/// <param name="then">A promise that resolves to a string the user provided or to `undefined` in case of dismissal.</param>
-		void ShowInputBox(InputBoxOptions options = default, Cancel token = default, Action<string> then = default);
+		/// <param name="andThen">A promise that resolves to a string the user provided or to `undefined` in case of dismissal.</param>
+		void ShowInputBox(InputBoxOptions options = default, Cancel token = default, Action<string> andThen = default);
 
 		/// <summary>
 		/// Shows a selection list allowing multiple selections.
@@ -356,13 +356,13 @@ namespace VscAppz {
 		/// 
 		/// `token` ── A token that can be used to signal cancellation.
 		/// 
-		/// `then` ── A promise that resolves to the selected items or `undefined`.
+		/// `andThen` ── A promise that resolves to the selected items or `undefined`.
 		/// </summary>
 		/// <param name="items">An array of strings, or a promise that resolves to an array of strings.</param>
 		/// <param name="options">Configures the behavior of the selection list.</param>
 		/// <param name="token">A token that can be used to signal cancellation.</param>
-		/// <param name="then">A promise that resolves to the selected items or `undefined`.</param>
-		void ShowQuickPick(string[] items = default, QuickPickOptions options = default, Cancel token = default, Action<string[]> then = default);
+		/// <param name="andThen">A promise that resolves to the selected items or `undefined`.</param>
+		void ShowQuickPick(string[] items = default, QuickPickOptions options = default, Cancel token = default, Action<string[]> andThen = default);
 
 		/// <summary>
 		/// Shows a selection list.
@@ -373,13 +373,13 @@ namespace VscAppz {
 		/// 
 		/// `token` ── A token that can be used to signal cancellation.
 		/// 
-		/// `then` ── A promise that resolves to the selection or `undefined`.
+		/// `andThen` ── A promise that resolves to the selection or `undefined`.
 		/// </summary>
 		/// <param name="items">An array of strings, or a promise that resolves to an array of strings.</param>
 		/// <param name="options">Configures the behavior of the selection list.</param>
 		/// <param name="token">A token that can be used to signal cancellation.</param>
-		/// <param name="then">A promise that resolves to the selection or `undefined`.</param>
-		void ShowQuickPick(string[] items = default, QuickPickOptions options = default, Cancel token = default, Action<string> then = default);
+		/// <param name="andThen">A promise that resolves to the selection or `undefined`.</param>
+		void ShowQuickPick(string[] items = default, QuickPickOptions options = default, Cancel token = default, Action<string> andThen = default);
 
 		/// <summary>
 		/// Shows a selection list allowing multiple selections.
@@ -390,13 +390,13 @@ namespace VscAppz {
 		/// 
 		/// `token` ── A token that can be used to signal cancellation.
 		/// 
-		/// `then` ── A promise that resolves to the selected items or `undefined`.
+		/// `andThen` ── A promise that resolves to the selected items or `undefined`.
 		/// </summary>
 		/// <param name="items">An array of items, or a promise that resolves to an array of items.</param>
 		/// <param name="options">Configures the behavior of the selection list.</param>
 		/// <param name="token">A token that can be used to signal cancellation.</param>
-		/// <param name="then">A promise that resolves to the selected items or `undefined`.</param>
-		void ShowQuickPick(QuickPickItem[] items = default, QuickPickOptions options = default, Cancel token = default, Action<QuickPickItem[]> then = default);
+		/// <param name="andThen">A promise that resolves to the selected items or `undefined`.</param>
+		void ShowQuickPick(QuickPickItem[] items = default, QuickPickOptions options = default, Cancel token = default, Action<QuickPickItem[]> andThen = default);
 
 		/// <summary>
 		/// Shows a selection list.
@@ -407,13 +407,13 @@ namespace VscAppz {
 		/// 
 		/// `token` ── A token that can be used to signal cancellation.
 		/// 
-		/// `then` ── A promise that resolves to the selected item or `undefined`.
+		/// `andThen` ── A promise that resolves to the selected item or `undefined`.
 		/// </summary>
 		/// <param name="items">An array of items, or a promise that resolves to an array of items.</param>
 		/// <param name="options">Configures the behavior of the selection list.</param>
 		/// <param name="token">A token that can be used to signal cancellation.</param>
-		/// <param name="then">A promise that resolves to the selected item or `undefined`.</param>
-		void ShowQuickPick(QuickPickItem[] items = default, QuickPickOptions options = default, Cancel token = default, Action<QuickPickItem> then = default);
+		/// <param name="andThen">A promise that resolves to the selected item or `undefined`.</param>
+		void ShowQuickPick(QuickPickItem[] items = default, QuickPickOptions options = default, Cancel token = default, Action<QuickPickItem> andThen = default);
 
 		/// <summary>
 		/// Set a message to the status bar. This is a short hand for the more powerful
@@ -423,12 +423,12 @@ namespace VscAppz {
 		/// 
 		/// `hideAfterTimeout` ── Timeout in milliseconds after which the message will be disposed.
 		/// 
-		/// `then` ── A disposable which hides the status bar message.
+		/// `andThen` ── A disposable which hides the status bar message.
 		/// </summary>
 		/// <param name="text">The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).</param>
 		/// <param name="hideAfterTimeout">Timeout in milliseconds after which the message will be disposed.</param>
-		/// <param name="then">A disposable which hides the status bar message.</param>
-		void SetStatusBarMessage(string text = default, int hideAfterTimeout = default, Action<Disposable> then = default);
+		/// <param name="andThen">A disposable which hides the status bar message.</param>
+		void SetStatusBarMessage(string text = default, int hideAfterTimeout = default, Action<Disposable> andThen = default);
 
 		/// <summary>
 		/// Set a message to the status bar. This is a short hand for the more powerful
@@ -439,11 +439,11 @@ namespace VscAppz {
 		/// 
 		/// `text` ── The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
 		/// 
-		/// `then` ── A disposable which hides the status bar message.
+		/// `andThen` ── A disposable which hides the status bar message.
 		/// </summary>
 		/// <param name="text">The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).</param>
-		/// <param name="then">A disposable which hides the status bar message.</param>
-		void SetStatusBarMessage(string text = default, Action<Disposable> then = default);
+		/// <param name="andThen">A disposable which hides the status bar message.</param>
+		void SetStatusBarMessage(string text = default, Action<Disposable> andThen = default);
 
 		/// <summary>
 		/// Shows a file save dialog to the user which allows to select a file
@@ -451,11 +451,11 @@ namespace VscAppz {
 		/// 
 		/// `options` ── Options that control the dialog.
 		/// 
-		/// `then` ── A promise that resolves to the selected resource or `undefined`.
+		/// `andThen` ── A promise that resolves to the selected resource or `undefined`.
 		/// </summary>
 		/// <param name="options">Options that control the dialog.</param>
-		/// <param name="then">A promise that resolves to the selected resource or `undefined`.</param>
-		void ShowSaveDialog(SaveDialogOptions options = default, Action<string> then = default);
+		/// <param name="andThen">A promise that resolves to the selected resource or `undefined`.</param>
+		void ShowSaveDialog(SaveDialogOptions options = default, Action<string> andThen = default);
 
 		/// <summary>
 		/// Shows a file open dialog to the user which allows to select a file
@@ -463,11 +463,11 @@ namespace VscAppz {
 		/// 
 		/// `options` ── Options that control the dialog.
 		/// 
-		/// `then` ── A promise that resolves to the selected resources or `undefined`.
+		/// `andThen` ── A promise that resolves to the selected resources or `undefined`.
 		/// </summary>
 		/// <param name="options">Options that control the dialog.</param>
-		/// <param name="then">A promise that resolves to the selected resources or `undefined`.</param>
-		void ShowOpenDialog(OpenDialogOptions options = default, Action<string[]> then = default);
+		/// <param name="andThen">A promise that resolves to the selected resources or `undefined`.</param>
+		void ShowOpenDialog(OpenDialogOptions options = default, Action<string[]> andThen = default);
 
 		/// <summary>
 		/// Shows a selection list of [workspace folders](#workspace.workspaceFolders) to pick from.
@@ -475,20 +475,20 @@ namespace VscAppz {
 		/// 
 		/// `options` ── Configures the behavior of the workspace folder list.
 		/// 
-		/// `then` ── A promise that resolves to the workspace folder or `undefined`.
+		/// `andThen` ── A promise that resolves to the workspace folder or `undefined`.
 		/// </summary>
 		/// <param name="options">Configures the behavior of the workspace folder list.</param>
-		/// <param name="then">A promise that resolves to the workspace folder or `undefined`.</param>
-		void ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options = default, Action<WorkspaceFolder> then = default);
+		/// <param name="andThen">A promise that resolves to the workspace folder or `undefined`.</param>
+		void ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options = default, Action<WorkspaceFolder> andThen = default);
 
 		/// <summary>Represents the current window's state.</summary>
-		void State(Action<WindowState> then = default);
+		void State(Action<WindowState> andThen = default);
 
 		/// <summary>
 		/// An [event](#Event) which fires when the focus state of the current window
 		/// changes. The value of the event represents whether the window is focused.
 		/// </summary>
-		void OnDidChangeWindowState(Action<WindowState> listener = default, Action<Disposable> then = default);
+		void OnDidChangeWindowState(Action<WindowState> listener = default, Action<Disposable> andThen = default);
 	}
 
 	/// <summary>Namespace describing the environment the editor runs in.</summary>
@@ -502,23 +502,23 @@ namespace VscAppz {
 		/// 
 		/// `target` ── The uri that should be opened.
 		/// 
-		/// `then` ── A promise indicating if open was successful.
+		/// `andThen` ── A promise indicating if open was successful.
 		/// </summary>
 		/// <param name="target">The uri that should be opened.</param>
-		/// <param name="then">A promise indicating if open was successful.</param>
-		void OpenExternal(string target = default, Action<bool> then = default);
+		/// <param name="andThen">A promise indicating if open was successful.</param>
+		void OpenExternal(string target = default, Action<bool> andThen = default);
 
 		/// <summary>The application name of the editor, like 'VS Code'.</summary>
-		void AppName(Action<string> then = default);
+		void AppName(Action<string> andThen = default);
 
 		/// <summary>The application root folder from which the editor is running.</summary>
-		void AppRoot(Action<string> then = default);
+		void AppRoot(Action<string> andThen = default);
 
 		/// <summary>Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.</summary>
-		void Language(Action<string> then = default);
+		void Language(Action<string> andThen = default);
 
 		/// <summary>A unique identifier for the computer.</summary>
-		void MachineId(Action<string> then = default);
+		void MachineId(Action<string> andThen = default);
 
 		/// <summary>
 		/// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
@@ -529,22 +529,22 @@ namespace VscAppz {
 		/// exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
 		/// a specific extension runs remote or not.
 		/// </summary>
-		void RemoteName(Action<string> then = default);
+		void RemoteName(Action<string> andThen = default);
 
 		/// <summary>
 		/// A unique identifier for the current session.
 		/// Changes each time the editor is started.
 		/// </summary>
-		void SessionId(Action<string> then = default);
+		void SessionId(Action<string> andThen = default);
 
 		/// <summary>
 		/// The detected default shell for the extension host, this is overridden by the
 		/// `terminal.integrated.shell` setting for the extension host's platform.
 		/// </summary>
-		void Shell(Action<string> then = default);
+		void Shell(Action<string> andThen = default);
 
 		/// <summary>The custom uri scheme the editor registers to in the operating system.</summary>
-		void UriScheme(Action<string> then = default);
+		void UriScheme(Action<string> andThen = default);
 
 		/// <summary>Provides single-call access to numerous individual `IEnv` properties at once.</summary>
 		void Properties(Action<EnvProperties> then = default);
@@ -564,7 +564,7 @@ namespace VscAppz {
 		/// The name of the workspace. `undefined` when no folder
 		/// has been opened.
 		/// </summary>
-		void Name(Action<string> then = default);
+		void Name(Action<string> andThen = default);
 
 		/// <summary>
 		/// The location of the workspace file, for example:
@@ -595,21 +595,21 @@ namespace VscAppz {
 		/// for that purpose which will work both when a single folder is opened as
 		/// well as an untitled or saved workspace.
 		/// </summary>
-		void WorkspaceFile(Action<string> then = default);
+		void WorkspaceFile(Action<string> andThen = default);
 
 		/// <summary>
 		/// Save all dirty files.
 		/// 
 		/// `includeUntitled` ── Also save files that have been created during this session.
 		/// 
-		/// `then` ── A thenable that resolves when the files have been saved.
+		/// `andThen` ── A thenable that resolves when the files have been saved.
 		/// </summary>
 		/// <param name="includeUntitled">Also save files that have been created during this session.</param>
-		/// <param name="then">A thenable that resolves when the files have been saved.</param>
-		void SaveAll(bool includeUntitled = default, Action<bool> then = default);
+		/// <param name="andThen">A thenable that resolves when the files have been saved.</param>
+		void SaveAll(bool includeUntitled = default, Action<bool> andThen = default);
 
 		/// <summary>An event that is emitted when a workspace folder is added or removed.</summary>
-		void OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener = default, Action<Disposable> then = default);
+		void OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener = default, Action<Disposable> andThen = default);
 
 		/// <summary>
 		/// Returns the [workspace folder](#WorkspaceFolder) that contains a given uri.
@@ -618,17 +618,17 @@ namespace VscAppz {
 		/// 
 		/// `uri` ── An uri.
 		/// 
-		/// `then` ── A workspace folder or `undefined`
+		/// `andThen` ── A workspace folder or `undefined`
 		/// </summary>
 		/// <param name="uri">An uri.</param>
-		/// <param name="then">A workspace folder or `undefined`</param>
-		void GetWorkspaceFolder(string uri = default, Action<WorkspaceFolder> then = default);
+		/// <param name="andThen">A workspace folder or `undefined`</param>
+		void GetWorkspaceFolder(string uri = default, Action<WorkspaceFolder> andThen = default);
 
 		/// <summary>
 		/// List of workspace folders or `undefined` when no folder is open.
 		/// *Note* that the first entry corresponds to the value of `rootPath`.
 		/// </summary>
-		void WorkspaceFolders(Action<WorkspaceFolder[]> then = default);
+		void WorkspaceFolders(Action<WorkspaceFolder[]> andThen = default);
 
 		/// <summary>
 		/// Find files across all [workspace folders](#workspace.workspaceFolders) in the workspace.
@@ -646,15 +646,15 @@ namespace VscAppz {
 		/// 
 		/// `token` ── A token that can be used to signal cancellation to the underlying search engine.
 		/// 
-		/// `then` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
+		/// `andThen` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
 		/// [workspace folders](#workspace.workspaceFolders) are opened.
 		/// </summary>
 		/// <param name="include">A [glob pattern](#GlobPattern) that defines the files to search for. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. Use a [relative pattern](#RelativePattern) to restrict the search results to a [workspace folder](#WorkspaceFolder).</param>
 		/// <param name="exclude">A [glob pattern](#GlobPattern) that defines files and folders to exclude. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will apply, when `null` no excludes will apply.</param>
 		/// <param name="maxResults">An upper-bound for the result.</param>
 		/// <param name="token">A token that can be used to signal cancellation to the underlying search engine.</param>
-		/// <param name="then">A thenable that resolves to an array of resource identifiers. Will return no results if no [workspace folders](#workspace.workspaceFolders) are opened.</param>
-		void FindFiles(string include = default, string exclude = default, int? maxResults = default, Cancel token = default, Action<string[]> then = default);
+		/// <param name="andThen">A thenable that resolves to an array of resource identifiers. Will return no results if no [workspace folders](#workspace.workspaceFolders) are opened.</param>
+		void FindFiles(string include = default, string exclude = default, int? maxResults = default, Cancel token = default, Action<string[]> andThen = default);
 
 		/// <summary>
 		/// Returns a path that is relative to the workspace folder or folders.
@@ -668,12 +668,12 @@ namespace VscAppz {
 		/// workspace folder the name of the workspace is prepended. Defaults to `true` when there are
 		/// multiple workspace folders and `false` otherwise.
 		/// 
-		/// `then` ── A path relative to the root or the input.
+		/// `andThen` ── A path relative to the root or the input.
 		/// </summary>
 		/// <param name="pathOrUri">A path or uri. When a uri is given its [fsPath](#Uri.fsPath) is used.</param>
 		/// <param name="includeWorkspaceFolder">When `true` and when the given path is contained inside a workspace folder the name of the workspace is prepended. Defaults to `true` when there are multiple workspace folders and `false` otherwise.</param>
-		/// <param name="then">A path relative to the root or the input.</param>
-		void AsRelativePath(string pathOrUri = default, bool includeWorkspaceFolder = default, Action<string> then = default);
+		/// <param name="andThen">A path relative to the root or the input.</param>
+		void AsRelativePath(string pathOrUri = default, bool includeWorkspaceFolder = default, Action<string> andThen = default);
 
 		/// <summary>Provides single-call access to numerous individual `IWorkspace` properties at once.</summary>
 		void Properties(Action<WorkspaceProperties> then = default);
@@ -711,16 +711,16 @@ namespace VscAppz {
 		/// <summary>
 		/// Return the identifiers of all known languages.
 		/// 
-		/// `then` ── Promise resolving to an array of identifier strings.
+		/// `andThen` ── Promise resolving to an array of identifier strings.
 		/// </summary>
-		/// <param name="then">Promise resolving to an array of identifier strings.</param>
-		void GetLanguages(Action<string[]> then = default);
+		/// <param name="andThen">Promise resolving to an array of identifier strings.</param>
+		void GetLanguages(Action<string[]> andThen = default);
 
 		/// <summary>
 		/// An [event](#Event) which fires when the global set of diagnostics changes. This is
 		/// newly added and removed diagnostics.
 		/// </summary>
-		void OnDidChangeDiagnostics(Action<DiagnosticChangeEvent> listener = default, Action<Disposable> then = default);
+		void OnDidChangeDiagnostics(Action<DiagnosticChangeEvent> listener = default, Action<Disposable> andThen = default);
 	}
 
 	/// <summary>
@@ -760,7 +760,7 @@ namespace VscAppz {
 		/// An event which fires when `extensions.all` changes. This can happen when extensions are
 		/// installed, uninstalled, enabled or disabled.
 		/// </summary>
-		void OnDidChange(Action listener = default, Action<Disposable> then = default);
+		void OnDidChange(Action listener = default, Action<Disposable> andThen = default);
 	}
 
 	/// <summary>
@@ -801,6 +801,24 @@ namespace VscAppz {
 	/// </summary>
 	public interface ICommands {
 		/// <summary>
+		/// Registers a command that can be invoked via a keyboard shortcut,
+		/// a menu item, an action, or directly.
+		/// 
+		/// Registering a command with an existing command identifier twice
+		/// will cause an error.
+		/// 
+		/// `command` ── A unique identifier for the command.
+		/// 
+		/// `callback` ── A command handler function.
+		/// 
+		/// `andThen` ── Disposable which unregisters this command on disposal.
+		/// </summary>
+		/// <param name="command">A unique identifier for the command.</param>
+		/// <param name="callback">A command handler function.</param>
+		/// <param name="andThen">Disposable which unregisters this command on disposal.</param>
+		void RegisterCommand(string command = default, Func<any[], any> callback = default, Action<Disposable> andThen = default);
+
+		/// <summary>
 		/// Executes the command denoted by the given command identifier.
 		/// 
 		/// * *Note 1:* When executing an editor command not all types are allowed to
@@ -813,13 +831,13 @@ namespace VscAppz {
 		/// 
 		/// `rest` ── Parameters passed to the command function.
 		/// 
-		/// `then` ── A thenable that resolves to the returned value of the given command. `undefined` when
+		/// `andThen` ── A thenable that resolves to the returned value of the given command. `undefined` when
 		/// the command handler function doesn't return anything.
 		/// </summary>
 		/// <param name="command">Identifier of the command to execute.</param>
 		/// <param name="rest">Parameters passed to the command function.</param>
-		/// <param name="then">A thenable that resolves to the returned value of the given command. `undefined` when the command handler function doesn't return anything.</param>
-		void ExecuteCommand(string command = default, any[] rest = default, Action<any> then = default);
+		/// <param name="andThen">A thenable that resolves to the returned value of the given command. `undefined` when the command handler function doesn't return anything.</param>
+		void ExecuteCommand(string command = default, any[] rest = default, Action<any> andThen = default);
 
 		/// <summary>
 		/// Retrieve the list of all available commands. Commands starting an underscore are
@@ -827,11 +845,11 @@ namespace VscAppz {
 		/// 
 		/// `filterInternal` ── Set `true` to not see internal commands (starting with an underscore)
 		/// 
-		/// `then` ── Thenable that resolves to a list of command ids.
+		/// `andThen` ── Thenable that resolves to a list of command ids.
 		/// </summary>
 		/// <param name="filterInternal">Set `true` to not see internal commands (starting with an underscore)</param>
-		/// <param name="then">Thenable that resolves to a list of command ids.</param>
-		void GetCommands(bool filterInternal = default, Action<string[]> then = default);
+		/// <param name="andThen">Thenable that resolves to a list of command ids.</param>
+		void GetCommands(bool filterInternal = default, Action<string[]> andThen = default);
 	}
 
 	/// <summary>Options to configure the behavior of the message.</summary>
@@ -1240,7 +1258,7 @@ namespace VscAppz {
 			return this;
 		} }
 
-		void IWindow.ShowInformationMessage(string message, string[] items, Action<string> then) {
+		void IWindow.ShowInformationMessage(string message, string[] items, Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInformationMessage1";
@@ -1248,7 +1266,7 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -1260,14 +1278,14 @@ namespace VscAppz {
 						}
 						result = _result_;
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowInformationMessage(string message, MessageOptions options, string[] items, Action<string> then) {
+		void IWindow.ShowInformationMessage(string message, MessageOptions options, string[] items, Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInformationMessage2";
@@ -1276,7 +1294,7 @@ namespace VscAppz {
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -1288,14 +1306,14 @@ namespace VscAppz {
 						}
 						result = _result_;
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowInformationMessage(string message, MessageItem[] items, Action<MessageItem> then) {
+		void IWindow.ShowInformationMessage(string message, MessageItem[] items, Action<MessageItem> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInformationMessage3";
@@ -1303,7 +1321,7 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					MessageItem result = default;
@@ -1314,14 +1332,14 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowInformationMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> then) {
+		void IWindow.ShowInformationMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInformationMessage4";
@@ -1330,7 +1348,7 @@ namespace VscAppz {
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					MessageItem result = default;
@@ -1341,14 +1359,14 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowWarningMessage(string message, string[] items, Action<string> then) {
+		void IWindow.ShowWarningMessage(string message, string[] items, Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showWarningMessage1";
@@ -1356,7 +1374,7 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -1368,14 +1386,14 @@ namespace VscAppz {
 						}
 						result = _result_;
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowWarningMessage(string message, MessageOptions options, string[] items, Action<string> then) {
+		void IWindow.ShowWarningMessage(string message, MessageOptions options, string[] items, Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showWarningMessage2";
@@ -1384,7 +1402,7 @@ namespace VscAppz {
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -1396,14 +1414,14 @@ namespace VscAppz {
 						}
 						result = _result_;
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowWarningMessage(string message, MessageItem[] items, Action<MessageItem> then) {
+		void IWindow.ShowWarningMessage(string message, MessageItem[] items, Action<MessageItem> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showWarningMessage3";
@@ -1411,7 +1429,7 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					MessageItem result = default;
@@ -1422,14 +1440,14 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowWarningMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> then) {
+		void IWindow.ShowWarningMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showWarningMessage4";
@@ -1438,7 +1456,7 @@ namespace VscAppz {
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					MessageItem result = default;
@@ -1449,14 +1467,14 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowErrorMessage(string message, string[] items, Action<string> then) {
+		void IWindow.ShowErrorMessage(string message, string[] items, Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showErrorMessage1";
@@ -1464,7 +1482,7 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -1476,14 +1494,14 @@ namespace VscAppz {
 						}
 						result = _result_;
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowErrorMessage(string message, MessageOptions options, string[] items, Action<string> then) {
+		void IWindow.ShowErrorMessage(string message, MessageOptions options, string[] items, Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showErrorMessage2";
@@ -1492,7 +1510,7 @@ namespace VscAppz {
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -1504,14 +1522,14 @@ namespace VscAppz {
 						}
 						result = _result_;
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowErrorMessage(string message, MessageItem[] items, Action<MessageItem> then) {
+		void IWindow.ShowErrorMessage(string message, MessageItem[] items, Action<MessageItem> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showErrorMessage3";
@@ -1519,7 +1537,7 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					MessageItem result = default;
@@ -1530,14 +1548,14 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowErrorMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> then) {
+		void IWindow.ShowErrorMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showErrorMessage4";
@@ -1546,7 +1564,7 @@ namespace VscAppz {
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					MessageItem result = default;
@@ -1557,14 +1575,14 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowInputBox(InputBoxOptions options, Cancel token, Action<string> then) {
+		void IWindow.ShowInputBox(InputBoxOptions options, Cancel token, Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInputBox";
@@ -1608,7 +1626,7 @@ namespace VscAppz {
 				msg.Data["token"] = token.fnId;
 			}
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -1620,7 +1638,7 @@ namespace VscAppz {
 						}
 						result = _result_;
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
@@ -1636,7 +1654,7 @@ namespace VscAppz {
 			});
 		}
 
-		void IWindow.ShowQuickPick(string[] items, QuickPickOptions options, Cancel token, Action<string[]> then) {
+		void IWindow.ShowQuickPick(string[] items, QuickPickOptions options, Cancel token, Action<string[]> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showQuickPick1";
@@ -1685,7 +1703,7 @@ namespace VscAppz {
 				msg.Data["token"] = token.fnId;
 			}
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string[] result = default;
@@ -1708,7 +1726,7 @@ namespace VscAppz {
 							__idx__result = __idx__result + 1;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
@@ -1724,7 +1742,7 @@ namespace VscAppz {
 			});
 		}
 
-		void IWindow.ShowQuickPick(string[] items, QuickPickOptions options, Cancel token, Action<string> then) {
+		void IWindow.ShowQuickPick(string[] items, QuickPickOptions options, Cancel token, Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showQuickPick2";
@@ -1772,7 +1790,7 @@ namespace VscAppz {
 				msg.Data["token"] = token.fnId;
 			}
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -1784,7 +1802,7 @@ namespace VscAppz {
 						}
 						result = _result_;
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
@@ -1800,7 +1818,7 @@ namespace VscAppz {
 			});
 		}
 
-		void IWindow.ShowQuickPick(QuickPickItem[] items, QuickPickOptions options, Cancel token, Action<QuickPickItem[]> then) {
+		void IWindow.ShowQuickPick(QuickPickItem[] items, QuickPickOptions options, Cancel token, Action<QuickPickItem[]> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showQuickPick3";
@@ -1849,7 +1867,7 @@ namespace VscAppz {
 				msg.Data["token"] = token.fnId;
 			}
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					QuickPickItem[] result = default;
@@ -1873,7 +1891,7 @@ namespace VscAppz {
 							__idx__result = __idx__result + 1;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
@@ -1889,7 +1907,7 @@ namespace VscAppz {
 			});
 		}
 
-		void IWindow.ShowQuickPick(QuickPickItem[] items, QuickPickOptions options, Cancel token, Action<QuickPickItem> then) {
+		void IWindow.ShowQuickPick(QuickPickItem[] items, QuickPickOptions options, Cancel token, Action<QuickPickItem> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showQuickPick4";
@@ -1937,7 +1955,7 @@ namespace VscAppz {
 				msg.Data["token"] = token.fnId;
 			}
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					QuickPickItem result = default;
@@ -1948,7 +1966,7 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
@@ -1964,7 +1982,7 @@ namespace VscAppz {
 			});
 		}
 
-		void IWindow.SetStatusBarMessage(string text, int hideAfterTimeout, Action<Disposable> then) {
+		void IWindow.SetStatusBarMessage(string text, int hideAfterTimeout, Action<Disposable> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.setStatusBarMessage1";
@@ -1972,7 +1990,7 @@ namespace VscAppz {
 			msg.Data["text"] = text;
 			msg.Data["hideAfterTimeout"] = hideAfterTimeout;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					Disposable result = default;
@@ -1985,21 +2003,21 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
-					then(result.bind(this.Impl(), ""));
+					andThen(result.bind(this.Impl()));
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.SetStatusBarMessage(string text, Action<Disposable> then) {
+		void IWindow.SetStatusBarMessage(string text, Action<Disposable> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.setStatusBarMessage2";
 			msg.Data = new dict(1);
 			msg.Data["text"] = text;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					Disposable result = default;
@@ -2012,21 +2030,21 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
-					then(result.bind(this.Impl(), ""));
+					andThen(result.bind(this.Impl()));
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowSaveDialog(SaveDialogOptions options, Action<string> then) {
+		void IWindow.ShowSaveDialog(SaveDialogOptions options, Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showSaveDialog";
 			msg.Data = new dict(1);
 			msg.Data["options"] = options;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -2038,21 +2056,21 @@ namespace VscAppz {
 						}
 						result = _result_;
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowOpenDialog(OpenDialogOptions options, Action<string[]> then) {
+		void IWindow.ShowOpenDialog(OpenDialogOptions options, Action<string[]> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showOpenDialog";
 			msg.Data = new dict(1);
 			msg.Data["options"] = options;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string[] result = default;
@@ -2075,21 +2093,21 @@ namespace VscAppz {
 							__idx__result = __idx__result + 1;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options, Action<WorkspaceFolder> then) {
+		void IWindow.ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options, Action<WorkspaceFolder> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showWorkspaceFolderPick";
 			msg.Data = new dict(1);
 			msg.Data["options"] = options;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					WorkspaceFolder result = default;
@@ -2100,20 +2118,20 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.State(Action<WindowState> then) {
+		void IWindow.State(Action<WindowState> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.state";
 			msg.Data = new dict(0);
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					WindowState result = default;
@@ -2124,14 +2142,14 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWindow.OnDidChangeWindowState(Action<WindowState> listener, Action<Disposable> then) {
+		void IWindow.OnDidChangeWindowState(Action<WindowState> listener, Action<Disposable> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.onDidChangeWindowState";
@@ -2154,10 +2172,10 @@ namespace VscAppz {
 				}
 				listener(_a_0_);
 				return true;
-			});
+			}, null);
 			msg.Data["listener"] = _fnid_listener;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					Disposable result = default;
@@ -2170,21 +2188,21 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
-					then(result.bind(this.Impl(), _fnid_listener));
+					andThen(result.bind(this.Impl(), _fnid_listener));
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IEnv.OpenExternal(string target, Action<bool> then) {
+		void IEnv.OpenExternal(string target, Action<bool> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.openExternal";
 			msg.Data = new dict(1);
 			msg.Data["target"] = target;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					bool result = default;
@@ -2196,20 +2214,20 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IEnv.AppName(Action<string> then) {
+		void IEnv.AppName(Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.appName";
 			msg.Data = new dict(0);
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -2219,20 +2237,20 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IEnv.AppRoot(Action<string> then) {
+		void IEnv.AppRoot(Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.appRoot";
 			msg.Data = new dict(0);
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -2242,20 +2260,20 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IEnv.Language(Action<string> then) {
+		void IEnv.Language(Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.language";
 			msg.Data = new dict(0);
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -2265,20 +2283,20 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IEnv.MachineId(Action<string> then) {
+		void IEnv.MachineId(Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.machineId";
 			msg.Data = new dict(0);
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -2288,20 +2306,20 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IEnv.RemoteName(Action<string> then) {
+		void IEnv.RemoteName(Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.remoteName";
 			msg.Data = new dict(0);
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -2313,20 +2331,20 @@ namespace VscAppz {
 						}
 						result = _result_;
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IEnv.SessionId(Action<string> then) {
+		void IEnv.SessionId(Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.sessionId";
 			msg.Data = new dict(0);
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -2336,20 +2354,20 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IEnv.Shell(Action<string> then) {
+		void IEnv.Shell(Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.shell";
 			msg.Data = new dict(0);
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -2359,20 +2377,20 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IEnv.UriScheme(Action<string> then) {
+		void IEnv.UriScheme(Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.uriScheme";
 			msg.Data = new dict(0);
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -2382,7 +2400,7 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
@@ -2415,13 +2433,13 @@ namespace VscAppz {
 			this.Impl().send(msg, on);
 		}
 
-		void IWorkspace.Name(Action<string> then) {
+		void IWorkspace.Name(Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.name";
 			msg.Data = new dict(0);
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -2433,20 +2451,20 @@ namespace VscAppz {
 						}
 						result = _result_;
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWorkspace.WorkspaceFile(Action<string> then) {
+		void IWorkspace.WorkspaceFile(Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.workspaceFile";
 			msg.Data = new dict(0);
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -2458,21 +2476,21 @@ namespace VscAppz {
 						}
 						result = _result_;
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWorkspace.SaveAll(bool includeUntitled, Action<bool> then) {
+		void IWorkspace.SaveAll(bool includeUntitled, Action<bool> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.saveAll";
 			msg.Data = new dict(1);
 			msg.Data["includeUntitled"] = includeUntitled;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					bool result = default;
@@ -2484,14 +2502,14 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWorkspace.OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener, Action<Disposable> then) {
+		void IWorkspace.OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener, Action<Disposable> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.onDidChangeWorkspaceFolders";
@@ -2514,10 +2532,10 @@ namespace VscAppz {
 				}
 				listener(_a_0_);
 				return true;
-			});
+			}, null);
 			msg.Data["listener"] = _fnid_listener;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					Disposable result = default;
@@ -2530,21 +2548,21 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
-					then(result.bind(this.Impl(), _fnid_listener));
+					andThen(result.bind(this.Impl(), _fnid_listener));
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWorkspace.GetWorkspaceFolder(string uri, Action<WorkspaceFolder> then) {
+		void IWorkspace.GetWorkspaceFolder(string uri, Action<WorkspaceFolder> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.getWorkspaceFolder";
 			msg.Data = new dict(1);
 			msg.Data["uri"] = uri;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					WorkspaceFolder result = default;
@@ -2555,20 +2573,20 @@ namespace VscAppz {
 							return false;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWorkspace.WorkspaceFolders(Action<WorkspaceFolder[]> then) {
+		void IWorkspace.WorkspaceFolders(Action<WorkspaceFolder[]> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.workspaceFolders";
 			msg.Data = new dict(0);
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					WorkspaceFolder[] result = default;
@@ -2592,14 +2610,14 @@ namespace VscAppz {
 							__idx__result = __idx__result + 1;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWorkspace.FindFiles(string include, string exclude, int? maxResults, Cancel token, Action<string[]> then) {
+		void IWorkspace.FindFiles(string include, string exclude, int? maxResults, Cancel token, Action<string[]> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.findFiles";
@@ -2617,7 +2635,7 @@ namespace VscAppz {
 				msg.Data["token"] = token.fnId;
 			}
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string[] result = default;
@@ -2640,14 +2658,14 @@ namespace VscAppz {
 							__idx__result = __idx__result + 1;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IWorkspace.AsRelativePath(string pathOrUri, bool includeWorkspaceFolder, Action<string> then) {
+		void IWorkspace.AsRelativePath(string pathOrUri, bool includeWorkspaceFolder, Action<string> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.asRelativePath";
@@ -2655,7 +2673,7 @@ namespace VscAppz {
 			msg.Data["pathOrUri"] = pathOrUri;
 			msg.Data["includeWorkspaceFolder"] = includeWorkspaceFolder;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string result = default;
@@ -2667,7 +2685,7 @@ namespace VscAppz {
 						}
 						result = _result_;
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
@@ -2700,13 +2718,13 @@ namespace VscAppz {
 			this.Impl().send(msg, on);
 		}
 
-		void ILanguages.GetLanguages(Action<string[]> then) {
+		void ILanguages.GetLanguages(Action<string[]> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "languages.getLanguages";
 			msg.Data = new dict(0);
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string[] result = default;
@@ -2729,14 +2747,14 @@ namespace VscAppz {
 							__idx__result = __idx__result + 1;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void ILanguages.OnDidChangeDiagnostics(Action<DiagnosticChangeEvent> listener, Action<Disposable> then) {
+		void ILanguages.OnDidChangeDiagnostics(Action<DiagnosticChangeEvent> listener, Action<Disposable> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "languages.onDidChangeDiagnostics";
@@ -2759,10 +2777,10 @@ namespace VscAppz {
 				}
 				listener(_a_0_);
 				return true;
-			});
+			}, null);
 			msg.Data["listener"] = _fnid_listener;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					Disposable result = default;
@@ -2775,14 +2793,14 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
-					then(result.bind(this.Impl(), _fnid_listener));
+					andThen(result.bind(this.Impl(), _fnid_listener));
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void IExtensions.OnDidChange(Action listener, Action<Disposable> then) {
+		void IExtensions.OnDidChange(Action listener, Action<Disposable> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "extensions.onDidChange";
@@ -2799,10 +2817,10 @@ namespace VscAppz {
 				}
 				listener();
 				return true;
-			});
+			}, null);
 			msg.Data["listener"] = _fnid_listener;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					Disposable result = default;
@@ -2815,14 +2833,61 @@ namespace VscAppz {
 					} else {
 						return false;
 					}					
-					then(result.bind(this.Impl(), _fnid_listener));
+					andThen(result.bind(this.Impl(), _fnid_listener));
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void ICommands.ExecuteCommand(string command, any[] rest, Action<any> then) {
+		void ICommands.RegisterCommand(string command, Func<any[], any> callback, Action<Disposable> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "commands.registerCommand";
+			msg.Data = new dict(2);
+			msg.Data["command"] = command;
+			string _fnid_callback = default;
+			if ((null == callback)) {
+				OnError(this.Impl(), "ICommands.RegisterCommand: the 'callback' arg (which is not optional but required) was not passed by the caller", null);
+				return ;
+			}
+			_fnid_callback = this.Impl().nextSub(null, (any[] args) => {
+				bool ok = default;
+				if (1 != args.Length) {
+					return (null, ok);
+				}
+				any ret = default;
+				any[] _a_0_ = default;
+				(_a_0_, ok) = (args[0] is any[]) ? (((any[])(args[0])), true) : (default, false);
+				if (!ok) {
+					return (null, false);
+				}
+				ret = callback(_a_0_);
+				return (ret, true);
+			});
+			msg.Data["callback"] = _fnid_callback;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					Disposable result = default;
+					if ((null != payload)) {
+						result = new Disposable();
+						ok = result.populateFrom(payload);
+						if (!ok) {
+							return false;
+						}
+					} else {
+						return false;
+					}					
+					andThen(result.bind(this.Impl(), _fnid_callback));
+					return true;
+				};
+			}
+			this.Impl().send(msg, on);
+		}
+
+		void ICommands.ExecuteCommand(string command, any[] rest, Action<any> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "commands.executeCommand";
@@ -2830,7 +2895,7 @@ namespace VscAppz {
 			msg.Data["command"] = command;
 			msg.Data["rest"] = rest;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					any result = default;
@@ -2839,21 +2904,21 @@ namespace VscAppz {
 						if (ok) {
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}
 			this.Impl().send(msg, on);
 		}
 
-		void ICommands.GetCommands(bool filterInternal, Action<string[]> then) {
+		void ICommands.GetCommands(bool filterInternal, Action<string[]> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "commands.getCommands";
 			msg.Data = new dict(1);
 			msg.Data["filterInternal"] = filterInternal;
 			Func<any, bool> on = default;
-			if ((null != then)) {
+			if ((null != andThen)) {
 				on = (any payload) => {
 					bool ok = default;
 					string[] result = default;
@@ -2876,7 +2941,7 @@ namespace VscAppz {
 							__idx__result = __idx__result + 1;
 						}
 					}
-					then(result);
+					andThen(result);
 					return true;
 				};
 			}

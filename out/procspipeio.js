@@ -219,6 +219,8 @@ class Prog {
                 const ret = vscgen.handle(msg, this, cancelFnIds);
                 const retprom = ret;
                 const retdisp = ret;
+                if (retprom && retprom.then && retdisp && retdisp.dispose)
+                    throw ret; // just in case this ever begins occurring, we'll thusly find out stat
                 if (retdisp && retdisp.dispose) {
                     this.ditchCancellers(cancelFnIds);
                     const id = this.nextId();
@@ -226,18 +228,27 @@ class Prog {
                     if (sendret = msg.cbId ? true : false)
                         this.send({ cbId: msg.cbId, data: { yay: [id, ret] } });
                 }
-                else if (retprom && retprom.then)
-                    retprom.then(ret => {
-                        this.ditchCancellers(cancelFnIds);
-                        if (!this.proc)
-                            vsc.window.showInformationMessage(appz_1.uxStr.tooLate, this.fullCmd)
-                                .then(ensureProg, appz_1.onPromiseRejectedNoOp);
-                        else if (sendret = msg.cbId ? true : false)
-                            this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } });
-                    }, rej => {
+                else if (retprom && retprom.then) {
+                    let onret, onrej;
+                    onrej = rej => {
                         this.ditchCancellers(cancelFnIds);
                         onfail(rej);
-                    });
+                    };
+                    onret = ret => {
+                        const next = ret;
+                        if (next && next.then)
+                            next.then(onret, onrej);
+                        else {
+                            this.ditchCancellers(cancelFnIds);
+                            if (!this.proc)
+                                vsc.window.showInformationMessage(appz_1.uxStr.tooLate, this.fullCmd)
+                                    .then(ensureProg, appz_1.onPromiseRejectedNoOp);
+                            else if (sendret = msg.cbId ? true : false)
+                                this.send({ cbId: msg.cbId, data: { yay: ensureWillShowUpInJson(ret) } });
+                        }
+                    };
+                    retprom.then(onret, onrej);
+                }
                 else
                     this.ditchCancellers(cancelFnIds);
             }

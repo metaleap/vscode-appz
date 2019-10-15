@@ -42,8 +42,8 @@ export declare class Cancel {
 export declare class Disposable {
     impl: impl;
     id: string;
-    subFnId: string;
-    bind(impl: impl, subFnId: string): this;
+    subFnIds: string[];
+    bind(impl: impl, ...subFnIds: string[]): this;
     populateFrom(payload: any): boolean;
     Dispose(): void;
 }

@@ -38,9 +38,12 @@ export class impl extends vscgen.impl {
         ).toString()
     }
 
-    nextSub(subscriber: (_: any[]) => boolean) {
+    nextSub(eitherListener: (_: any[]) => boolean, orOther: (_: any[]) => [any, boolean]) {
         const fnid = this.nextFuncId()
-        this.cbListeners[fnid] = subscriber
+        if (eitherListener)
+            this.cbListeners[fnid] = eitherListener
+        else if (orOther)
+            this.cbOther[fnid] = orOther
         return fnid
     }
 
@@ -139,10 +142,10 @@ export class Cancel {
 export class Disposable {
     impl: impl
     id: string
-    subFnId: string
+    subFnIds: string[]
 
-    bind(impl: impl, subFnId: string) {
-        [this.impl, this.subFnId] = [impl, subFnId]
+    bind(impl: impl, ...subFnIds: string[]) {
+        [this.impl, this.subFnIds] = [impl, subFnIds]
         return this
     }
 
@@ -154,9 +157,12 @@ export class Disposable {
 
     Dispose() {
         this.impl.send(new ipcMsg('Dispose', { '': this.id }))
-        if (this.subFnId && this.subFnId.length) {
-            delete this.impl.cbListeners[this.subFnId]
-            this.subFnId = null
+        if (this.subFnIds && this.subFnIds.length) {
+            for (const subfnid of this.subFnIds) {
+                delete this.impl.cbListeners[subfnid]
+                delete this.impl.cbOther[subfnid]
+            }
+            this.subFnIds = null
         }
     }
 }

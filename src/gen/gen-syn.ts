@@ -791,24 +791,27 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (tdstcoll && tdstcoll.ValsOf && tdstcoll.KeysOf === undefined) {
             const tcoll: TypeRefColl = { ValsOf: TypeRefPrim.Any }
             const tncoll = "__coll__" + dstVarName, tnidx = "__idx__" + dstVarName, tnitem = "__item__" + dstVarName, tnval = "__val__" + dstVarName
-            return [
-                _.iVar(tncoll, tcoll),
-                _.iSet(_.eTup(_.n(tncoll), _.n(okBoolName)), _.eConv(tcoll, src)),
+            return (tdstcoll.ValsOf === TypeRefPrim.Any) ? [
+                _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eConv(tcoll, src)),
                 retifnotok,
-                _.iSet(_.n(dstVarName), _.eCollNew(_.eLen(_.n(tncoll), true), tdstcoll.ValsOf, true)),
-                _.iVar(tnidx, TypeRefPrim.Int),
-                _.iSet(_.n(tnidx), _.eLit(0)),
-                _.iFor(_.n(tnitem), _.n(tncoll),
-                    ...[
-                        _.iVar(tnval, tdstcoll.ValsOf) as Instr,
-                    ].concat(
-                        ...this.convOrRet(tnval, _.n(tnitem), tdstcoll.ValsOf, okBoolName, onErrRet)
-                    ).concat(
-                        _.iSet(_.oIdx(_.n(dstVarName), _.n(tnidx)), _.n(tnval)),
-                        _.iSet(_.n(tnidx), _.eOp('+', _.n(tnidx), _.eLit(1))),
-                    )
-                ),
-            ]
+            ] : [
+                    _.iVar(tncoll, tcoll),
+                    _.iSet(_.eTup(_.n(tncoll), _.n(okBoolName)), _.eConv(tcoll, src)),
+                    retifnotok,
+                    _.iSet(_.n(dstVarName), _.eCollNew(_.eLen(_.n(tncoll), true), tdstcoll.ValsOf, true)),
+                    _.iVar(tnidx, TypeRefPrim.Int),
+                    _.iSet(_.n(tnidx), _.eLit(0)),
+                    _.iFor(_.n(tnitem), _.n(tncoll),
+                        ...[
+                            _.iVar(tnval, tdstcoll.ValsOf) as Instr,
+                        ].concat(
+                            ...this.convOrRet(tnval, _.n(tnitem), tdstcoll.ValsOf, okBoolName, onErrRet)
+                        ).concat(
+                            _.iSet(_.oIdx(_.n(dstVarName), _.n(tnidx)), _.n(tnval)),
+                            _.iSet(_.n(tnidx), _.eOp('+', _.n(tnidx), _.eLit(1))),
+                        )
+                    ),
+                ]
         }
 
         if (dstType === TypeRefPrim.Int || dstType === TypeRefPrim.Real) {
@@ -866,7 +869,7 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     private genMethodImpl_MessageDispatch(iface: TypeRefOwn, method: Method, _: Builder, body: Instr[]) {
-        const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok')
+        const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok', 'ret')
         const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args)
         const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length
 
@@ -936,42 +939,57 @@ export class Gen extends gen.Gen implements gen.IGen {
             }
         }
 
-        const isevt: gen.MemberEvent = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl as gen.MemberEvent : null
-        let nameevtsub: string = undefined
-        if (isevt && isevt.EvtName && isevt.EvtName.length) {
-            const arg = method.Args[0]
-            nameevtsub = "_fnid_" + arg.Name
+        let evtsubfnids: string[] = []
+        const eventlike = (arg: Arg) => {
+            const fnid = "_fnid_" + arg.Name
+            const tfun = this.typeFunc(arg.Type)
+            evtsubfnids.push(fnid)
+            const numargs = (isevt && isevt.EvtArgs) ? isevt.EvtArgs.length : tfun.From.length
+            const argtypes: TypeRef[] = (!(isevt && isevt.EvtArgs)) ? tfun.From : isevt.EvtArgs.map(t => this.b.typeRef(this.b.prep.typeSpec(t)))
+            const rettype = tfun ? tfun.To : null
+            let call: Instr = _.eCall(_.n(arg.Name), ...argtypes.map((_a, i) => _.n(`_a_${i}_`)))
+            let onerrret: Expr
+            if (rettype)
+                [call, onerrret] = [_.iSet(_.n(__.ret), call), _.eTup(_.eZilch(), _.eLit(false))]
+            const handler = _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], rettype ? { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] } : TypeRefPrim.Bool,
+                ...[
+                    _.iVar(__.ok, TypeRefPrim.Bool) as Instr,
+                    _.iIf(_.oNeq(_.eLit(numargs), _.eLen(_.n("args"), true)), [
+                        _.iRet(rettype ? _.eTup(_.eZilch(), _.n(__.ok)) : _.n(__.ok)),
+                    ]) as Instr,
+                ].concat(..._.WHEN(rettype, () => [
+                    _.iVar(__.ret, TypeRefPrim.Any) as Instr,
+                ])).concat(
+                    _.EACH(argtypes, (atype, i): Instr[] =>
+                        _.LET(`_a_${i}_`, aname =>
+                            [_.iVar(aname, atype) as Instr].concat(
+                                this.convOrRet(aname, _.oIdx(_.n("args"), _.eLit(i)), atype, __.ok, onerrret),
+                            )
+                        ),
+                    )).concat(
+                        call,
+                        _.iRet(rettype ? _.eTup(_.n(__.ret), _.eLit(true)) : _.eLit(true)),
+                    ),
+            )
             body.push(
-                _.iVar(nameevtsub, TypeRefPrim.String),
+                _.iVar(fnid, TypeRefPrim.String),
                 _.iIf(_.oIsnt(_.n(arg.Name)), [
                     _.eCall(_.n("OnError"), _.eCall(_.oDot(_.n('Impl'))), _.eLit(`${iface.Name}.${method.Name}: the '${arg.Name}' arg (which is not optional but required) was not passed by the caller`), _.eZilch()),
                     _.iRet(null),
                 ]),
-                _.iSet(_.n(nameevtsub), _.eCall(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n("nextSub")),
-                    _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Bool,
-                        ...[
-                            _.iVar(__.ok, TypeRefPrim.Bool) as Instr,
-                            _.iIf(_.oNeq(_.eLit(isevt.EvtArgs.length), _.eLen(_.n("args"), true)), [
-                                _.iRet(_.n(__.ok)),
-                            ]) as Instr,
-                        ].concat(
-                            _.EACH(isevt.EvtArgs, (t, i): Instr[] =>
-                                _.LET(`_a_${i}_`, aname =>
-                                    _.LET(this.b.typeRef(this.b.prep.typeSpec(t)), atype =>
-                                        [_.iVar(aname, atype) as Instr].concat(
-                                            this.convOrRet(aname, _.oIdx(_.n("args"), _.eLit(i)), atype),
-                                        )
-                                    )
-                                ),
-                            )).concat(
-                                _.eCall(_.n(arg.Name), ...isevt.EvtArgs.map((_a, i) => _.n(`_a_${i}_`))),
-                                _.iRet(_.eLit(true)),
-                            ),
-                    ),
+                _.iSet(_.n(fnid), _.eCall(_.oDot(_.eCall(_.oDot(_.n('Impl'))), _.n("nextSub")),
+                    rettype ? _.eZilch() : handler, rettype ? handler : _.eZilch(),
                 )),
-                _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n(nameevtsub)),
+                _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n(fnid)),
             )
-        } else
+        }
+
+        const lastarg = method.Args[method.Args.length - 1]
+        const isdisp = lastarg && lastarg.fromPrep && lastarg.fromPrep.isFromRetThenable && gen.typePromOf(lastarg.fromPrep.typeSpec, 'Disposable')
+        const isevt: gen.MemberEvent = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl as gen.MemberEvent : null
+        if (isevt && isevt.EvtName && isevt.EvtName.length)
+            eventlike(method.Args[0])
+        else
             for (const arg of method.Args)
                 if (!arg.fromPrep.isFromRetThenable)
                     if (arg.fromPrep.isCancellationToken !== undefined)
@@ -984,6 +1002,8 @@ export class Gen extends gen.Gen implements gen.IGen {
                             ]),
                             _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.oDot(_.n(arg.Name), _.n("fnId"))),
                         ]))
+                    else if (this.typeFunc(arg.Type))
+                        eventlike(arg)
                     else {
                         let town = this.typeOwn(arg.Type)
                         if (town && town.Ands) {
@@ -1006,10 +1026,8 @@ export class Gen extends gen.Gen implements gen.IGen {
                         ))
                     }
 
-        const lastarg = method.Args[method.Args.length - 1]
         body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }))
         if (lastarg.fromPrep.isFromRetThenable) {
-            const isdisp = gen.typePromOf(lastarg.fromPrep.typeSpec, 'Disposable')
             const meprop = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl as gen.MemberProp : null
             const isprop = meprop && meprop.PropType
             const isprops = method.fromPrep && method.fromPrep.isProps
@@ -1026,7 +1044,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                             _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => []),
                         ),
                         _.WHEN(isdisp, () => [
-                            _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bind')), _.eCall(_.oDot(_.eThis(), _.n("Impl"))), nameevtsub ? _.n(nameevtsub) : _.eLit(""))),
+                            _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bind')), ...[_.eCall(_.oDot(_.eThis(), _.n("Impl"))) as Expr].concat(...evtsubfnids.map(fnid => _.n(fnid))))),
                         ], () => [
                             _.eCall(_.n(lastarg.Name), _.n(__.result)),
                         ])[0],

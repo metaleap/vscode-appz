@@ -61,10 +61,13 @@ namespace VscAppz {
         internal string nextFuncId() =>
             (++counter).ToString();
 
-        internal string nextSub(Func<any[], bool> subscriber) {
+        internal string nextSub(Func<any[], bool> eitherListener, Func<any[], (any, bool)> orOther) {
             lock (this) {
                 var fnid = nextFuncId();
-                cbListeners[fnid] = subscriber;
+                if (eitherListener != null)
+                    cbListeners[fnid] = eitherListener;
+                else if (orOther != null)
+                    cbOther[fnid] = orOther;
                 return fnid;
             }
         }
@@ -173,20 +176,23 @@ namespace VscAppz {
     public class Disposable:IDisposable {
         internal impl impl;
         internal string id;
-        internal string subFnId;
+        internal string[] subFnIds;
         internal Disposable() {}
-        internal Disposable bind(impl impl,string subFnId) {
-            (this.impl, this.subFnId) = (impl, subFnId); return this; }
+        internal Disposable bind(impl impl, params string[] subFnIds) {
+            (this.impl, this.subFnIds) = (impl, subFnIds); return this; }
         internal bool populateFrom(any payload) =>
             (payload is any[] arr) && (arr != null) && (arr.Length == 2)
                 && (arr[0] is string s) && !string.IsNullOrEmpty(id = s);
         /// <summary>Dispose signals to the counterparty to destroy the object.</summary>
         public void Dispose() {
             impl.send(new ipcMsg("Dispose", 1) { Data = { [""] = id } }, null);
-            if (!string.IsNullOrEmpty(subFnId)) {
+            if (subFnIds != null && subFnIds.Length > 0) {
                 lock (this)
-                    impl.cbListeners.Remove(subFnId);
-                subFnId = "";
+                    foreach (var subfnid in subFnIds) {
+                        impl.cbListeners.Remove(subfnid);
+                        impl.cbOther.Remove(subfnid);
+                    }
+                subFnIds = null;
             }
         }
     }
