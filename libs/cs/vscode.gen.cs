@@ -801,6 +801,27 @@ namespace VscAppz {
 	/// </summary>
 	public interface ICommands {
 		/// <summary>
+		/// Executes the command denoted by the given command identifier.
+		/// 
+		/// * *Note 1:* When executing an editor command not all types are allowed to
+		/// be passed as arguments. Allowed are the primitive types `string`, `boolean`,
+		/// `number`, `undefined`, and `null`, as well as [`Position`](#Position), [`Range`](#Range), [`Uri`](#Uri) and [`Location`](#Location).
+		/// * *Note 2:* There are no restrictions when executing commands that have been contributed
+		/// by extensions.
+		/// 
+		/// `command` ── Identifier of the command to execute.
+		/// 
+		/// `rest` ── Parameters passed to the command function.
+		/// 
+		/// `then` ── A thenable that resolves to the returned value of the given command. `undefined` when
+		/// the command handler function doesn't return anything.
+		/// </summary>
+		/// <param name="command">Identifier of the command to execute.</param>
+		/// <param name="rest">Parameters passed to the command function.</param>
+		/// <param name="then">A thenable that resolves to the returned value of the given command. `undefined` when the command handler function doesn't return anything.</param>
+		void ExecuteCommand(string command = default, any[] rest = default, Action<any> then = default);
+
+		/// <summary>
 		/// Retrieve the list of all available commands. Commands starting an underscore are
 		/// treated as internal commands.
 		/// 
@@ -2795,6 +2816,30 @@ namespace VscAppz {
 						return false;
 					}					
 					then(result.bind(this.Impl(), _fnid_listener));
+					return true;
+				};
+			}
+			this.Impl().send(msg, on);
+		}
+
+		void ICommands.ExecuteCommand(string command, any[] rest, Action<any> then) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "commands.executeCommand";
+			msg.Data = new dict(2);
+			msg.Data["command"] = command;
+			msg.Data["rest"] = rest;
+			Func<any, bool> on = default;
+			if ((null != then)) {
+				on = (any payload) => {
+					bool ok = default;
+					any result = default;
+					if ((null != payload)) {
+						(result, ok) = (payload, true);
+						if (ok) {
+						}
+					}
+					then(result);
 					return true;
 				};
 			}

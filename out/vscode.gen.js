@@ -391,6 +391,14 @@ function handle(msg, prog, remoteCancellationTokens) {
             }
         case "commands":
             switch (methodname) {
+                case "executeCommand": {
+                    const arg_command = (msg.data['command']);
+                    const arg_rest = (msg.data['rest'] || []);
+                    const ret = vscode.commands.executeCommand(arg_command, ...arg_rest);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
                 case "getCommands": {
                     const arg_filterInternal = (msg.data['filterInternal']);
                     const ret = vscode.commands.getCommands(arg_filterInternal);

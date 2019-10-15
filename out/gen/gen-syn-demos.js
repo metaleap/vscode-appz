@@ -6,8 +6,12 @@ class GenDemos {
         const _ = b;
         this.gen = gen;
         this.all = {
-            "demo_Commands_GetCommands": () => this.genDemoOfStrListMenu(_, "Commands", "GetCommands", "command ID(s)", _.eLit(false)),
-            "demo_Languages_GetLanguages": () => this.genDemoOfStrListMenu(_, "Languages", "GetLanguages", "language ID(s)"),
+            "demo_Commands_GetCommands_and_ExecuteCommand": () => this.genDemoOfStrListMenu(_, "Commands", "GetCommands", "command ID(s), pick one to execute or escape now:", [_.eLit(false)], _.eFunc([{ Name: "item", Type: { Maybe: gen_syn_1.TypeRefPrim.String } }], null, _.iIf(_.oIsnt(_.n("item")), [
+                this.genByeMsg(_, "Command selection cancelled, bye now!"),
+            ], [
+                _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("ExecuteCommand")), _.oDeref(_.n("item")), _.eZilch(), _.eFunc([{ Name: "ret", Type: gen_syn_1.TypeRefPrim.Any }], null, this.genInfoMsg(_, _.eLit("Command result was: {0}", _.n("ret"))))),
+            ]))),
+            "demo_Languages_GetLanguages": () => this.genDemoOfStrListMenu(_, "Languages", "GetLanguages", "language ID(s)", []),
             "demo_Env_Properties": () => this.genDemoOfPropsMenu(_, "Env"),
             "demo_Workspace_Properties": () => this.genDemoOfPropsMenu(_, "Workspace"),
             "demo_Window_ShowOpenDialog": () => this.genDemoOfDialog(_, "Open", true, "Note: won't actually read from specified file path(s)"),
@@ -133,9 +137,9 @@ class GenDemos {
             ]).concat(...this.genMenu(_, _.eLit(ns + " has {0} properties:", _.eLen(_.n("items"), true)), _.n("quit")))))),
         ];
     }
-    genDemoOfStrListMenu(_, ns, fn, desc, ...args) {
+    genDemoOfStrListMenu(_, ns, fn, desc, args, onPick) {
         return [
-            _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n(ns))), _.n(fn)), ...args.concat(_.eFunc([{ Name: "items", Type: { ValsOf: gen_syn_1.TypeRefPrim.String } }], null, ...this.genMenu(_, _.eLit("Retrieved {0} " + desc, _.eLen(_.n("items"), true)), _.n("quit")))))
+            _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n(ns))), _.n(fn)), ...args.concat(_.eFunc([{ Name: "items", Type: { ValsOf: gen_syn_1.TypeRefPrim.String } }], null, ...this.genMenu(_, _.eLit("Retrieved {0} " + desc, _.eLen(_.n("items"), true)), onPick ? onPick : _.n("quit")))))
         ];
     }
     genMenu(_, msg, onPick) {

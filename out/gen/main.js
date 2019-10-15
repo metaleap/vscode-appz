@@ -63,6 +63,7 @@ const genApiSurface = {
                 'onDidChange',
             ],
             'commands': [
+                'executeCommand',
                 'getCommands',
             ],
         },

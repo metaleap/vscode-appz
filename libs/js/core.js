@@ -104,6 +104,9 @@ class impl extends vscgen.impl {
 }
 exports.impl = impl;
 class Cancel {
+    constructor() {
+        this.fnId = "";
+    }
     static In(msFromNow) {
         const me = new Cancel();
         setTimeout(() => me.Now(), msFromNow);

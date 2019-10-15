@@ -120,7 +120,7 @@ export class impl extends vscgen.impl {
 
 export class Cancel {
     impl: impl
-    fnId: string
+    fnId: string = ""
 
     static In(msFromNow: number) {
         const me = new Cancel()

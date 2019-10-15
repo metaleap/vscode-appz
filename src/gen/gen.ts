@@ -355,10 +355,7 @@ export class Prep {
                 const tparam = (!tParams) ? null : tParams.find(_ => _.name.getText() === tname)
                 if (tparam) {
                     const tnode = ts.getEffectiveConstraintOfTypeParameter(tparam)
-                    if (tnode)
-                        return this.typeSpec(tnode, tParams)
-                    else
-                        throw (tparam)
+                    return tnode ? this.typeSpec(tnode, tParams) : ScriptPrimType.Any
                 } else if (tname === 'Thenable') {
                     const tprom: TypeSpecProm = {
                         Thens: tref.typeArguments.map(_ => this.typeSpec(_, tParams))

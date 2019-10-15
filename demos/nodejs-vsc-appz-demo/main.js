@@ -10,9 +10,10 @@ exports.demo_Window_ShowInputBox = demo_Window_ShowInputBox
 function main() {
     const quit = exports.quit
 
-    miscdemos.onReady()
-    miscdemos.subscribeToMiscEvents()
     win.SetStatusBarMessage2("Choosing a demo WILL HIDE this", statusitem => {
+        miscdemos.onReady()
+        miscdemos.subscribeToMiscEvents()
+
         const buttons = ["Demo Text Input", "All Demos"]
         win.ShowInformationMessage1("What to try out? (If you cancel, I quit.)",
             buttons,
@@ -24,13 +25,13 @@ function main() {
                     switch (btn) {
                         case buttons[0]:
                             demo_Window_ShowInputBox()
-                            break;
+                            break
                         case buttons[1]:
                             miscdemos.demosMenu()
-                            break;
+                            break
                         default:
                             win.ShowErrorMessage1("Unknown: `" + btn + "`, bye now!", null, quit)
-                            break;
+                            break
                     }
             })
     })

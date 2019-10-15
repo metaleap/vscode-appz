@@ -5,13 +5,21 @@ import (
 	. "github.com/metaleap/vscode-appz/libs/go"
 )
 
-func demo_Commands_GetCommands() {
+func demo_Commands_GetCommands_and_ExecuteCommand() {
 	vsc.Commands().GetCommands(false, func(items []string) {
 		var opts QuickPickOptions
 		opts = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickOptions)
 		opts.IgnoreFocusOut = true
-		opts.PlaceHolder = strFmt("Retrieved {0} command ID(s)", len(items))
-		vsc.Window().ShowQuickPick2(items, &opts, nil, quit)
+		opts.PlaceHolder = strFmt("Retrieved {0} command ID(s), pick one to execute or escape now:", len(items))
+		vsc.Window().ShowQuickPick2(items, &opts, nil, func(item *string) {
+			if (nil == item) {
+				vsc.Window().ShowWarningMessage1("Command selection cancelled, bye now!", nil, quit)
+			} else {
+				vsc.Commands().ExecuteCommand(*item, nil, func(ret any) {
+					vsc.Window().ShowInformationMessage1(strFmt("Command result was: {0}", ret), nil, quit)
+				})
+			}
+		})
 	})
 }
 
@@ -198,7 +206,7 @@ func statusNoticeQuit() {
 
 func demosMenu() {
 	var items []string
-	items = []string{"demo_Window_ShowInputBox", "demo_Commands_GetCommands", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick"}
+	items = []string{"demo_Window_ShowInputBox", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick"}
 	var opts QuickPickOptions
 	opts = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickOptions)
 	opts.IgnoreFocusOut = true
@@ -210,8 +218,8 @@ func demosMenu() {
 			if "demo_Window_ShowInputBox" == (*menuitem) {
 				demo_Window_ShowInputBox()
 			}
-			if "demo_Commands_GetCommands" == (*menuitem) {
-				demo_Commands_GetCommands()
+			if "demo_Commands_GetCommands_and_ExecuteCommand" == (*menuitem) {
+				demo_Commands_GetCommands_and_ExecuteCommand()
 			}
 			if "demo_Languages_GetLanguages" == (*menuitem) {
 				demo_Languages_GetLanguages()

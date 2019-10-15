@@ -555,6 +555,11 @@ class Gen extends gen.Gen {
         if (!onErrRet)
             onErrRet = _.eLit(false);
         const retifnotok = _.iIf(_.oNot(_.n(okBoolName)), [_.iRet(onErrRet),]);
+        if (dstType === TypeRefPrim.Any || this.typeUnMaybe(dstType) === TypeRefPrim.Any)
+            return [
+                _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eTup(src, _.eLit(true))),
+                _.iIf(_.n(okBoolName), []),
+            ];
         const tdstnamed = this.typeOwn(this.typeUnMaybe(dstType));
         if (tdstnamed) {
             if (tdstnamed.Name !== 'Disposable' && tdstnamed.Name !== 'Uri' && this.state.genPopulateFor[tdstnamed.Name] !== false) // why this peculiar checking construct?..
@@ -591,8 +596,6 @@ class Gen extends gen.Gen {
                 ].concat(...this.convOrRet(tnval, _.n(tnitem), tdstcoll.ValsOf, okBoolName, onErrRet)).concat(_.iSet(_.oIdx(_.n(dstVarName), _.n(tnidx)), _.n(tnval)), _.iSet(_.n(tnidx), _.eOp('+', _.n(tnidx), _.eLit(1))))),
             ];
         }
-        if (dstType === TypeRefPrim.Any)
-            return [_.iSet(_.n(dstVarName), src)];
         if (dstType === TypeRefPrim.Int || dstType === TypeRefPrim.Real) {
             const alttype = (dstType === TypeRefPrim.Int) ? TypeRefPrim.Real : TypeRefPrim.Int;
             const altname = "__" + dstVarName + "__";

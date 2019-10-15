@@ -20,6 +20,7 @@
   - [Shell](#F-VscAppz-EnvProperties-Shell 'VscAppz.EnvProperties.Shell')
   - [UriScheme](#F-VscAppz-EnvProperties-UriScheme 'VscAppz.EnvProperties.UriScheme')
 - [ICommands](#T-VscAppz-ICommands 'VscAppz.ICommands')
+  - [ExecuteCommand(command,rest,then)](#M-VscAppz-ICommands-ExecuteCommand-System-String,System-Object[],System-Action{System-Object}- 'VscAppz.ICommands.ExecuteCommand(System.String,System.Object[],System.Action{System.Object})')
   - [GetCommands(filterInternal,then)](#M-VscAppz-ICommands-GetCommands-System-Boolean,System-Action{System-String[]}- 'VscAppz.ICommands.GetCommands(System.Boolean,System.Action{System.String[]})')
 - [IEnv](#T-VscAppz-IEnv 'VscAppz.IEnv')
   - [AppName()](#M-VscAppz-IEnv-AppName-System-Action{System-String}- 'VscAppz.IEnv.AppName(System.Action{System.String})')
@@ -334,6 +335,34 @@ Second, bind the command identifier to a title under which it will show in the p
  	}
 }
 ```
+
+<a name='M-VscAppz-ICommands-ExecuteCommand-System-String,System-Object[],System-Action{System-Object}-'></a>
+### ExecuteCommand(command,rest,then) `method`
+
+##### Summary
+
+Executes the command denoted by the given command identifier.
+
+* *Note 1:* When executing an editor command not all types are allowed to
+be passed as arguments. Allowed are the primitive types `string`, `boolean`,
+`number`, `undefined`, and `null`, as well as [`Position`](#Position), [`Range`](#Range), [`Uri`](#Uri) and [`Location`](#Location).
+* *Note 2:* There are no restrictions when executing commands that have been contributed
+by extensions.
+
+`command` ── Identifier of the command to execute.
+
+`rest` ── Parameters passed to the command function.
+
+`then` ── A thenable that resolves to the returned value of the given command. `undefined` when
+the command handler function doesn't return anything.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| command | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Identifier of the command to execute. |
+| rest | [System.Object[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Object[] 'System.Object[]') | Parameters passed to the command function. |
+| then | [System.Action{System.Object}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.Object}') | A thenable that resolves to the returned value of the given command. `undefined` when the command handler function doesn't return anything. |
 
 <a name='M-VscAppz-ICommands-GetCommands-System-Boolean,System-Action{System-String[]}-'></a>
 ### GetCommands(filterInternal,then) `method`

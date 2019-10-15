@@ -897,6 +897,29 @@ Extensions: interface
 # ```
 Commands: interface
 
+    # executeCommand:
+    # Executes the command denoted by the given command identifier.
+    # 
+    # * *Note 1:* When executing an editor command not all types are allowed to
+    # be passed as arguments. Allowed are the primitive types `string`, `boolean`,
+    # `number`, `undefined`, and `null`, as well as [`Position`](#Position), [`Range`](#Range), [`Uri`](#Uri) and [`Location`](#Location).
+    # * *Note 2:* There are no restrictions when executing commands that have been contributed
+    # by extensions.
+    #
+    # @command:
+    # Identifier of the command to execute.
+    #
+    # @rest:
+    # Parameters passed to the command function.
+    #
+    # @then:
+    # A thenable that resolves to the returned value of the given command. `undefined` when
+    # the command handler function doesn't return anything.
+    ExecuteCommand: void
+        command: string
+        rest: [any]
+        then: ?(?any->void)
+
     # getCommands:
     # Retrieve the list of all available commands. Commands starting an underscore are
     # treated as internal commands.
@@ -2882,6 +2905,29 @@ Extensions·OnDidChange: (listener:(->void) -> then:?(?Disposable->void) -> void
             else
                 return false
             then(result.bind(this.Impl(), _fnid_listener))
+            return true
+        
+    this.Impl().send(msg, on)
+
+
+
+
+Commands·ExecuteCommand: (command:string -> rest:[any] -> then:?(?any->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "commands.executeCommand"
+    msg.Data = dict·new(2)
+    msg.Data@"command" = command
+    msg.Data@"rest" = rest
+    var on of (any->bool)
+    if =?then
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?any
+            if =?payload
+                [result, ok] = [payload, true]
+                if ok
+            then(result)
             return true
         
     this.Impl().send(msg, on)

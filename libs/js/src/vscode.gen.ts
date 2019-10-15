@@ -710,6 +710,21 @@ export interface Extensions {
  */
 export interface Commands {
     /**
+     * Executes the command denoted by the given command identifier.
+     * 
+     * * *Note 1:* When executing an editor command not all types are allowed to
+     * be passed as arguments. Allowed are the primitive types `string`, `boolean`,
+     * `number`, `undefined`, and `null`, as well as [`Position`](#Position), [`Range`](#Range), [`Uri`](#Uri) and [`Location`](#Location).
+     * * *Note 2:* There are no restrictions when executing commands that have been contributed
+     * by extensions.
+
+     * @param command Identifier of the command to execute.
+     * @param rest Parameters passed to the command function.
+     * @param then A thenable that resolves to the returned value of the given command. `undefined` when the command handler function doesn't return anything.
+     */
+    ExecuteCommand: (command: string, rest: any[], then?: (_: any) => void) => void
+
+    /**
      * Retrieve the list of all available commands. Commands starting an underscore are
      * treated as internal commands.
 
@@ -2878,6 +2893,30 @@ class implExtensions extends implBase implements Extensions {
 
 class implCommands extends implBase implements Commands {
     constructor(impl: impl) { super(impl) }
+    ExecuteCommand(command: string, rest: any[], then?: (_: any) => void): void {
+        let msg: ipcMsg
+        msg = newipcMsg()
+        msg.QName = "commands.executeCommand"
+        msg.Data = {}
+        msg.Data["command"] = command
+        msg.Data["rest"] = rest
+        let on: (_: any) => boolean
+        if ((undefined !== then && null !== then)) {
+            on = (payload: any): boolean => {
+                let ok: boolean
+                let result: any
+                if ((undefined !== payload && null !== payload)) {
+                    [result, ok] = [payload, true]
+                    if (ok) {
+                    }
+                }
+                then(result)
+                return true
+            }
+        }
+        this.Impl().send(msg, on)
+    }
+
     GetCommands(filterInternal: boolean, then?: (_: string[]) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()

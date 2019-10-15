@@ -407,6 +407,14 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 			}
 		case "commands":
 			switch (methodname) {
+				case "executeCommand": {
+					const arg_command = (msg.data['command']) as string
+					const arg_rest = (msg.data['rest'] || []) as any[]
+					const ret = vscode.commands.executeCommand(arg_command, ...arg_rest, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
 				case "getCommands": {
 					const arg_filterInternal = (msg.data['filterInternal']) as boolean
 					const ret = vscode.commands.getCommands(arg_filterInternal, )

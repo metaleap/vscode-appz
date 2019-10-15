@@ -1634,6 +1634,29 @@ class implExtensions extends implBase {
 }
 class implCommands extends implBase {
     constructor(impl) { super(impl); }
+    ExecuteCommand(command, rest, then) {
+        let msg;
+        msg = newipcMsg();
+        msg.QName = "commands.executeCommand";
+        msg.Data = {};
+        msg.Data["command"] = command;
+        msg.Data["rest"] = rest;
+        let on;
+        if ((undefined !== then && null !== then)) {
+            on = (payload) => {
+                let ok;
+                let result;
+                if ((undefined !== payload && null !== payload)) {
+                    [result, ok] = [payload, true];
+                    if (ok) {
+                    }
+                }
+                then(result);
+                return true;
+            };
+        }
+        this.Impl().send(msg, on);
+    }
     GetCommands(filterInternal, then) {
         let msg;
         msg = newipcMsg();

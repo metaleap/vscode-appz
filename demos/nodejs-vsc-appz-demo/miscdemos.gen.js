@@ -7,13 +7,21 @@ exports.subscribeToMiscEvents = subscribeToMiscEvents
 exports.statusNoticeQuit = statusNoticeQuit
 exports.onReady = () => { vsc = main.vsc; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox }
 
-function demo_Commands_GetCommands() {
+function demo_Commands_GetCommands_and_ExecuteCommand() {
     vsc.Commands.GetCommands(false, (items) => {
         let opts
         opts = {}
         opts.ignoreFocusOut = true
-        opts.placeHolder = strFmt("Retrieved {0} command ID(s)", items.length)
-        vsc.Window.ShowQuickPick2(items, opts, null, quit)
+        opts.placeHolder = strFmt("Retrieved {0} command ID(s), pick one to execute or escape now:", items.length)
+        vsc.Window.ShowQuickPick2(items, opts, null, (item) => {
+            if ((undefined === item || null === item)) {
+                vsc.Window.ShowWarningMessage1("Command selection cancelled, bye now!", null, quit)
+            } else {
+                vsc.Commands.ExecuteCommand(item, null, (ret) => {
+                    vsc.Window.ShowInformationMessage1(strFmt("Command result was: {0}", ret), null, quit)
+                })
+            }            
+        })
     })
 }
 
@@ -200,7 +208,7 @@ function statusNoticeQuit() {
 
 function demosMenu() {
     let items
-    items = ["demo_Window_ShowInputBox", "demo_Commands_GetCommands", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick"]
+    items = ["demo_Window_ShowInputBox", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick"]
     let opts
     opts = {}
     opts.ignoreFocusOut = true
@@ -212,8 +220,8 @@ function demosMenu() {
             if ("demo_Window_ShowInputBox" === menuitem) {
                 demo_Window_ShowInputBox()
             }
-            if ("demo_Commands_GetCommands" === menuitem) {
-                demo_Commands_GetCommands()
+            if ("demo_Commands_GetCommands_and_ExecuteCommand" === menuitem) {
+                demo_Commands_GetCommands_and_ExecuteCommand()
             }
             if ("demo_Languages_GetLanguages" === menuitem) {
                 demo_Languages_GetLanguages()

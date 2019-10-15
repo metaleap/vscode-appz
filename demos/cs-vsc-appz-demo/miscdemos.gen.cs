@@ -7,13 +7,21 @@ namespace VscAppzDemo {
 	using dict = System.Collections.Generic.Dictionary<string, object>;
 
 	public static partial class App {
-		private static void demo_Commands_GetCommands() {
+		private static void demo_Commands_GetCommands_and_ExecuteCommand() {
 			vsc.Commands.GetCommands(false, (string[] items) => {
 				QuickPickOptions opts = default;
 				opts = new QuickPickOptions();
 				opts.IgnoreFocusOut = true;
-				opts.PlaceHolder = strFmt("Retrieved {0} command ID(s)", items.Length);
-				vsc.Window.ShowQuickPick(items, opts, null, quit);
+				opts.PlaceHolder = strFmt("Retrieved {0} command ID(s), pick one to execute or escape now:", items.Length);
+				vsc.Window.ShowQuickPick(items, opts, null, (string item) => {
+					if ((null == item)) {
+						vsc.Window.ShowWarningMessage("Command selection cancelled, bye now!", null, quit);
+					} else {
+						vsc.Commands.ExecuteCommand(item, null, (any ret) => {
+							vsc.Window.ShowInformationMessage(strFmt("Command result was: {0}", ret), null, quit);
+						});
+					}					
+				});
 			});
 		}
 		private static void demo_Languages_GetLanguages() {
@@ -189,7 +197,7 @@ namespace VscAppzDemo {
 		}
 		private static void demosMenu() {
 			string[] items = default;
-			items = new[] { "demo_Window_ShowInputBox", "demo_Commands_GetCommands", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick" };
+			items = new[] { "demo_Window_ShowInputBox", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick" };
 			QuickPickOptions opts = default;
 			opts = new QuickPickOptions();
 			opts.IgnoreFocusOut = true;
@@ -201,8 +209,8 @@ namespace VscAppzDemo {
 					if ("demo_Window_ShowInputBox" == menuitem) {
 						demo_Window_ShowInputBox();
 					}
-					if ("demo_Commands_GetCommands" == menuitem) {
-						demo_Commands_GetCommands();
+					if ("demo_Commands_GetCommands_and_ExecuteCommand" == menuitem) {
+						demo_Commands_GetCommands_and_ExecuteCommand();
 					}
 					if ("demo_Languages_GetLanguages" == menuitem) {
 						demo_Languages_GetLanguages();

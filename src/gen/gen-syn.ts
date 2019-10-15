@@ -759,6 +759,12 @@ export class Gen extends gen.Gen implements gen.IGen {
             onErrRet = _.eLit(false)
         const retifnotok = _.iIf(_.oNot(_.n(okBoolName)), [_.iRet(onErrRet),])
 
+        if (dstType === TypeRefPrim.Any || this.typeUnMaybe(dstType) === TypeRefPrim.Any)
+            return [
+                _.iSet(_.eTup(_.n(dstVarName), _.n(okBoolName)), _.eTup(src, _.eLit(true))),
+                _.iIf(_.n(okBoolName), []),
+            ]
+
         const tdstnamed = this.typeOwn(this.typeUnMaybe(dstType))
         if (tdstnamed) {
             if (tdstnamed.Name !== 'Disposable' && tdstnamed.Name !== 'Uri' && this.state.genPopulateFor[tdstnamed.Name] !== false) // why this peculiar checking construct?..
@@ -804,9 +810,6 @@ export class Gen extends gen.Gen implements gen.IGen {
                 ),
             ]
         }
-
-        if (dstType === TypeRefPrim.Any)
-            return [_.iSet(_.n(dstVarName), src)]
 
         if (dstType === TypeRefPrim.Int || dstType === TypeRefPrim.Real) {
             const alttype = (dstType === TypeRefPrim.Int) ? TypeRefPrim.Real : TypeRefPrim.Int

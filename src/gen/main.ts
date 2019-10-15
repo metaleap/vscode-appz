@@ -71,6 +71,7 @@ const genApiSurface: genApiMember = {
                 'onDidChange',
             ],
             'commands': [
+                'executeCommand',
                 'getCommands',
             ],
         },
