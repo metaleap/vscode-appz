@@ -29,7 +29,7 @@ export declare class impl extends vscgen.impl {
     };
     constructor(stdIn?: NodeJS.ReadStream, stdOut?: NodeJS.WriteStream);
     nextFuncId(): string;
-    nextSub(subscriber: (_: any[]) => boolean): string;
+    nextSub(eitherListener: (_: any[]) => boolean, orOther: (_: any[]) => [any, boolean]): string;
     send(msg: ipcMsg, on?: (_: any) => boolean): void;
     setupReadLn(): void;
 }

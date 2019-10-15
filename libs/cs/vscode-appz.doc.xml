@@ -189,11 +189,11 @@
             
             `items` ── A set of items that will be rendered as actions in the message.
             
-            `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
             </summary>
             <param name="message">The message to show.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+            <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})">
             <summary>
@@ -206,12 +206,12 @@
             
             `items` ── A set of items that will be rendered as actions in the message.
             
-            `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
             </summary>
             <param name="message">The message to show.</param>
             <param name="options">Configures the behaviour of the message.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+            <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})">
             <summary>
@@ -221,11 +221,11 @@
             
             `items` ── A set of items that will be rendered as actions in the message.
             
-            `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
             </summary>
             <param name="message">The message to show.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+            <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})">
             <summary>
@@ -237,12 +237,12 @@
             
             `items` ── A set of items that will be rendered as actions in the message.
             
-            `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
             </summary>
             <param name="message">The message to show.</param>
             <param name="options">Configures the behaviour of the message.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+            <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowWarningMessage(System.String,System.String[],System.Action{System.String})">
             <summary>
@@ -252,11 +252,11 @@
             
             `items` ── A set of items that will be rendered as actions in the message.
             
-            `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
             </summary>
             <param name="message">The message to show.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+            <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})">
             <summary>
@@ -268,12 +268,12 @@
             
             `items` ── A set of items that will be rendered as actions in the message.
             
-            `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
             </summary>
             <param name="message">The message to show.</param>
             <param name="options">Configures the behaviour of the message.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+            <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})">
             <summary>
@@ -283,11 +283,11 @@
             
             `items` ── A set of items that will be rendered as actions in the message.
             
-            `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
             </summary>
             <param name="message">The message to show.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+            <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})">
             <summary>
@@ -299,12 +299,12 @@
             
             `items` ── A set of items that will be rendered as actions in the message.
             
-            `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
             </summary>
             <param name="message">The message to show.</param>
             <param name="options">Configures the behaviour of the message.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+            <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowErrorMessage(System.String,System.String[],System.Action{System.String})">
             <summary>
@@ -314,11 +314,11 @@
             
             `items` ── A set of items that will be rendered as actions in the message.
             
-            `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
             </summary>
             <param name="message">The message to show.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+            <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowErrorMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})">
             <summary>
@@ -330,12 +330,12 @@
             
             `items` ── A set of items that will be rendered as actions in the message.
             
-            `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
             </summary>
             <param name="message">The message to show.</param>
             <param name="options">Configures the behaviour of the message.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+            <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowErrorMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})">
             <summary>
@@ -345,11 +345,11 @@
             
             `items` ── A set of items that will be rendered as actions in the message.
             
-            `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
             </summary>
             <param name="message">The message to show.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+            <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowErrorMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})">
             <summary>
@@ -361,12 +361,12 @@
             
             `items` ── A set of items that will be rendered as actions in the message.
             
-            `then` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
             </summary>
             <param name="message">The message to show.</param>
             <param name="options">Configures the behaviour of the message.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <param name="then">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+            <param name="andThen">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowInputBox(VscAppz.InputBoxOptions,VscAppz.Cancel,System.Action{System.String})">
             <summary>
@@ -380,11 +380,11 @@
             
             `token` ── A token that can be used to signal cancellation.
             
-            `then` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
+            `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
             </summary>
             <param name="options">Configures the behavior of the input box.</param>
             <param name="token">A token that can be used to signal cancellation.</param>
-            <param name="then">A promise that resolves to a string the user provided or to `undefined` in case of dismissal.</param>
+            <param name="andThen">A promise that resolves to a string the user provided or to `undefined` in case of dismissal.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowQuickPick(System.String[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{System.String[]})">
             <summary>
@@ -396,12 +396,12 @@
             
             `token` ── A token that can be used to signal cancellation.
             
-            `then` ── A promise that resolves to the selected items or `undefined`.
+            `andThen` ── A promise that resolves to the selected items or `undefined`.
             </summary>
             <param name="items">An array of strings, or a promise that resolves to an array of strings.</param>
             <param name="options">Configures the behavior of the selection list.</param>
             <param name="token">A token that can be used to signal cancellation.</param>
-            <param name="then">A promise that resolves to the selected items or `undefined`.</param>
+            <param name="andThen">A promise that resolves to the selected items or `undefined`.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowQuickPick(System.String[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{System.String})">
             <summary>
@@ -413,12 +413,12 @@
             
             `token` ── A token that can be used to signal cancellation.
             
-            `then` ── A promise that resolves to the selection or `undefined`.
+            `andThen` ── A promise that resolves to the selection or `undefined`.
             </summary>
             <param name="items">An array of strings, or a promise that resolves to an array of strings.</param>
             <param name="options">Configures the behavior of the selection list.</param>
             <param name="token">A token that can be used to signal cancellation.</param>
-            <param name="then">A promise that resolves to the selection or `undefined`.</param>
+            <param name="andThen">A promise that resolves to the selection or `undefined`.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowQuickPick(VscAppz.QuickPickItem[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{VscAppz.QuickPickItem[]})">
             <summary>
@@ -430,12 +430,12 @@
             
             `token` ── A token that can be used to signal cancellation.
             
-            `then` ── A promise that resolves to the selected items or `undefined`.
+            `andThen` ── A promise that resolves to the selected items or `undefined`.
             </summary>
             <param name="items">An array of items, or a promise that resolves to an array of items.</param>
             <param name="options">Configures the behavior of the selection list.</param>
             <param name="token">A token that can be used to signal cancellation.</param>
-            <param name="then">A promise that resolves to the selected items or `undefined`.</param>
+            <param name="andThen">A promise that resolves to the selected items or `undefined`.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowQuickPick(VscAppz.QuickPickItem[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{VscAppz.QuickPickItem})">
             <summary>
@@ -447,12 +447,12 @@
             
             `token` ── A token that can be used to signal cancellation.
             
-            `then` ── A promise that resolves to the selected item or `undefined`.
+            `andThen` ── A promise that resolves to the selected item or `undefined`.
             </summary>
             <param name="items">An array of items, or a promise that resolves to an array of items.</param>
             <param name="options">Configures the behavior of the selection list.</param>
             <param name="token">A token that can be used to signal cancellation.</param>
-            <param name="then">A promise that resolves to the selected item or `undefined`.</param>
+            <param name="andThen">A promise that resolves to the selected item or `undefined`.</param>
         </member>
         <member name="M:VscAppz.IWindow.SetStatusBarMessage(System.String,System.Int32,System.Action{VscAppz.Disposable})">
             <summary>
@@ -463,11 +463,11 @@
             
             `hideAfterTimeout` ── Timeout in milliseconds after which the message will be disposed.
             
-            `then` ── A disposable which hides the status bar message.
+            `andThen` ── A disposable which hides the status bar message.
             </summary>
             <param name="text">The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).</param>
             <param name="hideAfterTimeout">Timeout in milliseconds after which the message will be disposed.</param>
-            <param name="then">A disposable which hides the status bar message.</param>
+            <param name="andThen">A disposable which hides the status bar message.</param>
         </member>
         <member name="M:VscAppz.IWindow.SetStatusBarMessage(System.String,System.Action{VscAppz.Disposable})">
             <summary>
@@ -479,10 +479,10 @@
             
             `text` ── The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
             
-            `then` ── A disposable which hides the status bar message.
+            `andThen` ── A disposable which hides the status bar message.
             </summary>
             <param name="text">The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).</param>
-            <param name="then">A disposable which hides the status bar message.</param>
+            <param name="andThen">A disposable which hides the status bar message.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowSaveDialog(VscAppz.SaveDialogOptions,System.Action{System.String})">
             <summary>
@@ -491,10 +491,10 @@
             
             `options` ── Options that control the dialog.
             
-            `then` ── A promise that resolves to the selected resource or `undefined`.
+            `andThen` ── A promise that resolves to the selected resource or `undefined`.
             </summary>
             <param name="options">Options that control the dialog.</param>
-            <param name="then">A promise that resolves to the selected resource or `undefined`.</param>
+            <param name="andThen">A promise that resolves to the selected resource or `undefined`.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowOpenDialog(VscAppz.OpenDialogOptions,System.Action{System.String[]})">
             <summary>
@@ -503,10 +503,10 @@
             
             `options` ── Options that control the dialog.
             
-            `then` ── A promise that resolves to the selected resources or `undefined`.
+            `andThen` ── A promise that resolves to the selected resources or `undefined`.
             </summary>
             <param name="options">Options that control the dialog.</param>
-            <param name="then">A promise that resolves to the selected resources or `undefined`.</param>
+            <param name="andThen">A promise that resolves to the selected resources or `undefined`.</param>
         </member>
         <member name="M:VscAppz.IWindow.ShowWorkspaceFolderPick(VscAppz.WorkspaceFolderPickOptions,System.Action{VscAppz.WorkspaceFolder})">
             <summary>
@@ -515,10 +515,10 @@
             
             `options` ── Configures the behavior of the workspace folder list.
             
-            `then` ── A promise that resolves to the workspace folder or `undefined`.
+            `andThen` ── A promise that resolves to the workspace folder or `undefined`.
             </summary>
             <param name="options">Configures the behavior of the workspace folder list.</param>
-            <param name="then">A promise that resolves to the workspace folder or `undefined`.</param>
+            <param name="andThen">A promise that resolves to the workspace folder or `undefined`.</param>
         </member>
         <member name="M:VscAppz.IWindow.State(System.Action{VscAppz.WindowState})">
             <summary>Represents the current window's state.</summary>
@@ -542,10 +542,10 @@
             
             `target` ── The uri that should be opened.
             
-            `then` ── A promise indicating if open was successful.
+            `andThen` ── A promise indicating if open was successful.
             </summary>
             <param name="target">The uri that should be opened.</param>
-            <param name="then">A promise indicating if open was successful.</param>
+            <param name="andThen">A promise indicating if open was successful.</param>
         </member>
         <member name="M:VscAppz.IEnv.AppName(System.Action{System.String})">
             <summary>The application name of the editor, like 'VS Code'.</summary>
@@ -642,10 +642,10 @@
             
             `includeUntitled` ── Also save files that have been created during this session.
             
-            `then` ── A thenable that resolves when the files have been saved.
+            `andThen` ── A thenable that resolves when the files have been saved.
             </summary>
             <param name="includeUntitled">Also save files that have been created during this session.</param>
-            <param name="then">A thenable that resolves when the files have been saved.</param>
+            <param name="andThen">A thenable that resolves when the files have been saved.</param>
         </member>
         <member name="M:VscAppz.IWorkspace.OnDidChangeWorkspaceFolders(System.Action{VscAppz.WorkspaceFoldersChangeEvent},System.Action{VscAppz.Disposable})">
             <summary>An event that is emitted when a workspace folder is added or removed.</summary>
@@ -658,10 +658,10 @@
             
             `uri` ── An uri.
             
-            `then` ── A workspace folder or `undefined`
+            `andThen` ── A workspace folder or `undefined`
             </summary>
             <param name="uri">An uri.</param>
-            <param name="then">A workspace folder or `undefined`</param>
+            <param name="andThen">A workspace folder or `undefined`</param>
         </member>
         <member name="M:VscAppz.IWorkspace.WorkspaceFolders(System.Action{VscAppz.WorkspaceFolder[]})">
             <summary>
@@ -686,14 +686,14 @@
             
             `token` ── A token that can be used to signal cancellation to the underlying search engine.
             
-            `then` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
+            `andThen` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
             [workspace folders](#workspace.workspaceFolders) are opened.
             </summary>
             <param name="include">A [glob pattern](#GlobPattern) that defines the files to search for. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. Use a [relative pattern](#RelativePattern) to restrict the search results to a [workspace folder](#WorkspaceFolder).</param>
             <param name="exclude">A [glob pattern](#GlobPattern) that defines files and folders to exclude. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will apply, when `null` no excludes will apply.</param>
             <param name="maxResults">An upper-bound for the result.</param>
             <param name="token">A token that can be used to signal cancellation to the underlying search engine.</param>
-            <param name="then">A thenable that resolves to an array of resource identifiers. Will return no results if no [workspace folders](#workspace.workspaceFolders) are opened.</param>
+            <param name="andThen">A thenable that resolves to an array of resource identifiers. Will return no results if no [workspace folders](#workspace.workspaceFolders) are opened.</param>
         </member>
         <member name="M:VscAppz.IWorkspace.AsRelativePath(System.String,System.Boolean,System.Action{System.String})">
             <summary>
@@ -708,11 +708,11 @@
             workspace folder the name of the workspace is prepended. Defaults to `true` when there are
             multiple workspace folders and `false` otherwise.
             
-            `then` ── A path relative to the root or the input.
+            `andThen` ── A path relative to the root or the input.
             </summary>
             <param name="pathOrUri">A path or uri. When a uri is given its [fsPath](#Uri.fsPath) is used.</param>
             <param name="includeWorkspaceFolder">When `true` and when the given path is contained inside a workspace folder the name of the workspace is prepended. Defaults to `true` when there are multiple workspace folders and `false` otherwise.</param>
-            <param name="then">A path relative to the root or the input.</param>
+            <param name="andThen">A path relative to the root or the input.</param>
         </member>
         <member name="M:VscAppz.IWorkspace.Properties(System.Action{VscAppz.WorkspaceProperties})">
             <summary>Provides single-call access to numerous individual `IWorkspace` properties at once.</summary>
@@ -751,9 +751,9 @@
             <summary>
             Return the identifiers of all known languages.
             
-            `then` ── Promise resolving to an array of identifier strings.
+            `andThen` ── Promise resolving to an array of identifier strings.
             </summary>
-            <param name="then">Promise resolving to an array of identifier strings.</param>
+            <param name="andThen">Promise resolving to an array of identifier strings.</param>
         </member>
         <member name="M:VscAppz.ILanguages.OnDidChangeDiagnostics(System.Action{VscAppz.DiagnosticChangeEvent},System.Action{VscAppz.Disposable})">
             <summary>
@@ -839,6 +839,24 @@
             ```
             </summary>
         </member>
+        <member name="M:VscAppz.ICommands.RegisterCommand(System.String,System.Func{System.Object[],System.Object},System.Action{VscAppz.Disposable})">
+            <summary>
+            Registers a command that can be invoked via a keyboard shortcut,
+            a menu item, an action, or directly.
+            
+            Registering a command with an existing command identifier twice
+            will cause an error.
+            
+            `command` ── A unique identifier for the command.
+            
+            `callback` ── A command handler function.
+            
+            `andThen` ── Disposable which unregisters this command on disposal.
+            </summary>
+            <param name="command">A unique identifier for the command.</param>
+            <param name="callback">A command handler function.</param>
+            <param name="andThen">Disposable which unregisters this command on disposal.</param>
+        </member>
         <member name="M:VscAppz.ICommands.ExecuteCommand(System.String,System.Object[],System.Action{System.Object})">
             <summary>
             Executes the command denoted by the given command identifier.
@@ -853,12 +871,12 @@
             
             `rest` ── Parameters passed to the command function.
             
-            `then` ── A thenable that resolves to the returned value of the given command. `undefined` when
+            `andThen` ── A thenable that resolves to the returned value of the given command. `undefined` when
             the command handler function doesn't return anything.
             </summary>
             <param name="command">Identifier of the command to execute.</param>
             <param name="rest">Parameters passed to the command function.</param>
-            <param name="then">A thenable that resolves to the returned value of the given command. `undefined` when the command handler function doesn't return anything.</param>
+            <param name="andThen">A thenable that resolves to the returned value of the given command. `undefined` when the command handler function doesn't return anything.</param>
         </member>
         <member name="M:VscAppz.ICommands.GetCommands(System.Boolean,System.Action{System.String[]})">
             <summary>
@@ -867,10 +885,10 @@
             
             `filterInternal` ── Set `true` to not see internal commands (starting with an underscore)
             
-            `then` ── Thenable that resolves to a list of command ids.
+            `andThen` ── Thenable that resolves to a list of command ids.
             </summary>
             <param name="filterInternal">Set `true` to not see internal commands (starting with an underscore)</param>
-            <param name="then">Thenable that resolves to a list of command ids.</param>
+            <param name="andThen">Thenable that resolves to a list of command ids.</param>
         </member>
         <member name="T:VscAppz.MessageOptions">
             <summary>Options to configure the behavior of the message.</summary>

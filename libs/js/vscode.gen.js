@@ -966,7 +966,7 @@ class implWindow extends implBase {
             }
             listener(_a_0_);
             return true;
-        });
+        }, null);
         msg.Data["listener"] = _fnid_listener;
         let on;
         if ((undefined !== andThen && null !== andThen)) {
@@ -1322,7 +1322,7 @@ class implWorkspace extends implBase {
             }
             listener(_a_0_);
             return true;
-        });
+        }, null);
         msg.Data["listener"] = _fnid_listener;
         let on;
         if ((undefined !== andThen && null !== andThen)) {
@@ -1565,7 +1565,7 @@ class implLanguages extends implBase {
             }
             listener(_a_0_);
             return true;
-        });
+        }, null);
         msg.Data["listener"] = _fnid_listener;
         let on;
         if ((undefined !== andThen && null !== andThen)) {
@@ -1608,7 +1608,7 @@ class implExtensions extends implBase {
             }
             listener();
             return true;
-        });
+        }, null);
         msg.Data["listener"] = _fnid_listener;
         let on;
         if ((undefined !== andThen && null !== andThen)) {
@@ -1640,7 +1640,26 @@ class implCommands extends implBase {
         msg.QName = "commands.registerCommand";
         msg.Data = {};
         msg.Data["command"] = command;
-        msg.Data["callback"] = callback;
+        let _fnid_callback;
+        if ((undefined === callback || null === callback)) {
+            vsc_appz_1.OnError(this.Impl(), "Commands.RegisterCommand: the 'callback' arg (which is not optional but required) was not passed by the caller", null);
+            return;
+        }
+        _fnid_callback = this.Impl().nextSub(null, (args) => {
+            let ok;
+            if (1 !== args.length) {
+                return [null, ok];
+            }
+            let ret;
+            let _a_0_;
+            [_a_0_, ok] = [args[0], (typeof args[0] === "object") && (typeof args[0]["length"] === "number")];
+            if (!ok) {
+                return [null, false];
+            }
+            ret = callback(_a_0_);
+            return [ret, true];
+        });
+        msg.Data["callback"] = _fnid_callback;
         let on;
         if ((undefined !== andThen && null !== andThen)) {
             on = (payload) => {
@@ -1656,7 +1675,7 @@ class implCommands extends implBase {
                 else {
                     return false;
                 }
-                andThen(result.bind(this.Impl()));
+                andThen(result.bind(this.Impl(), _fnid_callback));
                 return true;
             };
         }

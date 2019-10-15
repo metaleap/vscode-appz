@@ -24,9 +24,12 @@ class impl extends vscgen.impl {
         return (this.counter =
             (this.counter === Number.MAX_SAFE_INTEGER) ? 1 : (1 + this.counter)).toString();
     }
-    nextSub(subscriber) {
+    nextSub(eitherListener, orOther) {
         const fnid = this.nextFuncId();
-        this.cbListeners[fnid] = subscriber;
+        if (eitherListener)
+            this.cbListeners[fnid] = eitherListener;
+        else if (orOther)
+            this.cbOther[fnid] = orOther;
         return fnid;
     }
     send(msg, on) {
@@ -133,8 +136,10 @@ class Disposable {
     Dispose() {
         this.impl.send(new ipcMsg('Dispose', { '': this.id }));
         if (this.subFnIds && this.subFnIds.length) {
-            for (const subfnid of this.subFnIds)
+            for (const subfnid of this.subFnIds) {
                 delete this.impl.cbListeners[subfnid];
+                delete this.impl.cbOther[subfnid];
+            }
             this.subFnIds = null;
         }
     }
