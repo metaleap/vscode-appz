@@ -135,7 +135,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
 					if (!arg_token)
 						arg_token = prog.cancellers[''].token
-					else 
+					else
 						remoteCancellationTokens.push(ctid)
 					const ret = vscode.window.showInputBox(arg_options, arg_token, )
 					const retdisp = ret as any as vscode.Disposable
@@ -150,7 +150,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
 					if (!arg_token)
 						arg_token = prog.cancellers[''].token
-					else 
+					else
 						remoteCancellationTokens.push(ctid)
 					const ret = vscode.window.showQuickPick(arg_items, arg_options, arg_token, )
 					const retdisp = ret as any as vscode.Disposable
@@ -165,7 +165,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
 					if (!arg_token)
 						arg_token = prog.cancellers[''].token
-					else 
+					else
 						remoteCancellationTokens.push(ctid)
 					const ret = vscode.window.showQuickPick(arg_items, arg_options, arg_token, )
 					const retdisp = ret as any as vscode.Disposable
@@ -180,7 +180,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
 					if (!arg_token)
 						arg_token = prog.cancellers[''].token
-					else 
+					else
 						remoteCancellationTokens.push(ctid)
 					const ret = vscode.window.showQuickPick(arg_items, arg_options, arg_token, )
 					const retdisp = ret as any as vscode.Disposable
@@ -195,7 +195,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
 					if (!arg_token)
 						arg_token = prog.cancellers[''].token
-					else 
+					else
 						remoteCancellationTokens.push(ctid)
 					const ret = vscode.window.showQuickPick(arg_items, arg_options, arg_token, )
 					const retdisp = ret as any as vscode.Disposable
@@ -346,7 +346,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
 					if (!arg_token)
 						arg_token = prog.cancellers[''].token
-					else 
+					else
 						remoteCancellationTokens.push(ctid)
 					const ret = vscode.workspace.findFiles(arg_include, arg_exclude, arg_maxResults, arg_token, )
 					const retdisp = ret as any as vscode.Disposable
@@ -412,7 +412,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const _fnid_callback = msg.data['callback'] as string
 					if (!(_fnid_callback && _fnid_callback.length))
 						return Promise.reject(msg.data)
-					const arg_callback = (_0: any[]): any => {
+					const arg_callback = (..._0: any[]): any => {
 						if (prog && prog.proc)
 							return prog.callBack(true, _fnid_callback, _0)
 						return undefined

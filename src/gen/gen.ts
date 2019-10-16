@@ -384,7 +384,16 @@ export class Prep {
                 const tfun = tNode as ts.FunctionTypeNode
                 if (tfun) {
                     const tparams = combine(tParams, tfun.typeParameters)
-                    return { From: tfun.parameters.map(_ => this.typeSpec(_.type, tparams)), To: this.typeSpec(tfun.type, tparams) }
+                    return {
+                        From: tfun.parameters.map(_ => {
+                            const ret = this.typeSpec(_.type, tparams)
+                            const rarr = ret as TypeSpecArr
+                            if (rarr && rarr.ArrOf && _.dotDotDotToken)
+                                rarr.Spreads = true
+                            return ret
+                        }),
+                        To: this.typeSpec(tfun.type, tparams)
+                    }
                 }
                 throw tNode
             default:
@@ -397,6 +406,7 @@ export type TypeSpec = ScriptPrimType | string | TypeSpecArr | TypeSpecTup | Typ
 
 export interface TypeSpecArr {
     ArrOf: TypeSpec
+    Spreads?: boolean
 }
 
 export interface TypeSpecSum {
@@ -487,6 +497,11 @@ export abstract class Gen {
 export function typeArr(typeSpec: TypeSpec): TypeSpec {
     const tarr = typeSpec as TypeSpecArr
     return (tarr && tarr.ArrOf) ? tarr.ArrOf : null
+}
+
+export function typeArrSpreads(typeSpec: TypeSpec): boolean {
+    const tarr = typeSpec as TypeSpecArr
+    return (tarr && tarr.ArrOf) ? tarr.Spreads : false
 }
 
 export function typeTup(typeSpec: TypeSpec): TypeSpec[] {

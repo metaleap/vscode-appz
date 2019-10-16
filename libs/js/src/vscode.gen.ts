@@ -1656,7 +1656,7 @@ class implWindow extends implBase implements Window {
                                 }
                             }
                             return [fn(__0), true]
-                        }                        
+                        }
                     }
                 }
             }
@@ -1729,9 +1729,9 @@ class implWindow extends implBase implements Window {
                                 }
                             } else {
                                 return [null, false]
-                            }                            
+                            }
                             return [fn(__0), true]
-                        }                        
+                        }
                     }
                 }
             }
@@ -1817,9 +1817,9 @@ class implWindow extends implBase implements Window {
                                 }
                             } else {
                                 return [null, false]
-                            }                            
+                            }
                             return [fn(__0), true]
-                        }                        
+                        }
                     }
                 }
             }
@@ -1893,9 +1893,9 @@ class implWindow extends implBase implements Window {
                                 }
                             } else {
                                 return [null, false]
-                            }                            
+                            }
                             return [fn(__0), true]
-                        }                        
+                        }
                     }
                 }
             }
@@ -1982,9 +1982,9 @@ class implWindow extends implBase implements Window {
                                 }
                             } else {
                                 return [null, false]
-                            }                            
+                            }
                             return [fn(__0), true]
-                        }                        
+                        }
                     }
                 }
             }
@@ -2048,7 +2048,7 @@ class implWindow extends implBase implements Window {
                     }
                 } else {
                     return false
-                }                
+                }
                 andThen(result.bind(this.Impl()))
                 return true
             }
@@ -2075,7 +2075,7 @@ class implWindow extends implBase implements Window {
                     }
                 } else {
                     return false
-                }                
+                }
                 andThen(result.bind(this.Impl()))
                 return true
             }
@@ -2233,7 +2233,7 @@ class implWindow extends implBase implements Window {
                     }
                 } else {
                     return false
-                }                
+                }
                 andThen(result.bind(this.Impl(), _fnid_listener))
                 return true
             }
@@ -2263,7 +2263,7 @@ class implEnv extends implBase implements Env {
                     }
                 } else {
                     return false
-                }                
+                }
                 andThen(result)
                 return true
             }
@@ -2475,7 +2475,7 @@ class implEnv extends implBase implements Env {
                     }
                 } else {
                     return false
-                }                
+                }
                 then(result)
                 return true
             }
@@ -2555,7 +2555,7 @@ class implWorkspace extends implBase implements Workspace {
                     }
                 } else {
                     return false
-                }                
+                }
                 andThen(result)
                 return true
             }
@@ -2601,7 +2601,7 @@ class implWorkspace extends implBase implements Workspace {
                     }
                 } else {
                     return false
-                }                
+                }
                 andThen(result.bind(this.Impl(), _fnid_listener))
                 return true
             }
@@ -2764,7 +2764,7 @@ class implWorkspace extends implBase implements Workspace {
                     }
                 } else {
                     return false
-                }                
+                }
                 then(result)
                 return true
             }
@@ -2850,7 +2850,7 @@ class implLanguages extends implBase implements Languages {
                     }
                 } else {
                     return false
-                }                
+                }
                 andThen(result.bind(this.Impl(), _fnid_listener))
                 return true
             }
@@ -2894,7 +2894,7 @@ class implExtensions extends implBase implements Extensions {
                     }
                 } else {
                     return false
-                }                
+                }
                 andThen(result.bind(this.Impl(), _fnid_listener))
                 return true
             }
@@ -2945,7 +2945,7 @@ class implCommands extends implBase implements Commands {
                     }
                 } else {
                     return false
-                }                
+                }
                 andThen(result.bind(this.Impl(), _fnid_callback))
                 return true
             }
@@ -3036,7 +3036,7 @@ function MessageItem_populateFrom(this: MessageItem, payload: any): boolean {
         this.title = title
     } else {
         return false
-    }    
+    }
     [val, ok] = [it["isCloseAffordance"], undefined !== it["isCloseAffordance"]]
     if (ok) {
         let isCloseAffordance: boolean
@@ -3084,7 +3084,7 @@ function QuickPickItem_populateFrom(this: QuickPickItem, payload: any): boolean 
         this.label = label
     } else {
         return false
-    }    
+    }
     [val, ok] = [it["description"], undefined !== it["description"]]
     if (ok) {
         let description: string
@@ -3171,7 +3171,7 @@ function WorkspaceFolder_populateFrom(this: WorkspaceFolder, payload: any): bool
         this.uri = uri
     } else {
         return false
-    }    
+    }
     [val, ok] = [it["name"], undefined !== it["name"]]
     if (ok) {
         let name: string
@@ -3184,7 +3184,7 @@ function WorkspaceFolder_populateFrom(this: WorkspaceFolder, payload: any): bool
         this.name = name
     } else {
         return false
-    }    
+    }
     [val, ok] = [it["index"], undefined !== it["index"]]
     if (ok) {
         let index: number
@@ -3202,7 +3202,7 @@ function WorkspaceFolder_populateFrom(this: WorkspaceFolder, payload: any): bool
         this.index = index
     } else {
         return false
-    }    
+    }
     return true
 }
 
@@ -3226,7 +3226,7 @@ function WindowState_populateFrom(this: WindowState, payload: any): boolean {
         this.focused = focused
     } else {
         return false
-    }    
+    }
     return true
 }
 
@@ -3379,7 +3379,7 @@ function WorkspaceFoldersChangeEvent_populateFrom(this: WorkspaceFoldersChangeEv
         this.added = added
     } else {
         return false
-    }    
+    }
     [val, ok] = [it["removed"], undefined !== it["removed"]]
     if (ok) {
         let removed: WorkspaceFolder[]
@@ -3406,7 +3406,7 @@ function WorkspaceFoldersChangeEvent_populateFrom(this: WorkspaceFoldersChangeEv
         this.removed = removed
     } else {
         return false
-    }    
+    }
     return true
 }
 
@@ -3505,7 +3505,7 @@ function DiagnosticChangeEvent_populateFrom(this: DiagnosticChangeEvent, payload
         this.uris = uris
     } else {
         return false
-    }    
+    }
     return true
 }
 

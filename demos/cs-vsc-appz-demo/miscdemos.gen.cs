@@ -17,11 +17,61 @@ namespace VscAppzDemo {
 					if ((null == item)) {
 						vsc.Window.ShowWarningMessage("Command selection cancelled, bye now!", null, quit);
 					} else {
-						vsc.Commands.ExecuteCommand(item, null, (any ret) => {
-							vsc.Window.ShowInformationMessage(strFmt("Command result was: {0}", ret), null, quit);
+						InputBoxOptions opts2 = default;
+						opts2 = new InputBoxOptions();
+						opts2.IgnoreFocusOut = true;
+						opts2.PlaceHolder = strFmt("Any param for `{0}` command? Else leave blank.", item);
+						vsc.Window.ShowInputBox(opts2, null, (string cmdarg) => {
+							if ((null == cmdarg)) {
+								vsc.Window.ShowWarningMessage("You cancelled, bye now!", null, quit);
+							} else {
+								any[] cmdargs = default;
+								if ("" != cmdarg) {
+									cmdargs = new any[1];
+									cmdargs[0] = cmdarg;
+								}
+								vsc.Commands.ExecuteCommand(item, cmdargs, (any ret) => {
+									vsc.Window.ShowInformationMessage(strFmt("Command result was: {0}", ret), null, quit);
+								});
+							}
 						});
-					}					
+					}
 				});
+			});
+		}
+		private static void demo_Commands_RegisterCommand() {
+			InputBoxOptions opts = default;
+			opts = new InputBoxOptions();
+			opts.IgnoreFocusOut = true;
+			opts.Value = "foo.bar.baz";
+			opts.Prompt = "Enter your command name. The command will accept a single text input and return a result built from it.";
+			vsc.Window.ShowInputBox(opts, null, (string cmdname) => {
+				if ((null == cmdname)) {
+					vsc.Window.ShowWarningMessage("You cancelled, bye now!", null, quit);
+				} else {
+					vsc.Commands.RegisterCommand(cmdname, (any[] cmdargs) => {
+						vsc.Window.SetStatusBarMessage(strFmt("Command `{0}` invoked with: `{1}`", cmdname, cmdargs[0]), 4242, null);
+						return strFmt("Input to command `{0}` was: `{1}`", cmdname, cmdargs[0]);
+					}, (Disposable useToUnregister) => {
+						InputBoxOptions opts2 = default;
+						opts2 = new InputBoxOptions();
+						opts2.IgnoreFocusOut = true;
+						opts2.Prompt = strFmt("Command `{0}` registered, try it now?", cmdname);
+						opts2.Value = strFmt("Enter input to command `{0}` here", cmdname);
+						vsc.Window.ShowInputBox(opts2, null, (string cmdarg) => {
+							if ((null == cmdarg)) {
+								vsc.Window.ShowWarningMessage("You cancelled, bye now!", null, quit);
+							} else {
+								any[] cmdargs2 = default;
+								cmdargs2 = new any[1];
+								cmdargs2[0] = cmdarg;
+								vsc.Commands.ExecuteCommand(cmdname, cmdargs2, (any ret) => {
+									vsc.Window.ShowInformationMessage(strFmt("Command result: {0}", ret), null, quit);
+								});
+							}
+						});
+					});
+				}
 			});
 		}
 		private static void demo_Languages_GetLanguages() {
@@ -88,7 +138,7 @@ namespace VscAppzDemo {
 					vsc.Window.ShowWarningMessage("Cancelled File-Open dialog, bye now!", null, quit);
 				} else {
 					vsc.Window.ShowInformationMessage(strFmt("Selected {0} file path(s), bye now!", filepaths.Length), null, quit);
-				}				
+				}
 			});
 		}
 		private static void demo_Window_ShowSaveDialog() {
@@ -104,7 +154,7 @@ namespace VscAppzDemo {
 					vsc.Window.ShowWarningMessage("Cancelled File-Save dialog, bye now!", null, quit);
 				} else {
 					vsc.Window.ShowInformationMessage(strFmt("Selected file path `{0}`, bye now!", filepath), null, quit);
-				}				
+				}
 			});
 		}
 		private static void demo_Window_ShowWorkspaceFolderPick() {
@@ -118,19 +168,18 @@ namespace VscAppzDemo {
 					vsc.Window.ShowWarningMessage("Cancelled pick input, bye now!", null, quit);
 				} else {
 					vsc.Window.ShowInformationMessage(strFmt("Selected `{0}` located at `{1}`, bye now!", pickedfolder.Name, pickedfolder.Uri), null, quit);
-				}				
+				}
 			});
 		}
 		private static void demo_Env_OpenExternal() {
 			InputBoxOptions opts = default;
 			opts = new InputBoxOptions();
 			opts.IgnoreFocusOut = true;
-			opts.Value = "http://github.com/metaleap/vscode-appz";
+			opts.Value = "http://foo.bar/baz";
 			opts.Prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol.";
 			vsc.Window.ShowInputBox(opts, null, (string uri) => {
-				statusNoticeQuit();
 				if ((null == uri)) {
-					vsc.Window.ShowWarningMessage("Cancelled, bye now!", null, quit);
+					vsc.Window.ShowWarningMessage("You cancelled, bye now!", null, quit);
 				} else {
 					vsc.Env.OpenExternal(uri, (bool ok) => {
 						string did = default;
@@ -140,7 +189,7 @@ namespace VscAppzDemo {
 						}
 						vsc.Window.ShowInformationMessage(strFmt("{0} succeed in opening `{1}`, bye now!", did, uri), null, quit);
 					});
-				}				
+				}
 			});
 		}
 		private static void demo_Window_ShowQuickPick() {
@@ -178,7 +227,7 @@ namespace VscAppzDemo {
 					vsc.Window.ShowWarningMessage("Cancelled pick input, bye now!", null, quit);
 				} else {
 					vsc.Window.ShowInformationMessage(strFmt("You picked {0} item(s), bye now!", pickeditems.Length), null, quit);
-				}				
+				}
 			});
 		}
 		private static void subscribeToMiscEvents() {
@@ -197,7 +246,7 @@ namespace VscAppzDemo {
 		}
 		private static void demosMenu() {
 			string[] items = default;
-			items = new[] { "demo_Window_ShowInputBox", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick" };
+			items = new[] { "demo_Window_ShowInputBox", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick" };
 			QuickPickOptions opts = default;
 			opts = new QuickPickOptions();
 			opts.IgnoreFocusOut = true;
@@ -211,6 +260,9 @@ namespace VscAppzDemo {
 					}
 					if ("demo_Commands_GetCommands_and_ExecuteCommand" == menuitem) {
 						demo_Commands_GetCommands_and_ExecuteCommand();
+					}
+					if ("demo_Commands_RegisterCommand" == menuitem) {
+						demo_Commands_RegisterCommand();
 					}
 					if ("demo_Languages_GetLanguages" == menuitem) {
 						demo_Languages_GetLanguages();
@@ -236,7 +288,7 @@ namespace VscAppzDemo {
 					if ("demo_Window_ShowQuickPick" == menuitem) {
 						demo_Window_ShowQuickPick();
 					}
-				}				
+				}
 			});
 		}
 }}

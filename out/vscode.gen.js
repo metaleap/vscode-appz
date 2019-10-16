@@ -396,7 +396,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const _fnid_callback = msg.data['callback'];
                     if (!(_fnid_callback && _fnid_callback.length))
                         return Promise.reject(msg.data);
-                    const arg_callback = (_0) => {
+                    const arg_callback = (..._0) => {
                         if (prog && prog.proc)
                             return prog.callBack(true, _fnid_callback, _0);
                         return undefined;

@@ -25,13 +25,41 @@ export class GenDemos {
                     _.eFunc([{ Name: "item", Type: { Maybe: TypeRefPrim.String } }], null,
                         _.iIf(_.oIsnt(_.n("item")), [
                             this.genByeMsg(_, "Command selection cancelled, bye now!"),
-                        ], [
+                        ], this.genInput(_, "opts2", "cmdarg", [{ k: "PlaceHolder", v: _.eLit("Any param for `{0}` command? Else leave blank.", _.oDeref(_.n("item"))) }],
+                            _.iVar("cmdargs", { ValsOf: TypeRefPrim.Any }),
+                            _.iIf(_.oNeq(_.eLit(""), _.oDeref(_.n("cmdarg"))), [
+                                _.iSet(_.n("cmdargs"), _.eCollNew(_.eLit(1), TypeRefPrim.Any, true)),
+                                _.iSet(_.oIdx(_.n("cmdargs"), _.eLit(0)), _.oDeref(_.n("cmdarg"))),
+                            ]),
                             _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("ExecuteCommand")),
-                                _.oDeref(_.n("item")), _.eZilch(), _.eFunc([{ Name: "ret", Type: TypeRefPrim.Any }], null,
+                                _.oDeref(_.n("item")), _.n("cmdargs"), _.eFunc([{ Name: "ret", Type: TypeRefPrim.Any }], null,
                                     this.genInfoMsg(_, _.eLit("Command result was: {0}", _.n("ret"))),
                                 ),
                             ),
-                        ]),
+                        )),
+                    ),
+                ),
+
+            "demo_Commands_RegisterCommand": () =>
+                this.genInput(_, "opts", "cmdname", [{ k: "Value", v: _.eLit("foo.bar.baz") }, { k: "Prompt", v: _.eLit("Enter your command name. The command will accept a single text input and return a result built from it.") }],
+                    _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("RegisterCommand")),
+                        _.oDeref(_.n("cmdname")), _.eFunc([{ Name: "cmdargs", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Any,
+                            this.genStatusMsg(_, _.eLit("Command `{0}` invoked with: `{1}`", _.oDeref(_.n("cmdname")), _.oIdx(_.n("cmdargs"), _.eLit(0)))),
+                            _.iRet(_.eLit("Input to command `{0}` was: `{1}`", _.oDeref(_.n("cmdname")), _.oIdx(_.n("cmdargs"), _.eLit(0)))),
+                        ), _.eFunc([{ Name: "useToUnregister", Type: { Maybe: { Name: "Disposable" } } }], null,
+                            ...this.genInput(_, "opts2", "cmdarg", [{ k: "Prompt", v: _.eLit("Command `{0}` registered, try it now?", _.oDeref(_.n("cmdname"))) }, { k: "Value", v: _.eLit("Enter input to command `{0}` here", _.oDeref(_.n("cmdname"))) }],
+                                _.iVar("cmdargs2", { ValsOf: TypeRefPrim.Any }),
+                                _.iSet(_.n("cmdargs2"), _.eCollNew(_.eLit(1), TypeRefPrim.Any, true)),
+                                _.iSet(_.oIdx(_.n("cmdargs2"), _.eLit(0)), _.oDeref(_.n("cmdarg"))),
+                                _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("ExecuteCommand")),
+                                    _.oDeref(_.n("cmdname")),
+                                    _.n("cmdargs2"),
+                                    _.eFunc([{ Name: "ret", Type: TypeRefPrim.Any }], null,
+                                        this.genInfoMsg(_, _.eLit("Command result: {0}", _.n("ret"))),
+                                    ),
+                                ),
+                            ),
+                        ),
                     ),
                 ),
 
@@ -68,35 +96,19 @@ export class GenDemos {
                 ),
             ],
 
-            "demo_Env_OpenExternal": () => [
-                _.iVar("opts", { Maybe: { Name: "InputBoxOptions" } }),
-                _.iSet(_.n("opts"), _.eNew({ Maybe: { Name: "InputBoxOptions" } })),
-                _.iSet(_.oDot(_.n("opts"), _.n(this.fld("IgnoreFocusOut"))), _.eLit(true)),
-                _.iSet(_.oDot(_.n("opts"), _.n(this.fld("Value"))), _.eLit("http://github.com/metaleap/vscode-appz")),
-                _.iSet(_.oDot(_.n("opts"), _.n(this.fld("Prompt"))), _.eLit("Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol.")),
-                _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("ShowInputBox")),
-                    _.n("opts"),
-                    _.eZilch(),
-                    _.eFunc([{ Name: "uri", Type: { Maybe: TypeRefPrim.String } }], null,
-                        _.eCall(_.n("statusNoticeQuit")),
-                        _.iIf(_.oIsnt(_.n("uri")), [
-                            this.genByeMsg(_, "Cancelled, bye now!"),
-                        ], [
-                            _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Env"))), _.n("OpenExternal")),
-                                _.oDeref(_.n("uri")),
-                                _.eFunc([{ Name: "ok", Type: TypeRefPrim.Bool }], null,
-                                    _.iVar("did", TypeRefPrim.String),
-                                    _.iSet(_.n("did"), _.eLit("Did")),
-                                    _.iIf(_.oNot(_.n("ok")), [
-                                        _.iSet(_.n("did"), _.eOp(" + ", _.n("did"), _.eLit(" not")))
-                                    ]),
-                                    this.genInfoMsg(_, _.eLit("{0} succeed in opening `{1}`, bye now!", _.n("did"), _.oDeref(_.n("uri")))),
-                                ),
-                            ),
+            "demo_Env_OpenExternal": () => this.genInput(_, "opts", "uri", [{ k: "Value", v: _.eLit("http://foo.bar/baz") }, { k: "Prompt", v: _.eLit("Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol.") }],
+                _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Env"))), _.n("OpenExternal")),
+                    _.oDeref(_.n("uri")),
+                    _.eFunc([{ Name: "ok", Type: TypeRefPrim.Bool }], null,
+                        _.iVar("did", TypeRefPrim.String),
+                        _.iSet(_.n("did"), _.eLit("Did")),
+                        _.iIf(_.oNot(_.n("ok")), [
+                            _.iSet(_.n("did"), _.eOp(" + ", _.n("did"), _.eLit(" not")))
                         ]),
+                        this.genInfoMsg(_, _.eLit("{0} succeed in opening `{1}`, bye now!", _.n("did"), _.oDeref(_.n("uri")))),
                     ),
                 ),
-            ],
+            ),
 
             "demo_Window_ShowQuickPick": () => {
                 const items = [
@@ -221,6 +233,24 @@ export class GenDemos {
 
     genInfoMsg(_: Builder, msg: Expr): Instr {
         return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowInformationMessage", 1))), msg, _.eZilch(), _.n("quit"))
+    }
+
+    genInput(_: Builder, nameOpts: string, nameInput: string, props: { k: string, v: Expr }[], ...withInput: Instr[]): Instr[] {
+        return ([
+            _.iVar(nameOpts, { Maybe: { Name: "InputBoxOptions" } }),
+            _.iSet(_.n(nameOpts), _.eNew({ Maybe: { Name: "InputBoxOptions" } })),
+            _.iSet(_.oDot(_.n(nameOpts), _.n(this.fld("IgnoreFocusOut"))), _.eLit(true)),
+        ] as Instr[]).concat(..._.EACH(props, prop => [
+            _.iSet(_.oDot(_.n(nameOpts), _.n(this.fld(prop.k))), prop.v)
+        ] as Instr[])).concat(
+            _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("ShowInputBox")),
+                _.n(nameOpts), _.eZilch(), _.eFunc([{ Name: nameInput, Type: { Maybe: TypeRefPrim.String } }], null,
+                    _.iIf(_.oIsnt(_.n(nameInput)), [
+                        this.genByeMsg(_, "You cancelled, bye now!"),
+                    ], withInput),
+                ),
+            ),
+        )
     }
 
     genStatusMsg(_: Builder, msg: Expr): Instr {

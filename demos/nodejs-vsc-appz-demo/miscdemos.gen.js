@@ -17,11 +17,62 @@ function demo_Commands_GetCommands_and_ExecuteCommand() {
             if ((undefined === item || null === item)) {
                 vsc.Window.ShowWarningMessage1("Command selection cancelled, bye now!", null, quit)
             } else {
-                vsc.Commands.ExecuteCommand(item, null, (ret) => {
-                    vsc.Window.ShowInformationMessage1(strFmt("Command result was: {0}", ret), null, quit)
+                let opts2
+                opts2 = {}
+                opts2.ignoreFocusOut = true
+                opts2.placeHolder = strFmt("Any param for `{0}` command? Else leave blank.", item)
+                vsc.Window.ShowInputBox(opts2, null, (cmdarg) => {
+                    if ((undefined === cmdarg || null === cmdarg)) {
+                        vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null, quit)
+                    } else {
+                        let cmdargs
+                        if ("" !== cmdarg) {
+                            cmdargs = new Array(1)
+                            cmdargs[0] = cmdarg
+                        }
+                        vsc.Commands.ExecuteCommand(item, cmdargs, (ret) => {
+                            vsc.Window.ShowInformationMessage1(strFmt("Command result was: {0}", ret), null, quit)
+                        })
+                    }
                 })
-            }            
+            }
         })
+    })
+}
+
+function demo_Commands_RegisterCommand() {
+    let opts
+    opts = {}
+    opts.ignoreFocusOut = true
+    opts.value = "foo.bar.baz"
+    opts.prompt = "Enter your command name. The command will accept a single text input and return a result built from it."
+    vsc.Window.ShowInputBox(opts, null, (cmdname) => {
+        if ((undefined === cmdname || null === cmdname)) {
+            vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null, quit)
+        } else {
+            vsc.Commands.RegisterCommand(cmdname, (cmdargs) => {
+                vsc.Window.SetStatusBarMessage1(strFmt("Command `{0}` invoked with: `{1}`", cmdname, cmdargs[0]), 4242, null)
+                return strFmt("Input to command `{0}` was: `{1}`", cmdname, cmdargs[0])
+            }, (useToUnregister) => {
+                let opts2
+                opts2 = {}
+                opts2.ignoreFocusOut = true
+                opts2.prompt = strFmt("Command `{0}` registered, try it now?", cmdname)
+                opts2.value = strFmt("Enter input to command `{0}` here", cmdname)
+                vsc.Window.ShowInputBox(opts2, null, (cmdarg) => {
+                    if ((undefined === cmdarg || null === cmdarg)) {
+                        vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null, quit)
+                    } else {
+                        let cmdargs2
+                        cmdargs2 = new Array(1)
+                        cmdargs2[0] = cmdarg
+                        vsc.Commands.ExecuteCommand(cmdname, cmdargs2, (ret) => {
+                            vsc.Window.ShowInformationMessage1(strFmt("Command result: {0}", ret), null, quit)
+                        })
+                    }
+                })
+            })
+        }
     })
 }
 
@@ -92,7 +143,7 @@ function demo_Window_ShowOpenDialog() {
             vsc.Window.ShowWarningMessage1("Cancelled File-Open dialog, bye now!", null, quit)
         } else {
             vsc.Window.ShowInformationMessage1(strFmt("Selected {0} file path(s), bye now!", filepaths.length), null, quit)
-        }        
+        }
     })
 }
 
@@ -109,7 +160,7 @@ function demo_Window_ShowSaveDialog() {
             vsc.Window.ShowWarningMessage1("Cancelled File-Save dialog, bye now!", null, quit)
         } else {
             vsc.Window.ShowInformationMessage1(strFmt("Selected file path `{0}`, bye now!", filepath), null, quit)
-        }        
+        }
     })
 }
 
@@ -124,7 +175,7 @@ function demo_Window_ShowWorkspaceFolderPick() {
             vsc.Window.ShowWarningMessage1("Cancelled pick input, bye now!", null, quit)
         } else {
             vsc.Window.ShowInformationMessage1(strFmt("Selected `{0}` located at `{1}`, bye now!", pickedfolder.name, pickedfolder.uri), null, quit)
-        }        
+        }
     })
 }
 
@@ -132,12 +183,11 @@ function demo_Env_OpenExternal() {
     let opts
     opts = {}
     opts.ignoreFocusOut = true
-    opts.value = "http://github.com/metaleap/vscode-appz"
+    opts.value = "http://foo.bar/baz"
     opts.prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."
     vsc.Window.ShowInputBox(opts, null, (uri) => {
-        statusNoticeQuit()
         if ((undefined === uri || null === uri)) {
-            vsc.Window.ShowWarningMessage1("Cancelled, bye now!", null, quit)
+            vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null, quit)
         } else {
             vsc.Env.OpenExternal(uri, (ok) => {
                 let did
@@ -147,7 +197,7 @@ function demo_Env_OpenExternal() {
                 }
                 vsc.Window.ShowInformationMessage1(strFmt("{0} succeed in opening `{1}`, bye now!", did, uri), null, quit)
             })
-        }        
+        }
     })
 }
 
@@ -186,7 +236,7 @@ function demo_Window_ShowQuickPick() {
             vsc.Window.ShowWarningMessage1("Cancelled pick input, bye now!", null, quit)
         } else {
             vsc.Window.ShowInformationMessage1(strFmt("You picked {0} item(s), bye now!", pickeditems.length), null, quit)
-        }        
+        }
     })
 }
 
@@ -208,7 +258,7 @@ function statusNoticeQuit() {
 
 function demosMenu() {
     let items
-    items = ["demo_Window_ShowInputBox", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick"]
+    items = ["demo_Window_ShowInputBox", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick"]
     let opts
     opts = {}
     opts.ignoreFocusOut = true
@@ -222,6 +272,9 @@ function demosMenu() {
             }
             if ("demo_Commands_GetCommands_and_ExecuteCommand" === menuitem) {
                 demo_Commands_GetCommands_and_ExecuteCommand()
+            }
+            if ("demo_Commands_RegisterCommand" === menuitem) {
+                demo_Commands_RegisterCommand()
             }
             if ("demo_Languages_GetLanguages" === menuitem) {
                 demo_Languages_GetLanguages()
@@ -247,7 +300,7 @@ function demosMenu() {
             if ("demo_Window_ShowQuickPick" === menuitem) {
                 demo_Window_ShowQuickPick()
             }
-        }        
+        }
     })
 }
 

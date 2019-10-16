@@ -194,7 +194,7 @@ export class Gen extends gen_syn.Gen {
                 this.lf().s("}")
 
                 if (iblock.If && iblock.If.length > 1 && iblock.If[1] && iblock.If[1].Instrs && iblock.If[1].Instrs.length)
-                    this.s(" else ").emitInstr(iblock.If[1]).lf()
+                    this.s(" else ").emitInstr(iblock.If[1])
 
                 return endeol ? this.line() : this
             }

@@ -1610,7 +1610,7 @@ namespace VscAppz {
 									}
 								}
 								return (fn(__0), true);
-							}							
+							}
 						};
 					}
 				}
@@ -1683,9 +1683,9 @@ namespace VscAppz {
 									}
 								} else {
 									return (null, false);
-								}								
+								}
 								return (fn(__0), true);
-							}							
+							}
 						};
 					}
 				}
@@ -1771,9 +1771,9 @@ namespace VscAppz {
 									}
 								} else {
 									return (null, false);
-								}								
+								}
 								return (fn(__0), true);
-							}							
+							}
 						};
 					}
 				}
@@ -1847,9 +1847,9 @@ namespace VscAppz {
 									}
 								} else {
 									return (null, false);
-								}								
+								}
 								return (fn(__0), true);
-							}							
+							}
 						};
 					}
 				}
@@ -1936,9 +1936,9 @@ namespace VscAppz {
 									}
 								} else {
 									return (null, false);
-								}								
+								}
 								return (fn(__0), true);
-							}							
+							}
 						};
 					}
 				}
@@ -2002,7 +2002,7 @@ namespace VscAppz {
 						}
 					} else {
 						return false;
-					}					
+					}
 					andThen(result.bind(this.Impl()));
 					return true;
 				};
@@ -2029,7 +2029,7 @@ namespace VscAppz {
 						}
 					} else {
 						return false;
-					}					
+					}
 					andThen(result.bind(this.Impl()));
 					return true;
 				};
@@ -2187,7 +2187,7 @@ namespace VscAppz {
 						}
 					} else {
 						return false;
-					}					
+					}
 					andThen(result.bind(this.Impl(), _fnid_listener));
 					return true;
 				};
@@ -2213,7 +2213,7 @@ namespace VscAppz {
 						}
 					} else {
 						return false;
-					}					
+					}
 					andThen(result);
 					return true;
 				};
@@ -2425,7 +2425,7 @@ namespace VscAppz {
 						}
 					} else {
 						return false;
-					}					
+					}
 					then(result);
 					return true;
 				};
@@ -2501,7 +2501,7 @@ namespace VscAppz {
 						}
 					} else {
 						return false;
-					}					
+					}
 					andThen(result);
 					return true;
 				};
@@ -2547,7 +2547,7 @@ namespace VscAppz {
 						}
 					} else {
 						return false;
-					}					
+					}
 					andThen(result.bind(this.Impl(), _fnid_listener));
 					return true;
 				};
@@ -2710,7 +2710,7 @@ namespace VscAppz {
 						}
 					} else {
 						return false;
-					}					
+					}
 					then(result);
 					return true;
 				};
@@ -2792,7 +2792,7 @@ namespace VscAppz {
 						}
 					} else {
 						return false;
-					}					
+					}
 					andThen(result.bind(this.Impl(), _fnid_listener));
 					return true;
 				};
@@ -2832,7 +2832,7 @@ namespace VscAppz {
 						}
 					} else {
 						return false;
-					}					
+					}
 					andThen(result.bind(this.Impl(), _fnid_listener));
 					return true;
 				};
@@ -2879,7 +2879,7 @@ namespace VscAppz {
 						}
 					} else {
 						return false;
-					}					
+					}
 					andThen(result.bind(this.Impl(), _fnid_callback));
 					return true;
 				};
@@ -2971,7 +2971,7 @@ namespace VscAppz {
 				this.Title = title;
 			} else {
 				return false;
-			}			
+			}
 			(val, ok) = (it.TryGetValue("isCloseAffordance", out var ___) ? (___, true) : (default, false));
 			if (ok) {
 				bool isCloseAffordance = default;
@@ -3019,7 +3019,7 @@ namespace VscAppz {
 				this.Label = label;
 			} else {
 				return false;
-			}			
+			}
 			(val, ok) = (it.TryGetValue("description", out var ___) ? (___, true) : (default, false));
 			if (ok) {
 				string description = default;
@@ -3104,7 +3104,7 @@ namespace VscAppz {
 				this.Uri = uri;
 			} else {
 				return false;
-			}			
+			}
 			(val, ok) = (it.TryGetValue("name", out var ___) ? (___, true) : (default, false));
 			if (ok) {
 				string name = default;
@@ -3117,7 +3117,7 @@ namespace VscAppz {
 				this.Name = name;
 			} else {
 				return false;
-			}			
+			}
 			(val, ok) = (it.TryGetValue("index", out var ____) ? (____, true) : (default, false));
 			if (ok) {
 				int index = default;
@@ -3135,7 +3135,7 @@ namespace VscAppz {
 				this.Index = index;
 			} else {
 				return false;
-			}			
+			}
 			return true;
 		}
 	}
@@ -3161,7 +3161,7 @@ namespace VscAppz {
 				this.Focused = focused;
 			} else {
 				return false;
-			}			
+			}
 			return true;
 		}
 	}
@@ -3318,7 +3318,7 @@ namespace VscAppz {
 				this.Added = added;
 			} else {
 				return false;
-			}			
+			}
 			(val, ok) = (it.TryGetValue("removed", out var ___) ? (___, true) : (default, false));
 			if (ok) {
 				WorkspaceFolder[] removed = default;
@@ -3345,7 +3345,7 @@ namespace VscAppz {
 				this.Removed = removed;
 			} else {
 				return false;
-			}			
+			}
 			return true;
 		}
 	}
@@ -3448,7 +3448,7 @@ namespace VscAppz {
 				this.Uris = uris;
 			} else {
 				return false;
-			}			
+			}
 			return true;
 		}
 	}

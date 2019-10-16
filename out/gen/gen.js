@@ -287,7 +287,16 @@ class Prep {
                 const tfun = tNode;
                 if (tfun) {
                     const tparams = combine(tParams, tfun.typeParameters);
-                    return { From: tfun.parameters.map(_ => this.typeSpec(_.type, tparams)), To: this.typeSpec(tfun.type, tparams) };
+                    return {
+                        From: tfun.parameters.map(_ => {
+                            const ret = this.typeSpec(_.type, tparams);
+                            const rarr = ret;
+                            if (rarr && rarr.ArrOf && _.dotDotDotToken)
+                                rarr.Spreads = true;
+                            return ret;
+                        }),
+                        To: this.typeSpec(tfun.type, tparams)
+                    };
                 }
                 throw tNode;
             default:
@@ -344,6 +353,11 @@ function typeArr(typeSpec) {
     return (tarr && tarr.ArrOf) ? tarr.ArrOf : null;
 }
 exports.typeArr = typeArr;
+function typeArrSpreads(typeSpec) {
+    const tarr = typeSpec;
+    return (tarr && tarr.ArrOf) ? tarr.Spreads : false;
+}
+exports.typeArrSpreads = typeArrSpreads;
 function typeTup(typeSpec) {
     const ttup = typeSpec;
     return (ttup && ttup.TupOf) ? ttup.TupOf : null;

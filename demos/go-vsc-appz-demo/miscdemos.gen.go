@@ -15,11 +15,62 @@ func demo_Commands_GetCommands_and_ExecuteCommand() {
 			if (nil == item) {
 				vsc.Window().ShowWarningMessage1("Command selection cancelled, bye now!", nil, quit)
 			} else {
-				vsc.Commands().ExecuteCommand(*item, nil, func(ret any) {
-					vsc.Window().ShowInformationMessage1(strFmt("Command result was: {0}", ret), nil, quit)
+				var opts2 *InputBoxOptions
+				opts2 = new(InputBoxOptions)
+				opts2.IgnoreFocusOut = true
+				opts2.PlaceHolder = strFmt("Any param for `{0}` command? Else leave blank.", *item)
+				vsc.Window().ShowInputBox(opts2, nil, func(cmdarg *string) {
+					if (nil == cmdarg) {
+						vsc.Window().ShowWarningMessage1("You cancelled, bye now!", nil, quit)
+					} else {
+						var cmdargs []any
+						if "" != (*cmdarg) {
+							cmdargs = make([]any, 1)
+							cmdargs[0] = *cmdarg
+						}
+						vsc.Commands().ExecuteCommand(*item, cmdargs, func(ret any) {
+							vsc.Window().ShowInformationMessage1(strFmt("Command result was: {0}", ret), nil, quit)
+						})
+					}
 				})
 			}
 		})
+	})
+}
+
+func demo_Commands_RegisterCommand() {
+	var opts *InputBoxOptions
+	opts = new(InputBoxOptions)
+	opts.IgnoreFocusOut = true
+	opts.Value = "foo.bar.baz"
+	opts.Prompt = "Enter your command name. The command will accept a single text input and return a result built from it."
+	vsc.Window().ShowInputBox(opts, nil, func(cmdname *string) {
+		if (nil == cmdname) {
+			vsc.Window().ShowWarningMessage1("You cancelled, bye now!", nil, quit)
+		} else {
+			vsc.Commands().RegisterCommand(*cmdname, func(cmdargs []any) any {
+				vsc.Window().SetStatusBarMessage1(strFmt("Command `{0}` invoked with: `{1}`", *cmdname, cmdargs[0]), 4242, nil)
+				return strFmt("Input to command `{0}` was: `{1}`", *cmdname, cmdargs[0])
+			}, func(useToUnregister *Disposable) {
+				var opts2 *InputBoxOptions
+				opts2 = new(InputBoxOptions)
+				opts2.IgnoreFocusOut = true
+				opts2.Prompt = strFmt("Command `{0}` registered, try it now?", *cmdname)
+				opts2.Value = strFmt("Enter input to command `{0}` here", *cmdname)
+				vsc.Window().ShowInputBox(opts2, nil, func(cmdarg *string) {
+					if (nil == cmdarg) {
+						vsc.Window().ShowWarningMessage1("You cancelled, bye now!", nil, quit)
+					} else {
+						var cmdargs2 []any
+						cmdargs2 = make([]any, 1)
+						cmdargs2[0] = *cmdarg
+						vsc.Commands().ExecuteCommand(*cmdname, cmdargs2, func(ret any) {
+							vsc.Window().ShowInformationMessage1(strFmt("Command result: {0}", ret), nil, quit)
+						})
+					}
+				})
+			})
+		}
 	})
 }
 
@@ -130,12 +181,11 @@ func demo_Env_OpenExternal() {
 	var opts *InputBoxOptions
 	opts = new(InputBoxOptions)
 	opts.IgnoreFocusOut = true
-	opts.Value = "http://github.com/metaleap/vscode-appz"
+	opts.Value = "http://foo.bar/baz"
 	opts.Prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."
 	vsc.Window().ShowInputBox(opts, nil, func(uri *string) {
-		statusNoticeQuit()
 		if (nil == uri) {
-			vsc.Window().ShowWarningMessage1("Cancelled, bye now!", nil, quit)
+			vsc.Window().ShowWarningMessage1("You cancelled, bye now!", nil, quit)
 		} else {
 			vsc.Env().OpenExternal(*uri, func(ok bool) {
 				var did string
@@ -206,7 +256,7 @@ func statusNoticeQuit() {
 
 func demosMenu() {
 	var items []string
-	items = []string{"demo_Window_ShowInputBox", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick"}
+	items = []string{"demo_Window_ShowInputBox", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick"}
 	var opts QuickPickOptions
 	opts = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickOptions)
 	opts.IgnoreFocusOut = true
@@ -220,6 +270,9 @@ func demosMenu() {
 			}
 			if "demo_Commands_GetCommands_and_ExecuteCommand" == (*menuitem) {
 				demo_Commands_GetCommands_and_ExecuteCommand()
+			}
+			if "demo_Commands_RegisterCommand" == (*menuitem) {
+				demo_Commands_RegisterCommand()
 			}
 			if "demo_Languages_GetLanguages" == (*menuitem) {
 				demo_Languages_GetLanguages()

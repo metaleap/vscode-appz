@@ -65,14 +65,14 @@ export class Gen extends gen.Gen implements gen.IGen {
                                     src += `\t\t\t\t\tlet ctid = msg.data['${arg.name}'] as string, arg_${arg.name} = prog.cancellerToken(ctid)\n`
                                     src += `\t\t\t\t\tif (!arg_${arg.name})\n`
                                     src += `\t\t\t\t\t\targ_${arg.name} = prog.cancellers[''].token\n`
-                                    src += `\t\t\t\t\telse \n`
+                                    src += `\t\t\t\t\telse\n`
                                     src += `\t\t\t\t\t\tremoteCancellationTokens.push(ctid)\n`
                                 } else if ((tfunc = gen.typeFun(arg.typeSpec)) && (tfunc.length)) {
                                     const fnid = "_fnid_" + arg.name
                                     src += `\t\t\t\t\tconst ${fnid} = msg.data['${arg.name}'] as string\n`
                                     src += `\t\t\t\t\tif (!(${fnid} && ${fnid}.length))\n`
                                     src += "\t\t\t\t\t\treturn Promise.reject(msg.data)\n"
-                                    src += `\t\t\t\t\tconst arg_${arg.name} = (${tfunc[0].map((_, i) => '_' + i + ': ' + this.typeSpec(_)).join(', ')}): ${this.typeSpec(tfunc[1])} => {\n`
+                                    src += `\t\t\t\t\tconst arg_${arg.name} = (${tfunc[0].map((_, i) => (gen.typeArrSpreads(_) ? '...' : '') + '_' + i + ': ' + this.typeSpec(_)).join(', ')}): ${this.typeSpec(tfunc[1])} => {\n`
                                     src += "\t\t\t\t\t\tif (prog && prog.proc)\n"
                                     src += `\t\t\t\t\t\t\treturn prog.callBack(true, ${fnid}, ${tfunc[0].map((_, i) => '_' + i).join(', ')})\n`
                                     src += "\t\t\t\t\t\treturn undefined\n"
