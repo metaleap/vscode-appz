@@ -73,6 +73,7 @@ export interface PrepStruct {
     isOutgoing?: boolean
     isIncoming?: boolean
     isPropsOf?: PrepInterface
+    isObj?: boolean
 }
 
 export interface PrepField {
@@ -172,6 +173,9 @@ export class Prep {
                     throw (struct)
                 struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict })
             }
+
+            if (struct.isIncoming && struct.fields.find(_ => typeFun(_.typeSpec)))
+                struct.isObj = true
         })
 
         const printjson = (_: any) => console.log(JSON.stringify(_, function (this: any, key: string, val: any): any {
@@ -272,6 +276,11 @@ export class Prep {
             (decle && decle.EvtName && decle.EvtName.length) ?
                 "Disposable" :
                 this.typeSpec(declf.type, declf.typeParameters)
+        if (typeof tret === 'string') {
+            const struct = this.structs.find(_ => _.name === tret)
+            if (struct)
+                struct.isIncoming = true
+        }
         const tprom = typeProm(tret)
         if (!(tprom && tprom.length))
             tret = { Thens: [tret] }

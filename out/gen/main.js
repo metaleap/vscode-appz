@@ -33,6 +33,7 @@ const genApiSurface = {
                 'showWorkspaceFolderPick',
                 'state',
                 'onDidChangeWindowState',
+                'createStatusBarItem',
             ],
             'env': [
                 'openExternal',

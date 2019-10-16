@@ -47,6 +47,7 @@
   - [Window](#P-VscAppz-IVscode-Window 'VscAppz.IVscode.Window')
   - [Workspace](#P-VscAppz-IVscode-Workspace 'VscAppz.IVscode.Workspace')
 - [IWindow](#T-VscAppz-IWindow 'VscAppz.IWindow')
+  - [CreateStatusBarItem(alignment,priority,andThen)](#M-VscAppz-IWindow-CreateStatusBarItem-VscAppz-StatusBarAlignment,System-Nullable{System-Int32},System-Action{VscAppz-StatusBarItem}- 'VscAppz.IWindow.CreateStatusBarItem(VscAppz.StatusBarAlignment,System.Nullable{System.Int32},System.Action{VscAppz.StatusBarItem})')
   - [OnDidChangeWindowState()](#M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState},System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState},System.Action{VscAppz.Disposable})')
   - [SetStatusBarMessage(text,hideAfterTimeout,andThen)](#M-VscAppz-IWindow-SetStatusBarMessage-System-String,System-Int32,System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.SetStatusBarMessage(System.String,System.Int32,System.Action{VscAppz.Disposable})')
   - [SetStatusBarMessage(text,andThen)](#M-VscAppz-IWindow-SetStatusBarMessage-System-String,System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.SetStatusBarMessage(System.String,System.Action{VscAppz.Disposable})')
@@ -122,6 +123,10 @@
   - [DefaultUri](#F-VscAppz-SaveDialogOptions-DefaultUri 'VscAppz.SaveDialogOptions.DefaultUri')
   - [Filters](#F-VscAppz-SaveDialogOptions-Filters 'VscAppz.SaveDialogOptions.Filters')
   - [SaveLabel](#F-VscAppz-SaveDialogOptions-SaveLabel 'VscAppz.SaveDialogOptions.SaveLabel')
+- [StatusBarAlignment](#T-VscAppz-StatusBarAlignment 'VscAppz.StatusBarAlignment')
+  - [Left](#F-VscAppz-StatusBarAlignment-Left 'VscAppz.StatusBarAlignment.Left')
+  - [Right](#F-VscAppz-StatusBarAlignment-Right 'VscAppz.StatusBarAlignment.Right')
+- [StatusBarItem](#T-VscAppz-StatusBarItem 'VscAppz.StatusBarItem')
 - [Vsc](#T-VscAppz-Vsc 'VscAppz.Vsc')
   - [OnError](#F-VscAppz-Vsc-OnError 'VscAppz.Vsc.OnError')
   - [OnErrorDefaultOutputFormat](#F-VscAppz-Vsc-OnErrorDefaultOutputFormat 'VscAppz.Vsc.OnErrorDefaultOutputFormat')
@@ -825,6 +830,27 @@ VscAppz
 Namespace for dealing with the current window of the editor. That is visible
 and active editors, as well as, UI elements to show messages, selections, and
 asking for user input.
+
+<a name='M-VscAppz-IWindow-CreateStatusBarItem-VscAppz-StatusBarAlignment,System-Nullable{System-Int32},System-Action{VscAppz-StatusBarItem}-'></a>
+### CreateStatusBarItem(alignment,priority,andThen) `method`
+
+##### Summary
+
+Creates a status bar [item](#StatusBarItem).
+
+`alignment` ── The alignment of the item.
+
+`priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
+
+`andThen` ── A new status bar item.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| alignment | [VscAppz.StatusBarAlignment](#T-VscAppz-StatusBarAlignment 'VscAppz.StatusBarAlignment') | The alignment of the item. |
+| priority | [System.Nullable{System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.Int32}') | The priority of the item. Higher values mean the item should be shown more to the left. |
+| andThen | [System.Action{VscAppz.StatusBarItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.StatusBarItem}') | A new status bar item. |
 
 <a name='M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState},System-Action{VscAppz-Disposable}-'></a>
 ### OnDidChangeWindowState() `method`
@@ -1889,6 +1915,43 @@ like "TypeScript", and an array of extensions, e.g.
 ##### Summary
 
 A human-readable string for the save button.
+
+<a name='T-VscAppz-StatusBarAlignment'></a>
+## StatusBarAlignment `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Represents the alignment of status bar items.
+
+<a name='F-VscAppz-StatusBarAlignment-Left'></a>
+### Left `constants`
+
+##### Summary
+
+Aligned to the left side.
+
+<a name='F-VscAppz-StatusBarAlignment-Right'></a>
+### Right `constants`
+
+##### Summary
+
+Aligned to the right side.
+
+<a name='T-VscAppz-StatusBarItem'></a>
+## StatusBarItem `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+A status bar item is a status bar contribution that can
+show text and icons and run a command on click.
 
 <a name='T-VscAppz-Vsc'></a>
 ## Vsc `type`

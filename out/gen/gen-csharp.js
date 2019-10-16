@@ -52,8 +52,8 @@ class Gen extends gen_syn.Gen {
             .when(f.Json, () => this.line(f.Json.Excluded
             ? "[JsonIgnore]"
             : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnMaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")))
-            .when((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel), () => this.line("[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]")).ln(() => this
-            .s("public ")
+            .ln(() => this
+            .s((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel) ? "internal " : "public ")
             .emitTypeRef(f.Type)
             .s(" ", f.Name, ";")))).lines("}", "");
     }
@@ -195,9 +195,12 @@ class Gen extends gen_syn.Gen {
     }
     emitTypeRef(it) {
         const tmay = this.typeMaybe(it);
-        if (tmay)
+        if (tmay) {
+            const tnamed = this.typeOwn(tmay.Maybe);
+            const tenum = (tnamed && tnamed.Name && tnamed.Name.length) ? this.allEnums.find(_ => _.Name === tnamed.Name) : null;
             return this.emitTypeRef(tmay.Maybe)
-                .s(typeRefNullable(tmay.Maybe) ? "" : "?");
+                .s(tenum ? "?" : typeRefNullable(tmay.Maybe) ? "" : "?");
+        }
         const tcoll = this.typeColl(it);
         if (tcoll)
             return (tcoll.KeysOf === null) ? this.s("List<").emitTypeRef(tcoll.ValsOf).s(">") :

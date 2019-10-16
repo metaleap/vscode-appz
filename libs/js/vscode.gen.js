@@ -9,6 +9,23 @@ class implBase {
 }
 function newipcMsg() { return new core.ipcMsg(); }
 function newDisposable() { return new core.Disposable(); }
+/**
+ * Represents the alignment of status bar items.
+
+ */
+var StatusBarAlignment;
+(function (StatusBarAlignment) {
+    /**
+     * Aligned to the left side.
+
+     */
+    StatusBarAlignment[StatusBarAlignment["Left"] = 1] = "Left";
+    /**
+     * Aligned to the right side.
+
+     */
+    StatusBarAlignment[StatusBarAlignment["Right"] = 2] = "Right";
+})(StatusBarAlignment = exports.StatusBarAlignment || (exports.StatusBarAlignment = {}));
 function newMessageItem() {
     let me;
     me = { populateFrom: _ => MessageItem_populateFrom.call(me, _) };
@@ -29,6 +46,11 @@ function newWorkspaceFolder() {
 function newWindowState() {
     let me;
     me = { populateFrom: _ => WindowState_populateFrom.call(me, _) };
+    return me;
+}
+function newStatusBarItem() {
+    let me;
+    me = { populateFrom: _ => StatusBarItem_populateFrom.call(me, _) };
     return me;
 }
 function newWorkspaceFoldersChangeEvent() {
@@ -984,6 +1006,31 @@ class implWindow extends implBase {
                     return false;
                 }
                 andThen(result.bind(this.Impl(), _fnid_listener));
+                return true;
+            };
+        }
+        this.Impl().send(msg, on);
+    }
+    CreateStatusBarItem(alignment, priority, andThen) {
+        let msg;
+        msg = newipcMsg();
+        msg.QName = "window.createStatusBarItem";
+        msg.Data = {};
+        msg.Data["alignment"] = alignment;
+        msg.Data["priority"] = priority;
+        let on;
+        if ((undefined !== andThen && null !== andThen)) {
+            on = (payload) => {
+                let ok;
+                let result;
+                if ((undefined !== payload && null !== payload)) {
+                    result = newStatusBarItem();
+                    ok = result.populateFrom(payload);
+                    if (!ok) {
+                        return false;
+                    }
+                }
+                andThen(result);
                 return true;
             };
         }
@@ -1955,6 +2002,9 @@ function WindowState_populateFrom(payload) {
     else {
         return false;
     }
+    return true;
+}
+function StatusBarItem_populateFrom(payload) {
     return true;
 }
 function EnvProperties_populateFrom(payload) {

@@ -126,7 +126,7 @@ class Builder {
             Docs: this.docs(gen.docs(it.fromOrig ? it.fromOrig.decl : it.isPropsOf.fromOrig)),
             IsOutgoing: it.isOutgoing ? true : false,
             IsIncoming: it.isIncoming ? true : false,
-            Fields: it.fields.map((_) => ({
+            Fields: it.isObj ? [] : it.fields.map((_) => ({
                 fromPrep: _,
                 name: _.name,
                 Name: this.gen.nameRewriters.fields(_.name),
@@ -138,14 +138,16 @@ class Builder {
         for (const ff of it.funcFields) {
             const ffname = this.gen.nameRewriters.fields(ff);
             const fldfn = ret.Fields.find(_ => _.Name === ffname);
-            fldfn.FuncFieldRel = {
-                Name: ffname + "_AppzFuncId",
-                Docs: this.docs(null, [gen.docStrs.internalOnly]),
-                Type: TypeRefPrim.String,
-                Json: { Name: ff + "_AppzFuncId", Required: false, Excluded: false },
-                FuncFieldRel: fldfn,
-            };
-            ret.Fields.push(fldfn.FuncFieldRel);
+            if (fldfn) {
+                fldfn.FuncFieldRel = {
+                    Name: ffname + "_AppzFuncId",
+                    Docs: this.docs(null, [gen.docStrs.internalOnly]),
+                    Type: TypeRefPrim.String,
+                    Json: { Name: ff + "_AppzFuncId", Required: false, Excluded: false },
+                    FuncFieldRel: fldfn,
+                };
+                ret.Fields.push(fldfn.FuncFieldRel);
+            }
         }
         return ret;
     }
@@ -491,7 +493,7 @@ class Gen extends gen.Gen {
                         .emitInstr(iblock.If[1]);
                 return this;
             }
-            throw "<instr>" + JSON.stringify(it);
+            // throw "<instr>" + JSON.stringify(it)
         }
         return this;
     }
@@ -548,7 +550,8 @@ class Gen extends gen.Gen {
         const ename = it;
         if (ename && ename.Name !== undefined)
             return this.s(ename.Name ? ename.Name : this.options.idents.curInst);
-        throw "<expr>" + JSON.stringify(it);
+        // throw "<expr>" + JSON.stringify(it)
+        return this;
     }
     convOrRet(dstVarName, src, dstType, okBoolName = 'ok', onErrRet = undefined) {
         const _ = this.b;
@@ -621,11 +624,15 @@ class Gen extends gen.Gen {
         body.push(_.iRet(_.eConv({ Name: this.options.idents.typeImpl + method.Name }, _.n(this.options.idents.curInst))));
     }
     genMethodImpl_PopulateFrom(struct, _method, _, body) {
-        body.push(_.iVar('it', TypeRefPrim.Dict), _.iVar('ok', TypeRefPrim.Bool), _.iVar('val', TypeRefPrim.Any));
-        body.push(...this.convOrRet('it', _.n('payload'), TypeRefPrim.Dict));
         const tstruct = struct;
         if (!(tstruct && tstruct.Fields))
             throw struct;
+        if (!tstruct.Fields.length) {
+            body.push(_.iRet(_.eLit(true)));
+            return;
+        }
+        body.push(_.iVar('it', TypeRefPrim.Dict), _.iVar('ok', TypeRefPrim.Bool), _.iVar('val', TypeRefPrim.Any));
+        body.push(...this.convOrRet('it', _.n('payload'), TypeRefPrim.Dict));
         for (const fld of tstruct.Fields)
             if (fld.Json && !fld.Json.Excluded) {
                 const tfld = this.typeRefForField(fld.Type, fld.fromPrep && fld.fromPrep.optional);

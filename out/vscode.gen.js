@@ -234,6 +234,14 @@ function handle(msg, prog, remoteCancellationTokens) {
                                 prog.callBack(false, _fnid_listener, a0).then(noOp, noOp);
                         });
                 }
+                case "createStatusBarItem": {
+                    const arg_alignment = (msg.data['alignment']);
+                    const arg_priority = (msg.data['priority']);
+                    const ret = vscode.window.createStatusBarItem(arg_alignment, arg_priority);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
                 default:
                     throw (methodname);
             }

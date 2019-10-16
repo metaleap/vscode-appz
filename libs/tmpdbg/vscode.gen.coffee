@@ -14,6 +14,18 @@
 
 
 
+# Represents the alignment of status bar items.
+StatusBarAlignment: enum
+
+    # Aligned to the left side.
+    Left: 1
+
+    # Aligned to the right side.
+    Right: 2
+
+
+
+
 # vscode:
 # Type Definition for Visual Studio Code 1.38 Extension API
 # See https://code.visualstudio.com/api for more information
@@ -548,6 +560,22 @@ Window: interface
     OnDidChangeWindowState: void
         listener: (WindowState->void)
         andThen: ?(?Disposable->void)
+
+    # createStatusBarItem:
+    # Creates a status bar [item](#StatusBarItem).
+    #
+    # @alignment:
+    # The alignment of the item.
+    #
+    # @priority:
+    # The priority of the item. Higher values mean the item should be shown more to the left.
+    #
+    # @andThen:
+    # A new status bar item.
+    CreateStatusBarItem: void
+        alignment: ?StatusBarAlignment
+        priority: ?int
+        andThen: ?(?StatusBarItem->void)
 
 
 
@@ -1290,6 +1318,13 @@ WindowState: class
     #
     # JSON FLAGS: {"Name":"focused","Required":true,"Excluded":false}
     Focused: bool
+
+
+
+
+# A status bar item is a status bar contribution that can
+# show text and icons and run a command on click.
+StatusBarItem: class
 
 
 
@@ -2326,6 +2361,31 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> andThen:?(?Disp
 
 
 
+Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> andThen:?(?StatusBarItem->void) -> void)
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "window.createStatusBarItem"
+    msg.Data = dict·new(2)
+    msg.Data@"alignment" = alignment
+    msg.Data@"priority" = priority
+    var on of (any->bool)
+    if =?andThen
+        on = (payload:any -> bool)
+            var ok of bool
+            var result of ?StatusBarItem
+            if =?payload
+                result = ?StatusBarItem·new
+                ok = result.populateFrom(payload)
+                if !ok
+                    return false
+            andThen(result)
+            return true
+        
+    this.Impl().send(msg, on)
+
+
+
+
 Env·OpenExternal: (target:string -> andThen:?(bool->void) -> void)
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
@@ -3205,6 +3265,12 @@ WindowState·populateFrom: (payload:any -> bool)
         this.Focused = focused
     else
         return false
+    return true
+
+
+
+
+StatusBarItem·populateFrom: (payload:any -> bool)
     return true
 
 

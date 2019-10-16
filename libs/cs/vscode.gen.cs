@@ -6,6 +6,15 @@ namespace VscAppz {
 	using any = System.Object;
 	using dict = System.Collections.Generic.Dictionary<string, object>;
 
+	/// <summary>Represents the alignment of status bar items.</summary>
+	public enum StatusBarAlignment {
+		/// <summary>Aligned to the left side.</summary>
+		Left = 1,
+
+		/// <summary>Aligned to the right side.</summary>
+		Right = 2,
+	}
+
 	/// <summary>
 	/// Type Definition for Visual Studio Code 1.38 Extension API
 	/// See https://code.visualstudio.com/api for more information
@@ -489,6 +498,20 @@ namespace VscAppz {
 		/// changes. The value of the event represents whether the window is focused.
 		/// </summary>
 		void OnDidChangeWindowState(Action<WindowState> listener = default, Action<Disposable> andThen = default);
+
+		/// <summary>
+		/// Creates a status bar [item](#StatusBarItem).
+		/// 
+		/// `alignment` ── The alignment of the item.
+		/// 
+		/// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
+		/// 
+		/// `andThen` ── A new status bar item.
+		/// </summary>
+		/// <param name="alignment">The alignment of the item.</param>
+		/// <param name="priority">The priority of the item. Higher values mean the item should be shown more to the left.</param>
+		/// <param name="andThen">A new status bar item.</param>
+		void CreateStatusBarItem(StatusBarAlignment? alignment = default, int? priority = default, Action<StatusBarItem> andThen = default);
 	}
 
 	/// <summary>Namespace describing the environment the editor runs in.</summary>
@@ -928,8 +951,7 @@ namespace VscAppz {
 
 		/// <summary>For internal runtime use only.</summary>
 		[JsonProperty("validateInput_AppzFuncId")]
-		[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-		public string ValidateInput_AppzFuncId;
+		internal string ValidateInput_AppzFuncId;
 	}
 
 	/// <summary>Options to configure the behavior of the quick pick UI.</summary>
@@ -960,8 +982,7 @@ namespace VscAppz {
 
 		/// <summary>For internal runtime use only.</summary>
 		[JsonProperty("onDidSelectItem_AppzFuncId")]
-		[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-		public string OnDidSelectItem_AppzFuncId;
+		internal string OnDidSelectItem_AppzFuncId;
 	}
 
 	/// <summary>
@@ -1106,6 +1127,13 @@ namespace VscAppz {
 		/// <summary>Whether the current window is focused.</summary>
 		[JsonProperty("focused"), JsonRequired]
 		public bool Focused;
+	}
+
+	/// <summary>
+	/// A status bar item is a status bar contribution that can
+	/// show text and icons and run a command on click.
+	/// </summary>
+	public partial class StatusBarItem {
 	}
 
 	/// <summary>An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).</summary>
@@ -2195,6 +2223,32 @@ namespace VscAppz {
 			this.Impl().send(msg, on);
 		}
 
+		void IWindow.CreateStatusBarItem(StatusBarAlignment? alignment, int? priority, Action<StatusBarItem> andThen) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.createStatusBarItem";
+			msg.Data = new dict(2);
+			msg.Data["alignment"] = alignment;
+			msg.Data["priority"] = priority;
+			Func<any, bool> on = default;
+			if ((null != andThen)) {
+				on = (any payload) => {
+					bool ok = default;
+					StatusBarItem result = default;
+					if ((null != payload)) {
+						result = new StatusBarItem();
+						ok = result.populateFrom(payload);
+						if (!ok) {
+							return false;
+						}
+					}
+					andThen(result);
+					return true;
+				};
+			}
+			this.Impl().send(msg, on);
+		}
+
 		void IEnv.OpenExternal(string target, Action<bool> andThen) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -3162,6 +3216,12 @@ namespace VscAppz {
 			} else {
 				return false;
 			}
+			return true;
+		}
+	}
+
+	public partial class StatusBarItem {
+		internal bool populateFrom(any payload) {
 			return true;
 		}
 	}

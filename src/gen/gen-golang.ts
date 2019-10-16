@@ -232,8 +232,11 @@ export class Gen extends gen_syn.Gen {
             return this.s("[]").emitTypeRef(ttup.TupOf[0])
 
         const tmay = this.typeMaybe(it)
-        if (tmay)
-            return this.s(typeRefNilable(this, tmay.Maybe) ? "" : "*").emitTypeRef(tmay.Maybe)
+        if (tmay) {
+            const tnamed = this.typeOwn(tmay.Maybe)
+            const tenum = (tnamed && tnamed.Name && tnamed.Name.length) ? this.allEnums.find(_ => _.Name === tnamed.Name) : null
+            return this.s(tenum || typeRefNilable(this, tmay.Maybe) ? "" : "*").emitTypeRef(tmay.Maybe)
+        }
 
         const tcoll = this.typeColl(it)
         if (tcoll)

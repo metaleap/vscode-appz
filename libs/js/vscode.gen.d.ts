@@ -5,6 +5,22 @@ interface fromJson {
     populateFrom: (_: any) => boolean;
 }
 /**
+ * Represents the alignment of status bar items.
+
+ */
+export declare enum StatusBarAlignment {
+    /**
+     * Aligned to the left side.
+
+     */
+    Left = 1,
+    /**
+     * Aligned to the right side.
+
+     */
+    Right = 2
+}
+/**
  * Type Definition for Visual Studio Code 1.38 Extension API
  * See https://code.visualstudio.com/api for more information
 
@@ -350,6 +366,14 @@ export interface Window {
 
      */
     OnDidChangeWindowState: (listener: (_: WindowState) => void, andThen?: (_: Disposable) => void) => void;
+    /**
+     * Creates a status bar [item](#StatusBarItem).
+
+     * @param alignment The alignment of the item.
+     * @param priority The priority of the item. Higher values mean the item should be shown more to the left.
+     * @param andThen A new status bar item.
+     */
+    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number, andThen?: (_: StatusBarItem) => void) => void;
 }
 /**
  * Namespace describing the environment the editor runs in.
@@ -721,11 +745,14 @@ export interface MessageItem extends fromJson {
     };
 }
 export declare function newMessageItem(): MessageItem;
+interface Bla {
+    Mohaha?: string;
+}
 /**
  * Options to configure the behavior of the input box UI.
 
  */
-export interface InputBoxOptions {
+export interface InputBoxOptions extends Bla {
     /**
      * The value to prefill in the input box.
 
@@ -990,6 +1017,13 @@ export interface WindowState extends fromJson {
 
      */
     focused: boolean;
+}
+/**
+ * A status bar item is a status bar contribution that can
+ * show text and icons and run a command on click.
+
+ */
+export interface StatusBarItem extends fromJson {
 }
 /**
  * An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).

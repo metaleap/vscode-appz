@@ -3,6 +3,7 @@
 import * as vscode from 'vscode'
 import * as ppio from './procspipeio'
 const noOp = (_:any) => {}
+type StatusBarAlignment = vscode.StatusBarAlignment
 type MessageOptions = vscode.MessageOptions
 interface MessageItem extends vscode.MessageItem {
 	my?: { [_: string]: any }
@@ -249,6 +250,14 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 							if (prog && prog.proc)
 								prog.callBack(false, _fnid_listener, a0).then(noOp, noOp)
 						})
+				}
+				case "createStatusBarItem": {
+					const arg_alignment = (msg.data['alignment']) as StatusBarAlignment
+					const arg_priority = (msg.data['priority']) as number
+					const ret = vscode.window.createStatusBarItem(arg_alignment, arg_priority, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				default:
 					throw (methodname)

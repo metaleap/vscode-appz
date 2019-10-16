@@ -246,7 +246,7 @@ export class Builder {
             Docs: this.docs(gen.docs(it.fromOrig ? it.fromOrig.decl : it.isPropsOf.fromOrig)),
             IsOutgoing: it.isOutgoing ? true : false,
             IsIncoming: it.isIncoming ? true : false,
-            Fields: it.fields.map((_: gen.PrepField): Field => ({
+            Fields: it.isObj ? [] : it.fields.map((_: gen.PrepField): Field => ({
                 fromPrep: _,
                 name: _.name,
                 Name: this.gen.nameRewriters.fields(_.name),
@@ -258,14 +258,16 @@ export class Builder {
         for (const ff of it.funcFields) {
             const ffname = this.gen.nameRewriters.fields(ff)
             const fldfn = ret.Fields.find(_ => _.Name === ffname)
-            fldfn.FuncFieldRel = {
-                Name: ffname + "_AppzFuncId",
-                Docs: this.docs(null, [gen.docStrs.internalOnly]),
-                Type: TypeRefPrim.String,
-                Json: { Name: ff + "_AppzFuncId", Required: false, Excluded: false },
-                FuncFieldRel: fldfn,
+            if (fldfn) {
+                fldfn.FuncFieldRel = {
+                    Name: ffname + "_AppzFuncId",
+                    Docs: this.docs(null, [gen.docStrs.internalOnly]),
+                    Type: TypeRefPrim.String,
+                    Json: { Name: ff + "_AppzFuncId", Required: false, Excluded: false },
+                    FuncFieldRel: fldfn,
+                }
+                ret.Fields.push(fldfn.FuncFieldRel)
             }
-            ret.Fields.push(fldfn.FuncFieldRel)
         }
         return ret
     }
@@ -677,7 +679,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 return this
             }
 
-            throw "<instr>" + JSON.stringify(it)
+            // throw "<instr>" + JSON.stringify(it)
         }
         return this
     }
@@ -750,7 +752,8 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (ename && ename.Name !== undefined)
             return this.s(ename.Name ? ename.Name : this.options.idents.curInst)
 
-        throw "<expr>" + JSON.stringify(it)
+        // throw "<expr>" + JSON.stringify(it)
+        return this
     }
 
     private convOrRet(dstVarName: string, src: Expr, dstType: TypeRef, okBoolName: string = 'ok', onErrRet: Expr = undefined): Instr[] {
@@ -839,6 +842,15 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     private genMethodImpl_PopulateFrom(struct: TypeRefOwn, _method: Method, _: Builder, body: Instr[]) {
+        const tstruct = struct as TStruct
+        if (!(tstruct && tstruct.Fields))
+            throw struct
+
+        if (!tstruct.Fields.length) {
+            body.push(_.iRet(_.eLit(true)))
+            return
+        }
+
         body.push(
             _.iVar('it', TypeRefPrim.Dict),
             _.iVar('ok', TypeRefPrim.Bool),
@@ -846,9 +858,6 @@ export class Gen extends gen.Gen implements gen.IGen {
         )
         body.push(...this.convOrRet('it', _.n('payload'), TypeRefPrim.Dict))
 
-        const tstruct = struct as TStruct
-        if (!(tstruct && tstruct.Fields))
-            throw struct
         for (const fld of tstruct.Fields)
             if (fld.Json && !fld.Json.Excluded) {
                 const tfld = this.typeRefForField(fld.Type, fld.fromPrep && fld.fromPrep.optional)

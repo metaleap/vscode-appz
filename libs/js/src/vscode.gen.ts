@@ -16,6 +16,24 @@ function newipcMsg() { return new core.ipcMsg() }
 function newDisposable() { return new core.Disposable() }
 
 /**
+ * Represents the alignment of status bar items.
+
+ */
+export enum StatusBarAlignment {
+    /**
+     * Aligned to the left side.
+
+     */
+    Left = 1,
+
+    /**
+     * Aligned to the right side.
+
+     */
+    Right = 2,
+}
+
+/**
  * Type Definition for Visual Studio Code 1.38 Extension API
  * See https://code.visualstudio.com/api for more information
 
@@ -390,6 +408,15 @@ export interface Window {
 
      */
     OnDidChangeWindowState: (listener: (_: WindowState) => void, andThen?: (_: Disposable) => void) => void
+
+    /**
+     * Creates a status bar [item](#StatusBarItem).
+
+     * @param alignment The alignment of the item.
+     * @param priority The priority of the item. Higher values mean the item should be shown more to the left.
+     * @param andThen A new status bar item.
+     */
+    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number, andThen?: (_: StatusBarItem) => void) => void
 }
 
 /**
@@ -1108,6 +1135,20 @@ export interface WindowState extends fromJson {
 function newWindowState (): WindowState {
     let me: WindowState
     me = { populateFrom: _ => WindowState_populateFrom.call(me, _) } as WindowState
+    return me
+}
+
+/**
+ * A status bar item is a status bar contribution that can
+ * show text and icons and run a command on click.
+
+ */
+export interface StatusBarItem extends fromJson {
+}
+
+function newStatusBarItem (): StatusBarItem {
+    let me: StatusBarItem
+    me = { populateFrom: _ => StatusBarItem_populateFrom.call(me, _) } as StatusBarItem
     return me
 }
 
@@ -2241,6 +2282,32 @@ class implWindow extends implBase implements Window {
         this.Impl().send(msg, on)
     }
 
+    CreateStatusBarItem(alignment?: StatusBarAlignment, priority?: number, andThen?: (_: StatusBarItem) => void): void {
+        let msg: ipcMsg
+        msg = newipcMsg()
+        msg.QName = "window.createStatusBarItem"
+        msg.Data = {}
+        msg.Data["alignment"] = alignment
+        msg.Data["priority"] = priority
+        let on: (_: any) => boolean
+        if ((undefined !== andThen && null !== andThen)) {
+            on = (payload: any): boolean => {
+                let ok: boolean
+                let result: StatusBarItem
+                if ((undefined !== payload && null !== payload)) {
+                    result = newStatusBarItem()
+                    ok = result.populateFrom(payload)
+                    if (!ok) {
+                        return false
+                    }
+                }
+                andThen(result)
+                return true
+            }
+        }
+        this.Impl().send(msg, on)
+    }
+
 }
 
 class implEnv extends implBase implements Env {
@@ -3227,6 +3294,10 @@ function WindowState_populateFrom(this: WindowState, payload: any): boolean {
     } else {
         return false
     }
+    return true
+}
+
+function StatusBarItem_populateFrom(this: StatusBarItem, payload: any): boolean {
     return true
 }
 

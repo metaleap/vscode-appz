@@ -44,6 +44,15 @@
         <member name="M:VscAppz.Disposable.Dispose">
             <summary>Dispose signals to the counterparty to destroy the object.</summary>
         </member>
+        <member name="T:VscAppz.StatusBarAlignment">
+            <summary>Represents the alignment of status bar items.</summary>
+        </member>
+        <member name="F:VscAppz.StatusBarAlignment.Left">
+            <summary>Aligned to the left side.</summary>
+        </member>
+        <member name="F:VscAppz.StatusBarAlignment.Right">
+            <summary>Aligned to the right side.</summary>
+        </member>
         <member name="T:VscAppz.IVscode">
             <summary>
             Type Definition for Visual Studio Code 1.38 Extension API
@@ -528,6 +537,20 @@
             An [event](#Event) which fires when the focus state of the current window
             changes. The value of the event represents whether the window is focused.
             </summary>
+        </member>
+        <member name="M:VscAppz.IWindow.CreateStatusBarItem(VscAppz.StatusBarAlignment,System.Nullable{System.Int32},System.Action{VscAppz.StatusBarItem})">
+            <summary>
+            Creates a status bar [item](#StatusBarItem).
+            
+            `alignment` ── The alignment of the item.
+            
+            `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
+            
+            `andThen` ── A new status bar item.
+            </summary>
+            <param name="alignment">The alignment of the item.</param>
+            <param name="priority">The priority of the item. Higher values mean the item should be shown more to the left.</param>
+            <param name="andThen">A new status bar item.</param>
         </member>
         <member name="T:VscAppz.IEnv">
             <summary>Namespace describing the environment the editor runs in.</summary>
@@ -1103,6 +1126,12 @@
         </member>
         <member name="F:VscAppz.WindowState.Focused">
             <summary>Whether the current window is focused.</summary>
+        </member>
+        <member name="T:VscAppz.StatusBarItem">
+            <summary>
+            A status bar item is a status bar contribution that can
+            show text and icons and run a command on click.
+            </summary>
         </member>
         <member name="T:VscAppz.WorkspaceFoldersChangeEvent">
             <summary>An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).</summary>

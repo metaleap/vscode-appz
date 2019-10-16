@@ -527,6 +527,34 @@ type SaveDialogOptions struct {
 
 Options to configure the behaviour of a file save dialog.
 
+#### type StatusBarAlignment
+
+```go
+type StatusBarAlignment int
+```
+
+Represents the alignment of status bar items.
+
+```go
+const (
+	// Aligned to the left side.
+	StatusBarAlignmentLeft StatusBarAlignment = 1
+
+	// Aligned to the right side.
+	StatusBarAlignmentRight StatusBarAlignment = 2
+)
+```
+
+#### type StatusBarItem
+
+```go
+type StatusBarItem struct {
+}
+```
+
+A status bar item is a status bar contribution that can show text and icons and
+run a command on click.
+
 #### type Vscode
 
 ```go
@@ -894,6 +922,15 @@ type Window interface {
 	// An [event](#Event) which fires when the focus state of the current window
 	// changes. The value of the event represents whether the window is focused.
 	OnDidChangeWindowState(listener func(WindowState), andThen func(*Disposable))
+
+	// Creates a status bar [item](#StatusBarItem).
+	//
+	// `alignment` ── The alignment of the item.
+	//
+	// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
+	//
+	// `andThen` ── A new status bar item.
+	CreateStatusBarItem(alignment StatusBarAlignment, priority *int, andThen func(*StatusBarItem))
 }
 ```
 

@@ -77,6 +77,8 @@ class Prep {
                     throw (struct);
                 struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict });
             }
+            if (struct.isIncoming && struct.fields.find(_ => typeFun(_.typeSpec)))
+                struct.isObj = true;
         });
         const printjson = (_) => console.log(JSON.stringify(_, function (key, val) {
             return (key === 'parent') ? null : val;
@@ -173,6 +175,11 @@ class Prep {
             (decle && decle.EvtName && decle.EvtName.length) ?
                 "Disposable" :
                 this.typeSpec(declf.type, declf.typeParameters);
+        if (typeof tret === 'string') {
+            const struct = this.structs.find(_ => _.name === tret);
+            if (struct)
+                struct.isIncoming = true;
+        }
         const tprom = typeProm(tret);
         if (!(tprom && tprom.length))
             tret = { Thens: [tret] };
