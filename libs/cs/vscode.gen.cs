@@ -1643,7 +1643,9 @@ namespace VscAppz {
 					}
 				}
 			}
-			msg.Data["options"] = options;
+			if ((null != options)) {
+				msg.Data["options"] = options;
+			}
 			if ((null != token)) {
 				token.impl = this.Impl();
 				if ("" == token.fnId) {
@@ -1807,7 +1809,9 @@ namespace VscAppz {
 				}
 			}
 			msg.Data["items"] = items;
-			msg.Data["options"] = options;
+			if ((null != options)) {
+				msg.Data["options"] = options;
+			}
 			if ((null != token)) {
 				token.impl = this.Impl();
 				if ("" == token.fnId) {
@@ -1972,7 +1976,9 @@ namespace VscAppz {
 				}
 			}
 			msg.Data["items"] = items;
-			msg.Data["options"] = options;
+			if ((null != options)) {
+				msg.Data["options"] = options;
+			}
 			if ((null != token)) {
 				token.impl = this.Impl();
 				if ("" == token.fnId) {
@@ -2133,7 +2139,9 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "window.showWorkspaceFolderPick";
 			msg.Data = new dict(1);
-			msg.Data["options"] = options;
+			if ((null != options)) {
+				msg.Data["options"] = options;
+			}
 			Func<any, bool> on = default;
 			if ((null != andThen)) {
 				on = (any payload) => {
@@ -2228,8 +2236,12 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "window.createStatusBarItem";
 			msg.Data = new dict(2);
-			msg.Data["alignment"] = alignment;
-			msg.Data["priority"] = priority;
+			if ((null != alignment)) {
+				msg.Data["alignment"] = alignment;
+			}
+			if ((null != priority)) {
+				msg.Data["priority"] = priority;
+			}
 			Func<any, bool> on = default;
 			if ((null != andThen)) {
 				on = (any payload) => {
@@ -2677,8 +2689,12 @@ namespace VscAppz {
 			msg.QName = "workspace.findFiles";
 			msg.Data = new dict(4);
 			msg.Data["include"] = include;
-			msg.Data["exclude"] = exclude;
-			msg.Data["maxResults"] = maxResults;
+			if ((null != exclude)) {
+				msg.Data["exclude"] = exclude;
+			}
+			if ((null != maxResults)) {
+				msg.Data["maxResults"] = maxResults;
+			}
 			if ((null != token)) {
 				token.impl = this.Impl();
 				if ("" == token.fnId) {

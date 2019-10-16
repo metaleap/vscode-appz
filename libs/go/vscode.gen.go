@@ -1356,7 +1356,9 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel, andTh
 			me.Unlock()
 		}
 	}
-	msg.Data["options"] = __options__
+	if (nil != options) {
+		msg.Data["options"] = __options__
+	}
 	if (nil != token) {
 		token.impl = me.Impl()
 		if "" == token.fnId {
@@ -1538,7 +1540,9 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 		}
 	}
 	msg.Data["items"] = items
-	msg.Data["options"] = __options__
+	if (nil != options) {
+		msg.Data["options"] = __options__
+	}
 	if (nil != token) {
 		token.impl = me.Impl()
 		if "" == token.fnId {
@@ -1721,7 +1725,9 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 		}
 	}
 	msg.Data["items"] = items
-	msg.Data["options"] = __options__
+	if (nil != options) {
+		msg.Data["options"] = __options__
+	}
 	if (nil != token) {
 		token.impl = me.Impl()
 		if "" == token.fnId {
@@ -1886,7 +1892,9 @@ func (me implWindow) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions
 	msg = new(ipcMsg)
 	msg.QName = "window.showWorkspaceFolderPick"
 	msg.Data = make(dict, 1)
-	msg.Data["options"] = options
+	if (nil != options) {
+		msg.Data["options"] = options
+	}
 	var on func(any) bool
 	if (nil != andThen) {
 		on = func(payload any) bool {
@@ -1981,8 +1989,12 @@ func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority 
 	msg = new(ipcMsg)
 	msg.QName = "window.createStatusBarItem"
 	msg.Data = make(dict, 2)
-	msg.Data["alignment"] = alignment
-	msg.Data["priority"] = priority
+	if 0 != alignment {
+		msg.Data["alignment"] = alignment
+	}
+	if (nil != priority) {
+		msg.Data["priority"] = priority
+	}
 	var on func(any) bool
 	if (nil != andThen) {
 		on = func(payload any) bool {
@@ -2430,8 +2442,12 @@ func (me implWorkspace) FindFiles(include string, exclude *string, maxResults *i
 	msg.QName = "workspace.findFiles"
 	msg.Data = make(dict, 4)
 	msg.Data["include"] = include
-	msg.Data["exclude"] = exclude
-	msg.Data["maxResults"] = maxResults
+	if (nil != exclude) {
+		msg.Data["exclude"] = exclude
+	}
+	if (nil != maxResults) {
+		msg.Data["maxResults"] = maxResults
+	}
 	if (nil != token) {
 		token.impl = me.Impl()
 		if "" == token.fnId {

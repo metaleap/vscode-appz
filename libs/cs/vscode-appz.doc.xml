@@ -538,7 +538,7 @@
             changes. The value of the event represents whether the window is focused.
             </summary>
         </member>
-        <member name="M:VscAppz.IWindow.CreateStatusBarItem(VscAppz.StatusBarAlignment,System.Nullable{System.Int32},System.Action{VscAppz.StatusBarItem})">
+        <member name="M:VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32},System.Action{VscAppz.StatusBarItem})">
             <summary>
             Creates a status bar [item](#StatusBarItem).
             

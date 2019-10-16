@@ -444,6 +444,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         unMaybeOutgoingTypes: [TypeRefPrim.String] as TypeRef[],
         oneIndent: '    ',
         funcOverloads: false,
+        optionalEnumsZeroNotZilch: false,
         haveProps: true,
         demoOutFilePath: ""
     }
@@ -1029,10 +1030,18 @@ export class Gen extends gen.Gen implements gen.IGen {
                         }
 
                         const twinarg = twinargs[arg.Name]
-                        body.push(_.iSet(
+                        let set: Instr = _.iSet(
                             _.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)),
                             _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name),
-                        ))
+                        )
+                        if (arg.fromPrep && arg.fromPrep.optional) {
+                            const town = this.typeOwn(this.typeUnMaybe(arg.Type))
+                            const tenum = (town && town.Name && town.Name.length) ? this.allEnums.find(_ => _.Name === town.Name) : null
+                            set = _.iIf((tenum && this.options.optionalEnumsZeroNotZilch) ? _.oNeq(_.eLit(0), _.n(arg.Name)) : _.oIs(_.n(arg.Name)), [
+                                set
+                            ])
+                        }
+                        body.push(set)
                     }
 
         body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }))

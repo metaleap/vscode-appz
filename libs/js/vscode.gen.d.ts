@@ -745,14 +745,11 @@ export interface MessageItem extends fromJson {
     };
 }
 export declare function newMessageItem(): MessageItem;
-interface Bla {
-    Mohaha?: string;
-}
 /**
  * Options to configure the behavior of the input box UI.
 
  */
-export interface InputBoxOptions extends Bla {
+export interface InputBoxOptions {
     /**
      * The value to prefill in the input box.
 

@@ -47,7 +47,7 @@
   - [Window](#P-VscAppz-IVscode-Window 'VscAppz.IVscode.Window')
   - [Workspace](#P-VscAppz-IVscode-Workspace 'VscAppz.IVscode.Workspace')
 - [IWindow](#T-VscAppz-IWindow 'VscAppz.IWindow')
-  - [CreateStatusBarItem(alignment,priority,andThen)](#M-VscAppz-IWindow-CreateStatusBarItem-VscAppz-StatusBarAlignment,System-Nullable{System-Int32},System-Action{VscAppz-StatusBarItem}- 'VscAppz.IWindow.CreateStatusBarItem(VscAppz.StatusBarAlignment,System.Nullable{System.Int32},System.Action{VscAppz.StatusBarItem})')
+  - [CreateStatusBarItem(alignment,priority,andThen)](#M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32},System-Action{VscAppz-StatusBarItem}- 'VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32},System.Action{VscAppz.StatusBarItem})')
   - [OnDidChangeWindowState()](#M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState},System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState},System.Action{VscAppz.Disposable})')
   - [SetStatusBarMessage(text,hideAfterTimeout,andThen)](#M-VscAppz-IWindow-SetStatusBarMessage-System-String,System-Int32,System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.SetStatusBarMessage(System.String,System.Int32,System.Action{VscAppz.Disposable})')
   - [SetStatusBarMessage(text,andThen)](#M-VscAppz-IWindow-SetStatusBarMessage-System-String,System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.SetStatusBarMessage(System.String,System.Action{VscAppz.Disposable})')
@@ -831,7 +831,7 @@ Namespace for dealing with the current window of the editor. That is visible
 and active editors, as well as, UI elements to show messages, selections, and
 asking for user input.
 
-<a name='M-VscAppz-IWindow-CreateStatusBarItem-VscAppz-StatusBarAlignment,System-Nullable{System-Int32},System-Action{VscAppz-StatusBarItem}-'></a>
+<a name='M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32},System-Action{VscAppz-StatusBarItem}-'></a>
 ### CreateStatusBarItem(alignment,priority,andThen) `method`
 
 ##### Summary
@@ -848,7 +848,7 @@ Creates a status bar [item](#StatusBarItem).
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| alignment | [VscAppz.StatusBarAlignment](#T-VscAppz-StatusBarAlignment 'VscAppz.StatusBarAlignment') | The alignment of the item. |
+| alignment | [System.Nullable{VscAppz.StatusBarAlignment}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{VscAppz.StatusBarAlignment}') | The alignment of the item. |
 | priority | [System.Nullable{System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.Int32}') | The priority of the item. Higher values mean the item should be shown more to the left. |
 | andThen | [System.Action{VscAppz.StatusBarItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.StatusBarItem}') | A new status bar item. |
 

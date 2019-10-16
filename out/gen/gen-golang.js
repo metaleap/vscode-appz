@@ -9,6 +9,7 @@ class Gen extends gen_syn.Gen {
         this.options.idents.curInst = "me";
         this.options.idents.null = "nil";
         this.options.haveProps = false;
+        this.options.optionalEnumsZeroNotZilch = true;
         super.gen(prep);
     }
     emitIntro() {

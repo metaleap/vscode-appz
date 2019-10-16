@@ -1856,7 +1856,8 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> andThen:?(?s
                                 return [null, false]
                         return [fn(__0), true]
                 
-    msg.Data@"options" = options
+    if =?options
+        msg.Data@"options" = options
     if =?token
         token.impl = this.Impl()
         if "" == token.fnId
@@ -1992,7 +1993,8 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
                         return [fn(__0), true]
                 
     msg.Data@"items" = items
-    msg.Data@"options" = options
+    if =?options
+        msg.Data@"options" = options
     if =?token
         token.impl = this.Impl()
         if "" == token.fnId
@@ -2129,7 +2131,8 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
                         return [fn(__0), true]
                 
     msg.Data@"items" = items
-    msg.Data@"options" = options
+    if =?options
+        msg.Data@"options" = options
     if =?token
         token.impl = this.Impl()
         if "" == token.fnId
@@ -2277,7 +2280,8 @@ Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> andThen
     msg = ?ipcMsg·new
     msg.QName = "window.showWorkspaceFolderPick"
     msg.Data = dict·new(1)
-    msg.Data@"options" = options
+    if =?options
+        msg.Data@"options" = options
     var on of (any->bool)
     if =?andThen
         on = (payload:any -> bool)
@@ -2366,8 +2370,10 @@ Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> 
     msg = ?ipcMsg·new
     msg.QName = "window.createStatusBarItem"
     msg.Data = dict·new(2)
-    msg.Data@"alignment" = alignment
-    msg.Data@"priority" = priority
+    if =?alignment
+        msg.Data@"alignment" = alignment
+    if =?priority
+        msg.Data@"priority" = priority
     var on of (any->bool)
     if =?andThen
         on = (payload:any -> bool)
@@ -2793,8 +2799,10 @@ Workspace·FindFiles: (include:string -> exclude:?string -> maxResults:?int -> t
     msg.QName = "workspace.findFiles"
     msg.Data = dict·new(4)
     msg.Data@"include" = include
-    msg.Data@"exclude" = exclude
-    msg.Data@"maxResults" = maxResults
+    if =?exclude
+        msg.Data@"exclude" = exclude
+    if =?maxResults
+        msg.Data@"maxResults" = maxResults
     if =?token
         token.impl = this.Impl()
         if "" == token.fnId
