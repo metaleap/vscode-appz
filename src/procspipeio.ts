@@ -249,7 +249,7 @@ export class Prog {
                     const id = this.nextId()
                     this.objects[id] = retdisp
                     if (sendret = msg.cbId ? true : false)
-                        this.send({ cbId: msg.cbId, data: { yay: [id, ret] } })
+                        this.send({ cbId: msg.cbId, data: { yay: id } })
 
                 } else if (retprom && retprom.then) {
                     let onret: (_: any) => void, onrej: (_: any) => void

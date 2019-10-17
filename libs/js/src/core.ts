@@ -150,9 +150,7 @@ export class Disposable {
     }
 
     populateFrom(payload: any): boolean {
-        const arr = payload as any[]
-        return (arr && arr.length === 2 && arr[0] && (typeof arr[0] === 'string')
-            && ((this.id = arr[0]).length > 0))
+        return ((typeof payload === 'string') && (this.id = payload) && this.id.length) ? true : false
     }
 
     Dispose() {

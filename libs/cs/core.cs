@@ -181,8 +181,7 @@ namespace VscAppz {
         internal Disposable bind(impl impl, params string[] subFnIds) {
             (this.impl, this.subFnIds) = (impl, subFnIds); return this; }
         internal bool populateFrom(any payload) =>
-            (payload is any[] arr) && (arr != null) && (arr.Length == 2)
-                && (arr[0] is string s) && !string.IsNullOrEmpty(id = s);
+            (payload is string s) && !string.IsNullOrEmpty(id = s);
         /// <summary>Dispose signals to the counterparty to destroy the object.</summary>
         public void Dispose() {
             impl.send(new ipcMsg("Dispose", 1) { Data = { [""] = id } }, null);

@@ -129,9 +129,7 @@ class Disposable {
         return this;
     }
     populateFrom(payload) {
-        const arr = payload;
-        return (arr && arr.length === 2 && arr[0] && (typeof arr[0] === 'string')
-            && ((this.id = arr[0]).length > 0));
+        return ((typeof payload === 'string') && (this.id = payload) && this.id.length) ? true : false;
     }
     Dispose() {
         this.impl.send(new ipcMsg('Dispose', { '': this.id }));

@@ -212,12 +212,9 @@ func (me *Disposable) bind(impl *impl, subFnIds ...string) *Disposable {
 	return me
 }
 
-func (me *Disposable) populateFrom(payload any) bool {
-	if arr, ok := payload.([]any); ok && len(arr) == 2 {
-		me.id, ok = arr[0].(string)
-		return ok && me.id != ""
-	}
-	return false
+func (me *Disposable) populateFrom(payload any) (ok bool) {
+	me.id, ok = payload.(string)
+	return ok && me.id != ""
 }
 
 // Dispose signals to the counterparty to destroy the object.
