@@ -135,7 +135,7 @@ export class Gen extends gen_syn.Gen {
                 )
 
         if (struct)
-            this.line("public partial class " + struct.Name + " {")
+            this.line("public partial class " + struct.Name + (it.Name === 'Dispose' ? ' : IDisposable' : '') + " {")
                 .indented(() => {
                     this.emitDocs(it)
                     emitsigheadln().emitInstr(it.Func.Body).line()

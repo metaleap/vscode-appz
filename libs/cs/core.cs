@@ -173,7 +173,7 @@ namespace VscAppz {
     }
 
     /// <summary>Disposable represents an non-transient object identity lifetimed at the counterparty.</summary>
-    public class Disposable:IDisposable {
+    public class Disposable : IDisposable {
         internal impl impl;
         internal string id;
         internal string[] subFnIds;

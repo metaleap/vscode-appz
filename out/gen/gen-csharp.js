@@ -89,7 +89,7 @@ class Gen extends gen_syn.Gen {
             .each(it.Func.Args, ", ", a => this.emitTypeRef(a.Type).s(" ", a.Name))
             .s(") "));
         if (struct)
-            this.line("public partial class " + struct.Name + " {")
+            this.line("public partial class " + struct.Name + (it.Name === 'Dispose' ? ' : IDisposable' : '') + " {")
                 .indented(() => {
                 this.emitDocs(it);
                 emitsigheadln().emitInstr(it.Func.Body).line();

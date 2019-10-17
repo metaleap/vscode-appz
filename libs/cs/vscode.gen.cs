@@ -3093,7 +3093,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class StatusBarItem {
+	public partial class StatusBarItem : IDisposable {
 		/// <summary>
 		/// Dispose and free associated resources. Call
 		/// [hide](#StatusBarItem.hide).
@@ -3189,7 +3189,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class OutputChannel {
+	public partial class OutputChannel : IDisposable {
 		/// <summary>Dispose and free associated resources.</summary>
 		public void Dispose() {
 			this.disp.Dispose();
