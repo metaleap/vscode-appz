@@ -45,7 +45,7 @@ class Prep {
                 iface.methods.push({
                     name: pickName("", ['Properties', 'Props', 'Info', 'Current', 'Self', 'It', 'Cur'], iface.methods),
                     isProps: struct, args: [{
-                            isFromRetThenable: true, name: "then", optional: false,
+                            isFromRetThenable: true, name: "onDone", optional: false,
                             typeSpec: { Thens: [struct.name] },
                         }],
                 });
@@ -78,7 +78,7 @@ class Prep {
                 struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict });
             }
             if (struct.isIncoming && struct.fields.find(_ => typeFun(_.typeSpec)))
-                struct.isObj = true;
+                struct.isDispObj = true;
         });
         const printjson = (_) => console.log(JSON.stringify(_, function (key, val) {
             return (key === 'parent') ? null : val;
@@ -91,22 +91,26 @@ class Prep {
             printjson(this.interfaces);
     }
     addEnum(enumJob) {
+        if (seemsDeprecated(enumJob.decl))
+            return;
         const qname = this.qName(enumJob);
         this.enums.push({
             fromOrig: enumJob,
             name: qname.slice(1).join('_'),
-            enumerants: enumJob.decl.members.map(_ => ({
+            enumerants: enumJob.decl.members.filter(_ => !seemsDeprecated(_)).map(_ => ({
                 fromOrig: _,
                 name: _.name.getText(),
-                value: parseInt(_.initializer.text)
+                value: parseInt(_.initializer.getText())
             }))
         });
     }
     addStruct(structJob) {
+        if (seemsDeprecated(structJob.decl))
+            return;
         const qname = this.qName(structJob);
         const fields = [];
         for (const _ of structJob.decl.members)
-            if (_.name) {
+            if (_.name && !seemsDeprecated(_)) {
                 let tspec = null;
                 const mtyped = _;
                 const mtparams = (_.kind === ts.SyntaxKind.MethodSignature || _.kind === ts.SyntaxKind.MethodDeclaration) ? _ : null;
@@ -133,6 +137,8 @@ class Prep {
         struct.funcFields = struct.fields.filter(_ => typeFun(_.typeSpec)).map(_ => _.name);
     }
     addFunc(funcJob) {
+        if (seemsDeprecated(funcJob.decl))
+            return;
         const qname = this.qName(funcJob);
         const ifacename = qname.slice(1, qname.length - 1).join('_');
         let iface = this.interfaces.find(_ => _.name === ifacename);
@@ -144,7 +150,7 @@ class Prep {
             nameOrig: qname[qname.length - 1],
             name: qname[qname.length - 1] + ((funcJob.overload > 0) ? funcJob.overload : ''),
             args: (declf && declf.parameters && declf.parameters.length) ?
-                declf.parameters.filter(_ => _.name.getText() !== 'thisArg').map(_ => ({
+                declf.parameters.filter(_ => _.name.getText() !== 'thisArg' && !seemsDeprecated(_)).map(_ => ({
                     fromOrig: _,
                     name: _.name.getText(),
                     typeSpec: this.typeSpec(_.type, declf.typeParameters),
@@ -184,7 +190,7 @@ class Prep {
         if (!(tprom && tprom.length))
             tret = { Thens: [tret] };
         if (tret) {
-            const argname = pickName('', ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], me.args);
+            const argname = pickName('', ['onDone', 'andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], me.args);
             if (!argname)
                 throw (me);
             me.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, spreads: false });
@@ -424,6 +430,14 @@ function typeRefersTo(typeSpec, name) {
         return tprom.some(_ => typeRefersTo(_, name));
     return typeSpec === name;
 }
+function argFrom(typeSpec, orig) {
+    return {
+        typeSpec: typeSpec, name: orig.name.getText(), fromOrig: orig,
+        optional: orig.questionToken ? true : false,
+        spreads: orig.dotDotDotToken ? true : false,
+    };
+}
+exports.argFrom = argFrom;
 function argsFuncFields(prep, args) {
     const funcfields = [];
     for (const arg of args) {
@@ -541,3 +555,11 @@ function combine(...arrs) {
     return only ? only : (all.length ? ts.createNodeArray(all) : undefined);
 }
 exports.combine = combine;
+function seemsDeprecated(it) {
+    let deprecated = false;
+    for (const jsdoc of jsDocs(it))
+        if ((!deprecated) && jsdoc.getText().includes("@deprecated "))
+            deprecated = true;
+    return deprecated;
+}
+exports.seemsDeprecated = seemsDeprecated;

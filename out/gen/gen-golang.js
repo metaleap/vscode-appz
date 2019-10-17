@@ -56,8 +56,9 @@ class Gen extends gen_syn.Gen {
     emitFuncImpl(it) {
         let struct = it.Type, iface = it.Type;
         [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null];
-        this
-            .lf("func ", (!(struct || iface)) ? ""
+        if (struct)
+            this.emitDocs(it);
+        this.lf("func ", (!(struct || iface)) ? ""
             : ("(" + this.options.idents.curInst + " " + (struct ? ("*" + struct.Name) : iface.IsTop ? ("*" + this.options.idents.typeImpl) : (this.options.idents.typeImpl + iface.Name)) + ") "), it.Name, "(")
             .each(it.Func.Args, ", ", a => this.s(a.Name, " ").emitTypeRef(a.Type)).s(") ").when(it.Func.Type, () => emitTypeRet(this, it.Func.Type).s(" "))
             .emitInstr(it.Func.Body).lines("", "");

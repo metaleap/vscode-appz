@@ -19,17 +19,27 @@ class Gen extends gen_syn.Gen {
         return this.undent(this.isDemos ? 2 : 1).lines("}".repeat(this.isDemos ? 2 : 1));
     }
     emitDocs(it) {
+        const method = it;
+        const paramnames = [];
         if (it.Docs && it.Docs.length)
             for (const doc of it.Docs)
                 if (doc.Lines && doc.Lines.length)
-                    if (doc.ForParam && doc.ForParam.length)
+                    if (doc.ForParam && doc.ForParam.length) {
                         this.line("/// <param name=\"" + doc.ForParam + "\">" + doc.Lines.join(" ") + "</param>");
+                        if (!paramnames.includes(doc.ForParam))
+                            paramnames.push(doc.ForParam);
+                    }
                     else if (doc.Lines.length > 1)
                         this.line("/// <summary>")
                             .lines(...doc.Lines.map(_ => "/// " + _))
                             .line("/// </summary>");
                     else
                         this.line("/// <summary>" + doc.Lines[0] + "</summary>");
+        // this just to prevent CS1573
+        if (method && method.Args && method.Args.length && paramnames.length)
+            for (const arg of method.Args)
+                if (!paramnames.includes(arg.Name))
+                    this.line("/// <param name=\"" + arg.Name + "\">Called on success with the result of the `" + method.Name + "` operation.</param>");
         return this;
     }
     emitEnum(it) {
@@ -53,7 +63,7 @@ class Gen extends gen_syn.Gen {
             ? "[JsonIgnore]"
             : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnMaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")))
             .ln(() => this
-            .s(((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel) || (it.fromPrep && it.fromPrep.isObj)) ? "internal " : "public ")
+            .s(((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel) || (it.fromPrep && it.fromPrep.isDispObj)) ? "internal " : "public ")
             .emitTypeRef(f.Type)
             .s(" ", f.Name, ";")))).lines("}", "");
     }
@@ -72,7 +82,7 @@ class Gen extends gen_syn.Gen {
         let struct = it.Type, iface = it.Type;
         [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null];
         const isproperty = it.Func.Type && !(it.Func.Args && it.Func.Args.length);
-        const emitsigheadln = () => this.lf(iface ? "" : struct ? "internal " : "private static ")
+        const emitsigheadln = () => this.lf(iface ? "" : (struct ? ((it.Name !== "populateFrom") ? "public " : "internal ") : "private static "))
             .emitTypeRef(it.Func.Type)
             .s(" ", (iface ? (iface.Name + ".") : "") + it.Name)
             .when(isproperty, () => this.s(" { get "), () => this.s("(")
@@ -80,7 +90,10 @@ class Gen extends gen_syn.Gen {
             .s(") "));
         if (struct)
             this.line("public partial class " + struct.Name + " {")
-                .indented(() => emitsigheadln().emitInstr(it.Func.Body).line()).lines("}", "");
+                .indented(() => {
+                this.emitDocs(it);
+                emitsigheadln().emitInstr(it.Func.Body).line();
+            }).lines("}", "");
         else if (iface)
             emitsigheadln()
                 .emitInstr(it.Func.Body)

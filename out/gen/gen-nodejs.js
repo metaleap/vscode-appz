@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const gen = require("./gen");
 const gen_syn = require("./gen-syn");
 let prevImplTypeName;
 let jsMode = false;
@@ -20,7 +21,7 @@ class Gen extends gen_syn.Gen {
         super.genDemos();
     }
     emitIntro() {
-        return this.isDemos ? this.lines("const main = require('./main')", 'Object.defineProperty(exports, "__esModule", { value: true })', "// " + this.doNotEditComment("nodejs"), "let vsc, strFmt, quit, cancelIn, demo_Window_ShowInputBox", "exports.demosMenu = demosMenu", "exports.subscribeToMiscEvents = subscribeToMiscEvents", "exports.statusNoticeQuit = statusNoticeQuit", "exports.onReady = () => { vsc = main.vsc; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox }", "") : this.lines("// " + this.doNotEditComment("nodejs"), "import * as core from './core'", "import { OnError } from './vsc-appz'", "type ipcMsg = core.ipcMsg", "type Cancel = core.Cancel", "type Disposable = core.Disposable", "interface fromJson { populateFrom: (_: any) => boolean }", "", "abstract class implBase {", "    impl: impl", "    constructor(impl: impl) { this.impl = impl }", "    Impl() { return this.impl as any as core.impl /* crikey, codegen life.. */ }", "}", "", "function newipcMsg() { return new core.ipcMsg() }", "function newDisposable() { return new core.Disposable() }", "");
+        return this.isDemos ? this.lines("const main = require('./main')", 'Object.defineProperty(exports, "__esModule", { value: true })', "// " + this.doNotEditComment("nodejs"), "let vsc, strFmt, quit, cancelIn, demo_Window_ShowInputBox", "exports.demosMenu = demosMenu", "exports.subscribeToMiscEvents = subscribeToMiscEvents", "exports.statusNoticeQuit = statusNoticeQuit", "exports.onReady = () => { vsc = main.vsc; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox }", "") : this.lines("// " + this.doNotEditComment("nodejs"), "import * as core from './core'", "import { OnError } from './vsc-appz'", "type ipcMsg = core.ipcMsg", "type Cancel = core.Cancel", "type Disposable = core.Disposable", "interface fromJson { populateFrom: (_: any) => boolean }", "interface withDisp { disp: Disposable }", "", "abstract class implBase {", "    impl: impl", "    constructor(impl: impl) { this.impl = impl }", "    Impl() { return this.impl as any as core.impl /* crikey, codegen life.. */ }", "}", "", "function newipcMsg() { return new core.ipcMsg() }", "function newDisposable() { return new core.Disposable() }", "");
     }
     emitOutro() { return this; }
     emitDocs(it) {
@@ -59,18 +60,34 @@ class Gen extends gen_syn.Gen {
             .lines("}", "");
     }
     emitStruct(it) {
+        const isdispobj = it.fromPrep && it.fromPrep.isDispObj;
+        const dispmethods = [];
         this.emitDocs(it)
-            .line("export interface " + it.Name + (it.IsIncoming ? " extends fromJson {" : " {")).indented(() => {
-            this.each(it.Fields, "\n", f => this.emitDocs(f)
-                .ln(() => {
-                this.s(f.Name)
-                    .s((f.fromPrep && f.fromPrep.optional) ? "?: " : ": ")
-                    .emitTypeRef(f.Type);
-            }));
+            .line("export interface " + it.Name + (it.IsIncoming ? " extends fromJson" + (isdispobj ? ", withDisp" : "") + " {" : " {")).indented(() => {
+            if (isdispobj)
+                this.each(it.fromPrep.fields.filter(_ => gen.typeFun(_.typeSpec)), "\n", f => {
+                    dispmethods.push(f);
+                    this.emitDocs({ Docs: this.b.docs(gen.docs(f.fromOrig)) })
+                        .ln(() => {
+                        this.s(this.nameRewriters.methods(f.name), ": ")
+                            .emitTypeRef(this.b.typeRef(f.typeSpec));
+                    });
+                });
+            else
+                this.each(it.Fields, "\n", f => this.emitDocs(f)
+                    .ln(() => {
+                    this.s(f.Name)
+                        .s((f.fromPrep && f.fromPrep.optional) ? "?: " : ": ")
+                        .emitTypeRef(f.Type);
+                }));
         })
             .lines("}", "");
         if (it.IsIncoming)
-            this.lines((it.IsOutgoing ? "export " : "") + "function new" + it.Name + " (): " + it.Name + " {", "    let me: " + it.Name, "    me = { populateFrom: _ => " + it.Name + "_populateFrom.call(me, _) } as " + it.Name, "    return me", "}", "");
+            this.lines((it.IsOutgoing ? "export " : "") + "function new" + it.Name + " (): " + it.Name + " {", "    let me: " + it.Name, "    me = { populateFrom: _ => " + it.Name + "_populateFrom.call(me, _) } as " + it.Name).each(dispmethods, "", f => {
+                const tfun = gen.typeFun(f.typeSpec);
+                const args = tfun[0].map((_, i) => 'a' + i).join(', ');
+                this.line(`    me.${this.nameRewriters.methods(f.name)} = (${args}) => ${it.Name}_${this.nameRewriters.methods(f.name)}.call(me, ${args})`);
+            }).lines("    return me", "}", "");
     }
     onBeforeEmitImpls(structs) {
         if (!structs) {

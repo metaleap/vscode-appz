@@ -184,7 +184,7 @@ namespace VscAppz {
             (payload is string s) && !string.IsNullOrEmpty(id = s);
         /// <summary>Dispose signals to the counterparty to destroy the object.</summary>
         public void Dispose() {
-            impl.send(new ipcMsg("Dispose", 1) { Data = { [""] = id } }, null);
+            impl.send(new ipcMsg("dispose", 1) { Data = { [""] = id } }, null);
             if (subFnIds != null && subFnIds.Length > 0) {
                 lock (this)
                     foreach (var subfnid in subFnIds) {

@@ -36,18 +36,28 @@ export class Gen extends gen_syn.Gen {
         return this.undent(this.isDemos ? 2 : 1).lines("}".repeat(this.isDemos ? 2 : 1))
     }
 
-    emitDocs(it: (gen_syn.WithDocs & gen_syn.WithName)): Gen {
+    emitDocs(it: gen_syn.WithDocs): Gen {
+        const method = it as gen_syn.Method
+        const paramnames: string[] = []
         if (it.Docs && it.Docs.length)
             for (const doc of it.Docs)
                 if (doc.Lines && doc.Lines.length)
-                    if (doc.ForParam && doc.ForParam.length)
+                    if (doc.ForParam && doc.ForParam.length) {
                         this.line("/// <param name=\"" + doc.ForParam + "\">" + doc.Lines.join(" ") + "</param>")
-                    else if (doc.Lines.length > 1)
+                        if (!paramnames.includes(doc.ForParam))
+                            paramnames.push(doc.ForParam)
+                    } else if (doc.Lines.length > 1)
                         this.line("/// <summary>")
                             .lines(...doc.Lines.map(_ => "/// " + _))
                             .line("/// </summary>")
                     else
                         this.line("/// <summary>" + doc.Lines[0] + "</summary>")
+
+        // this just to prevent CS1573
+        if (method && method.Args && method.Args.length && paramnames.length)
+            for (const arg of method.Args)
+                if (!paramnames.includes(arg.Name))
+                    this.line("/// <param name=\"" + arg.Name + "\">Called on success with the result of the `" + method.Name + "` operation.</param>")
         return this
     }
 
@@ -87,7 +97,7 @@ export class Gen extends gen_syn.Gen {
                             : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnMaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")
                         ))
                         .ln(() => this
-                            .s(((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel) || (it.fromPrep && it.fromPrep.isObj)) ? "internal " : "public ")
+                            .s(((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel) || (it.fromPrep && it.fromPrep.isDispObj)) ? "internal " : "public ")
                             .emitTypeRef(f.Type)
                             .s(" ", f.Name, ";")
                         ))
@@ -114,7 +124,7 @@ export class Gen extends gen_syn.Gen {
 
         const isproperty = it.Func.Type && !(it.Func.Args && it.Func.Args.length)
         const emitsigheadln = () =>
-            this.lf(iface ? "" : struct ? "internal " : "private static ")
+            this.lf(iface ? "" : (struct ? ((it.Name !== "populateFrom") ? "public " : "internal ") : "private static "))
                 .emitTypeRef(it.Func.Type)
                 .s(" ", (iface ? (iface.Name + ".") : "") + it.Name)
                 .when(isproperty,
@@ -126,9 +136,10 @@ export class Gen extends gen_syn.Gen {
 
         if (struct)
             this.line("public partial class " + struct.Name + " {")
-                .indented(() =>
+                .indented(() => {
+                    this.emitDocs(it)
                     emitsigheadln().emitInstr(it.Func.Body).line()
-                ).lines("}", "")
+                }).lines("}", "")
         else if (iface)
             emitsigheadln()
                 .emitInstr(it.Func.Body)

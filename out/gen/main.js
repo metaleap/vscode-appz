@@ -34,6 +34,7 @@ const genApiSurface = {
                 'state',
                 'onDidChangeWindowState',
                 'createStatusBarItem',
+                'createOutputChannel',
             ],
             'env': [
                 'openExternal',
@@ -156,7 +157,8 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                 throw ("GONE FROM API:\texport `" + prefixes.join('.') + '.' + item + '`');
             else
                 for (let i = 0; i < members.length; i++)
-                    gatherMember(into, members[i], (members.length === 1) ? 0 : (i + 1), ...prefixes);
+                    if (!gen.seemsDeprecated(members[i]))
+                        gatherMember(into, members[i], (members.length === 1) ? 0 : (i + 1), ...prefixes);
         }
 }
 function gatherMember(into, member, overload, ...prefixes) {
@@ -256,7 +258,7 @@ function gatherFunc(into, decl, overload, ...prefixes) {
     if (into.funcs.some(_ => _.qName === qname && _.overload === overload))
         return;
     into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] });
-    decl.parameters.forEach(_ => gatherFromTypeNode(into, _.type, decl.typeParameters));
+    decl.parameters.filter(_ => !gen.seemsDeprecated(_)).forEach(_ => gatherFromTypeNode(into, _.type, decl.typeParameters));
     gatherFromTypeNode(into, decl.type, decl.typeParameters);
 }
 function gatherProp(into, decl, ...prefixes) {
@@ -286,13 +288,15 @@ function gatherStruct(into, decl, ...prefixes) {
         return;
     into.structs.push({ qName: qname, decl: decl });
     decl.members.forEach((member) => {
-        const memtype = member;
-        const memtparams = member;
-        const memparams = member;
-        if (memtype && memtype.type)
-            gatherFromTypeNode(into, memtype.type, memtparams ? memtparams.typeParameters : undefined);
-        if (memparams && memparams.parameters && memparams.parameters.length)
-            memparams.parameters.forEach(_ => gatherFromTypeNode(into, _.type, memtparams ? memtparams.typeParameters : undefined));
+        if (!gen.seemsDeprecated(member)) {
+            const memtype = member;
+            const memtparams = member;
+            const memparams = member;
+            if (memtype && memtype.type)
+                gatherFromTypeNode(into, memtype.type, memtparams ? memtparams.typeParameters : undefined);
+            if (memparams && memparams.parameters && memparams.parameters.length)
+                memparams.parameters.filter(_ => !gen.seemsDeprecated(_)).forEach(_ => gatherFromTypeNode(into, _.type, memtparams ? memtparams.typeParameters : undefined));
+        }
     });
 }
 main();

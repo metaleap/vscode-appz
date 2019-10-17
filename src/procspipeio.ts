@@ -226,9 +226,11 @@ export class Prog {
                 this.send({ cbId: msg.cbId, data: { nay: ensureWillShowUpInJson(err) } })
         }
 
-        if (msg.qName === 'Dispose' && msg.data) {
-            const id = msg.data[''] as string
-            if (id && id.length) {
+        if (msg.qName === 'dispose') {
+            if (!(msg.data && msg.data['']))
+                onfail(msg)
+            else {
+                const id = msg.data[''] as string
                 const obj = this.objects[id] as vsc.Disposable
                 delete this.objects[id]
                 if (obj && obj.dispose)

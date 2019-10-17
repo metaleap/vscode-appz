@@ -41,6 +41,7 @@ const genApiSurface: genApiMember = {
                 'state',
                 'onDidChangeWindowState',
                 'createStatusBarItem',
+                'createOutputChannel',
             ],
             'env': [
                 'openExternal',
@@ -165,7 +166,8 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                 throw ("GONE FROM API:\texport `" + prefixes.join('.') + '.' + item + '`')
             else
                 for (let i = 0; i < members.length; i++)
-                    gatherMember(into, members[i], (members.length === 1) ? 0 : (i + 1), ...prefixes)
+                    if (!gen.seemsDeprecated(members[i]))
+                        gatherMember(into, members[i], (members.length === 1) ? 0 : (i + 1), ...prefixes)
         }
 }
 
@@ -269,7 +271,8 @@ function gatherFunc(into: gen.GenJob, decl: ts.FunctionDeclaration, overload: nu
     if (into.funcs.some(_ => _.qName === qname && _.overload === overload))
         return
     into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] })
-    decl.parameters.forEach(_ => gatherFromTypeNode(into, _.type, decl.typeParameters))
+    decl.parameters.filter(_ => !gen.seemsDeprecated(_)).forEach(_ =>
+        gatherFromTypeNode(into, _.type, decl.typeParameters))
     gatherFromTypeNode(into, decl.type, decl.typeParameters)
 }
 
@@ -304,13 +307,15 @@ function gatherStruct(into: gen.GenJob, decl: ts.InterfaceDeclaration | ts.Class
 
     into.structs.push({ qName: qname, decl: decl })
     decl.members.forEach((member: ts.NamedDeclaration) => {
-        const memtype = member as gen.TsNodeWithType
-        const memtparams = member as gen.TsNodeWithTypeParams
-        const memparams = member as any as gen.TsNodeWithParams
-        if (memtype && memtype.type)
-            gatherFromTypeNode(into, memtype.type, memtparams ? memtparams.typeParameters : undefined)
-        if (memparams && memparams.parameters && memparams.parameters.length)
-            memparams.parameters.forEach(_ => gatherFromTypeNode(into, _.type, memtparams ? memtparams.typeParameters : undefined))
+        if (!gen.seemsDeprecated(member)) {
+            const memtype = member as gen.TsNodeWithType
+            const memtparams = member as gen.TsNodeWithTypeParams
+            const memparams = member as any as gen.TsNodeWithParams
+            if (memtype && memtype.type)
+                gatherFromTypeNode(into, memtype.type, memtparams ? memtparams.typeParameters : undefined)
+            if (memparams && memparams.parameters && memparams.parameters.length)
+                memparams.parameters.filter(_ => !gen.seemsDeprecated(_)).forEach(_ => gatherFromTypeNode(into, _.type, memtparams ? memtparams.typeParameters : undefined))
+        }
     })
 }
 

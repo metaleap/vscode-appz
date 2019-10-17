@@ -132,7 +132,7 @@ class Disposable {
         return ((typeof payload === 'string') && (this.id = payload) && this.id.length) ? true : false;
     }
     Dispose() {
-        this.impl.send(new ipcMsg('Dispose', { '': this.id }));
+        this.impl.send(new ipcMsg('dispose', { '': this.id }));
         if (this.subFnIds && this.subFnIds.length) {
             for (const subfnid of this.subFnIds) {
                 delete this.impl.cbListeners[subfnid];

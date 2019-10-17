@@ -73,15 +73,15 @@ export interface PrepStruct {
     isOutgoing?: boolean
     isIncoming?: boolean
     isPropsOf?: PrepInterface
-    isObj?: boolean
+    isDispObj?: boolean
 }
 
 export interface PrepField {
     fromOrig?: ts.Node
     name: string
     typeSpec: TypeSpec
-    optional: boolean
-    isExtBaggage: boolean
+    optional?: boolean
+    isExtBaggage?: boolean
 }
 
 export interface PrepInterface {
@@ -150,7 +150,7 @@ export class Prep {
                 iface.methods.push({
                     name: pickName("", ['Properties', 'Props', 'Info', 'Current', 'Self', 'It', 'Cur'], iface.methods),
                     isProps: struct, args: [{
-                        isFromRetThenable: true, name: "then", optional: false,
+                        isFromRetThenable: true, name: "onDone", optional: false,
                         typeSpec: { Thens: [struct.name] },
                     }],
                 })
@@ -175,7 +175,7 @@ export class Prep {
             }
 
             if (struct.isIncoming && struct.fields.find(_ => typeFun(_.typeSpec)))
-                struct.isObj = true
+                struct.isDispObj = true
         })
 
         const printjson = (_: any) => console.log(JSON.stringify(_, function (this: any, key: string, val: any): any {
@@ -190,23 +190,29 @@ export class Prep {
     }
 
     addEnum(enumJob: GenJobEnum) {
+        if (seemsDeprecated(enumJob.decl))
+            return
+
         const qname = this.qName(enumJob)
         this.enums.push({
             fromOrig: enumJob,
             name: qname.slice(1).join('_'),
-            enumerants: enumJob.decl.members.map(_ => ({
+            enumerants: enumJob.decl.members.filter(_ => !seemsDeprecated(_)).map(_ => ({
                 fromOrig: _,
                 name: _.name.getText(),
-                value: parseInt((_.initializer as ts.LiteralExpression).text)
+                value: parseInt(_.initializer.getText())
             }))
         })
     }
 
     addStruct(structJob: GenJobStruct) {
+        if (seemsDeprecated(structJob.decl))
+            return
+
         const qname = this.qName(structJob)
         const fields: PrepField[] = []
         for (const _ of structJob.decl.members)
-            if (_.name) {
+            if (_.name && !seemsDeprecated(_)) {
                 let tspec: TypeSpec = null
                 const mtyped = _ as TsNodeWithType
                 const mtparams = (_.kind === ts.SyntaxKind.MethodSignature || _.kind === ts.SyntaxKind.MethodDeclaration) ? _ as TsNodeWithTypeParams : null
@@ -234,6 +240,9 @@ export class Prep {
     }
 
     addFunc(funcJob: GenJobFunc) {
+        if (seemsDeprecated(funcJob.decl))
+            return
+
         const qname = this.qName(funcJob)
         const ifacename = qname.slice(1, qname.length - 1).join('_')
         let iface = this.interfaces.find(_ => _.name === ifacename)
@@ -245,7 +254,7 @@ export class Prep {
             nameOrig: qname[qname.length - 1],
             name: qname[qname.length - 1] + ((funcJob.overload > 0) ? funcJob.overload : ''),
             args: (declf && declf.parameters && declf.parameters.length) ?
-                declf.parameters.filter(_ => _.name.getText() !== 'thisArg').map(_ => ({
+                declf.parameters.filter(_ => _.name.getText() !== 'thisArg' && !seemsDeprecated(_)).map(_ => ({
                     fromOrig: _,
                     name: _.name.getText(),
                     typeSpec: this.typeSpec(_.type, declf.typeParameters),
@@ -285,7 +294,7 @@ export class Prep {
         if (!(tprom && tprom.length))
             tret = { Thens: [tret] }
         if (tret) {
-            const argname = pickName('', ['andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], me.args)
+            const argname = pickName('', ['onDone', 'andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], me.args)
             if (!argname)
                 throw (me)
             me.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, spreads: false })
@@ -573,6 +582,14 @@ function typeRefersTo(typeSpec: TypeSpec, name: string): boolean {
     return typeSpec === name
 }
 
+export function argFrom(typeSpec: TypeSpec, orig: ts.ParameterDeclaration): PrepArg {
+    return {
+        typeSpec: typeSpec, name: orig.name.getText(), fromOrig: orig,
+        optional: orig.questionToken ? true : false,
+        spreads: orig.dotDotDotToken ? true : false,
+    }
+}
+
 export function argsFuncFields(prep: Prep, args: PrepArg[]) {
     const funcfields: { arg: PrepArg, struct: PrepStruct, name: string }[] = []
     for (const arg of args) {
@@ -690,4 +707,12 @@ export function combine<T extends ts.Node>(...arrs: (T[] | ts.NodeArray<T>)[]) {
                 only = narr
         }
     return only ? only : (all.length ? ts.createNodeArray<T>(all) : undefined)
+}
+
+export function seemsDeprecated(it: ts.Node) {
+    let deprecated: boolean = false
+    for (const jsdoc of jsDocs(it))
+        if ((!deprecated) && jsdoc.getText().includes("@deprecated "))
+            deprecated = true;
+    return deprecated
 }

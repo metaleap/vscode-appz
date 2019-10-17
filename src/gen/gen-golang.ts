@@ -95,11 +95,12 @@ export class Gen extends gen_syn.Gen {
             iface = it.Type as gen_syn.TInterface
         [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null]
 
-        this
-            .lf("func ",
-                (!(struct || iface)) ? ""
-                    : ("(" + this.options.idents.curInst + " " + (struct ? ("*" + struct.Name) : iface.IsTop ? ("*" + this.options.idents.typeImpl) : (this.options.idents.typeImpl + iface.Name)) + ") "),
-                it.Name, "(")
+        if (struct)
+            this.emitDocs(it)
+        this.lf("func ",
+            (!(struct || iface)) ? ""
+                : ("(" + this.options.idents.curInst + " " + (struct ? ("*" + struct.Name) : iface.IsTop ? ("*" + this.options.idents.typeImpl) : (this.options.idents.typeImpl + iface.Name)) + ") "),
+            it.Name, "(")
             .each(it.Func.Args, ", ", a =>
                 this.s(a.Name, " ").emitTypeRef(a.Type)
             ).s(") ").when(it.Func.Type,

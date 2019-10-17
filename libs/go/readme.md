@@ -61,8 +61,8 @@ type Commands interface {
 	//
 	// `callback` ── A command handler function.
 	//
-	// `andThen` ── Disposable which unregisters this command on disposal.
-	RegisterCommand(command string, callback func([]any) any, andThen func(*Disposable))
+	// `onDone` ── Disposable which unregisters this command on disposal.
+	RegisterCommand(command string, callback func([]any) any, onDone func(*Disposable))
 
 	// Executes the command denoted by the given command identifier.
 	//
@@ -76,17 +76,17 @@ type Commands interface {
 	//
 	// `rest` ── Parameters passed to the command function.
 	//
-	// `andThen` ── A thenable that resolves to the returned value of the given command. `undefined` when
+	// `onDone` ── A thenable that resolves to the returned value of the given command. `undefined` when
 	// the command handler function doesn't return anything.
-	ExecuteCommand(command string, rest []any, andThen func(any))
+	ExecuteCommand(command string, rest []any, onDone func(any))
 
 	// Retrieve the list of all available commands. Commands starting an underscore are
 	// treated as internal commands.
 	//
 	// `filterInternal` ── Set `true` to not see internal commands (starting with an underscore)
 	//
-	// `andThen` ── Thenable that resolves to a list of command ids.
-	GetCommands(filterInternal bool, andThen func([]string))
+	// `onDone` ── Thenable that resolves to a list of command ids.
+	GetCommands(filterInternal bool, onDone func([]string))
 }
 ```
 
@@ -169,20 +169,20 @@ type Env interface {
 	//
 	// `target` ── The uri that should be opened.
 	//
-	// `andThen` ── A promise indicating if open was successful.
-	OpenExternal(target string, andThen func(bool))
+	// `onDone` ── A promise indicating if open was successful.
+	OpenExternal(target string, onDone func(bool))
 
 	// The application name of the editor, like 'VS Code'.
-	AppName(andThen func(string))
+	AppName(onDone func(string))
 
 	// The application root folder from which the editor is running.
-	AppRoot(andThen func(string))
+	AppRoot(onDone func(string))
 
 	// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
-	Language(andThen func(string))
+	Language(onDone func(string))
 
 	// A unique identifier for the computer.
-	MachineId(andThen func(string))
+	MachineId(onDone func(string))
 
 	// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
 	// Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
@@ -191,21 +191,21 @@ type Env interface {
 	// value is defined in all extension hosts (local and remote) in case a remote extension host
 	// exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
 	// a specific extension runs remote or not.
-	RemoteName(andThen func(*string))
+	RemoteName(onDone func(*string))
 
 	// A unique identifier for the current session.
 	// Changes each time the editor is started.
-	SessionId(andThen func(string))
+	SessionId(onDone func(string))
 
 	// The detected default shell for the extension host, this is overridden by the
 	// `terminal.integrated.shell` setting for the extension host's platform.
-	Shell(andThen func(string))
+	Shell(onDone func(string))
 
 	// The custom uri scheme the editor registers to in the operating system.
-	UriScheme(andThen func(string))
+	UriScheme(onDone func(string))
 
 	// Provides single-call access to numerous individual `Env` properties at once.
-	Properties(then func(EnvProperties))
+	Properties(onDone func(EnvProperties))
 }
 ```
 
@@ -257,7 +257,7 @@ Namespace describing the environment the editor runs in.
 type Extensions interface {
 	// An event which fires when `extensions.all` changes. This can happen when extensions are
 	// installed, uninstalled, enabled or disabled.
-	OnDidChange(listener func(), andThen func(*Disposable))
+	OnDidChange(listener func(), onDone func(*Disposable))
 }
 ```
 
@@ -334,12 +334,12 @@ Options to configure the behavior of the input box UI.
 type Languages interface {
 	// Return the identifiers of all known languages.
 	//
-	// `andThen` ── Promise resolving to an array of identifier strings.
-	GetLanguages(andThen func([]string))
+	// `onDone` ── Promise resolving to an array of identifier strings.
+	GetLanguages(onDone func([]string))
 
 	// An [event](#Event) which fires when the global set of diagnostics changes. This is
 	// newly added and removed diagnostics.
-	OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent), andThen func(*Disposable))
+	OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent), onDone func(*Disposable))
 }
 ```
 
@@ -450,6 +450,66 @@ Windows which enforces to open either files or folder, but *not both*. * Note 2:
 Explicitly setting `canSelectFiles` and `canSelectFolders` to `false` is futile
 and the editor then silently adjusts the options to select files.
 
+#### type OutputChannel
+
+```go
+type OutputChannel struct {
+}
+```
+
+An output channel is a container for readonly textual information.
+
+To get an instance of an `OutputChannel` use
+[createOutputChannel](#window.createOutputChannel).
+
+#### func (*OutputChannel) Append
+
+```go
+func (me *OutputChannel) Append(value string)
+```
+Append the given value to the channel.
+
+`value` ── A string, falsy values will not be printed.
+
+#### func (*OutputChannel) AppendLine
+
+```go
+func (me *OutputChannel) AppendLine(value string)
+```
+Append the given value and a line feed character to the channel.
+
+`value` ── A string, falsy values will be printed.
+
+#### func (*OutputChannel) Clear
+
+```go
+func (me *OutputChannel) Clear()
+```
+Removes all output from the channel.
+
+#### func (*OutputChannel) Dispose
+
+```go
+func (me *OutputChannel) Dispose()
+```
+Dispose and free associated resources.
+
+#### func (*OutputChannel) Hide
+
+```go
+func (me *OutputChannel) Hide()
+```
+Hide this channel from the UI.
+
+#### func (*OutputChannel) Show
+
+```go
+func (me *OutputChannel) Show(preserveFocus *bool)
+```
+Reveal this channel in the UI.
+
+`preserveFocus` ── When `true` the channel will not take focus.
+
 #### type QuickPickItem
 
 ```go
@@ -554,6 +614,27 @@ type StatusBarItem struct {
 
 A status bar item is a status bar contribution that can show text and icons and
 run a command on click.
+
+#### func (*StatusBarItem) Dispose
+
+```go
+func (me *StatusBarItem) Dispose()
+```
+Dispose and free associated resources. Call [hide](#StatusBarItem.hide).
+
+#### func (*StatusBarItem) Hide
+
+```go
+func (me *StatusBarItem) Hide()
+```
+Hide the entry in the status bar.
+
+#### func (*StatusBarItem) Show
+
+```go
+func (me *StatusBarItem) Show()
+```
+Shows the entry in the status bar.
 
 #### type Vscode
 
@@ -699,8 +780,8 @@ type Window interface {
 	//
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
-	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage1(message string, items []string, andThen func(*string))
+	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowInformationMessage1(message string, items []string, onDone func(*string))
 
 	// Show an information message to users. Optionally provide an array of items which will be presented as
 	// clickable buttons.
@@ -711,8 +792,8 @@ type Window interface {
 	//
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
-	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage2(message string, options MessageOptions, items []string, andThen func(*string))
+	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowInformationMessage2(message string, options MessageOptions, items []string, onDone func(*string))
 
 	// Show an information message.
 	//
@@ -720,8 +801,8 @@ type Window interface {
 	//
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
-	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage3(message string, items []MessageItem, andThen func(*MessageItem))
+	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowInformationMessage3(message string, items []MessageItem, onDone func(*MessageItem))
 
 	// Show an information message.
 	//
@@ -731,8 +812,8 @@ type Window interface {
 	//
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
-	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem))
+	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, onDone func(*MessageItem))
 
 	// Show a warning message.
 	//
@@ -740,28 +821,8 @@ type Window interface {
 	//
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
-	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage1(message string, items []string, andThen func(*string))
-
-	// Show a warning message.
-	//
-	// `message` ── The message to show.
-	//
-	// `options` ── Configures the behaviour of the message.
-	//
-	// `items` ── A set of items that will be rendered as actions in the message.
-	//
-	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage2(message string, options MessageOptions, items []string, andThen func(*string))
-
-	// Show a warning message.
-	//
-	// `message` ── The message to show.
-	//
-	// `items` ── A set of items that will be rendered as actions in the message.
-	//
-	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage3(message string, items []MessageItem, andThen func(*MessageItem))
+	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowWarningMessage1(message string, items []string, onDone func(*string))
 
 	// Show a warning message.
 	//
@@ -771,8 +832,28 @@ type Window interface {
 	//
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
-	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem))
+	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowWarningMessage2(message string, options MessageOptions, items []string, onDone func(*string))
+
+	// Show a warning message.
+	//
+	// `message` ── The message to show.
+	//
+	// `items` ── A set of items that will be rendered as actions in the message.
+	//
+	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowWarningMessage3(message string, items []MessageItem, onDone func(*MessageItem))
+
+	// Show a warning message.
+	//
+	// `message` ── The message to show.
+	//
+	// `options` ── Configures the behaviour of the message.
+	//
+	// `items` ── A set of items that will be rendered as actions in the message.
+	//
+	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, onDone func(*MessageItem))
 
 	// Show an error message.
 	//
@@ -780,8 +861,8 @@ type Window interface {
 	//
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
-	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage1(message string, items []string, andThen func(*string))
+	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowErrorMessage1(message string, items []string, onDone func(*string))
 
 	// Show an error message.
 	//
@@ -791,8 +872,8 @@ type Window interface {
 	//
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
-	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage2(message string, options MessageOptions, items []string, andThen func(*string))
+	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowErrorMessage2(message string, options MessageOptions, items []string, onDone func(*string))
 
 	// Show an error message.
 	//
@@ -800,8 +881,8 @@ type Window interface {
 	//
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
-	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage3(message string, items []MessageItem, andThen func(*MessageItem))
+	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowErrorMessage3(message string, items []MessageItem, onDone func(*MessageItem))
 
 	// Show an error message.
 	//
@@ -811,8 +892,8 @@ type Window interface {
 	//
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
-	// `andThen` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, andThen func(*MessageItem))
+	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, onDone func(*MessageItem))
 
 	// Opens an input box to ask the user for input.
 	//
@@ -824,8 +905,8 @@ type Window interface {
 	//
 	// `token` ── A token that can be used to signal cancellation.
 	//
-	// `andThen` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
-	ShowInputBox(options *InputBoxOptions, token *Cancel, andThen func(*string))
+	// `onDone` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
+	ShowInputBox(options *InputBoxOptions, token *Cancel, onDone func(*string))
 
 	// Shows a selection list allowing multiple selections.
 	//
@@ -835,8 +916,8 @@ type Window interface {
 	//
 	// `token` ── A token that can be used to signal cancellation.
 	//
-	// `andThen` ── A promise that resolves to the selected items or `undefined`.
-	ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel, andThen func([]string))
+	// `onDone` ── A promise that resolves to the selected items or `undefined`.
+	ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel, onDone func([]string))
 
 	// Shows a selection list.
 	//
@@ -846,8 +927,8 @@ type Window interface {
 	//
 	// `token` ── A token that can be used to signal cancellation.
 	//
-	// `andThen` ── A promise that resolves to the selection or `undefined`.
-	ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel, andThen func(*string))
+	// `onDone` ── A promise that resolves to the selection or `undefined`.
+	ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel, onDone func(*string))
 
 	// Shows a selection list allowing multiple selections.
 	//
@@ -857,8 +938,8 @@ type Window interface {
 	//
 	// `token` ── A token that can be used to signal cancellation.
 	//
-	// `andThen` ── A promise that resolves to the selected items or `undefined`.
-	ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel, andThen func([]QuickPickItem))
+	// `onDone` ── A promise that resolves to the selected items or `undefined`.
+	ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel, onDone func([]QuickPickItem))
 
 	// Shows a selection list.
 	//
@@ -868,8 +949,8 @@ type Window interface {
 	//
 	// `token` ── A token that can be used to signal cancellation.
 	//
-	// `andThen` ── A promise that resolves to the selected item or `undefined`.
-	ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel, andThen func(*QuickPickItem))
+	// `onDone` ── A promise that resolves to the selected item or `undefined`.
+	ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel, onDone func(*QuickPickItem))
 
 	// Set a message to the status bar. This is a short hand for the more powerful
 	// status bar [items](#window.createStatusBarItem).
@@ -878,8 +959,8 @@ type Window interface {
 	//
 	// `hideAfterTimeout` ── Timeout in milliseconds after which the message will be disposed.
 	//
-	// `andThen` ── A disposable which hides the status bar message.
-	SetStatusBarMessage1(text string, hideAfterTimeout int, andThen func(*Disposable))
+	// `onDone` ── A disposable which hides the status bar message.
+	SetStatusBarMessage1(text string, hideAfterTimeout int, onDone func(*Disposable))
 
 	// Set a message to the status bar. This is a short hand for the more powerful
 	// status bar [items](#window.createStatusBarItem).
@@ -889,39 +970,39 @@ type Window interface {
 	//
 	// `text` ── The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
 	//
-	// `andThen` ── A disposable which hides the status bar message.
-	SetStatusBarMessage2(text string, andThen func(*Disposable))
+	// `onDone` ── A disposable which hides the status bar message.
+	SetStatusBarMessage2(text string, onDone func(*Disposable))
 
 	// Shows a file save dialog to the user which allows to select a file
 	// for saving-purposes.
 	//
 	// `options` ── Options that control the dialog.
 	//
-	// `andThen` ── A promise that resolves to the selected resource or `undefined`.
-	ShowSaveDialog(options SaveDialogOptions, andThen func(*string))
+	// `onDone` ── A promise that resolves to the selected resource or `undefined`.
+	ShowSaveDialog(options SaveDialogOptions, onDone func(*string))
 
 	// Shows a file open dialog to the user which allows to select a file
 	// for opening-purposes.
 	//
 	// `options` ── Options that control the dialog.
 	//
-	// `andThen` ── A promise that resolves to the selected resources or `undefined`.
-	ShowOpenDialog(options OpenDialogOptions, andThen func([]string))
+	// `onDone` ── A promise that resolves to the selected resources or `undefined`.
+	ShowOpenDialog(options OpenDialogOptions, onDone func([]string))
 
 	// Shows a selection list of [workspace folders](#workspace.workspaceFolders) to pick from.
 	// Returns `undefined` if no folder is open.
 	//
 	// `options` ── Configures the behavior of the workspace folder list.
 	//
-	// `andThen` ── A promise that resolves to the workspace folder or `undefined`.
-	ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, andThen func(*WorkspaceFolder))
+	// `onDone` ── A promise that resolves to the workspace folder or `undefined`.
+	ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, onDone func(*WorkspaceFolder))
 
 	// Represents the current window's state.
-	State(andThen func(WindowState))
+	State(onDone func(WindowState))
 
 	// An [event](#Event) which fires when the focus state of the current window
 	// changes. The value of the event represents whether the window is focused.
-	OnDidChangeWindowState(listener func(WindowState), andThen func(*Disposable))
+	OnDidChangeWindowState(listener func(WindowState), onDone func(*Disposable))
 
 	// Creates a status bar [item](#StatusBarItem).
 	//
@@ -929,8 +1010,13 @@ type Window interface {
 	//
 	// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 	//
-	// `andThen` ── A new status bar item.
-	CreateStatusBarItem(alignment StatusBarAlignment, priority *int, andThen func(*StatusBarItem))
+	// `onDone` ── A new status bar item.
+	CreateStatusBarItem(alignment StatusBarAlignment, priority *int, onDone func(*StatusBarItem))
+
+	// Creates a new [output channel](#OutputChannel) with the given name.
+	//
+	// `name` ── Human-readable string which will be used to represent the channel in the UI.
+	CreateOutputChannel(name string, onDone func(*OutputChannel))
 }
 ```
 
@@ -955,7 +1041,7 @@ Represents the state of a window.
 type Workspace interface {
 	// The name of the workspace. `undefined` when no folder
 	// has been opened.
-	Name(andThen func(*string))
+	Name(onDone func(*string))
 
 	// The location of the workspace file, for example:
 	//
@@ -984,17 +1070,17 @@ type Workspace interface {
 	// configuration data into the file. You can use `workspace.getConfiguration().update()`
 	// for that purpose which will work both when a single folder is opened as
 	// well as an untitled or saved workspace.
-	WorkspaceFile(andThen func(*string))
+	WorkspaceFile(onDone func(*string))
 
 	// Save all dirty files.
 	//
 	// `includeUntitled` ── Also save files that have been created during this session.
 	//
-	// `andThen` ── A thenable that resolves when the files have been saved.
-	SaveAll(includeUntitled bool, andThen func(bool))
+	// `onDone` ── A thenable that resolves when the files have been saved.
+	SaveAll(includeUntitled bool, onDone func(bool))
 
 	// An event that is emitted when a workspace folder is added or removed.
-	OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent), andThen func(*Disposable))
+	OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent), onDone func(*Disposable))
 
 	// Returns the [workspace folder](#WorkspaceFolder) that contains a given uri.
 	// * returns `undefined` when the given uri doesn't match any workspace folder
@@ -1002,12 +1088,12 @@ type Workspace interface {
 	//
 	// `uri` ── An uri.
 	//
-	// `andThen` ── A workspace folder or `undefined`
-	GetWorkspaceFolder(uri string, andThen func(*WorkspaceFolder))
+	// `onDone` ── A workspace folder or `undefined`
+	GetWorkspaceFolder(uri string, onDone func(*WorkspaceFolder))
 
 	// List of workspace folders or `undefined` when no folder is open.
 	// *Note* that the first entry corresponds to the value of `rootPath`.
-	WorkspaceFolders(andThen func([]WorkspaceFolder))
+	WorkspaceFolders(onDone func([]WorkspaceFolder))
 
 	// Find files across all [workspace folders](#workspace.workspaceFolders) in the workspace.
 	// `findFiles('**​/*.js', '**​/node_modules/**', 10)`
@@ -1024,9 +1110,9 @@ type Workspace interface {
 	//
 	// `token` ── A token that can be used to signal cancellation to the underlying search engine.
 	//
-	// `andThen` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
+	// `onDone` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
 	// [workspace folders](#workspace.workspaceFolders) are opened.
-	FindFiles(include string, exclude *string, maxResults *int, token *Cancel, andThen func([]string))
+	FindFiles(include string, exclude *string, maxResults *int, token *Cancel, onDone func([]string))
 
 	// Returns a path that is relative to the workspace folder or folders.
 	//
@@ -1039,11 +1125,11 @@ type Workspace interface {
 	// workspace folder the name of the workspace is prepended. Defaults to `true` when there are
 	// multiple workspace folders and `false` otherwise.
 	//
-	// `andThen` ── A path relative to the root or the input.
-	AsRelativePath(pathOrUri string, includeWorkspaceFolder bool, andThen func(*string))
+	// `onDone` ── A path relative to the root or the input.
+	AsRelativePath(pathOrUri string, includeWorkspaceFolder bool, onDone func(*string))
 
 	// Provides single-call access to numerous individual `Workspace` properties at once.
-	Properties(then func(WorkspaceProperties))
+	Properties(onDone func(WorkspaceProperties))
 }
 ```
 

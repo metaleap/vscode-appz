@@ -44,6 +44,7 @@ export class Gen extends gen_syn.Gen {
             "type Cancel = core.Cancel",
             "type Disposable = core.Disposable",
             "interface fromJson { populateFrom: (_: any) => boolean }",
+            "interface withDisp { disp: Disposable }",
             "",
             "abstract class implBase {",
             "    impl: impl",
@@ -59,7 +60,7 @@ export class Gen extends gen_syn.Gen {
 
     emitOutro(): Gen { return this }
 
-    emitDocs(it: (gen_syn.WithDocs & gen_syn.WithName)): Gen {
+    emitDocs(it: gen_syn.WithDocs): Gen {
         if (it.Docs && it.Docs.length) {
             this.line("/**")
             for (const doc of it.Docs)
@@ -108,23 +109,41 @@ export class Gen extends gen_syn.Gen {
     }
 
     emitStruct(it: gen_syn.TStruct) {
+        const isdispobj = it.fromPrep && it.fromPrep.isDispObj
+        const dispmethods: gen.PrepField[] = []
         this.emitDocs(it)
-            .line("export interface " + it.Name + (it.IsIncoming ? " extends fromJson {" : " {")).indented(() => {
-                this.each(it.Fields, "\n", f =>
-                    this.emitDocs(f)
-                        .ln(() => {
-                            this.s(f.Name)
-                                .s((f.fromPrep && f.fromPrep.optional) ? "?: " : ": ")
-                                .emitTypeRef(f.Type)
-                        })
-                )
+            .line("export interface " + it.Name + (it.IsIncoming ? " extends fromJson" + (isdispobj ? ", withDisp" : "") + " {" : " {")).indented(() => {
+                if (isdispobj)
+                    this.each(it.fromPrep.fields.filter(_ => gen.typeFun(_.typeSpec)), "\n", f => {
+                        dispmethods.push(f)
+                        this.emitDocs({ Docs: this.b.docs(gen.docs(f.fromOrig)) })
+                            .ln(() => {
+                                this.s(this.nameRewriters.methods(f.name), ": ")
+                                    .emitTypeRef(this.b.typeRef(f.typeSpec))
+                            })
+                    }
+                    )
+                else
+                    this.each(it.Fields, "\n", f =>
+                        this.emitDocs(f)
+                            .ln(() => {
+                                this.s(f.Name)
+                                    .s((f.fromPrep && f.fromPrep.optional) ? "?: " : ": ")
+                                    .emitTypeRef(f.Type)
+                            })
+                    )
             })
             .lines("}", "")
         if (it.IsIncoming)
             this.lines(
                 (it.IsOutgoing ? "export " : "") + "function new" + it.Name + " (): " + it.Name + " {",
                 "    let me: " + it.Name,
-                "    me = { populateFrom: _ => " + it.Name + "_populateFrom.call(me, _) } as " + it.Name,
+                "    me = { populateFrom: _ => " + it.Name + "_populateFrom.call(me, _) } as " + it.Name
+            ).each(dispmethods, "", f => {
+                const tfun = gen.typeFun(f.typeSpec)
+                const args = tfun[0].map((_, i) => 'a' + i).join(', ')
+                this.line(`    me.${this.nameRewriters.methods(f.name)} = (${args}) => ${it.Name}_${this.nameRewriters.methods(f.name)}.call(me, ${args})`)
+            }).lines(
                 "    return me",
                 "}",
                 ""

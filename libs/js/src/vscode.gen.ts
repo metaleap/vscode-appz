@@ -5,6 +5,7 @@ type ipcMsg = core.ipcMsg
 type Cancel = core.Cancel
 type Disposable = core.Disposable
 interface fromJson { populateFrom: (_: any) => boolean }
+interface withDisp { disp: Disposable }
 
 abstract class implBase {
     impl: impl
@@ -184,9 +185,9 @@ export interface Window {
 
      * @param message The message to show.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param andThen A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowInformationMessage1: (message: string, items: string[], andThen?: (_: string) => void) => void
+    ShowInformationMessage1: (message: string, items: string[], onDone?: (_: string) => void) => void
 
     /**
      * Show an information message to users. Optionally provide an array of items which will be presented as
@@ -195,18 +196,18 @@ export interface Window {
      * @param message The message to show.
      * @param options Configures the behaviour of the message.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param andThen A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowInformationMessage2: (message: string, options: MessageOptions, items: string[], andThen?: (_: string) => void) => void
+    ShowInformationMessage2: (message: string, options: MessageOptions, items: string[], onDone?: (_: string) => void) => void
 
     /**
      * Show an information message.
 
      * @param message The message to show.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param andThen A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowInformationMessage3: (message: string, items: MessageItem[], andThen?: (_: MessageItem) => void) => void
+    ShowInformationMessage3: (message: string, items: MessageItem[], onDone?: (_: MessageItem) => void) => void
 
     /**
      * Show an information message.
@@ -214,37 +215,18 @@ export interface Window {
      * @param message The message to show.
      * @param options Configures the behaviour of the message.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param andThen A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowInformationMessage4: (message: string, options: MessageOptions, items: MessageItem[], andThen?: (_: MessageItem) => void) => void
+    ShowInformationMessage4: (message: string, options: MessageOptions, items: MessageItem[], onDone?: (_: MessageItem) => void) => void
 
     /**
      * Show a warning message.
 
      * @param message The message to show.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param andThen A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowWarningMessage1: (message: string, items: string[], andThen?: (_: string) => void) => void
-
-    /**
-     * Show a warning message.
-
-     * @param message The message to show.
-     * @param options Configures the behaviour of the message.
-     * @param items A set of items that will be rendered as actions in the message.
-     * @param andThen A thenable that resolves to the selected item or `undefined` when being dismissed.
-     */
-    ShowWarningMessage2: (message: string, options: MessageOptions, items: string[], andThen?: (_: string) => void) => void
-
-    /**
-     * Show a warning message.
-
-     * @param message The message to show.
-     * @param items A set of items that will be rendered as actions in the message.
-     * @param andThen A thenable that resolves to the selected item or `undefined` when being dismissed.
-     */
-    ShowWarningMessage3: (message: string, items: MessageItem[], andThen?: (_: MessageItem) => void) => void
+    ShowWarningMessage1: (message: string, items: string[], onDone?: (_: string) => void) => void
 
     /**
      * Show a warning message.
@@ -252,18 +234,37 @@ export interface Window {
      * @param message The message to show.
      * @param options Configures the behaviour of the message.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param andThen A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowWarningMessage4: (message: string, options: MessageOptions, items: MessageItem[], andThen?: (_: MessageItem) => void) => void
+    ShowWarningMessage2: (message: string, options: MessageOptions, items: string[], onDone?: (_: string) => void) => void
+
+    /**
+     * Show a warning message.
+
+     * @param message The message to show.
+     * @param items A set of items that will be rendered as actions in the message.
+     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
+     */
+    ShowWarningMessage3: (message: string, items: MessageItem[], onDone?: (_: MessageItem) => void) => void
+
+    /**
+     * Show a warning message.
+
+     * @param message The message to show.
+     * @param options Configures the behaviour of the message.
+     * @param items A set of items that will be rendered as actions in the message.
+     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
+     */
+    ShowWarningMessage4: (message: string, options: MessageOptions, items: MessageItem[], onDone?: (_: MessageItem) => void) => void
 
     /**
      * Show an error message.
 
      * @param message The message to show.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param andThen A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowErrorMessage1: (message: string, items: string[], andThen?: (_: string) => void) => void
+    ShowErrorMessage1: (message: string, items: string[], onDone?: (_: string) => void) => void
 
     /**
      * Show an error message.
@@ -271,18 +272,18 @@ export interface Window {
      * @param message The message to show.
      * @param options Configures the behaviour of the message.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param andThen A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowErrorMessage2: (message: string, options: MessageOptions, items: string[], andThen?: (_: string) => void) => void
+    ShowErrorMessage2: (message: string, options: MessageOptions, items: string[], onDone?: (_: string) => void) => void
 
     /**
      * Show an error message.
 
      * @param message The message to show.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param andThen A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowErrorMessage3: (message: string, items: MessageItem[], andThen?: (_: MessageItem) => void) => void
+    ShowErrorMessage3: (message: string, items: MessageItem[], onDone?: (_: MessageItem) => void) => void
 
     /**
      * Show an error message.
@@ -290,9 +291,9 @@ export interface Window {
      * @param message The message to show.
      * @param options Configures the behaviour of the message.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param andThen A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowErrorMessage4: (message: string, options: MessageOptions, items: MessageItem[], andThen?: (_: MessageItem) => void) => void
+    ShowErrorMessage4: (message: string, options: MessageOptions, items: MessageItem[], onDone?: (_: MessageItem) => void) => void
 
     /**
      * Opens an input box to ask the user for input.
@@ -303,9 +304,9 @@ export interface Window {
 
      * @param options Configures the behavior of the input box.
      * @param token A token that can be used to signal cancellation.
-     * @param andThen A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
+     * @param onDone A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
      */
-    ShowInputBox: (options?: InputBoxOptions, token?: Cancel, andThen?: (_: string) => void) => void
+    ShowInputBox: (options?: InputBoxOptions, token?: Cancel, onDone?: (_: string) => void) => void
 
     /**
      * Shows a selection list allowing multiple selections.
@@ -313,9 +314,9 @@ export interface Window {
      * @param items An array of strings, or a promise that resolves to an array of strings.
      * @param options Configures the behavior of the selection list.
      * @param token A token that can be used to signal cancellation.
-     * @param andThen A promise that resolves to the selected items or `undefined`.
+     * @param onDone A promise that resolves to the selected items or `undefined`.
      */
-    ShowQuickPick1: (items: string[], options: QuickPickOptions, token?: Cancel, andThen?: (_: string[]) => void) => void
+    ShowQuickPick1: (items: string[], options: QuickPickOptions, token?: Cancel, onDone?: (_: string[]) => void) => void
 
     /**
      * Shows a selection list.
@@ -323,9 +324,9 @@ export interface Window {
      * @param items An array of strings, or a promise that resolves to an array of strings.
      * @param options Configures the behavior of the selection list.
      * @param token A token that can be used to signal cancellation.
-     * @param andThen A promise that resolves to the selection or `undefined`.
+     * @param onDone A promise that resolves to the selection or `undefined`.
      */
-    ShowQuickPick2: (items: string[], options?: QuickPickOptions, token?: Cancel, andThen?: (_: string) => void) => void
+    ShowQuickPick2: (items: string[], options?: QuickPickOptions, token?: Cancel, onDone?: (_: string) => void) => void
 
     /**
      * Shows a selection list allowing multiple selections.
@@ -333,9 +334,9 @@ export interface Window {
      * @param items An array of items, or a promise that resolves to an array of items.
      * @param options Configures the behavior of the selection list.
      * @param token A token that can be used to signal cancellation.
-     * @param andThen A promise that resolves to the selected items or `undefined`.
+     * @param onDone A promise that resolves to the selected items or `undefined`.
      */
-    ShowQuickPick3: (items: QuickPickItem[], options: QuickPickOptions, token?: Cancel, andThen?: (_: QuickPickItem[]) => void) => void
+    ShowQuickPick3: (items: QuickPickItem[], options: QuickPickOptions, token?: Cancel, onDone?: (_: QuickPickItem[]) => void) => void
 
     /**
      * Shows a selection list.
@@ -343,9 +344,9 @@ export interface Window {
      * @param items An array of items, or a promise that resolves to an array of items.
      * @param options Configures the behavior of the selection list.
      * @param token A token that can be used to signal cancellation.
-     * @param andThen A promise that resolves to the selected item or `undefined`.
+     * @param onDone A promise that resolves to the selected item or `undefined`.
      */
-    ShowQuickPick4: (items: QuickPickItem[], options?: QuickPickOptions, token?: Cancel, andThen?: (_: QuickPickItem) => void) => void
+    ShowQuickPick4: (items: QuickPickItem[], options?: QuickPickOptions, token?: Cancel, onDone?: (_: QuickPickItem) => void) => void
 
     /**
      * Set a message to the status bar. This is a short hand for the more powerful
@@ -353,9 +354,9 @@ export interface Window {
 
      * @param text The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
      * @param hideAfterTimeout Timeout in milliseconds after which the message will be disposed.
-     * @param andThen A disposable which hides the status bar message.
+     * @param onDone A disposable which hides the status bar message.
      */
-    SetStatusBarMessage1: (text: string, hideAfterTimeout: number, andThen?: (_: Disposable) => void) => void
+    SetStatusBarMessage1: (text: string, hideAfterTimeout: number, onDone?: (_: Disposable) => void) => void
 
     /**
      * Set a message to the status bar. This is a short hand for the more powerful
@@ -365,58 +366,65 @@ export interface Window {
      * longer used.
 
      * @param text The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
-     * @param andThen A disposable which hides the status bar message.
+     * @param onDone A disposable which hides the status bar message.
      */
-    SetStatusBarMessage2: (text: string, andThen?: (_: Disposable) => void) => void
+    SetStatusBarMessage2: (text: string, onDone?: (_: Disposable) => void) => void
 
     /**
      * Shows a file save dialog to the user which allows to select a file
      * for saving-purposes.
 
      * @param options Options that control the dialog.
-     * @param andThen A promise that resolves to the selected resource or `undefined`.
+     * @param onDone A promise that resolves to the selected resource or `undefined`.
      */
-    ShowSaveDialog: (options: SaveDialogOptions, andThen?: (_: string) => void) => void
+    ShowSaveDialog: (options: SaveDialogOptions, onDone?: (_: string) => void) => void
 
     /**
      * Shows a file open dialog to the user which allows to select a file
      * for opening-purposes.
 
      * @param options Options that control the dialog.
-     * @param andThen A promise that resolves to the selected resources or `undefined`.
+     * @param onDone A promise that resolves to the selected resources or `undefined`.
      */
-    ShowOpenDialog: (options: OpenDialogOptions, andThen?: (_: string[]) => void) => void
+    ShowOpenDialog: (options: OpenDialogOptions, onDone?: (_: string[]) => void) => void
 
     /**
      * Shows a selection list of [workspace folders](#workspace.workspaceFolders) to pick from.
      * Returns `undefined` if no folder is open.
 
      * @param options Configures the behavior of the workspace folder list.
-     * @param andThen A promise that resolves to the workspace folder or `undefined`.
+     * @param onDone A promise that resolves to the workspace folder or `undefined`.
      */
-    ShowWorkspaceFolderPick: (options?: WorkspaceFolderPickOptions, andThen?: (_: WorkspaceFolder) => void) => void
+    ShowWorkspaceFolderPick: (options?: WorkspaceFolderPickOptions, onDone?: (_: WorkspaceFolder) => void) => void
 
     /**
      * Represents the current window's state.
 
      */
-    State: (andThen?: (_: WindowState) => void) => void
+    State: (onDone?: (_: WindowState) => void) => void
 
     /**
      * An [event](#Event) which fires when the focus state of the current window
      * changes. The value of the event represents whether the window is focused.
 
      */
-    OnDidChangeWindowState: (listener: (_: WindowState) => void, andThen?: (_: Disposable) => void) => void
+    OnDidChangeWindowState: (listener: (_: WindowState) => void, onDone?: (_: Disposable) => void) => void
 
     /**
      * Creates a status bar [item](#StatusBarItem).
 
      * @param alignment The alignment of the item.
      * @param priority The priority of the item. Higher values mean the item should be shown more to the left.
-     * @param andThen A new status bar item.
+     * @param onDone A new status bar item.
      */
-    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number, andThen?: (_: StatusBarItem) => void) => void
+    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number, onDone?: (_: StatusBarItem) => void) => void
+
+    /**
+     * Creates a new [output channel](#OutputChannel) with the given name.
+
+     * @param name Human-readable string which will be used to represent the channel in the UI.
+     */
+    CreateOutputChannel: (name: string, onDone?: (_: OutputChannel) => void) => void
 }
 
 /**
@@ -432,33 +440,33 @@ export interface Env {
      * way to open a text document inside the editor, not this function.
 
      * @param target The uri that should be opened.
-     * @param andThen A promise indicating if open was successful.
+     * @param onDone A promise indicating if open was successful.
      */
-    OpenExternal: (target: string, andThen?: (_: boolean) => void) => void
+    OpenExternal: (target: string, onDone?: (_: boolean) => void) => void
 
     /**
      * The application name of the editor, like 'VS Code'.
 
      */
-    AppName: (andThen?: (_: string) => void) => void
+    AppName: (onDone?: (_: string) => void) => void
 
     /**
      * The application root folder from which the editor is running.
 
      */
-    AppRoot: (andThen?: (_: string) => void) => void
+    AppRoot: (onDone?: (_: string) => void) => void
 
     /**
      * Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
      */
-    Language: (andThen?: (_: string) => void) => void
+    Language: (onDone?: (_: string) => void) => void
 
     /**
      * A unique identifier for the computer.
 
      */
-    MachineId: (andThen?: (_: string) => void) => void
+    MachineId: (onDone?: (_: string) => void) => void
 
     /**
      * The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
@@ -470,33 +478,33 @@ export interface Env {
      * a specific extension runs remote or not.
 
      */
-    RemoteName: (andThen?: (_: string) => void) => void
+    RemoteName: (onDone?: (_: string) => void) => void
 
     /**
      * A unique identifier for the current session.
      * Changes each time the editor is started.
 
      */
-    SessionId: (andThen?: (_: string) => void) => void
+    SessionId: (onDone?: (_: string) => void) => void
 
     /**
      * The detected default shell for the extension host, this is overridden by the
      * `terminal.integrated.shell` setting for the extension host's platform.
 
      */
-    Shell: (andThen?: (_: string) => void) => void
+    Shell: (onDone?: (_: string) => void) => void
 
     /**
      * The custom uri scheme the editor registers to in the operating system.
 
      */
-    UriScheme: (andThen?: (_: string) => void) => void
+    UriScheme: (onDone?: (_: string) => void) => void
 
     /**
      * Provides single-call access to numerous individual `Env` properties at once.
 
      */
-    Properties: (then: (_: EnvProperties) => void) => void
+    Properties: (onDone: (_: EnvProperties) => void) => void
 }
 
 /**
@@ -515,7 +523,7 @@ export interface Workspace {
      * has been opened.
 
      */
-    Name: (andThen?: (_: string) => void) => void
+    Name: (onDone?: (_: string) => void) => void
 
     /**
      * The location of the workspace file, for example:
@@ -547,21 +555,21 @@ export interface Workspace {
      * well as an untitled or saved workspace.
 
      */
-    WorkspaceFile: (andThen?: (_: string) => void) => void
+    WorkspaceFile: (onDone?: (_: string) => void) => void
 
     /**
      * Save all dirty files.
 
      * @param includeUntitled Also save files that have been created during this session.
-     * @param andThen A thenable that resolves when the files have been saved.
+     * @param onDone A thenable that resolves when the files have been saved.
      */
-    SaveAll: (includeUntitled: boolean, andThen?: (_: boolean) => void) => void
+    SaveAll: (includeUntitled: boolean, onDone?: (_: boolean) => void) => void
 
     /**
      * An event that is emitted when a workspace folder is added or removed.
 
      */
-    OnDidChangeWorkspaceFolders: (listener: (_: WorkspaceFoldersChangeEvent) => void, andThen?: (_: Disposable) => void) => void
+    OnDidChangeWorkspaceFolders: (listener: (_: WorkspaceFoldersChangeEvent) => void, onDone?: (_: Disposable) => void) => void
 
     /**
      * Returns the [workspace folder](#WorkspaceFolder) that contains a given uri.
@@ -569,16 +577,16 @@ export interface Workspace {
      * * returns the *input* when the given uri is a workspace folder itself
 
      * @param uri An uri.
-     * @param andThen A workspace folder or `undefined`
+     * @param onDone A workspace folder or `undefined`
      */
-    GetWorkspaceFolder: (uri: string, andThen?: (_: WorkspaceFolder) => void) => void
+    GetWorkspaceFolder: (uri: string, onDone?: (_: WorkspaceFolder) => void) => void
 
     /**
      * List of workspace folders or `undefined` when no folder is open.
      * *Note* that the first entry corresponds to the value of `rootPath`.
 
      */
-    WorkspaceFolders: (andThen?: (_: WorkspaceFolder[]) => void) => void
+    WorkspaceFolders: (onDone?: (_: WorkspaceFolder[]) => void) => void
 
     /**
      * Find files across all [workspace folders](#workspace.workspaceFolders) in the workspace.
@@ -588,9 +596,9 @@ export interface Workspace {
      * @param exclude A [glob pattern](#GlobPattern) that defines files and folders to exclude. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will apply, when `null` no excludes will apply.
      * @param maxResults An upper-bound for the result.
      * @param token A token that can be used to signal cancellation to the underlying search engine.
-     * @param andThen A thenable that resolves to an array of resource identifiers. Will return no results if no [workspace folders](#workspace.workspaceFolders) are opened.
+     * @param onDone A thenable that resolves to an array of resource identifiers. Will return no results if no [workspace folders](#workspace.workspaceFolders) are opened.
      */
-    FindFiles: (include: string, exclude?: string, maxResults?: number, token?: Cancel, andThen?: (_: string[]) => void) => void
+    FindFiles: (include: string, exclude?: string, maxResults?: number, token?: Cancel, onDone?: (_: string[]) => void) => void
 
     /**
      * Returns a path that is relative to the workspace folder or folders.
@@ -600,15 +608,15 @@ export interface Workspace {
 
      * @param pathOrUri A path or uri. When a uri is given its [fsPath](#Uri.fsPath) is used.
      * @param includeWorkspaceFolder When `true` and when the given path is contained inside a workspace folder the name of the workspace is prepended. Defaults to `true` when there are multiple workspace folders and `false` otherwise.
-     * @param andThen A path relative to the root or the input.
+     * @param onDone A path relative to the root or the input.
      */
-    AsRelativePath: (pathOrUri: string, includeWorkspaceFolder: boolean, andThen?: (_: string) => void) => void
+    AsRelativePath: (pathOrUri: string, includeWorkspaceFolder: boolean, onDone?: (_: string) => void) => void
 
     /**
      * Provides single-call access to numerous individual `Workspace` properties at once.
 
      */
-    Properties: (then: (_: WorkspaceProperties) => void) => void
+    Properties: (onDone: (_: WorkspaceProperties) => void) => void
 }
 
 /**
@@ -644,16 +652,16 @@ export interface Languages {
     /**
      * Return the identifiers of all known languages.
 
-     * @param andThen Promise resolving to an array of identifier strings.
+     * @param onDone Promise resolving to an array of identifier strings.
      */
-    GetLanguages: (andThen?: (_: string[]) => void) => void
+    GetLanguages: (onDone?: (_: string[]) => void) => void
 
     /**
      * An [event](#Event) which fires when the global set of diagnostics changes. This is
      * newly added and removed diagnostics.
 
      */
-    OnDidChangeDiagnostics: (listener: (_: DiagnosticChangeEvent) => void, andThen?: (_: Disposable) => void) => void
+    OnDidChangeDiagnostics: (listener: (_: DiagnosticChangeEvent) => void, onDone?: (_: Disposable) => void) => void
 }
 
 /**
@@ -695,7 +703,7 @@ export interface Extensions {
      * installed, uninstalled, enabled or disabled.
 
      */
-    OnDidChange: (listener: () => void, andThen?: (_: Disposable) => void) => void
+    OnDidChange: (listener: () => void, onDone?: (_: Disposable) => void) => void
 }
 
 /**
@@ -745,9 +753,9 @@ export interface Commands {
 
      * @param command A unique identifier for the command.
      * @param callback A command handler function.
-     * @param andThen Disposable which unregisters this command on disposal.
+     * @param onDone Disposable which unregisters this command on disposal.
      */
-    RegisterCommand: (command: string, callback: (_: any[]) => any, andThen?: (_: Disposable) => void) => void
+    RegisterCommand: (command: string, callback: (_: any[]) => any, onDone?: (_: Disposable) => void) => void
 
     /**
      * Executes the command denoted by the given command identifier.
@@ -760,18 +768,18 @@ export interface Commands {
 
      * @param command Identifier of the command to execute.
      * @param rest Parameters passed to the command function.
-     * @param andThen A thenable that resolves to the returned value of the given command. `undefined` when the command handler function doesn't return anything.
+     * @param onDone A thenable that resolves to the returned value of the given command. `undefined` when the command handler function doesn't return anything.
      */
-    ExecuteCommand: (command: string, rest: any[], andThen?: (_: any) => void) => void
+    ExecuteCommand: (command: string, rest: any[], onDone?: (_: any) => void) => void
 
     /**
      * Retrieve the list of all available commands. Commands starting an underscore are
      * treated as internal commands.
 
      * @param filterInternal Set `true` to not see internal commands (starting with an underscore)
-     * @param andThen Thenable that resolves to a list of command ids.
+     * @param onDone Thenable that resolves to a list of command ids.
      */
-    GetCommands: (filterInternal: boolean, andThen?: (_: string[]) => void) => void
+    GetCommands: (filterInternal: boolean, onDone?: (_: string[]) => void) => void
 }
 
 /**
@@ -1143,13 +1151,97 @@ function newWindowState (): WindowState {
  * show text and icons and run a command on click.
 
  */
-export interface StatusBarItem extends fromJson {
-    disp: Disposable
+export interface StatusBarItem extends fromJson, withDisp {
+    /**
+     * Shows the entry in the status bar.
+
+     */
+    Show: () => void
+
+    /**
+     * Hide the entry in the status bar.
+
+     */
+    Hide: () => void
+
+    /**
+     * Dispose and free associated resources. Call
+     * [hide](#StatusBarItem.hide).
+
+     */
+    Dispose: () => void
 }
 
 function newStatusBarItem (): StatusBarItem {
     let me: StatusBarItem
     me = { populateFrom: _ => StatusBarItem_populateFrom.call(me, _) } as StatusBarItem
+    me.Show = () => StatusBarItem_Show.call(me, )
+    me.Hide = () => StatusBarItem_Hide.call(me, )
+    me.Dispose = () => StatusBarItem_Dispose.call(me, )
+    return me
+}
+
+/**
+ * An output channel is a container for readonly textual information.
+ * 
+ * To get an instance of an `OutputChannel` use
+ * [createOutputChannel](#window.createOutputChannel).
+
+ */
+export interface OutputChannel extends fromJson, withDisp {
+    /**
+     * Append the given value to the channel.
+     * 
+     * `value` ── A string, falsy values will not be printed.
+
+     */
+    Append: (_: string) => void
+
+    /**
+     * Append the given value and a line feed character
+     * to the channel.
+     * 
+     * `value` ── A string, falsy values will be printed.
+
+     */
+    AppendLine: (_: string) => void
+
+    /**
+     * Removes all output from the channel.
+
+     */
+    Clear: () => void
+
+    /**
+     * Reveal this channel in the UI.
+     * 
+     * `preserveFocus` ── When `true` the channel will not take focus.
+
+     */
+    Show: (_: boolean) => void
+
+    /**
+     * Hide this channel from the UI.
+
+     */
+    Hide: () => void
+
+    /**
+     * Dispose and free associated resources.
+
+     */
+    Dispose: () => void
+}
+
+function newOutputChannel (): OutputChannel {
+    let me: OutputChannel
+    me = { populateFrom: _ => OutputChannel_populateFrom.call(me, _) } as OutputChannel
+    me.Append = (a0) => OutputChannel_Append.call(me, a0)
+    me.AppendLine = (a0) => OutputChannel_AppendLine.call(me, a0)
+    me.Clear = () => OutputChannel_Clear.call(me, )
+    me.Show = (a0) => OutputChannel_Show.call(me, a0)
+    me.Hide = () => OutputChannel_Hide.call(me, )
+    me.Dispose = () => OutputChannel_Dispose.call(me, )
     return me
 }
 
@@ -1346,7 +1438,7 @@ export abstract class impl implements Vscode {
 
 class implWindow extends implBase implements Window {
     constructor(impl: impl) { super(impl) }
-    ShowInformationMessage1(message: string, items: string[], andThen?: (_: string) => void): void {
+    ShowInformationMessage1(message: string, items: string[], onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showInformationMessage1"
@@ -1354,7 +1446,7 @@ class implWindow extends implBase implements Window {
         msg.Data["message"] = message
         msg.Data["items"] = items
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -1366,14 +1458,14 @@ class implWindow extends implBase implements Window {
                     }
                     result = _result_
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowInformationMessage2(message: string, options: MessageOptions, items: string[], andThen?: (_: string) => void): void {
+    ShowInformationMessage2(message: string, options: MessageOptions, items: string[], onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showInformationMessage2"
@@ -1382,7 +1474,7 @@ class implWindow extends implBase implements Window {
         msg.Data["options"] = options
         msg.Data["items"] = items
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -1394,14 +1486,14 @@ class implWindow extends implBase implements Window {
                     }
                     result = _result_
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowInformationMessage3(message: string, items: MessageItem[], andThen?: (_: MessageItem) => void): void {
+    ShowInformationMessage3(message: string, items: MessageItem[], onDone?: (_: MessageItem) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showInformationMessage3"
@@ -1409,7 +1501,7 @@ class implWindow extends implBase implements Window {
         msg.Data["message"] = message
         msg.Data["items"] = items
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: MessageItem
@@ -1420,14 +1512,14 @@ class implWindow extends implBase implements Window {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowInformationMessage4(message: string, options: MessageOptions, items: MessageItem[], andThen?: (_: MessageItem) => void): void {
+    ShowInformationMessage4(message: string, options: MessageOptions, items: MessageItem[], onDone?: (_: MessageItem) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showInformationMessage4"
@@ -1436,7 +1528,7 @@ class implWindow extends implBase implements Window {
         msg.Data["options"] = options
         msg.Data["items"] = items
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: MessageItem
@@ -1447,14 +1539,14 @@ class implWindow extends implBase implements Window {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowWarningMessage1(message: string, items: string[], andThen?: (_: string) => void): void {
+    ShowWarningMessage1(message: string, items: string[], onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showWarningMessage1"
@@ -1462,7 +1554,7 @@ class implWindow extends implBase implements Window {
         msg.Data["message"] = message
         msg.Data["items"] = items
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -1474,14 +1566,14 @@ class implWindow extends implBase implements Window {
                     }
                     result = _result_
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowWarningMessage2(message: string, options: MessageOptions, items: string[], andThen?: (_: string) => void): void {
+    ShowWarningMessage2(message: string, options: MessageOptions, items: string[], onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showWarningMessage2"
@@ -1490,7 +1582,7 @@ class implWindow extends implBase implements Window {
         msg.Data["options"] = options
         msg.Data["items"] = items
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -1502,14 +1594,14 @@ class implWindow extends implBase implements Window {
                     }
                     result = _result_
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowWarningMessage3(message: string, items: MessageItem[], andThen?: (_: MessageItem) => void): void {
+    ShowWarningMessage3(message: string, items: MessageItem[], onDone?: (_: MessageItem) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showWarningMessage3"
@@ -1517,7 +1609,7 @@ class implWindow extends implBase implements Window {
         msg.Data["message"] = message
         msg.Data["items"] = items
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: MessageItem
@@ -1528,14 +1620,14 @@ class implWindow extends implBase implements Window {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowWarningMessage4(message: string, options: MessageOptions, items: MessageItem[], andThen?: (_: MessageItem) => void): void {
+    ShowWarningMessage4(message: string, options: MessageOptions, items: MessageItem[], onDone?: (_: MessageItem) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showWarningMessage4"
@@ -1544,7 +1636,7 @@ class implWindow extends implBase implements Window {
         msg.Data["options"] = options
         msg.Data["items"] = items
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: MessageItem
@@ -1555,14 +1647,14 @@ class implWindow extends implBase implements Window {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowErrorMessage1(message: string, items: string[], andThen?: (_: string) => void): void {
+    ShowErrorMessage1(message: string, items: string[], onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showErrorMessage1"
@@ -1570,7 +1662,7 @@ class implWindow extends implBase implements Window {
         msg.Data["message"] = message
         msg.Data["items"] = items
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -1582,14 +1674,14 @@ class implWindow extends implBase implements Window {
                     }
                     result = _result_
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowErrorMessage2(message: string, options: MessageOptions, items: string[], andThen?: (_: string) => void): void {
+    ShowErrorMessage2(message: string, options: MessageOptions, items: string[], onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showErrorMessage2"
@@ -1598,7 +1690,7 @@ class implWindow extends implBase implements Window {
         msg.Data["options"] = options
         msg.Data["items"] = items
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -1610,14 +1702,14 @@ class implWindow extends implBase implements Window {
                     }
                     result = _result_
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowErrorMessage3(message: string, items: MessageItem[], andThen?: (_: MessageItem) => void): void {
+    ShowErrorMessage3(message: string, items: MessageItem[], onDone?: (_: MessageItem) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showErrorMessage3"
@@ -1625,7 +1717,7 @@ class implWindow extends implBase implements Window {
         msg.Data["message"] = message
         msg.Data["items"] = items
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: MessageItem
@@ -1636,14 +1728,14 @@ class implWindow extends implBase implements Window {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowErrorMessage4(message: string, options: MessageOptions, items: MessageItem[], andThen?: (_: MessageItem) => void): void {
+    ShowErrorMessage4(message: string, options: MessageOptions, items: MessageItem[], onDone?: (_: MessageItem) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showErrorMessage4"
@@ -1652,7 +1744,7 @@ class implWindow extends implBase implements Window {
         msg.Data["options"] = options
         msg.Data["items"] = items
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: MessageItem
@@ -1663,14 +1755,14 @@ class implWindow extends implBase implements Window {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowInputBox(options?: InputBoxOptions, token?: Cancel, andThen?: (_: string) => void): void {
+    ShowInputBox(options?: InputBoxOptions, token?: Cancel, onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showInputBox"
@@ -1716,7 +1808,7 @@ class implWindow extends implBase implements Window {
             msg.Data["token"] = token.fnId
         }
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -1728,7 +1820,7 @@ class implWindow extends implBase implements Window {
                     }
                     result = _result_
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
@@ -1744,7 +1836,7 @@ class implWindow extends implBase implements Window {
         })
     }
 
-    ShowQuickPick1(items: string[], options: QuickPickOptions, token?: Cancel, andThen?: (_: string[]) => void): void {
+    ShowQuickPick1(items: string[], options: QuickPickOptions, token?: Cancel, onDone?: (_: string[]) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showQuickPick1"
@@ -1793,7 +1885,7 @@ class implWindow extends implBase implements Window {
             msg.Data["token"] = token.fnId
         }
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string[]
@@ -1816,7 +1908,7 @@ class implWindow extends implBase implements Window {
                         __idx__result = __idx__result + 1
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
@@ -1832,7 +1924,7 @@ class implWindow extends implBase implements Window {
         })
     }
 
-    ShowQuickPick2(items: string[], options?: QuickPickOptions, token?: Cancel, andThen?: (_: string) => void): void {
+    ShowQuickPick2(items: string[], options?: QuickPickOptions, token?: Cancel, onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showQuickPick2"
@@ -1882,7 +1974,7 @@ class implWindow extends implBase implements Window {
             msg.Data["token"] = token.fnId
         }
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -1894,7 +1986,7 @@ class implWindow extends implBase implements Window {
                     }
                     result = _result_
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
@@ -1910,7 +2002,7 @@ class implWindow extends implBase implements Window {
         })
     }
 
-    ShowQuickPick3(items: QuickPickItem[], options: QuickPickOptions, token?: Cancel, andThen?: (_: QuickPickItem[]) => void): void {
+    ShowQuickPick3(items: QuickPickItem[], options: QuickPickOptions, token?: Cancel, onDone?: (_: QuickPickItem[]) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showQuickPick3"
@@ -1959,7 +2051,7 @@ class implWindow extends implBase implements Window {
             msg.Data["token"] = token.fnId
         }
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: QuickPickItem[]
@@ -1983,7 +2075,7 @@ class implWindow extends implBase implements Window {
                         __idx__result = __idx__result + 1
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
@@ -1999,7 +2091,7 @@ class implWindow extends implBase implements Window {
         })
     }
 
-    ShowQuickPick4(items: QuickPickItem[], options?: QuickPickOptions, token?: Cancel, andThen?: (_: QuickPickItem) => void): void {
+    ShowQuickPick4(items: QuickPickItem[], options?: QuickPickOptions, token?: Cancel, onDone?: (_: QuickPickItem) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showQuickPick4"
@@ -2049,7 +2141,7 @@ class implWindow extends implBase implements Window {
             msg.Data["token"] = token.fnId
         }
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: QuickPickItem
@@ -2060,7 +2152,7 @@ class implWindow extends implBase implements Window {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
@@ -2076,7 +2168,7 @@ class implWindow extends implBase implements Window {
         })
     }
 
-    SetStatusBarMessage1(text: string, hideAfterTimeout: number, andThen?: (_: Disposable) => void): void {
+    SetStatusBarMessage1(text: string, hideAfterTimeout: number, onDone?: (_: Disposable) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.setStatusBarMessage1"
@@ -2084,7 +2176,7 @@ class implWindow extends implBase implements Window {
         msg.Data["text"] = text
         msg.Data["hideAfterTimeout"] = hideAfterTimeout
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: Disposable
@@ -2097,21 +2189,21 @@ class implWindow extends implBase implements Window {
                 } else {
                     return false
                 }
-                andThen(result.bind(this.Impl()))
+                onDone(result.bind(this.Impl()))
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    SetStatusBarMessage2(text: string, andThen?: (_: Disposable) => void): void {
+    SetStatusBarMessage2(text: string, onDone?: (_: Disposable) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.setStatusBarMessage2"
         msg.Data = {}
         msg.Data["text"] = text
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: Disposable
@@ -2124,21 +2216,21 @@ class implWindow extends implBase implements Window {
                 } else {
                     return false
                 }
-                andThen(result.bind(this.Impl()))
+                onDone(result.bind(this.Impl()))
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowSaveDialog(options: SaveDialogOptions, andThen?: (_: string) => void): void {
+    ShowSaveDialog(options: SaveDialogOptions, onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showSaveDialog"
         msg.Data = {}
         msg.Data["options"] = options
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -2150,21 +2242,21 @@ class implWindow extends implBase implements Window {
                     }
                     result = _result_
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowOpenDialog(options: OpenDialogOptions, andThen?: (_: string[]) => void): void {
+    ShowOpenDialog(options: OpenDialogOptions, onDone?: (_: string[]) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showOpenDialog"
         msg.Data = {}
         msg.Data["options"] = options
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string[]
@@ -2187,14 +2279,14 @@ class implWindow extends implBase implements Window {
                         __idx__result = __idx__result + 1
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ShowWorkspaceFolderPick(options?: WorkspaceFolderPickOptions, andThen?: (_: WorkspaceFolder) => void): void {
+    ShowWorkspaceFolderPick(options?: WorkspaceFolderPickOptions, onDone?: (_: WorkspaceFolder) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.showWorkspaceFolderPick"
@@ -2203,7 +2295,7 @@ class implWindow extends implBase implements Window {
             msg.Data["options"] = options
         }
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: WorkspaceFolder
@@ -2214,20 +2306,20 @@ class implWindow extends implBase implements Window {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    State(andThen?: (_: WindowState) => void): void {
+    State(onDone?: (_: WindowState) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.state"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: WindowState
@@ -2238,14 +2330,14 @@ class implWindow extends implBase implements Window {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    OnDidChangeWindowState(listener: (_: WindowState) => void, andThen?: (_: Disposable) => void): void {
+    OnDidChangeWindowState(listener: (_: WindowState) => void, onDone?: (_: Disposable) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.onDidChangeWindowState"
@@ -2271,7 +2363,7 @@ class implWindow extends implBase implements Window {
         }, null)
         msg.Data["listener"] = _fnid_listener
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: Disposable
@@ -2284,14 +2376,14 @@ class implWindow extends implBase implements Window {
                 } else {
                     return false
                 }
-                andThen(result.bind(this.Impl(), _fnid_listener))
+                onDone(result.bind(this.Impl(), _fnid_listener))
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    CreateStatusBarItem(alignment?: StatusBarAlignment, priority?: number, andThen?: (_: StatusBarItem) => void): void {
+    CreateStatusBarItem(alignment?: StatusBarAlignment, priority?: number, onDone?: (_: StatusBarItem) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createStatusBarItem"
@@ -2303,7 +2395,7 @@ class implWindow extends implBase implements Window {
             msg.Data["priority"] = priority
         }
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: StatusBarItem
@@ -2313,8 +2405,35 @@ class implWindow extends implBase implements Window {
                     if (!ok) {
                         return false
                     }
+                    result.disp.impl = this.Impl()
                 }
-                andThen(result)
+                onDone(result)
+                return true
+            }
+        }
+        this.Impl().send(msg, on)
+    }
+
+    CreateOutputChannel(name: string, onDone?: (_: OutputChannel) => void): void {
+        let msg: ipcMsg
+        msg = newipcMsg()
+        msg.QName = "window.createOutputChannel"
+        msg.Data = {}
+        msg.Data["name"] = name
+        let on: (_: any) => boolean
+        if ((undefined !== onDone && null !== onDone)) {
+            on = (payload: any): boolean => {
+                let ok: boolean
+                let result: OutputChannel
+                if ((undefined !== payload && null !== payload)) {
+                    result = newOutputChannel()
+                    ok = result.populateFrom(payload)
+                    if (!ok) {
+                        return false
+                    }
+                    result.disp.impl = this.Impl()
+                }
+                onDone(result)
                 return true
             }
         }
@@ -2325,14 +2444,14 @@ class implWindow extends implBase implements Window {
 
 class implEnv extends implBase implements Env {
     constructor(impl: impl) { super(impl) }
-    OpenExternal(target: string, andThen?: (_: boolean) => void): void {
+    OpenExternal(target: string, onDone?: (_: boolean) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "env.openExternal"
         msg.Data = {}
         msg.Data["target"] = target
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: boolean
@@ -2344,20 +2463,20 @@ class implEnv extends implBase implements Env {
                 } else {
                     return false
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    AppName(andThen?: (_: string) => void): void {
+    AppName(onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "env.appName"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -2367,20 +2486,20 @@ class implEnv extends implBase implements Env {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    AppRoot(andThen?: (_: string) => void): void {
+    AppRoot(onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "env.appRoot"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -2390,20 +2509,20 @@ class implEnv extends implBase implements Env {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    Language(andThen?: (_: string) => void): void {
+    Language(onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "env.language"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -2413,20 +2532,20 @@ class implEnv extends implBase implements Env {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    MachineId(andThen?: (_: string) => void): void {
+    MachineId(onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "env.machineId"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -2436,20 +2555,20 @@ class implEnv extends implBase implements Env {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    RemoteName(andThen?: (_: string) => void): void {
+    RemoteName(onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "env.remoteName"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -2461,20 +2580,20 @@ class implEnv extends implBase implements Env {
                     }
                     result = _result_
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    SessionId(andThen?: (_: string) => void): void {
+    SessionId(onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "env.sessionId"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -2484,20 +2603,20 @@ class implEnv extends implBase implements Env {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    Shell(andThen?: (_: string) => void): void {
+    Shell(onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "env.shell"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -2507,20 +2626,20 @@ class implEnv extends implBase implements Env {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    UriScheme(andThen?: (_: string) => void): void {
+    UriScheme(onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "env.uriScheme"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -2530,20 +2649,20 @@ class implEnv extends implBase implements Env {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    Properties(then: (_: EnvProperties) => void): void {
+    Properties(onDone: (_: EnvProperties) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "env.Properties"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: EnvProperties
@@ -2556,7 +2675,7 @@ class implEnv extends implBase implements Env {
                 } else {
                     return false
                 }
-                then(result)
+                onDone(result)
                 return true
             }
         }
@@ -2567,13 +2686,13 @@ class implEnv extends implBase implements Env {
 
 class implWorkspace extends implBase implements Workspace {
     constructor(impl: impl) { super(impl) }
-    Name(andThen?: (_: string) => void): void {
+    Name(onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "workspace.name"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -2585,20 +2704,20 @@ class implWorkspace extends implBase implements Workspace {
                     }
                     result = _result_
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    WorkspaceFile(andThen?: (_: string) => void): void {
+    WorkspaceFile(onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "workspace.workspaceFile"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -2610,21 +2729,21 @@ class implWorkspace extends implBase implements Workspace {
                     }
                     result = _result_
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    SaveAll(includeUntitled: boolean, andThen?: (_: boolean) => void): void {
+    SaveAll(includeUntitled: boolean, onDone?: (_: boolean) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "workspace.saveAll"
         msg.Data = {}
         msg.Data["includeUntitled"] = includeUntitled
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: boolean
@@ -2636,14 +2755,14 @@ class implWorkspace extends implBase implements Workspace {
                 } else {
                     return false
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    OnDidChangeWorkspaceFolders(listener: (_: WorkspaceFoldersChangeEvent) => void, andThen?: (_: Disposable) => void): void {
+    OnDidChangeWorkspaceFolders(listener: (_: WorkspaceFoldersChangeEvent) => void, onDone?: (_: Disposable) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "workspace.onDidChangeWorkspaceFolders"
@@ -2669,7 +2788,7 @@ class implWorkspace extends implBase implements Workspace {
         }, null)
         msg.Data["listener"] = _fnid_listener
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: Disposable
@@ -2682,21 +2801,21 @@ class implWorkspace extends implBase implements Workspace {
                 } else {
                     return false
                 }
-                andThen(result.bind(this.Impl(), _fnid_listener))
+                onDone(result.bind(this.Impl(), _fnid_listener))
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    GetWorkspaceFolder(uri: string, andThen?: (_: WorkspaceFolder) => void): void {
+    GetWorkspaceFolder(uri: string, onDone?: (_: WorkspaceFolder) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "workspace.getWorkspaceFolder"
         msg.Data = {}
         msg.Data["uri"] = uri
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: WorkspaceFolder
@@ -2707,20 +2826,20 @@ class implWorkspace extends implBase implements Workspace {
                         return false
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    WorkspaceFolders(andThen?: (_: WorkspaceFolder[]) => void): void {
+    WorkspaceFolders(onDone?: (_: WorkspaceFolder[]) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "workspace.workspaceFolders"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: WorkspaceFolder[]
@@ -2744,14 +2863,14 @@ class implWorkspace extends implBase implements Workspace {
                         __idx__result = __idx__result + 1
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    FindFiles(include: string, exclude?: string, maxResults?: number, token?: Cancel, andThen?: (_: string[]) => void): void {
+    FindFiles(include: string, exclude?: string, maxResults?: number, token?: Cancel, onDone?: (_: string[]) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "workspace.findFiles"
@@ -2773,7 +2892,7 @@ class implWorkspace extends implBase implements Workspace {
             msg.Data["token"] = token.fnId
         }
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string[]
@@ -2796,14 +2915,14 @@ class implWorkspace extends implBase implements Workspace {
                         __idx__result = __idx__result + 1
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    AsRelativePath(pathOrUri: string, includeWorkspaceFolder: boolean, andThen?: (_: string) => void): void {
+    AsRelativePath(pathOrUri: string, includeWorkspaceFolder: boolean, onDone?: (_: string) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "workspace.asRelativePath"
@@ -2811,7 +2930,7 @@ class implWorkspace extends implBase implements Workspace {
         msg.Data["pathOrUri"] = pathOrUri
         msg.Data["includeWorkspaceFolder"] = includeWorkspaceFolder
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string
@@ -2823,20 +2942,20 @@ class implWorkspace extends implBase implements Workspace {
                     }
                     result = _result_
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    Properties(then: (_: WorkspaceProperties) => void): void {
+    Properties(onDone: (_: WorkspaceProperties) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "workspace.Properties"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== then && null !== then)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: WorkspaceProperties
@@ -2849,7 +2968,7 @@ class implWorkspace extends implBase implements Workspace {
                 } else {
                     return false
                 }
-                then(result)
+                onDone(result)
                 return true
             }
         }
@@ -2860,13 +2979,13 @@ class implWorkspace extends implBase implements Workspace {
 
 class implLanguages extends implBase implements Languages {
     constructor(impl: impl) { super(impl) }
-    GetLanguages(andThen?: (_: string[]) => void): void {
+    GetLanguages(onDone?: (_: string[]) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "languages.getLanguages"
         msg.Data = {}
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string[]
@@ -2889,14 +3008,14 @@ class implLanguages extends implBase implements Languages {
                         __idx__result = __idx__result + 1
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    OnDidChangeDiagnostics(listener: (_: DiagnosticChangeEvent) => void, andThen?: (_: Disposable) => void): void {
+    OnDidChangeDiagnostics(listener: (_: DiagnosticChangeEvent) => void, onDone?: (_: Disposable) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "languages.onDidChangeDiagnostics"
@@ -2922,7 +3041,7 @@ class implLanguages extends implBase implements Languages {
         }, null)
         msg.Data["listener"] = _fnid_listener
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: Disposable
@@ -2935,7 +3054,7 @@ class implLanguages extends implBase implements Languages {
                 } else {
                     return false
                 }
-                andThen(result.bind(this.Impl(), _fnid_listener))
+                onDone(result.bind(this.Impl(), _fnid_listener))
                 return true
             }
         }
@@ -2946,7 +3065,7 @@ class implLanguages extends implBase implements Languages {
 
 class implExtensions extends implBase implements Extensions {
     constructor(impl: impl) { super(impl) }
-    OnDidChange(listener: () => void, andThen?: (_: Disposable) => void): void {
+    OnDidChange(listener: () => void, onDone?: (_: Disposable) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "extensions.onDidChange"
@@ -2966,7 +3085,7 @@ class implExtensions extends implBase implements Extensions {
         }, null)
         msg.Data["listener"] = _fnid_listener
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: Disposable
@@ -2979,7 +3098,7 @@ class implExtensions extends implBase implements Extensions {
                 } else {
                     return false
                 }
-                andThen(result.bind(this.Impl(), _fnid_listener))
+                onDone(result.bind(this.Impl(), _fnid_listener))
                 return true
             }
         }
@@ -2990,7 +3109,7 @@ class implExtensions extends implBase implements Extensions {
 
 class implCommands extends implBase implements Commands {
     constructor(impl: impl) { super(impl) }
-    RegisterCommand(command: string, callback: (_: any[]) => any, andThen?: (_: Disposable) => void): void {
+    RegisterCommand(command: string, callback: (_: any[]) => any, onDone?: (_: Disposable) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "commands.registerCommand"
@@ -3017,7 +3136,7 @@ class implCommands extends implBase implements Commands {
         })
         msg.Data["callback"] = _fnid_callback
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: Disposable
@@ -3030,14 +3149,14 @@ class implCommands extends implBase implements Commands {
                 } else {
                     return false
                 }
-                andThen(result.bind(this.Impl(), _fnid_callback))
+                onDone(result.bind(this.Impl(), _fnid_callback))
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    ExecuteCommand(command: string, rest: any[], andThen?: (_: any) => void): void {
+    ExecuteCommand(command: string, rest: any[], onDone?: (_: any) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "commands.executeCommand"
@@ -3045,7 +3164,7 @@ class implCommands extends implBase implements Commands {
         msg.Data["command"] = command
         msg.Data["rest"] = rest
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: any
@@ -3054,21 +3173,21 @@ class implCommands extends implBase implements Commands {
                     if (ok) {
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
-    GetCommands(filterInternal: boolean, andThen?: (_: string[]) => void): void {
+    GetCommands(filterInternal: boolean, onDone?: (_: string[]) => void): void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "commands.getCommands"
         msg.Data = {}
         msg.Data["filterInternal"] = filterInternal
         let on: (_: any) => boolean
-        if ((undefined !== andThen && null !== andThen)) {
+        if ((undefined !== onDone && null !== onDone)) {
             on = (payload: any): boolean => {
                 let ok: boolean
                 let result: string[]
@@ -3091,13 +3210,96 @@ class implCommands extends implBase implements Commands {
                         __idx__result = __idx__result + 1
                     }
                 }
-                andThen(result)
+                onDone(result)
                 return true
             }
         }
         this.Impl().send(msg, on)
     }
 
+}
+
+function StatusBarItem_Show(this: StatusBarItem, ): void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "StatusBarItem.show"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let on: (_: any) => boolean
+    this.disp.impl.send(msg, on)
+}
+
+function StatusBarItem_Hide(this: StatusBarItem, ): void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "StatusBarItem.hide"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let on: (_: any) => boolean
+    this.disp.impl.send(msg, on)
+}
+
+function StatusBarItem_Dispose(this: StatusBarItem, ): void {
+    this.disp.Dispose()
+}
+
+function OutputChannel_Append(this: OutputChannel, value: string): void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "OutputChannel.append"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    msg.Data["value"] = value
+    let on: (_: any) => boolean
+    this.disp.impl.send(msg, on)
+}
+
+function OutputChannel_AppendLine(this: OutputChannel, value: string): void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "OutputChannel.appendLine"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    msg.Data["value"] = value
+    let on: (_: any) => boolean
+    this.disp.impl.send(msg, on)
+}
+
+function OutputChannel_Clear(this: OutputChannel, ): void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "OutputChannel.clear"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let on: (_: any) => boolean
+    this.disp.impl.send(msg, on)
+}
+
+function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "OutputChannel.show"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    if ((undefined !== preserveFocus && null !== preserveFocus)) {
+        msg.Data["preserveFocus"] = preserveFocus
+    }
+    let on: (_: any) => boolean
+    this.disp.impl.send(msg, on)
+}
+
+function OutputChannel_Hide(this: OutputChannel, ): void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "OutputChannel.hide"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let on: (_: any) => boolean
+    this.disp.impl.send(msg, on)
+}
+
+function OutputChannel_Dispose(this: OutputChannel, ): void {
+    this.disp.Dispose()
 }
 
 function MessageItem_populateFrom(this: MessageItem, payload: any): boolean {
@@ -3315,6 +3517,13 @@ function WindowState_populateFrom(this: WindowState, payload: any): boolean {
 }
 
 function StatusBarItem_populateFrom(this: StatusBarItem, payload: any): boolean {
+    let ok: boolean
+    this.disp = newDisposable()
+    ok = this.disp.populateFrom(payload)
+    return ok
+}
+
+function OutputChannel_populateFrom(this: OutputChannel, payload: any): boolean {
     let ok: boolean
     this.disp = newDisposable()
     ok = this.disp.populateFrom(payload)

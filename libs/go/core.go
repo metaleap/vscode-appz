@@ -219,7 +219,7 @@ func (me *Disposable) populateFrom(payload any) (ok bool) {
 
 // Dispose signals to the counterparty to destroy the object.
 func (me Disposable) Dispose() {
-	me.impl.send(&ipcMsg{QName: "Dispose", Data: dict{"": me.id}}, nil)
+	me.impl.send(&ipcMsg{QName: "dispose", Data: dict{"": me.id}}, nil)
 	if len(me.subFnIds) > 0 {
 		me.impl.Lock()
 		for _, subfnid := range me.subFnIds {

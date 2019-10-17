@@ -204,9 +204,11 @@ class Prog {
             if (this.proc && msg && msg.cbId && !sendret)
                 this.send({ cbId: msg.cbId, data: { nay: ensureWillShowUpInJson(err) } });
         };
-        if (msg.qName === 'Dispose' && msg.data) {
-            const id = msg.data[''];
-            if (id && id.length) {
+        if (msg.qName === 'dispose') {
+            if (!(msg.data && msg.data['']))
+                onfail(msg);
+            else {
+                const id = msg.data[''];
                 const obj = this.objects[id];
                 delete this.objects[id];
                 if (obj && obj.dispose)

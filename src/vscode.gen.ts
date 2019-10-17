@@ -259,6 +259,13 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
+				case "createOutputChannel": {
+					const arg_name = (msg.data['name']) as string
+					const ret = vscode.window.createOutputChannel(arg_name, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
 				default:
 					throw (methodname)
 			}
@@ -448,6 +455,52 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				}
 				default:
 					throw (methodname)
+			}
+		case "StatusBarItem":
+			const thisStatusBarItem = prog.objects[msg.data[""]] as vscode.StatusBarItem
+			if (!thisStatusBarItem)
+				throw "Called vscode.StatusBarItem" + methodname + " for an already disposed-and-forgotten instance"
+			switch (methodname) {
+				case "show": {
+					return new Promise((ret, rej) => { try { ret(thisStatusBarItem.show()) } catch (err) { rej(err) } })
+				}
+				case "hide": {
+					return new Promise((ret, rej) => { try { ret(thisStatusBarItem.hide()) } catch (err) { rej(err) } })
+				}
+				case "dispose": {
+					return new Promise((ret, rej) => { try { ret(thisStatusBarItem.dispose()) } catch (err) { rej(err) } })
+				}
+				default:
+					throw methodname
+			}
+		case "OutputChannel":
+			const thisOutputChannel = prog.objects[msg.data[""]] as vscode.OutputChannel
+			if (!thisOutputChannel)
+				throw "Called vscode.OutputChannel" + methodname + " for an already disposed-and-forgotten instance"
+			switch (methodname) {
+				case "append": {
+					const arg_value = (msg.data['value']) as string
+					return new Promise((ret, rej) => { try { ret(thisOutputChannel.append(arg_value)) } catch (err) { rej(err) } })
+				}
+				case "appendLine": {
+					const arg_value = (msg.data['value']) as string
+					return new Promise((ret, rej) => { try { ret(thisOutputChannel.appendLine(arg_value)) } catch (err) { rej(err) } })
+				}
+				case "clear": {
+					return new Promise((ret, rej) => { try { ret(thisOutputChannel.clear()) } catch (err) { rej(err) } })
+				}
+				case "show": {
+					const arg_preserveFocus = (msg.data['preserveFocus']) as boolean
+					return new Promise((ret, rej) => { try { ret(thisOutputChannel.show(arg_preserveFocus)) } catch (err) { rej(err) } })
+				}
+				case "hide": {
+					return new Promise((ret, rej) => { try { ret(thisOutputChannel.hide()) } catch (err) { rej(err) } })
+				}
+				case "dispose": {
+					return new Promise((ret, rej) => { try { ret(thisOutputChannel.dispose()) } catch (err) { rej(err) } })
+				}
+				default:
+					throw methodname
 			}
 		default:
 			throw (apiname)

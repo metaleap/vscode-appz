@@ -59,45 +59,9 @@ class Gen extends gen.Gen {
                     }
                     else {
                         const lastarg = method.args[method.args.length - 1];
-                        let tfunc;
                         for (const arg of method.args)
                             if (arg !== lastarg)
-                                if (arg.isCancellationToken !== undefined) {
-                                    src += `\t\t\t\t\tlet ctid = msg.data['${arg.name}'] as string, arg_${arg.name} = prog.cancellerToken(ctid)\n`;
-                                    src += `\t\t\t\t\tif (!arg_${arg.name})\n`;
-                                    src += `\t\t\t\t\t\targ_${arg.name} = prog.cancellers[''].token\n`;
-                                    src += `\t\t\t\t\telse\n`;
-                                    src += `\t\t\t\t\t\tremoteCancellationTokens.push(ctid)\n`;
-                                }
-                                else if ((tfunc = gen.typeFun(arg.typeSpec)) && (tfunc.length)) {
-                                    const fnid = "_fnid_" + arg.name;
-                                    src += `\t\t\t\t\tconst ${fnid} = msg.data['${arg.name}'] as string\n`;
-                                    src += `\t\t\t\t\tif (!(${fnid} && ${fnid}.length))\n`;
-                                    src += "\t\t\t\t\t\treturn Promise.reject(msg.data)\n";
-                                    src += `\t\t\t\t\tconst arg_${arg.name} = (${tfunc[0].map((_, i) => (gen.typeArrSpreads(_) ? '...' : '') + '_' + i + ': ' + this.typeSpec(_)).join(', ')}): ${this.typeSpec(tfunc[1])} => {\n`;
-                                    src += "\t\t\t\t\t\tif (prog && prog.proc)\n";
-                                    src += `\t\t\t\t\t\t\treturn prog.callBack(true, ${fnid}, ${tfunc[0].map((_, i) => '_' + i).join(', ')})\n`;
-                                    src += "\t\t\t\t\t\treturn undefined\n";
-                                    src += "\t\t\t\t\t}\n";
-                                }
-                                else {
-                                    if (arg.typeSpec !== 'Uri')
-                                        src += `\t\t\t\t\tconst arg_${arg.name} = (msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}) as ${this.typeSpec(arg.typeSpec)}\n`;
-                                    else {
-                                        src += `\t\t\t\t\tconst arg_${arg.name} = ppio.tryUnmarshalUri(msg.data['${arg.name}'])\n`;
-                                        src += `\t\t\t\t\tif (!arg_${arg.name})\n`;
-                                        src += `\t\t\t\t\t\treturn Promise.reject(msg.data['${arg.name}'])\n`;
-                                    }
-                                    const funcfields = gen.argsFuncFields(prep, [arg]);
-                                    if (funcfields && funcfields.length)
-                                        for (const ff of funcfields) {
-                                            const tfn = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec);
-                                            if (tfn && tfn.length) {
-                                                src += `\t\t\t\t\tif (arg_${arg.name} && arg_${arg.name}.${ff.name}_AppzFuncId && arg_${arg.name}.${ff.name}_AppzFuncId.length)\n`;
-                                                src += `\t\t\t\t\t\targ_${arg.name}.${ff.name} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => prog.callBack(true, arg_${arg.name}.${ff.name}_AppzFuncId, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`;
-                                            }
-                                        }
-                                }
+                                src += this.argsSrc(prep, arg);
                         src += `\t\t\t\t\tconst ret = ${method.fromOrig.qName}(`;
                         for (const arg of method.args)
                             if (arg !== lastarg)
@@ -113,11 +77,73 @@ class Gen extends gen.Gen {
             src += "\t\t\t\t\tthrow (methodname)\n";
             src += "\t\t\t}\n";
         }
+        for (const it of prep.structs)
+            if (it.isDispObj) {
+                src += `\t\tcase "${it.name}":\n`;
+                src += `\t\t\tconst this${it.name} = prog.objects[msg.data[""]] as ${pkgname}.${it.name}\n`;
+                src += `\t\t\tif (!this${it.name})\n`;
+                src += `\t\t\t\tthrow "Called ${pkgname}.${it.name}" + methodname + " for an already disposed-and-forgotten instance"\n`;
+                src += "\t\t\tswitch (methodname) {\n";
+                let tfun;
+                for (const mem of it.fields)
+                    if (tfun = gen.typeFun(mem.typeSpec)) {
+                        const args = tfun[0].map((_, i) => gen.argFrom(_, mem.fromOrig.parameters[i]));
+                        src += `\t\t\t\tcase "${mem.name}": {\n`;
+                        for (const arg of args)
+                            src += this.argsSrc(prep, arg);
+                        src += `\t\t\t\t\treturn new Promise((ret, rej) => { try { ret(this${it.name}.${mem.name}(${args.map(_ => 'arg_' + _.name).join(', ')})) } catch (err) { rej(err) } })\n`;
+                        src += "\t\t\t\t}\n";
+                    }
+                src += "\t\t\t\tdefault:\n";
+                src += "\t\t\t\t\tthrow methodname\n";
+                src += "\t\t\t}\n";
+            }
         src += "\t\tdefault:\n";
         src += "\t\t\tthrow (apiname)\n";
         src += "\t}\n";
         src += "}\n\n";
         this.writeFileSync(pkgname, src);
+    }
+    argsSrc(prep, arg) {
+        let src = "";
+        let tfunc;
+        if (arg.isCancellationToken !== undefined) {
+            src += `\t\t\t\t\tlet ctid = msg.data['${arg.name}'] as string, arg_${arg.name} = prog.cancellerToken(ctid)\n`;
+            src += `\t\t\t\t\tif (!arg_${arg.name})\n`;
+            src += `\t\t\t\t\t\targ_${arg.name} = prog.cancellers[''].token\n`;
+            src += `\t\t\t\t\telse\n`;
+            src += `\t\t\t\t\t\tremoteCancellationTokens.push(ctid)\n`;
+        }
+        else if ((tfunc = gen.typeFun(arg.typeSpec)) && (tfunc.length)) {
+            const fnid = "_fnid_" + arg.name;
+            src += `\t\t\t\t\tconst ${fnid} = msg.data['${arg.name}'] as string\n`;
+            src += `\t\t\t\t\tif (!(${fnid} && ${fnid}.length))\n`;
+            src += "\t\t\t\t\t\treturn Promise.reject(msg.data)\n";
+            src += `\t\t\t\t\tconst arg_${arg.name} = (${tfunc[0].map((_, i) => (gen.typeArrSpreads(_) ? '...' : '') + '_' + i + ': ' + this.typeSpec(_)).join(', ')}): ${this.typeSpec(tfunc[1])} => {\n`;
+            src += "\t\t\t\t\t\tif (prog && prog.proc)\n";
+            src += `\t\t\t\t\t\t\treturn prog.callBack(true, ${fnid}, ${tfunc[0].map((_, i) => '_' + i).join(', ')})\n`;
+            src += "\t\t\t\t\t\treturn undefined\n";
+            src += "\t\t\t\t\t}\n";
+        }
+        else {
+            if (arg.typeSpec !== 'Uri')
+                src += `\t\t\t\t\tconst arg_${arg.name} = (msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}) as ${this.typeSpec(arg.typeSpec)}\n`;
+            else {
+                src += `\t\t\t\t\tconst arg_${arg.name} = ppio.tryUnmarshalUri(msg.data['${arg.name}'])\n`;
+                src += `\t\t\t\t\tif (!arg_${arg.name})\n`;
+                src += `\t\t\t\t\t\treturn Promise.reject(msg.data['${arg.name}'])\n`;
+            }
+            const funcfields = gen.argsFuncFields(prep, [arg]);
+            if (funcfields && funcfields.length)
+                for (const ff of funcfields) {
+                    const tfn = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec);
+                    if (tfn && tfn.length) {
+                        src += `\t\t\t\t\tif (arg_${arg.name} && arg_${arg.name}.${ff.name}_AppzFuncId && arg_${arg.name}.${ff.name}_AppzFuncId.length)\n`;
+                        src += `\t\t\t\t\t\targ_${arg.name}.${ff.name} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => prog.callBack(true, arg_${arg.name}.${ff.name}_AppzFuncId, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`;
+                    }
+                }
+        }
+        return src;
     }
     typeSpec(from, intoProm = false) {
         if (!from)
