@@ -1144,6 +1144,7 @@ function newWindowState (): WindowState {
 
  */
 export interface StatusBarItem extends fromJson {
+    disp: Disposable
 }
 
 function newStatusBarItem (): StatusBarItem {
@@ -3314,7 +3315,10 @@ function WindowState_populateFrom(this: WindowState, payload: any): boolean {
 }
 
 function StatusBarItem_populateFrom(this: StatusBarItem, payload: any): boolean {
-    return true
+    let ok: boolean
+    this.disp = newDisposable()
+    ok = this.disp.populateFrom(payload)
+    return ok
 }
 
 function EnvProperties_populateFrom(this: EnvProperties, payload: any): boolean {

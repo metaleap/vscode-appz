@@ -1021,6 +1021,7 @@ export interface WindowState extends fromJson {
 
  */
 export interface StatusBarItem extends fromJson {
+    disp: Disposable;
 }
 /**
  * An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).

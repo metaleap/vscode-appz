@@ -1326,6 +1326,10 @@ WindowState: class
 # show text and icons and run a command on click.
 StatusBarItem: class
 
+    #
+    # JSON FLAGS: undefined
+    disp: ?Disposable
+
 
 
 
@@ -3279,7 +3283,10 @@ WindowState·populateFrom: (payload:any -> bool)
 
 
 StatusBarItem·populateFrom: (payload:any -> bool)
-    return true
+    var ok of bool
+    this.disp = ?Disposable·new
+    ok = this.disp.populateFrom(payload)
+    return ok
 
 
 

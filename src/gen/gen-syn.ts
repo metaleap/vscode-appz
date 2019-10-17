@@ -246,7 +246,9 @@ export class Builder {
             Docs: this.docs(gen.docs(it.fromOrig ? it.fromOrig.decl : it.isPropsOf.fromOrig)),
             IsOutgoing: it.isOutgoing ? true : false,
             IsIncoming: it.isIncoming ? true : false,
-            Fields: it.isObj ? [] : it.fields.map((_: gen.PrepField): Field => ({
+            Fields: it.isObj ? [
+                { Name: "disp", Type: { Maybe: { Name: "Disposable" } } },
+            ] : it.fields.map((_: gen.PrepField): Field => ({
                 fromPrep: _,
                 name: _.name,
                 Name: this.gen.nameRewriters.fields(_.name),
@@ -847,35 +849,39 @@ export class Gen extends gen.Gen implements gen.IGen {
         if (!(tstruct && tstruct.Fields))
             throw struct
 
-        if (!tstruct.Fields.length) {
-            body.push(_.iRet(_.eLit(true)))
-            return
-        }
+        if (tstruct.fromPrep && tstruct.fromPrep.isObj) {
+            body.push(
+                _.iVar('ok', TypeRefPrim.Bool),
+                _.iSet(_.oDot(_.n("disp")), _.eNew({ Maybe: { Name: "Disposable" } })),
+                _.iSet(_.n("ok"), _.eCall(_.oDot(_.oDot(_.n("disp")), _.n("populateFrom")), _.n("payload"))),
+                _.iRet(_.n("ok")),
+            )
+        } else {
+            body.push(
+                _.iVar('it', TypeRefPrim.Dict),
+                _.iVar('ok', TypeRefPrim.Bool),
+                _.iVar('val', TypeRefPrim.Any),
+            )
+            body.push(...this.convOrRet('it', _.n('payload'), TypeRefPrim.Dict))
 
-        body.push(
-            _.iVar('it', TypeRefPrim.Dict),
-            _.iVar('ok', TypeRefPrim.Bool),
-            _.iVar('val', TypeRefPrim.Any),
-        )
-        body.push(...this.convOrRet('it', _.n('payload'), TypeRefPrim.Dict))
-
-        for (const fld of tstruct.Fields)
-            if (fld.Json && !fld.Json.Excluded) {
-                const tfld = this.typeRefForField(fld.Type, fld.fromPrep && fld.fromPrep.optional)
-                body.push(
-                    _.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdxMay(_.n('it'), _.eLit(fld.Json.Name))),
-                    _.iIf(_.n('ok'), [
-                        _.iVar(fld.name, tfld),
-                        _.iIf(_.oIs(_.n('val')),
-                            this.convOrRet(fld.name, _.n('val'), tfld),
+            for (const fld of tstruct.Fields)
+                if (fld.Json && !fld.Json.Excluded) {
+                    const tfld = this.typeRefForField(fld.Type, fld.fromPrep && fld.fromPrep.optional)
+                    body.push(
+                        _.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdxMay(_.n('it'), _.eLit(fld.Json.Name))),
+                        _.iIf(_.n('ok'), [
+                            _.iVar(fld.name, tfld),
+                            _.iIf(_.oIs(_.n('val')),
+                                this.convOrRet(fld.name, _.n('val'), tfld),
+                            ),
+                            _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name)),
+                        ],
+                            fld.Json.Required ? [_.iRet(_.eLit(false))] : []
                         ),
-                        _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name)),
-                    ],
-                        fld.Json.Required ? [_.iRet(_.eLit(false))] : []
-                    ),
-                )
-            }
-        body.push(_.iRet(_.eLit(true)))
+                    )
+                }
+            body.push(_.iRet(_.eLit(true)))
+        }
     }
 
     private genMethodImpl_MessageDispatch(iface: TypeRefOwn, method: Method, _: Builder, body: Instr[]) {

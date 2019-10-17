@@ -1134,6 +1134,7 @@ namespace VscAppz {
 	/// show text and icons and run a command on click.
 	/// </summary>
 	public partial class StatusBarItem {
+		internal Disposable disp;
 	}
 
 	/// <summary>An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).</summary>
@@ -3238,7 +3239,10 @@ namespace VscAppz {
 
 	public partial class StatusBarItem {
 		internal bool populateFrom(any payload) {
-			return true;
+			bool ok = default;
+			this.disp = new Disposable();
+			ok = this.disp.populateFrom(payload);
+			return ok;
 		}
 	}
 

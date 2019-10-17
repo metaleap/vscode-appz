@@ -872,6 +872,7 @@ type WindowState struct {
 // A status bar item is a status bar contribution that can
 // show text and icons and run a command on click.
 type StatusBarItem struct {
+	disp *Disposable
 }
 
 // An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).
@@ -2978,7 +2979,10 @@ func (me *WindowState) populateFrom(payload any) bool {
 }
 
 func (me *StatusBarItem) populateFrom(payload any) bool {
-	return true
+	var ok bool
+	me.disp = new(Disposable)
+	ok = me.disp.populateFrom(payload)
+	return ok
 }
 
 func (me *EnvProperties) populateFrom(payload any) bool {

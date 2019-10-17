@@ -87,7 +87,7 @@ export class Gen extends gen_syn.Gen {
                             : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnMaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")
                         ))
                         .ln(() => this
-                            .s((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel) ? "internal " : "public ")
+                            .s(((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel) || (it.fromPrep && it.fromPrep.isObj)) ? "internal " : "public ")
                             .emitTypeRef(f.Type)
                             .s(" ", f.Name, ";")
                         ))

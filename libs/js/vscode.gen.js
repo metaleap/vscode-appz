@@ -2021,7 +2021,10 @@ function WindowState_populateFrom(payload) {
     return true;
 }
 function StatusBarItem_populateFrom(payload) {
-    return true;
+    let ok;
+    this.disp = newDisposable();
+    ok = this.disp.populateFrom(payload);
+    return ok;
 }
 function EnvProperties_populateFrom(payload) {
     let it;
