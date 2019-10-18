@@ -50,27 +50,27 @@
   - [CreateOutputChannel(name,onDone)](#M-VscAppz-IWindow-CreateOutputChannel-System-String,System-Action{VscAppz-OutputChannel}- 'VscAppz.IWindow.CreateOutputChannel(System.String,System.Action{VscAppz.OutputChannel})')
   - [CreateStatusBarItem(alignment,priority,onDone)](#M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32},System-Action{VscAppz-StatusBarItem}- 'VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32},System.Action{VscAppz.StatusBarItem})')
   - [OnDidChangeWindowState()](#M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState},System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState},System.Action{VscAppz.Disposable})')
-  - [SetStatusBarMessage(text,hideAfterTimeout,onDone)](#M-VscAppz-IWindow-SetStatusBarMessage-System-String,System-Int32,System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.SetStatusBarMessage(System.String,System.Int32,System.Action{VscAppz.Disposable})')
-  - [SetStatusBarMessage(text,onDone)](#M-VscAppz-IWindow-SetStatusBarMessage-System-String,System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.SetStatusBarMessage(System.String,System.Action{VscAppz.Disposable})')
-  - [ShowErrorMessage(message,items,onDone)](#M-VscAppz-IWindow-ShowErrorMessage-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowErrorMessage(System.String,System.String[],System.Action{System.String})')
-  - [ShowErrorMessage(message,options,items,onDone)](#M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowErrorMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
-  - [ShowErrorMessage(message,items,onDone)](#M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowErrorMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
-  - [ShowErrorMessage(message,options,items,onDone)](#M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowErrorMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
-  - [ShowInformationMessage(message,items,onDone)](#M-VscAppz-IWindow-ShowInformationMessage-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowInformationMessage(System.String,System.String[],System.Action{System.String})')
-  - [ShowInformationMessage(message,options,items,onDone)](#M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
-  - [ShowInformationMessage(message,items,onDone)](#M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
-  - [ShowInformationMessage(message,options,items,onDone)](#M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowInformationMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
+  - [SetStatusBarMessage1(text,hideAfterTimeout,onDone)](#M-VscAppz-IWindow-SetStatusBarMessage1-System-String,System-Int32,System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.SetStatusBarMessage1(System.String,System.Int32,System.Action{VscAppz.Disposable})')
+  - [SetStatusBarMessage2(text,onDone)](#M-VscAppz-IWindow-SetStatusBarMessage2-System-String,System-Action{VscAppz-Disposable}- 'VscAppz.IWindow.SetStatusBarMessage2(System.String,System.Action{VscAppz.Disposable})')
+  - [ShowErrorMessage1(message,items,onDone)](#M-VscAppz-IWindow-ShowErrorMessage1-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowErrorMessage1(System.String,System.String[],System.Action{System.String})')
+  - [ShowErrorMessage2(message,options,items,onDone)](#M-VscAppz-IWindow-ShowErrorMessage2-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowErrorMessage2(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
+  - [ShowErrorMessage3(message,items,onDone)](#M-VscAppz-IWindow-ShowErrorMessage3-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowErrorMessage3(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
+  - [ShowErrorMessage4(message,options,items,onDone)](#M-VscAppz-IWindow-ShowErrorMessage4-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowErrorMessage4(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
+  - [ShowInformationMessage1(message,items,onDone)](#M-VscAppz-IWindow-ShowInformationMessage1-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowInformationMessage1(System.String,System.String[],System.Action{System.String})')
+  - [ShowInformationMessage2(message,options,items,onDone)](#M-VscAppz-IWindow-ShowInformationMessage2-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowInformationMessage2(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
+  - [ShowInformationMessage3(message,items,onDone)](#M-VscAppz-IWindow-ShowInformationMessage3-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowInformationMessage3(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
+  - [ShowInformationMessage4(message,options,items,onDone)](#M-VscAppz-IWindow-ShowInformationMessage4-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowInformationMessage4(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
   - [ShowInputBox(options,token,onDone)](#M-VscAppz-IWindow-ShowInputBox-VscAppz-InputBoxOptions,VscAppz-Cancel,System-Action{System-String}- 'VscAppz.IWindow.ShowInputBox(VscAppz.InputBoxOptions,VscAppz.Cancel,System.Action{System.String})')
   - [ShowOpenDialog(options,onDone)](#M-VscAppz-IWindow-ShowOpenDialog-VscAppz-OpenDialogOptions,System-Action{System-String[]}- 'VscAppz.IWindow.ShowOpenDialog(VscAppz.OpenDialogOptions,System.Action{System.String[]})')
-  - [ShowQuickPick(items,options,token,onDone)](#M-VscAppz-IWindow-ShowQuickPick-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{System-String[]}- 'VscAppz.IWindow.ShowQuickPick(System.String[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{System.String[]})')
-  - [ShowQuickPick(items,options,token,onDone)](#M-VscAppz-IWindow-ShowQuickPick-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{System-String}- 'VscAppz.IWindow.ShowQuickPick(System.String[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{System.String})')
-  - [ShowQuickPick(items,options,token,onDone)](#M-VscAppz-IWindow-ShowQuickPick-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{VscAppz-QuickPickItem[]}- 'VscAppz.IWindow.ShowQuickPick(VscAppz.QuickPickItem[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{VscAppz.QuickPickItem[]})')
-  - [ShowQuickPick(items,options,token,onDone)](#M-VscAppz-IWindow-ShowQuickPick-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{VscAppz-QuickPickItem}- 'VscAppz.IWindow.ShowQuickPick(VscAppz.QuickPickItem[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{VscAppz.QuickPickItem})')
+  - [ShowQuickPick1(items,options,token,onDone)](#M-VscAppz-IWindow-ShowQuickPick1-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{System-String[]}- 'VscAppz.IWindow.ShowQuickPick1(System.String[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{System.String[]})')
+  - [ShowQuickPick2(items,options,token,onDone)](#M-VscAppz-IWindow-ShowQuickPick2-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{System-String}- 'VscAppz.IWindow.ShowQuickPick2(System.String[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{System.String})')
+  - [ShowQuickPick3(items,options,token,onDone)](#M-VscAppz-IWindow-ShowQuickPick3-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{VscAppz-QuickPickItem[]}- 'VscAppz.IWindow.ShowQuickPick3(VscAppz.QuickPickItem[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{VscAppz.QuickPickItem[]})')
+  - [ShowQuickPick4(items,options,token,onDone)](#M-VscAppz-IWindow-ShowQuickPick4-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{VscAppz-QuickPickItem}- 'VscAppz.IWindow.ShowQuickPick4(VscAppz.QuickPickItem[],VscAppz.QuickPickOptions,VscAppz.Cancel,System.Action{VscAppz.QuickPickItem})')
   - [ShowSaveDialog(options,onDone)](#M-VscAppz-IWindow-ShowSaveDialog-VscAppz-SaveDialogOptions,System-Action{System-String}- 'VscAppz.IWindow.ShowSaveDialog(VscAppz.SaveDialogOptions,System.Action{System.String})')
-  - [ShowWarningMessage(message,items,onDone)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowWarningMessage(System.String,System.String[],System.Action{System.String})')
-  - [ShowWarningMessage(message,options,items,onDone)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
-  - [ShowWarningMessage(message,items,onDone)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
-  - [ShowWarningMessage(message,options,items,onDone)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowWarningMessage(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
+  - [ShowWarningMessage1(message,items,onDone)](#M-VscAppz-IWindow-ShowWarningMessage1-System-String,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowWarningMessage1(System.String,System.String[],System.Action{System.String})')
+  - [ShowWarningMessage2(message,options,items,onDone)](#M-VscAppz-IWindow-ShowWarningMessage2-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}- 'VscAppz.IWindow.ShowWarningMessage2(System.String,VscAppz.MessageOptions,System.String[],System.Action{System.String})')
+  - [ShowWarningMessage3(message,items,onDone)](#M-VscAppz-IWindow-ShowWarningMessage3-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowWarningMessage3(System.String,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
+  - [ShowWarningMessage4(message,options,items,onDone)](#M-VscAppz-IWindow-ShowWarningMessage4-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}- 'VscAppz.IWindow.ShowWarningMessage4(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[],System.Action{VscAppz.MessageItem})')
   - [ShowWorkspaceFolderPick(options,onDone)](#M-VscAppz-IWindow-ShowWorkspaceFolderPick-VscAppz-WorkspaceFolderPickOptions,System-Action{VscAppz-WorkspaceFolder}- 'VscAppz.IWindow.ShowWorkspaceFolderPick(VscAppz.WorkspaceFolderPickOptions,System.Action{VscAppz.WorkspaceFolder})')
   - [State()](#M-VscAppz-IWindow-State-System-Action{VscAppz-WindowState}- 'VscAppz.IWindow.State(System.Action{VscAppz.WindowState})')
 - [IWorkspace](#T-VscAppz-IWorkspace 'VscAppz.IWorkspace')
@@ -106,12 +106,12 @@
   - [Filters](#F-VscAppz-OpenDialogOptions-Filters 'VscAppz.OpenDialogOptions.Filters')
   - [OpenLabel](#F-VscAppz-OpenDialogOptions-OpenLabel 'VscAppz.OpenDialogOptions.OpenLabel')
 - [OutputChannel](#T-VscAppz-OutputChannel 'VscAppz.OutputChannel')
-  - [Append(value)](#M-VscAppz-OutputChannel-Append-System-String- 'VscAppz.OutputChannel.Append(System.String)')
-  - [AppendLine(value)](#M-VscAppz-OutputChannel-AppendLine-System-String- 'VscAppz.OutputChannel.AppendLine(System.String)')
-  - [Clear()](#M-VscAppz-OutputChannel-Clear 'VscAppz.OutputChannel.Clear')
-  - [Dispose()](#M-VscAppz-OutputChannel-Dispose 'VscAppz.OutputChannel.Dispose')
-  - [Hide()](#M-VscAppz-OutputChannel-Hide 'VscAppz.OutputChannel.Hide')
-  - [Show(preserveFocus)](#M-VscAppz-OutputChannel-Show-System-Nullable{System-Boolean}- 'VscAppz.OutputChannel.Show(System.Nullable{System.Boolean})')
+  - [Append(value)](#M-VscAppz-OutputChannel-Append-System-String,System-Action- 'VscAppz.OutputChannel.Append(System.String,System.Action)')
+  - [AppendLine(value)](#M-VscAppz-OutputChannel-AppendLine-System-String,System-Action- 'VscAppz.OutputChannel.AppendLine(System.String,System.Action)')
+  - [Clear()](#M-VscAppz-OutputChannel-Clear-System-Action- 'VscAppz.OutputChannel.Clear(System.Action)')
+  - [Dispose()](#M-VscAppz-OutputChannel-Dispose-System-Action- 'VscAppz.OutputChannel.Dispose(System.Action)')
+  - [Hide()](#M-VscAppz-OutputChannel-Hide-System-Action- 'VscAppz.OutputChannel.Hide(System.Action)')
+  - [Show(preserveFocus)](#M-VscAppz-OutputChannel-Show-System-Nullable{System-Boolean},System-Action- 'VscAppz.OutputChannel.Show(System.Nullable{System.Boolean},System.Action)')
 - [QuickPickItem](#T-VscAppz-QuickPickItem 'VscAppz.QuickPickItem')
   - [AlwaysShow](#F-VscAppz-QuickPickItem-AlwaysShow 'VscAppz.QuickPickItem.AlwaysShow')
   - [Description](#F-VscAppz-QuickPickItem-Description 'VscAppz.QuickPickItem.Description')
@@ -135,13 +135,13 @@
   - [Left](#F-VscAppz-StatusBarAlignment-Left 'VscAppz.StatusBarAlignment.Left')
   - [Right](#F-VscAppz-StatusBarAlignment-Right 'VscAppz.StatusBarAlignment.Right')
 - [StatusBarItem](#T-VscAppz-StatusBarItem 'VscAppz.StatusBarItem')
-  - [Dispose()](#M-VscAppz-StatusBarItem-Dispose 'VscAppz.StatusBarItem.Dispose')
-  - [Hide()](#M-VscAppz-StatusBarItem-Hide 'VscAppz.StatusBarItem.Hide')
-  - [Show()](#M-VscAppz-StatusBarItem-Show 'VscAppz.StatusBarItem.Show')
+  - [Dispose()](#M-VscAppz-StatusBarItem-Dispose-System-Action- 'VscAppz.StatusBarItem.Dispose(System.Action)')
+  - [Hide()](#M-VscAppz-StatusBarItem-Hide-System-Action- 'VscAppz.StatusBarItem.Hide(System.Action)')
+  - [Show()](#M-VscAppz-StatusBarItem-Show-System-Action- 'VscAppz.StatusBarItem.Show(System.Action)')
 - [Vsc](#T-VscAppz-Vsc 'VscAppz.Vsc')
   - [OnError](#F-VscAppz-Vsc-OnError 'VscAppz.Vsc.OnError')
   - [OnErrorDefaultOutputFormat](#F-VscAppz-Vsc-OnErrorDefaultOutputFormat 'VscAppz.Vsc.OnErrorDefaultOutputFormat')
-  - [InOut(stdIn,stdOut)](#M-VscAppz-Vsc-InOut-System-IO-TextReader,System-IO-TextWriter- 'VscAppz.Vsc.InOut(System.IO.TextReader,System.IO.TextWriter)')
+  - [Main(main,stdIn,stdOut)](#M-VscAppz-Vsc-Main-System-Action{VscAppz-IVscode},System-IO-TextReader,System-IO-TextWriter- 'VscAppz.Vsc.Main(System.Action{VscAppz.IVscode},System.IO.TextReader,System.IO.TextWriter)')
 - [WindowState](#T-VscAppz-WindowState 'VscAppz.WindowState')
   - [Focused](#F-VscAppz-WindowState-Focused 'VscAppz.WindowState.Focused')
 - [WorkspaceFolder](#T-VscAppz-WorkspaceFolder 'VscAppz.WorkspaceFolder')
@@ -891,8 +891,8 @@ changes. The value of the event represents whether the window is focused.
 
 This method has no parameters.
 
-<a name='M-VscAppz-IWindow-SetStatusBarMessage-System-String,System-Int32,System-Action{VscAppz-Disposable}-'></a>
-### SetStatusBarMessage(text,hideAfterTimeout,onDone) `method`
+<a name='M-VscAppz-IWindow-SetStatusBarMessage1-System-String,System-Int32,System-Action{VscAppz-Disposable}-'></a>
+### SetStatusBarMessage1(text,hideAfterTimeout,onDone) `method`
 
 ##### Summary
 
@@ -913,8 +913,8 @@ status bar [items](#window.createStatusBarItem).
 | hideAfterTimeout | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Timeout in milliseconds after which the message will be disposed. |
 | onDone | [System.Action{VscAppz.Disposable}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.Disposable}') | A disposable which hides the status bar message. |
 
-<a name='M-VscAppz-IWindow-SetStatusBarMessage-System-String,System-Action{VscAppz-Disposable}-'></a>
-### SetStatusBarMessage(text,onDone) `method`
+<a name='M-VscAppz-IWindow-SetStatusBarMessage2-System-String,System-Action{VscAppz-Disposable}-'></a>
+### SetStatusBarMessage2(text,onDone) `method`
 
 ##### Summary
 
@@ -935,8 +935,8 @@ longer used.
 | text | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text). |
 | onDone | [System.Action{VscAppz.Disposable}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.Disposable}') | A disposable which hides the status bar message. |
 
-<a name='M-VscAppz-IWindow-ShowErrorMessage-System-String,System-String[],System-Action{System-String}-'></a>
-### ShowErrorMessage(message,items,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowErrorMessage1-System-String,System-String[],System-Action{System-String}-'></a>
+### ShowErrorMessage1(message,items,onDone) `method`
 
 ##### Summary
 
@@ -956,8 +956,8 @@ Show an error message.
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
 | onDone | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
-<a name='M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}-'></a>
-### ShowErrorMessage(message,options,items,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowErrorMessage2-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}-'></a>
+### ShowErrorMessage2(message,options,items,onDone) `method`
 
 ##### Summary
 
@@ -980,8 +980,8 @@ Show an error message.
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
 | onDone | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
-<a name='M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
-### ShowErrorMessage(message,items,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowErrorMessage3-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
+### ShowErrorMessage3(message,items,onDone) `method`
 
 ##### Summary
 
@@ -1001,8 +1001,8 @@ Show an error message.
 | items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
 | onDone | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
-<a name='M-VscAppz-IWindow-ShowErrorMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
-### ShowErrorMessage(message,options,items,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowErrorMessage4-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
+### ShowErrorMessage4(message,options,items,onDone) `method`
 
 ##### Summary
 
@@ -1025,8 +1025,8 @@ Show an error message.
 | items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
 | onDone | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
-<a name='M-VscAppz-IWindow-ShowInformationMessage-System-String,System-String[],System-Action{System-String}-'></a>
-### ShowInformationMessage(message,items,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowInformationMessage1-System-String,System-String[],System-Action{System-String}-'></a>
+### ShowInformationMessage1(message,items,onDone) `method`
 
 ##### Summary
 
@@ -1047,8 +1047,8 @@ clickable buttons.
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
 | onDone | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
-<a name='M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}-'></a>
-### ShowInformationMessage(message,options,items,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowInformationMessage2-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}-'></a>
+### ShowInformationMessage2(message,options,items,onDone) `method`
 
 ##### Summary
 
@@ -1072,8 +1072,8 @@ clickable buttons.
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
 | onDone | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
-<a name='M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
-### ShowInformationMessage(message,items,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowInformationMessage3-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
+### ShowInformationMessage3(message,items,onDone) `method`
 
 ##### Summary
 
@@ -1093,8 +1093,8 @@ Show an information message.
 | items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
 | onDone | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
-<a name='M-VscAppz-IWindow-ShowInformationMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
-### ShowInformationMessage(message,options,items,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowInformationMessage4-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
+### ShowInformationMessage4(message,options,items,onDone) `method`
 
 ##### Summary
 
@@ -1161,8 +1161,8 @@ for opening-purposes.
 | options | [VscAppz.OpenDialogOptions](#T-VscAppz-OpenDialogOptions 'VscAppz.OpenDialogOptions') | Options that control the dialog. |
 | onDone | [System.Action{System.String[]}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String[]}') | A promise that resolves to the selected resources or `undefined`. |
 
-<a name='M-VscAppz-IWindow-ShowQuickPick-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{System-String[]}-'></a>
-### ShowQuickPick(items,options,token,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowQuickPick1-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{System-String[]}-'></a>
+### ShowQuickPick1(items,options,token,onDone) `method`
 
 ##### Summary
 
@@ -1185,8 +1185,8 @@ Shows a selection list allowing multiple selections.
 | token | [VscAppz.Cancel](#T-VscAppz-Cancel 'VscAppz.Cancel') | A token that can be used to signal cancellation. |
 | onDone | [System.Action{System.String[]}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String[]}') | A promise that resolves to the selected items or `undefined`. |
 
-<a name='M-VscAppz-IWindow-ShowQuickPick-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{System-String}-'></a>
-### ShowQuickPick(items,options,token,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowQuickPick2-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{System-String}-'></a>
+### ShowQuickPick2(items,options,token,onDone) `method`
 
 ##### Summary
 
@@ -1209,8 +1209,8 @@ Shows a selection list.
 | token | [VscAppz.Cancel](#T-VscAppz-Cancel 'VscAppz.Cancel') | A token that can be used to signal cancellation. |
 | onDone | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A promise that resolves to the selection or `undefined`. |
 
-<a name='M-VscAppz-IWindow-ShowQuickPick-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{VscAppz-QuickPickItem[]}-'></a>
-### ShowQuickPick(items,options,token,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowQuickPick3-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{VscAppz-QuickPickItem[]}-'></a>
+### ShowQuickPick3(items,options,token,onDone) `method`
 
 ##### Summary
 
@@ -1233,8 +1233,8 @@ Shows a selection list allowing multiple selections.
 | token | [VscAppz.Cancel](#T-VscAppz-Cancel 'VscAppz.Cancel') | A token that can be used to signal cancellation. |
 | onDone | [System.Action{VscAppz.QuickPickItem[]}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[]}') | A promise that resolves to the selected items or `undefined`. |
 
-<a name='M-VscAppz-IWindow-ShowQuickPick-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{VscAppz-QuickPickItem}-'></a>
-### ShowQuickPick(items,options,token,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowQuickPick4-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel,System-Action{VscAppz-QuickPickItem}-'></a>
+### ShowQuickPick4(items,options,token,onDone) `method`
 
 ##### Summary
 
@@ -1276,8 +1276,8 @@ for saving-purposes.
 | options | [VscAppz.SaveDialogOptions](#T-VscAppz-SaveDialogOptions 'VscAppz.SaveDialogOptions') | Options that control the dialog. |
 | onDone | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A promise that resolves to the selected resource or `undefined`. |
 
-<a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,System-String[],System-Action{System-String}-'></a>
-### ShowWarningMessage(message,items,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowWarningMessage1-System-String,System-String[],System-Action{System-String}-'></a>
+### ShowWarningMessage1(message,items,onDone) `method`
 
 ##### Summary
 
@@ -1297,8 +1297,8 @@ Show a warning message.
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
 | onDone | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
-<a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}-'></a>
-### ShowWarningMessage(message,options,items,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowWarningMessage2-System-String,VscAppz-MessageOptions,System-String[],System-Action{System-String}-'></a>
+### ShowWarningMessage2(message,options,items,onDone) `method`
 
 ##### Summary
 
@@ -1321,8 +1321,8 @@ Show a warning message.
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
 | onDone | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
-<a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
-### ShowWarningMessage(message,items,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowWarningMessage3-System-String,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
+### ShowWarningMessage3(message,items,onDone) `method`
 
 ##### Summary
 
@@ -1342,8 +1342,8 @@ Show a warning message.
 | items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
 | onDone | [System.Action{VscAppz.MessageItem}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.MessageItem}') | A thenable that resolves to the selected item or `undefined` when being dismissed. |
 
-<a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
-### ShowWarningMessage(message,options,items,onDone) `method`
+<a name='M-VscAppz-IWindow-ShowWarningMessage4-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[],System-Action{VscAppz-MessageItem}-'></a>
+### ShowWarningMessage4(message,options,items,onDone) `method`
 
 ##### Summary
 
@@ -1803,7 +1803,7 @@ An output channel is a container for readonly textual information.
 To get an instance of an `OutputChannel` use
 [createOutputChannel](#window.createOutputChannel).
 
-<a name='M-VscAppz-OutputChannel-Append-System-String-'></a>
+<a name='M-VscAppz-OutputChannel-Append-System-String,System-Action-'></a>
 ### Append(value) `method`
 
 ##### Summary
@@ -1818,7 +1818,7 @@ Append the given value to the channel.
 | ---- | ---- | ----------- |
 | value | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | A string, falsy values will not be printed. |
 
-<a name='M-VscAppz-OutputChannel-AppendLine-System-String-'></a>
+<a name='M-VscAppz-OutputChannel-AppendLine-System-String,System-Action-'></a>
 ### AppendLine(value) `method`
 
 ##### Summary
@@ -1834,7 +1834,7 @@ to the channel.
 | ---- | ---- | ----------- |
 | value | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | A string, falsy values will be printed. |
 
-<a name='M-VscAppz-OutputChannel-Clear'></a>
+<a name='M-VscAppz-OutputChannel-Clear-System-Action-'></a>
 ### Clear() `method`
 
 ##### Summary
@@ -1845,7 +1845,7 @@ Removes all output from the channel.
 
 This method has no parameters.
 
-<a name='M-VscAppz-OutputChannel-Dispose'></a>
+<a name='M-VscAppz-OutputChannel-Dispose-System-Action-'></a>
 ### Dispose() `method`
 
 ##### Summary
@@ -1856,7 +1856,7 @@ Dispose and free associated resources.
 
 This method has no parameters.
 
-<a name='M-VscAppz-OutputChannel-Hide'></a>
+<a name='M-VscAppz-OutputChannel-Hide-System-Action-'></a>
 ### Hide() `method`
 
 ##### Summary
@@ -1867,7 +1867,7 @@ Hide this channel from the UI.
 
 This method has no parameters.
 
-<a name='M-VscAppz-OutputChannel-Show-System-Nullable{System-Boolean}-'></a>
+<a name='M-VscAppz-OutputChannel-Show-System-Nullable{System-Boolean},System-Action-'></a>
 ### Show(preserveFocus) `method`
 
 ##### Summary
@@ -2073,7 +2073,7 @@ VscAppz
 A status bar item is a status bar contribution that can
 show text and icons and run a command on click.
 
-<a name='M-VscAppz-StatusBarItem-Dispose'></a>
+<a name='M-VscAppz-StatusBarItem-Dispose-System-Action-'></a>
 ### Dispose() `method`
 
 ##### Summary
@@ -2085,7 +2085,7 @@ Dispose and free associated resources. Call
 
 This method has no parameters.
 
-<a name='M-VscAppz-StatusBarItem-Hide'></a>
+<a name='M-VscAppz-StatusBarItem-Hide-System-Action-'></a>
 ### Hide() `method`
 
 ##### Summary
@@ -2096,7 +2096,7 @@ Hide the entry in the status bar.
 
 This method has no parameters.
 
-<a name='M-VscAppz-StatusBarItem-Show'></a>
+<a name='M-VscAppz-StatusBarItem-Show-System-Action-'></a>
 ### Show() `method`
 
 ##### Summary
@@ -2140,17 +2140,18 @@ Reports problems during the ongoing forever-looping stdin/stdout communication
 
 Used by the default `OnError` handler to print error details to stderr (aka. `Console.Error`).
 
-<a name='M-VscAppz-Vsc-InOut-System-IO-TextReader,System-IO-TextWriter-'></a>
-### InOut(stdIn,stdOut) `method`
+<a name='M-VscAppz-Vsc-Main-System-Action{VscAppz-IVscode},System-IO-TextReader,System-IO-TextWriter-'></a>
+### Main(main,stdIn,stdOut) `method`
 
 ##### Summary
 
-Returns an `IVscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `Console.In` and `stdOut` defaulting to `Console.Out`). Communication only begins its forever loop upon the first method invocation (which consequently never `return`s) on any of the `interface`s offered by the returned `IVscode`'s members.
+Creates an `IVscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `Console.In` and `stdOut` defaulting to `Console.Out`).
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
+| main | [System.Action{VscAppz.IVscode}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.IVscode}') | The rest of your program, called once the `vscode-appz` counterparty has signalled readiness. |
 | stdIn | [System.IO.TextReader](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.IO.TextReader 'System.IO.TextReader') | If `null`, defaults to `Console.In`. |
 | stdOut | [System.IO.TextWriter](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.IO.TextWriter 'System.IO.TextWriter') | If `null`, defaults to `Console.Out` |
 

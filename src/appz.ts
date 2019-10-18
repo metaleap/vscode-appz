@@ -38,7 +38,7 @@ export function activate(ctx: vsc.ExtensionContext) {
 }
 
 function onCmdMain() {
-	interface pickItem extends vsc.QuickPickItem { fullCmd: string }
+	interface pickItem extends vsc.QuickPickItem { fullCmd: string, shouldEnd?: boolean }
 
 	const progs = vsc.workspace.getConfiguration("appz").get<string[]>("allProgs") || []
 	const items: pickItem[] = progs.map(_ => ({
@@ -48,7 +48,7 @@ function onCmdMain() {
 	const prognum = items.length
 	for (const _ in ppio.progs)
 		items.push({
-			fullCmd: _, label: uxStr.menuPrefEnd + _,
+			fullCmd: _, label: uxStr.menuPrefEnd + _, shouldEnd: true,
 			detail: uxStr.menuDescStartedAgo.replace('_', getDurStr(_))
 		})
 
@@ -57,13 +57,14 @@ function onCmdMain() {
 	else
 		vsc.window.showQuickPick(items, {
 			placeHolder: uxStr.menuPrompt.replace('_', prognum.toString()),
-			canPickMany: false, ignoreFocusOut: true, matchOnDescription: true, matchOnDetail: true,
+			canPickMany: false, matchOnDescription: true, matchOnDetail: true,
 		}).then(_ => {
 			if (_ && _.fullCmd) {
 				let alreadyrunning = ppio.progs[_.fullCmd]
+				let shouldstart = !_.shouldEnd
 				if (alreadyrunning)
 					alreadyrunning.dispose()
-				else
+				if (shouldstart)
 					strvar.Interpolate(_.fullCmd, extDirPathStrVarProvider).then(fullcmd => {
 						if (fullcmd && fullcmd.length) {
 							if (alreadyrunning = ppio.progs[fullcmd])

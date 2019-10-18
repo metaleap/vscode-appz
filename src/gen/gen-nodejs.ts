@@ -1,3 +1,4 @@
+import * as ts from 'typescript'
 import * as gen from './gen'
 import * as gen_syn from './gen-syn'
 
@@ -13,7 +14,6 @@ export class Gen extends gen_syn.Gen {
         this.options.oneIndent = " ".repeat(4)
         this.options.doc.appendArgsToSummaryFor.funcFields = true
         this.options.doc.appendArgsToSummaryFor.methods = false
-        this.options.funcOverloads = false
         this.nameRewriters.types.interfaces = _ => this.caseUp(_)
         this.nameRewriters.fields = _ => this.caseLo(_)
         prevImplTypeName = ""
@@ -114,15 +114,20 @@ export class Gen extends gen_syn.Gen {
         this.emitDocs(it)
             .line("export interface " + it.Name + (it.IsIncoming ? " extends fromJson" + (isdispobj ? ", withDisp" : "") + " {" : " {")).indented(() => {
                 if (isdispobj)
-                    this.each(it.fromPrep.fields.filter(_ => gen.typeFun(_.typeSpec)), "\n", f => {
-                        dispmethods.push(f)
-                        this.emitDocs({ Docs: this.b.docs(gen.docs(f.fromOrig)) })
-                            .ln(() => {
-                                this.s(this.nameRewriters.methods(f.name), ": ")
-                                    .emitTypeRef(this.b.typeRef(f.typeSpec))
-                            })
-                    }
-                    )
+                    this.each(it.fromPrep.fields, "\n", f => {
+                        const tfun = gen.typeFun(f.typeSpec)
+                        if (tfun) {
+                            dispmethods.push(f)
+                            const orig = f.fromOrig as ts.MethodSignature
+                            if (!orig)
+                                throw f
+                            this.emitDocs({ Docs: this.b.docs(gen.docs(f.fromOrig)) })
+                                .ln(() => {
+                                    this.s(this.nameRewriters.methods(f.name), ": ")
+                                        .emitTypeRef(this.b.typeRef({ From: tfun[0], To: { From: [{ From: [tfun[1]], To: null }], To: null } }))
+                                })
+                        }
+                    })
                 else
                     this.each(it.Fields, "\n", f =>
                         this.emitDocs(f)
@@ -138,7 +143,7 @@ export class Gen extends gen_syn.Gen {
             this.lines(
                 (it.IsOutgoing ? "export " : "") + "function new" + it.Name + " (): " + it.Name + " {",
                 "    let me: " + it.Name,
-                "    me = { populateFrom: _ => " + it.Name + "_populateFrom.call(me, _) } as " + it.Name
+                "    me = { populateFrom: _ => " + it.Name + "_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as " + it.Name
             ).each(dispmethods, "", f => {
                 const tfun = gen.typeFun(f.typeSpec)
                 const args = tfun[0].map((_, i) => 'a' + i).join(', ')
@@ -349,7 +354,7 @@ export class Gen extends gen_syn.Gen {
         const tcoll = this.typeColl(it)
         if (tcoll)
             return (!tcoll.KeysOf) ? this.emitTypeRef(tcoll.ValsOf).s("[]")
-                : this.s("{ [_:").emitTypeRef(tcoll.KeysOf).s("]: ").emitTypeRef(tcoll.ValsOf).s("}")
+                : this.s("{ [_:").emitTypeRef(tcoll.KeysOf).s("]: ").emitTypeRef(tcoll.ValsOf).s(" }")
 
         const ttup = this.typeTup(it)
         if (ttup) return this.s("[").each(ttup.TupOf, ", ", t =>
@@ -359,7 +364,7 @@ export class Gen extends gen_syn.Gen {
         const tfun = this.typeFunc(it)
         if (tfun)
             return this.s("(")
-                .each(tfun.From, ", ", t => this.s("_").s(": ").emitTypeRef(t))
+                .each(tfun.From.filter(_ => _ ? true : false), ", ", t => this.s("_").s(": ").emitTypeRef(t))
                 .s(") => ").emitTypeRef(tfun.To)
 
         if (it === gen_syn.TypeRefPrim.Real || it === gen_syn.TypeRefPrim.Int)
@@ -367,7 +372,7 @@ export class Gen extends gen_syn.Gen {
         if (it === gen_syn.TypeRefPrim.Bool)
             return this.s("boolean")
         if (it === gen_syn.TypeRefPrim.Dict)
-            return this.s("{ [_: string]: any}")
+            return this.s("{ [_: string]: any }")
 
         return super.emitTypeRef(it)
     }

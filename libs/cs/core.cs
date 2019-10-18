@@ -36,25 +36,26 @@ namespace VscAppz {
             Console.Error.Write(string.Format(OnErrorDefaultOutputFormat, err, jsonMsg));
         };
 
-        /// <summary>Returns an `IVscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `Console.In` and `stdOut` defaulting to `Console.Out`). Communication only begins its forever loop upon the first method invocation (which consequently never `return`s) on any of the `interface`s offered by the returned `IVscode`'s members.</summary>
+        /// <summary>Creates an `IVscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `Console.In` and `stdOut` defaulting to `Console.Out`).</summary>
+        /// <param name="main">The rest of your program, called once the `vscode-appz` counterparty has signalled readiness.</param>
         /// <param name="stdIn">If `null`, defaults to `Console.In`.</param>
         /// <param name="stdOut">If `null`, defaults to `Console.Out`</param>
-        public static IVscode InOut(TextReader stdIn = null, TextWriter stdOut = null) =>
-            new impl(stdIn, stdOut);
+        public static void Main(Action<IVscode> main, TextReader stdIn = null, TextWriter stdOut = null) =>
+            new impl(stdIn, stdOut, main).loopReadln();
     }
 
     internal partial class impl {
         internal readonly TextReader stdIn;
         internal readonly TextWriter stdOut;
 
-        internal bool looping = false;
+        internal Action<IVscode> main;
         internal uint counter = 0;
         internal readonly Dictionary<string, Func<any, bool>> cbWaiting = new Dictionary<string, Func<any, bool>>(8);
         internal readonly Dictionary<string,Func<any[],bool>>cbListeners = new Dictionary<string, Func<any[], bool>>(8);
         internal readonly Dictionary<string, Func<any[], (any, bool)>> cbOther = new Dictionary<string, Func<any[], (any, bool)>>(8);
 
-        internal impl(TextReader stdIn, TextWriter stdOut) =>
-            (this.stdIn, this.stdOut) = (stdIn ?? Console.In, stdOut ?? Console.Out);
+        internal impl(TextReader stdIn, TextWriter stdOut, Action<IVscode> main) =>
+            (this.stdIn, this.stdOut, this.main) = (stdIn ?? Console.In, stdOut ?? Console.Out, main);
 
         internal impl Impl() => this;
 
@@ -82,11 +83,12 @@ namespace VscAppz {
                     Func<any, bool> cbprom = null;
                     Func <any[], bool> cbevt = null;
                     Func<any[], (any, bool)> cbmisc = null;
-                    lock (this)
-                        if (cbWaiting.TryGetValue(msg.CbId, out cbprom))
-                            _ = cbWaiting.Remove(msg.CbId);
-                        else if (!cbOther.TryGetValue(msg.CbId, out cbmisc))
-                            _ = cbListeners.TryGetValue(msg.CbId, out cbevt);
+                    if (!string.IsNullOrEmpty(msg.CbId))
+                        lock (this)
+                            if (cbWaiting.TryGetValue(msg.CbId, out cbprom))
+                                _ = cbWaiting.Remove(msg.CbId);
+                            else if (!cbOther.TryGetValue(msg.CbId, out cbmisc))
+                                _ = cbListeners.TryGetValue(msg.CbId, out cbevt);
 
                     if (cbprom != null) {
                         if (msg.Data.TryGetValue("nay", out var nay))
@@ -114,7 +116,10 @@ namespace VscAppz {
                             [ok ? "yay" : "nay"] = ok ? ret : ("unexpected args: " + fnargs)
                         } }, null);
 
-                    } else
+                    } else if (msg.QName == "main")
+                        main(this);
+
+                    else
                         throw new Exception("specified `cbId` not known locally");
                 }
             } catch (Exception err) {
@@ -123,11 +128,8 @@ namespace VscAppz {
         }
 
         internal void send(ipcMsg msg, Func<any, bool> on) {
-            bool startloop;
             Exception err = null;
             lock (this) {
-                if (startloop = !looping)
-                    looping = true;
                 if (on != null)
                     cbWaiting[msg.CbId = nextFuncId()] = on;
                 try { stdOut.WriteLine(msg.toJson()); }
@@ -137,8 +139,6 @@ namespace VscAppz {
                 msg.Data[""] = msg.QName;
                 OnError(this, err, msg.Data);
             }
-            if (startloop)
-                loopReadln();
         }
 
         internal Action<IVscode, any, any> OnError {get=>Vsc.OnError;}
@@ -182,9 +182,15 @@ namespace VscAppz {
             (this.impl, this.subFnIds) = (impl, subFnIds); return this; }
         internal bool populateFrom(any payload) =>
             (payload is string s) && !string.IsNullOrEmpty(id = s);
+        void IDisposable.Dispose(){}
         /// <summary>Dispose signals to the counterparty to destroy the object.</summary>
-        public void Dispose() {
-            impl.send(new ipcMsg("dispose", 1) { Data = { [""] = id } }, null);
+        public Action<Action> Dispose() {
+            Action ondone = null;
+            impl.send(new ipcMsg("dispose", 1) { Data = { [""] = id } }, _ => {
+                if (ondone != null)
+                    ondone();
+                return true;
+            });
             if (subFnIds != null && subFnIds.Length > 0) {
                 lock (this)
                     foreach (var subfnid in subFnIds) {
@@ -193,6 +199,7 @@ namespace VscAppz {
                     }
                 subFnIds = null;
             }
+            return on => ondone = on;
         }
     }
 

@@ -74,7 +74,7 @@ class Prep {
             if ((struct.isOutgoing = struct.isOutgoing || isargout) && (struct.isIncoming = struct.isIncoming || isargin)) {
                 const fieldname = pickName('my', ['', 'tags', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields);
                 if (!fieldname)
-                    throw (struct);
+                    throw struct;
                 struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict });
             }
             if (struct.isIncoming && struct.fields.find(_ => typeFun(_.typeSpec)))
@@ -192,14 +192,14 @@ class Prep {
         if (tret) {
             const argname = pickName('', ['onDone', 'andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], me.args);
             if (!argname)
-                throw (me);
-            me.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true, spreads: false });
+                throw me;
+            me.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true });
         }
     }
     qName(memJob) {
         const qname = memJob.qName.split('.');
         if ((!qname) || (!qname.length) || (qname.length < 2) || qname[0] !== this.fromOrig.moduleName)
-            throw (memJob.qName);
+            throw memJob.qName;
         return qname;
     }
     typeSpec(tNode, tParams) {
@@ -295,7 +295,7 @@ class Prep {
                     case ts.SyntaxKind.FalseKeyword:
                         return ScriptPrimType.BooleanFalse;
                 }
-                throw (lit.kind + "\t" + lit.getText());
+                throw lit.kind + "\t" + lit.getText();
             case ts.SyntaxKind.FunctionType:
                 const tfun = tNode;
                 if (tfun) {
@@ -313,7 +313,7 @@ class Prep {
                 }
                 throw tNode;
             default:
-                throw (tNode.kind + "\t" + tNode.getText());
+                throw tNode.kind + "\t" + tNode.getText();
         }
     }
 }

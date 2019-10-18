@@ -2,42 +2,47 @@ const vscAppz = require("../../libs/js/vsc-appz")
 const miscdemos = require('./miscdemos.gen')
 Object.defineProperty(exports, "__esModule", { value: true })
 
-const vsc = vscAppz.Vsc()
-const win = vsc.Window
-exports.vsc = vsc
-exports.demo_Window_ShowInputBox = demo_Window_ShowInputBox
+
+let win
+
 
 function main() {
     const quit = exports.quit
 
-    win.SetStatusBarMessage2("Choosing a demo WILL HIDE this", statusitem => {
-        miscdemos.onReady()
-        miscdemos.subscribeToMiscEvents()
+    vscAppz.Main(vscode => {
+        exports.vsc = vscode
+        win = vscode.Window
 
-        const buttons = ["Demo Text Input", "All Demos"]
-        win.ShowInformationMessage1("What to try out? (If you cancel, I quit.)",
-            buttons,
-            btn => {
-                statusitem.Dispose()
-                if (btn === undefined || btn === null)
-                    quit()
-                else
-                    switch (btn) {
-                        case buttons[0]:
-                            demo_Window_ShowInputBox()
-                            break
-                        case buttons[1]:
-                            miscdemos.demosMenu()
-                            break
-                        default:
-                            win.ShowErrorMessage1("Unknown: `" + btn + "`, bye now!", null, quit)
-                            break
-                    }
-            })
+        win.SetStatusBarMessage2("Choosing a demo WILL HIDE this")(statusmsg => {
+            miscdemos.onReady()
+            miscdemos.subscribeToMiscEvents()
+            win.CreateStatusBarItem()(_ => _.Show())
+
+            const buttons = ["Demo Text Input", "All Demos"]
+            win.ShowInformationMessage1("What to try out? (If you cancel, I quit.)", buttons)(
+                btn => {
+                    statusmsg.Dispose()
+                    if (btn === undefined || btn === null)
+                        quit()
+                    else
+                        switch (btn) {
+                            case buttons[0]:
+                                exports.demo_Window_ShowInputBox()
+                                break
+                            case buttons[1]:
+                                miscdemos.demosMenu()
+                                break
+                            default:
+                                win.ShowErrorMessage1("Unknown: `" + btn + "`, bye now!")(quit)
+                                break
+                        }
+                }
+            )
+        })
     })
 }
 
-function demo_Window_ShowInputBox() {
+exports.demo_Window_ShowInputBox = () => {
     const quit = exports.quit, foos = ["foo", "f00", "fo0", "f0o"]
     win.ShowInputBox({
         ignoreFocusOut: true, value: "Enter almost anything...", valueSelection: [6, 12],
@@ -46,12 +51,12 @@ function demo_Window_ShowInputBox() {
             input = input.toLowerCase()
             return (!foos.some(_ => input.includes(_))) ? "" : "Contains something looking like `foo`."
         }
-    }, null, input => {
+    })(input => {
         miscdemos.statusNoticeQuit()
         if (input === undefined || input === null)
-            win.ShowWarningMessage1("Cancelled text input, bye now!", null, quit)
+            win.ShowWarningMessage1("Cancelled text input, bye now!")(quit)
         else
-            win.ShowInformationMessage1("You entered: `" + input + "`, bye now!", null, quit)
+            win.ShowInformationMessage1("You entered: `" + input + "`, bye now!")(quit)
     })
 }
 

@@ -39,9 +39,9 @@ type ipcMsg struct {
 type impl struct {
 	readln  *bufio.Scanner
 	jsonOut *json.Encoder
+	main    func(Vscode)
 
 	sync.Mutex
-	looping     bool
 	counter     uint64
 	cbWaiting   map[string]func(any) bool
 	cbListeners map[string]func([]any) bool
@@ -57,22 +57,22 @@ func init() {
 	}
 }
 
-// Vsc returns a `Vscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `os.Stdin` and `stdOut` defaulting to `os.Stdout`). Communication only begins its forever loop upon the first method invocation (which consequently never `return`s) on any of the `interface`s offered by the returned `Vscode`'s members.
-func Vsc(stdIn io.Reader, stdOut io.Writer) Vscode {
+// Vsc creates a `Vscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `os.Stdin` and `stdOut` defaulting to `os.Stdout`).
+func Main(main func(Vscode), stdIn io.Reader, stdOut io.Writer) {
 	if stdIn == nil {
 		stdIn = os.Stdin
 	}
 	if stdOut == nil {
 		stdOut = os.Stdout
 	}
-	me := &impl{readln: bufio.NewScanner(stdIn), jsonOut: json.NewEncoder(stdOut)}
+	me := &impl{main: main, readln: bufio.NewScanner(stdIn), jsonOut: json.NewEncoder(stdOut)}
 	me.readln.Buffer(make([]byte, 1024*1024), 8*1024*1024)
 	me.jsonOut.SetEscapeHTML(false)
 	me.jsonOut.SetIndent("", "")
 	me.cbWaiting = make(map[string]func(any) bool, 8)
 	me.cbListeners = make(map[string]func([]any) bool, 8)
 	me.cbOther = make(map[string]func([]any) (any, bool), 8)
-	return me
+	me.loopReadln()
 }
 
 func (me *impl) Impl() *impl { return me }
@@ -100,6 +100,8 @@ func (me *impl) loopReadln() {
 			var inmsg ipcMsg
 			if err := json.Unmarshal([]byte(jsonmsg), &inmsg); err != nil {
 				OnError(me, err, jsonmsg)
+			} else if inmsg.QName == "main" {
+				me.main(me)
 			} else if inmsg.Data == nil || len(inmsg.Data) == 0 {
 				OnError(me, errors.New("field `data` is missing"), jsonmsg)
 			} else {
@@ -157,10 +159,6 @@ func (me *impl) loopReadln() {
 
 func (me *impl) send(msg *ipcMsg, on func(any) bool) {
 	me.Lock()
-	var startloop bool
-	if startloop = !me.looping; startloop {
-		me.looping = true
-	}
 	if on != nil {
 		msg.CbId = me.nextFuncId()
 		me.cbWaiting[msg.CbId] = on
@@ -172,9 +170,6 @@ func (me *impl) send(msg *ipcMsg, on func(any) bool) {
 			msg.Data[""] = msg.QName
 		}
 		OnError(me, err, msg.Data)
-	}
-	if startloop {
-		me.loopReadln()
 	}
 }
 
@@ -218,8 +213,14 @@ func (me *Disposable) populateFrom(payload any) (ok bool) {
 }
 
 // Dispose signals to the counterparty to destroy the object.
-func (me Disposable) Dispose() {
-	me.impl.send(&ipcMsg{QName: "dispose", Data: dict{"": me.id}}, nil)
+func (me Disposable) Dispose() func(func()) {
+	var ondone func()
+	me.impl.send(&ipcMsg{QName: "dispose", Data: dict{"": me.id}}, func(any) bool {
+		if ondone != nil {
+			ondone()
+		}
+		return true
+	})
 	if len(me.subFnIds) > 0 {
 		me.impl.Lock()
 		for _, subfnid := range me.subFnIds {
@@ -229,4 +230,5 @@ func (me Disposable) Dispose() {
 		me.impl.Unlock()
 		me.subFnIds = nil
 	}
+	return func(on func()) { ondone = on }
 }

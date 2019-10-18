@@ -91,7 +91,7 @@ function main() {
                 md = null
         })
         if (!md)
-            throw ("GONE FROM API:\tmodule `" + modulename + '`')
+            throw "GONE FROM API:\tmodule `" + modulename + '`'
         else {
             const job: gen.GenJob = {
                 fromOrig: md, moduleName: modulename, enums: [], structs: [], funcs: [], namespaces: {}
@@ -115,7 +115,7 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                         ns = undefined
                 })
                 if (!ns)
-                    throw ("GONE FROM API:\tnamespace `" + prefixes.join('.') + '.' + subns + '`')
+                    throw "GONE FROM API:\tnamespace `" + prefixes.join('.') + '.' + subns + '`'
                 else {
                     into.namespaces[subns] = ns
                     gatherAll(into, ns.body, item[subns], ...prefixes.concat(subns))
@@ -163,7 +163,7 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                 })
             }
             if (!members.length)
-                throw ("GONE FROM API:\texport `" + prefixes.join('.') + '.' + item + '`')
+                throw "GONE FROM API:\texport `" + prefixes.join('.') + '.' + item + '`'
             else
                 for (let i = 0; i < members.length; i++)
                     if (!gen.seemsDeprecated(members[i]))
@@ -199,7 +199,7 @@ function gatherMember(into: gen.GenJob, member: ts.Node, overload: number, ...pr
                 gatherFromTypeNode(into, talias.type, talias.typeParameters)
                 break
             default:
-                throw (member.kind + '\t' + member.getText())
+                throw member.kind + '\t' + member.getText()
         }
 }
 
@@ -236,7 +236,7 @@ function gatherFromTypeNode(into: gen.GenJob, it: ts.TypeNode, typeParams: ts.No
         case ts.SyntaxKind.LiteralType:
             const lit = (it as ts.LiteralTypeNode).literal
             if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(lit.kind))
-                throw (lit.kind + '\t' + it.getText())
+                throw lit.kind + '\t' + it.getText()
             break
         case ts.SyntaxKind.TypeReference:
             const tref = it as ts.TypeReferenceNode,
@@ -262,7 +262,7 @@ function gatherFromTypeNode(into: gen.GenJob, it: ts.TypeNode, typeParams: ts.No
             break
         default:
             if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.VoidKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(it.kind))
-                throw (it.kind + '\t' + it.getText())
+                throw it.kind + '\t' + it.getText()
     }
 }
 

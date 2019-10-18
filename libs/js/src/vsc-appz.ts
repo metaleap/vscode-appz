@@ -8,8 +8,8 @@ export let OnError = (_this: vscgen.Vscode, err: any, jsonMsg?: any): void => {
         + "\n\n")
 }
 
-export function Vsc(stdIn?: NodeJS.ReadStream, stdOut?: NodeJS.WriteStream): vscgen.Vscode {
-    return new core.impl(stdIn, stdOut)
+export function Main(main: (_: vscgen.Vscode) => void, stdIn?: NodeJS.ReadStream, stdOut?: NodeJS.WriteStream) {
+    new core.impl(main, stdIn, stdOut)
 }
 
 export function CancelIn(msFromNow: number) {

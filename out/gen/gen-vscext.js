@@ -4,19 +4,19 @@ const gen = require("./gen");
 class Gen extends gen.Gen {
     gen(prep) {
         this.resetState();
-        const pkgname = prep.fromOrig.moduleName;
+        this.pkg = prep.fromOrig.moduleName;
         let src = "// " + this.doNotEditComment("vscext") + "\n\n";
-        src += `import * as ${pkgname} from '${pkgname}'\n`;
+        src += `import * as ${this.pkg} from '${this.pkg}'\n`;
         src += "import * as ppio from './procspipeio'\n";
         src += "const noOp = (_:any) => {}\n";
         for (const it of prep.enums)
-            src += "type " + it.name + " = " + pkgname + "." + it.name + "\n";
+            src += "type " + it.name + " = " + this.pkg + "." + it.name + "\n";
         for (const it of prep.structs)
             if (!it.isPropsOf)
                 if (it.isOutgoing) {
                     const fieldsextra = it.fields.filter(_ => _.isExtBaggage);
                     if ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length)) {
-                        src += "interface " + it.name + " extends " + pkgname + "." + it.name + " {\n";
+                        src += "interface " + it.name + " extends " + this.pkg + "." + it.name + " {\n";
                         for (const f of fieldsextra)
                             src += `\t${f.name + (f.optional ? '?' : '')}: ${this.typeSpec(f.typeSpec)}\n`;
                         for (const ff of it.funcFields)
@@ -24,9 +24,9 @@ class Gen extends gen.Gen {
                         src += "}\n";
                     }
                     else
-                        src += "type " + it.name + " = " + pkgname + "." + it.name + "\n";
+                        src += "type " + it.name + " = " + this.pkg + "." + it.name + "\n";
                 }
-        src += `\nexport function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationTokens: string[]): Thenable<any> | ${pkgname}.Disposable {\n`;
+        src += `\nexport function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationTokens: string[]): Thenable<any> | ${this.pkg}.Disposable {\n`;
         src += "\tconst idxdot = msg.qName.lastIndexOf('.')\n";
         src += `\tconst [apiname, methodname] = (idxdot > 0) ? [msg.qName.slice(0, idxdot), msg.qName.slice(idxdot + 1)] : ['', msg.qName]\n`;
         src += "\tswitch (apiname) {\n";
@@ -38,7 +38,7 @@ class Gen extends gen.Gen {
                     src += `\t\t\t\tcase "${method.name}": {\n`;
                     src += `\t\t\t\t\treturn Promise.resolve({\n`;
                     for (const fld of method.isProps.fields)
-                        src += `\t\t\t\t\t\t${fld.name}: ${pkgname}.${it.name}.${fld.name},\n`;
+                        src += `\t\t\t\t\t\t${fld.name}: ${this.pkg}.${it.name}.${fld.name},\n`;
                     src += `\t\t\t\t\t})\n`;
                     src += `\t\t\t\t}\n`;
                 }
@@ -58,18 +58,10 @@ class Gen extends gen.Gen {
                         src += `\t\t\t\t\t\t})\n`;
                     }
                     else {
-                        const lastarg = method.args[method.args.length - 1];
-                        for (const arg of method.args)
-                            if (arg !== lastarg)
-                                src += this.argsSrc(prep, arg);
-                        src += `\t\t\t\t\tconst ret = ${method.fromOrig.qName}(`;
-                        for (const arg of method.args)
-                            if (arg !== lastarg)
-                                src += (arg.spreads ? '...' : '') + 'arg_' + arg.name + ', ';
-                        src += ")\n";
-                        src += `\t\t\t\t\tconst retdisp = ret as any as ${pkgname}.Disposable\n`;
-                        src += `\t\t\t\t\tconst retprom = ret as any as Thenable<any>\n`;
-                        src += `\t\t\t\t\treturn (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))\n`;
+                        const args = method.args.filter(_ => !_.isFromRetThenable);
+                        for (const arg of args)
+                            src += this.argsSrc(prep, arg);
+                        src += this.retArgsSrc(method.fromOrig.qName, args);
                     }
                     src += `\t\t\t\t}\n`;
                 }
@@ -80,18 +72,18 @@ class Gen extends gen.Gen {
         for (const it of prep.structs)
             if (it.isDispObj) {
                 src += `\t\tcase "${it.name}":\n`;
-                src += `\t\t\tconst this${it.name} = prog.objects[msg.data[""]] as ${pkgname}.${it.name}\n`;
+                src += `\t\t\tconst this${it.name} = prog.objects[msg.data[""]] as ${this.pkg}.${it.name}\n`;
                 src += `\t\t\tif (!this${it.name})\n`;
-                src += `\t\t\t\tthrow "Called ${pkgname}.${it.name}" + methodname + " for an already disposed-and-forgotten instance"\n`;
+                src += `\t\t\t\tthrow "Called ${this.pkg}.${it.name}" + methodname + " for an already disposed-and-forgotten instance"\n`;
                 src += "\t\t\tswitch (methodname) {\n";
                 let tfun;
                 for (const mem of it.fields)
                     if (tfun = gen.typeFun(mem.typeSpec)) {
-                        const args = tfun[0].map((_, i) => gen.argFrom(_, mem.fromOrig.parameters[i]));
+                        const args = tfun[0].map((_, i) => gen.argFrom(_, mem.fromOrig.parameters[i])).filter(_ => !_.isFromRetThenable);
                         src += `\t\t\t\tcase "${mem.name}": {\n`;
                         for (const arg of args)
                             src += this.argsSrc(prep, arg);
-                        src += `\t\t\t\t\treturn new Promise((ret, rej) => { try { ret(this${it.name}.${mem.name}(${args.map(_ => 'arg_' + _.name).join(', ')})) } catch (err) { rej(err) } })\n`;
+                        src += this.retArgsSrc(`this${it.name}.${mem.name}`, args);
                         src += "\t\t\t\t}\n";
                     }
                 src += "\t\t\t\tdefault:\n";
@@ -102,7 +94,7 @@ class Gen extends gen.Gen {
         src += "\t\t\tthrow (apiname)\n";
         src += "\t}\n";
         src += "}\n\n";
-        this.writeFileSync(pkgname, src);
+        this.writeFileSync(this.pkg, src);
     }
     argsSrc(prep, arg) {
         let src = "";
@@ -143,6 +135,17 @@ class Gen extends gen.Gen {
                     }
                 }
         }
+        return src;
+    }
+    retArgsSrc(callee, args) {
+        let src = "";
+        src += `\t\t\t\t\tconst ret = ${callee}(`;
+        for (const arg of args)
+            src += (arg.spreads ? '...' : '') + 'arg_' + arg.name + ', ';
+        src += ")\n";
+        src += `\t\t\t\t\tconst retdisp = ret as any as ${this.pkg}.Disposable\n`;
+        src += `\t\t\t\t\tconst retprom = ret as any as Thenable<any>\n`;
+        src += `\t\t\t\t\treturn (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))\n`;
         return src;
     }
     typeSpec(from, intoProm = false) {

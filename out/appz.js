@@ -36,7 +36,7 @@ function onCmdMain() {
     const prognum = items.length;
     for (const _ in ppio.progs)
         items.push({
-            fullCmd: _, label: exports.uxStr.menuPrefEnd + _,
+            fullCmd: _, label: exports.uxStr.menuPrefEnd + _, shouldEnd: true,
             detail: exports.uxStr.menuDescStartedAgo.replace('_', getDurStr(_))
         });
     if (!items.length)
@@ -44,13 +44,14 @@ function onCmdMain() {
     else
         vsc.window.showQuickPick(items, {
             placeHolder: exports.uxStr.menuPrompt.replace('_', prognum.toString()),
-            canPickMany: false, ignoreFocusOut: true, matchOnDescription: true, matchOnDetail: true,
+            canPickMany: false, matchOnDescription: true, matchOnDetail: true,
         }).then(_ => {
             if (_ && _.fullCmd) {
                 let alreadyrunning = ppio.progs[_.fullCmd];
+                let shouldstart = !_.shouldEnd;
                 if (alreadyrunning)
                     alreadyrunning.dispose();
-                else
+                if (shouldstart)
                     strvar.Interpolate(_.fullCmd, extDirPathStrVarProvider).then(fullcmd => {
                         if (fullcmd && fullcmd.length) {
                             if (alreadyrunning = ppio.progs[fullcmd])

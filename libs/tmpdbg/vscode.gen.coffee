@@ -171,7 +171,7 @@ Window: interface
     #
     # @onDone:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowInformationMessage1: void
+    ShowInformationMessage1: ((?string->void)->void)
         message: string
         items: [string]
         onDone: ?(?string->void)
@@ -191,7 +191,7 @@ Window: interface
     #
     # @onDone:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowInformationMessage2: void
+    ShowInformationMessage2: ((?string->void)->void)
         message: string
         options: MessageOptions
         items: [string]
@@ -208,7 +208,7 @@ Window: interface
     #
     # @onDone:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowInformationMessage3: void
+    ShowInformationMessage3: ((?MessageItem->void)->void)
         message: string
         items: [MessageItem]
         onDone: ?(?MessageItem->void)
@@ -227,7 +227,7 @@ Window: interface
     #
     # @onDone:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowInformationMessage4: void
+    ShowInformationMessage4: ((?MessageItem->void)->void)
         message: string
         options: MessageOptions
         items: [MessageItem]
@@ -244,7 +244,7 @@ Window: interface
     #
     # @onDone:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowWarningMessage1: void
+    ShowWarningMessage1: ((?string->void)->void)
         message: string
         items: [string]
         onDone: ?(?string->void)
@@ -263,7 +263,7 @@ Window: interface
     #
     # @onDone:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowWarningMessage2: void
+    ShowWarningMessage2: ((?string->void)->void)
         message: string
         options: MessageOptions
         items: [string]
@@ -280,7 +280,7 @@ Window: interface
     #
     # @onDone:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowWarningMessage3: void
+    ShowWarningMessage3: ((?MessageItem->void)->void)
         message: string
         items: [MessageItem]
         onDone: ?(?MessageItem->void)
@@ -299,7 +299,7 @@ Window: interface
     #
     # @onDone:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowWarningMessage4: void
+    ShowWarningMessage4: ((?MessageItem->void)->void)
         message: string
         options: MessageOptions
         items: [MessageItem]
@@ -316,7 +316,7 @@ Window: interface
     #
     # @onDone:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowErrorMessage1: void
+    ShowErrorMessage1: ((?string->void)->void)
         message: string
         items: [string]
         onDone: ?(?string->void)
@@ -335,7 +335,7 @@ Window: interface
     #
     # @onDone:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowErrorMessage2: void
+    ShowErrorMessage2: ((?string->void)->void)
         message: string
         options: MessageOptions
         items: [string]
@@ -352,7 +352,7 @@ Window: interface
     #
     # @onDone:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowErrorMessage3: void
+    ShowErrorMessage3: ((?MessageItem->void)->void)
         message: string
         items: [MessageItem]
         onDone: ?(?MessageItem->void)
@@ -371,7 +371,7 @@ Window: interface
     #
     # @onDone:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowErrorMessage4: void
+    ShowErrorMessage4: ((?MessageItem->void)->void)
         message: string
         options: MessageOptions
         items: [MessageItem]
@@ -392,7 +392,7 @@ Window: interface
     #
     # @onDone:
     # A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
-    ShowInputBox: void
+    ShowInputBox: ((?string->void)->void)
         options: ?InputBoxOptions
         token: ?Cancel
         onDone: ?(?string->void)
@@ -411,7 +411,7 @@ Window: interface
     #
     # @onDone:
     # A promise that resolves to the selected items or `undefined`.
-    ShowQuickPick1: void
+    ShowQuickPick1: ((?[string]->void)->void)
         items: [string]
         options: QuickPickOptions
         token: ?Cancel
@@ -431,7 +431,7 @@ Window: interface
     #
     # @onDone:
     # A promise that resolves to the selection or `undefined`.
-    ShowQuickPick2: void
+    ShowQuickPick2: ((?string->void)->void)
         items: [string]
         options: ?QuickPickOptions
         token: ?Cancel
@@ -451,7 +451,7 @@ Window: interface
     #
     # @onDone:
     # A promise that resolves to the selected items or `undefined`.
-    ShowQuickPick3: void
+    ShowQuickPick3: ((?[QuickPickItem]->void)->void)
         items: [QuickPickItem]
         options: QuickPickOptions
         token: ?Cancel
@@ -471,7 +471,7 @@ Window: interface
     #
     # @onDone:
     # A promise that resolves to the selected item or `undefined`.
-    ShowQuickPick4: void
+    ShowQuickPick4: ((?QuickPickItem->void)->void)
         items: [QuickPickItem]
         options: ?QuickPickOptions
         token: ?Cancel
@@ -489,7 +489,7 @@ Window: interface
     #
     # @onDone:
     # A disposable which hides the status bar message.
-    SetStatusBarMessage1: void
+    SetStatusBarMessage1: ((?Disposable->void)->void)
         text: string
         hideAfterTimeout: int
         onDone: ?(?Disposable->void)
@@ -506,7 +506,7 @@ Window: interface
     #
     # @onDone:
     # A disposable which hides the status bar message.
-    SetStatusBarMessage2: void
+    SetStatusBarMessage2: ((?Disposable->void)->void)
         text: string
         onDone: ?(?Disposable->void)
 
@@ -519,7 +519,7 @@ Window: interface
     #
     # @onDone:
     # A promise that resolves to the selected resource or `undefined`.
-    ShowSaveDialog: void
+    ShowSaveDialog: ((?string->void)->void)
         options: SaveDialogOptions
         onDone: ?(?string->void)
 
@@ -532,7 +532,7 @@ Window: interface
     #
     # @onDone:
     # A promise that resolves to the selected resources or `undefined`.
-    ShowOpenDialog: void
+    ShowOpenDialog: ((?[string]->void)->void)
         options: OpenDialogOptions
         onDone: ?(?[string]->void)
 
@@ -545,19 +545,19 @@ Window: interface
     #
     # @onDone:
     # A promise that resolves to the workspace folder or `undefined`.
-    ShowWorkspaceFolderPick: void
+    ShowWorkspaceFolderPick: ((?WorkspaceFolder->void)->void)
         options: ?WorkspaceFolderPickOptions
         onDone: ?(?WorkspaceFolder->void)
 
     # state:
     # Represents the current window's state.
-    State: void
+    State: ((WindowState->void)->void)
         onDone: ?(WindowState->void)
 
     # onDidChangeWindowState:
     # An [event](#Event) which fires when the focus state of the current window
     # changes. The value of the event represents whether the window is focused.
-    OnDidChangeWindowState: void
+    OnDidChangeWindowState: ((?Disposable->void)->void)
         listener: (WindowState->void)
         onDone: ?(?Disposable->void)
 
@@ -572,7 +572,7 @@ Window: interface
     #
     # @onDone:
     # A new status bar item.
-    CreateStatusBarItem: void
+    CreateStatusBarItem: ((?StatusBarItem->void)->void)
         alignment: ?StatusBarAlignment
         priority: ?int
         onDone: ?(?StatusBarItem->void)
@@ -582,7 +582,7 @@ Window: interface
     #
     # @name:
     # Human-readable string which will be used to represent the channel in the UI.
-    CreateOutputChannel: void
+    CreateOutputChannel: ((?OutputChannel->void)->void)
         name: string
         onDone: ?(?OutputChannel->void)
 
@@ -605,28 +605,28 @@ Env: interface
     #
     # @onDone:
     # A promise indicating if open was successful.
-    OpenExternal: void
+    OpenExternal: ((bool->void)->void)
         target: string
         onDone: ?(bool->void)
 
     # appName:
     # The application name of the editor, like 'VS Code'.
-    AppName: void
+    AppName: ((string->void)->void)
         onDone: ?(string->void)
 
     # appRoot:
     # The application root folder from which the editor is running.
-    AppRoot: void
+    AppRoot: ((string->void)->void)
         onDone: ?(string->void)
 
     # language:
     # Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
-    Language: void
+    Language: ((string->void)->void)
         onDone: ?(string->void)
 
     # machineId:
     # A unique identifier for the computer.
-    MachineId: void
+    MachineId: ((string->void)->void)
         onDone: ?(string->void)
 
     # remoteName:
@@ -637,28 +637,28 @@ Env: interface
     # value is defined in all extension hosts (local and remote) in case a remote extension host
     # exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
     # a specific extension runs remote or not.
-    RemoteName: void
+    RemoteName: ((?string->void)->void)
         onDone: ?(?string->void)
 
     # sessionId:
     # A unique identifier for the current session.
     # Changes each time the editor is started.
-    SessionId: void
+    SessionId: ((string->void)->void)
         onDone: ?(string->void)
 
     # shell:
     # The detected default shell for the extension host, this is overridden by the
     # `terminal.integrated.shell` setting for the extension host's platform.
-    Shell: void
+    Shell: ((string->void)->void)
         onDone: ?(string->void)
 
     # uriScheme:
     # The custom uri scheme the editor registers to in the operating system.
-    UriScheme: void
+    UriScheme: ((string->void)->void)
         onDone: ?(string->void)
 
     # Provides single-call access to numerous individual `Env` properties at once.
-    Properties: void
+    Properties: ((EnvProperties->void)->void)
         onDone: (EnvProperties->void)
 
 
@@ -677,7 +677,7 @@ Workspace: interface
     # name:
     # The name of the workspace. `undefined` when no folder
     # has been opened.
-    Name: void
+    Name: ((?string->void)->void)
         onDone: ?(?string->void)
 
     # workspaceFile:
@@ -708,7 +708,7 @@ Workspace: interface
     # configuration data into the file. You can use `workspace.getConfiguration().update()`
     # for that purpose which will work both when a single folder is opened as
     # well as an untitled or saved workspace.
-    WorkspaceFile: void
+    WorkspaceFile: ((?string->void)->void)
         onDone: ?(?string->void)
 
     # saveAll:
@@ -719,13 +719,13 @@ Workspace: interface
     #
     # @onDone:
     # A thenable that resolves when the files have been saved.
-    SaveAll: void
+    SaveAll: ((bool->void)->void)
         includeUntitled: bool
         onDone: ?(bool->void)
 
     # onDidChangeWorkspaceFolders:
     # An event that is emitted when a workspace folder is added or removed.
-    OnDidChangeWorkspaceFolders: void
+    OnDidChangeWorkspaceFolders: ((?Disposable->void)->void)
         listener: (WorkspaceFoldersChangeEvent->void)
         onDone: ?(?Disposable->void)
 
@@ -739,14 +739,14 @@ Workspace: interface
     #
     # @onDone:
     # A workspace folder or `undefined`
-    GetWorkspaceFolder: void
+    GetWorkspaceFolder: ((?WorkspaceFolder->void)->void)
         uri: string
         onDone: ?(?WorkspaceFolder->void)
 
     # workspaceFolders:
     # List of workspace folders or `undefined` when no folder is open.
     # *Note* that the first entry corresponds to the value of `rootPath`.
-    WorkspaceFolders: void
+    WorkspaceFolders: ((?[WorkspaceFolder]->void)->void)
         onDone: ?(?[WorkspaceFolder]->void)
 
     # findFiles:
@@ -772,7 +772,7 @@ Workspace: interface
     # @onDone:
     # A thenable that resolves to an array of resource identifiers. Will return no results if no
     # [workspace folders](#workspace.workspaceFolders) are opened.
-    FindFiles: void
+    FindFiles: ((?[string]->void)->void)
         include: string
         exclude: ?string
         maxResults: ?int
@@ -795,13 +795,13 @@ Workspace: interface
     #
     # @onDone:
     # A path relative to the root or the input.
-    AsRelativePath: void
+    AsRelativePath: ((?string->void)->void)
         pathOrUri: string
         includeWorkspaceFolder: bool
         onDone: ?(?string->void)
 
     # Provides single-call access to numerous individual `Workspace` properties at once.
-    Properties: void
+    Properties: ((WorkspaceProperties->void)->void)
         onDone: (WorkspaceProperties->void)
 
 
@@ -841,13 +841,13 @@ Languages: interface
     #
     # @onDone:
     # Promise resolving to an array of identifier strings.
-    GetLanguages: void
+    GetLanguages: ((?[string]->void)->void)
         onDone: ?(?[string]->void)
 
     # onDidChangeDiagnostics:
     # An [event](#Event) which fires when the global set of diagnostics changes. This is
     # newly added and removed diagnostics.
-    OnDidChangeDiagnostics: void
+    OnDidChangeDiagnostics: ((?Disposable->void)->void)
         listener: (DiagnosticChangeEvent->void)
         onDone: ?(?Disposable->void)
 
@@ -890,7 +890,7 @@ Extensions: interface
     # onDidChange:
     # An event which fires when `extensions.all` changes. This can happen when extensions are
     # installed, uninstalled, enabled or disabled.
-    OnDidChange: void
+    OnDidChange: ((?Disposable->void)->void)
         listener: (->void)
         onDone: ?(?Disposable->void)
 
@@ -949,7 +949,7 @@ Commands: interface
     #
     # @onDone:
     # Disposable which unregisters this command on disposal.
-    RegisterCommand: void
+    RegisterCommand: ((?Disposable->void)->void)
         command: string
         callback: ([any]->any)
         onDone: ?(?Disposable->void)
@@ -972,7 +972,7 @@ Commands: interface
     # @onDone:
     # A thenable that resolves to the returned value of the given command. `undefined` when
     # the command handler function doesn't return anything.
-    ExecuteCommand: void
+    ExecuteCommand: ((?any->void)->void)
         command: string
         rest: [any]
         onDone: ?(?any->void)
@@ -986,7 +986,7 @@ Commands: interface
     #
     # @onDone:
     # Thenable that resolves to a list of command ids.
-    GetCommands: void
+    GetCommands: ((?[string]->void)->void)
         filterInternal: bool
         onDone: ?(?[string]->void)
 
@@ -1543,33 +1543,38 @@ Vscode·Commands: ( -> Commands)
 
 
 
-Window·ShowInformationMessage1: (message:string -> items:[string] -> onDone:?(?string->void) -> void)
+Window·ShowInformationMessage1: (message:string -> items:[string] -> onDone:?(?string->void) -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showInformationMessage1"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?string
-            if =?payload
-                var _result_ of string
-                [_result_, ok] = ((payload)·(string))
-                if !ok
-                    return false
-                result = &_result_
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?string
+        if =?payload
+            var _result_ of string
+            [_result_, ok] = ((payload)·(string))
+            if !ok
+                return false
+            result = &_result_
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> items:[string] -> onDone:?(?string->void) -> void)
+Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> items:[string] -> onDone:?(?string->void) -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showInformationMessage2"
@@ -1577,51 +1582,61 @@ Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> it
     msg.Data@"message" = message
     msg.Data@"options" = options
     msg.Data@"items" = items
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?string
-            if =?payload
-                var _result_ of string
-                [_result_, ok] = ((payload)·(string))
-                if !ok
-                    return false
-                result = &_result_
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?string
+        if =?payload
+            var _result_ of string
+            [_result_, ok] = ((payload)·(string))
+            if !ok
+                return false
+            result = &_result_
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> void)
+Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showInformationMessage3"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?MessageItem
-            if =?payload
-                result = ?MessageItem·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?MessageItem->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?MessageItem
+        if =?payload
+            result = ?MessageItem·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?MessageItem->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> void)
+Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showInformationMessage4"
@@ -1629,51 +1644,61 @@ Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> it
     msg.Data@"message" = message
     msg.Data@"options" = options
     msg.Data@"items" = items
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?MessageItem
-            if =?payload
-                result = ?MessageItem·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?MessageItem->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?MessageItem
+        if =?payload
+            result = ?MessageItem·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?MessageItem->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowWarningMessage1: (message:string -> items:[string] -> onDone:?(?string->void) -> void)
+Window·ShowWarningMessage1: (message:string -> items:[string] -> onDone:?(?string->void) -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showWarningMessage1"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?string
-            if =?payload
-                var _result_ of string
-                [_result_, ok] = ((payload)·(string))
-                if !ok
-                    return false
-                result = &_result_
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?string
+        if =?payload
+            var _result_ of string
+            [_result_, ok] = ((payload)·(string))
+            if !ok
+                return false
+            result = &_result_
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:[string] -> onDone:?(?string->void) -> void)
+Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:[string] -> onDone:?(?string->void) -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showWarningMessage2"
@@ -1681,51 +1706,61 @@ Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:
     msg.Data@"message" = message
     msg.Data@"options" = options
     msg.Data@"items" = items
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?string
-            if =?payload
-                var _result_ of string
-                [_result_, ok] = ((payload)·(string))
-                if !ok
-                    return false
-                result = &_result_
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?string
+        if =?payload
+            var _result_ of string
+            [_result_, ok] = ((payload)·(string))
+            if !ok
+                return false
+            result = &_result_
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> void)
+Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showWarningMessage3"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?MessageItem
-            if =?payload
-                result = ?MessageItem·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?MessageItem->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?MessageItem
+        if =?payload
+            result = ?MessageItem·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?MessageItem->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> void)
+Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showWarningMessage4"
@@ -1733,51 +1768,61 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
     msg.Data@"message" = message
     msg.Data@"options" = options
     msg.Data@"items" = items
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?MessageItem
-            if =?payload
-                result = ?MessageItem·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?MessageItem->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?MessageItem
+        if =?payload
+            result = ?MessageItem·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?MessageItem->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowErrorMessage1: (message:string -> items:[string] -> onDone:?(?string->void) -> void)
+Window·ShowErrorMessage1: (message:string -> items:[string] -> onDone:?(?string->void) -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showErrorMessage1"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?string
-            if =?payload
-                var _result_ of string
-                [_result_, ok] = ((payload)·(string))
-                if !ok
-                    return false
-                result = &_result_
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?string
+        if =?payload
+            var _result_ of string
+            [_result_, ok] = ((payload)·(string))
+            if !ok
+                return false
+            result = &_result_
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[string] -> onDone:?(?string->void) -> void)
+Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[string] -> onDone:?(?string->void) -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showErrorMessage2"
@@ -1785,51 +1830,61 @@ Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[s
     msg.Data@"message" = message
     msg.Data@"options" = options
     msg.Data@"items" = items
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?string
-            if =?payload
-                var _result_ of string
-                [_result_, ok] = ((payload)·(string))
-                if !ok
-                    return false
-                result = &_result_
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?string
+        if =?payload
+            var _result_ of string
+            [_result_, ok] = ((payload)·(string))
+            if !ok
+                return false
+            result = &_result_
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> void)
+Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showErrorMessage3"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?MessageItem
-            if =?payload
-                result = ?MessageItem·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?MessageItem->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?MessageItem
+        if =?payload
+            result = ?MessageItem·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?MessageItem->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> void)
+Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showErrorMessage4"
@@ -1837,25 +1892,30 @@ Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[M
     msg.Data@"message" = message
     msg.Data@"options" = options
     msg.Data@"items" = items
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?MessageItem
-            if =?payload
-                result = ?MessageItem·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?MessageItem->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?MessageItem
+        if =?payload
+            result = ?MessageItem·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?MessageItem->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> onDone:?(?string->void) -> void)
+Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> onDone:?(?string->void) -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showInputBox"
@@ -1890,32 +1950,37 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> onDone:?(?st
             lock this
                 token.fnId = this.Impl().nextFuncId()
         msg.Data@"token" = token.fnId
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?string
-            if =?payload
-                var _result_ of string
-                [_result_, ok] = ((payload)·(string))
-                if !ok
-                    return false
-                result = &_result_
-            onDone(result)
-            return true
-        
+    var onresp of (any->bool)
+    var onret of (?string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?string
+        if =?payload
+            var _result_ of string
+            [_result_, ok] = ((payload)·(string))
+            if !ok
+                return false
+            result = &_result_
+        if =?onret
+            onret(result)
+        return true
+    
     this.Impl().send(msg, (payload:any -> bool)
         if fnids·len != 0
             lock this
                 for fnid in fnids
                     this.Impl().cbOther·del(fnid)
-        return (=!on) || on(payload)
+        return (=!onresp) || onresp(payload)
     )
+    return (a0:(?string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Cancel -> onDone:?(?[string]->void) -> void)
+Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Cancel -> onDone:?(?[string]->void) -> ((?[string]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showQuickPick1"
@@ -1954,41 +2019,46 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
             lock this
                 token.fnId = this.Impl().nextFuncId()
         msg.Data@"token" = token.fnId
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?[string]
-            if =?payload
-                var __coll__result of [any]
-                [__coll__result, ok] = ((payload)·([any]))
+    var onresp of (any->bool)
+    var onret of (?[string]->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?[string]
+        if =?payload
+            var __coll__result of [any]
+            [__coll__result, ok] = ((payload)·([any]))
+            if !ok
+                return false
+            result = [string]·new(__coll__result·len)
+            var __idx__result of int
+            __idx__result = 0
+            for __item__result in __coll__result
+                var __val__result of string
+                [__val__result, ok] = ((__item__result)·(string))
                 if !ok
                     return false
-                result = [string]·new(__coll__result·len)
-                var __idx__result of int
-                __idx__result = 0
-                for __item__result in __coll__result
-                    var __val__result of string
-                    [__val__result, ok] = ((__item__result)·(string))
-                    if !ok
-                        return false
-                    result@__idx__result = __val__result
-                    __idx__result = __idx__result + 1
-            onDone(result)
-            return true
-        
+                result@__idx__result = __val__result
+                __idx__result = __idx__result + 1
+        if =?onret
+            onret(result)
+        return true
+    
     this.Impl().send(msg, (payload:any -> bool)
         if fnids·len != 0
             lock this
                 for fnid in fnids
                     this.Impl().cbOther·del(fnid)
-        return (=!on) || on(payload)
+        return (=!onresp) || onresp(payload)
     )
+    return (a0:(?[string]->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?Cancel -> onDone:?(?string->void) -> void)
+Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?Cancel -> onDone:?(?string->void) -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showQuickPick2"
@@ -2027,32 +2097,37 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
             lock this
                 token.fnId = this.Impl().nextFuncId()
         msg.Data@"token" = token.fnId
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?string
-            if =?payload
-                var _result_ of string
-                [_result_, ok] = ((payload)·(string))
-                if !ok
-                    return false
-                result = &_result_
-            onDone(result)
-            return true
-        
+    var onresp of (any->bool)
+    var onret of (?string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?string
+        if =?payload
+            var _result_ of string
+            [_result_, ok] = ((payload)·(string))
+            if !ok
+                return false
+            result = &_result_
+        if =?onret
+            onret(result)
+        return true
+    
     this.Impl().send(msg, (payload:any -> bool)
         if fnids·len != 0
             lock this
                 for fnid in fnids
                     this.Impl().cbOther·del(fnid)
-        return (=!on) || on(payload)
+        return (=!onresp) || onresp(payload)
     )
+    return (a0:(?string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> token:?Cancel -> onDone:?(?[QuickPickItem]->void) -> void)
+Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> token:?Cancel -> onDone:?(?[QuickPickItem]->void) -> ((?[QuickPickItem]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showQuickPick3"
@@ -2091,42 +2166,47 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
             lock this
                 token.fnId = this.Impl().nextFuncId()
         msg.Data@"token" = token.fnId
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?[QuickPickItem]
-            if =?payload
-                var __coll__result of [any]
-                [__coll__result, ok] = ((payload)·([any]))
+    var onresp of (any->bool)
+    var onret of (?[QuickPickItem]->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?[QuickPickItem]
+        if =?payload
+            var __coll__result of [any]
+            [__coll__result, ok] = ((payload)·([any]))
+            if !ok
+                return false
+            result = [QuickPickItem]·new(__coll__result·len)
+            var __idx__result of int
+            __idx__result = 0
+            for __item__result in __coll__result
+                var __val__result of QuickPickItem
+                __val__result = QuickPickItem·new
+                ok = __val__result.populateFrom(__item__result)
                 if !ok
                     return false
-                result = [QuickPickItem]·new(__coll__result·len)
-                var __idx__result of int
-                __idx__result = 0
-                for __item__result in __coll__result
-                    var __val__result of QuickPickItem
-                    __val__result = QuickPickItem·new
-                    ok = __val__result.populateFrom(__item__result)
-                    if !ok
-                        return false
-                    result@__idx__result = __val__result
-                    __idx__result = __idx__result + 1
-            onDone(result)
-            return true
-        
+                result@__idx__result = __val__result
+                __idx__result = __idx__result + 1
+        if =?onret
+            onret(result)
+        return true
+    
     this.Impl().send(msg, (payload:any -> bool)
         if fnids·len != 0
             lock this
                 for fnid in fnids
                     this.Impl().cbOther·del(fnid)
-        return (=!on) || on(payload)
+        return (=!onresp) || onresp(payload)
     )
+    return (a0:(?[QuickPickItem]->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> token:?Cancel -> onDone:?(?QuickPickItem->void) -> void)
+Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> token:?Cancel -> onDone:?(?QuickPickItem->void) -> ((?QuickPickItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showQuickPick4"
@@ -2165,191 +2245,226 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
             lock this
                 token.fnId = this.Impl().nextFuncId()
         msg.Data@"token" = token.fnId
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?QuickPickItem
-            if =?payload
-                result = ?QuickPickItem·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
+    var onresp of (any->bool)
+    var onret of (?QuickPickItem->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?QuickPickItem
+        if =?payload
+            result = ?QuickPickItem·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
     this.Impl().send(msg, (payload:any -> bool)
         if fnids·len != 0
             lock this
                 for fnid in fnids
                     this.Impl().cbOther·del(fnid)
-        return (=!on) || on(payload)
+        return (=!onresp) || onresp(payload)
     )
+    return (a0:(?QuickPickItem->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> onDone:?(?Disposable->void) -> void)
+Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> onDone:?(?Disposable->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.setStatusBarMessage1"
     msg.Data = dict·new(2)
     msg.Data@"text" = text
     msg.Data@"hideAfterTimeout" = hideAfterTimeout
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?Disposable
-            if =?payload
-                result = ?Disposable·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            else
+    var onresp of (any->bool)
+    var onret of (?Disposable->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?Disposable
+        if =?payload
+            result = ?Disposable·new
+            ok = result.populateFrom(payload)
+            if !ok
                 return false
-            onDone(result.bind(this.Impl()))
-            return true
-        
-    this.Impl().send(msg, on)
+        else
+            return false
+        if =?onret
+            onret(result.bind(this.Impl()))
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?Disposable->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·SetStatusBarMessage2: (text:string -> onDone:?(?Disposable->void) -> void)
+Window·SetStatusBarMessage2: (text:string -> onDone:?(?Disposable->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.setStatusBarMessage2"
     msg.Data = dict·new(1)
     msg.Data@"text" = text
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?Disposable
-            if =?payload
-                result = ?Disposable·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            else
+    var onresp of (any->bool)
+    var onret of (?Disposable->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?Disposable
+        if =?payload
+            result = ?Disposable·new
+            ok = result.populateFrom(payload)
+            if !ok
                 return false
-            onDone(result.bind(this.Impl()))
-            return true
-        
-    this.Impl().send(msg, on)
+        else
+            return false
+        if =?onret
+            onret(result.bind(this.Impl()))
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?Disposable->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowSaveDialog: (options:SaveDialogOptions -> onDone:?(?string->void) -> void)
+Window·ShowSaveDialog: (options:SaveDialogOptions -> onDone:?(?string->void) -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showSaveDialog"
     msg.Data = dict·new(1)
     msg.Data@"options" = options
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?string
-            if =?payload
-                var _result_ of string
-                [_result_, ok] = ((payload)·(string))
-                if !ok
-                    return false
-                result = &_result_
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?string
+        if =?payload
+            var _result_ of string
+            [_result_, ok] = ((payload)·(string))
+            if !ok
+                return false
+            result = &_result_
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowOpenDialog: (options:OpenDialogOptions -> onDone:?(?[string]->void) -> void)
+Window·ShowOpenDialog: (options:OpenDialogOptions -> onDone:?(?[string]->void) -> ((?[string]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showOpenDialog"
     msg.Data = dict·new(1)
     msg.Data@"options" = options
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?[string]
-            if =?payload
-                var __coll__result of [any]
-                [__coll__result, ok] = ((payload)·([any]))
+    var onresp of (any->bool)
+    var onret of (?[string]->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?[string]
+        if =?payload
+            var __coll__result of [any]
+            [__coll__result, ok] = ((payload)·([any]))
+            if !ok
+                return false
+            result = [string]·new(__coll__result·len)
+            var __idx__result of int
+            __idx__result = 0
+            for __item__result in __coll__result
+                var __val__result of string
+                [__val__result, ok] = ((__item__result)·(string))
                 if !ok
                     return false
-                result = [string]·new(__coll__result·len)
-                var __idx__result of int
-                __idx__result = 0
-                for __item__result in __coll__result
-                    var __val__result of string
-                    [__val__result, ok] = ((__item__result)·(string))
-                    if !ok
-                        return false
-                    result@__idx__result = __val__result
-                    __idx__result = __idx__result + 1
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+                result@__idx__result = __val__result
+                __idx__result = __idx__result + 1
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?[string]->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> onDone:?(?WorkspaceFolder->void) -> void)
+Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> onDone:?(?WorkspaceFolder->void) -> ((?WorkspaceFolder->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showWorkspaceFolderPick"
     msg.Data = dict·new(1)
     if =?options
         msg.Data@"options" = options
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?WorkspaceFolder
-            if =?payload
-                result = ?WorkspaceFolder·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?WorkspaceFolder->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?WorkspaceFolder
+        if =?payload
+            result = ?WorkspaceFolder·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?WorkspaceFolder->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·State: (onDone:?(WindowState->void) -> void)
+Window·State: (onDone:?(WindowState->void) -> ((WindowState->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.state"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of WindowState
-            if =?payload
-                result = WindowState·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (WindowState->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of WindowState
+        if =?payload
+            result = WindowState·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(WindowState->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·OnDidChangeWindowState: (listener:(WindowState->void) -> onDone:?(?Disposable->void) -> void)
+Window·OnDidChangeWindowState: (listener:(WindowState->void) -> onDone:?(?Disposable->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.onDidChangeWindowState"
@@ -2357,7 +2472,7 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> onDone:?(?Dispo
     var _fnid_listener of string
     if =!listener
         OnError(this.Impl(), "Window.OnDidChangeWindowState: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
-        return 
+        return null
     _fnid_listener = this.Impl().nextSub((args:[any] -> bool)
         var ok of bool
         if 1 != args·len
@@ -2371,27 +2486,32 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> onDone:?(?Dispo
         return true
     , null)
     msg.Data@"listener" = _fnid_listener
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?Disposable
-            if =?payload
-                result = ?Disposable·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            else
+    var onresp of (any->bool)
+    var onret of (?Disposable->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?Disposable
+        if =?payload
+            result = ?Disposable·new
+            ok = result.populateFrom(payload)
+            if !ok
                 return false
-            onDone(result.bind(this.Impl(), _fnid_listener))
-            return true
-        
-    this.Impl().send(msg, on)
+        else
+            return false
+        if =?onret
+            onret(result.bind(this.Impl(), _fnid_listener))
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?Disposable->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> onDone:?(?StatusBarItem->void) -> void)
+Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> onDone:?(?StatusBarItem->void) -> ((?StatusBarItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createStatusBarItem"
@@ -2400,352 +2520,427 @@ Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> 
         msg.Data@"alignment" = alignment
     if =?priority
         msg.Data@"priority" = priority
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?StatusBarItem
-            if =?payload
-                result = ?StatusBarItem·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-                result.disp.impl = this.Impl()
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?StatusBarItem->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?StatusBarItem
+        if =?payload
+            result = ?StatusBarItem·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+            result.disp.impl = this.Impl()
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?StatusBarItem->void) -> void)
+        onret = a0
+    
 
 
 
 
-Window·CreateOutputChannel: (name:string -> onDone:?(?OutputChannel->void) -> void)
+Window·CreateOutputChannel: (name:string -> onDone:?(?OutputChannel->void) -> ((?OutputChannel->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createOutputChannel"
     msg.Data = dict·new(1)
     msg.Data@"name" = name
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?OutputChannel
-            if =?payload
-                result = ?OutputChannel·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-                result.disp.impl = this.Impl()
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?OutputChannel->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?OutputChannel
+        if =?payload
+            result = ?OutputChannel·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+            result.disp.impl = this.Impl()
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?OutputChannel->void) -> void)
+        onret = a0
+    
 
 
 
 
-Env·OpenExternal: (target:string -> onDone:?(bool->void) -> void)
+Env·OpenExternal: (target:string -> onDone:?(bool->void) -> ((bool->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.openExternal"
     msg.Data = dict·new(1)
     msg.Data@"target" = target
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of bool
-            if =?payload
-                [result, ok] = ((payload)·(bool))
-                if !ok
-                    return false
-            else
+    var onresp of (any->bool)
+    var onret of (bool->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of bool
+        if =?payload
+            [result, ok] = ((payload)·(bool))
+            if !ok
                 return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+        else
+            return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(bool->void) -> void)
+        onret = a0
+    
 
 
 
 
-Env·AppName: (onDone:?(string->void) -> void)
+Env·AppName: (onDone:?(string->void) -> ((string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.appName"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of string
-            if =?payload
-                [result, ok] = ((payload)·(string))
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of string
+        if =?payload
+            [result, ok] = ((payload)·(string))
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Env·AppRoot: (onDone:?(string->void) -> void)
+Env·AppRoot: (onDone:?(string->void) -> ((string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.appRoot"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of string
-            if =?payload
-                [result, ok] = ((payload)·(string))
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of string
+        if =?payload
+            [result, ok] = ((payload)·(string))
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Env·Language: (onDone:?(string->void) -> void)
+Env·Language: (onDone:?(string->void) -> ((string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.language"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of string
-            if =?payload
-                [result, ok] = ((payload)·(string))
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of string
+        if =?payload
+            [result, ok] = ((payload)·(string))
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Env·MachineId: (onDone:?(string->void) -> void)
+Env·MachineId: (onDone:?(string->void) -> ((string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.machineId"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of string
-            if =?payload
-                [result, ok] = ((payload)·(string))
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of string
+        if =?payload
+            [result, ok] = ((payload)·(string))
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Env·RemoteName: (onDone:?(?string->void) -> void)
+Env·RemoteName: (onDone:?(?string->void) -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.remoteName"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?string
-            if =?payload
-                var _result_ of string
-                [_result_, ok] = ((payload)·(string))
-                if !ok
-                    return false
-                result = &_result_
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?string
+        if =?payload
+            var _result_ of string
+            [_result_, ok] = ((payload)·(string))
+            if !ok
+                return false
+            result = &_result_
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Env·SessionId: (onDone:?(string->void) -> void)
+Env·SessionId: (onDone:?(string->void) -> ((string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.sessionId"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of string
-            if =?payload
-                [result, ok] = ((payload)·(string))
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of string
+        if =?payload
+            [result, ok] = ((payload)·(string))
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Env·Shell: (onDone:?(string->void) -> void)
+Env·Shell: (onDone:?(string->void) -> ((string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.shell"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of string
-            if =?payload
-                [result, ok] = ((payload)·(string))
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of string
+        if =?payload
+            [result, ok] = ((payload)·(string))
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Env·UriScheme: (onDone:?(string->void) -> void)
+Env·UriScheme: (onDone:?(string->void) -> ((string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.uriScheme"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of string
-            if =?payload
-                [result, ok] = ((payload)·(string))
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of string
+        if =?payload
+            [result, ok] = ((payload)·(string))
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Env·Properties: (onDone:(EnvProperties->void) -> void)
+Env·Properties: (onDone:(EnvProperties->void) -> ((EnvProperties->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.Properties"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of EnvProperties
-            if =?payload
-                result = EnvProperties·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            else
+    var onresp of (any->bool)
+    var onret of (EnvProperties->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of EnvProperties
+        if =?payload
+            result = EnvProperties·new
+            ok = result.populateFrom(payload)
+            if !ok
                 return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+        else
+            return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(EnvProperties->void) -> void)
+        onret = a0
+    
 
 
 
 
-Workspace·Name: (onDone:?(?string->void) -> void)
+Workspace·Name: (onDone:?(?string->void) -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.name"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?string
-            if =?payload
-                var _result_ of string
-                [_result_, ok] = ((payload)·(string))
-                if !ok
-                    return false
-                result = &_result_
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?string
+        if =?payload
+            var _result_ of string
+            [_result_, ok] = ((payload)·(string))
+            if !ok
+                return false
+            result = &_result_
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Workspace·WorkspaceFile: (onDone:?(?string->void) -> void)
+Workspace·WorkspaceFile: (onDone:?(?string->void) -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.workspaceFile"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?string
-            if =?payload
-                var _result_ of string
-                [_result_, ok] = ((payload)·(string))
-                if !ok
-                    return false
-                result = &_result_
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?string
+        if =?payload
+            var _result_ of string
+            [_result_, ok] = ((payload)·(string))
+            if !ok
+                return false
+            result = &_result_
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Workspace·SaveAll: (includeUntitled:bool -> onDone:?(bool->void) -> void)
+Workspace·SaveAll: (includeUntitled:bool -> onDone:?(bool->void) -> ((bool->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.saveAll"
     msg.Data = dict·new(1)
     msg.Data@"includeUntitled" = includeUntitled
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of bool
-            if =?payload
-                [result, ok] = ((payload)·(bool))
-                if !ok
-                    return false
-            else
+    var onresp of (any->bool)
+    var onret of (bool->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of bool
+        if =?payload
+            [result, ok] = ((payload)·(bool))
+            if !ok
                 return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+        else
+            return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(bool->void) -> void)
+        onret = a0
+    
 
 
 
 
-Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->void) -> onDone:?(?Disposable->void) -> void)
+Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->void) -> onDone:?(?Disposable->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.onDidChangeWorkspaceFolders"
@@ -2753,7 +2948,7 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
     var _fnid_listener of string
     if =!listener
         OnError(this.Impl(), "Workspace.OnDidChangeWorkspaceFolders: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
-        return 
+        return null
     _fnid_listener = this.Impl().nextSub((args:[any] -> bool)
         var ok of bool
         if 1 != args·len
@@ -2767,85 +2962,100 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
         return true
     , null)
     msg.Data@"listener" = _fnid_listener
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?Disposable
-            if =?payload
-                result = ?Disposable·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            else
+    var onresp of (any->bool)
+    var onret of (?Disposable->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?Disposable
+        if =?payload
+            result = ?Disposable·new
+            ok = result.populateFrom(payload)
+            if !ok
                 return false
-            onDone(result.bind(this.Impl(), _fnid_listener))
-            return true
-        
-    this.Impl().send(msg, on)
+        else
+            return false
+        if =?onret
+            onret(result.bind(this.Impl(), _fnid_listener))
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?Disposable->void) -> void)
+        onret = a0
+    
 
 
 
 
-Workspace·GetWorkspaceFolder: (uri:string -> onDone:?(?WorkspaceFolder->void) -> void)
+Workspace·GetWorkspaceFolder: (uri:string -> onDone:?(?WorkspaceFolder->void) -> ((?WorkspaceFolder->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.getWorkspaceFolder"
     msg.Data = dict·new(1)
     msg.Data@"uri" = uri
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?WorkspaceFolder
-            if =?payload
-                result = ?WorkspaceFolder·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?WorkspaceFolder->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?WorkspaceFolder
+        if =?payload
+            result = ?WorkspaceFolder·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?WorkspaceFolder->void) -> void)
+        onret = a0
+    
 
 
 
 
-Workspace·WorkspaceFolders: (onDone:?(?[WorkspaceFolder]->void) -> void)
+Workspace·WorkspaceFolders: (onDone:?(?[WorkspaceFolder]->void) -> ((?[WorkspaceFolder]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.workspaceFolders"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?[WorkspaceFolder]
-            if =?payload
-                var __coll__result of [any]
-                [__coll__result, ok] = ((payload)·([any]))
+    var onresp of (any->bool)
+    var onret of (?[WorkspaceFolder]->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?[WorkspaceFolder]
+        if =?payload
+            var __coll__result of [any]
+            [__coll__result, ok] = ((payload)·([any]))
+            if !ok
+                return false
+            result = [WorkspaceFolder]·new(__coll__result·len)
+            var __idx__result of int
+            __idx__result = 0
+            for __item__result in __coll__result
+                var __val__result of WorkspaceFolder
+                __val__result = WorkspaceFolder·new
+                ok = __val__result.populateFrom(__item__result)
                 if !ok
                     return false
-                result = [WorkspaceFolder]·new(__coll__result·len)
-                var __idx__result of int
-                __idx__result = 0
-                for __item__result in __coll__result
-                    var __val__result of WorkspaceFolder
-                    __val__result = WorkspaceFolder·new
-                    ok = __val__result.populateFrom(__item__result)
-                    if !ok
-                        return false
-                    result@__idx__result = __val__result
-                    __idx__result = __idx__result + 1
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+                result@__idx__result = __val__result
+                __idx__result = __idx__result + 1
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?[WorkspaceFolder]->void) -> void)
+        onret = a0
+    
 
 
 
 
-Workspace·FindFiles: (include:string -> exclude:?string -> maxResults:?int -> token:?Cancel -> onDone:?(?[string]->void) -> void)
+Workspace·FindFiles: (include:string -> exclude:?string -> maxResults:?int -> token:?Cancel -> onDone:?(?[string]->void) -> ((?[string]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.findFiles"
@@ -2861,119 +3071,139 @@ Workspace·FindFiles: (include:string -> exclude:?string -> maxResults:?int -> t
             lock this
                 token.fnId = this.Impl().nextFuncId()
         msg.Data@"token" = token.fnId
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?[string]
-            if =?payload
-                var __coll__result of [any]
-                [__coll__result, ok] = ((payload)·([any]))
+    var onresp of (any->bool)
+    var onret of (?[string]->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?[string]
+        if =?payload
+            var __coll__result of [any]
+            [__coll__result, ok] = ((payload)·([any]))
+            if !ok
+                return false
+            result = [string]·new(__coll__result·len)
+            var __idx__result of int
+            __idx__result = 0
+            for __item__result in __coll__result
+                var __val__result of string
+                [__val__result, ok] = ((__item__result)·(string))
                 if !ok
                     return false
-                result = [string]·new(__coll__result·len)
-                var __idx__result of int
-                __idx__result = 0
-                for __item__result in __coll__result
-                    var __val__result of string
-                    [__val__result, ok] = ((__item__result)·(string))
-                    if !ok
-                        return false
-                    result@__idx__result = __val__result
-                    __idx__result = __idx__result + 1
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+                result@__idx__result = __val__result
+                __idx__result = __idx__result + 1
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?[string]->void) -> void)
+        onret = a0
+    
 
 
 
 
-Workspace·AsRelativePath: (pathOrUri:string -> includeWorkspaceFolder:bool -> onDone:?(?string->void) -> void)
+Workspace·AsRelativePath: (pathOrUri:string -> includeWorkspaceFolder:bool -> onDone:?(?string->void) -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.asRelativePath"
     msg.Data = dict·new(2)
     msg.Data@"pathOrUri" = pathOrUri
     msg.Data@"includeWorkspaceFolder" = includeWorkspaceFolder
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?string
-            if =?payload
-                var _result_ of string
-                [_result_, ok] = ((payload)·(string))
-                if !ok
-                    return false
-                result = &_result_
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?string->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?string
+        if =?payload
+            var _result_ of string
+            [_result_, ok] = ((payload)·(string))
+            if !ok
+                return false
+            result = &_result_
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?string->void) -> void)
+        onret = a0
+    
 
 
 
 
-Workspace·Properties: (onDone:(WorkspaceProperties->void) -> void)
+Workspace·Properties: (onDone:(WorkspaceProperties->void) -> ((WorkspaceProperties->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.Properties"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of WorkspaceProperties
-            if =?payload
-                result = WorkspaceProperties·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            else
+    var onresp of (any->bool)
+    var onret of (WorkspaceProperties->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of WorkspaceProperties
+        if =?payload
+            result = WorkspaceProperties·new
+            ok = result.populateFrom(payload)
+            if !ok
                 return false
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+        else
+            return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(WorkspaceProperties->void) -> void)
+        onret = a0
+    
 
 
 
 
-Languages·GetLanguages: (onDone:?(?[string]->void) -> void)
+Languages·GetLanguages: (onDone:?(?[string]->void) -> ((?[string]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "languages.getLanguages"
     msg.Data = dict·new(0)
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?[string]
-            if =?payload
-                var __coll__result of [any]
-                [__coll__result, ok] = ((payload)·([any]))
+    var onresp of (any->bool)
+    var onret of (?[string]->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?[string]
+        if =?payload
+            var __coll__result of [any]
+            [__coll__result, ok] = ((payload)·([any]))
+            if !ok
+                return false
+            result = [string]·new(__coll__result·len)
+            var __idx__result of int
+            __idx__result = 0
+            for __item__result in __coll__result
+                var __val__result of string
+                [__val__result, ok] = ((__item__result)·(string))
                 if !ok
                     return false
-                result = [string]·new(__coll__result·len)
-                var __idx__result of int
-                __idx__result = 0
-                for __item__result in __coll__result
-                    var __val__result of string
-                    [__val__result, ok] = ((__item__result)·(string))
-                    if !ok
-                        return false
-                    result@__idx__result = __val__result
-                    __idx__result = __idx__result + 1
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+                result@__idx__result = __val__result
+                __idx__result = __idx__result + 1
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?[string]->void) -> void)
+        onret = a0
+    
 
 
 
 
-Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> onDone:?(?Disposable->void) -> void)
+Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> onDone:?(?Disposable->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "languages.onDidChangeDiagnostics"
@@ -2981,7 +3211,7 @@ Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> on
     var _fnid_listener of string
     if =!listener
         OnError(this.Impl(), "Languages.OnDidChangeDiagnostics: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
-        return 
+        return null
     _fnid_listener = this.Impl().nextSub((args:[any] -> bool)
         var ok of bool
         if 1 != args·len
@@ -2995,27 +3225,32 @@ Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> on
         return true
     , null)
     msg.Data@"listener" = _fnid_listener
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?Disposable
-            if =?payload
-                result = ?Disposable·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            else
+    var onresp of (any->bool)
+    var onret of (?Disposable->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?Disposable
+        if =?payload
+            result = ?Disposable·new
+            ok = result.populateFrom(payload)
+            if !ok
                 return false
-            onDone(result.bind(this.Impl(), _fnid_listener))
-            return true
-        
-    this.Impl().send(msg, on)
+        else
+            return false
+        if =?onret
+            onret(result.bind(this.Impl(), _fnid_listener))
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?Disposable->void) -> void)
+        onret = a0
+    
 
 
 
 
-Extensions·OnDidChange: (listener:(->void) -> onDone:?(?Disposable->void) -> void)
+Extensions·OnDidChange: (listener:(->void) -> onDone:?(?Disposable->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "extensions.onDidChange"
@@ -3023,7 +3258,7 @@ Extensions·OnDidChange: (listener:(->void) -> onDone:?(?Disposable->void) -> vo
     var _fnid_listener of string
     if =!listener
         OnError(this.Impl(), "Extensions.OnDidChange: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
-        return 
+        return null
     _fnid_listener = this.Impl().nextSub((args:[any] -> bool)
         var ok of bool
         if 0 != args·len
@@ -3032,27 +3267,32 @@ Extensions·OnDidChange: (listener:(->void) -> onDone:?(?Disposable->void) -> vo
         return true
     , null)
     msg.Data@"listener" = _fnid_listener
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?Disposable
-            if =?payload
-                result = ?Disposable·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            else
+    var onresp of (any->bool)
+    var onret of (?Disposable->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?Disposable
+        if =?payload
+            result = ?Disposable·new
+            ok = result.populateFrom(payload)
+            if !ok
                 return false
-            onDone(result.bind(this.Impl(), _fnid_listener))
-            return true
-        
-    this.Impl().send(msg, on)
+        else
+            return false
+        if =?onret
+            onret(result.bind(this.Impl(), _fnid_listener))
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?Disposable->void) -> void)
+        onret = a0
+    
 
 
 
 
-Commands·RegisterCommand: (command:string -> callback:([any]->any) -> onDone:?(?Disposable->void) -> void)
+Commands·RegisterCommand: (command:string -> callback:([any]->any) -> onDone:?(?Disposable->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "commands.registerCommand"
@@ -3061,7 +3301,7 @@ Commands·RegisterCommand: (command:string -> callback:([any]->any) -> onDone:?(
     var _fnid_callback of string
     if =!callback
         OnError(this.Impl(), "Commands.RegisterCommand: the 'callback' arg (which is not optional but required) was not passed by the caller", null)
-        return 
+        return null
     _fnid_callback = this.Impl().nextSub(null, (args:[any] -> [any,bool])
         var ok of bool
         if 1 != args·len
@@ -3075,152 +3315,227 @@ Commands·RegisterCommand: (command:string -> callback:([any]->any) -> onDone:?(
         return [ret, true]
     )
     msg.Data@"callback" = _fnid_callback
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?Disposable
-            if =?payload
-                result = ?Disposable·new
-                ok = result.populateFrom(payload)
-                if !ok
-                    return false
-            else
+    var onresp of (any->bool)
+    var onret of (?Disposable->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?Disposable
+        if =?payload
+            result = ?Disposable·new
+            ok = result.populateFrom(payload)
+            if !ok
                 return false
-            onDone(result.bind(this.Impl(), _fnid_callback))
-            return true
-        
-    this.Impl().send(msg, on)
+        else
+            return false
+        if =?onret
+            onret(result.bind(this.Impl(), _fnid_callback))
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?Disposable->void) -> void)
+        onret = a0
+    
 
 
 
 
-Commands·ExecuteCommand: (command:string -> rest:[any] -> onDone:?(?any->void) -> void)
+Commands·ExecuteCommand: (command:string -> rest:[any] -> onDone:?(?any->void) -> ((?any->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "commands.executeCommand"
     msg.Data = dict·new(2)
     msg.Data@"command" = command
     msg.Data@"rest" = rest
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?any
-            if =?payload
-                [result, ok] = [payload, true]
-                if ok
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+    var onresp of (any->bool)
+    var onret of (?any->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?any
+        if =?payload
+            [result, ok] = [payload, true]
+            if ok
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?any->void) -> void)
+        onret = a0
+    
 
 
 
 
-Commands·GetCommands: (filterInternal:bool -> onDone:?(?[string]->void) -> void)
+Commands·GetCommands: (filterInternal:bool -> onDone:?(?[string]->void) -> ((?[string]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "commands.getCommands"
     msg.Data = dict·new(1)
     msg.Data@"filterInternal" = filterInternal
-    var on of (any->bool)
-    if =?onDone
-        on = (payload:any -> bool)
-            var ok of bool
-            var result of ?[string]
-            if =?payload
-                var __coll__result of [any]
-                [__coll__result, ok] = ((payload)·([any]))
+    var onresp of (any->bool)
+    var onret of (?[string]->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?[string]
+        if =?payload
+            var __coll__result of [any]
+            [__coll__result, ok] = ((payload)·([any]))
+            if !ok
+                return false
+            result = [string]·new(__coll__result·len)
+            var __idx__result of int
+            __idx__result = 0
+            for __item__result in __coll__result
+                var __val__result of string
+                [__val__result, ok] = ((__item__result)·(string))
                 if !ok
                     return false
-                result = [string]·new(__coll__result·len)
-                var __idx__result of int
-                __idx__result = 0
-                for __item__result in __coll__result
-                    var __val__result of string
-                    [__val__result, ok] = ((__item__result)·(string))
-                    if !ok
-                        return false
-                    result@__idx__result = __val__result
-                    __idx__result = __idx__result + 1
-            onDone(result)
-            return true
-        
-    this.Impl().send(msg, on)
+                result@__idx__result = __val__result
+                __idx__result = __idx__result + 1
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?[string]->void) -> void)
+        onret = a0
+    
 
 
 
 
-StatusBarItem·Show: ( -> void)
+StatusBarItem·Show: (onDone:?(void->void) -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.show"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
-    var on of (any->bool)
-    this.disp.impl.send(msg, on)
+    var onresp of (any->bool)
+    var onret of (void->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        if =?payload
+            return false
+        if =?onret
+            onret()
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(void->void) -> void)
+        onret = a0
+    
 
 
 
 
-StatusBarItem·Hide: ( -> void)
+StatusBarItem·Hide: (onDone:?(void->void) -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.hide"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
-    var on of (any->bool)
-    this.disp.impl.send(msg, on)
+    var onresp of (any->bool)
+    var onret of (void->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        if =?payload
+            return false
+        if =?onret
+            onret()
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(void->void) -> void)
+        onret = a0
+    
 
 
 
 
-StatusBarItem·Dispose: ( -> void)
-    this.disp.Dispose()
+StatusBarItem·Dispose: (onDone:?(void->void) -> ((void->void)->void))
+    return this.disp.Dispose()
 
 
 
 
-OutputChannel·Append: (value:string -> void)
+OutputChannel·Append: (value:string -> onDone:?(void->void) -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.append"
     msg.Data = dict·new(2)
     msg.Data@"" = this.disp.id
     msg.Data@"value" = value
-    var on of (any->bool)
-    this.disp.impl.send(msg, on)
+    var onresp of (any->bool)
+    var onret of (void->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        if =?payload
+            return false
+        if =?onret
+            onret()
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(void->void) -> void)
+        onret = a0
+    
 
 
 
 
-OutputChannel·AppendLine: (value:string -> void)
+OutputChannel·AppendLine: (value:string -> onDone:?(void->void) -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.appendLine"
     msg.Data = dict·new(2)
     msg.Data@"" = this.disp.id
     msg.Data@"value" = value
-    var on of (any->bool)
-    this.disp.impl.send(msg, on)
+    var onresp of (any->bool)
+    var onret of (void->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        if =?payload
+            return false
+        if =?onret
+            onret()
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(void->void) -> void)
+        onret = a0
+    
 
 
 
 
-OutputChannel·Clear: ( -> void)
+OutputChannel·Clear: (onDone:?(void->void) -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.clear"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
-    var on of (any->bool)
-    this.disp.impl.send(msg, on)
+    var onresp of (any->bool)
+    var onret of (void->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        if =?payload
+            return false
+        if =?onret
+            onret()
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(void->void) -> void)
+        onret = a0
+    
 
 
 
 
-OutputChannel·Show: (preserveFocus:?bool -> void)
+OutputChannel·Show: (preserveFocus:?bool -> onDone:?(void->void) -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.show"
@@ -3228,26 +3543,50 @@ OutputChannel·Show: (preserveFocus:?bool -> void)
     msg.Data@"" = this.disp.id
     if =?preserveFocus
         msg.Data@"preserveFocus" = preserveFocus
-    var on of (any->bool)
-    this.disp.impl.send(msg, on)
+    var onresp of (any->bool)
+    var onret of (void->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        if =?payload
+            return false
+        if =?onret
+            onret()
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(void->void) -> void)
+        onret = a0
+    
 
 
 
 
-OutputChannel·Hide: ( -> void)
+OutputChannel·Hide: (onDone:?(void->void) -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.hide"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
-    var on of (any->bool)
-    this.disp.impl.send(msg, on)
+    var onresp of (any->bool)
+    var onret of (void->void)
+    onret = onDone
+    onresp = (payload:any -> bool)
+        if =?payload
+            return false
+        if =?onret
+            onret()
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(void->void) -> void)
+        onret = a0
+    
 
 
 
 
-OutputChannel·Dispose: ( -> void)
-    this.disp.Dispose()
+OutputChannel·Dispose: (onDone:?(void->void) -> ((void->void)->void))
+    return this.disp.Dispose()
 
 
 

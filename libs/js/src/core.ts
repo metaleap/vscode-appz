@@ -17,6 +17,7 @@ export class ipcMsg {
 }
 
 export class impl extends vscgen.impl {
+    main: (_: vscgen.Vscode) => void
     readln: NodeJS.ReadStream
     jsonOut: NodeJS.WriteStream
     counter: number = 0
@@ -25,8 +26,9 @@ export class impl extends vscgen.impl {
     cbListeners: { [_: string]: (_: any[]) => boolean } = {}
     cbOther: { [_: string]: (_: any[]) => [any, boolean] } = {}
 
-    constructor(stdIn?: NodeJS.ReadStream, stdOut?: NodeJS.WriteStream) {
+    constructor(main: (_: vscgen.Vscode) => void, stdIn?: NodeJS.ReadStream, stdOut?: NodeJS.WriteStream) {
         super()
+        this.main = main
         this.readln = stdIn ? stdIn : process.stdin
         this.jsonOut = stdOut ? stdOut : process.stdout
         this.setupReadLn()
@@ -82,37 +84,41 @@ export class impl extends vscgen.impl {
                                 return new ipcMsg(value['qName'], value['data'], value['cbId'])
                             return value
                         }) as ipcMsg
-                        if (!(inmsg.Data))
+                        if (inmsg.QName === "main")
+                            this.main(this)
+                        else if (!(inmsg.Data))
                             throw "field `data` is missing"
-                        const cbprom = this.cbWaiting[inmsg.CbId], cbevt = this.cbListeners[inmsg.CbId], cbmisc = this.cbOther[inmsg.CbId]
-                        if (cbprom) {
-                            const yay = inmsg.Data['yay'], nay = inmsg.Data['nay']
-                            if (nay)
-                                throw nay
-                            else if (yay === undefined)
-                                throw "field `data` must have either `yay` or `nay` member"
-                            else if (!cbprom(yay))
-                                throw "unexpected args: " + JSON.stringify(yay)
-                        } else if (cbevt) {
-                            const fnargs = inmsg.Data['']
-                            const args = fnargs as any[]
-                            if (args === undefined || args === null
-                                || !cbevt(args)
-                            ) throw "unexpected args: " + JSON.stringify(fnargs)
-                        } else if (cbmisc) {
-                            const fnargs = inmsg.Data['']
-                            const args = fnargs as any[]
-                            let ret: any
-                            let ok = (args !== undefined && args !== null)
-                            if (ok)
-                                [ret, ok] = cbmisc(args)
-                            this.send(new ipcMsg(undefined,
-                                (ok ? { yay: ret }
-                                    : { nay: "unexpected args: " + JSON.stringify(fnargs) }),
-                                inmsg.CbId)
-                            )
-                        } else
-                            throw "specified `cbId` not known locally"
+                        else {
+                            const cbprom = this.cbWaiting[inmsg.CbId], cbevt = this.cbListeners[inmsg.CbId], cbmisc = this.cbOther[inmsg.CbId]
+                            if (cbprom) {
+                                const yay = inmsg.Data['yay'], nay = inmsg.Data['nay']
+                                if (nay)
+                                    throw nay
+                                else if (yay === undefined)
+                                    throw "field `data` must have either `yay` or `nay` member"
+                                else if (!cbprom(yay))
+                                    throw "unexpected args: " + JSON.stringify(yay)
+                            } else if (cbevt) {
+                                const fnargs = inmsg.Data['']
+                                const args = fnargs as any[]
+                                if (args === undefined || args === null
+                                    || !cbevt(args)
+                                ) throw "unexpected args: " + JSON.stringify(fnargs)
+                            } else if (cbmisc) {
+                                const fnargs = inmsg.Data['']
+                                const args = fnargs as any[]
+                                let ret: any
+                                let ok = (args !== undefined && args !== null)
+                                if (ok)
+                                    [ret, ok] = cbmisc(args)
+                                this.send(new ipcMsg(undefined,
+                                    (ok ? { yay: ret }
+                                        : { nay: "unexpected args: " + JSON.stringify(fnargs) }),
+                                    inmsg.CbId)
+                                )
+                            } else
+                                throw "specified `cbId` not known locally"
+                        }
                     } catch (err) {
                         appz.OnError(this, err, jsonmsg)
                     }
@@ -153,8 +159,13 @@ export class Disposable {
         return ((typeof payload === 'string') && (this.id = payload) && this.id.length) ? true : false
     }
 
-    Dispose() {
-        this.impl.send(new ipcMsg('dispose', { '': this.id }))
+    Dispose(): (_: () => void) => void {
+        let ondone: () => void
+        this.impl.send(new ipcMsg('dispose', { '': this.id }), () => {
+            if (ondone)
+                ondone()
+            return true
+        })
         if (this.subFnIds && this.subFnIds.length) {
             for (const subfnid of this.subFnIds) {
                 delete this.impl.cbListeners[subfnid]
@@ -162,5 +173,6 @@ export class Disposable {
             }
             this.subFnIds = null
         }
+        return (on: () => void) => ondone = on;
     }
 }

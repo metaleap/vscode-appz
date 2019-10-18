@@ -10,29 +10,30 @@ namespace VscAppzDemo {
         private static IWindow win;
 
         public static void Main(string[] args) {
-            vsc = Vsc.InOut();
-            win = vsc.Window;
-            win.SetStatusBarMessage("Choosing a demo WILL HIDE this", statusitem => {
-                subscribeToMiscEvents();
+            Vsc.Main(vscode => {
+                Console.Error.WriteLine("AHOY");
+                (vsc, win) = (vscode, vscode.Window);
+                win.SetStatusBarMessage2("Choosing a demo WILL HIDE this", statusmsg => {
+                    subscribeToMiscEvents();
+                    win.CreateStatusBarItem()(_ => _.Show());
 
-                var buttons = new[] {"Demo Pick Input", "Demo Text Input", "All Demos"};
-                win.ShowInformationMessage(
-                    "What to try out? (If you cancel, I quit.)",
-                    buttons,
-                    btn => {
-                        statusitem.Dispose();
-                        if (btn == null)
-                            quit();
-                        else if (btn == buttons[0])
-                            demo_Window_ShowQuickPick();
-                        else if (btn == buttons[1])
-                            demo_Window_ShowInputBox();
-                        else if (btn == buttons[2])
-                            demosMenu();
-                        else
-                            win.ShowErrorMessage($"Unknown: `{btn}`, bye now!", nil, quit);
-                    }
-                );
+                    var buttons = new[] {"Demo Pick Input", "Demo Text Input", "All Demos"};
+                    win.ShowInformationMessage1("What to try out? (If you cancel, I quit.)", buttons)(
+                        btn => {
+                            statusmsg.Dispose();
+                            if (btn == null)
+                                quit();
+                            else if (btn == buttons[0])
+                                demo_Window_ShowQuickPick();
+                            else if (btn == buttons[1])
+                                demo_Window_ShowInputBox();
+                            else if (btn == buttons[2])
+                                demosMenu();
+                            else
+                                win.ShowErrorMessage1($"Unknown: `{btn}`, bye now!", nil, quit);
+                        }
+                    );
+                });
             });
         }
 
@@ -48,12 +49,12 @@ namespace VscAppzDemo {
                 ValueSelection  = (6, 12),
                 Prompt          = "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
                 ValidateInput   = val
-            }, null, input => {
+            })(input => {
                 statusNoticeQuit();
                 if (input == null)
-                    win.ShowWarningMessage("Cancelled text input, bye now!", nil, quit);
+                    win.ShowWarningMessage1("Cancelled text input, bye now!", nil, quit);
                 else
-                    win.ShowInformationMessage("You entered: `"+input+"`, bye now!", nil, quit);
+                    win.ShowInformationMessage1("You entered: `"+input+"`, bye now!", nil, quit);
             });
         }
 

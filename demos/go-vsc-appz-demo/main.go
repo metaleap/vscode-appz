@@ -26,34 +26,37 @@ func main() {
 		}
 	}
 
-	vsc = Vsc(nil, nil)
-	win = vsc.Window()
-	win.SetStatusBarMessage2("Choosing a demo WILL HIDE this", func(statusitem *Disposable) {
-		subscribeToMiscEvents()
+	Main(func(vscode Vscode) {
+		vsc = vscode
+		win = vsc.Window()
 
-		buttons := []string{"Demo Pick Input", "Demo Text Input", "All Demos"}
-		win.ShowInformationMessage1(
-			greethow+", "+greetname+"! What to try out? (If you cancel, I quit.)",
-			buttons,
-			func(btn *string) {
-				statusitem.Dispose()
-				if btn == nil {
-					quit(btn) // msgbox dismissed via close / esc key
-				} else {
-					switch button := *btn; button {
-					case buttons[0]:
-						demo_Window_ShowQuickPick()
-					case buttons[1]:
-						demo_Window_ShowInputBox()
-					case buttons[2]:
-						demosMenu()
-					default:
-						win.ShowErrorMessage1("Unknown: `"+button+"`, bye now!", nil, quit)
+		win.SetStatusBarMessage2("Choosing a demo WILL HIDE this", nil)(func(statusmsg *Disposable) {
+			subscribeToMiscEvents()
+			win.CreateStatusBarItem(0, nil, nil)(
+				func(it *StatusBarItem) { it.Show(nil) })
+
+			buttons := []string{"Demo Pick Input", "Demo Text Input", "All Demos"}
+			win.ShowInformationMessage1(
+				greethow+", "+greetname+"! What to try out? (If you cancel, I quit.)", buttons, nil)(
+				func(btn *string) {
+					statusmsg.Dispose()
+					if btn == nil {
+						quit(btn) // msgbox dismissed via close / esc key
+					} else {
+						switch button := *btn; button {
+						case buttons[0]:
+							demo_Window_ShowQuickPick()
+						case buttons[1]:
+							demo_Window_ShowInputBox()
+						case buttons[2]:
+							demosMenu()
+						default:
+							win.ShowErrorMessage1("Unknown: `"+button+"`, bye now!", nil, nil)(quit)
+						}
 					}
-				}
-			},
-		)
-	})
+				})
+		})
+	}, nil, nil)
 }
 
 func demo_Window_ShowInputBox() {
@@ -68,14 +71,15 @@ func demo_Window_ShowInputBox() {
 			}
 			return
 		},
-	}, nil, func(input *string) {
-		statusNoticeQuit()
-		if input == nil {
-			win.ShowWarningMessage1("Cancelled text input, bye now!", nil, quit)
-		} else {
-			win.ShowInformationMessage1("You entered: `"+(*input)+"`, bye now!", nil, quit)
-		}
-	})
+	}, nil, nil)(
+		func(input *string) {
+			statusNoticeQuit()
+			if input == nil {
+				win.ShowWarningMessage1("Cancelled text input, bye now!", nil, nil)(quit)
+			} else {
+				win.ShowInformationMessage1("You entered: `"+(*input)+"`, bye now!", nil, nil)(quit)
+			}
+		})
 }
 
 func quit(*string) { os.Exit(0) }

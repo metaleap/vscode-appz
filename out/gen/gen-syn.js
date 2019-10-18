@@ -79,7 +79,7 @@ class Builder {
     LETS(values, then) {
         return then(...values);
     }
-    enumFrom(it) {
+    fromEnum(it) {
         return {
             fromPrep: it,
             name: it.name,
@@ -94,25 +94,29 @@ class Builder {
             })),
         };
     }
-    interfaceFrom(it) {
+    fromInterface(it) {
         return {
             fromPrep: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.interfaces(it.name),
             Docs: this.docs(gen.docs(it.fromOrig)),
-            Methods: it.methods.map((method) => ({
-                fromPrep: method,
-                name: (method.nameOrig && method.nameOrig.length) ? method.nameOrig : method.name,
-                Name: this.gen.nameRewriters.methods((this.gen.options.funcOverloads && method.nameOrig && method.nameOrig.length) ? method.nameOrig : method.name),
-                Docs: method.isProps
-                    ? [{ Lines: ["Provides single-call access to numerous individual `" + this.gen.nameRewriters.types.interfaces(it.name) + "` properties at once."], ForParam: "" }]
-                    : this.docs(gen.docs(method.fromOrig ? method.fromOrig.decl : it.fromOrig, () => method.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
-                Type: null,
-                Args: method.args.map((arg) => this.argFrom(arg, method)),
-            })),
+            Methods: it.methods.map((method) => {
+                const me = {
+                    fromPrep: method,
+                    name: (method.nameOrig && method.nameOrig.length) ? method.nameOrig : method.name,
+                    Name: this.gen.nameRewriters.methods(method.name),
+                    Docs: method.isProps
+                        ? [{ Lines: ["Provides single-call access to numerous individual `" + this.gen.nameRewriters.types.interfaces(it.name) + "` properties at once."], ForParam: "" }]
+                        : this.docs(gen.docs(method.fromOrig ? method.fromOrig.decl : it.fromOrig, () => method.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
+                    Type: null,
+                    Args: method.args.map((arg) => this.fromArg(arg, method)),
+                };
+                me.Type = { From: [this.gen.typeUnMaybe(me.Args[me.Args.length - 1].Type)], To: null };
+                return me;
+            }),
         };
     }
-    argFrom(arg, method) {
+    fromArg(arg, method) {
         return {
             fromPrep: arg,
             name: arg.name,
@@ -121,7 +125,7 @@ class Builder {
             Type: this.typeRef(arg.typeSpec, arg.optional, false, (method && ((method.fromOrig && method.fromOrig.decl && method.fromOrig.decl && method.fromOrig.decl.PropType) || method.isProps)) ? true : false),
         };
     }
-    structFrom(it) {
+    fromStruct(it) {
         let ret = {
             fromPrep: it,
             name: it.name,
@@ -214,7 +218,7 @@ class Builder {
                     else if (tup[1] === gen.ScriptPrimType.BooleanFalse)
                         ands[tup[0]] = this.eLit(false);
                     else
-                        throw (tup[1]);
+                        throw tup[1];
             }
             return { Name: tmul[0], Ands: ands };
         }
@@ -309,7 +313,6 @@ class Gen extends gen.Gen {
             },
             unMaybeOutgoingTypes: [TypeRefPrim.String],
             oneIndent: '    ',
-            funcOverloads: false,
             optionalEnumsZeroNotZilch: false,
             haveProps: true,
             demoOutFilePath: ""
@@ -340,7 +343,7 @@ class Gen extends gen.Gen {
         for (let i = 0; i < arr.length; i++) {
             if (i > 0)
                 this.s(joinBy);
-            then(arr[i]);
+            then(arr[i], i);
         }
         return this;
     }
@@ -448,7 +451,7 @@ class Gen extends gen.Gen {
         const tname = this.typeOwn(it);
         if (tname)
             return this.s(tname.Name);
-        throw it;
+        throw JSON.stringify(it);
     }
     emitMethodImpl(interfaceOrStruct, method, fillBody) {
         const me = {
@@ -499,7 +502,7 @@ class Gen extends gen.Gen {
                         .emitInstr(iblock.If[1]);
                 return this;
             }
-            // throw "<instr>" + JSON.stringify(it)
+            throw "<instr>" + JSON.stringify(it);
         }
         return this;
     }
@@ -556,8 +559,7 @@ class Gen extends gen.Gen {
         const ename = it;
         if (ename && ename.Name !== undefined)
             return this.s(ename.Name ? ename.Name : this.options.idents.curInst);
-        // throw "<expr>" + JSON.stringify(it)
-        return this;
+        throw "<expr>" + JSON.stringify(it);
     }
     convOrRet(dstVarName, src, dstType, okBoolName = 'ok', onErrRet = undefined) {
         const _ = this.b;
@@ -656,7 +658,7 @@ class Gen extends gen.Gen {
     }
     genMethodImpl_ObjMethodCall(struct, method, _, body) {
         if (method.Name === 'Dispose')
-            body.push(_.eCall(_.oDot(_.eThis(), _.n("disp"), _.n("Dispose"))));
+            body.push(_.iRet(_.eCall(_.oDot(_.eThis(), _.n("disp"), _.n("Dispose")))));
         else
             this.genMethodImpl_methodCall(struct, method, _, body, _.oDot(_.eThis(), _.n("disp"), _.n("id")), _.oDot(_.eThis(), _.n("disp"), _.n("impl")));
     }
@@ -664,7 +666,7 @@ class Gen extends gen.Gen {
         this.genMethodImpl_methodCall(typeRef, method, _, body);
     }
     genMethodImpl_methodCall(iface, method, _, body, idVal, impl) {
-        const __ = gen.idents(method.fromPrep.args, 'msg', 'on', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok', 'ret');
+        const __ = gen.idents(method.fromPrep.args, 'msg', 'onresp', 'onret', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok', 'ret');
         const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args);
         const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length;
         if (!impl)
@@ -722,11 +724,11 @@ class Gen extends gen.Gen {
             ])).concat(_.EACH(argtypes, (atype, i) => _.LET(`_a_${i}_`, aname => [_.iVar(aname, atype)].concat(this.convOrRet(aname, _.oIdx(_.n("args"), _.eLit(i)), atype, __.ok, onerrret))))).concat(call, _.iRet(rettype ? _.eTup(_.n(__.ret), _.eLit(true)) : _.eLit(true))));
             body.push(_.iVar(fnid, TypeRefPrim.String), _.iIf(_.oIsnt(_.n(arg.Name)), [
                 _.eCall(_.n("OnError"), impl, _.eLit(`${iface.Name}.${method.Name}: the '${arg.Name}' arg (which is not optional but required) was not passed by the caller`), _.eZilch()),
-                _.iRet(null),
+                _.iRet(_.eZilch()),
             ]), _.iSet(_.n(fnid), _.eCall(_.oDot(impl, _.n("nextSub")), rettype ? _.eZilch() : handler, rettype ? handler : _.eZilch())), _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n(fnid)));
         };
-        const lastarg = method.Args[method.Args.length - 1];
-        const isdisp = lastarg && lastarg.fromPrep && lastarg.fromPrep.isFromRetThenable && gen.typePromOf(lastarg.fromPrep.typeSpec, 'Disposable');
+        const retarg = method.Args.find(_ => _.fromPrep && _.fromPrep.isFromRetThenable);
+        const isdisp = retarg && gen.typePromOf(retarg.fromPrep.typeSpec, 'Disposable');
         const isevt = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl : null;
         if (isevt && isevt.EvtName && isevt.EvtName.length)
             eventlike(method.Args[0]);
@@ -768,27 +770,38 @@ class Gen extends gen.Gen {
                         }
                         body.push(set);
                     }
-        body.push(_.iVar(__.on, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }));
-        if (lastarg && lastarg.fromPrep.isFromRetThenable) {
+        body.push(_.iVar(__.onresp, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }), _.iVar(__.onret, method.Type.From[0]));
+        if (retarg) {
             const meprop = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl : null;
             const isprop = meprop && meprop.PropType;
             const isprops = method.fromPrep && method.fromPrep.isProps;
-            const isval = gen.typePromOf(lastarg.fromPrep.typeSpec, gen.ScriptPrimType.Boolean) || gen.typePromOf(lastarg.fromPrep.typeSpec, gen.ScriptPrimType.Number);
-            const dsttype = _.typeRef(lastarg.fromPrep.typeSpec, !(isval || isprop || isprops), true);
-            body.push(_.iIf(_.oIs(_.n(lastarg.Name)), [
-                _.iSet(_.n(__.on), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iVar(__.ok, TypeRefPrim.Bool), _.iVar(__.result, dsttype), _.iIf(_.oIs(_.n(__.payload)), this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok), _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => [])), _.WHEN(isdisp, () => [
-                    _.eCall(_.n(lastarg.Name), _.eCall(_.oDot(_.n(__.result), _.n('bind')), ...[impl].concat(...evtsubfnids.map(fnid => _.n(fnid))))),
-                ], () => [
-                    _.eCall(_.n(lastarg.Name), _.n(__.result)),
-                ])[0], _.iRet(_.eLit(true)))),
-            ]));
+            const isval = gen.typePromOf(retarg.fromPrep.typeSpec, gen.ScriptPrimType.Boolean) || gen.typePromOf(retarg.fromPrep.typeSpec, gen.ScriptPrimType.Number);
+            let dsttype = _.typeRef(retarg.fromPrep.typeSpec, !(isval || isprop || isprops), true);
+            if (this.typeMaybe(dsttype) && !this.typeMaybe(dsttype).Maybe)
+                dsttype = null;
+            body.push(_.iSet(_.n(__.onret), _.n(retarg.Name)), _.iSet(_.n(__.onresp), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, ..._.WHEN(dsttype, () => [
+                _.iVar(__.ok, TypeRefPrim.Bool),
+                _.iVar(__.result, dsttype),
+                _.iIf(_.oIs(_.n(__.payload)), this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok), _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => [])),
+                _.WHEN(isdisp, () => [_.iIf(_.oIs(_.n(__.onret)), [
+                        _.eCall(_.n(__.onret), _.eCall(_.oDot(_.n(__.result), _.n('bind')), ...[impl].concat(...evtsubfnids.map(fnid => _.n(fnid))))),
+                    ])], () => [_.iIf(_.oIs(_.n(__.onret)), [
+                        _.eCall(_.n(__.onret), _.n(__.result)),
+                    ])])[0],
+                _.iRet(_.eLit(true)),
+            ], () => [
+                _.iIf(_.oIs(_.n(__.payload)), [_.iRet(_.eLit(false))]),
+                _.iIf(_.oIs(_.n(__.onret)), [_.eCall(_.n(__.onret))]),
+                _.iRet(_.eLit(true)),
+            ]))));
         }
         if (!funcfields.length)
-            body.push(_.eCall(_.oDot(impl, _.n('send')), _.n(__.msg), _.n(__.on)));
+            body.push(_.eCall(_.oDot(impl, _.n('send')), _.n(__.msg), _.n(__.onresp)));
         else
             body.push(_.eCall(_.oDot(impl, _.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iIf(_.oNeq(_.eLen(_.n(__.fnids), false), _.eLit(0)), [
                 _.iLock(_.eThis(), _.iFor(_.n(__.fnid), _.n(__.fnids), _.iDel(_.oDot(impl, _.n('cbOther')), _.n(__.fnid)))),
-            ]), _.iRet(_.oOr(_.oIsnt(_.n(__.on)), _.eCall(_.n(__.on), _.n(__.payload)))))));
+            ]), _.iRet(_.oOr(_.oIsnt(_.n(__.onresp)), _.eCall(_.n(__.onresp), _.n(__.payload)))))));
+        body.push(_.iRet(_.eFunc(method.Type.From.map((_, i) => ({ Name: "a" + i, Type: _ })), null, _.iSet(_.n(__.onret), _.n("a0")))));
     }
     emitIntro() {
         return this.lines("#", "# NOTE, this is not a CoffeeScript file: the .coffee extension is solely", "# for the convenience of syntax-highlighting in editors & source viewers.", "#", "# A debug-print of our in-memory-only intermediate-representation prepared", "# for code-gens that choose to inherit from `gen-ast.Gen` to stay lean &", "# mean & low on LoCs for maintainability & ease of porting & consistency.", "#", "# Again, all the below is just a debug-print: it's never to be parsed (and", "# the in-mem IR never to be interpreted, other than for actual code-gen).", "# Just a dump of all the structures available to a code-gen for emitting.", "#", "", "");
@@ -815,11 +828,11 @@ class Gen extends gen.Gen {
             })),
             IsTop: true,
         };
-        this.allEnums = prep.enums.map(_ => build.enumFrom(_));
-        this.allInterfaces = [ifacetop].concat(...prep.interfaces.map(_ => build.interfaceFrom(_)));
+        this.allEnums = prep.enums.map(_ => build.fromEnum(_));
+        this.allInterfaces = [ifacetop].concat(...prep.interfaces.map(_ => build.fromInterface(_)));
         this.allStructs = {};
         for (const it of prep.structs) {
-            const struct = build.structFrom(it);
+            const struct = build.fromStruct(it);
             this.allStructs[struct.Name] = struct;
         }
         { // set all structs' Outgoing & Incoming bools only now that all ifaces and structs are complete
@@ -887,17 +900,23 @@ class Gen extends gen.Gen {
                     });
                 for (const field of struct.fromPrep.fields)
                     if (tfun = gen.typeFun(field.typeSpec)) {
-                        if (tfun[1])
-                            throw tfun[1]; // handle it when we get there
                         const orig = field.fromOrig;
                         if (!orig)
                             throw field;
                         const prepargs = tfun[0].map((_, i) => gen.argFrom(_, orig.parameters[i]));
-                        this.emitMethodImpl(struct, {
-                            Name: this.nameRewriters.methods(field.name),
-                            name: field.name, Args: prepargs.map(_ => this.b.argFrom(_)), Type: null, Docs: this.b.docs(gen.docs(field.fromOrig), [], true, true),
+                        let tret = tfun[1];
+                        if (!gen.typeProm(tret))
+                            tret = { Thens: [tret] };
+                        prepargs.push({ name: "onDone", isFromRetThenable: true, optional: true, typeSpec: tret });
+                        const me = {
+                            name: field.name, Name: this.nameRewriters.methods(field.name),
+                            Args: prepargs.map(_ => this.b.fromArg(_)),
+                            Type: null,
+                            Docs: this.b.docs(gen.docs(field.fromOrig), [], true, true),
                             fromPrep: { args: prepargs, name: field.name, nameOrig: field.fromOrig.getText() }
-                        }, this.genMethodImpl_ObjMethodCall);
+                        };
+                        me.Type = { From: [this.typeUnMaybe(me.Args[me.Args.length - 1].Type)], To: null };
+                        this.emitMethodImpl(struct, me, this.genMethodImpl_ObjMethodCall);
                     }
             }
         }
@@ -938,7 +957,7 @@ class Gen extends gen.Gen {
     }
     typeMaybe(it) {
         const me = it;
-        return (me && me.Maybe) ? me : null;
+        return (me && me.Maybe !== undefined) ? me : null;
     }
     typeFunc(it) {
         const me = it;

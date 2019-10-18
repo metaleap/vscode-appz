@@ -28,29 +28,29 @@ var StatusBarAlignment;
 })(StatusBarAlignment = exports.StatusBarAlignment || (exports.StatusBarAlignment = {}));
 function newMessageItem() {
     let me;
-    me = { populateFrom: _ => MessageItem_populateFrom.call(me, _) };
+    me = { populateFrom: _ => MessageItem_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 exports.newMessageItem = newMessageItem;
 function newQuickPickItem() {
     let me;
-    me = { populateFrom: _ => QuickPickItem_populateFrom.call(me, _) };
+    me = { populateFrom: _ => QuickPickItem_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 exports.newQuickPickItem = newQuickPickItem;
 function newWorkspaceFolder() {
     let me;
-    me = { populateFrom: _ => WorkspaceFolder_populateFrom.call(me, _) };
+    me = { populateFrom: _ => WorkspaceFolder_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 function newWindowState() {
     let me;
-    me = { populateFrom: _ => WindowState_populateFrom.call(me, _) };
+    me = { populateFrom: _ => WindowState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 function newStatusBarItem() {
     let me;
-    me = { populateFrom: _ => StatusBarItem_populateFrom.call(me, _) };
+    me = { populateFrom: _ => StatusBarItem_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     me.Show = () => StatusBarItem_Show.call(me);
     me.Hide = () => StatusBarItem_Hide.call(me);
     me.Dispose = () => StatusBarItem_Dispose.call(me);
@@ -58,7 +58,7 @@ function newStatusBarItem() {
 }
 function newOutputChannel() {
     let me;
-    me = { populateFrom: _ => OutputChannel_populateFrom.call(me, _) };
+    me = { populateFrom: _ => OutputChannel_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     me.Append = (a0) => OutputChannel_Append.call(me, a0);
     me.AppendLine = (a0) => OutputChannel_AppendLine.call(me, a0);
     me.Clear = () => OutputChannel_Clear.call(me);
@@ -69,22 +69,22 @@ function newOutputChannel() {
 }
 function newWorkspaceFoldersChangeEvent() {
     let me;
-    me = { populateFrom: _ => WorkspaceFoldersChangeEvent_populateFrom.call(me, _) };
+    me = { populateFrom: _ => WorkspaceFoldersChangeEvent_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 function newDiagnosticChangeEvent() {
     let me;
-    me = { populateFrom: _ => DiagnosticChangeEvent_populateFrom.call(me, _) };
+    me = { populateFrom: _ => DiagnosticChangeEvent_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 function newEnvProperties() {
     let me;
-    me = { populateFrom: _ => EnvProperties_populateFrom.call(me, _) };
+    me = { populateFrom: _ => EnvProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 function newWorkspaceProperties() {
     let me;
-    me = { populateFrom: _ => WorkspaceProperties_populateFrom.call(me, _) };
+    me = { populateFrom: _ => WorkspaceProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 class impl {
@@ -107,24 +107,29 @@ class implWindow extends implBase {
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let _result_;
-                    [_result_, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
-                    result = _result_;
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let _result_;
+                [_result_, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+                result = _result_;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowInformationMessage2(message, options, items, onDone) {
         let msg;
@@ -134,24 +139,29 @@ class implWindow extends implBase {
         msg.Data["message"] = message;
         msg.Data["options"] = options;
         msg.Data["items"] = items;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let _result_;
-                    [_result_, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
-                    result = _result_;
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let _result_;
+                [_result_, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+                result = _result_;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowInformationMessage3(message, items, onDone) {
         let msg;
@@ -160,23 +170,28 @@ class implWindow extends implBase {
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newMessageItem();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newMessageItem();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowInformationMessage4(message, options, items, onDone) {
         let msg;
@@ -186,23 +201,28 @@ class implWindow extends implBase {
         msg.Data["message"] = message;
         msg.Data["options"] = options;
         msg.Data["items"] = items;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newMessageItem();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newMessageItem();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowWarningMessage1(message, items, onDone) {
         let msg;
@@ -211,24 +231,29 @@ class implWindow extends implBase {
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let _result_;
-                    [_result_, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
-                    result = _result_;
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let _result_;
+                [_result_, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+                result = _result_;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowWarningMessage2(message, options, items, onDone) {
         let msg;
@@ -238,24 +263,29 @@ class implWindow extends implBase {
         msg.Data["message"] = message;
         msg.Data["options"] = options;
         msg.Data["items"] = items;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let _result_;
-                    [_result_, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
-                    result = _result_;
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let _result_;
+                [_result_, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+                result = _result_;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowWarningMessage3(message, items, onDone) {
         let msg;
@@ -264,23 +294,28 @@ class implWindow extends implBase {
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newMessageItem();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newMessageItem();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowWarningMessage4(message, options, items, onDone) {
         let msg;
@@ -290,23 +325,28 @@ class implWindow extends implBase {
         msg.Data["message"] = message;
         msg.Data["options"] = options;
         msg.Data["items"] = items;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newMessageItem();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newMessageItem();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowErrorMessage1(message, items, onDone) {
         let msg;
@@ -315,24 +355,29 @@ class implWindow extends implBase {
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let _result_;
-                    [_result_, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
-                    result = _result_;
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let _result_;
+                [_result_, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+                result = _result_;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowErrorMessage2(message, options, items, onDone) {
         let msg;
@@ -342,24 +387,29 @@ class implWindow extends implBase {
         msg.Data["message"] = message;
         msg.Data["options"] = options;
         msg.Data["items"] = items;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let _result_;
-                    [_result_, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
-                    result = _result_;
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let _result_;
+                [_result_, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+                result = _result_;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowErrorMessage3(message, items, onDone) {
         let msg;
@@ -368,23 +418,28 @@ class implWindow extends implBase {
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newMessageItem();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newMessageItem();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowErrorMessage4(message, options, items, onDone) {
         let msg;
@@ -394,23 +449,28 @@ class implWindow extends implBase {
         msg.Data["message"] = message;
         msg.Data["options"] = options;
         msg.Data["items"] = items;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newMessageItem();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newMessageItem();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowInputBox(options, token, onDone) {
         let msg;
@@ -458,23 +518,25 @@ class implWindow extends implBase {
             }
             msg.Data["token"] = token.fnId;
         }
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let _result_;
-                    [_result_, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
-                    result = _result_;
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let _result_;
+                [_result_, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
+                result = _result_;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
         this.Impl().send(msg, (payload) => {
             if (fnids.length !== 0) {
                 {
@@ -483,8 +545,11 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return (undefined === on || null === on) || on(payload);
+            return (undefined === onresp || null === onresp) || onresp(payload);
         });
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowQuickPick1(items, options, token, onDone) {
         let msg;
@@ -536,34 +601,36 @@ class implWindow extends implBase {
             }
             msg.Data["token"] = token.fnId;
         }
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let __coll__result;
-                    [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let __coll__result;
+                [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+                if (!ok) {
+                    return false;
+                }
+                result = new Array(__coll__result.length);
+                let __idx__result;
+                __idx__result = 0;
+                for (const __item__result of __coll__result) {
+                    let __val__result;
+                    [__val__result, ok] = [__item__result, typeof __item__result === "string"];
                     if (!ok) {
                         return false;
                     }
-                    result = new Array(__coll__result.length);
-                    let __idx__result;
-                    __idx__result = 0;
-                    for (const __item__result of __coll__result) {
-                        let __val__result;
-                        [__val__result, ok] = [__item__result, typeof __item__result === "string"];
-                        if (!ok) {
-                            return false;
-                        }
-                        result[__idx__result] = __val__result;
-                        __idx__result = __idx__result + 1;
-                    }
+                    result[__idx__result] = __val__result;
+                    __idx__result = __idx__result + 1;
                 }
-                onDone(result);
-                return true;
-            };
-        }
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
         this.Impl().send(msg, (payload) => {
             if (fnids.length !== 0) {
                 {
@@ -572,8 +639,11 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return (undefined === on || null === on) || on(payload);
+            return (undefined === onresp || null === onresp) || onresp(payload);
         });
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowQuickPick2(items, options, token, onDone) {
         let msg;
@@ -626,23 +696,25 @@ class implWindow extends implBase {
             }
             msg.Data["token"] = token.fnId;
         }
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let _result_;
-                    [_result_, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
-                    result = _result_;
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let _result_;
+                [_result_, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
+                result = _result_;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
         this.Impl().send(msg, (payload) => {
             if (fnids.length !== 0) {
                 {
@@ -651,8 +723,11 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return (undefined === on || null === on) || on(payload);
+            return (undefined === onresp || null === onresp) || onresp(payload);
         });
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowQuickPick3(items, options, token, onDone) {
         let msg;
@@ -704,35 +779,37 @@ class implWindow extends implBase {
             }
             msg.Data["token"] = token.fnId;
         }
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let __coll__result;
-                    [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let __coll__result;
+                [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+                if (!ok) {
+                    return false;
+                }
+                result = new Array(__coll__result.length);
+                let __idx__result;
+                __idx__result = 0;
+                for (const __item__result of __coll__result) {
+                    let __val__result;
+                    __val__result = newQuickPickItem();
+                    ok = __val__result.populateFrom(__item__result);
                     if (!ok) {
                         return false;
                     }
-                    result = new Array(__coll__result.length);
-                    let __idx__result;
-                    __idx__result = 0;
-                    for (const __item__result of __coll__result) {
-                        let __val__result;
-                        __val__result = newQuickPickItem();
-                        ok = __val__result.populateFrom(__item__result);
-                        if (!ok) {
-                            return false;
-                        }
-                        result[__idx__result] = __val__result;
-                        __idx__result = __idx__result + 1;
-                    }
+                    result[__idx__result] = __val__result;
+                    __idx__result = __idx__result + 1;
                 }
-                onDone(result);
-                return true;
-            };
-        }
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
         this.Impl().send(msg, (payload) => {
             if (fnids.length !== 0) {
                 {
@@ -741,8 +818,11 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return (undefined === on || null === on) || on(payload);
+            return (undefined === onresp || null === onresp) || onresp(payload);
         });
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowQuickPick4(items, options, token, onDone) {
         let msg;
@@ -795,22 +875,24 @@ class implWindow extends implBase {
             }
             msg.Data["token"] = token.fnId;
         }
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newQuickPickItem();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newQuickPickItem();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
         this.Impl().send(msg, (payload) => {
             if (fnids.length !== 0) {
                 {
@@ -819,8 +901,11 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return (undefined === on || null === on) || on(payload);
+            return (undefined === onresp || null === onresp) || onresp(payload);
         });
+        return (a0) => {
+            onret = a0;
+        };
     }
     SetStatusBarMessage1(text, hideAfterTimeout, onDone) {
         let msg;
@@ -829,26 +914,31 @@ class implWindow extends implBase {
         msg.Data = {};
         msg.Data["text"] = text;
         msg.Data["hideAfterTimeout"] = hideAfterTimeout;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newDisposable();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
-                }
-                else {
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newDisposable();
+                ok = result.populateFrom(payload);
+                if (!ok) {
                     return false;
                 }
-                onDone(result.bind(this.Impl()));
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            else {
+                return false;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl()));
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     SetStatusBarMessage2(text, onDone) {
         let msg;
@@ -856,26 +946,31 @@ class implWindow extends implBase {
         msg.QName = "window.setStatusBarMessage2";
         msg.Data = {};
         msg.Data["text"] = text;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newDisposable();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
-                }
-                else {
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newDisposable();
+                ok = result.populateFrom(payload);
+                if (!ok) {
                     return false;
                 }
-                onDone(result.bind(this.Impl()));
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            else {
+                return false;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl()));
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowSaveDialog(options, onDone) {
         let msg;
@@ -883,24 +978,29 @@ class implWindow extends implBase {
         msg.QName = "window.showSaveDialog";
         msg.Data = {};
         msg.Data["options"] = options;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let _result_;
-                    [_result_, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
-                    result = _result_;
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let _result_;
+                [_result_, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+                result = _result_;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowOpenDialog(options, onDone) {
         let msg;
@@ -908,35 +1008,40 @@ class implWindow extends implBase {
         msg.QName = "window.showOpenDialog";
         msg.Data = {};
         msg.Data["options"] = options;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let __coll__result;
-                    [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let __coll__result;
+                [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+                if (!ok) {
+                    return false;
+                }
+                result = new Array(__coll__result.length);
+                let __idx__result;
+                __idx__result = 0;
+                for (const __item__result of __coll__result) {
+                    let __val__result;
+                    [__val__result, ok] = [__item__result, typeof __item__result === "string"];
                     if (!ok) {
                         return false;
                     }
-                    result = new Array(__coll__result.length);
-                    let __idx__result;
-                    __idx__result = 0;
-                    for (const __item__result of __coll__result) {
-                        let __val__result;
-                        [__val__result, ok] = [__item__result, typeof __item__result === "string"];
-                        if (!ok) {
-                            return false;
-                        }
-                        result[__idx__result] = __val__result;
-                        __idx__result = __idx__result + 1;
-                    }
+                    result[__idx__result] = __val__result;
+                    __idx__result = __idx__result + 1;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ShowWorkspaceFolderPick(options, onDone) {
         let msg;
@@ -946,46 +1051,56 @@ class implWindow extends implBase {
         if ((undefined !== options && null !== options)) {
             msg.Data["options"] = options;
         }
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newWorkspaceFolder();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newWorkspaceFolder();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     State(onDone) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.state";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newWindowState();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newWindowState();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     OnDidChangeWindowState(listener, onDone) {
         let msg;
@@ -995,7 +1110,7 @@ class implWindow extends implBase {
         let _fnid_listener;
         if ((undefined === listener || null === listener)) {
             vsc_appz_1.OnError(this.Impl(), "Window.OnDidChangeWindowState: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
-            return;
+            return null;
         }
         _fnid_listener = this.Impl().nextSub((args) => {
             let ok;
@@ -1012,26 +1127,31 @@ class implWindow extends implBase {
             return true;
         }, null);
         msg.Data["listener"] = _fnid_listener;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newDisposable();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
-                }
-                else {
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newDisposable();
+                ok = result.populateFrom(payload);
+                if (!ok) {
                     return false;
                 }
-                onDone(result.bind(this.Impl(), _fnid_listener));
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            else {
+                return false;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), _fnid_listener));
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     CreateStatusBarItem(alignment, priority, onDone) {
         let msg;
@@ -1044,24 +1164,29 @@ class implWindow extends implBase {
         if ((undefined !== priority && null !== priority)) {
             msg.Data["priority"] = priority;
         }
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newStatusBarItem();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
-                    result.disp.impl = this.Impl();
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newStatusBarItem();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+                result.disp.impl = this.Impl();
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     CreateOutputChannel(name, onDone) {
         let msg;
@@ -1069,24 +1194,29 @@ class implWindow extends implBase {
         msg.QName = "window.createOutputChannel";
         msg.Data = {};
         msg.Data["name"] = name;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newOutputChannel();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
-                    result.disp.impl = this.Impl();
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newOutputChannel();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+                result.disp.impl = this.Impl();
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
 }
 class implEnv extends implBase {
@@ -1097,229 +1227,279 @@ class implEnv extends implBase {
         msg.QName = "env.openExternal";
         msg.Data = {};
         msg.Data["target"] = target;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    [result, ok] = [payload, typeof payload === "boolean"];
-                    if (!ok) {
-                        return false;
-                    }
-                }
-                else {
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                [result, ok] = [payload, typeof payload === "boolean"];
+                if (!ok) {
                     return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            else {
+                return false;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     AppName(onDone) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.appName";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    [result, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                [result, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     AppRoot(onDone) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.appRoot";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    [result, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                [result, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     Language(onDone) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.language";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    [result, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                [result, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     MachineId(onDone) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.machineId";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    [result, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                [result, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     RemoteName(onDone) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.remoteName";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let _result_;
-                    [_result_, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
-                    result = _result_;
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let _result_;
+                [_result_, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+                result = _result_;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     SessionId(onDone) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.sessionId";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    [result, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                [result, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     Shell(onDone) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.shell";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    [result, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                [result, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     UriScheme(onDone) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.uriScheme";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    [result, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                [result, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     Properties(onDone) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.Properties";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newEnvProperties();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
-                }
-                else {
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newEnvProperties();
+                ok = result.populateFrom(payload);
+                if (!ok) {
                     return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            else {
+                return false;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
 }
 class implWorkspace extends implBase {
@@ -1329,48 +1509,58 @@ class implWorkspace extends implBase {
         msg = newipcMsg();
         msg.QName = "workspace.name";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let _result_;
-                    [_result_, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
-                    result = _result_;
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let _result_;
+                [_result_, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+                result = _result_;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     WorkspaceFile(onDone) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.workspaceFile";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let _result_;
-                    [_result_, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
-                    result = _result_;
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let _result_;
+                [_result_, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+                result = _result_;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     SaveAll(includeUntitled, onDone) {
         let msg;
@@ -1378,25 +1568,30 @@ class implWorkspace extends implBase {
         msg.QName = "workspace.saveAll";
         msg.Data = {};
         msg.Data["includeUntitled"] = includeUntitled;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    [result, ok] = [payload, typeof payload === "boolean"];
-                    if (!ok) {
-                        return false;
-                    }
-                }
-                else {
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                [result, ok] = [payload, typeof payload === "boolean"];
+                if (!ok) {
                     return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            else {
+                return false;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     OnDidChangeWorkspaceFolders(listener, onDone) {
         let msg;
@@ -1406,7 +1601,7 @@ class implWorkspace extends implBase {
         let _fnid_listener;
         if ((undefined === listener || null === listener)) {
             vsc_appz_1.OnError(this.Impl(), "Workspace.OnDidChangeWorkspaceFolders: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
-            return;
+            return null;
         }
         _fnid_listener = this.Impl().nextSub((args) => {
             let ok;
@@ -1423,26 +1618,31 @@ class implWorkspace extends implBase {
             return true;
         }, null);
         msg.Data["listener"] = _fnid_listener;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newDisposable();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
-                }
-                else {
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newDisposable();
+                ok = result.populateFrom(payload);
+                if (!ok) {
                     return false;
                 }
-                onDone(result.bind(this.Impl(), _fnid_listener));
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            else {
+                return false;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), _fnid_listener));
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     GetWorkspaceFolder(uri, onDone) {
         let msg;
@@ -1450,59 +1650,69 @@ class implWorkspace extends implBase {
         msg.QName = "workspace.getWorkspaceFolder";
         msg.Data = {};
         msg.Data["uri"] = uri;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newWorkspaceFolder();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newWorkspaceFolder();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     WorkspaceFolders(onDone) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.workspaceFolders";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let __coll__result;
-                    [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let __coll__result;
+                [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+                if (!ok) {
+                    return false;
+                }
+                result = new Array(__coll__result.length);
+                let __idx__result;
+                __idx__result = 0;
+                for (const __item__result of __coll__result) {
+                    let __val__result;
+                    __val__result = newWorkspaceFolder();
+                    ok = __val__result.populateFrom(__item__result);
                     if (!ok) {
                         return false;
                     }
-                    result = new Array(__coll__result.length);
-                    let __idx__result;
-                    __idx__result = 0;
-                    for (const __item__result of __coll__result) {
-                        let __val__result;
-                        __val__result = newWorkspaceFolder();
-                        ok = __val__result.populateFrom(__item__result);
-                        if (!ok) {
-                            return false;
-                        }
-                        result[__idx__result] = __val__result;
-                        __idx__result = __idx__result + 1;
-                    }
+                    result[__idx__result] = __val__result;
+                    __idx__result = __idx__result + 1;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     FindFiles(include, exclude, maxResults, token, onDone) {
         let msg;
@@ -1525,35 +1735,40 @@ class implWorkspace extends implBase {
             }
             msg.Data["token"] = token.fnId;
         }
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let __coll__result;
-                    [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let __coll__result;
+                [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+                if (!ok) {
+                    return false;
+                }
+                result = new Array(__coll__result.length);
+                let __idx__result;
+                __idx__result = 0;
+                for (const __item__result of __coll__result) {
+                    let __val__result;
+                    [__val__result, ok] = [__item__result, typeof __item__result === "string"];
                     if (!ok) {
                         return false;
                     }
-                    result = new Array(__coll__result.length);
-                    let __idx__result;
-                    __idx__result = 0;
-                    for (const __item__result of __coll__result) {
-                        let __val__result;
-                        [__val__result, ok] = [__item__result, typeof __item__result === "string"];
-                        if (!ok) {
-                            return false;
-                        }
-                        result[__idx__result] = __val__result;
-                        __idx__result = __idx__result + 1;
-                    }
+                    result[__idx__result] = __val__result;
+                    __idx__result = __idx__result + 1;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     AsRelativePath(pathOrUri, includeWorkspaceFolder, onDone) {
         let msg;
@@ -1562,50 +1777,60 @@ class implWorkspace extends implBase {
         msg.Data = {};
         msg.Data["pathOrUri"] = pathOrUri;
         msg.Data["includeWorkspaceFolder"] = includeWorkspaceFolder;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let _result_;
-                    [_result_, ok] = [payload, typeof payload === "string"];
-                    if (!ok) {
-                        return false;
-                    }
-                    result = _result_;
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let _result_;
+                [_result_, ok] = [payload, typeof payload === "string"];
+                if (!ok) {
+                    return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+                result = _result_;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     Properties(onDone) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.Properties";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newWorkspaceProperties();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
-                }
-                else {
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newWorkspaceProperties();
+                ok = result.populateFrom(payload);
+                if (!ok) {
                     return false;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            else {
+                return false;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
 }
 class implLanguages extends implBase {
@@ -1615,35 +1840,40 @@ class implLanguages extends implBase {
         msg = newipcMsg();
         msg.QName = "languages.getLanguages";
         msg.Data = {};
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let __coll__result;
-                    [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let __coll__result;
+                [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+                if (!ok) {
+                    return false;
+                }
+                result = new Array(__coll__result.length);
+                let __idx__result;
+                __idx__result = 0;
+                for (const __item__result of __coll__result) {
+                    let __val__result;
+                    [__val__result, ok] = [__item__result, typeof __item__result === "string"];
                     if (!ok) {
                         return false;
                     }
-                    result = new Array(__coll__result.length);
-                    let __idx__result;
-                    __idx__result = 0;
-                    for (const __item__result of __coll__result) {
-                        let __val__result;
-                        [__val__result, ok] = [__item__result, typeof __item__result === "string"];
-                        if (!ok) {
-                            return false;
-                        }
-                        result[__idx__result] = __val__result;
-                        __idx__result = __idx__result + 1;
-                    }
+                    result[__idx__result] = __val__result;
+                    __idx__result = __idx__result + 1;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     OnDidChangeDiagnostics(listener, onDone) {
         let msg;
@@ -1653,7 +1883,7 @@ class implLanguages extends implBase {
         let _fnid_listener;
         if ((undefined === listener || null === listener)) {
             vsc_appz_1.OnError(this.Impl(), "Languages.OnDidChangeDiagnostics: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
-            return;
+            return null;
         }
         _fnid_listener = this.Impl().nextSub((args) => {
             let ok;
@@ -1670,26 +1900,31 @@ class implLanguages extends implBase {
             return true;
         }, null);
         msg.Data["listener"] = _fnid_listener;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newDisposable();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
-                }
-                else {
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newDisposable();
+                ok = result.populateFrom(payload);
+                if (!ok) {
                     return false;
                 }
-                onDone(result.bind(this.Impl(), _fnid_listener));
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            else {
+                return false;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), _fnid_listener));
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
 }
 class implExtensions extends implBase {
@@ -1702,7 +1937,7 @@ class implExtensions extends implBase {
         let _fnid_listener;
         if ((undefined === listener || null === listener)) {
             vsc_appz_1.OnError(this.Impl(), "Extensions.OnDidChange: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
-            return;
+            return null;
         }
         _fnid_listener = this.Impl().nextSub((args) => {
             let ok;
@@ -1713,26 +1948,31 @@ class implExtensions extends implBase {
             return true;
         }, null);
         msg.Data["listener"] = _fnid_listener;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newDisposable();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
-                }
-                else {
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newDisposable();
+                ok = result.populateFrom(payload);
+                if (!ok) {
                     return false;
                 }
-                onDone(result.bind(this.Impl(), _fnid_listener));
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            else {
+                return false;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), _fnid_listener));
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
 }
 class implCommands extends implBase {
@@ -1746,7 +1986,7 @@ class implCommands extends implBase {
         let _fnid_callback;
         if ((undefined === callback || null === callback)) {
             vsc_appz_1.OnError(this.Impl(), "Commands.RegisterCommand: the 'callback' arg (which is not optional but required) was not passed by the caller", null);
-            return;
+            return null;
         }
         _fnid_callback = this.Impl().nextSub(null, (args) => {
             let ok;
@@ -1763,26 +2003,31 @@ class implCommands extends implBase {
             return [ret, true];
         });
         msg.Data["callback"] = _fnid_callback;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    result = newDisposable();
-                    ok = result.populateFrom(payload);
-                    if (!ok) {
-                        return false;
-                    }
-                }
-                else {
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newDisposable();
+                ok = result.populateFrom(payload);
+                if (!ok) {
                     return false;
                 }
-                onDone(result.bind(this.Impl(), _fnid_callback));
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            else {
+                return false;
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), _fnid_callback));
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     ExecuteCommand(command, rest, onDone) {
         let msg;
@@ -1791,21 +2036,26 @@ class implCommands extends implBase {
         msg.Data = {};
         msg.Data["command"] = command;
         msg.Data["rest"] = rest;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    [result, ok] = [payload, true];
-                    if (ok) {
-                    }
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                [result, ok] = [payload, true];
+                if (ok) {
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
     GetCommands(filterInternal, onDone) {
         let msg;
@@ -1813,88 +2063,163 @@ class implCommands extends implBase {
         msg.QName = "commands.getCommands";
         msg.Data = {};
         msg.Data["filterInternal"] = filterInternal;
-        let on;
-        if ((undefined !== onDone && null !== onDone)) {
-            on = (payload) => {
-                let ok;
-                let result;
-                if ((undefined !== payload && null !== payload)) {
-                    let __coll__result;
-                    [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        let onresp;
+        let onret;
+        onret = onDone;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                let __coll__result;
+                [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+                if (!ok) {
+                    return false;
+                }
+                result = new Array(__coll__result.length);
+                let __idx__result;
+                __idx__result = 0;
+                for (const __item__result of __coll__result) {
+                    let __val__result;
+                    [__val__result, ok] = [__item__result, typeof __item__result === "string"];
                     if (!ok) {
                         return false;
                     }
-                    result = new Array(__coll__result.length);
-                    let __idx__result;
-                    __idx__result = 0;
-                    for (const __item__result of __coll__result) {
-                        let __val__result;
-                        [__val__result, ok] = [__item__result, typeof __item__result === "string"];
-                        if (!ok) {
-                            return false;
-                        }
-                        result[__idx__result] = __val__result;
-                        __idx__result = __idx__result + 1;
-                    }
+                    result[__idx__result] = __val__result;
+                    __idx__result = __idx__result + 1;
                 }
-                onDone(result);
-                return true;
-            };
-        }
-        this.Impl().send(msg, on);
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
     }
 }
-function StatusBarItem_Show() {
+function StatusBarItem_Show(onDone) {
     let msg;
     msg = newipcMsg();
     msg.QName = "StatusBarItem.show";
     msg.Data = {};
     msg.Data[""] = this.disp.id;
-    let on;
-    this.disp.impl.send(msg, on);
+    let onresp;
+    let onret;
+    onret = onDone;
+    onresp = (payload) => {
+        if ((undefined !== payload && null !== payload)) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
 }
-function StatusBarItem_Hide() {
+function StatusBarItem_Hide(onDone) {
     let msg;
     msg = newipcMsg();
     msg.QName = "StatusBarItem.hide";
     msg.Data = {};
     msg.Data[""] = this.disp.id;
-    let on;
-    this.disp.impl.send(msg, on);
+    let onresp;
+    let onret;
+    onret = onDone;
+    onresp = (payload) => {
+        if ((undefined !== payload && null !== payload)) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
 }
-function StatusBarItem_Dispose() {
-    this.disp.Dispose();
+function StatusBarItem_Dispose(onDone) {
+    return this.disp.Dispose();
 }
-function OutputChannel_Append(value) {
+function OutputChannel_Append(value, onDone) {
     let msg;
     msg = newipcMsg();
     msg.QName = "OutputChannel.append";
     msg.Data = {};
     msg.Data[""] = this.disp.id;
     msg.Data["value"] = value;
-    let on;
-    this.disp.impl.send(msg, on);
+    let onresp;
+    let onret;
+    onret = onDone;
+    onresp = (payload) => {
+        if ((undefined !== payload && null !== payload)) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
 }
-function OutputChannel_AppendLine(value) {
+function OutputChannel_AppendLine(value, onDone) {
     let msg;
     msg = newipcMsg();
     msg.QName = "OutputChannel.appendLine";
     msg.Data = {};
     msg.Data[""] = this.disp.id;
     msg.Data["value"] = value;
-    let on;
-    this.disp.impl.send(msg, on);
+    let onresp;
+    let onret;
+    onret = onDone;
+    onresp = (payload) => {
+        if ((undefined !== payload && null !== payload)) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
 }
-function OutputChannel_Clear() {
+function OutputChannel_Clear(onDone) {
     let msg;
     msg = newipcMsg();
     msg.QName = "OutputChannel.clear";
     msg.Data = {};
     msg.Data[""] = this.disp.id;
-    let on;
-    this.disp.impl.send(msg, on);
+    let onresp;
+    let onret;
+    onret = onDone;
+    onresp = (payload) => {
+        if ((undefined !== payload && null !== payload)) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
 }
-function OutputChannel_Show(preserveFocus) {
+function OutputChannel_Show(preserveFocus, onDone) {
     let msg;
     msg = newipcMsg();
     msg.QName = "OutputChannel.show";
@@ -1903,20 +2228,48 @@ function OutputChannel_Show(preserveFocus) {
     if ((undefined !== preserveFocus && null !== preserveFocus)) {
         msg.Data["preserveFocus"] = preserveFocus;
     }
-    let on;
-    this.disp.impl.send(msg, on);
+    let onresp;
+    let onret;
+    onret = onDone;
+    onresp = (payload) => {
+        if ((undefined !== payload && null !== payload)) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
 }
-function OutputChannel_Hide() {
+function OutputChannel_Hide(onDone) {
     let msg;
     msg = newipcMsg();
     msg.QName = "OutputChannel.hide";
     msg.Data = {};
     msg.Data[""] = this.disp.id;
-    let on;
-    this.disp.impl.send(msg, on);
+    let onresp;
+    let onret;
+    onret = onDone;
+    onresp = (payload) => {
+        if ((undefined !== payload && null !== payload)) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
 }
-function OutputChannel_Dispose() {
-    this.disp.Dispose();
+function OutputChannel_Dispose(onDone) {
+    return this.disp.Dispose();
 }
 function MessageItem_populateFrom(payload) {
     let it;

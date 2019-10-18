@@ -81,7 +81,7 @@ function main() {
                 md = null;
         });
         if (!md)
-            throw ("GONE FROM API:\tmodule `" + modulename + '`');
+            throw "GONE FROM API:\tmodule `" + modulename + '`';
         else {
             const job = {
                 fromOrig: md, moduleName: modulename, enums: [], structs: [], funcs: [], namespaces: {}
@@ -104,7 +104,7 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                         ns = undefined;
                 });
                 if (!ns)
-                    throw ("GONE FROM API:\tnamespace `" + prefixes.join('.') + '.' + subns + '`');
+                    throw "GONE FROM API:\tnamespace `" + prefixes.join('.') + '.' + subns + '`';
                 else {
                     into.namespaces[subns] = ns;
                     gatherAll(into, ns.body, item[subns], ...prefixes.concat(subns));
@@ -154,7 +154,7 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                 });
             }
             if (!members.length)
-                throw ("GONE FROM API:\texport `" + prefixes.join('.') + '.' + item + '`');
+                throw "GONE FROM API:\texport `" + prefixes.join('.') + '.' + item + '`';
             else
                 for (let i = 0; i < members.length; i++)
                     if (!gen.seemsDeprecated(members[i]))
@@ -189,7 +189,7 @@ function gatherMember(into, member, overload, ...prefixes) {
                 gatherFromTypeNode(into, talias.type, talias.typeParameters);
                 break;
             default:
-                throw (member.kind + '\t' + member.getText());
+                throw member.kind + '\t' + member.getText();
         }
 }
 function gatherFromTypeElem(into, it, typeParams = undefined) {
@@ -224,7 +224,7 @@ function gatherFromTypeNode(into, it, typeParams = undefined) {
         case ts.SyntaxKind.LiteralType:
             const lit = it.literal;
             if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(lit.kind))
-                throw (lit.kind + '\t' + it.getText());
+                throw lit.kind + '\t' + it.getText();
             break;
         case ts.SyntaxKind.TypeReference:
             const tref = it, tname = tref.typeName.getText();
@@ -250,7 +250,7 @@ function gatherFromTypeNode(into, it, typeParams = undefined) {
             break;
         default:
             if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.VoidKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(it.kind))
-                throw (it.kind + '\t' + it.getText());
+                throw it.kind + '\t' + it.getText();
     }
 }
 function gatherFunc(into, decl, overload, ...prefixes) {

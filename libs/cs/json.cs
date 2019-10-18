@@ -81,7 +81,7 @@ namespace VscAppz {
                 ret.CbId = (a == null) ? null : (string)a;
             if (obj.TryGetValue("data", out var d) )
                 ret.Data = (d == null) ? null : (dict)d;
-            if (ret.Data == null || ret.Data.Count == 0)
+            if ((ret.Data == null || ret.Data.Count == 0) && ret.QName != "main")
                 throw new JsonException("field `data` is missing");
             return ret;
         }

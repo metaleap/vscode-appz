@@ -15,6 +15,7 @@ export declare class ipcMsg {
     };
 }
 export declare class impl extends vscgen.impl {
+    main: (_: vscgen.Vscode) => void;
     readln: NodeJS.ReadStream;
     jsonOut: NodeJS.WriteStream;
     counter: number;
@@ -27,7 +28,7 @@ export declare class impl extends vscgen.impl {
     cbOther: {
         [_: string]: (_: any[]) => [any, boolean];
     };
-    constructor(stdIn?: NodeJS.ReadStream, stdOut?: NodeJS.WriteStream);
+    constructor(main: (_: vscgen.Vscode) => void, stdIn?: NodeJS.ReadStream, stdOut?: NodeJS.WriteStream);
     nextFuncId(): string;
     nextSub(eitherListener: (_: any[]) => boolean, orOther: (_: any[]) => [any, boolean]): string;
     send(msg: ipcMsg, on?: (_: any) => boolean): void;
@@ -45,6 +46,6 @@ export declare class Disposable {
     subFnIds: string[];
     bind(impl: impl, ...subFnIds: string[]): this;
     populateFrom(payload: any): boolean;
-    Dispose(): void;
+    Dispose(): (_: () => void) => void;
 }
 export {};

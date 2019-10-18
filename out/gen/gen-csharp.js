@@ -8,7 +8,6 @@ class Gen extends gen_syn.Gen {
         this.options.oneIndent = "\t";
         this.options.doc.appendArgsToSummaryFor.funcFields = true;
         this.options.doc.appendArgsToSummaryFor.methods = true;
-        this.options.funcOverloads = true;
         this.nameRewriters.types.interfaces = _ => "I" + this.caseUp(_);
         super.gen(prep);
     }
@@ -81,18 +80,21 @@ class Gen extends gen_syn.Gen {
         anonVarCounter = 1;
         let struct = it.Type, iface = it.Type;
         [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null];
+        const isdisp = struct && (it.Name === "Dispose");
         const isproperty = it.Func.Type && !(it.Func.Args && it.Func.Args.length);
         const emitsigheadln = () => this.lf(iface ? "" : (struct ? ((it.Name !== "populateFrom") ? "public " : "internal ") : "private static "))
             .emitTypeRef(it.Func.Type)
             .s(" ", (iface ? (iface.Name + ".") : "") + it.Name)
             .when(isproperty, () => this.s(" { get "), () => this.s("(")
-            .each(it.Func.Args, ", ", a => this.emitTypeRef(a.Type).s(" ", a.Name))
+            .each(it.Func.Args, ", ", a => this.emitTypeRef(a.Type).s(" ", a.Name, struct ? " = default" : ""))
             .s(") "));
         if (struct)
-            this.line("public partial class " + struct.Name + (it.Name === 'Dispose' ? ' : IDisposable' : '') + " {")
+            this.line("public partial class " + struct.Name + (isdisp ? ' : IDisposable' : '') + " {")
                 .indented(() => {
                 this.emitDocs(it);
                 emitsigheadln().emitInstr(it.Func.Body).line();
+                if (isdisp)
+                    this.line("void IDisposable.Dispose() { this.Dispose(); }");
             }).lines("}", "");
         else if (iface)
             emitsigheadln()
@@ -223,10 +225,12 @@ class Gen extends gen_syn.Gen {
         if (ttup)
             return this.s("(").each(ttup.TupOf, ", ", t => this.emitTypeRef(t)).s(")");
         const tfun = this.typeFunc(it);
-        if (tfun)
+        if (tfun) {
+            const isvoid = (!tfun.From.length) || (tfun.From.length === 1 && !tfun.From[0]);
             return (!tfun.To)
-                ? this.s(tfun.From.length ? "Action<" : "Action").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(tfun.From.length ? ">" : "")
+                ? this.s(isvoid ? "Action" : "Action<").each(isvoid ? [] : tfun.From, ", ", t => this.emitTypeRef(t)).s(isvoid ? "" : ">")
                 : this.s("Func<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(", ").emitTypeRef(tfun.To).s(">");
+        }
         if (it === gen_syn.TypeRefPrim.Real)
             return this.s("double");
         return super.emitTypeRef(it);

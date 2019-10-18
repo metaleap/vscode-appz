@@ -8,30 +8,30 @@ exports.statusNoticeQuit = statusNoticeQuit
 exports.onReady = () => { vsc = main.vsc; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox }
 
 function demo_Commands_GetCommands_and_ExecuteCommand() {
-    vsc.Commands.GetCommands(false, (items) => {
+    vsc.Commands.GetCommands(false, null)((items) => {
         let opts
         opts = {}
         opts.ignoreFocusOut = true
         opts.placeHolder = strFmt("Retrieved {0} command ID(s), pick one to execute or escape now:", items.length)
-        vsc.Window.ShowQuickPick2(items, opts, null, (item) => {
+        vsc.Window.ShowQuickPick2(items, opts, null, null)((item) => {
             if ((undefined === item || null === item)) {
-                vsc.Window.ShowWarningMessage1("Command selection cancelled, bye now!", null, quit)
+                vsc.Window.ShowWarningMessage1("Command selection cancelled, bye now!", null, null)(quit)
             } else {
                 let opts2
                 opts2 = {}
                 opts2.ignoreFocusOut = true
                 opts2.placeHolder = strFmt("Any param for `{0}` command? Else leave blank.", item)
-                vsc.Window.ShowInputBox(opts2, null, (cmdarg) => {
+                vsc.Window.ShowInputBox(opts2, null, null)((cmdarg) => {
                     if ((undefined === cmdarg || null === cmdarg)) {
-                        vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null, quit)
+                        vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null, null)(quit)
                     } else {
                         let cmdargs
                         if ("" !== cmdarg) {
                             cmdargs = new Array(1)
                             cmdargs[0] = cmdarg
                         }
-                        vsc.Commands.ExecuteCommand(item, cmdargs, (ret) => {
-                            vsc.Window.ShowInformationMessage1(strFmt("Command result was: {0}", ret), null, quit)
+                        vsc.Commands.ExecuteCommand(item, cmdargs, null)((ret) => {
+                            vsc.Window.ShowInformationMessage1(strFmt("Command result was: {0}", ret), null, null)(quit)
                         })
                     }
                 })
@@ -46,28 +46,28 @@ function demo_Commands_RegisterCommand() {
     opts.ignoreFocusOut = true
     opts.value = "foo.bar.baz"
     opts.prompt = "Enter your command name. The command will accept a single text input and return a result built from it."
-    vsc.Window.ShowInputBox(opts, null, (cmdname) => {
+    vsc.Window.ShowInputBox(opts, null, null)((cmdname) => {
         if ((undefined === cmdname || null === cmdname)) {
-            vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null, quit)
+            vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null, null)(quit)
         } else {
             vsc.Commands.RegisterCommand(cmdname, (cmdargs) => {
                 vsc.Window.SetStatusBarMessage1(strFmt("Command `{0}` invoked with: `{1}`", cmdname, cmdargs[0]), 4242, null)
                 return strFmt("Input to command `{0}` was: `{1}`", cmdname, cmdargs[0])
-            }, (useToUnregister) => {
+            }, null)((useToUnregister) => {
                 let opts2
                 opts2 = {}
                 opts2.ignoreFocusOut = true
                 opts2.prompt = strFmt("Command `{0}` registered, try it now?", cmdname)
                 opts2.value = strFmt("Enter input to command `{0}` here", cmdname)
-                vsc.Window.ShowInputBox(opts2, null, (cmdarg) => {
+                vsc.Window.ShowInputBox(opts2, null, null)((cmdarg) => {
                     if ((undefined === cmdarg || null === cmdarg)) {
-                        vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null, quit)
+                        vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null, null)(quit)
                     } else {
                         let cmdargs2
                         cmdargs2 = new Array(1)
                         cmdargs2[0] = cmdarg
-                        vsc.Commands.ExecuteCommand(cmdname, cmdargs2, (ret) => {
-                            vsc.Window.ShowInformationMessage1(strFmt("Command result: {0}", ret), null, quit)
+                        vsc.Commands.ExecuteCommand(cmdname, cmdargs2, null)((ret) => {
+                            vsc.Window.ShowInformationMessage1(strFmt("Command result: {0}", ret), null, null)(quit)
                         })
                     }
                 })
@@ -77,17 +77,17 @@ function demo_Commands_RegisterCommand() {
 }
 
 function demo_Languages_GetLanguages() {
-    vsc.Languages.GetLanguages((items) => {
+    vsc.Languages.GetLanguages(null)((items) => {
         let opts
         opts = {}
         opts.ignoreFocusOut = true
         opts.placeHolder = strFmt("Retrieved {0} language ID(s)", items.length)
-        vsc.Window.ShowQuickPick2(items, opts, null, quit)
+        vsc.Window.ShowQuickPick2(items, opts, null, null)(quit)
     })
 }
 
 function demo_Env_Properties() {
-    vsc.Env.Properties((props) => {
+    vsc.Env.Properties(null)((props) => {
         let items
         items = new Array(8)
         {
@@ -103,13 +103,13 @@ function demo_Env_Properties() {
             opts = {}
             opts.ignoreFocusOut = true
             opts.placeHolder = strFmt("Env has {0} properties:", items.length)
-            vsc.Window.ShowQuickPick2(items, opts, null, quit)
+            vsc.Window.ShowQuickPick2(items, opts, null, null)(quit)
         }
     })
 }
 
 function demo_Workspace_Properties() {
-    vsc.Workspace.Properties((props) => {
+    vsc.Workspace.Properties(null)((props) => {
         let items
         items = new Array(3)
         {
@@ -120,7 +120,7 @@ function demo_Workspace_Properties() {
             opts = {}
             opts.ignoreFocusOut = true
             opts.placeHolder = strFmt("Workspace has {0} properties:", items.length)
-            vsc.Window.ShowQuickPick2(items, opts, null, quit)
+            vsc.Window.ShowQuickPick2(items, opts, null, null)(quit)
         }
     })
 }
@@ -137,12 +137,12 @@ function demo_Window_ShowOpenDialog() {
         opts.canSelectFolders = false
         opts.canSelectMany = true
     }
-    vsc.Window.ShowOpenDialog(opts, (filepaths) => {
+    vsc.Window.ShowOpenDialog(opts, null)((filepaths) => {
         statusNoticeQuit()
         if ((undefined === filepaths || null === filepaths)) {
-            vsc.Window.ShowWarningMessage1("Cancelled File-Open dialog, bye now!", null, quit)
+            vsc.Window.ShowWarningMessage1("Cancelled File-Open dialog, bye now!", null, null)(quit)
         } else {
-            vsc.Window.ShowInformationMessage1(strFmt("Selected {0} file path(s), bye now!", filepaths.length), null, quit)
+            vsc.Window.ShowInformationMessage1(strFmt("Selected {0} file path(s), bye now!", filepaths.length), null, null)(quit)
         }
     })
 }
@@ -154,12 +154,12 @@ function demo_Window_ShowSaveDialog() {
     opts.filters = {}
     opts.filters["All"] = ["*"]
     opts.filters["Dummy Filter"] = ["dummy", "demo"]
-    vsc.Window.ShowSaveDialog(opts, (filepath) => {
+    vsc.Window.ShowSaveDialog(opts, null)((filepath) => {
         statusNoticeQuit()
         if ((undefined === filepath || null === filepath)) {
-            vsc.Window.ShowWarningMessage1("Cancelled File-Save dialog, bye now!", null, quit)
+            vsc.Window.ShowWarningMessage1("Cancelled File-Save dialog, bye now!", null, null)(quit)
         } else {
-            vsc.Window.ShowInformationMessage1(strFmt("Selected file path `{0}`, bye now!", filepath), null, quit)
+            vsc.Window.ShowInformationMessage1(strFmt("Selected file path `{0}`, bye now!", filepath), null, null)(quit)
         }
     })
 }
@@ -169,12 +169,12 @@ function demo_Window_ShowWorkspaceFolderPick() {
     opts = {}
     opts.ignoreFocusOut = true
     opts.placeHolder = "Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side."
-    vsc.Window.ShowWorkspaceFolderPick(opts, (pickedfolder) => {
+    vsc.Window.ShowWorkspaceFolderPick(opts, null)((pickedfolder) => {
         statusNoticeQuit()
         if ((undefined === pickedfolder || null === pickedfolder)) {
-            vsc.Window.ShowWarningMessage1("Cancelled pick input, bye now!", null, quit)
+            vsc.Window.ShowWarningMessage1("Cancelled pick input, bye now!", null, null)(quit)
         } else {
-            vsc.Window.ShowInformationMessage1(strFmt("Selected `{0}` located at `{1}`, bye now!", pickedfolder.name, pickedfolder.uri), null, quit)
+            vsc.Window.ShowInformationMessage1(strFmt("Selected `{0}` located at `{1}`, bye now!", pickedfolder.name, pickedfolder.uri), null, null)(quit)
         }
     })
 }
@@ -185,17 +185,17 @@ function demo_Env_OpenExternal() {
     opts.ignoreFocusOut = true
     opts.value = "http://foo.bar/baz"
     opts.prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."
-    vsc.Window.ShowInputBox(opts, null, (uri) => {
+    vsc.Window.ShowInputBox(opts, null, null)((uri) => {
         if ((undefined === uri || null === uri)) {
-            vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null, quit)
+            vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null, null)(quit)
         } else {
-            vsc.Env.OpenExternal(uri, (ok) => {
+            vsc.Env.OpenExternal(uri, null)((ok) => {
                 let did
                 did = "Did"
                 if (!ok) {
                     did = did  +  " not"
                 }
-                vsc.Window.ShowInformationMessage1(strFmt("{0} succeed in opening `{1}`, bye now!", did, uri), null, quit)
+                vsc.Window.ShowInformationMessage1(strFmt("{0} succeed in opening `{1}`, bye now!", did, uri), null, null)(quit)
             })
         }
     })
@@ -230,12 +230,12 @@ function demo_Window_ShowQuickPick() {
         vsc.Window.SetStatusBarMessage1(strFmt("Just selected: {0}", item.label), 4242, null)
         return null
     }
-    vsc.Window.ShowQuickPick3(items, opts, cancelIn(42), (pickeditems) => {
+    vsc.Window.ShowQuickPick3(items, opts, cancelIn(42), null)((pickeditems) => {
         statusNoticeQuit()
         if ((undefined === pickeditems || null === pickeditems)) {
-            vsc.Window.ShowWarningMessage1("Cancelled pick input, bye now!", null, quit)
+            vsc.Window.ShowWarningMessage1("Cancelled pick input, bye now!", null, null)(quit)
         } else {
-            vsc.Window.ShowInformationMessage1(strFmt("You picked {0} item(s), bye now!", pickeditems.length), null, quit)
+            vsc.Window.ShowInformationMessage1(strFmt("You picked {0} item(s), bye now!", pickeditems.length), null, null)(quit)
         }
     })
 }
@@ -263,7 +263,7 @@ function demosMenu() {
     opts = {}
     opts.ignoreFocusOut = true
     opts.placeHolder = "Dismissing this menu WILL end the prog."
-    vsc.Window.ShowQuickPick2(items, opts, null, (menuitem) => {
+    vsc.Window.ShowQuickPick2(items, opts, null, null)((menuitem) => {
         if ((undefined === menuitem || null === menuitem)) {
             quit(null)
         } else {

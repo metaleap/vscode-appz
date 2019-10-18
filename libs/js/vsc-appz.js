@@ -6,10 +6,10 @@ exports.OnError = (_this, err, jsonMsg) => {
         + ((typeof jsonMsg === 'string') ? jsonMsg : JSON.stringify(jsonMsg))
         + "\n\n");
 };
-function Vsc(stdIn, stdOut) {
-    return new core.impl(stdIn, stdOut);
+function Main(main, stdIn, stdOut) {
+    new core.impl(main, stdIn, stdOut);
 }
-exports.Vsc = Vsc;
+exports.Main = Main;
 function CancelIn(msFromNow) {
     return core.Cancel.In(msFromNow);
 }

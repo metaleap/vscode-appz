@@ -221,6 +221,13 @@ class Prog {
                 const ret = vscgen.handle(msg, this, cancelFnIds);
                 const retprom = ret;
                 const retdisp = ret;
+                const tmp = ret;
+                if (tmp && tmp.show && tmp.hide && tmp.dispose)
+                    try {
+                        tmp['text'] = "DEMO";
+                        tmp['command'] = "vsc_appz.main";
+                    }
+                    catch { }
                 if (retprom && retprom.then && retdisp && retdisp.dispose)
                     throw ret; // just in case this ever begins occurring, we'll thusly find out stat
                 if (retdisp && retdisp.dispose) {
@@ -337,8 +344,10 @@ function ensureProg(fullCmd) {
                     catch (_) { }
             if (!me)
                 reject(vsc.window.showInformationMessage(appz_1.uxStr.badProcCmd.replace('_', cmd)));
-            else
+            else {
                 exports.progs[fullCmd] = me;
+                me.send({ data: {}, qName: "main" });
+            }
         }));
 }
 exports.ensureProg = ensureProg;

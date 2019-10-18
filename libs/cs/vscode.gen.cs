@@ -163,7 +163,7 @@ namespace VscAppz {
 		/// <param name="message">The message to show.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
 		/// <param name="onDone">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowInformationMessage(string message = default, string[] items = default, Action<string> onDone = default);
+		Action<Action<string>> ShowInformationMessage1(string message = default, string[] items = default, Action<string> onDone = default);
 
 		/// <summary>
 		/// Show an information message to users. Optionally provide an array of items which will be presented as
@@ -181,7 +181,7 @@ namespace VscAppz {
 		/// <param name="options">Configures the behaviour of the message.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
 		/// <param name="onDone">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowInformationMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> onDone = default);
+		Action<Action<string>> ShowInformationMessage2(string message = default, MessageOptions options = default, string[] items = default, Action<string> onDone = default);
 
 		/// <summary>
 		/// Show an information message.
@@ -195,7 +195,7 @@ namespace VscAppz {
 		/// <param name="message">The message to show.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
 		/// <param name="onDone">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowInformationMessage(string message = default, MessageItem[] items = default, Action<MessageItem> onDone = default);
+		Action<Action<MessageItem>> ShowInformationMessage3(string message = default, MessageItem[] items = default, Action<MessageItem> onDone = default);
 
 		/// <summary>
 		/// Show an information message.
@@ -212,7 +212,7 @@ namespace VscAppz {
 		/// <param name="options">Configures the behaviour of the message.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
 		/// <param name="onDone">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowInformationMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> onDone = default);
+		Action<Action<MessageItem>> ShowInformationMessage4(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> onDone = default);
 
 		/// <summary>
 		/// Show a warning message.
@@ -226,38 +226,7 @@ namespace VscAppz {
 		/// <param name="message">The message to show.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
 		/// <param name="onDone">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowWarningMessage(string message = default, string[] items = default, Action<string> onDone = default);
-
-		/// <summary>
-		/// Show a warning message.
-		/// 
-		/// `message` ── The message to show.
-		/// 
-		/// `options` ── Configures the behaviour of the message.
-		/// 
-		/// `items` ── A set of items that will be rendered as actions in the message.
-		/// 
-		/// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-		/// </summary>
-		/// <param name="message">The message to show.</param>
-		/// <param name="options">Configures the behaviour of the message.</param>
-		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <param name="onDone">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowWarningMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> onDone = default);
-
-		/// <summary>
-		/// Show a warning message.
-		/// 
-		/// `message` ── The message to show.
-		/// 
-		/// `items` ── A set of items that will be rendered as actions in the message.
-		/// 
-		/// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-		/// </summary>
-		/// <param name="message">The message to show.</param>
-		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <param name="onDone">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowWarningMessage(string message = default, MessageItem[] items = default, Action<MessageItem> onDone = default);
+		Action<Action<string>> ShowWarningMessage1(string message = default, string[] items = default, Action<string> onDone = default);
 
 		/// <summary>
 		/// Show a warning message.
@@ -274,7 +243,38 @@ namespace VscAppz {
 		/// <param name="options">Configures the behaviour of the message.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
 		/// <param name="onDone">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowWarningMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> onDone = default);
+		Action<Action<string>> ShowWarningMessage2(string message = default, MessageOptions options = default, string[] items = default, Action<string> onDone = default);
+
+		/// <summary>
+		/// Show a warning message.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="onDone">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+		Action<Action<MessageItem>> ShowWarningMessage3(string message = default, MessageItem[] items = default, Action<MessageItem> onDone = default);
+
+		/// <summary>
+		/// Show a warning message.
+		/// 
+		/// `message` ── The message to show.
+		/// 
+		/// `options` ── Configures the behaviour of the message.
+		/// 
+		/// `items` ── A set of items that will be rendered as actions in the message.
+		/// 
+		/// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+		/// </summary>
+		/// <param name="message">The message to show.</param>
+		/// <param name="options">Configures the behaviour of the message.</param>
+		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
+		/// <param name="onDone">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
+		Action<Action<MessageItem>> ShowWarningMessage4(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> onDone = default);
 
 		/// <summary>
 		/// Show an error message.
@@ -288,7 +288,7 @@ namespace VscAppz {
 		/// <param name="message">The message to show.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
 		/// <param name="onDone">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowErrorMessage(string message = default, string[] items = default, Action<string> onDone = default);
+		Action<Action<string>> ShowErrorMessage1(string message = default, string[] items = default, Action<string> onDone = default);
 
 		/// <summary>
 		/// Show an error message.
@@ -305,7 +305,7 @@ namespace VscAppz {
 		/// <param name="options">Configures the behaviour of the message.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
 		/// <param name="onDone">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowErrorMessage(string message = default, MessageOptions options = default, string[] items = default, Action<string> onDone = default);
+		Action<Action<string>> ShowErrorMessage2(string message = default, MessageOptions options = default, string[] items = default, Action<string> onDone = default);
 
 		/// <summary>
 		/// Show an error message.
@@ -319,7 +319,7 @@ namespace VscAppz {
 		/// <param name="message">The message to show.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
 		/// <param name="onDone">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowErrorMessage(string message = default, MessageItem[] items = default, Action<MessageItem> onDone = default);
+		Action<Action<MessageItem>> ShowErrorMessage3(string message = default, MessageItem[] items = default, Action<MessageItem> onDone = default);
 
 		/// <summary>
 		/// Show an error message.
@@ -336,7 +336,7 @@ namespace VscAppz {
 		/// <param name="options">Configures the behaviour of the message.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
 		/// <param name="onDone">A thenable that resolves to the selected item or `undefined` when being dismissed.</param>
-		void ShowErrorMessage(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> onDone = default);
+		Action<Action<MessageItem>> ShowErrorMessage4(string message = default, MessageOptions options = default, MessageItem[] items = default, Action<MessageItem> onDone = default);
 
 		/// <summary>
 		/// Opens an input box to ask the user for input.
@@ -354,7 +354,7 @@ namespace VscAppz {
 		/// <param name="options">Configures the behavior of the input box.</param>
 		/// <param name="token">A token that can be used to signal cancellation.</param>
 		/// <param name="onDone">A promise that resolves to a string the user provided or to `undefined` in case of dismissal.</param>
-		void ShowInputBox(InputBoxOptions options = default, Cancel token = default, Action<string> onDone = default);
+		Action<Action<string>> ShowInputBox(InputBoxOptions options = default, Cancel token = default, Action<string> onDone = default);
 
 		/// <summary>
 		/// Shows a selection list allowing multiple selections.
@@ -371,7 +371,7 @@ namespace VscAppz {
 		/// <param name="options">Configures the behavior of the selection list.</param>
 		/// <param name="token">A token that can be used to signal cancellation.</param>
 		/// <param name="onDone">A promise that resolves to the selected items or `undefined`.</param>
-		void ShowQuickPick(string[] items = default, QuickPickOptions options = default, Cancel token = default, Action<string[]> onDone = default);
+		Action<Action<string[]>> ShowQuickPick1(string[] items = default, QuickPickOptions options = default, Cancel token = default, Action<string[]> onDone = default);
 
 		/// <summary>
 		/// Shows a selection list.
@@ -388,7 +388,7 @@ namespace VscAppz {
 		/// <param name="options">Configures the behavior of the selection list.</param>
 		/// <param name="token">A token that can be used to signal cancellation.</param>
 		/// <param name="onDone">A promise that resolves to the selection or `undefined`.</param>
-		void ShowQuickPick(string[] items = default, QuickPickOptions options = default, Cancel token = default, Action<string> onDone = default);
+		Action<Action<string>> ShowQuickPick2(string[] items = default, QuickPickOptions options = default, Cancel token = default, Action<string> onDone = default);
 
 		/// <summary>
 		/// Shows a selection list allowing multiple selections.
@@ -405,7 +405,7 @@ namespace VscAppz {
 		/// <param name="options">Configures the behavior of the selection list.</param>
 		/// <param name="token">A token that can be used to signal cancellation.</param>
 		/// <param name="onDone">A promise that resolves to the selected items or `undefined`.</param>
-		void ShowQuickPick(QuickPickItem[] items = default, QuickPickOptions options = default, Cancel token = default, Action<QuickPickItem[]> onDone = default);
+		Action<Action<QuickPickItem[]>> ShowQuickPick3(QuickPickItem[] items = default, QuickPickOptions options = default, Cancel token = default, Action<QuickPickItem[]> onDone = default);
 
 		/// <summary>
 		/// Shows a selection list.
@@ -422,7 +422,7 @@ namespace VscAppz {
 		/// <param name="options">Configures the behavior of the selection list.</param>
 		/// <param name="token">A token that can be used to signal cancellation.</param>
 		/// <param name="onDone">A promise that resolves to the selected item or `undefined`.</param>
-		void ShowQuickPick(QuickPickItem[] items = default, QuickPickOptions options = default, Cancel token = default, Action<QuickPickItem> onDone = default);
+		Action<Action<QuickPickItem>> ShowQuickPick4(QuickPickItem[] items = default, QuickPickOptions options = default, Cancel token = default, Action<QuickPickItem> onDone = default);
 
 		/// <summary>
 		/// Set a message to the status bar. This is a short hand for the more powerful
@@ -437,7 +437,7 @@ namespace VscAppz {
 		/// <param name="text">The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).</param>
 		/// <param name="hideAfterTimeout">Timeout in milliseconds after which the message will be disposed.</param>
 		/// <param name="onDone">A disposable which hides the status bar message.</param>
-		void SetStatusBarMessage(string text = default, int hideAfterTimeout = default, Action<Disposable> onDone = default);
+		Action<Action<Disposable>> SetStatusBarMessage1(string text = default, int hideAfterTimeout = default, Action<Disposable> onDone = default);
 
 		/// <summary>
 		/// Set a message to the status bar. This is a short hand for the more powerful
@@ -452,7 +452,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="text">The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).</param>
 		/// <param name="onDone">A disposable which hides the status bar message.</param>
-		void SetStatusBarMessage(string text = default, Action<Disposable> onDone = default);
+		Action<Action<Disposable>> SetStatusBarMessage2(string text = default, Action<Disposable> onDone = default);
 
 		/// <summary>
 		/// Shows a file save dialog to the user which allows to select a file
@@ -464,7 +464,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="options">Options that control the dialog.</param>
 		/// <param name="onDone">A promise that resolves to the selected resource or `undefined`.</param>
-		void ShowSaveDialog(SaveDialogOptions options = default, Action<string> onDone = default);
+		Action<Action<string>> ShowSaveDialog(SaveDialogOptions options = default, Action<string> onDone = default);
 
 		/// <summary>
 		/// Shows a file open dialog to the user which allows to select a file
@@ -476,7 +476,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="options">Options that control the dialog.</param>
 		/// <param name="onDone">A promise that resolves to the selected resources or `undefined`.</param>
-		void ShowOpenDialog(OpenDialogOptions options = default, Action<string[]> onDone = default);
+		Action<Action<string[]>> ShowOpenDialog(OpenDialogOptions options = default, Action<string[]> onDone = default);
 
 		/// <summary>
 		/// Shows a selection list of [workspace folders](#workspace.workspaceFolders) to pick from.
@@ -488,16 +488,16 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="options">Configures the behavior of the workspace folder list.</param>
 		/// <param name="onDone">A promise that resolves to the workspace folder or `undefined`.</param>
-		void ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options = default, Action<WorkspaceFolder> onDone = default);
+		Action<Action<WorkspaceFolder>> ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options = default, Action<WorkspaceFolder> onDone = default);
 
 		/// <summary>Represents the current window's state.</summary>
-		void State(Action<WindowState> onDone = default);
+		Action<Action<WindowState>> State(Action<WindowState> onDone = default);
 
 		/// <summary>
 		/// An [event](#Event) which fires when the focus state of the current window
 		/// changes. The value of the event represents whether the window is focused.
 		/// </summary>
-		void OnDidChangeWindowState(Action<WindowState> listener = default, Action<Disposable> onDone = default);
+		Action<Action<Disposable>> OnDidChangeWindowState(Action<WindowState> listener = default, Action<Disposable> onDone = default);
 
 		/// <summary>
 		/// Creates a status bar [item](#StatusBarItem).
@@ -511,7 +511,7 @@ namespace VscAppz {
 		/// <param name="alignment">The alignment of the item.</param>
 		/// <param name="priority">The priority of the item. Higher values mean the item should be shown more to the left.</param>
 		/// <param name="onDone">A new status bar item.</param>
-		void CreateStatusBarItem(StatusBarAlignment? alignment = default, int? priority = default, Action<StatusBarItem> onDone = default);
+		Action<Action<StatusBarItem>> CreateStatusBarItem(StatusBarAlignment? alignment = default, int? priority = default, Action<StatusBarItem> onDone = default);
 
 		/// <summary>
 		/// Creates a new [output channel](#OutputChannel) with the given name.
@@ -520,7 +520,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="name">Human-readable string which will be used to represent the channel in the UI.</param>
 		/// <param name="onDone">Called on success with the result of the `CreateOutputChannel` operation.</param>
-		void CreateOutputChannel(string name = default, Action<OutputChannel> onDone = default);
+		Action<Action<OutputChannel>> CreateOutputChannel(string name = default, Action<OutputChannel> onDone = default);
 	}
 
 	/// <summary>Namespace describing the environment the editor runs in.</summary>
@@ -538,19 +538,19 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="target">The uri that should be opened.</param>
 		/// <param name="onDone">A promise indicating if open was successful.</param>
-		void OpenExternal(string target = default, Action<bool> onDone = default);
+		Action<Action<bool>> OpenExternal(string target = default, Action<bool> onDone = default);
 
 		/// <summary>The application name of the editor, like 'VS Code'.</summary>
-		void AppName(Action<string> onDone = default);
+		Action<Action<string>> AppName(Action<string> onDone = default);
 
 		/// <summary>The application root folder from which the editor is running.</summary>
-		void AppRoot(Action<string> onDone = default);
+		Action<Action<string>> AppRoot(Action<string> onDone = default);
 
 		/// <summary>Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.</summary>
-		void Language(Action<string> onDone = default);
+		Action<Action<string>> Language(Action<string> onDone = default);
 
 		/// <summary>A unique identifier for the computer.</summary>
-		void MachineId(Action<string> onDone = default);
+		Action<Action<string>> MachineId(Action<string> onDone = default);
 
 		/// <summary>
 		/// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
@@ -561,25 +561,25 @@ namespace VscAppz {
 		/// exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
 		/// a specific extension runs remote or not.
 		/// </summary>
-		void RemoteName(Action<string> onDone = default);
+		Action<Action<string>> RemoteName(Action<string> onDone = default);
 
 		/// <summary>
 		/// A unique identifier for the current session.
 		/// Changes each time the editor is started.
 		/// </summary>
-		void SessionId(Action<string> onDone = default);
+		Action<Action<string>> SessionId(Action<string> onDone = default);
 
 		/// <summary>
 		/// The detected default shell for the extension host, this is overridden by the
 		/// `terminal.integrated.shell` setting for the extension host's platform.
 		/// </summary>
-		void Shell(Action<string> onDone = default);
+		Action<Action<string>> Shell(Action<string> onDone = default);
 
 		/// <summary>The custom uri scheme the editor registers to in the operating system.</summary>
-		void UriScheme(Action<string> onDone = default);
+		Action<Action<string>> UriScheme(Action<string> onDone = default);
 
 		/// <summary>Provides single-call access to numerous individual `IEnv` properties at once.</summary>
-		void Properties(Action<EnvProperties> onDone = default);
+		Action<Action<EnvProperties>> Properties(Action<EnvProperties> onDone = default);
 	}
 
 	/// <summary>
@@ -596,7 +596,7 @@ namespace VscAppz {
 		/// The name of the workspace. `undefined` when no folder
 		/// has been opened.
 		/// </summary>
-		void Name(Action<string> onDone = default);
+		Action<Action<string>> Name(Action<string> onDone = default);
 
 		/// <summary>
 		/// The location of the workspace file, for example:
@@ -627,7 +627,7 @@ namespace VscAppz {
 		/// for that purpose which will work both when a single folder is opened as
 		/// well as an untitled or saved workspace.
 		/// </summary>
-		void WorkspaceFile(Action<string> onDone = default);
+		Action<Action<string>> WorkspaceFile(Action<string> onDone = default);
 
 		/// <summary>
 		/// Save all dirty files.
@@ -638,10 +638,10 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="includeUntitled">Also save files that have been created during this session.</param>
 		/// <param name="onDone">A thenable that resolves when the files have been saved.</param>
-		void SaveAll(bool includeUntitled = default, Action<bool> onDone = default);
+		Action<Action<bool>> SaveAll(bool includeUntitled = default, Action<bool> onDone = default);
 
 		/// <summary>An event that is emitted when a workspace folder is added or removed.</summary>
-		void OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener = default, Action<Disposable> onDone = default);
+		Action<Action<Disposable>> OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener = default, Action<Disposable> onDone = default);
 
 		/// <summary>
 		/// Returns the [workspace folder](#WorkspaceFolder) that contains a given uri.
@@ -654,13 +654,13 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="uri">An uri.</param>
 		/// <param name="onDone">A workspace folder or `undefined`</param>
-		void GetWorkspaceFolder(string uri = default, Action<WorkspaceFolder> onDone = default);
+		Action<Action<WorkspaceFolder>> GetWorkspaceFolder(string uri = default, Action<WorkspaceFolder> onDone = default);
 
 		/// <summary>
 		/// List of workspace folders or `undefined` when no folder is open.
 		/// *Note* that the first entry corresponds to the value of `rootPath`.
 		/// </summary>
-		void WorkspaceFolders(Action<WorkspaceFolder[]> onDone = default);
+		Action<Action<WorkspaceFolder[]>> WorkspaceFolders(Action<WorkspaceFolder[]> onDone = default);
 
 		/// <summary>
 		/// Find files across all [workspace folders](#workspace.workspaceFolders) in the workspace.
@@ -686,7 +686,7 @@ namespace VscAppz {
 		/// <param name="maxResults">An upper-bound for the result.</param>
 		/// <param name="token">A token that can be used to signal cancellation to the underlying search engine.</param>
 		/// <param name="onDone">A thenable that resolves to an array of resource identifiers. Will return no results if no [workspace folders](#workspace.workspaceFolders) are opened.</param>
-		void FindFiles(string include = default, string exclude = default, int? maxResults = default, Cancel token = default, Action<string[]> onDone = default);
+		Action<Action<string[]>> FindFiles(string include = default, string exclude = default, int? maxResults = default, Cancel token = default, Action<string[]> onDone = default);
 
 		/// <summary>
 		/// Returns a path that is relative to the workspace folder or folders.
@@ -705,10 +705,10 @@ namespace VscAppz {
 		/// <param name="pathOrUri">A path or uri. When a uri is given its [fsPath](#Uri.fsPath) is used.</param>
 		/// <param name="includeWorkspaceFolder">When `true` and when the given path is contained inside a workspace folder the name of the workspace is prepended. Defaults to `true` when there are multiple workspace folders and `false` otherwise.</param>
 		/// <param name="onDone">A path relative to the root or the input.</param>
-		void AsRelativePath(string pathOrUri = default, bool includeWorkspaceFolder = default, Action<string> onDone = default);
+		Action<Action<string>> AsRelativePath(string pathOrUri = default, bool includeWorkspaceFolder = default, Action<string> onDone = default);
 
 		/// <summary>Provides single-call access to numerous individual `IWorkspace` properties at once.</summary>
-		void Properties(Action<WorkspaceProperties> onDone = default);
+		Action<Action<WorkspaceProperties>> Properties(Action<WorkspaceProperties> onDone = default);
 	}
 
 	/// <summary>
@@ -746,13 +746,13 @@ namespace VscAppz {
 		/// `onDone` ── Promise resolving to an array of identifier strings.
 		/// </summary>
 		/// <param name="onDone">Promise resolving to an array of identifier strings.</param>
-		void GetLanguages(Action<string[]> onDone = default);
+		Action<Action<string[]>> GetLanguages(Action<string[]> onDone = default);
 
 		/// <summary>
 		/// An [event](#Event) which fires when the global set of diagnostics changes. This is
 		/// newly added and removed diagnostics.
 		/// </summary>
-		void OnDidChangeDiagnostics(Action<DiagnosticChangeEvent> listener = default, Action<Disposable> onDone = default);
+		Action<Action<Disposable>> OnDidChangeDiagnostics(Action<DiagnosticChangeEvent> listener = default, Action<Disposable> onDone = default);
 	}
 
 	/// <summary>
@@ -792,7 +792,7 @@ namespace VscAppz {
 		/// An event which fires when `extensions.all` changes. This can happen when extensions are
 		/// installed, uninstalled, enabled or disabled.
 		/// </summary>
-		void OnDidChange(Action listener = default, Action<Disposable> onDone = default);
+		Action<Action<Disposable>> OnDidChange(Action listener = default, Action<Disposable> onDone = default);
 	}
 
 	/// <summary>
@@ -848,7 +848,7 @@ namespace VscAppz {
 		/// <param name="command">A unique identifier for the command.</param>
 		/// <param name="callback">A command handler function.</param>
 		/// <param name="onDone">Disposable which unregisters this command on disposal.</param>
-		void RegisterCommand(string command = default, Func<any[], any> callback = default, Action<Disposable> onDone = default);
+		Action<Action<Disposable>> RegisterCommand(string command = default, Func<any[], any> callback = default, Action<Disposable> onDone = default);
 
 		/// <summary>
 		/// Executes the command denoted by the given command identifier.
@@ -869,7 +869,7 @@ namespace VscAppz {
 		/// <param name="command">Identifier of the command to execute.</param>
 		/// <param name="rest">Parameters passed to the command function.</param>
 		/// <param name="onDone">A thenable that resolves to the returned value of the given command. `undefined` when the command handler function doesn't return anything.</param>
-		void ExecuteCommand(string command = default, any[] rest = default, Action<any> onDone = default);
+		Action<Action<any>> ExecuteCommand(string command = default, any[] rest = default, Action<any> onDone = default);
 
 		/// <summary>
 		/// Retrieve the list of all available commands. Commands starting an underscore are
@@ -881,7 +881,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="filterInternal">Set `true` to not see internal commands (starting with an underscore)</param>
 		/// <param name="onDone">Thenable that resolves to a list of command ids.</param>
-		void GetCommands(bool filterInternal = default, Action<string[]> onDone = default);
+		Action<Action<string[]>> GetCommands(bool filterInternal = default, Action<string[]> onDone = default);
 	}
 
 	/// <summary>Options to configure the behavior of the message.</summary>
@@ -1306,34 +1306,39 @@ namespace VscAppz {
 			return this;
 		} }
 
-		void IWindow.ShowInformationMessage(string message, string[] items, Action<string> onDone) {
+		Action<Action<string>> IWindow.ShowInformationMessage1(string message, string[] items, Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInformationMessage1";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						result = _result_;
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					string _result_ = default;
+					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+					result = _result_;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowInformationMessage(string message, MessageOptions options, string[] items, Action<string> onDone) {
+		Action<Action<string>> IWindow.ShowInformationMessage2(string message, MessageOptions options, string[] items, Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInformationMessage2";
@@ -1341,53 +1346,63 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						result = _result_;
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					string _result_ = default;
+					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+					result = _result_;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowInformationMessage(string message, MessageItem[] items, Action<MessageItem> onDone) {
+		Action<Action<MessageItem>> IWindow.ShowInformationMessage3(string message, MessageItem[] items, Action<MessageItem> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInformationMessage3";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					MessageItem result = default;
-					if ((null != payload)) {
-						result = new MessageItem();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<MessageItem> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				MessageItem result = default;
+				if ((null != payload)) {
+					result = new MessageItem();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<MessageItem> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowInformationMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> onDone) {
+		Action<Action<MessageItem>> IWindow.ShowInformationMessage4(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInformationMessage4";
@@ -1395,53 +1410,63 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					MessageItem result = default;
-					if ((null != payload)) {
-						result = new MessageItem();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<MessageItem> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				MessageItem result = default;
+				if ((null != payload)) {
+					result = new MessageItem();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<MessageItem> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowWarningMessage(string message, string[] items, Action<string> onDone) {
+		Action<Action<string>> IWindow.ShowWarningMessage1(string message, string[] items, Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showWarningMessage1";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						result = _result_;
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					string _result_ = default;
+					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+					result = _result_;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowWarningMessage(string message, MessageOptions options, string[] items, Action<string> onDone) {
+		Action<Action<string>> IWindow.ShowWarningMessage2(string message, MessageOptions options, string[] items, Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showWarningMessage2";
@@ -1449,53 +1474,63 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						result = _result_;
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					string _result_ = default;
+					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+					result = _result_;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowWarningMessage(string message, MessageItem[] items, Action<MessageItem> onDone) {
+		Action<Action<MessageItem>> IWindow.ShowWarningMessage3(string message, MessageItem[] items, Action<MessageItem> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showWarningMessage3";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					MessageItem result = default;
-					if ((null != payload)) {
-						result = new MessageItem();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<MessageItem> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				MessageItem result = default;
+				if ((null != payload)) {
+					result = new MessageItem();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<MessageItem> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowWarningMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> onDone) {
+		Action<Action<MessageItem>> IWindow.ShowWarningMessage4(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showWarningMessage4";
@@ -1503,53 +1538,63 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					MessageItem result = default;
-					if ((null != payload)) {
-						result = new MessageItem();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<MessageItem> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				MessageItem result = default;
+				if ((null != payload)) {
+					result = new MessageItem();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<MessageItem> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowErrorMessage(string message, string[] items, Action<string> onDone) {
+		Action<Action<string>> IWindow.ShowErrorMessage1(string message, string[] items, Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showErrorMessage1";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						result = _result_;
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					string _result_ = default;
+					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+					result = _result_;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowErrorMessage(string message, MessageOptions options, string[] items, Action<string> onDone) {
+		Action<Action<string>> IWindow.ShowErrorMessage2(string message, MessageOptions options, string[] items, Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showErrorMessage2";
@@ -1557,53 +1602,63 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						result = _result_;
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					string _result_ = default;
+					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+					result = _result_;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowErrorMessage(string message, MessageItem[] items, Action<MessageItem> onDone) {
+		Action<Action<MessageItem>> IWindow.ShowErrorMessage3(string message, MessageItem[] items, Action<MessageItem> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showErrorMessage3";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					MessageItem result = default;
-					if ((null != payload)) {
-						result = new MessageItem();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<MessageItem> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				MessageItem result = default;
+				if ((null != payload)) {
+					result = new MessageItem();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<MessageItem> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowErrorMessage(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> onDone) {
+		Action<Action<MessageItem>> IWindow.ShowErrorMessage4(string message, MessageOptions options, MessageItem[] items, Action<MessageItem> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showErrorMessage4";
@@ -1611,26 +1666,31 @@ namespace VscAppz {
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
 			msg.Data["items"] = items;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					MessageItem result = default;
-					if ((null != payload)) {
-						result = new MessageItem();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<MessageItem> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				MessageItem result = default;
+				if ((null != payload)) {
+					result = new MessageItem();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<MessageItem> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowInputBox(InputBoxOptions options, Cancel token, Action<string> onDone) {
+		Action<Action<string>> IWindow.ShowInputBox(InputBoxOptions options, Cancel token, Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showInputBox";
@@ -1675,23 +1735,25 @@ namespace VscAppz {
 				}
 				msg.Data["token"] = token.fnId;
 			}
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						result = _result_;
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					string _result_ = default;
+					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
+					result = _result_;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
 			this.Impl().send(msg, (any payload) => {
 				if (fnids.Count != 0) {
 					lock (this) {
@@ -1700,11 +1762,14 @@ namespace VscAppz {
 						}
 					}
 				}
-				return (null == on) || on(payload);
+				return (null == onresp) || onresp(payload);
 			});
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowQuickPick(string[] items, QuickPickOptions options, Cancel token, Action<string[]> onDone) {
+		Action<Action<string[]>> IWindow.ShowQuickPick1(string[] items, QuickPickOptions options, Cancel token, Action<string[]> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showQuickPick1";
@@ -1752,34 +1817,36 @@ namespace VscAppz {
 				}
 				msg.Data["token"] = token.fnId;
 			}
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string[] result = default;
-					if ((null != payload)) {
-						any[] __coll__result = default;
-						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+			Func<any, bool> onresp = default;
+			Action<string[]> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string[] result = default;
+				if ((null != payload)) {
+					any[] __coll__result = default;
+					(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					result = new string[__coll__result.Length];
+					int __idx__result = default;
+					__idx__result = 0;
+					foreach (var __item__result in __coll__result) {
+						string __val__result = default;
+						(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
 						if (!ok) {
 							return false;
 						}
-						result = new string[__coll__result.Length];
-						int __idx__result = default;
-						__idx__result = 0;
-						foreach (var __item__result in __coll__result) {
-							string __val__result = default;
-							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
-							if (!ok) {
-								return false;
-							}
-							result[__idx__result] = __val__result;
-							__idx__result = __idx__result + 1;
-						}
+						result[__idx__result] = __val__result;
+						__idx__result = __idx__result + 1;
 					}
-					onDone(result);
-					return true;
-				};
-			}
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
 			this.Impl().send(msg, (any payload) => {
 				if (fnids.Count != 0) {
 					lock (this) {
@@ -1788,11 +1855,14 @@ namespace VscAppz {
 						}
 					}
 				}
-				return (null == on) || on(payload);
+				return (null == onresp) || onresp(payload);
 			});
+			return (Action<string[]> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowQuickPick(string[] items, QuickPickOptions options, Cancel token, Action<string> onDone) {
+		Action<Action<string>> IWindow.ShowQuickPick2(string[] items, QuickPickOptions options, Cancel token, Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showQuickPick2";
@@ -1841,23 +1911,25 @@ namespace VscAppz {
 				}
 				msg.Data["token"] = token.fnId;
 			}
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						result = _result_;
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					string _result_ = default;
+					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
+					result = _result_;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
 			this.Impl().send(msg, (any payload) => {
 				if (fnids.Count != 0) {
 					lock (this) {
@@ -1866,11 +1938,14 @@ namespace VscAppz {
 						}
 					}
 				}
-				return (null == on) || on(payload);
+				return (null == onresp) || onresp(payload);
 			});
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowQuickPick(QuickPickItem[] items, QuickPickOptions options, Cancel token, Action<QuickPickItem[]> onDone) {
+		Action<Action<QuickPickItem[]>> IWindow.ShowQuickPick3(QuickPickItem[] items, QuickPickOptions options, Cancel token, Action<QuickPickItem[]> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showQuickPick3";
@@ -1918,35 +1993,37 @@ namespace VscAppz {
 				}
 				msg.Data["token"] = token.fnId;
 			}
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					QuickPickItem[] result = default;
-					if ((null != payload)) {
-						any[] __coll__result = default;
-						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+			Func<any, bool> onresp = default;
+			Action<QuickPickItem[]> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				QuickPickItem[] result = default;
+				if ((null != payload)) {
+					any[] __coll__result = default;
+					(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					result = new QuickPickItem[__coll__result.Length];
+					int __idx__result = default;
+					__idx__result = 0;
+					foreach (var __item__result in __coll__result) {
+						QuickPickItem __val__result = default;
+						__val__result = new QuickPickItem();
+						ok = __val__result.populateFrom(__item__result);
 						if (!ok) {
 							return false;
 						}
-						result = new QuickPickItem[__coll__result.Length];
-						int __idx__result = default;
-						__idx__result = 0;
-						foreach (var __item__result in __coll__result) {
-							QuickPickItem __val__result = default;
-							__val__result = new QuickPickItem();
-							ok = __val__result.populateFrom(__item__result);
-							if (!ok) {
-								return false;
-							}
-							result[__idx__result] = __val__result;
-							__idx__result = __idx__result + 1;
-						}
+						result[__idx__result] = __val__result;
+						__idx__result = __idx__result + 1;
 					}
-					onDone(result);
-					return true;
-				};
-			}
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
 			this.Impl().send(msg, (any payload) => {
 				if (fnids.Count != 0) {
 					lock (this) {
@@ -1955,11 +2032,14 @@ namespace VscAppz {
 						}
 					}
 				}
-				return (null == on) || on(payload);
+				return (null == onresp) || onresp(payload);
 			});
+			return (Action<QuickPickItem[]> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowQuickPick(QuickPickItem[] items, QuickPickOptions options, Cancel token, Action<QuickPickItem> onDone) {
+		Action<Action<QuickPickItem>> IWindow.ShowQuickPick4(QuickPickItem[] items, QuickPickOptions options, Cancel token, Action<QuickPickItem> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showQuickPick4";
@@ -2008,22 +2088,24 @@ namespace VscAppz {
 				}
 				msg.Data["token"] = token.fnId;
 			}
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					QuickPickItem result = default;
-					if ((null != payload)) {
-						result = new QuickPickItem();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<QuickPickItem> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				QuickPickItem result = default;
+				if ((null != payload)) {
+					result = new QuickPickItem();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
 			this.Impl().send(msg, (any payload) => {
 				if (fnids.Count != 0) {
 					lock (this) {
@@ -2032,129 +2114,152 @@ namespace VscAppz {
 						}
 					}
 				}
-				return (null == on) || on(payload);
+				return (null == onresp) || onresp(payload);
 			});
+			return (Action<QuickPickItem> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.SetStatusBarMessage(string text, int hideAfterTimeout, Action<Disposable> onDone) {
+		Action<Action<Disposable>> IWindow.SetStatusBarMessage1(string text, int hideAfterTimeout, Action<Disposable> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.setStatusBarMessage1";
 			msg.Data = new dict(2);
 			msg.Data["text"] = text;
 			msg.Data["hideAfterTimeout"] = hideAfterTimeout;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					Disposable result = default;
-					if ((null != payload)) {
-						result = new Disposable();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
-					} else {
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
 						return false;
 					}
-					onDone(result.bind(this.Impl()));
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.Impl()));
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.SetStatusBarMessage(string text, Action<Disposable> onDone) {
+		Action<Action<Disposable>> IWindow.SetStatusBarMessage2(string text, Action<Disposable> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.setStatusBarMessage2";
 			msg.Data = new dict(1);
 			msg.Data["text"] = text;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					Disposable result = default;
-					if ((null != payload)) {
-						result = new Disposable();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
-					} else {
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
 						return false;
 					}
-					onDone(result.bind(this.Impl()));
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.Impl()));
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowSaveDialog(SaveDialogOptions options, Action<string> onDone) {
+		Action<Action<string>> IWindow.ShowSaveDialog(SaveDialogOptions options, Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showSaveDialog";
 			msg.Data = new dict(1);
 			msg.Data["options"] = options;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						result = _result_;
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					string _result_ = default;
+					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+					result = _result_;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowOpenDialog(OpenDialogOptions options, Action<string[]> onDone) {
+		Action<Action<string[]>> IWindow.ShowOpenDialog(OpenDialogOptions options, Action<string[]> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showOpenDialog";
 			msg.Data = new dict(1);
 			msg.Data["options"] = options;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string[] result = default;
-					if ((null != payload)) {
-						any[] __coll__result = default;
-						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+			Func<any, bool> onresp = default;
+			Action<string[]> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string[] result = default;
+				if ((null != payload)) {
+					any[] __coll__result = default;
+					(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					result = new string[__coll__result.Length];
+					int __idx__result = default;
+					__idx__result = 0;
+					foreach (var __item__result in __coll__result) {
+						string __val__result = default;
+						(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
 						if (!ok) {
 							return false;
 						}
-						result = new string[__coll__result.Length];
-						int __idx__result = default;
-						__idx__result = 0;
-						foreach (var __item__result in __coll__result) {
-							string __val__result = default;
-							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
-							if (!ok) {
-								return false;
-							}
-							result[__idx__result] = __val__result;
-							__idx__result = __idx__result + 1;
-						}
+						result[__idx__result] = __val__result;
+						__idx__result = __idx__result + 1;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string[]> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options, Action<WorkspaceFolder> onDone) {
+		Action<Action<WorkspaceFolder>> IWindow.ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options, Action<WorkspaceFolder> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.showWorkspaceFolderPick";
@@ -2162,50 +2267,60 @@ namespace VscAppz {
 			if ((null != options)) {
 				msg.Data["options"] = options;
 			}
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					WorkspaceFolder result = default;
-					if ((null != payload)) {
-						result = new WorkspaceFolder();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<WorkspaceFolder> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				WorkspaceFolder result = default;
+				if ((null != payload)) {
+					result = new WorkspaceFolder();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<WorkspaceFolder> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.State(Action<WindowState> onDone) {
+		Action<Action<WindowState>> IWindow.State(Action<WindowState> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.state";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					WindowState result = default;
-					if ((null != payload)) {
-						result = new WindowState();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<WindowState> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				WindowState result = default;
+				if ((null != payload)) {
+					result = new WindowState();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<WindowState> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.OnDidChangeWindowState(Action<WindowState> listener, Action<Disposable> onDone) {
+		Action<Action<Disposable>> IWindow.OnDidChangeWindowState(Action<WindowState> listener, Action<Disposable> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.onDidChangeWindowState";
@@ -2213,7 +2328,7 @@ namespace VscAppz {
 			string _fnid_listener = default;
 			if ((null == listener)) {
 				OnError(this.Impl(), "IWindow.OnDidChangeWindowState: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
-				return ;
+				return null;
 			}
 			_fnid_listener = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
@@ -2230,28 +2345,33 @@ namespace VscAppz {
 				return true;
 			}, null);
 			msg.Data["listener"] = _fnid_listener;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					Disposable result = default;
-					if ((null != payload)) {
-						result = new Disposable();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
-					} else {
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
 						return false;
 					}
-					onDone(result.bind(this.Impl(), _fnid_listener));
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.Impl(), _fnid_listener));
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.CreateStatusBarItem(StatusBarAlignment? alignment, int? priority, Action<StatusBarItem> onDone) {
+		Action<Action<StatusBarItem>> IWindow.CreateStatusBarItem(StatusBarAlignment? alignment, int? priority, Action<StatusBarItem> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createStatusBarItem";
@@ -2262,367 +2382,442 @@ namespace VscAppz {
 			if ((null != priority)) {
 				msg.Data["priority"] = priority;
 			}
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					StatusBarItem result = default;
-					if ((null != payload)) {
-						result = new StatusBarItem();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
-						result.disp.impl = this.Impl();
+			Func<any, bool> onresp = default;
+			Action<StatusBarItem> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				StatusBarItem result = default;
+				if ((null != payload)) {
+					result = new StatusBarItem();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+					result.disp.impl = this.Impl();
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<StatusBarItem> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWindow.CreateOutputChannel(string name, Action<OutputChannel> onDone) {
+		Action<Action<OutputChannel>> IWindow.CreateOutputChannel(string name, Action<OutputChannel> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createOutputChannel";
 			msg.Data = new dict(1);
 			msg.Data["name"] = name;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					OutputChannel result = default;
-					if ((null != payload)) {
-						result = new OutputChannel();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
-						result.disp.impl = this.Impl();
+			Func<any, bool> onresp = default;
+			Action<OutputChannel> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				OutputChannel result = default;
+				if ((null != payload)) {
+					result = new OutputChannel();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+					result.disp.impl = this.Impl();
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<OutputChannel> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IEnv.OpenExternal(string target, Action<bool> onDone) {
+		Action<Action<bool>> IEnv.OpenExternal(string target, Action<bool> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.openExternal";
 			msg.Data = new dict(1);
 			msg.Data["target"] = target;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					bool result = default;
-					if ((null != payload)) {
-						(result, ok) = (payload is bool) ? (((bool)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-					} else {
+			Func<any, bool> onresp = default;
+			Action<bool> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				bool result = default;
+				if ((null != payload)) {
+					(result, ok) = (payload is bool) ? (((bool)(payload)), true) : (default, false);
+					if (!ok) {
 						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<bool> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IEnv.AppName(Action<string> onDone) {
+		Action<Action<string>> IEnv.AppName(Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.appName";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IEnv.AppRoot(Action<string> onDone) {
+		Action<Action<string>> IEnv.AppRoot(Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.appRoot";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IEnv.Language(Action<string> onDone) {
+		Action<Action<string>> IEnv.Language(Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.language";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IEnv.MachineId(Action<string> onDone) {
+		Action<Action<string>> IEnv.MachineId(Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.machineId";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IEnv.RemoteName(Action<string> onDone) {
+		Action<Action<string>> IEnv.RemoteName(Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.remoteName";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						result = _result_;
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					string _result_ = default;
+					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+					result = _result_;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IEnv.SessionId(Action<string> onDone) {
+		Action<Action<string>> IEnv.SessionId(Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.sessionId";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IEnv.Shell(Action<string> onDone) {
+		Action<Action<string>> IEnv.Shell(Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.shell";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IEnv.UriScheme(Action<string> onDone) {
+		Action<Action<string>> IEnv.UriScheme(Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.uriScheme";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					(result, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IEnv.Properties(Action<EnvProperties> onDone) {
+		Action<Action<EnvProperties>> IEnv.Properties(Action<EnvProperties> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "env.Properties";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					EnvProperties result = default;
-					if ((null != payload)) {
-						result = new EnvProperties();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
-					} else {
+			Func<any, bool> onresp = default;
+			Action<EnvProperties> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				EnvProperties result = default;
+				if ((null != payload)) {
+					result = new EnvProperties();
+					ok = result.populateFrom(payload);
+					if (!ok) {
 						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<EnvProperties> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWorkspace.Name(Action<string> onDone) {
+		Action<Action<string>> IWorkspace.Name(Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.name";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						result = _result_;
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					string _result_ = default;
+					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+					result = _result_;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWorkspace.WorkspaceFile(Action<string> onDone) {
+		Action<Action<string>> IWorkspace.WorkspaceFile(Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.workspaceFile";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						result = _result_;
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					string _result_ = default;
+					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+					result = _result_;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWorkspace.SaveAll(bool includeUntitled, Action<bool> onDone) {
+		Action<Action<bool>> IWorkspace.SaveAll(bool includeUntitled, Action<bool> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.saveAll";
 			msg.Data = new dict(1);
 			msg.Data["includeUntitled"] = includeUntitled;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					bool result = default;
-					if ((null != payload)) {
-						(result, ok) = (payload is bool) ? (((bool)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-					} else {
+			Func<any, bool> onresp = default;
+			Action<bool> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				bool result = default;
+				if ((null != payload)) {
+					(result, ok) = (payload is bool) ? (((bool)(payload)), true) : (default, false);
+					if (!ok) {
 						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<bool> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWorkspace.OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener, Action<Disposable> onDone) {
+		Action<Action<Disposable>> IWorkspace.OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener, Action<Disposable> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.onDidChangeWorkspaceFolders";
@@ -2630,7 +2825,7 @@ namespace VscAppz {
 			string _fnid_listener = default;
 			if ((null == listener)) {
 				OnError(this.Impl(), "IWorkspace.OnDidChangeWorkspaceFolders: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
-				return ;
+				return null;
 			}
 			_fnid_listener = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
@@ -2647,90 +2842,105 @@ namespace VscAppz {
 				return true;
 			}, null);
 			msg.Data["listener"] = _fnid_listener;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					Disposable result = default;
-					if ((null != payload)) {
-						result = new Disposable();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
-					} else {
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
 						return false;
 					}
-					onDone(result.bind(this.Impl(), _fnid_listener));
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.Impl(), _fnid_listener));
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWorkspace.GetWorkspaceFolder(string uri, Action<WorkspaceFolder> onDone) {
+		Action<Action<WorkspaceFolder>> IWorkspace.GetWorkspaceFolder(string uri, Action<WorkspaceFolder> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.getWorkspaceFolder";
 			msg.Data = new dict(1);
 			msg.Data["uri"] = uri;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					WorkspaceFolder result = default;
-					if ((null != payload)) {
-						result = new WorkspaceFolder();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
+			Func<any, bool> onresp = default;
+			Action<WorkspaceFolder> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				WorkspaceFolder result = default;
+				if ((null != payload)) {
+					result = new WorkspaceFolder();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<WorkspaceFolder> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWorkspace.WorkspaceFolders(Action<WorkspaceFolder[]> onDone) {
+		Action<Action<WorkspaceFolder[]>> IWorkspace.WorkspaceFolders(Action<WorkspaceFolder[]> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.workspaceFolders";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					WorkspaceFolder[] result = default;
-					if ((null != payload)) {
-						any[] __coll__result = default;
-						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+			Func<any, bool> onresp = default;
+			Action<WorkspaceFolder[]> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				WorkspaceFolder[] result = default;
+				if ((null != payload)) {
+					any[] __coll__result = default;
+					(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					result = new WorkspaceFolder[__coll__result.Length];
+					int __idx__result = default;
+					__idx__result = 0;
+					foreach (var __item__result in __coll__result) {
+						WorkspaceFolder __val__result = default;
+						__val__result = new WorkspaceFolder();
+						ok = __val__result.populateFrom(__item__result);
 						if (!ok) {
 							return false;
 						}
-						result = new WorkspaceFolder[__coll__result.Length];
-						int __idx__result = default;
-						__idx__result = 0;
-						foreach (var __item__result in __coll__result) {
-							WorkspaceFolder __val__result = default;
-							__val__result = new WorkspaceFolder();
-							ok = __val__result.populateFrom(__item__result);
-							if (!ok) {
-								return false;
-							}
-							result[__idx__result] = __val__result;
-							__idx__result = __idx__result + 1;
-						}
+						result[__idx__result] = __val__result;
+						__idx__result = __idx__result + 1;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<WorkspaceFolder[]> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWorkspace.FindFiles(string include, string exclude, int? maxResults, Cancel token, Action<string[]> onDone) {
+		Action<Action<string[]>> IWorkspace.FindFiles(string include, string exclude, int? maxResults, Cancel token, Action<string[]> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.findFiles";
@@ -2751,127 +2961,147 @@ namespace VscAppz {
 				}
 				msg.Data["token"] = token.fnId;
 			}
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string[] result = default;
-					if ((null != payload)) {
-						any[] __coll__result = default;
-						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+			Func<any, bool> onresp = default;
+			Action<string[]> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string[] result = default;
+				if ((null != payload)) {
+					any[] __coll__result = default;
+					(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					result = new string[__coll__result.Length];
+					int __idx__result = default;
+					__idx__result = 0;
+					foreach (var __item__result in __coll__result) {
+						string __val__result = default;
+						(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
 						if (!ok) {
 							return false;
 						}
-						result = new string[__coll__result.Length];
-						int __idx__result = default;
-						__idx__result = 0;
-						foreach (var __item__result in __coll__result) {
-							string __val__result = default;
-							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
-							if (!ok) {
-								return false;
-							}
-							result[__idx__result] = __val__result;
-							__idx__result = __idx__result + 1;
-						}
+						result[__idx__result] = __val__result;
+						__idx__result = __idx__result + 1;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string[]> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWorkspace.AsRelativePath(string pathOrUri, bool includeWorkspaceFolder, Action<string> onDone) {
+		Action<Action<string>> IWorkspace.AsRelativePath(string pathOrUri, bool includeWorkspaceFolder, Action<string> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.asRelativePath";
 			msg.Data = new dict(2);
 			msg.Data["pathOrUri"] = pathOrUri;
 			msg.Data["includeWorkspaceFolder"] = includeWorkspaceFolder;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string result = default;
-					if ((null != payload)) {
-						string _result_ = default;
-						(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						result = _result_;
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					string _result_ = default;
+					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+					result = _result_;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IWorkspace.Properties(Action<WorkspaceProperties> onDone) {
+		Action<Action<WorkspaceProperties>> IWorkspace.Properties(Action<WorkspaceProperties> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "workspace.Properties";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					WorkspaceProperties result = default;
-					if ((null != payload)) {
-						result = new WorkspaceProperties();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
-					} else {
+			Func<any, bool> onresp = default;
+			Action<WorkspaceProperties> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				WorkspaceProperties result = default;
+				if ((null != payload)) {
+					result = new WorkspaceProperties();
+					ok = result.populateFrom(payload);
+					if (!ok) {
 						return false;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<WorkspaceProperties> a0) => {
+				onret = a0;
+			};
 		}
 
-		void ILanguages.GetLanguages(Action<string[]> onDone) {
+		Action<Action<string[]>> ILanguages.GetLanguages(Action<string[]> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "languages.getLanguages";
 			msg.Data = new dict(0);
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string[] result = default;
-					if ((null != payload)) {
-						any[] __coll__result = default;
-						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+			Func<any, bool> onresp = default;
+			Action<string[]> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string[] result = default;
+				if ((null != payload)) {
+					any[] __coll__result = default;
+					(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					result = new string[__coll__result.Length];
+					int __idx__result = default;
+					__idx__result = 0;
+					foreach (var __item__result in __coll__result) {
+						string __val__result = default;
+						(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
 						if (!ok) {
 							return false;
 						}
-						result = new string[__coll__result.Length];
-						int __idx__result = default;
-						__idx__result = 0;
-						foreach (var __item__result in __coll__result) {
-							string __val__result = default;
-							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
-							if (!ok) {
-								return false;
-							}
-							result[__idx__result] = __val__result;
-							__idx__result = __idx__result + 1;
-						}
+						result[__idx__result] = __val__result;
+						__idx__result = __idx__result + 1;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string[]> a0) => {
+				onret = a0;
+			};
 		}
 
-		void ILanguages.OnDidChangeDiagnostics(Action<DiagnosticChangeEvent> listener, Action<Disposable> onDone) {
+		Action<Action<Disposable>> ILanguages.OnDidChangeDiagnostics(Action<DiagnosticChangeEvent> listener, Action<Disposable> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "languages.onDidChangeDiagnostics";
@@ -2879,7 +3109,7 @@ namespace VscAppz {
 			string _fnid_listener = default;
 			if ((null == listener)) {
 				OnError(this.Impl(), "ILanguages.OnDidChangeDiagnostics: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
-				return ;
+				return null;
 			}
 			_fnid_listener = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
@@ -2896,28 +3126,33 @@ namespace VscAppz {
 				return true;
 			}, null);
 			msg.Data["listener"] = _fnid_listener;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					Disposable result = default;
-					if ((null != payload)) {
-						result = new Disposable();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
-					} else {
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
 						return false;
 					}
-					onDone(result.bind(this.Impl(), _fnid_listener));
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.Impl(), _fnid_listener));
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
 		}
 
-		void IExtensions.OnDidChange(Action listener, Action<Disposable> onDone) {
+		Action<Action<Disposable>> IExtensions.OnDidChange(Action listener, Action<Disposable> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "extensions.onDidChange";
@@ -2925,7 +3160,7 @@ namespace VscAppz {
 			string _fnid_listener = default;
 			if ((null == listener)) {
 				OnError(this.Impl(), "IExtensions.OnDidChange: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
-				return ;
+				return null;
 			}
 			_fnid_listener = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
@@ -2936,28 +3171,33 @@ namespace VscAppz {
 				return true;
 			}, null);
 			msg.Data["listener"] = _fnid_listener;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					Disposable result = default;
-					if ((null != payload)) {
-						result = new Disposable();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
-					} else {
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
 						return false;
 					}
-					onDone(result.bind(this.Impl(), _fnid_listener));
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.Impl(), _fnid_listener));
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
 		}
 
-		void ICommands.RegisterCommand(string command, Func<any[], any> callback, Action<Disposable> onDone) {
+		Action<Action<Disposable>> ICommands.RegisterCommand(string command, Func<any[], any> callback, Action<Disposable> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "commands.registerCommand";
@@ -2966,7 +3206,7 @@ namespace VscAppz {
 			string _fnid_callback = default;
 			if ((null == callback)) {
 				OnError(this.Impl(), "ICommands.RegisterCommand: the 'callback' arg (which is not optional but required) was not passed by the caller", null);
-				return ;
+				return null;
 			}
 			_fnid_callback = this.Impl().nextSub(null, (any[] args) => {
 				bool ok = default;
@@ -2983,113 +3223,156 @@ namespace VscAppz {
 				return (ret, true);
 			});
 			msg.Data["callback"] = _fnid_callback;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					Disposable result = default;
-					if ((null != payload)) {
-						result = new Disposable();
-						ok = result.populateFrom(payload);
-						if (!ok) {
-							return false;
-						}
-					} else {
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
 						return false;
 					}
-					onDone(result.bind(this.Impl(), _fnid_callback));
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.Impl(), _fnid_callback));
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
 		}
 
-		void ICommands.ExecuteCommand(string command, any[] rest, Action<any> onDone) {
+		Action<Action<any>> ICommands.ExecuteCommand(string command, any[] rest, Action<any> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "commands.executeCommand";
 			msg.Data = new dict(2);
 			msg.Data["command"] = command;
 			msg.Data["rest"] = rest;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					any result = default;
-					if ((null != payload)) {
-						(result, ok) = (payload, true);
-						if (ok) {
-						}
+			Func<any, bool> onresp = default;
+			Action<any> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				any result = default;
+				if ((null != payload)) {
+					(result, ok) = (payload, true);
+					if (ok) {
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<any> a0) => {
+				onret = a0;
+			};
 		}
 
-		void ICommands.GetCommands(bool filterInternal, Action<string[]> onDone) {
+		Action<Action<string[]>> ICommands.GetCommands(bool filterInternal, Action<string[]> onDone) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "commands.getCommands";
 			msg.Data = new dict(1);
 			msg.Data["filterInternal"] = filterInternal;
-			Func<any, bool> on = default;
-			if ((null != onDone)) {
-				on = (any payload) => {
-					bool ok = default;
-					string[] result = default;
-					if ((null != payload)) {
-						any[] __coll__result = default;
-						(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+			Func<any, bool> onresp = default;
+			Action<string[]> onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				bool ok = default;
+				string[] result = default;
+				if ((null != payload)) {
+					any[] __coll__result = default;
+					(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					result = new string[__coll__result.Length];
+					int __idx__result = default;
+					__idx__result = 0;
+					foreach (var __item__result in __coll__result) {
+						string __val__result = default;
+						(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
 						if (!ok) {
 							return false;
 						}
-						result = new string[__coll__result.Length];
-						int __idx__result = default;
-						__idx__result = 0;
-						foreach (var __item__result in __coll__result) {
-							string __val__result = default;
-							(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
-							if (!ok) {
-								return false;
-							}
-							result[__idx__result] = __val__result;
-							__idx__result = __idx__result + 1;
-						}
+						result[__idx__result] = __val__result;
+						__idx__result = __idx__result + 1;
 					}
-					onDone(result);
-					return true;
-				};
-			}
-			this.Impl().send(msg, on);
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string[]> a0) => {
+				onret = a0;
+			};
 		}
 
 	}
 
 	public partial class StatusBarItem {
 		/// <summary>Shows the entry in the status bar.</summary>
-		public void Show() {
+		public Action<Action> Show(Action onDone = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.show";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
-			Func<any, bool> on = default;
-			this.disp.impl.send(msg, on);
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				if ((null != payload)) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
 		}
 	}
 
 	public partial class StatusBarItem {
 		/// <summary>Hide the entry in the status bar.</summary>
-		public void Hide() {
+		public Action<Action> Hide(Action onDone = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.hide";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
-			Func<any, bool> on = default;
-			this.disp.impl.send(msg, on);
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				if ((null != payload)) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
 		}
 	}
 
@@ -3098,9 +3381,10 @@ namespace VscAppz {
 		/// Dispose and free associated resources. Call
 		/// [hide](#StatusBarItem.hide).
 		/// </summary>
-		public void Dispose() {
-			this.disp.Dispose();
+		public Action<Action> Dispose(Action onDone = default) {
+			return this.disp.Dispose();
 		}
+		void IDisposable.Dispose() { this.Dispose(); }
 	}
 
 	public partial class OutputChannel {
@@ -3110,15 +3394,29 @@ namespace VscAppz {
 		/// `value` ── A string, falsy values will not be printed.
 		/// </summary>
 		/// <param name="value">A string, falsy values will not be printed.</param>
-		public void Append(string value) {
+		public Action<Action> Append(string value = default, Action onDone = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.append";
 			msg.Data = new dict(2);
 			msg.Data[""] = this.disp.id;
 			msg.Data["value"] = value;
-			Func<any, bool> on = default;
-			this.disp.impl.send(msg, on);
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				if ((null != payload)) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
 		}
 	}
 
@@ -3130,28 +3428,56 @@ namespace VscAppz {
 		/// `value` ── A string, falsy values will be printed.
 		/// </summary>
 		/// <param name="value">A string, falsy values will be printed.</param>
-		public void AppendLine(string value) {
+		public Action<Action> AppendLine(string value = default, Action onDone = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.appendLine";
 			msg.Data = new dict(2);
 			msg.Data[""] = this.disp.id;
 			msg.Data["value"] = value;
-			Func<any, bool> on = default;
-			this.disp.impl.send(msg, on);
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				if ((null != payload)) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
 		}
 	}
 
 	public partial class OutputChannel {
 		/// <summary>Removes all output from the channel.</summary>
-		public void Clear() {
+		public Action<Action> Clear(Action onDone = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.clear";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
-			Func<any, bool> on = default;
-			this.disp.impl.send(msg, on);
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				if ((null != payload)) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
 		}
 	}
 
@@ -3162,7 +3488,7 @@ namespace VscAppz {
 		/// `preserveFocus` ── When `true` the channel will not take focus.
 		/// </summary>
 		/// <param name="preserveFocus">When `true` the channel will not take focus.</param>
-		public void Show(bool? preserveFocus) {
+		public Action<Action> Show(bool? preserveFocus = default, Action onDone = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.show";
@@ -3171,33 +3497,62 @@ namespace VscAppz {
 			if ((null != preserveFocus)) {
 				msg.Data["preserveFocus"] = preserveFocus;
 			}
-			Func<any, bool> on = default;
-			this.disp.impl.send(msg, on);
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				if ((null != payload)) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
 		}
 	}
 
 	public partial class OutputChannel {
 		/// <summary>Hide this channel from the UI.</summary>
-		public void Hide() {
+		public Action<Action> Hide(Action onDone = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.hide";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
-			Func<any, bool> on = default;
-			this.disp.impl.send(msg, on);
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onret = onDone;
+			onresp = (any payload) => {
+				if ((null != payload)) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
 		}
 	}
 
 	public partial class OutputChannel : IDisposable {
 		/// <summary>Dispose and free associated resources.</summary>
-		public void Dispose() {
-			this.disp.Dispose();
+		public Action<Action> Dispose(Action onDone = default) {
+			return this.disp.Dispose();
 		}
+		void IDisposable.Dispose() { this.Dispose(); }
 	}
 
 	public partial class MessageItem {
-		internal bool populateFrom(any payload) {
+		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -3245,7 +3600,7 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPickItem {
-		internal bool populateFrom(any payload) {
+		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -3330,7 +3685,7 @@ namespace VscAppz {
 	}
 
 	public partial class WorkspaceFolder {
-		internal bool populateFrom(any payload) {
+		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -3387,7 +3742,7 @@ namespace VscAppz {
 	}
 
 	public partial class WindowState {
-		internal bool populateFrom(any payload) {
+		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -3413,7 +3768,7 @@ namespace VscAppz {
 	}
 
 	public partial class StatusBarItem {
-		internal bool populateFrom(any payload) {
+		internal bool populateFrom(any payload = default) {
 			bool ok = default;
 			this.disp = new Disposable();
 			ok = this.disp.populateFrom(payload);
@@ -3422,7 +3777,7 @@ namespace VscAppz {
 	}
 
 	public partial class OutputChannel {
-		internal bool populateFrom(any payload) {
+		internal bool populateFrom(any payload = default) {
 			bool ok = default;
 			this.disp = new Disposable();
 			ok = this.disp.populateFrom(payload);
@@ -3431,7 +3786,7 @@ namespace VscAppz {
 	}
 
 	public partial class EnvProperties {
-		internal bool populateFrom(any payload) {
+		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -3548,7 +3903,7 @@ namespace VscAppz {
 	}
 
 	public partial class WorkspaceFoldersChangeEvent {
-		internal bool populateFrom(any payload) {
+		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -3615,7 +3970,7 @@ namespace VscAppz {
 	}
 
 	public partial class WorkspaceProperties {
-		internal bool populateFrom(any payload) {
+		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -3679,7 +4034,7 @@ namespace VscAppz {
 	}
 
 	public partial class DiagnosticChangeEvent {
-		internal bool populateFrom(any payload) {
+		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;

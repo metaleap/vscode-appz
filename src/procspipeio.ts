@@ -243,6 +243,12 @@ export class Prog {
                 const retprom = ret as Thenable<any>
                 const retdisp = ret as vsc.Disposable
 
+                const tmp = ret as vsc.StatusBarItem
+                if (tmp && tmp.show && tmp.hide && tmp.dispose) try {
+                    tmp['text'] = "DEMO"
+                    tmp['command'] = "vsc_appz.main"
+                } catch { }
+
                 if (retprom && retprom.then && retdisp && retdisp.dispose)
                     throw ret // just in case this ever begins occurring, we'll thusly find out stat
 
@@ -296,7 +302,7 @@ export class Prog {
         }
     }
 
-    private send(msgOut: IpcMsg) {
+    send(msgOut: IpcMsg) {
         const onmaybefailed = (err: any) => {
             if (err && this.proc)
                 vsc.window.showErrorMessage(err + '')
@@ -359,8 +365,10 @@ export function ensureProg(fullCmd: string) {
 
                 if (!me)
                     reject(vsc.window.showInformationMessage(uxStr.badProcCmd.replace('_', cmd)))
-                else
+                else {
                     progs[fullCmd] = me
+                    me.send({ data: {}, qName: "main" })
+                }
             })
         )
 }

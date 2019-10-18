@@ -462,13 +462,22 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				throw "Called vscode.StatusBarItem" + methodname + " for an already disposed-and-forgotten instance"
 			switch (methodname) {
 				case "show": {
-					return new Promise((ret, rej) => { try { ret(thisStatusBarItem.show()) } catch (err) { rej(err) } })
+					const ret = thisStatusBarItem.show()
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				case "hide": {
-					return new Promise((ret, rej) => { try { ret(thisStatusBarItem.hide()) } catch (err) { rej(err) } })
+					const ret = thisStatusBarItem.hide()
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				case "dispose": {
-					return new Promise((ret, rej) => { try { ret(thisStatusBarItem.dispose()) } catch (err) { rej(err) } })
+					const ret = thisStatusBarItem.dispose()
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				default:
 					throw methodname
@@ -480,24 +489,42 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 			switch (methodname) {
 				case "append": {
 					const arg_value = (msg.data['value']) as string
-					return new Promise((ret, rej) => { try { ret(thisOutputChannel.append(arg_value)) } catch (err) { rej(err) } })
+					const ret = thisOutputChannel.append(arg_value, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				case "appendLine": {
 					const arg_value = (msg.data['value']) as string
-					return new Promise((ret, rej) => { try { ret(thisOutputChannel.appendLine(arg_value)) } catch (err) { rej(err) } })
+					const ret = thisOutputChannel.appendLine(arg_value, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				case "clear": {
-					return new Promise((ret, rej) => { try { ret(thisOutputChannel.clear()) } catch (err) { rej(err) } })
+					const ret = thisOutputChannel.clear()
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				case "show": {
 					const arg_preserveFocus = (msg.data['preserveFocus']) as boolean
-					return new Promise((ret, rej) => { try { ret(thisOutputChannel.show(arg_preserveFocus)) } catch (err) { rej(err) } })
+					const ret = thisOutputChannel.show(arg_preserveFocus, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				case "hide": {
-					return new Promise((ret, rej) => { try { ret(thisOutputChannel.hide()) } catch (err) { rej(err) } })
+					const ret = thisOutputChannel.hide()
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				case "dispose": {
-					return new Promise((ret, rej) => { try { ret(thisOutputChannel.dispose()) } catch (err) { rej(err) } })
+					const ret = thisOutputChannel.dispose()
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				default:
 					throw methodname
