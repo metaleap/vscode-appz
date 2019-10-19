@@ -532,7 +532,7 @@ Reveal this channel in the UI.
 ```go
 type OutputChannelProperties struct {
 	// The human-readable name of this output channel.
-	Name string
+	Name func() string `json:"-"`
 
 	// Free-form custom data, preserved across a roundtrip.
 	My dict `json:"my,omitempty"`
@@ -691,11 +691,11 @@ Shows the entry in the status bar.
 ```go
 type StatusBarItemProperties struct {
 	// The alignment of this item.
-	Alignment StatusBarAlignment
+	Alignment func() StatusBarAlignment `json:"-"`
 
 	// The priority of this item. Higher value means the item should
 	// be shown more to the left.
-	Priority int
+	Priority func() int `json:"-"`
 
 	// The text to show for the entry. You can embed icons in the text by leveraging the syntax:
 	//

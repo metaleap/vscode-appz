@@ -1152,12 +1152,6 @@ function newWindowState (): WindowState {
 
  */
 export interface StatusBarItem extends fromJson, withDisp {
-
-
-
-
-
-
     /**
      * Shows the entry in the status bar.
 
@@ -1176,6 +1170,10 @@ export interface StatusBarItem extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void
+
+    Get: () => (_: (_: StatusBarItemProperties) => void) => void
+
+    Set: (_: StatusBarItemProperties) => (_: () => void) => void
 }
 
 function newStatusBarItem (): StatusBarItem {
@@ -1184,6 +1182,8 @@ function newStatusBarItem (): StatusBarItem {
     me.Show = () => StatusBarItem_Show.call(me, )
     me.Hide = () => StatusBarItem_Hide.call(me, )
     me.Dispose = () => StatusBarItem_Dispose.call(me, )
+    me.Get = () => StatusBarItem_Get.call(me, )
+    me.Set = (a0) => StatusBarItem_Set.call(me, a0)
     return me
 }
 
@@ -1195,7 +1195,6 @@ function newStatusBarItem (): StatusBarItem {
 
  */
 export interface OutputChannel extends fromJson, withDisp {
-
     /**
      * Append the given value to the channel.
      * 
@@ -1238,6 +1237,8 @@ export interface OutputChannel extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void
+
+    Get: () => (_: (_: OutputChannelProperties) => void) => void
 }
 
 function newOutputChannel (): OutputChannel {
@@ -1249,6 +1250,7 @@ function newOutputChannel (): OutputChannel {
     me.Show = (a0) => OutputChannel_Show.call(me, a0)
     me.Hide = () => OutputChannel_Hide.call(me, )
     me.Dispose = () => OutputChannel_Dispose.call(me, )
+    me.Get = () => OutputChannel_Get.call(me, )
     return me
 }
 
@@ -1436,14 +1438,14 @@ export interface StatusBarItemProperties extends fromJson {
      * The alignment of this item.
 
      */
-    Alignment: StatusBarAlignment
+    Alignment: () => StatusBarAlignment
 
     /**
      * The priority of this item. Higher value means the item should
      * be shown more to the left.
 
      */
-    Priority: number
+    Priority: () => number
 
     /**
      * The text to show for the entry. You can embed icons in the text by leveraging the syntax:
@@ -1500,7 +1502,7 @@ export interface OutputChannelProperties extends fromJson {
      * The human-readable name of this output channel.
 
      */
-    Name: string
+    Name: () => string
 
     /**
      * Free-form custom data, preserved across a roundtrip.
@@ -3570,11 +3572,56 @@ function StatusBarItem_Dispose(this: StatusBarItem, ): (_: () => void) => void {
 }
 
 function StatusBarItem_Get(this: StatusBarItem, ): (_: (_: StatusBarItemProperties) => void) => void {
-    return null
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "StatusBarItem.appzObjPropsGet"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let onresp: (_: any) => boolean
+    let onret: (_: StatusBarItemProperties) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: StatusBarItemProperties
+        if ((undefined !== payload && null !== payload)) {
+            result = newStatusBarItemProperties()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result)
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: StatusBarItemProperties) => void): void => {
+        onret = a0
+    }
 }
 
 function StatusBarItem_Set(this: StatusBarItem, allUpdates: StatusBarItemProperties): (_: () => void) => void {
-    return null
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "StatusBarItem.appzObjPropsSet"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    msg.Data["allUpdates"] = allUpdates
+    let onresp: (_: any) => boolean
+    let onret: () => void
+    onresp = (payload: any): boolean => {
+        if ((undefined !== payload && null !== payload)) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: () => void): void => {
+        onret = a0
+    }
 }
 
 function OutputChannel_Append(this: OutputChannel, value: string): (_: () => void) => void {
@@ -3702,7 +3749,32 @@ function OutputChannel_Dispose(this: OutputChannel, ): (_: () => void) => void {
 }
 
 function OutputChannel_Get(this: OutputChannel, ): (_: (_: OutputChannelProperties) => void) => void {
-    return null
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "OutputChannel.appzObjPropsGet"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let onresp: (_: any) => boolean
+    let onret: (_: OutputChannelProperties) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: OutputChannelProperties
+        if ((undefined !== payload && null !== payload)) {
+            result = newOutputChannelProperties()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result)
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: OutputChannelProperties) => void): void => {
+        onret = a0
+    }
 }
 
 function MessageItem_populateFrom(this: MessageItem, payload: any): boolean {
@@ -4220,6 +4292,46 @@ function StatusBarItemProperties_populateFrom(this: StatusBarItemProperties, pay
     if (!ok) {
         return false
     }
+    [val, ok] = [it["alignment"], undefined !== it["alignment"]]
+    if (ok) {
+        let alignment: StatusBarAlignment
+        if ((undefined !== val && null !== val)) {
+            let i_alignment: number
+            [i_alignment, ok] = [val as number, typeof val === "number"]
+            if (!ok) {
+                let __i_alignment__: number
+                [__i_alignment__, ok] = [val as number, typeof val === "number"]
+                if (!ok) {
+                    return false
+                }
+                i_alignment = __i_alignment__
+            }
+            alignment = i_alignment
+        }
+        this.Alignment = (): StatusBarAlignment => {
+            return alignment
+        }
+    } else {
+        return false
+    }
+    [val, ok] = [it["priority"], undefined !== it["priority"]]
+    if (ok) {
+        let priority: number
+        if ((undefined !== val && null !== val)) {
+            [priority, ok] = [val as number, typeof val === "number"]
+            if (!ok) {
+                let __priority__: number
+                [__priority__, ok] = [val as number, typeof val === "number"]
+                if (!ok) {
+                    return false
+                }
+                priority = __priority__
+            }
+        }
+        this.Priority = (): number => {
+            return priority
+        }
+    }
     [val, ok] = [it["text"], undefined !== it["text"]]
     if (ok) {
         let text: string
@@ -4286,6 +4398,21 @@ function OutputChannelProperties_populateFrom(this: OutputChannelProperties, pay
     let val: any
     [it, ok] = [payload as { [_: string]: any }, typeof payload === "object"]
     if (!ok) {
+        return false
+    }
+    [val, ok] = [it["name"], undefined !== it["name"]]
+    if (ok) {
+        let name: string
+        if ((undefined !== val && null !== val)) {
+            [name, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.Name = (): string => {
+            return name
+        }
+    } else {
         return false
     }
     [val, ok] = [it["my"], undefined !== it["my"]]

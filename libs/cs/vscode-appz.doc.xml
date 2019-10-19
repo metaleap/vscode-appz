@@ -1154,6 +1154,12 @@
             [hide](#StatusBarItem.hide).
             </summary>
         </member>
+        <member name="M:VscAppz.StatusBarItem.Get">
+            <summary>Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.</summary>
+        </member>
+        <member name="M:VscAppz.StatusBarItem.Set(VscAppz.StatusBarItemProperties)">
+            <summary>Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.</summary>
+        </member>
         <member name="T:VscAppz.OutputChannel">
             <summary>
             An output channel is a container for readonly textual information.
@@ -1195,6 +1201,9 @@
         </member>
         <member name="M:VscAppz.OutputChannel.Dispose">
             <summary>Dispose and free associated resources.</summary>
+        </member>
+        <member name="M:VscAppz.OutputChannel.Get">
+            <summary>Obtains this `OutputChannel`'s current property values for: `name`.</summary>
         </member>
         <member name="T:VscAppz.WorkspaceFoldersChangeEvent">
             <summary>An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).</summary>
@@ -1312,10 +1321,10 @@
             show text and icons and run a command on click.
             </summary>
         </member>
-        <member name="P:VscAppz.StatusBarItemProperties.Alignment">
+        <member name="F:VscAppz.StatusBarItemProperties.Alignment">
             <summary>The alignment of this item.</summary>
         </member>
-        <member name="P:VscAppz.StatusBarItemProperties.Priority">
+        <member name="F:VscAppz.StatusBarItemProperties.Priority">
             <summary>
             The priority of this item. Higher value means the item should
             be shown more to the left.
@@ -1354,7 +1363,7 @@
             [createOutputChannel](#window.createOutputChannel).
             </summary>
         </member>
-        <member name="P:VscAppz.OutputChannelProperties.Name">
+        <member name="F:VscAppz.OutputChannelProperties.Name">
             <summary>The human-readable name of this output channel.</summary>
         </member>
         <member name="F:VscAppz.OutputChannelProperties.My">

@@ -682,7 +682,7 @@ function jsDocs(from: ts.Node): ts.JSDoc[] {
     return null
 }
 
-function pickName(forcePrefix: string, pickFrom: string[], dontCollideWith: { name: string }[]): string {
+export function pickName(forcePrefix: string, pickFrom: string[], dontCollideWith: { name: string }[]): string {
     if (!(forcePrefix && forcePrefix.length)) {
         for (const name of pickFrom)
             if (name && name.length && !dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))

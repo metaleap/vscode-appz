@@ -110,11 +110,12 @@
   - [AppendLine(value)](#M-VscAppz-OutputChannel-AppendLine-System-String- 'VscAppz.OutputChannel.AppendLine(System.String)')
   - [Clear()](#M-VscAppz-OutputChannel-Clear 'VscAppz.OutputChannel.Clear')
   - [Dispose()](#M-VscAppz-OutputChannel-Dispose 'VscAppz.OutputChannel.Dispose')
+  - [Get()](#M-VscAppz-OutputChannel-Get 'VscAppz.OutputChannel.Get')
   - [Hide()](#M-VscAppz-OutputChannel-Hide 'VscAppz.OutputChannel.Hide')
   - [Show(preserveFocus)](#M-VscAppz-OutputChannel-Show-System-Nullable{System-Boolean}- 'VscAppz.OutputChannel.Show(System.Nullable{System.Boolean})')
 - [OutputChannelProperties](#T-VscAppz-OutputChannelProperties 'VscAppz.OutputChannelProperties')
   - [My](#F-VscAppz-OutputChannelProperties-My 'VscAppz.OutputChannelProperties.My')
-  - [Name](#P-VscAppz-OutputChannelProperties-Name 'VscAppz.OutputChannelProperties.Name')
+  - [Name](#F-VscAppz-OutputChannelProperties-Name 'VscAppz.OutputChannelProperties.Name')
 - [QuickPickItem](#T-VscAppz-QuickPickItem 'VscAppz.QuickPickItem')
   - [AlwaysShow](#F-VscAppz-QuickPickItem-AlwaysShow 'VscAppz.QuickPickItem.AlwaysShow')
   - [Description](#F-VscAppz-QuickPickItem-Description 'VscAppz.QuickPickItem.Description')
@@ -139,16 +140,18 @@
   - [Right](#F-VscAppz-StatusBarAlignment-Right 'VscAppz.StatusBarAlignment.Right')
 - [StatusBarItem](#T-VscAppz-StatusBarItem 'VscAppz.StatusBarItem')
   - [Dispose()](#M-VscAppz-StatusBarItem-Dispose 'VscAppz.StatusBarItem.Dispose')
+  - [Get()](#M-VscAppz-StatusBarItem-Get 'VscAppz.StatusBarItem.Get')
   - [Hide()](#M-VscAppz-StatusBarItem-Hide 'VscAppz.StatusBarItem.Hide')
+  - [Set()](#M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemProperties- 'VscAppz.StatusBarItem.Set(VscAppz.StatusBarItemProperties)')
   - [Show()](#M-VscAppz-StatusBarItem-Show 'VscAppz.StatusBarItem.Show')
 - [StatusBarItemProperties](#T-VscAppz-StatusBarItemProperties 'VscAppz.StatusBarItemProperties')
+  - [Alignment](#F-VscAppz-StatusBarItemProperties-Alignment 'VscAppz.StatusBarItemProperties.Alignment')
   - [Color](#F-VscAppz-StatusBarItemProperties-Color 'VscAppz.StatusBarItemProperties.Color')
   - [Command](#F-VscAppz-StatusBarItemProperties-Command 'VscAppz.StatusBarItemProperties.Command')
   - [My](#F-VscAppz-StatusBarItemProperties-My 'VscAppz.StatusBarItemProperties.My')
+  - [Priority](#F-VscAppz-StatusBarItemProperties-Priority 'VscAppz.StatusBarItemProperties.Priority')
   - [Text](#F-VscAppz-StatusBarItemProperties-Text 'VscAppz.StatusBarItemProperties.Text')
   - [Tooltip](#F-VscAppz-StatusBarItemProperties-Tooltip 'VscAppz.StatusBarItemProperties.Tooltip')
-  - [Alignment](#P-VscAppz-StatusBarItemProperties-Alignment 'VscAppz.StatusBarItemProperties.Alignment')
-  - [Priority](#P-VscAppz-StatusBarItemProperties-Priority 'VscAppz.StatusBarItemProperties.Priority')
 - [Vsc](#T-VscAppz-Vsc 'VscAppz.Vsc')
   - [OnError](#F-VscAppz-Vsc-OnError 'VscAppz.Vsc.OnError')
   - [OnErrorDefaultOutputFormat](#F-VscAppz-Vsc-OnErrorDefaultOutputFormat 'VscAppz.Vsc.OnErrorDefaultOutputFormat')
@@ -1833,6 +1836,17 @@ Dispose and free associated resources.
 
 This method has no parameters.
 
+<a name='M-VscAppz-OutputChannel-Get'></a>
+### Get() `method`
+
+##### Summary
+
+Obtains this `OutputChannel`'s current property values for: `name`.
+
+##### Parameters
+
+This method has no parameters.
+
 <a name='M-VscAppz-OutputChannel-Hide'></a>
 ### Hide() `method`
 
@@ -1880,8 +1894,8 @@ To get an instance of an `OutputChannel` use
 
 Free-form custom data, preserved across a roundtrip.
 
-<a name='P-VscAppz-OutputChannelProperties-Name'></a>
-### Name `property`
+<a name='F-VscAppz-OutputChannelProperties-Name'></a>
+### Name `constants`
 
 ##### Summary
 
@@ -2090,12 +2104,34 @@ Dispose and free associated resources. Call
 
 This method has no parameters.
 
+<a name='M-VscAppz-StatusBarItem-Get'></a>
+### Get() `method`
+
+##### Summary
+
+Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
+
+##### Parameters
+
+This method has no parameters.
+
 <a name='M-VscAppz-StatusBarItem-Hide'></a>
 ### Hide() `method`
 
 ##### Summary
 
 Hide the entry in the status bar.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemProperties-'></a>
+### Set() `method`
+
+##### Summary
+
+Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
 
 ##### Parameters
 
@@ -2124,6 +2160,13 @@ VscAppz
 A status bar item is a status bar contribution that can
 show text and icons and run a command on click.
 
+<a name='F-VscAppz-StatusBarItemProperties-Alignment'></a>
+### Alignment `constants`
+
+##### Summary
+
+The alignment of this item.
+
 <a name='F-VscAppz-StatusBarItemProperties-Color'></a>
 ### Color `constants`
 
@@ -2146,6 +2189,14 @@ The identifier of a command to run on click. The command must be
 
 Free-form custom data, preserved across a roundtrip.
 
+<a name='F-VscAppz-StatusBarItemProperties-Priority'></a>
+### Priority `constants`
+
+##### Summary
+
+The priority of this item. Higher value means the item should
+be shown more to the left.
+
 <a name='F-VscAppz-StatusBarItemProperties-Text'></a>
 ### Text `constants`
 
@@ -2164,21 +2215,6 @@ Where the icon-name is taken from the [octicon](https://octicons.github.com) ico
 ##### Summary
 
 The tooltip text when you hover over this entry.
-
-<a name='P-VscAppz-StatusBarItemProperties-Alignment'></a>
-### Alignment `property`
-
-##### Summary
-
-The alignment of this item.
-
-<a name='P-VscAppz-StatusBarItemProperties-Priority'></a>
-### Priority `property`
-
-##### Summary
-
-The priority of this item. Higher value means the item should
-be shown more to the left.
 
 <a name='T-VscAppz-Vsc'></a>
 ## Vsc `type`

@@ -548,6 +548,7 @@ function pickName(forcePrefix, pickFrom, dontCollideWith) {
             }
     return undefined;
 }
+exports.pickName = pickName;
 function combine(...arrs) {
     const all = [];
     let only = null;

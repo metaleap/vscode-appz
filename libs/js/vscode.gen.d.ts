@@ -1046,6 +1046,8 @@ export interface StatusBarItem extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void;
+    Get: () => (_: (_: StatusBarItemProperties) => void) => void;
+    Set: (_: StatusBarItemProperties) => (_: () => void) => void;
 }
 /**
  * An output channel is a container for readonly textual information.
@@ -1092,6 +1094,7 @@ export interface OutputChannel extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void;
+    Get: () => (_: (_: OutputChannelProperties) => void) => void;
 }
 /**
  * An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).
@@ -1239,13 +1242,13 @@ export interface StatusBarItemProperties extends fromJson {
      * The alignment of this item.
 
      */
-    alignment: () => StatusBarAlignment;
+    Alignment: () => StatusBarAlignment;
     /**
      * The priority of this item. Higher value means the item should
      * be shown more to the left.
 
      */
-    priority: () => number;
+    Priority: () => number;
     /**
      * The text to show for the entry. You can embed icons in the text by leveraging the syntax:
      *
@@ -1293,7 +1296,7 @@ export interface OutputChannelProperties extends fromJson {
      * The human-readable name of this output channel.
 
      */
-    name: () => string;
+    Name: () => string;
     /**
      * Free-form custom data, preserved across a roundtrip.
 

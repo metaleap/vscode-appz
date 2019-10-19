@@ -54,6 +54,8 @@ function newStatusBarItem() {
     me.Show = () => StatusBarItem_Show.call(me);
     me.Hide = () => StatusBarItem_Hide.call(me);
     me.Dispose = () => StatusBarItem_Dispose.call(me);
+    me.Get = () => StatusBarItem_Get.call(me);
+    me.Set = (a0) => StatusBarItem_Set.call(me, a0);
     return me;
 }
 function newOutputChannel() {
@@ -65,6 +67,7 @@ function newOutputChannel() {
     me.Show = (a0) => OutputChannel_Show.call(me, a0);
     me.Hide = () => OutputChannel_Hide.call(me);
     me.Dispose = () => OutputChannel_Dispose.call(me);
+    me.Get = () => OutputChannel_Get.call(me);
     return me;
 }
 function newWorkspaceFoldersChangeEvent() {
@@ -2107,6 +2110,57 @@ function StatusBarItem_Hide() {
 function StatusBarItem_Dispose() {
     return this.disp.Dispose();
 }
+function StatusBarItem_Get() {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "StatusBarItem.appzObjPropsGet";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newStatusBarItemProperties();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result);
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function StatusBarItem_Set(allUpdates) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "StatusBarItem.appzObjPropsSet";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    msg.Data["allUpdates"] = allUpdates;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        if ((undefined !== payload && null !== payload)) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
 function OutputChannel_Append(value) {
     let msg;
     msg = newipcMsg();
@@ -2224,6 +2278,34 @@ function OutputChannel_Hide() {
 }
 function OutputChannel_Dispose() {
     return this.disp.Dispose();
+}
+function OutputChannel_Get() {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "OutputChannel.appzObjPropsGet";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newOutputChannelProperties();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result);
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
 }
 function MessageItem_populateFrom(payload) {
     let it;
@@ -2728,6 +2810,152 @@ function DiagnosticChangeEvent_populateFrom(payload) {
     }
     else {
         return false;
+    }
+    return true;
+}
+function StatusBarItemProperties_populateFrom(payload) {
+    let it;
+    let ok;
+    let val;
+    [it, ok] = [payload, typeof payload === "object"];
+    if (!ok) {
+        return false;
+    }
+    [val, ok] = [it["alignment"], undefined !== it["alignment"]];
+    if (ok) {
+        let alignment;
+        if ((undefined !== val && null !== val)) {
+            let i_alignment;
+            [i_alignment, ok] = [val, typeof val === "number"];
+            if (!ok) {
+                let __i_alignment__;
+                [__i_alignment__, ok] = [val, typeof val === "number"];
+                if (!ok) {
+                    return false;
+                }
+                i_alignment = __i_alignment__;
+            }
+            alignment = i_alignment;
+        }
+        this.Alignment = () => {
+            return alignment;
+        };
+    }
+    else {
+        return false;
+    }
+    [val, ok] = [it["priority"], undefined !== it["priority"]];
+    if (ok) {
+        let priority;
+        if ((undefined !== val && null !== val)) {
+            [priority, ok] = [val, typeof val === "number"];
+            if (!ok) {
+                let __priority__;
+                [__priority__, ok] = [val, typeof val === "number"];
+                if (!ok) {
+                    return false;
+                }
+                priority = __priority__;
+            }
+        }
+        this.Priority = () => {
+            return priority;
+        };
+    }
+    [val, ok] = [it["text"], undefined !== it["text"]];
+    if (ok) {
+        let text;
+        if ((undefined !== val && null !== val)) {
+            [text, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.text = text;
+    }
+    else {
+        return false;
+    }
+    [val, ok] = [it["tooltip"], undefined !== it["tooltip"]];
+    if (ok) {
+        let tooltip;
+        if ((undefined !== val && null !== val)) {
+            [tooltip, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.tooltip = tooltip;
+    }
+    [val, ok] = [it["color"], undefined !== it["color"]];
+    if (ok) {
+        let color;
+        if ((undefined !== val && null !== val)) {
+            [color, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.color = color;
+    }
+    [val, ok] = [it["command"], undefined !== it["command"]];
+    if (ok) {
+        let command;
+        if ((undefined !== val && null !== val)) {
+            [command, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.command = command;
+    }
+    [val, ok] = [it["my"], undefined !== it["my"]];
+    if (ok) {
+        let my;
+        if ((undefined !== val && null !== val)) {
+            [my, ok] = [val, typeof val === "object"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.my = my;
+    }
+    return true;
+}
+function OutputChannelProperties_populateFrom(payload) {
+    let it;
+    let ok;
+    let val;
+    [it, ok] = [payload, typeof payload === "object"];
+    if (!ok) {
+        return false;
+    }
+    [val, ok] = [it["name"], undefined !== it["name"]];
+    if (ok) {
+        let name;
+        if ((undefined !== val && null !== val)) {
+            [name, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.Name = () => {
+            return name;
+        };
+    }
+    else {
+        return false;
+    }
+    [val, ok] = [it["my"], undefined !== it["my"]];
+    if (ok) {
+        let my;
+        if ((undefined !== val && null !== val)) {
+            [my, ok] = [val, typeof val === "object"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.my = my;
     }
     return true;
 }

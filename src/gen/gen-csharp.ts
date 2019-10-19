@@ -304,7 +304,7 @@ export class Gen extends gen_syn.Gen {
             const isvoid = (!tfun.From.length) || (tfun.From.length === 1 && !tfun.From[0])
             return (!tfun.To)
                 ? this.s(isvoid ? "Action" : "Action<").each(isvoid ? [] : tfun.From, ", ", t => this.emitTypeRef(t)).s(isvoid ? "" : ">")
-                : this.s("Func<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(", ").emitTypeRef(tfun.To).s(">")
+                : this.s("Func<").each(tfun.From, ", ", t => this.emitTypeRef(t)).s(tfun.From.length ? ", " : "").emitTypeRef(tfun.To).s(">")
         }
 
         if (it === gen_syn.TypeRefPrim.Real)

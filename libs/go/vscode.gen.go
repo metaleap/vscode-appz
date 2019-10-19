@@ -988,11 +988,11 @@ type WorkspaceProperties struct {
 // show text and icons and run a command on click.
 type StatusBarItemProperties struct {
 	// The alignment of this item.
-	Alignment StatusBarAlignment `json:"-"`
+	Alignment func() StatusBarAlignment `json:"-"`
 
 	// The priority of this item. Higher value means the item should
 	// be shown more to the left.
-	Priority int `json:"-"`
+	Priority func() int `json:"-"`
 
 	// The text to show for the entry. You can embed icons in the text by leveraging the syntax:
 	// 
@@ -1022,7 +1022,7 @@ type StatusBarItemProperties struct {
 // [createOutputChannel](#window.createOutputChannel).
 type OutputChannelProperties struct {
 	// The human-readable name of this output channel.
-	Name string `json:"-"`
+	Name func() string `json:"-"`
 
 	// Free-form custom data, preserved across a roundtrip.
 	My dict `json:"my,omitempty"`
@@ -3118,12 +3118,57 @@ func (me *StatusBarItem) Dispose() func(func()) {
 
 // Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
 func (me *StatusBarItem) Get() func(func(StatusBarItemProperties)) {
-	return nil
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "StatusBarItem.appzObjPropsGet"
+	msg.Data = make(dict, 1)
+	msg.Data[""] = me.disp.id
+	var onresp func(any) bool
+	var onret func(StatusBarItemProperties)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result StatusBarItemProperties
+		if (nil != payload) {
+			result = */*sorryButSuchIsCodeGenSometimes...*/new(StatusBarItemProperties)
+			ok = result.populateFrom(payload)
+			if !ok {
+				return false
+			}
+		}
+		if (nil != onret) {
+			onret(result)
+		}
+		return true
+	}
+	me.disp.impl.send(msg, onresp)
+	return func(a0 func(StatusBarItemProperties)) {
+		onret = a0
+	}
 }
 
 // Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
 func (me *StatusBarItem) Set(allUpdates StatusBarItemProperties) func(func()) {
-	return nil
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "StatusBarItem.appzObjPropsSet"
+	msg.Data = make(dict, 2)
+	msg.Data[""] = me.disp.id
+	msg.Data["allUpdates"] = allUpdates
+	var onresp func(any) bool
+	var onret func()
+	onresp = func(payload any) bool {
+		if (nil != payload) {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
+		return true
+	}
+	me.disp.impl.send(msg, onresp)
+	return func(a0 func()) {
+		onret = a0
+	}
 }
 
 // Append the given value to the channel.
@@ -3265,7 +3310,32 @@ func (me *OutputChannel) Dispose() func(func()) {
 
 // Obtains this `OutputChannel`'s current property values for: `name`.
 func (me *OutputChannel) Get() func(func(OutputChannelProperties)) {
-	return nil
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "OutputChannel.appzObjPropsGet"
+	msg.Data = make(dict, 1)
+	msg.Data[""] = me.disp.id
+	var onresp func(any) bool
+	var onret func(OutputChannelProperties)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result OutputChannelProperties
+		if (nil != payload) {
+			result = */*sorryButSuchIsCodeGenSometimes...*/new(OutputChannelProperties)
+			ok = result.populateFrom(payload)
+			if !ok {
+				return false
+			}
+		}
+		if (nil != onret) {
+			onret(result)
+		}
+		return true
+	}
+	me.disp.impl.send(msg, onresp)
+	return func(a0 func(OutputChannelProperties)) {
+		onret = a0
+	}
 }
 
 func (me *MessageItem) populateFrom(payload any) bool {
@@ -3753,6 +3823,46 @@ func (me *StatusBarItemProperties) populateFrom(payload any) bool {
 	if !ok {
 		return false
 	}
+	val, ok = it["alignment"]
+	if ok {
+		var alignment StatusBarAlignment
+		if (nil != val) {
+			var i_alignment int
+			i_alignment, ok = val.(int)
+			if !ok {
+				var __i_alignment__ float64
+				__i_alignment__, ok = val.(float64)
+				if !ok {
+					return false
+				}
+				i_alignment = int(__i_alignment__)
+			}
+			alignment = StatusBarAlignment(i_alignment)
+		}
+		me.Alignment = func() StatusBarAlignment {
+			return alignment
+		}
+	} else {
+		return false
+	}
+	val, ok = it["priority"]
+	if ok {
+		var priority int
+		if (nil != val) {
+			priority, ok = val.(int)
+			if !ok {
+				var __priority__ float64
+				__priority__, ok = val.(float64)
+				if !ok {
+					return false
+				}
+				priority = int(__priority__)
+			}
+		}
+		me.Priority = func() int {
+			return priority
+		}
+	}
 	val, ok = it["text"]
 	if ok {
 		var text string
@@ -3819,6 +3929,21 @@ func (me *OutputChannelProperties) populateFrom(payload any) bool {
 	var val any
 	it, ok = payload.(dict)
 	if !ok {
+		return false
+	}
+	val, ok = it["name"]
+	if ok {
+		var name string
+		if (nil != val) {
+			name, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.Name = func() string {
+			return name
+		}
+	} else {
 		return false
 	}
 	val, ok = it["my"]

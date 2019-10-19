@@ -1464,14 +1464,14 @@ StatusBarItemProperties: class
     # The alignment of this item.
     #
     # JSON FLAGS: {"Name":"alignment","Required":true,"Excluded":true}
-    Alignment: StatusBarAlignment
+    Alignment: (->StatusBarAlignment)
 
     # priority:
     # The priority of this item. Higher value means the item should
     # be shown more to the left.
     #
     # JSON FLAGS: {"Name":"priority","Required":false,"Excluded":true}
-    Priority: ?int
+    Priority: (->int)
 
     # text:
     # The text to show for the entry. You can embed icons in the text by leveraging the syntax:
@@ -1522,7 +1522,7 @@ OutputChannelProperties: class
     # The human-readable name of this output channel.
     #
     # JSON FLAGS: {"Name":"name","Required":true,"Excluded":true}
-    Name: string
+    Name: (->string)
 
     # my:
     # Free-form custom data, preserved across a roundtrip.
@@ -3435,13 +3435,53 @@ StatusBarItem·Dispose: ( -> ((void->void)->void))
 
 
 StatusBarItem·Get: ( -> ((StatusBarItemProperties->void)->void))
-    return null
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "StatusBarItem.appzObjPropsGet"
+    msg.Data = dict·new(1)
+    msg.Data@"" = this.disp.id
+    var onresp of (any->bool)
+    var onret of (StatusBarItemProperties->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of StatusBarItemProperties
+        if =?payload
+            result = StatusBarItemProperties·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(StatusBarItemProperties->void) -> void)
+        onret = a0
+    
 
 
 
 
 StatusBarItem·Set: (allUpdates:StatusBarItemProperties -> ((void->void)->void))
-    return null
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "StatusBarItem.appzObjPropsSet"
+    msg.Data = dict·new(2)
+    msg.Data@"" = this.disp.id
+    msg.Data@"allUpdates" = allUpdates
+    var onresp of (any->bool)
+    var onret of (void->void)
+    onresp = (payload:any -> bool)
+        if =?payload
+            return false
+        if =?onret
+            onret()
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(void->void) -> void)
+        onret = a0
+    
 
 
 
@@ -3572,7 +3612,29 @@ OutputChannel·Dispose: ( -> ((void->void)->void))
 
 
 OutputChannel·Get: ( -> ((OutputChannelProperties->void)->void))
-    return null
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "OutputChannel.appzObjPropsGet"
+    msg.Data = dict·new(1)
+    msg.Data@"" = this.disp.id
+    var onresp of (any->bool)
+    var onret of (OutputChannelProperties->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of OutputChannelProperties
+        if =?payload
+            result = OutputChannelProperties·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(OutputChannelProperties->void) -> void)
+        onret = a0
+    
 
 
 
@@ -4013,6 +4075,38 @@ StatusBarItemProperties·populateFrom: (payload:any -> bool)
     [it, ok] = ((payload)·(dict))
     if !ok
         return false
+    [val, ok] = it@?"alignment"
+    if ok
+        var alignment of StatusBarAlignment
+        if =?val
+            var i_alignment of int
+            [i_alignment, ok] = ((val)·(int))
+            if !ok
+                var __i_alignment__ of real
+                [__i_alignment__, ok] = ((val)·(real))
+                if !ok
+                    return false
+                i_alignment = ((__i_alignment__)·(int))
+            alignment = ((i_alignment)·(StatusBarAlignment))
+        this.Alignment = ( -> StatusBarAlignment)
+            return alignment
+        
+    else
+        return false
+    [val, ok] = it@?"priority"
+    if ok
+        var priority of int
+        if =?val
+            [priority, ok] = ((val)·(int))
+            if !ok
+                var __priority__ of real
+                [__priority__, ok] = ((val)·(real))
+                if !ok
+                    return false
+                priority = ((__priority__)·(int))
+        this.Priority = ( -> int)
+            return priority
+        
     [val, ok] = it@?"text"
     if ok
         var text of string
@@ -4066,6 +4160,18 @@ OutputChannelProperties·populateFrom: (payload:any -> bool)
     var val of any
     [it, ok] = ((payload)·(dict))
     if !ok
+        return false
+    [val, ok] = it@?"name"
+    if ok
+        var name of string
+        if =?val
+            [name, ok] = ((val)·(string))
+            if !ok
+                return false
+        this.Name = ( -> string)
+            return name
+        
+    else
         return false
     [val, ok] = it@?"my"
     if ok

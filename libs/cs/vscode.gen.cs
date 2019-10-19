@@ -1286,14 +1286,14 @@ namespace VscAppz {
 	public partial class StatusBarItemProperties {
 		/// <summary>The alignment of this item.</summary>
 		[JsonIgnore]
-		public StatusBarAlignment Alignment;
+		public Func<StatusBarAlignment> Alignment;
 
 		/// <summary>
 		/// The priority of this item. Higher value means the item should
 		/// be shown more to the left.
 		/// </summary>
 		[JsonIgnore]
-		public int? Priority;
+		public Func<int> Priority;
 
 		/// <summary>
 		/// The text to show for the entry. You can embed icons in the text by leveraging the syntax:
@@ -1335,7 +1335,7 @@ namespace VscAppz {
 	public partial class OutputChannelProperties {
 		/// <summary>The human-readable name of this output channel.</summary>
 		[JsonIgnore]
-		public string Name;
+		public Func<string> Name;
 
 		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
 		[JsonProperty("my")]
@@ -3399,14 +3399,59 @@ namespace VscAppz {
 	public partial class StatusBarItem {
 		/// <summary>Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.</summary>
 		public Action<Action<StatusBarItemProperties>> Get() {
-			return null;
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "StatusBarItem.appzObjPropsGet";
+			msg.Data = new dict(1);
+			msg.Data[""] = this.disp.id;
+			Func<any, bool> onresp = default;
+			Action<StatusBarItemProperties> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				StatusBarItemProperties result = default;
+				if ((null != payload)) {
+					result = new StatusBarItemProperties();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<StatusBarItemProperties> a0) => {
+				onret = a0;
+			};
 		}
 	}
 
 	public partial class StatusBarItem {
 		/// <summary>Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.</summary>
 		public Action<Action> Set(StatusBarItemProperties allUpdates = default) {
-			return null;
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "StatusBarItem.appzObjPropsSet";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.disp.id;
+			msg.Data["allUpdates"] = allUpdates;
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onresp = (any payload) => {
+				if ((null != payload)) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
 		}
 	}
 
@@ -3572,7 +3617,32 @@ namespace VscAppz {
 	public partial class OutputChannel {
 		/// <summary>Obtains this `OutputChannel`'s current property values for: `name`.</summary>
 		public Action<Action<OutputChannelProperties>> Get() {
-			return null;
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "OutputChannel.appzObjPropsGet";
+			msg.Data = new dict(1);
+			msg.Data[""] = this.disp.id;
+			Func<any, bool> onresp = default;
+			Action<OutputChannelProperties> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				OutputChannelProperties result = default;
+				if ((null != payload)) {
+					result = new OutputChannelProperties();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<OutputChannelProperties> a0) => {
+				onret = a0;
+			};
 		}
 	}
 
@@ -4106,7 +4176,47 @@ namespace VscAppz {
 			if (!ok) {
 				return false;
 			}
-			(val, ok) = (it.TryGetValue("text", out var __) ? (__, true) : (default, false));
+			(val, ok) = (it.TryGetValue("alignment", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				StatusBarAlignment alignment = default;
+				if ((null != val)) {
+					int i_alignment = default;
+					(i_alignment, ok) = (val is int) ? (((int)(val)), true) : (default, false);
+					if (!ok) {
+						double __i_alignment__ = default;
+						(__i_alignment__, ok) = (val is double) ? (((double)(val)), true) : (default, false);
+						if (!ok) {
+							return false;
+						}
+						i_alignment = ((int)(__i_alignment__));
+					}
+					alignment = ((StatusBarAlignment)(i_alignment));
+				}
+				this.Alignment = () => {
+					return alignment;
+				};
+			} else {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("priority", out var ___) ? (___, true) : (default, false));
+			if (ok) {
+				int priority = default;
+				if ((null != val)) {
+					(priority, ok) = (val is int) ? (((int)(val)), true) : (default, false);
+					if (!ok) {
+						double __priority__ = default;
+						(__priority__, ok) = (val is double) ? (((double)(val)), true) : (default, false);
+						if (!ok) {
+							return false;
+						}
+						priority = ((int)(__priority__));
+					}
+				}
+				this.Priority = () => {
+					return priority;
+				};
+			}
+			(val, ok) = (it.TryGetValue("text", out var ____) ? (____, true) : (default, false));
 			if (ok) {
 				string text = default;
 				if ((null != val)) {
@@ -4119,7 +4229,7 @@ namespace VscAppz {
 			} else {
 				return false;
 			}
-			(val, ok) = (it.TryGetValue("tooltip", out var ___) ? (___, true) : (default, false));
+			(val, ok) = (it.TryGetValue("tooltip", out var _____) ? (_____, true) : (default, false));
 			if (ok) {
 				string tooltip = default;
 				if ((null != val)) {
@@ -4130,7 +4240,7 @@ namespace VscAppz {
 				}
 				this.Tooltip = tooltip;
 			}
-			(val, ok) = (it.TryGetValue("color", out var ____) ? (____, true) : (default, false));
+			(val, ok) = (it.TryGetValue("color", out var ______) ? (______, true) : (default, false));
 			if (ok) {
 				string color = default;
 				if ((null != val)) {
@@ -4141,7 +4251,7 @@ namespace VscAppz {
 				}
 				this.Color = color;
 			}
-			(val, ok) = (it.TryGetValue("command", out var _____) ? (_____, true) : (default, false));
+			(val, ok) = (it.TryGetValue("command", out var _______) ? (_______, true) : (default, false));
 			if (ok) {
 				string command = default;
 				if ((null != val)) {
@@ -4152,7 +4262,7 @@ namespace VscAppz {
 				}
 				this.Command = command;
 			}
-			(val, ok) = (it.TryGetValue("my", out var ______) ? (______, true) : (default, false));
+			(val, ok) = (it.TryGetValue("my", out var ________) ? (________, true) : (default, false));
 			if (ok) {
 				dict my = default;
 				if ((null != val)) {
@@ -4176,7 +4286,22 @@ namespace VscAppz {
 			if (!ok) {
 				return false;
 			}
-			(val, ok) = (it.TryGetValue("my", out var __) ? (__, true) : (default, false));
+			(val, ok) = (it.TryGetValue("name", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				string name = default;
+				if ((null != val)) {
+					(name, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Name = () => {
+					return name;
+				};
+			} else {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("my", out var ___) ? (___, true) : (default, false));
 			if (ok) {
 				dict my = default;
 				if ((null != val)) {

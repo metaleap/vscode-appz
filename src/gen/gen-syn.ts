@@ -264,7 +264,7 @@ export class Builder {
                 name: _.name,
                 Name: ((it.isPropsOfStruct && _.readOnly) ? this.gen.nameRewriters.methods : this.gen.nameRewriters.fields)(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummaryFor.funcFields),
-                Type: this.gen.typeRefForField(this.typeRef(_.typeSpec, _.optional), _.optional),
+                Type: (it.isPropsOfStruct && _.readOnly) ? { From: [], To: this.typeRef(_.typeSpec, false, true, true) } : this.gen.typeRefForField(this.typeRef(_.typeSpec, _.optional), _.optional),
                 Json: { Name: _.name, Required: !_.optional, Excluded: (it.isPropsOfStruct && _.readOnly) || it.funcFields.some(ff => _.name === ff) },
             }))
         }
@@ -458,6 +458,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         haveProps: true,
         demoOutFilePath: "",
         typeNamesToString: ["Uri", "ThemeColor"],
+        objPropsGetSetNamePicks: ["", "Props", "Properties", "P", "Ps", "Details"]
     }
 
     constructor(outFilePath: [string, string], demoOutFilePath: string = "") {
@@ -884,9 +885,10 @@ export class Gen extends gen.Gen implements gen.IGen {
             )
             body.push(...this.convOrRet('it', _.n('payload'), TypeRefPrim.Dict))
 
-            for (const fld of tstruct.Fields)
-                if (fld.Json && !fld.Json.Excluded) {
-                    const tfld = this.typeRefForField(fld.Type, fld.fromPrep && fld.fromPrep.optional)
+            for (const fld of tstruct.Fields) {
+                const isreadonly = tstruct.fromPrep && tstruct.fromPrep.isPropsOfStruct && fld.fromPrep && fld.fromPrep.readOnly
+                if (fld.Json && ((!fld.Json.Excluded) || isreadonly)) {
+                    const tfld = isreadonly ? (fld.Type as TypeRefFunc).To : this.typeRefForField(fld.Type, fld.fromPrep && fld.fromPrep.optional)
                     body.push(
                         _.iSet(_.eTup(_.n('val'), _.n('ok')), _.oIdxMay(_.n('it'), _.eLit(fld.Json.Name))),
                         _.iIf(_.n('ok'), [
@@ -894,22 +896,25 @@ export class Gen extends gen.Gen implements gen.IGen {
                             _.iIf(_.oIs(_.n('val')),
                                 this.convOrRet(fld.name, _.n('val'), tfld),
                             ),
-                            _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), _.n(fld.name)),
+                            _.iSet(_.oDot(_.eThis(), _.n(fld.Name)), isreadonly ? _.eFunc(
+                                [], (fld.Type as TypeRefFunc).To, _.iRet(_.n(fld.name))
+                            ) : _.n(fld.name)),
                         ],
                             fld.Json.Required ? [_.iRet(_.eLit(false))] : []
                         ),
                     )
                 }
+            }
             body.push(_.iRet(_.eLit(true)))
         }
     }
 
-    private genMethodImpl_ObjPropsGet(struct: TypeRefOwn, _method: Method, _: Builder, body: Instr[]) {
-        body.push(_.iRet(_.eZilch()))
+    private genMethodImpl_ObjPropsGet(struct: TypeRefOwn, method: Method, _: Builder, body: Instr[]) {
+        this.genMethodImpl_methodCall(struct, method, _, body, _.oDot(_.eThis(), _.n("disp"), _.n("id")), _.oDot(_.eThis(), _.n("disp"), _.n("impl")))
     }
 
-    private genMethodImpl_ObjPropsSet(struct: TypeRefOwn, _method: Method, _: Builder, body: Instr[]) {
-        body.push(_.iRet(_.eZilch()))
+    private genMethodImpl_ObjPropsSet(struct: TypeRefOwn, method: Method, _: Builder, body: Instr[]) {
+        this.genMethodImpl_methodCall(struct, method, _, body, _.oDot(_.eThis(), _.n("disp"), _.n("id")), _.oDot(_.eThis(), _.n("disp"), _.n("impl")))
     }
 
     private genMethodImpl_ObjMethodCall(struct: TypeRefOwn, method: Method, _: Builder, body: Instr[]) {
@@ -925,10 +930,10 @@ export class Gen extends gen.Gen implements gen.IGen {
         this.genMethodImpl_methodCall(typeRef, method, _, body)
     }
 
-    private genMethodImpl_methodCall(iface: TypeRefOwn, method: Method, _: Builder, body: Instr[], idVal?: Expr, impl?: Expr) {
-        const __ = gen.idents(method.fromPrep.args, 'msg', 'onresp', 'onret', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok', 'ret')
-        const funcfields = gen.argsFuncFields(_.prep, method.fromPrep.args)
-        const numargs = method.fromPrep.args.filter(_ => !_.isFromRetThenable).length
+    private genMethodImpl_methodCall(ifaceOrStruct: TypeRefOwn, method: Method, _: Builder, body: Instr[], idVal?: Expr, impl?: Expr) {
+        const __ = gen.idents(method.fromPrep ? method.fromPrep.args : [], 'msg', 'onresp', 'onret', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok', 'ret')
+        const funcfields = method.fromPrep ? gen.argsFuncFields(_.prep, method.fromPrep.args) : []
+        const numargs = method.fromPrep ? method.fromPrep.args.filter(_ => !_.isFromRetThenable).length : method.Args.length
 
         if (!impl)
             impl = _.eCall(_.oDot(_.n("Impl")))
@@ -936,7 +941,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         body.push(
             _.iVar(__.msg, { Maybe: { Name: 'ipcMsg' } }),
             _.iSet(_.n(__.msg), _.eNew({ Maybe: { Name: 'ipcMsg' } })),
-            _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(iface.name + '.' + method.fromPrep.name)),
+            _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(ifaceOrStruct.name + '.' + (method.fromPrep ? method.fromPrep.name : (method.name && method.name.startsWith("appz")) ? method.name : method.Name))),
             _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs + (idVal ? 1 : 0)))),
         )
         if (idVal)
@@ -1036,7 +1041,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             body.push(
                 _.iVar(fnid, TypeRefPrim.String),
                 _.iIf(_.oIsnt(_.n(arg.Name)), [
-                    _.eCall(_.n("OnError"), impl, _.eLit(`${iface.Name}.${method.Name}: the '${arg.Name}' arg (which is not optional but required) was not passed by the caller`), _.eZilch()),
+                    _.eCall(_.n("OnError"), impl, _.eLit(`${ifaceOrStruct.Name}.${method.Name}: the '${arg.Name}' arg (which is not optional but required) was not passed by the caller`), _.eZilch()),
                     _.iRet(_.eZilch()),
                 ]),
                 _.iSet(_.n(fnid), _.eCall(_.oDot(impl, _.n("nextSub")),
@@ -1056,8 +1061,8 @@ export class Gen extends gen.Gen implements gen.IGen {
             eventlike(method.Args[0])
         else
             for (const arg of method.Args)
-                if (!arg.fromPrep.isFromRetThenable)
-                    if (arg.fromPrep.isCancellationToken !== undefined)
+                if ((!arg.fromPrep) || (!arg.fromPrep.isFromRetThenable))
+                    if (arg.fromPrep && arg.fromPrep.isCancellationToken !== undefined)
                         body.push(_.iIf(_.oIs(_.n(arg.Name)), [
                             _.iSet(_.oDot(_.n(arg.Name), _.n("impl")), impl),
                             _.iIf(_.oEq(_.eLit(""), _.oDot(_.n(arg.Name), _.n("fnId"))), [
@@ -1086,7 +1091,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
                         const twinarg = twinargs[arg.Name]
                         let set: Instr = _.iSet(
-                            _.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)),
+                            _.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit((arg.name && arg.name.length) ? arg.name : arg.Name)),
                             _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name),
                         )
                         if (arg.fromPrep && arg.fromPrep.optional) {
@@ -1305,17 +1310,10 @@ export class Gen extends gen.Gen implements gen.IGen {
                     }
                 const propsfields = struct.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec))
                 if (propsfields && propsfields.length) {
-                    let nameget = "get", nameset = "set"
-                    if (struct.fromPrep.fields.find(_ => _.name === nameget) || struct.fromPrep.fields.find(_ => _.name === nameset))
-                        for (const suff of ["Props", "Properties", "P", "Ps", "Details"])
-                            if (!(struct.fromPrep.fields.find(_ => _.name === "get" + suff) || struct.fromPrep.fields.find(_ => _.name === "set" + suff))) {
-                                [nameget, nameset] = ["get" + suff, "set" + suff]
-                                break
-                            }
-                    if (struct.fromPrep.fields.find(_ => _.name === nameget) || struct.fromPrep.fields.find(_ => _.name === nameset))
-                        throw struct
+                    const nameget = gen.pickName("get", this.options.objPropsGetSetNamePicks, struct.fromPrep.fields),
+                        nameset = gen.pickName("set", this.options.objPropsGetSetNamePicks, struct.fromPrep.fields)
                     const mget: Method = {
-                        name: nameget, Name: this.nameRewriters.methods(nameget), Args: [],
+                        name: "appzObjPropsGet", Name: this.nameRewriters.methods(nameget), Args: [],
                         Type: { From: [{ From: [{ Name: struct.Name + "Properties" }], To: null }], To: null },
                         Docs: [{ Lines: ["Obtains this `" + struct.Name + "`'s current property values for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
                     }
@@ -1323,7 +1321,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                     this.emitMethodImpl(struct, mget, this.genMethodImpl_ObjPropsGet)
                     if (propsfields.find(_ => !_.readOnly)) {
                         const mset: Method = {
-                            name: nameset, Name: this.nameRewriters.methods(nameset),
+                            name: "appzObjPropsSet", Name: this.nameRewriters.methods(nameset),
                             Args: [{ Name: "allUpdates", Type: { Name: struct.Name + "Properties" } }],
                             Type: { From: [{ From: [null], To: null }], To: null },
                             Docs: [{ Lines: ["Updates this `" + struct.Name + "`'s current property values for: `" + propsfields.filter(_ => !_.readOnly).map(_ => _.name).join("`, `") + "`."] }]

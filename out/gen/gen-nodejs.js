@@ -63,21 +63,30 @@ class Gen extends gen_syn.Gen {
         const dispmethods = [];
         this.emitDocs(it)
             .line("export interface " + it.Name + (it.IsIncoming ? " extends fromJson" + (isdispobj ? ", withDisp" : "") + " {" : " {")).indented(() => {
-            if (isdispobj)
-                this.each(it.fromPrep.fields, "\n", f => {
-                    const tfun = gen.typeFun(f.typeSpec);
-                    if (tfun) {
-                        dispmethods.push(f);
-                        const orig = f.fromOrig;
-                        if (!orig)
-                            throw f;
-                        this.emitDocs({ Docs: this.b.docs(gen.docs(f.fromOrig)) })
-                            .ln(() => {
-                            this.s(this.nameRewriters.methods(f.name), ": ")
-                                .emitTypeRef(this.b.typeRef({ From: tfun[0], To: { From: [{ From: [tfun[1]], To: null }], To: null } }));
+            if (isdispobj) {
+                const ffuncs = it.fromPrep.fields.filter(_ => gen.typeFun(_.typeSpec));
+                const fprops = it.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec));
+                if (fprops && fprops.length) {
+                    ffuncs.push({
+                        name: gen.pickName("get", this.options.objPropsGetSetNamePicks, it.fromPrep.fields),
+                        typeSpec: { From: [], To: it.Name + "Properties" }
+                    });
+                    if (fprops.find(_ => !_.readOnly))
+                        ffuncs.push({
+                            name: gen.pickName("set", this.options.objPropsGetSetNamePicks, it.fromPrep.fields),
+                            typeSpec: { From: [it.Name + "Properties"], To: null }
                         });
-                    }
+                }
+                this.each(ffuncs, "\n", f => {
+                    const tfun = gen.typeFun(f.typeSpec);
+                    dispmethods.push(f);
+                    this.emitDocs({ Docs: this.b.docs(gen.docs(f.fromOrig)) })
+                        .ln(() => {
+                        this.s(this.nameRewriters.methods(f.name), ": ")
+                            .emitTypeRef(this.b.typeRef({ From: tfun[0], To: { From: [{ From: [tfun[1]], To: null }], To: null } }));
+                    });
                 });
+            }
             else
                 this.each(it.Fields, "\n", f => {
                     const isreadonly = it.fromPrep && it.fromPrep.isPropsOfStruct && f.fromPrep && f.fromPrep.readOnly;
