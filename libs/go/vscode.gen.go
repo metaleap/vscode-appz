@@ -988,11 +988,11 @@ type WorkspaceProperties struct {
 // show text and icons and run a command on click.
 type StatusBarItemProperties struct {
 	// The alignment of this item.
-	_Alignment StatusBarAlignment
+	Alignment StatusBarAlignment `json:"-"`
 
 	// The priority of this item. Higher value means the item should
 	// be shown more to the left.
-	_Priority int
+	Priority int `json:"-"`
 
 	// The text to show for the entry. You can embed icons in the text by leveraging the syntax:
 	// 
@@ -1016,32 +1016,16 @@ type StatusBarItemProperties struct {
 	My dict `json:"my,omitempty"`
 }
 
-// The alignment of this item.
-func (me *StatusBarItemProperties) Alignment() StatusBarAlignment {
-	return me._Alignment
-}
-
-// The priority of this item. Higher value means the item should
-// be shown more to the left.
-func (me *StatusBarItemProperties) Priority() int {
-	return me._Priority
-}
-
 // An output channel is a container for readonly textual information.
 // 
 // To get an instance of an `OutputChannel` use
 // [createOutputChannel](#window.createOutputChannel).
 type OutputChannelProperties struct {
 	// The human-readable name of this output channel.
-	_Name string
+	Name string `json:"-"`
 
 	// Free-form custom data, preserved across a roundtrip.
 	My dict `json:"my,omitempty"`
-}
-
-// The human-readable name of this output channel.
-func (me *OutputChannelProperties) Name() string {
-	return me._Name
 }
 
 func (me *impl) Window() Window {
@@ -3132,6 +3116,16 @@ func (me *StatusBarItem) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
+// Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
+func (me *StatusBarItem) Get() func(func(StatusBarItemProperties)) {
+	return nil
+}
+
+// Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
+func (me *StatusBarItem) Set(allUpdates StatusBarItemProperties) func(func()) {
+	return nil
+}
+
 // Append the given value to the channel.
 // 
 // `value` ── A string, falsy values will not be printed.
@@ -3267,6 +3261,11 @@ func (me *OutputChannel) Hide() func(func()) {
 // Dispose and free associated resources.
 func (me *OutputChannel) Dispose() func(func()) {
 	return me.disp.Dispose()
+}
+
+// Obtains this `OutputChannel`'s current property values for: `name`.
+func (me *OutputChannel) Get() func(func(OutputChannelProperties)) {
+	return nil
 }
 
 func (me *MessageItem) populateFrom(payload any) bool {
@@ -3742,6 +3741,96 @@ func (me *DiagnosticChangeEvent) populateFrom(payload any) bool {
 		me.Uris = uris
 	} else {
 		return false
+	}
+	return true
+}
+
+func (me *StatusBarItemProperties) populateFrom(payload any) bool {
+	var it dict
+	var ok bool
+	var val any
+	it, ok = payload.(dict)
+	if !ok {
+		return false
+	}
+	val, ok = it["text"]
+	if ok {
+		var text string
+		if (nil != val) {
+			text, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.Text = text
+	} else {
+		return false
+	}
+	val, ok = it["tooltip"]
+	if ok {
+		var tooltip string
+		if (nil != val) {
+			tooltip, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.Tooltip = tooltip
+	}
+	val, ok = it["color"]
+	if ok {
+		var color string
+		if (nil != val) {
+			color, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.Color = color
+	}
+	val, ok = it["command"]
+	if ok {
+		var command string
+		if (nil != val) {
+			command, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.Command = command
+	}
+	val, ok = it["my"]
+	if ok {
+		var my dict
+		if (nil != val) {
+			my, ok = val.(dict)
+			if !ok {
+				return false
+			}
+		}
+		me.My = my
+	}
+	return true
+}
+
+func (me *OutputChannelProperties) populateFrom(payload any) bool {
+	var it dict
+	var ok bool
+	var val any
+	it, ok = payload.(dict)
+	if !ok {
+		return false
+	}
+	val, ok = it["my"]
+	if ok {
+		var my dict
+		if (nil != val) {
+			my, ok = val.(dict)
+			if !ok {
+				return false
+			}
+		}
+		me.My = my
 	}
 	return true
 }

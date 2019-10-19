@@ -1436,14 +1436,14 @@ export interface StatusBarItemProperties extends fromJson {
      * The alignment of this item.
 
      */
-    alignment: () => StatusBarAlignment
+    Alignment: StatusBarAlignment
 
     /**
      * The priority of this item. Higher value means the item should
      * be shown more to the left.
 
      */
-    priority: () => number
+    Priority: number
 
     /**
      * The text to show for the entry. You can embed icons in the text by leveraging the syntax:
@@ -1500,7 +1500,7 @@ export interface OutputChannelProperties extends fromJson {
      * The human-readable name of this output channel.
 
      */
-    name: () => string
+    Name: string
 
     /**
      * Free-form custom data, preserved across a roundtrip.
@@ -3569,6 +3569,14 @@ function StatusBarItem_Dispose(this: StatusBarItem, ): (_: () => void) => void {
     return this.disp.Dispose()
 }
 
+function StatusBarItem_Get(this: StatusBarItem, ): (_: (_: StatusBarItemProperties) => void) => void {
+    return null
+}
+
+function StatusBarItem_Set(this: StatusBarItem, allUpdates: StatusBarItemProperties): (_: () => void) => void {
+    return null
+}
+
 function OutputChannel_Append(this: OutputChannel, value: string): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
@@ -3691,6 +3699,10 @@ function OutputChannel_Hide(this: OutputChannel, ): (_: () => void) => void {
 
 function OutputChannel_Dispose(this: OutputChannel, ): (_: () => void) => void {
     return this.disp.Dispose()
+}
+
+function OutputChannel_Get(this: OutputChannel, ): (_: (_: OutputChannelProperties) => void) => void {
+    return null
 }
 
 function MessageItem_populateFrom(this: MessageItem, payload: any): boolean {
@@ -4196,6 +4208,96 @@ function DiagnosticChangeEvent_populateFrom(this: DiagnosticChangeEvent, payload
         this.uris = uris
     } else {
         return false
+    }
+    return true
+}
+
+function StatusBarItemProperties_populateFrom(this: StatusBarItemProperties, payload: any): boolean {
+    let it: { [_: string]: any }
+    let ok: boolean
+    let val: any
+    [it, ok] = [payload as { [_: string]: any }, typeof payload === "object"]
+    if (!ok) {
+        return false
+    }
+    [val, ok] = [it["text"], undefined !== it["text"]]
+    if (ok) {
+        let text: string
+        if ((undefined !== val && null !== val)) {
+            [text, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.text = text
+    } else {
+        return false
+    }
+    [val, ok] = [it["tooltip"], undefined !== it["tooltip"]]
+    if (ok) {
+        let tooltip: string
+        if ((undefined !== val && null !== val)) {
+            [tooltip, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.tooltip = tooltip
+    }
+    [val, ok] = [it["color"], undefined !== it["color"]]
+    if (ok) {
+        let color: string
+        if ((undefined !== val && null !== val)) {
+            [color, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.color = color
+    }
+    [val, ok] = [it["command"], undefined !== it["command"]]
+    if (ok) {
+        let command: string
+        if ((undefined !== val && null !== val)) {
+            [command, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.command = command
+    }
+    [val, ok] = [it["my"], undefined !== it["my"]]
+    if (ok) {
+        let my: { [_: string]: any }
+        if ((undefined !== val && null !== val)) {
+            [my, ok] = [val as { [_: string]: any }, typeof val === "object"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.my = my
+    }
+    return true
+}
+
+function OutputChannelProperties_populateFrom(this: OutputChannelProperties, payload: any): boolean {
+    let it: { [_: string]: any }
+    let ok: boolean
+    let val: any
+    [it, ok] = [payload as { [_: string]: any }, typeof payload === "object"]
+    if (!ok) {
+        return false
+    }
+    [val, ok] = [it["my"], undefined !== it["my"]]
+    if (ok) {
+        let my: { [_: string]: any }
+        if ((undefined !== val && null !== val)) {
+            [my, ok] = [val as { [_: string]: any }, typeof val === "object"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.my = my
     }
     return true
 }

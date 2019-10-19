@@ -504,6 +504,13 @@ func (me *OutputChannel) Dispose() func(func())
 ```
 Dispose and free associated resources.
 
+#### func (*OutputChannel) Get
+
+```go
+func (me *OutputChannel) Get() func(func(OutputChannelProperties))
+```
+Obtains this `OutputChannel`'s current property values for: `name`.
+
 #### func (*OutputChannel) Hide
 
 ```go
@@ -524,6 +531,8 @@ Reveal this channel in the UI.
 
 ```go
 type OutputChannelProperties struct {
+	// The human-readable name of this output channel.
+	Name string
 
 	// Free-form custom data, preserved across a roundtrip.
 	My dict `json:"my,omitempty"`
@@ -534,13 +543,6 @@ An output channel is a container for readonly textual information.
 
 To get an instance of an `OutputChannel` use
 [createOutputChannel](#window.createOutputChannel).
-
-#### func (*OutputChannelProperties) Name
-
-```go
-func (me *OutputChannelProperties) Name() string
-```
-The human-readable name of this output channel.
 
 #### type QuickPickItem
 
@@ -654,12 +656,28 @@ func (me *StatusBarItem) Dispose() func(func())
 ```
 Dispose and free associated resources. Call [hide](#StatusBarItem.hide).
 
+#### func (*StatusBarItem) Get
+
+```go
+func (me *StatusBarItem) Get() func(func(StatusBarItemProperties))
+```
+Obtains this `StatusBarItem`'s current property values for: `alignment`,
+`priority`, `text`, `tooltip`, `color`, `command`.
+
 #### func (*StatusBarItem) Hide
 
 ```go
 func (me *StatusBarItem) Hide() func(func())
 ```
 Hide the entry in the status bar.
+
+#### func (*StatusBarItem) Set
+
+```go
+func (me *StatusBarItem) Set(allUpdates StatusBarItemProperties) func(func())
+```
+Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`,
+`color`, `command`.
 
 #### func (*StatusBarItem) Show
 
@@ -672,6 +690,12 @@ Shows the entry in the status bar.
 
 ```go
 type StatusBarItemProperties struct {
+	// The alignment of this item.
+	Alignment StatusBarAlignment
+
+	// The priority of this item. Higher value means the item should
+	// be shown more to the left.
+	Priority int
 
 	// The text to show for the entry. You can embed icons in the text by leveraging the syntax:
 	//
@@ -698,21 +722,6 @@ type StatusBarItemProperties struct {
 
 A status bar item is a status bar contribution that can show text and icons and
 run a command on click.
-
-#### func (*StatusBarItemProperties) Alignment
-
-```go
-func (me *StatusBarItemProperties) Alignment() StatusBarAlignment
-```
-The alignment of this item.
-
-#### func (*StatusBarItemProperties) Priority
-
-```go
-func (me *StatusBarItemProperties) Priority() int
-```
-The priority of this item. Higher value means the item should be shown more to
-the left.
 
 #### type Vscode
 

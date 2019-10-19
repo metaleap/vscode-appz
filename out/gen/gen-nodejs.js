@@ -86,7 +86,7 @@ class Gen extends gen_syn.Gen {
                         .ln(() => {
                         this.s(f.Name)
                             .s((isoptional && !isreadonly) ? "?: " : ": ")
-                            .emitTypeRef(isreadonly ? { From: [], To: isoptional ? { Maybe: f.Type } : f.Type } : f.Type);
+                            .emitTypeRef(f.Type);
                     });
                 });
         })

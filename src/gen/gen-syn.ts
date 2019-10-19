@@ -9,7 +9,7 @@ export interface WithName { Name: string, name?: string }
 export interface WithType { Type: TypeRef }
 export interface WithFrom<T> { fromPrep?: T }
 export interface WithDocs { Docs?: Doc[] }
-export interface Doc { ForParam: string, Lines: string[] }
+export interface Doc { ForParam?: string, Lines: string[] }
 
 export interface TEnum extends WithDocs, WithName, WithFrom<gen.PrepEnum> { Enumerants: Enumerant[] }
 export interface TInterface extends WithDocs, WithName, WithFrom<gen.PrepInterface> { Methods: Method[], IsTop?: boolean }
@@ -262,10 +262,10 @@ export class Builder {
             ] : it.fields.map((_: gen.PrepField): Field => ({
                 fromPrep: _,
                 name: _.name,
-                Name: this.gen.nameRewriters.fields(_.name),
+                Name: ((it.isPropsOfStruct && _.readOnly) ? this.gen.nameRewriters.methods : this.gen.nameRewriters.fields)(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummaryFor.funcFields),
                 Type: this.gen.typeRefForField(this.typeRef(_.typeSpec, _.optional), _.optional),
-                Json: { Name: _.name, Required: !_.optional, Excluded: it.funcFields.some(ff => _.name === ff) },
+                Json: { Name: _.name, Required: !_.optional, Excluded: (it.isPropsOfStruct && _.readOnly) || it.funcFields.some(ff => _.name === ff) },
             }))
         }
         for (const ff of it.funcFields) {
@@ -781,16 +781,25 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         const tdstnamed = this.typeOwn(this.typeUnMaybe(dstType))
         if (tdstnamed) {
-            const struct = this.allStructs[tdstnamed.Name]
-            if (tdstnamed.Name !== 'Disposable' && (!this.options.typeNamesToString.includes(tdstnamed.Name)) && this.state.genPopulateFor[tdstnamed.Name] !== false) // why this peculiar checking construct?..
-                this.state.genPopulateFor[tdstnamed.Name] = true // ..see the consumer of genDecoders to grasp it
-            return ([
-                _.iSet(_.n(dstVarName), _.eNew(dstType)),
-                _.iSet(_.n(okBoolName), _.eCall(_.oDot(_.n(dstVarName), _.n("populateFrom")), src)),
-                retifnotok,
-            ] as Instr[]).concat(..._.WHEN(struct && struct.fromPrep && struct.fromPrep.isDispObj, () => [
-                _.iSet(_.oDot(_.n("result"), _.n("disp"), _.n("impl")), _.eCall(_.oDot(_.n("Impl")))),
-            ] as Instr[]))
+            const tstruct = this.allStructs[tdstnamed.Name], tenum = tstruct ? null : this.allEnums.find(_ => _.Name === tdstnamed.Name)
+            if (tenum) {
+                const tmpvarname = "i_" + dstVarName
+                return ([
+                    _.iVar(tmpvarname, TypeRefPrim.Int),
+                ] as Instr[]).concat(...this.convOrRet(tmpvarname, src, TypeRefPrim.Int, okBoolName, onErrRet)).concat(...[
+                    _.iSet(_.n(dstVarName), _.eConv(dstType, _.n(tmpvarname), true)),
+                ])
+            } else {
+                if (tdstnamed.Name !== 'Disposable' && (!this.options.typeNamesToString.includes(tdstnamed.Name)) && this.state.genPopulateFor[tdstnamed.Name] !== false) // why this peculiar checking construct?..
+                    this.state.genPopulateFor[tdstnamed.Name] = true // ..see the consumer of genPopulateFor to grasp it
+                return ([
+                    _.iSet(_.n(dstVarName), _.eNew(dstType)),
+                    _.iSet(_.n(okBoolName), _.eCall(_.oDot(_.n(dstVarName), _.n("populateFrom")), src)),
+                    retifnotok,
+                ] as Instr[]).concat(..._.WHEN(tstruct && tstruct.fromPrep && tstruct.fromPrep.isDispObj, () => [
+                    _.iSet(_.oDot(_.n("result"), _.n("disp"), _.n("impl")), _.eCall(_.oDot(_.n("Impl")))),
+                ] as Instr[]))
+            }
         }
 
         const tdstmaybe = this.typeMaybe(dstType)
@@ -893,6 +902,14 @@ export class Gen extends gen.Gen implements gen.IGen {
                 }
             body.push(_.iRet(_.eLit(true)))
         }
+    }
+
+    private genMethodImpl_ObjPropsGet(struct: TypeRefOwn, _method: Method, _: Builder, body: Instr[]) {
+        body.push(_.iRet(_.eZilch()))
+    }
+
+    private genMethodImpl_ObjPropsSet(struct: TypeRefOwn, _method: Method, _: Builder, body: Instr[]) {
+        body.push(_.iRet(_.eZilch()))
     }
 
     private genMethodImpl_ObjMethodCall(struct: TypeRefOwn, method: Method, _: Builder, body: Instr[]) {
@@ -1286,6 +1303,34 @@ export class Gen extends gen.Gen implements gen.IGen {
                         me.Args = me.Args.slice(0, me.Args.length - 1)
                         this.emitMethodImpl(struct, me, this.genMethodImpl_ObjMethodCall)
                     }
+                const propsfields = struct.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec))
+                if (propsfields && propsfields.length) {
+                    let nameget = "get", nameset = "set"
+                    if (struct.fromPrep.fields.find(_ => _.name === nameget) || struct.fromPrep.fields.find(_ => _.name === nameset))
+                        for (const suff of ["Props", "Properties", "P", "Ps", "Details"])
+                            if (!(struct.fromPrep.fields.find(_ => _.name === "get" + suff) || struct.fromPrep.fields.find(_ => _.name === "set" + suff))) {
+                                [nameget, nameset] = ["get" + suff, "set" + suff]
+                                break
+                            }
+                    if (struct.fromPrep.fields.find(_ => _.name === nameget) || struct.fromPrep.fields.find(_ => _.name === nameset))
+                        throw struct
+                    const mget: Method = {
+                        name: nameget, Name: this.nameRewriters.methods(nameget), Args: [],
+                        Type: { From: [{ From: [{ Name: struct.Name + "Properties" }], To: null }], To: null },
+                        Docs: [{ Lines: ["Obtains this `" + struct.Name + "`'s current property values for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
+                    }
+                    this.state.genPopulateFor[struct.Name + "Properties"] = true
+                    this.emitMethodImpl(struct, mget, this.genMethodImpl_ObjPropsGet)
+                    if (propsfields.find(_ => !_.readOnly)) {
+                        const mset: Method = {
+                            name: nameset, Name: this.nameRewriters.methods(nameset),
+                            Args: [{ Name: "allUpdates", Type: { Name: struct.Name + "Properties" } }],
+                            Type: { From: [{ From: [null], To: null }], To: null },
+                            Docs: [{ Lines: ["Updates this `" + struct.Name + "`'s current property values for: `" + propsfields.filter(_ => !_.readOnly).map(_ => _.name).join("`, `") + "`."] }]
+                        }
+                        this.emitMethodImpl(struct, mset, this.genMethodImpl_ObjPropsSet)
+                    }
+                }
             }
         }
 

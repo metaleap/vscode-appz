@@ -1463,14 +1463,14 @@ StatusBarItemProperties: class
     # alignment:
     # The alignment of this item.
     #
-    # JSON FLAGS: {"Name":"alignment","Required":true,"Excluded":false}
+    # JSON FLAGS: {"Name":"alignment","Required":true,"Excluded":true}
     Alignment: StatusBarAlignment
 
     # priority:
     # The priority of this item. Higher value means the item should
     # be shown more to the left.
     #
-    # JSON FLAGS: {"Name":"priority","Required":false,"Excluded":false}
+    # JSON FLAGS: {"Name":"priority","Required":false,"Excluded":true}
     Priority: ?int
 
     # text:
@@ -1521,7 +1521,7 @@ OutputChannelProperties: class
     # name:
     # The human-readable name of this output channel.
     #
-    # JSON FLAGS: {"Name":"name","Required":true,"Excluded":false}
+    # JSON FLAGS: {"Name":"name","Required":true,"Excluded":true}
     Name: string
 
     # my:
@@ -3434,6 +3434,18 @@ StatusBarItem·Dispose: ( -> ((void->void)->void))
 
 
 
+StatusBarItem·Get: ( -> ((StatusBarItemProperties->void)->void))
+    return null
+
+
+
+
+StatusBarItem·Set: (allUpdates:StatusBarItemProperties -> ((void->void)->void))
+    return null
+
+
+
+
 OutputChannel·Append: (value:string -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
@@ -3555,6 +3567,12 @@ OutputChannel·Hide: ( -> ((void->void)->void))
 
 OutputChannel·Dispose: ( -> ((void->void)->void))
     return this.disp.Dispose()
+
+
+
+
+OutputChannel·Get: ( -> ((OutputChannelProperties->void)->void))
+    return null
 
 
 
@@ -3983,6 +4001,80 @@ DiagnosticChangeEvent·populateFrom: (payload:any -> bool)
         this.Uris = uris
     else
         return false
+    return true
+
+
+
+
+StatusBarItemProperties·populateFrom: (payload:any -> bool)
+    var it of dict
+    var ok of bool
+    var val of any
+    [it, ok] = ((payload)·(dict))
+    if !ok
+        return false
+    [val, ok] = it@?"text"
+    if ok
+        var text of string
+        if =?val
+            [text, ok] = ((val)·(string))
+            if !ok
+                return false
+        this.Text = text
+    else
+        return false
+    [val, ok] = it@?"tooltip"
+    if ok
+        var tooltip of string
+        if =?val
+            [tooltip, ok] = ((val)·(string))
+            if !ok
+                return false
+        this.Tooltip = tooltip
+    [val, ok] = it@?"color"
+    if ok
+        var color of string
+        if =?val
+            [color, ok] = ((val)·(string))
+            if !ok
+                return false
+        this.Color = color
+    [val, ok] = it@?"command"
+    if ok
+        var command of string
+        if =?val
+            [command, ok] = ((val)·(string))
+            if !ok
+                return false
+        this.Command = command
+    [val, ok] = it@?"my"
+    if ok
+        var my of ?dict
+        if =?val
+            [my, ok] = ((val)·(?dict))
+            if !ok
+                return false
+        this.My = my
+    return true
+
+
+
+
+OutputChannelProperties·populateFrom: (payload:any -> bool)
+    var it of dict
+    var ok of bool
+    var val of any
+    [it, ok] = ((payload)·(dict))
+    if !ok
+        return false
+    [val, ok] = it@?"my"
+    if ok
+        var my of ?dict
+        if =?val
+            [my, ok] = ((val)·(?dict))
+            if !ok
+                return false
+        this.My = my
     return true
 
 

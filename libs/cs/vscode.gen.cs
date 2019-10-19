@@ -1285,13 +1285,15 @@ namespace VscAppz {
 	/// </summary>
 	public partial class StatusBarItemProperties {
 		/// <summary>The alignment of this item.</summary>
-		public StatusBarAlignment Alignment { get; internal set; }
+		[JsonIgnore]
+		public StatusBarAlignment Alignment;
 
 		/// <summary>
 		/// The priority of this item. Higher value means the item should
 		/// be shown more to the left.
 		/// </summary>
-		public int? Priority { get; internal set; }
+		[JsonIgnore]
+		public int? Priority;
 
 		/// <summary>
 		/// The text to show for the entry. You can embed icons in the text by leveraging the syntax:
@@ -1332,7 +1334,8 @@ namespace VscAppz {
 	/// </summary>
 	public partial class OutputChannelProperties {
 		/// <summary>The human-readable name of this output channel.</summary>
-		public string Name { get; internal set; }
+		[JsonIgnore]
+		public string Name;
 
 		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
 		[JsonProperty("my")]
@@ -3393,6 +3396,20 @@ namespace VscAppz {
 		void IDisposable.Dispose() { this.Dispose(); }
 	}
 
+	public partial class StatusBarItem {
+		/// <summary>Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.</summary>
+		public Action<Action<StatusBarItemProperties>> Get() {
+			return null;
+		}
+	}
+
+	public partial class StatusBarItem {
+		/// <summary>Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.</summary>
+		public Action<Action> Set(StatusBarItemProperties allUpdates = default) {
+			return null;
+		}
+	}
+
 	public partial class OutputChannel {
 		/// <summary>
 		/// Append the given value to the channel.
@@ -3550,6 +3567,13 @@ namespace VscAppz {
 			return this.disp.Dispose();
 		}
 		void IDisposable.Dispose() { this.Dispose(); }
+	}
+
+	public partial class OutputChannel {
+		/// <summary>Obtains this `OutputChannel`'s current property values for: `name`.</summary>
+		public Action<Action<OutputChannelProperties>> Get() {
+			return null;
+		}
 	}
 
 	public partial class MessageItem {
@@ -4068,6 +4092,100 @@ namespace VscAppz {
 				this.Uris = uris;
 			} else {
 				return false;
+			}
+			return true;
+		}
+	}
+
+	public partial class StatusBarItemProperties {
+		internal bool populateFrom(any payload = default) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if (!ok) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("text", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				string text = default;
+				if ((null != val)) {
+					(text, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Text = text;
+			} else {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("tooltip", out var ___) ? (___, true) : (default, false));
+			if (ok) {
+				string tooltip = default;
+				if ((null != val)) {
+					(tooltip, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Tooltip = tooltip;
+			}
+			(val, ok) = (it.TryGetValue("color", out var ____) ? (____, true) : (default, false));
+			if (ok) {
+				string color = default;
+				if ((null != val)) {
+					(color, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Color = color;
+			}
+			(val, ok) = (it.TryGetValue("command", out var _____) ? (_____, true) : (default, false));
+			if (ok) {
+				string command = default;
+				if ((null != val)) {
+					(command, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Command = command;
+			}
+			(val, ok) = (it.TryGetValue("my", out var ______) ? (______, true) : (default, false));
+			if (ok) {
+				dict my = default;
+				if ((null != val)) {
+					(my, ok) = (val is dict) ? (((dict)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.My = my;
+			}
+			return true;
+		}
+	}
+
+	public partial class OutputChannelProperties {
+		internal bool populateFrom(any payload = default) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if (!ok) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("my", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				dict my = default;
+				if ((null != val)) {
+					(my, ok) = (val is dict) ? (((dict)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.My = my;
 			}
 			return true;
 		}

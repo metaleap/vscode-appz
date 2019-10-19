@@ -86,16 +86,15 @@ export class Gen extends gen_syn.Gen {
         this.emitDocs(it)
             .line("public partial class " + it.Name + " {").indented(() =>
                 this.each(it.Fields, "\n", f => {
-                    const isreadonly = it.fromPrep && it.fromPrep.isPropsOfStruct && f.fromPrep && f.fromPrep.readOnly
                     this.emitDocs(f)
-                        .when(f.Json && !isreadonly, () => this.line(f.Json.Excluded
+                        .when(f.Json, () => this.line(f.Json.Excluded
                             ? "[JsonIgnore]"
                             : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnMaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")
                         ))
                         .ln(() => this
                             .s(((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel) || (it.fromPrep && it.fromPrep.isDispObj)) ? "internal " : "public ")
                             .emitTypeRef(f.Type)
-                            .s(" ", f.Name, isreadonly ? " { get; internal set; }" : ";")
+                            .s(" ", f.Name, ";")
                         )
                 })
             ).lines("}", "")

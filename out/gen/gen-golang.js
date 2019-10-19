@@ -45,22 +45,9 @@ class Gen extends gen_syn.Gen {
     emitStruct(it) {
         this.emitDocs(it)
             .line("type " + it.Name + " struct {").indented(() => this.each(it.Fields.filter(_ => (!_.FuncFieldRel) || _.Type !== gen_syn.TypeRefPrim.String), "\n", f => {
-            const isreadonly = it.fromPrep && it.fromPrep.isPropsOfStruct && f.fromPrep && f.fromPrep.readOnly;
-            this.emitDocs(f).ln(() => this.s(isreadonly ? "_" : "", f.Name, " ").emitTypeRef(f.Type).when(f.Json && !isreadonly, () => this.s(" `json:\"")
+            this.emitDocs(f).ln(() => this.s(f.Name, " ").emitTypeRef(f.Type).when(f.Json, () => this.s(" `json:\"")
                 .when(f.Json.Excluded, () => this.s("-"), () => this.s(f.Json.Name + (f.Json.Required ? "" : ",omitempty"))).s("\"`")));
         })).lines("}", "");
-        const fieldsreadonly = it.fromPrep && it.fromPrep.isPropsOfStruct ? it.Fields.filter(_ => _.fromPrep && _.fromPrep.readOnly) : null;
-        if (fieldsreadonly && fieldsreadonly.length)
-            for (const field of fieldsreadonly)
-                this.emitFuncImpl({
-                    Name: field.Name, Type: it, Docs: field.Docs, Func: {
-                        Args: [], Type: field.Type, Body: {
-                            Instrs: [
-                                this.b.iRet(this.b.oDot(this.b.eThis(), this.b.n("_" + field.Name))),
-                            ]
-                        }
-                    }
-                });
         const fflds = it.Fields.filter(_ => _.FuncFieldRel && _.Type === gen_syn.TypeRefPrim.String);
         if (fflds && fflds.length) {
             it.OutgoingTwin = "_" + it.Name;
