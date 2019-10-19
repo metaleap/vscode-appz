@@ -485,7 +485,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 						priority: thisStatusBarItem.priority,
 						text: thisStatusBarItem.text,
 						tooltip: thisStatusBarItem.tooltip,
-						color: thisStatusBarItem.color,
+						color: (thisStatusBarItem.color && ((thisStatusBarItem.color as any)["id"])) ? ((thisStatusBarItem.color as any)["id"]) : thisStatusBarItem.color,
 						command: thisStatusBarItem.command,
 					})
 				}

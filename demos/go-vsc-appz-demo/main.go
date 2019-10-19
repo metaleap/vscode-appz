@@ -33,7 +33,22 @@ func main() {
 		win.SetStatusBarMessage2("Choosing a demo WILL HIDE this")(func(statusmsg *Disposable) {
 			subscribeToMiscEvents()
 			win.CreateStatusBarItem(0, nil)(
-				func(it *StatusBarItem) { it.Show() })
+				func(it *StatusBarItem) {
+					println("SBI:Created")
+					it.Show()(func() {
+						println("SBI:Shown")
+						it.Get()(func(props StatusBarItemProperties) {
+							props.Text = "Foo"
+							props.Tooltip = "Bar Baz"
+							props.Color = "button.background"
+							it.Set(props)(func() {
+								it.Get()(func(props StatusBarItemProperties) {
+									println(props.Color + "\t" + props.Command + "\t" + props.Text + "\t" + props.Tooltip)
+								})
+							})
+						})
+					})
+				})
 
 			buttons := []string{"Demo Pick Input", "Demo Text Input", "All Demos"}
 			win.ShowInformationMessage1(

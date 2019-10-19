@@ -770,6 +770,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
     private convOrRet(dstVarName: string, src: Expr, dstType: TypeRef, okBoolName: string = 'ok', onErrRet: Expr = undefined): Instr[] {
         const _ = this.b
+
         if (!onErrRet)
             onErrRet = _.eLit(false)
         const retifnotok = _.iIf(_.oNot(_.n(okBoolName)), [_.iRet(onErrRet),])

@@ -468,7 +468,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         priority: thisStatusBarItem.priority,
                         text: thisStatusBarItem.text,
                         tooltip: thisStatusBarItem.tooltip,
-                        color: thisStatusBarItem.color,
+                        color: (thisStatusBarItem.color && (thisStatusBarItem.color["id"])) ? (thisStatusBarItem.color["id"]) : thisStatusBarItem.color,
                         command: thisStatusBarItem.command,
                     });
                 }

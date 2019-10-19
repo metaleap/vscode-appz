@@ -92,7 +92,9 @@ class Gen extends gen.Gen {
                     src += '\t\t\t\tcase "appzObjPropsGet": {\n';
                     src += "\t\t\t\t\treturn Promise.resolve({\n";
                     for (const prop of it.fields.filter(_ => !gen.typeFun(_.typeSpec)))
-                        src += `\t\t\t\t\t\t${prop.name}: this${it.name}.${prop.name},\n`;
+                        src += `\t\t\t\t\t\t${prop.name}: `
+                            + (!gen.typeSumOf(prop.typeSpec, 'ThemeColor') ? `this${it.name}.${prop.name}` : `(this${it.name}.${prop.name} && ((this${it.name}.${prop.name} as any)["id"])) ? ((this${it.name}.${prop.name} as any)["id"]) : this${it.name}.${prop.name}`)
+                            + ",\n";
                     src += "\t\t\t\t\t})\n";
                     src += "\t\t\t\t}\n";
                 }
