@@ -520,6 +520,28 @@ Reveal this channel in the UI.
 
 `preserveFocus` ── When `true` the channel will not take focus.
 
+#### type OutputChannelProperties
+
+```go
+type OutputChannelProperties struct {
+
+	// Free-form custom data, preserved across a roundtrip.
+	My dict `json:"my,omitempty"`
+}
+```
+
+An output channel is a container for readonly textual information.
+
+To get an instance of an `OutputChannel` use
+[createOutputChannel](#window.createOutputChannel).
+
+#### func (*OutputChannelProperties) Name
+
+```go
+func (me *OutputChannelProperties) Name() string
+```
+The human-readable name of this output channel.
+
 #### type QuickPickItem
 
 ```go
@@ -645,6 +667,52 @@ Hide the entry in the status bar.
 func (me *StatusBarItem) Show() func(func())
 ```
 Shows the entry in the status bar.
+
+#### type StatusBarItemProperties
+
+```go
+type StatusBarItemProperties struct {
+
+	// The text to show for the entry. You can embed icons in the text by leveraging the syntax:
+	//
+	// `My text $(icon-name) contains icons like $(icon-name) this one.`
+	//
+	// Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
+	// `light-bulb`, `thumbsup`, `zap` etc.
+	Text string `json:"text"`
+
+	// The tooltip text when you hover over this entry.
+	Tooltip string `json:"tooltip,omitempty"`
+
+	// The foreground color for this entry.
+	Color string `json:"color,omitempty"`
+
+	// The identifier of a command to run on click. The command must be
+	// [known](#commands.getCommands).
+	Command string `json:"command,omitempty"`
+
+	// Free-form custom data, preserved across a roundtrip.
+	My dict `json:"my,omitempty"`
+}
+```
+
+A status bar item is a status bar contribution that can show text and icons and
+run a command on click.
+
+#### func (*StatusBarItemProperties) Alignment
+
+```go
+func (me *StatusBarItemProperties) Alignment() StatusBarAlignment
+```
+The alignment of this item.
+
+#### func (*StatusBarItemProperties) Priority
+
+```go
+func (me *StatusBarItemProperties) Priority() int
+```
+The priority of this item. Higher value means the item should be shown more to
+the left.
 
 #### type Vscode
 

@@ -127,11 +127,12 @@ class Builder {
         };
     }
     fromStruct(it) {
+        let docssrcnode = it.fromOrig ? it.fromOrig.decl : it.isPropsOfIface ? it.isPropsOfIface.fromOrig : it.isPropsOfStruct.fromOrig.decl;
         let ret = {
             fromPrep: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.structs(it.name),
-            Docs: this.docs(gen.docs(it.fromOrig ? it.fromOrig.decl : it.isPropsOf.fromOrig)),
+            Docs: this.docs(gen.docs(docssrcnode)),
             IsOutgoing: it.isOutgoing ? true : false,
             IsIncoming: it.isIncoming ? true : false,
             Fields: it.isDispObj ? [
@@ -243,7 +244,7 @@ class Builder {
             else
                 return { From: tprom.map(_ => this.typeRef(_, !(_ === gen.ScriptPrimType.Boolean || propsRelated))), To: null };
         if (typeof it === 'string')
-            return (it === 'Uri') ? TypeRefPrim.String : { Name: this.gen.nameRewriters.types.structs(it) };
+            return this.gen.options.typeNamesToString.includes(it) ? TypeRefPrim.String : { Name: this.gen.nameRewriters.types.structs(it) };
         throw JSON.stringify(it);
     }
     docs(docs, extraSummaryLines = undefined, isMethod = false, appendArgsAndRetsToSummaryToo = true, into = undefined) {
@@ -314,7 +315,8 @@ class Gen extends gen.Gen {
             oneIndent: '    ',
             optionalEnumsZeroNotZilch: false,
             haveProps: true,
-            demoOutFilePath: ""
+            demoOutFilePath: "",
+            typeNamesToString: ["Uri", "ThemeColor"],
         };
         this.options.demoOutFilePath = demoOutFilePath;
     }
@@ -573,7 +575,7 @@ class Gen extends gen.Gen {
         const tdstnamed = this.typeOwn(this.typeUnMaybe(dstType));
         if (tdstnamed) {
             const struct = this.allStructs[tdstnamed.Name];
-            if (tdstnamed.Name !== 'Disposable' && tdstnamed.Name !== 'Uri' && this.state.genPopulateFor[tdstnamed.Name] !== false) // why this peculiar checking construct?..
+            if (tdstnamed.Name !== 'Disposable' && (!this.options.typeNamesToString.includes(tdstnamed.Name)) && this.state.genPopulateFor[tdstnamed.Name] !== false) // why this peculiar checking construct?..
                 this.state.genPopulateFor[tdstnamed.Name] = true; // ..see the consumer of genDecoders to grasp it
             return [
                 _.iSet(_.n(dstVarName), _.eNew(dstType)),
@@ -867,15 +869,21 @@ class Gen extends gen.Gen {
         }
         for (const structname in this.allStructs) {
             const struct = this.allStructs[structname];
-            if (struct.IsOutgoing)
+            if (struct.IsOutgoing) {
                 for (const fld of struct.Fields) {
                     this.typeRefTraverse(fld.Type, t => {
                         const tmay = this.typeMaybe(t);
                         if (tmay && this.options.unMaybeOutgoingTypes.some(_ => this.typeRefEq(_, tmay.Maybe)))
                             return tmay.Maybe;
                         return undefined;
+                    }, tref => {
+                        if (struct.fromPrep && struct.fromPrep.isPropsOfStruct) {
+                            fld.Type = tref;
+                            fld.Json.Required = false;
+                        }
                     });
                 }
+            }
         }
         this.emitIntro();
         for (const it of this.allEnums)

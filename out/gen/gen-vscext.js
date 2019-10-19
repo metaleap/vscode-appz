@@ -12,20 +12,19 @@ class Gen extends gen.Gen {
         for (const it of prep.enums)
             src += "type " + it.name + " = " + this.pkg + "." + it.name + "\n";
         for (const it of prep.structs)
-            if (!it.isPropsOf)
-                if (it.isOutgoing) {
-                    const fieldsextra = it.fields.filter(_ => _.isExtBaggage);
-                    if ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length)) {
-                        src += "interface " + it.name + " extends " + this.pkg + "." + it.name + " {\n";
-                        for (const f of fieldsextra)
-                            src += `\t${f.name + (f.optional ? '?' : '')}: ${this.typeSpec(f.typeSpec)}\n`;
-                        for (const ff of it.funcFields)
-                            src += `\t${ff}_AppzFuncId: string\n`;
-                        src += "}\n";
-                    }
-                    else
-                        src += "type " + it.name + " = " + this.pkg + "." + it.name + "\n";
+            if ((!(it.isPropsOfIface || it.isPropsOfStruct)) && it.isOutgoing) {
+                const fieldsextra = it.fields.filter(_ => _.isExtBaggage);
+                if ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length)) {
+                    src += "interface " + it.name + " extends " + this.pkg + "." + it.name + " {\n";
+                    for (const f of fieldsextra)
+                        src += `\t${f.name + (f.optional ? '?' : '')}: ${this.typeSpec(f.typeSpec)}\n`;
+                    for (const ff of it.funcFields)
+                        src += `\t${ff}_AppzFuncId: string\n`;
+                    src += "}\n";
                 }
+                else
+                    src += "type " + it.name + " = " + this.pkg + "." + it.name + "\n";
+            }
         src += `\nexport function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationTokens: string[]): Thenable<any> | ${this.pkg}.Disposable {\n`;
         src += "\tconst idxdot = msg.qName.lastIndexOf('.')\n";
         src += `\tconst [apiname, methodname] = (idxdot > 0) ? [msg.qName.slice(0, idxdot), msg.qName.slice(idxdot + 1)] : ['', msg.qName]\n`;
@@ -74,7 +73,7 @@ class Gen extends gen.Gen {
                 src += `\t\tcase "${it.name}":\n`;
                 src += `\t\t\tconst this${it.name} = prog.objects[msg.data[""]] as ${this.pkg}.${it.name}\n`;
                 src += `\t\t\tif (!this${it.name})\n`;
-                src += `\t\t\t\tthrow "Called ${this.pkg}.${it.name}" + methodname + " for an already disposed-and-forgotten instance"\n`;
+                src += `\t\t\t\tthrow "Called ${this.pkg}.${it.name}." + methodname + " for an already disposed-and-forgotten instance"\n`;
                 src += "\t\t\tswitch (methodname) {\n";
                 let tfun;
                 for (const mem of it.fields)

@@ -1456,6 +1456,83 @@ WorkspaceProperties: class
 
 
 
+# A status bar item is a status bar contribution that can
+# show text and icons and run a command on click.
+StatusBarItemProperties: class
+
+    # alignment:
+    # The alignment of this item.
+    #
+    # JSON FLAGS: {"Name":"alignment","Required":true,"Excluded":false}
+    Alignment: StatusBarAlignment
+
+    # priority:
+    # The priority of this item. Higher value means the item should
+    # be shown more to the left.
+    #
+    # JSON FLAGS: {"Name":"priority","Required":false,"Excluded":false}
+    Priority: ?int
+
+    # text:
+    # The text to show for the entry. You can embed icons in the text by leveraging the syntax:
+    # 
+    # `My text $(icon-name) contains icons like $(icon-name) this one.`
+    # 
+    # Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
+    # `light-bulb`, `thumbsup`, `zap` etc.
+    #
+    # JSON FLAGS: {"Name":"text","Required":true,"Excluded":false}
+    Text: string
+
+    # tooltip:
+    # The tooltip text when you hover over this entry.
+    #
+    # JSON FLAGS: {"Name":"tooltip","Required":false,"Excluded":false}
+    Tooltip: string
+
+    # color:
+    # The foreground color for this entry.
+    #
+    # JSON FLAGS: {"Name":"color","Required":false,"Excluded":false}
+    Color: string
+
+    # command:
+    # The identifier of a command to run on click. The command must be
+    # [known](#commands.getCommands).
+    #
+    # JSON FLAGS: {"Name":"command","Required":false,"Excluded":false}
+    Command: string
+
+    # my:
+    # Free-form custom data, preserved across a roundtrip.
+    #
+    # JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
+    My: ?dict
+
+
+
+
+# An output channel is a container for readonly textual information.
+# 
+# To get an instance of an `OutputChannel` use
+# [createOutputChannel](#window.createOutputChannel).
+OutputChannelProperties: class
+
+    # name:
+    # The human-readable name of this output channel.
+    #
+    # JSON FLAGS: {"Name":"name","Required":true,"Excluded":false}
+    Name: string
+
+    # my:
+    # Free-form custom data, preserved across a roundtrip.
+    #
+    # JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
+    My: ?dict
+
+
+
+
 Vscode·Window: ( -> Window)
     return ((this)·(implWindow))
 

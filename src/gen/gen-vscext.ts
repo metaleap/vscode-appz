@@ -15,8 +15,8 @@ export class Gen extends gen.Gen implements gen.IGen {
 
         for (const it of prep.enums)
             src += "type " + it.name + " = " + this.pkg + "." + it.name + "\n"
-        for (const it of prep.structs) if (!it.isPropsOf)
-            if (it.isOutgoing) {
+        for (const it of prep.structs)
+            if ((!(it.isPropsOfIface || it.isPropsOfStruct)) && it.isOutgoing) {
                 const fieldsextra = it.fields.filter(_ => _.isExtBaggage)
                 if ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length)) {
                     src += "interface " + it.name + " extends " + this.pkg + "." + it.name + " {\n"
@@ -76,7 +76,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 src += `\t\tcase "${it.name}":\n`
                 src += `\t\t\tconst this${it.name} = prog.objects[msg.data[""]] as ${this.pkg}.${it.name}\n`
                 src += `\t\t\tif (!this${it.name})\n`
-                src += `\t\t\t\tthrow "Called ${this.pkg}.${it.name}" + methodname + " for an already disposed-and-forgotten instance"\n`
+                src += `\t\t\t\tthrow "Called ${this.pkg}.${it.name}." + methodname + " for an already disposed-and-forgotten instance"\n`
                 src += "\t\t\tswitch (methodname) {\n"
                 let tfun: [gen.TypeSpec[], gen.TypeSpec]
                 for (const mem of it.fields)

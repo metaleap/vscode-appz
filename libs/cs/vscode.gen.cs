@@ -1279,6 +1279,69 @@ namespace VscAppz {
 		public WorkspaceFolder[] WorkspaceFolders;
 	}
 
+	/// <summary>
+	/// A status bar item is a status bar contribution that can
+	/// show text and icons and run a command on click.
+	/// </summary>
+	public partial class StatusBarItemProperties {
+		/// <summary>The alignment of this item.</summary>
+		[JsonProperty("alignment"), JsonRequired]
+		public StatusBarAlignment Alignment;
+
+		/// <summary>
+		/// The priority of this item. Higher value means the item should
+		/// be shown more to the left.
+		/// </summary>
+		[JsonProperty("priority")]
+		public int? Priority;
+
+		/// <summary>
+		/// The text to show for the entry. You can embed icons in the text by leveraging the syntax:
+		/// 
+		/// `My text $(icon-name) contains icons like $(icon-name) this one.`
+		/// 
+		/// Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
+		/// `light-bulb`, `thumbsup`, `zap` etc.
+		/// </summary>
+		[JsonProperty("text"), JsonRequired]
+		public string Text;
+
+		/// <summary>The tooltip text when you hover over this entry.</summary>
+		[JsonProperty("tooltip")]
+		public string Tooltip;
+
+		/// <summary>The foreground color for this entry.</summary>
+		[JsonProperty("color")]
+		public string Color;
+
+		/// <summary>
+		/// The identifier of a command to run on click. The command must be
+		/// [known](#commands.getCommands).
+		/// </summary>
+		[JsonProperty("command")]
+		public string Command;
+
+		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
+		[JsonProperty("my")]
+		public dict My;
+	}
+
+	/// <summary>
+	/// An output channel is a container for readonly textual information.
+	/// 
+	/// To get an instance of an `OutputChannel` use
+	/// [createOutputChannel](#window.createOutputChannel).
+	/// </summary>
+	public partial class OutputChannelProperties {
+		/// <summary>The human-readable name of this output channel.</summary>
+		[JsonProperty("name"), JsonRequired]
+		public string Name;
+
+		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
+		[JsonProperty("my")]
+		public dict My;
+	}
+
 	internal partial class impl : IVscode, IWindow, IEnv, IWorkspace, ILanguages, IExtensions, ICommands {
 
 		IWindow IVscode.Window { get {

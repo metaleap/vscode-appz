@@ -442,7 +442,7 @@ function handle(msg, prog, remoteCancellationTokens) {
         case "StatusBarItem":
             const thisStatusBarItem = prog.objects[msg.data[""]];
             if (!thisStatusBarItem)
-                throw "Called vscode.StatusBarItem" + methodname + " for an already disposed-and-forgotten instance";
+                throw "Called vscode.StatusBarItem." + methodname + " for an already disposed-and-forgotten instance";
             switch (methodname) {
                 case "show": {
                     const ret = thisStatusBarItem.show();
@@ -468,7 +468,7 @@ function handle(msg, prog, remoteCancellationTokens) {
         case "OutputChannel":
             const thisOutputChannel = prog.objects[msg.data[""]];
             if (!thisOutputChannel)
-                throw "Called vscode.OutputChannel" + methodname + " for an already disposed-and-forgotten instance";
+                throw "Called vscode.OutputChannel." + methodname + " for an already disposed-and-forgotten instance";
             switch (methodname) {
                 case "append": {
                     const arg_value = (msg.data['value']);

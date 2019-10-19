@@ -32,7 +32,7 @@ class Prep {
             }
             if (propmethods.length > 1) {
                 const struct = {
-                    isPropsOf: iface, name: iface.name + "Properties", funcFields: [],
+                    isPropsOfIface: iface, name: iface.name + "Properties", funcFields: [],
                     fields: propmethods.map(me => ({
                         fromOrig: me.fromOrig.decl,
                         name: me.name,
@@ -51,7 +51,7 @@ class Prep {
                 });
             }
         }
-        this.structs.forEach(struct => {
+        for (const struct of this.structs) {
             let isargout = false, isargin = false;
             for (const iface of this.interfaces)
                 if (isargin && isargout)
@@ -77,9 +77,18 @@ class Prep {
                     throw struct;
                 struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict });
             }
-            if (struct.isIncoming && struct.fields.find(_ => typeFun(_.typeSpec)))
+            if (struct.isIncoming && struct.fields.find(_ => typeFun(_.typeSpec))) {
                 struct.isDispObj = true;
-        });
+                if (struct.fields.find(_ => !typeFun(_.typeSpec))) {
+                    const propstruct = {
+                        funcFields: [], name: struct.name + "Properties", isPropsOfStruct: struct,
+                        fromOrig: struct.fromOrig, isIncoming: true, isOutgoing: true,
+                        fields: struct.fields.filter(_ => !typeFun(_.typeSpec)),
+                    };
+                    this.structs.push(propstruct);
+                }
+            }
+        }
         const printjson = (_) => console.log(JSON.stringify(_, function (key, val) {
             return (key === 'parent') ? null : val;
         }, 2));
@@ -124,6 +133,7 @@ class Prep {
                         name: _.name.getText(),
                         typeSpec: tspec,
                         optional: (ts.isTypeElement(_) && _.questionToken) ? true : false,
+                        readOnly: (_.modifiers && _.modifiers.find(_ => _.getText() === 'readonly')) ? true : false,
                         isExtBaggage: false,
                     });
             }

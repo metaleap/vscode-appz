@@ -72,7 +72,8 @@ export interface PrepStruct {
     funcFields: string[]
     isOutgoing?: boolean
     isIncoming?: boolean
-    isPropsOf?: PrepInterface
+    isPropsOfIface?: PrepInterface
+    isPropsOfStruct?: PrepStruct
     isDispObj?: boolean
 }
 
@@ -81,6 +82,7 @@ export interface PrepField {
     name: string
     typeSpec: TypeSpec
     optional?: boolean
+    readOnly?: boolean
     isExtBaggage?: boolean
 }
 
@@ -137,7 +139,7 @@ export class Prep {
             }
             if (propmethods.length > 1) {
                 const struct: PrepStruct = {
-                    isPropsOf: iface, name: iface.name + "Properties", funcFields: [],
+                    isPropsOfIface: iface, name: iface.name + "Properties", funcFields: [],
                     fields: propmethods.map(me => ({
                         fromOrig: me.fromOrig.decl,
                         name: me.name,
@@ -157,7 +159,7 @@ export class Prep {
             }
         }
 
-        this.structs.forEach(struct => {
+        for (const struct of this.structs) {
             let isargout = false, isargin = false
             for (const iface of this.interfaces) if (isargin && isargout) break
             else for (const method of iface.methods) if (isargin && isargout) break
@@ -174,9 +176,18 @@ export class Prep {
                 struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict })
             }
 
-            if (struct.isIncoming && struct.fields.find(_ => typeFun(_.typeSpec)))
+            if (struct.isIncoming && struct.fields.find(_ => typeFun(_.typeSpec))) {
                 struct.isDispObj = true
-        })
+                if (struct.fields.find(_ => !typeFun(_.typeSpec))) {
+                    const propstruct: PrepStruct = {
+                        funcFields: [], name: struct.name + "Properties", isPropsOfStruct: struct,
+                        fromOrig: struct.fromOrig, isIncoming: true, isOutgoing: true,
+                        fields: struct.fields.filter(_ => !typeFun(_.typeSpec)),
+                    }
+                    this.structs.push(propstruct)
+                }
+            }
+        }
 
         const printjson = (_: any) => console.log(JSON.stringify(_, function (this: any, key: string, val: any): any {
             return (key === 'parent') ? null : val
@@ -226,6 +237,7 @@ export class Prep {
                         name: _.name.getText(),
                         typeSpec: tspec,
                         optional: (ts.isTypeElement(_) && _.questionToken) ? true : false,
+                        readOnly: (_.modifiers && _.modifiers.find(_ => _.getText() === 'readonly')) ? true : false,
                         isExtBaggage: false,
                     })
             }

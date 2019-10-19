@@ -459,7 +459,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 		case "StatusBarItem":
 			const thisStatusBarItem = prog.objects[msg.data[""]] as vscode.StatusBarItem
 			if (!thisStatusBarItem)
-				throw "Called vscode.StatusBarItem" + methodname + " for an already disposed-and-forgotten instance"
+				throw "Called vscode.StatusBarItem." + methodname + " for an already disposed-and-forgotten instance"
 			switch (methodname) {
 				case "show": {
 					const ret = thisStatusBarItem.show()
@@ -485,7 +485,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 		case "OutputChannel":
 			const thisOutputChannel = prog.objects[msg.data[""]] as vscode.OutputChannel
 			if (!thisOutputChannel)
-				throw "Called vscode.OutputChannel" + methodname + " for an already disposed-and-forgotten instance"
+				throw "Called vscode.OutputChannel." + methodname + " for an already disposed-and-forgotten instance"
 			switch (methodname) {
 				case "append": {
 					const arg_value = (msg.data['value']) as string
