@@ -1229,6 +1229,80 @@ export interface WorkspaceProperties extends fromJson {
      */
     workspaceFolders?: WorkspaceFolder[];
 }
+/**
+ * A status bar item is a status bar contribution that can
+ * show text and icons and run a command on click.
+
+ */
+export interface StatusBarItemProperties extends fromJson {
+    /**
+     * The alignment of this item.
+
+     */
+    alignment: () => StatusBarAlignment;
+    /**
+     * The priority of this item. Higher value means the item should
+     * be shown more to the left.
+
+     */
+    priority: () => number;
+    /**
+     * The text to show for the entry. You can embed icons in the text by leveraging the syntax:
+     *
+     * `My text $(icon-name) contains icons like $(icon-name) this one.`
+     *
+     * Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
+     * `light-bulb`, `thumbsup`, `zap` etc.
+
+     */
+    text: string;
+    /**
+     * The tooltip text when you hover over this entry.
+
+     */
+    tooltip: string;
+    /**
+     * The foreground color for this entry.
+
+     */
+    color: string;
+    /**
+     * The identifier of a command to run on click. The command must be
+     * [known](#commands.getCommands).
+
+     */
+    command: string;
+    /**
+     * Free-form custom data, preserved across a roundtrip.
+
+     */
+    my?: {
+        [_: string]: any;
+    };
+}
+export declare function newStatusBarItemProperties(): StatusBarItemProperties;
+/**
+ * An output channel is a container for readonly textual information.
+ *
+ * To get an instance of an `OutputChannel` use
+ * [createOutputChannel](#window.createOutputChannel).
+
+ */
+export interface OutputChannelProperties extends fromJson {
+    /**
+     * The human-readable name of this output channel.
+
+     */
+    name: () => string;
+    /**
+     * Free-form custom data, preserved across a roundtrip.
+
+     */
+    my?: {
+        [_: string]: any;
+    };
+}
+export declare function newOutputChannelProperties(): OutputChannelProperties;
 export declare abstract class impl implements Vscode {
     Window: Window;
     Env: Env;

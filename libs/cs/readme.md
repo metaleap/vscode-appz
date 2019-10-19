@@ -112,6 +112,9 @@
   - [Dispose()](#M-VscAppz-OutputChannel-Dispose 'VscAppz.OutputChannel.Dispose')
   - [Hide()](#M-VscAppz-OutputChannel-Hide 'VscAppz.OutputChannel.Hide')
   - [Show(preserveFocus)](#M-VscAppz-OutputChannel-Show-System-Nullable{System-Boolean}- 'VscAppz.OutputChannel.Show(System.Nullable{System.Boolean})')
+- [OutputChannelProperties](#T-VscAppz-OutputChannelProperties 'VscAppz.OutputChannelProperties')
+  - [My](#F-VscAppz-OutputChannelProperties-My 'VscAppz.OutputChannelProperties.My')
+  - [Name](#P-VscAppz-OutputChannelProperties-Name 'VscAppz.OutputChannelProperties.Name')
 - [QuickPickItem](#T-VscAppz-QuickPickItem 'VscAppz.QuickPickItem')
   - [AlwaysShow](#F-VscAppz-QuickPickItem-AlwaysShow 'VscAppz.QuickPickItem.AlwaysShow')
   - [Description](#F-VscAppz-QuickPickItem-Description 'VscAppz.QuickPickItem.Description')
@@ -138,6 +141,14 @@
   - [Dispose()](#M-VscAppz-StatusBarItem-Dispose 'VscAppz.StatusBarItem.Dispose')
   - [Hide()](#M-VscAppz-StatusBarItem-Hide 'VscAppz.StatusBarItem.Hide')
   - [Show()](#M-VscAppz-StatusBarItem-Show 'VscAppz.StatusBarItem.Show')
+- [StatusBarItemProperties](#T-VscAppz-StatusBarItemProperties 'VscAppz.StatusBarItemProperties')
+  - [Color](#F-VscAppz-StatusBarItemProperties-Color 'VscAppz.StatusBarItemProperties.Color')
+  - [Command](#F-VscAppz-StatusBarItemProperties-Command 'VscAppz.StatusBarItemProperties.Command')
+  - [My](#F-VscAppz-StatusBarItemProperties-My 'VscAppz.StatusBarItemProperties.My')
+  - [Text](#F-VscAppz-StatusBarItemProperties-Text 'VscAppz.StatusBarItemProperties.Text')
+  - [Tooltip](#F-VscAppz-StatusBarItemProperties-Tooltip 'VscAppz.StatusBarItemProperties.Tooltip')
+  - [Alignment](#P-VscAppz-StatusBarItemProperties-Alignment 'VscAppz.StatusBarItemProperties.Alignment')
+  - [Priority](#P-VscAppz-StatusBarItemProperties-Priority 'VscAppz.StatusBarItemProperties.Priority')
 - [Vsc](#T-VscAppz-Vsc 'VscAppz.Vsc')
   - [OnError](#F-VscAppz-Vsc-OnError 'VscAppz.Vsc.OnError')
   - [OnErrorDefaultOutputFormat](#F-VscAppz-Vsc-OnErrorDefaultOutputFormat 'VscAppz.Vsc.OnErrorDefaultOutputFormat')
@@ -1848,6 +1859,34 @@ Reveal this channel in the UI.
 | ---- | ---- | ----------- |
 | preserveFocus | [System.Nullable{System.Boolean}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.Boolean}') | When `true` the channel will not take focus. |
 
+<a name='T-VscAppz-OutputChannelProperties'></a>
+## OutputChannelProperties `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+An output channel is a container for readonly textual information.
+
+To get an instance of an `OutputChannel` use
+[createOutputChannel](#window.createOutputChannel).
+
+<a name='F-VscAppz-OutputChannelProperties-My'></a>
+### My `constants`
+
+##### Summary
+
+Free-form custom data, preserved across a roundtrip.
+
+<a name='P-VscAppz-OutputChannelProperties-Name'></a>
+### Name `property`
+
+##### Summary
+
+The human-readable name of this output channel.
+
 <a name='T-VscAppz-QuickPickItem'></a>
 ## QuickPickItem `type`
 
@@ -2072,6 +2111,74 @@ Shows the entry in the status bar.
 ##### Parameters
 
 This method has no parameters.
+
+<a name='T-VscAppz-StatusBarItemProperties'></a>
+## StatusBarItemProperties `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+A status bar item is a status bar contribution that can
+show text and icons and run a command on click.
+
+<a name='F-VscAppz-StatusBarItemProperties-Color'></a>
+### Color `constants`
+
+##### Summary
+
+The foreground color for this entry.
+
+<a name='F-VscAppz-StatusBarItemProperties-Command'></a>
+### Command `constants`
+
+##### Summary
+
+The identifier of a command to run on click. The command must be
+[known](#commands.getCommands).
+
+<a name='F-VscAppz-StatusBarItemProperties-My'></a>
+### My `constants`
+
+##### Summary
+
+Free-form custom data, preserved across a roundtrip.
+
+<a name='F-VscAppz-StatusBarItemProperties-Text'></a>
+### Text `constants`
+
+##### Summary
+
+The text to show for the entry. You can embed icons in the text by leveraging the syntax:
+
+`My text $(icon-name) contains icons like $(icon-name) this one.`
+
+Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
+`light-bulb`, `thumbsup`, `zap` etc.
+
+<a name='F-VscAppz-StatusBarItemProperties-Tooltip'></a>
+### Tooltip `constants`
+
+##### Summary
+
+The tooltip text when you hover over this entry.
+
+<a name='P-VscAppz-StatusBarItemProperties-Alignment'></a>
+### Alignment `property`
+
+##### Summary
+
+The alignment of this item.
+
+<a name='P-VscAppz-StatusBarItemProperties-Priority'></a>
+### Priority `property`
+
+##### Summary
+
+The priority of this item. Higher value means the item should
+be shown more to the left.
 
 <a name='T-VscAppz-Vsc'></a>
 ## Vsc `type`

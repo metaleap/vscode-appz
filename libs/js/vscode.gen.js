@@ -87,6 +87,18 @@ function newWorkspaceProperties() {
     me = { populateFrom: _ => WorkspaceProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
+function newStatusBarItemProperties() {
+    let me;
+    me = { populateFrom: _ => StatusBarItemProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    return me;
+}
+exports.newStatusBarItemProperties = newStatusBarItemProperties;
+function newOutputChannelProperties() {
+    let me;
+    me = { populateFrom: _ => OutputChannelProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    return me;
+}
+exports.newOutputChannelProperties = newOutputChannelProperties;
 class impl {
     constructor() {
         this.Window = new implWindow(this);

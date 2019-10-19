@@ -1436,14 +1436,14 @@ export interface StatusBarItemProperties extends fromJson {
      * The alignment of this item.
 
      */
-    alignment: StatusBarAlignment
+    alignment: () => StatusBarAlignment
 
     /**
      * The priority of this item. Higher value means the item should
      * be shown more to the left.
 
      */
-    priority?: number
+    priority: () => number
 
     /**
      * The text to show for the entry. You can embed icons in the text by leveraging the syntax:
@@ -1500,7 +1500,7 @@ export interface OutputChannelProperties extends fromJson {
      * The human-readable name of this output channel.
 
      */
-    name: string
+    name: () => string
 
     /**
      * Free-form custom data, preserved across a roundtrip.

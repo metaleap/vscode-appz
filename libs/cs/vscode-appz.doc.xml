@@ -1306,5 +1306,59 @@
             *Note* that the first entry corresponds to the value of `rootPath`.
             </summary>
         </member>
+        <member name="T:VscAppz.StatusBarItemProperties">
+            <summary>
+            A status bar item is a status bar contribution that can
+            show text and icons and run a command on click.
+            </summary>
+        </member>
+        <member name="P:VscAppz.StatusBarItemProperties.Alignment">
+            <summary>The alignment of this item.</summary>
+        </member>
+        <member name="P:VscAppz.StatusBarItemProperties.Priority">
+            <summary>
+            The priority of this item. Higher value means the item should
+            be shown more to the left.
+            </summary>
+        </member>
+        <member name="F:VscAppz.StatusBarItemProperties.Text">
+            <summary>
+            The text to show for the entry. You can embed icons in the text by leveraging the syntax:
+            
+            `My text $(icon-name) contains icons like $(icon-name) this one.`
+            
+            Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
+            `light-bulb`, `thumbsup`, `zap` etc.
+            </summary>
+        </member>
+        <member name="F:VscAppz.StatusBarItemProperties.Tooltip">
+            <summary>The tooltip text when you hover over this entry.</summary>
+        </member>
+        <member name="F:VscAppz.StatusBarItemProperties.Color">
+            <summary>The foreground color for this entry.</summary>
+        </member>
+        <member name="F:VscAppz.StatusBarItemProperties.Command">
+            <summary>
+            The identifier of a command to run on click. The command must be
+            [known](#commands.getCommands).
+            </summary>
+        </member>
+        <member name="F:VscAppz.StatusBarItemProperties.My">
+            <summary>Free-form custom data, preserved across a roundtrip.</summary>
+        </member>
+        <member name="T:VscAppz.OutputChannelProperties">
+            <summary>
+            An output channel is a container for readonly textual information.
+            
+            To get an instance of an `OutputChannel` use
+            [createOutputChannel](#window.createOutputChannel).
+            </summary>
+        </member>
+        <member name="P:VscAppz.OutputChannelProperties.Name">
+            <summary>The human-readable name of this output channel.</summary>
+        </member>
+        <member name="F:VscAppz.OutputChannelProperties.My">
+            <summary>Free-form custom data, preserved across a roundtrip.</summary>
+        </member>
     </members>
 </doc>

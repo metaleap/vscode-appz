@@ -1285,15 +1285,13 @@ namespace VscAppz {
 	/// </summary>
 	public partial class StatusBarItemProperties {
 		/// <summary>The alignment of this item.</summary>
-		[JsonProperty("alignment"), JsonRequired]
-		public StatusBarAlignment Alignment;
+		public StatusBarAlignment Alignment { get; internal set; }
 
 		/// <summary>
 		/// The priority of this item. Higher value means the item should
 		/// be shown more to the left.
 		/// </summary>
-		[JsonProperty("priority")]
-		public int? Priority;
+		public int? Priority { get; internal set; }
 
 		/// <summary>
 		/// The text to show for the entry. You can embed icons in the text by leveraging the syntax:
@@ -1334,8 +1332,7 @@ namespace VscAppz {
 	/// </summary>
 	public partial class OutputChannelProperties {
 		/// <summary>The human-readable name of this output channel.</summary>
-		[JsonProperty("name"), JsonRequired]
-		public string Name;
+		public string Name { get; internal set; }
 
 		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
 		[JsonProperty("my")]

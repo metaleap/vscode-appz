@@ -79,12 +79,16 @@ class Gen extends gen_syn.Gen {
                     }
                 });
             else
-                this.each(it.Fields, "\n", f => this.emitDocs(f)
-                    .ln(() => {
-                    this.s(f.Name)
-                        .s((f.fromPrep && f.fromPrep.optional) ? "?: " : ": ")
-                        .emitTypeRef(f.Type);
-                }));
+                this.each(it.Fields, "\n", f => {
+                    const isreadonly = it.fromPrep && it.fromPrep.isPropsOfStruct && f.fromPrep && f.fromPrep.readOnly;
+                    const isoptional = f.fromPrep && f.fromPrep.optional;
+                    this.emitDocs(f)
+                        .ln(() => {
+                        this.s(f.Name)
+                            .s((isoptional && !isreadonly) ? "?: " : ": ")
+                            .emitTypeRef(isreadonly ? { From: [], To: isoptional ? { Maybe: f.Type } : f.Type } : f.Type);
+                    });
+                });
         })
             .lines("}", "");
         if (it.IsIncoming)
