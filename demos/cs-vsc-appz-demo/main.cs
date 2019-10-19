@@ -4,6 +4,7 @@ namespace VscAppzDemo {
 
     public static partial class App {
 
+        private const string appName = "cs-vsc-appz-demo";
         private static readonly string[] nil = new string[0];
 
         private static IVscode vsc;
@@ -12,9 +13,9 @@ namespace VscAppzDemo {
         public static void Main(string[] args) {
             Vsc.Main(vscode => {
                 (vsc, win) = (vscode, vscode.Window);
-                win.SetStatusBarMessage2("Choosing a demo WILL HIDE this")(statusmsg => {
-                    subscribeToMiscEvents();
-                    win.CreateStatusBarItem()(_ => _.Show());
+                onUpAndRunning();
+
+                win.SetStatusBarMessage2("Choosing a demo now WILL remove me")(statusmsg => {
 
                     var buttons = new[] {"Demo Pick Input", "Demo Text Input", "All Demos"};
                     win.ShowInformationMessage1("What to try out? (If you cancel, I quit.)", buttons)(
@@ -29,7 +30,7 @@ namespace VscAppzDemo {
                             else if (btn == buttons[2])
                                 demosMenu();
                             else
-                                win.ShowErrorMessage1($"Unknown: `{btn}`, bye now!")(quit);
+                                win.ShowErrorMessage1($"Unknown: `{btn}`!")(demosmenu);
                         }
                     );
                 });
@@ -49,16 +50,15 @@ namespace VscAppzDemo {
                 Prompt          = "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
                 ValidateInput   = val
             })(input => {
-                statusNoticeQuit();
                 if (input == null)
-                    win.ShowWarningMessage1("Cancelled text input, bye now!")(quit);
+                    win.ShowWarningMessage1("Cancelled text input!")(demosmenu);
                 else
-                    win.ShowInformationMessage1("You entered: `"+input+"`, bye now!")(quit);
+                    win.ShowInformationMessage1("You entered: `"+input+"`, merci!")(demosmenu);
             });
         }
 
-        private static void quit(string _unused = default) =>
-            Environment.Exit(0);
+        private static void demosmenu(string _unused = default) => demosMenu();
+        private static void quit(string _unused = default) => Environment.Exit(0);
 
         private static Cancel cancelIn(double seconds) =>
             Cancel.In(TimeSpan.FromSeconds(seconds));

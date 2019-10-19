@@ -4,26 +4,23 @@ Object.defineProperty(exports, "__esModule", { value: true })
 
 
 let win
-
+exports.appName = "nodejs-vsc-appz-demo"
 
 function main() {
-    const quit = exports.quit
-
     vscAppz.Main(vscode => {
         exports.vsc = vscode
         win = vscode.Window
+        miscdemos.onReady()
+        miscdemos.onUpAndRunning()
 
-        win.SetStatusBarMessage2("Choosing a demo WILL HIDE this")(statusmsg => {
-            miscdemos.onReady()
-            miscdemos.subscribeToMiscEvents()
-            win.CreateStatusBarItem()(_ => _.Show())
+        win.SetStatusBarMessage2("Choosing a demo now WILL remove me")(statusmsg => {
 
             const buttons = ["Demo Text Input", "All Demos"]
             win.ShowInformationMessage1("What to try out? (If you cancel, I quit.)", buttons)(
                 btn => {
                     statusmsg.Dispose()
                     if (btn === undefined || btn === null)
-                        quit()
+                        exports.quit()
                     else
                         switch (btn) {
                             case buttons[0]:
@@ -33,7 +30,7 @@ function main() {
                                 miscdemos.demosMenu()
                                 break
                             default:
-                                win.ShowErrorMessage1("Unknown: `" + btn + "`, bye now!")(quit)
+                                win.ShowErrorMessage1("Unknown: `" + btn + "`!")(miscdemos.demosMenu)
                                 break
                         }
                 }
@@ -43,7 +40,7 @@ function main() {
 }
 
 exports.demo_Window_ShowInputBox = () => {
-    const quit = exports.quit, foos = ["foo", "f00", "fo0", "f0o"]
+    const foos = ["foo", "f00", "fo0", "f0o"]
     win.ShowInputBox({
         ignoreFocusOut: true, value: "Enter almost anything...", valueSelection: [6, 12],
         prompt: "Enter anything containing nothing looking like `foo` (it would be rejected by my real-time ValidateInput func)",
@@ -52,17 +49,14 @@ exports.demo_Window_ShowInputBox = () => {
             return (!foos.some(_ => input.includes(_))) ? "" : "Contains something looking like `foo`."
         }
     })(input => {
-        miscdemos.statusNoticeQuit()
         if (input === undefined || input === null)
-            win.ShowWarningMessage1("Cancelled text input, bye now!")(quit)
+            win.ShowWarningMessage1("Cancelled text input!")(miscdemos.demosMenu)
         else
-            win.ShowInformationMessage1("You entered: `" + input + "`, bye now!")(quit)
+            win.ShowInformationMessage1("You entered: `" + input + "`, merci!")(miscdemos.demosMenu)
     })
 }
 
-exports.quit = () => {
-    process.exit()
-}
+exports.quit = () => { process.exit() }
 
 exports.cancelIn = (seconds) => {
     return vscAppz.CancelIn(1000 * seconds)

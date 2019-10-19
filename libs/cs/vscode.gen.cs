@@ -1303,7 +1303,7 @@ namespace VscAppz {
 		/// Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
 		/// `light-bulb`, `thumbsup`, `zap` etc.
 		/// </summary>
-		[JsonProperty("text"), JsonRequired]
+		[JsonProperty("text")]
 		public string Text;
 
 		/// <summary>The tooltip text when you hover over this entry.</summary>
@@ -4195,8 +4195,6 @@ namespace VscAppz {
 				this.Alignment = () => {
 					return alignment;
 				};
-			} else {
-				return false;
 			}
 			(val, ok) = (it.TryGetValue("priority", out var ___) ? (___, true) : (default, false));
 			if (ok) {
@@ -4226,8 +4224,6 @@ namespace VscAppz {
 					}
 				}
 				this.Text = text;
-			} else {
-				return false;
 			}
 			(val, ok) = (it.TryGetValue("tooltip", out var _____) ? (_____, true) : (default, false));
 			if (ok) {
@@ -4298,8 +4294,6 @@ namespace VscAppz {
 				this.Name = () => {
 					return name;
 				};
-			} else {
-				return false;
 			}
 			(val, ok) = (it.TryGetValue("my", out var ___) ? (___, true) : (default, false));
 			if (ok) {

@@ -83,7 +83,10 @@ class Prep {
                     const propstruct = {
                         funcFields: [], name: struct.name + "Properties", isPropsOfStruct: struct,
                         fromOrig: struct.fromOrig, isIncoming: true, isOutgoing: true,
-                        fields: struct.fields.filter(_ => !typeFun(_.typeSpec)),
+                        fields: struct.fields.filter(_ => !typeFun(_.typeSpec)).map(_ => {
+                            _.optional = true;
+                            return _;
+                        }),
                     };
                     this.structs.push(propstruct);
                 }

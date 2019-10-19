@@ -1258,23 +1258,23 @@ export interface StatusBarItemProperties extends fromJson {
      * `light-bulb`, `thumbsup`, `zap` etc.
 
      */
-    text: string;
+    text?: string;
     /**
      * The tooltip text when you hover over this entry.
 
      */
-    tooltip: string;
+    tooltip?: string;
     /**
      * The foreground color for this entry.
 
      */
-    color: string;
+    color?: string;
     /**
      * The identifier of a command to run on click. The command must be
      * [known](#commands.getCommands).
 
      */
-    command: string;
+    command?: string;
     /**
      * Free-form custom data, preserved across a roundtrip.
 

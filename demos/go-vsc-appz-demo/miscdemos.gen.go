@@ -5,6 +5,14 @@ import (
 	. "github.com/metaleap/vscode-appz/libs/go"
 )
 
+func demo_promptToExit() {
+	vsc.Window().ShowWarningMessage1(strFmt("Are you sure you want `{0}` to exit?", appName), []string{"Sure I'm sure"})(func(btn *string) {
+		if (nil != btn) {
+			quit(nil)
+		}
+	})
+}
+
 func demo_Commands_GetCommands_and_ExecuteCommand() {
 	vsc.Commands().GetCommands(false)(func(items []string) {
 		var opts QuickPickOptions
@@ -256,7 +264,7 @@ func statusNoticeQuit() {
 
 func demosMenu() {
 	var items []string
-	items = []string{"demo_Window_ShowInputBox", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick"}
+	items = []string{"demo_promptToExit", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_ShowInputBox"}
 	var opts QuickPickOptions
 	opts = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickOptions)
 	opts.IgnoreFocusOut = true
@@ -265,8 +273,8 @@ func demosMenu() {
 		if (nil == menuitem) {
 			quit(nil)
 		} else {
-			if "demo_Window_ShowInputBox" == (*menuitem) {
-				demo_Window_ShowInputBox()
+			if "demo_promptToExit" == (*menuitem) {
+				demo_promptToExit()
 			}
 			if "demo_Commands_GetCommands_and_ExecuteCommand" == (*menuitem) {
 				demo_Commands_GetCommands_and_ExecuteCommand()
@@ -298,7 +306,25 @@ func demosMenu() {
 			if "demo_Window_ShowQuickPick" == (*menuitem) {
 				demo_Window_ShowQuickPick()
 			}
+			if "demo_Window_ShowInputBox" == (*menuitem) {
+				demo_Window_ShowInputBox()
+			}
 		}
+	})
+}
+
+func onUpAndRunning() {
+	subscribeToMiscEvents()
+	vsc.Window().CreateStatusBarItem(0, nil)(func(it *StatusBarItem) {
+		it.Get()(func(props StatusBarItemProperties) {
+			props.Tooltip = strFmt("Hi from {0}!", appName)
+			props.Text = "You clicked me 0 time(s)."
+			props.Color = "editorLightBulb.foreground"
+			props.Command = "vsc_appz.main"
+			it.Set(props)(func() {
+				it.Show()
+			})
+		})
 	})
 }
 

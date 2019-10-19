@@ -2841,9 +2841,6 @@ function StatusBarItemProperties_populateFrom(payload) {
             return alignment;
         };
     }
-    else {
-        return false;
-    }
     [val, ok] = [it["priority"], undefined !== it["priority"]];
     if (ok) {
         let priority;
@@ -2872,9 +2869,6 @@ function StatusBarItemProperties_populateFrom(payload) {
             }
         }
         this.text = text;
-    }
-    else {
-        return false;
     }
     [val, ok] = [it["tooltip"], undefined !== it["tooltip"]];
     if (ok) {
@@ -2942,9 +2936,6 @@ function OutputChannelProperties_populateFrom(payload) {
         this.Name = () => {
             return name;
         };
-    }
-    else {
-        return false;
     }
     [val, ok] = [it["my"], undefined !== it["my"]];
     if (ok) {

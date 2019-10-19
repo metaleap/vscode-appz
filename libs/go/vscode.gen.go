@@ -1000,7 +1000,7 @@ type StatusBarItemProperties struct {
 	// 
 	// Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
 	// `light-bulb`, `thumbsup`, `zap` etc.
-	Text string `json:"text"`
+	Text string `json:"text,omitempty"`
 
 	// The tooltip text when you hover over this entry.
 	Tooltip string `json:"tooltip,omitempty"`
@@ -3842,8 +3842,6 @@ func (me *StatusBarItemProperties) populateFrom(payload any) bool {
 		me.Alignment = func() StatusBarAlignment {
 			return alignment
 		}
-	} else {
-		return false
 	}
 	val, ok = it["priority"]
 	if ok {
@@ -3873,8 +3871,6 @@ func (me *StatusBarItemProperties) populateFrom(payload any) bool {
 			}
 		}
 		me.Text = text
-	} else {
-		return false
 	}
 	val, ok = it["tooltip"]
 	if ok {
@@ -3943,8 +3939,6 @@ func (me *OutputChannelProperties) populateFrom(payload any) bool {
 		me.Name = func() string {
 			return name
 		}
-	} else {
-		return false
 	}
 	val, ok = it["my"]
 	if ok {

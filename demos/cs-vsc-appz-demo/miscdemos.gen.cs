@@ -7,6 +7,13 @@ namespace VscAppzDemo {
 	using dict = System.Collections.Generic.Dictionary<string, object>;
 
 	public static partial class App {
+		private static void demo_promptToExit() {
+			vsc.Window.ShowWarningMessage1(strFmt("Are you sure you want `{0}` to exit?", appName), new[] { "Sure I'm sure" })((string btn) => {
+				if ((null != btn)) {
+					quit(null);
+				}
+			});
+		}
 		private static void demo_Commands_GetCommands_and_ExecuteCommand() {
 			vsc.Commands.GetCommands(false)((string[] items) => {
 				QuickPickOptions opts = default;
@@ -246,7 +253,7 @@ namespace VscAppzDemo {
 		}
 		private static void demosMenu() {
 			string[] items = default;
-			items = new[] { "demo_Window_ShowInputBox", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick" };
+			items = new[] { "demo_promptToExit", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_ShowInputBox" };
 			QuickPickOptions opts = default;
 			opts = new QuickPickOptions();
 			opts.IgnoreFocusOut = true;
@@ -255,8 +262,8 @@ namespace VscAppzDemo {
 				if ((null == menuitem)) {
 					quit(null);
 				} else {
-					if ("demo_Window_ShowInputBox" == menuitem) {
-						demo_Window_ShowInputBox();
+					if ("demo_promptToExit" == menuitem) {
+						demo_promptToExit();
 					}
 					if ("demo_Commands_GetCommands_and_ExecuteCommand" == menuitem) {
 						demo_Commands_GetCommands_and_ExecuteCommand();
@@ -288,7 +295,24 @@ namespace VscAppzDemo {
 					if ("demo_Window_ShowQuickPick" == menuitem) {
 						demo_Window_ShowQuickPick();
 					}
+					if ("demo_Window_ShowInputBox" == menuitem) {
+						demo_Window_ShowInputBox();
+					}
 				}
+			});
+		}
+		private static void onUpAndRunning() {
+			subscribeToMiscEvents();
+			vsc.Window.CreateStatusBarItem(0, null)((StatusBarItem it) => {
+				it.Get()((StatusBarItemProperties props) => {
+					props.Tooltip = strFmt("Hi from {0}!", appName);
+					props.Text = "You clicked me 0 time(s).";
+					props.Color = "editorLightBulb.foreground";
+					props.Command = "vsc_appz.main";
+					it.Set(props)(() => {
+						it.Show();
+					});
+				});
 			});
 		}
 }}

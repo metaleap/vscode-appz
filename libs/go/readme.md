@@ -703,7 +703,7 @@ type StatusBarItemProperties struct {
 	//
 	// Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
 	// `light-bulb`, `thumbsup`, `zap` etc.
-	Text string `json:"text"`
+	Text string `json:"text,omitempty"`
 
 	// The tooltip text when you hover over this entry.
 	Tooltip string `json:"tooltip,omitempty"`

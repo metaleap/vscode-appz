@@ -20,6 +20,14 @@ export class GenDemos {
         this.gen = gen
         this.all = {
 
+            "demo_promptToExit": () => [
+                _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowWarningMessage", 1))), _.eLit("Are you sure you want `{0}` to exit?", _.n("appName")), _.eLit(["Sure I'm sure"])),
+                    _.eFunc([{ Name: "btn", Type: { Maybe: TypeRefPrim.String } }], null,
+                        _.iIf(_.oIs(_.n("btn")), [_.eCall(_.n("quit"), _.eZilch())]),
+                    ),
+                )
+            ],
+
             "demo_Commands_GetCommands_and_ExecuteCommand": () =>
                 this.genDemoOfStrListMenu(_, "Commands", "GetCommands", "command ID(s), pick one to execute or escape now:", [_.eLit(false)],
                     _.eFunc([{ Name: "item", Type: { Maybe: TypeRefPrim.String } }], null,
@@ -161,23 +169,43 @@ export class GenDemos {
 
         }
 
+        const allnames: string[] = []
         for (const name in this.all)
             if (name.startsWith("demo_"))
-                names.push(name)
+                allnames.push(name)
+        allnames.push(...names)
+
         this.all["demosMenu"] = () => ([
             _.iVar("items", { ValsOf: TypeRefPrim.String }),
-            _.iSet(_.n("items"), _.eLit(names)),
+            _.iSet(_.n("items"), _.eLit(allnames)),
         ] as Instr[]).concat(
             ...this.genMenu(_, _.eLit("Dismissing this menu WILL end the prog."),
                 _.eFunc([{ Name: "menuitem", Type: { Maybe: TypeRefPrim.String } }], null,
                     _.iIf(_.oIsnt(_.n("menuitem")), [
                         _.eCall(_.n("quit"), _.eZilch()),
-                    ], names.map(name => _.iIf(_.oEq(_.eLit(name), _.oDeref(_.n("menuitem"))), [
+                    ], allnames.map(name => _.iIf(_.oEq(_.eLit(name), _.oDeref(_.n("menuitem"))), [
                         _.eCall(_.n(name)),
                     ]))),
                 ),
             )
         )
+
+        this.all["onUpAndRunning"] = () => ([
+            _.eCall(_.n("subscribeToMiscEvents")),
+            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("CreateStatusBarItem")),
+                _.eLit(0), _.eZilch(),
+            ), _.eFunc([{ Name: "it", Type: { Maybe: { Name: "StatusBarItem" } } }], null,
+                _.eCall(_.eCall(_.oDot(_.n("it"), _.n("Get"))), _.eFunc([{ Name: "props", Type: { Name: "StatusBarItemProperties" } }], null,
+                    _.iSet(_.oDot(_.n("props"), _.n(this.fld("Tooltip"))), _.eLit("Hi from {0}!", _.n("appName"))),
+                    _.iSet(_.oDot(_.n("props"), _.n(this.fld("Text"))), _.eLit("You clicked me 0 time(s).")),
+                    _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("editorLightBulb.foreground")), // editorLightBulbAutoFix.foreground editorLightBulb.foreground
+                    _.iSet(_.oDot(_.n("props"), _.n(this.fld("Command"))), _.eLit("vsc_appz.main")),
+                    _.eCall(_.eCall(_.oDot(_.n("it"), _.n("Set")), _.n("props")), _.eFunc([], null,
+                        _.eCall(_.oDot(_.n("it"), _.n("Show"))),
+                    )),
+                )),
+            ))
+        ])
     }
 
     genEventSubs(_: Builder, subs: { ns: string, evtName: string, evtArgs?: string, msg: Expr }[]): Instr[] {

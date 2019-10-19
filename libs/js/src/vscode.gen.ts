@@ -1456,26 +1456,26 @@ export interface StatusBarItemProperties extends fromJson {
      * `light-bulb`, `thumbsup`, `zap` etc.
 
      */
-    text: string
+    text?: string
 
     /**
      * The tooltip text when you hover over this entry.
 
      */
-    tooltip: string
+    tooltip?: string
 
     /**
      * The foreground color for this entry.
 
      */
-    color: string
+    color?: string
 
     /**
      * The identifier of a command to run on click. The command must be
      * [known](#commands.getCommands).
 
      */
-    command: string
+    command?: string
 
     /**
      * Free-form custom data, preserved across a roundtrip.
@@ -4311,8 +4311,6 @@ function StatusBarItemProperties_populateFrom(this: StatusBarItemProperties, pay
         this.Alignment = (): StatusBarAlignment => {
             return alignment
         }
-    } else {
-        return false
     }
     [val, ok] = [it["priority"], undefined !== it["priority"]]
     if (ok) {
@@ -4342,8 +4340,6 @@ function StatusBarItemProperties_populateFrom(this: StatusBarItemProperties, pay
             }
         }
         this.text = text
-    } else {
-        return false
     }
     [val, ok] = [it["tooltip"], undefined !== it["tooltip"]]
     if (ok) {
@@ -4412,8 +4408,6 @@ function OutputChannelProperties_populateFrom(this: OutputChannelProperties, pay
         this.Name = (): string => {
             return name
         }
-    } else {
-        return false
     }
     [val, ok] = [it["my"], undefined !== it["my"]]
     if (ok) {

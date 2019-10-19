@@ -12,6 +12,8 @@ import (
 
 type any = interface{}
 
+const appName = "go-vsc-appz-demo"
+
 var vsc Vscode
 var win Window
 
@@ -30,29 +32,12 @@ func main() {
 		vsc = vscode
 		win = vsc.Window()
 
-		win.SetStatusBarMessage2("Choosing a demo WILL HIDE this")(func(statusmsg *Disposable) {
-			subscribeToMiscEvents()
-			win.CreateStatusBarItem(0, nil)(
-				func(it *StatusBarItem) {
-					println("SBI:Created")
-					it.Show()(func() {
-						println("SBI:Shown")
-						it.Get()(func(props StatusBarItemProperties) {
-							props.Text = "Foo"
-							props.Tooltip = "Bar Baz"
-							props.Color = "button.background"
-							it.Set(props)(func() {
-								it.Get()(func(props StatusBarItemProperties) {
-									println(props.Color + "\t" + props.Command + "\t" + props.Text + "\t" + props.Tooltip)
-								})
-							})
-						})
-					})
-				})
+		onUpAndRunning()
 
+		win.SetStatusBarMessage2("Choosing a demo now WILL remove me")(func(statusmsg *Disposable) {
 			buttons := []string{"Demo Pick Input", "Demo Text Input", "All Demos"}
 			win.ShowInformationMessage1(
-				greethow+", "+greetname+"! What to try out? (If you cancel, I quit.)", buttons)(
+				greethow+", "+greetname+"! What to try out? (If you cancel here, I quit.)", buttons)(
 				func(btn *string) {
 					statusmsg.Dispose()
 					if btn == nil {
@@ -66,7 +51,7 @@ func main() {
 						case buttons[2]:
 							demosMenu()
 						default:
-							win.ShowErrorMessage1("Unknown: `"+button+"`, bye now!", nil)(quit)
+							win.ShowErrorMessage1("Unknown: `"+button+"`", nil)(demosmenu)
 						}
 					}
 				})
@@ -88,16 +73,16 @@ func demo_Window_ShowInputBox() {
 		},
 	}, nil)(
 		func(input *string) {
-			statusNoticeQuit()
 			if input == nil {
-				win.ShowWarningMessage1("Cancelled text input, bye now!", nil)(quit)
+				win.ShowWarningMessage1("Cancelled text input!", nil)(demosmenu)
 			} else {
-				win.ShowInformationMessage1("You entered: `"+(*input)+"`, bye now!", nil)(quit)
+				win.ShowInformationMessage1("You entered: `"+(*input)+"`, merci!", nil)(demosmenu)
 			}
 		})
 }
 
-func quit(*string) { os.Exit(0) }
+func demosmenu(*string) { demosMenu() }
+func quit(*string)      { os.Exit(0) }
 
 func cancelIn(seconds int64) *Cancel {
 	return CancelIn(time.Duration(seconds * int64(time.Second)))

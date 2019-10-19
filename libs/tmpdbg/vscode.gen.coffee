@@ -1463,7 +1463,7 @@ StatusBarItemProperties: class
     # alignment:
     # The alignment of this item.
     #
-    # JSON FLAGS: {"Name":"alignment","Required":true,"Excluded":true}
+    # JSON FLAGS: {"Name":"alignment","Required":false,"Excluded":true}
     Alignment: (->StatusBarAlignment)
 
     # priority:
@@ -1481,7 +1481,7 @@ StatusBarItemProperties: class
     # Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
     # `light-bulb`, `thumbsup`, `zap` etc.
     #
-    # JSON FLAGS: {"Name":"text","Required":true,"Excluded":false}
+    # JSON FLAGS: {"Name":"text","Required":false,"Excluded":false}
     Text: string
 
     # tooltip:
@@ -1521,7 +1521,7 @@ OutputChannelProperties: class
     # name:
     # The human-readable name of this output channel.
     #
-    # JSON FLAGS: {"Name":"name","Required":true,"Excluded":true}
+    # JSON FLAGS: {"Name":"name","Required":false,"Excluded":true}
     Name: (->string)
 
     # my:
@@ -4091,8 +4091,6 @@ StatusBarItemProperties·populateFrom: (payload:any -> bool)
         this.Alignment = ( -> StatusBarAlignment)
             return alignment
         
-    else
-        return false
     [val, ok] = it@?"priority"
     if ok
         var priority of int
@@ -4115,8 +4113,6 @@ StatusBarItemProperties·populateFrom: (payload:any -> bool)
             if !ok
                 return false
         this.Text = text
-    else
-        return false
     [val, ok] = it@?"tooltip"
     if ok
         var tooltip of string
@@ -4171,8 +4167,6 @@ OutputChannelProperties·populateFrom: (payload:any -> bool)
         this.Name = ( -> string)
             return name
         
-    else
-        return false
     [val, ok] = it@?"my"
     if ok
         var my of ?dict
