@@ -533,9 +533,6 @@ Reveal this channel in the UI.
 type OutputChannelProperties struct {
 	// The human-readable name of this output channel.
 	Name func() string `json:"-"`
-
-	// Free-form custom data, preserved across a roundtrip.
-	My dict `json:"my,omitempty"`
 }
 ```
 
@@ -714,9 +711,6 @@ type StatusBarItemProperties struct {
 	// The identifier of a command to run on click. The command must be
 	// [known](#commands.getCommands).
 	Command string `json:"command,omitempty"`
-
-	// Free-form custom data, preserved across a roundtrip.
-	My dict `json:"my,omitempty"`
 }
 ```
 

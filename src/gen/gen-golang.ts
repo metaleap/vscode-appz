@@ -70,7 +70,7 @@ export class Gen extends gen_syn.Gen {
                         this.emitDocs(f).ln(() =>
                             this.s(f.Name, " ").emitTypeRef(f.Type).when(f.Json, () =>
                                 this.s(" `json:\"")
-                                    .when(f.Json.Excluded ,
+                                    .when(f.Json.Excluded,
                                         () => this.s("-"),
                                         () => this.s(f.Json.Name + (f.Json.Required ? "" : ",omitempty"))
                                     ).s("\"`")
@@ -116,6 +116,13 @@ export class Gen extends gen_syn.Gen {
             const ivar = it as gen_syn.IVar
             if (ivar && ivar.Name && ivar.Type) return this.ln(() =>
                 this.s("var ", ivar.Name, " ").emitTypeRef(ivar.Type))
+
+            const iset = it as gen_syn.ISet
+            if (iset && iset.SetTo) {
+                const enew = iset.SetTo as gen_syn.ENew
+                if (enew && (!this.typeMaybe(enew.New)) && this.typeOwn(enew.New))
+                    return this
+            }
 
             const idictdel = it as gen_syn.IDictDel
             if (idictdel && idictdel.DelFrom && idictdel.DelWhat) return this.ln(() =>

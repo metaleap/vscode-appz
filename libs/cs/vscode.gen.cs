@@ -1320,10 +1320,6 @@ namespace VscAppz {
 		/// </summary>
 		[JsonProperty("command")]
 		public string Command;
-
-		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
-		[JsonProperty("my")]
-		public dict My;
 	}
 
 	/// <summary>
@@ -1336,10 +1332,6 @@ namespace VscAppz {
 		/// <summary>The human-readable name of this output channel.</summary>
 		[JsonIgnore]
 		public Func<string> Name;
-
-		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
-		[JsonProperty("my")]
-		public dict My;
 	}
 
 	internal partial class impl : IVscode, IWindow, IEnv, IWorkspace, ILanguages, IExtensions, ICommands {
@@ -4258,17 +4250,6 @@ namespace VscAppz {
 				}
 				this.Command = command;
 			}
-			(val, ok) = (it.TryGetValue("my", out var ________) ? (________, true) : (default, false));
-			if (ok) {
-				dict my = default;
-				if ((null != val)) {
-					(my, ok) = (val is dict) ? (((dict)(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-				}
-				this.My = my;
-			}
 			return true;
 		}
 	}
@@ -4294,17 +4275,6 @@ namespace VscAppz {
 				this.Name = () => {
 					return name;
 				};
-			}
-			(val, ok) = (it.TryGetValue("my", out var ___) ? (___, true) : (default, false));
-			if (ok) {
-				dict my = default;
-				if ((null != val)) {
-					(my, ok) = (val is dict) ? (((dict)(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-				}
-				this.My = my;
 			}
 			return true;
 		}

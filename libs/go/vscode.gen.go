@@ -1011,9 +1011,6 @@ type StatusBarItemProperties struct {
 	// The identifier of a command to run on click. The command must be
 	// [known](#commands.getCommands).
 	Command string `json:"command,omitempty"`
-
-	// Free-form custom data, preserved across a roundtrip.
-	My dict `json:"my,omitempty"`
 }
 
 // An output channel is a container for readonly textual information.
@@ -1023,9 +1020,6 @@ type StatusBarItemProperties struct {
 type OutputChannelProperties struct {
 	// The human-readable name of this output channel.
 	Name func() string `json:"-"`
-
-	// Free-form custom data, preserved across a roundtrip.
-	My dict `json:"my,omitempty"`
 }
 
 func (me *impl) Window() Window {
@@ -1537,7 +1531,6 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 						var ok bool
 						var __0 QuickPickItem
 						if (nil != args[0]) {
-							__0 = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
 							ok = __0.populateFrom(args[0])
 							if !ok {
 								return nil, false
@@ -1638,7 +1631,6 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 						var ok bool
 						var __0 QuickPickItem
 						if (nil != args[0]) {
-							__0 = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
 							ok = __0.populateFrom(args[0])
 							if !ok {
 								return nil, false
@@ -1729,7 +1721,6 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 						var ok bool
 						var __0 QuickPickItem
 						if (nil != args[0]) {
-							__0 = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
 							ok = __0.populateFrom(args[0])
 							if !ok {
 								return nil, false
@@ -1774,7 +1765,6 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 			__idx__result = 0
 			for _, __item__result := range __coll__result {
 				var __val__result QuickPickItem
-				__val__result = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
 				ok = __val__result.populateFrom(__item__result)
 				if !ok {
 					return false
@@ -1831,7 +1821,6 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 						var ok bool
 						var __0 QuickPickItem
 						if (nil != args[0]) {
-							__0 = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
 							ok = __0.populateFrom(args[0])
 							if !ok {
 								return nil, false
@@ -2071,7 +2060,6 @@ func (me implWindow) State() func(func(WindowState)) {
 		var ok bool
 		var result WindowState
 		if (nil != payload) {
-			result = */*sorryButSuchIsCodeGenSometimes...*/new(WindowState)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -2104,7 +2092,6 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState)) func(fun
 			return ok
 		}
 		var _a_0_ WindowState
-		_a_0_ = */*sorryButSuchIsCodeGenSometimes...*/new(WindowState)
 		ok = _a_0_.populateFrom(args[0])
 		if !ok {
 			return false
@@ -2462,7 +2449,6 @@ func (me implEnv) Properties() func(func(EnvProperties)) {
 		var ok bool
 		var result EnvProperties
 		if (nil != payload) {
-			result = */*sorryButSuchIsCodeGenSometimes...*/new(EnvProperties)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -2585,7 +2571,6 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 			return ok
 		}
 		var _a_0_ WorkspaceFoldersChangeEvent
-		_a_0_ = */*sorryButSuchIsCodeGenSometimes...*/new(WorkspaceFoldersChangeEvent)
 		ok = _a_0_.populateFrom(args[0])
 		if !ok {
 			return false
@@ -2669,7 +2654,6 @@ func (me implWorkspace) WorkspaceFolders() func(func([]WorkspaceFolder)) {
 			__idx__result = 0
 			for _, __item__result := range __coll__result {
 				var __val__result WorkspaceFolder
-				__val__result = */*sorryButSuchIsCodeGenSometimes...*/new(WorkspaceFolder)
 				ok = __val__result.populateFrom(__item__result)
 				if !ok {
 					return false
@@ -2789,7 +2773,6 @@ func (me implWorkspace) Properties() func(func(WorkspaceProperties)) {
 		var ok bool
 		var result WorkspaceProperties
 		if (nil != payload) {
-			result = */*sorryButSuchIsCodeGenSometimes...*/new(WorkspaceProperties)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -2864,7 +2847,6 @@ func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEve
 			return ok
 		}
 		var _a_0_ DiagnosticChangeEvent
-		_a_0_ = */*sorryButSuchIsCodeGenSometimes...*/new(DiagnosticChangeEvent)
 		ok = _a_0_.populateFrom(args[0])
 		if !ok {
 			return false
@@ -3129,7 +3111,6 @@ func (me *StatusBarItem) Get() func(func(StatusBarItemProperties)) {
 		var ok bool
 		var result StatusBarItemProperties
 		if (nil != payload) {
-			result = */*sorryButSuchIsCodeGenSometimes...*/new(StatusBarItemProperties)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -3321,7 +3302,6 @@ func (me *OutputChannel) Get() func(func(OutputChannelProperties)) {
 		var ok bool
 		var result OutputChannelProperties
 		if (nil != payload) {
-			result = */*sorryButSuchIsCodeGenSometimes...*/new(OutputChannelProperties)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -3677,7 +3657,6 @@ func (me *WorkspaceFoldersChangeEvent) populateFrom(payload any) bool {
 			__idx__added = 0
 			for _, __item__added := range __coll__added {
 				var __val__added WorkspaceFolder
-				__val__added = */*sorryButSuchIsCodeGenSometimes...*/new(WorkspaceFolder)
 				ok = __val__added.populateFrom(__item__added)
 				if !ok {
 					return false
@@ -3704,7 +3683,6 @@ func (me *WorkspaceFoldersChangeEvent) populateFrom(payload any) bool {
 			__idx__removed = 0
 			for _, __item__removed := range __coll__removed {
 				var __val__removed WorkspaceFolder
-				__val__removed = */*sorryButSuchIsCodeGenSometimes...*/new(WorkspaceFolder)
 				ok = __val__removed.populateFrom(__item__removed)
 				if !ok {
 					return false
@@ -3764,7 +3742,6 @@ func (me *WorkspaceProperties) populateFrom(payload any) bool {
 			__idx__workspaceFolders = 0
 			for _, __item__workspaceFolders := range __coll__workspaceFolders {
 				var __val__workspaceFolders WorkspaceFolder
-				__val__workspaceFolders = */*sorryButSuchIsCodeGenSometimes...*/new(WorkspaceFolder)
 				ok = __val__workspaceFolders.populateFrom(__item__workspaceFolders)
 				if !ok {
 					return false
@@ -3905,17 +3882,6 @@ func (me *StatusBarItemProperties) populateFrom(payload any) bool {
 		}
 		me.Command = command
 	}
-	val, ok = it["my"]
-	if ok {
-		var my dict
-		if (nil != val) {
-			my, ok = val.(dict)
-			if !ok {
-				return false
-			}
-		}
-		me.My = my
-	}
 	return true
 }
 
@@ -3939,17 +3905,6 @@ func (me *OutputChannelProperties) populateFrom(payload any) bool {
 		me.Name = func() string {
 			return name
 		}
-	}
-	val, ok = it["my"]
-	if ok {
-		var my dict
-		if (nil != val) {
-			my, ok = val.(dict)
-			if !ok {
-				return false
-			}
-		}
-		me.My = my
 	}
 	return true
 }

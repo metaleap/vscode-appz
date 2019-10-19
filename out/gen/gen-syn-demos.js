@@ -73,15 +73,16 @@ class GenDemos {
         this.all["demosMenu"] = () => [
             _.iVar("items", { ValsOf: gen_syn_1.TypeRefPrim.String }),
             _.iSet(_.n("items"), _.eLit(allnames)),
-        ].concat(...this.genMenu(_, _.eLit("Dismissing this menu WILL end the prog."), _.eFunc([{ Name: "menuitem", Type: { Maybe: gen_syn_1.TypeRefPrim.String } }], null, _.iIf(_.oIsnt(_.n("menuitem")), [
-            _.eCall(_.n("quit"), _.eZilch()),
-        ], allnames.map(name => _.iIf(_.oEq(_.eLit(name), _.oDeref(_.n("menuitem"))), [
+        ].concat(...this.genMenu(_, _.eLit("This menu can be re-opened any time via our custom status-bar item."), _.eFunc([{ Name: "menuitem", Type: { Maybe: gen_syn_1.TypeRefPrim.String } }], null, _.iIf(_.oIs(_.n("menuitem")), allnames.map(name => _.iIf(_.oEq(_.eLit(name), _.oDeref(_.n("menuitem"))), [
             _.eCall(_.n(name)),
         ]))))));
         this.all["onUpAndRunning"] = () => ([
             _.eCall(_.n("subscribeToMiscEvents")),
-            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("CreateStatusBarItem")), _.eLit(0), _.eZilch()), _.eFunc([{ Name: "it", Type: { Maybe: { Name: "StatusBarItem" } } }], null, _.eCall(_.eCall(_.oDot(_.n("it"), _.n("Get"))), _.eFunc([{ Name: "props", Type: { Name: "StatusBarItemProperties" } }], null, _.iSet(_.oDot(_.n("props"), _.n(this.fld("Tooltip"))), _.eLit("Hi from {0}!", _.n("appName"))), _.iSet(_.oDot(_.n("props"), _.n(this.fld("Text"))), _.eLit("You clicked me 0 time(s).")), _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("editorLightBulb.foreground")), // editorLightBulbAutoFix.foreground editorLightBulb.foreground
-            _.iSet(_.oDot(_.n("props"), _.n(this.fld("Command"))), _.eLit("vsc_appz.main")), _.eCall(_.eCall(_.oDot(_.n("it"), _.n("Set")), _.n("props")), _.eFunc([], null, _.eCall(_.oDot(_.n("it"), _.n("Show")))))))))
+            _.iBlock(_.iVar("statusitem", { Maybe: { Name: "StatusBarItem" } }), _.iVar("clickcount", gen_syn_1.TypeRefPrim.Int), _.iSet(_.n("clickcount"), _.eLit(0)), _.iVar("mycmd", { From: [{ ValsOf: gen_syn_1.TypeRefPrim.Any }], To: gen_syn_1.TypeRefPrim.Any }), _.iSet(_.n("mycmd"), _.eFunc([{ Name: "_unused", Type: { ValsOf: gen_syn_1.TypeRefPrim.Any } }], gen_syn_1.TypeRefPrim.Any, _.iSet(_.n("clickcount"), _.eOp("+", _.eLit(1), _.n("clickcount"))), _.eCall(_.eCall(_.oDot(_.n("statusitem"), _.n("Get"))), _.eFunc([{ Name: "props", Type: { Name: "StatusBarItemProperties" } }], null, _.iSet(_.oDot(_.n("props"), _.n(this.fld("Text"))), _.eLit("You clicked me {0} time(s).", _.n("clickcount"))), _.iIf(_.oEq(_.eLit("editorLightBulbAutoFix.foreground"), _.oDot(_.n("props"), _.n(this.fld("Color")))), [
+                _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("editorLightBulb.foreground")),
+            ], [
+                _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("editorLightBulbAutoFix.foreground")),
+            ]), _.eCall(_.eCall(_.oDot(_.n("statusitem"), _.n("Set")), _.n("props")), _.n("demosMenu")))), _.iRet(_.eZilch()))), _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("RegisterCommand")), _.n("cmdName"), _.n("mycmd")), _.eFunc([{ Name: "_commandRegisteredAtThisPoint", Type: { Maybe: { Name: "Disposable" } } }], null, _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("CreateStatusBarItem")), _.eLit(0), _.eZilch()), _.eFunc([{ Name: "it", Type: { Maybe: { Name: "StatusBarItem" } } }], null, _.iSet(_.n("statusitem"), _.n("it")), _.iVar("props", { Name: "StatusBarItemProperties" }), _.iSet(_.n("props"), _.eNew({ Name: "StatusBarItemProperties" })), _.iSet(_.oDot(_.n("props"), _.n(this.fld("Tooltip"))), _.eLit("Hi from {0}!", _.n("appName"))), _.iSet(_.oDot(_.n("props"), _.n(this.fld("Text"))), _.eLit("You clicked me 0 time(s).")), _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("#597")), _.iSet(_.oDot(_.n("props"), _.n(this.fld("Command"))), _.n("cmdName")), _.eCall(_.eCall(_.oDot(_.n("statusitem"), _.n("Set")), _.n("props")), _.eFunc([], null, _.eCall(_.oDot(_.n("statusitem"), _.n("Show")))))))))),
         ]);
     }
     genDemos() {

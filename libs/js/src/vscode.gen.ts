@@ -1476,12 +1476,6 @@ export interface StatusBarItemProperties extends fromJson {
 
      */
     command?: string
-
-    /**
-     * Free-form custom data, preserved across a roundtrip.
-
-     */
-    my?: { [_: string]: any }
 }
 
 export function newStatusBarItemProperties (): StatusBarItemProperties {
@@ -1503,12 +1497,6 @@ export interface OutputChannelProperties extends fromJson {
 
      */
     Name: () => string
-
-    /**
-     * Free-form custom data, preserved across a roundtrip.
-
-     */
-    my?: { [_: string]: any }
 }
 
 export function newOutputChannelProperties (): OutputChannelProperties {
@@ -4374,17 +4362,6 @@ function StatusBarItemProperties_populateFrom(this: StatusBarItemProperties, pay
         }
         this.command = command
     }
-    [val, ok] = [it["my"], undefined !== it["my"]]
-    if (ok) {
-        let my: { [_: string]: any }
-        if ((undefined !== val && null !== val)) {
-            [my, ok] = [val as { [_: string]: any }, typeof val === "object"]
-            if (!ok) {
-                return false
-            }
-        }
-        this.my = my
-    }
     return true
 }
 
@@ -4408,17 +4385,6 @@ function OutputChannelProperties_populateFrom(this: OutputChannelProperties, pay
         this.Name = (): string => {
             return name
         }
-    }
-    [val, ok] = [it["my"], undefined !== it["my"]]
-    if (ok) {
-        let my: { [_: string]: any }
-        if ((undefined !== val && null !== val)) {
-            [my, ok] = [val as { [_: string]: any }, typeof val === "object"]
-            if (!ok) {
-                return false
-            }
-        }
-        this.my = my
     }
     return true
 }

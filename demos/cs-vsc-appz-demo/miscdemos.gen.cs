@@ -257,11 +257,9 @@ namespace VscAppzDemo {
 			QuickPickOptions opts = default;
 			opts = new QuickPickOptions();
 			opts.IgnoreFocusOut = true;
-			opts.PlaceHolder = "Dismissing this menu WILL end the prog.";
+			opts.PlaceHolder = "This menu can be re-opened any time via our custom status-bar item.";
 			vsc.Window.ShowQuickPick2(items, opts, null)((string menuitem) => {
-				if ((null == menuitem)) {
-					quit(null);
-				} else {
+				if ((null != menuitem)) {
 					if ("demo_promptToExit" == menuitem) {
 						demo_promptToExit();
 					}
@@ -303,16 +301,38 @@ namespace VscAppzDemo {
 		}
 		private static void onUpAndRunning() {
 			subscribeToMiscEvents();
-			vsc.Window.CreateStatusBarItem(0, null)((StatusBarItem it) => {
-				it.Get()((StatusBarItemProperties props) => {
-					props.Tooltip = strFmt("Hi from {0}!", appName);
-					props.Text = "You clicked me 0 time(s).";
-					props.Color = "editorLightBulb.foreground";
-					props.Command = "vsc_appz.main";
-					it.Set(props)(() => {
-						it.Show();
+			{
+				StatusBarItem statusitem = default;
+				int clickcount = default;
+				clickcount = 0;
+				Func<any[], any> mycmd = default;
+				mycmd = (any[] _unused) => {
+					clickcount = 1 + clickcount;
+					statusitem.Get()((StatusBarItemProperties props) => {
+						props.Text = strFmt("You clicked me {0} time(s).", clickcount);
+						if ("editorLightBulbAutoFix.foreground" == props.Color) {
+							props.Color = "editorLightBulb.foreground";
+						} else {
+							props.Color = "editorLightBulbAutoFix.foreground";
+						}
+						statusitem.Set(props)(demosMenu);
+					});
+					return null;
+				};
+				vsc.Commands.RegisterCommand(cmdName, mycmd)((Disposable _commandRegisteredAtThisPoint) => {
+					vsc.Window.CreateStatusBarItem(0, null)((StatusBarItem it) => {
+						statusitem = it;
+						StatusBarItemProperties props = default;
+						props = new StatusBarItemProperties();
+						props.Tooltip = strFmt("Hi from {0}!", appName);
+						props.Text = "You clicked me 0 time(s).";
+						props.Color = "#597";
+						props.Command = cmdName;
+						statusitem.Set(props)(() => {
+							statusitem.Show();
+						});
 					});
 				});
-			});
+			}
 		}
 }}

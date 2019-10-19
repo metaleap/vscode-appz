@@ -1503,12 +1503,6 @@ StatusBarItemProperties: class
     # JSON FLAGS: {"Name":"command","Required":false,"Excluded":false}
     Command: string
 
-    # my:
-    # Free-form custom data, preserved across a roundtrip.
-    #
-    # JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
-    My: ?dict
-
 
 
 
@@ -1523,12 +1517,6 @@ OutputChannelProperties: class
     #
     # JSON FLAGS: {"Name":"name","Required":false,"Excluded":true}
     Name: (->string)
-
-    # my:
-    # Free-form custom data, preserved across a roundtrip.
-    #
-    # JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
-    My: ?dict
 
 
 
@@ -4137,14 +4125,6 @@ StatusBarItemProperties·populateFrom: (payload:any -> bool)
             if !ok
                 return false
         this.Command = command
-    [val, ok] = it@?"my"
-    if ok
-        var my of ?dict
-        if =?val
-            [my, ok] = ((val)·(?dict))
-            if !ok
-                return false
-        this.My = my
     return true
 
 
@@ -4167,14 +4147,6 @@ OutputChannelProperties·populateFrom: (payload:any -> bool)
         this.Name = ( -> string)
             return name
         
-    [val, ok] = it@?"my"
-    if ok
-        var my of ?dict
-        if =?val
-            [my, ok] = ((val)·(?dict))
-            if !ok
-                return false
-        this.My = my
     return true
 
 

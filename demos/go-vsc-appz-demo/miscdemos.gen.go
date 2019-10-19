@@ -16,7 +16,6 @@ func demo_promptToExit() {
 func demo_Commands_GetCommands_and_ExecuteCommand() {
 	vsc.Commands().GetCommands(false)(func(items []string) {
 		var opts QuickPickOptions
-		opts = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickOptions)
 		opts.IgnoreFocusOut = true
 		opts.PlaceHolder = strFmt("Retrieved {0} command ID(s), pick one to execute or escape now:", len(items))
 		vsc.Window().ShowQuickPick2(items, &opts, nil)(func(item *string) {
@@ -85,7 +84,6 @@ func demo_Commands_RegisterCommand() {
 func demo_Languages_GetLanguages() {
 	vsc.Languages().GetLanguages()(func(items []string) {
 		var opts QuickPickOptions
-		opts = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickOptions)
 		opts.IgnoreFocusOut = true
 		opts.PlaceHolder = strFmt("Retrieved {0} language ID(s)", len(items))
 		vsc.Window().ShowQuickPick2(items, &opts, nil)(quit)
@@ -106,7 +104,6 @@ func demo_Env_Properties() {
 			items[6] = strFmt("Shell\t\t\t{0}", props.Shell)
 			items[7] = strFmt("UriScheme\t\t{0}", props.UriScheme)
 			var opts QuickPickOptions
-			opts = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickOptions)
 			opts.IgnoreFocusOut = true
 			opts.PlaceHolder = strFmt("Env has {0} properties:", len(items))
 			vsc.Window().ShowQuickPick2(items, &opts, nil)(quit)
@@ -123,7 +120,6 @@ func demo_Workspace_Properties() {
 			items[1] = strFmt("WorkspaceFile\t\t{0}", props.WorkspaceFile)
 			items[2] = strFmt("WorkspaceFolders\t{0}", props.WorkspaceFolders)
 			var opts QuickPickOptions
-			opts = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickOptions)
 			opts.IgnoreFocusOut = true
 			opts.PlaceHolder = strFmt("Workspace has {0} properties:", len(items))
 			vsc.Window().ShowQuickPick2(items, &opts, nil)(quit)
@@ -133,7 +129,6 @@ func demo_Workspace_Properties() {
 
 func demo_Window_ShowOpenDialog() {
 	var opts OpenDialogOptions
-	opts = */*sorryButSuchIsCodeGenSometimes...*/new(OpenDialogOptions)
 	opts.OpenLabel = "Note: won't actually read from specified file path(s)"
 	opts.Filters = make(map[string][]string, 2)
 	opts.Filters["All"] = []string{"*"}
@@ -155,7 +150,6 @@ func demo_Window_ShowOpenDialog() {
 
 func demo_Window_ShowSaveDialog() {
 	var opts SaveDialogOptions
-	opts = */*sorryButSuchIsCodeGenSometimes...*/new(SaveDialogOptions)
 	opts.SaveLabel = "Note: won't actually write to specified file path"
 	opts.Filters = make(map[string][]string, 2)
 	opts.Filters["All"] = []string{"*"}
@@ -210,24 +204,19 @@ func demo_Env_OpenExternal() {
 func demo_Window_ShowQuickPick() {
 	var items []QuickPickItem
 	items = make([]QuickPickItem, 4)
-	items[0] = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
 	items[0].Label = "One"
 	items[0].Description = "The first"
 	items[0].Detail = "Das erste"
-	items[1] = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
 	items[1].Label = "Two"
 	items[1].Description = "The second"
 	items[1].Detail = "Das zweite"
-	items[2] = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
 	items[2].Label = "Three"
 	items[2].Description = "The third"
 	items[2].Detail = "Das dritte"
-	items[3] = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickItem)
 	items[3].Label = "Four"
 	items[3].Description = "The fourth"
 	items[3].Detail = "Das vierte"
 	var opts QuickPickOptions
-	opts = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickOptions)
 	opts.IgnoreFocusOut = true
 	opts.MatchOnDescription = true
 	opts.MatchOnDetail = true
@@ -266,13 +255,10 @@ func demosMenu() {
 	var items []string
 	items = []string{"demo_promptToExit", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_ShowInputBox"}
 	var opts QuickPickOptions
-	opts = */*sorryButSuchIsCodeGenSometimes...*/new(QuickPickOptions)
 	opts.IgnoreFocusOut = true
-	opts.PlaceHolder = "Dismissing this menu WILL end the prog."
+	opts.PlaceHolder = "This menu can be re-opened any time via our custom status-bar item."
 	vsc.Window().ShowQuickPick2(items, &opts, nil)(func(menuitem *string) {
-		if (nil == menuitem) {
-			quit(nil)
-		} else {
+		if (nil != menuitem) {
 			if "demo_promptToExit" == (*menuitem) {
 				demo_promptToExit()
 			}
@@ -315,16 +301,37 @@ func demosMenu() {
 
 func onUpAndRunning() {
 	subscribeToMiscEvents()
-	vsc.Window().CreateStatusBarItem(0, nil)(func(it *StatusBarItem) {
-		it.Get()(func(props StatusBarItemProperties) {
-			props.Tooltip = strFmt("Hi from {0}!", appName)
-			props.Text = "You clicked me 0 time(s)."
-			props.Color = "editorLightBulb.foreground"
-			props.Command = "vsc_appz.main"
-			it.Set(props)(func() {
-				it.Show()
+	{
+		var statusitem *StatusBarItem
+		var clickcount int
+		clickcount = 0
+		var mycmd func([]any) any
+		mycmd = func(_unused []any) any {
+			clickcount = 1 + clickcount
+			statusitem.Get()(func(props StatusBarItemProperties) {
+				props.Text = strFmt("You clicked me {0} time(s).", clickcount)
+				if "editorLightBulbAutoFix.foreground" == props.Color {
+					props.Color = "editorLightBulb.foreground"
+				} else {
+					props.Color = "editorLightBulbAutoFix.foreground"
+				}
+				statusitem.Set(props)(demosMenu)
+			})
+			return nil
+		}
+		vsc.Commands().RegisterCommand(cmdName, mycmd)(func(_commandRegisteredAtThisPoint *Disposable) {
+			vsc.Window().CreateStatusBarItem(0, nil)(func(it *StatusBarItem) {
+				statusitem = it
+				var props StatusBarItemProperties
+				props.Tooltip = strFmt("Hi from {0}!", appName)
+				props.Text = "You clicked me 0 time(s)."
+				props.Color = "#597"
+				props.Command = cmdName
+				statusitem.Set(props)(func() {
+					statusitem.Show()
+				})
 			})
 		})
-	})
+	}
 }
 

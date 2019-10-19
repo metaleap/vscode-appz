@@ -71,7 +71,7 @@ class Prep {
                                     if (!arg.isFromRetThenable)
                                         isargout = !isinfunc;
                                 }
-            if ((struct.isOutgoing = struct.isOutgoing || isargout) && (struct.isIncoming = struct.isIncoming || isargin)) {
+            if (((struct.isOutgoing = struct.isOutgoing || isargout) && (struct.isIncoming = struct.isIncoming || isargin)) && !(struct.isPropsOfStruct || struct.isPropsOfIface)) {
                 const fieldname = pickName('my', ['', 'tags', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields);
                 if (!fieldname)
                     throw struct;

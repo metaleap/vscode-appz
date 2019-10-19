@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true })
 
 let win
 exports.appName = "nodejs-vsc-appz-demo"
+exports.cmdName = exports.appName + new Date().getTime()
 
 function main() {
     vscAppz.Main(vscode => {

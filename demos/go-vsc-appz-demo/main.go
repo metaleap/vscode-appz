@@ -14,6 +14,8 @@ type any = interface{}
 
 const appName = "go-vsc-appz-demo"
 
+var cmdName = appName + strconv.FormatInt(time.Now().UnixNano(), 10)
+
 var vsc Vscode
 var win Window
 

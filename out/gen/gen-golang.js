@@ -70,6 +70,12 @@ class Gen extends gen_syn.Gen {
             const ivar = it;
             if (ivar && ivar.Name && ivar.Type)
                 return this.ln(() => this.s("var ", ivar.Name, " ").emitTypeRef(ivar.Type));
+            const iset = it;
+            if (iset && iset.SetTo) {
+                const enew = iset.SetTo;
+                if (enew && (!this.typeMaybe(enew.New)) && this.typeOwn(enew.New))
+                    return this;
+            }
             const idictdel = it;
             if (idictdel && idictdel.DelFrom && idictdel.DelWhat)
                 return this.ln(() => this.s("delete(").emitExpr(idictdel.DelFrom).s(", ").emitExpr(idictdel.DelWhat).s(')'));
