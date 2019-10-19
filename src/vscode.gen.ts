@@ -479,6 +479,34 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
+				case "appzObjPropsGet": {
+					return Promise.resolve({
+						alignment: thisStatusBarItem.alignment,
+						priority: thisStatusBarItem.priority,
+						text: thisStatusBarItem.text,
+						tooltip: thisStatusBarItem.tooltip,
+						color: thisStatusBarItem.color,
+						command: thisStatusBarItem.command,
+					})
+				}
+				case "appzObjPropsSet": {
+					const allUpdates = msg.data['allUpdates'] as { [_:string]: any }
+					if (!allUpdates)
+						return Promise.reject(msg.data)
+					const prop_text = allUpdates["text"] as string
+					if (prop_text !== undefined)
+						thisStatusBarItem.text = prop_text
+					const prop_tooltip = allUpdates["tooltip"] as string
+					if (prop_tooltip !== undefined)
+						thisStatusBarItem.tooltip = (!(prop_tooltip && prop_tooltip.length)) ? undefined : prop_tooltip
+					const prop_color = allUpdates["color"] as string
+					if (prop_color !== undefined)
+						thisStatusBarItem.color = (!(prop_color && prop_color.length)) ? undefined : prop_color.startsWith("#") ? prop_color : new vscode.ThemeColor(prop_color)
+					const prop_command = allUpdates["command"] as string
+					if (prop_command !== undefined)
+						thisStatusBarItem.command = (!(prop_command && prop_command.length)) ? undefined : prop_command
+					return Promise.resolve()
+				}
 				default:
 					throw methodname
 			}
@@ -525,6 +553,11 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const retdisp = ret as any as vscode.Disposable
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "appzObjPropsGet": {
+					return Promise.resolve({
+						name: thisOutputChannel.name,
+					})
 				}
 				default:
 					throw methodname

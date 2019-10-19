@@ -554,6 +554,11 @@ export function typeObj(typeSpec: TypeSpec): [string, TypeSpec][] {
     return (tobj && tobj.Members) ? tobj.Members : null
 }
 
+export function typeSumOf(typeSpec: TypeSpec, sumOf: TypeSpec): boolean {
+    const tsum = typeSum(typeSpec)
+    return tsum && tsum.length && tsum.some(_ => _ === sumOf)
+}
+
 export function typePromOf(typeSpec: TypeSpec, promOf: TypeSpec): boolean {
     const tprom = typeProm(typeSpec)
     return (tprom && tprom.length && tprom[0] === promOf)

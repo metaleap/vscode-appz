@@ -76,6 +76,7 @@ class Gen extends gen.Gen {
                 src += `\t\t\t\tthrow "Called ${this.pkg}.${it.name}." + methodname + " for an already disposed-and-forgotten instance"\n`;
                 src += "\t\t\tswitch (methodname) {\n";
                 let tfun;
+                let hasgets = false, hassets = false;
                 for (const mem of it.fields)
                     if (tfun = gen.typeFun(mem.typeSpec)) {
                         const args = tfun[0].map((_, i) => gen.argFrom(_, mem.fromOrig.parameters[i])).filter(_ => !_.isFromRetThenable);
@@ -85,6 +86,30 @@ class Gen extends gen.Gen {
                         src += this.retArgsSrc(`this${it.name}.${mem.name}`, args);
                         src += "\t\t\t\t}\n";
                     }
+                    else
+                        [hasgets, hassets] = [true, hassets || !mem.readOnly];
+                if (hasgets) {
+                    src += '\t\t\t\tcase "appzObjPropsGet": {\n';
+                    src += "\t\t\t\t\treturn Promise.resolve({\n";
+                    for (const prop of it.fields.filter(_ => !gen.typeFun(_.typeSpec)))
+                        src += `\t\t\t\t\t\t${prop.name}: this${it.name}.${prop.name},\n`;
+                    src += "\t\t\t\t\t})\n";
+                    src += "\t\t\t\t}\n";
+                }
+                if (hassets) {
+                    src += '\t\t\t\tcase "appzObjPropsSet": {\n';
+                    src += "\t\t\t\t\tconst allUpdates = msg.data['allUpdates'] as { [_:string]: any }\n";
+                    src += "\t\t\t\t\tif (!allUpdates)\n\t\t\t\t\t\treturn Promise.reject(msg.data)\n";
+                    for (const prop of it.fields.filter(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec))) {
+                        src += `\t\t\t\t\tconst prop_${prop.name} = allUpdates["${prop.name}"] as ${this.typeSpec(prop.typeSpec)}\n`;
+                        src += `\t\t\t\t\tif (prop_${prop.name} !== undefined)\n\t\t\t\t\t\tthis${it.name}.${prop.name} = `
+                            + ((!gen.typeSumOf(prop.typeSpec, 'ThemeColor')) ? ((!gen.typeSumOf(prop.typeSpec, gen.ScriptPrimType.Undefined)) ?
+                                `prop_${prop.name}` : `(!(prop_${prop.name} && prop_${prop.name}.length)) ? undefined : prop_${prop.name}`) : (`(!(prop_${prop.name} && prop_${prop.name}.length)) ? undefined : prop_${prop.name}.startsWith("#") ? prop_${prop.name} : new ${this.pkg}.ThemeColor(prop_${prop.name})`))
+                            + "\n";
+                    }
+                    src += "\t\t\t\t\treturn Promise.resolve()\n";
+                    src += "\t\t\t\t}\n";
+                }
                 src += "\t\t\t\tdefault:\n";
                 src += "\t\t\t\t\tthrow methodname\n";
                 src += "\t\t\t}\n";

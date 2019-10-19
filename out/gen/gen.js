@@ -401,6 +401,11 @@ function typeObj(typeSpec) {
     return (tobj && tobj.Members) ? tobj.Members : null;
 }
 exports.typeObj = typeObj;
+function typeSumOf(typeSpec, sumOf) {
+    const tsum = typeSum(typeSpec);
+    return tsum && tsum.length && tsum.some(_ => _ === sumOf);
+}
+exports.typeSumOf = typeSumOf;
 function typePromOf(typeSpec, promOf) {
     const tprom = typeProm(typeSpec);
     return (tprom && tprom.length && tprom[0] === promOf);

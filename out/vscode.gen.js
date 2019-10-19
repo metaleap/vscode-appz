@@ -462,6 +462,34 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
+                case "appzObjPropsGet": {
+                    return Promise.resolve({
+                        alignment: thisStatusBarItem.alignment,
+                        priority: thisStatusBarItem.priority,
+                        text: thisStatusBarItem.text,
+                        tooltip: thisStatusBarItem.tooltip,
+                        color: thisStatusBarItem.color,
+                        command: thisStatusBarItem.command,
+                    });
+                }
+                case "appzObjPropsSet": {
+                    const allUpdates = msg.data['allUpdates'];
+                    if (!allUpdates)
+                        return Promise.reject(msg.data);
+                    const prop_text = allUpdates["text"];
+                    if (prop_text !== undefined)
+                        thisStatusBarItem.text = prop_text;
+                    const prop_tooltip = allUpdates["tooltip"];
+                    if (prop_tooltip !== undefined)
+                        thisStatusBarItem.tooltip = (!(prop_tooltip && prop_tooltip.length)) ? undefined : prop_tooltip;
+                    const prop_color = allUpdates["color"];
+                    if (prop_color !== undefined)
+                        thisStatusBarItem.color = (!(prop_color && prop_color.length)) ? undefined : prop_color.startsWith("#") ? prop_color : new vscode.ThemeColor(prop_color);
+                    const prop_command = allUpdates["command"];
+                    if (prop_command !== undefined)
+                        thisStatusBarItem.command = (!(prop_command && prop_command.length)) ? undefined : prop_command;
+                    return Promise.resolve();
+                }
                 default:
                     throw methodname;
             }
@@ -508,6 +536,11 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const retdisp = ret;
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "appzObjPropsGet": {
+                    return Promise.resolve({
+                        name: thisOutputChannel.name,
+                    });
                 }
                 default:
                     throw methodname;
