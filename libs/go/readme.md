@@ -30,8 +30,10 @@ func Main(main func(Vscode), stdIn io.Reader, stdOut io.Writer)
 ```
 Vsc creates a `Vscode` implementation that communicates via the specified input
 and output streams (with `stdIn` defaulting to `os.Stdin` and `stdOut`
-defaulting to `os.Stdout`), then loops forever to never `return`. `main` ──
-called whenever the counterparty demands, which usually means once at startup.
+defaulting to `os.Stdout`), then loops forever to never `return`.
+
+`main` ── called whenever the counterparty demands, which usually means once at
+startup.
 
 #### type Cancel
 
