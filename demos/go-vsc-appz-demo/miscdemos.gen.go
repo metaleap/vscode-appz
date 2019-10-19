@@ -20,7 +20,7 @@ func demo_Commands_GetCommands_and_ExecuteCommand() {
 		opts.PlaceHolder = strFmt("Retrieved {0} command ID(s), pick one to execute or escape now:", len(items))
 		vsc.Window().ShowQuickPick2(items, &opts, nil)(func(item *string) {
 			if (nil == item) {
-				vsc.Window().ShowWarningMessage1("Command selection cancelled, bye now!", nil)(quit)
+				vsc.Window().ShowWarningMessage1("Command selection cancelled!", nil)
 			} else {
 				var opts2 *InputBoxOptions
 				opts2 = new(InputBoxOptions)
@@ -28,7 +28,7 @@ func demo_Commands_GetCommands_and_ExecuteCommand() {
 				opts2.PlaceHolder = strFmt("Any param for `{0}` command? Else leave blank.", *item)
 				vsc.Window().ShowInputBox(opts2, nil)(func(cmdarg *string) {
 					if (nil == cmdarg) {
-						vsc.Window().ShowWarningMessage1("You cancelled, bye now!", nil)(quit)
+						vsc.Window().ShowWarningMessage1("Cancelled text input!", nil)
 					} else {
 						var cmdargs []any
 						if "" != (*cmdarg) {
@@ -36,7 +36,7 @@ func demo_Commands_GetCommands_and_ExecuteCommand() {
 							cmdargs[0] = *cmdarg
 						}
 						vsc.Commands().ExecuteCommand(*item, cmdargs)(func(ret any) {
-							vsc.Window().ShowInformationMessage1(strFmt("Command result was: {0}", ret), nil)(quit)
+							vsc.Window().ShowInformationMessage1(strFmt("Command result was: `{0}`, merci!", ret), nil)
 						})
 					}
 				})
@@ -53,7 +53,7 @@ func demo_Commands_RegisterCommand() {
 	opts.Prompt = "Enter your command name. The command will accept a single text input and return a result built from it."
 	vsc.Window().ShowInputBox(opts, nil)(func(cmdname *string) {
 		if (nil == cmdname) {
-			vsc.Window().ShowWarningMessage1("You cancelled, bye now!", nil)(quit)
+			vsc.Window().ShowWarningMessage1("Cancelled text input!", nil)
 		} else {
 			vsc.Commands().RegisterCommand(*cmdname, func(cmdargs []any) any {
 				vsc.Window().SetStatusBarMessage1(strFmt("Command `{0}` invoked with: `{1}`", *cmdname, cmdargs[0]), 4242)
@@ -66,13 +66,13 @@ func demo_Commands_RegisterCommand() {
 				opts2.Value = strFmt("Enter input to command `{0}` here", *cmdname)
 				vsc.Window().ShowInputBox(opts2, nil)(func(cmdarg *string) {
 					if (nil == cmdarg) {
-						vsc.Window().ShowWarningMessage1("You cancelled, bye now!", nil)(quit)
+						vsc.Window().ShowWarningMessage1("Cancelled text input!", nil)
 					} else {
 						var cmdargs2 []any
 						cmdargs2 = make([]any, 1)
 						cmdargs2[0] = *cmdarg
 						vsc.Commands().ExecuteCommand(*cmdname, cmdargs2)(func(ret any) {
-							vsc.Window().ShowInformationMessage1(strFmt("Command result: {0}", ret), nil)(quit)
+							vsc.Window().ShowInformationMessage1(strFmt("Command result: `{0}`, merci!", ret), nil)
 						})
 					}
 				})
@@ -86,7 +86,7 @@ func demo_Languages_GetLanguages() {
 		var opts QuickPickOptions
 		opts.IgnoreFocusOut = true
 		opts.PlaceHolder = strFmt("Retrieved {0} language ID(s)", len(items))
-		vsc.Window().ShowQuickPick2(items, &opts, nil)(quit)
+		vsc.Window().ShowQuickPick2(items, &opts, nil)(nil)
 	})
 }
 
@@ -106,7 +106,7 @@ func demo_Env_Properties() {
 			var opts QuickPickOptions
 			opts.IgnoreFocusOut = true
 			opts.PlaceHolder = strFmt("Env has {0} properties:", len(items))
-			vsc.Window().ShowQuickPick2(items, &opts, nil)(quit)
+			vsc.Window().ShowQuickPick2(items, &opts, nil)(nil)
 		}
 	})
 }
@@ -122,7 +122,7 @@ func demo_Workspace_Properties() {
 			var opts QuickPickOptions
 			opts.IgnoreFocusOut = true
 			opts.PlaceHolder = strFmt("Workspace has {0} properties:", len(items))
-			vsc.Window().ShowQuickPick2(items, &opts, nil)(quit)
+			vsc.Window().ShowQuickPick2(items, &opts, nil)(nil)
 		}
 	})
 }
@@ -139,11 +139,10 @@ func demo_Window_ShowOpenDialog() {
 		opts.CanSelectMany = true
 	}
 	vsc.Window().ShowOpenDialog(opts)(func(filepaths []string) {
-		statusNoticeQuit()
 		if (nil == filepaths) {
-			vsc.Window().ShowWarningMessage1("Cancelled File-Open dialog, bye now!", nil)(quit)
+			vsc.Window().ShowWarningMessage1("Cancelled File-Open dialog!", nil)
 		} else {
-			vsc.Window().ShowInformationMessage1(strFmt("Selected {0} file path(s), bye now!", len(filepaths)), nil)(quit)
+			vsc.Window().ShowInformationMessage1(strFmt("Selected {0} file path(s), merci!", len(filepaths)), nil)
 		}
 	})
 }
@@ -155,11 +154,10 @@ func demo_Window_ShowSaveDialog() {
 	opts.Filters["All"] = []string{"*"}
 	opts.Filters["Dummy Filter"] = []string{"dummy", "demo"}
 	vsc.Window().ShowSaveDialog(opts)(func(filepath *string) {
-		statusNoticeQuit()
 		if (nil == filepath) {
-			vsc.Window().ShowWarningMessage1("Cancelled File-Save dialog, bye now!", nil)(quit)
+			vsc.Window().ShowWarningMessage1("Cancelled File-Save dialog!", nil)
 		} else {
-			vsc.Window().ShowInformationMessage1(strFmt("Selected file path `{0}`, bye now!", *filepath), nil)(quit)
+			vsc.Window().ShowInformationMessage1(strFmt("Selected file path `{0}`, merci!", *filepath), nil)
 		}
 	})
 }
@@ -170,11 +168,10 @@ func demo_Window_ShowWorkspaceFolderPick() {
 	opts.IgnoreFocusOut = true
 	opts.PlaceHolder = "Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side."
 	vsc.Window().ShowWorkspaceFolderPick(opts)(func(pickedfolder *WorkspaceFolder) {
-		statusNoticeQuit()
 		if (nil == pickedfolder) {
-			vsc.Window().ShowWarningMessage1("Cancelled pick input, bye now!", nil)(quit)
+			vsc.Window().ShowWarningMessage1("Cancelled pick input!", nil)
 		} else {
-			vsc.Window().ShowInformationMessage1(strFmt("Selected `{0}` located at `{1}`, bye now!", pickedfolder.Name, pickedfolder.Uri), nil)(quit)
+			vsc.Window().ShowInformationMessage1(strFmt("Selected `{0}` located at `{1}`, merci!", pickedfolder.Name, pickedfolder.Uri), nil)
 		}
 	})
 }
@@ -183,11 +180,11 @@ func demo_Env_OpenExternal() {
 	var opts *InputBoxOptions
 	opts = new(InputBoxOptions)
 	opts.IgnoreFocusOut = true
-	opts.Value = "http://foo.bar/baz"
+	opts.Value = "http://github.com/metaleap/vscode-appz"
 	opts.Prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."
 	vsc.Window().ShowInputBox(opts, nil)(func(uri *string) {
 		if (nil == uri) {
-			vsc.Window().ShowWarningMessage1("You cancelled, bye now!", nil)(quit)
+			vsc.Window().ShowWarningMessage1("Cancelled text input!", nil)
 		} else {
 			vsc.Env().OpenExternal(*uri)(func(ok bool) {
 				var did string
@@ -195,7 +192,7 @@ func demo_Env_OpenExternal() {
 				if !ok {
 					did = did  +  " not"
 				}
-				vsc.Window().ShowInformationMessage1(strFmt("{0} succeed in opening `{1}`, bye now!", did, *uri), nil)(quit)
+				vsc.Window().ShowInformationMessage1(strFmt("{0} succeed in opening `{1}`, merci!", did, *uri), nil)
 			})
 		}
 	})
@@ -226,11 +223,10 @@ func demo_Window_ShowQuickPick() {
 		return nil
 	}
 	vsc.Window().ShowQuickPick3(items, opts, cancelIn(42))(func(pickeditems []QuickPickItem) {
-		statusNoticeQuit()
 		if (nil == pickeditems) {
-			vsc.Window().ShowWarningMessage1("Cancelled pick input, bye now!", nil)(quit)
+			vsc.Window().ShowWarningMessage1("Cancelled pick input!", nil)
 		} else {
-			vsc.Window().ShowInformationMessage1(strFmt("You picked {0} item(s), bye now!", len(pickeditems)), nil)(quit)
+			vsc.Window().ShowInformationMessage1(strFmt("You picked {0} item(s), merci!", len(pickeditems)), nil)
 		}
 	})
 }
@@ -245,10 +241,6 @@ func subscribeToMiscEvents() {
 	vsc.Languages().OnDidChangeDiagnostics(func(evt DiagnosticChangeEvent) {
 		vsc.Window().SetStatusBarMessage1(strFmt("Diag(s) changed for {0} file path(s).", len(evt.Uris)), 4242)
 	})
-}
-
-func statusNoticeQuit() {
-	vsc.Window().SetStatusBarMessage1("Reacting to the 'bye now' WILL end the prog.", 4242)
 }
 
 func demosMenu() {

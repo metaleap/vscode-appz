@@ -114,7 +114,6 @@
   - [Hide()](#M-VscAppz-OutputChannel-Hide 'VscAppz.OutputChannel.Hide')
   - [Show(preserveFocus)](#M-VscAppz-OutputChannel-Show-System-Nullable{System-Boolean}- 'VscAppz.OutputChannel.Show(System.Nullable{System.Boolean})')
 - [OutputChannelProperties](#T-VscAppz-OutputChannelProperties 'VscAppz.OutputChannelProperties')
-  - [My](#F-VscAppz-OutputChannelProperties-My 'VscAppz.OutputChannelProperties.My')
   - [Name](#F-VscAppz-OutputChannelProperties-Name 'VscAppz.OutputChannelProperties.Name')
 - [QuickPickItem](#T-VscAppz-QuickPickItem 'VscAppz.QuickPickItem')
   - [AlwaysShow](#F-VscAppz-QuickPickItem-AlwaysShow 'VscAppz.QuickPickItem.AlwaysShow')
@@ -148,7 +147,6 @@
   - [Alignment](#F-VscAppz-StatusBarItemProperties-Alignment 'VscAppz.StatusBarItemProperties.Alignment')
   - [Color](#F-VscAppz-StatusBarItemProperties-Color 'VscAppz.StatusBarItemProperties.Color')
   - [Command](#F-VscAppz-StatusBarItemProperties-Command 'VscAppz.StatusBarItemProperties.Command')
-  - [My](#F-VscAppz-StatusBarItemProperties-My 'VscAppz.StatusBarItemProperties.My')
   - [Priority](#F-VscAppz-StatusBarItemProperties-Priority 'VscAppz.StatusBarItemProperties.Priority')
   - [Text](#F-VscAppz-StatusBarItemProperties-Text 'VscAppz.StatusBarItemProperties.Text')
   - [Tooltip](#F-VscAppz-StatusBarItemProperties-Tooltip 'VscAppz.StatusBarItemProperties.Tooltip')
@@ -1887,13 +1885,6 @@ An output channel is a container for readonly textual information.
 To get an instance of an `OutputChannel` use
 [createOutputChannel](#window.createOutputChannel).
 
-<a name='F-VscAppz-OutputChannelProperties-My'></a>
-### My `constants`
-
-##### Summary
-
-Free-form custom data, preserved across a roundtrip.
-
 <a name='F-VscAppz-OutputChannelProperties-Name'></a>
 ### Name `constants`
 
@@ -2181,13 +2172,6 @@ The foreground color for this entry.
 
 The identifier of a command to run on click. The command must be
 [known](#commands.getCommands).
-
-<a name='F-VscAppz-StatusBarItemProperties-My'></a>
-### My `constants`
-
-##### Summary
-
-Free-form custom data, preserved across a roundtrip.
 
 <a name='F-VscAppz-StatusBarItemProperties-Priority'></a>
 ### Priority `constants`

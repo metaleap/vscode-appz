@@ -1275,13 +1275,6 @@ export interface StatusBarItemProperties extends fromJson {
 
      */
     command?: string;
-    /**
-     * Free-form custom data, preserved across a roundtrip.
-
-     */
-    my?: {
-        [_: string]: any;
-    };
 }
 export declare function newStatusBarItemProperties(): StatusBarItemProperties;
 /**
@@ -1297,13 +1290,6 @@ export interface OutputChannelProperties extends fromJson {
 
      */
     Name: () => string;
-    /**
-     * Free-form custom data, preserved across a roundtrip.
-
-     */
-    my?: {
-        [_: string]: any;
-    };
 }
 export declare function newOutputChannelProperties(): OutputChannelProperties;
 export declare abstract class impl implements Vscode {

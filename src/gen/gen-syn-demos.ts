@@ -32,7 +32,7 @@ export class GenDemos {
                 this.genDemoOfStrListMenu(_, "Commands", "GetCommands", "command ID(s), pick one to execute or escape now:", [_.eLit(false)],
                     _.eFunc([{ Name: "item", Type: { Maybe: TypeRefPrim.String } }], null,
                         _.iIf(_.oIsnt(_.n("item")), [
-                            this.genByeMsg(_, "Command selection cancelled, bye now!"),
+                            this.genByeMsg(_, "Command selection cancelled!"),
                         ], this.genInput(_, "opts2", "cmdarg", [{ k: "PlaceHolder", v: _.eLit("Any param for `{0}` command? Else leave blank.", _.oDeref(_.n("item"))) }],
                             _.iVar("cmdargs", { ValsOf: TypeRefPrim.Any }),
                             _.iIf(_.oNeq(_.eLit(""), _.oDeref(_.n("cmdarg"))), [
@@ -42,7 +42,7 @@ export class GenDemos {
                             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("ExecuteCommand")),
                                 _.oDeref(_.n("item")), _.n("cmdargs"),
                             ), _.eFunc([{ Name: "ret", Type: TypeRefPrim.Any }], null,
-                                this.genInfoMsg(_, _.eLit("Command result was: {0}", _.n("ret"))),
+                                this.genInfoMsg(_, _.eLit("Command result was: `{0}`, merci!", _.n("ret"))),
                             ))
                         )),
                     ),
@@ -63,7 +63,7 @@ export class GenDemos {
                             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("ExecuteCommand")),
                                 _.oDeref(_.n("cmdname")), _.n("cmdargs2")),
                                 _.eFunc([{ Name: "ret", Type: TypeRefPrim.Any }], null,
-                                    this.genInfoMsg(_, _.eLit("Command result: {0}", _.n("ret"))),
+                                    this.genInfoMsg(_, _.eLit("Command result: `{0}`, merci!", _.n("ret"))),
                                 ))
                         ),
                     ))
@@ -91,17 +91,16 @@ export class GenDemos {
                 _.iSet(_.oDot(_.n("opts"), _.n(this.fld("PlaceHolder"))), _.eLit("Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side.")),
                 _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("ShowWorkspaceFolderPick")), _.n("opts")),
                     _.eFunc([{ Name: "pickedfolder", Type: { Maybe: { Name: "WorkspaceFolder" } } }], null,
-                        _.eCall(_.n("statusNoticeQuit")),
                         _.iIf(_.oIsnt(_.n("pickedfolder")), [
-                            this.genByeMsg(_, "Cancelled pick input, bye now!"),
+                            this.genByeMsg(_, "Cancelled pick input!"),
                         ], [
-                            this.genInfoMsg(_, _.eLit("Selected `{0}` located at `{1}`, bye now!", _.oDot(_.n("pickedfolder"), _.n(this.fld("Name"))), _.oDot(_.n("pickedfolder"), _.n(this.fld("Uri"))))),
+                            this.genInfoMsg(_, _.eLit("Selected `{0}` located at `{1}`, merci!", _.oDot(_.n("pickedfolder"), _.n(this.fld("Name"))), _.oDot(_.n("pickedfolder"), _.n(this.fld("Uri"))))),
                         ]),
                     )
                 )
             ],
 
-            "demo_Env_OpenExternal": () => this.genInput(_, "opts", "uri", [{ k: "Value", v: _.eLit("http://foo.bar/baz") }, { k: "Prompt", v: _.eLit("Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol.") }],
+            "demo_Env_OpenExternal": () => this.genInput(_, "opts", "uri", [{ k: "Value", v: _.eLit("http://github.com/metaleap/vscode-appz") }, { k: "Prompt", v: _.eLit("Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol.") }],
                 _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Env"))), _.n("OpenExternal")), _.oDeref(_.n("uri"))),
                     _.eFunc([{ Name: "ok", Type: TypeRefPrim.Bool }], null,
                         _.iVar("did", TypeRefPrim.String),
@@ -109,7 +108,7 @@ export class GenDemos {
                         _.iIf(_.oNot(_.n("ok")), [
                             _.iSet(_.n("did"), _.eOp(" + ", _.n("did"), _.eLit(" not")))
                         ]),
-                        this.genInfoMsg(_, _.eLit("{0} succeed in opening `{1}`, bye now!", _.n("did"), _.oDeref(_.n("uri")))),
+                        this.genInfoMsg(_, _.eLit("{0} succeed in opening `{1}`, merci!", _.n("did"), _.oDeref(_.n("uri")))),
                     )
                 )
             ),
@@ -147,11 +146,10 @@ export class GenDemos {
                     _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowQuickPick", 3))),
                         _.n("items"), _.n("opts"), _.eCall(_.n("cancelIn"), _.eLit(42)),
                     ), _.eFunc([{ Name: "pickeditems", Type: { ValsOf: { Name: "QuickPickItem" } } }], null,
-                        _.eCall(_.n("statusNoticeQuit")),
                         _.iIf(_.oIsnt(_.n("pickeditems")), [
-                            this.genByeMsg(_, "Cancelled pick input, bye now!"),
+                            this.genByeMsg(_, "Cancelled pick input!"),
                         ], [
-                            this.genInfoMsg(_, _.eLit("You picked {0} item(s), bye now!", _.eLen(_.n("pickeditems"), true))),
+                            this.genInfoMsg(_, _.eLit("You picked {0} item(s), merci!", _.eLen(_.n("pickeditems"), true))),
                         ]),
                     ))
                 )
@@ -162,10 +160,6 @@ export class GenDemos {
                 { ns: "Window", evtName: "OnDidChangeWindowState", evtArgs: "WindowState", msg: _.eLit("Am I focused? {0}.", _.oDot(_.n("evt"), _.n(this.fld("Focused")))) },
                 { ns: "Languages", evtName: "OnDidChangeDiagnostics", evtArgs: "DiagnosticChangeEvent", msg: _.eLit("Diag(s) changed for {0} file path(s).", _.eLen(_.oDot(_.n("evt"), _.n(this.fld("Uris"))), true)) },
             ]),
-
-            "statusNoticeQuit": () => [
-                this.genStatusMsg(_, _.eLit("Reacting to the 'bye now' WILL end the prog.")),
-            ],
 
         }
 
@@ -257,22 +251,21 @@ export class GenDemos {
             ])),
             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(`Show${which}Dialog`)), _.n("opts")),
                 _.eFunc([{ Name: fp, Type: mult ? { ValsOf: TypeRefPrim.String } : { Maybe: TypeRefPrim.String } }], null,
-                    _.eCall(_.n("statusNoticeQuit")),
                     _.iIf(_.oIsnt(_.n(fp)), [
-                        this.genByeMsg(_, `Cancelled File-${which} dialog, bye now!`),
+                        this.genByeMsg(_, `Cancelled File-${which} dialog!`),
                     ], [
-                        this.genInfoMsg(_, _.eLit("Selected " + (mult ? "{0} file path(s)" : "file path `{0}`") + ", bye now!", mult ? (_.eLen(_.n(fp), true)) : _.oDeref(_.n(fp)))),
+                        this.genInfoMsg(_, _.eLit("Selected " + (mult ? "{0} file path(s)" : "file path `{0}`") + ", merci!", mult ? (_.eLen(_.n(fp), true)) : _.oDeref(_.n(fp)))),
                     ]),
                 ))
         ]
     }
 
     genByeMsg(_: Builder, msg: string): Instr {
-        return _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowWarningMessage", 1))), _.eLit(msg), _.eZilch()), _.n("quit"))
+        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowWarningMessage", 1))), _.eLit(msg), _.eZilch())
     }
 
     genInfoMsg(_: Builder, msg: Expr): Instr {
-        return _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowInformationMessage", 1))), msg, _.eZilch()), _.n("quit"))
+        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowInformationMessage", 1))), msg, _.eZilch())
     }
 
     genInput(_: Builder, nameOpts: string, nameInput: string, props: { k: string, v: Expr }[], ...withInput: Instr[]): Instr[] {
@@ -287,7 +280,7 @@ export class GenDemos {
                 _.n(nameOpts), _.eZilch(),
             ), _.eFunc([{ Name: nameInput, Type: { Maybe: TypeRefPrim.String } }], null,
                 _.iIf(_.oIsnt(_.n(nameInput)), [
-                    this.genByeMsg(_, "You cancelled, bye now!"),
+                    this.genByeMsg(_, "Cancelled text input!"),
                 ], withInput),
             )),
         )
@@ -308,7 +301,7 @@ export class GenDemos {
                     _.iBlock(..._.EACH(struct.Fields, (f, i): Instr[] => [
                         _.iSet(_.oIdx(_.n("items"), _.eLit(i)), _.eLit(f.Name + "\t".repeat(f.Name.length < 8 ? 3 : f.Name.length >= 16 ? 1 : 2) + "{0}", _.oDot(_.n("props"), _.n(f.Name)))),
                     ]).concat(
-                        ...this.genMenu(_, _.eLit(ns + " has {0} properties:", _.eLen(_.n("items"), true)), _.n("quit"))
+                        ...this.genMenu(_, _.eLit(ns + " has {0} properties:", _.eLen(_.n("items"), true)))
                     )),
                 ),
             ),
@@ -320,12 +313,12 @@ export class GenDemos {
             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n(ns))), _.n(fn)),
                 ...args
             ), _.eFunc([{ Name: "items", Type: { ValsOf: TypeRefPrim.String } }], null,
-                ...this.genMenu(_, _.eLit("Retrieved {0} " + desc, _.eLen(_.n("items"), true)), onPick ? onPick : _.n("quit")),
+                ...this.genMenu(_, _.eLit("Retrieved {0} " + desc, _.eLen(_.n("items"), true)), onPick),
             ))
         ]
     }
 
-    genMenu(_: Builder, msg: Expr, onPick: Expr): Instr[] {
+    genMenu(_: Builder, msg: Expr, onPick?: Expr): Instr[] {
         return [
             _.iVar("opts", { Name: "QuickPickOptions" }),
             _.iSet(_.n("opts"), _.eNew({ Name: "QuickPickOptions" })),
@@ -333,7 +326,7 @@ export class GenDemos {
             _.iSet(_.oDot(_.n("opts"), _.n(this.fld("PlaceHolder"))), msg),
             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowQuickPick", 2))),
                 _.n("items"), _.oAddr(_.n("opts")), _.eZilch()
-            ), onPick)
+            ), onPick ? onPick : _.eZilch())
         ]
     }
 

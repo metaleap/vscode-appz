@@ -22,7 +22,7 @@ namespace VscAppzDemo {
 				opts.PlaceHolder = strFmt("Retrieved {0} command ID(s), pick one to execute or escape now:", items.Length);
 				vsc.Window.ShowQuickPick2(items, opts, null)((string item) => {
 					if ((null == item)) {
-						vsc.Window.ShowWarningMessage1("Command selection cancelled, bye now!", null)(quit);
+						vsc.Window.ShowWarningMessage1("Command selection cancelled!", null);
 					} else {
 						InputBoxOptions opts2 = default;
 						opts2 = new InputBoxOptions();
@@ -30,7 +30,7 @@ namespace VscAppzDemo {
 						opts2.PlaceHolder = strFmt("Any param for `{0}` command? Else leave blank.", item);
 						vsc.Window.ShowInputBox(opts2, null)((string cmdarg) => {
 							if ((null == cmdarg)) {
-								vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null)(quit);
+								vsc.Window.ShowWarningMessage1("Cancelled text input!", null);
 							} else {
 								any[] cmdargs = default;
 								if ("" != cmdarg) {
@@ -38,7 +38,7 @@ namespace VscAppzDemo {
 									cmdargs[0] = cmdarg;
 								}
 								vsc.Commands.ExecuteCommand(item, cmdargs)((any ret) => {
-									vsc.Window.ShowInformationMessage1(strFmt("Command result was: {0}", ret), null)(quit);
+									vsc.Window.ShowInformationMessage1(strFmt("Command result was: `{0}`, merci!", ret), null);
 								});
 							}
 						});
@@ -54,7 +54,7 @@ namespace VscAppzDemo {
 			opts.Prompt = "Enter your command name. The command will accept a single text input and return a result built from it.";
 			vsc.Window.ShowInputBox(opts, null)((string cmdname) => {
 				if ((null == cmdname)) {
-					vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null)(quit);
+					vsc.Window.ShowWarningMessage1("Cancelled text input!", null);
 				} else {
 					vsc.Commands.RegisterCommand(cmdname, (any[] cmdargs) => {
 						vsc.Window.SetStatusBarMessage1(strFmt("Command `{0}` invoked with: `{1}`", cmdname, cmdargs[0]), 4242);
@@ -67,13 +67,13 @@ namespace VscAppzDemo {
 						opts2.Value = strFmt("Enter input to command `{0}` here", cmdname);
 						vsc.Window.ShowInputBox(opts2, null)((string cmdarg) => {
 							if ((null == cmdarg)) {
-								vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null)(quit);
+								vsc.Window.ShowWarningMessage1("Cancelled text input!", null);
 							} else {
 								any[] cmdargs2 = default;
 								cmdargs2 = new any[1];
 								cmdargs2[0] = cmdarg;
 								vsc.Commands.ExecuteCommand(cmdname, cmdargs2)((any ret) => {
-									vsc.Window.ShowInformationMessage1(strFmt("Command result: {0}", ret), null)(quit);
+									vsc.Window.ShowInformationMessage1(strFmt("Command result: `{0}`, merci!", ret), null);
 								});
 							}
 						});
@@ -87,7 +87,7 @@ namespace VscAppzDemo {
 				opts = new QuickPickOptions();
 				opts.IgnoreFocusOut = true;
 				opts.PlaceHolder = strFmt("Retrieved {0} language ID(s)", items.Length);
-				vsc.Window.ShowQuickPick2(items, opts, null)(quit);
+				vsc.Window.ShowQuickPick2(items, opts, null)(null);
 			});
 		}
 		private static void demo_Env_Properties() {
@@ -107,7 +107,7 @@ namespace VscAppzDemo {
 					opts = new QuickPickOptions();
 					opts.IgnoreFocusOut = true;
 					opts.PlaceHolder = strFmt("Env has {0} properties:", items.Length);
-					vsc.Window.ShowQuickPick2(items, opts, null)(quit);
+					vsc.Window.ShowQuickPick2(items, opts, null)(null);
 				}
 			});
 		}
@@ -123,7 +123,7 @@ namespace VscAppzDemo {
 					opts = new QuickPickOptions();
 					opts.IgnoreFocusOut = true;
 					opts.PlaceHolder = strFmt("Workspace has {0} properties:", items.Length);
-					vsc.Window.ShowQuickPick2(items, opts, null)(quit);
+					vsc.Window.ShowQuickPick2(items, opts, null)(null);
 				}
 			});
 		}
@@ -140,11 +140,10 @@ namespace VscAppzDemo {
 				opts.CanSelectMany = true;
 			}
 			vsc.Window.ShowOpenDialog(opts)((string[] filepaths) => {
-				statusNoticeQuit();
 				if ((null == filepaths)) {
-					vsc.Window.ShowWarningMessage1("Cancelled File-Open dialog, bye now!", null)(quit);
+					vsc.Window.ShowWarningMessage1("Cancelled File-Open dialog!", null);
 				} else {
-					vsc.Window.ShowInformationMessage1(strFmt("Selected {0} file path(s), bye now!", filepaths.Length), null)(quit);
+					vsc.Window.ShowInformationMessage1(strFmt("Selected {0} file path(s), merci!", filepaths.Length), null);
 				}
 			});
 		}
@@ -156,11 +155,10 @@ namespace VscAppzDemo {
 			opts.Filters["All"] = new[] { "*" };
 			opts.Filters["Dummy Filter"] = new[] { "dummy", "demo" };
 			vsc.Window.ShowSaveDialog(opts)((string filepath) => {
-				statusNoticeQuit();
 				if ((null == filepath)) {
-					vsc.Window.ShowWarningMessage1("Cancelled File-Save dialog, bye now!", null)(quit);
+					vsc.Window.ShowWarningMessage1("Cancelled File-Save dialog!", null);
 				} else {
-					vsc.Window.ShowInformationMessage1(strFmt("Selected file path `{0}`, bye now!", filepath), null)(quit);
+					vsc.Window.ShowInformationMessage1(strFmt("Selected file path `{0}`, merci!", filepath), null);
 				}
 			});
 		}
@@ -170,11 +168,10 @@ namespace VscAppzDemo {
 			opts.IgnoreFocusOut = true;
 			opts.PlaceHolder = "Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side.";
 			vsc.Window.ShowWorkspaceFolderPick(opts)((WorkspaceFolder pickedfolder) => {
-				statusNoticeQuit();
 				if ((null == pickedfolder)) {
-					vsc.Window.ShowWarningMessage1("Cancelled pick input, bye now!", null)(quit);
+					vsc.Window.ShowWarningMessage1("Cancelled pick input!", null);
 				} else {
-					vsc.Window.ShowInformationMessage1(strFmt("Selected `{0}` located at `{1}`, bye now!", pickedfolder.Name, pickedfolder.Uri), null)(quit);
+					vsc.Window.ShowInformationMessage1(strFmt("Selected `{0}` located at `{1}`, merci!", pickedfolder.Name, pickedfolder.Uri), null);
 				}
 			});
 		}
@@ -182,11 +179,11 @@ namespace VscAppzDemo {
 			InputBoxOptions opts = default;
 			opts = new InputBoxOptions();
 			opts.IgnoreFocusOut = true;
-			opts.Value = "http://foo.bar/baz";
+			opts.Value = "http://github.com/metaleap/vscode-appz";
 			opts.Prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol.";
 			vsc.Window.ShowInputBox(opts, null)((string uri) => {
 				if ((null == uri)) {
-					vsc.Window.ShowWarningMessage1("You cancelled, bye now!", null)(quit);
+					vsc.Window.ShowWarningMessage1("Cancelled text input!", null);
 				} else {
 					vsc.Env.OpenExternal(uri)((bool ok) => {
 						string did = default;
@@ -194,7 +191,7 @@ namespace VscAppzDemo {
 						if (!ok) {
 							did = did  +  " not";
 						}
-						vsc.Window.ShowInformationMessage1(strFmt("{0} succeed in opening `{1}`, bye now!", did, uri), null)(quit);
+						vsc.Window.ShowInformationMessage1(strFmt("{0} succeed in opening `{1}`, merci!", did, uri), null);
 					});
 				}
 			});
@@ -229,11 +226,10 @@ namespace VscAppzDemo {
 				return null;
 			};
 			vsc.Window.ShowQuickPick3(items, opts, cancelIn(42))((QuickPickItem[] pickeditems) => {
-				statusNoticeQuit();
 				if ((null == pickeditems)) {
-					vsc.Window.ShowWarningMessage1("Cancelled pick input, bye now!", null)(quit);
+					vsc.Window.ShowWarningMessage1("Cancelled pick input!", null);
 				} else {
-					vsc.Window.ShowInformationMessage1(strFmt("You picked {0} item(s), bye now!", pickeditems.Length), null)(quit);
+					vsc.Window.ShowInformationMessage1(strFmt("You picked {0} item(s), merci!", pickeditems.Length), null);
 				}
 			});
 		}
@@ -247,9 +243,6 @@ namespace VscAppzDemo {
 			vsc.Languages.OnDidChangeDiagnostics((DiagnosticChangeEvent evt) => {
 				vsc.Window.SetStatusBarMessage1(strFmt("Diag(s) changed for {0} file path(s).", evt.Uris.Length), 4242);
 			});
-		}
-		private static void statusNoticeQuit() {
-			vsc.Window.SetStatusBarMessage1("Reacting to the 'bye now' WILL end the prog.", 4242);
 		}
 		private static void demosMenu() {
 			string[] items = default;

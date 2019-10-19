@@ -1352,9 +1352,6 @@
             [known](#commands.getCommands).
             </summary>
         </member>
-        <member name="F:VscAppz.StatusBarItemProperties.My">
-            <summary>Free-form custom data, preserved across a roundtrip.</summary>
-        </member>
         <member name="T:VscAppz.OutputChannelProperties">
             <summary>
             An output channel is a container for readonly textual information.
@@ -1365,9 +1362,6 @@
         </member>
         <member name="F:VscAppz.OutputChannelProperties.Name">
             <summary>The human-readable name of this output channel.</summary>
-        </member>
-        <member name="F:VscAppz.OutputChannelProperties.My">
-            <summary>Free-form custom data, preserved across a roundtrip.</summary>
         </member>
     </members>
 </doc>

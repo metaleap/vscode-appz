@@ -19,7 +19,7 @@ namespace VscAppzDemo {
                 win.SetStatusBarMessage2("Choosing a demo now WILL remove me")(statusmsg => {
 
                     var buttons = new[] {"Demo Pick Input", "Demo Text Input", "All Demos"};
-                    win.ShowInformationMessage1("What to try out? (If you cancel, I quit.)", buttons)(
+                    win.ShowInformationMessage1("What to try out? (If you cancel here, I quit.)", buttons)(
                         btn => {
                             statusmsg.Dispose();
                             if (btn == null)

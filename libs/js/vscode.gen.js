@@ -2903,17 +2903,6 @@ function StatusBarItemProperties_populateFrom(payload) {
         }
         this.command = command;
     }
-    [val, ok] = [it["my"], undefined !== it["my"]];
-    if (ok) {
-        let my;
-        if ((undefined !== val && null !== val)) {
-            [my, ok] = [val, typeof val === "object"];
-            if (!ok) {
-                return false;
-            }
-        }
-        this.my = my;
-    }
     return true;
 }
 function OutputChannelProperties_populateFrom(payload) {
@@ -2936,17 +2925,6 @@ function OutputChannelProperties_populateFrom(payload) {
         this.Name = () => {
             return name;
         };
-    }
-    [val, ok] = [it["my"], undefined !== it["my"]];
-    if (ok) {
-        let my;
-        if ((undefined !== val && null !== val)) {
-            [my, ok] = [val, typeof val === "object"];
-            if (!ok) {
-                return false;
-            }
-        }
-        this.my = my;
     }
     return true;
 }

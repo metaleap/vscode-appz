@@ -31,9 +31,7 @@ export class Gen extends gen_syn.Gen {
             "// " + this.doNotEditComment("nodejs"),
             "let vsc, appName, cmdName, strFmt, quit, cancelIn, demo_Window_ShowInputBox",
             "exports.demosMenu = demosMenu",
-            "exports.onUpAndRunning = onUpAndRunning",
-            "exports.statusNoticeQuit = statusNoticeQuit",
-            "exports.onReady = () => { vsc = main.vsc; appName = main.appName; cmdName = main.cmdName; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox }",
+            "exports.onUpAndRunning = () => { vsc = main.vsc; appName = main.appName; cmdName = main.cmdName; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox; onUpAndRunning() }",
             "",
         ) : this.lines(
             "// " + this.doNotEditComment("nodejs"),
