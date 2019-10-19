@@ -57,7 +57,8 @@ func init() {
 	}
 }
 
-// Vsc creates a `Vscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `os.Stdin` and `stdOut` defaulting to `os.Stdout`).
+// Vsc creates a `Vscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `os.Stdin` and `stdOut` defaulting to `os.Stdout`), then loops forever to never `return`.
+// `main` ── called whenever the counterparty demands, which usually means once at startup.
 func Main(main func(Vscode), stdIn io.Reader, stdOut io.Writer) {
 	if stdIn == nil {
 		stdIn = os.Stdin

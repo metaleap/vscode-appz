@@ -11,9 +11,8 @@ namespace VscAppzDemo {
 
         public static void Main(string[] args) {
             Vsc.Main(vscode => {
-                Console.Error.WriteLine("AHOY");
                 (vsc, win) = (vscode, vscode.Window);
-                win.SetStatusBarMessage2("Choosing a demo WILL HIDE this", statusmsg => {
+                win.SetStatusBarMessage2("Choosing a demo WILL HIDE this")(statusmsg => {
                     subscribeToMiscEvents();
                     win.CreateStatusBarItem()(_ => _.Show());
 
@@ -30,7 +29,7 @@ namespace VscAppzDemo {
                             else if (btn == buttons[2])
                                 demosMenu();
                             else
-                                win.ShowErrorMessage1($"Unknown: `{btn}`, bye now!", nil, quit);
+                                win.ShowErrorMessage1($"Unknown: `{btn}`, bye now!")(quit);
                         }
                     );
                 });
@@ -52,9 +51,9 @@ namespace VscAppzDemo {
             })(input => {
                 statusNoticeQuit();
                 if (input == null)
-                    win.ShowWarningMessage1("Cancelled text input, bye now!", nil, quit);
+                    win.ShowWarningMessage1("Cancelled text input, bye now!")(quit);
                 else
-                    win.ShowInformationMessage1("You entered: `"+input+"`, bye now!", nil, quit);
+                    win.ShowInformationMessage1("You entered: `"+input+"`, bye now!")(quit);
             });
         }
 

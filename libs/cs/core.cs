@@ -36,8 +36,8 @@ namespace VscAppz {
             Console.Error.Write(string.Format(OnErrorDefaultOutputFormat, err, jsonMsg));
         };
 
-        /// <summary>Creates an `IVscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `Console.In` and `stdOut` defaulting to `Console.Out`).</summary>
-        /// <param name="main">The rest of your program, called once the `vscode-appz` counterparty has signalled readiness.</param>
+        /// <summary>Creates an `IVscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `Console.In` and `stdOut` defaulting to `Console.Out`), then loops forever to never `return`.</summary>
+        /// <param name="main">Called whenever the counterparty demands, which usually means once at startup.</param>
         /// <param name="stdIn">If `null`, defaults to `Console.In`.</param>
         /// <param name="stdOut">If `null`, defaults to `Console.Out`</param>
         public static void Main(Action<IVscode> main, TextReader stdIn = null, TextWriter stdOut = null) =>

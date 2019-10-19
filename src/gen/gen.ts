@@ -464,7 +464,7 @@ export enum ScriptPrimType {
     Dict = ts.SyntaxKind.ObjectLiteralExpression,
 }
 
-export type Doc = { fromOrig: ts.JSDoc, lines: string[], subs: Docs, isForArg?: string, isForRet?: string }
+export type Doc = { fromOrig: ts.JSDoc, lines: string[], subs: Docs, isForArg?: string, isForRet?: boolean }
 export type Docs = Doc[]
 
 export abstract class Gen {
@@ -606,7 +606,7 @@ export function argsFuncFields(prep: Prep, args: PrepArg[]) {
     return funcfields
 }
 
-function docFrom(from: ts.JSDoc, retName: () => { name: string }): Doc {
+function docFrom(from: ts.JSDoc): Doc {
     let ret: Doc = null, txt: string, argname: string
     if (from) {
         ret = { fromOrig: from, subs: [], lines: [] }
@@ -615,14 +615,12 @@ function docFrom(from: ts.JSDoc, retName: () => { name: string }): Doc {
                 if ('thisArg' === (argname = from.name.getText()))
                     return null
                 ret.isForArg = argname
-            } else if (ts.isJSDocReturnTag(from)) {
-                const rn = retName ? retName() : null
-                ret.isForRet = (rn && rn.name && rn.name.length) ? rn.name : ""
-            }
+            } else if (ts.isJSDocReturnTag(from))
+                ret.isForRet = true
             ret.lines.push(...txt.split('\n').filter(_ => _ !== null && (!(_.startsWith('[') && _.endsWith(')') && _.includes('](#')))))
         }
         from.forEachChild(_ => {
-            const sub = docFrom(_ as ts.JSDoc, retName)
+            const sub = docFrom(_ as ts.JSDoc)
             if (sub)
                 ret.subs.push(sub)
         })
@@ -630,10 +628,10 @@ function docFrom(from: ts.JSDoc, retName: () => { name: string }): Doc {
     return ret
 }
 
-export function docs(from: ts.Node, retName: () => { name: string } = undefined): Docs {
+export function docs(from: ts.Node): Docs {
     const docs = jsDocs(from), ret: Docs = []
     if (docs && docs.length)
-        for (const _ of docs.map(_ => docFrom(_, retName)))
+        for (const _ of docs.map(_ => docFrom(_)))
             if (_)
                 ret.push(_)
     return ret
@@ -643,8 +641,8 @@ export function docPrependArgOrRetName(doc: Doc, ln: string, retFallback: string
     let isfor = doc.isForArg
     if (isfor && isfor.length)
         isfor = argNameRewrite ? argNameRewrite(isfor) : isfor
-    else if (doc.isForRet !== undefined && doc.isForRet !== null)
-        isfor = (doc.isForRet && doc.isForRet.length) ? doc.isForRet : retFallback
+    else if (doc.isForRet)
+        isfor = retFallback
     return (!(isfor && isfor.length)) ? ln : (pref + isfor + suff + ln)
 }
 

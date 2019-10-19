@@ -227,11 +227,12 @@ export class Builder {
                     Name: this.gen.nameRewriters.methods(method.name),
                     Docs: method.isProps
                         ? [{ Lines: ["Provides single-call access to numerous individual `" + this.gen.nameRewriters.types.interfaces(it.name) + "` properties at once."], ForParam: "" }]
-                        : this.docs(gen.docs(method.fromOrig ? method.fromOrig.decl : it.fromOrig, () => method.args.find(arg => arg.isFromRetThenable)), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
+                        : this.docs(gen.docs(method.fromOrig ? method.fromOrig.decl : it.fromOrig), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
                     Type: null,
                     Args: method.args.map((arg: gen.PrepArg): Arg => this.fromArg(arg, method)),
                 }
                 me.Type = { From: [this.gen.typeUnMaybe(me.Args[me.Args.length - 1].Type)], To: null }
+                me.Args = me.Args.slice(0, me.Args.length - 1)
                 return me
             }),
         }
@@ -381,17 +382,15 @@ export class Builder {
         throw JSON.stringify(it)
     }
 
-    docs(docs: gen.Docs, extraSummaryLines: string[] = undefined, isMethod = false, appendArgsAndRetsToSummaryToo = true, retNameFallback = "return", into: Doc[] = undefined) {
+    docs(docs: gen.Docs, extraSummaryLines: string[] = undefined, isMethod = false, appendArgsAndRetsToSummaryToo = true, into: Doc[] = undefined) {
         const istop = (into === undefined)
         if (istop)
             into = []
         if (docs && docs.length) for (const doc of docs) {
             if (doc.lines && doc.lines.length) {
                 let name = doc.isForArg
-                if ((!(name && name.length)) && doc.isForRet !== null && doc.isForRet !== undefined)
-                    name = (doc.isForRet && doc.isForRet.length) ? doc.isForRet : retNameFallback
-                if (!name)
-                    name = ''
+                if (!(name && name.length))
+                    name = doc.isForRet ? "return" : ""
                 let dst = into.find(_ => _.ForParam === name)
                 if (isMethod || !(name && name.length)) {
                     if (!dst)
@@ -404,7 +403,7 @@ export class Builder {
                     ))
             }
             if (doc.subs && doc.subs.length)
-                this.docs(doc.subs, undefined, isMethod, appendArgsAndRetsToSummaryToo, retNameFallback, into)
+                this.docs(doc.subs, undefined, isMethod, appendArgsAndRetsToSummaryToo, into)
         }
         if (istop && extraSummaryLines && extraSummaryLines.length) {
             let dst = into.find(_ => _.ForParam === '')
@@ -1028,8 +1027,11 @@ export class Gen extends gen.Gen implements gen.IGen {
             )
         }
 
-        const retarg = method.Args.find(_ => _.fromPrep && _.fromPrep.isFromRetThenable)
-        const isdisp = retarg && gen.typePromOf(retarg.fromPrep.typeSpec, 'Disposable')
+        if ((!method.Type) || (method.Type as TypeRefFunc).From.length !== 1 || (method.Type as TypeRefFunc).To
+            || ((method.Type as TypeRefFunc).From[0] as TypeRefFunc).From.length !== 1 || ((method.Type as TypeRefFunc).From[0] as TypeRefFunc).To)
+            throw method.Type
+        const rettype = ((method.Type as TypeRefFunc).From[0] as TypeRefFunc).From[0]
+        const isdisp = this.typeOwnOf(rettype, "Disposable")
         const isevt: gen.MemberEvent = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl as gen.MemberEvent : null
         if (isevt && isevt.EvtName && isevt.EvtName.length)
             eventlike(method.Args[0])
@@ -1082,39 +1084,38 @@ export class Gen extends gen.Gen implements gen.IGen {
             _.iVar(__.onresp, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }),
             _.iVar(__.onret, (method.Type as TypeRefFunc).From[0]),
         )
-        if (retarg) {
-            const meprop = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl as gen.MemberProp : null
-            const isprop = meprop && meprop.PropType
-            const isprops = method.fromPrep && method.fromPrep.isProps
-            const isval = gen.typePromOf(retarg.fromPrep.typeSpec, gen.ScriptPrimType.Boolean) || gen.typePromOf(retarg.fromPrep.typeSpec, gen.ScriptPrimType.Number)
-            let dsttype = _.typeRef(retarg.fromPrep.typeSpec, !(isval || isprop || isprops), true)
-            if (this.typeMaybe(dsttype) && !this.typeMaybe(dsttype).Maybe)
-                dsttype = null
 
-            body.push(
-                _.iSet(_.n(__.onret), _.n(retarg.Name)),
-                _.iSet(_.n(__.onresp), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool,
-                    ..._.WHEN(dsttype, () => [
-                        _.iVar(__.ok, TypeRefPrim.Bool),
-                        _.iVar(__.result, dsttype),
-                        _.iIf(_.oIs(_.n(__.payload)),
-                            this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok),
-                            _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => []),
-                        ),
-                        _.WHEN(isdisp, () => [_.iIf(_.oIs(_.n(__.onret)), [
-                            _.eCall(_.n(__.onret), _.eCall(_.oDot(_.n(__.result), _.n('bind')), ...[impl].concat(...evtsubfnids.map(fnid => _.n(fnid))))),
-                        ])], () => [_.iIf(_.oIs(_.n(__.onret)), [
-                            _.eCall(_.n(__.onret), _.n(__.result)),
-                        ])])[0],
-                        _.iRet(_.eLit(true)),
-                    ], () => [
-                        _.iIf(_.oIs(_.n(__.payload)), [_.iRet(_.eLit(false))]),
-                        _.iIf(_.oIs(_.n(__.onret)), [_.eCall(_.n(__.onret))]),
-                        _.iRet(_.eLit(true)),
-                    ])
-                )),
-            )
-        }
+        // const meprop = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl as gen.MemberProp : null
+        // const isprop = meprop && meprop.PropType
+        const isprops = method.fromPrep && method.fromPrep.isProps
+        const isval = rettype === TypeRefPrim.Bool || rettype === TypeRefPrim.Int || rettype === TypeRefPrim.Real
+        let dsttype = (isval || isprops) ? this.typeUnMaybe(rettype) : rettype
+        if (this.typeMaybe(dsttype) && !this.typeMaybe(dsttype).Maybe)
+            dsttype = null
+
+        body.push(
+            _.iSet(_.n(__.onresp), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool,
+                ..._.WHEN(dsttype, () => [
+                    _.iVar(__.ok, TypeRefPrim.Bool),
+                    _.iVar(__.result, dsttype),
+                    _.iIf(_.oIs(_.n(__.payload)),
+                        this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok),
+                        _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => []),
+                    ),
+                    _.WHEN(isdisp, () => [_.iIf(_.oIs(_.n(__.onret)), [
+                        _.eCall(_.n(__.onret), _.eCall(_.oDot(_.n(__.result), _.n('bind')), ...[impl].concat(...evtsubfnids.map(fnid => _.n(fnid))))),
+                    ])], () => [_.iIf(_.oIs(_.n(__.onret)), [
+                        _.eCall(_.n(__.onret), _.n(__.result)),
+                    ])])[0],
+                    _.iRet(_.eLit(true)),
+                ], () => [
+                    _.iIf(_.oIs(_.n(__.payload)), [_.iRet(_.eLit(false))]),
+                    _.iIf(_.oIs(_.n(__.onret)), [_.eCall(_.n(__.onret))]),
+                    _.iRet(_.eLit(true)),
+                ])
+            )),
+        )
+
         if (!funcfields.length) body.push(
             _.eCall(_.oDot(impl, _.n('send')), _.n(__.msg), _.n(__.onresp)),
         )
@@ -1212,6 +1213,8 @@ export class Gen extends gen.Gen implements gen.IGen {
                     const isevtsub = (method.fromPrep && method.fromPrep.fromOrig && (evtsub = method.fromPrep.fromOrig.decl as gen.MemberEvent) && evtsub.EvtName && evtsub.EvtName.length) ? true : false
                     for (const arg of method.Args)
                         traverse(arg.Type, (arg.fromPrep && arg.fromPrep.isFromRetThenable) || isevtsub)
+                    if (method.Type)
+                        traverse(method.Type, true)
                 }
         }
         for (const structname in this.allStructs) {
@@ -1272,6 +1275,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                             fromPrep: { args: prepargs, name: field.name, nameOrig: field.fromOrig.getText() }
                         }
                         me.Type = { From: [this.typeUnMaybe(me.Args[me.Args.length - 1].Type)], To: null }
+                        me.Args = me.Args.slice(0, me.Args.length - 1)
                         this.emitMethodImpl(struct, me, this.genMethodImpl_ObjMethodCall)
                     }
             }
@@ -1316,6 +1320,11 @@ export class Gen extends gen.Gen implements gen.IGen {
     typeOwn(it: TypeRef): TypeRefOwn {
         const me = it as TypeRefOwn
         return (me && me.Name && me.Name.length) ? me : null
+    }
+
+    typeOwnOf(it: TypeRef, name: string): boolean {
+        const me = this.typeOwn(this.typeUnMaybe(it))
+        return me && me.Name === name
     }
 
     typeMaybe(it: TypeRef): TypeRefMaybe {

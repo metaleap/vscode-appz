@@ -32,7 +32,7 @@ export class GenDemos {
                                 _.iSet(_.oIdx(_.n("cmdargs"), _.eLit(0)), _.oDeref(_.n("cmdarg"))),
                             ]),
                             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("ExecuteCommand")),
-                                _.oDeref(_.n("item")), _.n("cmdargs"), _.eZilch(),
+                                _.oDeref(_.n("item")), _.n("cmdargs"),
                             ), _.eFunc([{ Name: "ret", Type: TypeRefPrim.Any }], null,
                                 this.genInfoMsg(_, _.eLit("Command result was: {0}", _.n("ret"))),
                             ))
@@ -46,14 +46,14 @@ export class GenDemos {
                         _.oDeref(_.n("cmdname")), _.eFunc([{ Name: "cmdargs", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Any,
                             this.genStatusMsg(_, _.eLit("Command `{0}` invoked with: `{1}`", _.oDeref(_.n("cmdname")), _.oIdx(_.n("cmdargs"), _.eLit(0)))),
                             _.iRet(_.eLit("Input to command `{0}` was: `{1}`", _.oDeref(_.n("cmdname")), _.oIdx(_.n("cmdargs"), _.eLit(0)))),
-                        ), _.eZilch(),
+                        ),
                     ), _.eFunc([{ Name: "useToUnregister", Type: { Maybe: { Name: "Disposable" } } }], null,
                         ...this.genInput(_, "opts2", "cmdarg", [{ k: "Prompt", v: _.eLit("Command `{0}` registered, try it now?", _.oDeref(_.n("cmdname"))) }, { k: "Value", v: _.eLit("Enter input to command `{0}` here", _.oDeref(_.n("cmdname"))) }],
                             _.iVar("cmdargs2", { ValsOf: TypeRefPrim.Any }),
                             _.iSet(_.n("cmdargs2"), _.eCollNew(_.eLit(1), TypeRefPrim.Any, true)),
                             _.iSet(_.oIdx(_.n("cmdargs2"), _.eLit(0)), _.oDeref(_.n("cmdarg"))),
                             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("ExecuteCommand")),
-                                _.oDeref(_.n("cmdname")), _.n("cmdargs2"), _.eZilch()),
+                                _.oDeref(_.n("cmdname")), _.n("cmdargs2")),
                                 _.eFunc([{ Name: "ret", Type: TypeRefPrim.Any }], null,
                                     this.genInfoMsg(_, _.eLit("Command result: {0}", _.n("ret"))),
                                 ))
@@ -81,7 +81,7 @@ export class GenDemos {
                 _.iSet(_.n("opts"), _.eNew({ Maybe: { Name: "WorkspaceFolderPickOptions" } })),
                 _.iSet(_.oDot(_.n("opts"), _.n(this.fld("IgnoreFocusOut"))), _.eLit(true)),
                 _.iSet(_.oDot(_.n("opts"), _.n(this.fld("PlaceHolder"))), _.eLit("Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side.")),
-                _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("ShowWorkspaceFolderPick")), _.n("opts"), _.eZilch()),
+                _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("ShowWorkspaceFolderPick")), _.n("opts")),
                     _.eFunc([{ Name: "pickedfolder", Type: { Maybe: { Name: "WorkspaceFolder" } } }], null,
                         _.eCall(_.n("statusNoticeQuit")),
                         _.iIf(_.oIsnt(_.n("pickedfolder")), [
@@ -94,7 +94,7 @@ export class GenDemos {
             ],
 
             "demo_Env_OpenExternal": () => this.genInput(_, "opts", "uri", [{ k: "Value", v: _.eLit("http://foo.bar/baz") }, { k: "Prompt", v: _.eLit("Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol.") }],
-                _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Env"))), _.n("OpenExternal")), _.oDeref(_.n("uri")), _.eZilch()),
+                _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Env"))), _.n("OpenExternal")), _.oDeref(_.n("uri"))),
                     _.eFunc([{ Name: "ok", Type: TypeRefPrim.Bool }], null,
                         _.iVar("did", TypeRefPrim.String),
                         _.iSet(_.n("did"), _.eLit("Did")),
@@ -138,7 +138,6 @@ export class GenDemos {
                     ),
                     _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowQuickPick", 3))),
                         _.n("items"), _.n("opts"), _.eCall(_.n("cancelIn"), _.eLit(42)),
-                        _.eZilch()
                     ), _.eFunc([{ Name: "pickeditems", Type: { ValsOf: { Name: "QuickPickItem" } } }], null,
                         _.eCall(_.n("statusNoticeQuit")),
                         _.iIf(_.oIsnt(_.n("pickeditems")), [
@@ -184,14 +183,9 @@ export class GenDemos {
     genEventSubs(_: Builder, subs: { ns: string, evtName: string, evtArgs?: string, msg: Expr }[]): Instr[] {
         const ret: Instr[] = []
         for (const sub of subs)
-            ret.push(
-                _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n(sub.ns))), _.n(sub.evtName)),
-                    _.eFunc(sub.evtArgs ? [{ Name: "evt", Type: { Name: sub.evtArgs } }] : [], null,
-                        this.genStatusMsg(_, sub.msg),
-                    ),
-                    _.eZilch(),
-                )
-            )
+            ret.push(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n(sub.ns))), _.n(sub.evtName)),
+                _.eFunc(sub.evtArgs ? [{ Name: "evt", Type: { Name: sub.evtArgs } }] : [], null,
+                    this.genStatusMsg(_, sub.msg))))
         return ret
     }
 
@@ -209,7 +203,7 @@ export class GenDemos {
                 _.iSet(_.oDot(_.n("opts"), _.n(this.fld("CanSelectFolders"))), _.eLit(false)),
                 _.iSet(_.oDot(_.n("opts"), _.n(this.fld("CanSelectMany"))), _.eLit(true)),
             ])),
-            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(`Show${which}Dialog`)), _.n("opts"), _.eZilch()),
+            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(`Show${which}Dialog`)), _.n("opts")),
                 _.eFunc([{ Name: fp, Type: mult ? { ValsOf: TypeRefPrim.String } : { Maybe: TypeRefPrim.String } }], null,
                     _.eCall(_.n("statusNoticeQuit")),
                     _.iIf(_.oIsnt(_.n(fp)), [
@@ -222,11 +216,11 @@ export class GenDemos {
     }
 
     genByeMsg(_: Builder, msg: string): Instr {
-        return _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowWarningMessage", 1))), _.eLit(msg), _.eZilch(), _.eZilch()), _.n("quit"))
+        return _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowWarningMessage", 1))), _.eLit(msg), _.eZilch()), _.n("quit"))
     }
 
     genInfoMsg(_: Builder, msg: Expr): Instr {
-        return _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowInformationMessage", 1))), msg, _.eZilch(), _.eZilch()), _.n("quit"))
+        return _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowInformationMessage", 1))), msg, _.eZilch()), _.n("quit"))
     }
 
     genInput(_: Builder, nameOpts: string, nameInput: string, props: { k: string, v: Expr }[], ...withInput: Instr[]): Instr[] {
@@ -238,7 +232,7 @@ export class GenDemos {
             _.iSet(_.oDot(_.n(nameOpts), _.n(this.fld(prop.k))), prop.v)
         ] as Instr[])).concat(
             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("ShowInputBox")),
-                _.n(nameOpts), _.eZilch(), _.eZilch(),
+                _.n(nameOpts), _.eZilch(),
             ), _.eFunc([{ Name: nameInput, Type: { Maybe: TypeRefPrim.String } }], null,
                 _.iIf(_.oIsnt(_.n(nameInput)), [
                     this.genByeMsg(_, "You cancelled, bye now!"),
@@ -248,14 +242,14 @@ export class GenDemos {
     }
 
     genStatusMsg(_: Builder, msg: Expr): Instr {
-        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("SetStatusBarMessage", 1))), msg, _.eLit(4242), _.eZilch())
+        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("SetStatusBarMessage", 1))), msg, _.eLit(4242))
     }
 
     genDemoOfPropsMenu(_: Builder, ns: string): Instr[] {
         const struct = this.gen.allStructs[ns + "Properties"]
 
         return [
-            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n(ns))), _.n("Properties")), _.eZilch()),
+            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n(ns))), _.n("Properties"))),
                 _.eFunc([{ Name: "props", Type: { Name: struct.Name } }], null,
                     _.iVar("items", { ValsOf: TypeRefPrim.String }),
                     _.iSet(_.n("items"), _.eCollNew(_.eLit(struct.Fields.length), TypeRefPrim.String, true)),
@@ -272,7 +266,7 @@ export class GenDemos {
     genDemoOfStrListMenu(_: Builder, ns: string, fn: string, desc: string, args: Expr[], onPick?: Expr): Instr[] {
         return [
             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n(ns))), _.n(fn)),
-                ...args.concat(_.eZilch())
+                ...args
             ), _.eFunc([{ Name: "items", Type: { ValsOf: TypeRefPrim.String } }], null,
                 ...this.genMenu(_, _.eLit("Retrieved {0} " + desc, _.eLen(_.n("items"), true)), onPick ? onPick : _.n("quit")),
             ))
@@ -286,7 +280,7 @@ export class GenDemos {
             _.iSet(_.oDot(_.n("opts"), _.n(this.fld("IgnoreFocusOut"))), _.eLit(true)),
             _.iSet(_.oDot(_.n("opts"), _.n(this.fld("PlaceHolder"))), msg),
             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowQuickPick", 2))),
-                _.n("items"), _.oAddr(_.n("opts")), _.eZilch(), _.eZilch()
+                _.n("items"), _.oAddr(_.n("opts")), _.eZilch()
             ), onPick)
         ]
     }

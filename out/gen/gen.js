@@ -454,7 +454,7 @@ function argsFuncFields(prep, args) {
     return funcfields;
 }
 exports.argsFuncFields = argsFuncFields;
-function docFrom(from, retName) {
+function docFrom(from) {
     let ret = null, txt, argname;
     if (from) {
         ret = { fromOrig: from, subs: [], lines: [] };
@@ -464,24 +464,22 @@ function docFrom(from, retName) {
                     return null;
                 ret.isForArg = argname;
             }
-            else if (ts.isJSDocReturnTag(from)) {
-                const rn = retName ? retName() : null;
-                ret.isForRet = (rn && rn.name && rn.name.length) ? rn.name : "";
-            }
+            else if (ts.isJSDocReturnTag(from))
+                ret.isForRet = true;
             ret.lines.push(...txt.split('\n').filter(_ => _ !== null && (!(_.startsWith('[') && _.endsWith(')') && _.includes('](#')))));
         }
         from.forEachChild(_ => {
-            const sub = docFrom(_, retName);
+            const sub = docFrom(_);
             if (sub)
                 ret.subs.push(sub);
         });
     }
     return ret;
 }
-function docs(from, retName = undefined) {
+function docs(from) {
     const docs = jsDocs(from), ret = [];
     if (docs && docs.length)
-        for (const _ of docs.map(_ => docFrom(_, retName)))
+        for (const _ of docs.map(_ => docFrom(_)))
             if (_)
                 ret.push(_);
     return ret;
@@ -491,8 +489,8 @@ function docPrependArgOrRetName(doc, ln, retFallback, argNameRewrite = undefined
     let isfor = doc.isForArg;
     if (isfor && isfor.length)
         isfor = argNameRewrite ? argNameRewrite(isfor) : isfor;
-    else if (doc.isForRet !== undefined && doc.isForRet !== null)
-        isfor = (doc.isForRet && doc.isForRet.length) ? doc.isForRet : retFallback;
+    else if (doc.isForRet)
+        isfor = retFallback;
     return (!(isfor && isfor.length)) ? ln : (pref + isfor + suff + ln);
 }
 exports.docPrependArgOrRetName = docPrependArgOrRetName;

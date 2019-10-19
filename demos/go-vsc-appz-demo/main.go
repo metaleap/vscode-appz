@@ -30,14 +30,14 @@ func main() {
 		vsc = vscode
 		win = vsc.Window()
 
-		win.SetStatusBarMessage2("Choosing a demo WILL HIDE this", nil)(func(statusmsg *Disposable) {
+		win.SetStatusBarMessage2("Choosing a demo WILL HIDE this")(func(statusmsg *Disposable) {
 			subscribeToMiscEvents()
-			win.CreateStatusBarItem(0, nil, nil)(
-				func(it *StatusBarItem) { it.Show(nil) })
+			win.CreateStatusBarItem(0, nil)(
+				func(it *StatusBarItem) { it.Show() })
 
 			buttons := []string{"Demo Pick Input", "Demo Text Input", "All Demos"}
 			win.ShowInformationMessage1(
-				greethow+", "+greetname+"! What to try out? (If you cancel, I quit.)", buttons, nil)(
+				greethow+", "+greetname+"! What to try out? (If you cancel, I quit.)", buttons)(
 				func(btn *string) {
 					statusmsg.Dispose()
 					if btn == nil {
@@ -51,7 +51,7 @@ func main() {
 						case buttons[2]:
 							demosMenu()
 						default:
-							win.ShowErrorMessage1("Unknown: `"+button+"`, bye now!", nil, nil)(quit)
+							win.ShowErrorMessage1("Unknown: `"+button+"`, bye now!", nil)(quit)
 						}
 					}
 				})
@@ -71,13 +71,13 @@ func demo_Window_ShowInputBox() {
 			}
 			return
 		},
-	}, nil, nil)(
+	}, nil)(
 		func(input *string) {
 			statusNoticeQuit()
 			if input == nil {
-				win.ShowWarningMessage1("Cancelled text input, bye now!", nil, nil)(quit)
+				win.ShowWarningMessage1("Cancelled text input, bye now!", nil)(quit)
 			} else {
-				win.ShowInformationMessage1("You entered: `"+(*input)+"`, bye now!", nil, nil)(quit)
+				win.ShowInformationMessage1("You entered: `"+(*input)+"`, bye now!", nil)(quit)
 			}
 		})
 }

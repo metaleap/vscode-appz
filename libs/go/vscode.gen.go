@@ -139,8 +139,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage1(message string, items []string, onDone func(*string)) func(func(*string))
+	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowInformationMessage1(message string, items []string) func(func(*string))
 
 	// Show an information message to users. Optionally provide an array of items which will be presented as
 	// clickable buttons.
@@ -151,8 +151,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage2(message string, options MessageOptions, items []string, onDone func(*string)) func(func(*string))
+	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowInformationMessage2(message string, options MessageOptions, items []string) func(func(*string))
 
 	// Show an information message.
 	// 
@@ -160,8 +160,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage3(message string, items []MessageItem, onDone func(*MessageItem)) func(func(*MessageItem))
+	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowInformationMessage3(message string, items []MessageItem) func(func(*MessageItem))
 
 	// Show an information message.
 	// 
@@ -171,8 +171,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, onDone func(*MessageItem)) func(func(*MessageItem))
+	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowInformationMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem))
 
 	// Show a warning message.
 	// 
@@ -180,28 +180,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage1(message string, items []string, onDone func(*string)) func(func(*string))
-
-	// Show a warning message.
-	// 
-	// `message` ── The message to show.
-	// 
-	// `options` ── Configures the behaviour of the message.
-	// 
-	// `items` ── A set of items that will be rendered as actions in the message.
-	// 
-	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage2(message string, options MessageOptions, items []string, onDone func(*string)) func(func(*string))
-
-	// Show a warning message.
-	// 
-	// `message` ── The message to show.
-	// 
-	// `items` ── A set of items that will be rendered as actions in the message.
-	// 
-	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage3(message string, items []MessageItem, onDone func(*MessageItem)) func(func(*MessageItem))
+	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowWarningMessage1(message string, items []string) func(func(*string))
 
 	// Show a warning message.
 	// 
@@ -211,8 +191,28 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, onDone func(*MessageItem)) func(func(*MessageItem))
+	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowWarningMessage2(message string, options MessageOptions, items []string) func(func(*string))
+
+	// Show a warning message.
+	// 
+	// `message` ── The message to show.
+	// 
+	// `items` ── A set of items that will be rendered as actions in the message.
+	// 
+	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowWarningMessage3(message string, items []MessageItem) func(func(*MessageItem))
+
+	// Show a warning message.
+	// 
+	// `message` ── The message to show.
+	// 
+	// `options` ── Configures the behaviour of the message.
+	// 
+	// `items` ── A set of items that will be rendered as actions in the message.
+	// 
+	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowWarningMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem))
 
 	// Show an error message.
 	// 
@@ -220,8 +220,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage1(message string, items []string, onDone func(*string)) func(func(*string))
+	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowErrorMessage1(message string, items []string) func(func(*string))
 
 	// Show an error message.
 	// 
@@ -231,8 +231,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage2(message string, options MessageOptions, items []string, onDone func(*string)) func(func(*string))
+	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowErrorMessage2(message string, options MessageOptions, items []string) func(func(*string))
 
 	// Show an error message.
 	// 
@@ -240,8 +240,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage3(message string, items []MessageItem, onDone func(*MessageItem)) func(func(*MessageItem))
+	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowErrorMessage3(message string, items []MessageItem) func(func(*MessageItem))
 
 	// Show an error message.
 	// 
@@ -251,8 +251,8 @@ type Window interface {
 	// 
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
-	// `onDone` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, onDone func(*MessageItem)) func(func(*MessageItem))
+	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+	ShowErrorMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem))
 
 	// Opens an input box to ask the user for input.
 	// 
@@ -264,8 +264,8 @@ type Window interface {
 	// 
 	// `token` ── A token that can be used to signal cancellation.
 	// 
-	// `onDone` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
-	ShowInputBox(options *InputBoxOptions, token *Cancel, onDone func(*string)) func(func(*string))
+	// `return` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
+	ShowInputBox(options *InputBoxOptions, token *Cancel) func(func(*string))
 
 	// Shows a selection list allowing multiple selections.
 	// 
@@ -275,8 +275,8 @@ type Window interface {
 	// 
 	// `token` ── A token that can be used to signal cancellation.
 	// 
-	// `onDone` ── A promise that resolves to the selected items or `undefined`.
-	ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel, onDone func([]string)) func(func([]string))
+	// `return` ── A promise that resolves to the selected items or `undefined`.
+	ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel) func(func([]string))
 
 	// Shows a selection list.
 	// 
@@ -286,8 +286,8 @@ type Window interface {
 	// 
 	// `token` ── A token that can be used to signal cancellation.
 	// 
-	// `onDone` ── A promise that resolves to the selection or `undefined`.
-	ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel, onDone func(*string)) func(func(*string))
+	// `return` ── A promise that resolves to the selection or `undefined`.
+	ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel) func(func(*string))
 
 	// Shows a selection list allowing multiple selections.
 	// 
@@ -297,8 +297,8 @@ type Window interface {
 	// 
 	// `token` ── A token that can be used to signal cancellation.
 	// 
-	// `onDone` ── A promise that resolves to the selected items or `undefined`.
-	ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel, onDone func([]QuickPickItem)) func(func([]QuickPickItem))
+	// `return` ── A promise that resolves to the selected items or `undefined`.
+	ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel) func(func([]QuickPickItem))
 
 	// Shows a selection list.
 	// 
@@ -308,8 +308,8 @@ type Window interface {
 	// 
 	// `token` ── A token that can be used to signal cancellation.
 	// 
-	// `onDone` ── A promise that resolves to the selected item or `undefined`.
-	ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel, onDone func(*QuickPickItem)) func(func(*QuickPickItem))
+	// `return` ── A promise that resolves to the selected item or `undefined`.
+	ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel) func(func(*QuickPickItem))
 
 	// Set a message to the status bar. This is a short hand for the more powerful
 	// status bar [items](#window.createStatusBarItem).
@@ -318,8 +318,8 @@ type Window interface {
 	// 
 	// `hideAfterTimeout` ── Timeout in milliseconds after which the message will be disposed.
 	// 
-	// `onDone` ── A disposable which hides the status bar message.
-	SetStatusBarMessage1(text string, hideAfterTimeout int, onDone func(*Disposable)) func(func(*Disposable))
+	// `return` ── A disposable which hides the status bar message.
+	SetStatusBarMessage1(text string, hideAfterTimeout int) func(func(*Disposable))
 
 	// Set a message to the status bar. This is a short hand for the more powerful
 	// status bar [items](#window.createStatusBarItem).
@@ -329,39 +329,39 @@ type Window interface {
 	// 
 	// `text` ── The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
 	// 
-	// `onDone` ── A disposable which hides the status bar message.
-	SetStatusBarMessage2(text string, onDone func(*Disposable)) func(func(*Disposable))
+	// `return` ── A disposable which hides the status bar message.
+	SetStatusBarMessage2(text string) func(func(*Disposable))
 
 	// Shows a file save dialog to the user which allows to select a file
 	// for saving-purposes.
 	// 
 	// `options` ── Options that control the dialog.
 	// 
-	// `onDone` ── A promise that resolves to the selected resource or `undefined`.
-	ShowSaveDialog(options SaveDialogOptions, onDone func(*string)) func(func(*string))
+	// `return` ── A promise that resolves to the selected resource or `undefined`.
+	ShowSaveDialog(options SaveDialogOptions) func(func(*string))
 
 	// Shows a file open dialog to the user which allows to select a file
 	// for opening-purposes.
 	// 
 	// `options` ── Options that control the dialog.
 	// 
-	// `onDone` ── A promise that resolves to the selected resources or `undefined`.
-	ShowOpenDialog(options OpenDialogOptions, onDone func([]string)) func(func([]string))
+	// `return` ── A promise that resolves to the selected resources or `undefined`.
+	ShowOpenDialog(options OpenDialogOptions) func(func([]string))
 
 	// Shows a selection list of [workspace folders](#workspace.workspaceFolders) to pick from.
 	// Returns `undefined` if no folder is open.
 	// 
 	// `options` ── Configures the behavior of the workspace folder list.
 	// 
-	// `onDone` ── A promise that resolves to the workspace folder or `undefined`.
-	ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, onDone func(*WorkspaceFolder)) func(func(*WorkspaceFolder))
+	// `return` ── A promise that resolves to the workspace folder or `undefined`.
+	ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions) func(func(*WorkspaceFolder))
 
 	// Represents the current window's state.
-	State(onDone func(WindowState)) func(func(WindowState))
+	State() func(func(WindowState))
 
 	// An [event](#Event) which fires when the focus state of the current window
 	// changes. The value of the event represents whether the window is focused.
-	OnDidChangeWindowState(listener func(WindowState), onDone func(*Disposable)) func(func(*Disposable))
+	OnDidChangeWindowState(listener func(WindowState)) func(func(*Disposable))
 
 	// Creates a status bar [item](#StatusBarItem).
 	// 
@@ -369,13 +369,13 @@ type Window interface {
 	// 
 	// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 	// 
-	// `onDone` ── A new status bar item.
-	CreateStatusBarItem(alignment StatusBarAlignment, priority *int, onDone func(*StatusBarItem)) func(func(*StatusBarItem))
+	// `return` ── A new status bar item.
+	CreateStatusBarItem(alignment StatusBarAlignment, priority *int) func(func(*StatusBarItem))
 
 	// Creates a new [output channel](#OutputChannel) with the given name.
 	// 
 	// `name` ── Human-readable string which will be used to represent the channel in the UI.
-	CreateOutputChannel(name string, onDone func(*OutputChannel)) func(func(*OutputChannel))
+	CreateOutputChannel(name string) func(func(*OutputChannel))
 }
 type implWindow struct{ *impl }
 
@@ -389,20 +389,20 @@ type Env interface {
 	// 
 	// `target` ── The uri that should be opened.
 	// 
-	// `onDone` ── A promise indicating if open was successful.
-	OpenExternal(target string, onDone func(bool)) func(func(bool))
+	// `return` ── A promise indicating if open was successful.
+	OpenExternal(target string) func(func(bool))
 
 	// The application name of the editor, like 'VS Code'.
-	AppName(onDone func(string)) func(func(string))
+	AppName() func(func(string))
 
 	// The application root folder from which the editor is running.
-	AppRoot(onDone func(string)) func(func(string))
+	AppRoot() func(func(string))
 
 	// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
-	Language(onDone func(string)) func(func(string))
+	Language() func(func(string))
 
 	// A unique identifier for the computer.
-	MachineId(onDone func(string)) func(func(string))
+	MachineId() func(func(string))
 
 	// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
 	// Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
@@ -411,21 +411,21 @@ type Env interface {
 	// value is defined in all extension hosts (local and remote) in case a remote extension host
 	// exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
 	// a specific extension runs remote or not.
-	RemoteName(onDone func(*string)) func(func(*string))
+	RemoteName() func(func(*string))
 
 	// A unique identifier for the current session.
 	// Changes each time the editor is started.
-	SessionId(onDone func(string)) func(func(string))
+	SessionId() func(func(string))
 
 	// The detected default shell for the extension host, this is overridden by the
 	// `terminal.integrated.shell` setting for the extension host's platform.
-	Shell(onDone func(string)) func(func(string))
+	Shell() func(func(string))
 
 	// The custom uri scheme the editor registers to in the operating system.
-	UriScheme(onDone func(string)) func(func(string))
+	UriScheme() func(func(string))
 
 	// Provides single-call access to numerous individual `Env` properties at once.
-	Properties(onDone func(EnvProperties)) func(func(EnvProperties))
+	Properties() func(func(EnvProperties))
 }
 type implEnv struct{ *impl }
 
@@ -439,7 +439,7 @@ type implEnv struct{ *impl }
 type Workspace interface {
 	// The name of the workspace. `undefined` when no folder
 	// has been opened.
-	Name(onDone func(*string)) func(func(*string))
+	Name() func(func(*string))
 
 	// The location of the workspace file, for example:
 	// 
@@ -468,17 +468,17 @@ type Workspace interface {
 	// configuration data into the file. You can use `workspace.getConfiguration().update()`
 	// for that purpose which will work both when a single folder is opened as
 	// well as an untitled or saved workspace.
-	WorkspaceFile(onDone func(*string)) func(func(*string))
+	WorkspaceFile() func(func(*string))
 
 	// Save all dirty files.
 	// 
 	// `includeUntitled` ── Also save files that have been created during this session.
 	// 
-	// `onDone` ── A thenable that resolves when the files have been saved.
-	SaveAll(includeUntitled bool, onDone func(bool)) func(func(bool))
+	// `return` ── A thenable that resolves when the files have been saved.
+	SaveAll(includeUntitled bool) func(func(bool))
 
 	// An event that is emitted when a workspace folder is added or removed.
-	OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent), onDone func(*Disposable)) func(func(*Disposable))
+	OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent)) func(func(*Disposable))
 
 	// Returns the [workspace folder](#WorkspaceFolder) that contains a given uri.
 	// * returns `undefined` when the given uri doesn't match any workspace folder
@@ -486,12 +486,12 @@ type Workspace interface {
 	// 
 	// `uri` ── An uri.
 	// 
-	// `onDone` ── A workspace folder or `undefined`
-	GetWorkspaceFolder(uri string, onDone func(*WorkspaceFolder)) func(func(*WorkspaceFolder))
+	// `return` ── A workspace folder or `undefined`
+	GetWorkspaceFolder(uri string) func(func(*WorkspaceFolder))
 
 	// List of workspace folders or `undefined` when no folder is open.
 	// *Note* that the first entry corresponds to the value of `rootPath`.
-	WorkspaceFolders(onDone func([]WorkspaceFolder)) func(func([]WorkspaceFolder))
+	WorkspaceFolders() func(func([]WorkspaceFolder))
 
 	// Find files across all [workspace folders](#workspace.workspaceFolders) in the workspace.
 	// `findFiles('**​/*.js', '**​/node_modules/**', 10)`
@@ -508,9 +508,9 @@ type Workspace interface {
 	// 
 	// `token` ── A token that can be used to signal cancellation to the underlying search engine.
 	// 
-	// `onDone` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
+	// `return` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
 	// [workspace folders](#workspace.workspaceFolders) are opened.
-	FindFiles(include string, exclude *string, maxResults *int, token *Cancel, onDone func([]string)) func(func([]string))
+	FindFiles(include string, exclude *string, maxResults *int, token *Cancel) func(func([]string))
 
 	// Returns a path that is relative to the workspace folder or folders.
 	// 
@@ -523,11 +523,11 @@ type Workspace interface {
 	// workspace folder the name of the workspace is prepended. Defaults to `true` when there are
 	// multiple workspace folders and `false` otherwise.
 	// 
-	// `onDone` ── A path relative to the root or the input.
-	AsRelativePath(pathOrUri string, includeWorkspaceFolder bool, onDone func(*string)) func(func(*string))
+	// `return` ── A path relative to the root or the input.
+	AsRelativePath(pathOrUri string, includeWorkspaceFolder bool) func(func(*string))
 
 	// Provides single-call access to numerous individual `Workspace` properties at once.
-	Properties(onDone func(WorkspaceProperties)) func(func(WorkspaceProperties))
+	Properties() func(func(WorkspaceProperties))
 }
 type implWorkspace struct{ *impl }
 
@@ -560,12 +560,12 @@ type implWorkspace struct{ *impl }
 type Languages interface {
 	// Return the identifiers of all known languages.
 	// 
-	// `onDone` ── Promise resolving to an array of identifier strings.
-	GetLanguages(onDone func([]string)) func(func([]string))
+	// `return` ── Promise resolving to an array of identifier strings.
+	GetLanguages() func(func([]string))
 
 	// An [event](#Event) which fires when the global set of diagnostics changes. This is
 	// newly added and removed diagnostics.
-	OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent), onDone func(*Disposable)) func(func(*Disposable))
+	OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent)) func(func(*Disposable))
 }
 type implLanguages struct{ *impl }
 
@@ -602,7 +602,7 @@ type implLanguages struct{ *impl }
 type Extensions interface {
 	// An event which fires when `extensions.all` changes. This can happen when extensions are
 	// installed, uninstalled, enabled or disabled.
-	OnDidChange(listener func(), onDone func(*Disposable)) func(func(*Disposable))
+	OnDidChange(listener func()) func(func(*Disposable))
 }
 type implExtensions struct{ *impl }
 
@@ -651,8 +651,8 @@ type Commands interface {
 	// 
 	// `callback` ── A command handler function.
 	// 
-	// `onDone` ── Disposable which unregisters this command on disposal.
-	RegisterCommand(command string, callback func([]any) any, onDone func(*Disposable)) func(func(*Disposable))
+	// `return` ── Disposable which unregisters this command on disposal.
+	RegisterCommand(command string, callback func([]any) any) func(func(*Disposable))
 
 	// Executes the command denoted by the given command identifier.
 	// 
@@ -666,17 +666,17 @@ type Commands interface {
 	// 
 	// `rest` ── Parameters passed to the command function.
 	// 
-	// `onDone` ── A thenable that resolves to the returned value of the given command. `undefined` when
+	// `return` ── A thenable that resolves to the returned value of the given command. `undefined` when
 	// the command handler function doesn't return anything.
-	ExecuteCommand(command string, rest []any, onDone func(any)) func(func(any))
+	ExecuteCommand(command string, rest []any) func(func(any))
 
 	// Retrieve the list of all available commands. Commands starting an underscore are
 	// treated as internal commands.
 	// 
 	// `filterInternal` ── Set `true` to not see internal commands (starting with an underscore)
 	// 
-	// `onDone` ── Thenable that resolves to a list of command ids.
-	GetCommands(filterInternal bool, onDone func([]string)) func(func([]string))
+	// `return` ── Thenable that resolves to a list of command ids.
+	GetCommands(filterInternal bool) func(func([]string))
 }
 type implCommands struct{ *impl }
 
@@ -1008,7 +1008,7 @@ func (me *impl) Commands() Commands {
 	return implCommands{me}
 }
 
-func (me implWindow) ShowInformationMessage1(message string, items []string, onDone func(*string)) func(func(*string)) {
+func (me implWindow) ShowInformationMessage1(message string, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInformationMessage1"
@@ -1017,7 +1017,6 @@ func (me implWindow) ShowInformationMessage1(message string, items []string, onD
 	msg.Data["items"] = items
 	var onresp func(any) bool
 	var onret func(*string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *string
@@ -1040,7 +1039,7 @@ func (me implWindow) ShowInformationMessage1(message string, items []string, onD
 	}
 }
 
-func (me implWindow) ShowInformationMessage2(message string, options MessageOptions, items []string, onDone func(*string)) func(func(*string)) {
+func (me implWindow) ShowInformationMessage2(message string, options MessageOptions, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInformationMessage2"
@@ -1050,7 +1049,6 @@ func (me implWindow) ShowInformationMessage2(message string, options MessageOpti
 	msg.Data["items"] = items
 	var onresp func(any) bool
 	var onret func(*string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *string
@@ -1073,7 +1071,7 @@ func (me implWindow) ShowInformationMessage2(message string, options MessageOpti
 	}
 }
 
-func (me implWindow) ShowInformationMessage3(message string, items []MessageItem, onDone func(*MessageItem)) func(func(*MessageItem)) {
+func (me implWindow) ShowInformationMessage3(message string, items []MessageItem) func(func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInformationMessage3"
@@ -1082,7 +1080,6 @@ func (me implWindow) ShowInformationMessage3(message string, items []MessageItem
 	msg.Data["items"] = items
 	var onresp func(any) bool
 	var onret func(*MessageItem)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *MessageItem
@@ -1104,7 +1101,7 @@ func (me implWindow) ShowInformationMessage3(message string, items []MessageItem
 	}
 }
 
-func (me implWindow) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem, onDone func(*MessageItem)) func(func(*MessageItem)) {
+func (me implWindow) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInformationMessage4"
@@ -1114,7 +1111,6 @@ func (me implWindow) ShowInformationMessage4(message string, options MessageOpti
 	msg.Data["items"] = items
 	var onresp func(any) bool
 	var onret func(*MessageItem)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *MessageItem
@@ -1136,7 +1132,7 @@ func (me implWindow) ShowInformationMessage4(message string, options MessageOpti
 	}
 }
 
-func (me implWindow) ShowWarningMessage1(message string, items []string, onDone func(*string)) func(func(*string)) {
+func (me implWindow) ShowWarningMessage1(message string, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWarningMessage1"
@@ -1145,7 +1141,6 @@ func (me implWindow) ShowWarningMessage1(message string, items []string, onDone 
 	msg.Data["items"] = items
 	var onresp func(any) bool
 	var onret func(*string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *string
@@ -1168,7 +1163,7 @@ func (me implWindow) ShowWarningMessage1(message string, items []string, onDone 
 	}
 }
 
-func (me implWindow) ShowWarningMessage2(message string, options MessageOptions, items []string, onDone func(*string)) func(func(*string)) {
+func (me implWindow) ShowWarningMessage2(message string, options MessageOptions, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWarningMessage2"
@@ -1178,7 +1173,6 @@ func (me implWindow) ShowWarningMessage2(message string, options MessageOptions,
 	msg.Data["items"] = items
 	var onresp func(any) bool
 	var onret func(*string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *string
@@ -1201,7 +1195,7 @@ func (me implWindow) ShowWarningMessage2(message string, options MessageOptions,
 	}
 }
 
-func (me implWindow) ShowWarningMessage3(message string, items []MessageItem, onDone func(*MessageItem)) func(func(*MessageItem)) {
+func (me implWindow) ShowWarningMessage3(message string, items []MessageItem) func(func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWarningMessage3"
@@ -1210,7 +1204,6 @@ func (me implWindow) ShowWarningMessage3(message string, items []MessageItem, on
 	msg.Data["items"] = items
 	var onresp func(any) bool
 	var onret func(*MessageItem)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *MessageItem
@@ -1232,7 +1225,7 @@ func (me implWindow) ShowWarningMessage3(message string, items []MessageItem, on
 	}
 }
 
-func (me implWindow) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem, onDone func(*MessageItem)) func(func(*MessageItem)) {
+func (me implWindow) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWarningMessage4"
@@ -1242,7 +1235,6 @@ func (me implWindow) ShowWarningMessage4(message string, options MessageOptions,
 	msg.Data["items"] = items
 	var onresp func(any) bool
 	var onret func(*MessageItem)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *MessageItem
@@ -1264,7 +1256,7 @@ func (me implWindow) ShowWarningMessage4(message string, options MessageOptions,
 	}
 }
 
-func (me implWindow) ShowErrorMessage1(message string, items []string, onDone func(*string)) func(func(*string)) {
+func (me implWindow) ShowErrorMessage1(message string, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showErrorMessage1"
@@ -1273,7 +1265,6 @@ func (me implWindow) ShowErrorMessage1(message string, items []string, onDone fu
 	msg.Data["items"] = items
 	var onresp func(any) bool
 	var onret func(*string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *string
@@ -1296,7 +1287,7 @@ func (me implWindow) ShowErrorMessage1(message string, items []string, onDone fu
 	}
 }
 
-func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, items []string, onDone func(*string)) func(func(*string)) {
+func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showErrorMessage2"
@@ -1306,7 +1297,6 @@ func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, i
 	msg.Data["items"] = items
 	var onresp func(any) bool
 	var onret func(*string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *string
@@ -1329,7 +1319,7 @@ func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, i
 	}
 }
 
-func (me implWindow) ShowErrorMessage3(message string, items []MessageItem, onDone func(*MessageItem)) func(func(*MessageItem)) {
+func (me implWindow) ShowErrorMessage3(message string, items []MessageItem) func(func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showErrorMessage3"
@@ -1338,7 +1328,6 @@ func (me implWindow) ShowErrorMessage3(message string, items []MessageItem, onDo
 	msg.Data["items"] = items
 	var onresp func(any) bool
 	var onret func(*MessageItem)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *MessageItem
@@ -1360,7 +1349,7 @@ func (me implWindow) ShowErrorMessage3(message string, items []MessageItem, onDo
 	}
 }
 
-func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem, onDone func(*MessageItem)) func(func(*MessageItem)) {
+func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showErrorMessage4"
@@ -1370,7 +1359,6 @@ func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, i
 	msg.Data["items"] = items
 	var onresp func(any) bool
 	var onret func(*MessageItem)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *MessageItem
@@ -1392,7 +1380,7 @@ func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, i
 	}
 }
 
-func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel, onDone func(*string)) func(func(*string)) {
+func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showInputBox"
@@ -1446,7 +1434,6 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel, onDon
 	}
 	var onresp func(any) bool
 	var onret func(*string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *string
@@ -1480,7 +1467,7 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel, onDon
 	}
 }
 
-func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel, onDone func([]string)) func(func([]string)) {
+func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel) func(func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showQuickPick1"
@@ -1537,7 +1524,6 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 	}
 	var onresp func(any) bool
 	var onret func([]string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result []string
@@ -1582,7 +1568,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 	}
 }
 
-func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel, onDone func(*string)) func(func(*string)) {
+func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showQuickPick2"
@@ -1640,7 +1626,6 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 	}
 	var onresp func(any) bool
 	var onret func(*string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *string
@@ -1674,7 +1659,7 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 	}
 }
 
-func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel, onDone func([]QuickPickItem)) func(func([]QuickPickItem)) {
+func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel) func(func([]QuickPickItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showQuickPick3"
@@ -1731,7 +1716,6 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 	}
 	var onresp func(any) bool
 	var onret func([]QuickPickItem)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result []QuickPickItem
@@ -1777,7 +1761,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 	}
 }
 
-func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel, onDone func(*QuickPickItem)) func(func(*QuickPickItem)) {
+func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel) func(func(*QuickPickItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showQuickPick4"
@@ -1835,7 +1819,6 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 	}
 	var onresp func(any) bool
 	var onret func(*QuickPickItem)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *QuickPickItem
@@ -1868,7 +1851,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 	}
 }
 
-func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int, onDone func(*Disposable)) func(func(*Disposable)) {
+func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.setStatusBarMessage1"
@@ -1877,7 +1860,6 @@ func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int, onD
 	msg.Data["hideAfterTimeout"] = hideAfterTimeout
 	var onresp func(any) bool
 	var onret func(*Disposable)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *Disposable
@@ -1901,7 +1883,7 @@ func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int, onD
 	}
 }
 
-func (me implWindow) SetStatusBarMessage2(text string, onDone func(*Disposable)) func(func(*Disposable)) {
+func (me implWindow) SetStatusBarMessage2(text string) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.setStatusBarMessage2"
@@ -1909,7 +1891,6 @@ func (me implWindow) SetStatusBarMessage2(text string, onDone func(*Disposable))
 	msg.Data["text"] = text
 	var onresp func(any) bool
 	var onret func(*Disposable)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *Disposable
@@ -1933,7 +1914,7 @@ func (me implWindow) SetStatusBarMessage2(text string, onDone func(*Disposable))
 	}
 }
 
-func (me implWindow) ShowSaveDialog(options SaveDialogOptions, onDone func(*string)) func(func(*string)) {
+func (me implWindow) ShowSaveDialog(options SaveDialogOptions) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showSaveDialog"
@@ -1941,7 +1922,6 @@ func (me implWindow) ShowSaveDialog(options SaveDialogOptions, onDone func(*stri
 	msg.Data["options"] = options
 	var onresp func(any) bool
 	var onret func(*string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *string
@@ -1964,7 +1944,7 @@ func (me implWindow) ShowSaveDialog(options SaveDialogOptions, onDone func(*stri
 	}
 }
 
-func (me implWindow) ShowOpenDialog(options OpenDialogOptions, onDone func([]string)) func(func([]string)) {
+func (me implWindow) ShowOpenDialog(options OpenDialogOptions) func(func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showOpenDialog"
@@ -1972,7 +1952,6 @@ func (me implWindow) ShowOpenDialog(options OpenDialogOptions, onDone func([]str
 	msg.Data["options"] = options
 	var onresp func(any) bool
 	var onret func([]string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result []string
@@ -2006,7 +1985,7 @@ func (me implWindow) ShowOpenDialog(options OpenDialogOptions, onDone func([]str
 	}
 }
 
-func (me implWindow) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions, onDone func(*WorkspaceFolder)) func(func(*WorkspaceFolder)) {
+func (me implWindow) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions) func(func(*WorkspaceFolder)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.showWorkspaceFolderPick"
@@ -2016,7 +1995,6 @@ func (me implWindow) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions
 	}
 	var onresp func(any) bool
 	var onret func(*WorkspaceFolder)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *WorkspaceFolder
@@ -2038,14 +2016,13 @@ func (me implWindow) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions
 	}
 }
 
-func (me implWindow) State(onDone func(WindowState)) func(func(WindowState)) {
+func (me implWindow) State() func(func(WindowState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.state"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func(WindowState)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result WindowState
@@ -2067,7 +2044,7 @@ func (me implWindow) State(onDone func(WindowState)) func(func(WindowState)) {
 	}
 }
 
-func (me implWindow) OnDidChangeWindowState(listener func(WindowState), onDone func(*Disposable)) func(func(*Disposable)) {
+func (me implWindow) OnDidChangeWindowState(listener func(WindowState)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.onDidChangeWindowState"
@@ -2094,7 +2071,6 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState), onDone f
 	msg.Data["listener"] = _fnid_listener
 	var onresp func(any) bool
 	var onret func(*Disposable)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *Disposable
@@ -2118,7 +2094,7 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState), onDone f
 	}
 }
 
-func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority *int, onDone func(*StatusBarItem)) func(func(*StatusBarItem)) {
+func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority *int) func(func(*StatusBarItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createStatusBarItem"
@@ -2131,7 +2107,6 @@ func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority 
 	}
 	var onresp func(any) bool
 	var onret func(*StatusBarItem)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *StatusBarItem
@@ -2154,7 +2129,7 @@ func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority 
 	}
 }
 
-func (me implWindow) CreateOutputChannel(name string, onDone func(*OutputChannel)) func(func(*OutputChannel)) {
+func (me implWindow) CreateOutputChannel(name string) func(func(*OutputChannel)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createOutputChannel"
@@ -2162,7 +2137,6 @@ func (me implWindow) CreateOutputChannel(name string, onDone func(*OutputChannel
 	msg.Data["name"] = name
 	var onresp func(any) bool
 	var onret func(*OutputChannel)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *OutputChannel
@@ -2185,7 +2159,7 @@ func (me implWindow) CreateOutputChannel(name string, onDone func(*OutputChannel
 	}
 }
 
-func (me implEnv) OpenExternal(target string, onDone func(bool)) func(func(bool)) {
+func (me implEnv) OpenExternal(target string) func(func(bool)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.openExternal"
@@ -2193,7 +2167,6 @@ func (me implEnv) OpenExternal(target string, onDone func(bool)) func(func(bool)
 	msg.Data["target"] = target
 	var onresp func(any) bool
 	var onret func(bool)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result bool
@@ -2216,14 +2189,13 @@ func (me implEnv) OpenExternal(target string, onDone func(bool)) func(func(bool)
 	}
 }
 
-func (me implEnv) AppName(onDone func(string)) func(func(string)) {
+func (me implEnv) AppName() func(func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.appName"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func(string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result string
@@ -2244,14 +2216,13 @@ func (me implEnv) AppName(onDone func(string)) func(func(string)) {
 	}
 }
 
-func (me implEnv) AppRoot(onDone func(string)) func(func(string)) {
+func (me implEnv) AppRoot() func(func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.appRoot"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func(string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result string
@@ -2272,14 +2243,13 @@ func (me implEnv) AppRoot(onDone func(string)) func(func(string)) {
 	}
 }
 
-func (me implEnv) Language(onDone func(string)) func(func(string)) {
+func (me implEnv) Language() func(func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.language"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func(string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result string
@@ -2300,14 +2270,13 @@ func (me implEnv) Language(onDone func(string)) func(func(string)) {
 	}
 }
 
-func (me implEnv) MachineId(onDone func(string)) func(func(string)) {
+func (me implEnv) MachineId() func(func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.machineId"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func(string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result string
@@ -2328,14 +2297,13 @@ func (me implEnv) MachineId(onDone func(string)) func(func(string)) {
 	}
 }
 
-func (me implEnv) RemoteName(onDone func(*string)) func(func(*string)) {
+func (me implEnv) RemoteName() func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.remoteName"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func(*string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *string
@@ -2358,14 +2326,13 @@ func (me implEnv) RemoteName(onDone func(*string)) func(func(*string)) {
 	}
 }
 
-func (me implEnv) SessionId(onDone func(string)) func(func(string)) {
+func (me implEnv) SessionId() func(func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.sessionId"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func(string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result string
@@ -2386,14 +2353,13 @@ func (me implEnv) SessionId(onDone func(string)) func(func(string)) {
 	}
 }
 
-func (me implEnv) Shell(onDone func(string)) func(func(string)) {
+func (me implEnv) Shell() func(func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.shell"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func(string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result string
@@ -2414,14 +2380,13 @@ func (me implEnv) Shell(onDone func(string)) func(func(string)) {
 	}
 }
 
-func (me implEnv) UriScheme(onDone func(string)) func(func(string)) {
+func (me implEnv) UriScheme() func(func(string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.uriScheme"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func(string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result string
@@ -2442,14 +2407,13 @@ func (me implEnv) UriScheme(onDone func(string)) func(func(string)) {
 	}
 }
 
-func (me implEnv) Properties(onDone func(EnvProperties)) func(func(EnvProperties)) {
+func (me implEnv) Properties() func(func(EnvProperties)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.Properties"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func(EnvProperties)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result EnvProperties
@@ -2473,14 +2437,13 @@ func (me implEnv) Properties(onDone func(EnvProperties)) func(func(EnvProperties
 	}
 }
 
-func (me implWorkspace) Name(onDone func(*string)) func(func(*string)) {
+func (me implWorkspace) Name() func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.name"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func(*string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *string
@@ -2503,14 +2466,13 @@ func (me implWorkspace) Name(onDone func(*string)) func(func(*string)) {
 	}
 }
 
-func (me implWorkspace) WorkspaceFile(onDone func(*string)) func(func(*string)) {
+func (me implWorkspace) WorkspaceFile() func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.workspaceFile"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func(*string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *string
@@ -2533,7 +2495,7 @@ func (me implWorkspace) WorkspaceFile(onDone func(*string)) func(func(*string)) 
 	}
 }
 
-func (me implWorkspace) SaveAll(includeUntitled bool, onDone func(bool)) func(func(bool)) {
+func (me implWorkspace) SaveAll(includeUntitled bool) func(func(bool)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.saveAll"
@@ -2541,7 +2503,6 @@ func (me implWorkspace) SaveAll(includeUntitled bool, onDone func(bool)) func(fu
 	msg.Data["includeUntitled"] = includeUntitled
 	var onresp func(any) bool
 	var onret func(bool)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result bool
@@ -2564,7 +2525,7 @@ func (me implWorkspace) SaveAll(includeUntitled bool, onDone func(bool)) func(fu
 	}
 }
 
-func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent), onDone func(*Disposable)) func(func(*Disposable)) {
+func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.onDidChangeWorkspaceFolders"
@@ -2591,7 +2552,6 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 	msg.Data["listener"] = _fnid_listener
 	var onresp func(any) bool
 	var onret func(*Disposable)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *Disposable
@@ -2615,7 +2575,7 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 	}
 }
 
-func (me implWorkspace) GetWorkspaceFolder(uri string, onDone func(*WorkspaceFolder)) func(func(*WorkspaceFolder)) {
+func (me implWorkspace) GetWorkspaceFolder(uri string) func(func(*WorkspaceFolder)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.getWorkspaceFolder"
@@ -2623,7 +2583,6 @@ func (me implWorkspace) GetWorkspaceFolder(uri string, onDone func(*WorkspaceFol
 	msg.Data["uri"] = uri
 	var onresp func(any) bool
 	var onret func(*WorkspaceFolder)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *WorkspaceFolder
@@ -2645,14 +2604,13 @@ func (me implWorkspace) GetWorkspaceFolder(uri string, onDone func(*WorkspaceFol
 	}
 }
 
-func (me implWorkspace) WorkspaceFolders(onDone func([]WorkspaceFolder)) func(func([]WorkspaceFolder)) {
+func (me implWorkspace) WorkspaceFolders() func(func([]WorkspaceFolder)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.workspaceFolders"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func([]WorkspaceFolder)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result []WorkspaceFolder
@@ -2687,7 +2645,7 @@ func (me implWorkspace) WorkspaceFolders(onDone func([]WorkspaceFolder)) func(fu
 	}
 }
 
-func (me implWorkspace) FindFiles(include string, exclude *string, maxResults *int, token *Cancel, onDone func([]string)) func(func([]string)) {
+func (me implWorkspace) FindFiles(include string, exclude *string, maxResults *int, token *Cancel) func(func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.findFiles"
@@ -2712,7 +2670,6 @@ func (me implWorkspace) FindFiles(include string, exclude *string, maxResults *i
 	}
 	var onresp func(any) bool
 	var onret func([]string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result []string
@@ -2746,7 +2703,7 @@ func (me implWorkspace) FindFiles(include string, exclude *string, maxResults *i
 	}
 }
 
-func (me implWorkspace) AsRelativePath(pathOrUri string, includeWorkspaceFolder bool, onDone func(*string)) func(func(*string)) {
+func (me implWorkspace) AsRelativePath(pathOrUri string, includeWorkspaceFolder bool) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.asRelativePath"
@@ -2755,7 +2712,6 @@ func (me implWorkspace) AsRelativePath(pathOrUri string, includeWorkspaceFolder 
 	msg.Data["includeWorkspaceFolder"] = includeWorkspaceFolder
 	var onresp func(any) bool
 	var onret func(*string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *string
@@ -2778,14 +2734,13 @@ func (me implWorkspace) AsRelativePath(pathOrUri string, includeWorkspaceFolder 
 	}
 }
 
-func (me implWorkspace) Properties(onDone func(WorkspaceProperties)) func(func(WorkspaceProperties)) {
+func (me implWorkspace) Properties() func(func(WorkspaceProperties)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.Properties"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func(WorkspaceProperties)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result WorkspaceProperties
@@ -2809,14 +2764,13 @@ func (me implWorkspace) Properties(onDone func(WorkspaceProperties)) func(func(W
 	}
 }
 
-func (me implLanguages) GetLanguages(onDone func([]string)) func(func([]string)) {
+func (me implLanguages) GetLanguages() func(func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "languages.getLanguages"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func([]string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result []string
@@ -2850,7 +2804,7 @@ func (me implLanguages) GetLanguages(onDone func([]string)) func(func([]string))
 	}
 }
 
-func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent), onDone func(*Disposable)) func(func(*Disposable)) {
+func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "languages.onDidChangeDiagnostics"
@@ -2877,7 +2831,6 @@ func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEve
 	msg.Data["listener"] = _fnid_listener
 	var onresp func(any) bool
 	var onret func(*Disposable)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *Disposable
@@ -2901,7 +2854,7 @@ func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEve
 	}
 }
 
-func (me implExtensions) OnDidChange(listener func(), onDone func(*Disposable)) func(func(*Disposable)) {
+func (me implExtensions) OnDidChange(listener func()) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "extensions.onDidChange"
@@ -2922,7 +2875,6 @@ func (me implExtensions) OnDidChange(listener func(), onDone func(*Disposable)) 
 	msg.Data["listener"] = _fnid_listener
 	var onresp func(any) bool
 	var onret func(*Disposable)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *Disposable
@@ -2946,7 +2898,7 @@ func (me implExtensions) OnDidChange(listener func(), onDone func(*Disposable)) 
 	}
 }
 
-func (me implCommands) RegisterCommand(command string, callback func([]any) any, onDone func(*Disposable)) func(func(*Disposable)) {
+func (me implCommands) RegisterCommand(command string, callback func([]any) any) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "commands.registerCommand"
@@ -2974,7 +2926,6 @@ func (me implCommands) RegisterCommand(command string, callback func([]any) any,
 	msg.Data["callback"] = _fnid_callback
 	var onresp func(any) bool
 	var onret func(*Disposable)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result *Disposable
@@ -2998,7 +2949,7 @@ func (me implCommands) RegisterCommand(command string, callback func([]any) any,
 	}
 }
 
-func (me implCommands) ExecuteCommand(command string, rest []any, onDone func(any)) func(func(any)) {
+func (me implCommands) ExecuteCommand(command string, rest []any) func(func(any)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "commands.executeCommand"
@@ -3007,7 +2958,6 @@ func (me implCommands) ExecuteCommand(command string, rest []any, onDone func(an
 	msg.Data["rest"] = rest
 	var onresp func(any) bool
 	var onret func(any)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result any
@@ -3027,7 +2977,7 @@ func (me implCommands) ExecuteCommand(command string, rest []any, onDone func(an
 	}
 }
 
-func (me implCommands) GetCommands(filterInternal bool, onDone func([]string)) func(func([]string)) {
+func (me implCommands) GetCommands(filterInternal bool) func(func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "commands.getCommands"
@@ -3035,7 +2985,6 @@ func (me implCommands) GetCommands(filterInternal bool, onDone func([]string)) f
 	msg.Data["filterInternal"] = filterInternal
 	var onresp func(any) bool
 	var onret func([]string)
-	onret = onDone
 	onresp = func(payload any) bool {
 		var ok bool
 		var result []string
@@ -3070,7 +3019,7 @@ func (me implCommands) GetCommands(filterInternal bool, onDone func([]string)) f
 }
 
 // Shows the entry in the status bar.
-func (me *StatusBarItem) Show(onDone func()) func(func()) {
+func (me *StatusBarItem) Show() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.show"
@@ -3078,7 +3027,6 @@ func (me *StatusBarItem) Show(onDone func()) func(func()) {
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
 	var onret func()
-	onret = onDone
 	onresp = func(payload any) bool {
 		if (nil != payload) {
 			return false
@@ -3095,7 +3043,7 @@ func (me *StatusBarItem) Show(onDone func()) func(func()) {
 }
 
 // Hide the entry in the status bar.
-func (me *StatusBarItem) Hide(onDone func()) func(func()) {
+func (me *StatusBarItem) Hide() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.hide"
@@ -3103,7 +3051,6 @@ func (me *StatusBarItem) Hide(onDone func()) func(func()) {
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
 	var onret func()
-	onret = onDone
 	onresp = func(payload any) bool {
 		if (nil != payload) {
 			return false
@@ -3121,14 +3068,14 @@ func (me *StatusBarItem) Hide(onDone func()) func(func()) {
 
 // Dispose and free associated resources. Call
 // [hide](#StatusBarItem.hide).
-func (me *StatusBarItem) Dispose(onDone func()) func(func()) {
+func (me *StatusBarItem) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
 // Append the given value to the channel.
 // 
 // `value` ── A string, falsy values will not be printed.
-func (me *OutputChannel) Append(value string, onDone func()) func(func()) {
+func (me *OutputChannel) Append(value string) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.append"
@@ -3137,7 +3084,6 @@ func (me *OutputChannel) Append(value string, onDone func()) func(func()) {
 	msg.Data["value"] = value
 	var onresp func(any) bool
 	var onret func()
-	onret = onDone
 	onresp = func(payload any) bool {
 		if (nil != payload) {
 			return false
@@ -3157,7 +3103,7 @@ func (me *OutputChannel) Append(value string, onDone func()) func(func()) {
 // to the channel.
 // 
 // `value` ── A string, falsy values will be printed.
-func (me *OutputChannel) AppendLine(value string, onDone func()) func(func()) {
+func (me *OutputChannel) AppendLine(value string) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.appendLine"
@@ -3166,7 +3112,6 @@ func (me *OutputChannel) AppendLine(value string, onDone func()) func(func()) {
 	msg.Data["value"] = value
 	var onresp func(any) bool
 	var onret func()
-	onret = onDone
 	onresp = func(payload any) bool {
 		if (nil != payload) {
 			return false
@@ -3183,7 +3128,7 @@ func (me *OutputChannel) AppendLine(value string, onDone func()) func(func()) {
 }
 
 // Removes all output from the channel.
-func (me *OutputChannel) Clear(onDone func()) func(func()) {
+func (me *OutputChannel) Clear() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.clear"
@@ -3191,7 +3136,6 @@ func (me *OutputChannel) Clear(onDone func()) func(func()) {
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
 	var onret func()
-	onret = onDone
 	onresp = func(payload any) bool {
 		if (nil != payload) {
 			return false
@@ -3210,7 +3154,7 @@ func (me *OutputChannel) Clear(onDone func()) func(func()) {
 // Reveal this channel in the UI.
 // 
 // `preserveFocus` ── When `true` the channel will not take focus.
-func (me *OutputChannel) Show(preserveFocus *bool, onDone func()) func(func()) {
+func (me *OutputChannel) Show(preserveFocus *bool) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.show"
@@ -3221,7 +3165,6 @@ func (me *OutputChannel) Show(preserveFocus *bool, onDone func()) func(func()) {
 	}
 	var onresp func(any) bool
 	var onret func()
-	onret = onDone
 	onresp = func(payload any) bool {
 		if (nil != payload) {
 			return false
@@ -3238,7 +3181,7 @@ func (me *OutputChannel) Show(preserveFocus *bool, onDone func()) func(func()) {
 }
 
 // Hide this channel from the UI.
-func (me *OutputChannel) Hide(onDone func()) func(func()) {
+func (me *OutputChannel) Hide() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.hide"
@@ -3246,7 +3189,6 @@ func (me *OutputChannel) Hide(onDone func()) func(func()) {
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
 	var onret func()
-	onret = onDone
 	onresp = func(payload any) bool {
 		if (nil != payload) {
 			return false
@@ -3263,7 +3205,7 @@ func (me *OutputChannel) Hide(onDone func()) func(func()) {
 }
 
 // Dispose and free associated resources.
-func (me *OutputChannel) Dispose(onDone func()) func(func()) {
+func (me *OutputChannel) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 

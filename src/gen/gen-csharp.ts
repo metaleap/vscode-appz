@@ -36,13 +36,15 @@ export class Gen extends gen_syn.Gen {
     }
 
     emitDocs(it: gen_syn.WithDocs): Gen {
-        const method = it as gen_syn.Method
         const paramnames: string[] = []
         if (it.Docs && it.Docs.length)
             for (const doc of it.Docs)
                 if (doc.Lines && doc.Lines.length)
                     if (doc.ForParam && doc.ForParam.length) {
-                        this.line("/// <param name=\"" + doc.ForParam + "\">" + doc.Lines.join(" ") + "</param>")
+                        this.line(
+                            (doc.ForParam === "return" ? "/// <return>" : "/// <param name=\"" + doc.ForParam + "\">")
+                            + doc.Lines.join(" ")
+                            + (doc.ForParam === "return" ? "</return>" : "</param>"))
                         if (!paramnames.includes(doc.ForParam))
                             paramnames.push(doc.ForParam)
                     } else if (doc.Lines.length > 1)
@@ -51,12 +53,6 @@ export class Gen extends gen_syn.Gen {
                             .line("/// </summary>")
                     else
                         this.line("/// <summary>" + doc.Lines[0] + "</summary>")
-
-        // this just to prevent CS1573
-        if (method && method.Args && method.Args.length && paramnames.length)
-            for (const arg of method.Args)
-                if (!paramnames.includes(arg.Name))
-                    this.line("/// <param name=\"" + arg.Name + "\">Called on success with the result of the `" + method.Name + "` operation.</param>")
         return this
     }
 
@@ -75,11 +71,11 @@ export class Gen extends gen_syn.Gen {
                 this.each(it.Methods, "\n", m =>
                     this.emitDocs(m).lf()
                         .emitTypeRef(m.Type).s(" ", m.Name)
-                        .when(m.Args && m.Args.length,
+                        .when(it.IsTop && m.Type && !(m.Args && m.Args.length),
+                            () => this.s(" { get; }"),
                             () => this.s("(").each(m.Args, ", ", a =>
                                 this.emitTypeRef(a.Type).s(" ", a.Name, " = default"))
-                                .s(");"),
-                            () => this.s(" { get; }")
+                                .s(");")
                         ).line()
                 )
             )
@@ -122,7 +118,7 @@ export class Gen extends gen_syn.Gen {
         [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null]
 
         const isdisp = struct && (it.Name === "Dispose")
-        const isproperty = it.Func.Type && !(it.Func.Args && it.Func.Args.length)
+        const isproperty = it.Func.Type && !(it.Func.Args && it.Func.Args.length) && iface && iface.IsTop
         const emitsigheadln = () =>
             this.lf(iface ? "" : (struct ? ((it.Name !== "populateFrom") ? "public " : "internal ") : "private static "))
                 .emitTypeRef(it.Func.Type)

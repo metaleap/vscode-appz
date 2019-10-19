@@ -168,9 +168,9 @@ export interface Window {
 
      * @param message The message to show.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowInformationMessage1: (message: string, items: string[], onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    ShowInformationMessage1: (message: string, items: string[]) => (_: (_: string) => void) => void;
     /**
      * Show an information message to users. Optionally provide an array of items which will be presented as
      * clickable buttons.
@@ -178,94 +178,94 @@ export interface Window {
      * @param message The message to show.
      * @param options Configures the behaviour of the message.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowInformationMessage2: (message: string, options: MessageOptions, items: string[], onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    ShowInformationMessage2: (message: string, options: MessageOptions, items: string[]) => (_: (_: string) => void) => void;
     /**
      * Show an information message.
 
      * @param message The message to show.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowInformationMessage3: (message: string, items: MessageItem[], onDone?: (_: MessageItem) => void) => (_: (_: MessageItem) => void) => void;
+    ShowInformationMessage3: (message: string, items: MessageItem[]) => (_: (_: MessageItem) => void) => void;
     /**
      * Show an information message.
 
      * @param message The message to show.
      * @param options Configures the behaviour of the message.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowInformationMessage4: (message: string, options: MessageOptions, items: MessageItem[], onDone?: (_: MessageItem) => void) => (_: (_: MessageItem) => void) => void;
+    ShowInformationMessage4: (message: string, options: MessageOptions, items: MessageItem[]) => (_: (_: MessageItem) => void) => void;
     /**
      * Show a warning message.
 
      * @param message The message to show.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowWarningMessage1: (message: string, items: string[], onDone?: (_: string) => void) => (_: (_: string) => void) => void;
-    /**
-     * Show a warning message.
-
-     * @param message The message to show.
-     * @param options Configures the behaviour of the message.
-     * @param items A set of items that will be rendered as actions in the message.
-     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
-     */
-    ShowWarningMessage2: (message: string, options: MessageOptions, items: string[], onDone?: (_: string) => void) => (_: (_: string) => void) => void;
-    /**
-     * Show a warning message.
-
-     * @param message The message to show.
-     * @param items A set of items that will be rendered as actions in the message.
-     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
-     */
-    ShowWarningMessage3: (message: string, items: MessageItem[], onDone?: (_: MessageItem) => void) => (_: (_: MessageItem) => void) => void;
+    ShowWarningMessage1: (message: string, items: string[]) => (_: (_: string) => void) => void;
     /**
      * Show a warning message.
 
      * @param message The message to show.
      * @param options Configures the behaviour of the message.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowWarningMessage4: (message: string, options: MessageOptions, items: MessageItem[], onDone?: (_: MessageItem) => void) => (_: (_: MessageItem) => void) => void;
+    ShowWarningMessage2: (message: string, options: MessageOptions, items: string[]) => (_: (_: string) => void) => void;
+    /**
+     * Show a warning message.
+
+     * @param message The message to show.
+     * @param items A set of items that will be rendered as actions in the message.
+     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
+     */
+    ShowWarningMessage3: (message: string, items: MessageItem[]) => (_: (_: MessageItem) => void) => void;
+    /**
+     * Show a warning message.
+
+     * @param message The message to show.
+     * @param options Configures the behaviour of the message.
+     * @param items A set of items that will be rendered as actions in the message.
+     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
+     */
+    ShowWarningMessage4: (message: string, options: MessageOptions, items: MessageItem[]) => (_: (_: MessageItem) => void) => void;
     /**
      * Show an error message.
 
      * @param message The message to show.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowErrorMessage1: (message: string, items: string[], onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    ShowErrorMessage1: (message: string, items: string[]) => (_: (_: string) => void) => void;
     /**
      * Show an error message.
 
      * @param message The message to show.
      * @param options Configures the behaviour of the message.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowErrorMessage2: (message: string, options: MessageOptions, items: string[], onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    ShowErrorMessage2: (message: string, options: MessageOptions, items: string[]) => (_: (_: string) => void) => void;
     /**
      * Show an error message.
 
      * @param message The message to show.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowErrorMessage3: (message: string, items: MessageItem[], onDone?: (_: MessageItem) => void) => (_: (_: MessageItem) => void) => void;
+    ShowErrorMessage3: (message: string, items: MessageItem[]) => (_: (_: MessageItem) => void) => void;
     /**
      * Show an error message.
 
      * @param message The message to show.
      * @param options Configures the behaviour of the message.
      * @param items A set of items that will be rendered as actions in the message.
-     * @param onDone A thenable that resolves to the selected item or `undefined` when being dismissed.
+     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowErrorMessage4: (message: string, options: MessageOptions, items: MessageItem[], onDone?: (_: MessageItem) => void) => (_: (_: MessageItem) => void) => void;
+    ShowErrorMessage4: (message: string, options: MessageOptions, items: MessageItem[]) => (_: (_: MessageItem) => void) => void;
     /**
      * Opens an input box to ask the user for input.
      *
@@ -275,54 +275,54 @@ export interface Window {
 
      * @param options Configures the behavior of the input box.
      * @param token A token that can be used to signal cancellation.
-     * @param onDone A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
+     * @return A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
      */
-    ShowInputBox: (options?: InputBoxOptions, token?: Cancel, onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    ShowInputBox: (options?: InputBoxOptions, token?: Cancel) => (_: (_: string) => void) => void;
     /**
      * Shows a selection list allowing multiple selections.
 
      * @param items An array of strings, or a promise that resolves to an array of strings.
      * @param options Configures the behavior of the selection list.
      * @param token A token that can be used to signal cancellation.
-     * @param onDone A promise that resolves to the selected items or `undefined`.
+     * @return A promise that resolves to the selected items or `undefined`.
      */
-    ShowQuickPick1: (items: string[], options: QuickPickOptions, token?: Cancel, onDone?: (_: string[]) => void) => (_: (_: string[]) => void) => void;
+    ShowQuickPick1: (items: string[], options: QuickPickOptions, token?: Cancel) => (_: (_: string[]) => void) => void;
     /**
      * Shows a selection list.
 
      * @param items An array of strings, or a promise that resolves to an array of strings.
      * @param options Configures the behavior of the selection list.
      * @param token A token that can be used to signal cancellation.
-     * @param onDone A promise that resolves to the selection or `undefined`.
+     * @return A promise that resolves to the selection or `undefined`.
      */
-    ShowQuickPick2: (items: string[], options?: QuickPickOptions, token?: Cancel, onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    ShowQuickPick2: (items: string[], options?: QuickPickOptions, token?: Cancel) => (_: (_: string) => void) => void;
     /**
      * Shows a selection list allowing multiple selections.
 
      * @param items An array of items, or a promise that resolves to an array of items.
      * @param options Configures the behavior of the selection list.
      * @param token A token that can be used to signal cancellation.
-     * @param onDone A promise that resolves to the selected items or `undefined`.
+     * @return A promise that resolves to the selected items or `undefined`.
      */
-    ShowQuickPick3: (items: QuickPickItem[], options: QuickPickOptions, token?: Cancel, onDone?: (_: QuickPickItem[]) => void) => (_: (_: QuickPickItem[]) => void) => void;
+    ShowQuickPick3: (items: QuickPickItem[], options: QuickPickOptions, token?: Cancel) => (_: (_: QuickPickItem[]) => void) => void;
     /**
      * Shows a selection list.
 
      * @param items An array of items, or a promise that resolves to an array of items.
      * @param options Configures the behavior of the selection list.
      * @param token A token that can be used to signal cancellation.
-     * @param onDone A promise that resolves to the selected item or `undefined`.
+     * @return A promise that resolves to the selected item or `undefined`.
      */
-    ShowQuickPick4: (items: QuickPickItem[], options?: QuickPickOptions, token?: Cancel, onDone?: (_: QuickPickItem) => void) => (_: (_: QuickPickItem) => void) => void;
+    ShowQuickPick4: (items: QuickPickItem[], options?: QuickPickOptions, token?: Cancel) => (_: (_: QuickPickItem) => void) => void;
     /**
      * Set a message to the status bar. This is a short hand for the more powerful
      * status bar [items](#window.createStatusBarItem).
 
      * @param text The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
      * @param hideAfterTimeout Timeout in milliseconds after which the message will be disposed.
-     * @param onDone A disposable which hides the status bar message.
+     * @return A disposable which hides the status bar message.
      */
-    SetStatusBarMessage1: (text: string, hideAfterTimeout: number, onDone?: (_: Disposable) => void) => (_: (_: Disposable) => void) => void;
+    SetStatusBarMessage1: (text: string, hideAfterTimeout: number) => (_: (_: Disposable) => void) => void;
     /**
      * Set a message to the status bar. This is a short hand for the more powerful
      * status bar [items](#window.createStatusBarItem).
@@ -331,58 +331,58 @@ export interface Window {
      * longer used.
 
      * @param text The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
-     * @param onDone A disposable which hides the status bar message.
+     * @return A disposable which hides the status bar message.
      */
-    SetStatusBarMessage2: (text: string, onDone?: (_: Disposable) => void) => (_: (_: Disposable) => void) => void;
+    SetStatusBarMessage2: (text: string) => (_: (_: Disposable) => void) => void;
     /**
      * Shows a file save dialog to the user which allows to select a file
      * for saving-purposes.
 
      * @param options Options that control the dialog.
-     * @param onDone A promise that resolves to the selected resource or `undefined`.
+     * @return A promise that resolves to the selected resource or `undefined`.
      */
-    ShowSaveDialog: (options: SaveDialogOptions, onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    ShowSaveDialog: (options: SaveDialogOptions) => (_: (_: string) => void) => void;
     /**
      * Shows a file open dialog to the user which allows to select a file
      * for opening-purposes.
 
      * @param options Options that control the dialog.
-     * @param onDone A promise that resolves to the selected resources or `undefined`.
+     * @return A promise that resolves to the selected resources or `undefined`.
      */
-    ShowOpenDialog: (options: OpenDialogOptions, onDone?: (_: string[]) => void) => (_: (_: string[]) => void) => void;
+    ShowOpenDialog: (options: OpenDialogOptions) => (_: (_: string[]) => void) => void;
     /**
      * Shows a selection list of [workspace folders](#workspace.workspaceFolders) to pick from.
      * Returns `undefined` if no folder is open.
 
      * @param options Configures the behavior of the workspace folder list.
-     * @param onDone A promise that resolves to the workspace folder or `undefined`.
+     * @return A promise that resolves to the workspace folder or `undefined`.
      */
-    ShowWorkspaceFolderPick: (options?: WorkspaceFolderPickOptions, onDone?: (_: WorkspaceFolder) => void) => (_: (_: WorkspaceFolder) => void) => void;
+    ShowWorkspaceFolderPick: (options?: WorkspaceFolderPickOptions) => (_: (_: WorkspaceFolder) => void) => void;
     /**
      * Represents the current window's state.
 
      */
-    State: (onDone?: (_: WindowState) => void) => (_: (_: WindowState) => void) => void;
+    State: (_: (_: WindowState) => void) => void;
     /**
      * An [event](#Event) which fires when the focus state of the current window
      * changes. The value of the event represents whether the window is focused.
 
      */
-    OnDidChangeWindowState: (listener: (_: WindowState) => void, onDone?: (_: Disposable) => void) => (_: (_: Disposable) => void) => void;
+    OnDidChangeWindowState: (listener: (_: WindowState) => void) => (_: (_: Disposable) => void) => void;
     /**
      * Creates a status bar [item](#StatusBarItem).
 
      * @param alignment The alignment of the item.
      * @param priority The priority of the item. Higher values mean the item should be shown more to the left.
-     * @param onDone A new status bar item.
+     * @return A new status bar item.
      */
-    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number, onDone?: (_: StatusBarItem) => void) => (_: (_: StatusBarItem) => void) => void;
+    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number) => (_: (_: StatusBarItem) => void) => void;
     /**
      * Creates a new [output channel](#OutputChannel) with the given name.
 
      * @param name Human-readable string which will be used to represent the channel in the UI.
      */
-    CreateOutputChannel: (name: string, onDone?: (_: OutputChannel) => void) => (_: (_: OutputChannel) => void) => void;
+    CreateOutputChannel: (name: string) => (_: (_: OutputChannel) => void) => void;
 }
 /**
  * Namespace describing the environment the editor runs in.
@@ -397,29 +397,29 @@ export interface Env {
      * way to open a text document inside the editor, not this function.
 
      * @param target The uri that should be opened.
-     * @param onDone A promise indicating if open was successful.
+     * @return A promise indicating if open was successful.
      */
-    OpenExternal: (target: string, onDone?: (_: boolean) => void) => (_: (_: boolean) => void) => void;
+    OpenExternal: (target: string) => (_: (_: boolean) => void) => void;
     /**
      * The application name of the editor, like 'VS Code'.
 
      */
-    AppName: (onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    AppName: (_: (_: string) => void) => void;
     /**
      * The application root folder from which the editor is running.
 
      */
-    AppRoot: (onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    AppRoot: (_: (_: string) => void) => void;
     /**
      * Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
      */
-    Language: (onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    Language: (_: (_: string) => void) => void;
     /**
      * A unique identifier for the computer.
 
      */
-    MachineId: (onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    MachineId: (_: (_: string) => void) => void;
     /**
      * The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
      * Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
@@ -430,29 +430,29 @@ export interface Env {
      * a specific extension runs remote or not.
 
      */
-    RemoteName: (onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    RemoteName: (_: (_: string) => void) => void;
     /**
      * A unique identifier for the current session.
      * Changes each time the editor is started.
 
      */
-    SessionId: (onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    SessionId: (_: (_: string) => void) => void;
     /**
      * The detected default shell for the extension host, this is overridden by the
      * `terminal.integrated.shell` setting for the extension host's platform.
 
      */
-    Shell: (onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    Shell: (_: (_: string) => void) => void;
     /**
      * The custom uri scheme the editor registers to in the operating system.
 
      */
-    UriScheme: (onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    UriScheme: (_: (_: string) => void) => void;
     /**
      * Provides single-call access to numerous individual `Env` properties at once.
 
      */
-    Properties: (onDone: (_: EnvProperties) => void) => (_: (_: EnvProperties) => void) => void;
+    Properties: (_: (_: EnvProperties) => void) => void;
 }
 /**
  * Namespace for dealing with the current workspace. A workspace is the representation
@@ -470,7 +470,7 @@ export interface Workspace {
      * has been opened.
 
      */
-    Name: (onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    Name: (_: (_: string) => void) => void;
     /**
      * The location of the workspace file, for example:
      *
@@ -501,34 +501,34 @@ export interface Workspace {
      * well as an untitled or saved workspace.
 
      */
-    WorkspaceFile: (onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    WorkspaceFile: (_: (_: string) => void) => void;
     /**
      * Save all dirty files.
 
      * @param includeUntitled Also save files that have been created during this session.
-     * @param onDone A thenable that resolves when the files have been saved.
+     * @return A thenable that resolves when the files have been saved.
      */
-    SaveAll: (includeUntitled: boolean, onDone?: (_: boolean) => void) => (_: (_: boolean) => void) => void;
+    SaveAll: (includeUntitled: boolean) => (_: (_: boolean) => void) => void;
     /**
      * An event that is emitted when a workspace folder is added or removed.
 
      */
-    OnDidChangeWorkspaceFolders: (listener: (_: WorkspaceFoldersChangeEvent) => void, onDone?: (_: Disposable) => void) => (_: (_: Disposable) => void) => void;
+    OnDidChangeWorkspaceFolders: (listener: (_: WorkspaceFoldersChangeEvent) => void) => (_: (_: Disposable) => void) => void;
     /**
      * Returns the [workspace folder](#WorkspaceFolder) that contains a given uri.
      * * returns `undefined` when the given uri doesn't match any workspace folder
      * * returns the *input* when the given uri is a workspace folder itself
 
      * @param uri An uri.
-     * @param onDone A workspace folder or `undefined`
+     * @return A workspace folder or `undefined`
      */
-    GetWorkspaceFolder: (uri: string, onDone?: (_: WorkspaceFolder) => void) => (_: (_: WorkspaceFolder) => void) => void;
+    GetWorkspaceFolder: (uri: string) => (_: (_: WorkspaceFolder) => void) => void;
     /**
      * List of workspace folders or `undefined` when no folder is open.
      * *Note* that the first entry corresponds to the value of `rootPath`.
 
      */
-    WorkspaceFolders: (onDone?: (_: WorkspaceFolder[]) => void) => (_: (_: WorkspaceFolder[]) => void) => void;
+    WorkspaceFolders: (_: (_: WorkspaceFolder[]) => void) => void;
     /**
      * Find files across all [workspace folders](#workspace.workspaceFolders) in the workspace.
      * `findFiles('**​/*.js', '**​/node_modules/**', 10)`
@@ -537,9 +537,9 @@ export interface Workspace {
      * @param exclude A [glob pattern](#GlobPattern) that defines files and folders to exclude. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will apply, when `null` no excludes will apply.
      * @param maxResults An upper-bound for the result.
      * @param token A token that can be used to signal cancellation to the underlying search engine.
-     * @param onDone A thenable that resolves to an array of resource identifiers. Will return no results if no [workspace folders](#workspace.workspaceFolders) are opened.
+     * @return A thenable that resolves to an array of resource identifiers. Will return no results if no [workspace folders](#workspace.workspaceFolders) are opened.
      */
-    FindFiles: (include: string, exclude?: string, maxResults?: number, token?: Cancel, onDone?: (_: string[]) => void) => (_: (_: string[]) => void) => void;
+    FindFiles: (include: string, exclude?: string, maxResults?: number, token?: Cancel) => (_: (_: string[]) => void) => void;
     /**
      * Returns a path that is relative to the workspace folder or folders.
      *
@@ -548,14 +548,14 @@ export interface Workspace {
 
      * @param pathOrUri A path or uri. When a uri is given its [fsPath](#Uri.fsPath) is used.
      * @param includeWorkspaceFolder When `true` and when the given path is contained inside a workspace folder the name of the workspace is prepended. Defaults to `true` when there are multiple workspace folders and `false` otherwise.
-     * @param onDone A path relative to the root or the input.
+     * @return A path relative to the root or the input.
      */
-    AsRelativePath: (pathOrUri: string, includeWorkspaceFolder: boolean, onDone?: (_: string) => void) => (_: (_: string) => void) => void;
+    AsRelativePath: (pathOrUri: string, includeWorkspaceFolder: boolean) => (_: (_: string) => void) => void;
     /**
      * Provides single-call access to numerous individual `Workspace` properties at once.
 
      */
-    Properties: (onDone: (_: WorkspaceProperties) => void) => (_: (_: WorkspaceProperties) => void) => void;
+    Properties: (_: (_: WorkspaceProperties) => void) => void;
 }
 /**
  * Namespace for participating in language-specific editor [features](https://code.visualstudio.com/docs/editor/editingevolved),
@@ -590,15 +590,15 @@ export interface Languages {
     /**
      * Return the identifiers of all known languages.
 
-     * @param onDone Promise resolving to an array of identifier strings.
+     * @return Promise resolving to an array of identifier strings.
      */
-    GetLanguages: (onDone?: (_: string[]) => void) => (_: (_: string[]) => void) => void;
+    GetLanguages: (_: (_: string[]) => void) => void;
     /**
      * An [event](#Event) which fires when the global set of diagnostics changes. This is
      * newly added and removed diagnostics.
 
      */
-    OnDidChangeDiagnostics: (listener: (_: DiagnosticChangeEvent) => void, onDone?: (_: Disposable) => void) => (_: (_: Disposable) => void) => void;
+    OnDidChangeDiagnostics: (listener: (_: DiagnosticChangeEvent) => void) => (_: (_: Disposable) => void) => void;
 }
 /**
  * Namespace for dealing with installed extensions. Extensions are represented
@@ -639,7 +639,7 @@ export interface Extensions {
      * installed, uninstalled, enabled or disabled.
 
      */
-    OnDidChange: (listener: () => void, onDone?: (_: Disposable) => void) => (_: (_: Disposable) => void) => void;
+    OnDidChange: (listener: () => void) => (_: (_: Disposable) => void) => void;
 }
 /**
  * Namespace for dealing with commands. In short, a command is a function with a
@@ -688,9 +688,9 @@ export interface Commands {
 
      * @param command A unique identifier for the command.
      * @param callback A command handler function.
-     * @param onDone Disposable which unregisters this command on disposal.
+     * @return Disposable which unregisters this command on disposal.
      */
-    RegisterCommand: (command: string, callback: (_: any[]) => any, onDone?: (_: Disposable) => void) => (_: (_: Disposable) => void) => void;
+    RegisterCommand: (command: string, callback: (_: any[]) => any) => (_: (_: Disposable) => void) => void;
     /**
      * Executes the command denoted by the given command identifier.
      *
@@ -702,17 +702,17 @@ export interface Commands {
 
      * @param command Identifier of the command to execute.
      * @param rest Parameters passed to the command function.
-     * @param onDone A thenable that resolves to the returned value of the given command. `undefined` when the command handler function doesn't return anything.
+     * @return A thenable that resolves to the returned value of the given command. `undefined` when the command handler function doesn't return anything.
      */
-    ExecuteCommand: (command: string, rest: any[], onDone?: (_: any) => void) => (_: (_: any) => void) => void;
+    ExecuteCommand: (command: string, rest: any[]) => (_: (_: any) => void) => void;
     /**
      * Retrieve the list of all available commands. Commands starting an underscore are
      * treated as internal commands.
 
      * @param filterInternal Set `true` to not see internal commands (starting with an underscore)
-     * @param onDone Thenable that resolves to a list of command ids.
+     * @return Thenable that resolves to a list of command ids.
      */
-    GetCommands: (filterInternal: boolean, onDone?: (_: string[]) => void) => (_: (_: string[]) => void) => void;
+    GetCommands: (filterInternal: boolean) => (_: (_: string[]) => void) => void;
 }
 /**
  * Options to configure the behavior of the message.

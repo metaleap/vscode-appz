@@ -100,7 +100,7 @@ class impl {
 exports.impl = impl;
 class implWindow extends implBase {
     constructor(impl) { super(impl); }
-    ShowInformationMessage1(message, items, onDone) {
+    ShowInformationMessage1(message, items) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showInformationMessage1";
@@ -109,7 +109,6 @@ class implWindow extends implBase {
         msg.Data["items"] = items;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -131,7 +130,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowInformationMessage2(message, options, items, onDone) {
+    ShowInformationMessage2(message, options, items) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showInformationMessage2";
@@ -141,7 +140,6 @@ class implWindow extends implBase {
         msg.Data["items"] = items;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -163,7 +161,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowInformationMessage3(message, items, onDone) {
+    ShowInformationMessage3(message, items) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showInformationMessage3";
@@ -172,7 +170,6 @@ class implWindow extends implBase {
         msg.Data["items"] = items;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -193,7 +190,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowInformationMessage4(message, options, items, onDone) {
+    ShowInformationMessage4(message, options, items) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showInformationMessage4";
@@ -203,7 +200,6 @@ class implWindow extends implBase {
         msg.Data["items"] = items;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -224,7 +220,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowWarningMessage1(message, items, onDone) {
+    ShowWarningMessage1(message, items) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showWarningMessage1";
@@ -233,7 +229,6 @@ class implWindow extends implBase {
         msg.Data["items"] = items;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -255,7 +250,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowWarningMessage2(message, options, items, onDone) {
+    ShowWarningMessage2(message, options, items) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showWarningMessage2";
@@ -265,7 +260,6 @@ class implWindow extends implBase {
         msg.Data["items"] = items;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -287,7 +281,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowWarningMessage3(message, items, onDone) {
+    ShowWarningMessage3(message, items) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showWarningMessage3";
@@ -296,7 +290,6 @@ class implWindow extends implBase {
         msg.Data["items"] = items;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -317,7 +310,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowWarningMessage4(message, options, items, onDone) {
+    ShowWarningMessage4(message, options, items) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showWarningMessage4";
@@ -327,7 +320,6 @@ class implWindow extends implBase {
         msg.Data["items"] = items;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -348,7 +340,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowErrorMessage1(message, items, onDone) {
+    ShowErrorMessage1(message, items) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showErrorMessage1";
@@ -357,7 +349,6 @@ class implWindow extends implBase {
         msg.Data["items"] = items;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -379,7 +370,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowErrorMessage2(message, options, items, onDone) {
+    ShowErrorMessage2(message, options, items) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showErrorMessage2";
@@ -389,7 +380,6 @@ class implWindow extends implBase {
         msg.Data["items"] = items;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -411,7 +401,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowErrorMessage3(message, items, onDone) {
+    ShowErrorMessage3(message, items) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showErrorMessage3";
@@ -420,7 +410,6 @@ class implWindow extends implBase {
         msg.Data["items"] = items;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -441,7 +430,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowErrorMessage4(message, options, items, onDone) {
+    ShowErrorMessage4(message, options, items) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showErrorMessage4";
@@ -451,7 +440,6 @@ class implWindow extends implBase {
         msg.Data["items"] = items;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -472,7 +460,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowInputBox(options, token, onDone) {
+    ShowInputBox(options, token) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showInputBox";
@@ -520,7 +508,6 @@ class implWindow extends implBase {
         }
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -551,7 +538,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowQuickPick1(items, options, token, onDone) {
+    ShowQuickPick1(items, options, token) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showQuickPick1";
@@ -603,7 +590,6 @@ class implWindow extends implBase {
         }
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -645,7 +631,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowQuickPick2(items, options, token, onDone) {
+    ShowQuickPick2(items, options, token) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showQuickPick2";
@@ -698,7 +684,6 @@ class implWindow extends implBase {
         }
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -729,7 +714,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowQuickPick3(items, options, token, onDone) {
+    ShowQuickPick3(items, options, token) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showQuickPick3";
@@ -781,7 +766,6 @@ class implWindow extends implBase {
         }
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -824,7 +808,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowQuickPick4(items, options, token, onDone) {
+    ShowQuickPick4(items, options, token) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showQuickPick4";
@@ -877,7 +861,6 @@ class implWindow extends implBase {
         }
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -907,7 +890,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    SetStatusBarMessage1(text, hideAfterTimeout, onDone) {
+    SetStatusBarMessage1(text, hideAfterTimeout) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.setStatusBarMessage1";
@@ -916,7 +899,6 @@ class implWindow extends implBase {
         msg.Data["hideAfterTimeout"] = hideAfterTimeout;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -940,7 +922,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    SetStatusBarMessage2(text, onDone) {
+    SetStatusBarMessage2(text) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.setStatusBarMessage2";
@@ -948,7 +930,6 @@ class implWindow extends implBase {
         msg.Data["text"] = text;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -972,7 +953,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowSaveDialog(options, onDone) {
+    ShowSaveDialog(options) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showSaveDialog";
@@ -980,7 +961,6 @@ class implWindow extends implBase {
         msg.Data["options"] = options;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1002,7 +982,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowOpenDialog(options, onDone) {
+    ShowOpenDialog(options) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showOpenDialog";
@@ -1010,7 +990,6 @@ class implWindow extends implBase {
         msg.Data["options"] = options;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1043,7 +1022,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowWorkspaceFolderPick(options, onDone) {
+    ShowWorkspaceFolderPick(options) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.showWorkspaceFolderPick";
@@ -1053,7 +1032,6 @@ class implWindow extends implBase {
         }
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1074,14 +1052,13 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    State(onDone) {
+    State() {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.state";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1102,7 +1079,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    OnDidChangeWindowState(listener, onDone) {
+    OnDidChangeWindowState(listener) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.onDidChangeWindowState";
@@ -1129,7 +1106,6 @@ class implWindow extends implBase {
         msg.Data["listener"] = _fnid_listener;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1153,7 +1129,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    CreateStatusBarItem(alignment, priority, onDone) {
+    CreateStatusBarItem(alignment, priority) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.createStatusBarItem";
@@ -1166,7 +1142,6 @@ class implWindow extends implBase {
         }
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1188,7 +1163,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    CreateOutputChannel(name, onDone) {
+    CreateOutputChannel(name) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.createOutputChannel";
@@ -1196,7 +1171,6 @@ class implWindow extends implBase {
         msg.Data["name"] = name;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1221,7 +1195,7 @@ class implWindow extends implBase {
 }
 class implEnv extends implBase {
     constructor(impl) { super(impl); }
-    OpenExternal(target, onDone) {
+    OpenExternal(target) {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.openExternal";
@@ -1229,7 +1203,6 @@ class implEnv extends implBase {
         msg.Data["target"] = target;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1252,14 +1225,13 @@ class implEnv extends implBase {
             onret = a0;
         };
     }
-    AppName(onDone) {
+    AppName() {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.appName";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1279,14 +1251,13 @@ class implEnv extends implBase {
             onret = a0;
         };
     }
-    AppRoot(onDone) {
+    AppRoot() {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.appRoot";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1306,14 +1277,13 @@ class implEnv extends implBase {
             onret = a0;
         };
     }
-    Language(onDone) {
+    Language() {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.language";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1333,14 +1303,13 @@ class implEnv extends implBase {
             onret = a0;
         };
     }
-    MachineId(onDone) {
+    MachineId() {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.machineId";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1360,14 +1329,13 @@ class implEnv extends implBase {
             onret = a0;
         };
     }
-    RemoteName(onDone) {
+    RemoteName() {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.remoteName";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1389,14 +1357,13 @@ class implEnv extends implBase {
             onret = a0;
         };
     }
-    SessionId(onDone) {
+    SessionId() {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.sessionId";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1416,14 +1383,13 @@ class implEnv extends implBase {
             onret = a0;
         };
     }
-    Shell(onDone) {
+    Shell() {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.shell";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1443,14 +1409,13 @@ class implEnv extends implBase {
             onret = a0;
         };
     }
-    UriScheme(onDone) {
+    UriScheme() {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.uriScheme";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1470,14 +1435,13 @@ class implEnv extends implBase {
             onret = a0;
         };
     }
-    Properties(onDone) {
+    Properties() {
         let msg;
         msg = newipcMsg();
         msg.QName = "env.Properties";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1504,14 +1468,13 @@ class implEnv extends implBase {
 }
 class implWorkspace extends implBase {
     constructor(impl) { super(impl); }
-    Name(onDone) {
+    Name() {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.name";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1533,14 +1496,13 @@ class implWorkspace extends implBase {
             onret = a0;
         };
     }
-    WorkspaceFile(onDone) {
+    WorkspaceFile() {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.workspaceFile";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1562,7 +1524,7 @@ class implWorkspace extends implBase {
             onret = a0;
         };
     }
-    SaveAll(includeUntitled, onDone) {
+    SaveAll(includeUntitled) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.saveAll";
@@ -1570,7 +1532,6 @@ class implWorkspace extends implBase {
         msg.Data["includeUntitled"] = includeUntitled;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1593,7 +1554,7 @@ class implWorkspace extends implBase {
             onret = a0;
         };
     }
-    OnDidChangeWorkspaceFolders(listener, onDone) {
+    OnDidChangeWorkspaceFolders(listener) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.onDidChangeWorkspaceFolders";
@@ -1620,7 +1581,6 @@ class implWorkspace extends implBase {
         msg.Data["listener"] = _fnid_listener;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1644,7 +1604,7 @@ class implWorkspace extends implBase {
             onret = a0;
         };
     }
-    GetWorkspaceFolder(uri, onDone) {
+    GetWorkspaceFolder(uri) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.getWorkspaceFolder";
@@ -1652,7 +1612,6 @@ class implWorkspace extends implBase {
         msg.Data["uri"] = uri;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1673,14 +1632,13 @@ class implWorkspace extends implBase {
             onret = a0;
         };
     }
-    WorkspaceFolders(onDone) {
+    WorkspaceFolders() {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.workspaceFolders";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1714,7 +1672,7 @@ class implWorkspace extends implBase {
             onret = a0;
         };
     }
-    FindFiles(include, exclude, maxResults, token, onDone) {
+    FindFiles(include, exclude, maxResults, token) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.findFiles";
@@ -1737,7 +1695,6 @@ class implWorkspace extends implBase {
         }
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1770,7 +1727,7 @@ class implWorkspace extends implBase {
             onret = a0;
         };
     }
-    AsRelativePath(pathOrUri, includeWorkspaceFolder, onDone) {
+    AsRelativePath(pathOrUri, includeWorkspaceFolder) {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.asRelativePath";
@@ -1779,7 +1736,6 @@ class implWorkspace extends implBase {
         msg.Data["includeWorkspaceFolder"] = includeWorkspaceFolder;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1801,14 +1757,13 @@ class implWorkspace extends implBase {
             onret = a0;
         };
     }
-    Properties(onDone) {
+    Properties() {
         let msg;
         msg = newipcMsg();
         msg.QName = "workspace.Properties";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1835,14 +1790,13 @@ class implWorkspace extends implBase {
 }
 class implLanguages extends implBase {
     constructor(impl) { super(impl); }
-    GetLanguages(onDone) {
+    GetLanguages() {
         let msg;
         msg = newipcMsg();
         msg.QName = "languages.getLanguages";
         msg.Data = {};
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1875,7 +1829,7 @@ class implLanguages extends implBase {
             onret = a0;
         };
     }
-    OnDidChangeDiagnostics(listener, onDone) {
+    OnDidChangeDiagnostics(listener) {
         let msg;
         msg = newipcMsg();
         msg.QName = "languages.onDidChangeDiagnostics";
@@ -1902,7 +1856,6 @@ class implLanguages extends implBase {
         msg.Data["listener"] = _fnid_listener;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1929,7 +1882,7 @@ class implLanguages extends implBase {
 }
 class implExtensions extends implBase {
     constructor(impl) { super(impl); }
-    OnDidChange(listener, onDone) {
+    OnDidChange(listener) {
         let msg;
         msg = newipcMsg();
         msg.QName = "extensions.onDidChange";
@@ -1950,7 +1903,6 @@ class implExtensions extends implBase {
         msg.Data["listener"] = _fnid_listener;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -1977,7 +1929,7 @@ class implExtensions extends implBase {
 }
 class implCommands extends implBase {
     constructor(impl) { super(impl); }
-    RegisterCommand(command, callback, onDone) {
+    RegisterCommand(command, callback) {
         let msg;
         msg = newipcMsg();
         msg.QName = "commands.registerCommand";
@@ -2005,7 +1957,6 @@ class implCommands extends implBase {
         msg.Data["callback"] = _fnid_callback;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -2029,7 +1980,7 @@ class implCommands extends implBase {
             onret = a0;
         };
     }
-    ExecuteCommand(command, rest, onDone) {
+    ExecuteCommand(command, rest) {
         let msg;
         msg = newipcMsg();
         msg.QName = "commands.executeCommand";
@@ -2038,7 +1989,6 @@ class implCommands extends implBase {
         msg.Data["rest"] = rest;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -2057,7 +2007,7 @@ class implCommands extends implBase {
             onret = a0;
         };
     }
-    GetCommands(filterInternal, onDone) {
+    GetCommands(filterInternal) {
         let msg;
         msg = newipcMsg();
         msg.QName = "commands.getCommands";
@@ -2065,7 +2015,6 @@ class implCommands extends implBase {
         msg.Data["filterInternal"] = filterInternal;
         let onresp;
         let onret;
-        onret = onDone;
         onresp = (payload) => {
             let ok;
             let result;
@@ -2099,7 +2048,7 @@ class implCommands extends implBase {
         };
     }
 }
-function StatusBarItem_Show(onDone) {
+function StatusBarItem_Show() {
     let msg;
     msg = newipcMsg();
     msg.QName = "StatusBarItem.show";
@@ -2107,7 +2056,6 @@ function StatusBarItem_Show(onDone) {
     msg.Data[""] = this.disp.id;
     let onresp;
     let onret;
-    onret = onDone;
     onresp = (payload) => {
         if ((undefined !== payload && null !== payload)) {
             return false;
@@ -2122,7 +2070,7 @@ function StatusBarItem_Show(onDone) {
         onret = a0;
     };
 }
-function StatusBarItem_Hide(onDone) {
+function StatusBarItem_Hide() {
     let msg;
     msg = newipcMsg();
     msg.QName = "StatusBarItem.hide";
@@ -2130,7 +2078,6 @@ function StatusBarItem_Hide(onDone) {
     msg.Data[""] = this.disp.id;
     let onresp;
     let onret;
-    onret = onDone;
     onresp = (payload) => {
         if ((undefined !== payload && null !== payload)) {
             return false;
@@ -2145,10 +2092,10 @@ function StatusBarItem_Hide(onDone) {
         onret = a0;
     };
 }
-function StatusBarItem_Dispose(onDone) {
+function StatusBarItem_Dispose() {
     return this.disp.Dispose();
 }
-function OutputChannel_Append(value, onDone) {
+function OutputChannel_Append(value) {
     let msg;
     msg = newipcMsg();
     msg.QName = "OutputChannel.append";
@@ -2157,7 +2104,6 @@ function OutputChannel_Append(value, onDone) {
     msg.Data["value"] = value;
     let onresp;
     let onret;
-    onret = onDone;
     onresp = (payload) => {
         if ((undefined !== payload && null !== payload)) {
             return false;
@@ -2172,7 +2118,7 @@ function OutputChannel_Append(value, onDone) {
         onret = a0;
     };
 }
-function OutputChannel_AppendLine(value, onDone) {
+function OutputChannel_AppendLine(value) {
     let msg;
     msg = newipcMsg();
     msg.QName = "OutputChannel.appendLine";
@@ -2181,7 +2127,6 @@ function OutputChannel_AppendLine(value, onDone) {
     msg.Data["value"] = value;
     let onresp;
     let onret;
-    onret = onDone;
     onresp = (payload) => {
         if ((undefined !== payload && null !== payload)) {
             return false;
@@ -2196,7 +2141,7 @@ function OutputChannel_AppendLine(value, onDone) {
         onret = a0;
     };
 }
-function OutputChannel_Clear(onDone) {
+function OutputChannel_Clear() {
     let msg;
     msg = newipcMsg();
     msg.QName = "OutputChannel.clear";
@@ -2204,7 +2149,6 @@ function OutputChannel_Clear(onDone) {
     msg.Data[""] = this.disp.id;
     let onresp;
     let onret;
-    onret = onDone;
     onresp = (payload) => {
         if ((undefined !== payload && null !== payload)) {
             return false;
@@ -2219,7 +2163,7 @@ function OutputChannel_Clear(onDone) {
         onret = a0;
     };
 }
-function OutputChannel_Show(preserveFocus, onDone) {
+function OutputChannel_Show(preserveFocus) {
     let msg;
     msg = newipcMsg();
     msg.QName = "OutputChannel.show";
@@ -2230,7 +2174,6 @@ function OutputChannel_Show(preserveFocus, onDone) {
     }
     let onresp;
     let onret;
-    onret = onDone;
     onresp = (payload) => {
         if ((undefined !== payload && null !== payload)) {
             return false;
@@ -2245,7 +2188,7 @@ function OutputChannel_Show(preserveFocus, onDone) {
         onret = a0;
     };
 }
-function OutputChannel_Hide(onDone) {
+function OutputChannel_Hide() {
     let msg;
     msg = newipcMsg();
     msg.QName = "OutputChannel.hide";
@@ -2253,7 +2196,6 @@ function OutputChannel_Hide(onDone) {
     msg.Data[""] = this.disp.id;
     let onresp;
     let onret;
-    onret = onDone;
     onresp = (payload) => {
         if ((undefined !== payload && null !== payload)) {
             return false;
@@ -2268,7 +2210,7 @@ function OutputChannel_Hide(onDone) {
         onret = a0;
     };
 }
-function OutputChannel_Dispose(onDone) {
+function OutputChannel_Dispose() {
     return this.disp.Dispose();
 }
 function MessageItem_populateFrom(payload) {

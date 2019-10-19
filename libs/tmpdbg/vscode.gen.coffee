@@ -169,12 +169,11 @@ Window: interface
     # @items:
     # A set of items that will be rendered as actions in the message.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
     ShowInformationMessage1: ((?string->void)->void)
         message: string
         items: [string]
-        onDone: ?(?string->void)
 
     # showInformationMessage:
     # Show an information message to users. Optionally provide an array of items which will be presented as
@@ -189,13 +188,12 @@ Window: interface
     # @items:
     # A set of items that will be rendered as actions in the message.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
     ShowInformationMessage2: ((?string->void)->void)
         message: string
         options: MessageOptions
         items: [string]
-        onDone: ?(?string->void)
 
     # showInformationMessage:
     # Show an information message.
@@ -206,12 +204,11 @@ Window: interface
     # @items:
     # A set of items that will be rendered as actions in the message.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
     ShowInformationMessage3: ((?MessageItem->void)->void)
         message: string
         items: [MessageItem]
-        onDone: ?(?MessageItem->void)
 
     # showInformationMessage:
     # Show an information message.
@@ -225,13 +222,12 @@ Window: interface
     # @items:
     # A set of items that will be rendered as actions in the message.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
     ShowInformationMessage4: ((?MessageItem->void)->void)
         message: string
         options: MessageOptions
         items: [MessageItem]
-        onDone: ?(?MessageItem->void)
 
     # showWarningMessage:
     # Show a warning message.
@@ -242,12 +238,11 @@ Window: interface
     # @items:
     # A set of items that will be rendered as actions in the message.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
     ShowWarningMessage1: ((?string->void)->void)
         message: string
         items: [string]
-        onDone: ?(?string->void)
 
     # showWarningMessage:
     # Show a warning message.
@@ -261,13 +256,12 @@ Window: interface
     # @items:
     # A set of items that will be rendered as actions in the message.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
     ShowWarningMessage2: ((?string->void)->void)
         message: string
         options: MessageOptions
         items: [string]
-        onDone: ?(?string->void)
 
     # showWarningMessage:
     # Show a warning message.
@@ -278,12 +272,11 @@ Window: interface
     # @items:
     # A set of items that will be rendered as actions in the message.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
     ShowWarningMessage3: ((?MessageItem->void)->void)
         message: string
         items: [MessageItem]
-        onDone: ?(?MessageItem->void)
 
     # showWarningMessage:
     # Show a warning message.
@@ -297,13 +290,12 @@ Window: interface
     # @items:
     # A set of items that will be rendered as actions in the message.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
     ShowWarningMessage4: ((?MessageItem->void)->void)
         message: string
         options: MessageOptions
         items: [MessageItem]
-        onDone: ?(?MessageItem->void)
 
     # showErrorMessage:
     # Show an error message.
@@ -314,12 +306,11 @@ Window: interface
     # @items:
     # A set of items that will be rendered as actions in the message.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
     ShowErrorMessage1: ((?string->void)->void)
         message: string
         items: [string]
-        onDone: ?(?string->void)
 
     # showErrorMessage:
     # Show an error message.
@@ -333,13 +324,12 @@ Window: interface
     # @items:
     # A set of items that will be rendered as actions in the message.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
     ShowErrorMessage2: ((?string->void)->void)
         message: string
         options: MessageOptions
         items: [string]
-        onDone: ?(?string->void)
 
     # showErrorMessage:
     # Show an error message.
@@ -350,12 +340,11 @@ Window: interface
     # @items:
     # A set of items that will be rendered as actions in the message.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
     ShowErrorMessage3: ((?MessageItem->void)->void)
         message: string
         items: [MessageItem]
-        onDone: ?(?MessageItem->void)
 
     # showErrorMessage:
     # Show an error message.
@@ -369,13 +358,12 @@ Window: interface
     # @items:
     # A set of items that will be rendered as actions in the message.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
     ShowErrorMessage4: ((?MessageItem->void)->void)
         message: string
         options: MessageOptions
         items: [MessageItem]
-        onDone: ?(?MessageItem->void)
 
     # showInputBox:
     # Opens an input box to ask the user for input.
@@ -390,12 +378,11 @@ Window: interface
     # @token:
     # A token that can be used to signal cancellation.
     #
-    # @onDone:
+    # @return:
     # A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
     ShowInputBox: ((?string->void)->void)
         options: ?InputBoxOptions
         token: ?Cancel
-        onDone: ?(?string->void)
 
     # showQuickPick:
     # Shows a selection list allowing multiple selections.
@@ -409,13 +396,12 @@ Window: interface
     # @token:
     # A token that can be used to signal cancellation.
     #
-    # @onDone:
+    # @return:
     # A promise that resolves to the selected items or `undefined`.
     ShowQuickPick1: ((?[string]->void)->void)
         items: [string]
         options: QuickPickOptions
         token: ?Cancel
-        onDone: ?(?[string]->void)
 
     # showQuickPick:
     # Shows a selection list.
@@ -429,13 +415,12 @@ Window: interface
     # @token:
     # A token that can be used to signal cancellation.
     #
-    # @onDone:
+    # @return:
     # A promise that resolves to the selection or `undefined`.
     ShowQuickPick2: ((?string->void)->void)
         items: [string]
         options: ?QuickPickOptions
         token: ?Cancel
-        onDone: ?(?string->void)
 
     # showQuickPick:
     # Shows a selection list allowing multiple selections.
@@ -449,13 +434,12 @@ Window: interface
     # @token:
     # A token that can be used to signal cancellation.
     #
-    # @onDone:
+    # @return:
     # A promise that resolves to the selected items or `undefined`.
     ShowQuickPick3: ((?[QuickPickItem]->void)->void)
         items: [QuickPickItem]
         options: QuickPickOptions
         token: ?Cancel
-        onDone: ?(?[QuickPickItem]->void)
 
     # showQuickPick:
     # Shows a selection list.
@@ -469,13 +453,12 @@ Window: interface
     # @token:
     # A token that can be used to signal cancellation.
     #
-    # @onDone:
+    # @return:
     # A promise that resolves to the selected item or `undefined`.
     ShowQuickPick4: ((?QuickPickItem->void)->void)
         items: [QuickPickItem]
         options: ?QuickPickOptions
         token: ?Cancel
-        onDone: ?(?QuickPickItem->void)
 
     # setStatusBarMessage:
     # Set a message to the status bar. This is a short hand for the more powerful
@@ -487,12 +470,11 @@ Window: interface
     # @hideAfterTimeout:
     # Timeout in milliseconds after which the message will be disposed.
     #
-    # @onDone:
+    # @return:
     # A disposable which hides the status bar message.
     SetStatusBarMessage1: ((?Disposable->void)->void)
         text: string
         hideAfterTimeout: int
-        onDone: ?(?Disposable->void)
 
     # setStatusBarMessage:
     # Set a message to the status bar. This is a short hand for the more powerful
@@ -504,11 +486,10 @@ Window: interface
     # @text:
     # The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
     #
-    # @onDone:
+    # @return:
     # A disposable which hides the status bar message.
     SetStatusBarMessage2: ((?Disposable->void)->void)
         text: string
-        onDone: ?(?Disposable->void)
 
     # showSaveDialog:
     # Shows a file save dialog to the user which allows to select a file
@@ -517,11 +498,10 @@ Window: interface
     # @options:
     # Options that control the dialog.
     #
-    # @onDone:
+    # @return:
     # A promise that resolves to the selected resource or `undefined`.
     ShowSaveDialog: ((?string->void)->void)
         options: SaveDialogOptions
-        onDone: ?(?string->void)
 
     # showOpenDialog:
     # Shows a file open dialog to the user which allows to select a file
@@ -530,11 +510,10 @@ Window: interface
     # @options:
     # Options that control the dialog.
     #
-    # @onDone:
+    # @return:
     # A promise that resolves to the selected resources or `undefined`.
     ShowOpenDialog: ((?[string]->void)->void)
         options: OpenDialogOptions
-        onDone: ?(?[string]->void)
 
     # showWorkspaceFolderPick:
     # Shows a selection list of [workspace folders](#workspace.workspaceFolders) to pick from.
@@ -543,23 +522,20 @@ Window: interface
     # @options:
     # Configures the behavior of the workspace folder list.
     #
-    # @onDone:
+    # @return:
     # A promise that resolves to the workspace folder or `undefined`.
     ShowWorkspaceFolderPick: ((?WorkspaceFolder->void)->void)
         options: ?WorkspaceFolderPickOptions
-        onDone: ?(?WorkspaceFolder->void)
 
     # state:
     # Represents the current window's state.
     State: ((WindowState->void)->void)
-        onDone: ?(WindowState->void)
 
     # onDidChangeWindowState:
     # An [event](#Event) which fires when the focus state of the current window
     # changes. The value of the event represents whether the window is focused.
     OnDidChangeWindowState: ((?Disposable->void)->void)
         listener: (WindowState->void)
-        onDone: ?(?Disposable->void)
 
     # createStatusBarItem:
     # Creates a status bar [item](#StatusBarItem).
@@ -570,12 +546,11 @@ Window: interface
     # @priority:
     # The priority of the item. Higher values mean the item should be shown more to the left.
     #
-    # @onDone:
+    # @return:
     # A new status bar item.
     CreateStatusBarItem: ((?StatusBarItem->void)->void)
         alignment: ?StatusBarAlignment
         priority: ?int
-        onDone: ?(?StatusBarItem->void)
 
     # createOutputChannel:
     # Creates a new [output channel](#OutputChannel) with the given name.
@@ -584,7 +559,6 @@ Window: interface
     # Human-readable string which will be used to represent the channel in the UI.
     CreateOutputChannel: ((?OutputChannel->void)->void)
         name: string
-        onDone: ?(?OutputChannel->void)
 
 
 
@@ -603,31 +577,26 @@ Env: interface
     # @target:
     # The uri that should be opened.
     #
-    # @onDone:
+    # @return:
     # A promise indicating if open was successful.
     OpenExternal: ((bool->void)->void)
         target: string
-        onDone: ?(bool->void)
 
     # appName:
     # The application name of the editor, like 'VS Code'.
     AppName: ((string->void)->void)
-        onDone: ?(string->void)
 
     # appRoot:
     # The application root folder from which the editor is running.
     AppRoot: ((string->void)->void)
-        onDone: ?(string->void)
 
     # language:
     # Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
     Language: ((string->void)->void)
-        onDone: ?(string->void)
 
     # machineId:
     # A unique identifier for the computer.
     MachineId: ((string->void)->void)
-        onDone: ?(string->void)
 
     # remoteName:
     # The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
@@ -638,28 +607,23 @@ Env: interface
     # exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
     # a specific extension runs remote or not.
     RemoteName: ((?string->void)->void)
-        onDone: ?(?string->void)
 
     # sessionId:
     # A unique identifier for the current session.
     # Changes each time the editor is started.
     SessionId: ((string->void)->void)
-        onDone: ?(string->void)
 
     # shell:
     # The detected default shell for the extension host, this is overridden by the
     # `terminal.integrated.shell` setting for the extension host's platform.
     Shell: ((string->void)->void)
-        onDone: ?(string->void)
 
     # uriScheme:
     # The custom uri scheme the editor registers to in the operating system.
     UriScheme: ((string->void)->void)
-        onDone: ?(string->void)
 
     # Provides single-call access to numerous individual `Env` properties at once.
     Properties: ((EnvProperties->void)->void)
-        onDone: (EnvProperties->void)
 
 
 
@@ -678,7 +642,6 @@ Workspace: interface
     # The name of the workspace. `undefined` when no folder
     # has been opened.
     Name: ((?string->void)->void)
-        onDone: ?(?string->void)
 
     # workspaceFile:
     # The location of the workspace file, for example:
@@ -709,7 +672,6 @@ Workspace: interface
     # for that purpose which will work both when a single folder is opened as
     # well as an untitled or saved workspace.
     WorkspaceFile: ((?string->void)->void)
-        onDone: ?(?string->void)
 
     # saveAll:
     # Save all dirty files.
@@ -717,17 +679,15 @@ Workspace: interface
     # @includeUntitled:
     # Also save files that have been created during this session.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves when the files have been saved.
     SaveAll: ((bool->void)->void)
         includeUntitled: bool
-        onDone: ?(bool->void)
 
     # onDidChangeWorkspaceFolders:
     # An event that is emitted when a workspace folder is added or removed.
     OnDidChangeWorkspaceFolders: ((?Disposable->void)->void)
         listener: (WorkspaceFoldersChangeEvent->void)
-        onDone: ?(?Disposable->void)
 
     # getWorkspaceFolder:
     # Returns the [workspace folder](#WorkspaceFolder) that contains a given uri.
@@ -737,17 +697,15 @@ Workspace: interface
     # @uri:
     # An uri.
     #
-    # @onDone:
+    # @return:
     # A workspace folder or `undefined`
     GetWorkspaceFolder: ((?WorkspaceFolder->void)->void)
         uri: string
-        onDone: ?(?WorkspaceFolder->void)
 
     # workspaceFolders:
     # List of workspace folders or `undefined` when no folder is open.
     # *Note* that the first entry corresponds to the value of `rootPath`.
     WorkspaceFolders: ((?[WorkspaceFolder]->void)->void)
-        onDone: ?(?[WorkspaceFolder]->void)
 
     # findFiles:
     # Find files across all [workspace folders](#workspace.workspaceFolders) in the workspace.
@@ -769,7 +727,7 @@ Workspace: interface
     # @token:
     # A token that can be used to signal cancellation to the underlying search engine.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves to an array of resource identifiers. Will return no results if no
     # [workspace folders](#workspace.workspaceFolders) are opened.
     FindFiles: ((?[string]->void)->void)
@@ -777,7 +735,6 @@ Workspace: interface
         exclude: ?string
         maxResults: ?int
         token: ?Cancel
-        onDone: ?(?[string]->void)
 
     # asRelativePath:
     # Returns a path that is relative to the workspace folder or folders.
@@ -793,16 +750,14 @@ Workspace: interface
     # workspace folder the name of the workspace is prepended. Defaults to `true` when there are
     # multiple workspace folders and `false` otherwise.
     #
-    # @onDone:
+    # @return:
     # A path relative to the root or the input.
     AsRelativePath: ((?string->void)->void)
         pathOrUri: string
         includeWorkspaceFolder: bool
-        onDone: ?(?string->void)
 
     # Provides single-call access to numerous individual `Workspace` properties at once.
     Properties: ((WorkspaceProperties->void)->void)
-        onDone: (WorkspaceProperties->void)
 
 
 
@@ -839,17 +794,15 @@ Languages: interface
     # getLanguages:
     # Return the identifiers of all known languages.
     #
-    # @onDone:
+    # @return:
     # Promise resolving to an array of identifier strings.
     GetLanguages: ((?[string]->void)->void)
-        onDone: ?(?[string]->void)
 
     # onDidChangeDiagnostics:
     # An [event](#Event) which fires when the global set of diagnostics changes. This is
     # newly added and removed diagnostics.
     OnDidChangeDiagnostics: ((?Disposable->void)->void)
         listener: (DiagnosticChangeEvent->void)
-        onDone: ?(?Disposable->void)
 
 
 
@@ -892,7 +845,6 @@ Extensions: interface
     # installed, uninstalled, enabled or disabled.
     OnDidChange: ((?Disposable->void)->void)
         listener: (->void)
-        onDone: ?(?Disposable->void)
 
 
 
@@ -947,12 +899,11 @@ Commands: interface
     # @callback:
     # A command handler function.
     #
-    # @onDone:
+    # @return:
     # Disposable which unregisters this command on disposal.
     RegisterCommand: ((?Disposable->void)->void)
         command: string
         callback: ([any]->any)
-        onDone: ?(?Disposable->void)
 
     # executeCommand:
     # Executes the command denoted by the given command identifier.
@@ -969,13 +920,12 @@ Commands: interface
     # @rest:
     # Parameters passed to the command function.
     #
-    # @onDone:
+    # @return:
     # A thenable that resolves to the returned value of the given command. `undefined` when
     # the command handler function doesn't return anything.
     ExecuteCommand: ((?any->void)->void)
         command: string
         rest: [any]
-        onDone: ?(?any->void)
 
     # getCommands:
     # Retrieve the list of all available commands. Commands starting an underscore are
@@ -984,11 +934,10 @@ Commands: interface
     # @filterInternal:
     # Set `true` to not see internal commands (starting with an underscore)
     #
-    # @onDone:
+    # @return:
     # Thenable that resolves to a list of command ids.
     GetCommands: ((?[string]->void)->void)
         filterInternal: bool
-        onDone: ?(?[string]->void)
 
 
 
@@ -1543,7 +1492,7 @@ Vscode·Commands: ( -> Commands)
 
 
 
-Window·ShowInformationMessage1: (message:string -> items:[string] -> onDone:?(?string->void) -> ((?string->void)->void))
+Window·ShowInformationMessage1: (message:string -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showInformationMessage1"
@@ -1552,7 +1501,6 @@ Window·ShowInformationMessage1: (message:string -> items:[string] -> onDone:?(?
     msg.Data@"items" = items
     var onresp of (any->bool)
     var onret of (?string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?string
@@ -1574,7 +1522,7 @@ Window·ShowInformationMessage1: (message:string -> items:[string] -> onDone:?(?
 
 
 
-Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> items:[string] -> onDone:?(?string->void) -> ((?string->void)->void))
+Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showInformationMessage2"
@@ -1584,7 +1532,6 @@ Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> it
     msg.Data@"items" = items
     var onresp of (any->bool)
     var onret of (?string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?string
@@ -1606,7 +1553,7 @@ Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> it
 
 
 
-Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> ((?MessageItem->void)->void))
+Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showInformationMessage3"
@@ -1615,7 +1562,6 @@ Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> onDon
     msg.Data@"items" = items
     var onresp of (any->bool)
     var onret of (?MessageItem->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?MessageItem
@@ -1636,7 +1582,7 @@ Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> onDon
 
 
 
-Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> ((?MessageItem->void)->void))
+Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showInformationMessage4"
@@ -1646,7 +1592,6 @@ Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> it
     msg.Data@"items" = items
     var onresp of (any->bool)
     var onret of (?MessageItem->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?MessageItem
@@ -1667,7 +1612,7 @@ Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> it
 
 
 
-Window·ShowWarningMessage1: (message:string -> items:[string] -> onDone:?(?string->void) -> ((?string->void)->void))
+Window·ShowWarningMessage1: (message:string -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showWarningMessage1"
@@ -1676,7 +1621,6 @@ Window·ShowWarningMessage1: (message:string -> items:[string] -> onDone:?(?stri
     msg.Data@"items" = items
     var onresp of (any->bool)
     var onret of (?string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?string
@@ -1698,7 +1642,7 @@ Window·ShowWarningMessage1: (message:string -> items:[string] -> onDone:?(?stri
 
 
 
-Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:[string] -> onDone:?(?string->void) -> ((?string->void)->void))
+Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showWarningMessage2"
@@ -1708,7 +1652,6 @@ Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:
     msg.Data@"items" = items
     var onresp of (any->bool)
     var onret of (?string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?string
@@ -1730,7 +1673,7 @@ Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:
 
 
 
-Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> ((?MessageItem->void)->void))
+Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showWarningMessage3"
@@ -1739,7 +1682,6 @@ Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> onDone:?(
     msg.Data@"items" = items
     var onresp of (any->bool)
     var onret of (?MessageItem->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?MessageItem
@@ -1760,7 +1702,7 @@ Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> onDone:?(
 
 
 
-Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> ((?MessageItem->void)->void))
+Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showWarningMessage4"
@@ -1770,7 +1712,6 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
     msg.Data@"items" = items
     var onresp of (any->bool)
     var onret of (?MessageItem->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?MessageItem
@@ -1791,7 +1732,7 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
 
 
 
-Window·ShowErrorMessage1: (message:string -> items:[string] -> onDone:?(?string->void) -> ((?string->void)->void))
+Window·ShowErrorMessage1: (message:string -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showErrorMessage1"
@@ -1800,7 +1741,6 @@ Window·ShowErrorMessage1: (message:string -> items:[string] -> onDone:?(?string
     msg.Data@"items" = items
     var onresp of (any->bool)
     var onret of (?string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?string
@@ -1822,7 +1762,7 @@ Window·ShowErrorMessage1: (message:string -> items:[string] -> onDone:?(?string
 
 
 
-Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[string] -> onDone:?(?string->void) -> ((?string->void)->void))
+Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showErrorMessage2"
@@ -1832,7 +1772,6 @@ Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[s
     msg.Data@"items" = items
     var onresp of (any->bool)
     var onret of (?string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?string
@@ -1854,7 +1793,7 @@ Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[s
 
 
 
-Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> ((?MessageItem->void)->void))
+Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showErrorMessage3"
@@ -1863,7 +1802,6 @@ Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> onDone:?(?M
     msg.Data@"items" = items
     var onresp of (any->bool)
     var onret of (?MessageItem->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?MessageItem
@@ -1884,7 +1822,7 @@ Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> onDone:?(?M
 
 
 
-Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> onDone:?(?MessageItem->void) -> ((?MessageItem->void)->void))
+Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showErrorMessage4"
@@ -1894,7 +1832,6 @@ Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[M
     msg.Data@"items" = items
     var onresp of (any->bool)
     var onret of (?MessageItem->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?MessageItem
@@ -1915,7 +1852,7 @@ Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[M
 
 
 
-Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> onDone:?(?string->void) -> ((?string->void)->void))
+Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showInputBox"
@@ -1952,7 +1889,6 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> onDone:?(?st
         msg.Data@"token" = token.fnId
     var onresp of (any->bool)
     var onret of (?string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?string
@@ -1980,7 +1916,7 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> onDone:?(?st
 
 
 
-Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Cancel -> onDone:?(?[string]->void) -> ((?[string]->void)->void))
+Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Cancel -> ((?[string]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showQuickPick1"
@@ -2021,7 +1957,6 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
         msg.Data@"token" = token.fnId
     var onresp of (any->bool)
     var onret of (?[string]->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?[string]
@@ -2058,7 +1993,7 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
 
 
 
-Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?Cancel -> onDone:?(?string->void) -> ((?string->void)->void))
+Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?Cancel -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showQuickPick2"
@@ -2099,7 +2034,6 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
         msg.Data@"token" = token.fnId
     var onresp of (any->bool)
     var onret of (?string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?string
@@ -2127,7 +2061,7 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
 
 
 
-Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> token:?Cancel -> onDone:?(?[QuickPickItem]->void) -> ((?[QuickPickItem]->void)->void))
+Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> token:?Cancel -> ((?[QuickPickItem]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showQuickPick3"
@@ -2168,7 +2102,6 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
         msg.Data@"token" = token.fnId
     var onresp of (any->bool)
     var onret of (?[QuickPickItem]->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?[QuickPickItem]
@@ -2206,7 +2139,7 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
 
 
 
-Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> token:?Cancel -> onDone:?(?QuickPickItem->void) -> ((?QuickPickItem->void)->void))
+Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> token:?Cancel -> ((?QuickPickItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showQuickPick4"
@@ -2247,7 +2180,6 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
         msg.Data@"token" = token.fnId
     var onresp of (any->bool)
     var onret of (?QuickPickItem->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?QuickPickItem
@@ -2274,7 +2206,7 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
 
 
 
-Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> onDone:?(?Disposable->void) -> ((?Disposable->void)->void))
+Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.setStatusBarMessage1"
@@ -2283,7 +2215,6 @@ Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> onDone:?(?
     msg.Data@"hideAfterTimeout" = hideAfterTimeout
     var onresp of (any->bool)
     var onret of (?Disposable->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?Disposable
@@ -2306,7 +2237,7 @@ Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> onDone:?(?
 
 
 
-Window·SetStatusBarMessage2: (text:string -> onDone:?(?Disposable->void) -> ((?Disposable->void)->void))
+Window·SetStatusBarMessage2: (text:string -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.setStatusBarMessage2"
@@ -2314,7 +2245,6 @@ Window·SetStatusBarMessage2: (text:string -> onDone:?(?Disposable->void) -> ((?
     msg.Data@"text" = text
     var onresp of (any->bool)
     var onret of (?Disposable->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?Disposable
@@ -2337,7 +2267,7 @@ Window·SetStatusBarMessage2: (text:string -> onDone:?(?Disposable->void) -> ((?
 
 
 
-Window·ShowSaveDialog: (options:SaveDialogOptions -> onDone:?(?string->void) -> ((?string->void)->void))
+Window·ShowSaveDialog: (options:SaveDialogOptions -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showSaveDialog"
@@ -2345,7 +2275,6 @@ Window·ShowSaveDialog: (options:SaveDialogOptions -> onDone:?(?string->void) ->
     msg.Data@"options" = options
     var onresp of (any->bool)
     var onret of (?string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?string
@@ -2367,7 +2296,7 @@ Window·ShowSaveDialog: (options:SaveDialogOptions -> onDone:?(?string->void) ->
 
 
 
-Window·ShowOpenDialog: (options:OpenDialogOptions -> onDone:?(?[string]->void) -> ((?[string]->void)->void))
+Window·ShowOpenDialog: (options:OpenDialogOptions -> ((?[string]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showOpenDialog"
@@ -2375,7 +2304,6 @@ Window·ShowOpenDialog: (options:OpenDialogOptions -> onDone:?(?[string]->void) 
     msg.Data@"options" = options
     var onresp of (any->bool)
     var onret of (?[string]->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?[string]
@@ -2406,7 +2334,7 @@ Window·ShowOpenDialog: (options:OpenDialogOptions -> onDone:?(?[string]->void) 
 
 
 
-Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> onDone:?(?WorkspaceFolder->void) -> ((?WorkspaceFolder->void)->void))
+Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> ((?WorkspaceFolder->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.showWorkspaceFolderPick"
@@ -2415,7 +2343,6 @@ Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> onDone:
         msg.Data@"options" = options
     var onresp of (any->bool)
     var onret of (?WorkspaceFolder->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?WorkspaceFolder
@@ -2436,14 +2363,13 @@ Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> onDone:
 
 
 
-Window·State: (onDone:?(WindowState->void) -> ((WindowState->void)->void))
+Window·State: ( -> ((WindowState->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.state"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (WindowState->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of WindowState
@@ -2464,7 +2390,7 @@ Window·State: (onDone:?(WindowState->void) -> ((WindowState->void)->void))
 
 
 
-Window·OnDidChangeWindowState: (listener:(WindowState->void) -> onDone:?(?Disposable->void) -> ((?Disposable->void)->void))
+Window·OnDidChangeWindowState: (listener:(WindowState->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.onDidChangeWindowState"
@@ -2488,7 +2414,6 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> onDone:?(?Dispo
     msg.Data@"listener" = _fnid_listener
     var onresp of (any->bool)
     var onret of (?Disposable->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?Disposable
@@ -2511,7 +2436,7 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> onDone:?(?Dispo
 
 
 
-Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> onDone:?(?StatusBarItem->void) -> ((?StatusBarItem->void)->void))
+Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> ((?StatusBarItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createStatusBarItem"
@@ -2522,7 +2447,6 @@ Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> 
         msg.Data@"priority" = priority
     var onresp of (any->bool)
     var onret of (?StatusBarItem->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?StatusBarItem
@@ -2544,7 +2468,7 @@ Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> 
 
 
 
-Window·CreateOutputChannel: (name:string -> onDone:?(?OutputChannel->void) -> ((?OutputChannel->void)->void))
+Window·CreateOutputChannel: (name:string -> ((?OutputChannel->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createOutputChannel"
@@ -2552,7 +2476,6 @@ Window·CreateOutputChannel: (name:string -> onDone:?(?OutputChannel->void) -> (
     msg.Data@"name" = name
     var onresp of (any->bool)
     var onret of (?OutputChannel->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?OutputChannel
@@ -2574,7 +2497,7 @@ Window·CreateOutputChannel: (name:string -> onDone:?(?OutputChannel->void) -> (
 
 
 
-Env·OpenExternal: (target:string -> onDone:?(bool->void) -> ((bool->void)->void))
+Env·OpenExternal: (target:string -> ((bool->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.openExternal"
@@ -2582,7 +2505,6 @@ Env·OpenExternal: (target:string -> onDone:?(bool->void) -> ((bool->void)->void
     msg.Data@"target" = target
     var onresp of (any->bool)
     var onret of (bool->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of bool
@@ -2604,14 +2526,13 @@ Env·OpenExternal: (target:string -> onDone:?(bool->void) -> ((bool->void)->void
 
 
 
-Env·AppName: (onDone:?(string->void) -> ((string->void)->void))
+Env·AppName: ( -> ((string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.appName"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of string
@@ -2631,14 +2552,13 @@ Env·AppName: (onDone:?(string->void) -> ((string->void)->void))
 
 
 
-Env·AppRoot: (onDone:?(string->void) -> ((string->void)->void))
+Env·AppRoot: ( -> ((string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.appRoot"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of string
@@ -2658,14 +2578,13 @@ Env·AppRoot: (onDone:?(string->void) -> ((string->void)->void))
 
 
 
-Env·Language: (onDone:?(string->void) -> ((string->void)->void))
+Env·Language: ( -> ((string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.language"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of string
@@ -2685,14 +2604,13 @@ Env·Language: (onDone:?(string->void) -> ((string->void)->void))
 
 
 
-Env·MachineId: (onDone:?(string->void) -> ((string->void)->void))
+Env·MachineId: ( -> ((string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.machineId"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of string
@@ -2712,14 +2630,13 @@ Env·MachineId: (onDone:?(string->void) -> ((string->void)->void))
 
 
 
-Env·RemoteName: (onDone:?(?string->void) -> ((?string->void)->void))
+Env·RemoteName: ( -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.remoteName"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (?string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?string
@@ -2741,14 +2658,13 @@ Env·RemoteName: (onDone:?(?string->void) -> ((?string->void)->void))
 
 
 
-Env·SessionId: (onDone:?(string->void) -> ((string->void)->void))
+Env·SessionId: ( -> ((string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.sessionId"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of string
@@ -2768,14 +2684,13 @@ Env·SessionId: (onDone:?(string->void) -> ((string->void)->void))
 
 
 
-Env·Shell: (onDone:?(string->void) -> ((string->void)->void))
+Env·Shell: ( -> ((string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.shell"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of string
@@ -2795,14 +2710,13 @@ Env·Shell: (onDone:?(string->void) -> ((string->void)->void))
 
 
 
-Env·UriScheme: (onDone:?(string->void) -> ((string->void)->void))
+Env·UriScheme: ( -> ((string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.uriScheme"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of string
@@ -2822,14 +2736,13 @@ Env·UriScheme: (onDone:?(string->void) -> ((string->void)->void))
 
 
 
-Env·Properties: (onDone:(EnvProperties->void) -> ((EnvProperties->void)->void))
+Env·Properties: ( -> ((EnvProperties->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.Properties"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (EnvProperties->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of EnvProperties
@@ -2852,14 +2765,13 @@ Env·Properties: (onDone:(EnvProperties->void) -> ((EnvProperties->void)->void))
 
 
 
-Workspace·Name: (onDone:?(?string->void) -> ((?string->void)->void))
+Workspace·Name: ( -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.name"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (?string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?string
@@ -2881,14 +2793,13 @@ Workspace·Name: (onDone:?(?string->void) -> ((?string->void)->void))
 
 
 
-Workspace·WorkspaceFile: (onDone:?(?string->void) -> ((?string->void)->void))
+Workspace·WorkspaceFile: ( -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.workspaceFile"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (?string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?string
@@ -2910,7 +2821,7 @@ Workspace·WorkspaceFile: (onDone:?(?string->void) -> ((?string->void)->void))
 
 
 
-Workspace·SaveAll: (includeUntitled:bool -> onDone:?(bool->void) -> ((bool->void)->void))
+Workspace·SaveAll: (includeUntitled:bool -> ((bool->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.saveAll"
@@ -2918,7 +2829,6 @@ Workspace·SaveAll: (includeUntitled:bool -> onDone:?(bool->void) -> ((bool->voi
     msg.Data@"includeUntitled" = includeUntitled
     var onresp of (any->bool)
     var onret of (bool->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of bool
@@ -2940,7 +2850,7 @@ Workspace·SaveAll: (includeUntitled:bool -> onDone:?(bool->void) -> ((bool->voi
 
 
 
-Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->void) -> onDone:?(?Disposable->void) -> ((?Disposable->void)->void))
+Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.onDidChangeWorkspaceFolders"
@@ -2964,7 +2874,6 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
     msg.Data@"listener" = _fnid_listener
     var onresp of (any->bool)
     var onret of (?Disposable->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?Disposable
@@ -2987,7 +2896,7 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
 
 
 
-Workspace·GetWorkspaceFolder: (uri:string -> onDone:?(?WorkspaceFolder->void) -> ((?WorkspaceFolder->void)->void))
+Workspace·GetWorkspaceFolder: (uri:string -> ((?WorkspaceFolder->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.getWorkspaceFolder"
@@ -2995,7 +2904,6 @@ Workspace·GetWorkspaceFolder: (uri:string -> onDone:?(?WorkspaceFolder->void) -
     msg.Data@"uri" = uri
     var onresp of (any->bool)
     var onret of (?WorkspaceFolder->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?WorkspaceFolder
@@ -3016,14 +2924,13 @@ Workspace·GetWorkspaceFolder: (uri:string -> onDone:?(?WorkspaceFolder->void) -
 
 
 
-Workspace·WorkspaceFolders: (onDone:?(?[WorkspaceFolder]->void) -> ((?[WorkspaceFolder]->void)->void))
+Workspace·WorkspaceFolders: ( -> ((?[WorkspaceFolder]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.workspaceFolders"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (?[WorkspaceFolder]->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?[WorkspaceFolder]
@@ -3055,7 +2962,7 @@ Workspace·WorkspaceFolders: (onDone:?(?[WorkspaceFolder]->void) -> ((?[Workspac
 
 
 
-Workspace·FindFiles: (include:string -> exclude:?string -> maxResults:?int -> token:?Cancel -> onDone:?(?[string]->void) -> ((?[string]->void)->void))
+Workspace·FindFiles: (include:string -> exclude:?string -> maxResults:?int -> token:?Cancel -> ((?[string]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.findFiles"
@@ -3073,7 +2980,6 @@ Workspace·FindFiles: (include:string -> exclude:?string -> maxResults:?int -> t
         msg.Data@"token" = token.fnId
     var onresp of (any->bool)
     var onret of (?[string]->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?[string]
@@ -3104,7 +3010,7 @@ Workspace·FindFiles: (include:string -> exclude:?string -> maxResults:?int -> t
 
 
 
-Workspace·AsRelativePath: (pathOrUri:string -> includeWorkspaceFolder:bool -> onDone:?(?string->void) -> ((?string->void)->void))
+Workspace·AsRelativePath: (pathOrUri:string -> includeWorkspaceFolder:bool -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.asRelativePath"
@@ -3113,7 +3019,6 @@ Workspace·AsRelativePath: (pathOrUri:string -> includeWorkspaceFolder:bool -> o
     msg.Data@"includeWorkspaceFolder" = includeWorkspaceFolder
     var onresp of (any->bool)
     var onret of (?string->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?string
@@ -3135,14 +3040,13 @@ Workspace·AsRelativePath: (pathOrUri:string -> includeWorkspaceFolder:bool -> o
 
 
 
-Workspace·Properties: (onDone:(WorkspaceProperties->void) -> ((WorkspaceProperties->void)->void))
+Workspace·Properties: ( -> ((WorkspaceProperties->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.Properties"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (WorkspaceProperties->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of WorkspaceProperties
@@ -3165,14 +3069,13 @@ Workspace·Properties: (onDone:(WorkspaceProperties->void) -> ((WorkspacePropert
 
 
 
-Languages·GetLanguages: (onDone:?(?[string]->void) -> ((?[string]->void)->void))
+Languages·GetLanguages: ( -> ((?[string]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "languages.getLanguages"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (?[string]->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?[string]
@@ -3203,7 +3106,7 @@ Languages·GetLanguages: (onDone:?(?[string]->void) -> ((?[string]->void)->void)
 
 
 
-Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> onDone:?(?Disposable->void) -> ((?Disposable->void)->void))
+Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "languages.onDidChangeDiagnostics"
@@ -3227,7 +3130,6 @@ Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> on
     msg.Data@"listener" = _fnid_listener
     var onresp of (any->bool)
     var onret of (?Disposable->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?Disposable
@@ -3250,7 +3152,7 @@ Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> on
 
 
 
-Extensions·OnDidChange: (listener:(->void) -> onDone:?(?Disposable->void) -> ((?Disposable->void)->void))
+Extensions·OnDidChange: (listener:(->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "extensions.onDidChange"
@@ -3269,7 +3171,6 @@ Extensions·OnDidChange: (listener:(->void) -> onDone:?(?Disposable->void) -> ((
     msg.Data@"listener" = _fnid_listener
     var onresp of (any->bool)
     var onret of (?Disposable->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?Disposable
@@ -3292,7 +3193,7 @@ Extensions·OnDidChange: (listener:(->void) -> onDone:?(?Disposable->void) -> ((
 
 
 
-Commands·RegisterCommand: (command:string -> callback:([any]->any) -> onDone:?(?Disposable->void) -> ((?Disposable->void)->void))
+Commands·RegisterCommand: (command:string -> callback:([any]->any) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "commands.registerCommand"
@@ -3317,7 +3218,6 @@ Commands·RegisterCommand: (command:string -> callback:([any]->any) -> onDone:?(
     msg.Data@"callback" = _fnid_callback
     var onresp of (any->bool)
     var onret of (?Disposable->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?Disposable
@@ -3340,7 +3240,7 @@ Commands·RegisterCommand: (command:string -> callback:([any]->any) -> onDone:?(
 
 
 
-Commands·ExecuteCommand: (command:string -> rest:[any] -> onDone:?(?any->void) -> ((?any->void)->void))
+Commands·ExecuteCommand: (command:string -> rest:[any] -> ((?any->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "commands.executeCommand"
@@ -3349,7 +3249,6 @@ Commands·ExecuteCommand: (command:string -> rest:[any] -> onDone:?(?any->void) 
     msg.Data@"rest" = rest
     var onresp of (any->bool)
     var onret of (?any->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?any
@@ -3368,7 +3267,7 @@ Commands·ExecuteCommand: (command:string -> rest:[any] -> onDone:?(?any->void) 
 
 
 
-Commands·GetCommands: (filterInternal:bool -> onDone:?(?[string]->void) -> ((?[string]->void)->void))
+Commands·GetCommands: (filterInternal:bool -> ((?[string]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "commands.getCommands"
@@ -3376,7 +3275,6 @@ Commands·GetCommands: (filterInternal:bool -> onDone:?(?[string]->void) -> ((?[
     msg.Data@"filterInternal" = filterInternal
     var onresp of (any->bool)
     var onret of (?[string]->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         var ok of bool
         var result of ?[string]
@@ -3407,7 +3305,7 @@ Commands·GetCommands: (filterInternal:bool -> onDone:?(?[string]->void) -> ((?[
 
 
 
-StatusBarItem·Show: (onDone:?(void->void) -> ((void->void)->void))
+StatusBarItem·Show: ( -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.show"
@@ -3415,7 +3313,6 @@ StatusBarItem·Show: (onDone:?(void->void) -> ((void->void)->void))
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
     var onret of (void->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         if =?payload
             return false
@@ -3431,7 +3328,7 @@ StatusBarItem·Show: (onDone:?(void->void) -> ((void->void)->void))
 
 
 
-StatusBarItem·Hide: (onDone:?(void->void) -> ((void->void)->void))
+StatusBarItem·Hide: ( -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.hide"
@@ -3439,7 +3336,6 @@ StatusBarItem·Hide: (onDone:?(void->void) -> ((void->void)->void))
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
     var onret of (void->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         if =?payload
             return false
@@ -3455,13 +3351,13 @@ StatusBarItem·Hide: (onDone:?(void->void) -> ((void->void)->void))
 
 
 
-StatusBarItem·Dispose: (onDone:?(void->void) -> ((void->void)->void))
+StatusBarItem·Dispose: ( -> ((void->void)->void))
     return this.disp.Dispose()
 
 
 
 
-OutputChannel·Append: (value:string -> onDone:?(void->void) -> ((void->void)->void))
+OutputChannel·Append: (value:string -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.append"
@@ -3470,7 +3366,6 @@ OutputChannel·Append: (value:string -> onDone:?(void->void) -> ((void->void)->v
     msg.Data@"value" = value
     var onresp of (any->bool)
     var onret of (void->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         if =?payload
             return false
@@ -3486,7 +3381,7 @@ OutputChannel·Append: (value:string -> onDone:?(void->void) -> ((void->void)->v
 
 
 
-OutputChannel·AppendLine: (value:string -> onDone:?(void->void) -> ((void->void)->void))
+OutputChannel·AppendLine: (value:string -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.appendLine"
@@ -3495,7 +3390,6 @@ OutputChannel·AppendLine: (value:string -> onDone:?(void->void) -> ((void->void
     msg.Data@"value" = value
     var onresp of (any->bool)
     var onret of (void->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         if =?payload
             return false
@@ -3511,7 +3405,7 @@ OutputChannel·AppendLine: (value:string -> onDone:?(void->void) -> ((void->void
 
 
 
-OutputChannel·Clear: (onDone:?(void->void) -> ((void->void)->void))
+OutputChannel·Clear: ( -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.clear"
@@ -3519,7 +3413,6 @@ OutputChannel·Clear: (onDone:?(void->void) -> ((void->void)->void))
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
     var onret of (void->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         if =?payload
             return false
@@ -3535,7 +3428,7 @@ OutputChannel·Clear: (onDone:?(void->void) -> ((void->void)->void))
 
 
 
-OutputChannel·Show: (preserveFocus:?bool -> onDone:?(void->void) -> ((void->void)->void))
+OutputChannel·Show: (preserveFocus:?bool -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.show"
@@ -3545,7 +3438,6 @@ OutputChannel·Show: (preserveFocus:?bool -> onDone:?(void->void) -> ((void->voi
         msg.Data@"preserveFocus" = preserveFocus
     var onresp of (any->bool)
     var onret of (void->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         if =?payload
             return false
@@ -3561,7 +3453,7 @@ OutputChannel·Show: (preserveFocus:?bool -> onDone:?(void->void) -> ((void->voi
 
 
 
-OutputChannel·Hide: (onDone:?(void->void) -> ((void->void)->void))
+OutputChannel·Hide: ( -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.hide"
@@ -3569,7 +3461,6 @@ OutputChannel·Hide: (onDone:?(void->void) -> ((void->void)->void))
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
     var onret of (void->void)
-    onret = onDone
     onresp = (payload:any -> bool)
         if =?payload
             return false
@@ -3585,7 +3476,7 @@ OutputChannel·Hide: (onDone:?(void->void) -> ((void->void)->void))
 
 
 
-OutputChannel·Dispose: (onDone:?(void->void) -> ((void->void)->void))
+OutputChannel·Dispose: ( -> ((void->void)->void))
     return this.disp.Dispose()
 
 
