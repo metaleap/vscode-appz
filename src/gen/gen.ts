@@ -18,7 +18,7 @@ export interface IGen {
 
 export interface GenJob {
     fromOrig: ts.ModuleDeclaration
-    namespaces: { [_: string]: (ts.NamespaceDeclaration | ts.VariableDeclaration) }
+    namespaces: { [_: string]: ts.Node }
     moduleName: string
     funcs: GenJobFunc[]
     structs: GenJobStruct[]
@@ -30,7 +30,7 @@ interface GenJobNamed {
 }
 
 export interface GenJobFunc extends GenJobNamed {
-    ifaceNs: ts.NamespaceDeclaration | ts.VariableDeclaration
+    ifaceNs: ts.Node
     overload: number
     decl: ts.SignatureDeclarationBase | MemberProp | MemberEvent
 }
@@ -259,7 +259,7 @@ export class Prep {
             return
 
         const qname = this.qName(funcJob)
-        const ifacename = qname.slice(1, qname.length - 1).map((_, i) => (i === 0) ? _ : caseUp(_)).join('')
+        const ifacename = qname[qname.length - 2]
         let iface = this.interfaces.find(_ => _.name === ifacename)
         if (!iface)
             this.interfaces.push(iface = { name: ifacename, methods: [], fromOrig: funcJob.ifaceNs })

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const ts = require("typescript");
 const node_fs = require("fs");
 const node_util = require("util");
 const gen = require("./gen");
@@ -95,7 +96,7 @@ class Builder {
         };
     }
     fromInterface(it) {
-        return {
+        const me = {
             fromPrep: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.interfaces(it.name),
@@ -116,6 +117,7 @@ class Builder {
                 return me;
             }),
         };
+        return me;
     }
     fromArg(arg, method) {
         return {
@@ -691,7 +693,9 @@ class Gen extends gen.Gen {
         const numargs = method.fromPrep ? method.fromPrep.args.filter(_ => !_.isFromRetThenable).length : method.Args.length;
         if (!impl)
             impl = _.eCall(_.oDot(_.n("Impl")));
-        body.push(_.iVar(__.msg, { Maybe: { Name: 'ipcMsg' } }), _.iSet(_.n(__.msg), _.eNew({ Maybe: { Name: 'ipcMsg' } })), _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(ifaceOrStruct.name + '.' + (method.fromPrep ? method.fromPrep.name : (method.name && method.name.startsWith("appz")) ? method.name : method.Name))), _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs + (idVal ? 1 : 0)))));
+        body.push(_.iVar(__.msg, { Maybe: { Name: 'ipcMsg' } }), _.iSet(_.n(__.msg), _.eNew({ Maybe: { Name: 'ipcMsg' } })), _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit((method.fromPrep && method.fromPrep.fromOrig && method.fromPrep.fromOrig.qName && method.fromPrep.fromOrig.qName.length)
+            ? method.fromPrep.fromOrig.qName.split('.').slice(1).join('.')
+            : (ifaceOrStruct.name + '.' + (method.fromPrep ? method.fromPrep.name : (method.name && method.name.startsWith("appz")) ? method.name : method.Name)))), _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs + (idVal ? 1 : 0)))));
         if (idVal)
             body.push(_.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit("")), idVal));
         const twinargs = {};
@@ -840,7 +844,7 @@ class Gen extends gen.Gen {
             name: prep.fromOrig.moduleName,
             Name: this.nameRewriters.types.interfaces(prep.fromOrig.moduleName),
             Docs: build.docs(gen.docs(prep.fromOrig.fromOrig)),
-            Methods: prep.interfaces.map((_) => ({
+            Methods: prep.interfaces.filter(_ => _.fromOrig.kind === ts.SyntaxKind.ModuleDeclaration).map((_) => ({
                 name: _.name,
                 Name: this.nameRewriters.methods(_.name),
                 Docs: build.docs(gen.docs(_.fromOrig)),

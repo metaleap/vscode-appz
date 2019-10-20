@@ -319,7 +319,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				default:
 					throw (methodname)
 			}
-		case "envClipboard":
+		case "clipboard":
 			switch (methodname) {
 				case "readText": {
 					const ret = vscode.env.clipboard.readText()

@@ -22,8 +22,6 @@ type Vscode interface {
 	// Namespace describing the environment the editor runs in.
 	Env() Env
 
-	EnvClipboard() EnvClipboard
-
 	// Namespace for dealing with the current workspace. A workspace is the representation
 	// of the folder that has been opened. There is no workspace when just a file but not a
 	// folder has been opened.
@@ -431,7 +429,8 @@ type Env interface {
 }
 type implEnv struct{ *impl }
 
-type EnvClipboard interface {
+// The clipboard provides read and write access to the system's clipboard.
+type Clipboard interface {
 	// Read the current clipboard contents as text.
 	// 
 	// `return` ── A thenable that resolves to a string.
@@ -442,7 +441,7 @@ type EnvClipboard interface {
 	// `return` ── A thenable that resolves when writing happened.
 	WriteText(value string) func(func())
 }
-type implEnvClipboard struct{ *impl }
+type implClipboard struct{ *impl }
 
 // Namespace for dealing with the current workspace. A workspace is the representation
 // of the folder that has been opened. There is no workspace when just a file but not a
@@ -1045,10 +1044,6 @@ func (me *impl) Env() Env {
 	return implEnv{me}
 }
 
-func (me *impl) EnvClipboard() EnvClipboard {
-	return implEnvClipboard{me}
-}
-
 func (me *impl) Workspace() Workspace {
 	return implWorkspace{me}
 }
@@ -1068,7 +1063,7 @@ func (me *impl) Commands() Commands {
 func (me implWindow) ShowInformationMessage1(message string, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showInformationMessage1"
+	msg.QName = "window.showInformationMessage"
 	msg.Data = make(dict, 2)
 	msg.Data["message"] = message
 	msg.Data["items"] = items
@@ -1099,7 +1094,7 @@ func (me implWindow) ShowInformationMessage1(message string, items []string) fun
 func (me implWindow) ShowInformationMessage2(message string, options MessageOptions, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showInformationMessage2"
+	msg.QName = "window.showInformationMessage"
 	msg.Data = make(dict, 3)
 	msg.Data["message"] = message
 	msg.Data["options"] = options
@@ -1131,7 +1126,7 @@ func (me implWindow) ShowInformationMessage2(message string, options MessageOpti
 func (me implWindow) ShowInformationMessage3(message string, items []MessageItem) func(func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showInformationMessage3"
+	msg.QName = "window.showInformationMessage"
 	msg.Data = make(dict, 2)
 	msg.Data["message"] = message
 	msg.Data["items"] = items
@@ -1161,7 +1156,7 @@ func (me implWindow) ShowInformationMessage3(message string, items []MessageItem
 func (me implWindow) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showInformationMessage4"
+	msg.QName = "window.showInformationMessage"
 	msg.Data = make(dict, 3)
 	msg.Data["message"] = message
 	msg.Data["options"] = options
@@ -1192,7 +1187,7 @@ func (me implWindow) ShowInformationMessage4(message string, options MessageOpti
 func (me implWindow) ShowWarningMessage1(message string, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showWarningMessage1"
+	msg.QName = "window.showWarningMessage"
 	msg.Data = make(dict, 2)
 	msg.Data["message"] = message
 	msg.Data["items"] = items
@@ -1223,7 +1218,7 @@ func (me implWindow) ShowWarningMessage1(message string, items []string) func(fu
 func (me implWindow) ShowWarningMessage2(message string, options MessageOptions, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showWarningMessage2"
+	msg.QName = "window.showWarningMessage"
 	msg.Data = make(dict, 3)
 	msg.Data["message"] = message
 	msg.Data["options"] = options
@@ -1255,7 +1250,7 @@ func (me implWindow) ShowWarningMessage2(message string, options MessageOptions,
 func (me implWindow) ShowWarningMessage3(message string, items []MessageItem) func(func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showWarningMessage3"
+	msg.QName = "window.showWarningMessage"
 	msg.Data = make(dict, 2)
 	msg.Data["message"] = message
 	msg.Data["items"] = items
@@ -1285,7 +1280,7 @@ func (me implWindow) ShowWarningMessage3(message string, items []MessageItem) fu
 func (me implWindow) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showWarningMessage4"
+	msg.QName = "window.showWarningMessage"
 	msg.Data = make(dict, 3)
 	msg.Data["message"] = message
 	msg.Data["options"] = options
@@ -1316,7 +1311,7 @@ func (me implWindow) ShowWarningMessage4(message string, options MessageOptions,
 func (me implWindow) ShowErrorMessage1(message string, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showErrorMessage1"
+	msg.QName = "window.showErrorMessage"
 	msg.Data = make(dict, 2)
 	msg.Data["message"] = message
 	msg.Data["items"] = items
@@ -1347,7 +1342,7 @@ func (me implWindow) ShowErrorMessage1(message string, items []string) func(func
 func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showErrorMessage2"
+	msg.QName = "window.showErrorMessage"
 	msg.Data = make(dict, 3)
 	msg.Data["message"] = message
 	msg.Data["options"] = options
@@ -1379,7 +1374,7 @@ func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, i
 func (me implWindow) ShowErrorMessage3(message string, items []MessageItem) func(func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showErrorMessage3"
+	msg.QName = "window.showErrorMessage"
 	msg.Data = make(dict, 2)
 	msg.Data["message"] = message
 	msg.Data["items"] = items
@@ -1409,7 +1404,7 @@ func (me implWindow) ShowErrorMessage3(message string, items []MessageItem) func
 func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showErrorMessage4"
+	msg.QName = "window.showErrorMessage"
 	msg.Data = make(dict, 3)
 	msg.Data["message"] = message
 	msg.Data["options"] = options
@@ -1527,7 +1522,7 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel) func(
 func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel) func(func([]string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showQuickPick1"
+	msg.QName = "window.showQuickPick"
 	msg.Data = make(dict, 3)
 	var __options__ *_QuickPickOptions
 	var fnids []string
@@ -1627,7 +1622,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showQuickPick2"
+	msg.QName = "window.showQuickPick"
 	msg.Data = make(dict, 3)
 	var __options__ *_QuickPickOptions
 	var fnids []string
@@ -1717,7 +1712,7 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel) func(func([]QuickPickItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showQuickPick3"
+	msg.QName = "window.showQuickPick"
 	msg.Data = make(dict, 3)
 	var __options__ *_QuickPickOptions
 	var fnids []string
@@ -1817,7 +1812,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel) func(func(*QuickPickItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showQuickPick4"
+	msg.QName = "window.showQuickPick"
 	msg.Data = make(dict, 3)
 	var __options__ *_QuickPickOptions
 	var fnids []string
@@ -1906,7 +1901,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.setStatusBarMessage1"
+	msg.QName = "window.setStatusBarMessage"
 	msg.Data = make(dict, 2)
 	msg.Data["text"] = text
 	msg.Data["hideAfterTimeout"] = hideAfterTimeout
@@ -1938,7 +1933,7 @@ func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int) fun
 func (me implWindow) SetStatusBarMessage2(text string) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.setStatusBarMessage2"
+	msg.QName = "window.setStatusBarMessage"
 	msg.Data = make(dict, 1)
 	msg.Data["text"] = text
 	var onresp func(any) bool
@@ -2486,10 +2481,10 @@ func (me implEnv) Properties() func(func(EnvProperties)) {
 	}
 }
 
-func (me implEnvClipboard) ReadText() func(func(*string)) {
+func (me implClipboard) ReadText() func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "envClipboard.readText"
+	msg.QName = "env.clipboard.readText"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
 	var onret func(*string)
@@ -2515,10 +2510,10 @@ func (me implEnvClipboard) ReadText() func(func(*string)) {
 	}
 }
 
-func (me implEnvClipboard) WriteText(value string) func(func()) {
+func (me implClipboard) WriteText(value string) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "envClipboard.writeText"
+	msg.QName = "env.clipboard.writeText"
 	msg.Data = make(dict, 1)
 	msg.Data["value"] = value
 	var onresp func(any) bool

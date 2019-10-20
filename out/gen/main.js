@@ -113,12 +113,10 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                                     break;
                                 }
                     });
-                if (vd) {
-                    into.namespaces[subns] = vd;
+                if (vd)
                     gatherAll(into, vd, item[subns], ...prefixes.concat(subns));
-                }
                 else if (ns) {
-                    into.namespaces[subns] = ns;
+                    into.namespaces[prefixes.slice(1).concat(subns).join('.')] = ns;
                     gatherAll(into, ns.body, item[subns], ...prefixes.concat(subns));
                 }
                 else
@@ -180,8 +178,10 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                 into.fromOrig.forEachChild(find);
                 if (iface && iface.members && iface.members.length)
                     for (const mem of iface.members)
-                        if (ts.isMethodSignature(mem) && mem.name.getText() === item)
+                        if (ts.isMethodSignature(mem) && mem.name.getText() === item) {
                             members.push(mem);
+                            into.namespaces[prefixes.slice(1).join('.')] = iface;
+                        }
             }
             if (!members.length)
                 throw "GONE FROM API:\texport `" + prefixes.join('.') + '.' + item + '`' + astNode.kind;
@@ -290,7 +290,8 @@ function gatherFunc(into, decl, overload, ...prefixes) {
     const qname = prefixes.concat(decl.name.getText()).join('.');
     if (into.funcs.some(_ => _.qName === qname && _.overload === overload))
         return;
-    into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] });
+    const owner = into.namespaces[prefixes.slice(1).join('.')];
+    into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: owner });
     decl.parameters.filter(_ => !gen.seemsDeprecated(_)).forEach(_ => gatherFromTypeNode(into, _.type, decl.typeParameters));
     gatherFromTypeNode(into, decl.type, decl.typeParameters);
 }

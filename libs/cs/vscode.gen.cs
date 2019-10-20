@@ -30,8 +30,6 @@ namespace VscAppz {
 		/// <summary>Namespace describing the environment the editor runs in.</summary>
 		IEnv Env { get; }
 
-		IEnvClipboard EnvClipboard { get; }
-
 		/// <summary>
 		/// Namespace for dealing with the current workspace. A workspace is the representation
 		/// of the folder that has been opened. There is no workspace when just a file but not a
@@ -583,7 +581,8 @@ namespace VscAppz {
 		Action<Action<EnvProperties>> Properties();
 	}
 
-	public interface IEnvClipboard {
+	/// <summary>The clipboard provides read and write access to the system's clipboard.</summary>
+	public interface IClipboard {
 		/// <summary>
 		/// Read the current clipboard contents as text.
 		/// 
@@ -1354,17 +1353,13 @@ namespace VscAppz {
 		public Func<string> Name;
 	}
 
-	internal partial class impl : IVscode, IWindow, IEnv, IEnvClipboard, IWorkspace, ILanguages, IExtensions, ICommands {
+	internal partial class impl : IVscode, IWindow, IEnv, IClipboard, IWorkspace, ILanguages, IExtensions, ICommands {
 
 		IWindow IVscode.Window { get {
 			return this;
 		} }
 
 		IEnv IVscode.Env { get {
-			return this;
-		} }
-
-		IEnvClipboard IVscode.EnvClipboard { get {
 			return this;
 		} }
 
@@ -1387,7 +1382,7 @@ namespace VscAppz {
 		Action<Action<string>> IWindow.ShowInformationMessage1(string message, string[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showInformationMessage1";
+			msg.QName = "window.showInformationMessage";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
@@ -1418,7 +1413,7 @@ namespace VscAppz {
 		Action<Action<string>> IWindow.ShowInformationMessage2(string message, MessageOptions options, string[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showInformationMessage2";
+			msg.QName = "window.showInformationMessage";
 			msg.Data = new dict(3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
@@ -1450,7 +1445,7 @@ namespace VscAppz {
 		Action<Action<MessageItem>> IWindow.ShowInformationMessage3(string message, MessageItem[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showInformationMessage3";
+			msg.QName = "window.showInformationMessage";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
@@ -1480,7 +1475,7 @@ namespace VscAppz {
 		Action<Action<MessageItem>> IWindow.ShowInformationMessage4(string message, MessageOptions options, MessageItem[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showInformationMessage4";
+			msg.QName = "window.showInformationMessage";
 			msg.Data = new dict(3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
@@ -1511,7 +1506,7 @@ namespace VscAppz {
 		Action<Action<string>> IWindow.ShowWarningMessage1(string message, string[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showWarningMessage1";
+			msg.QName = "window.showWarningMessage";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
@@ -1542,7 +1537,7 @@ namespace VscAppz {
 		Action<Action<string>> IWindow.ShowWarningMessage2(string message, MessageOptions options, string[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showWarningMessage2";
+			msg.QName = "window.showWarningMessage";
 			msg.Data = new dict(3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
@@ -1574,7 +1569,7 @@ namespace VscAppz {
 		Action<Action<MessageItem>> IWindow.ShowWarningMessage3(string message, MessageItem[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showWarningMessage3";
+			msg.QName = "window.showWarningMessage";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
@@ -1604,7 +1599,7 @@ namespace VscAppz {
 		Action<Action<MessageItem>> IWindow.ShowWarningMessage4(string message, MessageOptions options, MessageItem[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showWarningMessage4";
+			msg.QName = "window.showWarningMessage";
 			msg.Data = new dict(3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
@@ -1635,7 +1630,7 @@ namespace VscAppz {
 		Action<Action<string>> IWindow.ShowErrorMessage1(string message, string[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showErrorMessage1";
+			msg.QName = "window.showErrorMessage";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
@@ -1666,7 +1661,7 @@ namespace VscAppz {
 		Action<Action<string>> IWindow.ShowErrorMessage2(string message, MessageOptions options, string[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showErrorMessage2";
+			msg.QName = "window.showErrorMessage";
 			msg.Data = new dict(3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
@@ -1698,7 +1693,7 @@ namespace VscAppz {
 		Action<Action<MessageItem>> IWindow.ShowErrorMessage3(string message, MessageItem[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showErrorMessage3";
+			msg.QName = "window.showErrorMessage";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
@@ -1728,7 +1723,7 @@ namespace VscAppz {
 		Action<Action<MessageItem>> IWindow.ShowErrorMessage4(string message, MessageOptions options, MessageItem[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showErrorMessage4";
+			msg.QName = "window.showErrorMessage";
 			msg.Data = new dict(3);
 			msg.Data["message"] = message;
 			msg.Data["options"] = options;
@@ -1837,7 +1832,7 @@ namespace VscAppz {
 		Action<Action<string[]>> IWindow.ShowQuickPick1(string[] items, QuickPickOptions options, Cancel token) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showQuickPick1";
+			msg.QName = "window.showQuickPick";
 			msg.Data = new dict(3);
 			List<string> fnids = default;
 			fnids = new List<string>(1);
@@ -1929,7 +1924,7 @@ namespace VscAppz {
 		Action<Action<string>> IWindow.ShowQuickPick2(string[] items, QuickPickOptions options, Cancel token) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showQuickPick2";
+			msg.QName = "window.showQuickPick";
 			msg.Data = new dict(3);
 			List<string> fnids = default;
 			fnids = new List<string>(1);
@@ -2011,7 +2006,7 @@ namespace VscAppz {
 		Action<Action<QuickPickItem[]>> IWindow.ShowQuickPick3(QuickPickItem[] items, QuickPickOptions options, Cancel token) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showQuickPick3";
+			msg.QName = "window.showQuickPick";
 			msg.Data = new dict(3);
 			List<string> fnids = default;
 			fnids = new List<string>(1);
@@ -2104,7 +2099,7 @@ namespace VscAppz {
 		Action<Action<QuickPickItem>> IWindow.ShowQuickPick4(QuickPickItem[] items, QuickPickOptions options, Cancel token) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showQuickPick4";
+			msg.QName = "window.showQuickPick";
 			msg.Data = new dict(3);
 			List<string> fnids = default;
 			fnids = new List<string>(1);
@@ -2185,7 +2180,7 @@ namespace VscAppz {
 		Action<Action<Disposable>> IWindow.SetStatusBarMessage1(string text, int hideAfterTimeout) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.setStatusBarMessage1";
+			msg.QName = "window.setStatusBarMessage";
 			msg.Data = new dict(2);
 			msg.Data["text"] = text;
 			msg.Data["hideAfterTimeout"] = hideAfterTimeout;
@@ -2217,7 +2212,7 @@ namespace VscAppz {
 		Action<Action<Disposable>> IWindow.SetStatusBarMessage2(string text) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.setStatusBarMessage2";
+			msg.QName = "window.setStatusBarMessage";
 			msg.Data = new dict(1);
 			msg.Data["text"] = text;
 			Func<any, bool> onresp = default;
@@ -2768,10 +2763,10 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<string>> IEnvClipboard.ReadText() {
+		Action<Action<string>> IClipboard.ReadText() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "envClipboard.readText";
+			msg.QName = "env.clipboard.readText";
 			msg.Data = new dict(0);
 			Func<any, bool> onresp = default;
 			Action<string> onret = default;
@@ -2797,10 +2792,10 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action> IEnvClipboard.WriteText(string value) {
+		Action<Action> IClipboard.WriteText(string value) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "envClipboard.writeText";
+			msg.QName = "env.clipboard.writeText";
 			msg.Data = new dict(1);
 			msg.Data["value"] = value;
 			Func<any, bool> onresp = default;

@@ -302,7 +302,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                 default:
                     throw (methodname);
             }
-        case "envClipboard":
+        case "clipboard":
             switch (methodname) {
                 case "readText": {
                     const ret = vscode.env.clipboard.readText();

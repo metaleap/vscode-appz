@@ -215,7 +215,7 @@ export class Builder {
     }
 
     fromInterface(it: gen.PrepInterface): TInterface {
-        return {
+        const me: TInterface = {
             fromPrep: it,
             name: it.name,
             Name: this.gen.nameRewriters.types.interfaces(it.name),
@@ -236,6 +236,7 @@ export class Builder {
                 return me
             }),
         }
+        return me
     }
 
     fromArg(arg: gen.PrepArg, method?: gen.PrepMethod): Arg {
@@ -942,7 +943,11 @@ export class Gen extends gen.Gen implements gen.IGen {
         body.push(
             _.iVar(__.msg, { Maybe: { Name: 'ipcMsg' } }),
             _.iSet(_.n(__.msg), _.eNew({ Maybe: { Name: 'ipcMsg' } })),
-            _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(ifaceOrStruct.name + '.' + (method.fromPrep ? method.fromPrep.name : (method.name && method.name.startsWith("appz")) ? method.name : method.Name))),
+            _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(
+                (method.fromPrep && method.fromPrep.fromOrig && method.fromPrep.fromOrig.qName && method.fromPrep.fromOrig.qName.length)
+                    ? method.fromPrep.fromOrig.qName.split('.').slice(1).join('.')
+                    : (ifaceOrStruct.name + '.' + (method.fromPrep ? method.fromPrep.name : (method.name && method.name.startsWith("appz")) ? method.name : method.Name))
+            )),
             _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs + (idVal ? 1 : 0)))),
         )
         if (idVal)
@@ -1192,7 +1197,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             name: prep.fromOrig.moduleName,
             Name: this.nameRewriters.types.interfaces(prep.fromOrig.moduleName),
             Docs: build.docs(gen.docs(prep.fromOrig.fromOrig)),
-            Methods: prep.interfaces.map((_: gen.PrepInterface): Method => ({
+            Methods: prep.interfaces.filter(_ => _.fromOrig.kind === ts.SyntaxKind.ModuleDeclaration).map((_: gen.PrepInterface): Method => ({
                 name: _.name,
                 Name: this.nameRewriters.methods(_.name),
                 Docs: build.docs(gen.docs(_.fromOrig)),

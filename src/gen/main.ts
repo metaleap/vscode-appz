@@ -124,11 +124,10 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                                     break
                                 }
                     })
-                if (vd) {
-                    into.namespaces[subns] = vd
+                if (vd)
                     gatherAll(into, vd, item[subns], ...prefixes.concat(subns))
-                } else if (ns) {
-                    into.namespaces[subns] = ns
+                else if (ns) {
+                    into.namespaces[prefixes.slice(1).concat(subns).join('.')] = ns
                     gatherAll(into, ns.body, item[subns], ...prefixes.concat(subns))
                 } else
                     throw "GONE FROM API:\tnamespace `" + prefixes.join('.') + '.' + subns + '`'
@@ -187,8 +186,10 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                 into.fromOrig.forEachChild(find)
                 if (iface && iface.members && iface.members.length)
                     for (const mem of iface.members)
-                        if (ts.isMethodSignature(mem) && mem.name.getText() === item)
+                        if (ts.isMethodSignature(mem) && mem.name.getText() === item) {
                             members.push(mem)
+                            into.namespaces[prefixes.slice(1).join('.')] = iface
+                        }
             }
 
             if (!members.length)
@@ -302,7 +303,8 @@ function gatherFunc(into: gen.GenJob, decl: ts.SignatureDeclarationBase, overloa
     const qname = prefixes.concat(decl.name.getText()).join('.')
     if (into.funcs.some(_ => _.qName === qname && _.overload === overload))
         return
-    into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] })
+    const owner = into.namespaces[prefixes.slice(1).join('.')]
+    into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: owner })
     decl.parameters.filter(_ => !gen.seemsDeprecated(_)).forEach(_ =>
         gatherFromTypeNode(into, _.type, decl.typeParameters))
     gatherFromTypeNode(into, decl.type, decl.typeParameters)

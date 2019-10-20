@@ -153,7 +153,7 @@ class Prep {
         if (seemsDeprecated(funcJob.decl))
             return;
         const qname = this.qName(funcJob);
-        const ifacename = qname.slice(1, qname.length - 1).map((_, i) => (i === 0) ? _ : caseUp(_)).join('');
+        const ifacename = qname[qname.length - 2];
         let iface = this.interfaces.find(_ => _.name === ifacename);
         if (!iface)
             this.interfaces.push(iface = { name: ifacename, methods: [], fromOrig: funcJob.ifaceNs });
