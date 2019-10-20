@@ -41,6 +41,9 @@ Vscode: interface
     # Namespace describing the environment the editor runs in.
     Env: Env
 
+    # envClipboard:
+    EnvClipboard: EnvClipboard
+
     # workspace:
     # Namespace for dealing with the current workspace. A workspace is the representation
     # of the folder that has been opened. There is no workspace when just a file but not a
@@ -624,6 +627,27 @@ Env: interface
 
     # Provides single-call access to numerous individual `Env` properties at once.
     Properties: ((EnvProperties->void)->void)
+
+
+
+
+# envClipboard:
+EnvClipboard: interface
+
+    # readText:
+    # Read the current clipboard contents as text.
+    #
+    # @return:
+    # A thenable that resolves to a string.
+    ReadText: ((?string->void)->void)
+
+    # writeText:
+    # Writes text into the clipboard.
+    #
+    # @return:
+    # A thenable that resolves when writing happened.
+    WriteText: ((void->void)->void)
+        value: string
 
 
 
@@ -1529,6 +1553,12 @@ Vscode·Window: ( -> Window)
 
 Vscode·Env: ( -> Env)
     return ((this)·(implEnv))
+
+
+
+
+Vscode·EnvClipboard: ( -> EnvClipboard)
+    return ((this)·(implEnvClipboard))
 
 
 
@@ -2824,6 +2854,57 @@ Env·Properties: ( -> ((EnvProperties->void)->void))
     
     this.Impl().send(msg, onresp)
     return (a0:(EnvProperties->void) -> void)
+        onret = a0
+    
+
+
+
+
+EnvClipboard·ReadText: ( -> ((?string->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "envClipboard.readText"
+    msg.Data = dict·new(0)
+    var onresp of (any->bool)
+    var onret of (?string->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?string
+        if =?payload
+            var _result_ of string
+            [_result_, ok] = ((payload)·(string))
+            if !ok
+                return false
+            result = &_result_
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?string->void) -> void)
+        onret = a0
+    
+
+
+
+
+EnvClipboard·WriteText: (value:string -> ((void->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "envClipboard.writeText"
+    msg.Data = dict·new(1)
+    msg.Data@"value" = value
+    var onresp of (any->bool)
+    var onret of (void->void)
+    onresp = (payload:any -> bool)
+        if =?payload
+            return false
+        if =?onret
+            onret()
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(void->void) -> void)
         onret = a0
     
 

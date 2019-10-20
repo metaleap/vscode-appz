@@ -22,6 +22,8 @@ type Vscode interface {
 	// Namespace describing the environment the editor runs in.
 	Env() Env
 
+	EnvClipboard() EnvClipboard
+
 	// Namespace for dealing with the current workspace. A workspace is the representation
 	// of the folder that has been opened. There is no workspace when just a file but not a
 	// folder has been opened.
@@ -428,6 +430,19 @@ type Env interface {
 	Properties() func(func(EnvProperties))
 }
 type implEnv struct{ *impl }
+
+type EnvClipboard interface {
+	// Read the current clipboard contents as text.
+	// 
+	// `return` ── A thenable that resolves to a string.
+	ReadText() func(func(*string))
+
+	// Writes text into the clipboard.
+	// 
+	// `return` ── A thenable that resolves when writing happened.
+	WriteText(value string) func(func())
+}
+type implEnvClipboard struct{ *impl }
 
 // Namespace for dealing with the current workspace. A workspace is the representation
 // of the folder that has been opened. There is no workspace when just a file but not a
@@ -1028,6 +1043,10 @@ func (me *impl) Window() Window {
 
 func (me *impl) Env() Env {
 	return implEnv{me}
+}
+
+func (me *impl) EnvClipboard() EnvClipboard {
+	return implEnvClipboard{me}
 }
 
 func (me *impl) Workspace() Workspace {
@@ -2463,6 +2482,58 @@ func (me implEnv) Properties() func(func(EnvProperties)) {
 	}
 	me.Impl().send(msg, onresp)
 	return func(a0 func(EnvProperties)) {
+		onret = a0
+	}
+}
+
+func (me implEnvClipboard) ReadText() func(func(*string)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "envClipboard.readText"
+	msg.Data = make(dict, 0)
+	var onresp func(any) bool
+	var onret func(*string)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result *string
+		if (nil != payload) {
+			var _result_ string
+			_result_, ok = payload.(string)
+			if !ok {
+				return false
+			}
+			result = &_result_
+		}
+		if (nil != onret) {
+			onret(result)
+		}
+		return true
+	}
+	me.Impl().send(msg, onresp)
+	return func(a0 func(*string)) {
+		onret = a0
+	}
+}
+
+func (me implEnvClipboard) WriteText(value string) func(func()) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "envClipboard.writeText"
+	msg.Data = make(dict, 1)
+	msg.Data["value"] = value
+	var onresp func(any) bool
+	var onret func()
+	onresp = func(payload any) bool {
+		if (nil != payload) {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
+		return true
+	}
+	me.Impl().send(msg, onresp)
+	return func(a0 func()) {
 		onret = a0
 	}
 }

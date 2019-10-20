@@ -54,6 +54,8 @@ export interface Vscode {
      */
     Env: Env
 
+    EnvClipboard: EnvClipboard
+
     /**
      * Namespace for dealing with the current workspace. A workspace is the representation
      * of the folder that has been opened. There is no workspace when just a file but not a
@@ -505,6 +507,22 @@ export interface Env {
 
      */
     Properties: (_: (_: EnvProperties) => void) => void
+}
+
+export interface EnvClipboard {
+    /**
+     * Read the current clipboard contents as text.
+
+     * @return A thenable that resolves to a string.
+     */
+    ReadText: (_: (_: string) => void) => void
+
+    /**
+     * Writes text into the clipboard.
+
+     * @return A thenable that resolves when writing happened.
+     */
+    WriteText: (value: string) => (_: () => void) => void
 }
 
 /**
@@ -1508,6 +1526,7 @@ export function newOutputChannelProperties (): OutputChannelProperties {
 export abstract class impl implements Vscode {
     Window: Window
     Env: Env
+    EnvClipboard: EnvClipboard
     Workspace: Workspace
     Languages: Languages
     Extensions: Extensions
@@ -1515,6 +1534,7 @@ export abstract class impl implements Vscode {
     constructor() {
         this.Window = new implWindow(this)
         this.Env = new implEnv(this)
+        this.EnvClipboard = new implEnvClipboard(this)
         this.Workspace = new implWorkspace(this)
         this.Languages = new implLanguages(this)
         this.Extensions = new implExtensions(this)
@@ -2908,6 +2928,62 @@ class implEnv extends implBase implements Env {
         }
         this.Impl().send(msg, onresp)
         return (a0: (_: EnvProperties) => void): void => {
+            onret = a0
+        }
+    }
+
+}
+
+class implEnvClipboard extends implBase implements EnvClipboard {
+    constructor(impl: impl) { super(impl) }
+    ReadText(): (_: (_: string) => void) => void {
+        let msg: ipcMsg
+        msg = newipcMsg()
+        msg.QName = "envClipboard.readText"
+        msg.Data = {}
+        let onresp: (_: any) => boolean
+        let onret: (_: string) => void
+        onresp = (payload: any): boolean => {
+            let ok: boolean
+            let result: string
+            if ((undefined !== payload && null !== payload)) {
+                let _result_: string
+                [_result_, ok] = [payload as string, typeof payload === "string"]
+                if (!ok) {
+                    return false
+                }
+                result = _result_
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
+            return true
+        }
+        this.Impl().send(msg, onresp)
+        return (a0: (_: string) => void): void => {
+            onret = a0
+        }
+    }
+
+    WriteText(value: string): (_: () => void) => void {
+        let msg: ipcMsg
+        msg = newipcMsg()
+        msg.QName = "envClipboard.writeText"
+        msg.Data = {}
+        msg.Data["value"] = value
+        let onresp: (_: any) => boolean
+        let onret: () => void
+        onresp = (payload: any): boolean => {
+            if ((undefined !== payload && null !== payload)) {
+                return false
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret()
+            }
+            return true
+        }
+        this.Impl().send(msg, onresp)
+        return (a0: () => void): void => {
             onret = a0
         }
     }

@@ -30,6 +30,8 @@ namespace VscAppz {
 		/// <summary>Namespace describing the environment the editor runs in.</summary>
 		IEnv Env { get; }
 
+		IEnvClipboard EnvClipboard { get; }
+
 		/// <summary>
 		/// Namespace for dealing with the current workspace. A workspace is the representation
 		/// of the folder that has been opened. There is no workspace when just a file but not a
@@ -579,6 +581,24 @@ namespace VscAppz {
 
 		/// <summary>Provides single-call access to numerous individual `IEnv` properties at once.</summary>
 		Action<Action<EnvProperties>> Properties();
+	}
+
+	public interface IEnvClipboard {
+		/// <summary>
+		/// Read the current clipboard contents as text.
+		/// 
+		/// `return` ── A thenable that resolves to a string.
+		/// </summary>
+		/// <return>A thenable that resolves to a string.</return>
+		Action<Action<string>> ReadText();
+
+		/// <summary>
+		/// Writes text into the clipboard.
+		/// 
+		/// `return` ── A thenable that resolves when writing happened.
+		/// </summary>
+		/// <return>A thenable that resolves when writing happened.</return>
+		Action<Action> WriteText(string value = default);
 	}
 
 	/// <summary>
@@ -1334,13 +1354,17 @@ namespace VscAppz {
 		public Func<string> Name;
 	}
 
-	internal partial class impl : IVscode, IWindow, IEnv, IWorkspace, ILanguages, IExtensions, ICommands {
+	internal partial class impl : IVscode, IWindow, IEnv, IEnvClipboard, IWorkspace, ILanguages, IExtensions, ICommands {
 
 		IWindow IVscode.Window { get {
 			return this;
 		} }
 
 		IEnv IVscode.Env { get {
+			return this;
+		} }
+
+		IEnvClipboard IVscode.EnvClipboard { get {
 			return this;
 		} }
 
@@ -2740,6 +2764,58 @@ namespace VscAppz {
 			};
 			this.Impl().send(msg, onresp);
 			return (Action<EnvProperties> a0) => {
+				onret = a0;
+			};
+		}
+
+		Action<Action<string>> IEnvClipboard.ReadText() {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "envClipboard.readText";
+			msg.Data = new dict(0);
+			Func<any, bool> onresp = default;
+			Action<string> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				string result = default;
+				if ((null != payload)) {
+					string _result_ = default;
+					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					result = _result_;
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<string> a0) => {
+				onret = a0;
+			};
+		}
+
+		Action<Action> IEnvClipboard.WriteText(string value) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "envClipboard.writeText";
+			msg.Data = new dict(1);
+			msg.Data["value"] = value;
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onresp = (any payload) => {
+				if ((null != payload)) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action a0) => {
 				onret = a0;
 			};
 		}

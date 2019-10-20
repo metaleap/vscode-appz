@@ -18,7 +18,7 @@ export interface IGen {
 
 export interface GenJob {
     fromOrig: ts.ModuleDeclaration
-    namespaces: { [_: string]: ts.NamespaceDeclaration }
+    namespaces: { [_: string]: (ts.NamespaceDeclaration | ts.VariableDeclaration) }
     moduleName: string
     funcs: GenJobFunc[]
     structs: GenJobStruct[]
@@ -30,9 +30,9 @@ interface GenJobNamed {
 }
 
 export interface GenJobFunc extends GenJobNamed {
-    ifaceNs: ts.NamespaceDeclaration
+    ifaceNs: ts.NamespaceDeclaration | ts.VariableDeclaration
     overload: number
-    decl: ts.FunctionDeclaration | MemberProp | MemberEvent
+    decl: ts.SignatureDeclarationBase | MemberProp | MemberEvent
 }
 
 export interface GenJobEnum extends GenJobNamed {
@@ -87,7 +87,7 @@ export interface PrepField {
 }
 
 export interface PrepInterface {
-    fromOrig: ts.NamespaceDeclaration
+    fromOrig: ts.Node
     name: string
     methods: PrepMethod[]
 }
@@ -259,7 +259,7 @@ export class Prep {
             return
 
         const qname = this.qName(funcJob)
-        const ifacename = qname.slice(1, qname.length - 1).join('_')
+        const ifacename = qname.slice(1, qname.length - 1).map((_, i) => (i === 0) ? _ : caseUp(_)).join('')
         let iface = this.interfaces.find(_ => _.name === ifacename)
         if (!iface)
             this.interfaces.push(iface = { name: ifacename, methods: [], fromOrig: funcJob.ifaceNs })
@@ -503,11 +503,11 @@ export abstract class Gen {
     }
 
     caseLo(name: string): string {
-        return name.charAt(0).toLowerCase() + name.slice(1)
+        return caseLo(name)
     }
 
     caseUp(name: string): string {
-        return name.charAt(0).toUpperCase() + name.slice(1)
+        return caseUp(name)
     }
 
     genDocSrc(lnPref: string, docLns: string[]): string {
@@ -733,4 +733,12 @@ export function seemsDeprecated(it: ts.Node) {
         if ((!deprecated) && jsdoc.getText().includes("@deprecated "))
             deprecated = true;
     return deprecated
+}
+
+export function caseLo(name: string): string {
+    return name.charAt(0).toLowerCase() + name.slice(1)
+}
+
+export function caseUp(name: string): string {
+    return name.charAt(0).toUpperCase() + name.slice(1)
 }

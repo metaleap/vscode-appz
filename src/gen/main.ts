@@ -53,6 +53,7 @@ const genApiSurface: genApiMember = {
                 'sessionId',
                 'shell',
                 'uriScheme',
+                { 'clipboard': ['readText', 'writeText'] }
             ],
             'workspace': [
                 'name',
@@ -108,18 +109,29 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
     for (const item of childItems)
         if (typeof item !== 'string') {
             for (const subns in item) {
-                let ns: ts.NamespaceDeclaration = undefined
+                let ns: ts.NamespaceDeclaration, vd: ts.VariableDeclaration
                 astNode.forEachChild(n => {
                     if ((!ns) && (ns = n as ts.NamespaceDeclaration)
                         && (!(ns.name && ns.name.text === subns)))
                         ns = undefined
                 })
                 if (!ns)
-                    throw "GONE FROM API:\tnamespace `" + prefixes.join('.') + '.' + subns + '`'
-                else {
+                    astNode.forEachChild(n => {
+                        if ((!vd) && ts.isVariableStatement(n) && n.declarationList.declarations && n.declarationList.declarations.length)
+                            for (const vardecl of n.declarationList.declarations)
+                                if (vardecl.name && vardecl.name.getText() === subns) {
+                                    vd = vardecl
+                                    break
+                                }
+                    })
+                if (vd) {
+                    into.namespaces[subns] = vd
+                    gatherAll(into, vd, item[subns], ...prefixes.concat(subns))
+                } else if (ns) {
                     into.namespaces[subns] = ns
                     gatherAll(into, ns.body, item[subns], ...prefixes.concat(subns))
-                }
+                } else
+                    throw "GONE FROM API:\tnamespace `" + prefixes.join('.') + '.' + subns + '`'
             }
         } else {
             const members: ts.Node[] = []
@@ -136,7 +148,7 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                 }
             })
             // second: search for events/props to be modeled as pretend API methods
-            if (!members.length) {
+            if (!members.length)
                 astNode.forEachChild(ntop => {
                     if ((!members.length) && ntop.kind === 220 && ntop.getText().includes(item))
                         ntop.forEachChild(nsub => {
@@ -161,9 +173,26 @@ function gatherAll(into: gen.GenJob, astNode: ts.Node, childItems: genApiMembers
                                 })
                         })
                 })
+            // third: faux-namespaces from property-like vars (such as `env.clipboard`)
+            if ((!members.length) && ts.isVariableDeclaration(astNode) && astNode.type && ts.isTypeReferenceNode(astNode.type) && astNode.type.typeName) {
+                const tname = astNode.type.typeName.getText()
+                let iface: ts.InterfaceDeclaration
+                const find = (_: ts.Node) => {
+                    if ((!iface) && _.getText().includes(tname))
+                        if (ts.isInterfaceDeclaration(_))
+                            iface = _
+                        else
+                            _.forEachChild(find)
+                }
+                into.fromOrig.forEachChild(find)
+                if (iface && iface.members && iface.members.length)
+                    for (const mem of iface.members)
+                        if (ts.isMethodSignature(mem) && mem.name.getText() === item)
+                            members.push(mem)
             }
+
             if (!members.length)
-                throw "GONE FROM API:\texport `" + prefixes.join('.') + '.' + item + '`'
+                throw "GONE FROM API:\texport `" + prefixes.join('.') + '.' + item + '`' + astNode.kind
             else
                 for (let i = 0; i < members.length; i++)
                     if (!gen.seemsDeprecated(members[i]))
@@ -184,6 +213,9 @@ function gatherMember(into: gen.GenJob, member: ts.Node, overload: number, ...pr
                 break
             case ts.SyntaxKind.FunctionDeclaration:
                 gatherFunc(into, member as ts.FunctionDeclaration, overload, ...prefixes)
+                break
+            case ts.SyntaxKind.MethodSignature:
+                gatherFunc(into, member as ts.MethodSignature, 0, ...prefixes)
                 break
             case ts.SyntaxKind.InterfaceDeclaration:
                 gatherStruct(into, member as ts.InterfaceDeclaration, ...prefixes)
@@ -266,8 +298,8 @@ function gatherFromTypeNode(into: gen.GenJob, it: ts.TypeNode, typeParams: ts.No
     }
 }
 
-function gatherFunc(into: gen.GenJob, decl: ts.FunctionDeclaration, overload: number, ...prefixes: string[]) {
-    const qname = prefixes.concat(decl.name.text).join('.')
+function gatherFunc(into: gen.GenJob, decl: ts.SignatureDeclarationBase, overload: number, ...prefixes: string[]) {
+    const qname = prefixes.concat(decl.name.getText()).join('.')
     if (into.funcs.some(_ => _.qName === qname && _.overload === overload))
         return
     into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] })

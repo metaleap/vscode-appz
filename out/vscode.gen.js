@@ -302,6 +302,24 @@ function handle(msg, prog, remoteCancellationTokens) {
                 default:
                     throw (methodname);
             }
+        case "envClipboard":
+            switch (methodname) {
+                case "readText": {
+                    const ret = vscode.env.clipboard.readText();
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "writeText": {
+                    const arg_value = (msg.data['value']);
+                    const ret = vscode.env.clipboard.writeText(arg_value);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                default:
+                    throw (methodname);
+            }
         case "workspace":
             switch (methodname) {
                 case "name": {

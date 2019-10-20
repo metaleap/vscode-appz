@@ -319,6 +319,24 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				default:
 					throw (methodname)
 			}
+		case "envClipboard":
+			switch (methodname) {
+				case "readText": {
+					const ret = vscode.env.clipboard.readText()
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "writeText": {
+					const arg_value = (msg.data['value']) as string
+					const ret = vscode.env.clipboard.writeText(arg_value, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				default:
+					throw (methodname)
+			}
 		case "workspace":
 			switch (methodname) {
 				case "name": {

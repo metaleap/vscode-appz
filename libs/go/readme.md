@@ -263,6 +263,18 @@ type EnvProperties struct {
 
 Namespace describing the environment the editor runs in.
 
+#### type Env_clipboard
+
+```go
+type Env_clipboard interface {
+	// Read the current clipboard contents as text.
+	//
+	// `return` ── A thenable that resolves to a string.
+	ReadText() func(func(*string))
+}
+```
+
+
 #### type Extensions
 
 ```go
@@ -730,6 +742,8 @@ type Vscode interface {
 
 	// Namespace describing the environment the editor runs in.
 	Env() Env
+
+	Env_clipboard() Env_clipboard
 
 	// Namespace for dealing with the current workspace. A workspace is the representation
 	// of the folder that has been opened. There is no workspace when just a file but not a

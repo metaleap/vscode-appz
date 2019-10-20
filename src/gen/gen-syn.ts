@@ -1284,10 +1284,6 @@ export class Gen extends gen.Gen implements gen.IGen {
             let tfun: [gen.TypeSpec[], gen.TypeSpec]
             const struct = this.allStructs[structname]
             if (struct && struct.fromPrep && struct.fromPrep.isDispObj) {
-                if (!struct.fromPrep.fields.find(_ => _.name === 'dispose' && gen.typeFun(_.typeSpec)))
-                    struct.fromPrep.fields.push({
-                        name: 'dispose', typeSpec: { From: [], To: null }
-                    })
                 for (const field of struct.fromPrep.fields)
                     if (tfun = gen.typeFun(field.typeSpec)) {
                         const orig = field.fromOrig as ts.MethodSignature
