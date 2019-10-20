@@ -3234,15 +3234,13 @@ func (me *OutputChannel) Clear() func(func()) {
 // Reveal this channel in the UI.
 // 
 // `preserveFocus` ── When `true` the channel will not take focus.
-func (me *OutputChannel) Show(preserveFocus *bool) func(func()) {
+func (me *OutputChannel) Show(preserveFocus bool) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.show"
 	msg.Data = make(dict, 2)
 	msg.Data[""] = me.disp.id
-	if (nil != preserveFocus) {
-		msg.Data["preserveFocus"] = preserveFocus
-	}
+	msg.Data["preserveFocus"] = preserveFocus
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
@@ -3289,7 +3287,7 @@ func (me *OutputChannel) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
-// Obtains this `OutputChannel`'s current property values for: `name`.
+// Obtains this `OutputChannel`'s current property value for: `name`.
 func (me *OutputChannel) Get() func(func(OutputChannelProperties)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)

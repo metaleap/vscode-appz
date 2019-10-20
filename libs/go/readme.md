@@ -29,8 +29,8 @@ var OnErrorDefaultOutputFormat = "err:\t%v\njson:\t%v\n\n"
 func Main(main func(Vscode), stdIn io.Reader, stdOut io.Writer)
 ```
 Vsc creates a `Vscode` implementation that communicates via the specified input
-and output streams (with `stdIn` defaulting to `os.Stdin` and `stdOut`
-defaulting to `os.Stdout`), then loops forever to never `return`.
+and output streams (with `stdIn` if `nil` defaulting to `os.Stdin`, and `stdOut`
+if `nil` defaulting to `os.Stdout`), then loops forever to never `return`.
 
 `main` ── called whenever the counterparty demands, which usually means once at
 startup.
@@ -511,7 +511,7 @@ Dispose and free associated resources.
 ```go
 func (me *OutputChannel) Get() func(func(OutputChannelProperties))
 ```
-Obtains this `OutputChannel`'s current property values for: `name`.
+Obtains this `OutputChannel`'s current property value for: `name`.
 
 #### func (*OutputChannel) Hide
 
@@ -523,7 +523,7 @@ Hide this channel from the UI.
 #### func (*OutputChannel) Show
 
 ```go
-func (me *OutputChannel) Show(preserveFocus *bool) func(func())
+func (me *OutputChannel) Show(preserveFocus bool) func(func())
 ```
 Reveal this channel in the UI.
 

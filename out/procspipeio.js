@@ -184,11 +184,11 @@ class Prog {
             catch (_) { }
             if (!msg)
                 vsc.window.showWarningMessage(ln);
-            else if (msg.qName && msg.qName.length) {
+            else if (msg.qName && (typeof msg.qName === 'string') && msg.qName.length) {
                 this.hadOkJsonIncomingAtLeastOnce = true;
                 this.handleIncomingRequestMsg(msg);
             }
-            else if (msg.cbId && msg.cbId.length) {
+            else if (msg.cbId && (typeof msg.cbId === 'string') && msg.cbId.length) {
                 this.hadOkJsonIncomingAtLeastOnce = true;
                 this.handleIncomingResponseMsg(msg);
             }
@@ -242,7 +242,7 @@ class Prog {
                             next.then(onret, onrej);
                         else {
                             this.ditchCancellers(cancelFnIds);
-                            if (!this.proc)
+                            if ((!this.proc) && (ret !== undefined))
                                 vsc.window.showInformationMessage(appz_1.uxStr.tooLate, this.fullCmd)
                                     .then(ensureProg, appz_1.onPromiseRejectedNoOp);
                             else if (sendret = msg.cbId ? true : false)
@@ -268,7 +268,7 @@ class Prog {
                 else
                     prom.resolve(yay);
         }
-        else {
+        else if (msg.cbId) {
             const cts = this.cancellers[msg.cbId];
             if (cts)
                 cts.cancel();

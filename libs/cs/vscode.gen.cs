@@ -3545,15 +3545,13 @@ namespace VscAppz {
 		/// `preserveFocus` ── When `true` the channel will not take focus.
 		/// </summary>
 		/// <param name="preserveFocus">When `true` the channel will not take focus.</param>
-		public Action<Action> Show(bool? preserveFocus = default) {
+		public Action<Action> Show(bool preserveFocus = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.show";
 			msg.Data = new dict(2);
 			msg.Data[""] = this.disp.id;
-			if ((null != preserveFocus)) {
-				msg.Data["preserveFocus"] = preserveFocus;
-			}
+			msg.Data["preserveFocus"] = preserveFocus;
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
@@ -3607,7 +3605,7 @@ namespace VscAppz {
 	}
 
 	public partial class OutputChannel {
-		/// <summary>Obtains this `OutputChannel`'s current property values for: `name`.</summary>
+		/// <summary>Obtains this `OutputChannel`'s current property value for: `name`.</summary>
 		public Action<Action<OutputChannelProperties>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();

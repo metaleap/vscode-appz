@@ -3545,14 +3545,13 @@ OutputChannel·Clear: ( -> ((void->void)->void))
 
 
 
-OutputChannel·Show: (preserveFocus:?bool -> ((void->void)->void))
+OutputChannel·Show: (preserveFocus:bool -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.show"
     msg.Data = dict·new(2)
     msg.Data@"" = this.disp.id
-    if =?preserveFocus
-        msg.Data@"preserveFocus" = preserveFocus
+    msg.Data@"preserveFocus" = preserveFocus
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)

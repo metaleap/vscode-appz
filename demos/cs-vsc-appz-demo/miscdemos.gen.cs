@@ -303,10 +303,10 @@ namespace VscAppzDemo {
 					clickcount = 1 + clickcount;
 					statusitem.Get()((StatusBarItemProperties props) => {
 						props.Text = strFmt("You clicked me {0} time(s).", clickcount);
-						if ("editorLightBulbAutoFix.foreground" == props.Color) {
-							props.Color = "editorLightBulb.foreground";
+						if ("editorLightBulb.foreground" == props.Color) {
+							props.Color = "inputValidation.infoBackground";
 						} else {
-							props.Color = "editorLightBulbAutoFix.foreground";
+							props.Color = "editorLightBulb.foreground";
 						}
 						statusitem.Set(props)(demosMenu);
 					});
@@ -319,7 +319,7 @@ namespace VscAppzDemo {
 						props = new StatusBarItemProperties();
 						props.Tooltip = strFmt("Hi from {0}!", appName);
 						props.Text = "You clicked me 0 time(s).";
-						props.Color = "#597";
+						props.Color = "#BEEF88";
 						props.Command = cmdName;
 						statusitem.Set(props)(() => {
 							statusitem.Show();

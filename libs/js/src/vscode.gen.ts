@@ -3689,9 +3689,7 @@ function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (
     msg.QName = "OutputChannel.show"
     msg.Data = {}
     msg.Data[""] = this.disp.id
-    if ((undefined !== preserveFocus && null !== preserveFocus)) {
-        msg.Data["preserveFocus"] = preserveFocus
-    }
+    msg.Data["preserveFocus"] = preserveFocus
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {

@@ -452,7 +452,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             typeDict: "dict",
             typeImpl: "impl",
         },
-        unMaybeOutgoingTypes: [TypeRefPrim.String] as TypeRef[],
+        unMaybeOutgoingTypes: [TypeRefPrim.String, TypeRefPrim.Bool] as TypeRef[],
         oneIndent: '    ',
         optionalEnumsZeroNotZilch: false,
         haveProps: true,
@@ -1095,7 +1095,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                             _.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit((arg.name && arg.name.length) ? arg.name : arg.Name)),
                             _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name),
                         )
-                        if (arg.fromPrep && arg.fromPrep.optional) {
+                        if (arg.fromPrep && arg.fromPrep.optional && !this.options.unMaybeOutgoingTypes.includes(arg.Type)) {
                             const town = this.typeOwn(this.typeUnMaybe(arg.Type))
                             const tenum = (town && town.Name && town.Name.length) ? this.allEnums.find(_ => _.Name === town.Name) : null
                             set = _.iIf((tenum && this.options.optionalEnumsZeroNotZilch) ? _.oNeq(_.eLit(0), _.n(arg.Name)) : _.oIs(_.n(arg.Name)), [
@@ -1300,7 +1300,13 @@ export class Gen extends gen.Gen implements gen.IGen {
                         prepargs.push({ name: "onDone", isFromRetThenable: true, optional: true, typeSpec: tret })
                         const me: Method = {
                             name: field.name, Name: this.nameRewriters.methods(field.name),
-                            Args: prepargs.map(_ => this.b.fromArg(_)),
+                            Args: prepargs.map(_ => {
+                                const arg = this.b.fromArg(_)
+                                const tmay = this.typeMaybe(arg.Type)
+                                if (_.optional && tmay && tmay.Maybe && this.options.unMaybeOutgoingTypes.includes(tmay.Maybe))
+                                    arg.Type = tmay.Maybe
+                                return arg
+                            }),
                             Type: null,
                             Docs: this.b.docs(gen.docs(field.fromOrig), [], true, true),
                             fromPrep: { args: prepargs, name: field.name, nameOrig: field.fromOrig.getText() }
@@ -1309,23 +1315,24 @@ export class Gen extends gen.Gen implements gen.IGen {
                         me.Args = me.Args.slice(0, me.Args.length - 1)
                         this.emitMethodImpl(struct, me, this.genMethodImpl_ObjMethodCall)
                     }
-                const propsfields = struct.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec))
+                let propsfields = struct.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec))
                 if (propsfields && propsfields.length) {
                     const nameget = gen.pickName("get", this.options.objPropsGetSetNamePicks, struct.fromPrep.fields),
                         nameset = gen.pickName("set", this.options.objPropsGetSetNamePicks, struct.fromPrep.fields)
                     const mget: Method = {
                         name: "appzObjPropsGet", Name: this.nameRewriters.methods(nameget), Args: [],
                         Type: { From: [{ From: [{ Name: struct.Name + "Properties" }], To: null }], To: null },
-                        Docs: [{ Lines: ["Obtains this `" + struct.Name + "`'s current property values for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
+                        Docs: [{ Lines: ["Obtains this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
                     }
                     this.state.genPopulateFor[struct.Name + "Properties"] = true
                     this.emitMethodImpl(struct, mget, this.genMethodImpl_ObjPropsGet)
-                    if (propsfields.find(_ => !_.readOnly)) {
+                    propsfields = propsfields.filter(_ => !_.readOnly)
+                    if (propsfields.length) {
                         const mset: Method = {
                             name: "appzObjPropsSet", Name: this.nameRewriters.methods(nameset),
                             Args: [{ Name: "allUpdates", Type: { Name: struct.Name + "Properties" } }],
                             Type: { From: [{ From: [null], To: null }], To: null },
-                            Docs: [{ Lines: ["Updates this `" + struct.Name + "`'s current property values for: `" + propsfields.filter(_ => !_.readOnly).map(_ => _.name).join("`, `") + "`."] }]
+                            Docs: [{ Lines: ["Updates this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
                         }
                         this.emitMethodImpl(struct, mset, this.genMethodImpl_ObjPropsSet)
                     }

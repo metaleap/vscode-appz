@@ -15,9 +15,9 @@ type any = interface{}
 const appName = "go-vsc-appz-demo"
 
 var cmdName = appName + strconv.FormatInt(time.Now().UnixNano(), 10)
-
 var vsc Vscode
 var win Window
+var logOutChan *OutputChannel
 
 func main() {
 	greethow, greetname := "Hallo", "Welt"
@@ -88,6 +88,15 @@ func quit(*string)      { os.Exit(0) }
 
 func cancelIn(seconds int64) *Cancel {
 	return CancelIn(time.Duration(seconds * int64(time.Second)))
+}
+
+func logLn(msgLn string) {
+	if logOutChan != nil {
+		if msgLn != "" {
+			msgLn = time.Now().Format("15:04:05") + "\t" + msgLn
+		}
+		logOutChan.AppendLine(msgLn)
+	}
 }
 
 func strFmt(s string, args ...any) string {
