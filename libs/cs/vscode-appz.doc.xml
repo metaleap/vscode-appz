@@ -54,6 +54,51 @@
         <member name="F:VscAppz.StatusBarAlignment.Right">
             <summary>Aligned to the right side.</summary>
         </member>
+        <member name="T:VscAppz.DecorationRangeBehavior">
+            <summary>Describes the behavior of decorations when typing/editing at their edges.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRangeBehavior.OpenOpen">
+            <summary>The decoration's range will widen when edits occur at the start or end.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRangeBehavior.ClosedClosed">
+            <summary>The decoration's range will not widen when edits occur at the start of end.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRangeBehavior.OpenClosed">
+            <summary>The decoration's range will widen when edits occur at the start, but not at the end.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRangeBehavior.ClosedOpen">
+            <summary>The decoration's range will widen when edits occur at the end, but not at the start.</summary>
+        </member>
+        <member name="T:VscAppz.OverviewRulerLane">
+            <summary>
+            Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+            The overview ruler supports three lanes.
+            </summary>
+        </member>
+        <member name="F:VscAppz.OverviewRulerLane.Left">
+            <summary>
+            Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+            The overview ruler supports three lanes.
+            </summary>
+        </member>
+        <member name="F:VscAppz.OverviewRulerLane.Center">
+            <summary>
+            Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+            The overview ruler supports three lanes.
+            </summary>
+        </member>
+        <member name="F:VscAppz.OverviewRulerLane.Right">
+            <summary>
+            Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+            The overview ruler supports three lanes.
+            </summary>
+        </member>
+        <member name="F:VscAppz.OverviewRulerLane.Full">
+            <summary>
+            Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+            The overview ruler supports three lanes.
+            </summary>
+        </member>
         <member name="T:VscAppz.IVscode">
             <summary>
             Type Definition for Visual Studio Code 1.38 Extension API
@@ -560,6 +605,17 @@
             `name` ── Human-readable string which will be used to represent the channel in the UI.
             </summary>
             <param name="name">Human-readable string which will be used to represent the channel in the UI.</param>
+        </member>
+        <member name="M:VscAppz.IWindow.CreateTextEditorDecorationType(VscAppz.DecorationRenderOptions)">
+            <summary>
+            Create a TextEditorDecorationType that can be used to add decorations to text editors.
+            
+            `options` ── Rendering options for the decoration type.
+            
+            `return` ── A new decoration type instance.
+            </summary>
+            <param name="options">Rendering options for the decoration type.</param>
+            <return>A new decoration type instance.</return>
         </member>
         <member name="T:VscAppz.IEnv">
             <summary>Namespace describing the environment the editor runs in.</summary>
@@ -1227,6 +1283,193 @@
         <member name="M:VscAppz.OutputChannel.Get">
             <summary>Obtains this `OutputChannel`'s current property value for: `name`.</summary>
         </member>
+        <member name="T:VscAppz.DecorationRenderOptions">
+            <summary>Represents rendering styles for a [text editor decoration](#TextEditorDecorationType).</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.IsWholeLine">
+            <summary>
+            Should the decoration be rendered also on the whitespace after the line text.
+            Defaults to `false`.
+            </summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.RangeBehavior">
+            <summary>
+            Customize the growing behavior of the decoration when edits occur at the edges of the decoration's range.
+            Defaults to `DecorationRangeBehavior.OpenOpen`.
+            </summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.OverviewRulerLane">
+            <summary>The position in the overview ruler where the decoration should be rendered.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.Light">
+            <summary>Overwrite options for light themes.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.Dark">
+            <summary>Overwrite options for dark themes.</summary>
+        </member>
+        <member name="T:VscAppz.ThemableDecorationRenderOptions">
+            <summary>Represents theme specific rendering styles for a [text editor decoration](#TextEditorDecorationType).</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.BackgroundColor">
+            <summary>
+            Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+            Alternatively a color from the color registry can be [referenced](#ThemeColor).
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.Outline">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.OutlineColor">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'outline' for setting one or more of the individual outline properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.OutlineStyle">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'outline' for setting one or more of the individual outline properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.OutlineWidth">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'outline' for setting one or more of the individual outline properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.Border">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderColor">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderRadius">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderSpacing">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderStyle">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderWidth">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.FontStyle">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.FontWeight">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.TextDecoration">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.Cursor">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.Color">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.Opacity">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.LetterSpacing">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.GutterIconPath">
+            <summary>An **absolute path** or an URI to an image to be rendered in the gutter.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.GutterIconSize">
+            <summary>
+            Specifies the size of the gutter icon.
+            Available values are 'auto', 'contain', 'cover' and any percentage value.
+            For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.OverviewRulerColor">
+            <summary>The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.Before">
+            <summary>Defines the rendering options of the attachment that is inserted before the decorated text.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.After">
+            <summary>Defines the rendering options of the attachment that is inserted after the decorated text.</summary>
+        </member>
+        <member name="T:VscAppz.ThemableDecorationAttachmentRenderOptions">
+            <summary>
+            Type Definition for Visual Studio Code 1.38 Extension API
+            See https://code.visualstudio.com/api for more information
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.ContentText">
+            <summary>Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.ContentIconPath">
+            <summary>
+            An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
+            or a text can be shown, but not both.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.Border">
+            <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.BorderColor">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.FontStyle">
+            <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.FontWeight">
+            <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.TextDecoration">
+            <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.Color">
+            <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.BackgroundColor">
+            <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.Margin">
+            <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.Width">
+            <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.Height">
+            <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+        </member>
+        <member name="T:VscAppz.TextEditorDecorationType">
+            <summary>
+            Represents a handle to a set of decorations
+            sharing the same [styling options](#DecorationRenderOptions) in a [text editor](#TextEditor).
+            
+            To get an instance of a `TextEditorDecorationType` use
+            [createTextEditorDecorationType](#window.createTextEditorDecorationType).
+            </summary>
+        </member>
+        <member name="M:VscAppz.TextEditorDecorationType.Dispose">
+            <summary>Remove this decoration type and all decorations on all text editors using it.</summary>
+        </member>
+        <member name="M:VscAppz.TextEditorDecorationType.Get">
+            <summary>Obtains this `TextEditorDecorationType`'s current property value for: `key`.</summary>
+        </member>
         <member name="T:VscAppz.WorkspaceFoldersChangeEvent">
             <summary>An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).</summary>
         </member>
@@ -1384,6 +1627,18 @@
         </member>
         <member name="F:VscAppz.OutputChannelProperties.Name">
             <summary>The human-readable name of this output channel.</summary>
+        </member>
+        <member name="T:VscAppz.TextEditorDecorationTypeProperties">
+            <summary>
+            Represents a handle to a set of decorations
+            sharing the same [styling options](#DecorationRenderOptions) in a [text editor](#TextEditor).
+            
+            To get an instance of a `TextEditorDecorationType` use
+            [createTextEditorDecorationType](#window.createTextEditorDecorationType).
+            </summary>
+        </member>
+        <member name="F:VscAppz.TextEditorDecorationTypeProperties.Key">
+            <summary>Internal representation of the handle.</summary>
         </member>
     </members>
 </doc>

@@ -24,6 +24,63 @@ export declare enum StatusBarAlignment {
     Right = 2
 }
 /**
+ * Describes the behavior of decorations when typing/editing at their edges.
+
+ */
+export declare enum DecorationRangeBehavior {
+    /**
+     * The decoration's range will widen when edits occur at the start or end.
+
+     */
+    OpenOpen = 0,
+    /**
+     * The decoration's range will not widen when edits occur at the start of end.
+
+     */
+    ClosedClosed = 1,
+    /**
+     * The decoration's range will widen when edits occur at the start, but not at the end.
+
+     */
+    OpenClosed = 2,
+    /**
+     * The decoration's range will widen when edits occur at the end, but not at the start.
+
+     */
+    ClosedOpen = 3
+}
+/**
+ * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+ * The overview ruler supports three lanes.
+
+ */
+export declare enum OverviewRulerLane {
+    /**
+     * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+     * The overview ruler supports three lanes.
+
+     */
+    Left = 1,
+    /**
+     * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+     * The overview ruler supports three lanes.
+
+     */
+    Center = 2,
+    /**
+     * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+     * The overview ruler supports three lanes.
+
+     */
+    Right = 4,
+    /**
+     * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+     * The overview ruler supports three lanes.
+
+     */
+    Full = 7
+}
+/**
  * Type Definition for Visual Studio Code 1.38 Extension API
  * See https://code.visualstudio.com/api for more information
 
@@ -383,6 +440,13 @@ export interface Window {
      * @param name Human-readable string which will be used to represent the channel in the UI.
      */
     CreateOutputChannel: (name: string) => (_: (_: OutputChannel) => void) => void;
+    /**
+     * Create a TextEditorDecorationType that can be used to add decorations to text editors.
+
+     * @param options Rendering options for the decoration type.
+     * @return A new decoration type instance.
+     */
+    CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType) => void) => void;
 }
 /**
  * Namespace describing the environment the editor runs in.
@@ -1120,6 +1184,255 @@ export interface OutputChannel extends fromJson, withDisp {
     Get: () => (_: (_: OutputChannelProperties) => void) => void;
 }
 /**
+ * Represents rendering styles for a [text editor decoration](#TextEditorDecorationType).
+
+ */
+export interface DecorationRenderOptions {
+    /**
+     * Should the decoration be rendered also on the whitespace after the line text.
+     * Defaults to `false`.
+
+     */
+    isWholeLine?: boolean;
+    /**
+     * Customize the growing behavior of the decoration when edits occur at the edges of the decoration's range.
+     * Defaults to `DecorationRangeBehavior.OpenOpen`.
+
+     */
+    rangeBehavior?: DecorationRangeBehavior;
+    /**
+     * The position in the overview ruler where the decoration should be rendered.
+
+     */
+    overviewRulerLane?: OverviewRulerLane;
+    /**
+     * Overwrite options for light themes.
+
+     */
+    light?: ThemableDecorationRenderOptions;
+    /**
+     * Overwrite options for dark themes.
+
+     */
+    dark?: ThemableDecorationRenderOptions;
+}
+/**
+ * Represents theme specific rendering styles for a [text editor decoration](#TextEditorDecorationType).
+
+ */
+export interface ThemableDecorationRenderOptions {
+    /**
+     * Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+     * Alternatively a color from the color registry can be [referenced](#ThemeColor).
+
+     */
+    backgroundColor?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    outline?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'outline' for setting one or more of the individual outline properties.
+
+     */
+    outlineColor?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'outline' for setting one or more of the individual outline properties.
+
+     */
+    outlineStyle?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'outline' for setting one or more of the individual outline properties.
+
+     */
+    outlineWidth?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    border?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderColor?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderRadius?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderSpacing?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderStyle?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderWidth?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    fontStyle?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    fontWeight?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    textDecoration?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    cursor?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    color?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    opacity?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    letterSpacing?: string;
+    /**
+     * An **absolute path** or an URI to an image to be rendered in the gutter.
+
+     */
+    gutterIconPath?: string;
+    /**
+     * Specifies the size of the gutter icon.
+     * Available values are 'auto', 'contain', 'cover' and any percentage value.
+     * For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+
+     */
+    gutterIconSize?: string;
+    /**
+     * The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.
+
+     */
+    overviewRulerColor?: string;
+    /**
+     * Defines the rendering options of the attachment that is inserted before the decorated text.
+
+     */
+    before?: ThemableDecorationAttachmentRenderOptions;
+    /**
+     * Defines the rendering options of the attachment that is inserted after the decorated text.
+
+     */
+    after?: ThemableDecorationAttachmentRenderOptions;
+}
+/**
+ * Type Definition for Visual Studio Code 1.38 Extension API
+ * See https://code.visualstudio.com/api for more information
+
+ */
+export interface ThemableDecorationAttachmentRenderOptions {
+    /**
+     * Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.
+
+     */
+    contentText?: string;
+    /**
+     * An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
+     * or a text can be shown, but not both.
+
+     */
+    contentIconPath?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    border?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    borderColor?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    fontStyle?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    fontWeight?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    textDecoration?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    color?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    backgroundColor?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    margin?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    width?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    height?: string;
+}
+/**
+ * Represents a handle to a set of decorations
+ * sharing the same [styling options](#DecorationRenderOptions) in a [text editor](#TextEditor).
+ *
+ * To get an instance of a `TextEditorDecorationType` use
+ * [createTextEditorDecorationType](#window.createTextEditorDecorationType).
+
+ */
+export interface TextEditorDecorationType extends fromJson, withDisp {
+    /**
+     * Remove this decoration type and all decorations on all text editors using it.
+
+     */
+    Dispose: () => (_: () => void) => void;
+    Get: () => (_: (_: TextEditorDecorationTypeProperties) => void) => void;
+}
+/**
  * An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).
 
  */
@@ -1315,6 +1628,22 @@ export interface OutputChannelProperties extends fromJson {
     Name: () => string;
 }
 export declare function newOutputChannelProperties(): OutputChannelProperties;
+/**
+ * Represents a handle to a set of decorations
+ * sharing the same [styling options](#DecorationRenderOptions) in a [text editor](#TextEditor).
+ *
+ * To get an instance of a `TextEditorDecorationType` use
+ * [createTextEditorDecorationType](#window.createTextEditorDecorationType).
+
+ */
+export interface TextEditorDecorationTypeProperties extends fromJson {
+    /**
+     * Internal representation of the handle.
+
+     */
+    Key: () => string;
+}
+export declare function newTextEditorDecorationTypeProperties(): TextEditorDecorationTypeProperties;
 export declare abstract class impl implements Vscode {
     Window: Window;
     Env: Env;

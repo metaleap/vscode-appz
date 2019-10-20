@@ -6,6 +6,17 @@
 - [Cancel](#T-VscAppz-Cancel 'VscAppz.Cancel')
   - [In(fromNow)](#M-VscAppz-Cancel-In-System-TimeSpan- 'VscAppz.Cancel.In(System.TimeSpan)')
   - [Now()](#M-VscAppz-Cancel-Now 'VscAppz.Cancel.Now')
+- [DecorationRangeBehavior](#T-VscAppz-DecorationRangeBehavior 'VscAppz.DecorationRangeBehavior')
+  - [ClosedClosed](#F-VscAppz-DecorationRangeBehavior-ClosedClosed 'VscAppz.DecorationRangeBehavior.ClosedClosed')
+  - [ClosedOpen](#F-VscAppz-DecorationRangeBehavior-ClosedOpen 'VscAppz.DecorationRangeBehavior.ClosedOpen')
+  - [OpenClosed](#F-VscAppz-DecorationRangeBehavior-OpenClosed 'VscAppz.DecorationRangeBehavior.OpenClosed')
+  - [OpenOpen](#F-VscAppz-DecorationRangeBehavior-OpenOpen 'VscAppz.DecorationRangeBehavior.OpenOpen')
+- [DecorationRenderOptions](#T-VscAppz-DecorationRenderOptions 'VscAppz.DecorationRenderOptions')
+  - [Dark](#F-VscAppz-DecorationRenderOptions-Dark 'VscAppz.DecorationRenderOptions.Dark')
+  - [IsWholeLine](#F-VscAppz-DecorationRenderOptions-IsWholeLine 'VscAppz.DecorationRenderOptions.IsWholeLine')
+  - [Light](#F-VscAppz-DecorationRenderOptions-Light 'VscAppz.DecorationRenderOptions.Light')
+  - [OverviewRulerLane](#F-VscAppz-DecorationRenderOptions-OverviewRulerLane 'VscAppz.DecorationRenderOptions.OverviewRulerLane')
+  - [RangeBehavior](#F-VscAppz-DecorationRenderOptions-RangeBehavior 'VscAppz.DecorationRenderOptions.RangeBehavior')
 - [DiagnosticChangeEvent](#T-VscAppz-DiagnosticChangeEvent 'VscAppz.DiagnosticChangeEvent')
   - [Uris](#F-VscAppz-DiagnosticChangeEvent-Uris 'VscAppz.DiagnosticChangeEvent.Uris')
 - [Disposable](#T-VscAppz-Disposable 'VscAppz.Disposable')
@@ -53,6 +64,7 @@
 - [IWindow](#T-VscAppz-IWindow 'VscAppz.IWindow')
   - [CreateOutputChannel(name)](#M-VscAppz-IWindow-CreateOutputChannel-System-String- 'VscAppz.IWindow.CreateOutputChannel(System.String)')
   - [CreateStatusBarItem(alignment,priority)](#M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32}- 'VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32})')
+  - [CreateTextEditorDecorationType(options)](#M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions- 'VscAppz.IWindow.CreateTextEditorDecorationType(VscAppz.DecorationRenderOptions)')
   - [OnDidChangeWindowState()](#M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState}- 'VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState})')
   - [SetStatusBarMessage1(text,hideAfterTimeout)](#M-VscAppz-IWindow-SetStatusBarMessage1-System-String,System-Int32- 'VscAppz.IWindow.SetStatusBarMessage1(System.String,System.Int32)')
   - [SetStatusBarMessage2(text)](#M-VscAppz-IWindow-SetStatusBarMessage2-System-String- 'VscAppz.IWindow.SetStatusBarMessage2(System.String)')
@@ -119,6 +131,11 @@
   - [Show(preserveFocus)](#M-VscAppz-OutputChannel-Show-System-Boolean- 'VscAppz.OutputChannel.Show(System.Boolean)')
 - [OutputChannelProperties](#T-VscAppz-OutputChannelProperties 'VscAppz.OutputChannelProperties')
   - [Name](#F-VscAppz-OutputChannelProperties-Name 'VscAppz.OutputChannelProperties.Name')
+- [OverviewRulerLane](#T-VscAppz-OverviewRulerLane 'VscAppz.OverviewRulerLane')
+  - [Center](#F-VscAppz-OverviewRulerLane-Center 'VscAppz.OverviewRulerLane.Center')
+  - [Full](#F-VscAppz-OverviewRulerLane-Full 'VscAppz.OverviewRulerLane.Full')
+  - [Left](#F-VscAppz-OverviewRulerLane-Left 'VscAppz.OverviewRulerLane.Left')
+  - [Right](#F-VscAppz-OverviewRulerLane-Right 'VscAppz.OverviewRulerLane.Right')
 - [QuickPickItem](#T-VscAppz-QuickPickItem 'VscAppz.QuickPickItem')
   - [AlwaysShow](#F-VscAppz-QuickPickItem-AlwaysShow 'VscAppz.QuickPickItem.AlwaysShow')
   - [Description](#F-VscAppz-QuickPickItem-Description 'VscAppz.QuickPickItem.Description')
@@ -154,6 +171,48 @@
   - [Priority](#F-VscAppz-StatusBarItemProperties-Priority 'VscAppz.StatusBarItemProperties.Priority')
   - [Text](#F-VscAppz-StatusBarItemProperties-Text 'VscAppz.StatusBarItemProperties.Text')
   - [Tooltip](#F-VscAppz-StatusBarItemProperties-Tooltip 'VscAppz.StatusBarItemProperties.Tooltip')
+- [TextEditorDecorationType](#T-VscAppz-TextEditorDecorationType 'VscAppz.TextEditorDecorationType')
+  - [Dispose()](#M-VscAppz-TextEditorDecorationType-Dispose 'VscAppz.TextEditorDecorationType.Dispose')
+  - [Get()](#M-VscAppz-TextEditorDecorationType-Get 'VscAppz.TextEditorDecorationType.Get')
+- [TextEditorDecorationTypeProperties](#T-VscAppz-TextEditorDecorationTypeProperties 'VscAppz.TextEditorDecorationTypeProperties')
+  - [Key](#F-VscAppz-TextEditorDecorationTypeProperties-Key 'VscAppz.TextEditorDecorationTypeProperties.Key')
+- [ThemableDecorationAttachmentRenderOptions](#T-VscAppz-ThemableDecorationAttachmentRenderOptions 'VscAppz.ThemableDecorationAttachmentRenderOptions')
+  - [BackgroundColor](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-BackgroundColor 'VscAppz.ThemableDecorationAttachmentRenderOptions.BackgroundColor')
+  - [Border](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-Border 'VscAppz.ThemableDecorationAttachmentRenderOptions.Border')
+  - [BorderColor](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-BorderColor 'VscAppz.ThemableDecorationAttachmentRenderOptions.BorderColor')
+  - [Color](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-Color 'VscAppz.ThemableDecorationAttachmentRenderOptions.Color')
+  - [ContentIconPath](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-ContentIconPath 'VscAppz.ThemableDecorationAttachmentRenderOptions.ContentIconPath')
+  - [ContentText](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-ContentText 'VscAppz.ThemableDecorationAttachmentRenderOptions.ContentText')
+  - [FontStyle](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-FontStyle 'VscAppz.ThemableDecorationAttachmentRenderOptions.FontStyle')
+  - [FontWeight](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-FontWeight 'VscAppz.ThemableDecorationAttachmentRenderOptions.FontWeight')
+  - [Height](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-Height 'VscAppz.ThemableDecorationAttachmentRenderOptions.Height')
+  - [Margin](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-Margin 'VscAppz.ThemableDecorationAttachmentRenderOptions.Margin')
+  - [TextDecoration](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-TextDecoration 'VscAppz.ThemableDecorationAttachmentRenderOptions.TextDecoration')
+  - [Width](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-Width 'VscAppz.ThemableDecorationAttachmentRenderOptions.Width')
+- [ThemableDecorationRenderOptions](#T-VscAppz-ThemableDecorationRenderOptions 'VscAppz.ThemableDecorationRenderOptions')
+  - [After](#F-VscAppz-ThemableDecorationRenderOptions-After 'VscAppz.ThemableDecorationRenderOptions.After')
+  - [BackgroundColor](#F-VscAppz-ThemableDecorationRenderOptions-BackgroundColor 'VscAppz.ThemableDecorationRenderOptions.BackgroundColor')
+  - [Before](#F-VscAppz-ThemableDecorationRenderOptions-Before 'VscAppz.ThemableDecorationRenderOptions.Before')
+  - [Border](#F-VscAppz-ThemableDecorationRenderOptions-Border 'VscAppz.ThemableDecorationRenderOptions.Border')
+  - [BorderColor](#F-VscAppz-ThemableDecorationRenderOptions-BorderColor 'VscAppz.ThemableDecorationRenderOptions.BorderColor')
+  - [BorderRadius](#F-VscAppz-ThemableDecorationRenderOptions-BorderRadius 'VscAppz.ThemableDecorationRenderOptions.BorderRadius')
+  - [BorderSpacing](#F-VscAppz-ThemableDecorationRenderOptions-BorderSpacing 'VscAppz.ThemableDecorationRenderOptions.BorderSpacing')
+  - [BorderStyle](#F-VscAppz-ThemableDecorationRenderOptions-BorderStyle 'VscAppz.ThemableDecorationRenderOptions.BorderStyle')
+  - [BorderWidth](#F-VscAppz-ThemableDecorationRenderOptions-BorderWidth 'VscAppz.ThemableDecorationRenderOptions.BorderWidth')
+  - [Color](#F-VscAppz-ThemableDecorationRenderOptions-Color 'VscAppz.ThemableDecorationRenderOptions.Color')
+  - [Cursor](#F-VscAppz-ThemableDecorationRenderOptions-Cursor 'VscAppz.ThemableDecorationRenderOptions.Cursor')
+  - [FontStyle](#F-VscAppz-ThemableDecorationRenderOptions-FontStyle 'VscAppz.ThemableDecorationRenderOptions.FontStyle')
+  - [FontWeight](#F-VscAppz-ThemableDecorationRenderOptions-FontWeight 'VscAppz.ThemableDecorationRenderOptions.FontWeight')
+  - [GutterIconPath](#F-VscAppz-ThemableDecorationRenderOptions-GutterIconPath 'VscAppz.ThemableDecorationRenderOptions.GutterIconPath')
+  - [GutterIconSize](#F-VscAppz-ThemableDecorationRenderOptions-GutterIconSize 'VscAppz.ThemableDecorationRenderOptions.GutterIconSize')
+  - [LetterSpacing](#F-VscAppz-ThemableDecorationRenderOptions-LetterSpacing 'VscAppz.ThemableDecorationRenderOptions.LetterSpacing')
+  - [Opacity](#F-VscAppz-ThemableDecorationRenderOptions-Opacity 'VscAppz.ThemableDecorationRenderOptions.Opacity')
+  - [Outline](#F-VscAppz-ThemableDecorationRenderOptions-Outline 'VscAppz.ThemableDecorationRenderOptions.Outline')
+  - [OutlineColor](#F-VscAppz-ThemableDecorationRenderOptions-OutlineColor 'VscAppz.ThemableDecorationRenderOptions.OutlineColor')
+  - [OutlineStyle](#F-VscAppz-ThemableDecorationRenderOptions-OutlineStyle 'VscAppz.ThemableDecorationRenderOptions.OutlineStyle')
+  - [OutlineWidth](#F-VscAppz-ThemableDecorationRenderOptions-OutlineWidth 'VscAppz.ThemableDecorationRenderOptions.OutlineWidth')
+  - [OverviewRulerColor](#F-VscAppz-ThemableDecorationRenderOptions-OverviewRulerColor 'VscAppz.ThemableDecorationRenderOptions.OverviewRulerColor')
+  - [TextDecoration](#F-VscAppz-ThemableDecorationRenderOptions-TextDecoration 'VscAppz.ThemableDecorationRenderOptions.TextDecoration')
 - [Vsc](#T-VscAppz-Vsc 'VscAppz.Vsc')
   - [OnError](#F-VscAppz-Vsc-OnError 'VscAppz.Vsc.OnError')
   - [OnErrorDefaultOutputFormat](#F-VscAppz-Vsc-OnErrorDefaultOutputFormat 'VscAppz.Vsc.OnErrorDefaultOutputFormat')
@@ -209,6 +268,93 @@ Cancel.Now signals cancellation to the counterparty.
 ##### Parameters
 
 This method has no parameters.
+
+<a name='T-VscAppz-DecorationRangeBehavior'></a>
+## DecorationRangeBehavior `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Describes the behavior of decorations when typing/editing at their edges.
+
+<a name='F-VscAppz-DecorationRangeBehavior-ClosedClosed'></a>
+### ClosedClosed `constants`
+
+##### Summary
+
+The decoration's range will not widen when edits occur at the start of end.
+
+<a name='F-VscAppz-DecorationRangeBehavior-ClosedOpen'></a>
+### ClosedOpen `constants`
+
+##### Summary
+
+The decoration's range will widen when edits occur at the end, but not at the start.
+
+<a name='F-VscAppz-DecorationRangeBehavior-OpenClosed'></a>
+### OpenClosed `constants`
+
+##### Summary
+
+The decoration's range will widen when edits occur at the start, but not at the end.
+
+<a name='F-VscAppz-DecorationRangeBehavior-OpenOpen'></a>
+### OpenOpen `constants`
+
+##### Summary
+
+The decoration's range will widen when edits occur at the start or end.
+
+<a name='T-VscAppz-DecorationRenderOptions'></a>
+## DecorationRenderOptions `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Represents rendering styles for a [text editor decoration](#TextEditorDecorationType).
+
+<a name='F-VscAppz-DecorationRenderOptions-Dark'></a>
+### Dark `constants`
+
+##### Summary
+
+Overwrite options for dark themes.
+
+<a name='F-VscAppz-DecorationRenderOptions-IsWholeLine'></a>
+### IsWholeLine `constants`
+
+##### Summary
+
+Should the decoration be rendered also on the whitespace after the line text.
+Defaults to `false`.
+
+<a name='F-VscAppz-DecorationRenderOptions-Light'></a>
+### Light `constants`
+
+##### Summary
+
+Overwrite options for light themes.
+
+<a name='F-VscAppz-DecorationRenderOptions-OverviewRulerLane'></a>
+### OverviewRulerLane `constants`
+
+##### Summary
+
+The position in the overview ruler where the decoration should be rendered.
+
+<a name='F-VscAppz-DecorationRenderOptions-RangeBehavior'></a>
+### RangeBehavior `constants`
+
+##### Summary
+
+Customize the growing behavior of the decoration when edits occur at the edges of the decoration's range.
+Defaults to `DecorationRangeBehavior.OpenOpen`.
 
 <a name='T-VscAppz-DiagnosticChangeEvent'></a>
 ## DiagnosticChangeEvent `type`
@@ -934,6 +1080,23 @@ Creates a status bar [item](#StatusBarItem).
 | ---- | ---- | ----------- |
 | alignment | [System.Nullable{VscAppz.StatusBarAlignment}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{VscAppz.StatusBarAlignment}') | The alignment of the item. |
 | priority | [System.Nullable{System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.Int32}') | The priority of the item. Higher values mean the item should be shown more to the left. |
+
+<a name='M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions-'></a>
+### CreateTextEditorDecorationType(options) `method`
+
+##### Summary
+
+Create a TextEditorDecorationType that can be used to add decorations to text editors.
+
+`options` ── Rendering options for the decoration type.
+
+`return` ── A new decoration type instance.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| options | [VscAppz.DecorationRenderOptions](#T-VscAppz-DecorationRenderOptions 'VscAppz.DecorationRenderOptions') | Rendering options for the decoration type. |
 
 <a name='M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState}-'></a>
 ### OnDidChangeWindowState() `method`
@@ -1944,6 +2107,50 @@ To get an instance of an `OutputChannel` use
 
 The human-readable name of this output channel.
 
+<a name='T-VscAppz-OverviewRulerLane'></a>
+## OverviewRulerLane `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+The overview ruler supports three lanes.
+
+<a name='F-VscAppz-OverviewRulerLane-Center'></a>
+### Center `constants`
+
+##### Summary
+
+Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+The overview ruler supports three lanes.
+
+<a name='F-VscAppz-OverviewRulerLane-Full'></a>
+### Full `constants`
+
+##### Summary
+
+Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+The overview ruler supports three lanes.
+
+<a name='F-VscAppz-OverviewRulerLane-Left'></a>
+### Left `constants`
+
+##### Summary
+
+Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+The overview ruler supports three lanes.
+
+<a name='F-VscAppz-OverviewRulerLane-Right'></a>
+### Right `constants`
+
+##### Summary
+
+Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+The overview ruler supports three lanes.
+
 <a name='T-VscAppz-QuickPickItem'></a>
 ## QuickPickItem `type`
 
@@ -2251,6 +2458,345 @@ Where the icon-name is taken from the [octicon](https://octicons.github.com) ico
 ##### Summary
 
 The tooltip text when you hover over this entry.
+
+<a name='T-VscAppz-TextEditorDecorationType'></a>
+## TextEditorDecorationType `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Represents a handle to a set of decorations
+sharing the same [styling options](#DecorationRenderOptions) in a [text editor](#TextEditor).
+
+To get an instance of a `TextEditorDecorationType` use
+[createTextEditorDecorationType](#window.createTextEditorDecorationType).
+
+<a name='M-VscAppz-TextEditorDecorationType-Dispose'></a>
+### Dispose() `method`
+
+##### Summary
+
+Remove this decoration type and all decorations on all text editors using it.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-TextEditorDecorationType-Get'></a>
+### Get() `method`
+
+##### Summary
+
+Obtains this `TextEditorDecorationType`'s current property value for: `key`.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='T-VscAppz-TextEditorDecorationTypeProperties'></a>
+## TextEditorDecorationTypeProperties `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Represents a handle to a set of decorations
+sharing the same [styling options](#DecorationRenderOptions) in a [text editor](#TextEditor).
+
+To get an instance of a `TextEditorDecorationType` use
+[createTextEditorDecorationType](#window.createTextEditorDecorationType).
+
+<a name='F-VscAppz-TextEditorDecorationTypeProperties-Key'></a>
+### Key `constants`
+
+##### Summary
+
+Internal representation of the handle.
+
+<a name='T-VscAppz-ThemableDecorationAttachmentRenderOptions'></a>
+## ThemableDecorationAttachmentRenderOptions `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Type Definition for Visual Studio Code 1.38 Extension API
+See https://code.visualstudio.com/api for more information
+
+<a name='F-VscAppz-ThemableDecorationAttachmentRenderOptions-BackgroundColor'></a>
+### BackgroundColor `constants`
+
+##### Summary
+
+CSS styling property that will be applied to the decoration attachment.
+
+<a name='F-VscAppz-ThemableDecorationAttachmentRenderOptions-Border'></a>
+### Border `constants`
+
+##### Summary
+
+CSS styling property that will be applied to the decoration attachment.
+
+<a name='F-VscAppz-ThemableDecorationAttachmentRenderOptions-BorderColor'></a>
+### BorderColor `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-ThemableDecorationAttachmentRenderOptions-Color'></a>
+### Color `constants`
+
+##### Summary
+
+CSS styling property that will be applied to the decoration attachment.
+
+<a name='F-VscAppz-ThemableDecorationAttachmentRenderOptions-ContentIconPath'></a>
+### ContentIconPath `constants`
+
+##### Summary
+
+An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
+or a text can be shown, but not both.
+
+<a name='F-VscAppz-ThemableDecorationAttachmentRenderOptions-ContentText'></a>
+### ContentText `constants`
+
+##### Summary
+
+Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.
+
+<a name='F-VscAppz-ThemableDecorationAttachmentRenderOptions-FontStyle'></a>
+### FontStyle `constants`
+
+##### Summary
+
+CSS styling property that will be applied to the decoration attachment.
+
+<a name='F-VscAppz-ThemableDecorationAttachmentRenderOptions-FontWeight'></a>
+### FontWeight `constants`
+
+##### Summary
+
+CSS styling property that will be applied to the decoration attachment.
+
+<a name='F-VscAppz-ThemableDecorationAttachmentRenderOptions-Height'></a>
+### Height `constants`
+
+##### Summary
+
+CSS styling property that will be applied to the decoration attachment.
+
+<a name='F-VscAppz-ThemableDecorationAttachmentRenderOptions-Margin'></a>
+### Margin `constants`
+
+##### Summary
+
+CSS styling property that will be applied to the decoration attachment.
+
+<a name='F-VscAppz-ThemableDecorationAttachmentRenderOptions-TextDecoration'></a>
+### TextDecoration `constants`
+
+##### Summary
+
+CSS styling property that will be applied to the decoration attachment.
+
+<a name='F-VscAppz-ThemableDecorationAttachmentRenderOptions-Width'></a>
+### Width `constants`
+
+##### Summary
+
+CSS styling property that will be applied to the decoration attachment.
+
+<a name='T-VscAppz-ThemableDecorationRenderOptions'></a>
+## ThemableDecorationRenderOptions `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Represents theme specific rendering styles for a [text editor decoration](#TextEditorDecorationType).
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-After'></a>
+### After `constants`
+
+##### Summary
+
+Defines the rendering options of the attachment that is inserted after the decorated text.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-BackgroundColor'></a>
+### BackgroundColor `constants`
+
+##### Summary
+
+Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+Alternatively a color from the color registry can be [referenced](#ThemeColor).
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-Before'></a>
+### Before `constants`
+
+##### Summary
+
+Defines the rendering options of the attachment that is inserted before the decorated text.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-Border'></a>
+### Border `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-BorderColor'></a>
+### BorderColor `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-BorderRadius'></a>
+### BorderRadius `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-BorderSpacing'></a>
+### BorderSpacing `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-BorderStyle'></a>
+### BorderStyle `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-BorderWidth'></a>
+### BorderWidth `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-Color'></a>
+### Color `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-Cursor'></a>
+### Cursor `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-FontStyle'></a>
+### FontStyle `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-FontWeight'></a>
+### FontWeight `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-GutterIconPath'></a>
+### GutterIconPath `constants`
+
+##### Summary
+
+An **absolute path** or an URI to an image to be rendered in the gutter.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-GutterIconSize'></a>
+### GutterIconSize `constants`
+
+##### Summary
+
+Specifies the size of the gutter icon.
+Available values are 'auto', 'contain', 'cover' and any percentage value.
+For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-LetterSpacing'></a>
+### LetterSpacing `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-Opacity'></a>
+### Opacity `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-Outline'></a>
+### Outline `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-OutlineColor'></a>
+### OutlineColor `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'outline' for setting one or more of the individual outline properties.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-OutlineStyle'></a>
+### OutlineStyle `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'outline' for setting one or more of the individual outline properties.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-OutlineWidth'></a>
+### OutlineWidth `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'outline' for setting one or more of the individual outline properties.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-OverviewRulerColor'></a>
+### OverviewRulerColor `constants`
+
+##### Summary
+
+The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.
+
+<a name='F-VscAppz-ThemableDecorationRenderOptions-TextDecoration'></a>
+### TextDecoration `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
 
 <a name='T-VscAppz-Vsc'></a>
 ## Vsc `type`

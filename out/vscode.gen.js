@@ -249,6 +249,13 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
+                case "createTextEditorDecorationType": {
+                    const arg_options = (msg.data['options']);
+                    const ret = vscode.window.createTextEditorDecorationType(arg_options);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
                 default:
                     throw (methodname);
             }
@@ -495,16 +502,16 @@ function handle(msg, prog, remoteCancellationTokens) {
                     if (!allUpdates)
                         return Promise.reject(msg.data);
                     const prop_text = allUpdates["text"];
-                    if (prop_text !== undefined)
+                    if (prop_text !== undefined && prop_text !== thisStatusBarItem.text)
                         thisStatusBarItem.text = prop_text;
                     const prop_tooltip = allUpdates["tooltip"];
-                    if (prop_tooltip !== undefined)
+                    if (prop_tooltip !== undefined && prop_tooltip !== thisStatusBarItem.tooltip)
                         thisStatusBarItem.tooltip = (!(prop_tooltip && prop_tooltip.length)) ? undefined : prop_tooltip;
                     const prop_color = allUpdates["color"];
-                    if (prop_color !== undefined)
+                    if (prop_color !== undefined && prop_color !== thisStatusBarItem.color)
                         thisStatusBarItem.color = (!(prop_color && prop_color.length)) ? undefined : prop_color.startsWith("#") ? prop_color : new vscode.ThemeColor(prop_color);
                     const prop_command = allUpdates["command"];
-                    if (prop_command !== undefined)
+                    if (prop_command !== undefined && prop_command !== thisStatusBarItem.command)
                         thisStatusBarItem.command = (!(prop_command && prop_command.length)) ? undefined : prop_command;
                     return Promise.resolve();
                 }
@@ -558,6 +565,25 @@ function handle(msg, prog, remoteCancellationTokens) {
                 case "appzObjPropsGet": {
                     return Promise.resolve({
                         name: thisOutputChannel.name,
+                    });
+                }
+                default:
+                    throw methodname;
+            }
+        case "TextEditorDecorationType":
+            const thisTextEditorDecorationType = prog.objects[msg.data[""]];
+            if (!thisTextEditorDecorationType)
+                throw "Called vscode.TextEditorDecorationType." + methodname + " for an already disposed-and-forgotten instance";
+            switch (methodname) {
+                case "dispose": {
+                    const ret = thisTextEditorDecorationType.dispose();
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "appzObjPropsGet": {
+                    return Promise.resolve({
+                        key: thisTextEditorDecorationType.key,
                     });
                 }
                 default:

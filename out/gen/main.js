@@ -35,6 +35,7 @@ const genApiSurface = {
                 'onDidChangeWindowState',
                 'createStatusBarItem',
                 'createOutputChannel',
+                'createTextEditorDecorationType',
             ],
             'env': [
                 'openExternal',

@@ -11,6 +11,43 @@ const (
 	StatusBarAlignmentRight StatusBarAlignment = 2
 )
 
+// Describes the behavior of decorations when typing/editing at their edges.
+type DecorationRangeBehavior int
+const (
+	// The decoration's range will widen when edits occur at the start or end.
+	DecorationRangeBehaviorOpenOpen DecorationRangeBehavior = 0
+
+	// The decoration's range will not widen when edits occur at the start of end.
+	DecorationRangeBehaviorClosedClosed DecorationRangeBehavior = 1
+
+	// The decoration's range will widen when edits occur at the start, but not at the end.
+	DecorationRangeBehaviorOpenClosed DecorationRangeBehavior = 2
+
+	// The decoration's range will widen when edits occur at the end, but not at the start.
+	DecorationRangeBehaviorClosedOpen DecorationRangeBehavior = 3
+)
+
+// Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+// The overview ruler supports three lanes.
+type OverviewRulerLane int
+const (
+	// Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+	// The overview ruler supports three lanes.
+	OverviewRulerLaneLeft OverviewRulerLane = 1
+
+	// Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+	// The overview ruler supports three lanes.
+	OverviewRulerLaneCenter OverviewRulerLane = 2
+
+	// Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+	// The overview ruler supports three lanes.
+	OverviewRulerLaneRight OverviewRulerLane = 4
+
+	// Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+	// The overview ruler supports three lanes.
+	OverviewRulerLaneFull OverviewRulerLane = 7
+)
+
 // Type Definition for Visual Studio Code 1.38 Extension API
 // See https://code.visualstudio.com/api for more information
 type Vscode interface {
@@ -376,6 +413,13 @@ type Window interface {
 	// 
 	// `name` ── Human-readable string which will be used to represent the channel in the UI.
 	CreateOutputChannel(name string) func(func(*OutputChannel))
+
+	// Create a TextEditorDecorationType that can be used to add decorations to text editors.
+	// 
+	// `options` ── Rendering options for the decoration type.
+	// 
+	// `return` ── A new decoration type instance.
+	CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(*TextEditorDecorationType))
 }
 type implWindow struct{ *impl }
 
@@ -905,6 +949,159 @@ type OutputChannel struct {
 	disp *Disposable
 }
 
+// Represents rendering styles for a [text editor decoration](#TextEditorDecorationType).
+type DecorationRenderOptions struct {
+	// Should the decoration be rendered also on the whitespace after the line text.
+	// Defaults to `false`.
+	IsWholeLine bool `json:"isWholeLine,omitempty"`
+
+	// Customize the growing behavior of the decoration when edits occur at the edges of the decoration's range.
+	// Defaults to `DecorationRangeBehavior.OpenOpen`.
+	RangeBehavior DecorationRangeBehavior `json:"rangeBehavior,omitempty"`
+
+	// The position in the overview ruler where the decoration should be rendered.
+	OverviewRulerLane OverviewRulerLane `json:"overviewRulerLane,omitempty"`
+
+	// Overwrite options for light themes.
+	Light ThemableDecorationRenderOptions `json:"light,omitempty"`
+
+	// Overwrite options for dark themes.
+	Dark ThemableDecorationRenderOptions `json:"dark,omitempty"`
+}
+
+// Represents theme specific rendering styles for a [text editor decoration](#TextEditorDecorationType).
+type ThemableDecorationRenderOptions struct {
+	// Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+	// Alternatively a color from the color registry can be [referenced](#ThemeColor).
+	BackgroundColor string `json:"backgroundColor,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Outline string `json:"outline,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'outline' for setting one or more of the individual outline properties.
+	OutlineColor string `json:"outlineColor,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'outline' for setting one or more of the individual outline properties.
+	OutlineStyle string `json:"outlineStyle,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'outline' for setting one or more of the individual outline properties.
+	OutlineWidth string `json:"outlineWidth,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Border string `json:"border,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderColor string `json:"borderColor,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderRadius string `json:"borderRadius,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderSpacing string `json:"borderSpacing,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderStyle string `json:"borderStyle,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderWidth string `json:"borderWidth,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	FontStyle string `json:"fontStyle,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	FontWeight string `json:"fontWeight,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	TextDecoration string `json:"textDecoration,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Cursor string `json:"cursor,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Color string `json:"color,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Opacity string `json:"opacity,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	LetterSpacing string `json:"letterSpacing,omitempty"`
+
+	// An **absolute path** or an URI to an image to be rendered in the gutter.
+	GutterIconPath string `json:"gutterIconPath,omitempty"`
+
+	// Specifies the size of the gutter icon.
+	// Available values are 'auto', 'contain', 'cover' and any percentage value.
+	// For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+	GutterIconSize string `json:"gutterIconSize,omitempty"`
+
+	// The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.
+	OverviewRulerColor string `json:"overviewRulerColor,omitempty"`
+
+	// Defines the rendering options of the attachment that is inserted before the decorated text.
+	Before ThemableDecorationAttachmentRenderOptions `json:"before,omitempty"`
+
+	// Defines the rendering options of the attachment that is inserted after the decorated text.
+	After ThemableDecorationAttachmentRenderOptions `json:"after,omitempty"`
+}
+
+// Type Definition for Visual Studio Code 1.38 Extension API
+// See https://code.visualstudio.com/api for more information
+type ThemableDecorationAttachmentRenderOptions struct {
+	// Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.
+	ContentText string `json:"contentText,omitempty"`
+
+	// An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
+	// or a text can be shown, but not both.
+	ContentIconPath string `json:"contentIconPath,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	Border string `json:"border,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	BorderColor string `json:"borderColor,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	FontStyle string `json:"fontStyle,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	FontWeight string `json:"fontWeight,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	TextDecoration string `json:"textDecoration,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	Color string `json:"color,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	BackgroundColor string `json:"backgroundColor,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	Margin string `json:"margin,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	Width string `json:"width,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	Height string `json:"height,omitempty"`
+}
+
+// Represents a handle to a set of decorations
+// sharing the same [styling options](#DecorationRenderOptions) in a [text editor](#TextEditor).
+// 
+// To get an instance of a `TextEditorDecorationType` use
+// [createTextEditorDecorationType](#window.createTextEditorDecorationType).
+type TextEditorDecorationType struct {
+	disp *Disposable
+}
+
 // An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).
 type WorkspaceFoldersChangeEvent struct {
 	// Added workspace folders.
@@ -1037,6 +1234,16 @@ type StatusBarItemProperties struct {
 type OutputChannelProperties struct {
 	// The human-readable name of this output channel.
 	Name func() string `json:"-"`
+}
+
+// Represents a handle to a set of decorations
+// sharing the same [styling options](#DecorationRenderOptions) in a [text editor](#TextEditor).
+// 
+// To get an instance of a `TextEditorDecorationType` use
+// [createTextEditorDecorationType](#window.createTextEditorDecorationType).
+type TextEditorDecorationTypeProperties struct {
+	// Internal representation of the handle.
+	Key func() string `json:"-"`
 }
 
 func (me *impl) Window() Window {
@@ -2203,6 +2410,36 @@ func (me implWindow) CreateOutputChannel(name string) func(func(*OutputChannel))
 	}
 	me.Impl().send(msg, onresp)
 	return func(a0 func(*OutputChannel)) {
+		onret = a0
+	}
+}
+
+func (me implWindow) CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(*TextEditorDecorationType)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.createTextEditorDecorationType"
+	msg.Data = make(dict, 1)
+	msg.Data["options"] = options
+	var onresp func(any) bool
+	var onret func(*TextEditorDecorationType)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result *TextEditorDecorationType
+		if (nil != payload) {
+			result = new(TextEditorDecorationType)
+			ok = result.populateFrom(payload)
+			if !ok {
+				return false
+			}
+			result.disp.impl = me.Impl()
+		}
+		if (nil != onret) {
+			onret(result)
+		}
+		return true
+	}
+	me.Impl().send(msg, onresp)
+	return func(a0 func(*TextEditorDecorationType)) {
 		onret = a0
 	}
 }
@@ -3389,6 +3626,40 @@ func (me *OutputChannel) Get() func(func(OutputChannelProperties)) {
 	}
 }
 
+// Remove this decoration type and all decorations on all text editors using it.
+func (me *TextEditorDecorationType) Dispose() func(func()) {
+	return me.disp.Dispose()
+}
+
+// Obtains this `TextEditorDecorationType`'s current property value for: `key`.
+func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeProperties)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "TextEditorDecorationType.appzObjPropsGet"
+	msg.Data = make(dict, 1)
+	msg.Data[""] = me.disp.id
+	var onresp func(any) bool
+	var onret func(TextEditorDecorationTypeProperties)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result TextEditorDecorationTypeProperties
+		if (nil != payload) {
+			ok = result.populateFrom(payload)
+			if !ok {
+				return false
+			}
+		}
+		if (nil != onret) {
+			onret(result)
+		}
+		return true
+	}
+	me.disp.impl.send(msg, onresp)
+	return func(a0 func(TextEditorDecorationTypeProperties)) {
+		onret = a0
+	}
+}
+
 func (me *MessageItem) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
@@ -3601,6 +3872,13 @@ func (me *StatusBarItem) populateFrom(payload any) bool {
 }
 
 func (me *OutputChannel) populateFrom(payload any) bool {
+	var ok bool
+	me.disp = new(Disposable)
+	ok = me.disp.populateFrom(payload)
+	return ok
+}
+
+func (me *TextEditorDecorationType) populateFrom(payload any) bool {
 	var ok bool
 	me.disp = new(Disposable)
 	ok = me.disp.populateFrom(payload)
@@ -3975,6 +4253,30 @@ func (me *OutputChannelProperties) populateFrom(payload any) bool {
 		}
 		me.Name = func() string {
 			return name
+		}
+	}
+	return true
+}
+
+func (me *TextEditorDecorationTypeProperties) populateFrom(payload any) bool {
+	var it dict
+	var ok bool
+	var val any
+	it, ok = payload.(dict)
+	if !ok {
+		return false
+	}
+	val, ok = it["key"]
+	if ok {
+		var key string
+		if (nil != val) {
+			key, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.Key = func() string {
+			return key
 		}
 	}
 	return true

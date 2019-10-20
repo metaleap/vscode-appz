@@ -26,6 +26,65 @@ var StatusBarAlignment;
      */
     StatusBarAlignment[StatusBarAlignment["Right"] = 2] = "Right";
 })(StatusBarAlignment = exports.StatusBarAlignment || (exports.StatusBarAlignment = {}));
+/**
+ * Describes the behavior of decorations when typing/editing at their edges.
+
+ */
+var DecorationRangeBehavior;
+(function (DecorationRangeBehavior) {
+    /**
+     * The decoration's range will widen when edits occur at the start or end.
+
+     */
+    DecorationRangeBehavior[DecorationRangeBehavior["OpenOpen"] = 0] = "OpenOpen";
+    /**
+     * The decoration's range will not widen when edits occur at the start of end.
+
+     */
+    DecorationRangeBehavior[DecorationRangeBehavior["ClosedClosed"] = 1] = "ClosedClosed";
+    /**
+     * The decoration's range will widen when edits occur at the start, but not at the end.
+
+     */
+    DecorationRangeBehavior[DecorationRangeBehavior["OpenClosed"] = 2] = "OpenClosed";
+    /**
+     * The decoration's range will widen when edits occur at the end, but not at the start.
+
+     */
+    DecorationRangeBehavior[DecorationRangeBehavior["ClosedOpen"] = 3] = "ClosedOpen";
+})(DecorationRangeBehavior = exports.DecorationRangeBehavior || (exports.DecorationRangeBehavior = {}));
+/**
+ * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+ * The overview ruler supports three lanes.
+
+ */
+var OverviewRulerLane;
+(function (OverviewRulerLane) {
+    /**
+     * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+     * The overview ruler supports three lanes.
+
+     */
+    OverviewRulerLane[OverviewRulerLane["Left"] = 1] = "Left";
+    /**
+     * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+     * The overview ruler supports three lanes.
+
+     */
+    OverviewRulerLane[OverviewRulerLane["Center"] = 2] = "Center";
+    /**
+     * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+     * The overview ruler supports three lanes.
+
+     */
+    OverviewRulerLane[OverviewRulerLane["Right"] = 4] = "Right";
+    /**
+     * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+     * The overview ruler supports three lanes.
+
+     */
+    OverviewRulerLane[OverviewRulerLane["Full"] = 7] = "Full";
+})(OverviewRulerLane = exports.OverviewRulerLane || (exports.OverviewRulerLane = {}));
 function newMessageItem() {
     let me;
     me = { populateFrom: _ => MessageItem_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
@@ -70,6 +129,13 @@ function newOutputChannel() {
     me.Get = () => OutputChannel_Get.call(me);
     return me;
 }
+function newTextEditorDecorationType() {
+    let me;
+    me = { populateFrom: _ => TextEditorDecorationType_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me.Dispose = () => TextEditorDecorationType_Dispose.call(me);
+    me.Get = () => TextEditorDecorationType_Get.call(me);
+    return me;
+}
 function newWorkspaceFoldersChangeEvent() {
     let me;
     me = { populateFrom: _ => WorkspaceFoldersChangeEvent_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
@@ -102,6 +168,12 @@ function newOutputChannelProperties() {
     return me;
 }
 exports.newOutputChannelProperties = newOutputChannelProperties;
+function newTextEditorDecorationTypeProperties() {
+    let me;
+    me = { populateFrom: _ => TextEditorDecorationTypeProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    return me;
+}
+exports.newTextEditorDecorationTypeProperties = newTextEditorDecorationTypeProperties;
 class impl {
     constructor() {
         this.Window = new implWindow(this);
@@ -1192,6 +1264,35 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newOutputChannel();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
+                }
+                result.disp.impl = this.Impl();
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
+    }
+    CreateTextEditorDecorationType(options) {
+        let msg;
+        msg = newipcMsg();
+        msg.QName = "window.createTextEditorDecorationType";
+        msg.Data = {};
+        msg.Data["options"] = options;
+        let onresp;
+        let onret;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newTextEditorDecorationType();
                 ok = result.populateFrom(payload);
                 if (!ok) {
                     return false;
@@ -2362,6 +2463,37 @@ function OutputChannel_Get() {
         onret = a0;
     };
 }
+function TextEditorDecorationType_Dispose() {
+    return this.disp.Dispose();
+}
+function TextEditorDecorationType_Get() {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "TextEditorDecorationType.appzObjPropsGet";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newTextEditorDecorationTypeProperties();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result);
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
 function MessageItem_populateFrom(payload) {
     let it;
     let ok;
@@ -2585,6 +2717,12 @@ function StatusBarItem_populateFrom(payload) {
     return ok;
 }
 function OutputChannel_populateFrom(payload) {
+    let ok;
+    this.disp = newDisposable();
+    ok = this.disp.populateFrom(payload);
+    return ok;
+}
+function TextEditorDecorationType_populateFrom(payload) {
     let ok;
     this.disp = newDisposable();
     ok = this.disp.populateFrom(payload);
@@ -2979,6 +3117,29 @@ function OutputChannelProperties_populateFrom(payload) {
         }
         this.Name = () => {
             return name;
+        };
+    }
+    return true;
+}
+function TextEditorDecorationTypeProperties_populateFrom(payload) {
+    let it;
+    let ok;
+    let val;
+    [it, ok] = [payload, typeof payload === "object"];
+    if (!ok) {
+        return false;
+    }
+    [val, ok] = [it["key"], undefined !== it["key"]];
+    if (ok) {
+        let key;
+        if ((undefined !== val && null !== val)) {
+            [key, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.Key = () => {
+            return key;
         };
     }
     return true;

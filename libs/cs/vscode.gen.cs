@@ -15,6 +15,51 @@ namespace VscAppz {
 		Right = 2,
 	}
 
+	/// <summary>Describes the behavior of decorations when typing/editing at their edges.</summary>
+	public enum DecorationRangeBehavior {
+		/// <summary>The decoration's range will widen when edits occur at the start or end.</summary>
+		OpenOpen = 0,
+
+		/// <summary>The decoration's range will not widen when edits occur at the start of end.</summary>
+		ClosedClosed = 1,
+
+		/// <summary>The decoration's range will widen when edits occur at the start, but not at the end.</summary>
+		OpenClosed = 2,
+
+		/// <summary>The decoration's range will widen when edits occur at the end, but not at the start.</summary>
+		ClosedOpen = 3,
+	}
+
+	/// <summary>
+	/// Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+	/// The overview ruler supports three lanes.
+	/// </summary>
+	public enum OverviewRulerLane {
+		/// <summary>
+		/// Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+		/// The overview ruler supports three lanes.
+		/// </summary>
+		Left = 1,
+
+		/// <summary>
+		/// Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+		/// The overview ruler supports three lanes.
+		/// </summary>
+		Center = 2,
+
+		/// <summary>
+		/// Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+		/// The overview ruler supports three lanes.
+		/// </summary>
+		Right = 4,
+
+		/// <summary>
+		/// Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+		/// The overview ruler supports three lanes.
+		/// </summary>
+		Full = 7,
+	}
+
 	/// <summary>
 	/// Type Definition for Visual Studio Code 1.38 Extension API
 	/// See https://code.visualstudio.com/api for more information
@@ -520,6 +565,17 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="name">Human-readable string which will be used to represent the channel in the UI.</param>
 		Action<Action<OutputChannel>> CreateOutputChannel(string name = default);
+
+		/// <summary>
+		/// Create a TextEditorDecorationType that can be used to add decorations to text editors.
+		/// 
+		/// `options` ── Rendering options for the decoration type.
+		/// 
+		/// `return` ── A new decoration type instance.
+		/// </summary>
+		/// <param name="options">Rendering options for the decoration type.</param>
+		/// <return>A new decoration type instance.</return>
+		Action<Action<TextEditorDecorationType>> CreateTextEditorDecorationType(DecorationRenderOptions options = default);
 	}
 
 	/// <summary>Namespace describing the environment the editor runs in.</summary>
@@ -1177,6 +1233,229 @@ namespace VscAppz {
 		internal Disposable disp;
 	}
 
+	/// <summary>Represents rendering styles for a [text editor decoration](#TextEditorDecorationType).</summary>
+	public partial class DecorationRenderOptions {
+		/// <summary>
+		/// Should the decoration be rendered also on the whitespace after the line text.
+		/// Defaults to `false`.
+		/// </summary>
+		[JsonProperty("isWholeLine")]
+		public bool IsWholeLine;
+
+		/// <summary>
+		/// Customize the growing behavior of the decoration when edits occur at the edges of the decoration's range.
+		/// Defaults to `DecorationRangeBehavior.OpenOpen`.
+		/// </summary>
+		[JsonProperty("rangeBehavior")]
+		public DecorationRangeBehavior? RangeBehavior;
+
+		/// <summary>The position in the overview ruler where the decoration should be rendered.</summary>
+		[JsonProperty("overviewRulerLane")]
+		public OverviewRulerLane? OverviewRulerLane;
+
+		/// <summary>Overwrite options for light themes.</summary>
+		[JsonProperty("light")]
+		public ThemableDecorationRenderOptions Light;
+
+		/// <summary>Overwrite options for dark themes.</summary>
+		[JsonProperty("dark")]
+		public ThemableDecorationRenderOptions Dark;
+	}
+
+	/// <summary>Represents theme specific rendering styles for a [text editor decoration](#TextEditorDecorationType).</summary>
+	public partial class ThemableDecorationRenderOptions {
+		/// <summary>
+		/// Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+		/// Alternatively a color from the color registry can be [referenced](#ThemeColor).
+		/// </summary>
+		[JsonProperty("backgroundColor")]
+		public string BackgroundColor;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("outline")]
+		public string Outline;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'outline' for setting one or more of the individual outline properties.
+		/// </summary>
+		[JsonProperty("outlineColor")]
+		public string OutlineColor;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'outline' for setting one or more of the individual outline properties.
+		/// </summary>
+		[JsonProperty("outlineStyle")]
+		public string OutlineStyle;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'outline' for setting one or more of the individual outline properties.
+		/// </summary>
+		[JsonProperty("outlineWidth")]
+		public string OutlineWidth;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("border")]
+		public string Border;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'border' for setting one or more of the individual border properties.
+		/// </summary>
+		[JsonProperty("borderColor")]
+		public string BorderColor;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'border' for setting one or more of the individual border properties.
+		/// </summary>
+		[JsonProperty("borderRadius")]
+		public string BorderRadius;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'border' for setting one or more of the individual border properties.
+		/// </summary>
+		[JsonProperty("borderSpacing")]
+		public string BorderSpacing;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'border' for setting one or more of the individual border properties.
+		/// </summary>
+		[JsonProperty("borderStyle")]
+		public string BorderStyle;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'border' for setting one or more of the individual border properties.
+		/// </summary>
+		[JsonProperty("borderWidth")]
+		public string BorderWidth;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("fontStyle")]
+		public string FontStyle;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("fontWeight")]
+		public string FontWeight;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("textDecoration")]
+		public string TextDecoration;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("cursor")]
+		public string Cursor;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("color")]
+		public string Color;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("opacity")]
+		public string Opacity;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("letterSpacing")]
+		public string LetterSpacing;
+
+		/// <summary>An **absolute path** or an URI to an image to be rendered in the gutter.</summary>
+		[JsonProperty("gutterIconPath")]
+		public string GutterIconPath;
+
+		/// <summary>
+		/// Specifies the size of the gutter icon.
+		/// Available values are 'auto', 'contain', 'cover' and any percentage value.
+		/// For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+		/// </summary>
+		[JsonProperty("gutterIconSize")]
+		public string GutterIconSize;
+
+		/// <summary>The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.</summary>
+		[JsonProperty("overviewRulerColor")]
+		public string OverviewRulerColor;
+
+		/// <summary>Defines the rendering options of the attachment that is inserted before the decorated text.</summary>
+		[JsonProperty("before")]
+		public ThemableDecorationAttachmentRenderOptions Before;
+
+		/// <summary>Defines the rendering options of the attachment that is inserted after the decorated text.</summary>
+		[JsonProperty("after")]
+		public ThemableDecorationAttachmentRenderOptions After;
+	}
+
+	/// <summary>
+	/// Type Definition for Visual Studio Code 1.38 Extension API
+	/// See https://code.visualstudio.com/api for more information
+	/// </summary>
+	public partial class ThemableDecorationAttachmentRenderOptions {
+		/// <summary>Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.</summary>
+		[JsonProperty("contentText")]
+		public string ContentText;
+
+		/// <summary>
+		/// An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
+		/// or a text can be shown, but not both.
+		/// </summary>
+		[JsonProperty("contentIconPath")]
+		public string ContentIconPath;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("border")]
+		public string Border;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("borderColor")]
+		public string BorderColor;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("fontStyle")]
+		public string FontStyle;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("fontWeight")]
+		public string FontWeight;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("textDecoration")]
+		public string TextDecoration;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("color")]
+		public string Color;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("backgroundColor")]
+		public string BackgroundColor;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("margin")]
+		public string Margin;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("width")]
+		public string Width;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("height")]
+		public string Height;
+	}
+
+	/// <summary>
+	/// Represents a handle to a set of decorations
+	/// sharing the same [styling options](#DecorationRenderOptions) in a [text editor](#TextEditor).
+	/// 
+	/// To get an instance of a `TextEditorDecorationType` use
+	/// [createTextEditorDecorationType](#window.createTextEditorDecorationType).
+	/// </summary>
+	public partial class TextEditorDecorationType {
+		internal Disposable disp;
+	}
+
 	/// <summary>An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).</summary>
 	public partial class WorkspaceFoldersChangeEvent {
 		/// <summary>Added workspace folders.</summary>
@@ -1354,6 +1633,19 @@ namespace VscAppz {
 		/// <summary>The human-readable name of this output channel.</summary>
 		[JsonIgnore]
 		public Func<string> Name;
+	}
+
+	/// <summary>
+	/// Represents a handle to a set of decorations
+	/// sharing the same [styling options](#DecorationRenderOptions) in a [text editor](#TextEditor).
+	/// 
+	/// To get an instance of a `TextEditorDecorationType` use
+	/// [createTextEditorDecorationType](#window.createTextEditorDecorationType).
+	/// </summary>
+	public partial class TextEditorDecorationTypeProperties {
+		/// <summary>Internal representation of the handle.</summary>
+		[JsonIgnore]
+		public Func<string> Key;
 	}
 
 	internal partial class impl : IVscode, IWindow, IEnv, IClipboard, IWorkspace, ILanguages, IExtensions, ICommands {
@@ -2484,6 +2776,36 @@ namespace VscAppz {
 			};
 			this.Impl().send(msg, onresp);
 			return (Action<OutputChannel> a0) => {
+				onret = a0;
+			};
+		}
+
+		Action<Action<TextEditorDecorationType>> IWindow.CreateTextEditorDecorationType(DecorationRenderOptions options) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.createTextEditorDecorationType";
+			msg.Data = new dict(1);
+			msg.Data["options"] = options;
+			Func<any, bool> onresp = default;
+			Action<TextEditorDecorationType> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				TextEditorDecorationType result = default;
+				if ((null != payload)) {
+					result = new TextEditorDecorationType();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+					result.disp.impl = this.Impl();
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<TextEditorDecorationType> a0) => {
 				onret = a0;
 			};
 		}
@@ -3714,6 +4036,46 @@ namespace VscAppz {
 		}
 	}
 
+	public partial class TextEditorDecorationType : IDisposable {
+		/// <summary>Remove this decoration type and all decorations on all text editors using it.</summary>
+		public Action<Action> Dispose() {
+			return this.disp.Dispose();
+		}
+		void IDisposable.Dispose() { this.Dispose(); }
+	}
+
+	public partial class TextEditorDecorationType {
+		/// <summary>Obtains this `TextEditorDecorationType`'s current property value for: `key`.</summary>
+		public Action<Action<TextEditorDecorationTypeProperties>> Get() {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "TextEditorDecorationType.appzObjPropsGet";
+			msg.Data = new dict(1);
+			msg.Data[""] = this.disp.id;
+			Func<any, bool> onresp = default;
+			Action<TextEditorDecorationTypeProperties> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				TextEditorDecorationTypeProperties result = default;
+				if ((null != payload)) {
+					result = new TextEditorDecorationTypeProperties();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<TextEditorDecorationTypeProperties> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
 	public partial class MessageItem {
 		internal bool populateFrom(any payload = default) {
 			dict it = default;
@@ -3940,6 +4302,15 @@ namespace VscAppz {
 	}
 
 	public partial class OutputChannel {
+		internal bool populateFrom(any payload = default) {
+			bool ok = default;
+			this.disp = new Disposable();
+			ok = this.disp.populateFrom(payload);
+			return ok;
+		}
+	}
+
+	public partial class TextEditorDecorationType {
 		internal bool populateFrom(any payload = default) {
 			bool ok = default;
 			this.disp = new Disposable();
@@ -4350,6 +4721,32 @@ namespace VscAppz {
 				}
 				this.Name = () => {
 					return name;
+				};
+			}
+			return true;
+		}
+	}
+
+	public partial class TextEditorDecorationTypeProperties {
+		internal bool populateFrom(any payload = default) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if (!ok) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("key", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				string key = default;
+				if ((null != val)) {
+					(key, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Key = () => {
+					return key;
 				};
 			}
 			return true;

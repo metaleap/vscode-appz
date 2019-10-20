@@ -4,27 +4,12 @@ const gen = require("./gen");
 class Gen extends gen.Gen {
     gen(prep) {
         this.resetState();
+        this.typeNamesUsed = {};
         this.pkg = prep.fromOrig.moduleName;
         let src = "// " + this.doNotEditComment("vscext") + "\n\n";
         src += `import * as ${this.pkg} from '${this.pkg}'\n`;
         src += "import * as ppio from './procspipeio'\n";
         src += "const noOp = (_:any) => {}\n";
-        for (const it of prep.enums)
-            src += "type " + it.name + " = " + this.pkg + "." + it.name + "\n";
-        for (const it of prep.structs)
-            if ((!(it.isPropsOfIface || it.isPropsOfStruct)) && it.isOutgoing) {
-                const fieldsextra = it.fields.filter(_ => _.isExtBaggage);
-                if ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length)) {
-                    src += "interface " + it.name + " extends " + this.pkg + "." + it.name + " {\n";
-                    for (const f of fieldsextra)
-                        src += `\t${f.name + (f.optional ? '?' : '')}: ${this.typeSpec(f.typeSpec)}\n`;
-                    for (const ff of it.funcFields)
-                        src += `\t${ff}_AppzFuncId: string\n`;
-                    src += "}\n";
-                }
-                else
-                    src += "type " + it.name + " = " + this.pkg + "." + it.name + "\n";
-            }
         src += `\nexport function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationTokens: string[]): Thenable<any> | ${this.pkg}.Disposable {\n`;
         src += "\tconst idxdot = msg.qName.lastIndexOf('.')\n";
         src += `\tconst [apiname, methodname] = (idxdot > 0) ? [msg.qName.slice(0, idxdot), msg.qName.slice(idxdot + 1)] : ['', msg.qName]\n`;
@@ -70,6 +55,7 @@ class Gen extends gen.Gen {
         }
         for (const it of prep.structs)
             if (it.isDispObj) {
+                this.typeNamesUsed[it.name] = true;
                 src += `\t\tcase "${it.name}":\n`;
                 src += `\t\t\tconst this${it.name} = prog.objects[msg.data[""]] as ${this.pkg}.${it.name}\n`;
                 src += `\t\t\tif (!this${it.name})\n`;
@@ -103,8 +89,10 @@ class Gen extends gen.Gen {
                     src += "\t\t\t\t\tconst allUpdates = msg.data['allUpdates'] as { [_:string]: any }\n";
                     src += "\t\t\t\t\tif (!allUpdates)\n\t\t\t\t\t\treturn Promise.reject(msg.data)\n";
                     for (const prop of it.fields.filter(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec))) {
+                        for (const tname of gen.typeNames(prop.typeSpec))
+                            this.typeNamesUsed[tname] = true;
                         src += `\t\t\t\t\tconst prop_${prop.name} = allUpdates["${prop.name}"] as ${this.typeSpec(prop.typeSpec)}\n`;
-                        src += `\t\t\t\t\tif (prop_${prop.name} !== undefined)\n\t\t\t\t\t\tthis${it.name}.${prop.name} = `
+                        src += `\t\t\t\t\tif (prop_${prop.name} !== undefined && prop_${prop.name} !== this${it.name}.${prop.name})\n\t\t\t\t\t\tthis${it.name}.${prop.name} = `
                             + ((!gen.typeSumOf(prop.typeSpec, 'ThemeColor')) ? ((!gen.typeSumOf(prop.typeSpec, gen.ScriptPrimType.Undefined)) ?
                                 `prop_${prop.name}` : `(!(prop_${prop.name} && prop_${prop.name}.length)) ? undefined : prop_${prop.name}`) : (`(!(prop_${prop.name} && prop_${prop.name}.length)) ? undefined : prop_${prop.name}.startsWith("#") ? prop_${prop.name} : new ${this.pkg}.ThemeColor(prop_${prop.name})`))
                             + "\n";
@@ -120,6 +108,23 @@ class Gen extends gen.Gen {
         src += "\t\t\tthrow (apiname)\n";
         src += "\t}\n";
         src += "}\n\n";
+        for (const it of prep.enums)
+            if (this.typeNamesUsed[it.name])
+                src += "type " + it.name + " = " + this.pkg + "." + it.name + "\n";
+        for (const it of prep.structs)
+            if ((!(it.isPropsOfIface || it.isPropsOfStruct)) && it.isOutgoing && this.typeNamesUsed[it.name]) {
+                const fieldsextra = it.fields.filter(_ => _.isExtBaggage);
+                if ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length)) {
+                    src += "interface " + it.name + " extends " + this.pkg + "." + it.name + " {\n";
+                    for (const f of fieldsextra)
+                        src += `\t${f.name + (f.optional ? '?' : '')}: ${this.typeSpec(f.typeSpec)}\n`;
+                    for (const ff of it.funcFields)
+                        src += `\t${ff}_AppzFuncId: string\n`;
+                    src += "}\n";
+                }
+                else
+                    src += "type " + it.name + " = " + this.pkg + "." + it.name + "\n";
+            }
         this.writeFileSync(this.pkg, src);
     }
     argsSrc(prep, arg) {
@@ -144,8 +149,11 @@ class Gen extends gen.Gen {
             src += "\t\t\t\t\t}\n";
         }
         else {
-            if (arg.typeSpec !== 'Uri')
+            if (arg.typeSpec !== 'Uri') {
+                for (const tname of gen.typeNames(arg.typeSpec))
+                    this.typeNamesUsed[tname] = true;
                 src += `\t\t\t\t\tconst arg_${arg.name} = (msg.data['${arg.name}']${(gen.typeArr(arg.typeSpec) || gen.typeTup(arg.typeSpec)) ? ' || []' : ''}) as ${this.typeSpec(arg.typeSpec)}\n`;
+            }
             else {
                 src += `\t\t\t\t\tconst arg_${arg.name} = ppio.tryUnmarshalUri(msg.data['${arg.name}'])\n`;
                 src += `\t\t\t\t\tif (!arg_${arg.name})\n`;

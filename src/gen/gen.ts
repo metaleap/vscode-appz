@@ -572,6 +572,43 @@ export function typeProm(typeSpec: TypeSpec): TypeSpec[] {
     return (tprom && tprom.Thens) ? tprom.Thens : null
 }
 
+function typeNamesGather(typeSpec: TypeSpec, dict: { [_: string]: boolean }): any {
+    if (typeof typeSpec === 'string')
+        dict[typeSpec] = true
+    else {
+        const tarr = typeArr(typeSpec)
+        if (tarr) return typeNamesGather(tarr, dict)
+
+        const ttup = typeTup(typeSpec)
+        if (ttup) return ttup.forEach(_ => typeNamesGather(_, dict))
+
+        const tsum = typeSum(typeSpec)
+        if (tsum) return tsum.forEach(_ => typeNamesGather(_, dict))
+
+        const tmul = typeMul(typeSpec)
+        if (tmul) return tmul.forEach(_ => typeNamesGather(_, dict))
+
+        const tobj = typeObj(typeSpec)
+        if (tobj) return tobj.forEach(_ => typeNamesGather(_[1], dict))
+
+        const tfun = typeFun(typeSpec)
+        if (tfun) return tfun[0].concat(tfun[1]).forEach(_ => typeNamesGather(_, dict))
+
+        const tprom = typeProm(typeSpec)
+        if (tprom) return tprom.forEach(_ => typeNamesGather(_, dict))
+    }
+}
+
+export function typeNames(typeSpec: TypeSpec): string[] {
+    const dict: { [_: string]: boolean } = {}
+    typeNamesGather(typeSpec, dict)
+    const me: string[] = []
+    for (const name in dict)
+        if (!me.includes(name))
+            me.push(name)
+    return me
+}
+
 export function typeFun(typeSpec: TypeSpec): [TypeSpec[], TypeSpec] {
     const tfun = typeSpec as TypeSpecFun
     return (tfun && tfun.From) ? [tfun.From, tfun.To] : null
