@@ -16,6 +16,31 @@ func demo_promptToExit() {
 	})
 }
 
+func demo_clipboard() {
+	vsc.Env().Clipboard().ReadText()(func(text *string) {
+		if (nil == text) {
+			vsc.Window().ShowWarningMessage1(logLn("No text in clipboard"), nil)
+		} else {
+			var opts *InputBoxOptions
+			opts = new(InputBoxOptions)
+			opts.IgnoreFocusOut = true
+			opts.Value = *text
+			logLn(strFmt("input/opts/{0}:\t{1}", "Prompt", "Enter new contents to write to your clipboard."))
+			opts.Prompt = "Enter new contents to write to your clipboard."
+			vsc.Window().ShowInputBox(opts, nil)(func(input *string) {
+				if (nil == input) {
+					vsc.Window().ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), nil)
+				} else {
+					logLn(strFmt("input <- {0}", *input))
+					vsc.Env().Clipboard().WriteText(*input)(func() {
+						vsc.Window().ShowInformationMessage1(logLn("Okay. Now double-check by pasting somewhere."), nil)
+					})
+				}
+			})
+		}
+	})
+}
+
 func demo_Commands_GetCommands_and_ExecuteCommand() {
 	vsc.Commands().GetCommands(false)(func(items []string) {
 		var opts QuickPickOptions
@@ -28,11 +53,13 @@ func demo_Commands_GetCommands_and_ExecuteCommand() {
 				var opts2 *InputBoxOptions
 				opts2 = new(InputBoxOptions)
 				opts2.IgnoreFocusOut = true
+				logLn(strFmt("cmdarg/opts2/{0}:\t{1}", "PlaceHolder", strFmt("Any param for `{0}` command? Else leave blank.", *item)))
 				opts2.PlaceHolder = strFmt("Any param for `{0}` command? Else leave blank.", *item)
 				vsc.Window().ShowInputBox(opts2, nil)(func(cmdarg *string) {
 					if (nil == cmdarg) {
 						vsc.Window().ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), nil)
 					} else {
+						logLn(strFmt("cmdarg <- {0}", *cmdarg))
 						var cmdargs []any
 						if "" != (*cmdarg) {
 							cmdargs = make([]any, 1)
@@ -53,11 +80,13 @@ func demo_Commands_RegisterCommand() {
 	opts = new(InputBoxOptions)
 	opts.IgnoreFocusOut = true
 	opts.Value = "foo.bar.baz"
+	logLn(strFmt("cmdname/opts/{0}:\t{1}", "Prompt", "Enter your command name. The command will accept a single text input and return a result built from it."))
 	opts.Prompt = "Enter your command name. The command will accept a single text input and return a result built from it."
 	vsc.Window().ShowInputBox(opts, nil)(func(cmdname *string) {
 		if (nil == cmdname) {
 			vsc.Window().ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), nil)
 		} else {
+			logLn(strFmt("cmdname <- {0}", *cmdname))
 			vsc.Commands().RegisterCommand(*cmdname, func(cmdargs []any) any {
 				vsc.Window().SetStatusBarMessage1(logLn(strFmt("Command `{0}` invoked with: `{1}`", *cmdname, cmdargs[0])), 4242)
 				return strFmt("Input to command `{0}` was: `{1}`", *cmdname, cmdargs[0])
@@ -65,12 +94,14 @@ func demo_Commands_RegisterCommand() {
 				var opts2 *InputBoxOptions
 				opts2 = new(InputBoxOptions)
 				opts2.IgnoreFocusOut = true
+				logLn(strFmt("cmdarg/opts2/{0}:\t{1}", "Prompt", strFmt("Command `{0}` registered, try it now?", *cmdname)))
 				opts2.Prompt = strFmt("Command `{0}` registered, try it now?", *cmdname)
 				opts2.Value = strFmt("Enter input to command `{0}` here", *cmdname)
 				vsc.Window().ShowInputBox(opts2, nil)(func(cmdarg *string) {
 					if (nil == cmdarg) {
 						vsc.Window().ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), nil)
 					} else {
+						logLn(strFmt("cmdarg <- {0}", *cmdarg))
 						var cmdargs2 []any
 						cmdargs2 = make([]any, 1)
 						cmdargs2[0] = *cmdarg
@@ -198,11 +229,13 @@ func demo_Env_OpenExternal() {
 	opts = new(InputBoxOptions)
 	opts.IgnoreFocusOut = true
 	opts.Value = "http://github.com/metaleap/vscode-appz"
+	logLn(strFmt("uri/opts/{0}:\t{1}", "Prompt", "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."))
 	opts.Prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."
 	vsc.Window().ShowInputBox(opts, nil)(func(uri *string) {
 		if (nil == uri) {
 			vsc.Window().ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), nil)
 		} else {
+			logLn(strFmt("uri <- {0}", *uri))
 			vsc.Env().OpenExternal(*uri)(func(ok bool) {
 				var did string
 				did = "Did"
@@ -262,7 +295,7 @@ func subscribeToMiscEvents() {
 
 func demosMenu() {
 	var items []string
-	items = []string{"demo_promptToExit", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_ShowInputBox"}
+	items = []string{"demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_ShowInputBox"}
 	var opts QuickPickOptions
 	opts.IgnoreFocusOut = true
 	opts.PlaceHolder = "This menu can be re-opened any time via our custom status-bar item."
@@ -271,6 +304,10 @@ func demosMenu() {
 			if "demo_promptToExit" == (*menuitem) {
 				logLn("Picked `demo_promptToExit` from main menu")
 				demo_promptToExit()
+			}
+			if "demo_clipboard" == (*menuitem) {
+				logLn("Picked `demo_clipboard` from main menu")
+				demo_clipboard()
 			}
 			if "demo_Commands_GetCommands_and_ExecuteCommand" == (*menuitem) {
 				logLn("Picked `demo_Commands_GetCommands_and_ExecuteCommand` from main menu")

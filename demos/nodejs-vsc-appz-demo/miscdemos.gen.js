@@ -16,6 +16,31 @@ function demo_promptToExit() {
     })
 }
 
+function demo_clipboard() {
+    vsc.Env.Clipboard().ReadText()((text) => {
+        if ((undefined === text || null === text)) {
+            vsc.Window.ShowWarningMessage1(logLn("No text in clipboard"), null)
+        } else {
+            let opts
+            opts = {}
+            opts.ignoreFocusOut = true
+            opts.value = text
+            logLn(strFmt("input/opts/{0}:\t{1}", "Prompt", "Enter new contents to write to your clipboard."))
+            opts.prompt = "Enter new contents to write to your clipboard."
+            vsc.Window.ShowInputBox(opts, null)((input) => {
+                if ((undefined === input || null === input)) {
+                    vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null)
+                } else {
+                    logLn(strFmt("input <- {0}", input))
+                    vsc.Env.Clipboard().WriteText(input)(() => {
+                        vsc.Window.ShowInformationMessage1(logLn("Okay. Now double-check by pasting somewhere."), null)
+                    })
+                }
+            })
+        }
+    })
+}
+
 function demo_Commands_GetCommands_and_ExecuteCommand() {
     vsc.Commands.GetCommands(false)((items) => {
         let opts
@@ -29,11 +54,13 @@ function demo_Commands_GetCommands_and_ExecuteCommand() {
                 let opts2
                 opts2 = {}
                 opts2.ignoreFocusOut = true
+                logLn(strFmt("cmdarg/opts2/{0}:\t{1}", "PlaceHolder", strFmt("Any param for `{0}` command? Else leave blank.", item)))
                 opts2.placeHolder = strFmt("Any param for `{0}` command? Else leave blank.", item)
                 vsc.Window.ShowInputBox(opts2, null)((cmdarg) => {
                     if ((undefined === cmdarg || null === cmdarg)) {
                         vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null)
                     } else {
+                        logLn(strFmt("cmdarg <- {0}", cmdarg))
                         let cmdargs
                         if ("" !== cmdarg) {
                             cmdargs = new Array(1)
@@ -54,11 +81,13 @@ function demo_Commands_RegisterCommand() {
     opts = {}
     opts.ignoreFocusOut = true
     opts.value = "foo.bar.baz"
+    logLn(strFmt("cmdname/opts/{0}:\t{1}", "Prompt", "Enter your command name. The command will accept a single text input and return a result built from it."))
     opts.prompt = "Enter your command name. The command will accept a single text input and return a result built from it."
     vsc.Window.ShowInputBox(opts, null)((cmdname) => {
         if ((undefined === cmdname || null === cmdname)) {
             vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null)
         } else {
+            logLn(strFmt("cmdname <- {0}", cmdname))
             vsc.Commands.RegisterCommand(cmdname, (cmdargs) => {
                 vsc.Window.SetStatusBarMessage1(logLn(strFmt("Command `{0}` invoked with: `{1}`", cmdname, cmdargs[0])), 4242)
                 return strFmt("Input to command `{0}` was: `{1}`", cmdname, cmdargs[0])
@@ -66,12 +95,14 @@ function demo_Commands_RegisterCommand() {
                 let opts2
                 opts2 = {}
                 opts2.ignoreFocusOut = true
+                logLn(strFmt("cmdarg/opts2/{0}:\t{1}", "Prompt", strFmt("Command `{0}` registered, try it now?", cmdname)))
                 opts2.prompt = strFmt("Command `{0}` registered, try it now?", cmdname)
                 opts2.value = strFmt("Enter input to command `{0}` here", cmdname)
                 vsc.Window.ShowInputBox(opts2, null)((cmdarg) => {
                     if ((undefined === cmdarg || null === cmdarg)) {
                         vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null)
                     } else {
+                        logLn(strFmt("cmdarg <- {0}", cmdarg))
                         let cmdargs2
                         cmdargs2 = new Array(1)
                         cmdargs2[0] = cmdarg
@@ -204,11 +235,13 @@ function demo_Env_OpenExternal() {
     opts = {}
     opts.ignoreFocusOut = true
     opts.value = "http://github.com/metaleap/vscode-appz"
+    logLn(strFmt("uri/opts/{0}:\t{1}", "Prompt", "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."))
     opts.prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."
     vsc.Window.ShowInputBox(opts, null)((uri) => {
         if ((undefined === uri || null === uri)) {
             vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null)
         } else {
+            logLn(strFmt("uri <- {0}", uri))
             vsc.Env.OpenExternal(uri)((ok) => {
                 let did
                 did = "Did"
@@ -273,7 +306,7 @@ function subscribeToMiscEvents() {
 
 function demosMenu() {
     let items
-    items = ["demo_promptToExit", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_ShowInputBox"]
+    items = ["demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_ShowInputBox"]
     let opts
     opts = {}
     opts.ignoreFocusOut = true
@@ -283,6 +316,10 @@ function demosMenu() {
             if ("demo_promptToExit" === menuitem) {
                 logLn("Picked `demo_promptToExit` from main menu")
                 demo_promptToExit()
+            }
+            if ("demo_clipboard" === menuitem) {
+                logLn("Picked `demo_clipboard` from main menu")
+                demo_clipboard()
             }
             if ("demo_Commands_GetCommands_and_ExecuteCommand" === menuitem) {
                 logLn("Picked `demo_Commands_GetCommands_and_ExecuteCommand` from main menu")

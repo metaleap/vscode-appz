@@ -14,6 +14,11 @@ class GenDemos {
                     this.genInfoMsg(_, _.eLit("So I'm not a goner yet. I'll stick around then.")),
                 ])))
             ],
+            "demo_clipboard": () => [
+                _.eCall(_.eCall(_.oDot(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Env"))), _.n("Clipboard"))), _.n("ReadText"))), _.eFunc([{ Name: "text", Type: { Maybe: gen_syn_1.TypeRefPrim.String } }], null, _.iIf(_.oIsnt(_.n("text")), [
+                    this.genByeMsg(_, "No text in clipboard"),
+                ], this.genInput(_, "opts", "input", [{ k: "Value", v: _.oDeref(_.n("text")) }, { k: "Prompt", v: _.eLit("Enter new contents to write to your clipboard.") }], _.eCall(_.eCall(_.oDot(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Env"))), _.n("Clipboard"))), _.n("WriteText")), _.oDeref(_.n("input"))), _.eFunc([], null, this.genInfoMsg(_, _.eLit("Okay. Now double-check by pasting somewhere.")))))))),
+            ],
             "demo_Commands_GetCommands_and_ExecuteCommand": () => this.genDemoOfStrListMenu(_, "Commands", "GetCommands", "command ID(s), pick one to execute or escape now:", [_.eLit(false)], _.eFunc([{ Name: "item", Type: { Maybe: gen_syn_1.TypeRefPrim.String } }], null, _.iIf(_.oIsnt(_.n("item")), [
                 this.genByeMsg(_, "Command selection cancelled, spooked?"),
             ], this.genInput(_, "opts2", "cmdarg", [{ k: "PlaceHolder", v: _.eLit("Any param for `{0}` command? Else leave blank.", _.oDeref(_.n("item"))) }], _.iVar("cmdargs", { ValsOf: gen_syn_1.TypeRefPrim.Any }), _.iIf(_.oNeq(_.eLit(""), _.oDeref(_.n("cmdarg"))), [
@@ -145,11 +150,17 @@ class GenDemos {
             _.iVar(nameOpts, { Maybe: { Name: "InputBoxOptions" } }),
             _.iSet(_.n(nameOpts), _.eNew({ Maybe: { Name: "InputBoxOptions" } })),
             _.iSet(_.oDot(_.n(nameOpts), _.n(this.fld("IgnoreFocusOut"))), _.eLit(true)),
-        ].concat(..._.EACH(props, prop => [
-            _.iSet(_.oDot(_.n(nameOpts), _.n(this.fld(prop.k))), prop.v)
-        ])).concat(_.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("ShowInputBox")), _.n(nameOpts), _.eZilch()), _.eFunc([{ Name: nameInput, Type: { Maybe: gen_syn_1.TypeRefPrim.String } }], null, _.iIf(_.oIsnt(_.n(nameInput)), [
+        ].concat(..._.EACH(props, (prop) => {
+            return _.WHEN(prop.k === 'Prompt' || prop.k === 'PlaceHolder', () => [
+                _.eCall(_.n("logLn"), _.eLit(nameInput + "/" + nameOpts + "/{0}:\t{1}", _.eLit(prop.k), prop.v)),
+            ]).concat([
+                _.iSet(_.oDot(_.n(nameOpts), _.n(this.fld(prop.k))), prop.v)
+            ]);
+        })).concat(_.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("ShowInputBox")), _.n(nameOpts), _.eZilch()), _.eFunc([{ Name: nameInput, Type: { Maybe: gen_syn_1.TypeRefPrim.String } }], null, _.iIf(_.oIsnt(_.n(nameInput)), [
             this.genByeMsg(_, "Cancelled text input, out of ideas?"),
-        ], withInput))));
+        ], [
+            _.eCall(_.n("logLn"), _.eLit(nameInput + " <- {0}", _.oDeref(_.n(nameInput)))),
+        ].concat(withInput)))));
     }
     genStatusMsg(_, msg) {
         return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("SetStatusBarMessage", 1))), _.eCall(_.n("logLn"), msg), _.eLit(4242));

@@ -33,6 +33,23 @@ export class GenDemos {
                 )
             ],
 
+            "demo_clipboard": () => [
+                _.eCall(_.eCall(_.oDot(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Env"))), _.n("Clipboard"))), _.n("ReadText"))),
+                    _.eFunc([{ Name: "text", Type: { Maybe: TypeRefPrim.String } }], null,
+                        _.iIf(_.oIsnt(_.n("text")), [
+                            this.genByeMsg(_, "No text in clipboard"),
+                        ], this.genInput(
+                            _, "opts", "input", [{ k: "Value", v: _.oDeref(_.n("text")) }, { k: "Prompt", v: _.eLit("Enter new contents to write to your clipboard.") }],
+                            _.eCall(_.eCall(_.oDot(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Env"))), _.n("Clipboard"))), _.n("WriteText")), _.oDeref(_.n("input"))),
+                                _.eFunc([], null,
+                                    this.genInfoMsg(_, _.eLit("Okay. Now double-check by pasting somewhere.")),
+                                ),
+                            ),
+                        )),
+                    ),
+                ),
+            ],
+
             "demo_Commands_GetCommands_and_ExecuteCommand": () =>
                 this.genDemoOfStrListMenu(_, "Commands", "GetCommands", "command ID(s), pick one to execute or escape now:", [_.eLit(false)],
                     _.eFunc([{ Name: "item", Type: { Maybe: TypeRefPrim.String } }], null,
@@ -303,15 +320,21 @@ export class GenDemos {
             _.iVar(nameOpts, { Maybe: { Name: "InputBoxOptions" } }),
             _.iSet(_.n(nameOpts), _.eNew({ Maybe: { Name: "InputBoxOptions" } })),
             _.iSet(_.oDot(_.n(nameOpts), _.n(this.fld("IgnoreFocusOut"))), _.eLit(true)),
-        ] as Instr[]).concat(..._.EACH(props, prop => [
-            _.iSet(_.oDot(_.n(nameOpts), _.n(this.fld(prop.k))), prop.v)
-        ] as Instr[])).concat(
+        ] as Instr[]).concat(..._.EACH(props, (prop): Instr[] => {
+            return _.WHEN(prop.k === 'Prompt' || prop.k === 'PlaceHolder', () => [
+                _.eCall(_.n("logLn"), _.eLit(nameInput + "/" + nameOpts + "/{0}:\t{1}", _.eLit(prop.k), prop.v)),
+            ]).concat([
+                _.iSet(_.oDot(_.n(nameOpts), _.n(this.fld(prop.k))), prop.v)
+            ])
+        })).concat(
             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("ShowInputBox")),
                 _.n(nameOpts), _.eZilch(),
             ), _.eFunc([{ Name: nameInput, Type: { Maybe: TypeRefPrim.String } }], null,
                 _.iIf(_.oIsnt(_.n(nameInput)), [
                     this.genByeMsg(_, "Cancelled text input, out of ideas?"),
-                ], withInput),
+                ], ([
+                    _.eCall(_.n("logLn"), _.eLit(nameInput + " <- {0}", _.oDeref(_.n(nameInput)))),
+                ] as Instr[]).concat(withInput)),
             )),
         )
     }
