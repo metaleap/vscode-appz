@@ -119,7 +119,7 @@ class implWindow extends implBase {
     ShowInformationMessage1(message, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showInformationMessage";
+        msg.QName = "window.showInformationMessage1";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
@@ -149,7 +149,7 @@ class implWindow extends implBase {
     ShowInformationMessage2(message, options, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showInformationMessage";
+        msg.QName = "window.showInformationMessage2";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["options"] = options;
@@ -180,7 +180,7 @@ class implWindow extends implBase {
     ShowInformationMessage3(message, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showInformationMessage";
+        msg.QName = "window.showInformationMessage3";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
@@ -209,7 +209,7 @@ class implWindow extends implBase {
     ShowInformationMessage4(message, options, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showInformationMessage";
+        msg.QName = "window.showInformationMessage4";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["options"] = options;
@@ -239,7 +239,7 @@ class implWindow extends implBase {
     ShowWarningMessage1(message, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showWarningMessage";
+        msg.QName = "window.showWarningMessage1";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
@@ -269,7 +269,7 @@ class implWindow extends implBase {
     ShowWarningMessage2(message, options, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showWarningMessage";
+        msg.QName = "window.showWarningMessage2";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["options"] = options;
@@ -300,7 +300,7 @@ class implWindow extends implBase {
     ShowWarningMessage3(message, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showWarningMessage";
+        msg.QName = "window.showWarningMessage3";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
@@ -329,7 +329,7 @@ class implWindow extends implBase {
     ShowWarningMessage4(message, options, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showWarningMessage";
+        msg.QName = "window.showWarningMessage4";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["options"] = options;
@@ -359,7 +359,7 @@ class implWindow extends implBase {
     ShowErrorMessage1(message, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showErrorMessage";
+        msg.QName = "window.showErrorMessage1";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
@@ -389,7 +389,7 @@ class implWindow extends implBase {
     ShowErrorMessage2(message, options, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showErrorMessage";
+        msg.QName = "window.showErrorMessage2";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["options"] = options;
@@ -420,7 +420,7 @@ class implWindow extends implBase {
     ShowErrorMessage3(message, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showErrorMessage";
+        msg.QName = "window.showErrorMessage3";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
@@ -449,7 +449,7 @@ class implWindow extends implBase {
     ShowErrorMessage4(message, options, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showErrorMessage";
+        msg.QName = "window.showErrorMessage4";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["options"] = options;
@@ -557,7 +557,7 @@ class implWindow extends implBase {
     ShowQuickPick1(items, options, token) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showQuickPick";
+        msg.QName = "window.showQuickPick1";
         msg.Data = {};
         let fnids;
         fnids = [];
@@ -650,7 +650,7 @@ class implWindow extends implBase {
     ShowQuickPick2(items, options, token) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showQuickPick";
+        msg.QName = "window.showQuickPick2";
         msg.Data = {};
         let fnids;
         fnids = [];
@@ -733,7 +733,7 @@ class implWindow extends implBase {
     ShowQuickPick3(items, options, token) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showQuickPick";
+        msg.QName = "window.showQuickPick3";
         msg.Data = {};
         let fnids;
         fnids = [];
@@ -827,7 +827,7 @@ class implWindow extends implBase {
     ShowQuickPick4(items, options, token) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showQuickPick";
+        msg.QName = "window.showQuickPick4";
         msg.Data = {};
         let fnids;
         fnids = [];
@@ -909,7 +909,7 @@ class implWindow extends implBase {
     SetStatusBarMessage1(text, hideAfterTimeout) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.setStatusBarMessage";
+        msg.QName = "window.setStatusBarMessage1";
         msg.Data = {};
         msg.Data["text"] = text;
         msg.Data["hideAfterTimeout"] = hideAfterTimeout;
@@ -941,7 +941,7 @@ class implWindow extends implBase {
     SetStatusBarMessage2(text) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.setStatusBarMessage";
+        msg.QName = "window.setStatusBarMessage2";
         msg.Data = {};
         msg.Data["text"] = text;
         let onresp;
@@ -1490,7 +1490,7 @@ class implClipboard extends implBase {
     ReadText() {
         let msg;
         msg = newipcMsg();
-        msg.QName = "env.clipboard.readText";
+        msg.QName = "clipboard.readText";
         msg.Data = {};
         let onresp;
         let onret;
@@ -1518,7 +1518,7 @@ class implClipboard extends implBase {
     WriteText(value) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "env.clipboard.writeText";
+        msg.QName = "clipboard.writeText";
         msg.Data = {};
         msg.Data["value"] = value;
         let onresp;

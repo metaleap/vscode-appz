@@ -1555,7 +1555,7 @@ class implWindow extends implBase implements Window {
     ShowInformationMessage1(message: string, items: string[]): (_: (_: string) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showInformationMessage"
+        msg.QName = "window.showInformationMessage1"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["items"] = items
@@ -1586,7 +1586,7 @@ class implWindow extends implBase implements Window {
     ShowInformationMessage2(message: string, options: MessageOptions, items: string[]): (_: (_: string) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showInformationMessage"
+        msg.QName = "window.showInformationMessage2"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["options"] = options
@@ -1618,7 +1618,7 @@ class implWindow extends implBase implements Window {
     ShowInformationMessage3(message: string, items: MessageItem[]): (_: (_: MessageItem) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showInformationMessage"
+        msg.QName = "window.showInformationMessage3"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["items"] = items
@@ -1648,7 +1648,7 @@ class implWindow extends implBase implements Window {
     ShowInformationMessage4(message: string, options: MessageOptions, items: MessageItem[]): (_: (_: MessageItem) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showInformationMessage"
+        msg.QName = "window.showInformationMessage4"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["options"] = options
@@ -1679,7 +1679,7 @@ class implWindow extends implBase implements Window {
     ShowWarningMessage1(message: string, items: string[]): (_: (_: string) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showWarningMessage"
+        msg.QName = "window.showWarningMessage1"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["items"] = items
@@ -1710,7 +1710,7 @@ class implWindow extends implBase implements Window {
     ShowWarningMessage2(message: string, options: MessageOptions, items: string[]): (_: (_: string) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showWarningMessage"
+        msg.QName = "window.showWarningMessage2"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["options"] = options
@@ -1742,7 +1742,7 @@ class implWindow extends implBase implements Window {
     ShowWarningMessage3(message: string, items: MessageItem[]): (_: (_: MessageItem) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showWarningMessage"
+        msg.QName = "window.showWarningMessage3"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["items"] = items
@@ -1772,7 +1772,7 @@ class implWindow extends implBase implements Window {
     ShowWarningMessage4(message: string, options: MessageOptions, items: MessageItem[]): (_: (_: MessageItem) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showWarningMessage"
+        msg.QName = "window.showWarningMessage4"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["options"] = options
@@ -1803,7 +1803,7 @@ class implWindow extends implBase implements Window {
     ShowErrorMessage1(message: string, items: string[]): (_: (_: string) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showErrorMessage"
+        msg.QName = "window.showErrorMessage1"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["items"] = items
@@ -1834,7 +1834,7 @@ class implWindow extends implBase implements Window {
     ShowErrorMessage2(message: string, options: MessageOptions, items: string[]): (_: (_: string) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showErrorMessage"
+        msg.QName = "window.showErrorMessage2"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["options"] = options
@@ -1866,7 +1866,7 @@ class implWindow extends implBase implements Window {
     ShowErrorMessage3(message: string, items: MessageItem[]): (_: (_: MessageItem) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showErrorMessage"
+        msg.QName = "window.showErrorMessage3"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["items"] = items
@@ -1896,7 +1896,7 @@ class implWindow extends implBase implements Window {
     ShowErrorMessage4(message: string, options: MessageOptions, items: MessageItem[]): (_: (_: MessageItem) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showErrorMessage"
+        msg.QName = "window.showErrorMessage4"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["options"] = options
@@ -2005,7 +2005,7 @@ class implWindow extends implBase implements Window {
     ShowQuickPick1(items: string[], options: QuickPickOptions, token?: Cancel): (_: (_: string[]) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showQuickPick"
+        msg.QName = "window.showQuickPick1"
         msg.Data = {}
         let fnids: string[]
         fnids = []
@@ -2097,7 +2097,7 @@ class implWindow extends implBase implements Window {
     ShowQuickPick2(items: string[], options?: QuickPickOptions, token?: Cancel): (_: (_: string) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showQuickPick"
+        msg.QName = "window.showQuickPick2"
         msg.Data = {}
         let fnids: string[]
         fnids = []
@@ -2179,7 +2179,7 @@ class implWindow extends implBase implements Window {
     ShowQuickPick3(items: QuickPickItem[], options: QuickPickOptions, token?: Cancel): (_: (_: QuickPickItem[]) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showQuickPick"
+        msg.QName = "window.showQuickPick3"
         msg.Data = {}
         let fnids: string[]
         fnids = []
@@ -2272,7 +2272,7 @@ class implWindow extends implBase implements Window {
     ShowQuickPick4(items: QuickPickItem[], options?: QuickPickOptions, token?: Cancel): (_: (_: QuickPickItem) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showQuickPick"
+        msg.QName = "window.showQuickPick4"
         msg.Data = {}
         let fnids: string[]
         fnids = []
@@ -2353,7 +2353,7 @@ class implWindow extends implBase implements Window {
     SetStatusBarMessage1(text: string, hideAfterTimeout: number): (_: (_: Disposable) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.setStatusBarMessage"
+        msg.QName = "window.setStatusBarMessage1"
         msg.Data = {}
         msg.Data["text"] = text
         msg.Data["hideAfterTimeout"] = hideAfterTimeout
@@ -2385,7 +2385,7 @@ class implWindow extends implBase implements Window {
     SetStatusBarMessage2(text: string): (_: (_: Disposable) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.setStatusBarMessage"
+        msg.QName = "window.setStatusBarMessage2"
         msg.Data = {}
         msg.Data["text"] = text
         let onresp: (_: any) => boolean
@@ -2951,7 +2951,7 @@ class implClipboard extends implBase implements Clipboard {
     ReadText(): (_: (_: string) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "env.clipboard.readText"
+        msg.QName = "clipboard.readText"
         msg.Data = {}
         let onresp: (_: any) => boolean
         let onret: (_: string) => void
@@ -2980,7 +2980,7 @@ class implClipboard extends implBase implements Clipboard {
     WriteText(value: string): (_: () => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "env.clipboard.writeText"
+        msg.QName = "clipboard.writeText"
         msg.Data = {}
         msg.Data["value"] = value
         let onresp: (_: any) => boolean

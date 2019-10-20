@@ -1585,7 +1585,7 @@ Vscode·Commands: ( -> Commands)
 Window·ShowInformationMessage1: (message:string -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showInformationMessage"
+    msg.QName = "window.showInformationMessage1"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
@@ -1615,7 +1615,7 @@ Window·ShowInformationMessage1: (message:string -> items:[string] -> ((?string-
 Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showInformationMessage"
+    msg.QName = "window.showInformationMessage2"
     msg.Data = dict·new(3)
     msg.Data@"message" = message
     msg.Data@"options" = options
@@ -1646,7 +1646,7 @@ Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> it
 Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showInformationMessage"
+    msg.QName = "window.showInformationMessage3"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
@@ -1675,7 +1675,7 @@ Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> ((?Me
 Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showInformationMessage"
+    msg.QName = "window.showInformationMessage4"
     msg.Data = dict·new(3)
     msg.Data@"message" = message
     msg.Data@"options" = options
@@ -1705,7 +1705,7 @@ Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> it
 Window·ShowWarningMessage1: (message:string -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showWarningMessage"
+    msg.QName = "window.showWarningMessage1"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
@@ -1735,7 +1735,7 @@ Window·ShowWarningMessage1: (message:string -> items:[string] -> ((?string->voi
 Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showWarningMessage"
+    msg.QName = "window.showWarningMessage2"
     msg.Data = dict·new(3)
     msg.Data@"message" = message
     msg.Data@"options" = options
@@ -1766,7 +1766,7 @@ Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:
 Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showWarningMessage"
+    msg.QName = "window.showWarningMessage3"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
@@ -1795,7 +1795,7 @@ Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> ((?Messag
 Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showWarningMessage"
+    msg.QName = "window.showWarningMessage4"
     msg.Data = dict·new(3)
     msg.Data@"message" = message
     msg.Data@"options" = options
@@ -1825,7 +1825,7 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
 Window·ShowErrorMessage1: (message:string -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showErrorMessage"
+    msg.QName = "window.showErrorMessage1"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
@@ -1855,7 +1855,7 @@ Window·ShowErrorMessage1: (message:string -> items:[string] -> ((?string->void)
 Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showErrorMessage"
+    msg.QName = "window.showErrorMessage2"
     msg.Data = dict·new(3)
     msg.Data@"message" = message
     msg.Data@"options" = options
@@ -1886,7 +1886,7 @@ Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[s
 Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showErrorMessage"
+    msg.QName = "window.showErrorMessage3"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
@@ -1915,7 +1915,7 @@ Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> ((?MessageI
 Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> ((?MessageItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showErrorMessage"
+    msg.QName = "window.showErrorMessage4"
     msg.Data = dict·new(3)
     msg.Data@"message" = message
     msg.Data@"options" = options
@@ -2009,7 +2009,7 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> ((?string->v
 Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Cancel -> ((?[string]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showQuickPick"
+    msg.QName = "window.showQuickPick1"
     msg.Data = dict·new(3)
     var fnids of [string]
     fnids = [string]·new(1)
@@ -2086,7 +2086,7 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
 Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?Cancel -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showQuickPick"
+    msg.QName = "window.showQuickPick2"
     msg.Data = dict·new(3)
     var fnids of [string]
     fnids = [string]·new(1)
@@ -2154,7 +2154,7 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
 Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> token:?Cancel -> ((?[QuickPickItem]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showQuickPick"
+    msg.QName = "window.showQuickPick3"
     msg.Data = dict·new(3)
     var fnids of [string]
     fnids = [string]·new(1)
@@ -2232,7 +2232,7 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
 Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> token:?Cancel -> ((?QuickPickItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showQuickPick"
+    msg.QName = "window.showQuickPick4"
     msg.Data = dict·new(3)
     var fnids of [string]
     fnids = [string]·new(1)
@@ -2299,7 +2299,7 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
 Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.setStatusBarMessage"
+    msg.QName = "window.setStatusBarMessage1"
     msg.Data = dict·new(2)
     msg.Data@"text" = text
     msg.Data@"hideAfterTimeout" = hideAfterTimeout
@@ -2330,7 +2330,7 @@ Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> ((?Disposa
 Window·SetStatusBarMessage2: (text:string -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.setStatusBarMessage"
+    msg.QName = "window.setStatusBarMessage2"
     msg.Data = dict·new(1)
     msg.Data@"text" = text
     var onresp of (any->bool)
@@ -2864,7 +2864,7 @@ Env·Clipboard: ( -> Clipboard)
 Clipboard·ReadText: ( -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "env.clipboard.readText"
+    msg.QName = "clipboard.readText"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
     var onret of (?string->void)
@@ -2892,7 +2892,7 @@ Clipboard·ReadText: ( -> ((?string->void)->void))
 Clipboard·WriteText: (value:string -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "env.clipboard.writeText"
+    msg.QName = "clipboard.writeText"
     msg.Data = dict·new(1)
     msg.Data@"value" = value
     var onresp of (any->bool)

@@ -696,9 +696,7 @@ class Gen extends gen.Gen {
         const numargs = method.fromPrep ? method.fromPrep.args.filter(_ => !_.isFromRetThenable).length : method.Args.length;
         if (!impl)
             impl = _.eCall(_.oDot(_.n("Impl")));
-        body.push(_.iVar(__.msg, { Maybe: { Name: 'ipcMsg' } }), _.iSet(_.n(__.msg), _.eNew({ Maybe: { Name: 'ipcMsg' } })), _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit((method.fromPrep && method.fromPrep.fromOrig && method.fromPrep.fromOrig.qName && method.fromPrep.fromOrig.qName.length)
-            ? method.fromPrep.fromOrig.qName.split('.').slice(1).join('.')
-            : (ifaceOrStruct.name + '.' + (method.fromPrep ? method.fromPrep.name : (method.name && method.name.startsWith("appz")) ? method.name : method.Name)))), _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs + (idVal ? 1 : 0)))));
+        body.push(_.iVar(__.msg, { Maybe: { Name: 'ipcMsg' } }), _.iSet(_.n(__.msg), _.eNew({ Maybe: { Name: 'ipcMsg' } })), _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit((ifaceOrStruct.name + '.' + (method.fromPrep ? method.fromPrep.name : (method.name && method.name.startsWith("appz")) ? method.name : method.Name)))), _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs + (idVal ? 1 : 0)))));
         if (idVal)
             body.push(_.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit("")), idVal));
         const twinargs = {};

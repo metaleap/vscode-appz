@@ -947,9 +947,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             _.iVar(__.msg, { Maybe: { Name: 'ipcMsg' } }),
             _.iSet(_.n(__.msg), _.eNew({ Maybe: { Name: 'ipcMsg' } })),
             _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(
-                (method.fromPrep && method.fromPrep.fromOrig && method.fromPrep.fromOrig.qName && method.fromPrep.fromOrig.qName.length)
-                    ? method.fromPrep.fromOrig.qName.split('.').slice(1).join('.')
-                    : (ifaceOrStruct.name + '.' + (method.fromPrep ? method.fromPrep.name : (method.name && method.name.startsWith("appz")) ? method.name : method.Name))
+                (ifaceOrStruct.name + '.' + (method.fromPrep ? method.fromPrep.name : (method.name && method.name.startsWith("appz")) ? method.name : method.Name))
             )),
             _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs + (idVal ? 1 : 0)))),
         )
