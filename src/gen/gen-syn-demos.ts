@@ -23,7 +23,12 @@ export class GenDemos {
             "demo_promptToExit": () => [
                 _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowWarningMessage", 1))), _.eLit("Are you sure you want `{0}` to exit?", _.n("appName")), _.eLit(["Sure I'm sure"])),
                     _.eFunc([{ Name: "btn", Type: { Maybe: TypeRefPrim.String } }], null,
-                        _.iIf(_.oIs(_.n("btn")), [_.eCall(_.n("quit"), _.eZilch())]),
+                        _.iIf(_.oIs(_.n("btn")), [
+                            this.genInfoMsg(_, _.eLit("So fish and long for all the thanks!")),
+                            _.eCall(_.n("quit"), _.eZilch()),
+                        ], [
+                            this.genInfoMsg(_, _.eLit("So I'm not a goner yet. I'll stick around then.")),
+                        ]),
                     ),
                 )
             ],
@@ -32,7 +37,7 @@ export class GenDemos {
                 this.genDemoOfStrListMenu(_, "Commands", "GetCommands", "command ID(s), pick one to execute or escape now:", [_.eLit(false)],
                     _.eFunc([{ Name: "item", Type: { Maybe: TypeRefPrim.String } }], null,
                         _.iIf(_.oIsnt(_.n("item")), [
-                            this.genByeMsg(_, "Command selection cancelled!"),
+                            this.genByeMsg(_, "Command selection cancelled, spooked?"),
                         ], this.genInput(_, "opts2", "cmdarg", [{ k: "PlaceHolder", v: _.eLit("Any param for `{0}` command? Else leave blank.", _.oDeref(_.n("item"))) }],
                             _.iVar("cmdargs", { ValsOf: TypeRefPrim.Any }),
                             _.iIf(_.oNeq(_.eLit(""), _.oDeref(_.n("cmdarg"))), [
@@ -42,7 +47,7 @@ export class GenDemos {
                             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("ExecuteCommand")),
                                 _.oDeref(_.n("item")), _.n("cmdargs"),
                             ), _.eFunc([{ Name: "ret", Type: TypeRefPrim.Any }], null,
-                                this.genInfoMsg(_, _.eLit("Command result was: `{0}`, merci!", _.n("ret"))),
+                                this.genInfoMsg(_, _.eLit("Command result was: `{0}`, kudos!", _.n("ret"))),
                             ))
                         )),
                     ),
@@ -63,7 +68,7 @@ export class GenDemos {
                             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("ExecuteCommand")),
                                 _.oDeref(_.n("cmdname")), _.n("cmdargs2")),
                                 _.eFunc([{ Name: "ret", Type: TypeRefPrim.Any }], null,
-                                    this.genInfoMsg(_, _.eLit("Command result: `{0}`, merci!", _.n("ret"))),
+                                    this.genInfoMsg(_, _.eLit("Command result: `{0}`, mad props!", _.n("ret"))),
                                 ))
                         ),
                     ))
@@ -92,9 +97,9 @@ export class GenDemos {
                 _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("ShowWorkspaceFolderPick")), _.n("opts")),
                     _.eFunc([{ Name: "pickedfolder", Type: { Maybe: { Name: "WorkspaceFolder" } } }], null,
                         _.iIf(_.oIsnt(_.n("pickedfolder")), [
-                            this.genByeMsg(_, "Cancelled pick input!"),
+                            this.genByeMsg(_, "Cancelled pick input, changed your mind?"),
                         ], [
-                            this.genInfoMsg(_, _.eLit("Selected `{0}` located at `{1}`, merci!", _.oDot(_.n("pickedfolder"), _.n(this.fld("Name"))), _.oDot(_.n("pickedfolder"), _.n(this.fld("Uri"))))),
+                            this.genInfoMsg(_, _.eLit("Selected `{0}` located at `{1}`, respect!", _.oDot(_.n("pickedfolder"), _.n(this.fld("Name"))), _.oDot(_.n("pickedfolder"), _.n(this.fld("Uri"))))),
                         ]),
                     )
                 )
@@ -108,7 +113,7 @@ export class GenDemos {
                         _.iIf(_.oNot(_.n("ok")), [
                             _.iSet(_.n("did"), _.eOp(" + ", _.n("did"), _.eLit(" not")))
                         ]),
-                        this.genInfoMsg(_, _.eLit("{0} succeed in opening `{1}`, merci!", _.n("did"), _.oDeref(_.n("uri")))),
+                        this.genInfoMsg(_, _.eLit("{0} succeed in opening `{1}`, chapeau!", _.n("did"), _.oDeref(_.n("uri")))),
                     )
                 )
             ),
@@ -147,9 +152,9 @@ export class GenDemos {
                         _.n("items"), _.n("opts"), _.eCall(_.n("cancelIn"), _.eLit(42)),
                     ), _.eFunc([{ Name: "pickeditems", Type: { ValsOf: { Name: "QuickPickItem" } } }], null,
                         _.iIf(_.oIsnt(_.n("pickeditems")), [
-                            this.genByeMsg(_, "Cancelled pick input!"),
+                            this.genByeMsg(_, "Cancelled pick input, not one to tick the boxes?"),
                         ], [
-                            this.genInfoMsg(_, _.eLit("You picked {0} item(s), merci!", _.eLen(_.n("pickeditems"), true))),
+                            this.genInfoMsg(_, _.eLit("You picked {0} item(s), good stuff!", _.eLen(_.n("pickeditems"), true))),
                         ]),
                     ))
                 )
@@ -183,7 +188,20 @@ export class GenDemos {
         )
 
         this.all["onUpAndRunning"] = () => ([
-            _.eCall(_.n("subscribeToMiscEvents")),
+            _.iBlock(
+                _.eCall(_.n("subscribeToMiscEvents")),
+            ),
+            _.iBlock(
+                _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("CreateOutputChannel")),
+                    _.n("appName")), _.eFunc([{ Name: "it", Type: { Maybe: { Name: "OutputChannel" } } }], null,
+                        _.eCall(_.n("setOutChan"), _.n("it")),
+                        _.eCall(_.n("logLn"), _.eCall(_.n("strFmt"), _.eLit("Hi, I'm `{0}`, this is my own custom `OutputChannel` where I leisurely log all your interactions with me. When I'm ended, it too will disappear."), _.n("appName"))),
+                        _.eCall(_.n("logLn"), _.eLit("")),
+                        _.eCall(_.n("logLn"), _.eLit("NOTE that for logging error messages, you won't need to manually create a custom `OutputChannel` at all: just have your prog print to its `stderr` as (presumably) usual, and `vscode-appz` will then create a dedicated `OutputChannel` for (both that initial and all subsequent) `stderr` prints from your prog while it's up and running.")),
+                        _.eCall(_.oDot(_.n("it"), _.n("Show")), _.eLit(true)),
+                    )
+                ),
+            ),
             _.iBlock(
                 _.iVar("statusitem", { Maybe: { Name: "StatusBarItem" } }),
                 _.iVar("clickcount", TypeRefPrim.Int),
@@ -252,9 +270,9 @@ export class GenDemos {
             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(`Show${which}Dialog`)), _.n("opts")),
                 _.eFunc([{ Name: fp, Type: mult ? { ValsOf: TypeRefPrim.String } : { Maybe: TypeRefPrim.String } }], null,
                     _.iIf(_.oIsnt(_.n(fp)), [
-                        this.genByeMsg(_, `Cancelled File-${which} dialog!`),
+                        this.genByeMsg(_, `Cancelled File-${which} dialog, chicken?`),
                     ], [
-                        this.genInfoMsg(_, _.eLit("Selected " + (mult ? "{0} file path(s)" : "file path `{0}`") + ", merci!", mult ? (_.eLen(_.n(fp), true)) : _.oDeref(_.n(fp)))),
+                        this.genInfoMsg(_, _.eLit("Selected " + (mult ? "{0} file path(s)" : "file path `{0}`") + ", excellent!", mult ? (_.eLen(_.n(fp), true)) : _.oDeref(_.n(fp)))),
                     ]),
                 ))
         ]
@@ -280,7 +298,7 @@ export class GenDemos {
                 _.n(nameOpts), _.eZilch(),
             ), _.eFunc([{ Name: nameInput, Type: { Maybe: TypeRefPrim.String } }], null,
                 _.iIf(_.oIsnt(_.n(nameInput)), [
-                    this.genByeMsg(_, "Cancelled text input!"),
+                    this.genByeMsg(_, "Cancelled text input, out of ideas?"),
                 ], withInput),
             )),
         )

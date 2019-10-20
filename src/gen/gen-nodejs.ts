@@ -29,9 +29,9 @@ export class Gen extends gen_syn.Gen {
             "const main = require('./main')",
             'Object.defineProperty(exports, "__esModule", { value: true })',
             "// " + this.doNotEditComment("nodejs"),
-            "let vsc, appName, cmdName, strFmt, quit, cancelIn, demo_Window_ShowInputBox",
+            "let vsc, appName, cmdName, strFmt, quit, cancelIn, demo_Window_ShowInputBox, setOutChan, logLn",
             "exports.demosMenu = demosMenu",
-            "exports.onUpAndRunning = () => { vsc = main.vsc; appName = main.appName; cmdName = main.cmdName; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox; onUpAndRunning() }",
+            "exports.onUpAndRunning = () => { /* crikey.. */ vsc = main.vsc; appName = main.appName; cmdName = main.cmdName; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox; setOutChan = main.setOutChan; logLn = main.logLn; onUpAndRunning() }",
             "",
         ) : this.lines(
             "// " + this.doNotEditComment("nodejs"),

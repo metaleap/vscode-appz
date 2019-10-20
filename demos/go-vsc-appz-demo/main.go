@@ -17,7 +17,7 @@ const appName = "go-vsc-appz-demo"
 var cmdName = appName + strconv.FormatInt(time.Now().UnixNano(), 10)
 var vsc Vscode
 var win Window
-var logOutChan *OutputChannel
+var logChan *OutputChannel
 
 func main() {
 	greethow, greetname := "Hallo", "Welt"
@@ -76,7 +76,7 @@ func demo_Window_ShowInputBox() {
 	}, nil)(
 		func(input *string) {
 			if input == nil {
-				win.ShowWarningMessage1("Cancelled text input!", nil)(demosmenu)
+				win.ShowWarningMessage1("Drat! Was itching to hear that.", nil)(demosmenu)
 			} else {
 				win.ShowInformationMessage1("You entered: `"+(*input)+"`, merci!", nil)(demosmenu)
 			}
@@ -91,13 +91,14 @@ func cancelIn(seconds int64) *Cancel {
 }
 
 func logLn(msgLn string) {
-	if logOutChan != nil {
+	if logChan != nil {
 		if msgLn != "" {
 			msgLn = time.Now().Format("15:04:05") + "\t" + msgLn
 		}
-		logOutChan.AppendLine(msgLn)
+		logChan.AppendLine(msgLn)
 	}
 }
+func setOutChan(outChan *OutputChannel) { logChan = outChan }
 
 func strFmt(s string, args ...any) string {
 	for i := range args {

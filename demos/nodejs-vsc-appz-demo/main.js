@@ -3,7 +3,7 @@ const miscdemos = require('./miscdemos.gen')
 Object.defineProperty(exports, "__esModule", { value: true })
 
 
-let win
+let win, logChan
 exports.appName = "nodejs-vsc-appz-demo"
 exports.cmdName = exports.appName + new Date().getTime()
 
@@ -50,7 +50,7 @@ exports.demo_Window_ShowInputBox = () => {
         }
     })(input => {
         if (input === undefined || input === null)
-            win.ShowWarningMessage1("Cancelled text input!")(miscdemos.demosMenu)
+            win.ShowWarningMessage1("Drat! Was itching to hear that.")(miscdemos.demosMenu)
         else
             win.ShowInformationMessage1("You entered: `" + input + "`, merci!")(miscdemos.demosMenu)
     })
@@ -61,6 +61,14 @@ exports.quit = () => { process.exit() }
 exports.cancelIn = (seconds) => {
     return vscAppz.CancelIn(1000 * seconds)
 }
+
+exports.logLn = (msgLn) => {
+    if (logChan) {
+        msgLn = (!(msgLn && msgLn.length)) ? "" : (new Date().toLocaleTimeString() + "\t" + msgLn)
+        logChan.AppendLine(msgLn)
+    }
+}
+exports.setOutChan = (outChan) => logChan = outChan
 
 exports.strFmt = (s, ...args) => {
     for (let i = 0; i < args.length; i++)

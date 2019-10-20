@@ -112,7 +112,7 @@
   - [Dispose()](#M-VscAppz-OutputChannel-Dispose 'VscAppz.OutputChannel.Dispose')
   - [Get()](#M-VscAppz-OutputChannel-Get 'VscAppz.OutputChannel.Get')
   - [Hide()](#M-VscAppz-OutputChannel-Hide 'VscAppz.OutputChannel.Hide')
-  - [Show(preserveFocus)](#M-VscAppz-OutputChannel-Show-System-Nullable{System-Boolean}- 'VscAppz.OutputChannel.Show(System.Nullable{System.Boolean})')
+  - [Show(preserveFocus)](#M-VscAppz-OutputChannel-Show-System-Boolean- 'VscAppz.OutputChannel.Show(System.Boolean)')
 - [OutputChannelProperties](#T-VscAppz-OutputChannelProperties 'VscAppz.OutputChannelProperties')
   - [Name](#F-VscAppz-OutputChannelProperties-Name 'VscAppz.OutputChannelProperties.Name')
 - [QuickPickItem](#T-VscAppz-QuickPickItem 'VscAppz.QuickPickItem')
@@ -1839,7 +1839,7 @@ This method has no parameters.
 
 ##### Summary
 
-Obtains this `OutputChannel`'s current property values for: `name`.
+Obtains this `OutputChannel`'s current property value for: `name`.
 
 ##### Parameters
 
@@ -1856,7 +1856,7 @@ Hide this channel from the UI.
 
 This method has no parameters.
 
-<a name='M-VscAppz-OutputChannel-Show-System-Nullable{System-Boolean}-'></a>
+<a name='M-VscAppz-OutputChannel-Show-System-Boolean-'></a>
 ### Show(preserveFocus) `method`
 
 ##### Summary
@@ -1869,7 +1869,7 @@ Reveal this channel in the UI.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| preserveFocus | [System.Nullable{System.Boolean}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.Boolean}') | When `true` the channel will not take focus. |
+| preserveFocus | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | When `true` the channel will not take focus. |
 
 <a name='T-VscAppz-OutputChannelProperties'></a>
 ## OutputChannelProperties `type`

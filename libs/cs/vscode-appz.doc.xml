@@ -1188,7 +1188,7 @@
         <member name="M:VscAppz.OutputChannel.Clear">
             <summary>Removes all output from the channel.</summary>
         </member>
-        <member name="M:VscAppz.OutputChannel.Show(System.Nullable{System.Boolean})">
+        <member name="M:VscAppz.OutputChannel.Show(System.Boolean)">
             <summary>
             Reveal this channel in the UI.
             
@@ -1203,7 +1203,7 @@
             <summary>Dispose and free associated resources.</summary>
         </member>
         <member name="M:VscAppz.OutputChannel.Get">
-            <summary>Obtains this `OutputChannel`'s current property values for: `name`.</summary>
+            <summary>Obtains this `OutputChannel`'s current property value for: `name`.</summary>
         </member>
         <member name="T:VscAppz.WorkspaceFoldersChangeEvent">
             <summary>An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).</summary>

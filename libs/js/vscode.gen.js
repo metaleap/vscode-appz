@@ -2235,9 +2235,7 @@ function OutputChannel_Show(preserveFocus) {
     msg.QName = "OutputChannel.show";
     msg.Data = {};
     msg.Data[""] = this.disp.id;
-    if ((undefined !== preserveFocus && null !== preserveFocus)) {
-        msg.Data["preserveFocus"] = preserveFocus;
-    }
+    msg.Data["preserveFocus"] = preserveFocus;
     let onresp;
     let onret;
     onresp = (payload) => {

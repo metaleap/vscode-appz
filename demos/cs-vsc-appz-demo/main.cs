@@ -10,6 +10,7 @@ namespace VscAppzDemo {
 
         private static IVscode vsc;
         private static IWindow win;
+        private static OutputChannel logChan;
 
         public static void Main(string[] args) {
             Vsc.Main(vscode => {
@@ -52,7 +53,7 @@ namespace VscAppzDemo {
                 ValidateInput   = val
             })(input => {
                 if (input == null)
-                    win.ShowWarningMessage1("Cancelled text input!")(demosmenu);
+                    win.ShowWarningMessage1("Drat! Was itching to hear that.")(demosmenu);
                 else
                     win.ShowInformationMessage1("You entered: `"+input+"`, merci!")(demosmenu);
             });
@@ -63,6 +64,14 @@ namespace VscAppzDemo {
 
         private static Cancel cancelIn(double seconds) =>
             Cancel.In(TimeSpan.FromSeconds(seconds));
+
+        private static void logLn(string msgLn) {
+            if (logChan != null) {
+                msgLn = string.IsNullOrEmpty(msgLn) ? "" : (DateTime.Now.ToString("HH:mm:ss") + "\t" + msgLn);
+                logChan.AppendLine(msgLn);
+            }
+        }
+        private static void setOutChan(OutputChannel outChan) => logChan = outChan;
 
         private static string strFmt(string s , params object[] args)=>
             string.Format(s,args);
