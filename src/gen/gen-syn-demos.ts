@@ -212,7 +212,7 @@ export class GenDemos {
                     _.eCall(_.eCall(_.oDot(_.n("statusitem"), _.n("Get"))), _.eFunc([{ Name: "props", Type: { Name: "StatusBarItemProperties" } }], null,
                         _.iSet(_.oDot(_.n("props"), _.n(this.fld("Text"))), _.eLit("You clicked me {0} time(s).", _.n("clickcount"))),
                         _.iIf(_.oEq(_.eLit("editorLightBulb.foreground"), _.oDot(_.n("props"), _.n(this.fld("Color")))), [
-                            _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("inputValidation.infoBackground")),
+                            _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("terminal.ansiGreen")),
                         ], [
                             _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("editorLightBulb.foreground")),
                         ]),
@@ -232,7 +232,7 @@ export class GenDemos {
                             _.iSet(_.n("props"), _.eNew({ Name: "StatusBarItemProperties" })),
                             _.iSet(_.oDot(_.n("props"), _.n(this.fld("Tooltip"))), _.eLit("Hi from {0}!", _.n("appName"))),
                             _.iSet(_.oDot(_.n("props"), _.n(this.fld("Text"))), _.eLit("You clicked me 0 time(s).")),
-                            _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("#BEEF88")),
+                            _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("#42BEEF")),
                             _.iSet(_.oDot(_.n("props"), _.n(this.fld("Command"))), _.n("cmdName")),
                             _.eCall(_.eCall(_.oDot(_.n("statusitem"), _.n("Set")), _.n("props")), _.eFunc([], null,
                                 _.eCall(_.oDot(_.n("statusitem"), _.n("Show"))),

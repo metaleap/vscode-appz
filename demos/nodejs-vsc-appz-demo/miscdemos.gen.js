@@ -329,7 +329,7 @@ function onUpAndRunning() {
             statusitem.Get()((props) => {
                 props.text = strFmt("You clicked me {0} time(s).", clickcount)
                 if ("editorLightBulb.foreground" === props.color) {
-                    props.color = "inputValidation.infoBackground"
+                    props.color = "terminal.ansiGreen"
                 } else {
                     props.color = "editorLightBulb.foreground"
                 }
@@ -344,7 +344,7 @@ function onUpAndRunning() {
                 props = {}
                 props.tooltip = strFmt("Hi from {0}!", appName)
                 props.text = "You clicked me 0 time(s)."
-                props.color = "#BEEF88"
+                props.color = "#42BEEF"
                 props.command = cmdName
                 statusitem.Set(props)(() => {
                     statusitem.Show()
