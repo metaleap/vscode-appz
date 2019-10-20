@@ -181,6 +181,7 @@ export class GenDemos {
             ...this.genMenu(_, _.eLit("This menu can be re-opened any time via our custom status-bar item."),
                 _.eFunc([{ Name: "menuitem", Type: { Maybe: TypeRefPrim.String } }], null,
                     _.iIf(_.oIs(_.n("menuitem")), allnames.map(name => _.iIf(_.oEq(_.eLit(name), _.oDeref(_.n("menuitem"))), [
+                        _.eCall(_.n("logLn"), _.eLit("Picked `" + name + "` from main menu")),
                         _.eCall(_.n(name)),
                     ]))),
                 ),
@@ -191,14 +192,22 @@ export class GenDemos {
             _.iBlock(
                 _.eCall(_.n("subscribeToMiscEvents")),
             ),
+            _.iVar("logchan", { Maybe: { Name: "OutputChannel" } }),
+            _.iVar("toggleonclick", TypeRefPrim.Bool),
             _.iBlock(
                 _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("CreateOutputChannel")),
                     _.n("appName")), _.eFunc([{ Name: "it", Type: { Maybe: { Name: "OutputChannel" } } }], null,
-                        _.eCall(_.n("setOutChan"), _.n("it")),
+                        _.iSet(_.n("logchan"), _.n("it")),
+                        _.eCall(_.n("setOutChan"), _.n("logchan")),
                         _.eCall(_.n("logLn"), _.eCall(_.n("strFmt"), _.eLit("Hi, I'm `{0}`, this is my own custom `OutputChannel` where I leisurely log all your interactions with me. When I'm ended, it too will disappear."), _.n("appName"))),
                         _.eCall(_.n("logLn"), _.eLit("")),
                         _.eCall(_.n("logLn"), _.eLit("NOTE that for logging error messages, you won't need to manually create a custom `OutputChannel` at all: just have your prog print to its `stderr` as (presumably) usual, and `vscode-appz` will then create a dedicated `OutputChannel` for (both that initial and all subsequent) `stderr` prints from your prog while it's up and running.")),
-                        _.eCall(_.oDot(_.n("it"), _.n("Show")), _.eLit(true)),
+                        _.eCall(_.n("logLn"), _.eLit("")),
+                        _.iIf(_.n("toggleonclick"), [
+                            _.eCall(_.n("logLn"), _.eLit("Note also that every click on my status-bar item will toggle my visibility.")),
+                            _.eCall(_.n("logLn"), _.eLit("")),
+                        ]),
+                        _.eCall(_.oDot(_.n("logchan"), _.n("Show")), _.eLit(true)),
                     )
                 ),
             ),
@@ -210,11 +219,13 @@ export class GenDemos {
                 _.iSet(_.n("mycmd"), _.eFunc([{ Name: "_unused", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Any,
                     _.iSet(_.n("clickcount"), _.eOp("+", _.eLit(1), _.n("clickcount"))),
                     _.eCall(_.eCall(_.oDot(_.n("statusitem"), _.n("Get"))), _.eFunc([{ Name: "props", Type: { Name: "StatusBarItemProperties" } }], null,
-                        _.iSet(_.oDot(_.n("props"), _.n(this.fld("Text"))), _.eLit("You clicked me {0} time(s).", _.n("clickcount"))),
+                        _.iSet(_.oDot(_.n("props"), _.n(this.fld("Text"))), _.eCall(_.n("logLn"), _.eLit("You clicked me {0} time(s).", _.n("clickcount")))),
                         _.iIf(_.oEq(_.eLit("editorLightBulb.foreground"), _.oDot(_.n("props"), _.n(this.fld("Color")))), [
                             _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("terminal.ansiGreen")),
+                            _.iIf(_.oAnd(_.n("toggleonclick"), _.oIs(_.n("logchan"))), [_.eCall(_.oDot(_.n("logchan"), _.n("Hide")))]),
                         ], [
                             _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("editorLightBulb.foreground")),
+                            _.iIf(_.oAnd(_.n("toggleonclick"), _.oIs(_.n("logchan"))), [_.eCall(_.oDot(_.n("logchan"), _.n("Show")), _.eLit(true))]),
                         ]),
                         _.eCall(_.eCall(_.oDot(_.n("statusitem"), _.n("Set")), _.n("props")), _.n("demosMenu")),
                     )),
@@ -267,6 +278,7 @@ export class GenDemos {
                 _.iSet(_.oDot(_.n("opts"), _.n(this.fld("CanSelectFolders"))), _.eLit(false)),
                 _.iSet(_.oDot(_.n("opts"), _.n(this.fld("CanSelectMany"))), _.eLit(true)),
             ])),
+            _.eCall(_.n("logLn"), _.eLit(`Showing File-${which} dialog...`)),
             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(`Show${which}Dialog`)), _.n("opts")),
                 _.eFunc([{ Name: fp, Type: mult ? { ValsOf: TypeRefPrim.String } : { Maybe: TypeRefPrim.String } }], null,
                     _.iIf(_.oIsnt(_.n(fp)), [
@@ -279,11 +291,11 @@ export class GenDemos {
     }
 
     genByeMsg(_: Builder, msg: string): Instr {
-        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowWarningMessage", 1))), _.eLit(msg), _.eZilch())
+        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowWarningMessage", 1))), _.eCall(_.n("logLn"), _.eLit(msg)), _.eZilch())
     }
 
     genInfoMsg(_: Builder, msg: Expr): Instr {
-        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowInformationMessage", 1))), msg, _.eZilch())
+        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowInformationMessage", 1))), _.eCall(_.n("logLn"), msg), _.eZilch())
     }
 
     genInput(_: Builder, nameOpts: string, nameInput: string, props: { k: string, v: Expr }[], ...withInput: Instr[]): Instr[] {
@@ -305,7 +317,7 @@ export class GenDemos {
     }
 
     genStatusMsg(_: Builder, msg: Expr): Instr {
-        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("SetStatusBarMessage", 1))), msg, _.eLit(4242))
+        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("SetStatusBarMessage", 1))), _.eCall(_.n("logLn"), msg), _.eLit(4242))
     }
 
     genDemoOfPropsMenu(_: Builder, ns: string): Instr[] {
@@ -319,7 +331,7 @@ export class GenDemos {
                     _.iBlock(..._.EACH(struct.Fields, (f, i): Instr[] => [
                         _.iSet(_.oIdx(_.n("items"), _.eLit(i)), _.eLit(f.Name + "\t".repeat(f.Name.length < 8 ? 3 : f.Name.length >= 16 ? 1 : 2) + "{0}", _.oDot(_.n("props"), _.n(f.Name)))),
                     ]).concat(
-                        ...this.genMenu(_, _.eLit(ns + " has {0} properties:", _.eLen(_.n("items"), true)))
+                        ...this.genMenu(_, _.eOp("+", _.eCall(_.n("logLn"), _.eLit(ns + " has {0} properties", _.eLen(_.n("items"), true))), _.eLit(":")))
                     )),
                 ),
             ),
@@ -344,7 +356,9 @@ export class GenDemos {
             _.iSet(_.oDot(_.n("opts"), _.n(this.fld("PlaceHolder"))), msg),
             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowQuickPick", 2))),
                 _.n("items"), _.oAddr(_.n("opts")), _.eZilch()
-            ), onPick ? onPick : _.eZilch())
+            ), onPick ? onPick : _.eFunc([{ Name: "menuitem", Type: { Maybe: TypeRefPrim.String } }], null,
+                _.iIf(_.oIs(_.n("menuitem")), [_.eCall(_.n("logLn"), _.oDeref(_.n("menuitem")))]),
+            ))
         ]
     }
 

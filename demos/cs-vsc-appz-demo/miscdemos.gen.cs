@@ -10,10 +10,10 @@ namespace VscAppzDemo {
 		private static void demo_promptToExit() {
 			vsc.Window.ShowWarningMessage1(strFmt("Are you sure you want `{0}` to exit?", appName), new[] { "Sure I'm sure" })((string btn) => {
 				if ((null != btn)) {
-					vsc.Window.ShowInformationMessage1("So fish and long for all the thanks!", null);
+					vsc.Window.ShowInformationMessage1(logLn("So fish and long for all the thanks!"), null);
 					quit(null);
 				} else {
-					vsc.Window.ShowInformationMessage1("So I'm not a goner yet. I'll stick around then.", null);
+					vsc.Window.ShowInformationMessage1(logLn("So I'm not a goner yet. I'll stick around then."), null);
 				}
 			});
 		}
@@ -25,7 +25,7 @@ namespace VscAppzDemo {
 				opts.PlaceHolder = strFmt("Retrieved {0} command ID(s), pick one to execute or escape now:", items.Length);
 				vsc.Window.ShowQuickPick2(items, opts, null)((string item) => {
 					if ((null == item)) {
-						vsc.Window.ShowWarningMessage1("Command selection cancelled, spooked?", null);
+						vsc.Window.ShowWarningMessage1(logLn("Command selection cancelled, spooked?"), null);
 					} else {
 						InputBoxOptions opts2 = default;
 						opts2 = new InputBoxOptions();
@@ -33,7 +33,7 @@ namespace VscAppzDemo {
 						opts2.PlaceHolder = strFmt("Any param for `{0}` command? Else leave blank.", item);
 						vsc.Window.ShowInputBox(opts2, null)((string cmdarg) => {
 							if ((null == cmdarg)) {
-								vsc.Window.ShowWarningMessage1("Cancelled text input, out of ideas?", null);
+								vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null);
 							} else {
 								any[] cmdargs = default;
 								if ("" != cmdarg) {
@@ -41,7 +41,7 @@ namespace VscAppzDemo {
 									cmdargs[0] = cmdarg;
 								}
 								vsc.Commands.ExecuteCommand(item, cmdargs)((any ret) => {
-									vsc.Window.ShowInformationMessage1(strFmt("Command result was: `{0}`, kudos!", ret), null);
+									vsc.Window.ShowInformationMessage1(logLn(strFmt("Command result was: `{0}`, kudos!", ret)), null);
 								});
 							}
 						});
@@ -57,10 +57,10 @@ namespace VscAppzDemo {
 			opts.Prompt = "Enter your command name. The command will accept a single text input and return a result built from it.";
 			vsc.Window.ShowInputBox(opts, null)((string cmdname) => {
 				if ((null == cmdname)) {
-					vsc.Window.ShowWarningMessage1("Cancelled text input, out of ideas?", null);
+					vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null);
 				} else {
 					vsc.Commands.RegisterCommand(cmdname, (any[] cmdargs) => {
-						vsc.Window.SetStatusBarMessage1(strFmt("Command `{0}` invoked with: `{1}`", cmdname, cmdargs[0]), 4242);
+						vsc.Window.SetStatusBarMessage1(logLn(strFmt("Command `{0}` invoked with: `{1}`", cmdname, cmdargs[0])), 4242);
 						return strFmt("Input to command `{0}` was: `{1}`", cmdname, cmdargs[0]);
 					})((Disposable useToUnregister) => {
 						InputBoxOptions opts2 = default;
@@ -70,13 +70,13 @@ namespace VscAppzDemo {
 						opts2.Value = strFmt("Enter input to command `{0}` here", cmdname);
 						vsc.Window.ShowInputBox(opts2, null)((string cmdarg) => {
 							if ((null == cmdarg)) {
-								vsc.Window.ShowWarningMessage1("Cancelled text input, out of ideas?", null);
+								vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null);
 							} else {
 								any[] cmdargs2 = default;
 								cmdargs2 = new any[1];
 								cmdargs2[0] = cmdarg;
 								vsc.Commands.ExecuteCommand(cmdname, cmdargs2)((any ret) => {
-									vsc.Window.ShowInformationMessage1(strFmt("Command result: `{0}`, mad props!", ret), null);
+									vsc.Window.ShowInformationMessage1(logLn(strFmt("Command result: `{0}`, mad props!", ret)), null);
 								});
 							}
 						});
@@ -90,7 +90,11 @@ namespace VscAppzDemo {
 				opts = new QuickPickOptions();
 				opts.IgnoreFocusOut = true;
 				opts.PlaceHolder = strFmt("Retrieved {0} language ID(s)", items.Length);
-				vsc.Window.ShowQuickPick2(items, opts, null)(null);
+				vsc.Window.ShowQuickPick2(items, opts, null)((string menuitem) => {
+					if ((null != menuitem)) {
+						logLn(menuitem);
+					}
+				});
 			});
 		}
 		private static void demo_Env_Properties() {
@@ -109,8 +113,12 @@ namespace VscAppzDemo {
 					QuickPickOptions opts = default;
 					opts = new QuickPickOptions();
 					opts.IgnoreFocusOut = true;
-					opts.PlaceHolder = strFmt("Env has {0} properties:", items.Length);
-					vsc.Window.ShowQuickPick2(items, opts, null)(null);
+					opts.PlaceHolder = logLn(strFmt("Env has {0} properties", items.Length)) + ":";
+					vsc.Window.ShowQuickPick2(items, opts, null)((string menuitem) => {
+						if ((null != menuitem)) {
+							logLn(menuitem);
+						}
+					});
 				}
 			});
 		}
@@ -125,8 +133,12 @@ namespace VscAppzDemo {
 					QuickPickOptions opts = default;
 					opts = new QuickPickOptions();
 					opts.IgnoreFocusOut = true;
-					opts.PlaceHolder = strFmt("Workspace has {0} properties:", items.Length);
-					vsc.Window.ShowQuickPick2(items, opts, null)(null);
+					opts.PlaceHolder = logLn(strFmt("Workspace has {0} properties", items.Length)) + ":";
+					vsc.Window.ShowQuickPick2(items, opts, null)((string menuitem) => {
+						if ((null != menuitem)) {
+							logLn(menuitem);
+						}
+					});
 				}
 			});
 		}
@@ -142,11 +154,12 @@ namespace VscAppzDemo {
 				opts.CanSelectFolders = false;
 				opts.CanSelectMany = true;
 			}
+			logLn("Showing File-Open dialog...");
 			vsc.Window.ShowOpenDialog(opts)((string[] filepaths) => {
 				if ((null == filepaths)) {
-					vsc.Window.ShowWarningMessage1("Cancelled File-Open dialog, chicken?", null);
+					vsc.Window.ShowWarningMessage1(logLn("Cancelled File-Open dialog, chicken?"), null);
 				} else {
-					vsc.Window.ShowInformationMessage1(strFmt("Selected {0} file path(s), excellent!", filepaths.Length), null);
+					vsc.Window.ShowInformationMessage1(logLn(strFmt("Selected {0} file path(s), excellent!", filepaths.Length)), null);
 				}
 			});
 		}
@@ -157,11 +170,12 @@ namespace VscAppzDemo {
 			opts.Filters = new Dictionary<string, string[]>(2);
 			opts.Filters["All"] = new[] { "*" };
 			opts.Filters["Dummy Filter"] = new[] { "dummy", "demo" };
+			logLn("Showing File-Save dialog...");
 			vsc.Window.ShowSaveDialog(opts)((string filepath) => {
 				if ((null == filepath)) {
-					vsc.Window.ShowWarningMessage1("Cancelled File-Save dialog, chicken?", null);
+					vsc.Window.ShowWarningMessage1(logLn("Cancelled File-Save dialog, chicken?"), null);
 				} else {
-					vsc.Window.ShowInformationMessage1(strFmt("Selected file path `{0}`, excellent!", filepath), null);
+					vsc.Window.ShowInformationMessage1(logLn(strFmt("Selected file path `{0}`, excellent!", filepath)), null);
 				}
 			});
 		}
@@ -172,9 +186,9 @@ namespace VscAppzDemo {
 			opts.PlaceHolder = "Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side.";
 			vsc.Window.ShowWorkspaceFolderPick(opts)((WorkspaceFolder pickedfolder) => {
 				if ((null == pickedfolder)) {
-					vsc.Window.ShowWarningMessage1("Cancelled pick input, changed your mind?", null);
+					vsc.Window.ShowWarningMessage1(logLn("Cancelled pick input, changed your mind?"), null);
 				} else {
-					vsc.Window.ShowInformationMessage1(strFmt("Selected `{0}` located at `{1}`, respect!", pickedfolder.Name, pickedfolder.Uri), null);
+					vsc.Window.ShowInformationMessage1(logLn(strFmt("Selected `{0}` located at `{1}`, respect!", pickedfolder.Name, pickedfolder.Uri)), null);
 				}
 			});
 		}
@@ -186,7 +200,7 @@ namespace VscAppzDemo {
 			opts.Prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol.";
 			vsc.Window.ShowInputBox(opts, null)((string uri) => {
 				if ((null == uri)) {
-					vsc.Window.ShowWarningMessage1("Cancelled text input, out of ideas?", null);
+					vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null);
 				} else {
 					vsc.Env.OpenExternal(uri)((bool ok) => {
 						string did = default;
@@ -194,7 +208,7 @@ namespace VscAppzDemo {
 						if (!ok) {
 							did = did  +  " not";
 						}
-						vsc.Window.ShowInformationMessage1(strFmt("{0} succeed in opening `{1}`, chapeau!", did, uri), null);
+						vsc.Window.ShowInformationMessage1(logLn(strFmt("{0} succeed in opening `{1}`, chapeau!", did, uri)), null);
 					});
 				}
 			});
@@ -225,26 +239,26 @@ namespace VscAppzDemo {
 			opts.MatchOnDetail = true;
 			opts.PlaceHolder = "You have 42 seconds before auto-cancellation!";
 			opts.OnDidSelectItem = (QuickPickItem item) => {
-				vsc.Window.SetStatusBarMessage1(strFmt("Just selected: {0}", item.Label), 4242);
+				vsc.Window.SetStatusBarMessage1(logLn(strFmt("Just selected: {0}", item.Label)), 4242);
 				return null;
 			};
 			vsc.Window.ShowQuickPick3(items, opts, cancelIn(42))((QuickPickItem[] pickeditems) => {
 				if ((null == pickeditems)) {
-					vsc.Window.ShowWarningMessage1("Cancelled pick input, not one to tick the boxes?", null);
+					vsc.Window.ShowWarningMessage1(logLn("Cancelled pick input, not one to tick the boxes?"), null);
 				} else {
-					vsc.Window.ShowInformationMessage1(strFmt("You picked {0} item(s), good stuff!", pickeditems.Length), null);
+					vsc.Window.ShowInformationMessage1(logLn(strFmt("You picked {0} item(s), good stuff!", pickeditems.Length)), null);
 				}
 			});
 		}
 		private static void subscribeToMiscEvents() {
 			vsc.Extensions.OnDidChange(() => {
-				vsc.Window.SetStatusBarMessage1("Some extension(s) were just (un)installed or (de)activated.", 4242);
+				vsc.Window.SetStatusBarMessage1(logLn("Some extension(s) were just (un)installed or (de)activated."), 4242);
 			});
 			vsc.Window.OnDidChangeWindowState((WindowState evt) => {
-				vsc.Window.SetStatusBarMessage1(strFmt("Am I focused? {0}.", evt.Focused), 4242);
+				vsc.Window.SetStatusBarMessage1(logLn(strFmt("Am I focused? {0}.", evt.Focused)), 4242);
 			});
 			vsc.Languages.OnDidChangeDiagnostics((DiagnosticChangeEvent evt) => {
-				vsc.Window.SetStatusBarMessage1(strFmt("Diag(s) changed for {0} file path(s).", evt.Uris.Length), 4242);
+				vsc.Window.SetStatusBarMessage1(logLn(strFmt("Diag(s) changed for {0} file path(s).", evt.Uris.Length)), 4242);
 			});
 		}
 		private static void demosMenu() {
@@ -257,39 +271,51 @@ namespace VscAppzDemo {
 			vsc.Window.ShowQuickPick2(items, opts, null)((string menuitem) => {
 				if ((null != menuitem)) {
 					if ("demo_promptToExit" == menuitem) {
+						logLn("Picked `demo_promptToExit` from main menu");
 						demo_promptToExit();
 					}
 					if ("demo_Commands_GetCommands_and_ExecuteCommand" == menuitem) {
+						logLn("Picked `demo_Commands_GetCommands_and_ExecuteCommand` from main menu");
 						demo_Commands_GetCommands_and_ExecuteCommand();
 					}
 					if ("demo_Commands_RegisterCommand" == menuitem) {
+						logLn("Picked `demo_Commands_RegisterCommand` from main menu");
 						demo_Commands_RegisterCommand();
 					}
 					if ("demo_Languages_GetLanguages" == menuitem) {
+						logLn("Picked `demo_Languages_GetLanguages` from main menu");
 						demo_Languages_GetLanguages();
 					}
 					if ("demo_Env_Properties" == menuitem) {
+						logLn("Picked `demo_Env_Properties` from main menu");
 						demo_Env_Properties();
 					}
 					if ("demo_Workspace_Properties" == menuitem) {
+						logLn("Picked `demo_Workspace_Properties` from main menu");
 						demo_Workspace_Properties();
 					}
 					if ("demo_Window_ShowOpenDialog" == menuitem) {
+						logLn("Picked `demo_Window_ShowOpenDialog` from main menu");
 						demo_Window_ShowOpenDialog();
 					}
 					if ("demo_Window_ShowSaveDialog" == menuitem) {
+						logLn("Picked `demo_Window_ShowSaveDialog` from main menu");
 						demo_Window_ShowSaveDialog();
 					}
 					if ("demo_Window_ShowWorkspaceFolderPick" == menuitem) {
+						logLn("Picked `demo_Window_ShowWorkspaceFolderPick` from main menu");
 						demo_Window_ShowWorkspaceFolderPick();
 					}
 					if ("demo_Env_OpenExternal" == menuitem) {
+						logLn("Picked `demo_Env_OpenExternal` from main menu");
 						demo_Env_OpenExternal();
 					}
 					if ("demo_Window_ShowQuickPick" == menuitem) {
+						logLn("Picked `demo_Window_ShowQuickPick` from main menu");
 						demo_Window_ShowQuickPick();
 					}
 					if ("demo_Window_ShowInputBox" == menuitem) {
+						logLn("Picked `demo_Window_ShowInputBox` from main menu");
 						demo_Window_ShowInputBox();
 					}
 				}
@@ -299,13 +325,21 @@ namespace VscAppzDemo {
 			{
 				subscribeToMiscEvents();
 			}
+			OutputChannel logchan = default;
+			bool toggleonclick = default;
 			{
 				vsc.Window.CreateOutputChannel(appName)((OutputChannel it) => {
-					setOutChan(it);
+					logchan = it;
+					setOutChan(logchan);
 					logLn(strFmt("Hi, I'm `{0}`, this is my own custom `OutputChannel` where I leisurely log all your interactions with me. When I'm ended, it too will disappear.", appName));
 					logLn("");
 					logLn("NOTE that for logging error messages, you won't need to manually create a custom `OutputChannel` at all: just have your prog print to its `stderr` as (presumably) usual, and `vscode-appz` will then create a dedicated `OutputChannel` for (both that initial and all subsequent) `stderr` prints from your prog while it's up and running.");
-					it.Show(true);
+					logLn("");
+					if (toggleonclick) {
+						logLn("Note also that every click on my status-bar item will toggle my visibility.");
+						logLn("");
+					}
+					logchan.Show(true);
 				});
 			}
 			{
@@ -316,11 +350,17 @@ namespace VscAppzDemo {
 				mycmd = (any[] _unused) => {
 					clickcount = 1 + clickcount;
 					statusitem.Get()((StatusBarItemProperties props) => {
-						props.Text = strFmt("You clicked me {0} time(s).", clickcount);
+						props.Text = logLn(strFmt("You clicked me {0} time(s).", clickcount));
 						if ("editorLightBulb.foreground" == props.Color) {
 							props.Color = "terminal.ansiGreen";
+							if (toggleonclick && (null != logchan)) {
+								logchan.Hide();
+							}
 						} else {
 							props.Color = "editorLightBulb.foreground";
+							if (toggleonclick && (null != logchan)) {
+								logchan.Show(true);
+							}
 						}
 						statusitem.Set(props)(demosMenu);
 					});

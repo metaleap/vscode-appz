@@ -63,10 +63,9 @@ exports.cancelIn = (seconds) => {
 }
 
 exports.logLn = (msgLn) => {
-    if (logChan) {
-        msgLn = (!(msgLn && msgLn.length)) ? "" : (new Date().toLocaleTimeString() + "\t" + msgLn)
-        logChan.AppendLine(msgLn)
-    }
+    if (logChan)
+        logChan.AppendLine((!(msgLn && msgLn.length)) ? "" : (new Date().toLocaleTimeString() + "\t" + msgLn))
+    return msgLn
 }
 exports.setOutChan = (outChan) => logChan = outChan
 

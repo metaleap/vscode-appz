@@ -76,15 +76,23 @@ class GenDemos {
             _.iVar("items", { ValsOf: gen_syn_1.TypeRefPrim.String }),
             _.iSet(_.n("items"), _.eLit(allnames)),
         ].concat(...this.genMenu(_, _.eLit("This menu can be re-opened any time via our custom status-bar item."), _.eFunc([{ Name: "menuitem", Type: { Maybe: gen_syn_1.TypeRefPrim.String } }], null, _.iIf(_.oIs(_.n("menuitem")), allnames.map(name => _.iIf(_.oEq(_.eLit(name), _.oDeref(_.n("menuitem"))), [
+            _.eCall(_.n("logLn"), _.eLit("Picked `" + name + "` from main menu")),
             _.eCall(_.n(name)),
         ]))))));
         this.all["onUpAndRunning"] = () => ([
             _.iBlock(_.eCall(_.n("subscribeToMiscEvents"))),
-            _.iBlock(_.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("CreateOutputChannel")), _.n("appName")), _.eFunc([{ Name: "it", Type: { Maybe: { Name: "OutputChannel" } } }], null, _.eCall(_.n("setOutChan"), _.n("it")), _.eCall(_.n("logLn"), _.eCall(_.n("strFmt"), _.eLit("Hi, I'm `{0}`, this is my own custom `OutputChannel` where I leisurely log all your interactions with me. When I'm ended, it too will disappear."), _.n("appName"))), _.eCall(_.n("logLn"), _.eLit("")), _.eCall(_.n("logLn"), _.eLit("NOTE that for logging error messages, you won't need to manually create a custom `OutputChannel` at all: just have your prog print to its `stderr` as (presumably) usual, and `vscode-appz` will then create a dedicated `OutputChannel` for (both that initial and all subsequent) `stderr` prints from your prog while it's up and running.")), _.eCall(_.oDot(_.n("it"), _.n("Show")), _.eLit(true))))),
-            _.iBlock(_.iVar("statusitem", { Maybe: { Name: "StatusBarItem" } }), _.iVar("clickcount", gen_syn_1.TypeRefPrim.Int), _.iSet(_.n("clickcount"), _.eLit(0)), _.iVar("mycmd", { From: [{ ValsOf: gen_syn_1.TypeRefPrim.Any }], To: gen_syn_1.TypeRefPrim.Any }), _.iSet(_.n("mycmd"), _.eFunc([{ Name: "_unused", Type: { ValsOf: gen_syn_1.TypeRefPrim.Any } }], gen_syn_1.TypeRefPrim.Any, _.iSet(_.n("clickcount"), _.eOp("+", _.eLit(1), _.n("clickcount"))), _.eCall(_.eCall(_.oDot(_.n("statusitem"), _.n("Get"))), _.eFunc([{ Name: "props", Type: { Name: "StatusBarItemProperties" } }], null, _.iSet(_.oDot(_.n("props"), _.n(this.fld("Text"))), _.eLit("You clicked me {0} time(s).", _.n("clickcount"))), _.iIf(_.oEq(_.eLit("editorLightBulb.foreground"), _.oDot(_.n("props"), _.n(this.fld("Color")))), [
+            _.iVar("logchan", { Maybe: { Name: "OutputChannel" } }),
+            _.iVar("toggleonclick", gen_syn_1.TypeRefPrim.Bool),
+            _.iBlock(_.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("CreateOutputChannel")), _.n("appName")), _.eFunc([{ Name: "it", Type: { Maybe: { Name: "OutputChannel" } } }], null, _.iSet(_.n("logchan"), _.n("it")), _.eCall(_.n("setOutChan"), _.n("logchan")), _.eCall(_.n("logLn"), _.eCall(_.n("strFmt"), _.eLit("Hi, I'm `{0}`, this is my own custom `OutputChannel` where I leisurely log all your interactions with me. When I'm ended, it too will disappear."), _.n("appName"))), _.eCall(_.n("logLn"), _.eLit("")), _.eCall(_.n("logLn"), _.eLit("NOTE that for logging error messages, you won't need to manually create a custom `OutputChannel` at all: just have your prog print to its `stderr` as (presumably) usual, and `vscode-appz` will then create a dedicated `OutputChannel` for (both that initial and all subsequent) `stderr` prints from your prog while it's up and running.")), _.eCall(_.n("logLn"), _.eLit("")), _.iIf(_.n("toggleonclick"), [
+                _.eCall(_.n("logLn"), _.eLit("Note also that every click on my status-bar item will toggle my visibility.")),
+                _.eCall(_.n("logLn"), _.eLit("")),
+            ]), _.eCall(_.oDot(_.n("logchan"), _.n("Show")), _.eLit(true))))),
+            _.iBlock(_.iVar("statusitem", { Maybe: { Name: "StatusBarItem" } }), _.iVar("clickcount", gen_syn_1.TypeRefPrim.Int), _.iSet(_.n("clickcount"), _.eLit(0)), _.iVar("mycmd", { From: [{ ValsOf: gen_syn_1.TypeRefPrim.Any }], To: gen_syn_1.TypeRefPrim.Any }), _.iSet(_.n("mycmd"), _.eFunc([{ Name: "_unused", Type: { ValsOf: gen_syn_1.TypeRefPrim.Any } }], gen_syn_1.TypeRefPrim.Any, _.iSet(_.n("clickcount"), _.eOp("+", _.eLit(1), _.n("clickcount"))), _.eCall(_.eCall(_.oDot(_.n("statusitem"), _.n("Get"))), _.eFunc([{ Name: "props", Type: { Name: "StatusBarItemProperties" } }], null, _.iSet(_.oDot(_.n("props"), _.n(this.fld("Text"))), _.eCall(_.n("logLn"), _.eLit("You clicked me {0} time(s).", _.n("clickcount")))), _.iIf(_.oEq(_.eLit("editorLightBulb.foreground"), _.oDot(_.n("props"), _.n(this.fld("Color")))), [
                 _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("terminal.ansiGreen")),
+                _.iIf(_.oAnd(_.n("toggleonclick"), _.oIs(_.n("logchan"))), [_.eCall(_.oDot(_.n("logchan"), _.n("Hide")))]),
             ], [
                 _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("editorLightBulb.foreground")),
+                _.iIf(_.oAnd(_.n("toggleonclick"), _.oIs(_.n("logchan"))), [_.eCall(_.oDot(_.n("logchan"), _.n("Show")), _.eLit(true))]),
             ]), _.eCall(_.eCall(_.oDot(_.n("statusitem"), _.n("Set")), _.n("props")), _.n("demosMenu")))), _.iRet(_.eZilch()))), _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("RegisterCommand")), _.n("cmdName"), _.n("mycmd")), _.eFunc([{ Name: "_commandRegisteredAtThisPoint", Type: { Maybe: { Name: "Disposable" } } }], null, _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("CreateStatusBarItem")), _.eLit(0), _.eZilch()), _.eFunc([{ Name: "it", Type: { Maybe: { Name: "StatusBarItem" } } }], null, _.iSet(_.n("statusitem"), _.n("it")), _.iVar("props", { Name: "StatusBarItemProperties" }), _.iSet(_.n("props"), _.eNew({ Name: "StatusBarItemProperties" })), _.iSet(_.oDot(_.n("props"), _.n(this.fld("Tooltip"))), _.eLit("Hi from {0}!", _.n("appName"))), _.iSet(_.oDot(_.n("props"), _.n(this.fld("Text"))), _.eLit("You clicked me 0 time(s).")), _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("#42BEEF")), _.iSet(_.oDot(_.n("props"), _.n(this.fld("Command"))), _.n("cmdName")), _.eCall(_.eCall(_.oDot(_.n("statusitem"), _.n("Set")), _.n("props")), _.eFunc([], null, _.eCall(_.oDot(_.n("statusitem"), _.n("Show")))))))))),
         ]);
     }
@@ -118,6 +126,7 @@ class GenDemos {
                 _.iSet(_.oDot(_.n("opts"), _.n(this.fld("CanSelectFolders"))), _.eLit(false)),
                 _.iSet(_.oDot(_.n("opts"), _.n(this.fld("CanSelectMany"))), _.eLit(true)),
             ])),
+            _.eCall(_.n("logLn"), _.eLit(`Showing File-${which} dialog...`)),
             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(`Show${which}Dialog`)), _.n("opts")), _.eFunc([{ Name: fp, Type: mult ? { ValsOf: gen_syn_1.TypeRefPrim.String } : { Maybe: gen_syn_1.TypeRefPrim.String } }], null, _.iIf(_.oIsnt(_.n(fp)), [
                 this.genByeMsg(_, `Cancelled File-${which} dialog, chicken?`),
             ], [
@@ -126,10 +135,10 @@ class GenDemos {
         ];
     }
     genByeMsg(_, msg) {
-        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowWarningMessage", 1))), _.eLit(msg), _.eZilch());
+        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowWarningMessage", 1))), _.eCall(_.n("logLn"), _.eLit(msg)), _.eZilch());
     }
     genInfoMsg(_, msg) {
-        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowInformationMessage", 1))), msg, _.eZilch());
+        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowInformationMessage", 1))), _.eCall(_.n("logLn"), msg), _.eZilch());
     }
     genInput(_, nameOpts, nameInput, props, ...withInput) {
         return [
@@ -143,14 +152,14 @@ class GenDemos {
         ], withInput))));
     }
     genStatusMsg(_, msg) {
-        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("SetStatusBarMessage", 1))), msg, _.eLit(4242));
+        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("SetStatusBarMessage", 1))), _.eCall(_.n("logLn"), msg), _.eLit(4242));
     }
     genDemoOfPropsMenu(_, ns) {
         const struct = this.gen.allStructs[ns + "Properties"];
         return [
             _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n(ns))), _.n("Properties"))), _.eFunc([{ Name: "props", Type: { Name: struct.Name } }], null, _.iVar("items", { ValsOf: gen_syn_1.TypeRefPrim.String }), _.iSet(_.n("items"), _.eCollNew(_.eLit(struct.Fields.length), gen_syn_1.TypeRefPrim.String, true)), _.iBlock(..._.EACH(struct.Fields, (f, i) => [
                 _.iSet(_.oIdx(_.n("items"), _.eLit(i)), _.eLit(f.Name + "\t".repeat(f.Name.length < 8 ? 3 : f.Name.length >= 16 ? 1 : 2) + "{0}", _.oDot(_.n("props"), _.n(f.Name)))),
-            ]).concat(...this.genMenu(_, _.eLit(ns + " has {0} properties:", _.eLen(_.n("items"), true))))))),
+            ]).concat(...this.genMenu(_, _.eOp("+", _.eCall(_.n("logLn"), _.eLit(ns + " has {0} properties", _.eLen(_.n("items"), true))), _.eLit(":"))))))),
         ];
     }
     genDemoOfStrListMenu(_, ns, fn, desc, args, onPick) {
@@ -164,7 +173,7 @@ class GenDemos {
             _.iSet(_.n("opts"), _.eNew({ Name: "QuickPickOptions" })),
             _.iSet(_.oDot(_.n("opts"), _.n(this.fld("IgnoreFocusOut"))), _.eLit(true)),
             _.iSet(_.oDot(_.n("opts"), _.n(this.fld("PlaceHolder"))), msg),
-            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowQuickPick", 2))), _.n("items"), _.oAddr(_.n("opts")), _.eZilch()), onPick ? onPick : _.eZilch())
+            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowQuickPick", 2))), _.n("items"), _.oAddr(_.n("opts")), _.eZilch()), onPick ? onPick : _.eFunc([{ Name: "menuitem", Type: { Maybe: gen_syn_1.TypeRefPrim.String } }], null, _.iIf(_.oIs(_.n("menuitem")), [_.eCall(_.n("logLn"), _.oDeref(_.n("menuitem")))])))
         ];
     }
     fn(name, overload) {

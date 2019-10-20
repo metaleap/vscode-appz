@@ -90,13 +90,14 @@ func cancelIn(seconds int64) *Cancel {
 	return CancelIn(time.Duration(seconds * int64(time.Second)))
 }
 
-func logLn(msgLn string) {
-	if logChan != nil {
-		if msgLn != "" {
-			msgLn = time.Now().Format("15:04:05") + "\t" + msgLn
+func logLn(msgLn string) string {
+	if msgln := msgLn; logChan != nil {
+		if msgln != "" {
+			msgln = time.Now().Format("15:04:05") + "\t" + msgln
 		}
-		logChan.AppendLine(msgLn)
+		logChan.AppendLine(msgln)
 	}
+	return msgLn
 }
 func setOutChan(outChan *OutputChannel) { logChan = outChan }
 

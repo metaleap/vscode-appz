@@ -65,11 +65,9 @@ namespace VscAppzDemo {
         private static Cancel cancelIn(double seconds) =>
             Cancel.In(TimeSpan.FromSeconds(seconds));
 
-        private static void logLn(string msgLn) {
-            if (logChan != null) {
-                msgLn = string.IsNullOrEmpty(msgLn) ? "" : (DateTime.Now.ToString("HH:mm:ss") + "\t" + msgLn);
-                logChan.AppendLine(msgLn);
-            }
+        private static string logLn(string msgLn) {
+            logChan?.AppendLine(string.IsNullOrEmpty(msgLn) ? "" : (DateTime.Now.ToString("HH:mm:ss") + "\t" + msgLn));
+            return msgLn;
         }
         private static void setOutChan(OutputChannel outChan) => logChan = outChan;
 

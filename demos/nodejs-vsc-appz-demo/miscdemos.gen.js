@@ -8,10 +8,10 @@ exports.onUpAndRunning = () => { /* crikey.. */ vsc = main.vsc; appName = main.a
 function demo_promptToExit() {
     vsc.Window.ShowWarningMessage1(strFmt("Are you sure you want `{0}` to exit?", appName), ["Sure I'm sure"])((btn) => {
         if ((undefined !== btn && null !== btn)) {
-            vsc.Window.ShowInformationMessage1("So fish and long for all the thanks!", null)
+            vsc.Window.ShowInformationMessage1(logLn("So fish and long for all the thanks!"), null)
             quit(null)
         } else {
-            vsc.Window.ShowInformationMessage1("So I'm not a goner yet. I'll stick around then.", null)
+            vsc.Window.ShowInformationMessage1(logLn("So I'm not a goner yet. I'll stick around then."), null)
         }
     })
 }
@@ -24,7 +24,7 @@ function demo_Commands_GetCommands_and_ExecuteCommand() {
         opts.placeHolder = strFmt("Retrieved {0} command ID(s), pick one to execute or escape now:", items.length)
         vsc.Window.ShowQuickPick2(items, opts, null)((item) => {
             if ((undefined === item || null === item)) {
-                vsc.Window.ShowWarningMessage1("Command selection cancelled, spooked?", null)
+                vsc.Window.ShowWarningMessage1(logLn("Command selection cancelled, spooked?"), null)
             } else {
                 let opts2
                 opts2 = {}
@@ -32,7 +32,7 @@ function demo_Commands_GetCommands_and_ExecuteCommand() {
                 opts2.placeHolder = strFmt("Any param for `{0}` command? Else leave blank.", item)
                 vsc.Window.ShowInputBox(opts2, null)((cmdarg) => {
                     if ((undefined === cmdarg || null === cmdarg)) {
-                        vsc.Window.ShowWarningMessage1("Cancelled text input, out of ideas?", null)
+                        vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null)
                     } else {
                         let cmdargs
                         if ("" !== cmdarg) {
@@ -40,7 +40,7 @@ function demo_Commands_GetCommands_and_ExecuteCommand() {
                             cmdargs[0] = cmdarg
                         }
                         vsc.Commands.ExecuteCommand(item, cmdargs)((ret) => {
-                            vsc.Window.ShowInformationMessage1(strFmt("Command result was: `{0}`, kudos!", ret), null)
+                            vsc.Window.ShowInformationMessage1(logLn(strFmt("Command result was: `{0}`, kudos!", ret)), null)
                         })
                     }
                 })
@@ -57,10 +57,10 @@ function demo_Commands_RegisterCommand() {
     opts.prompt = "Enter your command name. The command will accept a single text input and return a result built from it."
     vsc.Window.ShowInputBox(opts, null)((cmdname) => {
         if ((undefined === cmdname || null === cmdname)) {
-            vsc.Window.ShowWarningMessage1("Cancelled text input, out of ideas?", null)
+            vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null)
         } else {
             vsc.Commands.RegisterCommand(cmdname, (cmdargs) => {
-                vsc.Window.SetStatusBarMessage1(strFmt("Command `{0}` invoked with: `{1}`", cmdname, cmdargs[0]), 4242)
+                vsc.Window.SetStatusBarMessage1(logLn(strFmt("Command `{0}` invoked with: `{1}`", cmdname, cmdargs[0])), 4242)
                 return strFmt("Input to command `{0}` was: `{1}`", cmdname, cmdargs[0])
             })((useToUnregister) => {
                 let opts2
@@ -70,13 +70,13 @@ function demo_Commands_RegisterCommand() {
                 opts2.value = strFmt("Enter input to command `{0}` here", cmdname)
                 vsc.Window.ShowInputBox(opts2, null)((cmdarg) => {
                     if ((undefined === cmdarg || null === cmdarg)) {
-                        vsc.Window.ShowWarningMessage1("Cancelled text input, out of ideas?", null)
+                        vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null)
                     } else {
                         let cmdargs2
                         cmdargs2 = new Array(1)
                         cmdargs2[0] = cmdarg
                         vsc.Commands.ExecuteCommand(cmdname, cmdargs2)((ret) => {
-                            vsc.Window.ShowInformationMessage1(strFmt("Command result: `{0}`, mad props!", ret), null)
+                            vsc.Window.ShowInformationMessage1(logLn(strFmt("Command result: `{0}`, mad props!", ret)), null)
                         })
                     }
                 })
@@ -91,7 +91,11 @@ function demo_Languages_GetLanguages() {
         opts = {}
         opts.ignoreFocusOut = true
         opts.placeHolder = strFmt("Retrieved {0} language ID(s)", items.length)
-        vsc.Window.ShowQuickPick2(items, opts, null)(null)
+        vsc.Window.ShowQuickPick2(items, opts, null)((menuitem) => {
+            if ((undefined !== menuitem && null !== menuitem)) {
+                logLn(menuitem)
+            }
+        })
     })
 }
 
@@ -111,8 +115,12 @@ function demo_Env_Properties() {
             let opts
             opts = {}
             opts.ignoreFocusOut = true
-            opts.placeHolder = strFmt("Env has {0} properties:", items.length)
-            vsc.Window.ShowQuickPick2(items, opts, null)(null)
+            opts.placeHolder = logLn(strFmt("Env has {0} properties", items.length)) + ":"
+            vsc.Window.ShowQuickPick2(items, opts, null)((menuitem) => {
+                if ((undefined !== menuitem && null !== menuitem)) {
+                    logLn(menuitem)
+                }
+            })
         }
     })
 }
@@ -128,8 +136,12 @@ function demo_Workspace_Properties() {
             let opts
             opts = {}
             opts.ignoreFocusOut = true
-            opts.placeHolder = strFmt("Workspace has {0} properties:", items.length)
-            vsc.Window.ShowQuickPick2(items, opts, null)(null)
+            opts.placeHolder = logLn(strFmt("Workspace has {0} properties", items.length)) + ":"
+            vsc.Window.ShowQuickPick2(items, opts, null)((menuitem) => {
+                if ((undefined !== menuitem && null !== menuitem)) {
+                    logLn(menuitem)
+                }
+            })
         }
     })
 }
@@ -146,11 +158,12 @@ function demo_Window_ShowOpenDialog() {
         opts.canSelectFolders = false
         opts.canSelectMany = true
     }
+    logLn("Showing File-Open dialog...")
     vsc.Window.ShowOpenDialog(opts)((filepaths) => {
         if ((undefined === filepaths || null === filepaths)) {
-            vsc.Window.ShowWarningMessage1("Cancelled File-Open dialog, chicken?", null)
+            vsc.Window.ShowWarningMessage1(logLn("Cancelled File-Open dialog, chicken?"), null)
         } else {
-            vsc.Window.ShowInformationMessage1(strFmt("Selected {0} file path(s), excellent!", filepaths.length), null)
+            vsc.Window.ShowInformationMessage1(logLn(strFmt("Selected {0} file path(s), excellent!", filepaths.length)), null)
         }
     })
 }
@@ -162,11 +175,12 @@ function demo_Window_ShowSaveDialog() {
     opts.filters = {}
     opts.filters["All"] = ["*"]
     opts.filters["Dummy Filter"] = ["dummy", "demo"]
+    logLn("Showing File-Save dialog...")
     vsc.Window.ShowSaveDialog(opts)((filepath) => {
         if ((undefined === filepath || null === filepath)) {
-            vsc.Window.ShowWarningMessage1("Cancelled File-Save dialog, chicken?", null)
+            vsc.Window.ShowWarningMessage1(logLn("Cancelled File-Save dialog, chicken?"), null)
         } else {
-            vsc.Window.ShowInformationMessage1(strFmt("Selected file path `{0}`, excellent!", filepath), null)
+            vsc.Window.ShowInformationMessage1(logLn(strFmt("Selected file path `{0}`, excellent!", filepath)), null)
         }
     })
 }
@@ -178,9 +192,9 @@ function demo_Window_ShowWorkspaceFolderPick() {
     opts.placeHolder = "Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side."
     vsc.Window.ShowWorkspaceFolderPick(opts)((pickedfolder) => {
         if ((undefined === pickedfolder || null === pickedfolder)) {
-            vsc.Window.ShowWarningMessage1("Cancelled pick input, changed your mind?", null)
+            vsc.Window.ShowWarningMessage1(logLn("Cancelled pick input, changed your mind?"), null)
         } else {
-            vsc.Window.ShowInformationMessage1(strFmt("Selected `{0}` located at `{1}`, respect!", pickedfolder.name, pickedfolder.uri), null)
+            vsc.Window.ShowInformationMessage1(logLn(strFmt("Selected `{0}` located at `{1}`, respect!", pickedfolder.name, pickedfolder.uri)), null)
         }
     })
 }
@@ -193,7 +207,7 @@ function demo_Env_OpenExternal() {
     opts.prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."
     vsc.Window.ShowInputBox(opts, null)((uri) => {
         if ((undefined === uri || null === uri)) {
-            vsc.Window.ShowWarningMessage1("Cancelled text input, out of ideas?", null)
+            vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null)
         } else {
             vsc.Env.OpenExternal(uri)((ok) => {
                 let did
@@ -201,7 +215,7 @@ function demo_Env_OpenExternal() {
                 if (!ok) {
                     did = did  +  " not"
                 }
-                vsc.Window.ShowInformationMessage1(strFmt("{0} succeed in opening `{1}`, chapeau!", did, uri), null)
+                vsc.Window.ShowInformationMessage1(logLn(strFmt("{0} succeed in opening `{1}`, chapeau!", did, uri)), null)
             })
         }
     })
@@ -233,27 +247,27 @@ function demo_Window_ShowQuickPick() {
     opts.matchOnDetail = true
     opts.placeHolder = "You have 42 seconds before auto-cancellation!"
     opts.onDidSelectItem = (item) => {
-        vsc.Window.SetStatusBarMessage1(strFmt("Just selected: {0}", item.label), 4242)
+        vsc.Window.SetStatusBarMessage1(logLn(strFmt("Just selected: {0}", item.label)), 4242)
         return null
     }
     vsc.Window.ShowQuickPick3(items, opts, cancelIn(42))((pickeditems) => {
         if ((undefined === pickeditems || null === pickeditems)) {
-            vsc.Window.ShowWarningMessage1("Cancelled pick input, not one to tick the boxes?", null)
+            vsc.Window.ShowWarningMessage1(logLn("Cancelled pick input, not one to tick the boxes?"), null)
         } else {
-            vsc.Window.ShowInformationMessage1(strFmt("You picked {0} item(s), good stuff!", pickeditems.length), null)
+            vsc.Window.ShowInformationMessage1(logLn(strFmt("You picked {0} item(s), good stuff!", pickeditems.length)), null)
         }
     })
 }
 
 function subscribeToMiscEvents() {
     vsc.Extensions.OnDidChange(() => {
-        vsc.Window.SetStatusBarMessage1("Some extension(s) were just (un)installed or (de)activated.", 4242)
+        vsc.Window.SetStatusBarMessage1(logLn("Some extension(s) were just (un)installed or (de)activated."), 4242)
     })
     vsc.Window.OnDidChangeWindowState((evt) => {
-        vsc.Window.SetStatusBarMessage1(strFmt("Am I focused? {0}.", evt.focused), 4242)
+        vsc.Window.SetStatusBarMessage1(logLn(strFmt("Am I focused? {0}.", evt.focused)), 4242)
     })
     vsc.Languages.OnDidChangeDiagnostics((evt) => {
-        vsc.Window.SetStatusBarMessage1(strFmt("Diag(s) changed for {0} file path(s).", evt.uris.length), 4242)
+        vsc.Window.SetStatusBarMessage1(logLn(strFmt("Diag(s) changed for {0} file path(s).", evt.uris.length)), 4242)
     })
 }
 
@@ -267,39 +281,51 @@ function demosMenu() {
     vsc.Window.ShowQuickPick2(items, opts, null)((menuitem) => {
         if ((undefined !== menuitem && null !== menuitem)) {
             if ("demo_promptToExit" === menuitem) {
+                logLn("Picked `demo_promptToExit` from main menu")
                 demo_promptToExit()
             }
             if ("demo_Commands_GetCommands_and_ExecuteCommand" === menuitem) {
+                logLn("Picked `demo_Commands_GetCommands_and_ExecuteCommand` from main menu")
                 demo_Commands_GetCommands_and_ExecuteCommand()
             }
             if ("demo_Commands_RegisterCommand" === menuitem) {
+                logLn("Picked `demo_Commands_RegisterCommand` from main menu")
                 demo_Commands_RegisterCommand()
             }
             if ("demo_Languages_GetLanguages" === menuitem) {
+                logLn("Picked `demo_Languages_GetLanguages` from main menu")
                 demo_Languages_GetLanguages()
             }
             if ("demo_Env_Properties" === menuitem) {
+                logLn("Picked `demo_Env_Properties` from main menu")
                 demo_Env_Properties()
             }
             if ("demo_Workspace_Properties" === menuitem) {
+                logLn("Picked `demo_Workspace_Properties` from main menu")
                 demo_Workspace_Properties()
             }
             if ("demo_Window_ShowOpenDialog" === menuitem) {
+                logLn("Picked `demo_Window_ShowOpenDialog` from main menu")
                 demo_Window_ShowOpenDialog()
             }
             if ("demo_Window_ShowSaveDialog" === menuitem) {
+                logLn("Picked `demo_Window_ShowSaveDialog` from main menu")
                 demo_Window_ShowSaveDialog()
             }
             if ("demo_Window_ShowWorkspaceFolderPick" === menuitem) {
+                logLn("Picked `demo_Window_ShowWorkspaceFolderPick` from main menu")
                 demo_Window_ShowWorkspaceFolderPick()
             }
             if ("demo_Env_OpenExternal" === menuitem) {
+                logLn("Picked `demo_Env_OpenExternal` from main menu")
                 demo_Env_OpenExternal()
             }
             if ("demo_Window_ShowQuickPick" === menuitem) {
+                logLn("Picked `demo_Window_ShowQuickPick` from main menu")
                 demo_Window_ShowQuickPick()
             }
             if ("demo_Window_ShowInputBox" === menuitem) {
+                logLn("Picked `demo_Window_ShowInputBox` from main menu")
                 demo_Window_ShowInputBox()
             }
         }
@@ -310,13 +336,21 @@ function onUpAndRunning() {
     {
         subscribeToMiscEvents()
     }
+    let logchan
+    let toggleonclick
     {
         vsc.Window.CreateOutputChannel(appName)((it) => {
-            setOutChan(it)
+            logchan = it
+            setOutChan(logchan)
             logLn(strFmt("Hi, I'm `{0}`, this is my own custom `OutputChannel` where I leisurely log all your interactions with me. When I'm ended, it too will disappear.", appName))
             logLn("")
             logLn("NOTE that for logging error messages, you won't need to manually create a custom `OutputChannel` at all: just have your prog print to its `stderr` as (presumably) usual, and `vscode-appz` will then create a dedicated `OutputChannel` for (both that initial and all subsequent) `stderr` prints from your prog while it's up and running.")
-            it.Show(true)
+            logLn("")
+            if (toggleonclick) {
+                logLn("Note also that every click on my status-bar item will toggle my visibility.")
+                logLn("")
+            }
+            logchan.Show(true)
         })
     }
     {
@@ -327,11 +361,17 @@ function onUpAndRunning() {
         mycmd = (_unused) => {
             clickcount = 1 + clickcount
             statusitem.Get()((props) => {
-                props.text = strFmt("You clicked me {0} time(s).", clickcount)
+                props.text = logLn(strFmt("You clicked me {0} time(s).", clickcount))
                 if ("editorLightBulb.foreground" === props.color) {
                     props.color = "terminal.ansiGreen"
+                    if (toggleonclick && (undefined !== logchan && null !== logchan)) {
+                        logchan.Hide()
+                    }
                 } else {
                     props.color = "editorLightBulb.foreground"
+                    if (toggleonclick && (undefined !== logchan && null !== logchan)) {
+                        logchan.Show(true)
+                    }
                 }
                 statusitem.Set(props)(demosMenu)
             })
