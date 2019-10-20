@@ -19,6 +19,9 @@
   - [SessionId](#F-VscAppz-EnvProperties-SessionId 'VscAppz.EnvProperties.SessionId')
   - [Shell](#F-VscAppz-EnvProperties-Shell 'VscAppz.EnvProperties.Shell')
   - [UriScheme](#F-VscAppz-EnvProperties-UriScheme 'VscAppz.EnvProperties.UriScheme')
+- [IClipboard](#T-VscAppz-IClipboard 'VscAppz.IClipboard')
+  - [ReadText()](#M-VscAppz-IClipboard-ReadText 'VscAppz.IClipboard.ReadText')
+  - [WriteText()](#M-VscAppz-IClipboard-WriteText-System-String- 'VscAppz.IClipboard.WriteText(System.String)')
 - [ICommands](#T-VscAppz-ICommands 'VscAppz.ICommands')
   - [ExecuteCommand(command,rest)](#M-VscAppz-ICommands-ExecuteCommand-System-String,System-Object[]- 'VscAppz.ICommands.ExecuteCommand(System.String,System.Object[])')
   - [GetCommands(filterInternal)](#M-VscAppz-ICommands-GetCommands-System-Boolean- 'VscAppz.ICommands.GetCommands(System.Boolean)')
@@ -26,6 +29,7 @@
 - [IEnv](#T-VscAppz-IEnv 'VscAppz.IEnv')
   - [AppName()](#M-VscAppz-IEnv-AppName 'VscAppz.IEnv.AppName')
   - [AppRoot()](#M-VscAppz-IEnv-AppRoot 'VscAppz.IEnv.AppRoot')
+  - [Clipboard()](#M-VscAppz-IEnv-Clipboard 'VscAppz.IEnv.Clipboard')
   - [Language()](#M-VscAppz-IEnv-Language 'VscAppz.IEnv.Language')
   - [MachineId()](#M-VscAppz-IEnv-MachineId 'VscAppz.IEnv.MachineId')
   - [OpenExternal(target)](#M-VscAppz-IEnv-OpenExternal-System-String- 'VscAppz.IEnv.OpenExternal(System.String)')
@@ -321,6 +325,43 @@ The detected default shell for the extension host, this is overridden by the
 
 The custom uri scheme the editor registers to in the operating system.
 
+<a name='T-VscAppz-IClipboard'></a>
+## IClipboard `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+The clipboard provides read and write access to the system's clipboard.
+
+<a name='M-VscAppz-IClipboard-ReadText'></a>
+### ReadText() `method`
+
+##### Summary
+
+Read the current clipboard contents as text.
+
+`return` ── A thenable that resolves to a string.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-IClipboard-WriteText-System-String-'></a>
+### WriteText() `method`
+
+##### Summary
+
+Writes text into the clipboard.
+
+`return` ── A thenable that resolves when writing happened.
+
+##### Parameters
+
+This method has no parameters.
+
 <a name='T-VscAppz-ICommands'></a>
 ## ICommands `type`
 
@@ -462,6 +503,17 @@ This method has no parameters.
 ##### Summary
 
 The application root folder from which the editor is running.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-IEnv-Clipboard'></a>
+### Clipboard() `method`
+
+##### Summary
+
+The clipboard provides read and write access to the system's clipboard.
 
 ##### Parameters
 

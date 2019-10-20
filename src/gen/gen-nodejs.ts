@@ -86,7 +86,7 @@ export class Gen extends gen_syn.Gen {
                 this.each(it.Methods, "\n", m =>
                     this.emitDocs(m).lf()
                         .s(m.Name)
-                        .when(m.Args && m.Args.length,
+                        .when(m.IsSubNs || (m.Args && m.Args.length),
                             () => {
                                 this.s(": (")
                                     .each(m.Args, ", ", a =>
@@ -203,7 +203,13 @@ export class Gen extends gen_syn.Gen {
                         .line("constructor(impl: impl) { super(impl) }")
             }
         }
-        super.emitMethodImpl(it, method, fillBody)
+        if (method.IsSubNs)
+            super.emitMethodImpl(it, method, (_t: gen_syn.TypeRefOwn, _m: gen_syn.Method, _: gen_syn.Builder, body: gen_syn.Instr[]) => {
+                body.length = 1
+                body[0] = _.iRet(_.oDot(_.eCall(_.oDot(_.n("Impl"))), _.n(method.Name)))
+            })
+        else
+            super.emitMethodImpl(it, method, fillBody)
     }
 
     emitFuncImpl(it: gen_syn.Func) {

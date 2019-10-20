@@ -625,6 +625,9 @@ Env: interface
     # Provides single-call access to numerous individual `Env` properties at once.
     Properties: ((EnvProperties->void)->void)
 
+    # The clipboard provides read and write access to the system's clipboard.
+    Clipboard: Clipboard
+
 
 
 
@@ -2848,6 +2851,12 @@ Env·Properties: ( -> ((EnvProperties->void)->void))
     return (a0:(EnvProperties->void) -> void)
         onret = a0
     
+
+
+
+
+Env·Clipboard: ( -> Clipboard)
+    return ((this.Impl())·(implClipboard))
 
 
 

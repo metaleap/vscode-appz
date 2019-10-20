@@ -15,7 +15,7 @@ export interface TEnum extends WithDocs, WithName, WithFrom<gen.PrepEnum> { Enum
 export interface TInterface extends WithDocs, WithName, WithFrom<gen.PrepInterface> { Methods: Method[], IsTop?: boolean }
 export interface Enumerant extends WithDocs, WithName, WithFrom<gen.PrepEnumerant> { Value: number }
 export interface TStruct extends WithDocs, WithName, WithFrom<gen.PrepStruct> { Fields: Field[], IsOutgoing: boolean, IsIncoming: boolean, OutgoingTwin?: string }
-export interface Method extends WithDocs, WithName, WithType, WithFrom<gen.PrepMethod> { Args: Arg[] }
+export interface Method extends WithDocs, WithName, WithType, WithFrom<gen.PrepMethod> { Args: Arg[], IsSubNs?: boolean }
 export interface Arg extends WithDocs, WithName, WithType, WithFrom<gen.PrepArg> { }
 export interface Field extends WithDocs, WithName, WithType, WithFrom<gen.PrepField> {
     FuncFieldRel?: Field, Json?: { Excluded: boolean, Name: string, Required: boolean }
@@ -864,7 +864,7 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     private genMethodImpl_TopInterface(_iface: TypeRefOwn, method: Method, _: Builder, body: Instr[]) {
-        body.push(_.iRet(_.eConv({ Name: this.options.idents.typeImpl + method.Name }, _.n(this.options.idents.curInst))))
+        body.push(_.iRet(_.eConv({ Name: this.options.idents.typeImpl + method.Name }, _.eThis())))
     }
 
     private genMethodImpl_PopulateFrom(struct: TypeRefOwn, _method: Method, _: Builder, body: Instr[]) {
@@ -929,7 +929,10 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     private genMethodImpl_ApiMethodCall(typeRef: TypeRefOwn, method: Method, _: Builder, body: Instr[]) {
-        this.genMethodImpl_methodCall(typeRef, method, _, body)
+        if (method.IsSubNs)
+            body.push(_.iRet(_.eConv({ Name: this.options.idents.typeImpl + method.Name }, _.eCall(_.oDot(_.eThis(), _.n("Impl"))))))
+        else
+            this.genMethodImpl_methodCall(typeRef, method, _, body)
     }
 
     private genMethodImpl_methodCall(ifaceOrStruct: TypeRefOwn, method: Method, _: Builder, body: Instr[], idVal?: Expr, impl?: Expr) {
@@ -1211,6 +1214,19 @@ export class Gen extends gen.Gen implements gen.IGen {
             build.fromEnum(_))
         this.allInterfaces = [ifacetop].concat(...prep.interfaces.map(_ =>
             build.fromInterface(_)))
+        for (const ns in prep.fromOrig.namespaces)
+            if (ns.includes('.')) {
+                const parts = ns.split('.')
+                const iface_mod = this.allInterfaces.find(_ => _.name === parts[0] || (_.fromPrep && _.fromPrep.name === parts[0]))
+                const iface_sub = this.allInterfaces.find(_ => _.name === parts[parts.length - 1] || (_.fromPrep && _.fromPrep.name === parts[parts.length - 1]))
+                if (!(iface_mod && iface_sub))
+                    throw ns
+
+                iface_mod.Methods.push({
+                    Name: this.nameRewriters.methods(parts.slice(1).join('_')),
+                    Args: [], Type: iface_sub, Docs: iface_sub.Docs, IsSubNs: true,
+                })
+            }
         this.allStructs = {}
         for (const it of prep.structs) {
             const struct = build.fromStruct(it)

@@ -646,7 +646,7 @@ class Gen extends gen.Gen {
         ];
     }
     genMethodImpl_TopInterface(_iface, method, _, body) {
-        body.push(_.iRet(_.eConv({ Name: this.options.idents.typeImpl + method.Name }, _.n(this.options.idents.curInst))));
+        body.push(_.iRet(_.eConv({ Name: this.options.idents.typeImpl + method.Name }, _.eThis())));
     }
     genMethodImpl_PopulateFrom(struct, _method, _, body) {
         const tstruct = struct;
@@ -685,7 +685,10 @@ class Gen extends gen.Gen {
             this.genMethodImpl_methodCall(struct, method, _, body, _.oDot(_.eThis(), _.n("disp"), _.n("id")), _.oDot(_.eThis(), _.n("disp"), _.n("impl")));
     }
     genMethodImpl_ApiMethodCall(typeRef, method, _, body) {
-        this.genMethodImpl_methodCall(typeRef, method, _, body);
+        if (method.IsSubNs)
+            body.push(_.iRet(_.eConv({ Name: this.options.idents.typeImpl + method.Name }, _.eCall(_.oDot(_.eThis(), _.n("Impl"))))));
+        else
+            this.genMethodImpl_methodCall(typeRef, method, _, body);
     }
     genMethodImpl_methodCall(ifaceOrStruct, method, _, body, idVal, impl) {
         const __ = gen.idents(method.fromPrep ? method.fromPrep.args : [], 'msg', 'onresp', 'onret', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok', 'ret');
@@ -855,6 +858,18 @@ class Gen extends gen.Gen {
         };
         this.allEnums = prep.enums.map(_ => build.fromEnum(_));
         this.allInterfaces = [ifacetop].concat(...prep.interfaces.map(_ => build.fromInterface(_)));
+        for (const ns in prep.fromOrig.namespaces)
+            if (ns.includes('.')) {
+                const parts = ns.split('.');
+                const iface_mod = this.allInterfaces.find(_ => _.name === parts[0] || (_.fromPrep && _.fromPrep.name === parts[0]));
+                const iface_sub = this.allInterfaces.find(_ => _.name === parts[parts.length - 1] || (_.fromPrep && _.fromPrep.name === parts[parts.length - 1]));
+                if (!(iface_mod && iface_sub))
+                    throw ns;
+                iface_mod.Methods.push({
+                    Name: this.nameRewriters.methods(parts.slice(1).join('_')),
+                    Args: [], Type: iface_sub, Docs: iface_sub.Docs, IsSubNs: true,
+                });
+            }
         this.allStructs = {};
         for (const it of prep.structs) {
             const struct = build.fromStruct(it);

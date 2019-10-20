@@ -47,7 +47,7 @@ class Gen extends gen_syn.Gen {
             .line("export interface " + it.Name + " {").indented(() => {
             this.each(it.Methods, "\n", m => this.emitDocs(m).lf()
                 .s(m.Name)
-                .when(m.Args && m.Args.length, () => {
+                .when(m.IsSubNs || (m.Args && m.Args.length), () => {
                 this.s(": (")
                     .each(m.Args, ", ", a => this.s(a.Name)
                     .s((a.fromPrep && a.fromPrep.optional) ? "?: " : ": ")
@@ -147,7 +147,13 @@ class Gen extends gen_syn.Gen {
                         .line("constructor(impl: impl) { super(impl) }");
             }
         }
-        super.emitMethodImpl(it, method, fillBody);
+        if (method.IsSubNs)
+            super.emitMethodImpl(it, method, (_t, _m, _, body) => {
+                body.length = 1;
+                body[0] = _.iRet(_.oDot(_.eCall(_.oDot(_.n("Impl"))), _.n(method.Name)));
+            });
+        else
+            super.emitMethodImpl(it, method, fillBody);
     }
     emitFuncImpl(it) {
         const tnamed = it.Type;

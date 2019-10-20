@@ -426,6 +426,9 @@ type Env interface {
 
 	// Provides single-call access to numerous individual `Env` properties at once.
 	Properties() func(func(EnvProperties))
+
+	// The clipboard provides read and write access to the system's clipboard.
+	Clipboard() Clipboard
 }
 type implEnv struct{ *impl }
 
@@ -2479,6 +2482,10 @@ func (me implEnv) Properties() func(func(EnvProperties)) {
 	return func(a0 func(EnvProperties)) {
 		onret = a0
 	}
+}
+
+func (me implEnv) Clipboard() Clipboard {
+	return implClipboard{me.Impl()}
 }
 
 func (me implClipboard) ReadText() func(func(*string)) {

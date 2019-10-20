@@ -620,6 +620,28 @@
         <member name="M:VscAppz.IEnv.Properties">
             <summary>Provides single-call access to numerous individual `IEnv` properties at once.</summary>
         </member>
+        <member name="M:VscAppz.IEnv.Clipboard">
+            <summary>The clipboard provides read and write access to the system's clipboard.</summary>
+        </member>
+        <member name="T:VscAppz.IClipboard">
+            <summary>The clipboard provides read and write access to the system's clipboard.</summary>
+        </member>
+        <member name="M:VscAppz.IClipboard.ReadText">
+            <summary>
+            Read the current clipboard contents as text.
+            
+            `return` ── A thenable that resolves to a string.
+            </summary>
+            <return>A thenable that resolves to a string.</return>
+        </member>
+        <member name="M:VscAppz.IClipboard.WriteText(System.String)">
+            <summary>
+            Writes text into the clipboard.
+            
+            `return` ── A thenable that resolves when writing happened.
+            </summary>
+            <return>A thenable that resolves when writing happened.</return>
+        </member>
         <member name="T:VscAppz.IWorkspace">
             <summary>
             Namespace for dealing with the current workspace. A workspace is the representation

@@ -505,6 +505,12 @@ export interface Env {
 
      */
     Properties: (_: (_: EnvProperties) => void) => void
+
+    /**
+     * The clipboard provides read and write access to the system's clipboard.
+
+     */
+    Clipboard: () => Clipboard
 }
 
 /**
@@ -2932,6 +2938,10 @@ class implEnv extends implBase implements Env {
         return (a0: (_: EnvProperties) => void): void => {
             onret = a0
         }
+    }
+
+    Clipboard(): Clipboard {
+        return this.Impl().Clipboard
     }
 
 }

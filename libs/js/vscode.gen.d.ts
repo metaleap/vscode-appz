@@ -453,6 +453,29 @@ export interface Env {
 
      */
     Properties: (_: (_: EnvProperties) => void) => void;
+    /**
+     * The clipboard provides read and write access to the system's clipboard.
+
+     */
+    Clipboard: () => Clipboard;
+}
+/**
+ * The clipboard provides read and write access to the system's clipboard.
+
+ */
+export interface Clipboard {
+    /**
+     * Read the current clipboard contents as text.
+
+     * @return A thenable that resolves to a string.
+     */
+    ReadText: (_: (_: string) => void) => void;
+    /**
+     * Writes text into the clipboard.
+
+     * @return A thenable that resolves when writing happened.
+     */
+    WriteText: (value: string) => (_: () => void) => void;
 }
 /**
  * Namespace for dealing with the current workspace. A workspace is the representation
@@ -1295,6 +1318,7 @@ export declare function newOutputChannelProperties(): OutputChannelProperties;
 export declare abstract class impl implements Vscode {
     Window: Window;
     Env: Env;
+    Clipboard: Clipboard;
     Workspace: Workspace;
     Languages: Languages;
     Extensions: Extensions;

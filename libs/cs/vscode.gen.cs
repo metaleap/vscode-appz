@@ -579,6 +579,9 @@ namespace VscAppz {
 
 		/// <summary>Provides single-call access to numerous individual `IEnv` properties at once.</summary>
 		Action<Action<EnvProperties>> Properties();
+
+		/// <summary>The clipboard provides read and write access to the system's clipboard.</summary>
+		IClipboard Clipboard();
 	}
 
 	/// <summary>The clipboard provides read and write access to the system's clipboard.</summary>
@@ -2761,6 +2764,10 @@ namespace VscAppz {
 			return (Action<EnvProperties> a0) => {
 				onret = a0;
 			};
+		}
+
+		IClipboard IEnv.Clipboard() {
+			return this;
 		}
 
 		Action<Action<string>> IClipboard.ReadText() {

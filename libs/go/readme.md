@@ -59,6 +59,24 @@ func (me *Cancel) Now()
 ```
 Now signals cancellation to the counterparty.
 
+#### type Clipboard
+
+```go
+type Clipboard interface {
+	// Read the current clipboard contents as text.
+	//
+	// `return` ── A thenable that resolves to a string.
+	ReadText() func(func(*string))
+
+	// Writes text into the clipboard.
+	//
+	// `return` ── A thenable that resolves when writing happened.
+	WriteText(value string) func(func())
+}
+```
+
+The clipboard provides read and write access to the system's clipboard.
+
 #### type Commands
 
 ```go
@@ -218,6 +236,9 @@ type Env interface {
 
 	// Provides single-call access to numerous individual `Env` properties at once.
 	Properties() func(func(EnvProperties))
+
+	// The clipboard provides read and write access to the system's clipboard.
+	Clipboard() Clipboard
 }
 ```
 
@@ -262,18 +283,6 @@ type EnvProperties struct {
 ```
 
 Namespace describing the environment the editor runs in.
-
-#### type Env_clipboard
-
-```go
-type Env_clipboard interface {
-	// Read the current clipboard contents as text.
-	//
-	// `return` ── A thenable that resolves to a string.
-	ReadText() func(func(*string))
-}
-```
-
 
 #### type Extensions
 
@@ -742,8 +751,6 @@ type Vscode interface {
 
 	// Namespace describing the environment the editor runs in.
 	Env() Env
-
-	Env_clipboard() Env_clipboard
 
 	// Namespace for dealing with the current workspace. A workspace is the representation
 	// of the folder that has been opened. There is no workspace when just a file but not a
