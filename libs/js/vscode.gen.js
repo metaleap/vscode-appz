@@ -54,32 +54,32 @@ var DecorationRangeBehavior;
     DecorationRangeBehavior[DecorationRangeBehavior["ClosedOpen"] = 3] = "ClosedOpen";
 })(DecorationRangeBehavior = exports.DecorationRangeBehavior || (exports.DecorationRangeBehavior = {}));
 /**
- * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+ * Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
  * The overview ruler supports three lanes.
 
  */
 var OverviewRulerLane;
 (function (OverviewRulerLane) {
     /**
-     * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+     * Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
      * The overview ruler supports three lanes.
 
      */
     OverviewRulerLane[OverviewRulerLane["Left"] = 1] = "Left";
     /**
-     * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+     * Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
      * The overview ruler supports three lanes.
 
      */
     OverviewRulerLane[OverviewRulerLane["Center"] = 2] = "Center";
     /**
-     * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+     * Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
      * The overview ruler supports three lanes.
 
      */
     OverviewRulerLane[OverviewRulerLane["Right"] = 4] = "Right";
     /**
-     * Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+     * Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
      * The overview ruler supports three lanes.
 
      */

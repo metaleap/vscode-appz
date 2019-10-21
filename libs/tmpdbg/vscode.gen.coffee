@@ -44,23 +44,23 @@ DecorationRangeBehavior: enum
 
 
 
-# Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+# Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
 # The overview ruler supports three lanes.
 OverviewRulerLane: enum
 
-    # Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+    # Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
     # The overview ruler supports three lanes.
     Left: 1
 
-    # Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+    # Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
     # The overview ruler supports three lanes.
     Center: 2
 
-    # Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+    # Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
     # The overview ruler supports three lanes.
     Right: 4
 
-    # Represents different positions for rendering a decoration in an [overview ruler](#DecorationRenderOptions.overviewRulerLane).
+    # Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
     # The overview ruler supports three lanes.
     Full: 7
 
@@ -87,8 +87,8 @@ Vscode: interface
     # of the folder that has been opened. There is no workspace when just a file but not a
     # folder has been opened.
     # 
-    # The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
-    # events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+    # The workspace offers support for [listening](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher) to fs
+    # events and for [finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles) files. Both perform well and run _outside_
     # the editor-process so that they should be always used instead of nodejs-equivalents.
     Workspace: Workspace
 
@@ -102,33 +102,39 @@ Vscode: interface
     # 
     # The editor provides an API that makes it simple to provide such common features by having all UI and actions already in place and
     # by allowing you to participate by providing data only. For instance, to contribute a hover all you have to do is provide a function
-    # that can be called with a [TextDocument](#TextDocument) and a [Position](#Position) returning hover info. The rest, like tracking the
+    # that can be called with a [TextDocument](https://code.visualstudio.com/api/references/vscode-api#TextDocument) and a [Position](#Position) returning hover info. The rest, like tracking the
     # mouse, positioning the hover, keeping the hover stable etc. is taken care of by the editor.
     # 
+    # 
     # ```javascript
+    # 
     # languages.registerHoverProvider('javascript', {
     #  	provideHover(document, position, token) {
     #  		return new Hover('I am a hover!');
     #  	}
     # });
+    # 
     # ```
     # 
-    # Registration is done using a [document selector](#DocumentSelector) which is either a language id, like `javascript` or
-    # a more complex [filter](#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
-    # a selector will result in a [score](#languages.match) that is used to determine if and how a provider shall be used. When
-    # scores are equal the provider that came last wins. For features that allow full arity, like [hover](#languages.registerHoverProvider),
-    # the score is only checked to be `>0`, for other features, like [IntelliSense](#languages.registerCompletionItemProvider) the
+    # 
+    # Registration is done using a [document selector](https://code.visualstudio.com/api/references/vscode-api#DocumentSelector) which is either a language id, like `javascript` or
+    # a more complex [filter](https://code.visualstudio.com/api/references/vscode-api#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
+    # a selector will result in a [score](https://code.visualstudio.com/api/references/vscode-api#languages.match) that is used to determine if and how a provider shall be used. When
+    # scores are equal the provider that came last wins. For features that allow full arity, like [hover](https://code.visualstudio.com/api/references/vscode-api#languages.registerHoverProvider),
+    # the score is only checked to be `>0`, for other features, like [IntelliSense](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider) the
     # score is used for determining the order in which providers are asked to participate.
     Languages: Languages
 
     # extensions:
     # Namespace for dealing with installed extensions. Extensions are represented
-    # by an [extension](#Extension)-interface which enables reflection on them.
+    # by an [extension](https://code.visualstudio.com/api/references/vscode-api#Extension)-interface which enables reflection on them.
     # 
     # Extension writers can provide APIs to other extensions by returning their API public
     # surface from the `activate`-call.
     # 
+    # 
     # ```javascript
+    # 
     # export function activate(context: vscode.ExtensionContext) {
     #  	let api = {
     #  		sum(a, b) {
@@ -141,26 +147,32 @@ Vscode: interface
     #  	// 'export' public api-surface
     #  	return api;
     # }
+    # 
     # ```
+    # 
     # When depending on the API of another extension add an `extensionDependency`-entry
-    # to `package.json`, and use the [getExtension](#extensions.getExtension)-function
-    # and the [exports](#Extension.exports)-property, like below:
+    # to `package.json`, and use the [getExtension](https://code.visualstudio.com/api/references/vscode-api#extensions.getExtension)-function
+    # and the [exports](https://code.visualstudio.com/api/references/vscode-api#Extension.exports)-property, like below:
+    # 
     # 
     # ```javascript
+    # 
     # let mathExt = extensions.getExtension('genius.math');
     # let importedApi = mathExt.exports;
     # 
     # console.log(importedApi.mul(42, 1));
+    # 
     # ```
+    # 
     Extensions: Extensions
 
     # commands:
     # Namespace for dealing with commands. In short, a command is a function with a
     # unique identifier. The function is sometimes also called _command handler_.
     # 
-    # Commands can be added to the editor using the [registerCommand](#commands.registerCommand)
-    # and [registerTextEditorCommand](#commands.registerTextEditorCommand) functions. Commands
-    # can be executed [manually](#commands.executeCommand) or from a UI gesture. Those are:
+    # Commands can be added to the editor using the [registerCommand](https://code.visualstudio.com/api/references/vscode-api#commands.registerCommand)
+    # and [registerTextEditorCommand](https://code.visualstudio.com/api/references/vscode-api#commands.registerTextEditorCommand) functions. Commands
+    # can be executed [manually](https://code.visualstudio.com/api/references/vscode-api#commands.executeCommand) or from a UI gesture. Those are:
     # 
     # * palette - Use the `commands`-section in `package.json` to make a command show in
     # the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette).
@@ -173,13 +185,19 @@ Vscode: interface
     # 
     # This is a sample that registers a command handler and adds an entry for that command to the palette. First
     # register a command handler with the identifier `extension.sayHello`.
+    # 
     # ```javascript
+    # 
     # commands.registerCommand('extension.sayHello', () => {
     #  	window.showInformationMessage('Hello World!');
     # });
+    # 
     # ```
+    # 
     # Second, bind the command identifier to a title under which it will show in the palette (`package.json`).
+    # 
     # ```json
+    # 
     # {
     #  	"contributes": {
     #  		"commands": [{
@@ -188,7 +206,9 @@ Vscode: interface
     #  		}]
     #  	}
     # }
+    # 
     # ```
+    # 
     Commands: Commands
 
 
@@ -503,10 +523,10 @@ Window: interface
 
     # setStatusBarMessage:
     # Set a message to the status bar. This is a short hand for the more powerful
-    # status bar [items](#window.createStatusBarItem).
+    # status bar [items](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem).
     #
     # @text:
-    # The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
+    # The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
     #
     # @hideAfterTimeout:
     # Timeout in milliseconds after which the message will be disposed.
@@ -519,13 +539,13 @@ Window: interface
 
     # setStatusBarMessage:
     # Set a message to the status bar. This is a short hand for the more powerful
-    # status bar [items](#window.createStatusBarItem).
+    # status bar [items](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem).
     # 
     # *Note* that status bar messages stack and that they must be disposed when no
     # longer used.
     #
     # @text:
-    # The message to show, supports icon substitution as in status bar [items](#StatusBarItem.text).
+    # The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
     #
     # @return:
     # A disposable which hides the status bar message.
@@ -557,7 +577,7 @@ Window: interface
         options: OpenDialogOptions
 
     # showWorkspaceFolderPick:
-    # Shows a selection list of [workspace folders](#workspace.workspaceFolders) to pick from.
+    # Shows a selection list of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) to pick from.
     # Returns `undefined` if no folder is open.
     #
     # @options:
@@ -573,13 +593,13 @@ Window: interface
     State: ((WindowState->void)->void)
 
     # onDidChangeWindowState:
-    # An [event](#Event) which fires when the focus state of the current window
+    # An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
     # changes. The value of the event represents whether the window is focused.
     OnDidChangeWindowState: ((?Disposable->void)->void)
         listener: (WindowState->void)
 
     # createStatusBarItem:
-    # Creates a status bar [item](#StatusBarItem).
+    # Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem).
     #
     # @alignment:
     # The alignment of the item.
@@ -594,7 +614,7 @@ Window: interface
         priority: ?int
 
     # createOutputChannel:
-    # Creates a new [output channel](#OutputChannel) with the given name.
+    # Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
     #
     # @name:
     # Human-readable string which will be used to represent the channel in the UI.
@@ -623,7 +643,7 @@ Env: interface
     # Opens an *external* item, e.g. a http(s) or mailto-link, using the
     # default application.
     # 
-    # *Note* that [`showTextDocument`](#window.showTextDocument) is the right
+    # *Note* that [`showTextDocument`](https://code.visualstudio.com/api/references/vscode-api#window.showTextDocument) is the right
     # way to open a text document inside the editor, not this function.
     #
     # @target:
@@ -656,7 +676,7 @@ Env: interface
     # 
     # *Note* that the value is `undefined` when there is no remote extension host but that the
     # value is defined in all extension hosts (local and remote) in case a remote extension host
-    # exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
+    # exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
     # a specific extension runs remote or not.
     RemoteName: ((?string->void)->void)
 
@@ -710,8 +730,8 @@ Clipboard: interface
 # of the folder that has been opened. There is no workspace when just a file but not a
 # folder has been opened.
 # 
-# The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
-# events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+# The workspace offers support for [listening](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher) to fs
+# events and for [finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles) files. Both perform well and run _outside_
 # the editor-process so that they should be always used instead of nodejs-equivalents.
 Workspace: interface
 
@@ -740,9 +760,13 @@ Workspace: interface
     # open the workspace again after it has been closed.
     # 
     # **Example:**
+    # 
     # ```typescript
+    # 
     # vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
+    # 
     # ```
+    # 
     # 
     # **Note:** it is not advised to use `workspace.workspaceFile` to write
     # configuration data into the file. You can use `workspace.getConfiguration().update()`
@@ -767,7 +791,7 @@ Workspace: interface
         listener: (WorkspaceFoldersChangeEvent->void)
 
     # getWorkspaceFolder:
-    # Returns the [workspace folder](#WorkspaceFolder) that contains a given uri.
+    # Returns the [workspace folder](https://code.visualstudio.com/api/references/vscode-api#WorkspaceFolder) that contains a given uri.
     # * returns `undefined` when the given uri doesn't match any workspace folder
     # * returns the *input* when the given uri is a workspace folder itself
     #
@@ -785,16 +809,16 @@ Workspace: interface
     WorkspaceFolders: ((?[WorkspaceFolder]->void)->void)
 
     # findFiles:
-    # Find files across all [workspace folders](#workspace.workspaceFolders) in the workspace.
+    # Find files across all [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) in the workspace.
     # `findFiles('**​/*.js', '**​/node_modules/**', 10)`
     #
     # @include:
-    # A [glob pattern](#GlobPattern) that defines the files to search for. The glob pattern
-    # will be matched against the file paths of resulting matches relative to their workspace. Use a [relative pattern](#RelativePattern)
-    # to restrict the search results to a [workspace folder](#WorkspaceFolder).
+    # A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that defines the files to search for. The glob pattern
+    # will be matched against the file paths of resulting matches relative to their workspace. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern)
+    # to restrict the search results to a [workspace folder](https://code.visualstudio.com/api/references/vscode-api#WorkspaceFolder).
     #
     # @exclude:
-    # A [glob pattern](#GlobPattern) that defines files and folders to exclude. The glob pattern
+    # A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that defines files and folders to exclude. The glob pattern
     # will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will
     # apply, when `null` no excludes will apply.
     #
@@ -806,7 +830,7 @@ Workspace: interface
     #
     # @return:
     # A thenable that resolves to an array of resource identifiers. Will return no results if no
-    # [workspace folders](#workspace.workspaceFolders) are opened.
+    # [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) are opened.
     FindFiles: ((?[string]->void)->void)
         include: string
         exclude: ?string
@@ -816,11 +840,11 @@ Workspace: interface
     # asRelativePath:
     # Returns a path that is relative to the workspace folder or folders.
     # 
-    # When there are no [workspace folders](#workspace.workspaceFolders) or when the path
+    # When there are no [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) or when the path
     # is not contained in them, the input is returned.
     #
     # @pathOrUri:
-    # A path or uri. When a uri is given its [fsPath](#Uri.fsPath) is used.
+    # A path or uri. When a uri is given its [fsPath](https://code.visualstudio.com/api/references/vscode-api#Uri.fsPath) is used.
     #
     # @includeWorkspaceFolder:
     # When `true` and when the given path is contained inside a
@@ -849,22 +873,26 @@ Workspace: interface
 # 
 # The editor provides an API that makes it simple to provide such common features by having all UI and actions already in place and
 # by allowing you to participate by providing data only. For instance, to contribute a hover all you have to do is provide a function
-# that can be called with a [TextDocument](#TextDocument) and a [Position](#Position) returning hover info. The rest, like tracking the
+# that can be called with a [TextDocument](https://code.visualstudio.com/api/references/vscode-api#TextDocument) and a [Position](#Position) returning hover info. The rest, like tracking the
 # mouse, positioning the hover, keeping the hover stable etc. is taken care of by the editor.
 # 
+# 
 # ```javascript
+# 
 # languages.registerHoverProvider('javascript', {
 #  	provideHover(document, position, token) {
 #  		return new Hover('I am a hover!');
 #  	}
 # });
+# 
 # ```
 # 
-# Registration is done using a [document selector](#DocumentSelector) which is either a language id, like `javascript` or
-# a more complex [filter](#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
-# a selector will result in a [score](#languages.match) that is used to determine if and how a provider shall be used. When
-# scores are equal the provider that came last wins. For features that allow full arity, like [hover](#languages.registerHoverProvider),
-# the score is only checked to be `>0`, for other features, like [IntelliSense](#languages.registerCompletionItemProvider) the
+# 
+# Registration is done using a [document selector](https://code.visualstudio.com/api/references/vscode-api#DocumentSelector) which is either a language id, like `javascript` or
+# a more complex [filter](https://code.visualstudio.com/api/references/vscode-api#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
+# a selector will result in a [score](https://code.visualstudio.com/api/references/vscode-api#languages.match) that is used to determine if and how a provider shall be used. When
+# scores are equal the provider that came last wins. For features that allow full arity, like [hover](https://code.visualstudio.com/api/references/vscode-api#languages.registerHoverProvider),
+# the score is only checked to be `>0`, for other features, like [IntelliSense](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider) the
 # score is used for determining the order in which providers are asked to participate.
 Languages: interface
 
@@ -876,7 +904,7 @@ Languages: interface
     GetLanguages: ((?[string]->void)->void)
 
     # onDidChangeDiagnostics:
-    # An [event](#Event) which fires when the global set of diagnostics changes. This is
+    # An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
     # newly added and removed diagnostics.
     OnDidChangeDiagnostics: ((?Disposable->void)->void)
         listener: (DiagnosticChangeEvent->void)
@@ -886,12 +914,14 @@ Languages: interface
 
 # extensions:
 # Namespace for dealing with installed extensions. Extensions are represented
-# by an [extension](#Extension)-interface which enables reflection on them.
+# by an [extension](https://code.visualstudio.com/api/references/vscode-api#Extension)-interface which enables reflection on them.
 # 
 # Extension writers can provide APIs to other extensions by returning their API public
 # surface from the `activate`-call.
 # 
+# 
 # ```javascript
+# 
 # export function activate(context: vscode.ExtensionContext) {
 #  	let api = {
 #  		sum(a, b) {
@@ -904,17 +934,23 @@ Languages: interface
 #  	// 'export' public api-surface
 #  	return api;
 # }
+# 
 # ```
+# 
 # When depending on the API of another extension add an `extensionDependency`-entry
-# to `package.json`, and use the [getExtension](#extensions.getExtension)-function
-# and the [exports](#Extension.exports)-property, like below:
+# to `package.json`, and use the [getExtension](https://code.visualstudio.com/api/references/vscode-api#extensions.getExtension)-function
+# and the [exports](https://code.visualstudio.com/api/references/vscode-api#Extension.exports)-property, like below:
+# 
 # 
 # ```javascript
+# 
 # let mathExt = extensions.getExtension('genius.math');
 # let importedApi = mathExt.exports;
 # 
 # console.log(importedApi.mul(42, 1));
+# 
 # ```
+# 
 Extensions: interface
 
     # onDidChange:
@@ -930,9 +966,9 @@ Extensions: interface
 # Namespace for dealing with commands. In short, a command is a function with a
 # unique identifier. The function is sometimes also called _command handler_.
 # 
-# Commands can be added to the editor using the [registerCommand](#commands.registerCommand)
-# and [registerTextEditorCommand](#commands.registerTextEditorCommand) functions. Commands
-# can be executed [manually](#commands.executeCommand) or from a UI gesture. Those are:
+# Commands can be added to the editor using the [registerCommand](https://code.visualstudio.com/api/references/vscode-api#commands.registerCommand)
+# and [registerTextEditorCommand](https://code.visualstudio.com/api/references/vscode-api#commands.registerTextEditorCommand) functions. Commands
+# can be executed [manually](https://code.visualstudio.com/api/references/vscode-api#commands.executeCommand) or from a UI gesture. Those are:
 # 
 # * palette - Use the `commands`-section in `package.json` to make a command show in
 # the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette).
@@ -945,13 +981,19 @@ Extensions: interface
 # 
 # This is a sample that registers a command handler and adds an entry for that command to the palette. First
 # register a command handler with the identifier `extension.sayHello`.
+# 
 # ```javascript
+# 
 # commands.registerCommand('extension.sayHello', () => {
 #  	window.showInformationMessage('Hello World!');
 # });
+# 
 # ```
+# 
 # Second, bind the command identifier to a title under which it will show in the palette (`package.json`).
+# 
 # ```json
+# 
 # {
 #  	"contributes": {
 #  		"commands": [{
@@ -960,7 +1002,9 @@ Extensions: interface
 #  		}]
 #  	}
 # }
+# 
 # ```
+# 
 Commands: interface
 
     # registerCommand:
@@ -987,7 +1031,7 @@ Commands: interface
     # 
     # * *Note 1:* When executing an editor command not all types are allowed to
     # be passed as arguments. Allowed are the primitive types `string`, `boolean`,
-    # `number`, `undefined`, and `null`, as well as [`Position`](#Position), [`Range`](#Range), [`Uri`](#Uri) and [`Location`](#Location).
+    # `number`, `undefined`, and `null`, as well as [`Position`](https://code.visualstudio.com/api/references/vscode-api#Position), [`Range`](#Range), [`Uri`](#Uri) and [`Location`](#Location).
     # * *Note 2:* There are no restrictions when executing commands that have been contributed
     # by extensions.
     #
@@ -1070,7 +1114,7 @@ InputBoxOptions: class
     Value: ?string
 
     # valueSelection:
-    # Selection of the prefilled [`value`](#InputBoxOptions.value). Defined as tuple of two number where the
+    # Selection of the prefilled [`value`](https://code.visualstudio.com/api/references/vscode-api#InputBoxOptions.value). Defined as tuple of two number where the
     # first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
     # word will be selected, when empty (start equals end) only the cursor will be set,
     # otherwise the defined range will be selected.
@@ -1231,12 +1275,16 @@ SaveDialogOptions: class
     # filters:
     # A set of file filters that are used by the dialog. Each entry is a human readable label,
     # like "TypeScript", and an array of extensions, e.g.
+    # 
     # ```ts
+    # 
     # {
     #  	'Images': ['png', 'jpg']
     #  	'TypeScript': ['ts', 'tsx']
     # }
+    # 
     # ```
+    # 
     #
     # JSON FLAGS: {"Name":"filters","Required":false,"Excluded":false}
     Filters: ?[[string]]
@@ -1285,12 +1333,16 @@ OpenDialogOptions: class
     # filters:
     # A set of file filters that are used by the dialog. Each entry is a human readable label,
     # like "TypeScript", and an array of extensions, e.g.
+    # 
     # ```ts
+    # 
     # {
     #  	'Images': ['png', 'jpg']
     #  	'TypeScript': ['ts', 'tsx']
     # }
+    # 
     # ```
+    # 
     #
     # JSON FLAGS: {"Name":"filters","Required":false,"Excluded":false}
     Filters: ?[[string]]
@@ -1298,7 +1350,7 @@ OpenDialogOptions: class
 
 
 
-# Options to configure the behaviour of the [workspace folder](#WorkspaceFolder) pick UI.
+# Options to configure the behaviour of the [workspace folder](https://code.visualstudio.com/api/references/vscode-api#WorkspaceFolder) pick UI.
 WorkspaceFolderPickOptions: class
 
     # placeHolder:
@@ -1323,7 +1375,7 @@ WorkspaceFolder: class
     # uri:
     # The associated uri for this workspace folder.
     # 
-    # *Note:* The [Uri](#Uri)-type was intentionally chosen such that future releases of the editor can support
+    # *Note:* The [Uri](https://code.visualstudio.com/api/references/vscode-api#Uri)-type was intentionally chosen such that future releases of the editor can support
     # workspace folders that are not stored on the local disk, e.g. `ftp://server/workspaces/foo`.
     #
     # JSON FLAGS: {"Name":"uri","Required":true,"Excluded":false}
@@ -1331,7 +1383,7 @@ WorkspaceFolder: class
 
     # name:
     # The name of this workspace folder. Defaults to
-    # the basename of its [uri-path](#Uri.path)
+    # the basename of its [uri-path](https://code.visualstudio.com/api/references/vscode-api#Uri.path)
     #
     # JSON FLAGS: {"Name":"name","Required":true,"Excluded":false}
     Name: string
@@ -1371,7 +1423,7 @@ StatusBarItem: class
 # An output channel is a container for readonly textual information.
 # 
 # To get an instance of an `OutputChannel` use
-# [createOutputChannel](#window.createOutputChannel).
+# [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 OutputChannel: class
 
     #
@@ -1381,7 +1433,7 @@ OutputChannel: class
 
 
 
-# Represents rendering styles for a [text editor decoration](#TextEditorDecorationType).
+# Represents rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
 DecorationRenderOptions: class
 
     # isWholeLine:
@@ -1419,12 +1471,12 @@ DecorationRenderOptions: class
 
 
 
-# Represents theme specific rendering styles for a [text editor decoration](#TextEditorDecorationType).
+# Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
 ThemableDecorationRenderOptions: class
 
     # backgroundColor:
     # Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
-    # Alternatively a color from the color registry can be [referenced](#ThemeColor).
+    # Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
     #
     # JSON FLAGS: {"Name":"backgroundColor","Required":false,"Excluded":false}
     BackgroundColor: ?string
@@ -1655,10 +1707,10 @@ ThemableDecorationAttachmentRenderOptions: class
 
 
 # Represents a handle to a set of decorations
-# sharing the same [styling options](#DecorationRenderOptions) in a [text editor](#TextEditor).
+# sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
 # 
 # To get an instance of a `TextEditorDecorationType` use
-# [createTextEditorDecorationType](#window.createTextEditorDecorationType).
+# [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 TextEditorDecorationType: class
 
     #
@@ -1668,7 +1720,7 @@ TextEditorDecorationType: class
 
 
 
-# An event describing a change to the set of [workspace folders](#workspace.workspaceFolders).
+# An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).
 WorkspaceFoldersChangeEvent: class
 
     # added:
@@ -1732,7 +1784,7 @@ EnvProperties: class
     # 
     # *Note* that the value is `undefined` when there is no remote extension host but that the
     # value is defined in all extension hosts (local and remote) in case a remote extension host
-    # exists. Use [`Extension#extensionKind`](#Extension.extensionKind) to know if
+    # exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
     # a specific extension runs remote or not.
     #
     # JSON FLAGS: {"Name":"remoteName","Required":false,"Excluded":false}
@@ -1766,8 +1818,8 @@ EnvProperties: class
 # of the folder that has been opened. There is no workspace when just a file but not a
 # folder has been opened.
 # 
-# The workspace offers support for [listening](#workspace.createFileSystemWatcher) to fs
-# events and for [finding](#workspace.findFiles) files. Both perform well and run _outside_
+# The workspace offers support for [listening](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher) to fs
+# events and for [finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles) files. Both perform well and run _outside_
 # the editor-process so that they should be always used instead of nodejs-equivalents.
 WorkspaceProperties: class
 
@@ -1798,9 +1850,13 @@ WorkspaceProperties: class
     # open the workspace again after it has been closed.
     # 
     # **Example:**
+    # 
     # ```typescript
+    # 
     # vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
+    # 
     # ```
+    # 
     # 
     # **Note:** it is not advised to use `workspace.workspaceFile` to write
     # configuration data into the file. You can use `workspace.getConfiguration().update()`
@@ -1862,7 +1918,7 @@ StatusBarItemProperties: class
 
     # command:
     # The identifier of a command to run on click. The command must be
-    # [known](#commands.getCommands).
+    # [known](https://code.visualstudio.com/api/references/vscode-api#commands.getCommands).
     #
     # JSON FLAGS: {"Name":"command","Required":false,"Excluded":false}
     Command: string
@@ -1873,7 +1929,7 @@ StatusBarItemProperties: class
 # An output channel is a container for readonly textual information.
 # 
 # To get an instance of an `OutputChannel` use
-# [createOutputChannel](#window.createOutputChannel).
+# [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 OutputChannelProperties: class
 
     # name:
@@ -1886,10 +1942,10 @@ OutputChannelProperties: class
 
 
 # Represents a handle to a set of decorations
-# sharing the same [styling options](#DecorationRenderOptions) in a [text editor](#TextEditor).
+# sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
 # 
 # To get an instance of a `TextEditorDecorationType` use
-# [createTextEditorDecorationType](#window.createTextEditorDecorationType).
+# [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 TextEditorDecorationTypeProperties: class
 
     # key:

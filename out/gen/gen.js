@@ -529,6 +529,16 @@ function docFrom(from) {
                 ret.subs.push(sub);
         });
     }
+    let relined = false;
+    ret.lines = ret.lines.map(_ => {
+        if (_.startsWith("```")) {
+            relined = true;
+            return ("\n" + _ + "\n");
+        }
+        return _.replace("](#", "](https://code.visualstudio.com/api/references/vscode-api#");
+    });
+    if (relined)
+        ret.lines = ret.lines.join("\n").split("\n");
     return ret;
 }
 function docs(from) {

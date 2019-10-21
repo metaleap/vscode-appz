@@ -12,7 +12,7 @@
 	"description": "Exposes Visual Studio Code as a GUI layer to your written-in-[Go|C#|Python|your-lang-here] programs (for that sweet spot where printf/TUIs no longer suffice but a full-fledged Native App or reactive SPA would be overkill).",
 	"version": "1.38.1",
 	"engines": {
-		"vscode": "^1.38.1"
+		"vscode": "^1.39.1"
 	},
 	"categories": [
 		"Other"
@@ -57,10 +57,13 @@
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
 		"@types/node": "^12.7.5",
-		"@types/vscode": "^1.38.0",
-		"glob": "^7.1.4",
+		"@types/vscode": "^1.39.0",
+		"glob": "^7.1.5",
 		"tslint": "^5.20.0",
-		"typescript": "^3.6.3",
-		"vscode-test": "^1.2.0"
+		"typescript": "^3.6.4",
+		"vscode-test": "^1.2.0",
+		"typedoc": "0.15.0",
+		"typedoc-plugin-markdown": "2.2.11",
+		"concat-md": "0.3.2"
 	}
 }
