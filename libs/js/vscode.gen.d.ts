@@ -81,7 +81,7 @@ export declare enum OverviewRulerLane {
     Full = 7
 }
 /**
- * Type Definition for Visual Studio Code 1.38 Extension API
+ * Type Definition for Visual Studio Code 1.39 Extension API
  * See https://code.visualstudio.com/api for more information
 
  */
@@ -1401,7 +1401,7 @@ export interface ThemableDecorationRenderOptions {
     after?: ThemableDecorationAttachmentRenderOptions;
 }
 /**
- * Type Definition for Visual Studio Code 1.38 Extension API
+ * Type Definition for Visual Studio Code 1.39 Extension API
  * See https://code.visualstudio.com/api for more information
 
  */

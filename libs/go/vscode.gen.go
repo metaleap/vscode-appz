@@ -48,7 +48,7 @@ const (
 	OverviewRulerLaneFull OverviewRulerLane = 7
 )
 
-// Type Definition for Visual Studio Code 1.38 Extension API
+// Type Definition for Visual Studio Code 1.39 Extension API
 // See https://code.visualstudio.com/api for more information
 type Vscode interface {
 	// Namespace for dealing with the current window of the editor. That is visible
@@ -1104,7 +1104,7 @@ type ThemableDecorationRenderOptions struct {
 	After ThemableDecorationAttachmentRenderOptions `json:"after,omitempty"`
 }
 
-// Type Definition for Visual Studio Code 1.38 Extension API
+// Type Definition for Visual Studio Code 1.39 Extension API
 // See https://code.visualstudio.com/api for more information
 type ThemableDecorationAttachmentRenderOptions struct {
 	// Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.

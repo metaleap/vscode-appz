@@ -10,7 +10,8 @@ var OnError func(this Vscode, err any, jsonMsg any)
 ```
 Reports problems during the ongoing forever-looping stdin/stdout communication
 with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be
-`nil`. Any of its args must be checked for `nil`-ness by the `OnError` handler.
+`nil`. Any of its args must be checked for `nil`-ness by your custom `OnError`
+handler.
 
 `err` ── if an `error`, it occurred on the Go side (I/O or JSON), else some
 JSON-decoded Go value from whatever was transmitted as the problem data (if
@@ -954,7 +955,7 @@ type ThemableDecorationAttachmentRenderOptions struct {
 }
 ```
 
-Type Definition for Visual Studio Code 1.38 Extension API See
+Type Definition for Visual Studio Code 1.39 Extension API See
 https://code.visualstudio.com/api for more information
 
 #### type ThemableDecorationRenderOptions
@@ -1185,7 +1186,7 @@ type Vscode interface {
 }
 ```
 
-Type Definition for Visual Studio Code 1.38 Extension API See
+Type Definition for Visual Studio Code 1.39 Extension API See
 https://code.visualstudio.com/api for more information
 
 #### type Window

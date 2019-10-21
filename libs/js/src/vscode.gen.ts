@@ -100,7 +100,7 @@ export enum OverviewRulerLane {
 }
 
 /**
- * Type Definition for Visual Studio Code 1.38 Extension API
+ * Type Definition for Visual Studio Code 1.39 Extension API
  * See https://code.visualstudio.com/api for more information
 
  */
@@ -1599,7 +1599,7 @@ export interface ThemableDecorationRenderOptions {
 }
 
 /**
- * Type Definition for Visual Studio Code 1.38 Extension API
+ * Type Definition for Visual Studio Code 1.39 Extension API
  * See https://code.visualstudio.com/api for more information
 
  */

@@ -24,7 +24,7 @@ namespace VscAppz {
         /// <summary>
         /// Reports problems during the ongoing forever-looping stdin/stdout communication
         /// with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be `null`.
-        /// Any of its args must be checked for `null`-ness by the `OnError` handler.
+        /// Any of its args must be checked for `null`-ness by your `OnError` handler.
         ///
         /// `IVscode self`── the caller that encountered the problem being reported.
         ///

@@ -1,13 +1,10 @@
 import * as core from './core'
 import * as vscgen from './vscode.gen'
 
-
 /**
- * OnError Shows a selection list allowing multiple selections.
-
- * @param _this An array of strings, or a promise that resolves to an array of strings.
- * @param err Configures the behavior of the selection list.
- * @param jsonMsg A token that can be used to signal cancellation.
+ * Reports problems during the ongoing forever-looping stdin/stdout communication
+ * with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be `null` or `undefined`.
+ * Any of its args must be checked for `null`/`undefined`-ness by your `OnError` handler.
  */
 export let OnError = (_this: vscgen.Vscode, err: any, jsonMsg?: any): void => {
     process.stderr.write("err:\t" + err + "\njson:\t"
@@ -16,21 +13,16 @@ export let OnError = (_this: vscgen.Vscode, err: any, jsonMsg?: any): void => {
 }
 
 /**
- * Main Shows a selection list allowing multiple selections.
+ * Creates a `Vscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `process.stdin`, and `stdOut` defaulting to `process.stdout`), then loops forever to never `return`.
 
- * @param main An array of strings, or a promise that resolves to an array of strings.
- * @param stdIn Configures the behavior of the selection list.
- * @param stdOut A token that can be used to signal cancellation.
- * @return A promise that resolves to the selected items or `undefined`.
+ * @param main called whenever the counterparty demands, which usually means once at startup.
  */
 export function Main(main: (_: vscgen.Vscode) => void, stdIn?: NodeJS.ReadStream, stdOut?: NodeJS.WriteStream) {
     new core.impl(main, stdIn, stdOut)
 }
 
 /**
- * CancelIn Shows a selection list allowing multiple selections.
-
- * @param msFromNow An array of strings, or a promise that resolves to an array of strings.
+ * Returns a new `Cancel` with its `Now` already scheduled to be called in `msFromNow` milliseconds.
  */
 export function CancelIn(msFromNow: number) {
     return core.Cancel.In(msFromNow)
