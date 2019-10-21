@@ -518,6 +518,17 @@ export interface Window {
      * @return A new decoration type instance.
      */
     CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType) => void) => void
+
+    /**
+     * Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
+     * 
+     * Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+     * is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+     * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+
+     * @return A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
+     */
+    CreateInputBox: (_: (_: InputBox) => void) => void
 }
 
 /**
@@ -923,6 +934,161 @@ export interface Commands {
      * @return Thenable that resolves to a list of command ids.
      */
     GetCommands: (filterInternal: boolean) => (_: (_: string[]) => void) => void
+}
+
+/**
+ * Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
+
+ */
+export interface ThemableDecorationRenderOptions {
+    /**
+     * Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+     * Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
+
+     */
+    backgroundColor?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    outline?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'outline' for setting one or more of the individual outline properties.
+
+     */
+    outlineColor?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'outline' for setting one or more of the individual outline properties.
+
+     */
+    outlineStyle?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'outline' for setting one or more of the individual outline properties.
+
+     */
+    outlineWidth?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    border?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderColor?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderRadius?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderSpacing?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderStyle?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderWidth?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    fontStyle?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    fontWeight?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    textDecoration?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    cursor?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    color?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    opacity?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    letterSpacing?: string
+
+    /**
+     * An **absolute path** or an URI to an image to be rendered in the gutter.
+
+     */
+    gutterIconPath?: string
+
+    /**
+     * Specifies the size of the gutter icon.
+     * Available values are 'auto', 'contain', 'cover' and any percentage value.
+     * For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+
+     */
+    gutterIconSize?: string
+
+    /**
+     * The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.
+
+     */
+    overviewRulerColor?: string
+
+    /**
+     * Defines the rendering options of the attachment that is inserted before the decorated text.
+
+     */
+    before?: ThemableDecorationAttachmentRenderOptions
+
+    /**
+     * Defines the rendering options of the attachment that is inserted after the decorated text.
+
+     */
+    after?: ThemableDecorationAttachmentRenderOptions
 }
 
 /**
@@ -1406,6 +1572,86 @@ function newOutputChannel (): OutputChannel {
 }
 
 /**
+ * Type Definition for Visual Studio Code 1.39 Extension API
+ * See https://code.visualstudio.com/api for more information
+
+ */
+export interface ThemableDecorationAttachmentRenderOptions {
+    /**
+     * Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.
+
+     */
+    contentText?: string
+
+    /**
+     * An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
+     * or a text can be shown, but not both.
+
+     */
+    contentIconPath?: string
+
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    border?: string
+
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    borderColor?: string
+
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    fontStyle?: string
+
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    fontWeight?: string
+
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    textDecoration?: string
+
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    color?: string
+
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    backgroundColor?: string
+
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    margin?: string
+
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    width?: string
+
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    height?: string
+}
+
+/**
  * Represents rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
 
  */
@@ -1441,13 +1687,7 @@ export interface DecorationRenderOptions {
 
      */
     dark?: ThemableDecorationRenderOptions
-}
 
-/**
- * Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
-
- */
-export interface ThemableDecorationRenderOptions {
     /**
      * Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
      * Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
@@ -1599,86 +1839,6 @@ export interface ThemableDecorationRenderOptions {
 }
 
 /**
- * Type Definition for Visual Studio Code 1.39 Extension API
- * See https://code.visualstudio.com/api for more information
-
- */
-export interface ThemableDecorationAttachmentRenderOptions {
-    /**
-     * Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.
-
-     */
-    contentText?: string
-
-    /**
-     * An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
-     * or a text can be shown, but not both.
-
-     */
-    contentIconPath?: string
-
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    border?: string
-
-    /**
-     * CSS styling property that will be applied to text enclosed by a decoration.
-
-     */
-    borderColor?: string
-
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    fontStyle?: string
-
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    fontWeight?: string
-
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    textDecoration?: string
-
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    color?: string
-
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    backgroundColor?: string
-
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    margin?: string
-
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    width?: string
-
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    height?: string
-}
-
-/**
  * Represents a handle to a set of decorations
  * sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
  * 
@@ -1702,6 +1862,72 @@ function newTextEditorDecorationType (): TextEditorDecorationType {
     me.Dispose = () => TextEditorDecorationType_Dispose.call(me, )
     me.Get = () => TextEditorDecorationType_Get.call(me, )
     return me
+}
+
+/**
+ * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+ * 
+ * Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+ * is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+ * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+
+ */
+export interface InputBox extends fromJson, withDisp {
+    /**
+     * Makes the input UI visible in its current configuration. Any other input
+     * UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+
+     */
+    Show: () => (_: () => void) => void
+
+    /**
+     * Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+     * event.
+
+     */
+    Hide: () => (_: () => void) => void
+
+    /**
+     * Dispose of this input UI and any associated resources. If it is still
+     * visible, it is first hidden. After this call the input UI is no longer
+     * functional and no additional methods or properties on it should be
+     * accessed. Instead a new input UI should be created.
+
+     */
+    Dispose: () => (_: () => void) => void
+
+    Get: () => (_: (_: InputBoxProperties) => void) => void
+
+    Set: (_: InputBoxProperties) => (_: () => void) => void
+}
+
+function newInputBox (): InputBox {
+    let me: InputBox
+    me = { populateFrom: _ => InputBox_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBox
+    me.Show = () => InputBox_Show.call(me, )
+    me.Hide = () => InputBox_Hide.call(me, )
+    me.Dispose = () => InputBox_Dispose.call(me, )
+    me.Get = () => InputBox_Get.call(me, )
+    me.Set = (a0) => InputBox_Set.call(me, a0)
+    return me
+}
+
+/**
+ * Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
+
+ */
+export interface QuickInputButton {
+    /**
+     * Icon for the button.
+
+     */
+    iconPath: string
+
+    /**
+     * An optional tooltip.
+
+     */
+    tooltip?: string
 }
 
 /**
@@ -1978,6 +2204,129 @@ export interface TextEditorDecorationTypeProperties extends fromJson {
 export function newTextEditorDecorationTypeProperties (): TextEditorDecorationTypeProperties {
     let me: TextEditorDecorationTypeProperties
     me = { populateFrom: _ => TextEditorDecorationTypeProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as TextEditorDecorationTypeProperties
+    return me
+}
+
+/**
+ * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+ * 
+ * Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+ * is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+ * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+
+ */
+export interface InputBoxProperties extends fromJson {
+    /**
+     * Current input value.
+
+     */
+    value?: string
+
+    /**
+     * Optional placeholder in the filter text.
+
+     */
+    placeholder?: string
+
+    /**
+     * If the input value should be hidden. Defaults to false.
+
+     */
+    password?: boolean
+
+    /**
+     * An event signaling when the value has changed.
+
+     */
+    OnDidChangeValue: () => Event
+
+    /**
+     * An event signaling when the user indicated acceptance of the input value.
+
+     */
+    OnDidAccept: () => Event
+
+    /**
+     * Buttons for actions in the UI.
+
+     */
+    buttons?: QuickInputButton[]
+
+    /**
+     * An event signaling when a button was triggered.
+
+     */
+    OnDidTriggerButton: () => Event
+
+    /**
+     * An optional prompt text providing some ask or explanation to the user.
+
+     */
+    prompt?: string
+
+    /**
+     * An optional validation message indicating a problem with the current input value.
+
+     */
+    validationMessage?: string
+
+    /**
+     * An optional title.
+
+     */
+    title?: string
+
+    /**
+     * An optional current step count.
+
+     */
+    step?: number
+
+    /**
+     * An optional total step count.
+
+     */
+    totalSteps?: number
+
+    /**
+     * If the UI should allow for user input. Defaults to true.
+     * 
+     * Change this to false, e.g., while validating user input or
+     * loading data for the next step in user input.
+
+     */
+    enabled?: boolean
+
+    /**
+     * If the UI should show a progress indicator. Defaults to false.
+     * 
+     * Change this to true, e.g., while loading more data or validating
+     * user input.
+
+     */
+    busy?: boolean
+
+    /**
+     * If the UI should stay open even when loosing UI focus. Defaults to false.
+
+     */
+    ignoreFocusOut?: boolean
+
+    /**
+     * An event signaling when this input UI is hidden.
+     * 
+     * There are several reasons why this UI might have to be hidden and
+     * the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+     * (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+     * the user pressing Esc, some other input UI opening, etc.)
+
+     */
+    onDidHide?: Event
+}
+
+export function newInputBoxProperties (): InputBoxProperties {
+    let me: InputBoxProperties
+    me = { populateFrom: _ => InputBoxProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBoxProperties
     return me
 }
 
@@ -3134,6 +3483,35 @@ class implWindow extends implBase implements Window {
         }
         this.Impl().send(msg, onresp)
         return (a0: (_: TextEditorDecorationType) => void): void => {
+            onret = a0
+        }
+    }
+
+    CreateInputBox(): (_: (_: InputBox) => void) => void {
+        let msg: ipcMsg
+        msg = newipcMsg()
+        msg.QName = "window.createInputBox"
+        msg.Data = {}
+        let onresp: (_: any) => boolean
+        let onret: (_: InputBox) => void
+        onresp = (payload: any): boolean => {
+            let ok: boolean
+            let result: InputBox
+            if ((undefined !== payload && null !== payload)) {
+                result = newInputBox()
+                ok = result.populateFrom(payload)
+                if (!ok) {
+                    return false
+                }
+                result.disp.impl = this.Impl()
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
+            return true
+        }
+        this.Impl().send(msg, onresp)
+        return (a0: (_: InputBox) => void): void => {
             onret = a0
         }
     }
@@ -4364,6 +4742,109 @@ function TextEditorDecorationType_Get(this: TextEditorDecorationType, ): (_: (_:
     }
 }
 
+function InputBox_Show(this: InputBox, ): (_: () => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "InputBox.show"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let onresp: (_: any) => boolean
+    let onret: () => void
+    onresp = (payload: any): boolean => {
+        if ((undefined !== payload && null !== payload)) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: () => void): void => {
+        onret = a0
+    }
+}
+
+function InputBox_Hide(this: InputBox, ): (_: () => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "InputBox.hide"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let onresp: (_: any) => boolean
+    let onret: () => void
+    onresp = (payload: any): boolean => {
+        if ((undefined !== payload && null !== payload)) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: () => void): void => {
+        onret = a0
+    }
+}
+
+function InputBox_Dispose(this: InputBox, ): (_: () => void) => void {
+    return this.disp.Dispose()
+}
+
+function InputBox_Get(this: InputBox, ): (_: (_: InputBoxProperties) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "InputBox.appzObjPropsGet"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let onresp: (_: any) => boolean
+    let onret: (_: InputBoxProperties) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: InputBoxProperties
+        if ((undefined !== payload && null !== payload)) {
+            result = newInputBoxProperties()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result)
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: InputBoxProperties) => void): void => {
+        onret = a0
+    }
+}
+
+function InputBox_Set(this: InputBox, allUpdates: InputBoxProperties): (_: () => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "InputBox.appzObjPropsSet"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    msg.Data["allUpdates"] = allUpdates
+    let onresp: (_: any) => boolean
+    let onret: () => void
+    onresp = (payload: any): boolean => {
+        if ((undefined !== payload && null !== payload)) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: () => void): void => {
+        onret = a0
+    }
+}
+
 function MessageItem_populateFrom(this: MessageItem, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
@@ -4593,6 +5074,13 @@ function OutputChannel_populateFrom(this: OutputChannel, payload: any): boolean 
 }
 
 function TextEditorDecorationType_populateFrom(this: TextEditorDecorationType, payload: any): boolean {
+    let ok: boolean
+    this.disp = newDisposable()
+    ok = this.disp.populateFrom(payload)
+    return ok
+}
+
+function InputBox_populateFrom(this: InputBox, payload: any): boolean {
     let ok: boolean
     this.disp = newDisposable()
     ok = this.disp.populateFrom(payload)
@@ -5015,6 +5503,258 @@ function TextEditorDecorationTypeProperties_populateFrom(this: TextEditorDecorat
         this.Key = (): string => {
             return key
         }
+    }
+    return true
+}
+
+function InputBoxProperties_populateFrom(this: InputBoxProperties, payload: any): boolean {
+    let it: { [_: string]: any }
+    let ok: boolean
+    let val: any
+    [it, ok] = [payload as { [_: string]: any }, typeof payload === "object"]
+    if (!ok) {
+        return false
+    }
+    [val, ok] = [it["value"], undefined !== it["value"]]
+    if (ok) {
+        let value: string
+        if ((undefined !== val && null !== val)) {
+            [value, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.value = value
+    }
+    [val, ok] = [it["placeholder"], undefined !== it["placeholder"]]
+    if (ok) {
+        let placeholder: string
+        if ((undefined !== val && null !== val)) {
+            [placeholder, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.placeholder = placeholder
+    }
+    [val, ok] = [it["password"], undefined !== it["password"]]
+    if (ok) {
+        let password: boolean
+        if ((undefined !== val && null !== val)) {
+            [password, ok] = [val as boolean, typeof val === "boolean"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.password = password
+    }
+    [val, ok] = [it["onDidChangeValue"], undefined !== it["onDidChangeValue"]]
+    if (ok) {
+        let onDidChangeValue: Event
+        if ((undefined !== val && null !== val)) {
+            onDidChangeValue = newEvent()
+            ok = onDidChangeValue.populateFrom(val)
+            if (!ok) {
+                return false
+            }
+        }
+        this.OnDidChangeValue = (): Event => {
+            return onDidChangeValue
+        }
+    }
+    [val, ok] = [it["onDidAccept"], undefined !== it["onDidAccept"]]
+    if (ok) {
+        let onDidAccept: Event
+        if ((undefined !== val && null !== val)) {
+            onDidAccept = newEvent()
+            ok = onDidAccept.populateFrom(val)
+            if (!ok) {
+                return false
+            }
+        }
+        this.OnDidAccept = (): Event => {
+            return onDidAccept
+        }
+    }
+    [val, ok] = [it["buttons"], undefined !== it["buttons"]]
+    if (ok) {
+        let buttons: QuickInputButton[]
+        if ((undefined !== val && null !== val)) {
+            let __coll__buttons: any[]
+            [__coll__buttons, ok] = [val as any[], (typeof val === "object") && (typeof val["length"] === "number")]
+            if (!ok) {
+                return false
+            }
+            buttons = new Array(__coll__buttons.length)
+            let __idx__buttons: number
+            __idx__buttons = 0
+            for (const __item__buttons of __coll__buttons) {
+                let __val__buttons: QuickInputButton
+                __val__buttons = newQuickInputButton()
+                ok = __val__buttons.populateFrom(__item__buttons)
+                if (!ok) {
+                    return false
+                }
+                buttons[__idx__buttons] = __val__buttons
+                __idx__buttons = __idx__buttons + 1
+            }
+        }
+        this.buttons = buttons
+    }
+    [val, ok] = [it["onDidTriggerButton"], undefined !== it["onDidTriggerButton"]]
+    if (ok) {
+        let onDidTriggerButton: Event
+        if ((undefined !== val && null !== val)) {
+            onDidTriggerButton = newEvent()
+            ok = onDidTriggerButton.populateFrom(val)
+            if (!ok) {
+                return false
+            }
+        }
+        this.OnDidTriggerButton = (): Event => {
+            return onDidTriggerButton
+        }
+    }
+    [val, ok] = [it["prompt"], undefined !== it["prompt"]]
+    if (ok) {
+        let prompt: string
+        if ((undefined !== val && null !== val)) {
+            [prompt, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.prompt = prompt
+    }
+    [val, ok] = [it["validationMessage"], undefined !== it["validationMessage"]]
+    if (ok) {
+        let validationMessage: string
+        if ((undefined !== val && null !== val)) {
+            [validationMessage, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.validationMessage = validationMessage
+    }
+    [val, ok] = [it["title"], undefined !== it["title"]]
+    if (ok) {
+        let title: string
+        if ((undefined !== val && null !== val)) {
+            [title, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.title = title
+    }
+    [val, ok] = [it["step"], undefined !== it["step"]]
+    if (ok) {
+        let step: number
+        if ((undefined !== val && null !== val)) {
+            let _step_: number
+            [_step_, ok] = [val as number, typeof val === "number"]
+            if (!ok) {
+                return false
+            }
+            step = _step_
+        }
+        this.step = step
+    }
+    [val, ok] = [it["totalSteps"], undefined !== it["totalSteps"]]
+    if (ok) {
+        let totalSteps: number
+        if ((undefined !== val && null !== val)) {
+            let _totalSteps_: number
+            [_totalSteps_, ok] = [val as number, typeof val === "number"]
+            if (!ok) {
+                return false
+            }
+            totalSteps = _totalSteps_
+        }
+        this.totalSteps = totalSteps
+    }
+    [val, ok] = [it["enabled"], undefined !== it["enabled"]]
+    if (ok) {
+        let enabled: boolean
+        if ((undefined !== val && null !== val)) {
+            [enabled, ok] = [val as boolean, typeof val === "boolean"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.enabled = enabled
+    }
+    [val, ok] = [it["busy"], undefined !== it["busy"]]
+    if (ok) {
+        let busy: boolean
+        if ((undefined !== val && null !== val)) {
+            [busy, ok] = [val as boolean, typeof val === "boolean"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.busy = busy
+    }
+    [val, ok] = [it["ignoreFocusOut"], undefined !== it["ignoreFocusOut"]]
+    if (ok) {
+        let ignoreFocusOut: boolean
+        if ((undefined !== val && null !== val)) {
+            [ignoreFocusOut, ok] = [val as boolean, typeof val === "boolean"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.ignoreFocusOut = ignoreFocusOut
+    }
+    [val, ok] = [it["onDidHide"], undefined !== it["onDidHide"]]
+    if (ok) {
+        let onDidHide: Event
+        if ((undefined !== val && null !== val)) {
+            onDidHide = newEvent()
+            ok = onDidHide.populateFrom(val)
+            if (!ok) {
+                return false
+            }
+        }
+        this.onDidHide = onDidHide
+    }
+    return true
+}
+
+function QuickInputButton_populateFrom(this: QuickInputButton, payload: any): boolean {
+    let it: { [_: string]: any }
+    let ok: boolean
+    let val: any
+    [it, ok] = [payload as { [_: string]: any }, typeof payload === "object"]
+    if (!ok) {
+        return false
+    }
+    [val, ok] = [it["iconPath"], undefined !== it["iconPath"]]
+    if (ok) {
+        let iconPath: string
+        if ((undefined !== val && null !== val)) {
+            [iconPath, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.iconPath = iconPath
+    } else {
+        return false
+    }
+    [val, ok] = [it["tooltip"], undefined !== it["tooltip"]]
+    if (ok) {
+        let tooltip: string
+        if ((undefined !== val && null !== val)) {
+            let _tooltip_: string
+            [_tooltip_, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+            tooltip = _tooltip_
+        }
+        this.tooltip = tooltip
     }
     return true
 }

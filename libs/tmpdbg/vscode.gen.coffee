@@ -632,6 +632,17 @@ Window: interface
     CreateTextEditorDecorationType: ((?TextEditorDecorationType->void)->void)
         options: DecorationRenderOptions
 
+    # createInputBox:
+    # Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
+    # 
+    # Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+    # is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+    # when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+    #
+    # @return:
+    # A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
+    CreateInputBox: ((?InputBox->void)->void)
+
 
 
 
@@ -1063,6 +1074,161 @@ Commands: interface
 
 
 
+# Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
+ThemableDecorationRenderOptions: class
+
+    # backgroundColor:
+    # Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+    # Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
+    #
+    # JSON FLAGS: {"Name":"backgroundColor","Required":false,"Excluded":false}
+    BackgroundColor: ?string
+
+    # outline:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    #
+    # JSON FLAGS: {"Name":"outline","Required":false,"Excluded":false}
+    Outline: ?string
+
+    # outlineColor:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    # Better use 'outline' for setting one or more of the individual outline properties.
+    #
+    # JSON FLAGS: {"Name":"outlineColor","Required":false,"Excluded":false}
+    OutlineColor: ?string
+
+    # outlineStyle:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    # Better use 'outline' for setting one or more of the individual outline properties.
+    #
+    # JSON FLAGS: {"Name":"outlineStyle","Required":false,"Excluded":false}
+    OutlineStyle: ?string
+
+    # outlineWidth:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    # Better use 'outline' for setting one or more of the individual outline properties.
+    #
+    # JSON FLAGS: {"Name":"outlineWidth","Required":false,"Excluded":false}
+    OutlineWidth: ?string
+
+    # border:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    #
+    # JSON FLAGS: {"Name":"border","Required":false,"Excluded":false}
+    Border: ?string
+
+    # borderColor:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    # Better use 'border' for setting one or more of the individual border properties.
+    #
+    # JSON FLAGS: {"Name":"borderColor","Required":false,"Excluded":false}
+    BorderColor: ?string
+
+    # borderRadius:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    # Better use 'border' for setting one or more of the individual border properties.
+    #
+    # JSON FLAGS: {"Name":"borderRadius","Required":false,"Excluded":false}
+    BorderRadius: ?string
+
+    # borderSpacing:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    # Better use 'border' for setting one or more of the individual border properties.
+    #
+    # JSON FLAGS: {"Name":"borderSpacing","Required":false,"Excluded":false}
+    BorderSpacing: ?string
+
+    # borderStyle:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    # Better use 'border' for setting one or more of the individual border properties.
+    #
+    # JSON FLAGS: {"Name":"borderStyle","Required":false,"Excluded":false}
+    BorderStyle: ?string
+
+    # borderWidth:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    # Better use 'border' for setting one or more of the individual border properties.
+    #
+    # JSON FLAGS: {"Name":"borderWidth","Required":false,"Excluded":false}
+    BorderWidth: ?string
+
+    # fontStyle:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    #
+    # JSON FLAGS: {"Name":"fontStyle","Required":false,"Excluded":false}
+    FontStyle: ?string
+
+    # fontWeight:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    #
+    # JSON FLAGS: {"Name":"fontWeight","Required":false,"Excluded":false}
+    FontWeight: ?string
+
+    # textDecoration:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    #
+    # JSON FLAGS: {"Name":"textDecoration","Required":false,"Excluded":false}
+    TextDecoration: ?string
+
+    # cursor:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    #
+    # JSON FLAGS: {"Name":"cursor","Required":false,"Excluded":false}
+    Cursor: ?string
+
+    # color:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    #
+    # JSON FLAGS: {"Name":"color","Required":false,"Excluded":false}
+    Color: ?string
+
+    # opacity:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    #
+    # JSON FLAGS: {"Name":"opacity","Required":false,"Excluded":false}
+    Opacity: ?string
+
+    # letterSpacing:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    #
+    # JSON FLAGS: {"Name":"letterSpacing","Required":false,"Excluded":false}
+    LetterSpacing: ?string
+
+    # gutterIconPath:
+    # An **absolute path** or an URI to an image to be rendered in the gutter.
+    #
+    # JSON FLAGS: {"Name":"gutterIconPath","Required":false,"Excluded":false}
+    GutterIconPath: ?string
+
+    # gutterIconSize:
+    # Specifies the size of the gutter icon.
+    # Available values are 'auto', 'contain', 'cover' and any percentage value.
+    # For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+    #
+    # JSON FLAGS: {"Name":"gutterIconSize","Required":false,"Excluded":false}
+    GutterIconSize: ?string
+
+    # overviewRulerColor:
+    # The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.
+    #
+    # JSON FLAGS: {"Name":"overviewRulerColor","Required":false,"Excluded":false}
+    OverviewRulerColor: ?string
+
+    # before:
+    # Defines the rendering options of the attachment that is inserted before the decorated text.
+    #
+    # JSON FLAGS: {"Name":"before","Required":false,"Excluded":false}
+    Before: ?ThemableDecorationAttachmentRenderOptions
+
+    # after:
+    # Defines the rendering options of the attachment that is inserted after the decorated text.
+    #
+    # JSON FLAGS: {"Name":"after","Required":false,"Excluded":false}
+    After: ?ThemableDecorationAttachmentRenderOptions
+
+
+
+
 # Options to configure the behavior of the message.
 MessageOptions: class
 
@@ -1433,6 +1599,86 @@ OutputChannel: class
 
 
 
+# Type Definition for Visual Studio Code 1.39 Extension API
+# See https://code.visualstudio.com/api for more information
+ThemableDecorationAttachmentRenderOptions: class
+
+    # contentText:
+    # Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.
+    #
+    # JSON FLAGS: {"Name":"contentText","Required":false,"Excluded":false}
+    ContentText: ?string
+
+    # contentIconPath:
+    # An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
+    # or a text can be shown, but not both.
+    #
+    # JSON FLAGS: {"Name":"contentIconPath","Required":false,"Excluded":false}
+    ContentIconPath: ?string
+
+    # border:
+    # CSS styling property that will be applied to the decoration attachment.
+    #
+    # JSON FLAGS: {"Name":"border","Required":false,"Excluded":false}
+    Border: ?string
+
+    # borderColor:
+    # CSS styling property that will be applied to text enclosed by a decoration.
+    #
+    # JSON FLAGS: {"Name":"borderColor","Required":false,"Excluded":false}
+    BorderColor: ?string
+
+    # fontStyle:
+    # CSS styling property that will be applied to the decoration attachment.
+    #
+    # JSON FLAGS: {"Name":"fontStyle","Required":false,"Excluded":false}
+    FontStyle: ?string
+
+    # fontWeight:
+    # CSS styling property that will be applied to the decoration attachment.
+    #
+    # JSON FLAGS: {"Name":"fontWeight","Required":false,"Excluded":false}
+    FontWeight: ?string
+
+    # textDecoration:
+    # CSS styling property that will be applied to the decoration attachment.
+    #
+    # JSON FLAGS: {"Name":"textDecoration","Required":false,"Excluded":false}
+    TextDecoration: ?string
+
+    # color:
+    # CSS styling property that will be applied to the decoration attachment.
+    #
+    # JSON FLAGS: {"Name":"color","Required":false,"Excluded":false}
+    Color: ?string
+
+    # backgroundColor:
+    # CSS styling property that will be applied to the decoration attachment.
+    #
+    # JSON FLAGS: {"Name":"backgroundColor","Required":false,"Excluded":false}
+    BackgroundColor: ?string
+
+    # margin:
+    # CSS styling property that will be applied to the decoration attachment.
+    #
+    # JSON FLAGS: {"Name":"margin","Required":false,"Excluded":false}
+    Margin: ?string
+
+    # width:
+    # CSS styling property that will be applied to the decoration attachment.
+    #
+    # JSON FLAGS: {"Name":"width","Required":false,"Excluded":false}
+    Width: ?string
+
+    # height:
+    # CSS styling property that will be applied to the decoration attachment.
+    #
+    # JSON FLAGS: {"Name":"height","Required":false,"Excluded":false}
+    Height: ?string
+
+
+
+
 # Represents rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
 DecorationRenderOptions: class
 
@@ -1467,12 +1713,6 @@ DecorationRenderOptions: class
     #
     # JSON FLAGS: {"Name":"dark","Required":false,"Excluded":false}
     Dark: ?ThemableDecorationRenderOptions
-
-
-
-
-# Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
-ThemableDecorationRenderOptions: class
 
     # backgroundColor:
     # Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
@@ -1626,86 +1866,6 @@ ThemableDecorationRenderOptions: class
 
 
 
-# Type Definition for Visual Studio Code 1.39 Extension API
-# See https://code.visualstudio.com/api for more information
-ThemableDecorationAttachmentRenderOptions: class
-
-    # contentText:
-    # Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.
-    #
-    # JSON FLAGS: {"Name":"contentText","Required":false,"Excluded":false}
-    ContentText: ?string
-
-    # contentIconPath:
-    # An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
-    # or a text can be shown, but not both.
-    #
-    # JSON FLAGS: {"Name":"contentIconPath","Required":false,"Excluded":false}
-    ContentIconPath: ?string
-
-    # border:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"border","Required":false,"Excluded":false}
-    Border: ?string
-
-    # borderColor:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"borderColor","Required":false,"Excluded":false}
-    BorderColor: ?string
-
-    # fontStyle:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"fontStyle","Required":false,"Excluded":false}
-    FontStyle: ?string
-
-    # fontWeight:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"fontWeight","Required":false,"Excluded":false}
-    FontWeight: ?string
-
-    # textDecoration:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"textDecoration","Required":false,"Excluded":false}
-    TextDecoration: ?string
-
-    # color:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"color","Required":false,"Excluded":false}
-    Color: ?string
-
-    # backgroundColor:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"backgroundColor","Required":false,"Excluded":false}
-    BackgroundColor: ?string
-
-    # margin:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"margin","Required":false,"Excluded":false}
-    Margin: ?string
-
-    # width:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"width","Required":false,"Excluded":false}
-    Width: ?string
-
-    # height:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"height","Required":false,"Excluded":false}
-    Height: ?string
-
-
-
-
 # Represents a handle to a set of decorations
 # sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
 # 
@@ -1716,6 +1876,38 @@ TextEditorDecorationType: class
     #
     # JSON FLAGS: undefined
     disp: ?Disposable
+
+
+
+
+# A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+# 
+# Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+# is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+# when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+InputBox: class
+
+    #
+    # JSON FLAGS: undefined
+    disp: ?Disposable
+
+
+
+
+# Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
+QuickInputButton: class
+
+    # iconPath:
+    # Icon for the button.
+    #
+    # JSON FLAGS: {"Name":"iconPath","Required":true,"Excluded":false}
+    IconPath: string
+
+    # tooltip:
+    # An optional tooltip.
+    #
+    # JSON FLAGS: {"Name":"tooltip","Required":false,"Excluded":false}
+    Tooltip: ?string
 
 
 
@@ -1953,6 +2145,123 @@ TextEditorDecorationTypeProperties: class
     #
     # JSON FLAGS: {"Name":"key","Required":false,"Excluded":true}
     Key: (->string)
+
+
+
+
+# A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+# 
+# Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+# is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+# when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+InputBoxProperties: class
+
+    # value:
+    # Current input value.
+    #
+    # JSON FLAGS: {"Name":"value","Required":false,"Excluded":false}
+    Value: string
+
+    # placeholder:
+    # Optional placeholder in the filter text.
+    #
+    # JSON FLAGS: {"Name":"placeholder","Required":false,"Excluded":false}
+    Placeholder: string
+
+    # password:
+    # If the input value should be hidden. Defaults to false.
+    #
+    # JSON FLAGS: {"Name":"password","Required":false,"Excluded":false}
+    Password: bool
+
+    # onDidChangeValue:
+    # An event signaling when the value has changed.
+    #
+    # JSON FLAGS: {"Name":"onDidChangeValue","Required":false,"Excluded":true}
+    OnDidChangeValue: (->Event)
+
+    # onDidAccept:
+    # An event signaling when the user indicated acceptance of the input value.
+    #
+    # JSON FLAGS: {"Name":"onDidAccept","Required":false,"Excluded":true}
+    OnDidAccept: (->Event)
+
+    # buttons:
+    # Buttons for actions in the UI.
+    #
+    # JSON FLAGS: {"Name":"buttons","Required":false,"Excluded":false}
+    Buttons: ?[QuickInputButton]
+
+    # onDidTriggerButton:
+    # An event signaling when a button was triggered.
+    #
+    # JSON FLAGS: {"Name":"onDidTriggerButton","Required":false,"Excluded":true}
+    OnDidTriggerButton: (->Event)
+
+    # prompt:
+    # An optional prompt text providing some ask or explanation to the user.
+    #
+    # JSON FLAGS: {"Name":"prompt","Required":false,"Excluded":false}
+    Prompt: string
+
+    # validationMessage:
+    # An optional validation message indicating a problem with the current input value.
+    #
+    # JSON FLAGS: {"Name":"validationMessage","Required":false,"Excluded":false}
+    ValidationMessage: string
+
+    # title:
+    # An optional title.
+    #
+    # JSON FLAGS: {"Name":"title","Required":false,"Excluded":false}
+    Title: string
+
+    # step:
+    # An optional current step count.
+    #
+    # JSON FLAGS: {"Name":"step","Required":false,"Excluded":false}
+    Step: ?int
+
+    # totalSteps:
+    # An optional total step count.
+    #
+    # JSON FLAGS: {"Name":"totalSteps","Required":false,"Excluded":false}
+    TotalSteps: ?int
+
+    # enabled:
+    # If the UI should allow for user input. Defaults to true.
+    # 
+    # Change this to false, e.g., while validating user input or
+    # loading data for the next step in user input.
+    #
+    # JSON FLAGS: {"Name":"enabled","Required":false,"Excluded":false}
+    Enabled: bool
+
+    # busy:
+    # If the UI should show a progress indicator. Defaults to false.
+    # 
+    # Change this to true, e.g., while loading more data or validating
+    # user input.
+    #
+    # JSON FLAGS: {"Name":"busy","Required":false,"Excluded":false}
+    Busy: bool
+
+    # ignoreFocusOut:
+    # If the UI should stay open even when loosing UI focus. Defaults to false.
+    #
+    # JSON FLAGS: {"Name":"ignoreFocusOut","Required":false,"Excluded":false}
+    IgnoreFocusOut: bool
+
+    # onDidHide:
+    # An event signaling when this input UI is hidden.
+    # 
+    # There are several reasons why this UI might have to be hidden and
+    # the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+    # (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+    # the user pressing Esc, some other input UI opening, etc.)
+    #
+    # JSON FLAGS: {"Name":"onDidHide","Required":false,"Excluded":false}
+    OnDidHide: ?Event
 
 
 
@@ -3021,6 +3330,34 @@ Window·CreateTextEditorDecorationType: (options:DecorationRenderOptions -> ((?T
     
     this.Impl().send(msg, onresp)
     return (a0:(?TextEditorDecorationType->void) -> void)
+        onret = a0
+    
+
+
+
+
+Window·CreateInputBox: ( -> ((?InputBox->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "window.createInputBox"
+    msg.Data = dict·new(0)
+    var onresp of (any->bool)
+    var onret of (?InputBox->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?InputBox
+        if =?payload
+            result = ?InputBox·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+            result.disp.impl = this.Impl()
+        if =?onret
+            onret(result)
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?InputBox->void) -> void)
         onret = a0
     
 
@@ -4182,6 +4519,110 @@ TextEditorDecorationType·Get: ( -> ((TextEditorDecorationTypeProperties->void)-
 
 
 
+InputBox·Show: ( -> ((void->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "InputBox.show"
+    msg.Data = dict·new(1)
+    msg.Data@"" = this.disp.id
+    var onresp of (any->bool)
+    var onret of (void->void)
+    onresp = (payload:any -> bool)
+        if =?payload
+            return false
+        if =?onret
+            onret()
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(void->void) -> void)
+        onret = a0
+    
+
+
+
+
+InputBox·Hide: ( -> ((void->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "InputBox.hide"
+    msg.Data = dict·new(1)
+    msg.Data@"" = this.disp.id
+    var onresp of (any->bool)
+    var onret of (void->void)
+    onresp = (payload:any -> bool)
+        if =?payload
+            return false
+        if =?onret
+            onret()
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(void->void) -> void)
+        onret = a0
+    
+
+
+
+
+InputBox·Dispose: ( -> ((void->void)->void))
+    return this.disp.Dispose()
+
+
+
+
+InputBox·Get: ( -> ((InputBoxProperties->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "InputBox.appzObjPropsGet"
+    msg.Data = dict·new(1)
+    msg.Data@"" = this.disp.id
+    var onresp of (any->bool)
+    var onret of (InputBoxProperties->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of InputBoxProperties
+        if =?payload
+            result = InputBoxProperties·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        if =?onret
+            onret(result)
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(InputBoxProperties->void) -> void)
+        onret = a0
+    
+
+
+
+
+InputBox·Set: (allUpdates:InputBoxProperties -> ((void->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "InputBox.appzObjPropsSet"
+    msg.Data = dict·new(2)
+    msg.Data@"" = this.disp.id
+    msg.Data@"allUpdates" = allUpdates
+    var onresp of (any->bool)
+    var onret of (void->void)
+    onresp = (payload:any -> bool)
+        if =?payload
+            return false
+        if =?onret
+            onret()
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(void->void) -> void)
+        onret = a0
+    
+
+
+
+
 MessageItem·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
@@ -4379,6 +4820,15 @@ OutputChannel·populateFrom: (payload:any -> bool)
 
 
 TextEditorDecorationType·populateFrom: (payload:any -> bool)
+    var ok of bool
+    this.disp = ?Disposable·new
+    ok = this.disp.populateFrom(payload)
+    return ok
+
+
+
+
+InputBox·populateFrom: (payload:any -> bool)
     var ok of bool
     this.disp = ?Disposable·new
     ok = this.disp.populateFrom(payload)
@@ -4733,6 +5183,204 @@ TextEditorDecorationTypeProperties·populateFrom: (payload:any -> bool)
         this.Key = ( -> string)
             return key
         
+    return true
+
+
+
+
+InputBoxProperties·populateFrom: (payload:any -> bool)
+    var it of dict
+    var ok of bool
+    var val of any
+    [it, ok] = ((payload)·(dict))
+    if !ok
+        return false
+    [val, ok] = it@?"value"
+    if ok
+        var value of string
+        if =?val
+            [value, ok] = ((val)·(string))
+            if !ok
+                return false
+        this.Value = value
+    [val, ok] = it@?"placeholder"
+    if ok
+        var placeholder of string
+        if =?val
+            [placeholder, ok] = ((val)·(string))
+            if !ok
+                return false
+        this.Placeholder = placeholder
+    [val, ok] = it@?"password"
+    if ok
+        var password of bool
+        if =?val
+            [password, ok] = ((val)·(bool))
+            if !ok
+                return false
+        this.Password = password
+    [val, ok] = it@?"onDidChangeValue"
+    if ok
+        var onDidChangeValue of Event
+        if =?val
+            onDidChangeValue = Event·new
+            ok = onDidChangeValue.populateFrom(val)
+            if !ok
+                return false
+        this.OnDidChangeValue = ( -> Event)
+            return onDidChangeValue
+        
+    [val, ok] = it@?"onDidAccept"
+    if ok
+        var onDidAccept of Event
+        if =?val
+            onDidAccept = Event·new
+            ok = onDidAccept.populateFrom(val)
+            if !ok
+                return false
+        this.OnDidAccept = ( -> Event)
+            return onDidAccept
+        
+    [val, ok] = it@?"buttons"
+    if ok
+        var buttons of ?[QuickInputButton]
+        if =?val
+            var __coll__buttons of [any]
+            [__coll__buttons, ok] = ((val)·([any]))
+            if !ok
+                return false
+            buttons = [QuickInputButton]·new(__coll__buttons·len)
+            var __idx__buttons of int
+            __idx__buttons = 0
+            for __item__buttons in __coll__buttons
+                var __val__buttons of QuickInputButton
+                __val__buttons = QuickInputButton·new
+                ok = __val__buttons.populateFrom(__item__buttons)
+                if !ok
+                    return false
+                buttons@__idx__buttons = __val__buttons
+                __idx__buttons = __idx__buttons + 1
+        this.Buttons = buttons
+    [val, ok] = it@?"onDidTriggerButton"
+    if ok
+        var onDidTriggerButton of Event
+        if =?val
+            onDidTriggerButton = Event·new
+            ok = onDidTriggerButton.populateFrom(val)
+            if !ok
+                return false
+        this.OnDidTriggerButton = ( -> Event)
+            return onDidTriggerButton
+        
+    [val, ok] = it@?"prompt"
+    if ok
+        var prompt of string
+        if =?val
+            [prompt, ok] = ((val)·(string))
+            if !ok
+                return false
+        this.Prompt = prompt
+    [val, ok] = it@?"validationMessage"
+    if ok
+        var validationMessage of string
+        if =?val
+            [validationMessage, ok] = ((val)·(string))
+            if !ok
+                return false
+        this.ValidationMessage = validationMessage
+    [val, ok] = it@?"title"
+    if ok
+        var title of string
+        if =?val
+            [title, ok] = ((val)·(string))
+            if !ok
+                return false
+        this.Title = title
+    [val, ok] = it@?"step"
+    if ok
+        var step of ?int
+        if =?val
+            var _step_ of int
+            [_step_, ok] = ((val)·(int))
+            if !ok
+                return false
+            step = &_step_
+        this.Step = step
+    [val, ok] = it@?"totalSteps"
+    if ok
+        var totalSteps of ?int
+        if =?val
+            var _totalSteps_ of int
+            [_totalSteps_, ok] = ((val)·(int))
+            if !ok
+                return false
+            totalSteps = &_totalSteps_
+        this.TotalSteps = totalSteps
+    [val, ok] = it@?"enabled"
+    if ok
+        var enabled of bool
+        if =?val
+            [enabled, ok] = ((val)·(bool))
+            if !ok
+                return false
+        this.Enabled = enabled
+    [val, ok] = it@?"busy"
+    if ok
+        var busy of bool
+        if =?val
+            [busy, ok] = ((val)·(bool))
+            if !ok
+                return false
+        this.Busy = busy
+    [val, ok] = it@?"ignoreFocusOut"
+    if ok
+        var ignoreFocusOut of bool
+        if =?val
+            [ignoreFocusOut, ok] = ((val)·(bool))
+            if !ok
+                return false
+        this.IgnoreFocusOut = ignoreFocusOut
+    [val, ok] = it@?"onDidHide"
+    if ok
+        var onDidHide of ?Event
+        if =?val
+            onDidHide = ?Event·new
+            ok = onDidHide.populateFrom(val)
+            if !ok
+                return false
+        this.OnDidHide = onDidHide
+    return true
+
+
+
+
+QuickInputButton·populateFrom: (payload:any -> bool)
+    var it of dict
+    var ok of bool
+    var val of any
+    [it, ok] = ((payload)·(dict))
+    if !ok
+        return false
+    [val, ok] = it@?"iconPath"
+    if ok
+        var iconPath of string
+        if =?val
+            [iconPath, ok] = ((val)·(string))
+            if !ok
+                return false
+        this.IconPath = iconPath
+    else
+        return false
+    [val, ok] = it@?"tooltip"
+    if ok
+        var tooltip of ?string
+        if =?val
+            var _tooltip_ of string
+            [_tooltip_, ok] = ((val)·(string))
+            if !ok
+                return false
+            tooltip = &_tooltip_
+        this.Tooltip = tooltip
     return true
 
 

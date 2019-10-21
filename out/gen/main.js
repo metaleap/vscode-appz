@@ -36,6 +36,7 @@ const genApiSurface = {
                 'createStatusBarItem',
                 'createOutputChannel',
                 'createTextEditorDecorationType',
+                'createInputBox',
             ],
             'env': [
                 'openExternal',
@@ -83,10 +84,10 @@ function main() {
                 md = null;
         });
         if (!md)
-            throw "GONE FROM API:\tmodule `" + modulename + '`';
+            throw "GONE FROM API:\tmodule `" + modulename + "`";
         else {
             const job = {
-                fromOrig: md, moduleName: modulename, enums: [], structs: [], funcs: [], namespaces: {}
+                fromOrig: md, moduleName: modulename, enums: [], structs: [], funcs: [], namespaces: {}, mereBaseTypes: []
             };
             gatherAll(job, md.body, genApiSurface[modulename], modulename);
             const prep = new gen.Prep(job);
@@ -96,8 +97,8 @@ function main() {
     }
 }
 function gatherAll(into, astNode, childItems, ...prefixes) {
-    for (const item of childItems)
-        if (typeof item !== 'string') {
+    for (const item of childItems) {
+        if (typeof item !== "string") {
             for (const subns in item) {
                 let ns, vd;
                 astNode.forEachChild(n => {
@@ -117,11 +118,11 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                 if (vd)
                     gatherAll(into, vd, item[subns], ...prefixes.concat(subns));
                 else if (ns) {
-                    into.namespaces[prefixes.slice(1).concat(subns).join('.')] = ns;
+                    into.namespaces[prefixes.slice(1).concat(subns).join(".")] = ns;
                     gatherAll(into, ns.body, item[subns], ...prefixes.concat(subns));
                 }
                 else
-                    throw "GONE FROM API:\tnamespace `" + prefixes.join('.') + '.' + subns + '`';
+                    throw "GONE FROM API:\tnamespace `" + prefixes.join(".") + "." + subns + "`";
             }
         }
         else {
@@ -133,7 +134,7 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                     const declfun = decl;
                     if ((!declfun) || (!declfun.parameters) || !declfun.parameters.find(_ => {
                         const t = _.type;
-                        return (t && t.typeName && t.typeName.getText() === 'Thenable');
+                        return (t && t.typeName && t.typeName.getText() === "Thenable");
                     }))
                         members.push(n);
                 }
@@ -150,7 +151,7 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                                         if (nname && nname.getText() === item && nsubsub.getChildCount() > 2) {
                                             const ntype = nsubsub.getChildAt(2);
                                             const ntyperef = nsubsub.getChildAt(2);
-                                            if (ntyperef && ntyperef.typeName && ntyperef.typeName.getText() === 'Event' && ntyperef.typeArguments && ntyperef.typeArguments.length) {
+                                            if (ntyperef && ntyperef.typeName && ntyperef.typeName.getText() === "Event" && ntyperef.typeArguments && ntyperef.typeArguments.length) {
                                                 const n = nsubsub;
                                                 [n.EvtName, n.EvtArgs] = [item, ntyperef.typeArguments.filter(_ => _.kind !== ts.SyntaxKind.VoidKeyword).map(_ => _)];
                                                 members.push(n);
@@ -181,16 +182,17 @@ function gatherAll(into, astNode, childItems, ...prefixes) {
                     for (const mem of iface.members)
                         if (ts.isMethodSignature(mem) && mem.name.getText() === item) {
                             members.push(mem);
-                            into.namespaces[prefixes.slice(1).join('.')] = iface;
+                            into.namespaces[prefixes.slice(1).join(".")] = iface;
                         }
             }
             if (!members.length)
-                throw "GONE FROM API:\texport `" + prefixes.join('.') + '.' + item + '`' + astNode.kind;
+                throw "GONE FROM API:\texport `" + prefixes.join(".") + "." + item + "` (kind=" + astNode.kind + ")";
             else
                 for (let i = 0; i < members.length; i++)
                     if (!gen.seemsDeprecated(members[i]))
                         gatherMember(into, members[i], (members.length === 1) ? 0 : (i + 1), ...prefixes);
         }
+    }
 }
 function gatherMember(into, member, overload, ...prefixes) {
     const evt = member, prop = member;
@@ -223,7 +225,7 @@ function gatherMember(into, member, overload, ...prefixes) {
                 gatherFromTypeNode(into, talias.type, talias.typeParameters);
                 break;
             default:
-                throw member.kind + '\t' + member.getText();
+                throw member.kind + "\t" + member.getText();
         }
 }
 function gatherFromTypeElem(into, it, typeParams = undefined) {
@@ -258,7 +260,7 @@ function gatherFromTypeNode(into, it, typeParams = undefined) {
         case ts.SyntaxKind.LiteralType:
             const lit = it.literal;
             if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(lit.kind))
-                throw lit.kind + '\t' + it.getText();
+                throw lit.kind + "\t" + it.getText();
             break;
         case ts.SyntaxKind.TypeReference:
             const tref = it, tname = tref.typeName.getText();
@@ -268,9 +270,9 @@ function gatherFromTypeNode(into, it, typeParams = undefined) {
                 if (tnode)
                     gatherAll(into, into.fromOrig.body, [tnode.getText()], into.moduleName);
             }
-            else if (tname === 'Thenable' || tname === 'ReadonlyArray')
+            else if (tname === "Thenable" || tname === "ReadonlyArray")
                 tref.typeArguments.forEach(_ => gatherFromTypeNode(into, _, typeParams));
-            else if (tname !== 'Uri' && tname !== 'CancellationToken' && tname !== 'Disposable')
+            else if (tname !== "Uri" && tname !== "ThemeIcon" && tname !== "CancellationToken" && tname !== "Disposable" && /* crikey!.. */ tname.length > 1)
                 gatherAll(into, into.fromOrig.body, [tname], into.moduleName);
             break;
         case ts.SyntaxKind.FunctionType:
@@ -284,53 +286,66 @@ function gatherFromTypeNode(into, it, typeParams = undefined) {
             break;
         default:
             if (![ts.SyntaxKind.AnyKeyword, ts.SyntaxKind.VoidKeyword, ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.NumberKeyword, ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword].includes(it.kind))
-                throw it.kind + '\t' + it.getText();
+                throw it.kind + "\t" + it.getText();
     }
 }
 function gatherFunc(into, decl, overload, ...prefixes) {
-    const qname = prefixes.concat(decl.name.getText()).join('.');
+    const qname = prefixes.concat(decl.name.getText()).join(".");
     if (into.funcs.some(_ => _.qName === qname && _.overload === overload))
         return;
-    const owner = into.namespaces[prefixes.slice(1).join('.')];
+    const owner = into.namespaces[prefixes.slice(1).join(".")];
     into.funcs.push({ qName: qname, overload: overload, decl: decl, ifaceNs: owner });
     decl.parameters.filter(_ => !gen.seemsDeprecated(_)).forEach(_ => gatherFromTypeNode(into, _.type, decl.typeParameters));
     gatherFromTypeNode(into, decl.type, decl.typeParameters);
 }
 function gatherProp(into, decl, ...prefixes) {
-    const qname = prefixes.concat(decl.PropName).join('.');
+    const qname = prefixes.concat(decl.PropName).join(".");
     if (into.funcs.some(_ => _.qName === qname))
         return;
-    into.funcs.push({ qName: qname, overload: 0, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] });
+    into.funcs.push({ qName: qname, overload: 0, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join(".")] });
     if (ts.isTypeNode(decl.PropType))
         gatherFromTypeNode(into, decl.PropType);
 }
 function gatherEvent(into, decl, ...prefixes) {
-    const qname = prefixes.concat(decl.EvtName).join('.');
+    const qname = prefixes.concat(decl.EvtName).join(".");
     if (into.funcs.some(_ => _.qName === qname))
         return;
-    into.funcs.push({ qName: qname, overload: 0, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join('.')] });
+    into.funcs.push({ qName: qname, overload: 0, decl: decl, ifaceNs: into.namespaces[prefixes.slice(1).join(".")] });
     for (const _ of decl.EvtArgs)
         gatherFromTypeNode(into, _);
 }
 function gatherEnum(into, decl, ...prefixes) {
-    const qname = prefixes.concat(decl.name.text).join('.');
+    const qname = prefixes.concat(decl.name.text).join(".");
     if (!into.enums.some(_ => _.qName === qname))
         into.enums.push({ qName: qname, decl: decl });
 }
 function gatherStruct(into, decl, ...prefixes) {
-    const qname = prefixes.concat(decl.name.text).join('.');
+    const qname = prefixes.concat(decl.name.text).join(".");
     if (into.structs.some(_ => _.qName === qname))
         return;
-    into.structs.push({ qName: qname, decl: decl });
+    if (decl.heritageClauses && decl.heritageClauses.length)
+        for (const hc of decl.heritageClauses)
+            if (hc.types && hc.types.length)
+                for (const hct of hc.types) {
+                    const tname = hct.getText();
+                    if (!into.mereBaseTypes.includes(tname))
+                        into.mereBaseTypes.push(tname);
+                    gatherAll(into, into.fromOrig.body, [tname], into.moduleName);
+                    if (hct.typeArguments && hct.typeArguments.length)
+                        for (const hcta of hct.typeArguments)
+                            gatherFromTypeNode(into, hcta, decl.typeParameters);
+                }
+    if (decl.name.text !== "Event")
+        into.structs.push({ qName: qname, decl: decl });
     decl.members.forEach((member) => {
         if (!gen.seemsDeprecated(member)) {
             const memtype = member;
             const memtparams = member;
             const memparams = member;
             if (memtype && memtype.type)
-                gatherFromTypeNode(into, memtype.type, memtparams ? memtparams.typeParameters : undefined);
+                gatherFromTypeNode(into, memtype.type, memtparams ? gen.combine(memtparams.typeParameters, decl.typeParameters) : decl.typeParameters);
             if (memparams && memparams.parameters && memparams.parameters.length)
-                memparams.parameters.filter(_ => !gen.seemsDeprecated(_)).forEach(_ => gatherFromTypeNode(into, _.type, memtparams ? memtparams.typeParameters : undefined));
+                memparams.parameters.filter(_ => !gen.seemsDeprecated(_)).forEach(_ => gatherFromTypeNode(into, _.type, memtparams ? gen.combine(memtparams.typeParameters, decl.typeParameters) : decl.typeParameters));
         }
     });
 }

@@ -333,6 +333,8 @@ export class Builder {
             })
             if (tsum.length > 1)
                 tsum = tsum.filter(_ => _ !== gen.ScriptPrimType.String)
+            if (tsum.length > 1 && tsum.find(_ => _ === "Uri"))
+                tsum = [gen.ScriptPrimType.String]
             if (tsum.length !== 1)
                 throw it
             let ret = this.typeRef(tsum[0], needMaybe, intoProm, propsRelated)
@@ -458,7 +460,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         optionalEnumsZeroNotZilch: false,
         haveProps: true,
         demoOutFilePath: "",
-        typeNamesToString: ["Uri", "ThemeColor"],
+        typeNamesToString: ["Uri", "ThemeColor", "ThemeIcon"],
         objPropsGetSetNamePicks: ["", "Props", "Properties", "P", "Ps", "Details"]
     }
 

@@ -15,8 +15,12 @@ class Prep {
         this.fromOrig = job;
         for (const enumjob of job.enums)
             this.addEnum(enumjob);
-        for (const structjob of job.structs)
+        for (const structjob of job.structs.filter(_ => job.mereBaseTypes.includes(_.decl.name.text)))
             this.addStruct(structjob);
+        for (const structjob of job.structs.filter(_ => !job.mereBaseTypes.includes(_.decl.name.text)))
+            this.addStruct(structjob);
+        for (const structjob of job.structs.filter(_ => job.mereBaseTypes.includes(_.decl.name.text)))
+            this.structs = this.structs.filter(_ => _.fromOrig !== structjob);
         for (const funcjob of job.funcs)
             this.addFunc(funcjob);
         for (const iface of this.interfaces) {
@@ -102,35 +106,35 @@ class Prep {
         if (dbgJsonPrintIfaces)
             printjson(this.interfaces);
     }
-    addEnum(enumJob) {
-        if (seemsDeprecated(enumJob.decl))
+    addEnum(it) {
+        if (seemsDeprecated(it.decl))
             return;
-        const qname = this.qName(enumJob);
+        const qname = this.qName(it);
         this.enums.push({
-            fromOrig: enumJob,
+            fromOrig: it,
             name: qname.slice(1).join('_'),
-            enumerants: enumJob.decl.members.filter(_ => !seemsDeprecated(_)).map(_ => ({
+            enumerants: it.decl.members.filter(_ => !seemsDeprecated(_)).map(_ => ({
                 fromOrig: _,
                 name: _.name.getText(),
                 value: parseInt(_.initializer.getText())
             }))
         });
     }
-    addStruct(structJob) {
-        if (seemsDeprecated(structJob.decl))
+    addStruct(it) {
+        if (seemsDeprecated(it.decl))
             return;
-        const qname = this.qName(structJob);
-        const fields = [];
-        for (const _ of structJob.decl.members)
+        const addMember = (_) => {
             if (_.name && !seemsDeprecated(_)) {
                 let tspec = null;
                 const mtyped = _;
                 const mtparams = (_.kind === ts.SyntaxKind.MethodSignature || _.kind === ts.SyntaxKind.MethodDeclaration) ? _ : null;
                 if ((!mtparams) && mtyped && mtyped.type)
-                    tspec = this.typeSpec(mtyped.type, structJob.decl.typeParameters);
-                else if (mtparams && ts.isInterfaceDeclaration(structJob.decl))
-                    tspec = this.typeSpec(_, combine(structJob.decl.typeParameters, mtparams.typeParameters));
-                if (tspec)
+                    tspec = this.typeSpec(mtyped.type, it.decl.typeParameters);
+                else if (mtparams && ts.isInterfaceDeclaration(it.decl))
+                    tspec = this.typeSpec(_, combine(it.decl.typeParameters, mtparams.typeParameters));
+                if (tspec) {
+                    if (typeof tspec === "string" && this.fromOrig.mereBaseTypes.includes(tspec))
+                        this.fromOrig.mereBaseTypes = this.fromOrig.mereBaseTypes.filter(tname => tname !== tspec);
                     fields.push({
                         fromOrig: _,
                         name: _.name.getText(),
@@ -139,9 +143,22 @@ class Prep {
                         readOnly: (_.modifiers && _.modifiers.find(_ => _.getText() === 'readonly')) ? true : false,
                         isExtBaggage: false,
                     });
+                }
             }
+        };
+        const qname = this.qName(it);
+        const fields = [];
+        for (const _ of it.decl.members)
+            addMember(_);
+        if (it.decl.heritageClauses && it.decl.heritageClauses.length)
+            for (const hc of it.decl.heritageClauses)
+                for (const hct of hc.types) {
+                    const tbase = this.structs.find(_ => _.name === hct.getText());
+                    if (tbase)
+                        fields.push(...tbase.fields);
+                }
         this.structs.push({
-            fromOrig: structJob, isOutgoing: false, isIncoming: false,
+            fromOrig: it, isOutgoing: false, isIncoming: false,
             name: qname.slice(1).join('_'),
             fields: fields,
             funcFields: []
@@ -149,19 +166,19 @@ class Prep {
         const struct = this.structs[this.structs.length - 1];
         struct.funcFields = struct.fields.filter(_ => typeFun(_.typeSpec)).map(_ => _.name);
     }
-    addFunc(funcJob) {
-        if (seemsDeprecated(funcJob.decl))
+    addFunc(it) {
+        if (seemsDeprecated(it.decl))
             return;
-        const qname = this.qName(funcJob);
+        const qname = this.qName(it);
         const ifacename = qname[qname.length - 2];
         let iface = this.interfaces.find(_ => _.name === ifacename);
         if (!iface)
-            this.interfaces.push(iface = { name: ifacename, methods: [], fromOrig: funcJob.ifaceNs });
-        const declf = funcJob.decl, declp = funcJob.decl, decle = funcJob.decl;
+            this.interfaces.push(iface = { name: ifacename, methods: [], fromOrig: it.ifaceNs });
+        const declf = it.decl, declp = it.decl, decle = it.decl;
         const me = {
-            fromOrig: funcJob,
+            fromOrig: it,
             nameOrig: qname[qname.length - 1],
-            name: qname[qname.length - 1] + ((funcJob.overload > 0) ? funcJob.overload : ''),
+            name: qname[qname.length - 1] + ((it.overload > 0) ? it.overload : ''),
             args: (declf && declf.parameters && declf.parameters.length) ?
                 declf.parameters.filter(_ => _.name.getText() !== 'thisArg' && !seemsDeprecated(_)).map(_ => ({
                     fromOrig: _,

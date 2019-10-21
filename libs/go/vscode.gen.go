@@ -440,6 +440,15 @@ type Window interface {
 	// 
 	// `return` ── A new decoration type instance.
 	CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(*TextEditorDecorationType))
+
+	// Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
+	// 
+	// Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+	// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+	// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+	// 
+	// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
+	CreateInputBox() func(func(*InputBox))
 }
 type implWindow struct{ *impl }
 
@@ -785,6 +794,89 @@ type Commands interface {
 }
 type implCommands struct{ *impl }
 
+// Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
+type ThemableDecorationRenderOptions struct {
+	// Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+	// Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
+	BackgroundColor string `json:"backgroundColor,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Outline string `json:"outline,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'outline' for setting one or more of the individual outline properties.
+	OutlineColor string `json:"outlineColor,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'outline' for setting one or more of the individual outline properties.
+	OutlineStyle string `json:"outlineStyle,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'outline' for setting one or more of the individual outline properties.
+	OutlineWidth string `json:"outlineWidth,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Border string `json:"border,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderColor string `json:"borderColor,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderRadius string `json:"borderRadius,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderSpacing string `json:"borderSpacing,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderStyle string `json:"borderStyle,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderWidth string `json:"borderWidth,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	FontStyle string `json:"fontStyle,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	FontWeight string `json:"fontWeight,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	TextDecoration string `json:"textDecoration,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Cursor string `json:"cursor,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Color string `json:"color,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Opacity string `json:"opacity,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	LetterSpacing string `json:"letterSpacing,omitempty"`
+
+	// An **absolute path** or an URI to an image to be rendered in the gutter.
+	GutterIconPath string `json:"gutterIconPath,omitempty"`
+
+	// Specifies the size of the gutter icon.
+	// Available values are 'auto', 'contain', 'cover' and any percentage value.
+	// For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+	GutterIconSize string `json:"gutterIconSize,omitempty"`
+
+	// The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.
+	OverviewRulerColor string `json:"overviewRulerColor,omitempty"`
+
+	// Defines the rendering options of the attachment that is inserted before the decorated text.
+	Before ThemableDecorationAttachmentRenderOptions `json:"before,omitempty"`
+
+	// Defines the rendering options of the attachment that is inserted after the decorated text.
+	After ThemableDecorationAttachmentRenderOptions `json:"after,omitempty"`
+}
+
 // Options to configure the behavior of the message.
 type MessageOptions struct {
 	// Indicates that this message should be modal.
@@ -1001,6 +1093,47 @@ type OutputChannel struct {
 	disp *Disposable
 }
 
+// Type Definition for Visual Studio Code 1.39 Extension API
+// See https://code.visualstudio.com/api for more information
+type ThemableDecorationAttachmentRenderOptions struct {
+	// Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.
+	ContentText string `json:"contentText,omitempty"`
+
+	// An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
+	// or a text can be shown, but not both.
+	ContentIconPath string `json:"contentIconPath,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	Border string `json:"border,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	BorderColor string `json:"borderColor,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	FontStyle string `json:"fontStyle,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	FontWeight string `json:"fontWeight,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	TextDecoration string `json:"textDecoration,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	Color string `json:"color,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	BackgroundColor string `json:"backgroundColor,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	Margin string `json:"margin,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	Width string `json:"width,omitempty"`
+
+	// CSS styling property that will be applied to the decoration attachment.
+	Height string `json:"height,omitempty"`
+}
+
 // Represents rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
 type DecorationRenderOptions struct {
 	// Should the decoration be rendered also on the whitespace after the line text.
@@ -1019,10 +1152,7 @@ type DecorationRenderOptions struct {
 
 	// Overwrite options for dark themes.
 	Dark ThemableDecorationRenderOptions `json:"dark,omitempty"`
-}
 
-// Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
-type ThemableDecorationRenderOptions struct {
 	// Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
 	// Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
 	BackgroundColor string `json:"backgroundColor,omitempty"`
@@ -1104,47 +1234,6 @@ type ThemableDecorationRenderOptions struct {
 	After ThemableDecorationAttachmentRenderOptions `json:"after,omitempty"`
 }
 
-// Type Definition for Visual Studio Code 1.39 Extension API
-// See https://code.visualstudio.com/api for more information
-type ThemableDecorationAttachmentRenderOptions struct {
-	// Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.
-	ContentText string `json:"contentText,omitempty"`
-
-	// An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
-	// or a text can be shown, but not both.
-	ContentIconPath string `json:"contentIconPath,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	Border string `json:"border,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	BorderColor string `json:"borderColor,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	FontStyle string `json:"fontStyle,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	FontWeight string `json:"fontWeight,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	TextDecoration string `json:"textDecoration,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	Color string `json:"color,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	BackgroundColor string `json:"backgroundColor,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	Margin string `json:"margin,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	Width string `json:"width,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	Height string `json:"height,omitempty"`
-}
-
 // Represents a handle to a set of decorations
 // sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
 // 
@@ -1152,6 +1241,24 @@ type ThemableDecorationAttachmentRenderOptions struct {
 // [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 type TextEditorDecorationType struct {
 	disp *Disposable
+}
+
+// A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+// 
+// Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+type InputBox struct {
+	disp *Disposable
+}
+
+// Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
+type QuickInputButton struct {
+	// Icon for the button.
+	IconPath string `json:"iconPath"`
+
+	// An optional tooltip.
+	Tooltip string `json:"tooltip,omitempty"`
 }
 
 // An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).
@@ -1300,6 +1407,72 @@ type OutputChannelProperties struct {
 type TextEditorDecorationTypeProperties struct {
 	// Internal representation of the handle.
 	Key func() string `json:"-"`
+}
+
+// A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+// 
+// Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+type InputBoxProperties struct {
+	// Current input value.
+	Value string `json:"value,omitempty"`
+
+	// Optional placeholder in the filter text.
+	Placeholder string `json:"placeholder,omitempty"`
+
+	// If the input value should be hidden. Defaults to false.
+	Password bool `json:"password,omitempty"`
+
+	// An event signaling when the value has changed.
+	OnDidChangeValue func() Event `json:"-"`
+
+	// An event signaling when the user indicated acceptance of the input value.
+	OnDidAccept func() Event `json:"-"`
+
+	// Buttons for actions in the UI.
+	Buttons []QuickInputButton `json:"buttons,omitempty"`
+
+	// An event signaling when a button was triggered.
+	OnDidTriggerButton func() Event `json:"-"`
+
+	// An optional prompt text providing some ask or explanation to the user.
+	Prompt string `json:"prompt,omitempty"`
+
+	// An optional validation message indicating a problem with the current input value.
+	ValidationMessage string `json:"validationMessage,omitempty"`
+
+	// An optional title.
+	Title string `json:"title,omitempty"`
+
+	// An optional current step count.
+	Step int `json:"step,omitempty"`
+
+	// An optional total step count.
+	TotalSteps int `json:"totalSteps,omitempty"`
+
+	// If the UI should allow for user input. Defaults to true.
+	// 
+	// Change this to false, e.g., while validating user input or
+	// loading data for the next step in user input.
+	Enabled bool `json:"enabled,omitempty"`
+
+	// If the UI should show a progress indicator. Defaults to false.
+	// 
+	// Change this to true, e.g., while loading more data or validating
+	// user input.
+	Busy bool `json:"busy,omitempty"`
+
+	// If the UI should stay open even when loosing UI focus. Defaults to false.
+	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
+
+	// An event signaling when this input UI is hidden.
+	// 
+	// There are several reasons why this UI might have to be hidden and
+	// the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+	// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+	// the user pressing Esc, some other input UI opening, etc.)
+	OnDidHide Event `json:"onDidHide,omitempty"`
 }
 
 func (me *impl) Window() Window {
@@ -2496,6 +2669,35 @@ func (me implWindow) CreateTextEditorDecorationType(options DecorationRenderOpti
 	}
 	me.Impl().send(msg, onresp)
 	return func(a0 func(*TextEditorDecorationType)) {
+		onret = a0
+	}
+}
+
+func (me implWindow) CreateInputBox() func(func(*InputBox)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "window.createInputBox"
+	msg.Data = make(dict, 0)
+	var onresp func(any) bool
+	var onret func(*InputBox)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result *InputBox
+		if (nil != payload) {
+			result = new(InputBox)
+			ok = result.populateFrom(payload)
+			if !ok {
+				return false
+			}
+			result.disp.impl = me.Impl()
+		}
+		if (nil != onret) {
+			onret(result)
+		}
+		return true
+	}
+	me.Impl().send(msg, onresp)
+	return func(a0 func(*InputBox)) {
 		onret = a0
 	}
 }
@@ -3716,6 +3918,118 @@ func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeProp
 	}
 }
 
+// Makes the input UI visible in its current configuration. Any other input
+// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+func (me *InputBox) Show() func(func()) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "InputBox.show"
+	msg.Data = make(dict, 1)
+	msg.Data[""] = me.disp.id
+	var onresp func(any) bool
+	var onret func()
+	onresp = func(payload any) bool {
+		if (nil != payload) {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
+		return true
+	}
+	me.disp.impl.send(msg, onresp)
+	return func(a0 func()) {
+		onret = a0
+	}
+}
+
+// Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+// event.
+func (me *InputBox) Hide() func(func()) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "InputBox.hide"
+	msg.Data = make(dict, 1)
+	msg.Data[""] = me.disp.id
+	var onresp func(any) bool
+	var onret func()
+	onresp = func(payload any) bool {
+		if (nil != payload) {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
+		return true
+	}
+	me.disp.impl.send(msg, onresp)
+	return func(a0 func()) {
+		onret = a0
+	}
+}
+
+// Dispose of this input UI and any associated resources. If it is still
+// visible, it is first hidden. After this call the input UI is no longer
+// functional and no additional methods or properties on it should be
+// accessed. Instead a new input UI should be created.
+func (me *InputBox) Dispose() func(func()) {
+	return me.disp.Dispose()
+}
+
+// Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `onDidChangeValue`, `onDidAccept`, `buttons`, `onDidTriggerButton`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`, `onDidHide`.
+func (me *InputBox) Get() func(func(InputBoxProperties)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "InputBox.appzObjPropsGet"
+	msg.Data = make(dict, 1)
+	msg.Data[""] = me.disp.id
+	var onresp func(any) bool
+	var onret func(InputBoxProperties)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result InputBoxProperties
+		if (nil != payload) {
+			ok = result.populateFrom(payload)
+			if !ok {
+				return false
+			}
+		}
+		if (nil != onret) {
+			onret(result)
+		}
+		return true
+	}
+	me.disp.impl.send(msg, onresp)
+	return func(a0 func(InputBoxProperties)) {
+		onret = a0
+	}
+}
+
+// Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`, `onDidHide`.
+func (me *InputBox) Set(allUpdates InputBoxProperties) func(func()) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "InputBox.appzObjPropsSet"
+	msg.Data = make(dict, 2)
+	msg.Data[""] = me.disp.id
+	msg.Data["allUpdates"] = allUpdates
+	var onresp func(any) bool
+	var onret func()
+	onresp = func(payload any) bool {
+		if (nil != payload) {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
+		return true
+	}
+	me.disp.impl.send(msg, onresp)
+	return func(a0 func()) {
+		onret = a0
+	}
+}
+
 func (me *MessageItem) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
@@ -3935,6 +4249,13 @@ func (me *OutputChannel) populateFrom(payload any) bool {
 }
 
 func (me *TextEditorDecorationType) populateFrom(payload any) bool {
+	var ok bool
+	me.disp = new(Disposable)
+	ok = me.disp.populateFrom(payload)
+	return ok
+}
+
+func (me *InputBox) populateFrom(payload any) bool {
 	var ok bool
 	me.disp = new(Disposable)
 	ok = me.disp.populateFrom(payload)
@@ -4334,6 +4655,257 @@ func (me *TextEditorDecorationTypeProperties) populateFrom(payload any) bool {
 		me.Key = func() string {
 			return key
 		}
+	}
+	return true
+}
+
+func (me *InputBoxProperties) populateFrom(payload any) bool {
+	var it dict
+	var ok bool
+	var val any
+	it, ok = payload.(dict)
+	if !ok {
+		return false
+	}
+	val, ok = it["value"]
+	if ok {
+		var value string
+		if (nil != val) {
+			value, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.Value = value
+	}
+	val, ok = it["placeholder"]
+	if ok {
+		var placeholder string
+		if (nil != val) {
+			placeholder, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.Placeholder = placeholder
+	}
+	val, ok = it["password"]
+	if ok {
+		var password bool
+		if (nil != val) {
+			password, ok = val.(bool)
+			if !ok {
+				return false
+			}
+		}
+		me.Password = password
+	}
+	val, ok = it["onDidChangeValue"]
+	if ok {
+		var onDidChangeValue Event
+		if (nil != val) {
+			ok = onDidChangeValue.populateFrom(val)
+			if !ok {
+				return false
+			}
+		}
+		me.OnDidChangeValue = func() Event {
+			return onDidChangeValue
+		}
+	}
+	val, ok = it["onDidAccept"]
+	if ok {
+		var onDidAccept Event
+		if (nil != val) {
+			ok = onDidAccept.populateFrom(val)
+			if !ok {
+				return false
+			}
+		}
+		me.OnDidAccept = func() Event {
+			return onDidAccept
+		}
+	}
+	val, ok = it["buttons"]
+	if ok {
+		var buttons []QuickInputButton
+		if (nil != val) {
+			var __coll__buttons []any
+			__coll__buttons, ok = val.([]any)
+			if !ok {
+				return false
+			}
+			buttons = make([]QuickInputButton, len(__coll__buttons))
+			var __idx__buttons int
+			__idx__buttons = 0
+			for _, __item__buttons := range __coll__buttons {
+				var __val__buttons QuickInputButton
+				ok = __val__buttons.populateFrom(__item__buttons)
+				if !ok {
+					return false
+				}
+				buttons[__idx__buttons] = __val__buttons
+				__idx__buttons = __idx__buttons + 1
+			}
+		}
+		me.Buttons = buttons
+	}
+	val, ok = it["onDidTriggerButton"]
+	if ok {
+		var onDidTriggerButton Event
+		if (nil != val) {
+			ok = onDidTriggerButton.populateFrom(val)
+			if !ok {
+				return false
+			}
+		}
+		me.OnDidTriggerButton = func() Event {
+			return onDidTriggerButton
+		}
+	}
+	val, ok = it["prompt"]
+	if ok {
+		var prompt string
+		if (nil != val) {
+			prompt, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.Prompt = prompt
+	}
+	val, ok = it["validationMessage"]
+	if ok {
+		var validationMessage string
+		if (nil != val) {
+			validationMessage, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.ValidationMessage = validationMessage
+	}
+	val, ok = it["title"]
+	if ok {
+		var title string
+		if (nil != val) {
+			title, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.Title = title
+	}
+	val, ok = it["step"]
+	if ok {
+		var step int
+		if (nil != val) {
+			step, ok = val.(int)
+			if !ok {
+				var __step__ float64
+				__step__, ok = val.(float64)
+				if !ok {
+					return false
+				}
+				step = int(__step__)
+			}
+		}
+		me.Step = step
+	}
+	val, ok = it["totalSteps"]
+	if ok {
+		var totalSteps int
+		if (nil != val) {
+			totalSteps, ok = val.(int)
+			if !ok {
+				var __totalSteps__ float64
+				__totalSteps__, ok = val.(float64)
+				if !ok {
+					return false
+				}
+				totalSteps = int(__totalSteps__)
+			}
+		}
+		me.TotalSteps = totalSteps
+	}
+	val, ok = it["enabled"]
+	if ok {
+		var enabled bool
+		if (nil != val) {
+			enabled, ok = val.(bool)
+			if !ok {
+				return false
+			}
+		}
+		me.Enabled = enabled
+	}
+	val, ok = it["busy"]
+	if ok {
+		var busy bool
+		if (nil != val) {
+			busy, ok = val.(bool)
+			if !ok {
+				return false
+			}
+		}
+		me.Busy = busy
+	}
+	val, ok = it["ignoreFocusOut"]
+	if ok {
+		var ignoreFocusOut bool
+		if (nil != val) {
+			ignoreFocusOut, ok = val.(bool)
+			if !ok {
+				return false
+			}
+		}
+		me.IgnoreFocusOut = ignoreFocusOut
+	}
+	val, ok = it["onDidHide"]
+	if ok {
+		var onDidHide Event
+		if (nil != val) {
+			ok = onDidHide.populateFrom(val)
+			if !ok {
+				return false
+			}
+		}
+		me.OnDidHide = onDidHide
+	}
+	return true
+}
+
+func (me *QuickInputButton) populateFrom(payload any) bool {
+	var it dict
+	var ok bool
+	var val any
+	it, ok = payload.(dict)
+	if !ok {
+		return false
+	}
+	val, ok = it["iconPath"]
+	if ok {
+		var iconPath string
+		if (nil != val) {
+			iconPath, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.IconPath = iconPath
+	} else {
+		return false
+	}
+	val, ok = it["tooltip"]
+	if ok {
+		var tooltip string
+		if (nil != val) {
+			tooltip, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.Tooltip = tooltip
 	}
 	return true
 }

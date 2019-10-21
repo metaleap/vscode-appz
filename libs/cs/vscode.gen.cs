@@ -596,6 +596,18 @@ namespace VscAppz {
 		/// <param name="options">Rendering options for the decoration type.</param>
 		/// <return>A new decoration type instance.</return>
 		Action<Action<TextEditorDecorationType>> CreateTextEditorDecorationType(DecorationRenderOptions options = default);
+
+		/// <summary>
+		/// Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
+		/// 
+		/// Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+		/// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+		/// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+		/// 
+		/// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
+		/// </summary>
+		/// <return>A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).</return>
+		Action<Action<InputBox>> CreateInputBox();
 	}
 
 	/// <summary>Namespace describing the environment the editor runs in.</summary>
@@ -1005,6 +1017,132 @@ namespace VscAppz {
 		Action<Action<string[]>> GetCommands(bool filterInternal = default);
 	}
 
+	/// <summary>Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).</summary>
+	public partial class ThemableDecorationRenderOptions {
+		/// <summary>
+		/// Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+		/// Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
+		/// </summary>
+		[JsonProperty("backgroundColor")]
+		public string BackgroundColor;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("outline")]
+		public string Outline;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'outline' for setting one or more of the individual outline properties.
+		/// </summary>
+		[JsonProperty("outlineColor")]
+		public string OutlineColor;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'outline' for setting one or more of the individual outline properties.
+		/// </summary>
+		[JsonProperty("outlineStyle")]
+		public string OutlineStyle;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'outline' for setting one or more of the individual outline properties.
+		/// </summary>
+		[JsonProperty("outlineWidth")]
+		public string OutlineWidth;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("border")]
+		public string Border;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'border' for setting one or more of the individual border properties.
+		/// </summary>
+		[JsonProperty("borderColor")]
+		public string BorderColor;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'border' for setting one or more of the individual border properties.
+		/// </summary>
+		[JsonProperty("borderRadius")]
+		public string BorderRadius;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'border' for setting one or more of the individual border properties.
+		/// </summary>
+		[JsonProperty("borderSpacing")]
+		public string BorderSpacing;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'border' for setting one or more of the individual border properties.
+		/// </summary>
+		[JsonProperty("borderStyle")]
+		public string BorderStyle;
+
+		/// <summary>
+		/// CSS styling property that will be applied to text enclosed by a decoration.
+		/// Better use 'border' for setting one or more of the individual border properties.
+		/// </summary>
+		[JsonProperty("borderWidth")]
+		public string BorderWidth;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("fontStyle")]
+		public string FontStyle;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("fontWeight")]
+		public string FontWeight;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("textDecoration")]
+		public string TextDecoration;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("cursor")]
+		public string Cursor;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("color")]
+		public string Color;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("opacity")]
+		public string Opacity;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("letterSpacing")]
+		public string LetterSpacing;
+
+		/// <summary>An **absolute path** or an URI to an image to be rendered in the gutter.</summary>
+		[JsonProperty("gutterIconPath")]
+		public string GutterIconPath;
+
+		/// <summary>
+		/// Specifies the size of the gutter icon.
+		/// Available values are 'auto', 'contain', 'cover' and any percentage value.
+		/// For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+		/// </summary>
+		[JsonProperty("gutterIconSize")]
+		public string GutterIconSize;
+
+		/// <summary>The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.</summary>
+		[JsonProperty("overviewRulerColor")]
+		public string OverviewRulerColor;
+
+		/// <summary>Defines the rendering options of the attachment that is inserted before the decorated text.</summary>
+		[JsonProperty("before")]
+		public ThemableDecorationAttachmentRenderOptions Before;
+
+		/// <summary>Defines the rendering options of the attachment that is inserted after the decorated text.</summary>
+		[JsonProperty("after")]
+		public ThemableDecorationAttachmentRenderOptions After;
+	}
+
 	/// <summary>Options to configure the behavior of the message.</summary>
 	public partial class MessageOptions {
 		/// <summary>Indicates that this message should be modal.</summary>
@@ -1285,6 +1423,63 @@ namespace VscAppz {
 		internal Disposable disp;
 	}
 
+	/// <summary>
+	/// Type Definition for Visual Studio Code 1.39 Extension API
+	/// See https://code.visualstudio.com/api for more information
+	/// </summary>
+	public partial class ThemableDecorationAttachmentRenderOptions {
+		/// <summary>Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.</summary>
+		[JsonProperty("contentText")]
+		public string ContentText;
+
+		/// <summary>
+		/// An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
+		/// or a text can be shown, but not both.
+		/// </summary>
+		[JsonProperty("contentIconPath")]
+		public string ContentIconPath;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("border")]
+		public string Border;
+
+		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+		[JsonProperty("borderColor")]
+		public string BorderColor;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("fontStyle")]
+		public string FontStyle;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("fontWeight")]
+		public string FontWeight;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("textDecoration")]
+		public string TextDecoration;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("color")]
+		public string Color;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("backgroundColor")]
+		public string BackgroundColor;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("margin")]
+		public string Margin;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("width")]
+		public string Width;
+
+		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
+		[JsonProperty("height")]
+		public string Height;
+	}
+
 	/// <summary>Represents rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).</summary>
 	public partial class DecorationRenderOptions {
 		/// <summary>
@@ -1312,10 +1507,7 @@ namespace VscAppz {
 		/// <summary>Overwrite options for dark themes.</summary>
 		[JsonProperty("dark")]
 		public ThemableDecorationRenderOptions Dark;
-	}
 
-	/// <summary>Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).</summary>
-	public partial class ThemableDecorationRenderOptions {
 		/// <summary>
 		/// Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
 		/// Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
@@ -1441,63 +1633,6 @@ namespace VscAppz {
 	}
 
 	/// <summary>
-	/// Type Definition for Visual Studio Code 1.39 Extension API
-	/// See https://code.visualstudio.com/api for more information
-	/// </summary>
-	public partial class ThemableDecorationAttachmentRenderOptions {
-		/// <summary>Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.</summary>
-		[JsonProperty("contentText")]
-		public string ContentText;
-
-		/// <summary>
-		/// An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
-		/// or a text can be shown, but not both.
-		/// </summary>
-		[JsonProperty("contentIconPath")]
-		public string ContentIconPath;
-
-		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
-		[JsonProperty("border")]
-		public string Border;
-
-		/// <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
-		[JsonProperty("borderColor")]
-		public string BorderColor;
-
-		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
-		[JsonProperty("fontStyle")]
-		public string FontStyle;
-
-		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
-		[JsonProperty("fontWeight")]
-		public string FontWeight;
-
-		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
-		[JsonProperty("textDecoration")]
-		public string TextDecoration;
-
-		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
-		[JsonProperty("color")]
-		public string Color;
-
-		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
-		[JsonProperty("backgroundColor")]
-		public string BackgroundColor;
-
-		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
-		[JsonProperty("margin")]
-		public string Margin;
-
-		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
-		[JsonProperty("width")]
-		public string Width;
-
-		/// <summary>CSS styling property that will be applied to the decoration attachment.</summary>
-		[JsonProperty("height")]
-		public string Height;
-	}
-
-	/// <summary>
 	/// Represents a handle to a set of decorations
 	/// sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
 	/// 
@@ -1506,6 +1641,28 @@ namespace VscAppz {
 	/// </summary>
 	public partial class TextEditorDecorationType {
 		internal Disposable disp;
+	}
+
+	/// <summary>
+	/// A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+	/// 
+	/// Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+	/// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+	/// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+	/// </summary>
+	public partial class InputBox {
+		internal Disposable disp;
+	}
+
+	/// <summary>Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).</summary>
+	public partial class QuickInputButton {
+		/// <summary>Icon for the button.</summary>
+		[JsonProperty("iconPath"), JsonRequired]
+		public string IconPath;
+
+		/// <summary>An optional tooltip.</summary>
+		[JsonProperty("tooltip")]
+		public string Tooltip;
 	}
 
 	/// <summary>An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).</summary>
@@ -1702,6 +1859,96 @@ namespace VscAppz {
 		/// <summary>Internal representation of the handle.</summary>
 		[JsonIgnore]
 		public Func<string> Key;
+	}
+
+	/// <summary>
+	/// A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+	/// 
+	/// Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+	/// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+	/// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+	/// </summary>
+	public partial class InputBoxProperties {
+		/// <summary>Current input value.</summary>
+		[JsonProperty("value")]
+		public string Value;
+
+		/// <summary>Optional placeholder in the filter text.</summary>
+		[JsonProperty("placeholder")]
+		public string Placeholder;
+
+		/// <summary>If the input value should be hidden. Defaults to false.</summary>
+		[JsonProperty("password")]
+		public bool Password;
+
+		/// <summary>An event signaling when the value has changed.</summary>
+		[JsonIgnore]
+		public Func<Event> OnDidChangeValue;
+
+		/// <summary>An event signaling when the user indicated acceptance of the input value.</summary>
+		[JsonIgnore]
+		public Func<Event> OnDidAccept;
+
+		/// <summary>Buttons for actions in the UI.</summary>
+		[JsonProperty("buttons")]
+		public QuickInputButton[] Buttons;
+
+		/// <summary>An event signaling when a button was triggered.</summary>
+		[JsonIgnore]
+		public Func<Event> OnDidTriggerButton;
+
+		/// <summary>An optional prompt text providing some ask or explanation to the user.</summary>
+		[JsonProperty("prompt")]
+		public string Prompt;
+
+		/// <summary>An optional validation message indicating a problem with the current input value.</summary>
+		[JsonProperty("validationMessage")]
+		public string ValidationMessage;
+
+		/// <summary>An optional title.</summary>
+		[JsonProperty("title")]
+		public string Title;
+
+		/// <summary>An optional current step count.</summary>
+		[JsonProperty("step")]
+		public int? Step;
+
+		/// <summary>An optional total step count.</summary>
+		[JsonProperty("totalSteps")]
+		public int? TotalSteps;
+
+		/// <summary>
+		/// If the UI should allow for user input. Defaults to true.
+		/// 
+		/// Change this to false, e.g., while validating user input or
+		/// loading data for the next step in user input.
+		/// </summary>
+		[JsonProperty("enabled")]
+		public bool Enabled;
+
+		/// <summary>
+		/// If the UI should show a progress indicator. Defaults to false.
+		/// 
+		/// Change this to true, e.g., while loading more data or validating
+		/// user input.
+		/// </summary>
+		[JsonProperty("busy")]
+		public bool Busy;
+
+		/// <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
+		[JsonProperty("ignoreFocusOut")]
+		public bool IgnoreFocusOut;
+
+		/// <summary>
+		/// An event signaling when this input UI is hidden.
+		/// 
+		/// There are several reasons why this UI might have to be hidden and
+		/// the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+		/// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+		/// the user pressing Esc, some other input UI opening, etc.)
+		/// </summary>
+		[JsonProperty("onDidHide")]
+		public Event OnDidHide;
 	}
 
 	internal partial class impl : IVscode, IWindow, IEnv, IClipboard, IWorkspace, ILanguages, IExtensions, ICommands {
@@ -2862,6 +3109,35 @@ namespace VscAppz {
 			};
 			this.Impl().send(msg, onresp);
 			return (Action<TextEditorDecorationType> a0) => {
+				onret = a0;
+			};
+		}
+
+		Action<Action<InputBox>> IWindow.CreateInputBox() {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.createInputBox";
+			msg.Data = new dict(0);
+			Func<any, bool> onresp = default;
+			Action<InputBox> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				InputBox result = default;
+				if ((null != payload)) {
+					result = new InputBox();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+					result.disp.impl = this.Impl();
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<InputBox> a0) => {
 				onret = a0;
 			};
 		}
@@ -4132,6 +4408,136 @@ namespace VscAppz {
 		}
 	}
 
+	public partial class InputBox {
+		/// <summary>
+		/// Makes the input UI visible in its current configuration. Any other input
+		/// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+		/// </summary>
+		public Action<Action> Show() {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "InputBox.show";
+			msg.Data = new dict(1);
+			msg.Data[""] = this.disp.id;
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onresp = (any payload) => {
+				if ((null != payload)) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class InputBox {
+		/// <summary>
+		/// Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+		/// event.
+		/// </summary>
+		public Action<Action> Hide() {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "InputBox.hide";
+			msg.Data = new dict(1);
+			msg.Data[""] = this.disp.id;
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onresp = (any payload) => {
+				if ((null != payload)) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class InputBox : IDisposable {
+		/// <summary>
+		/// Dispose of this input UI and any associated resources. If it is still
+		/// visible, it is first hidden. After this call the input UI is no longer
+		/// functional and no additional methods or properties on it should be
+		/// accessed. Instead a new input UI should be created.
+		/// </summary>
+		public Action<Action> Dispose() {
+			return this.disp.Dispose();
+		}
+		void IDisposable.Dispose() { this.Dispose(); }
+	}
+
+	public partial class InputBox {
+		/// <summary>Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `onDidChangeValue`, `onDidAccept`, `buttons`, `onDidTriggerButton`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`, `onDidHide`.</summary>
+		public Action<Action<InputBoxProperties>> Get() {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "InputBox.appzObjPropsGet";
+			msg.Data = new dict(1);
+			msg.Data[""] = this.disp.id;
+			Func<any, bool> onresp = default;
+			Action<InputBoxProperties> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				InputBoxProperties result = default;
+				if ((null != payload)) {
+					result = new InputBoxProperties();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<InputBoxProperties> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class InputBox {
+		/// <summary>Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`, `onDidHide`.</summary>
+		public Action<Action> Set(InputBoxProperties allUpdates = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "InputBox.appzObjPropsSet";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.disp.id;
+			msg.Data["allUpdates"] = allUpdates;
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onresp = (any payload) => {
+				if ((null != payload)) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
+		}
+	}
+
 	public partial class MessageItem {
 		internal bool populateFrom(any payload = default) {
 			dict it = default;
@@ -4367,6 +4773,15 @@ namespace VscAppz {
 	}
 
 	public partial class TextEditorDecorationType {
+		internal bool populateFrom(any payload = default) {
+			bool ok = default;
+			this.disp = new Disposable();
+			ok = this.disp.populateFrom(payload);
+			return ok;
+		}
+	}
+
+	public partial class InputBox {
 		internal bool populateFrom(any payload = default) {
 			bool ok = default;
 			this.disp = new Disposable();
@@ -4804,6 +5219,262 @@ namespace VscAppz {
 				this.Key = () => {
 					return key;
 				};
+			}
+			return true;
+		}
+	}
+
+	public partial class InputBoxProperties {
+		internal bool populateFrom(any payload = default) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if (!ok) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("value", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				string value = default;
+				if ((null != val)) {
+					(value, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Value = value;
+			}
+			(val, ok) = (it.TryGetValue("placeholder", out var ___) ? (___, true) : (default, false));
+			if (ok) {
+				string placeholder = default;
+				if ((null != val)) {
+					(placeholder, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Placeholder = placeholder;
+			}
+			(val, ok) = (it.TryGetValue("password", out var ____) ? (____, true) : (default, false));
+			if (ok) {
+				bool password = default;
+				if ((null != val)) {
+					(password, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Password = password;
+			}
+			(val, ok) = (it.TryGetValue("onDidChangeValue", out var _____) ? (_____, true) : (default, false));
+			if (ok) {
+				Event onDidChangeValue = default;
+				if ((null != val)) {
+					onDidChangeValue = new Event();
+					ok = onDidChangeValue.populateFrom(val);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.OnDidChangeValue = () => {
+					return onDidChangeValue;
+				};
+			}
+			(val, ok) = (it.TryGetValue("onDidAccept", out var ______) ? (______, true) : (default, false));
+			if (ok) {
+				Event onDidAccept = default;
+				if ((null != val)) {
+					onDidAccept = new Event();
+					ok = onDidAccept.populateFrom(val);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.OnDidAccept = () => {
+					return onDidAccept;
+				};
+			}
+			(val, ok) = (it.TryGetValue("buttons", out var _______) ? (_______, true) : (default, false));
+			if (ok) {
+				QuickInputButton[] buttons = default;
+				if ((null != val)) {
+					any[] __coll__buttons = default;
+					(__coll__buttons, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					buttons = new QuickInputButton[__coll__buttons.Length];
+					int __idx__buttons = default;
+					__idx__buttons = 0;
+					foreach (var __item__buttons in __coll__buttons) {
+						QuickInputButton __val__buttons = default;
+						__val__buttons = new QuickInputButton();
+						ok = __val__buttons.populateFrom(__item__buttons);
+						if (!ok) {
+							return false;
+						}
+						buttons[__idx__buttons] = __val__buttons;
+						__idx__buttons = __idx__buttons + 1;
+					}
+				}
+				this.Buttons = buttons;
+			}
+			(val, ok) = (it.TryGetValue("onDidTriggerButton", out var ________) ? (________, true) : (default, false));
+			if (ok) {
+				Event onDidTriggerButton = default;
+				if ((null != val)) {
+					onDidTriggerButton = new Event();
+					ok = onDidTriggerButton.populateFrom(val);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.OnDidTriggerButton = () => {
+					return onDidTriggerButton;
+				};
+			}
+			(val, ok) = (it.TryGetValue("prompt", out var _________) ? (_________, true) : (default, false));
+			if (ok) {
+				string prompt = default;
+				if ((null != val)) {
+					(prompt, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Prompt = prompt;
+			}
+			(val, ok) = (it.TryGetValue("validationMessage", out var __________) ? (__________, true) : (default, false));
+			if (ok) {
+				string validationMessage = default;
+				if ((null != val)) {
+					(validationMessage, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.ValidationMessage = validationMessage;
+			}
+			(val, ok) = (it.TryGetValue("title", out var ___________) ? (___________, true) : (default, false));
+			if (ok) {
+				string title = default;
+				if ((null != val)) {
+					(title, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Title = title;
+			}
+			(val, ok) = (it.TryGetValue("step", out var ____________) ? (____________, true) : (default, false));
+			if (ok) {
+				int? step = default;
+				if ((null != val)) {
+					int _step_ = default;
+					(_step_, ok) = (val is int) ? (((int)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					step = _step_;
+				}
+				this.Step = step;
+			}
+			(val, ok) = (it.TryGetValue("totalSteps", out var _____________) ? (_____________, true) : (default, false));
+			if (ok) {
+				int? totalSteps = default;
+				if ((null != val)) {
+					int _totalSteps_ = default;
+					(_totalSteps_, ok) = (val is int) ? (((int)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					totalSteps = _totalSteps_;
+				}
+				this.TotalSteps = totalSteps;
+			}
+			(val, ok) = (it.TryGetValue("enabled", out var ______________) ? (______________, true) : (default, false));
+			if (ok) {
+				bool enabled = default;
+				if ((null != val)) {
+					(enabled, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Enabled = enabled;
+			}
+			(val, ok) = (it.TryGetValue("busy", out var _______________) ? (_______________, true) : (default, false));
+			if (ok) {
+				bool busy = default;
+				if ((null != val)) {
+					(busy, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Busy = busy;
+			}
+			(val, ok) = (it.TryGetValue("ignoreFocusOut", out var ________________) ? (________________, true) : (default, false));
+			if (ok) {
+				bool ignoreFocusOut = default;
+				if ((null != val)) {
+					(ignoreFocusOut, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.IgnoreFocusOut = ignoreFocusOut;
+			}
+			(val, ok) = (it.TryGetValue("onDidHide", out var _________________) ? (_________________, true) : (default, false));
+			if (ok) {
+				Event onDidHide = default;
+				if ((null != val)) {
+					onDidHide = new Event();
+					ok = onDidHide.populateFrom(val);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.OnDidHide = onDidHide;
+			}
+			return true;
+		}
+	}
+
+	public partial class QuickInputButton {
+		internal bool populateFrom(any payload = default) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if (!ok) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("iconPath", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				string iconPath = default;
+				if ((null != val)) {
+					(iconPath, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.IconPath = iconPath;
+			} else {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("tooltip", out var ___) ? (___, true) : (default, false));
+			if (ok) {
+				string tooltip = default;
+				if ((null != val)) {
+					string _tooltip_ = default;
+					(_tooltip_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					tooltip = _tooltip_;
+				}
+				this.Tooltip = tooltip;
 			}
 			return true;
 		}

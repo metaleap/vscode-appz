@@ -219,6 +219,86 @@ type DecorationRenderOptions struct {
 
 	// Overwrite options for dark themes.
 	Dark ThemableDecorationRenderOptions `json:"dark,omitempty"`
+
+	// Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+	// Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
+	BackgroundColor string `json:"backgroundColor,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Outline string `json:"outline,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'outline' for setting one or more of the individual outline properties.
+	OutlineColor string `json:"outlineColor,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'outline' for setting one or more of the individual outline properties.
+	OutlineStyle string `json:"outlineStyle,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'outline' for setting one or more of the individual outline properties.
+	OutlineWidth string `json:"outlineWidth,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Border string `json:"border,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderColor string `json:"borderColor,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderRadius string `json:"borderRadius,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderSpacing string `json:"borderSpacing,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderStyle string `json:"borderStyle,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	// Better use 'border' for setting one or more of the individual border properties.
+	BorderWidth string `json:"borderWidth,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	FontStyle string `json:"fontStyle,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	FontWeight string `json:"fontWeight,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	TextDecoration string `json:"textDecoration,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Cursor string `json:"cursor,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Color string `json:"color,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	Opacity string `json:"opacity,omitempty"`
+
+	// CSS styling property that will be applied to text enclosed by a decoration.
+	LetterSpacing string `json:"letterSpacing,omitempty"`
+
+	// An **absolute path** or an URI to an image to be rendered in the gutter.
+	GutterIconPath string `json:"gutterIconPath,omitempty"`
+
+	// Specifies the size of the gutter icon.
+	// Available values are 'auto', 'contain', 'cover' and any percentage value.
+	// For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+	GutterIconSize string `json:"gutterIconSize,omitempty"`
+
+	// The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.
+	OverviewRulerColor string `json:"overviewRulerColor,omitempty"`
+
+	// Defines the rendering options of the attachment that is inserted before the decorated text.
+	Before ThemableDecorationAttachmentRenderOptions `json:"before,omitempty"`
+
+	// Defines the rendering options of the attachment that is inserted after the decorated text.
+	After ThemableDecorationAttachmentRenderOptions `json:"after,omitempty"`
 }
 ```
 
@@ -350,6 +430,13 @@ type EnvProperties struct {
 
 Namespace describing the environment the editor runs in.
 
+#### type Event
+
+```go
+type Event string
+```
+
+
 #### type Extensions
 
 ```go
@@ -403,6 +490,73 @@ console.log(importedApi.mul(42, 1));
 
 ```
 
+#### type InputBox
+
+```go
+type InputBox struct {
+}
+```
+
+A concrete
+[QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput)
+to let the user input a text value.
+
+Note that in many cases the more convenient
+[window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+is easier to use.
+[window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox)
+should be used when
+[window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+does not offer the required flexibility.
+
+#### func (*InputBox) Dispose
+
+```go
+func (me *InputBox) Dispose() func(func())
+```
+Dispose of this input UI and any associated resources. If it is still visible,
+it is first hidden. After this call the input UI is no longer functional and no
+additional methods or properties on it should be accessed. Instead a new input
+UI should be created.
+
+#### func (*InputBox) Get
+
+```go
+func (me *InputBox) Get() func(func(InputBoxProperties))
+```
+Obtains this `InputBox`'s current property values for: `value`, `placeholder`,
+`password`, `onDidChangeValue`, `onDidAccept`, `buttons`, `onDidTriggerButton`,
+`prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`,
+`ignoreFocusOut`, `onDidHide`.
+
+#### func (*InputBox) Hide
+
+```go
+func (me *InputBox) Hide() func(func())
+```
+Hides this input UI. This will also fire an
+[QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+event.
+
+#### func (*InputBox) Set
+
+```go
+func (me *InputBox) Set(allUpdates InputBoxProperties) func(func())
+```
+Updates this `InputBox`'s current property values for: `value`, `placeholder`,
+`password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`,
+`totalSteps`, `enabled`, `busy`, `ignoreFocusOut`, `onDidHide`.
+
+#### func (*InputBox) Show
+
+```go
+func (me *InputBox) Show() func(func())
+```
+Makes the input UI visible in its current configuration. Any other input UI will
+first fire an
+[QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+event.
+
 #### type InputBoxOptions
 
 ```go
@@ -440,6 +594,83 @@ type InputBoxOptions struct {
 ```
 
 Options to configure the behavior of the input box UI.
+
+#### type InputBoxProperties
+
+```go
+type InputBoxProperties struct {
+	// Current input value.
+	Value string `json:"value,omitempty"`
+
+	// Optional placeholder in the filter text.
+	Placeholder string `json:"placeholder,omitempty"`
+
+	// If the input value should be hidden. Defaults to false.
+	Password bool `json:"password,omitempty"`
+
+	// An event signaling when the value has changed.
+	OnDidChangeValue func() Event `json:"-"`
+
+	// An event signaling when the user indicated acceptance of the input value.
+	OnDidAccept func() Event `json:"-"`
+
+	// Buttons for actions in the UI.
+	Buttons []QuickInputButton `json:"buttons,omitempty"`
+
+	// An event signaling when a button was triggered.
+	OnDidTriggerButton func() Event `json:"-"`
+
+	// An optional prompt text providing some ask or explanation to the user.
+	Prompt string `json:"prompt,omitempty"`
+
+	// An optional validation message indicating a problem with the current input value.
+	ValidationMessage string `json:"validationMessage,omitempty"`
+
+	// An optional title.
+	Title string `json:"title,omitempty"`
+
+	// An optional current step count.
+	Step int `json:"step,omitempty"`
+
+	// An optional total step count.
+	TotalSteps int `json:"totalSteps,omitempty"`
+
+	// If the UI should allow for user input. Defaults to true.
+	//
+	// Change this to false, e.g., while validating user input or
+	// loading data for the next step in user input.
+	Enabled bool `json:"enabled,omitempty"`
+
+	// If the UI should show a progress indicator. Defaults to false.
+	//
+	// Change this to true, e.g., while loading more data or validating
+	// user input.
+	Busy bool `json:"busy,omitempty"`
+
+	// If the UI should stay open even when loosing UI focus. Defaults to false.
+	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
+
+	// An event signaling when this input UI is hidden.
+	//
+	// There are several reasons why this UI might have to be hidden and
+	// the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+	// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+	// the user pressing Esc, some other input UI opening, etc.)
+	OnDidHide Event `json:"onDidHide,omitempty"`
+}
+```
+
+A concrete
+[QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput)
+to let the user input a text value.
+
+Note that in many cases the more convenient
+[window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+is easier to use.
+[window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox)
+should be used when
+[window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+does not offer the required flexibility.
 
 #### type Languages
 
@@ -686,6 +917,22 @@ const (
 	OverviewRulerLaneFull OverviewRulerLane = 7
 )
 ```
+
+#### type QuickInputButton
+
+```go
+type QuickInputButton struct {
+	// Icon for the button.
+	IconPath string `json:"iconPath"`
+
+	// An optional tooltip.
+	Tooltip string `json:"tooltip,omitempty"`
+}
+```
+
+Button for an action in a
+[QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick)
+or [InputBox](#InputBox).
 
 #### type QuickPickItem
 
@@ -1444,6 +1691,15 @@ type Window interface {
 	//
 	// `return` ── A new decoration type instance.
 	CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(*TextEditorDecorationType))
+
+	// Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
+	//
+	// Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+	// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+	// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+	//
+	// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
+	CreateInputBox() func(func(*InputBox))
 }
 ```
 

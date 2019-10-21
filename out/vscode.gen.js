@@ -256,6 +256,12 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
+                case "createInputBox": {
+                    const ret = vscode.window.createInputBox();
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
                 default:
                     throw (methodname);
             }
@@ -585,6 +591,97 @@ function handle(msg, prog, remoteCancellationTokens) {
                     return Promise.resolve({
                         key: thisTextEditorDecorationType.key,
                     });
+                }
+                default:
+                    throw methodname;
+            }
+        case "InputBox":
+            const thisInputBox = prog.objects[msg.data[""]];
+            if (!thisInputBox)
+                throw "Called vscode.InputBox." + methodname + " for an already disposed-and-forgotten instance";
+            switch (methodname) {
+                case "show": {
+                    const ret = thisInputBox.show();
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "hide": {
+                    const ret = thisInputBox.hide();
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "dispose": {
+                    const ret = thisInputBox.dispose();
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "appzObjPropsGet": {
+                    return Promise.resolve({
+                        value: thisInputBox.value,
+                        placeholder: thisInputBox.placeholder,
+                        password: thisInputBox.password,
+                        onDidChangeValue: thisInputBox.onDidChangeValue,
+                        onDidAccept: thisInputBox.onDidAccept,
+                        buttons: thisInputBox.buttons,
+                        onDidTriggerButton: thisInputBox.onDidTriggerButton,
+                        prompt: thisInputBox.prompt,
+                        validationMessage: thisInputBox.validationMessage,
+                        title: thisInputBox.title,
+                        step: thisInputBox.step,
+                        totalSteps: thisInputBox.totalSteps,
+                        enabled: thisInputBox.enabled,
+                        busy: thisInputBox.busy,
+                        ignoreFocusOut: thisInputBox.ignoreFocusOut,
+                        onDidHide: thisInputBox.onDidHide,
+                    });
+                }
+                case "appzObjPropsSet": {
+                    const allUpdates = msg.data['allUpdates'];
+                    if (!allUpdates)
+                        return Promise.reject(msg.data);
+                    const prop_value = allUpdates["value"];
+                    if (prop_value !== undefined && prop_value !== thisInputBox.value)
+                        thisInputBox.value = prop_value;
+                    const prop_placeholder = allUpdates["placeholder"];
+                    if (prop_placeholder !== undefined && prop_placeholder !== thisInputBox.placeholder)
+                        thisInputBox.placeholder = (!(prop_placeholder && prop_placeholder.length)) ? undefined : prop_placeholder;
+                    const prop_password = allUpdates["password"];
+                    if (prop_password !== undefined && prop_password !== thisInputBox.password)
+                        thisInputBox.password = prop_password;
+                    const prop_buttons = allUpdates["buttons"];
+                    if (prop_buttons !== undefined && prop_buttons !== thisInputBox.buttons)
+                        thisInputBox.buttons = prop_buttons;
+                    const prop_prompt = allUpdates["prompt"];
+                    if (prop_prompt !== undefined && prop_prompt !== thisInputBox.prompt)
+                        thisInputBox.prompt = (!(prop_prompt && prop_prompt.length)) ? undefined : prop_prompt;
+                    const prop_validationMessage = allUpdates["validationMessage"];
+                    if (prop_validationMessage !== undefined && prop_validationMessage !== thisInputBox.validationMessage)
+                        thisInputBox.validationMessage = (!(prop_validationMessage && prop_validationMessage.length)) ? undefined : prop_validationMessage;
+                    const prop_title = allUpdates["title"];
+                    if (prop_title !== undefined && prop_title !== thisInputBox.title)
+                        thisInputBox.title = (!(prop_title && prop_title.length)) ? undefined : prop_title;
+                    const prop_step = allUpdates["step"];
+                    if (prop_step !== undefined && prop_step !== thisInputBox.step)
+                        thisInputBox.step = (!(prop_step && prop_step.length)) ? undefined : prop_step;
+                    const prop_totalSteps = allUpdates["totalSteps"];
+                    if (prop_totalSteps !== undefined && prop_totalSteps !== thisInputBox.totalSteps)
+                        thisInputBox.totalSteps = (!(prop_totalSteps && prop_totalSteps.length)) ? undefined : prop_totalSteps;
+                    const prop_enabled = allUpdates["enabled"];
+                    if (prop_enabled !== undefined && prop_enabled !== thisInputBox.enabled)
+                        thisInputBox.enabled = prop_enabled;
+                    const prop_busy = allUpdates["busy"];
+                    if (prop_busy !== undefined && prop_busy !== thisInputBox.busy)
+                        thisInputBox.busy = prop_busy;
+                    const prop_ignoreFocusOut = allUpdates["ignoreFocusOut"];
+                    if (prop_ignoreFocusOut !== undefined && prop_ignoreFocusOut !== thisInputBox.ignoreFocusOut)
+                        thisInputBox.ignoreFocusOut = prop_ignoreFocusOut;
+                    const prop_onDidHide = allUpdates["onDidHide"];
+                    if (prop_onDidHide !== undefined && prop_onDidHide !== thisInputBox.onDidHide)
+                        thisInputBox.onDidHide = prop_onDidHide;
+                    return Promise.resolve();
                 }
                 default:
                     throw methodname;
