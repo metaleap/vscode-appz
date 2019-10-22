@@ -74,5 +74,7 @@ exports.strFmt = (s, ...args) => {
         s = s.replace('{' + i + '}', '' + args[i])
     return s
 }
+exports.strLo = s => s.toLowerCase()
+exports.strUp = s => s.toUpperCase()
 
 main()

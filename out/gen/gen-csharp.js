@@ -92,7 +92,7 @@ class Gen extends gen_syn.Gen {
                 this.emitDocs(it);
                 emitsigheadln().emitInstr(it.Func.Body).line();
                 if (isdisp)
-                    this.line("void IDisposable.Dispose() { this.Dispose(); }");
+                    this.lines("void IDisposable.Dispose() { this.Dispose(); }", "internal Action<IVscode, any, any> OnError { get => this.disp?.impl?.OnError; }");
             }).lines("}", "");
         else if (iface)
             emitsigheadln()

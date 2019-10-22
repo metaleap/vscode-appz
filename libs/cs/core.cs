@@ -100,7 +100,7 @@ namespace VscAppz {
 
                     } else if (cbevt != null) {
                         any fnargs;
-                        var ok = msg.Data.TryGetValue("", out fnargs);
+                        var ok = msg.Data.TryGetValue("[]", out fnargs);
                         if (ok && (fnargs is any[] args))
                             ok = cbevt(args);
                         if (!ok)
@@ -109,7 +109,7 @@ namespace VscAppz {
                     } else if (cbmisc != null) {
                         any fnargs;
                         any ret = null;
-                        var ok = msg.Data.TryGetValue("", out fnargs);
+                        var ok = msg.Data.TryGetValue("[]", out fnargs);
                         if (ok && (fnargs is any[] args))
                             (ret, ok) = cbmisc(args);
                         send(new ipcMsg("", 1, msg.CbId) { Data = {
@@ -136,7 +136,7 @@ namespace VscAppz {
                 catch (Exception _) { err = _;}
             }
             if (err != null ) {
-                msg.Data[""] = msg.QName;
+                msg.Data["#"] = msg.QName;
                 OnError(this, err, msg.Data);
             }
         }

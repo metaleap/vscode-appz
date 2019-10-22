@@ -281,6 +281,42 @@ func demo_Window_ShowQuickPick() {
 	})
 }
 
+func demo_Window_CreateInputBox() {
+	vsc.Window().CreateInputBox()(func(inputbox *InputBox) {
+		inputbox.Get()(func(props InputBoxState) {
+			props.IgnoreFocusOut = true
+			props.Placeholder = "The initial Placeholder"
+			props.Prompt = "The initial Prompt"
+			props.Title = "The initial Title"
+			inputbox.Set(props)(func() {
+				inputbox.OnDidChangeValue(func(input string) {
+					inputbox.Get()(func(p InputBoxState) {
+						p.Prompt = strFmt("Lower: {0}", strLo(p.Value))
+						p.Title = strFmt("Upper: {0}", strUp(p.Value))
+						inputbox.Set(p)
+					})
+				})
+				var finalinputvalue *string
+				inputbox.OnDidAccept(func() {
+					inputbox.Get()(func(p InputBoxState) {
+						finalinputvalue = &p.Value
+						inputbox.Hide()
+					})
+				})
+				inputbox.OnDidHide(func() {
+					inputbox.Dispose()
+					if (nil != finalinputvalue) {
+						vsc.Window().ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", *finalinputvalue)), nil)
+					} else {
+						vsc.Window().ShowWarningMessage1(logLn("Backing off or backing up?"), nil)
+					}
+				})
+				inputbox.Show()
+			})
+		})
+	})
+}
+
 func subscribeToMiscEvents() {
 	vsc.Extensions().OnDidChange(func() {
 		vsc.Window().SetStatusBarMessage1(logLn("Some extension(s) were just (un)installed or (de)activated."), 4242)
@@ -295,7 +331,7 @@ func subscribeToMiscEvents() {
 
 func demosMenu() {
 	var items []string
-	items = []string{"demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_ShowInputBox"}
+	items = []string{"demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_CreateInputBox", "demo_Window_ShowInputBox"}
 	var opts QuickPickOptions
 	opts.IgnoreFocusOut = true
 	opts.PlaceHolder = "This menu can be re-opened any time via our custom status-bar item."
@@ -349,6 +385,10 @@ func demosMenu() {
 				logLn("Picked `demo_Window_ShowQuickPick` from main menu")
 				demo_Window_ShowQuickPick()
 			}
+			if "demo_Window_CreateInputBox" == (*menuitem) {
+				logLn("Picked `demo_Window_CreateInputBox` from main menu")
+				demo_Window_CreateInputBox()
+			}
 			if "demo_Window_ShowInputBox" == (*menuitem) {
 				logLn("Picked `demo_Window_ShowInputBox` from main menu")
 				demo_Window_ShowInputBox()
@@ -385,7 +425,7 @@ func onUpAndRunning() {
 		var mycmd func([]any) any
 		mycmd = func(_unused []any) any {
 			clickcount = 1 + clickcount
-			statusitem.Get()(func(props StatusBarItemProperties) {
+			statusitem.Get()(func(props StatusBarItemState) {
 				props.Text = logLn(strFmt("You clicked me {0} time(s).", clickcount))
 				if "editorLightBulb.foreground" == props.Color {
 					props.Color = "terminal.ansiGreen"
@@ -405,7 +445,7 @@ func onUpAndRunning() {
 		vsc.Commands().RegisterCommand(cmdName, mycmd)(func(_commandRegisteredAtThisPoint *Disposable) {
 			vsc.Window().CreateStatusBarItem(0, nil)(func(it *StatusBarItem) {
 				statusitem = it
-				var props StatusBarItemProperties
+				var props StatusBarItemState
 				props.Tooltip = strFmt("Hi from {0}!", appName)
 				props.Text = "You clicked me 0 time(s)."
 				props.Color = "#42BEEF"

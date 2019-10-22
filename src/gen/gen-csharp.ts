@@ -136,8 +136,10 @@ export class Gen extends gen_syn.Gen {
                 .indented(() => {
                     this.emitDocs(it)
                     emitsigheadln().emitInstr(it.Func.Body).line()
-                    if (isdisp)
-                        this.line("void IDisposable.Dispose() { this.Dispose(); }")
+                    if (isdisp) this.lines(
+                        "void IDisposable.Dispose() { this.Dispose(); }",
+                        "internal Action<IVscode, any, any> OnError { get => this.disp?.impl?.OnError; }",
+                    )
                 }).lines("}", "")
         else if (iface)
             emitsigheadln()

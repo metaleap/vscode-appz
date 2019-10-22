@@ -512,13 +512,13 @@ function handle(msg, prog, remoteCancellationTokens) {
                         thisStatusBarItem.text = prop_text;
                     const prop_tooltip = allUpdates["tooltip"];
                     if (prop_tooltip !== undefined && prop_tooltip !== thisStatusBarItem.tooltip)
-                        thisStatusBarItem.tooltip = (!(prop_tooltip && prop_tooltip.length)) ? undefined : prop_tooltip;
+                        thisStatusBarItem.tooltip = prop_tooltip;
                     const prop_color = allUpdates["color"];
                     if (prop_color !== undefined && prop_color !== thisStatusBarItem.color)
                         thisStatusBarItem.color = (!(prop_color && prop_color.length)) ? undefined : prop_color.startsWith("#") ? prop_color : new vscode.ThemeColor(prop_color);
                     const prop_command = allUpdates["command"];
                     if (prop_command !== undefined && prop_command !== thisStatusBarItem.command)
-                        thisStatusBarItem.command = (!(prop_command && prop_command.length)) ? undefined : prop_command;
+                        thisStatusBarItem.command = prop_command;
                     return Promise.resolve();
                 }
                 default:
@@ -600,6 +600,48 @@ function handle(msg, prog, remoteCancellationTokens) {
             if (!thisInputBox)
                 throw "Called vscode.InputBox." + methodname + " for an already disposed-and-forgotten instance";
             switch (methodname) {
+                case "onDidChangeValue": {
+                    const _fnid_handler = msg.data['handler'];
+                    if (!(_fnid_handler && _fnid_handler.length))
+                        return Promise.reject(msg.data);
+                    const arg_handler = (_0) => {
+                        if (prog && prog.proc)
+                            return prog.callBack(false, _fnid_handler, _0);
+                        return undefined;
+                    };
+                    const ret = thisInputBox.onDidChangeValue(arg_handler);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "onDidAccept": {
+                    const _fnid_handler = msg.data['handler'];
+                    if (!(_fnid_handler && _fnid_handler.length))
+                        return Promise.reject(msg.data);
+                    const arg_handler = () => {
+                        if (prog && prog.proc)
+                            return prog.callBack(false, _fnid_handler);
+                        return undefined;
+                    };
+                    const ret = thisInputBox.onDidAccept(arg_handler);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "onDidTriggerButton": {
+                    const _fnid_handler = msg.data['handler'];
+                    if (!(_fnid_handler && _fnid_handler.length))
+                        return Promise.reject(msg.data);
+                    const arg_handler = (_0) => {
+                        if (prog && prog.proc)
+                            return prog.callBack(false, _fnid_handler, _0);
+                        return undefined;
+                    };
+                    const ret = thisInputBox.onDidTriggerButton(arg_handler);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
                 case "show": {
                     const ret = thisInputBox.show();
                     const retdisp = ret;
@@ -608,6 +650,20 @@ function handle(msg, prog, remoteCancellationTokens) {
                 }
                 case "hide": {
                     const ret = thisInputBox.hide();
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "onDidHide": {
+                    const _fnid_handler = msg.data['handler'];
+                    if (!(_fnid_handler && _fnid_handler.length))
+                        return Promise.reject(msg.data);
+                    const arg_handler = () => {
+                        if (prog && prog.proc)
+                            return prog.callBack(false, _fnid_handler);
+                        return undefined;
+                    };
+                    const ret = thisInputBox.onDidHide(arg_handler);
                     const retdisp = ret;
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
@@ -623,10 +679,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         value: thisInputBox.value,
                         placeholder: thisInputBox.placeholder,
                         password: thisInputBox.password,
-                        onDidChangeValue: thisInputBox.onDidChangeValue,
-                        onDidAccept: thisInputBox.onDidAccept,
                         buttons: thisInputBox.buttons,
-                        onDidTriggerButton: thisInputBox.onDidTriggerButton,
                         prompt: thisInputBox.prompt,
                         validationMessage: thisInputBox.validationMessage,
                         title: thisInputBox.title,
@@ -635,7 +688,6 @@ function handle(msg, prog, remoteCancellationTokens) {
                         enabled: thisInputBox.enabled,
                         busy: thisInputBox.busy,
                         ignoreFocusOut: thisInputBox.ignoreFocusOut,
-                        onDidHide: thisInputBox.onDidHide,
                     });
                 }
                 case "appzObjPropsSet": {
@@ -647,7 +699,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         thisInputBox.value = prop_value;
                     const prop_placeholder = allUpdates["placeholder"];
                     if (prop_placeholder !== undefined && prop_placeholder !== thisInputBox.placeholder)
-                        thisInputBox.placeholder = (!(prop_placeholder && prop_placeholder.length)) ? undefined : prop_placeholder;
+                        thisInputBox.placeholder = prop_placeholder;
                     const prop_password = allUpdates["password"];
                     if (prop_password !== undefined && prop_password !== thisInputBox.password)
                         thisInputBox.password = prop_password;
@@ -656,19 +708,19 @@ function handle(msg, prog, remoteCancellationTokens) {
                         thisInputBox.buttons = prop_buttons;
                     const prop_prompt = allUpdates["prompt"];
                     if (prop_prompt !== undefined && prop_prompt !== thisInputBox.prompt)
-                        thisInputBox.prompt = (!(prop_prompt && prop_prompt.length)) ? undefined : prop_prompt;
+                        thisInputBox.prompt = prop_prompt;
                     const prop_validationMessage = allUpdates["validationMessage"];
                     if (prop_validationMessage !== undefined && prop_validationMessage !== thisInputBox.validationMessage)
-                        thisInputBox.validationMessage = (!(prop_validationMessage && prop_validationMessage.length)) ? undefined : prop_validationMessage;
+                        thisInputBox.validationMessage = prop_validationMessage;
                     const prop_title = allUpdates["title"];
                     if (prop_title !== undefined && prop_title !== thisInputBox.title)
-                        thisInputBox.title = (!(prop_title && prop_title.length)) ? undefined : prop_title;
+                        thisInputBox.title = prop_title;
                     const prop_step = allUpdates["step"];
                     if (prop_step !== undefined && prop_step !== thisInputBox.step)
-                        thisInputBox.step = (!(prop_step && prop_step.length)) ? undefined : prop_step;
+                        thisInputBox.step = prop_step;
                     const prop_totalSteps = allUpdates["totalSteps"];
                     if (prop_totalSteps !== undefined && prop_totalSteps !== thisInputBox.totalSteps)
-                        thisInputBox.totalSteps = (!(prop_totalSteps && prop_totalSteps.length)) ? undefined : prop_totalSteps;
+                        thisInputBox.totalSteps = prop_totalSteps;
                     const prop_enabled = allUpdates["enabled"];
                     if (prop_enabled !== undefined && prop_enabled !== thisInputBox.enabled)
                         thisInputBox.enabled = prop_enabled;
@@ -678,9 +730,6 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const prop_ignoreFocusOut = allUpdates["ignoreFocusOut"];
                     if (prop_ignoreFocusOut !== undefined && prop_ignoreFocusOut !== thisInputBox.ignoreFocusOut)
                         thisInputBox.ignoreFocusOut = prop_ignoreFocusOut;
-                    const prop_onDidHide = allUpdates["onDidHide"];
-                    if (prop_onDidHide !== undefined && prop_onDidHide !== thisInputBox.onDidHide)
-                        thisInputBox.onDidHide = prop_onDidHide;
                     return Promise.resolve();
                 }
                 default:

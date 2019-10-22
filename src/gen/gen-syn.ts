@@ -15,7 +15,7 @@ export interface TEnum extends WithDocs, WithName, WithFrom<gen.PrepEnum> { Enum
 export interface TInterface extends WithDocs, WithName, WithFrom<gen.PrepInterface> { Methods: Method[], IsTop?: boolean }
 export interface Enumerant extends WithDocs, WithName, WithFrom<gen.PrepEnumerant> { Value: number }
 export interface TStruct extends WithDocs, WithName, WithFrom<gen.PrepStruct> { Fields: Field[], IsOutgoing: boolean, IsIncoming: boolean, OutgoingTwin?: string }
-export interface Method extends WithDocs, WithName, WithType, WithFrom<gen.PrepMethod> { Args: Arg[], IsSubNs?: boolean }
+export interface Method extends WithDocs, WithName, WithType, WithFrom<gen.PrepMethod> { Args: Arg[], IsSubNs?: boolean, IsObjEvt?: boolean }
 export interface Arg extends WithDocs, WithName, WithType, WithFrom<gen.PrepArg> { }
 export interface Field extends WithDocs, WithName, WithType, WithFrom<gen.PrepField> {
     FuncFieldRel?: Field, Json?: { Excluded: boolean, Name: string, Required: boolean }
@@ -250,16 +250,18 @@ export class Builder {
     }
 
     fromStruct(it: gen.PrepStruct): TStruct {
-        let docssrcnode: ts.Node = it.fromOrig ? it.fromOrig.decl : it.isPropsOfIface ? it.isPropsOfIface.fromOrig : it.isPropsOfStruct.fromOrig.decl
+        const docssrcnode: ts.Node = it.fromOrig ? it.fromOrig.decl : it.isPropsOfIface ? it.isPropsOfIface.fromOrig : it.isPropsOfStruct.fromOrig.decl
+        const structname = this.gen.nameRewriters.types.structs(it.name)
         let ret: TStruct = {
             fromPrep: it,
             name: it.name,
-            Name: this.gen.nameRewriters.types.structs(it.name),
+            Name: structname,
             Docs: this.docs(gen.docs(docssrcnode)),
             IsOutgoing: it.isOutgoing ? true : false,
             IsIncoming: it.isIncoming ? true : false,
             Fields: it.isDispObj ? [
                 { Name: "disp", Type: { Maybe: { Name: "Disposable" } } },
+                { Name: "nextUpd", Type: { Maybe: { Name: structname + "State" } } },
             ] : it.fields.map((_: gen.PrepField): Field => ({
                 fromPrep: _,
                 name: _.name,
@@ -1305,12 +1307,13 @@ export class Gen extends gen.Gen implements gen.IGen {
             let tfun: [gen.TypeSpec[], gen.TypeSpec]
             const struct = this.allStructs[structname]
             if (struct && struct.fromPrep && struct.fromPrep.isDispObj) {
-                for (const field of struct.fromPrep.fields)
+                for (const field of struct.fromPrep.fields) {
+                    const orig = field.fromOrig
                     if (tfun = gen.typeFun(field.typeSpec)) {
-                        const orig = field.fromOrig as ts.MethodSignature
-                        if (!orig)
-                            throw field
-                        const prepargs = tfun[0].map((_, i): gen.PrepArg => gen.argFrom(_, orig.parameters[i]))
+                        const isevt = (ts.isPropertySignature(orig) && ts.isTypeReferenceNode(orig.type) && orig.type.typeName.getText() === "Event")
+                        const prepargs = isevt
+                            ? [{ name: "handler", optional: false, typeSpec: (field.typeSpec as gen.TypeSpecFun).From[0] }]
+                            : (tfun[0].map((_, i): gen.PrepArg => gen.argFrom(_, (orig as ts.MethodSignature).parameters[i])))
                         let tret = tfun[1]
                         if (!gen.typeProm(tret))
                             tret = { Thens: [tret] }
@@ -1324,30 +1327,31 @@ export class Gen extends gen.Gen implements gen.IGen {
                                     arg.Type = tmay.Maybe
                                 return arg
                             }),
-                            Type: null,
-                            Docs: this.b.docs(gen.docs(field.fromOrig), [], true, true),
-                            fromPrep: { args: prepargs, name: field.name, nameOrig: field.fromOrig.getText() }
+                            Type: null, IsObjEvt: isevt,
+                            Docs: this.b.docs(gen.docs(orig), [], true, true),
+                            fromPrep: { args: prepargs, name: field.name, nameOrig: orig.getText() }
                         }
                         me.Type = { From: [this.typeUnMaybe(me.Args[me.Args.length - 1].Type)], To: null }
                         me.Args = me.Args.slice(0, me.Args.length - 1)
                         this.emitMethodImpl(struct, me, this.genMethodImpl_ObjMethodCall)
                     }
+                }
                 let propsfields = struct.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec))
                 if (propsfields && propsfields.length) {
                     const nameget = gen.pickName("get", this.options.objPropsGetSetNamePicks, struct.fromPrep.fields),
                         nameset = gen.pickName("set", this.options.objPropsGetSetNamePicks, struct.fromPrep.fields)
                     const mget: Method = {
                         name: "appzObjPropsGet", Name: this.nameRewriters.methods(nameget), Args: [],
-                        Type: { From: [{ From: [{ Name: struct.Name + "Properties" }], To: null }], To: null },
+                        Type: { From: [{ From: [{ Name: struct.Name + "State" }], To: null }], To: null },
                         Docs: [{ Lines: ["Obtains this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
                     }
-                    this.state.genPopulateFor[struct.Name + "Properties"] = true
+                    this.state.genPopulateFor[struct.Name + "State"] = true
                     this.emitMethodImpl(struct, mget, this.genMethodImpl_ObjPropsGet)
                     propsfields = propsfields.filter(_ => !_.readOnly)
                     if (propsfields.length) {
                         const mset: Method = {
                             name: "appzObjPropsSet", Name: this.nameRewriters.methods(nameset),
-                            Args: [{ Name: "allUpdates", Type: { Name: struct.Name + "Properties" } }],
+                            Args: [{ Name: "allUpdates", Type: { Name: struct.Name + "State" } }],
                             Type: { From: [{ From: [null], To: null }], To: null },
                             Docs: [{ Lines: ["Updates this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
                         }

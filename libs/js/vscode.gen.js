@@ -136,6 +136,26 @@ function newTextEditorDecorationType() {
     me.Get = () => TextEditorDecorationType_Get.call(me);
     return me;
 }
+function newInputBox() {
+    let me;
+    me = { populateFrom: _ => InputBox_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me.OnDidChangeValue = (a0) => InputBox_OnDidChangeValue.call(me, a0);
+    me.OnDidAccept = (a0) => InputBox_OnDidAccept.call(me, a0);
+    me.OnDidTriggerButton = (a0) => InputBox_OnDidTriggerButton.call(me, a0);
+    me.Show = () => InputBox_Show.call(me);
+    me.Hide = () => InputBox_Hide.call(me);
+    me.OnDidHide = (a0) => InputBox_OnDidHide.call(me, a0);
+    me.Dispose = () => InputBox_Dispose.call(me);
+    me.Get = () => InputBox_Get.call(me);
+    me.Set = (a0) => InputBox_Set.call(me, a0);
+    return me;
+}
+function newQuickInputButton() {
+    let me;
+    me = { populateFrom: _ => QuickInputButton_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    return me;
+}
+exports.newQuickInputButton = newQuickInputButton;
 function newWorkspaceFoldersChangeEvent() {
     let me;
     me = { populateFrom: _ => WorkspaceFoldersChangeEvent_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
@@ -156,24 +176,30 @@ function newWorkspaceProperties() {
     me = { populateFrom: _ => WorkspaceProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-function newStatusBarItemProperties() {
+function newStatusBarItemState() {
     let me;
-    me = { populateFrom: _ => StatusBarItemProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { populateFrom: _ => StatusBarItemState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-exports.newStatusBarItemProperties = newStatusBarItemProperties;
-function newOutputChannelProperties() {
+exports.newStatusBarItemState = newStatusBarItemState;
+function newOutputChannelState() {
     let me;
-    me = { populateFrom: _ => OutputChannelProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { populateFrom: _ => OutputChannelState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-exports.newOutputChannelProperties = newOutputChannelProperties;
-function newTextEditorDecorationTypeProperties() {
+exports.newOutputChannelState = newOutputChannelState;
+function newTextEditorDecorationTypeState() {
     let me;
-    me = { populateFrom: _ => TextEditorDecorationTypeProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { populateFrom: _ => TextEditorDecorationTypeState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-exports.newTextEditorDecorationTypeProperties = newTextEditorDecorationTypeProperties;
+exports.newTextEditorDecorationTypeState = newTextEditorDecorationTypeState;
+function newInputBoxState() {
+    let me;
+    me = { populateFrom: _ => InputBoxState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    return me;
+}
+exports.newInputBoxState = newInputBoxState;
 class impl {
     constructor() {
         this.Window = new implWindow(this);
@@ -1309,6 +1335,34 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
+    CreateInputBox() {
+        let msg;
+        msg = newipcMsg();
+        msg.QName = "window.createInputBox";
+        msg.Data = {};
+        let onresp;
+        let onret;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newInputBox();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
+                }
+                result.disp.impl = this.Impl();
+            }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
+    }
 }
 class implEnv extends implBase {
     constructor(impl) { super(impl); }
@@ -2280,7 +2334,7 @@ function StatusBarItem_Get() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newStatusBarItemProperties();
+            result = newStatusBarItemState();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -2447,7 +2501,7 @@ function OutputChannel_Get() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelProperties();
+            result = newOutputChannelState();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -2478,7 +2532,7 @@ function TextEditorDecorationType_Get() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newTextEditorDecorationTypeProperties();
+            result = newTextEditorDecorationTypeState();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -2486,6 +2540,295 @@ function TextEditorDecorationType_Get() {
         }
         if ((undefined !== onret && null !== onret)) {
             onret(result);
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function InputBox_OnDidChangeValue(handler) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "InputBox.onDidChangeValue";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let _fnid_handler;
+    if ((undefined === handler || null === handler)) {
+        vsc_appz_1.OnError(this.disp.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        return null;
+    }
+    _fnid_handler = this.disp.impl.nextSub((args) => {
+        let ok;
+        if (1 !== args.length) {
+            return ok;
+        }
+        let _a_0_;
+        [_a_0_, ok] = [args[0], typeof args[0] === "string"];
+        if (!ok) {
+            return false;
+        }
+        handler(_a_0_);
+        return true;
+    }, null);
+    msg.Data["handler"] = _fnid_handler;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler));
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function InputBox_OnDidAccept(handler) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "InputBox.onDidAccept";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let _fnid_handler;
+    if ((undefined === handler || null === handler)) {
+        vsc_appz_1.OnError(this.disp.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        return null;
+    }
+    _fnid_handler = this.disp.impl.nextSub((args) => {
+        let ok;
+        if (0 !== args.length) {
+            return ok;
+        }
+        handler();
+        return true;
+    }, null);
+    msg.Data["handler"] = _fnid_handler;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler));
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function InputBox_OnDidTriggerButton(handler) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "InputBox.onDidTriggerButton";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let _fnid_handler;
+    if ((undefined === handler || null === handler)) {
+        vsc_appz_1.OnError(this.disp.impl, "InputBox.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        return null;
+    }
+    _fnid_handler = this.disp.impl.nextSub((args) => {
+        let ok;
+        if (1 !== args.length) {
+            return ok;
+        }
+        let _a_0_;
+        _a_0_ = newQuickInputButton();
+        ok = _a_0_.populateFrom(args[0]);
+        if (!ok) {
+            return false;
+        }
+        handler(_a_0_);
+        return true;
+    }, null);
+    msg.Data["handler"] = _fnid_handler;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler));
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function InputBox_Show() {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "InputBox.show";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        if ((undefined !== payload && null !== payload)) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function InputBox_Hide() {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "InputBox.hide";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        if ((undefined !== payload && null !== payload)) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function InputBox_OnDidHide(handler) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "InputBox.onDidHide";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let _fnid_handler;
+    if ((undefined === handler || null === handler)) {
+        vsc_appz_1.OnError(this.disp.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        return null;
+    }
+    _fnid_handler = this.disp.impl.nextSub((args) => {
+        let ok;
+        if (0 !== args.length) {
+            return ok;
+        }
+        handler();
+        return true;
+    }, null);
+    msg.Data["handler"] = _fnid_handler;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler));
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function InputBox_Dispose() {
+    return this.disp.Dispose();
+}
+function InputBox_Get() {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "InputBox.appzObjPropsGet";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newInputBoxState();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result);
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function InputBox_Set(allUpdates) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "InputBox.appzObjPropsSet";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    msg.Data["allUpdates"] = allUpdates;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        if ((undefined !== payload && null !== payload)) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -2723,6 +3066,12 @@ function OutputChannel_populateFrom(payload) {
     return ok;
 }
 function TextEditorDecorationType_populateFrom(payload) {
+    let ok;
+    this.disp = newDisposable();
+    ok = this.disp.populateFrom(payload);
+    return ok;
+}
+function InputBox_populateFrom(payload) {
     let ok;
     this.disp = newDisposable();
     ok = this.disp.populateFrom(payload);
@@ -3006,7 +3355,7 @@ function DiagnosticChangeEvent_populateFrom(payload) {
     }
     return true;
 }
-function StatusBarItemProperties_populateFrom(payload) {
+function StatusBarItemState_populateFrom(payload) {
     let it;
     let ok;
     let val;
@@ -3098,7 +3447,7 @@ function StatusBarItemProperties_populateFrom(payload) {
     }
     return true;
 }
-function OutputChannelProperties_populateFrom(payload) {
+function OutputChannelState_populateFrom(payload) {
     let it;
     let ok;
     let val;
@@ -3121,7 +3470,7 @@ function OutputChannelProperties_populateFrom(payload) {
     }
     return true;
 }
-function TextEditorDecorationTypeProperties_populateFrom(payload) {
+function TextEditorDecorationTypeState_populateFrom(payload) {
     let it;
     let ok;
     let val;
@@ -3141,6 +3490,214 @@ function TextEditorDecorationTypeProperties_populateFrom(payload) {
         this.Key = () => {
             return key;
         };
+    }
+    return true;
+}
+function QuickInputButton_populateFrom(payload) {
+    let it;
+    let ok;
+    let val;
+    [it, ok] = [payload, typeof payload === "object"];
+    if (!ok) {
+        return false;
+    }
+    [val, ok] = [it["iconPath"], undefined !== it["iconPath"]];
+    if (ok) {
+        let iconPath;
+        if ((undefined !== val && null !== val)) {
+            [iconPath, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.iconPath = iconPath;
+    }
+    else {
+        return false;
+    }
+    [val, ok] = [it["tooltip"], undefined !== it["tooltip"]];
+    if (ok) {
+        let tooltip;
+        if ((undefined !== val && null !== val)) {
+            let _tooltip_;
+            [_tooltip_, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+            tooltip = _tooltip_;
+        }
+        this.tooltip = tooltip;
+    }
+    [val, ok] = [it["my"], undefined !== it["my"]];
+    if (ok) {
+        let my;
+        if ((undefined !== val && null !== val)) {
+            [my, ok] = [val, typeof val === "object"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.my = my;
+    }
+    return true;
+}
+function InputBoxState_populateFrom(payload) {
+    let it;
+    let ok;
+    let val;
+    [it, ok] = [payload, typeof payload === "object"];
+    if (!ok) {
+        return false;
+    }
+    [val, ok] = [it["value"], undefined !== it["value"]];
+    if (ok) {
+        let value;
+        if ((undefined !== val && null !== val)) {
+            [value, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.value = value;
+    }
+    [val, ok] = [it["placeholder"], undefined !== it["placeholder"]];
+    if (ok) {
+        let placeholder;
+        if ((undefined !== val && null !== val)) {
+            [placeholder, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.placeholder = placeholder;
+    }
+    [val, ok] = [it["password"], undefined !== it["password"]];
+    if (ok) {
+        let password;
+        if ((undefined !== val && null !== val)) {
+            [password, ok] = [val, typeof val === "boolean"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.password = password;
+    }
+    [val, ok] = [it["buttons"], undefined !== it["buttons"]];
+    if (ok) {
+        let buttons;
+        if ((undefined !== val && null !== val)) {
+            let __coll__buttons;
+            [__coll__buttons, ok] = [val, (typeof val === "object") && (typeof val["length"] === "number")];
+            if (!ok) {
+                return false;
+            }
+            buttons = new Array(__coll__buttons.length);
+            let __idx__buttons;
+            __idx__buttons = 0;
+            for (const __item__buttons of __coll__buttons) {
+                let __val__buttons;
+                __val__buttons = newQuickInputButton();
+                ok = __val__buttons.populateFrom(__item__buttons);
+                if (!ok) {
+                    return false;
+                }
+                buttons[__idx__buttons] = __val__buttons;
+                __idx__buttons = __idx__buttons + 1;
+            }
+        }
+        this.buttons = buttons;
+    }
+    [val, ok] = [it["prompt"], undefined !== it["prompt"]];
+    if (ok) {
+        let prompt;
+        if ((undefined !== val && null !== val)) {
+            [prompt, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.prompt = prompt;
+    }
+    [val, ok] = [it["validationMessage"], undefined !== it["validationMessage"]];
+    if (ok) {
+        let validationMessage;
+        if ((undefined !== val && null !== val)) {
+            [validationMessage, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.validationMessage = validationMessage;
+    }
+    [val, ok] = [it["title"], undefined !== it["title"]];
+    if (ok) {
+        let title;
+        if ((undefined !== val && null !== val)) {
+            [title, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.title = title;
+    }
+    [val, ok] = [it["step"], undefined !== it["step"]];
+    if (ok) {
+        let step;
+        if ((undefined !== val && null !== val)) {
+            let _step_;
+            [_step_, ok] = [val, typeof val === "number"];
+            if (!ok) {
+                return false;
+            }
+            step = _step_;
+        }
+        this.step = step;
+    }
+    [val, ok] = [it["totalSteps"], undefined !== it["totalSteps"]];
+    if (ok) {
+        let totalSteps;
+        if ((undefined !== val && null !== val)) {
+            let _totalSteps_;
+            [_totalSteps_, ok] = [val, typeof val === "number"];
+            if (!ok) {
+                return false;
+            }
+            totalSteps = _totalSteps_;
+        }
+        this.totalSteps = totalSteps;
+    }
+    [val, ok] = [it["enabled"], undefined !== it["enabled"]];
+    if (ok) {
+        let enabled;
+        if ((undefined !== val && null !== val)) {
+            [enabled, ok] = [val, typeof val === "boolean"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.enabled = enabled;
+    }
+    [val, ok] = [it["busy"], undefined !== it["busy"]];
+    if (ok) {
+        let busy;
+        if ((undefined !== val && null !== val)) {
+            [busy, ok] = [val, typeof val === "boolean"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.busy = busy;
+    }
+    [val, ok] = [it["ignoreFocusOut"], undefined !== it["ignoreFocusOut"]];
+    if (ok) {
+        let ignoreFocusOut;
+        if ((undefined !== val && null !== val)) {
+            [ignoreFocusOut, ok] = [val, typeof val === "boolean"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.ignoreFocusOut = ignoreFocusOut;
     }
     return true;
 }

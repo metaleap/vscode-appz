@@ -107,3 +107,5 @@ func strFmt(s string, args ...any) string {
 	}
 	return s
 }
+func strLo(s string) string { return strings.ToLower(s) }
+func strUp(s string) string { return strings.ToUpper(s) }

@@ -1411,6 +1411,8 @@ namespace VscAppz {
 	/// </summary>
 	public partial class StatusBarItem {
 		internal Disposable disp;
+
+		internal StatusBarItemState nextUpd;
 	}
 
 	/// <summary>
@@ -1421,6 +1423,8 @@ namespace VscAppz {
 	/// </summary>
 	public partial class OutputChannel {
 		internal Disposable disp;
+
+		internal OutputChannelState nextUpd;
 	}
 
 	/// <summary>
@@ -1641,6 +1645,8 @@ namespace VscAppz {
 	/// </summary>
 	public partial class TextEditorDecorationType {
 		internal Disposable disp;
+
+		internal TextEditorDecorationTypeState nextUpd;
 	}
 
 	/// <summary>
@@ -1652,6 +1658,8 @@ namespace VscAppz {
 	/// </summary>
 	public partial class InputBox {
 		internal Disposable disp;
+
+		internal InputBoxState nextUpd;
 	}
 
 	/// <summary>Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).</summary>
@@ -1663,6 +1671,10 @@ namespace VscAppz {
 		/// <summary>An optional tooltip.</summary>
 		[JsonProperty("tooltip")]
 		public string Tooltip;
+
+		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
+		[JsonProperty("my")]
+		public dict My;
 	}
 
 	/// <summary>An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).</summary>
@@ -1797,7 +1809,7 @@ namespace VscAppz {
 	/// A status bar item is a status bar contribution that can
 	/// show text and icons and run a command on click.
 	/// </summary>
-	public partial class StatusBarItemProperties {
+	public partial class StatusBarItemState {
 		/// <summary>The alignment of this item.</summary>
 		[JsonIgnore]
 		public Func<StatusBarAlignment> Alignment;
@@ -1842,7 +1854,7 @@ namespace VscAppz {
 	/// To get an instance of an `OutputChannel` use
 	/// [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 	/// </summary>
-	public partial class OutputChannelProperties {
+	public partial class OutputChannelState {
 		/// <summary>The human-readable name of this output channel.</summary>
 		[JsonIgnore]
 		public Func<string> Name;
@@ -1855,7 +1867,7 @@ namespace VscAppz {
 	/// To get an instance of a `TextEditorDecorationType` use
 	/// [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 	/// </summary>
-	public partial class TextEditorDecorationTypeProperties {
+	public partial class TextEditorDecorationTypeState {
 		/// <summary>Internal representation of the handle.</summary>
 		[JsonIgnore]
 		public Func<string> Key;
@@ -1868,7 +1880,7 @@ namespace VscAppz {
 	/// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 	/// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 	/// </summary>
-	public partial class InputBoxProperties {
+	public partial class InputBoxState {
 		/// <summary>Current input value.</summary>
 		[JsonProperty("value")]
 		public string Value;
@@ -1881,21 +1893,9 @@ namespace VscAppz {
 		[JsonProperty("password")]
 		public bool Password;
 
-		/// <summary>An event signaling when the value has changed.</summary>
-		[JsonIgnore]
-		public Func<Event> OnDidChangeValue;
-
-		/// <summary>An event signaling when the user indicated acceptance of the input value.</summary>
-		[JsonIgnore]
-		public Func<Event> OnDidAccept;
-
 		/// <summary>Buttons for actions in the UI.</summary>
 		[JsonProperty("buttons")]
 		public QuickInputButton[] Buttons;
-
-		/// <summary>An event signaling when a button was triggered.</summary>
-		[JsonIgnore]
-		public Func<Event> OnDidTriggerButton;
 
 		/// <summary>An optional prompt text providing some ask or explanation to the user.</summary>
 		[JsonProperty("prompt")]
@@ -1938,17 +1938,6 @@ namespace VscAppz {
 		/// <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
 		[JsonProperty("ignoreFocusOut")]
 		public bool IgnoreFocusOut;
-
-		/// <summary>
-		/// An event signaling when this input UI is hidden.
-		/// 
-		/// There are several reasons why this UI might have to be hidden and
-		/// the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
-		/// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
-		/// the user pressing Esc, some other input UI opening, etc.)
-		/// </summary>
-		[JsonProperty("onDidHide")]
-		public Event OnDidHide;
 	}
 
 	internal partial class impl : IVscode, IWindow, IEnv, IClipboard, IWorkspace, ILanguages, IExtensions, ICommands {
@@ -4118,23 +4107,24 @@ namespace VscAppz {
 			return this.disp.Dispose();
 		}
 		void IDisposable.Dispose() { this.Dispose(); }
+		internal Action<IVscode, any, any> OnError { get => this.disp?.impl?.OnError; }
 	}
 
 	public partial class StatusBarItem {
 		/// <summary>Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.</summary>
-		public Action<Action<StatusBarItemProperties>> Get() {
+		public Action<Action<StatusBarItemState>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.appzObjPropsGet";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<StatusBarItemProperties> onret = default;
+			Action<StatusBarItemState> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				StatusBarItemProperties result = default;
+				StatusBarItemState result = default;
 				if ((null != payload)) {
-					result = new StatusBarItemProperties();
+					result = new StatusBarItemState();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4146,7 +4136,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<StatusBarItemProperties> a0) => {
+			return (Action<StatusBarItemState> a0) => {
 				onret = a0;
 			};
 		}
@@ -4154,7 +4144,7 @@ namespace VscAppz {
 
 	public partial class StatusBarItem {
 		/// <summary>Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.</summary>
-		public Action<Action> Set(StatusBarItemProperties allUpdates = default) {
+		public Action<Action> Set(StatusBarItemState allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.appzObjPropsSet";
@@ -4334,23 +4324,24 @@ namespace VscAppz {
 			return this.disp.Dispose();
 		}
 		void IDisposable.Dispose() { this.Dispose(); }
+		internal Action<IVscode, any, any> OnError { get => this.disp?.impl?.OnError; }
 	}
 
 	public partial class OutputChannel {
 		/// <summary>Obtains this `OutputChannel`'s current property value for: `name`.</summary>
-		public Action<Action<OutputChannelProperties>> Get() {
+		public Action<Action<OutputChannelState>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.appzObjPropsGet";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<OutputChannelProperties> onret = default;
+			Action<OutputChannelState> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				OutputChannelProperties result = default;
+				OutputChannelState result = default;
 				if ((null != payload)) {
-					result = new OutputChannelProperties();
+					result = new OutputChannelState();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4362,7 +4353,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<OutputChannelProperties> a0) => {
+			return (Action<OutputChannelState> a0) => {
 				onret = a0;
 			};
 		}
@@ -4374,23 +4365,24 @@ namespace VscAppz {
 			return this.disp.Dispose();
 		}
 		void IDisposable.Dispose() { this.Dispose(); }
+		internal Action<IVscode, any, any> OnError { get => this.disp?.impl?.OnError; }
 	}
 
 	public partial class TextEditorDecorationType {
 		/// <summary>Obtains this `TextEditorDecorationType`'s current property value for: `key`.</summary>
-		public Action<Action<TextEditorDecorationTypeProperties>> Get() {
+		public Action<Action<TextEditorDecorationTypeState>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "TextEditorDecorationType.appzObjPropsGet";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<TextEditorDecorationTypeProperties> onret = default;
+			Action<TextEditorDecorationTypeState> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				TextEditorDecorationTypeProperties result = default;
+				TextEditorDecorationTypeState result = default;
 				if ((null != payload)) {
-					result = new TextEditorDecorationTypeProperties();
+					result = new TextEditorDecorationTypeState();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4402,7 +4394,162 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<TextEditorDecorationTypeProperties> a0) => {
+			return (Action<TextEditorDecorationTypeState> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class InputBox {
+		/// <summary>An event signaling when the value has changed.</summary>
+		public Action<Action<Disposable>> OnDidChangeValue(Action<string> handler = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "InputBox.onDidChangeValue";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.disp.id;
+			string _fnid_handler = default;
+			if ((null == handler)) {
+				OnError(this.disp.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				return null;
+			}
+			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+				bool ok = default;
+				if (1 != args.Length) {
+					return ok;
+				}
+				string _a_0_ = default;
+				(_a_0_, ok) = (args[0] is string) ? (((string)(args[0])), true) : (default, false);
+				if (!ok) {
+					return false;
+				}
+				handler(_a_0_);
+				return true;
+			}, null);
+			msg.Data["handler"] = _fnid_handler;
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.disp.impl, _fnid_handler));
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class InputBox {
+		/// <summary>An event signaling when the user indicated acceptance of the input value.</summary>
+		public Action<Action<Disposable>> OnDidAccept(Action handler = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "InputBox.onDidAccept";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.disp.id;
+			string _fnid_handler = default;
+			if ((null == handler)) {
+				OnError(this.disp.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				return null;
+			}
+			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+				bool ok = default;
+				if (0 != args.Length) {
+					return ok;
+				}
+				handler();
+				return true;
+			}, null);
+			msg.Data["handler"] = _fnid_handler;
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.disp.impl, _fnid_handler));
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class InputBox {
+		/// <summary>An event signaling when a button was triggered.</summary>
+		public Action<Action<Disposable>> OnDidTriggerButton(Action<QuickInputButton> handler = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "InputBox.onDidTriggerButton";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.disp.id;
+			string _fnid_handler = default;
+			if ((null == handler)) {
+				OnError(this.disp.impl, "InputBox.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				return null;
+			}
+			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+				bool ok = default;
+				if (1 != args.Length) {
+					return ok;
+				}
+				QuickInputButton _a_0_ = default;
+				_a_0_ = new QuickInputButton();
+				ok = _a_0_.populateFrom(args[0]);
+				if (!ok) {
+					return false;
+				}
+				handler(_a_0_);
+				return true;
+			}, null);
+			msg.Data["handler"] = _fnid_handler;
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.disp.impl, _fnid_handler));
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<Disposable> a0) => {
 				onret = a0;
 			};
 		}
@@ -4466,6 +4613,61 @@ namespace VscAppz {
 		}
 	}
 
+	public partial class InputBox {
+		/// <summary>
+		/// An event signaling when this input UI is hidden.
+		/// 
+		/// There are several reasons why this UI might have to be hidden and
+		/// the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+		/// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+		/// the user pressing Esc, some other input UI opening, etc.)
+		/// </summary>
+		public Action<Action<Disposable>> OnDidHide(Action handler = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "InputBox.onDidHide";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.disp.id;
+			string _fnid_handler = default;
+			if ((null == handler)) {
+				OnError(this.disp.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				return null;
+			}
+			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+				bool ok = default;
+				if (0 != args.Length) {
+					return ok;
+				}
+				handler();
+				return true;
+			}, null);
+			msg.Data["handler"] = _fnid_handler;
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.disp.impl, _fnid_handler));
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
 	public partial class InputBox : IDisposable {
 		/// <summary>
 		/// Dispose of this input UI and any associated resources. If it is still
@@ -4477,23 +4679,24 @@ namespace VscAppz {
 			return this.disp.Dispose();
 		}
 		void IDisposable.Dispose() { this.Dispose(); }
+		internal Action<IVscode, any, any> OnError { get => this.disp?.impl?.OnError; }
 	}
 
 	public partial class InputBox {
-		/// <summary>Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `onDidChangeValue`, `onDidAccept`, `buttons`, `onDidTriggerButton`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`, `onDidHide`.</summary>
-		public Action<Action<InputBoxProperties>> Get() {
+		/// <summary>Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+		public Action<Action<InputBoxState>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.appzObjPropsGet";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<InputBoxProperties> onret = default;
+			Action<InputBoxState> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				InputBoxProperties result = default;
+				InputBoxState result = default;
 				if ((null != payload)) {
-					result = new InputBoxProperties();
+					result = new InputBoxState();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4505,15 +4708,15 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<InputBoxProperties> a0) => {
+			return (Action<InputBoxState> a0) => {
 				onret = a0;
 			};
 		}
 	}
 
 	public partial class InputBox {
-		/// <summary>Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`, `onDidHide`.</summary>
-		public Action<Action> Set(InputBoxProperties allUpdates = default) {
+		/// <summary>Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+		public Action<Action> Set(InputBoxState allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.appzObjPropsSet";
@@ -5077,7 +5280,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class StatusBarItemProperties {
+	public partial class StatusBarItemState {
 		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
@@ -5172,7 +5375,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class OutputChannelProperties {
+	public partial class OutputChannelState {
 		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
@@ -5198,7 +5401,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class TextEditorDecorationTypeProperties {
+	public partial class TextEditorDecorationTypeState {
 		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
@@ -5224,7 +5427,57 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class InputBoxProperties {
+	public partial class QuickInputButton {
+		internal bool populateFrom(any payload = default) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if (!ok) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("iconPath", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				string iconPath = default;
+				if ((null != val)) {
+					(iconPath, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.IconPath = iconPath;
+			} else {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("tooltip", out var ___) ? (___, true) : (default, false));
+			if (ok) {
+				string tooltip = default;
+				if ((null != val)) {
+					string _tooltip_ = default;
+					(_tooltip_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					tooltip = _tooltip_;
+				}
+				this.Tooltip = tooltip;
+			}
+			(val, ok) = (it.TryGetValue("my", out var ____) ? (____, true) : (default, false));
+			if (ok) {
+				dict my = default;
+				if ((null != val)) {
+					(my, ok) = (val is dict) ? (((dict)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.My = my;
+			}
+			return true;
+		}
+	}
+
+	public partial class InputBoxState {
 		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
@@ -5266,35 +5519,7 @@ namespace VscAppz {
 				}
 				this.Password = password;
 			}
-			(val, ok) = (it.TryGetValue("onDidChangeValue", out var _____) ? (_____, true) : (default, false));
-			if (ok) {
-				Event onDidChangeValue = default;
-				if ((null != val)) {
-					onDidChangeValue = new Event();
-					ok = onDidChangeValue.populateFrom(val);
-					if (!ok) {
-						return false;
-					}
-				}
-				this.OnDidChangeValue = () => {
-					return onDidChangeValue;
-				};
-			}
-			(val, ok) = (it.TryGetValue("onDidAccept", out var ______) ? (______, true) : (default, false));
-			if (ok) {
-				Event onDidAccept = default;
-				if ((null != val)) {
-					onDidAccept = new Event();
-					ok = onDidAccept.populateFrom(val);
-					if (!ok) {
-						return false;
-					}
-				}
-				this.OnDidAccept = () => {
-					return onDidAccept;
-				};
-			}
-			(val, ok) = (it.TryGetValue("buttons", out var _______) ? (_______, true) : (default, false));
+			(val, ok) = (it.TryGetValue("buttons", out var _____) ? (_____, true) : (default, false));
 			if (ok) {
 				QuickInputButton[] buttons = default;
 				if ((null != val)) {
@@ -5319,21 +5544,7 @@ namespace VscAppz {
 				}
 				this.Buttons = buttons;
 			}
-			(val, ok) = (it.TryGetValue("onDidTriggerButton", out var ________) ? (________, true) : (default, false));
-			if (ok) {
-				Event onDidTriggerButton = default;
-				if ((null != val)) {
-					onDidTriggerButton = new Event();
-					ok = onDidTriggerButton.populateFrom(val);
-					if (!ok) {
-						return false;
-					}
-				}
-				this.OnDidTriggerButton = () => {
-					return onDidTriggerButton;
-				};
-			}
-			(val, ok) = (it.TryGetValue("prompt", out var _________) ? (_________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("prompt", out var ______) ? (______, true) : (default, false));
 			if (ok) {
 				string prompt = default;
 				if ((null != val)) {
@@ -5344,7 +5555,7 @@ namespace VscAppz {
 				}
 				this.Prompt = prompt;
 			}
-			(val, ok) = (it.TryGetValue("validationMessage", out var __________) ? (__________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("validationMessage", out var _______) ? (_______, true) : (default, false));
 			if (ok) {
 				string validationMessage = default;
 				if ((null != val)) {
@@ -5355,7 +5566,7 @@ namespace VscAppz {
 				}
 				this.ValidationMessage = validationMessage;
 			}
-			(val, ok) = (it.TryGetValue("title", out var ___________) ? (___________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("title", out var ________) ? (________, true) : (default, false));
 			if (ok) {
 				string title = default;
 				if ((null != val)) {
@@ -5366,7 +5577,7 @@ namespace VscAppz {
 				}
 				this.Title = title;
 			}
-			(val, ok) = (it.TryGetValue("step", out var ____________) ? (____________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("step", out var _________) ? (_________, true) : (default, false));
 			if (ok) {
 				int? step = default;
 				if ((null != val)) {
@@ -5379,7 +5590,7 @@ namespace VscAppz {
 				}
 				this.Step = step;
 			}
-			(val, ok) = (it.TryGetValue("totalSteps", out var _____________) ? (_____________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("totalSteps", out var __________) ? (__________, true) : (default, false));
 			if (ok) {
 				int? totalSteps = default;
 				if ((null != val)) {
@@ -5392,7 +5603,7 @@ namespace VscAppz {
 				}
 				this.TotalSteps = totalSteps;
 			}
-			(val, ok) = (it.TryGetValue("enabled", out var ______________) ? (______________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("enabled", out var ___________) ? (___________, true) : (default, false));
 			if (ok) {
 				bool enabled = default;
 				if ((null != val)) {
@@ -5403,7 +5614,7 @@ namespace VscAppz {
 				}
 				this.Enabled = enabled;
 			}
-			(val, ok) = (it.TryGetValue("busy", out var _______________) ? (_______________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("busy", out var ____________) ? (____________, true) : (default, false));
 			if (ok) {
 				bool busy = default;
 				if ((null != val)) {
@@ -5414,7 +5625,7 @@ namespace VscAppz {
 				}
 				this.Busy = busy;
 			}
-			(val, ok) = (it.TryGetValue("ignoreFocusOut", out var ________________) ? (________________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("ignoreFocusOut", out var _____________) ? (_____________, true) : (default, false));
 			if (ok) {
 				bool ignoreFocusOut = default;
 				if ((null != val)) {
@@ -5424,57 +5635,6 @@ namespace VscAppz {
 					}
 				}
 				this.IgnoreFocusOut = ignoreFocusOut;
-			}
-			(val, ok) = (it.TryGetValue("onDidHide", out var _________________) ? (_________________, true) : (default, false));
-			if (ok) {
-				Event onDidHide = default;
-				if ((null != val)) {
-					onDidHide = new Event();
-					ok = onDidHide.populateFrom(val);
-					if (!ok) {
-						return false;
-					}
-				}
-				this.OnDidHide = onDidHide;
-			}
-			return true;
-		}
-	}
-
-	public partial class QuickInputButton {
-		internal bool populateFrom(any payload = default) {
-			dict it = default;
-			bool ok = default;
-			any val = default;
-			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
-			if (!ok) {
-				return false;
-			}
-			(val, ok) = (it.TryGetValue("iconPath", out var __) ? (__, true) : (default, false));
-			if (ok) {
-				string iconPath = default;
-				if ((null != val)) {
-					(iconPath, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-				}
-				this.IconPath = iconPath;
-			} else {
-				return false;
-			}
-			(val, ok) = (it.TryGetValue("tooltip", out var ___) ? (___, true) : (default, false));
-			if (ok) {
-				string tooltip = default;
-				if ((null != val)) {
-					string _tooltip_ = default;
-					(_tooltip_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-					tooltip = _tooltip_;
-				}
-				this.Tooltip = tooltip;
 			}
 			return true;
 		}

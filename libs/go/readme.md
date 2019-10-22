@@ -522,12 +522,11 @@ UI should be created.
 #### func (*InputBox) Get
 
 ```go
-func (me *InputBox) Get() func(func(InputBoxProperties))
+func (me *InputBox) Get() func(func(InputBoxState))
 ```
 Obtains this `InputBox`'s current property values for: `value`, `placeholder`,
-`password`, `onDidChangeValue`, `onDidAccept`, `buttons`, `onDidTriggerButton`,
-`prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`,
-`ignoreFocusOut`, `onDidHide`.
+`password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`,
+`totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 
 #### func (*InputBox) Hide
 
@@ -538,14 +537,49 @@ Hides this input UI. This will also fire an
 [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
+#### func (*InputBox) OnDidAccept
+
+```go
+func (me *InputBox) OnDidAccept(handler func()) func(func(*Disposable))
+```
+An event signaling when the user indicated acceptance of the input value.
+
+#### func (*InputBox) OnDidChangeValue
+
+```go
+func (me *InputBox) OnDidChangeValue(handler func(string)) func(func(*Disposable))
+```
+An event signaling when the value has changed.
+
+#### func (*InputBox) OnDidHide
+
+```go
+func (me *InputBox) OnDidHide(handler func()) func(func(*Disposable))
+```
+An event signaling when this input UI is hidden.
+
+There are several reasons why this UI might have to be hidden and the extension
+will be notified through
+[QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+(Examples include: an explicit call to
+[QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+the user pressing Esc, some other input UI opening, etc.)
+
+#### func (*InputBox) OnDidTriggerButton
+
+```go
+func (me *InputBox) OnDidTriggerButton(handler func(QuickInputButton)) func(func(*Disposable))
+```
+An event signaling when a button was triggered.
+
 #### func (*InputBox) Set
 
 ```go
-func (me *InputBox) Set(allUpdates InputBoxProperties) func(func())
+func (me *InputBox) Set(allUpdates InputBoxState) func(func())
 ```
 Updates this `InputBox`'s current property values for: `value`, `placeholder`,
 `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`,
-`totalSteps`, `enabled`, `busy`, `ignoreFocusOut`, `onDidHide`.
+`totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 
 #### func (*InputBox) Show
 
@@ -595,10 +629,10 @@ type InputBoxOptions struct {
 
 Options to configure the behavior of the input box UI.
 
-#### type InputBoxProperties
+#### type InputBoxState
 
 ```go
-type InputBoxProperties struct {
+type InputBoxState struct {
 	// Current input value.
 	Value string `json:"value,omitempty"`
 
@@ -608,17 +642,8 @@ type InputBoxProperties struct {
 	// If the input value should be hidden. Defaults to false.
 	Password bool `json:"password,omitempty"`
 
-	// An event signaling when the value has changed.
-	OnDidChangeValue func() Event `json:"-"`
-
-	// An event signaling when the user indicated acceptance of the input value.
-	OnDidAccept func() Event `json:"-"`
-
 	// Buttons for actions in the UI.
 	Buttons []QuickInputButton `json:"buttons,omitempty"`
-
-	// An event signaling when a button was triggered.
-	OnDidTriggerButton func() Event `json:"-"`
 
 	// An optional prompt text providing some ask or explanation to the user.
 	Prompt string `json:"prompt,omitempty"`
@@ -649,14 +674,6 @@ type InputBoxProperties struct {
 
 	// If the UI should stay open even when loosing UI focus. Defaults to false.
 	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
-
-	// An event signaling when this input UI is hidden.
-	//
-	// There are several reasons why this UI might have to be hidden and
-	// the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
-	// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
-	// the user pressing Esc, some other input UI opening, etc.)
-	OnDidHide Event `json:"onDidHide,omitempty"`
 }
 ```
 
@@ -854,7 +871,7 @@ Dispose and free associated resources.
 #### func (*OutputChannel) Get
 
 ```go
-func (me *OutputChannel) Get() func(func(OutputChannelProperties))
+func (me *OutputChannel) Get() func(func(OutputChannelState))
 ```
 Obtains this `OutputChannel`'s current property value for: `name`.
 
@@ -874,10 +891,10 @@ Reveal this channel in the UI.
 
 `preserveFocus` ── When `true` the channel will not take focus.
 
-#### type OutputChannelProperties
+#### type OutputChannelState
 
 ```go
-type OutputChannelProperties struct {
+type OutputChannelState struct {
 	// The human-readable name of this output channel.
 	Name func() string `json:"-"`
 }
@@ -927,6 +944,9 @@ type QuickInputButton struct {
 
 	// An optional tooltip.
 	Tooltip string `json:"tooltip,omitempty"`
+
+	// Free-form custom data, preserved across a roundtrip.
+	My dict `json:"my,omitempty"`
 }
 ```
 
@@ -1054,7 +1074,7 @@ Dispose and free associated resources. Call
 #### func (*StatusBarItem) Get
 
 ```go
-func (me *StatusBarItem) Get() func(func(StatusBarItemProperties))
+func (me *StatusBarItem) Get() func(func(StatusBarItemState))
 ```
 Obtains this `StatusBarItem`'s current property values for: `alignment`,
 `priority`, `text`, `tooltip`, `color`, `command`.
@@ -1069,7 +1089,7 @@ Hide the entry in the status bar.
 #### func (*StatusBarItem) Set
 
 ```go
-func (me *StatusBarItem) Set(allUpdates StatusBarItemProperties) func(func())
+func (me *StatusBarItem) Set(allUpdates StatusBarItemState) func(func())
 ```
 Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`,
 `color`, `command`.
@@ -1081,10 +1101,10 @@ func (me *StatusBarItem) Show() func(func())
 ```
 Shows the entry in the status bar.
 
-#### type StatusBarItemProperties
+#### type StatusBarItemState
 
 ```go
-type StatusBarItemProperties struct {
+type StatusBarItemState struct {
 	// The alignment of this item.
 	Alignment func() StatusBarAlignment `json:"-"`
 
@@ -1139,14 +1159,14 @@ Remove this decoration type and all decorations on all text editors using it.
 #### func (*TextEditorDecorationType) Get
 
 ```go
-func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeProperties))
+func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeState))
 ```
 Obtains this `TextEditorDecorationType`'s current property value for: `key`.
 
-#### type TextEditorDecorationTypeProperties
+#### type TextEditorDecorationTypeState
 
 ```go
-type TextEditorDecorationTypeProperties struct {
+type TextEditorDecorationTypeState struct {
 	// Internal representation of the handle.
 	Key func() string `json:"-"`
 }

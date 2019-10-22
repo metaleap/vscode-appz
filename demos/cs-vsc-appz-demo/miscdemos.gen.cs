@@ -282,6 +282,41 @@ namespace VscAppzDemo {
 				}
 			});
 		}
+		private static void demo_Window_CreateInputBox() {
+			vsc.Window.CreateInputBox()((InputBox inputbox) => {
+				inputbox.Get()((InputBoxState props) => {
+					props.IgnoreFocusOut = true;
+					props.Placeholder = "The initial Placeholder";
+					props.Prompt = "The initial Prompt";
+					props.Title = "The initial Title";
+					inputbox.Set(props)(() => {
+						inputbox.OnDidChangeValue((string input) => {
+							inputbox.Get()((InputBoxState p) => {
+								p.Prompt = strFmt("Lower: {0}", strLo(p.Value));
+								p.Title = strFmt("Upper: {0}", strUp(p.Value));
+								inputbox.Set(p);
+							});
+						});
+						string finalinputvalue = default;
+						inputbox.OnDidAccept(() => {
+							inputbox.Get()((InputBoxState p) => {
+								finalinputvalue = p.Value;
+								inputbox.Hide();
+							});
+						});
+						inputbox.OnDidHide(() => {
+							inputbox.Dispose();
+							if ((null != finalinputvalue)) {
+								vsc.Window.ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", finalinputvalue)), null);
+							} else {
+								vsc.Window.ShowWarningMessage1(logLn("Backing off or backing up?"), null);
+							}
+						});
+						inputbox.Show();
+					});
+				});
+			});
+		}
 		private static void subscribeToMiscEvents() {
 			vsc.Extensions.OnDidChange(() => {
 				vsc.Window.SetStatusBarMessage1(logLn("Some extension(s) were just (un)installed or (de)activated."), 4242);
@@ -295,7 +330,7 @@ namespace VscAppzDemo {
 		}
 		private static void demosMenu() {
 			string[] items = default;
-			items = new[] { "demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_ShowInputBox" };
+			items = new[] { "demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_CreateInputBox", "demo_Window_ShowInputBox" };
 			QuickPickOptions opts = default;
 			opts = new QuickPickOptions();
 			opts.IgnoreFocusOut = true;
@@ -350,6 +385,10 @@ namespace VscAppzDemo {
 						logLn("Picked `demo_Window_ShowQuickPick` from main menu");
 						demo_Window_ShowQuickPick();
 					}
+					if ("demo_Window_CreateInputBox" == menuitem) {
+						logLn("Picked `demo_Window_CreateInputBox` from main menu");
+						demo_Window_CreateInputBox();
+					}
 					if ("demo_Window_ShowInputBox" == menuitem) {
 						logLn("Picked `demo_Window_ShowInputBox` from main menu");
 						demo_Window_ShowInputBox();
@@ -385,7 +424,7 @@ namespace VscAppzDemo {
 				Func<any[], any> mycmd = default;
 				mycmd = (any[] _unused) => {
 					clickcount = 1 + clickcount;
-					statusitem.Get()((StatusBarItemProperties props) => {
+					statusitem.Get()((StatusBarItemState props) => {
 						props.Text = logLn(strFmt("You clicked me {0} time(s).", clickcount));
 						if ("editorLightBulb.foreground" == props.Color) {
 							props.Color = "terminal.ansiGreen";
@@ -405,8 +444,8 @@ namespace VscAppzDemo {
 				vsc.Commands.RegisterCommand(cmdName, mycmd)((Disposable _commandRegisteredAtThisPoint) => {
 					vsc.Window.CreateStatusBarItem(0, null)((StatusBarItem it) => {
 						statusitem = it;
-						StatusBarItemProperties props = default;
-						props = new StatusBarItemProperties();
+						StatusBarItemState props = default;
+						props = new StatusBarItemState();
 						props.Tooltip = strFmt("Hi from {0}!", appName);
 						props.Text = "You clicked me 0 time(s).";
 						props.Color = "#42BEEF";

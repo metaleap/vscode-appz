@@ -6,7 +6,6 @@ namespace VscAppzDemo {
 
         private const string appName = "cs-vsc-appz-demo";
         private static readonly string cmdName = appName + Environment.TickCount;
-        private static readonly string[] nil = new string[0];
 
         private static IVscode vsc;
         private static IWindow win;
@@ -73,6 +72,8 @@ namespace VscAppzDemo {
 
         private static string strFmt(string s , params object[] args)=>
             string.Format(s,args);
+        private static string strLo(string s) => s.ToLower();
+        private static string strUp(string s) => s.ToUpper();
 
     }
 

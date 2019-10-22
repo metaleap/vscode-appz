@@ -1514,6 +1514,7 @@ Name | Type |
 
 ### Methods
 
+* [CreateInputBox](#createinputbox)
 * [CreateOutputChannel](#createoutputchannel)
 * [CreateStatusBarItem](#createstatusbaritem)
 * [CreateTextEditorDecorationType](#createtexteditordecorationtype)
@@ -1568,6 +1569,28 @@ Name | Type |
 *Inherited from [implBase](#classes_vscode_gen_implbasemd).[impl](#impl)*
 
 ## Methods
+
+###  CreateInputBox
+
+▸ **CreateInputBox**(): *function*
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [InputBox](#interfaces_vscode_gen_inputboxmd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
+
+___
 
 ###  CreateOutputChannel
 
@@ -2808,914 +2831,6 @@ ___
 Aligned to the right side.
 
 
-<a name="modules_core_md"></a>
-
-
-# External module: "core"
-
-## Index
-
-### Classes
-
-* [Cancel](#classes_core_cancelmd)
-* [Disposable](#classes_core_disposablemd)
-* [impl](#classes_core_implmd)
-* [ipcMsg](#classes_core_ipcmsgmd)
-
-### Type aliases
-
-* [dict](#dict)
-
-## Type aliases
-
-###  dict
-
-Ƭ **dict**: *object*
-
-#### Type declaration:
-
-* \[ **_**: *string*\]: any
-
-
-<a name="modules_vsc_appz_md"></a>
-
-
-# External module: "vsc-appz"
-
-## Index
-
-### Functions
-
-* [CancelIn](#cancelin)
-* [Main](#main)
-* [OnError](#let-onerror)
-
-## Functions
-
-###  CancelIn
-
-▸ **CancelIn**(`msFromNow`: number): *[Cancel](#classes_core_cancelmd)*
-
-Returns a new `Cancel` with its `Now` already scheduled to be called in `msFromNow` milliseconds.
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`msFromNow` | number |
-
-**Returns:** *[Cancel](#classes_core_cancelmd)*
-
-___
-
-###  Main
-
-▸ **Main**(`main`: function, `stdIn?`: ReadStream, `stdOut?`: WriteStream): *void*
-
-Creates a `Vscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `process.stdin`, and `stdOut` defaulting to `process.stdout`), then loops forever to never `return`.
-
-**Parameters:**
-
-▪ **main**: *function*
-
-called whenever the counterparty demands, which usually means once at startup.
-
-▸ (`_`: [Vscode](#interfaces_vscode_gen_vscodemd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [Vscode](#interfaces_vscode_gen_vscodemd) |
-
-▪`Optional`  **stdIn**: *ReadStream*
-
-▪`Optional`  **stdOut**: *WriteStream*
-
-**Returns:** *void*
-
-___
-
-### `Let` OnError
-
-▸ **OnError**(`_this`: [Vscode](#interfaces_vscode_gen_vscodemd), `err`: any, `jsonMsg?`: any): *void*
-
-Reports problems during the ongoing forever-looping stdin/stdout communication
-with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be `null` or `undefined`.
-Any of its args must be checked for `null`/`undefined`-ness by your `OnError` handler.
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_this` | [Vscode](#interfaces_vscode_gen_vscodemd) |
-`err` | any |
-`jsonMsg?` | any |
-
-**Returns:** *void*
-
-
-<a name="modules_vscode_gen_md"></a>
-
-
-# External module: "vscode.gen"
-
-## Index
-
-### Enumerations
-
-* [DecorationRangeBehavior](#enums_vscode_gen_decorationrangebehaviormd)
-* [OverviewRulerLane](#enums_vscode_gen_overviewrulerlanemd)
-* [StatusBarAlignment](#enums_vscode_gen_statusbaralignmentmd)
-
-### Classes
-
-* [impl](#classes_vscode_gen_implmd)
-* [implBase](#classes_vscode_gen_implbasemd)
-* [implClipboard](#classes_vscode_gen_implclipboardmd)
-* [implCommands](#classes_vscode_gen_implcommandsmd)
-* [implEnv](#classes_vscode_gen_implenvmd)
-* [implExtensions](#classes_vscode_gen_implextensionsmd)
-* [implLanguages](#classes_vscode_gen_impllanguagesmd)
-* [implWindow](#classes_vscode_gen_implwindowmd)
-* [implWorkspace](#classes_vscode_gen_implworkspacemd)
-
-### Interfaces
-
-* [Clipboard](#interfaces_vscode_gen_clipboardmd)
-* [Commands](#interfaces_vscode_gen_commandsmd)
-* [DecorationRenderOptions](#interfaces_vscode_gen_decorationrenderoptionsmd)
-* [DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd)
-* [Env](#interfaces_vscode_gen_envmd)
-* [EnvProperties](#interfaces_vscode_gen_envpropertiesmd)
-* [Extensions](#interfaces_vscode_gen_extensionsmd)
-* [InputBoxOptions](#interfaces_vscode_gen_inputboxoptionsmd)
-* [Languages](#interfaces_vscode_gen_languagesmd)
-* [MessageItem](#interfaces_vscode_gen_messageitemmd)
-* [MessageOptions](#interfaces_vscode_gen_messageoptionsmd)
-* [OpenDialogOptions](#interfaces_vscode_gen_opendialogoptionsmd)
-* [OutputChannel](#interfaces_vscode_gen_outputchannelmd)
-* [OutputChannelProperties](#interfaces_vscode_gen_outputchannelpropertiesmd)
-* [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)
-* [QuickPickOptions](#interfaces_vscode_gen_quickpickoptionsmd)
-* [SaveDialogOptions](#interfaces_vscode_gen_savedialogoptionsmd)
-* [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)
-* [StatusBarItemProperties](#interfaces_vscode_gen_statusbaritempropertiesmd)
-* [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)
-* [TextEditorDecorationTypeProperties](#interfaces_vscode_gen_texteditordecorationtypepropertiesmd)
-* [ThemableDecorationAttachmentRenderOptions](#interfaces_vscode_gen_themabledecorationattachmentrenderoptionsmd)
-* [ThemableDecorationRenderOptions](#interfaces_vscode_gen_themabledecorationrenderoptionsmd)
-* [Vscode](#interfaces_vscode_gen_vscodemd)
-* [Window](#interfaces_vscode_gen_windowmd)
-* [WindowState](#interfaces_vscode_gen_windowstatemd)
-* [Workspace](#interfaces_vscode_gen_workspacemd)
-* [WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)
-* [WorkspaceFolderPickOptions](#interfaces_vscode_gen_workspacefolderpickoptionsmd)
-* [WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd)
-* [WorkspaceProperties](#interfaces_vscode_gen_workspacepropertiesmd)
-* [fromJson](#interfaces_vscode_gen_fromjsonmd)
-* [withDisp](#interfaces_vscode_gen_withdispmd)
-
-### Type aliases
-
-* [Cancel](#cancel)
-* [Disposable](#disposable)
-* [ipcMsg](#ipcmsg)
-
-### Functions
-
-* [DiagnosticChangeEvent_populateFrom](#diagnosticchangeevent_populatefrom)
-* [EnvProperties_populateFrom](#envproperties_populatefrom)
-* [MessageItem_populateFrom](#messageitem_populatefrom)
-* [OutputChannelProperties_populateFrom](#outputchannelproperties_populatefrom)
-* [OutputChannel_Append](#outputchannel_append)
-* [OutputChannel_AppendLine](#outputchannel_appendline)
-* [OutputChannel_Clear](#outputchannel_clear)
-* [OutputChannel_Dispose](#outputchannel_dispose)
-* [OutputChannel_Get](#outputchannel_get)
-* [OutputChannel_Hide](#outputchannel_hide)
-* [OutputChannel_Show](#outputchannel_show)
-* [OutputChannel_populateFrom](#outputchannel_populatefrom)
-* [QuickPickItem_populateFrom](#quickpickitem_populatefrom)
-* [StatusBarItemProperties_populateFrom](#statusbaritemproperties_populatefrom)
-* [StatusBarItem_Dispose](#statusbaritem_dispose)
-* [StatusBarItem_Get](#statusbaritem_get)
-* [StatusBarItem_Hide](#statusbaritem_hide)
-* [StatusBarItem_Set](#statusbaritem_set)
-* [StatusBarItem_Show](#statusbaritem_show)
-* [StatusBarItem_populateFrom](#statusbaritem_populatefrom)
-* [TextEditorDecorationTypeProperties_populateFrom](#texteditordecorationtypeproperties_populatefrom)
-* [TextEditorDecorationType_Dispose](#texteditordecorationtype_dispose)
-* [TextEditorDecorationType_Get](#texteditordecorationtype_get)
-* [TextEditorDecorationType_populateFrom](#texteditordecorationtype_populatefrom)
-* [WindowState_populateFrom](#windowstate_populatefrom)
-* [WorkspaceFolder_populateFrom](#workspacefolder_populatefrom)
-* [WorkspaceFoldersChangeEvent_populateFrom](#workspacefolderschangeevent_populatefrom)
-* [WorkspaceProperties_populateFrom](#workspaceproperties_populatefrom)
-* [newDiagnosticChangeEvent](#newdiagnosticchangeevent)
-* [newDisposable](#newdisposable)
-* [newEnvProperties](#newenvproperties)
-* [newMessageItem](#newmessageitem)
-* [newOutputChannel](#newoutputchannel)
-* [newOutputChannelProperties](#newoutputchannelproperties)
-* [newQuickPickItem](#newquickpickitem)
-* [newStatusBarItem](#newstatusbaritem)
-* [newStatusBarItemProperties](#newstatusbaritemproperties)
-* [newTextEditorDecorationType](#newtexteditordecorationtype)
-* [newTextEditorDecorationTypeProperties](#newtexteditordecorationtypeproperties)
-* [newWindowState](#newwindowstate)
-* [newWorkspaceFolder](#newworkspacefolder)
-* [newWorkspaceFoldersChangeEvent](#newworkspacefolderschangeevent)
-* [newWorkspaceProperties](#newworkspaceproperties)
-* [newipcMsg](#newipcmsg)
-
-## Type aliases
-
-###  Cancel
-
-Ƭ **Cancel**: *[Cancel](#classes_core_cancelmd)*
-
-___
-
-###  Disposable
-
-Ƭ **Disposable**: *[Disposable](#classes_core_disposablemd)*
-
-___
-
-###  ipcMsg
-
-Ƭ **ipcMsg**: *[ipcMsg](#classes_core_ipcmsgmd)*
-
-## Functions
-
-###  DiagnosticChangeEvent_populateFrom
-
-▸ **DiagnosticChangeEvent_populateFrom**(`this`: [DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  EnvProperties_populateFrom
-
-▸ **EnvProperties_populateFrom**(`this`: [EnvProperties](#interfaces_vscode_gen_envpropertiesmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [EnvProperties](#interfaces_vscode_gen_envpropertiesmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  MessageItem_populateFrom
-
-▸ **MessageItem_populateFrom**(`this`: [MessageItem](#interfaces_vscode_gen_messageitemmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [MessageItem](#interfaces_vscode_gen_messageitemmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  OutputChannelProperties_populateFrom
-
-▸ **OutputChannelProperties_populateFrom**(`this`: [OutputChannelProperties](#interfaces_vscode_gen_outputchannelpropertiesmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannelProperties](#interfaces_vscode_gen_outputchannelpropertiesmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  OutputChannel_Append
-
-▸ **OutputChannel_Append**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `value`: string): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-`value` | string |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  OutputChannel_AppendLine
-
-▸ **OutputChannel_AppendLine**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `value`: string): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-`value` | string |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  OutputChannel_Clear
-
-▸ **OutputChannel_Clear**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  OutputChannel_Dispose
-
-▸ **OutputChannel_Dispose**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  OutputChannel_Get
-
-▸ **OutputChannel_Get**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (`_`: [OutputChannelProperties](#interfaces_vscode_gen_outputchannelpropertiesmd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [OutputChannelProperties](#interfaces_vscode_gen_outputchannelpropertiesmd) |
-
-___
-
-###  OutputChannel_Hide
-
-▸ **OutputChannel_Hide**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  OutputChannel_Show
-
-▸ **OutputChannel_Show**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `preserveFocus?`: boolean): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-`preserveFocus?` | boolean |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  OutputChannel_populateFrom
-
-▸ **OutputChannel_populateFrom**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  QuickPickItem_populateFrom
-
-▸ **QuickPickItem_populateFrom**(`this`: [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  StatusBarItemProperties_populateFrom
-
-▸ **StatusBarItemProperties_populateFrom**(`this`: [StatusBarItemProperties](#interfaces_vscode_gen_statusbaritempropertiesmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItemProperties](#interfaces_vscode_gen_statusbaritempropertiesmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  StatusBarItem_Dispose
-
-▸ **StatusBarItem_Dispose**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  StatusBarItem_Get
-
-▸ **StatusBarItem_Get**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (`_`: [StatusBarItemProperties](#interfaces_vscode_gen_statusbaritempropertiesmd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [StatusBarItemProperties](#interfaces_vscode_gen_statusbaritempropertiesmd) |
-
-___
-
-###  StatusBarItem_Hide
-
-▸ **StatusBarItem_Hide**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  StatusBarItem_Set
-
-▸ **StatusBarItem_Set**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd), `allUpdates`: [StatusBarItemProperties](#interfaces_vscode_gen_statusbaritempropertiesmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
-`allUpdates` | [StatusBarItemProperties](#interfaces_vscode_gen_statusbaritempropertiesmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  StatusBarItem_Show
-
-▸ **StatusBarItem_Show**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  StatusBarItem_populateFrom
-
-▸ **StatusBarItem_populateFrom**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  TextEditorDecorationTypeProperties_populateFrom
-
-▸ **TextEditorDecorationTypeProperties_populateFrom**(`this`: [TextEditorDecorationTypeProperties](#interfaces_vscode_gen_texteditordecorationtypepropertiesmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [TextEditorDecorationTypeProperties](#interfaces_vscode_gen_texteditordecorationtypepropertiesmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  TextEditorDecorationType_Dispose
-
-▸ **TextEditorDecorationType_Dispose**(`this`: [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  TextEditorDecorationType_Get
-
-▸ **TextEditorDecorationType_Get**(`this`: [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (`_`: [TextEditorDecorationTypeProperties](#interfaces_vscode_gen_texteditordecorationtypepropertiesmd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [TextEditorDecorationTypeProperties](#interfaces_vscode_gen_texteditordecorationtypepropertiesmd) |
-
-___
-
-###  TextEditorDecorationType_populateFrom
-
-▸ **TextEditorDecorationType_populateFrom**(`this`: [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  WindowState_populateFrom
-
-▸ **WindowState_populateFrom**(`this`: [WindowState](#interfaces_vscode_gen_windowstatemd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [WindowState](#interfaces_vscode_gen_windowstatemd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  WorkspaceFolder_populateFrom
-
-▸ **WorkspaceFolder_populateFrom**(`this`: [WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  WorkspaceFoldersChangeEvent_populateFrom
-
-▸ **WorkspaceFoldersChangeEvent_populateFrom**(`this`: [WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  WorkspaceProperties_populateFrom
-
-▸ **WorkspaceProperties_populateFrom**(`this`: [WorkspaceProperties](#interfaces_vscode_gen_workspacepropertiesmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [WorkspaceProperties](#interfaces_vscode_gen_workspacepropertiesmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  newDiagnosticChangeEvent
-
-▸ **newDiagnosticChangeEvent**(): *[DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd)*
-
-**Returns:** *[DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd)*
-
-___
-
-###  newDisposable
-
-▸ **newDisposable**(): *[Disposable](#classes_core_disposablemd)*
-
-**Returns:** *[Disposable](#classes_core_disposablemd)*
-
-___
-
-###  newEnvProperties
-
-▸ **newEnvProperties**(): *[EnvProperties](#interfaces_vscode_gen_envpropertiesmd)*
-
-**Returns:** *[EnvProperties](#interfaces_vscode_gen_envpropertiesmd)*
-
-___
-
-###  newMessageItem
-
-▸ **newMessageItem**(): *[MessageItem](#interfaces_vscode_gen_messageitemmd)*
-
-**Returns:** *[MessageItem](#interfaces_vscode_gen_messageitemmd)*
-
-___
-
-###  newOutputChannel
-
-▸ **newOutputChannel**(): *[OutputChannel](#interfaces_vscode_gen_outputchannelmd)*
-
-**Returns:** *[OutputChannel](#interfaces_vscode_gen_outputchannelmd)*
-
-___
-
-###  newOutputChannelProperties
-
-▸ **newOutputChannelProperties**(): *[OutputChannelProperties](#interfaces_vscode_gen_outputchannelpropertiesmd)*
-
-**Returns:** *[OutputChannelProperties](#interfaces_vscode_gen_outputchannelpropertiesmd)*
-
-___
-
-###  newQuickPickItem
-
-▸ **newQuickPickItem**(): *[QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)*
-
-**Returns:** *[QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)*
-
-___
-
-###  newStatusBarItem
-
-▸ **newStatusBarItem**(): *[StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)*
-
-**Returns:** *[StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)*
-
-___
-
-###  newStatusBarItemProperties
-
-▸ **newStatusBarItemProperties**(): *[StatusBarItemProperties](#interfaces_vscode_gen_statusbaritempropertiesmd)*
-
-**Returns:** *[StatusBarItemProperties](#interfaces_vscode_gen_statusbaritempropertiesmd)*
-
-___
-
-###  newTextEditorDecorationType
-
-▸ **newTextEditorDecorationType**(): *[TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)*
-
-**Returns:** *[TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)*
-
-___
-
-###  newTextEditorDecorationTypeProperties
-
-▸ **newTextEditorDecorationTypeProperties**(): *[TextEditorDecorationTypeProperties](#interfaces_vscode_gen_texteditordecorationtypepropertiesmd)*
-
-**Returns:** *[TextEditorDecorationTypeProperties](#interfaces_vscode_gen_texteditordecorationtypepropertiesmd)*
-
-___
-
-###  newWindowState
-
-▸ **newWindowState**(): *[WindowState](#interfaces_vscode_gen_windowstatemd)*
-
-**Returns:** *[WindowState](#interfaces_vscode_gen_windowstatemd)*
-
-___
-
-###  newWorkspaceFolder
-
-▸ **newWorkspaceFolder**(): *[WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)*
-
-**Returns:** *[WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)*
-
-___
-
-###  newWorkspaceFoldersChangeEvent
-
-▸ **newWorkspaceFoldersChangeEvent**(): *[WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd)*
-
-**Returns:** *[WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd)*
-
-___
-
-###  newWorkspaceProperties
-
-▸ **newWorkspaceProperties**(): *[WorkspaceProperties](#interfaces_vscode_gen_workspacepropertiesmd)*
-
-**Returns:** *[WorkspaceProperties](#interfaces_vscode_gen_workspacepropertiesmd)*
-
-___
-
-###  newipcMsg
-
-▸ **newipcMsg**(): *[ipcMsg](#classes_core_ipcmsgmd)*
-
-**Returns:** *[ipcMsg](#classes_core_ipcmsgmd)*
-
-
 <a name="interfaces_vscode_gen_clipboardmd"></a>
 
 
@@ -4004,19 +3119,170 @@ Represents rendering styles for a [text editor decoration](https://code.visualst
 
 ### Properties
 
+* [after](#optional-after)
+* [backgroundColor](#optional-backgroundcolor)
+* [before](#optional-before)
+* [border](#optional-border)
+* [borderColor](#optional-bordercolor)
+* [borderRadius](#optional-borderradius)
+* [borderSpacing](#optional-borderspacing)
+* [borderStyle](#optional-borderstyle)
+* [borderWidth](#optional-borderwidth)
+* [color](#optional-color)
+* [cursor](#optional-cursor)
 * [dark](#optional-dark)
+* [fontStyle](#optional-fontstyle)
+* [fontWeight](#optional-fontweight)
+* [gutterIconPath](#optional-guttericonpath)
+* [gutterIconSize](#optional-guttericonsize)
 * [isWholeLine](#optional-iswholeline)
+* [letterSpacing](#optional-letterspacing)
 * [light](#optional-light)
+* [opacity](#optional-opacity)
+* [outline](#optional-outline)
+* [outlineColor](#optional-outlinecolor)
+* [outlineStyle](#optional-outlinestyle)
+* [outlineWidth](#optional-outlinewidth)
+* [overviewRulerColor](#optional-overviewrulercolor)
 * [overviewRulerLane](#optional-overviewrulerlane)
 * [rangeBehavior](#optional-rangebehavior)
+* [textDecoration](#optional-textdecoration)
 
 ## Properties
+
+### `Optional` after
+
+• **after**? : *[ThemableDecorationAttachmentRenderOptions](#interfaces_vscode_gen_themabledecorationattachmentrenderoptionsmd)*
+
+Defines the rendering options of the attachment that is inserted after the decorated text.
+
+___
+
+### `Optional` backgroundColor
+
+• **backgroundColor**? : *string*
+
+Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
+
+___
+
+### `Optional` before
+
+• **before**? : *[ThemableDecorationAttachmentRenderOptions](#interfaces_vscode_gen_themabledecorationattachmentrenderoptionsmd)*
+
+Defines the rendering options of the attachment that is inserted before the decorated text.
+
+___
+
+### `Optional` border
+
+• **border**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+___
+
+### `Optional` borderColor
+
+• **borderColor**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+___
+
+### `Optional` borderRadius
+
+• **borderRadius**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+___
+
+### `Optional` borderSpacing
+
+• **borderSpacing**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+___
+
+### `Optional` borderStyle
+
+• **borderStyle**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+___
+
+### `Optional` borderWidth
+
+• **borderWidth**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+___
+
+### `Optional` color
+
+• **color**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+___
+
+### `Optional` cursor
+
+• **cursor**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+___
 
 ### `Optional` dark
 
 • **dark**? : *[ThemableDecorationRenderOptions](#interfaces_vscode_gen_themabledecorationrenderoptionsmd)*
 
 Overwrite options for dark themes.
+
+___
+
+### `Optional` fontStyle
+
+• **fontStyle**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+___
+
+### `Optional` fontWeight
+
+• **fontWeight**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+___
+
+### `Optional` gutterIconPath
+
+• **gutterIconPath**? : *string*
+
+An **absolute path** or an URI to an image to be rendered in the gutter.
+
+___
+
+### `Optional` gutterIconSize
+
+• **gutterIconSize**? : *string*
+
+Specifies the size of the gutter icon.
+Available values are 'auto', 'contain', 'cover' and any percentage value.
+For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
 
 ___
 
@@ -4029,11 +3295,70 @@ Defaults to `false`.
 
 ___
 
+### `Optional` letterSpacing
+
+• **letterSpacing**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+___
+
 ### `Optional` light
 
 • **light**? : *[ThemableDecorationRenderOptions](#interfaces_vscode_gen_themabledecorationrenderoptionsmd)*
 
 Overwrite options for light themes.
+
+___
+
+### `Optional` opacity
+
+• **opacity**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+___
+
+### `Optional` outline
+
+• **outline**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+___
+
+### `Optional` outlineColor
+
+• **outlineColor**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'outline' for setting one or more of the individual outline properties.
+
+___
+
+### `Optional` outlineStyle
+
+• **outlineStyle**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'outline' for setting one or more of the individual outline properties.
+
+___
+
+### `Optional` outlineWidth
+
+• **outlineWidth**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'outline' for setting one or more of the individual outline properties.
+
+___
+
+### `Optional` overviewRulerColor
+
+• **overviewRulerColor**? : *string*
+
+The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.
 
 ___
 
@@ -4051,6 +3376,14 @@ ___
 
 Customize the growing behavior of the decoration when edits occur at the edges of the decoration's range.
 Defaults to `DecorationRangeBehavior.OpenOpen`.
+
+___
+
+### `Optional` textDecoration
+
+• **textDecoration**? : *string*
+
+CSS styling property that will be applied to text enclosed by a decoration.
 
 
 <a name="interfaces_vscode_gen_diagnosticchangeeventmd"></a>
@@ -4638,6 +3971,10 @@ Name | Type |
 
   ↳ [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)
 
+  ↳ [InputBox](#interfaces_vscode_gen_inputboxmd)
+
+  ↳ [QuickInputButton](#interfaces_vscode_gen_quickinputbuttonmd)
+
   ↳ [WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd)
 
   ↳ [DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd)
@@ -4646,11 +3983,13 @@ Name | Type |
 
   ↳ [WorkspaceProperties](#interfaces_vscode_gen_workspacepropertiesmd)
 
-  ↳ [StatusBarItemProperties](#interfaces_vscode_gen_statusbaritempropertiesmd)
+  ↳ [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)
 
-  ↳ [OutputChannelProperties](#interfaces_vscode_gen_outputchannelpropertiesmd)
+  ↳ [OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd)
 
-  ↳ [TextEditorDecorationTypeProperties](#interfaces_vscode_gen_texteditordecorationtypepropertiesmd)
+  ↳ [TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd)
+
+  ↳ [InputBoxState](#interfaces_vscode_gen_inputboxstatemd)
 
 ## Index
 
@@ -4663,6 +4002,326 @@ Name | Type |
 ###  populateFrom
 
 • **populateFrom**: *function*
+
+#### Type declaration:
+
+▸ (`_`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | any |
+
+
+<a name="interfaces_vscode_gen_inputboxmd"></a>
+
+
+# Interface: InputBox
+
+A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+
+Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+
+## Hierarchy
+
+* [fromJson](#interfaces_vscode_gen_fromjsonmd)
+
+* [withDisp](#interfaces_vscode_gen_withdispmd)
+
+  ↳ **InputBox**
+
+## Index
+
+### Properties
+
+* [Dispose](#dispose)
+* [Get](#get)
+* [Hide](#hide)
+* [OnDidAccept](#ondidaccept)
+* [OnDidChangeValue](#ondidchangevalue)
+* [OnDidHide](#ondidhide)
+* [OnDidTriggerButton](#ondidtriggerbutton)
+* [Set](#set)
+* [Show](#show)
+* [disp](#disp)
+* [populateFrom](#populatefrom)
+
+## Properties
+
+###  Dispose
+
+• **Dispose**: *function*
+
+Dispose of this input UI and any associated resources. If it is still
+visible, it is first hidden. After this call the input UI is no longer
+functional and no additional methods or properties on it should be
+accessed. Instead a new input UI should be created.
+
+#### Type declaration:
+
+▸ (): *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  Get
+
+• **Get**: *function*
+
+#### Type declaration:
+
+▸ (): *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [InputBoxState](#interfaces_vscode_gen_inputboxstatemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [InputBoxState](#interfaces_vscode_gen_inputboxstatemd) |
+
+___
+
+###  Hide
+
+• **Hide**: *function*
+
+Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+event.
+
+#### Type declaration:
+
+▸ (): *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OnDidAccept
+
+• **OnDidAccept**: *function*
+
+An event signaling when the user indicated acceptance of the input value.
+
+#### Type declaration:
+
+▸ (`_`: function): *function*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  OnDidChangeValue
+
+• **OnDidChangeValue**: *function*
+
+An event signaling when the value has changed.
+
+#### Type declaration:
+
+▸ (`_`: function): *function*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: string): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | string |
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  OnDidHide
+
+• **OnDidHide**: *function*
+
+An event signaling when this input UI is hidden.
+
+There are several reasons why this UI might have to be hidden and
+the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+(Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+the user pressing Esc, some other input UI opening, etc.)
+
+#### Type declaration:
+
+▸ (`_`: function): *function*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  OnDidTriggerButton
+
+• **OnDidTriggerButton**: *function*
+
+An event signaling when a button was triggered.
+
+#### Type declaration:
+
+▸ (`_`: function): *function*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [QuickInputButton](#interfaces_vscode_gen_quickinputbuttonmd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [QuickInputButton](#interfaces_vscode_gen_quickinputbuttonmd) |
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  Set
+
+• **Set**: *function*
+
+#### Type declaration:
+
+▸ (`_`: [InputBoxState](#interfaces_vscode_gen_inputboxstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [InputBoxState](#interfaces_vscode_gen_inputboxstatemd) |
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  Show
+
+• **Show**: *function*
+
+Makes the input UI visible in its current configuration. Any other input
+UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+
+#### Type declaration:
+
+▸ (): *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  disp
+
+• **disp**: *[Disposable](#classes_core_disposablemd)*
+
+*Inherited from [withDisp](#interfaces_vscode_gen_withdispmd).[disp](#disp)*
+
+___
+
+###  populateFrom
+
+• **populateFrom**: *function*
+
+*Inherited from [fromJson](#interfaces_vscode_gen_fromjsonmd).[populateFrom](#populatefrom)*
 
 #### Type declaration:
 
@@ -4781,6 +4440,162 @@ Selection of the prefilled [`value`](https://code.visualstudio.com/api/reference
 first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
 word will be selected, when empty (start equals end) only the cursor will be set,
 otherwise the defined range will be selected.
+
+
+<a name="interfaces_vscode_gen_inputboxstatemd"></a>
+
+
+# Interface: InputBoxState
+
+A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+
+Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+
+## Hierarchy
+
+* [fromJson](#interfaces_vscode_gen_fromjsonmd)
+
+  ↳ **InputBoxState**
+
+## Index
+
+### Properties
+
+* [busy](#optional-busy)
+* [buttons](#optional-buttons)
+* [enabled](#optional-enabled)
+* [ignoreFocusOut](#optional-ignorefocusout)
+* [password](#optional-password)
+* [placeholder](#optional-placeholder)
+* [populateFrom](#populatefrom)
+* [prompt](#optional-prompt)
+* [step](#optional-step)
+* [title](#optional-title)
+* [totalSteps](#optional-totalsteps)
+* [validationMessage](#optional-validationmessage)
+* [value](#optional-value)
+
+## Properties
+
+### `Optional` busy
+
+• **busy**? : *boolean*
+
+If the UI should show a progress indicator. Defaults to false.
+
+Change this to true, e.g., while loading more data or validating
+user input.
+
+___
+
+### `Optional` buttons
+
+• **buttons**? : *[QuickInputButton](#interfaces_vscode_gen_quickinputbuttonmd)[]*
+
+Buttons for actions in the UI.
+
+___
+
+### `Optional` enabled
+
+• **enabled**? : *boolean*
+
+If the UI should allow for user input. Defaults to true.
+
+Change this to false, e.g., while validating user input or
+loading data for the next step in user input.
+
+___
+
+### `Optional` ignoreFocusOut
+
+• **ignoreFocusOut**? : *boolean*
+
+If the UI should stay open even when loosing UI focus. Defaults to false.
+
+___
+
+### `Optional` password
+
+• **password**? : *boolean*
+
+If the input value should be hidden. Defaults to false.
+
+___
+
+### `Optional` placeholder
+
+• **placeholder**? : *string*
+
+Optional placeholder in the filter text.
+
+___
+
+###  populateFrom
+
+• **populateFrom**: *function*
+
+*Inherited from [fromJson](#interfaces_vscode_gen_fromjsonmd).[populateFrom](#populatefrom)*
+
+#### Type declaration:
+
+▸ (`_`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | any |
+
+___
+
+### `Optional` prompt
+
+• **prompt**? : *string*
+
+An optional prompt text providing some ask or explanation to the user.
+
+___
+
+### `Optional` step
+
+• **step**? : *number*
+
+An optional current step count.
+
+___
+
+### `Optional` title
+
+• **title**? : *string*
+
+An optional title.
+
+___
+
+### `Optional` totalSteps
+
+• **totalSteps**? : *number*
+
+An optional total step count.
+
+___
+
+### `Optional` validationMessage
+
+• **validationMessage**? : *string*
+
+An optional validation message indicating a problem with the current input value.
+
+___
+
+### `Optional` value
+
+• **value**? : *string*
+
+Current input value.
 
 
 <a name="interfaces_vscode_gen_languagesmd"></a>
@@ -5233,13 +5048,13 @@ ___
 
 ▪ **_**: *function*
 
-▸ (`_`: [OutputChannelProperties](#interfaces_vscode_gen_outputchannelpropertiesmd)): *void*
+▸ (`_`: [OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`_` | [OutputChannelProperties](#interfaces_vscode_gen_outputchannelpropertiesmd) |
+`_` | [OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd) |
 
 ___
 
@@ -5316,10 +5131,10 @@ Name | Type |
 `_` | any |
 
 
-<a name="interfaces_vscode_gen_outputchannelpropertiesmd"></a>
+<a name="interfaces_vscode_gen_outputchannelstatemd"></a>
 
 
-# Interface: OutputChannelProperties
+# Interface: OutputChannelState
 
 An output channel is a container for readonly textual information.
 
@@ -5330,7 +5145,7 @@ To get an instance of an `OutputChannel` use
 
 * [fromJson](#interfaces_vscode_gen_fromjsonmd)
 
-  ↳ **OutputChannelProperties**
+  ↳ **OutputChannelState**
 
 ## Index
 
@@ -5368,6 +5183,75 @@ ___
 Name | Type |
 ------ | ------ |
 `_` | any |
+
+
+<a name="interfaces_vscode_gen_quickinputbuttonmd"></a>
+
+
+# Interface: QuickInputButton
+
+Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
+
+## Hierarchy
+
+* [fromJson](#interfaces_vscode_gen_fromjsonmd)
+
+  ↳ **QuickInputButton**
+
+## Index
+
+### Properties
+
+* [iconPath](#iconpath)
+* [my](#optional-my)
+* [populateFrom](#populatefrom)
+* [tooltip](#optional-tooltip)
+
+## Properties
+
+###  iconPath
+
+• **iconPath**: *string*
+
+Icon for the button.
+
+___
+
+### `Optional` my
+
+• **my**? : *object*
+
+Free-form custom data, preserved across a roundtrip.
+
+#### Type declaration:
+
+* \[ **_**: *string*\]: any
+
+___
+
+###  populateFrom
+
+• **populateFrom**: *function*
+
+*Inherited from [fromJson](#interfaces_vscode_gen_fromjsonmd).[populateFrom](#populatefrom)*
+
+#### Type declaration:
+
+▸ (`_`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | any |
+
+___
+
+### `Optional` tooltip
+
+• **tooltip**? : *string*
+
+An optional tooltip.
 
 
 <a name="interfaces_vscode_gen_quickpickitemmd"></a>
@@ -5681,13 +5565,13 @@ ___
 
 ▪ **_**: *function*
 
-▸ (`_`: [StatusBarItemProperties](#interfaces_vscode_gen_statusbaritempropertiesmd)): *void*
+▸ (`_`: [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`_` | [StatusBarItemProperties](#interfaces_vscode_gen_statusbaritempropertiesmd) |
+`_` | [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd) |
 
 ___
 
@@ -5717,13 +5601,13 @@ ___
 
 #### Type declaration:
 
-▸ (`_`: [StatusBarItemProperties](#interfaces_vscode_gen_statusbaritempropertiesmd)): *function*
+▸ (`_`: [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)): *function*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`_` | [StatusBarItemProperties](#interfaces_vscode_gen_statusbaritempropertiesmd) |
+`_` | [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd) |
 
 ▸ (`_`: function): *void*
 
@@ -5780,10 +5664,10 @@ Name | Type |
 `_` | any |
 
 
-<a name="interfaces_vscode_gen_statusbaritempropertiesmd"></a>
+<a name="interfaces_vscode_gen_statusbaritemstatemd"></a>
 
 
-# Interface: StatusBarItemProperties
+# Interface: StatusBarItemState
 
 A status bar item is a status bar contribution that can
 show text and icons and run a command on click.
@@ -5792,7 +5676,7 @@ show text and icons and run a command on click.
 
 * [fromJson](#interfaces_vscode_gen_fromjsonmd)
 
-  ↳ **StatusBarItemProperties**
+  ↳ **StatusBarItemState**
 
 ## Index
 
@@ -5952,13 +5836,13 @@ ___
 
 ▪ **_**: *function*
 
-▸ (`_`: [TextEditorDecorationTypeProperties](#interfaces_vscode_gen_texteditordecorationtypepropertiesmd)): *void*
+▸ (`_`: [TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`_` | [TextEditorDecorationTypeProperties](#interfaces_vscode_gen_texteditordecorationtypepropertiesmd) |
+`_` | [TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd) |
 
 ___
 
@@ -5987,10 +5871,10 @@ Name | Type |
 `_` | any |
 
 
-<a name="interfaces_vscode_gen_texteditordecorationtypepropertiesmd"></a>
+<a name="interfaces_vscode_gen_texteditordecorationtypestatemd"></a>
 
 
-# Interface: TextEditorDecorationTypeProperties
+# Interface: TextEditorDecorationTypeState
 
 Represents a handle to a set of decorations
 sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
@@ -6002,7 +5886,7 @@ To get an instance of a `TextEditorDecorationType` use
 
 * [fromJson](#interfaces_vscode_gen_fromjsonmd)
 
-  ↳ **TextEditorDecorationTypeProperties**
+  ↳ **TextEditorDecorationTypeState**
 
 ## Index
 
@@ -6611,6 +6495,7 @@ asking for user input.
 
 ### Properties
 
+* [CreateInputBox](#createinputbox)
 * [CreateOutputChannel](#createoutputchannel)
 * [CreateStatusBarItem](#createstatusbaritem)
 * [CreateTextEditorDecorationType](#createtexteditordecorationtype)
@@ -6640,6 +6525,36 @@ asking for user input.
 * [State](#state)
 
 ## Properties
+
+###  CreateInputBox
+
+• **CreateInputBox**: *function*
+
+Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
+
+Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+
+**`returns`** A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
+
+#### Type declaration:
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [InputBox](#interfaces_vscode_gen_inputboxmd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
+
+___
 
 ###  CreateOutputChannel
 
@@ -7764,6 +7679,8 @@ Name | Type |
 
   ↳ [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)
 
+  ↳ [InputBox](#interfaces_vscode_gen_inputboxmd)
+
 ## Index
 
 ### Properties
@@ -8401,3 +8318,1247 @@ ___
 
 List of workspace folders or `undefined` when no folder is open.
 *Note* that the first entry corresponds to the value of `rootPath`.
+
+
+<a name="modules_core_md"></a>
+
+
+# External module: "core"
+
+## Index
+
+### Classes
+
+* [Cancel](#classes_core_cancelmd)
+* [Disposable](#classes_core_disposablemd)
+* [impl](#classes_core_implmd)
+* [ipcMsg](#classes_core_ipcmsgmd)
+
+### Type aliases
+
+* [dict](#dict)
+
+## Type aliases
+
+###  dict
+
+Ƭ **dict**: *object*
+
+#### Type declaration:
+
+* \[ **_**: *string*\]: any
+
+
+<a name="modules_vsc_appz_md"></a>
+
+
+# External module: "vsc-appz"
+
+## Index
+
+### Functions
+
+* [CancelIn](#cancelin)
+* [Main](#main)
+* [OnError](#let-onerror)
+
+## Functions
+
+###  CancelIn
+
+▸ **CancelIn**(`msFromNow`: number): *[Cancel](#classes_core_cancelmd)*
+
+Returns a new `Cancel` with its `Now` already scheduled to be called in `msFromNow` milliseconds.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`msFromNow` | number |
+
+**Returns:** *[Cancel](#classes_core_cancelmd)*
+
+___
+
+###  Main
+
+▸ **Main**(`main`: function, `stdIn?`: ReadStream, `stdOut?`: WriteStream): *void*
+
+Creates a `Vscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `process.stdin`, and `stdOut` defaulting to `process.stdout`), then loops forever to never `return`.
+
+**Parameters:**
+
+▪ **main**: *function*
+
+called whenever the counterparty demands, which usually means once at startup.
+
+▸ (`_`: [Vscode](#interfaces_vscode_gen_vscodemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Vscode](#interfaces_vscode_gen_vscodemd) |
+
+▪`Optional`  **stdIn**: *ReadStream*
+
+▪`Optional`  **stdOut**: *WriteStream*
+
+**Returns:** *void*
+
+___
+
+### `Let` OnError
+
+▸ **OnError**(`_this`: [Vscode](#interfaces_vscode_gen_vscodemd), `err`: any, `jsonMsg?`: any): *void*
+
+Reports problems during the ongoing forever-looping stdin/stdout communication
+with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be `null` or `undefined`.
+Any of its args must be checked for `null`/`undefined`-ness by your `OnError` handler.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_this` | [Vscode](#interfaces_vscode_gen_vscodemd) |
+`err` | any |
+`jsonMsg?` | any |
+
+**Returns:** *void*
+
+
+<a name="modules_vscode_gen_md"></a>
+
+
+# External module: "vscode.gen"
+
+## Index
+
+### Enumerations
+
+* [DecorationRangeBehavior](#enums_vscode_gen_decorationrangebehaviormd)
+* [OverviewRulerLane](#enums_vscode_gen_overviewrulerlanemd)
+* [StatusBarAlignment](#enums_vscode_gen_statusbaralignmentmd)
+
+### Classes
+
+* [impl](#classes_vscode_gen_implmd)
+* [implBase](#classes_vscode_gen_implbasemd)
+* [implClipboard](#classes_vscode_gen_implclipboardmd)
+* [implCommands](#classes_vscode_gen_implcommandsmd)
+* [implEnv](#classes_vscode_gen_implenvmd)
+* [implExtensions](#classes_vscode_gen_implextensionsmd)
+* [implLanguages](#classes_vscode_gen_impllanguagesmd)
+* [implWindow](#classes_vscode_gen_implwindowmd)
+* [implWorkspace](#classes_vscode_gen_implworkspacemd)
+
+### Interfaces
+
+* [Clipboard](#interfaces_vscode_gen_clipboardmd)
+* [Commands](#interfaces_vscode_gen_commandsmd)
+* [DecorationRenderOptions](#interfaces_vscode_gen_decorationrenderoptionsmd)
+* [DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd)
+* [Env](#interfaces_vscode_gen_envmd)
+* [EnvProperties](#interfaces_vscode_gen_envpropertiesmd)
+* [Extensions](#interfaces_vscode_gen_extensionsmd)
+* [InputBox](#interfaces_vscode_gen_inputboxmd)
+* [InputBoxOptions](#interfaces_vscode_gen_inputboxoptionsmd)
+* [InputBoxState](#interfaces_vscode_gen_inputboxstatemd)
+* [Languages](#interfaces_vscode_gen_languagesmd)
+* [MessageItem](#interfaces_vscode_gen_messageitemmd)
+* [MessageOptions](#interfaces_vscode_gen_messageoptionsmd)
+* [OpenDialogOptions](#interfaces_vscode_gen_opendialogoptionsmd)
+* [OutputChannel](#interfaces_vscode_gen_outputchannelmd)
+* [OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd)
+* [QuickInputButton](#interfaces_vscode_gen_quickinputbuttonmd)
+* [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)
+* [QuickPickOptions](#interfaces_vscode_gen_quickpickoptionsmd)
+* [SaveDialogOptions](#interfaces_vscode_gen_savedialogoptionsmd)
+* [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)
+* [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)
+* [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)
+* [TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd)
+* [ThemableDecorationAttachmentRenderOptions](#interfaces_vscode_gen_themabledecorationattachmentrenderoptionsmd)
+* [ThemableDecorationRenderOptions](#interfaces_vscode_gen_themabledecorationrenderoptionsmd)
+* [Vscode](#interfaces_vscode_gen_vscodemd)
+* [Window](#interfaces_vscode_gen_windowmd)
+* [WindowState](#interfaces_vscode_gen_windowstatemd)
+* [Workspace](#interfaces_vscode_gen_workspacemd)
+* [WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)
+* [WorkspaceFolderPickOptions](#interfaces_vscode_gen_workspacefolderpickoptionsmd)
+* [WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd)
+* [WorkspaceProperties](#interfaces_vscode_gen_workspacepropertiesmd)
+* [fromJson](#interfaces_vscode_gen_fromjsonmd)
+* [withDisp](#interfaces_vscode_gen_withdispmd)
+
+### Type aliases
+
+* [Cancel](#cancel)
+* [Disposable](#disposable)
+* [ipcMsg](#ipcmsg)
+
+### Functions
+
+* [DiagnosticChangeEvent_populateFrom](#diagnosticchangeevent_populatefrom)
+* [EnvProperties_populateFrom](#envproperties_populatefrom)
+* [InputBoxState_populateFrom](#inputboxstate_populatefrom)
+* [InputBox_Dispose](#inputbox_dispose)
+* [InputBox_Get](#inputbox_get)
+* [InputBox_Hide](#inputbox_hide)
+* [InputBox_OnDidAccept](#inputbox_ondidaccept)
+* [InputBox_OnDidChangeValue](#inputbox_ondidchangevalue)
+* [InputBox_OnDidHide](#inputbox_ondidhide)
+* [InputBox_OnDidTriggerButton](#inputbox_ondidtriggerbutton)
+* [InputBox_Set](#inputbox_set)
+* [InputBox_Show](#inputbox_show)
+* [InputBox_populateFrom](#inputbox_populatefrom)
+* [MessageItem_populateFrom](#messageitem_populatefrom)
+* [OutputChannelState_populateFrom](#outputchannelstate_populatefrom)
+* [OutputChannel_Append](#outputchannel_append)
+* [OutputChannel_AppendLine](#outputchannel_appendline)
+* [OutputChannel_Clear](#outputchannel_clear)
+* [OutputChannel_Dispose](#outputchannel_dispose)
+* [OutputChannel_Get](#outputchannel_get)
+* [OutputChannel_Hide](#outputchannel_hide)
+* [OutputChannel_Show](#outputchannel_show)
+* [OutputChannel_populateFrom](#outputchannel_populatefrom)
+* [QuickInputButton_populateFrom](#quickinputbutton_populatefrom)
+* [QuickPickItem_populateFrom](#quickpickitem_populatefrom)
+* [StatusBarItemState_populateFrom](#statusbaritemstate_populatefrom)
+* [StatusBarItem_Dispose](#statusbaritem_dispose)
+* [StatusBarItem_Get](#statusbaritem_get)
+* [StatusBarItem_Hide](#statusbaritem_hide)
+* [StatusBarItem_Set](#statusbaritem_set)
+* [StatusBarItem_Show](#statusbaritem_show)
+* [StatusBarItem_populateFrom](#statusbaritem_populatefrom)
+* [TextEditorDecorationTypeState_populateFrom](#texteditordecorationtypestate_populatefrom)
+* [TextEditorDecorationType_Dispose](#texteditordecorationtype_dispose)
+* [TextEditorDecorationType_Get](#texteditordecorationtype_get)
+* [TextEditorDecorationType_populateFrom](#texteditordecorationtype_populatefrom)
+* [WindowState_populateFrom](#windowstate_populatefrom)
+* [WorkspaceFolder_populateFrom](#workspacefolder_populatefrom)
+* [WorkspaceFoldersChangeEvent_populateFrom](#workspacefolderschangeevent_populatefrom)
+* [WorkspaceProperties_populateFrom](#workspaceproperties_populatefrom)
+* [newDiagnosticChangeEvent](#newdiagnosticchangeevent)
+* [newDisposable](#newdisposable)
+* [newEnvProperties](#newenvproperties)
+* [newInputBox](#newinputbox)
+* [newInputBoxState](#newinputboxstate)
+* [newMessageItem](#newmessageitem)
+* [newOutputChannel](#newoutputchannel)
+* [newOutputChannelState](#newoutputchannelstate)
+* [newQuickInputButton](#newquickinputbutton)
+* [newQuickPickItem](#newquickpickitem)
+* [newStatusBarItem](#newstatusbaritem)
+* [newStatusBarItemState](#newstatusbaritemstate)
+* [newTextEditorDecorationType](#newtexteditordecorationtype)
+* [newTextEditorDecorationTypeState](#newtexteditordecorationtypestate)
+* [newWindowState](#newwindowstate)
+* [newWorkspaceFolder](#newworkspacefolder)
+* [newWorkspaceFoldersChangeEvent](#newworkspacefolderschangeevent)
+* [newWorkspaceProperties](#newworkspaceproperties)
+* [newipcMsg](#newipcmsg)
+
+## Type aliases
+
+###  Cancel
+
+Ƭ **Cancel**: *[Cancel](#classes_core_cancelmd)*
+
+___
+
+###  Disposable
+
+Ƭ **Disposable**: *[Disposable](#classes_core_disposablemd)*
+
+___
+
+###  ipcMsg
+
+Ƭ **ipcMsg**: *[ipcMsg](#classes_core_ipcmsgmd)*
+
+## Functions
+
+###  DiagnosticChangeEvent_populateFrom
+
+▸ **DiagnosticChangeEvent_populateFrom**(`this`: [DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  EnvProperties_populateFrom
+
+▸ **EnvProperties_populateFrom**(`this`: [EnvProperties](#interfaces_vscode_gen_envpropertiesmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [EnvProperties](#interfaces_vscode_gen_envpropertiesmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  InputBoxState_populateFrom
+
+▸ **InputBoxState_populateFrom**(`this`: [InputBoxState](#interfaces_vscode_gen_inputboxstatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBoxState](#interfaces_vscode_gen_inputboxstatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  InputBox_Dispose
+
+▸ **InputBox_Dispose**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  InputBox_Get
+
+▸ **InputBox_Get**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [InputBoxState](#interfaces_vscode_gen_inputboxstatemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [InputBoxState](#interfaces_vscode_gen_inputboxstatemd) |
+
+___
+
+###  InputBox_Hide
+
+▸ **InputBox_Hide**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  InputBox_OnDidAccept
+
+▸ **InputBox_OnDidAccept**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[InputBox](#interfaces_vscode_gen_inputboxmd)*
+
+▪ **handler**: *function*
+
+▸ (): *void*
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  InputBox_OnDidChangeValue
+
+▸ **InputBox_OnDidChangeValue**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[InputBox](#interfaces_vscode_gen_inputboxmd)*
+
+▪ **handler**: *function*
+
+▸ (`_`: string): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | string |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  InputBox_OnDidHide
+
+▸ **InputBox_OnDidHide**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[InputBox](#interfaces_vscode_gen_inputboxmd)*
+
+▪ **handler**: *function*
+
+▸ (): *void*
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  InputBox_OnDidTriggerButton
+
+▸ **InputBox_OnDidTriggerButton**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[InputBox](#interfaces_vscode_gen_inputboxmd)*
+
+▪ **handler**: *function*
+
+▸ (`_`: [QuickInputButton](#interfaces_vscode_gen_quickinputbuttonmd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [QuickInputButton](#interfaces_vscode_gen_quickinputbuttonmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  InputBox_Set
+
+▸ **InputBox_Set**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `allUpdates`: [InputBoxState](#interfaces_vscode_gen_inputboxstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
+`allUpdates` | [InputBoxState](#interfaces_vscode_gen_inputboxstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  InputBox_Show
+
+▸ **InputBox_Show**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  InputBox_populateFrom
+
+▸ **InputBox_populateFrom**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  MessageItem_populateFrom
+
+▸ **MessageItem_populateFrom**(`this`: [MessageItem](#interfaces_vscode_gen_messageitemmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [MessageItem](#interfaces_vscode_gen_messageitemmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  OutputChannelState_populateFrom
+
+▸ **OutputChannelState_populateFrom**(`this`: [OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  OutputChannel_Append
+
+▸ **OutputChannel_Append**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `value`: string): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+`value` | string |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OutputChannel_AppendLine
+
+▸ **OutputChannel_AppendLine**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `value`: string): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+`value` | string |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OutputChannel_Clear
+
+▸ **OutputChannel_Clear**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OutputChannel_Dispose
+
+▸ **OutputChannel_Dispose**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OutputChannel_Get
+
+▸ **OutputChannel_Get**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd) |
+
+___
+
+###  OutputChannel_Hide
+
+▸ **OutputChannel_Hide**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OutputChannel_Show
+
+▸ **OutputChannel_Show**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `preserveFocus?`: boolean): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+`preserveFocus?` | boolean |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OutputChannel_populateFrom
+
+▸ **OutputChannel_populateFrom**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  QuickInputButton_populateFrom
+
+▸ **QuickInputButton_populateFrom**(`this`: [QuickInputButton](#interfaces_vscode_gen_quickinputbuttonmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [QuickInputButton](#interfaces_vscode_gen_quickinputbuttonmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  QuickPickItem_populateFrom
+
+▸ **QuickPickItem_populateFrom**(`this`: [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  StatusBarItemState_populateFrom
+
+▸ **StatusBarItemState_populateFrom**(`this`: [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  StatusBarItem_Dispose
+
+▸ **StatusBarItem_Dispose**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  StatusBarItem_Get
+
+▸ **StatusBarItem_Get**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd) |
+
+___
+
+###  StatusBarItem_Hide
+
+▸ **StatusBarItem_Hide**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  StatusBarItem_Set
+
+▸ **StatusBarItem_Set**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd), `allUpdates`: [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
+`allUpdates` | [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  StatusBarItem_Show
+
+▸ **StatusBarItem_Show**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  StatusBarItem_populateFrom
+
+▸ **StatusBarItem_populateFrom**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  TextEditorDecorationTypeState_populateFrom
+
+▸ **TextEditorDecorationTypeState_populateFrom**(`this`: [TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  TextEditorDecorationType_Dispose
+
+▸ **TextEditorDecorationType_Dispose**(`this`: [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  TextEditorDecorationType_Get
+
+▸ **TextEditorDecorationType_Get**(`this`: [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd) |
+
+___
+
+###  TextEditorDecorationType_populateFrom
+
+▸ **TextEditorDecorationType_populateFrom**(`this`: [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  WindowState_populateFrom
+
+▸ **WindowState_populateFrom**(`this`: [WindowState](#interfaces_vscode_gen_windowstatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [WindowState](#interfaces_vscode_gen_windowstatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  WorkspaceFolder_populateFrom
+
+▸ **WorkspaceFolder_populateFrom**(`this`: [WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  WorkspaceFoldersChangeEvent_populateFrom
+
+▸ **WorkspaceFoldersChangeEvent_populateFrom**(`this`: [WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  WorkspaceProperties_populateFrom
+
+▸ **WorkspaceProperties_populateFrom**(`this`: [WorkspaceProperties](#interfaces_vscode_gen_workspacepropertiesmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [WorkspaceProperties](#interfaces_vscode_gen_workspacepropertiesmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  newDiagnosticChangeEvent
+
+▸ **newDiagnosticChangeEvent**(): *[DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd)*
+
+**Returns:** *[DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd)*
+
+___
+
+###  newDisposable
+
+▸ **newDisposable**(): *[Disposable](#classes_core_disposablemd)*
+
+**Returns:** *[Disposable](#classes_core_disposablemd)*
+
+___
+
+###  newEnvProperties
+
+▸ **newEnvProperties**(): *[EnvProperties](#interfaces_vscode_gen_envpropertiesmd)*
+
+**Returns:** *[EnvProperties](#interfaces_vscode_gen_envpropertiesmd)*
+
+___
+
+###  newInputBox
+
+▸ **newInputBox**(): *[InputBox](#interfaces_vscode_gen_inputboxmd)*
+
+**Returns:** *[InputBox](#interfaces_vscode_gen_inputboxmd)*
+
+___
+
+###  newInputBoxState
+
+▸ **newInputBoxState**(): *[InputBoxState](#interfaces_vscode_gen_inputboxstatemd)*
+
+**Returns:** *[InputBoxState](#interfaces_vscode_gen_inputboxstatemd)*
+
+___
+
+###  newMessageItem
+
+▸ **newMessageItem**(): *[MessageItem](#interfaces_vscode_gen_messageitemmd)*
+
+**Returns:** *[MessageItem](#interfaces_vscode_gen_messageitemmd)*
+
+___
+
+###  newOutputChannel
+
+▸ **newOutputChannel**(): *[OutputChannel](#interfaces_vscode_gen_outputchannelmd)*
+
+**Returns:** *[OutputChannel](#interfaces_vscode_gen_outputchannelmd)*
+
+___
+
+###  newOutputChannelState
+
+▸ **newOutputChannelState**(): *[OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd)*
+
+**Returns:** *[OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd)*
+
+___
+
+###  newQuickInputButton
+
+▸ **newQuickInputButton**(): *[QuickInputButton](#interfaces_vscode_gen_quickinputbuttonmd)*
+
+**Returns:** *[QuickInputButton](#interfaces_vscode_gen_quickinputbuttonmd)*
+
+___
+
+###  newQuickPickItem
+
+▸ **newQuickPickItem**(): *[QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)*
+
+**Returns:** *[QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)*
+
+___
+
+###  newStatusBarItem
+
+▸ **newStatusBarItem**(): *[StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)*
+
+**Returns:** *[StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)*
+
+___
+
+###  newStatusBarItemState
+
+▸ **newStatusBarItemState**(): *[StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)*
+
+**Returns:** *[StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)*
+
+___
+
+###  newTextEditorDecorationType
+
+▸ **newTextEditorDecorationType**(): *[TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)*
+
+**Returns:** *[TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)*
+
+___
+
+###  newTextEditorDecorationTypeState
+
+▸ **newTextEditorDecorationTypeState**(): *[TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd)*
+
+**Returns:** *[TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd)*
+
+___
+
+###  newWindowState
+
+▸ **newWindowState**(): *[WindowState](#interfaces_vscode_gen_windowstatemd)*
+
+**Returns:** *[WindowState](#interfaces_vscode_gen_windowstatemd)*
+
+___
+
+###  newWorkspaceFolder
+
+▸ **newWorkspaceFolder**(): *[WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)*
+
+**Returns:** *[WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)*
+
+___
+
+###  newWorkspaceFoldersChangeEvent
+
+▸ **newWorkspaceFoldersChangeEvent**(): *[WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd)*
+
+**Returns:** *[WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd)*
+
+___
+
+###  newWorkspaceProperties
+
+▸ **newWorkspaceProperties**(): *[WorkspaceProperties](#interfaces_vscode_gen_workspacepropertiesmd)*
+
+**Returns:** *[WorkspaceProperties](#interfaces_vscode_gen_workspacepropertiesmd)*
+
+___
+
+###  newipcMsg
+
+▸ **newipcMsg**(): *[ipcMsg](#classes_core_ipcmsgmd)*
+
+**Returns:** *[ipcMsg](#classes_core_ipcmsgmd)*

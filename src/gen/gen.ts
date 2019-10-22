@@ -126,8 +126,7 @@ export class Prep {
             this.addStruct(structjob)
         for (const structjob of job.structs.filter(_ => !job.mereBaseTypes.includes(_.decl.name.text)))
             this.addStruct(structjob)
-        for (const structjob of job.structs.filter(_ => job.mereBaseTypes.includes(_.decl.name.text)))
-            this.structs = this.structs.filter(_ => _.fromOrig !== structjob)
+        this.structs = this.structs.filter(_ => !job.mereBaseTypes.includes(_.fromOrig.decl.name.text))
         for (const funcjob of job.funcs)
             this.addFunc(funcjob)
 
@@ -155,7 +154,7 @@ export class Prep {
                 }
                 this.structs.push(struct)
                 iface.methods.push({
-                    name: pickName("", ['Properties', 'Props', 'Info', 'Current', 'Self', 'It', 'Cur'], iface.methods),
+                    name: pickName("", ["Properties", "Props", "Info", "Current", "Self", "It", "Cur"], iface.methods),
                     isProps: struct, args: [{
                         isFromRetThenable: true, name: "onDone", optional: false,
                         typeSpec: { Thens: [struct.name] },
@@ -185,10 +184,15 @@ export class Prep {
                 struct.isDispObj = true
                 if (struct.fields.find(_ => !typeFun(_.typeSpec))) {
                     const propstruct: PrepStruct = {
-                        funcFields: [], name: struct.name + "Properties", isPropsOfStruct: struct,
+                        funcFields: [], name: struct.name + "State", isPropsOfStruct: struct,
                         fromOrig: struct.fromOrig, isIncoming: true, isOutgoing: true,
                         fields: struct.fields.filter(_ => !typeFun(_.typeSpec)).map(_ => {
                             _.optional = true
+                            for (const tname of typeNames(_.typeSpec)) {
+                                const tstruct = this.structs.find(_ => _.name === tname)
+                                if (tstruct)
+                                    tstruct.isOutgoing = tstruct.isIncoming = true
+                            }
                             return _
                         }),
                     }
@@ -242,14 +246,17 @@ export class Prep {
                 if (tspec) {
                     if (typeof tspec === "string" && this.fromOrig.mereBaseTypes.includes(tspec))
                         this.fromOrig.mereBaseTypes = this.fromOrig.mereBaseTypes.filter(tname => tname !== tspec)
-                    fields.push({
+                    let field: PrepField = {
                         fromOrig: _,
                         name: _.name.getText(),
                         typeSpec: tspec,
                         optional: (ts.isTypeElement(_) && _.questionToken) ? true : false,
                         readOnly: (_.modifiers && _.modifiers.find(_ => _.getText() === 'readonly')) ? true : false,
                         isExtBaggage: false,
-                    })
+                    }
+                    if (ts.isPropertySignature(_) && ts.isTypeReferenceNode(_.type) && _.type.typeName.getText() === "Event")
+                        field.typeSpec = { From: [{ From: _.type.typeArguments.map(_ => this.typeSpec(_)).filter(_ => _ ? true : false), To: null }], To: "Disposable" }
+                    fields.push(field)
                 }
             }
         }
@@ -583,9 +590,9 @@ export function typeSumOf(typeSpec: TypeSpec, sumOf: TypeSpec): boolean {
     return tsum && tsum.length && tsum.some(_ => _ === sumOf)
 }
 
-export function typePromOf(typeSpec: TypeSpec, promOf: TypeSpec): boolean {
+export function typePromOf(typeSpec: TypeSpec, promOf?: TypeSpec): boolean {
     const tprom = typeProm(typeSpec)
-    return (tprom && tprom.length && tprom[0] === promOf)
+    return (tprom && tprom.length && (promOf ? (tprom[0] === promOf) : (tprom[0] === ScriptPrimType.Boolean || tprom[0] === ScriptPrimType.String || tprom[0] === ScriptPrimType.Number)))
 }
 
 export function typeProm(typeSpec: TypeSpec): TypeSpec[] {

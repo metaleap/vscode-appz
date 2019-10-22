@@ -69,10 +69,14 @@ export class Gen extends gen.Gen implements gen.IGen {
                 let hasgets = false, hassets = false
                 for (const mem of it.fields)
                     if (tfun = gen.typeFun(mem.typeSpec)) {
-                        const args = tfun[0].map((_, i) => gen.argFrom(_, (mem.fromOrig as ts.MethodSignature).parameters[i])).filter(_ => !_.isFromRetThenable)
+                        const orig = mem.fromOrig
+                        const isevt = (ts.isPropertySignature(orig) && ts.isTypeReferenceNode(orig.type) && orig.type.typeName.getText() === "Event")
+                        const args = isevt ? [
+                            { name: "handler", optional: false, typeSpec: (mem.typeSpec as gen.TypeSpecFun).From[0] },
+                        ] : (tfun[0].map((_, i): gen.PrepArg => gen.argFrom(_, (orig as ts.MethodSignature).parameters[i])).filter(_ => !_.isFromRetThenable))
                         src += `\t\t\t\tcase "${mem.name}": {\n`
                         for (const arg of args)
-                            src += this.argsSrc(prep, arg)
+                            src += this.argsSrc(prep, arg, isevt)
                         src += this.retArgsSrc(`this${it.name}.${mem.name}`, args)
                         src += "\t\t\t\t}\n"
                     } else
@@ -93,14 +97,13 @@ export class Gen extends gen.Gen implements gen.IGen {
                     src += "\t\t\t\t\tconst allUpdates = msg.data['allUpdates'] as { [_:string]: any }\n"
                     src += "\t\t\t\t\tif (!allUpdates)\n\t\t\t\t\t\treturn Promise.reject(msg.data)\n"
                     for (const prop of it.fields.filter(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec))) {
+                        const tcol = gen.typeNames(prop.typeSpec).includes("ThemeColor")
                         for (const tname of gen.typeNames(prop.typeSpec))
                             this.typeNamesUsed[tname] = true
                         src += `\t\t\t\t\tconst prop_${prop.name} = allUpdates["${prop.name}"] as ${this.typeSpec(prop.typeSpec)}\n`
                         src += `\t\t\t\t\tif (prop_${prop.name} !== undefined && prop_${prop.name} !== this${it.name}.${prop.name})\n\t\t\t\t\t\tthis${it.name}.${prop.name} = `
-                            + ((!gen.typeSumOf(prop.typeSpec, 'ThemeColor')) ? (
-                                (!gen.typeSumOf(prop.typeSpec, gen.ScriptPrimType.Undefined)) ?
-                                    `prop_${prop.name}` : `(!(prop_${prop.name} && prop_${prop.name}.length)) ? undefined : prop_${prop.name}`
-                            ) : (`(!(prop_${prop.name} && prop_${prop.name}.length)) ? undefined : prop_${prop.name}.startsWith("#") ? prop_${prop.name} : new ${this.pkg}.ThemeColor(prop_${prop.name})`))
+                            + ((!tcol) ? `prop_${prop.name}`
+                                : (`(!(prop_${prop.name} && prop_${prop.name}.length)) ? undefined : prop_${prop.name}.startsWith("#") ? prop_${prop.name} : new ${this.pkg}.ThemeColor(prop_${prop.name})`))
                             + "\n"
                     }
                     src += "\t\t\t\t\treturn Promise.resolve()\n"
@@ -136,7 +139,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         this.writeFileSync(this.pkg, src)
     }
 
-    argsSrc(prep: gen.Prep, arg: gen.PrepArg) {
+    argsSrc(prep: gen.Prep, arg: gen.PrepArg, isEvt?: boolean) {
         let src = ""
         let tfunc: [gen.TypeSpec[], gen.TypeSpec]
         if (arg.isCancellationToken !== undefined) {
@@ -146,13 +149,15 @@ export class Gen extends gen.Gen implements gen.IGen {
             src += `\t\t\t\t\telse\n`
             src += `\t\t\t\t\t\tremoteCancellationTokens.push(ctid)\n`
         } else if ((tfunc = gen.typeFun(arg.typeSpec)) && (tfunc.length)) {
+            for (const tname of gen.typeNames(arg.typeSpec))
+                this.typeNamesUsed[tname] = true
             const fnid = "_fnid_" + arg.name
             src += `\t\t\t\t\tconst ${fnid} = msg.data['${arg.name}'] as string\n`
             src += `\t\t\t\t\tif (!(${fnid} && ${fnid}.length))\n`
             src += "\t\t\t\t\t\treturn Promise.reject(msg.data)\n"
             src += `\t\t\t\t\tconst arg_${arg.name} = (${tfunc[0].map((_, i) => (gen.typeArrSpreads(_) ? '...' : '') + '_' + i + ': ' + this.typeSpec(_)).join(', ')}): ${this.typeSpec(tfunc[1])} => {\n`
             src += "\t\t\t\t\t\tif (prog && prog.proc)\n"
-            src += `\t\t\t\t\t\t\treturn prog.callBack(true, ${fnid}, ${tfunc[0].map((_, i) => '_' + i).join(', ')})\n`
+            src += `\t\t\t\t\t\t\treturn prog.callBack(${!isEvt}, ${fnid}, ${tfunc[0].map((_, i) => '_' + i).join(', ')})\n`
             src += "\t\t\t\t\t\treturn undefined\n"
             src += "\t\t\t\t\t}\n"
         } else {
@@ -194,7 +199,7 @@ export class Gen extends gen.Gen implements gen.IGen {
 
     typeSpec(from: gen.TypeSpec, intoProm: boolean = false): string {
         if (!from)
-            return "undefined"
+            return "unknown"
 
         if (from === gen.ScriptPrimType.Any)
             return "any"

@@ -129,7 +129,7 @@ export class Prog {
             else {
                 if (willRet)
                     this.callBacks[fnId] = { resolve: resolve, reject: reject }
-                this.send({ cbId: fnId, data: { "": args ? args : [] } })
+                this.send({ cbId: fnId, data: { "[]": args ? args : [] } })
             }
         })
     }
@@ -221,7 +221,7 @@ export class Prog {
         let sendret = false
         const onfail = (err: any) => {
             if (err)
-                vsc.window.showErrorMessage(err)
+                vsc.window.showErrorMessage(err).then()
             if (this.proc && msg && msg.cbId && !sendret)
                 this.send({ cbId: msg.cbId, data: { nay: ensureWillShowUpInJson(err) } })
         }

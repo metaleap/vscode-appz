@@ -20,7 +20,7 @@ class Gen extends gen_syn.Gen {
         super.genDemos();
     }
     emitIntro() {
-        return this.isDemos ? this.lines("const main = require('./main')", 'Object.defineProperty(exports, "__esModule", { value: true })', "// " + this.doNotEditComment("nodejs"), "let vsc, appName, cmdName, strFmt, quit, cancelIn, demo_Window_ShowInputBox, setOutChan, logLn", "exports.demosMenu = demosMenu", "exports.onUpAndRunning = () => { /* crikey.. */ vsc = main.vsc; appName = main.appName; cmdName = main.cmdName; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox; setOutChan = main.setOutChan; logLn = main.logLn; onUpAndRunning() }", "") : this.lines("// " + this.doNotEditComment("nodejs"), "import * as core from './core'", "import { OnError } from './vsc-appz'", "type ipcMsg = core.ipcMsg", "type Cancel = core.Cancel", "type Disposable = core.Disposable", "interface fromJson { populateFrom: (_: any) => boolean }", "interface withDisp { disp: Disposable }", "", "abstract class implBase {", "    impl: impl", "    constructor(impl: impl) { this.impl = impl }", "    Impl() { return this.impl as any as core.impl /* crikey, codegen life.. */ }", "}", "", "function newipcMsg() { return new core.ipcMsg() }", "function newDisposable() { return new core.Disposable() }", "");
+        return this.isDemos ? this.lines("const main = require('./main')", 'Object.defineProperty(exports, "__esModule", { value: true })', "// " + this.doNotEditComment("nodejs"), "let vsc, appName, cmdName, strFmt, quit, cancelIn, demo_Window_ShowInputBox, setOutChan, logLn, strLo, strUp", "exports.demosMenu = demosMenu", "exports.onUpAndRunning = () => { /* crikey!.. */ vsc = main.vsc; appName = main.appName; cmdName = main.cmdName; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox; setOutChan = main.setOutChan; logLn = main.logLn; strLo = main.strLo; strUp = main.strUp; onUpAndRunning() }", "") : this.lines("// " + this.doNotEditComment("nodejs"), "import * as core from './core'", "import { OnError } from './vsc-appz'", "type ipcMsg = core.ipcMsg", "type Cancel = core.Cancel", "type Disposable = core.Disposable", "interface fromJson { populateFrom: (_: any) => boolean }", "interface withDisp { disp: Disposable }", "", "abstract class implBase {", "    impl: impl", "    constructor(impl: impl) { this.impl = impl }", "    Impl() { return this.impl as any as core.impl /* crikey, codegen life.. */ }", "}", "", "function newipcMsg() { return new core.ipcMsg() }", "function newDisposable() { return new core.Disposable() }", "");
     }
     emitOutro() { return this; }
     emitDocs(it) {
@@ -69,12 +69,12 @@ class Gen extends gen_syn.Gen {
                 if (fprops && fprops.length) {
                     ffuncs.push({
                         name: gen.pickName("get", this.options.objPropsGetSetNamePicks, it.fromPrep.fields),
-                        typeSpec: { From: [], To: it.Name + "Properties" }
+                        typeSpec: { From: [], To: it.Name + "State" }
                     });
                     if (fprops.find(_ => !_.readOnly))
                         ffuncs.push({
                             name: gen.pickName("set", this.options.objPropsGetSetNamePicks, it.fromPrep.fields),
-                            typeSpec: { From: [it.Name + "Properties"], To: null }
+                            typeSpec: { From: [it.Name + "State"], To: null }
                         });
                 }
                 this.each(ffuncs, "\n", f => {

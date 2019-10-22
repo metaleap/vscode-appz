@@ -1583,6 +1583,10 @@ StatusBarItem: class
     # JSON FLAGS: undefined
     disp: ?Disposable
 
+    #
+    # JSON FLAGS: undefined
+    nextUpd: ?StatusBarItemState
+
 
 
 
@@ -1595,6 +1599,10 @@ OutputChannel: class
     #
     # JSON FLAGS: undefined
     disp: ?Disposable
+
+    #
+    # JSON FLAGS: undefined
+    nextUpd: ?OutputChannelState
 
 
 
@@ -1877,6 +1885,10 @@ TextEditorDecorationType: class
     # JSON FLAGS: undefined
     disp: ?Disposable
 
+    #
+    # JSON FLAGS: undefined
+    nextUpd: ?TextEditorDecorationTypeState
+
 
 
 
@@ -1890,6 +1902,10 @@ InputBox: class
     #
     # JSON FLAGS: undefined
     disp: ?Disposable
+
+    #
+    # JSON FLAGS: undefined
+    nextUpd: ?InputBoxState
 
 
 
@@ -1908,6 +1924,12 @@ QuickInputButton: class
     #
     # JSON FLAGS: {"Name":"tooltip","Required":false,"Excluded":false}
     Tooltip: ?string
+
+    # my:
+    # Free-form custom data, preserved across a roundtrip.
+    #
+    # JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
+    My: ?dict
 
 
 
@@ -2070,7 +2092,7 @@ WorkspaceProperties: class
 
 # A status bar item is a status bar contribution that can
 # show text and icons and run a command on click.
-StatusBarItemProperties: class
+StatusBarItemState: class
 
     # alignment:
     # The alignment of this item.
@@ -2122,7 +2144,7 @@ StatusBarItemProperties: class
 # 
 # To get an instance of an `OutputChannel` use
 # [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
-OutputChannelProperties: class
+OutputChannelState: class
 
     # name:
     # The human-readable name of this output channel.
@@ -2138,7 +2160,7 @@ OutputChannelProperties: class
 # 
 # To get an instance of a `TextEditorDecorationType` use
 # [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
-TextEditorDecorationTypeProperties: class
+TextEditorDecorationTypeState: class
 
     # key:
     # Internal representation of the handle.
@@ -2154,7 +2176,7 @@ TextEditorDecorationTypeProperties: class
 # Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
 # is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 # when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
-InputBoxProperties: class
+InputBoxState: class
 
     # value:
     # Current input value.
@@ -2174,29 +2196,11 @@ InputBoxProperties: class
     # JSON FLAGS: {"Name":"password","Required":false,"Excluded":false}
     Password: bool
 
-    # onDidChangeValue:
-    # An event signaling when the value has changed.
-    #
-    # JSON FLAGS: {"Name":"onDidChangeValue","Required":false,"Excluded":true}
-    OnDidChangeValue: (->Event)
-
-    # onDidAccept:
-    # An event signaling when the user indicated acceptance of the input value.
-    #
-    # JSON FLAGS: {"Name":"onDidAccept","Required":false,"Excluded":true}
-    OnDidAccept: (->Event)
-
     # buttons:
     # Buttons for actions in the UI.
     #
     # JSON FLAGS: {"Name":"buttons","Required":false,"Excluded":false}
     Buttons: ?[QuickInputButton]
-
-    # onDidTriggerButton:
-    # An event signaling when a button was triggered.
-    #
-    # JSON FLAGS: {"Name":"onDidTriggerButton","Required":false,"Excluded":true}
-    OnDidTriggerButton: (->Event)
 
     # prompt:
     # An optional prompt text providing some ask or explanation to the user.
@@ -2251,17 +2255,6 @@ InputBoxProperties: class
     #
     # JSON FLAGS: {"Name":"ignoreFocusOut","Required":false,"Excluded":false}
     IgnoreFocusOut: bool
-
-    # onDidHide:
-    # An event signaling when this input UI is hidden.
-    # 
-    # There are several reasons why this UI might have to be hidden and
-    # the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
-    # (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
-    # the user pressing Esc, some other input UI opening, etc.)
-    #
-    # JSON FLAGS: {"Name":"onDidHide","Required":false,"Excluded":false}
-    OnDidHide: ?Event
 
 
 
@@ -4281,19 +4274,19 @@ StatusBarItem·Dispose: ( -> ((void->void)->void))
 
 
 
-StatusBarItem·Get: ( -> ((StatusBarItemProperties->void)->void))
+StatusBarItem·Get: ( -> ((StatusBarItemState->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.appzObjPropsGet"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (StatusBarItemProperties->void)
+    var onret of (StatusBarItemState->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of StatusBarItemProperties
+        var result of StatusBarItemState
         if =?payload
-            result = StatusBarItemProperties·new
+            result = StatusBarItemState·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4302,14 +4295,14 @@ StatusBarItem·Get: ( -> ((StatusBarItemProperties->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(StatusBarItemProperties->void) -> void)
+    return (a0:(StatusBarItemState->void) -> void)
         onret = a0
     
 
 
 
 
-StatusBarItem·Set: (allUpdates:StatusBarItemProperties -> ((void->void)->void))
+StatusBarItem·Set: (allUpdates:StatusBarItemState -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.appzObjPropsSet"
@@ -4457,19 +4450,19 @@ OutputChannel·Dispose: ( -> ((void->void)->void))
 
 
 
-OutputChannel·Get: ( -> ((OutputChannelProperties->void)->void))
+OutputChannel·Get: ( -> ((OutputChannelState->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.appzObjPropsGet"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (OutputChannelProperties->void)
+    var onret of (OutputChannelState->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of OutputChannelProperties
+        var result of OutputChannelState
         if =?payload
-            result = OutputChannelProperties·new
+            result = OutputChannelState·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4478,7 +4471,7 @@ OutputChannel·Get: ( -> ((OutputChannelProperties->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(OutputChannelProperties->void) -> void)
+    return (a0:(OutputChannelState->void) -> void)
         onret = a0
     
 
@@ -4491,19 +4484,19 @@ TextEditorDecorationType·Dispose: ( -> ((void->void)->void))
 
 
 
-TextEditorDecorationType·Get: ( -> ((TextEditorDecorationTypeProperties->void)->void))
+TextEditorDecorationType·Get: ( -> ((TextEditorDecorationTypeState->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "TextEditorDecorationType.appzObjPropsGet"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (TextEditorDecorationTypeProperties->void)
+    var onret of (TextEditorDecorationTypeState->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of TextEditorDecorationTypeProperties
+        var result of TextEditorDecorationTypeState
         if =?payload
-            result = TextEditorDecorationTypeProperties·new
+            result = TextEditorDecorationTypeState·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4512,7 +4505,142 @@ TextEditorDecorationType·Get: ( -> ((TextEditorDecorationTypeProperties->void)-
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(TextEditorDecorationTypeProperties->void) -> void)
+    return (a0:(TextEditorDecorationTypeState->void) -> void)
+        onret = a0
+    
+
+
+
+
+InputBox·OnDidChangeValue: (handler:(string->void) -> ((?Disposable->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "InputBox.onDidChangeValue"
+    msg.Data = dict·new(2)
+    msg.Data@"" = this.disp.id
+    var _fnid_handler of string
+    if =!handler
+        OnError(this.disp.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    _fnid_handler = this.disp.impl.nextSub((args:[any] -> bool)
+        var ok of bool
+        if 1 != args·len
+            return ok
+        var _a_0_ of string
+        [_a_0_, ok] = ((args@0)·(string))
+        if !ok
+            return false
+        handler(_a_0_)
+        return true
+    , null)
+    msg.Data@"handler" = _fnid_handler
+    var onresp of (any->bool)
+    var onret of (?Disposable->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?Disposable
+        if =?payload
+            result = ?Disposable·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        else
+            return false
+        if =?onret
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(?Disposable->void) -> void)
+        onret = a0
+    
+
+
+
+
+InputBox·OnDidAccept: (handler:(->void) -> ((?Disposable->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "InputBox.onDidAccept"
+    msg.Data = dict·new(2)
+    msg.Data@"" = this.disp.id
+    var _fnid_handler of string
+    if =!handler
+        OnError(this.disp.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    _fnid_handler = this.disp.impl.nextSub((args:[any] -> bool)
+        var ok of bool
+        if 0 != args·len
+            return ok
+        handler()
+        return true
+    , null)
+    msg.Data@"handler" = _fnid_handler
+    var onresp of (any->bool)
+    var onret of (?Disposable->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?Disposable
+        if =?payload
+            result = ?Disposable·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        else
+            return false
+        if =?onret
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(?Disposable->void) -> void)
+        onret = a0
+    
+
+
+
+
+InputBox·OnDidTriggerButton: (handler:(QuickInputButton->void) -> ((?Disposable->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "InputBox.onDidTriggerButton"
+    msg.Data = dict·new(2)
+    msg.Data@"" = this.disp.id
+    var _fnid_handler of string
+    if =!handler
+        OnError(this.disp.impl, "InputBox.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    _fnid_handler = this.disp.impl.nextSub((args:[any] -> bool)
+        var ok of bool
+        if 1 != args·len
+            return ok
+        var _a_0_ of QuickInputButton
+        _a_0_ = QuickInputButton·new
+        ok = _a_0_.populateFrom(args@0)
+        if !ok
+            return false
+        handler(_a_0_)
+        return true
+    , null)
+    msg.Data@"handler" = _fnid_handler
+    var onresp of (any->bool)
+    var onret of (?Disposable->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?Disposable
+        if =?payload
+            result = ?Disposable·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        else
+            return false
+        if =?onret
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(?Disposable->void) -> void)
         onret = a0
     
 
@@ -4565,25 +4693,67 @@ InputBox·Hide: ( -> ((void->void)->void))
 
 
 
+InputBox·OnDidHide: (handler:(->void) -> ((?Disposable->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "InputBox.onDidHide"
+    msg.Data = dict·new(2)
+    msg.Data@"" = this.disp.id
+    var _fnid_handler of string
+    if =!handler
+        OnError(this.disp.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    _fnid_handler = this.disp.impl.nextSub((args:[any] -> bool)
+        var ok of bool
+        if 0 != args·len
+            return ok
+        handler()
+        return true
+    , null)
+    msg.Data@"handler" = _fnid_handler
+    var onresp of (any->bool)
+    var onret of (?Disposable->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?Disposable
+        if =?payload
+            result = ?Disposable·new
+            ok = result.populateFrom(payload)
+            if !ok
+                return false
+        else
+            return false
+        if =?onret
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        return true
+    
+    this.disp.impl.send(msg, onresp)
+    return (a0:(?Disposable->void) -> void)
+        onret = a0
+    
+
+
+
+
 InputBox·Dispose: ( -> ((void->void)->void))
     return this.disp.Dispose()
 
 
 
 
-InputBox·Get: ( -> ((InputBoxProperties->void)->void))
+InputBox·Get: ( -> ((InputBoxState->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.appzObjPropsGet"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (InputBoxProperties->void)
+    var onret of (InputBoxState->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of InputBoxProperties
+        var result of InputBoxState
         if =?payload
-            result = InputBoxProperties·new
+            result = InputBoxState·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4592,14 +4762,14 @@ InputBox·Get: ( -> ((InputBoxProperties->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(InputBoxProperties->void) -> void)
+    return (a0:(InputBoxState->void) -> void)
         onret = a0
     
 
 
 
 
-InputBox·Set: (allUpdates:InputBoxProperties -> ((void->void)->void))
+InputBox·Set: (allUpdates:InputBoxState -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.appzObjPropsSet"
@@ -5070,7 +5240,7 @@ DiagnosticChangeEvent·populateFrom: (payload:any -> bool)
 
 
 
-StatusBarItemProperties·populateFrom: (payload:any -> bool)
+StatusBarItemState·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5144,7 +5314,7 @@ StatusBarItemProperties·populateFrom: (payload:any -> bool)
 
 
 
-OutputChannelProperties·populateFrom: (payload:any -> bool)
+OutputChannelState·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5166,7 +5336,7 @@ OutputChannelProperties·populateFrom: (payload:any -> bool)
 
 
 
-TextEditorDecorationTypeProperties·populateFrom: (payload:any -> bool)
+TextEditorDecorationTypeState·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5188,7 +5358,47 @@ TextEditorDecorationTypeProperties·populateFrom: (payload:any -> bool)
 
 
 
-InputBoxProperties·populateFrom: (payload:any -> bool)
+QuickInputButton·populateFrom: (payload:any -> bool)
+    var it of dict
+    var ok of bool
+    var val of any
+    [it, ok] = ((payload)·(dict))
+    if !ok
+        return false
+    [val, ok] = it@?"iconPath"
+    if ok
+        var iconPath of string
+        if =?val
+            [iconPath, ok] = ((val)·(string))
+            if !ok
+                return false
+        this.IconPath = iconPath
+    else
+        return false
+    [val, ok] = it@?"tooltip"
+    if ok
+        var tooltip of ?string
+        if =?val
+            var _tooltip_ of string
+            [_tooltip_, ok] = ((val)·(string))
+            if !ok
+                return false
+            tooltip = &_tooltip_
+        this.Tooltip = tooltip
+    [val, ok] = it@?"my"
+    if ok
+        var my of ?dict
+        if =?val
+            [my, ok] = ((val)·(?dict))
+            if !ok
+                return false
+        this.My = my
+    return true
+
+
+
+
+InputBoxState·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5219,28 +5429,6 @@ InputBoxProperties·populateFrom: (payload:any -> bool)
             if !ok
                 return false
         this.Password = password
-    [val, ok] = it@?"onDidChangeValue"
-    if ok
-        var onDidChangeValue of Event
-        if =?val
-            onDidChangeValue = Event·new
-            ok = onDidChangeValue.populateFrom(val)
-            if !ok
-                return false
-        this.OnDidChangeValue = ( -> Event)
-            return onDidChangeValue
-        
-    [val, ok] = it@?"onDidAccept"
-    if ok
-        var onDidAccept of Event
-        if =?val
-            onDidAccept = Event·new
-            ok = onDidAccept.populateFrom(val)
-            if !ok
-                return false
-        this.OnDidAccept = ( -> Event)
-            return onDidAccept
-        
     [val, ok] = it@?"buttons"
     if ok
         var buttons of ?[QuickInputButton]
@@ -5261,17 +5449,6 @@ InputBoxProperties·populateFrom: (payload:any -> bool)
                 buttons@__idx__buttons = __val__buttons
                 __idx__buttons = __idx__buttons + 1
         this.Buttons = buttons
-    [val, ok] = it@?"onDidTriggerButton"
-    if ok
-        var onDidTriggerButton of Event
-        if =?val
-            onDidTriggerButton = Event·new
-            ok = onDidTriggerButton.populateFrom(val)
-            if !ok
-                return false
-        this.OnDidTriggerButton = ( -> Event)
-            return onDidTriggerButton
-        
     [val, ok] = it@?"prompt"
     if ok
         var prompt of string
@@ -5340,47 +5517,6 @@ InputBoxProperties·populateFrom: (payload:any -> bool)
             if !ok
                 return false
         this.IgnoreFocusOut = ignoreFocusOut
-    [val, ok] = it@?"onDidHide"
-    if ok
-        var onDidHide of ?Event
-        if =?val
-            onDidHide = ?Event·new
-            ok = onDidHide.populateFrom(val)
-            if !ok
-                return false
-        this.OnDidHide = onDidHide
-    return true
-
-
-
-
-QuickInputButton·populateFrom: (payload:any -> bool)
-    var it of dict
-    var ok of bool
-    var val of any
-    [it, ok] = ((payload)·(dict))
-    if !ok
-        return false
-    [val, ok] = it@?"iconPath"
-    if ok
-        var iconPath of string
-        if =?val
-            [iconPath, ok] = ((val)·(string))
-            if !ok
-                return false
-        this.IconPath = iconPath
-    else
-        return false
-    [val, ok] = it@?"tooltip"
-    if ok
-        var tooltip of ?string
-        if =?val
-            var _tooltip_ of string
-            [_tooltip_, ok] = ((val)·(string))
-            if !ok
-                return false
-            tooltip = &_tooltip_
-        this.Tooltip = tooltip
     return true
 
 

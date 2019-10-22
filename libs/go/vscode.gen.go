@@ -1083,6 +1083,8 @@ type WindowState struct {
 // show text and icons and run a command on click.
 type StatusBarItem struct {
 	disp *Disposable
+
+	nextUpd *StatusBarItemState
 }
 
 // An output channel is a container for readonly textual information.
@@ -1091,6 +1093,8 @@ type StatusBarItem struct {
 // [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 type OutputChannel struct {
 	disp *Disposable
+
+	nextUpd *OutputChannelState
 }
 
 // Type Definition for Visual Studio Code 1.39 Extension API
@@ -1241,6 +1245,8 @@ type DecorationRenderOptions struct {
 // [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 type TextEditorDecorationType struct {
 	disp *Disposable
+
+	nextUpd *TextEditorDecorationTypeState
 }
 
 // A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
@@ -1250,6 +1256,8 @@ type TextEditorDecorationType struct {
 // when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 type InputBox struct {
 	disp *Disposable
+
+	nextUpd *InputBoxState
 }
 
 // Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
@@ -1259,6 +1267,9 @@ type QuickInputButton struct {
 
 	// An optional tooltip.
 	Tooltip string `json:"tooltip,omitempty"`
+
+	// Free-form custom data, preserved across a roundtrip.
+	My dict `json:"my,omitempty"`
 }
 
 // An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).
@@ -1363,7 +1374,7 @@ type WorkspaceProperties struct {
 
 // A status bar item is a status bar contribution that can
 // show text and icons and run a command on click.
-type StatusBarItemProperties struct {
+type StatusBarItemState struct {
 	// The alignment of this item.
 	Alignment func() StatusBarAlignment `json:"-"`
 
@@ -1394,7 +1405,7 @@ type StatusBarItemProperties struct {
 // 
 // To get an instance of an `OutputChannel` use
 // [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
-type OutputChannelProperties struct {
+type OutputChannelState struct {
 	// The human-readable name of this output channel.
 	Name func() string `json:"-"`
 }
@@ -1404,7 +1415,7 @@ type OutputChannelProperties struct {
 // 
 // To get an instance of a `TextEditorDecorationType` use
 // [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
-type TextEditorDecorationTypeProperties struct {
+type TextEditorDecorationTypeState struct {
 	// Internal representation of the handle.
 	Key func() string `json:"-"`
 }
@@ -1414,7 +1425,7 @@ type TextEditorDecorationTypeProperties struct {
 // Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
 // is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 // when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
-type InputBoxProperties struct {
+type InputBoxState struct {
 	// Current input value.
 	Value string `json:"value,omitempty"`
 
@@ -1424,17 +1435,8 @@ type InputBoxProperties struct {
 	// If the input value should be hidden. Defaults to false.
 	Password bool `json:"password,omitempty"`
 
-	// An event signaling when the value has changed.
-	OnDidChangeValue func() Event `json:"-"`
-
-	// An event signaling when the user indicated acceptance of the input value.
-	OnDidAccept func() Event `json:"-"`
-
 	// Buttons for actions in the UI.
 	Buttons []QuickInputButton `json:"buttons,omitempty"`
-
-	// An event signaling when a button was triggered.
-	OnDidTriggerButton func() Event `json:"-"`
 
 	// An optional prompt text providing some ask or explanation to the user.
 	Prompt string `json:"prompt,omitempty"`
@@ -1465,14 +1467,6 @@ type InputBoxProperties struct {
 
 	// If the UI should stay open even when loosing UI focus. Defaults to false.
 	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
-
-	// An event signaling when this input UI is hidden.
-	// 
-	// There are several reasons why this UI might have to be hidden and
-	// the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
-	// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
-	// the user pressing Esc, some other input UI opening, etc.)
-	OnDidHide Event `json:"onDidHide,omitempty"`
 }
 
 func (me *impl) Window() Window {
@@ -3667,17 +3661,17 @@ func (me *StatusBarItem) Dispose() func(func()) {
 }
 
 // Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
-func (me *StatusBarItem) Get() func(func(StatusBarItemProperties)) {
+func (me *StatusBarItem) Get() func(func(StatusBarItemState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.appzObjPropsGet"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(StatusBarItemProperties)
+	var onret func(StatusBarItemState)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result StatusBarItemProperties
+		var result StatusBarItemState
 		if (nil != payload) {
 			ok = result.populateFrom(payload)
 			if !ok {
@@ -3690,13 +3684,13 @@ func (me *StatusBarItem) Get() func(func(StatusBarItemProperties)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(StatusBarItemProperties)) {
+	return func(a0 func(StatusBarItemState)) {
 		onret = a0
 	}
 }
 
 // Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
-func (me *StatusBarItem) Set(allUpdates StatusBarItemProperties) func(func()) {
+func (me *StatusBarItem) Set(allUpdates StatusBarItemState) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.appzObjPropsSet"
@@ -3856,17 +3850,17 @@ func (me *OutputChannel) Dispose() func(func()) {
 }
 
 // Obtains this `OutputChannel`'s current property value for: `name`.
-func (me *OutputChannel) Get() func(func(OutputChannelProperties)) {
+func (me *OutputChannel) Get() func(func(OutputChannelState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.appzObjPropsGet"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(OutputChannelProperties)
+	var onret func(OutputChannelState)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result OutputChannelProperties
+		var result OutputChannelState
 		if (nil != payload) {
 			ok = result.populateFrom(payload)
 			if !ok {
@@ -3879,7 +3873,7 @@ func (me *OutputChannel) Get() func(func(OutputChannelProperties)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(OutputChannelProperties)) {
+	return func(a0 func(OutputChannelState)) {
 		onret = a0
 	}
 }
@@ -3890,17 +3884,17 @@ func (me *TextEditorDecorationType) Dispose() func(func()) {
 }
 
 // Obtains this `TextEditorDecorationType`'s current property value for: `key`.
-func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeProperties)) {
+func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "TextEditorDecorationType.appzObjPropsGet"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(TextEditorDecorationTypeProperties)
+	var onret func(TextEditorDecorationTypeState)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result TextEditorDecorationTypeProperties
+		var result TextEditorDecorationTypeState
 		if (nil != payload) {
 			ok = result.populateFrom(payload)
 			if !ok {
@@ -3913,7 +3907,155 @@ func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeProp
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(TextEditorDecorationTypeProperties)) {
+	return func(a0 func(TextEditorDecorationTypeState)) {
+		onret = a0
+	}
+}
+
+// An event signaling when the value has changed.
+func (me *InputBox) OnDidChangeValue(handler func(string)) func(func(*Disposable)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "InputBox.onDidChangeValue"
+	msg.Data = make(dict, 2)
+	msg.Data[""] = me.disp.id
+	var _fnid_handler string
+	if (nil == handler) {
+		OnError(me.disp.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		return nil
+	}
+	_fnid_handler = me.disp.impl.nextSub(func(args []any) bool {
+		var ok bool
+		if 1 != len(args) {
+			return ok
+		}
+		var _a_0_ string
+		_a_0_, ok = args[0].(string)
+		if !ok {
+			return false
+		}
+		handler(_a_0_)
+		return true
+	}, nil)
+	msg.Data["handler"] = _fnid_handler
+	var onresp func(any) bool
+	var onret func(*Disposable)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result *Disposable
+		if (nil != payload) {
+			result = new(Disposable)
+			ok = result.populateFrom(payload)
+			if !ok {
+				return false
+			}
+		} else {
+			return false
+		}
+		if (nil != onret) {
+			onret(result.bind(me.disp.impl, _fnid_handler))
+		}
+		return true
+	}
+	me.disp.impl.send(msg, onresp)
+	return func(a0 func(*Disposable)) {
+		onret = a0
+	}
+}
+
+// An event signaling when the user indicated acceptance of the input value.
+func (me *InputBox) OnDidAccept(handler func()) func(func(*Disposable)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "InputBox.onDidAccept"
+	msg.Data = make(dict, 2)
+	msg.Data[""] = me.disp.id
+	var _fnid_handler string
+	if (nil == handler) {
+		OnError(me.disp.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		return nil
+	}
+	_fnid_handler = me.disp.impl.nextSub(func(args []any) bool {
+		var ok bool
+		if 0 != len(args) {
+			return ok
+		}
+		handler()
+		return true
+	}, nil)
+	msg.Data["handler"] = _fnid_handler
+	var onresp func(any) bool
+	var onret func(*Disposable)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result *Disposable
+		if (nil != payload) {
+			result = new(Disposable)
+			ok = result.populateFrom(payload)
+			if !ok {
+				return false
+			}
+		} else {
+			return false
+		}
+		if (nil != onret) {
+			onret(result.bind(me.disp.impl, _fnid_handler))
+		}
+		return true
+	}
+	me.disp.impl.send(msg, onresp)
+	return func(a0 func(*Disposable)) {
+		onret = a0
+	}
+}
+
+// An event signaling when a button was triggered.
+func (me *InputBox) OnDidTriggerButton(handler func(QuickInputButton)) func(func(*Disposable)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "InputBox.onDidTriggerButton"
+	msg.Data = make(dict, 2)
+	msg.Data[""] = me.disp.id
+	var _fnid_handler string
+	if (nil == handler) {
+		OnError(me.disp.impl, "InputBox.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		return nil
+	}
+	_fnid_handler = me.disp.impl.nextSub(func(args []any) bool {
+		var ok bool
+		if 1 != len(args) {
+			return ok
+		}
+		var _a_0_ QuickInputButton
+		ok = _a_0_.populateFrom(args[0])
+		if !ok {
+			return false
+		}
+		handler(_a_0_)
+		return true
+	}, nil)
+	msg.Data["handler"] = _fnid_handler
+	var onresp func(any) bool
+	var onret func(*Disposable)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result *Disposable
+		if (nil != payload) {
+			result = new(Disposable)
+			ok = result.populateFrom(payload)
+			if !ok {
+				return false
+			}
+		} else {
+			return false
+		}
+		if (nil != onret) {
+			onret(result.bind(me.disp.impl, _fnid_handler))
+		}
+		return true
+	}
+	me.disp.impl.send(msg, onresp)
+	return func(a0 func(*Disposable)) {
 		onret = a0
 	}
 }
@@ -3968,6 +4110,57 @@ func (me *InputBox) Hide() func(func()) {
 	}
 }
 
+// An event signaling when this input UI is hidden.
+// 
+// There are several reasons why this UI might have to be hidden and
+// the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+// the user pressing Esc, some other input UI opening, etc.)
+func (me *InputBox) OnDidHide(handler func()) func(func(*Disposable)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "InputBox.onDidHide"
+	msg.Data = make(dict, 2)
+	msg.Data[""] = me.disp.id
+	var _fnid_handler string
+	if (nil == handler) {
+		OnError(me.disp.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		return nil
+	}
+	_fnid_handler = me.disp.impl.nextSub(func(args []any) bool {
+		var ok bool
+		if 0 != len(args) {
+			return ok
+		}
+		handler()
+		return true
+	}, nil)
+	msg.Data["handler"] = _fnid_handler
+	var onresp func(any) bool
+	var onret func(*Disposable)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result *Disposable
+		if (nil != payload) {
+			result = new(Disposable)
+			ok = result.populateFrom(payload)
+			if !ok {
+				return false
+			}
+		} else {
+			return false
+		}
+		if (nil != onret) {
+			onret(result.bind(me.disp.impl, _fnid_handler))
+		}
+		return true
+	}
+	me.disp.impl.send(msg, onresp)
+	return func(a0 func(*Disposable)) {
+		onret = a0
+	}
+}
+
 // Dispose of this input UI and any associated resources. If it is still
 // visible, it is first hidden. After this call the input UI is no longer
 // functional and no additional methods or properties on it should be
@@ -3976,18 +4169,18 @@ func (me *InputBox) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
-// Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `onDidChangeValue`, `onDidAccept`, `buttons`, `onDidTriggerButton`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`, `onDidHide`.
-func (me *InputBox) Get() func(func(InputBoxProperties)) {
+// Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+func (me *InputBox) Get() func(func(InputBoxState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.appzObjPropsGet"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(InputBoxProperties)
+	var onret func(InputBoxState)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result InputBoxProperties
+		var result InputBoxState
 		if (nil != payload) {
 			ok = result.populateFrom(payload)
 			if !ok {
@@ -4000,13 +4193,13 @@ func (me *InputBox) Get() func(func(InputBoxProperties)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(InputBoxProperties)) {
+	return func(a0 func(InputBoxState)) {
 		onret = a0
 	}
 }
 
-// Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`, `onDidHide`.
-func (me *InputBox) Set(allUpdates InputBoxProperties) func(func()) {
+// Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+func (me *InputBox) Set(allUpdates InputBoxState) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.appzObjPropsSet"
@@ -4518,7 +4711,7 @@ func (me *DiagnosticChangeEvent) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *StatusBarItemProperties) populateFrom(payload any) bool {
+func (me *StatusBarItemState) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -4611,7 +4804,7 @@ func (me *StatusBarItemProperties) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *OutputChannelProperties) populateFrom(payload any) bool {
+func (me *OutputChannelState) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -4635,7 +4828,7 @@ func (me *OutputChannelProperties) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *TextEditorDecorationTypeProperties) populateFrom(payload any) bool {
+func (me *TextEditorDecorationTypeState) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -4659,7 +4852,53 @@ func (me *TextEditorDecorationTypeProperties) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *InputBoxProperties) populateFrom(payload any) bool {
+func (me *QuickInputButton) populateFrom(payload any) bool {
+	var it dict
+	var ok bool
+	var val any
+	it, ok = payload.(dict)
+	if !ok {
+		return false
+	}
+	val, ok = it["iconPath"]
+	if ok {
+		var iconPath string
+		if (nil != val) {
+			iconPath, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.IconPath = iconPath
+	} else {
+		return false
+	}
+	val, ok = it["tooltip"]
+	if ok {
+		var tooltip string
+		if (nil != val) {
+			tooltip, ok = val.(string)
+			if !ok {
+				return false
+			}
+		}
+		me.Tooltip = tooltip
+	}
+	val, ok = it["my"]
+	if ok {
+		var my dict
+		if (nil != val) {
+			my, ok = val.(dict)
+			if !ok {
+				return false
+			}
+		}
+		me.My = my
+	}
+	return true
+}
+
+func (me *InputBoxState) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -4700,32 +4939,6 @@ func (me *InputBoxProperties) populateFrom(payload any) bool {
 		}
 		me.Password = password
 	}
-	val, ok = it["onDidChangeValue"]
-	if ok {
-		var onDidChangeValue Event
-		if (nil != val) {
-			ok = onDidChangeValue.populateFrom(val)
-			if !ok {
-				return false
-			}
-		}
-		me.OnDidChangeValue = func() Event {
-			return onDidChangeValue
-		}
-	}
-	val, ok = it["onDidAccept"]
-	if ok {
-		var onDidAccept Event
-		if (nil != val) {
-			ok = onDidAccept.populateFrom(val)
-			if !ok {
-				return false
-			}
-		}
-		me.OnDidAccept = func() Event {
-			return onDidAccept
-		}
-	}
 	val, ok = it["buttons"]
 	if ok {
 		var buttons []QuickInputButton
@@ -4749,19 +4962,6 @@ func (me *InputBoxProperties) populateFrom(payload any) bool {
 			}
 		}
 		me.Buttons = buttons
-	}
-	val, ok = it["onDidTriggerButton"]
-	if ok {
-		var onDidTriggerButton Event
-		if (nil != val) {
-			ok = onDidTriggerButton.populateFrom(val)
-			if !ok {
-				return false
-			}
-		}
-		me.OnDidTriggerButton = func() Event {
-			return onDidTriggerButton
-		}
 	}
 	val, ok = it["prompt"]
 	if ok {
@@ -4860,52 +5060,6 @@ func (me *InputBoxProperties) populateFrom(payload any) bool {
 			}
 		}
 		me.IgnoreFocusOut = ignoreFocusOut
-	}
-	val, ok = it["onDidHide"]
-	if ok {
-		var onDidHide Event
-		if (nil != val) {
-			ok = onDidHide.populateFrom(val)
-			if !ok {
-				return false
-			}
-		}
-		me.OnDidHide = onDidHide
-	}
-	return true
-}
-
-func (me *QuickInputButton) populateFrom(payload any) bool {
-	var it dict
-	var ok bool
-	var val any
-	it, ok = payload.(dict)
-	if !ok {
-		return false
-	}
-	val, ok = it["iconPath"]
-	if ok {
-		var iconPath string
-		if (nil != val) {
-			iconPath, ok = val.(string)
-			if !ok {
-				return false
-			}
-		}
-		me.IconPath = iconPath
-	} else {
-		return false
-	}
-	val, ok = it["tooltip"]
-	if ok {
-		var tooltip string
-		if (nil != val) {
-			tooltip, ok = val.(string)
-			if !ok {
-				return false
-			}
-		}
-		me.Tooltip = tooltip
 	}
 	return true
 }

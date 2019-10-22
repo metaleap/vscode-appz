@@ -12,11 +12,34 @@
   - [OpenClosed](#F-VscAppz-DecorationRangeBehavior-OpenClosed 'VscAppz.DecorationRangeBehavior.OpenClosed')
   - [OpenOpen](#F-VscAppz-DecorationRangeBehavior-OpenOpen 'VscAppz.DecorationRangeBehavior.OpenOpen')
 - [DecorationRenderOptions](#T-VscAppz-DecorationRenderOptions 'VscAppz.DecorationRenderOptions')
+  - [After](#F-VscAppz-DecorationRenderOptions-After 'VscAppz.DecorationRenderOptions.After')
+  - [BackgroundColor](#F-VscAppz-DecorationRenderOptions-BackgroundColor 'VscAppz.DecorationRenderOptions.BackgroundColor')
+  - [Before](#F-VscAppz-DecorationRenderOptions-Before 'VscAppz.DecorationRenderOptions.Before')
+  - [Border](#F-VscAppz-DecorationRenderOptions-Border 'VscAppz.DecorationRenderOptions.Border')
+  - [BorderColor](#F-VscAppz-DecorationRenderOptions-BorderColor 'VscAppz.DecorationRenderOptions.BorderColor')
+  - [BorderRadius](#F-VscAppz-DecorationRenderOptions-BorderRadius 'VscAppz.DecorationRenderOptions.BorderRadius')
+  - [BorderSpacing](#F-VscAppz-DecorationRenderOptions-BorderSpacing 'VscAppz.DecorationRenderOptions.BorderSpacing')
+  - [BorderStyle](#F-VscAppz-DecorationRenderOptions-BorderStyle 'VscAppz.DecorationRenderOptions.BorderStyle')
+  - [BorderWidth](#F-VscAppz-DecorationRenderOptions-BorderWidth 'VscAppz.DecorationRenderOptions.BorderWidth')
+  - [Color](#F-VscAppz-DecorationRenderOptions-Color 'VscAppz.DecorationRenderOptions.Color')
+  - [Cursor](#F-VscAppz-DecorationRenderOptions-Cursor 'VscAppz.DecorationRenderOptions.Cursor')
   - [Dark](#F-VscAppz-DecorationRenderOptions-Dark 'VscAppz.DecorationRenderOptions.Dark')
+  - [FontStyle](#F-VscAppz-DecorationRenderOptions-FontStyle 'VscAppz.DecorationRenderOptions.FontStyle')
+  - [FontWeight](#F-VscAppz-DecorationRenderOptions-FontWeight 'VscAppz.DecorationRenderOptions.FontWeight')
+  - [GutterIconPath](#F-VscAppz-DecorationRenderOptions-GutterIconPath 'VscAppz.DecorationRenderOptions.GutterIconPath')
+  - [GutterIconSize](#F-VscAppz-DecorationRenderOptions-GutterIconSize 'VscAppz.DecorationRenderOptions.GutterIconSize')
   - [IsWholeLine](#F-VscAppz-DecorationRenderOptions-IsWholeLine 'VscAppz.DecorationRenderOptions.IsWholeLine')
+  - [LetterSpacing](#F-VscAppz-DecorationRenderOptions-LetterSpacing 'VscAppz.DecorationRenderOptions.LetterSpacing')
   - [Light](#F-VscAppz-DecorationRenderOptions-Light 'VscAppz.DecorationRenderOptions.Light')
+  - [Opacity](#F-VscAppz-DecorationRenderOptions-Opacity 'VscAppz.DecorationRenderOptions.Opacity')
+  - [Outline](#F-VscAppz-DecorationRenderOptions-Outline 'VscAppz.DecorationRenderOptions.Outline')
+  - [OutlineColor](#F-VscAppz-DecorationRenderOptions-OutlineColor 'VscAppz.DecorationRenderOptions.OutlineColor')
+  - [OutlineStyle](#F-VscAppz-DecorationRenderOptions-OutlineStyle 'VscAppz.DecorationRenderOptions.OutlineStyle')
+  - [OutlineWidth](#F-VscAppz-DecorationRenderOptions-OutlineWidth 'VscAppz.DecorationRenderOptions.OutlineWidth')
+  - [OverviewRulerColor](#F-VscAppz-DecorationRenderOptions-OverviewRulerColor 'VscAppz.DecorationRenderOptions.OverviewRulerColor')
   - [OverviewRulerLane](#F-VscAppz-DecorationRenderOptions-OverviewRulerLane 'VscAppz.DecorationRenderOptions.OverviewRulerLane')
   - [RangeBehavior](#F-VscAppz-DecorationRenderOptions-RangeBehavior 'VscAppz.DecorationRenderOptions.RangeBehavior')
+  - [TextDecoration](#F-VscAppz-DecorationRenderOptions-TextDecoration 'VscAppz.DecorationRenderOptions.TextDecoration')
 - [DiagnosticChangeEvent](#T-VscAppz-DiagnosticChangeEvent 'VscAppz.DiagnosticChangeEvent')
   - [Uris](#F-VscAppz-DiagnosticChangeEvent-Uris 'VscAppz.DiagnosticChangeEvent.Uris')
 - [Disposable](#T-VscAppz-Disposable 'VscAppz.Disposable')
@@ -62,6 +85,7 @@
   - [Window](#P-VscAppz-IVscode-Window 'VscAppz.IVscode.Window')
   - [Workspace](#P-VscAppz-IVscode-Workspace 'VscAppz.IVscode.Workspace')
 - [IWindow](#T-VscAppz-IWindow 'VscAppz.IWindow')
+  - [CreateInputBox()](#M-VscAppz-IWindow-CreateInputBox 'VscAppz.IWindow.CreateInputBox')
   - [CreateOutputChannel(name)](#M-VscAppz-IWindow-CreateOutputChannel-System-String- 'VscAppz.IWindow.CreateOutputChannel(System.String)')
   - [CreateStatusBarItem(alignment,priority)](#M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32}- 'VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32})')
   - [CreateTextEditorDecorationType(options)](#M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions- 'VscAppz.IWindow.CreateTextEditorDecorationType(VscAppz.DecorationRenderOptions)')
@@ -99,6 +123,16 @@
   - [SaveAll(includeUntitled)](#M-VscAppz-IWorkspace-SaveAll-System-Boolean- 'VscAppz.IWorkspace.SaveAll(System.Boolean)')
   - [WorkspaceFile()](#M-VscAppz-IWorkspace-WorkspaceFile 'VscAppz.IWorkspace.WorkspaceFile')
   - [WorkspaceFolders()](#M-VscAppz-IWorkspace-WorkspaceFolders 'VscAppz.IWorkspace.WorkspaceFolders')
+- [InputBox](#T-VscAppz-InputBox 'VscAppz.InputBox')
+  - [Dispose()](#M-VscAppz-InputBox-Dispose 'VscAppz.InputBox.Dispose')
+  - [Get()](#M-VscAppz-InputBox-Get 'VscAppz.InputBox.Get')
+  - [Hide()](#M-VscAppz-InputBox-Hide 'VscAppz.InputBox.Hide')
+  - [OnDidAccept()](#M-VscAppz-InputBox-OnDidAccept-System-Action- 'VscAppz.InputBox.OnDidAccept(System.Action)')
+  - [OnDidChangeValue()](#M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String}- 'VscAppz.InputBox.OnDidChangeValue(System.Action{System.String})')
+  - [OnDidHide()](#M-VscAppz-InputBox-OnDidHide-System-Action- 'VscAppz.InputBox.OnDidHide(System.Action)')
+  - [OnDidTriggerButton()](#M-VscAppz-InputBox-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton}- 'VscAppz.InputBox.OnDidTriggerButton(System.Action{VscAppz.QuickInputButton})')
+  - [Set()](#M-VscAppz-InputBox-Set-VscAppz-InputBoxState- 'VscAppz.InputBox.Set(VscAppz.InputBoxState)')
+  - [Show()](#M-VscAppz-InputBox-Show 'VscAppz.InputBox.Show')
 - [InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions')
   - [IgnoreFocusOut](#F-VscAppz-InputBoxOptions-IgnoreFocusOut 'VscAppz.InputBoxOptions.IgnoreFocusOut')
   - [Password](#F-VscAppz-InputBoxOptions-Password 'VscAppz.InputBoxOptions.Password')
@@ -108,6 +142,19 @@
   - [ValidateInput_AppzFuncId](#F-VscAppz-InputBoxOptions-ValidateInput_AppzFuncId 'VscAppz.InputBoxOptions.ValidateInput_AppzFuncId')
   - [Value](#F-VscAppz-InputBoxOptions-Value 'VscAppz.InputBoxOptions.Value')
   - [ValueSelection](#F-VscAppz-InputBoxOptions-ValueSelection 'VscAppz.InputBoxOptions.ValueSelection')
+- [InputBoxState](#T-VscAppz-InputBoxState 'VscAppz.InputBoxState')
+  - [Busy](#F-VscAppz-InputBoxState-Busy 'VscAppz.InputBoxState.Busy')
+  - [Buttons](#F-VscAppz-InputBoxState-Buttons 'VscAppz.InputBoxState.Buttons')
+  - [Enabled](#F-VscAppz-InputBoxState-Enabled 'VscAppz.InputBoxState.Enabled')
+  - [IgnoreFocusOut](#F-VscAppz-InputBoxState-IgnoreFocusOut 'VscAppz.InputBoxState.IgnoreFocusOut')
+  - [Password](#F-VscAppz-InputBoxState-Password 'VscAppz.InputBoxState.Password')
+  - [Placeholder](#F-VscAppz-InputBoxState-Placeholder 'VscAppz.InputBoxState.Placeholder')
+  - [Prompt](#F-VscAppz-InputBoxState-Prompt 'VscAppz.InputBoxState.Prompt')
+  - [Step](#F-VscAppz-InputBoxState-Step 'VscAppz.InputBoxState.Step')
+  - [Title](#F-VscAppz-InputBoxState-Title 'VscAppz.InputBoxState.Title')
+  - [TotalSteps](#F-VscAppz-InputBoxState-TotalSteps 'VscAppz.InputBoxState.TotalSteps')
+  - [ValidationMessage](#F-VscAppz-InputBoxState-ValidationMessage 'VscAppz.InputBoxState.ValidationMessage')
+  - [Value](#F-VscAppz-InputBoxState-Value 'VscAppz.InputBoxState.Value')
 - [MessageItem](#T-VscAppz-MessageItem 'VscAppz.MessageItem')
   - [IsCloseAffordance](#F-VscAppz-MessageItem-IsCloseAffordance 'VscAppz.MessageItem.IsCloseAffordance')
   - [My](#F-VscAppz-MessageItem-My 'VscAppz.MessageItem.My')
@@ -129,13 +176,17 @@
   - [Get()](#M-VscAppz-OutputChannel-Get 'VscAppz.OutputChannel.Get')
   - [Hide()](#M-VscAppz-OutputChannel-Hide 'VscAppz.OutputChannel.Hide')
   - [Show(preserveFocus)](#M-VscAppz-OutputChannel-Show-System-Boolean- 'VscAppz.OutputChannel.Show(System.Boolean)')
-- [OutputChannelProperties](#T-VscAppz-OutputChannelProperties 'VscAppz.OutputChannelProperties')
-  - [Name](#F-VscAppz-OutputChannelProperties-Name 'VscAppz.OutputChannelProperties.Name')
+- [OutputChannelState](#T-VscAppz-OutputChannelState 'VscAppz.OutputChannelState')
+  - [Name](#F-VscAppz-OutputChannelState-Name 'VscAppz.OutputChannelState.Name')
 - [OverviewRulerLane](#T-VscAppz-OverviewRulerLane 'VscAppz.OverviewRulerLane')
   - [Center](#F-VscAppz-OverviewRulerLane-Center 'VscAppz.OverviewRulerLane.Center')
   - [Full](#F-VscAppz-OverviewRulerLane-Full 'VscAppz.OverviewRulerLane.Full')
   - [Left](#F-VscAppz-OverviewRulerLane-Left 'VscAppz.OverviewRulerLane.Left')
   - [Right](#F-VscAppz-OverviewRulerLane-Right 'VscAppz.OverviewRulerLane.Right')
+- [QuickInputButton](#T-VscAppz-QuickInputButton 'VscAppz.QuickInputButton')
+  - [IconPath](#F-VscAppz-QuickInputButton-IconPath 'VscAppz.QuickInputButton.IconPath')
+  - [My](#F-VscAppz-QuickInputButton-My 'VscAppz.QuickInputButton.My')
+  - [Tooltip](#F-VscAppz-QuickInputButton-Tooltip 'VscAppz.QuickInputButton.Tooltip')
 - [QuickPickItem](#T-VscAppz-QuickPickItem 'VscAppz.QuickPickItem')
   - [AlwaysShow](#F-VscAppz-QuickPickItem-AlwaysShow 'VscAppz.QuickPickItem.AlwaysShow')
   - [Description](#F-VscAppz-QuickPickItem-Description 'VscAppz.QuickPickItem.Description')
@@ -162,20 +213,20 @@
   - [Dispose()](#M-VscAppz-StatusBarItem-Dispose 'VscAppz.StatusBarItem.Dispose')
   - [Get()](#M-VscAppz-StatusBarItem-Get 'VscAppz.StatusBarItem.Get')
   - [Hide()](#M-VscAppz-StatusBarItem-Hide 'VscAppz.StatusBarItem.Hide')
-  - [Set()](#M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemProperties- 'VscAppz.StatusBarItem.Set(VscAppz.StatusBarItemProperties)')
+  - [Set()](#M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemState- 'VscAppz.StatusBarItem.Set(VscAppz.StatusBarItemState)')
   - [Show()](#M-VscAppz-StatusBarItem-Show 'VscAppz.StatusBarItem.Show')
-- [StatusBarItemProperties](#T-VscAppz-StatusBarItemProperties 'VscAppz.StatusBarItemProperties')
-  - [Alignment](#F-VscAppz-StatusBarItemProperties-Alignment 'VscAppz.StatusBarItemProperties.Alignment')
-  - [Color](#F-VscAppz-StatusBarItemProperties-Color 'VscAppz.StatusBarItemProperties.Color')
-  - [Command](#F-VscAppz-StatusBarItemProperties-Command 'VscAppz.StatusBarItemProperties.Command')
-  - [Priority](#F-VscAppz-StatusBarItemProperties-Priority 'VscAppz.StatusBarItemProperties.Priority')
-  - [Text](#F-VscAppz-StatusBarItemProperties-Text 'VscAppz.StatusBarItemProperties.Text')
-  - [Tooltip](#F-VscAppz-StatusBarItemProperties-Tooltip 'VscAppz.StatusBarItemProperties.Tooltip')
+- [StatusBarItemState](#T-VscAppz-StatusBarItemState 'VscAppz.StatusBarItemState')
+  - [Alignment](#F-VscAppz-StatusBarItemState-Alignment 'VscAppz.StatusBarItemState.Alignment')
+  - [Color](#F-VscAppz-StatusBarItemState-Color 'VscAppz.StatusBarItemState.Color')
+  - [Command](#F-VscAppz-StatusBarItemState-Command 'VscAppz.StatusBarItemState.Command')
+  - [Priority](#F-VscAppz-StatusBarItemState-Priority 'VscAppz.StatusBarItemState.Priority')
+  - [Text](#F-VscAppz-StatusBarItemState-Text 'VscAppz.StatusBarItemState.Text')
+  - [Tooltip](#F-VscAppz-StatusBarItemState-Tooltip 'VscAppz.StatusBarItemState.Tooltip')
 - [TextEditorDecorationType](#T-VscAppz-TextEditorDecorationType 'VscAppz.TextEditorDecorationType')
   - [Dispose()](#M-VscAppz-TextEditorDecorationType-Dispose 'VscAppz.TextEditorDecorationType.Dispose')
   - [Get()](#M-VscAppz-TextEditorDecorationType-Get 'VscAppz.TextEditorDecorationType.Get')
-- [TextEditorDecorationTypeProperties](#T-VscAppz-TextEditorDecorationTypeProperties 'VscAppz.TextEditorDecorationTypeProperties')
-  - [Key](#F-VscAppz-TextEditorDecorationTypeProperties-Key 'VscAppz.TextEditorDecorationTypeProperties.Key')
+- [TextEditorDecorationTypeState](#T-VscAppz-TextEditorDecorationTypeState 'VscAppz.TextEditorDecorationTypeState')
+  - [Key](#F-VscAppz-TextEditorDecorationTypeState-Key 'VscAppz.TextEditorDecorationTypeState.Key')
 - [ThemableDecorationAttachmentRenderOptions](#T-VscAppz-ThemableDecorationAttachmentRenderOptions 'VscAppz.ThemableDecorationAttachmentRenderOptions')
   - [BackgroundColor](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-BackgroundColor 'VscAppz.ThemableDecorationAttachmentRenderOptions.BackgroundColor')
   - [Border](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-Border 'VscAppz.ThemableDecorationAttachmentRenderOptions.Border')
@@ -319,12 +370,125 @@ VscAppz
 
 Represents rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
 
+<a name='F-VscAppz-DecorationRenderOptions-After'></a>
+### After `constants`
+
+##### Summary
+
+Defines the rendering options of the attachment that is inserted after the decorated text.
+
+<a name='F-VscAppz-DecorationRenderOptions-BackgroundColor'></a>
+### BackgroundColor `constants`
+
+##### Summary
+
+Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
+
+<a name='F-VscAppz-DecorationRenderOptions-Before'></a>
+### Before `constants`
+
+##### Summary
+
+Defines the rendering options of the attachment that is inserted before the decorated text.
+
+<a name='F-VscAppz-DecorationRenderOptions-Border'></a>
+### Border `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-DecorationRenderOptions-BorderColor'></a>
+### BorderColor `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+<a name='F-VscAppz-DecorationRenderOptions-BorderRadius'></a>
+### BorderRadius `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+<a name='F-VscAppz-DecorationRenderOptions-BorderSpacing'></a>
+### BorderSpacing `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+<a name='F-VscAppz-DecorationRenderOptions-BorderStyle'></a>
+### BorderStyle `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+<a name='F-VscAppz-DecorationRenderOptions-BorderWidth'></a>
+### BorderWidth `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'border' for setting one or more of the individual border properties.
+
+<a name='F-VscAppz-DecorationRenderOptions-Color'></a>
+### Color `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-DecorationRenderOptions-Cursor'></a>
+### Cursor `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
 <a name='F-VscAppz-DecorationRenderOptions-Dark'></a>
 ### Dark `constants`
 
 ##### Summary
 
 Overwrite options for dark themes.
+
+<a name='F-VscAppz-DecorationRenderOptions-FontStyle'></a>
+### FontStyle `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-DecorationRenderOptions-FontWeight'></a>
+### FontWeight `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-DecorationRenderOptions-GutterIconPath'></a>
+### GutterIconPath `constants`
+
+##### Summary
+
+An **absolute path** or an URI to an image to be rendered in the gutter.
+
+<a name='F-VscAppz-DecorationRenderOptions-GutterIconSize'></a>
+### GutterIconSize `constants`
+
+##### Summary
+
+Specifies the size of the gutter icon.
+Available values are 'auto', 'contain', 'cover' and any percentage value.
+For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
 
 <a name='F-VscAppz-DecorationRenderOptions-IsWholeLine'></a>
 ### IsWholeLine `constants`
@@ -334,12 +498,64 @@ Overwrite options for dark themes.
 Should the decoration be rendered also on the whitespace after the line text.
 Defaults to `false`.
 
+<a name='F-VscAppz-DecorationRenderOptions-LetterSpacing'></a>
+### LetterSpacing `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
 <a name='F-VscAppz-DecorationRenderOptions-Light'></a>
 ### Light `constants`
 
 ##### Summary
 
 Overwrite options for light themes.
+
+<a name='F-VscAppz-DecorationRenderOptions-Opacity'></a>
+### Opacity `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-DecorationRenderOptions-Outline'></a>
+### Outline `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+
+<a name='F-VscAppz-DecorationRenderOptions-OutlineColor'></a>
+### OutlineColor `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'outline' for setting one or more of the individual outline properties.
+
+<a name='F-VscAppz-DecorationRenderOptions-OutlineStyle'></a>
+### OutlineStyle `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'outline' for setting one or more of the individual outline properties.
+
+<a name='F-VscAppz-DecorationRenderOptions-OutlineWidth'></a>
+### OutlineWidth `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
+Better use 'outline' for setting one or more of the individual outline properties.
+
+<a name='F-VscAppz-DecorationRenderOptions-OverviewRulerColor'></a>
+### OverviewRulerColor `constants`
+
+##### Summary
+
+The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.
 
 <a name='F-VscAppz-DecorationRenderOptions-OverviewRulerLane'></a>
 ### OverviewRulerLane `constants`
@@ -355,6 +571,13 @@ The position in the overview ruler where the decoration should be rendered.
 
 Customize the growing behavior of the decoration when edits occur at the edges of the decoration's range.
 Defaults to `DecorationRangeBehavior.OpenOpen`.
+
+<a name='F-VscAppz-DecorationRenderOptions-TextDecoration'></a>
+### TextDecoration `constants`
+
+##### Summary
+
+CSS styling property that will be applied to text enclosed by a decoration.
 
 <a name='T-VscAppz-DiagnosticChangeEvent'></a>
 ## DiagnosticChangeEvent `type`
@@ -911,7 +1134,7 @@ VscAppz
 
 ##### Summary
 
-Type Definition for Visual Studio Code 1.38 Extension API
+Type Definition for Visual Studio Code 1.39 Extension API
 See https://code.visualstudio.com/api for more information
 
 <a name='P-VscAppz-IVscode-Commands'></a>
@@ -1081,6 +1304,23 @@ VscAppz
 Namespace for dealing with the current window of the editor. That is visible
 and active editors, as well as, UI elements to show messages, selections, and
 asking for user input.
+
+<a name='M-VscAppz-IWindow-CreateInputBox'></a>
+### CreateInputBox() `method`
+
+##### Summary
+
+Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
+
+Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+
+`return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='M-VscAppz-IWindow-CreateOutputChannel-System-String-'></a>
 ### CreateOutputChannel(name) `method`
@@ -1826,6 +2066,130 @@ List of workspace folders or `undefined` when no folder is open.
 
 This method has no parameters.
 
+<a name='T-VscAppz-InputBox'></a>
+## InputBox `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+
+Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+
+<a name='M-VscAppz-InputBox-Dispose'></a>
+### Dispose() `method`
+
+##### Summary
+
+Dispose of this input UI and any associated resources. If it is still
+visible, it is first hidden. After this call the input UI is no longer
+functional and no additional methods or properties on it should be
+accessed. Instead a new input UI should be created.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-InputBox-Get'></a>
+### Get() `method`
+
+##### Summary
+
+Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-InputBox-Hide'></a>
+### Hide() `method`
+
+##### Summary
+
+Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+event.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-InputBox-OnDidAccept-System-Action-'></a>
+### OnDidAccept() `method`
+
+##### Summary
+
+An event signaling when the user indicated acceptance of the input value.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String}-'></a>
+### OnDidChangeValue() `method`
+
+##### Summary
+
+An event signaling when the value has changed.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-InputBox-OnDidHide-System-Action-'></a>
+### OnDidHide() `method`
+
+##### Summary
+
+An event signaling when this input UI is hidden.
+
+There are several reasons why this UI might have to be hidden and
+the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+(Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+the user pressing Esc, some other input UI opening, etc.)
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-InputBox-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton}-'></a>
+### OnDidTriggerButton() `method`
+
+##### Summary
+
+An event signaling when a button was triggered.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-InputBox-Set-VscAppz-InputBoxState-'></a>
+### Set() `method`
+
+##### Summary
+
+Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-InputBox-Show'></a>
+### Show() `method`
+
+##### Summary
+
+Makes the input UI visible in its current configuration. Any other input
+UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+
+##### Parameters
+
+This method has no parameters.
+
 <a name='T-VscAppz-InputBoxOptions'></a>
 ## InputBoxOptions `type`
 
@@ -1901,6 +2265,111 @@ Selection of the prefilled [`value`](https://code.visualstudio.com/api/reference
 first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
 word will be selected, when empty (start equals end) only the cursor will be set,
 otherwise the defined range will be selected.
+
+<a name='T-VscAppz-InputBoxState'></a>
+## InputBoxState `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+
+Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+
+<a name='F-VscAppz-InputBoxState-Busy'></a>
+### Busy `constants`
+
+##### Summary
+
+If the UI should show a progress indicator. Defaults to false.
+
+Change this to true, e.g., while loading more data or validating
+user input.
+
+<a name='F-VscAppz-InputBoxState-Buttons'></a>
+### Buttons `constants`
+
+##### Summary
+
+Buttons for actions in the UI.
+
+<a name='F-VscAppz-InputBoxState-Enabled'></a>
+### Enabled `constants`
+
+##### Summary
+
+If the UI should allow for user input. Defaults to true.
+
+Change this to false, e.g., while validating user input or
+loading data for the next step in user input.
+
+<a name='F-VscAppz-InputBoxState-IgnoreFocusOut'></a>
+### IgnoreFocusOut `constants`
+
+##### Summary
+
+If the UI should stay open even when loosing UI focus. Defaults to false.
+
+<a name='F-VscAppz-InputBoxState-Password'></a>
+### Password `constants`
+
+##### Summary
+
+If the input value should be hidden. Defaults to false.
+
+<a name='F-VscAppz-InputBoxState-Placeholder'></a>
+### Placeholder `constants`
+
+##### Summary
+
+Optional placeholder in the filter text.
+
+<a name='F-VscAppz-InputBoxState-Prompt'></a>
+### Prompt `constants`
+
+##### Summary
+
+An optional prompt text providing some ask or explanation to the user.
+
+<a name='F-VscAppz-InputBoxState-Step'></a>
+### Step `constants`
+
+##### Summary
+
+An optional current step count.
+
+<a name='F-VscAppz-InputBoxState-Title'></a>
+### Title `constants`
+
+##### Summary
+
+An optional title.
+
+<a name='F-VscAppz-InputBoxState-TotalSteps'></a>
+### TotalSteps `constants`
+
+##### Summary
+
+An optional total step count.
+
+<a name='F-VscAppz-InputBoxState-ValidationMessage'></a>
+### ValidationMessage `constants`
+
+##### Summary
+
+An optional validation message indicating a problem with the current input value.
+
+<a name='F-VscAppz-InputBoxState-Value'></a>
+### Value `constants`
+
+##### Summary
+
+Current input value.
 
 <a name='T-VscAppz-MessageItem'></a>
 ## MessageItem `type`
@@ -2129,8 +2598,8 @@ Reveal this channel in the UI.
 | ---- | ---- | ----------- |
 | preserveFocus | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | When `true` the channel will not take focus. |
 
-<a name='T-VscAppz-OutputChannelProperties'></a>
-## OutputChannelProperties `type`
+<a name='T-VscAppz-OutputChannelState'></a>
+## OutputChannelState `type`
 
 ##### Namespace
 
@@ -2143,7 +2612,7 @@ An output channel is a container for readonly textual information.
 To get an instance of an `OutputChannel` use
 [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 
-<a name='F-VscAppz-OutputChannelProperties-Name'></a>
+<a name='F-VscAppz-OutputChannelState-Name'></a>
 ### Name `constants`
 
 ##### Summary
@@ -2193,6 +2662,38 @@ The overview ruler supports three lanes.
 
 Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
 The overview ruler supports three lanes.
+
+<a name='T-VscAppz-QuickInputButton'></a>
+## QuickInputButton `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
+
+<a name='F-VscAppz-QuickInputButton-IconPath'></a>
+### IconPath `constants`
+
+##### Summary
+
+Icon for the button.
+
+<a name='F-VscAppz-QuickInputButton-My'></a>
+### My `constants`
+
+##### Summary
+
+Free-form custom data, preserved across a roundtrip.
+
+<a name='F-VscAppz-QuickInputButton-Tooltip'></a>
+### Tooltip `constants`
+
+##### Summary
+
+An optional tooltip.
 
 <a name='T-VscAppz-QuickPickItem'></a>
 ## QuickPickItem `type`
@@ -2422,7 +2923,7 @@ Hide the entry in the status bar.
 
 This method has no parameters.
 
-<a name='M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemProperties-'></a>
+<a name='M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemState-'></a>
 ### Set() `method`
 
 ##### Summary
@@ -2444,8 +2945,8 @@ Shows the entry in the status bar.
 
 This method has no parameters.
 
-<a name='T-VscAppz-StatusBarItemProperties'></a>
-## StatusBarItemProperties `type`
+<a name='T-VscAppz-StatusBarItemState'></a>
+## StatusBarItemState `type`
 
 ##### Namespace
 
@@ -2456,21 +2957,21 @@ VscAppz
 A status bar item is a status bar contribution that can
 show text and icons and run a command on click.
 
-<a name='F-VscAppz-StatusBarItemProperties-Alignment'></a>
+<a name='F-VscAppz-StatusBarItemState-Alignment'></a>
 ### Alignment `constants`
 
 ##### Summary
 
 The alignment of this item.
 
-<a name='F-VscAppz-StatusBarItemProperties-Color'></a>
+<a name='F-VscAppz-StatusBarItemState-Color'></a>
 ### Color `constants`
 
 ##### Summary
 
 The foreground color for this entry.
 
-<a name='F-VscAppz-StatusBarItemProperties-Command'></a>
+<a name='F-VscAppz-StatusBarItemState-Command'></a>
 ### Command `constants`
 
 ##### Summary
@@ -2478,7 +2979,7 @@ The foreground color for this entry.
 The identifier of a command to run on click. The command must be
 [known](https://code.visualstudio.com/api/references/vscode-api#commands.getCommands).
 
-<a name='F-VscAppz-StatusBarItemProperties-Priority'></a>
+<a name='F-VscAppz-StatusBarItemState-Priority'></a>
 ### Priority `constants`
 
 ##### Summary
@@ -2486,7 +2987,7 @@ The identifier of a command to run on click. The command must be
 The priority of this item. Higher value means the item should
 be shown more to the left.
 
-<a name='F-VscAppz-StatusBarItemProperties-Text'></a>
+<a name='F-VscAppz-StatusBarItemState-Text'></a>
 ### Text `constants`
 
 ##### Summary
@@ -2498,7 +2999,7 @@ The text to show for the entry. You can embed icons in the text by leveraging th
 Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
 `light-bulb`, `thumbsup`, `zap` etc.
 
-<a name='F-VscAppz-StatusBarItemProperties-Tooltip'></a>
+<a name='F-VscAppz-StatusBarItemState-Tooltip'></a>
 ### Tooltip `constants`
 
 ##### Summary
@@ -2542,8 +3043,8 @@ Obtains this `TextEditorDecorationType`'s current property value for: `key`.
 
 This method has no parameters.
 
-<a name='T-VscAppz-TextEditorDecorationTypeProperties'></a>
-## TextEditorDecorationTypeProperties `type`
+<a name='T-VscAppz-TextEditorDecorationTypeState'></a>
+## TextEditorDecorationTypeState `type`
 
 ##### Namespace
 
@@ -2557,7 +3058,7 @@ sharing the same [styling options](https://code.visualstudio.com/api/references/
 To get an instance of a `TextEditorDecorationType` use
 [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 
-<a name='F-VscAppz-TextEditorDecorationTypeProperties-Key'></a>
+<a name='F-VscAppz-TextEditorDecorationTypeState-Key'></a>
 ### Key `constants`
 
 ##### Summary
@@ -2573,7 +3074,7 @@ VscAppz
 
 ##### Summary
 
-Type Definition for Visual Studio Code 1.38 Extension API
+Type Definition for Visual Studio Code 1.39 Extension API
 See https://code.visualstudio.com/api for more information
 
 <a name='F-VscAppz-ThemableDecorationAttachmentRenderOptions-BackgroundColor'></a>
@@ -2862,7 +3363,7 @@ Everything related to the running of your app.
 
 Reports problems during the ongoing forever-looping stdin/stdout communication
  with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be `null`.
- Any of its args must be checked for `null`-ness by the `OnError` handler.
+ Any of its args must be checked for `null`-ness by your `OnError` handler.
 
  `IVscode self`── the caller that encountered the problem being reported.
 

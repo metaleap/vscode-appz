@@ -14,7 +14,7 @@
              <summary>
              Reports problems during the ongoing forever-looping stdin/stdout communication
              with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be `null`.
-             Any of its args must be checked for `null`-ness by the `OnError` handler.
+             Any of its args must be checked for `null`-ness by your `OnError` handler.
             
              `IVscode self`── the caller that encountered the problem being reported.
             
@@ -101,7 +101,7 @@
         </member>
         <member name="T:VscAppz.IVscode">
             <summary>
-            Type Definition for Visual Studio Code 1.38 Extension API
+            Type Definition for Visual Studio Code 1.39 Extension API
             See https://code.visualstudio.com/api for more information
             </summary>
         </member>
@@ -637,6 +637,18 @@
             <param name="options">Rendering options for the decoration type.</param>
             <return>A new decoration type instance.</return>
         </member>
+        <member name="M:VscAppz.IWindow.CreateInputBox">
+            <summary>
+            Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
+            
+            Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+            is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+            when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+            
+            `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
+            </summary>
+            <return>A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).</return>
+        </member>
         <member name="T:VscAppz.IEnv">
             <summary>Namespace describing the environment the editor runs in.</summary>
         </member>
@@ -1044,6 +1056,109 @@
             <param name="filterInternal">Set `true` to not see internal commands (starting with an underscore)</param>
             <return>Thenable that resolves to a list of command ids.</return>
         </member>
+        <member name="T:VscAppz.ThemableDecorationRenderOptions">
+            <summary>Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.BackgroundColor">
+            <summary>
+            Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+            Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.Outline">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.OutlineColor">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'outline' for setting one or more of the individual outline properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.OutlineStyle">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'outline' for setting one or more of the individual outline properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.OutlineWidth">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'outline' for setting one or more of the individual outline properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.Border">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderColor">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderRadius">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderSpacing">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderStyle">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderWidth">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.FontStyle">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.FontWeight">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.TextDecoration">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.Cursor">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.Color">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.Opacity">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.LetterSpacing">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.GutterIconPath">
+            <summary>An **absolute path** or an URI to an image to be rendered in the gutter.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.GutterIconSize">
+            <summary>
+            Specifies the size of the gutter icon.
+            Available values are 'auto', 'contain', 'cover' and any percentage value.
+            For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+            </summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.OverviewRulerColor">
+            <summary>The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.Before">
+            <summary>Defines the rendering options of the attachment that is inserted before the decorated text.</summary>
+        </member>
+        <member name="F:VscAppz.ThemableDecorationRenderOptions.After">
+            <summary>Defines the rendering options of the attachment that is inserted after the decorated text.</summary>
+        </member>
         <member name="T:VscAppz.MessageOptions">
             <summary>Options to configure the behavior of the message.</summary>
         </member>
@@ -1287,7 +1402,7 @@
         <member name="M:VscAppz.StatusBarItem.Get">
             <summary>Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.</summary>
         </member>
-        <member name="M:VscAppz.StatusBarItem.Set(VscAppz.StatusBarItemProperties)">
+        <member name="M:VscAppz.StatusBarItem.Set(VscAppz.StatusBarItemState)">
             <summary>Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.</summary>
         </member>
         <member name="T:VscAppz.OutputChannel">
@@ -1335,136 +1450,9 @@
         <member name="M:VscAppz.OutputChannel.Get">
             <summary>Obtains this `OutputChannel`'s current property value for: `name`.</summary>
         </member>
-        <member name="T:VscAppz.DecorationRenderOptions">
-            <summary>Represents rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).</summary>
-        </member>
-        <member name="F:VscAppz.DecorationRenderOptions.IsWholeLine">
-            <summary>
-            Should the decoration be rendered also on the whitespace after the line text.
-            Defaults to `false`.
-            </summary>
-        </member>
-        <member name="F:VscAppz.DecorationRenderOptions.RangeBehavior">
-            <summary>
-            Customize the growing behavior of the decoration when edits occur at the edges of the decoration's range.
-            Defaults to `DecorationRangeBehavior.OpenOpen`.
-            </summary>
-        </member>
-        <member name="F:VscAppz.DecorationRenderOptions.OverviewRulerLane">
-            <summary>The position in the overview ruler where the decoration should be rendered.</summary>
-        </member>
-        <member name="F:VscAppz.DecorationRenderOptions.Light">
-            <summary>Overwrite options for light themes.</summary>
-        </member>
-        <member name="F:VscAppz.DecorationRenderOptions.Dark">
-            <summary>Overwrite options for dark themes.</summary>
-        </member>
-        <member name="T:VscAppz.ThemableDecorationRenderOptions">
-            <summary>Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).</summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.BackgroundColor">
-            <summary>
-            Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
-            Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
-            </summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.Outline">
-            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.OutlineColor">
-            <summary>
-            CSS styling property that will be applied to text enclosed by a decoration.
-            Better use 'outline' for setting one or more of the individual outline properties.
-            </summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.OutlineStyle">
-            <summary>
-            CSS styling property that will be applied to text enclosed by a decoration.
-            Better use 'outline' for setting one or more of the individual outline properties.
-            </summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.OutlineWidth">
-            <summary>
-            CSS styling property that will be applied to text enclosed by a decoration.
-            Better use 'outline' for setting one or more of the individual outline properties.
-            </summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.Border">
-            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderColor">
-            <summary>
-            CSS styling property that will be applied to text enclosed by a decoration.
-            Better use 'border' for setting one or more of the individual border properties.
-            </summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderRadius">
-            <summary>
-            CSS styling property that will be applied to text enclosed by a decoration.
-            Better use 'border' for setting one or more of the individual border properties.
-            </summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderSpacing">
-            <summary>
-            CSS styling property that will be applied to text enclosed by a decoration.
-            Better use 'border' for setting one or more of the individual border properties.
-            </summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderStyle">
-            <summary>
-            CSS styling property that will be applied to text enclosed by a decoration.
-            Better use 'border' for setting one or more of the individual border properties.
-            </summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderWidth">
-            <summary>
-            CSS styling property that will be applied to text enclosed by a decoration.
-            Better use 'border' for setting one or more of the individual border properties.
-            </summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.FontStyle">
-            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.FontWeight">
-            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.TextDecoration">
-            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.Cursor">
-            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.Color">
-            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.Opacity">
-            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.LetterSpacing">
-            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.GutterIconPath">
-            <summary>An **absolute path** or an URI to an image to be rendered in the gutter.</summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.GutterIconSize">
-            <summary>
-            Specifies the size of the gutter icon.
-            Available values are 'auto', 'contain', 'cover' and any percentage value.
-            For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
-            </summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.OverviewRulerColor">
-            <summary>The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.</summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.Before">
-            <summary>Defines the rendering options of the attachment that is inserted before the decorated text.</summary>
-        </member>
-        <member name="F:VscAppz.ThemableDecorationRenderOptions.After">
-            <summary>Defines the rendering options of the attachment that is inserted after the decorated text.</summary>
-        </member>
         <member name="T:VscAppz.ThemableDecorationAttachmentRenderOptions">
             <summary>
-            Type Definition for Visual Studio Code 1.38 Extension API
+            Type Definition for Visual Studio Code 1.39 Extension API
             See https://code.visualstudio.com/api for more information
             </summary>
         </member>
@@ -1507,6 +1495,130 @@
         <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.Height">
             <summary>CSS styling property that will be applied to the decoration attachment.</summary>
         </member>
+        <member name="T:VscAppz.DecorationRenderOptions">
+            <summary>Represents rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.IsWholeLine">
+            <summary>
+            Should the decoration be rendered also on the whitespace after the line text.
+            Defaults to `false`.
+            </summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.RangeBehavior">
+            <summary>
+            Customize the growing behavior of the decoration when edits occur at the edges of the decoration's range.
+            Defaults to `DecorationRangeBehavior.OpenOpen`.
+            </summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.OverviewRulerLane">
+            <summary>The position in the overview ruler where the decoration should be rendered.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.Light">
+            <summary>Overwrite options for light themes.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.Dark">
+            <summary>Overwrite options for dark themes.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.BackgroundColor">
+            <summary>
+            Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+            Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
+            </summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.Outline">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.OutlineColor">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'outline' for setting one or more of the individual outline properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.OutlineStyle">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'outline' for setting one or more of the individual outline properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.OutlineWidth">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'outline' for setting one or more of the individual outline properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.Border">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.BorderColor">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.BorderRadius">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.BorderSpacing">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.BorderStyle">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.BorderWidth">
+            <summary>
+            CSS styling property that will be applied to text enclosed by a decoration.
+            Better use 'border' for setting one or more of the individual border properties.
+            </summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.FontStyle">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.FontWeight">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.TextDecoration">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.Cursor">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.Color">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.Opacity">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.LetterSpacing">
+            <summary>CSS styling property that will be applied to text enclosed by a decoration.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.GutterIconPath">
+            <summary>An **absolute path** or an URI to an image to be rendered in the gutter.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.GutterIconSize">
+            <summary>
+            Specifies the size of the gutter icon.
+            Available values are 'auto', 'contain', 'cover' and any percentage value.
+            For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+            </summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.OverviewRulerColor">
+            <summary>The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.Before">
+            <summary>Defines the rendering options of the attachment that is inserted before the decorated text.</summary>
+        </member>
+        <member name="F:VscAppz.DecorationRenderOptions.After">
+            <summary>Defines the rendering options of the attachment that is inserted after the decorated text.</summary>
+        </member>
         <member name="T:VscAppz.TextEditorDecorationType">
             <summary>
             Represents a handle to a set of decorations
@@ -1521,6 +1633,72 @@
         </member>
         <member name="M:VscAppz.TextEditorDecorationType.Get">
             <summary>Obtains this `TextEditorDecorationType`'s current property value for: `key`.</summary>
+        </member>
+        <member name="T:VscAppz.InputBox">
+            <summary>
+            A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+            
+            Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+            is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+            when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+            </summary>
+        </member>
+        <member name="M:VscAppz.InputBox.OnDidChangeValue(System.Action{System.String})">
+            <summary>An event signaling when the value has changed.</summary>
+        </member>
+        <member name="M:VscAppz.InputBox.OnDidAccept(System.Action)">
+            <summary>An event signaling when the user indicated acceptance of the input value.</summary>
+        </member>
+        <member name="M:VscAppz.InputBox.OnDidTriggerButton(System.Action{VscAppz.QuickInputButton})">
+            <summary>An event signaling when a button was triggered.</summary>
+        </member>
+        <member name="M:VscAppz.InputBox.Show">
+            <summary>
+            Makes the input UI visible in its current configuration. Any other input
+            UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+            </summary>
+        </member>
+        <member name="M:VscAppz.InputBox.Hide">
+            <summary>
+            Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+            event.
+            </summary>
+        </member>
+        <member name="M:VscAppz.InputBox.OnDidHide(System.Action)">
+            <summary>
+            An event signaling when this input UI is hidden.
+            
+            There are several reasons why this UI might have to be hidden and
+            the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+            (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+            the user pressing Esc, some other input UI opening, etc.)
+            </summary>
+        </member>
+        <member name="M:VscAppz.InputBox.Dispose">
+            <summary>
+            Dispose of this input UI and any associated resources. If it is still
+            visible, it is first hidden. After this call the input UI is no longer
+            functional and no additional methods or properties on it should be
+            accessed. Instead a new input UI should be created.
+            </summary>
+        </member>
+        <member name="M:VscAppz.InputBox.Get">
+            <summary>Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+        </member>
+        <member name="M:VscAppz.InputBox.Set(VscAppz.InputBoxState)">
+            <summary>Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+        </member>
+        <member name="T:VscAppz.QuickInputButton">
+            <summary>Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).</summary>
+        </member>
+        <member name="F:VscAppz.QuickInputButton.IconPath">
+            <summary>Icon for the button.</summary>
+        </member>
+        <member name="F:VscAppz.QuickInputButton.Tooltip">
+            <summary>An optional tooltip.</summary>
+        </member>
+        <member name="F:VscAppz.QuickInputButton.My">
+            <summary>Free-form custom data, preserved across a roundtrip.</summary>
         </member>
         <member name="T:VscAppz.WorkspaceFoldersChangeEvent">
             <summary>An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).</summary>
@@ -1636,22 +1814,22 @@
             *Note* that the first entry corresponds to the value of `rootPath`.
             </summary>
         </member>
-        <member name="T:VscAppz.StatusBarItemProperties">
+        <member name="T:VscAppz.StatusBarItemState">
             <summary>
             A status bar item is a status bar contribution that can
             show text and icons and run a command on click.
             </summary>
         </member>
-        <member name="F:VscAppz.StatusBarItemProperties.Alignment">
+        <member name="F:VscAppz.StatusBarItemState.Alignment">
             <summary>The alignment of this item.</summary>
         </member>
-        <member name="F:VscAppz.StatusBarItemProperties.Priority">
+        <member name="F:VscAppz.StatusBarItemState.Priority">
             <summary>
             The priority of this item. Higher value means the item should
             be shown more to the left.
             </summary>
         </member>
-        <member name="F:VscAppz.StatusBarItemProperties.Text">
+        <member name="F:VscAppz.StatusBarItemState.Text">
             <summary>
             The text to show for the entry. You can embed icons in the text by leveraging the syntax:
             
@@ -1661,19 +1839,19 @@
             `light-bulb`, `thumbsup`, `zap` etc.
             </summary>
         </member>
-        <member name="F:VscAppz.StatusBarItemProperties.Tooltip">
+        <member name="F:VscAppz.StatusBarItemState.Tooltip">
             <summary>The tooltip text when you hover over this entry.</summary>
         </member>
-        <member name="F:VscAppz.StatusBarItemProperties.Color">
+        <member name="F:VscAppz.StatusBarItemState.Color">
             <summary>The foreground color for this entry.</summary>
         </member>
-        <member name="F:VscAppz.StatusBarItemProperties.Command">
+        <member name="F:VscAppz.StatusBarItemState.Command">
             <summary>
             The identifier of a command to run on click. The command must be
             [known](https://code.visualstudio.com/api/references/vscode-api#commands.getCommands).
             </summary>
         </member>
-        <member name="T:VscAppz.OutputChannelProperties">
+        <member name="T:VscAppz.OutputChannelState">
             <summary>
             An output channel is a container for readonly textual information.
             
@@ -1681,10 +1859,10 @@
             [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
             </summary>
         </member>
-        <member name="F:VscAppz.OutputChannelProperties.Name">
+        <member name="F:VscAppz.OutputChannelState.Name">
             <summary>The human-readable name of this output channel.</summary>
         </member>
-        <member name="T:VscAppz.TextEditorDecorationTypeProperties">
+        <member name="T:VscAppz.TextEditorDecorationTypeState">
             <summary>
             Represents a handle to a set of decorations
             sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
@@ -1693,8 +1871,63 @@
             [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
             </summary>
         </member>
-        <member name="F:VscAppz.TextEditorDecorationTypeProperties.Key">
+        <member name="F:VscAppz.TextEditorDecorationTypeState.Key">
             <summary>Internal representation of the handle.</summary>
+        </member>
+        <member name="T:VscAppz.InputBoxState">
+            <summary>
+            A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+            
+            Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+            is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+            when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+            </summary>
+        </member>
+        <member name="F:VscAppz.InputBoxState.Value">
+            <summary>Current input value.</summary>
+        </member>
+        <member name="F:VscAppz.InputBoxState.Placeholder">
+            <summary>Optional placeholder in the filter text.</summary>
+        </member>
+        <member name="F:VscAppz.InputBoxState.Password">
+            <summary>If the input value should be hidden. Defaults to false.</summary>
+        </member>
+        <member name="F:VscAppz.InputBoxState.Buttons">
+            <summary>Buttons for actions in the UI.</summary>
+        </member>
+        <member name="F:VscAppz.InputBoxState.Prompt">
+            <summary>An optional prompt text providing some ask or explanation to the user.</summary>
+        </member>
+        <member name="F:VscAppz.InputBoxState.ValidationMessage">
+            <summary>An optional validation message indicating a problem with the current input value.</summary>
+        </member>
+        <member name="F:VscAppz.InputBoxState.Title">
+            <summary>An optional title.</summary>
+        </member>
+        <member name="F:VscAppz.InputBoxState.Step">
+            <summary>An optional current step count.</summary>
+        </member>
+        <member name="F:VscAppz.InputBoxState.TotalSteps">
+            <summary>An optional total step count.</summary>
+        </member>
+        <member name="F:VscAppz.InputBoxState.Enabled">
+            <summary>
+            If the UI should allow for user input. Defaults to true.
+            
+            Change this to false, e.g., while validating user input or
+            loading data for the next step in user input.
+            </summary>
+        </member>
+        <member name="F:VscAppz.InputBoxState.Busy">
+            <summary>
+            If the UI should show a progress indicator. Defaults to false.
+            
+            Change this to true, e.g., while loading more data or validating
+            user input.
+            </summary>
+        </member>
+        <member name="F:VscAppz.InputBoxState.IgnoreFocusOut">
+            <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
         </member>
     </members>
 </doc>

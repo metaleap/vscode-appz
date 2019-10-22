@@ -1488,9 +1488,9 @@ export interface StatusBarItem extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    Get: () => (_: (_: StatusBarItemProperties) => void) => void
+    Get: () => (_: (_: StatusBarItemState) => void) => void
 
-    Set: (_: StatusBarItemProperties) => (_: () => void) => void
+    Set: (_: StatusBarItemState) => (_: () => void) => void
 }
 
 function newStatusBarItem (): StatusBarItem {
@@ -1555,7 +1555,7 @@ export interface OutputChannel extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    Get: () => (_: (_: OutputChannelProperties) => void) => void
+    Get: () => (_: (_: OutputChannelState) => void) => void
 }
 
 function newOutputChannel (): OutputChannel {
@@ -1853,7 +1853,7 @@ export interface TextEditorDecorationType extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    Get: () => (_: (_: TextEditorDecorationTypeProperties) => void) => void
+    Get: () => (_: (_: TextEditorDecorationTypeState) => void) => void
 }
 
 function newTextEditorDecorationType (): TextEditorDecorationType {
@@ -1874,6 +1874,24 @@ function newTextEditorDecorationType (): TextEditorDecorationType {
  */
 export interface InputBox extends fromJson, withDisp {
     /**
+     * An event signaling when the value has changed.
+
+     */
+    OnDidChangeValue: (_: (_: string) => void) => (_: (_: Disposable) => void) => void
+
+    /**
+     * An event signaling when the user indicated acceptance of the input value.
+
+     */
+    OnDidAccept: (_: () => void) => (_: (_: Disposable) => void) => void
+
+    /**
+     * An event signaling when a button was triggered.
+
+     */
+    OnDidTriggerButton: (_: (_: QuickInputButton) => void) => (_: (_: Disposable) => void) => void
+
+    /**
      * Makes the input UI visible in its current configuration. Any other input
      * UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 
@@ -1888,6 +1906,17 @@ export interface InputBox extends fromJson, withDisp {
     Hide: () => (_: () => void) => void
 
     /**
+     * An event signaling when this input UI is hidden.
+     * 
+     * There are several reasons why this UI might have to be hidden and
+     * the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+     * (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+     * the user pressing Esc, some other input UI opening, etc.)
+
+     */
+    OnDidHide: (_: () => void) => (_: (_: Disposable) => void) => void
+
+    /**
      * Dispose of this input UI and any associated resources. If it is still
      * visible, it is first hidden. After this call the input UI is no longer
      * functional and no additional methods or properties on it should be
@@ -1896,16 +1925,20 @@ export interface InputBox extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    Get: () => (_: (_: InputBoxProperties) => void) => void
+    Get: () => (_: (_: InputBoxState) => void) => void
 
-    Set: (_: InputBoxProperties) => (_: () => void) => void
+    Set: (_: InputBoxState) => (_: () => void) => void
 }
 
 function newInputBox (): InputBox {
     let me: InputBox
     me = { populateFrom: _ => InputBox_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBox
+    me.OnDidChangeValue = (a0) => InputBox_OnDidChangeValue.call(me, a0)
+    me.OnDidAccept = (a0) => InputBox_OnDidAccept.call(me, a0)
+    me.OnDidTriggerButton = (a0) => InputBox_OnDidTriggerButton.call(me, a0)
     me.Show = () => InputBox_Show.call(me, )
     me.Hide = () => InputBox_Hide.call(me, )
+    me.OnDidHide = (a0) => InputBox_OnDidHide.call(me, a0)
     me.Dispose = () => InputBox_Dispose.call(me, )
     me.Get = () => InputBox_Get.call(me, )
     me.Set = (a0) => InputBox_Set.call(me, a0)
@@ -1916,7 +1949,7 @@ function newInputBox (): InputBox {
  * Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
 
  */
-export interface QuickInputButton {
+export interface QuickInputButton extends fromJson {
     /**
      * Icon for the button.
 
@@ -1928,6 +1961,18 @@ export interface QuickInputButton {
 
      */
     tooltip?: string
+
+    /**
+     * Free-form custom data, preserved across a roundtrip.
+
+     */
+    my?: { [_: string]: any }
+}
+
+export function newQuickInputButton (): QuickInputButton {
+    let me: QuickInputButton
+    me = { populateFrom: _ => QuickInputButton_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickInputButton
+    return me
 }
 
 /**
@@ -2113,7 +2158,7 @@ function newWorkspaceProperties (): WorkspaceProperties {
  * show text and icons and run a command on click.
 
  */
-export interface StatusBarItemProperties extends fromJson {
+export interface StatusBarItemState extends fromJson {
     /**
      * The alignment of this item.
 
@@ -2158,9 +2203,9 @@ export interface StatusBarItemProperties extends fromJson {
     command?: string
 }
 
-export function newStatusBarItemProperties (): StatusBarItemProperties {
-    let me: StatusBarItemProperties
-    me = { populateFrom: _ => StatusBarItemProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as StatusBarItemProperties
+export function newStatusBarItemState (): StatusBarItemState {
+    let me: StatusBarItemState
+    me = { populateFrom: _ => StatusBarItemState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as StatusBarItemState
     return me
 }
 
@@ -2171,7 +2216,7 @@ export function newStatusBarItemProperties (): StatusBarItemProperties {
  * [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 
  */
-export interface OutputChannelProperties extends fromJson {
+export interface OutputChannelState extends fromJson {
     /**
      * The human-readable name of this output channel.
 
@@ -2179,9 +2224,9 @@ export interface OutputChannelProperties extends fromJson {
     Name: () => string
 }
 
-export function newOutputChannelProperties (): OutputChannelProperties {
-    let me: OutputChannelProperties
-    me = { populateFrom: _ => OutputChannelProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as OutputChannelProperties
+export function newOutputChannelState (): OutputChannelState {
+    let me: OutputChannelState
+    me = { populateFrom: _ => OutputChannelState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as OutputChannelState
     return me
 }
 
@@ -2193,7 +2238,7 @@ export function newOutputChannelProperties (): OutputChannelProperties {
  * [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 
  */
-export interface TextEditorDecorationTypeProperties extends fromJson {
+export interface TextEditorDecorationTypeState extends fromJson {
     /**
      * Internal representation of the handle.
 
@@ -2201,9 +2246,9 @@ export interface TextEditorDecorationTypeProperties extends fromJson {
     Key: () => string
 }
 
-export function newTextEditorDecorationTypeProperties (): TextEditorDecorationTypeProperties {
-    let me: TextEditorDecorationTypeProperties
-    me = { populateFrom: _ => TextEditorDecorationTypeProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as TextEditorDecorationTypeProperties
+export function newTextEditorDecorationTypeState (): TextEditorDecorationTypeState {
+    let me: TextEditorDecorationTypeState
+    me = { populateFrom: _ => TextEditorDecorationTypeState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as TextEditorDecorationTypeState
     return me
 }
 
@@ -2215,7 +2260,7 @@ export function newTextEditorDecorationTypeProperties (): TextEditorDecorationTy
  * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
  */
-export interface InputBoxProperties extends fromJson {
+export interface InputBoxState extends fromJson {
     /**
      * Current input value.
 
@@ -2235,28 +2280,10 @@ export interface InputBoxProperties extends fromJson {
     password?: boolean
 
     /**
-     * An event signaling when the value has changed.
-
-     */
-    OnDidChangeValue: () => Event
-
-    /**
-     * An event signaling when the user indicated acceptance of the input value.
-
-     */
-    OnDidAccept: () => Event
-
-    /**
      * Buttons for actions in the UI.
 
      */
     buttons?: QuickInputButton[]
-
-    /**
-     * An event signaling when a button was triggered.
-
-     */
-    OnDidTriggerButton: () => Event
 
     /**
      * An optional prompt text providing some ask or explanation to the user.
@@ -2311,22 +2338,11 @@ export interface InputBoxProperties extends fromJson {
 
      */
     ignoreFocusOut?: boolean
-
-    /**
-     * An event signaling when this input UI is hidden.
-     * 
-     * There are several reasons why this UI might have to be hidden and
-     * the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
-     * (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
-     * the user pressing Esc, some other input UI opening, etc.)
-
-     */
-    onDidHide?: Event
 }
 
-export function newInputBoxProperties (): InputBoxProperties {
-    let me: InputBoxProperties
-    me = { populateFrom: _ => InputBoxProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBoxProperties
+export function newInputBoxState (): InputBoxState {
+    let me: InputBoxState
+    me = { populateFrom: _ => InputBoxState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBoxState
     return me
 }
 
@@ -4505,19 +4521,19 @@ function StatusBarItem_Dispose(this: StatusBarItem, ): (_: () => void) => void {
     return this.disp.Dispose()
 }
 
-function StatusBarItem_Get(this: StatusBarItem, ): (_: (_: StatusBarItemProperties) => void) => void {
+function StatusBarItem_Get(this: StatusBarItem, ): (_: (_: StatusBarItemState) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "StatusBarItem.appzObjPropsGet"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: StatusBarItemProperties) => void
+    let onret: (_: StatusBarItemState) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: StatusBarItemProperties
+        let result: StatusBarItemState
         if ((undefined !== payload && null !== payload)) {
-            result = newStatusBarItemProperties()
+            result = newStatusBarItemState()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -4529,12 +4545,12 @@ function StatusBarItem_Get(this: StatusBarItem, ): (_: (_: StatusBarItemProperti
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: StatusBarItemProperties) => void): void => {
+    return (a0: (_: StatusBarItemState) => void): void => {
         onret = a0
     }
 }
 
-function StatusBarItem_Set(this: StatusBarItem, allUpdates: StatusBarItemProperties): (_: () => void) => void {
+function StatusBarItem_Set(this: StatusBarItem, allUpdates: StatusBarItemState): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "StatusBarItem.appzObjPropsSet"
@@ -4680,19 +4696,19 @@ function OutputChannel_Dispose(this: OutputChannel, ): (_: () => void) => void {
     return this.disp.Dispose()
 }
 
-function OutputChannel_Get(this: OutputChannel, ): (_: (_: OutputChannelProperties) => void) => void {
+function OutputChannel_Get(this: OutputChannel, ): (_: (_: OutputChannelState) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.appzObjPropsGet"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: OutputChannelProperties) => void
+    let onret: (_: OutputChannelState) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: OutputChannelProperties
+        let result: OutputChannelState
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelProperties()
+            result = newOutputChannelState()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -4704,7 +4720,7 @@ function OutputChannel_Get(this: OutputChannel, ): (_: (_: OutputChannelProperti
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: OutputChannelProperties) => void): void => {
+    return (a0: (_: OutputChannelState) => void): void => {
         onret = a0
     }
 }
@@ -4713,19 +4729,19 @@ function TextEditorDecorationType_Dispose(this: TextEditorDecorationType, ): (_:
     return this.disp.Dispose()
 }
 
-function TextEditorDecorationType_Get(this: TextEditorDecorationType, ): (_: (_: TextEditorDecorationTypeProperties) => void) => void {
+function TextEditorDecorationType_Get(this: TextEditorDecorationType, ): (_: (_: TextEditorDecorationTypeState) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "TextEditorDecorationType.appzObjPropsGet"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: TextEditorDecorationTypeProperties) => void
+    let onret: (_: TextEditorDecorationTypeState) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: TextEditorDecorationTypeProperties
+        let result: TextEditorDecorationTypeState
         if ((undefined !== payload && null !== payload)) {
-            result = newTextEditorDecorationTypeProperties()
+            result = newTextEditorDecorationTypeState()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -4737,7 +4753,153 @@ function TextEditorDecorationType_Get(this: TextEditorDecorationType, ): (_: (_:
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: TextEditorDecorationTypeProperties) => void): void => {
+    return (a0: (_: TextEditorDecorationTypeState) => void): void => {
+        onret = a0
+    }
+}
+
+function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string) => void): (_: (_: Disposable) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "InputBox.onDidChangeValue"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let _fnid_handler: string
+    if ((undefined === handler || null === handler)) {
+        OnError(this.disp.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    }
+    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+        let ok: boolean
+        if (1 !== args.length) {
+            return ok
+        }
+        let _a_0_: string
+        [_a_0_, ok] = [args[0] as string, typeof args[0] === "string"]
+        if (!ok) {
+            return false
+        }
+        handler(_a_0_)
+        return true
+    }, null)
+    msg.Data["handler"] = _fnid_handler
+    let onresp: (_: any) => boolean
+    let onret: (_: Disposable) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: Disposable
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        } else {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: Disposable) => void): void => {
+        onret = a0
+    }
+}
+
+function InputBox_OnDidAccept(this: InputBox, handler: () => void): (_: (_: Disposable) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "InputBox.onDidAccept"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let _fnid_handler: string
+    if ((undefined === handler || null === handler)) {
+        OnError(this.disp.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    }
+    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+        let ok: boolean
+        if (0 !== args.length) {
+            return ok
+        }
+        handler()
+        return true
+    }, null)
+    msg.Data["handler"] = _fnid_handler
+    let onresp: (_: any) => boolean
+    let onret: (_: Disposable) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: Disposable
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        } else {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: Disposable) => void): void => {
+        onret = a0
+    }
+}
+
+function InputBox_OnDidTriggerButton(this: InputBox, handler: (_: QuickInputButton) => void): (_: (_: Disposable) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "InputBox.onDidTriggerButton"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let _fnid_handler: string
+    if ((undefined === handler || null === handler)) {
+        OnError(this.disp.impl, "InputBox.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    }
+    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+        let ok: boolean
+        if (1 !== args.length) {
+            return ok
+        }
+        let _a_0_: QuickInputButton
+        _a_0_ = newQuickInputButton()
+        ok = _a_0_.populateFrom(args[0])
+        if (!ok) {
+            return false
+        }
+        handler(_a_0_)
+        return true
+    }, null)
+    msg.Data["handler"] = _fnid_handler
+    let onresp: (_: any) => boolean
+    let onret: (_: Disposable) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: Disposable
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        } else {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: Disposable) => void): void => {
         onret = a0
     }
 }
@@ -4788,23 +4950,68 @@ function InputBox_Hide(this: InputBox, ): (_: () => void) => void {
     }
 }
 
+function InputBox_OnDidHide(this: InputBox, handler: () => void): (_: (_: Disposable) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "InputBox.onDidHide"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let _fnid_handler: string
+    if ((undefined === handler || null === handler)) {
+        OnError(this.disp.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    }
+    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+        let ok: boolean
+        if (0 !== args.length) {
+            return ok
+        }
+        handler()
+        return true
+    }, null)
+    msg.Data["handler"] = _fnid_handler
+    let onresp: (_: any) => boolean
+    let onret: (_: Disposable) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: Disposable
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        } else {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: Disposable) => void): void => {
+        onret = a0
+    }
+}
+
 function InputBox_Dispose(this: InputBox, ): (_: () => void) => void {
     return this.disp.Dispose()
 }
 
-function InputBox_Get(this: InputBox, ): (_: (_: InputBoxProperties) => void) => void {
+function InputBox_Get(this: InputBox, ): (_: (_: InputBoxState) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.appzObjPropsGet"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: InputBoxProperties) => void
+    let onret: (_: InputBoxState) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: InputBoxProperties
+        let result: InputBoxState
         if ((undefined !== payload && null !== payload)) {
-            result = newInputBoxProperties()
+            result = newInputBoxState()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -4816,12 +5023,12 @@ function InputBox_Get(this: InputBox, ): (_: (_: InputBoxProperties) => void) =>
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: InputBoxProperties) => void): void => {
+    return (a0: (_: InputBoxState) => void): void => {
         onret = a0
     }
 }
 
-function InputBox_Set(this: InputBox, allUpdates: InputBoxProperties): (_: () => void) => void {
+function InputBox_Set(this: InputBox, allUpdates: InputBoxState): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.appzObjPropsSet"
@@ -5366,7 +5573,7 @@ function DiagnosticChangeEvent_populateFrom(this: DiagnosticChangeEvent, payload
     return true
 }
 
-function StatusBarItemProperties_populateFrom(this: StatusBarItemProperties, payload: any): boolean {
+function StatusBarItemState_populateFrom(this: StatusBarItemState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -5459,7 +5666,7 @@ function StatusBarItemProperties_populateFrom(this: StatusBarItemProperties, pay
     return true
 }
 
-function OutputChannelProperties_populateFrom(this: OutputChannelProperties, payload: any): boolean {
+function OutputChannelState_populateFrom(this: OutputChannelState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -5483,7 +5690,7 @@ function OutputChannelProperties_populateFrom(this: OutputChannelProperties, pay
     return true
 }
 
-function TextEditorDecorationTypeProperties_populateFrom(this: TextEditorDecorationTypeProperties, payload: any): boolean {
+function TextEditorDecorationTypeState_populateFrom(this: TextEditorDecorationTypeState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -5507,7 +5714,55 @@ function TextEditorDecorationTypeProperties_populateFrom(this: TextEditorDecorat
     return true
 }
 
-function InputBoxProperties_populateFrom(this: InputBoxProperties, payload: any): boolean {
+function QuickInputButton_populateFrom(this: QuickInputButton, payload: any): boolean {
+    let it: { [_: string]: any }
+    let ok: boolean
+    let val: any
+    [it, ok] = [payload as { [_: string]: any }, typeof payload === "object"]
+    if (!ok) {
+        return false
+    }
+    [val, ok] = [it["iconPath"], undefined !== it["iconPath"]]
+    if (ok) {
+        let iconPath: string
+        if ((undefined !== val && null !== val)) {
+            [iconPath, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.iconPath = iconPath
+    } else {
+        return false
+    }
+    [val, ok] = [it["tooltip"], undefined !== it["tooltip"]]
+    if (ok) {
+        let tooltip: string
+        if ((undefined !== val && null !== val)) {
+            let _tooltip_: string
+            [_tooltip_, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+            tooltip = _tooltip_
+        }
+        this.tooltip = tooltip
+    }
+    [val, ok] = [it["my"], undefined !== it["my"]]
+    if (ok) {
+        let my: { [_: string]: any }
+        if ((undefined !== val && null !== val)) {
+            [my, ok] = [val as { [_: string]: any }, typeof val === "object"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.my = my
+    }
+    return true
+}
+
+function InputBoxState_populateFrom(this: InputBoxState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -5548,34 +5803,6 @@ function InputBoxProperties_populateFrom(this: InputBoxProperties, payload: any)
         }
         this.password = password
     }
-    [val, ok] = [it["onDidChangeValue"], undefined !== it["onDidChangeValue"]]
-    if (ok) {
-        let onDidChangeValue: Event
-        if ((undefined !== val && null !== val)) {
-            onDidChangeValue = newEvent()
-            ok = onDidChangeValue.populateFrom(val)
-            if (!ok) {
-                return false
-            }
-        }
-        this.OnDidChangeValue = (): Event => {
-            return onDidChangeValue
-        }
-    }
-    [val, ok] = [it["onDidAccept"], undefined !== it["onDidAccept"]]
-    if (ok) {
-        let onDidAccept: Event
-        if ((undefined !== val && null !== val)) {
-            onDidAccept = newEvent()
-            ok = onDidAccept.populateFrom(val)
-            if (!ok) {
-                return false
-            }
-        }
-        this.OnDidAccept = (): Event => {
-            return onDidAccept
-        }
-    }
     [val, ok] = [it["buttons"], undefined !== it["buttons"]]
     if (ok) {
         let buttons: QuickInputButton[]
@@ -5600,20 +5827,6 @@ function InputBoxProperties_populateFrom(this: InputBoxProperties, payload: any)
             }
         }
         this.buttons = buttons
-    }
-    [val, ok] = [it["onDidTriggerButton"], undefined !== it["onDidTriggerButton"]]
-    if (ok) {
-        let onDidTriggerButton: Event
-        if ((undefined !== val && null !== val)) {
-            onDidTriggerButton = newEvent()
-            ok = onDidTriggerButton.populateFrom(val)
-            if (!ok) {
-                return false
-            }
-        }
-        this.OnDidTriggerButton = (): Event => {
-            return onDidTriggerButton
-        }
     }
     [val, ok] = [it["prompt"], undefined !== it["prompt"]]
     if (ok) {
@@ -5706,55 +5919,6 @@ function InputBoxProperties_populateFrom(this: InputBoxProperties, payload: any)
             }
         }
         this.ignoreFocusOut = ignoreFocusOut
-    }
-    [val, ok] = [it["onDidHide"], undefined !== it["onDidHide"]]
-    if (ok) {
-        let onDidHide: Event
-        if ((undefined !== val && null !== val)) {
-            onDidHide = newEvent()
-            ok = onDidHide.populateFrom(val)
-            if (!ok) {
-                return false
-            }
-        }
-        this.onDidHide = onDidHide
-    }
-    return true
-}
-
-function QuickInputButton_populateFrom(this: QuickInputButton, payload: any): boolean {
-    let it: { [_: string]: any }
-    let ok: boolean
-    let val: any
-    [it, ok] = [payload as { [_: string]: any }, typeof payload === "object"]
-    if (!ok) {
-        return false
-    }
-    [val, ok] = [it["iconPath"], undefined !== it["iconPath"]]
-    if (ok) {
-        let iconPath: string
-        if ((undefined !== val && null !== val)) {
-            [iconPath, ok] = [val as string, typeof val === "string"]
-            if (!ok) {
-                return false
-            }
-        }
-        this.iconPath = iconPath
-    } else {
-        return false
-    }
-    [val, ok] = [it["tooltip"], undefined !== it["tooltip"]]
-    if (ok) {
-        let tooltip: string
-        if ((undefined !== val && null !== val)) {
-            let _tooltip_: string
-            [_tooltip_, ok] = [val as string, typeof val === "string"]
-            if (!ok) {
-                return false
-            }
-            tooltip = _tooltip_
-        }
-        this.tooltip = tooltip
     }
     return true
 }

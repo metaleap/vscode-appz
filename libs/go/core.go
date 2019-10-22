@@ -125,7 +125,7 @@ func (me *impl) loopReadln() {
 					}
 				} else if cbevt != nil {
 					var args []any
-					fnargs, ok := inmsg.Data[""]
+					fnargs, ok := inmsg.Data["[]"]
 					if ok {
 						if args, ok = fnargs.([]any); ok {
 							ok = cbevt(args)
@@ -137,7 +137,7 @@ func (me *impl) loopReadln() {
 				} else if cbmisc != nil {
 					var args []any
 					var ret any
-					fnargs, ok := inmsg.Data[""]
+					fnargs, ok := inmsg.Data["[]"]
 					if ok {
 						if args, ok = fnargs.([]any); ok {
 							ret, ok = cbmisc(args)
@@ -169,7 +169,7 @@ func (me *impl) send(msg *ipcMsg, on func(any) bool) {
 	me.Unlock()
 	if err != nil {
 		if msg.QName != "" {
-			msg.Data[""] = msg.QName
+			msg.Data["#"] = msg.QName
 		}
 		OnError(me, err, msg.Data)
 	}

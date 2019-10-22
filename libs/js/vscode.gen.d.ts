@@ -467,6 +467,16 @@ export interface Window {
      * @return A new decoration type instance.
      */
     CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType) => void) => void;
+    /**
+     * Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
+     *
+     * Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+     * is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+     * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+
+     * @return A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
+     */
+    CreateInputBox: (_: (_: InputBox) => void) => void;
 }
 /**
  * Namespace describing the environment the editor runs in.
@@ -846,6 +856,138 @@ export interface Commands {
     GetCommands: (filterInternal: boolean) => (_: (_: string[]) => void) => void;
 }
 /**
+ * Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
+
+ */
+export interface ThemableDecorationRenderOptions {
+    /**
+     * Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+     * Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
+
+     */
+    backgroundColor?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    outline?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'outline' for setting one or more of the individual outline properties.
+
+     */
+    outlineColor?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'outline' for setting one or more of the individual outline properties.
+
+     */
+    outlineStyle?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'outline' for setting one or more of the individual outline properties.
+
+     */
+    outlineWidth?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    border?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderColor?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderRadius?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderSpacing?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderStyle?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+     * Better use 'border' for setting one or more of the individual border properties.
+
+     */
+    borderWidth?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    fontStyle?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    fontWeight?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    textDecoration?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    cursor?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    color?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    opacity?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    letterSpacing?: string;
+    /**
+     * An **absolute path** or an URI to an image to be rendered in the gutter.
+
+     */
+    gutterIconPath?: string;
+    /**
+     * Specifies the size of the gutter icon.
+     * Available values are 'auto', 'contain', 'cover' and any percentage value.
+     * For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+
+     */
+    gutterIconSize?: string;
+    /**
+     * The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.
+
+     */
+    overviewRulerColor?: string;
+    /**
+     * Defines the rendering options of the attachment that is inserted before the decorated text.
+
+     */
+    before?: ThemableDecorationAttachmentRenderOptions;
+    /**
+     * Defines the rendering options of the attachment that is inserted after the decorated text.
+
+     */
+    after?: ThemableDecorationAttachmentRenderOptions;
+}
+/**
  * Options to configure the behavior of the message.
 
  */
@@ -1185,8 +1327,8 @@ export interface StatusBarItem extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void;
-    Get: () => (_: (_: StatusBarItemProperties) => void) => void;
-    Set: (_: StatusBarItemProperties) => (_: () => void) => void;
+    Get: () => (_: (_: StatusBarItemState) => void) => void;
+    Set: (_: StatusBarItemState) => (_: () => void) => void;
 }
 /**
  * An output channel is a container for readonly textual information.
@@ -1233,7 +1375,75 @@ export interface OutputChannel extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void;
-    Get: () => (_: (_: OutputChannelProperties) => void) => void;
+    Get: () => (_: (_: OutputChannelState) => void) => void;
+}
+/**
+ * Type Definition for Visual Studio Code 1.39 Extension API
+ * See https://code.visualstudio.com/api for more information
+
+ */
+export interface ThemableDecorationAttachmentRenderOptions {
+    /**
+     * Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.
+
+     */
+    contentText?: string;
+    /**
+     * An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
+     * or a text can be shown, but not both.
+
+     */
+    contentIconPath?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    border?: string;
+    /**
+     * CSS styling property that will be applied to text enclosed by a decoration.
+
+     */
+    borderColor?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    fontStyle?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    fontWeight?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    textDecoration?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    color?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    backgroundColor?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    margin?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    width?: string;
+    /**
+     * CSS styling property that will be applied to the decoration attachment.
+
+     */
+    height?: string;
 }
 /**
  * Represents rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
@@ -1267,12 +1477,6 @@ export interface DecorationRenderOptions {
 
      */
     dark?: ThemableDecorationRenderOptions;
-}
-/**
- * Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
-
- */
-export interface ThemableDecorationRenderOptions {
     /**
      * Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
      * Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
@@ -1401,74 +1605,6 @@ export interface ThemableDecorationRenderOptions {
     after?: ThemableDecorationAttachmentRenderOptions;
 }
 /**
- * Type Definition for Visual Studio Code 1.39 Extension API
- * See https://code.visualstudio.com/api for more information
-
- */
-export interface ThemableDecorationAttachmentRenderOptions {
-    /**
-     * Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.
-
-     */
-    contentText?: string;
-    /**
-     * An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
-     * or a text can be shown, but not both.
-
-     */
-    contentIconPath?: string;
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    border?: string;
-    /**
-     * CSS styling property that will be applied to text enclosed by a decoration.
-
-     */
-    borderColor?: string;
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    fontStyle?: string;
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    fontWeight?: string;
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    textDecoration?: string;
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    color?: string;
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    backgroundColor?: string;
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    margin?: string;
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    width?: string;
-    /**
-     * CSS styling property that will be applied to the decoration attachment.
-
-     */
-    height?: string;
-}
-/**
  * Represents a handle to a set of decorations
  * sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
  *
@@ -1482,8 +1618,89 @@ export interface TextEditorDecorationType extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void;
-    Get: () => (_: (_: TextEditorDecorationTypeProperties) => void) => void;
+    Get: () => (_: (_: TextEditorDecorationTypeState) => void) => void;
 }
+/**
+ * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+ *
+ * Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+ * is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+ * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+
+ */
+export interface InputBox extends fromJson, withDisp {
+    /**
+     * An event signaling when the value has changed.
+
+     */
+    OnDidChangeValue: (_: (_: string) => void) => (_: (_: Disposable) => void) => void;
+    /**
+     * An event signaling when the user indicated acceptance of the input value.
+
+     */
+    OnDidAccept: (_: () => void) => (_: (_: Disposable) => void) => void;
+    /**
+     * An event signaling when a button was triggered.
+
+     */
+    OnDidTriggerButton: (_: (_: QuickInputButton) => void) => (_: (_: Disposable) => void) => void;
+    /**
+     * Makes the input UI visible in its current configuration. Any other input
+     * UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+
+     */
+    Show: () => (_: () => void) => void;
+    /**
+     * Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+     * event.
+
+     */
+    Hide: () => (_: () => void) => void;
+    /**
+     * An event signaling when this input UI is hidden.
+     *
+     * There are several reasons why this UI might have to be hidden and
+     * the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+     * (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+     * the user pressing Esc, some other input UI opening, etc.)
+
+     */
+    OnDidHide: (_: () => void) => (_: (_: Disposable) => void) => void;
+    /**
+     * Dispose of this input UI and any associated resources. If it is still
+     * visible, it is first hidden. After this call the input UI is no longer
+     * functional and no additional methods or properties on it should be
+     * accessed. Instead a new input UI should be created.
+
+     */
+    Dispose: () => (_: () => void) => void;
+    Get: () => (_: (_: InputBoxState) => void) => void;
+    Set: (_: InputBoxState) => (_: () => void) => void;
+}
+/**
+ * Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
+
+ */
+export interface QuickInputButton extends fromJson {
+    /**
+     * Icon for the button.
+
+     */
+    iconPath: string;
+    /**
+     * An optional tooltip.
+
+     */
+    tooltip?: string;
+    /**
+     * Free-form custom data, preserved across a roundtrip.
+
+     */
+    my?: {
+        [_: string]: any;
+    };
+}
+export declare function newQuickInputButton(): QuickInputButton;
 /**
  * An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).
 
@@ -1629,7 +1846,7 @@ export interface WorkspaceProperties extends fromJson {
  * show text and icons and run a command on click.
 
  */
-export interface StatusBarItemProperties extends fromJson {
+export interface StatusBarItemState extends fromJson {
     /**
      * The alignment of this item.
 
@@ -1668,7 +1885,7 @@ export interface StatusBarItemProperties extends fromJson {
      */
     command?: string;
 }
-export declare function newStatusBarItemProperties(): StatusBarItemProperties;
+export declare function newStatusBarItemState(): StatusBarItemState;
 /**
  * An output channel is a container for readonly textual information.
  *
@@ -1676,14 +1893,14 @@ export declare function newStatusBarItemProperties(): StatusBarItemProperties;
  * [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 
  */
-export interface OutputChannelProperties extends fromJson {
+export interface OutputChannelState extends fromJson {
     /**
      * The human-readable name of this output channel.
 
      */
     Name: () => string;
 }
-export declare function newOutputChannelProperties(): OutputChannelProperties;
+export declare function newOutputChannelState(): OutputChannelState;
 /**
  * Represents a handle to a set of decorations
  * sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
@@ -1692,14 +1909,91 @@ export declare function newOutputChannelProperties(): OutputChannelProperties;
  * [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 
  */
-export interface TextEditorDecorationTypeProperties extends fromJson {
+export interface TextEditorDecorationTypeState extends fromJson {
     /**
      * Internal representation of the handle.
 
      */
     Key: () => string;
 }
-export declare function newTextEditorDecorationTypeProperties(): TextEditorDecorationTypeProperties;
+export declare function newTextEditorDecorationTypeState(): TextEditorDecorationTypeState;
+/**
+ * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
+ *
+ * Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
+ * is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
+ * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+
+ */
+export interface InputBoxState extends fromJson {
+    /**
+     * Current input value.
+
+     */
+    value?: string;
+    /**
+     * Optional placeholder in the filter text.
+
+     */
+    placeholder?: string;
+    /**
+     * If the input value should be hidden. Defaults to false.
+
+     */
+    password?: boolean;
+    /**
+     * Buttons for actions in the UI.
+
+     */
+    buttons?: QuickInputButton[];
+    /**
+     * An optional prompt text providing some ask or explanation to the user.
+
+     */
+    prompt?: string;
+    /**
+     * An optional validation message indicating a problem with the current input value.
+
+     */
+    validationMessage?: string;
+    /**
+     * An optional title.
+
+     */
+    title?: string;
+    /**
+     * An optional current step count.
+
+     */
+    step?: number;
+    /**
+     * An optional total step count.
+
+     */
+    totalSteps?: number;
+    /**
+     * If the UI should allow for user input. Defaults to true.
+     *
+     * Change this to false, e.g., while validating user input or
+     * loading data for the next step in user input.
+
+     */
+    enabled?: boolean;
+    /**
+     * If the UI should show a progress indicator. Defaults to false.
+     *
+     * Change this to true, e.g., while loading more data or validating
+     * user input.
+
+     */
+    busy?: boolean;
+    /**
+     * If the UI should stay open even when loosing UI focus. Defaults to false.
+
+     */
+    ignoreFocusOut?: boolean;
+}
+export declare function newInputBoxState(): InputBoxState;
 export declare abstract class impl implements Vscode {
     Window: Window;
     Env: Env;

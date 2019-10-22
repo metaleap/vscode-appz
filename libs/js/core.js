@@ -46,7 +46,7 @@ class impl extends vscgen.impl {
         }
         catch (err) {
             if (msg.QName && msg.QName.length)
-                msg.Data[""] = msg.QName;
+                msg.Data["#"] = msg.QName;
             appz.OnError(this, err, msg);
         }
     }
@@ -83,14 +83,14 @@ class impl extends vscgen.impl {
                                     throw "unexpected args: " + JSON.stringify(yay);
                             }
                             else if (cbevt) {
-                                const fnargs = inmsg.Data[''];
+                                const fnargs = inmsg.Data['[]'];
                                 const args = fnargs;
                                 if (args === undefined || args === null
                                     || !cbevt(args))
                                     throw "unexpected args: " + JSON.stringify(fnargs);
                             }
                             else if (cbmisc) {
-                                const fnargs = inmsg.Data[''];
+                                const fnargs = inmsg.Data['[]'];
                                 const args = fnargs;
                                 let ret;
                                 let ok = (args !== undefined && args !== null);
