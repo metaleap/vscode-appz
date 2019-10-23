@@ -72,8 +72,8 @@ namespace VscAppzDemo {
 
         private static string strFmt(string s , params object[] args)=>
             string.Format(s,args);
-        private static string strLo(string s) => s.ToLower();
-        private static string strUp(string s) => s.ToUpper();
+        private static string strLo(string s) => s==null ? "" : s.ToLower();
+        private static string strUp(string s) => s==null ? "" : s.ToUpper();
 
     }
 

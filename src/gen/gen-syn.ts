@@ -15,7 +15,7 @@ export interface TEnum extends WithDocs, WithName, WithFrom<gen.PrepEnum> { Enum
 export interface TInterface extends WithDocs, WithName, WithFrom<gen.PrepInterface> { Methods: Method[], IsTop?: boolean }
 export interface Enumerant extends WithDocs, WithName, WithFrom<gen.PrepEnumerant> { Value: number }
 export interface TStruct extends WithDocs, WithName, WithFrom<gen.PrepStruct> { Fields: Field[], IsOutgoing: boolean, IsIncoming: boolean, OutgoingTwin?: string }
-export interface Method extends WithDocs, WithName, WithType, WithFrom<gen.PrepMethod> { Args: Arg[], IsSubNs?: boolean, IsObjEvt?: boolean }
+export interface Method extends WithDocs, WithName, WithType, WithFrom<gen.PrepMethod> { Args: Arg[], IsSubNs?: boolean, IsObjEvt?: boolean, IsObjCtor?: string }
 export interface Arg extends WithDocs, WithName, WithType, WithFrom<gen.PrepArg> { }
 export interface Field extends WithDocs, WithName, WithType, WithFrom<gen.PrepField> {
     FuncFieldRel?: Field, Json?: { Excluded: boolean, Name: string, Required: boolean }
@@ -231,6 +231,19 @@ export class Builder {
                     Type: null,
                     Args: method.args.map((arg: gen.PrepArg): Arg => this.fromArg(arg, method)),
                 }
+                if (me.Args.length) {
+                    const tf = this.gen.typeUnMaybe(me.Args[me.Args.length - 1].Type) as TypeRefFunc
+                    if (tf.From && tf.From.length) {
+                        const tn = this.gen.typeUnMaybe(tf.From[0]) as TypeRefOwn
+                        if (tn && tn.Name && tn.Name.length) {
+                            const struct = this.prep.structs.find(_ => this.gen.nameRewriters.types.structs(_.name) === tn.Name)
+                            if (struct && struct.isDispObj) {
+                                me.IsObjCtor = tn.Name
+                                me.Args[me.Args.length - 1].Type = { From: [tn, { Name: tn.Name + "State" }], To: null }
+                            }
+                        }
+                    }
+                }
                 me.Type = { From: [this.gen.typeUnMaybe(me.Args[me.Args.length - 1].Type)], To: null }
                 me.Args = me.Args.slice(0, me.Args.length - 1)
                 return me
@@ -261,7 +274,6 @@ export class Builder {
             IsIncoming: it.isIncoming ? true : false,
             Fields: it.isDispObj ? [
                 { Name: "disp", Type: { Maybe: { Name: "Disposable" } } },
-                { Name: "nextUpd", Type: { Maybe: { Name: structname + "State" } } },
             ] : it.fields.map((_: gen.PrepField): Field => ({
                 fromPrep: _,
                 name: _.name,
@@ -924,7 +936,7 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     private genMethodImpl_ObjMethodCall(struct: TypeRefOwn, method: Method, _: Builder, body: Instr[]) {
-        if (method.Name === 'Dispose')
+        if (method.Name === "Dispose")
             body.push(
                 _.iRet(_.eCall(_.oDot(_.eThis(), _.n("disp"), _.n("Dispose")))),
             )
@@ -940,7 +952,7 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     private genMethodImpl_methodCall(ifaceOrStruct: TypeRefOwn, method: Method, _: Builder, body: Instr[], idVal?: Expr, impl?: Expr) {
-        const __ = gen.idents(method.fromPrep ? method.fromPrep.args : [], 'msg', 'onresp', 'onret', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok', 'ret')
+        const __ = gen.idents(method.fromPrep ? method.fromPrep.args : [], 'msg', 'onresp', 'onret', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok', 'ret', 'state')
         const funcfields = method.fromPrep ? gen.argsFuncFields(_.prep, method.fromPrep.args) : []
         const numargs = method.fromPrep ? method.fromPrep.args.filter(_ => !_.isFromRetThenable).length : method.Args.length
 
@@ -1062,8 +1074,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             )
         }
 
-        if ((!method.Type) || (method.Type as TypeRefFunc).From.length !== 1 || (method.Type as TypeRefFunc).To
-            || ((method.Type as TypeRefFunc).From[0] as TypeRefFunc).From.length !== 1 || ((method.Type as TypeRefFunc).From[0] as TypeRefFunc).To)
+        if ((!method.Type) || (method.Type as TypeRefFunc).From.length !== 1 || (method.Type as TypeRefFunc).To || ((method.Type as TypeRefFunc).From[0] as TypeRefFunc).To)
             throw method.Type
         const rettype = ((method.Type as TypeRefFunc).From[0] as TypeRefFunc).From[0]
         const isdisp = this.typeOwnOf(rettype, "Disposable")
@@ -1139,9 +1150,17 @@ export class Gen extends gen.Gen implements gen.IGen {
                     ),
                     _.WHEN(isdisp, () => [_.iIf(_.oIs(_.n(__.onret)), [
                         _.eCall(_.n(__.onret), _.eCall(_.oDot(_.n(__.result), _.n('bind')), ...[impl].concat(...evtsubfnids.map(fnid => _.n(fnid))))),
-                    ])], () => [_.iIf(_.oIs(_.n(__.onret)), [
-                        _.eCall(_.n(__.onret), _.n(__.result)),
-                    ])])[0],
+                    ])], () => (method.IsObjCtor && method.IsObjCtor.length) ? [
+                        _.eCall(_.eCall(_.oDot(_.n(__.result), _.n("Get"))), _.eFunc([{ Name: __.state, Type: { Name: method.IsObjCtor + "State" } }], null,
+                            _.iIf(_.oIs(_.n(__.onret)), [
+                                _.eCall(_.n(__.onret), _.n(__.result), _.n(__.state)),
+                            ]),
+                        )),
+                    ] : [
+                            _.iIf(_.oIs(_.n(__.onret)), [
+                                _.eCall(_.n(__.onret), _.n(__.result)),
+                            ]),
+                        ])[0],
                     _.iRet(_.eLit(true)),
                 ], () => [
                     _.iIf(_.oIs(_.n(__.payload)), [_.iRet(_.eLit(false))]),
@@ -1314,9 +1333,16 @@ export class Gen extends gen.Gen implements gen.IGen {
                         const prepargs = isevt
                             ? [{ name: "handler", optional: false, typeSpec: (field.typeSpec as gen.TypeSpecFun).From[0] }]
                             : (tfun[0].map((_, i): gen.PrepArg => gen.argFrom(_, (orig as ts.MethodSignature).parameters[i])))
+                        if (isevt) {
+                            const tf = gen.typeFun(prepargs[0].typeSpec)
+                            if (tf)
+                                prepargs[0].typeSpec = { From: tf[0].concat(struct.Name + "State"), To: tf[1] }
+                        }
                         let tret = tfun[1]
                         if (!gen.typeProm(tret))
-                            tret = { Thens: [tret] }
+                            if (field.name !== "dispose" && !tret)
+                                tret = struct.Name + "State"
+                        tret = { Thens: [tret] }
                         prepargs.push({ name: "onDone", isFromRetThenable: true, optional: true, typeSpec: tret })
                         const me: Method = {
                             name: field.name, Name: this.nameRewriters.methods(field.name),

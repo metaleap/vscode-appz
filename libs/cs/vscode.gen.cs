@@ -576,7 +576,7 @@ namespace VscAppz {
 		/// <param name="alignment">The alignment of the item.</param>
 		/// <param name="priority">The priority of the item. Higher values mean the item should be shown more to the left.</param>
 		/// <return>A new status bar item.</return>
-		Action<Action<StatusBarItem>> CreateStatusBarItem(StatusBarAlignment? alignment = default, int? priority = default);
+		Action<Action<StatusBarItem, StatusBarItemState>> CreateStatusBarItem(StatusBarAlignment? alignment = default, int? priority = default);
 
 		/// <summary>
 		/// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
@@ -584,7 +584,7 @@ namespace VscAppz {
 		/// `name` ── Human-readable string which will be used to represent the channel in the UI.
 		/// </summary>
 		/// <param name="name">Human-readable string which will be used to represent the channel in the UI.</param>
-		Action<Action<OutputChannel>> CreateOutputChannel(string name = default);
+		Action<Action<OutputChannel, OutputChannelState>> CreateOutputChannel(string name = default);
 
 		/// <summary>
 		/// Create a TextEditorDecorationType that can be used to add decorations to text editors.
@@ -595,7 +595,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="options">Rendering options for the decoration type.</param>
 		/// <return>A new decoration type instance.</return>
-		Action<Action<TextEditorDecorationType>> CreateTextEditorDecorationType(DecorationRenderOptions options = default);
+		Action<Action<TextEditorDecorationType, TextEditorDecorationTypeState>> CreateTextEditorDecorationType(DecorationRenderOptions options = default);
 
 		/// <summary>
 		/// Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
@@ -607,7 +607,20 @@ namespace VscAppz {
 		/// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
 		/// </summary>
 		/// <return>A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).</return>
-		Action<Action<InputBox>> CreateInputBox();
+		Action<Action<InputBox, InputBoxState>> CreateInputBox();
+
+		/// <summary>
+		/// Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
+		/// of items of type T.
+		/// 
+		/// Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+		/// is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+		/// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+		/// 
+		/// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
+		/// </summary>
+		/// <return>A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).</return>
+		Action<Action<QuickPick, QuickPickState>> CreateQuickPick();
 	}
 
 	/// <summary>Namespace describing the environment the editor runs in.</summary>
@@ -1411,8 +1424,6 @@ namespace VscAppz {
 	/// </summary>
 	public partial class StatusBarItem {
 		internal Disposable disp;
-
-		internal StatusBarItemState nextUpd;
 	}
 
 	/// <summary>
@@ -1423,8 +1434,6 @@ namespace VscAppz {
 	/// </summary>
 	public partial class OutputChannel {
 		internal Disposable disp;
-
-		internal OutputChannelState nextUpd;
 	}
 
 	/// <summary>
@@ -1645,8 +1654,6 @@ namespace VscAppz {
 	/// </summary>
 	public partial class TextEditorDecorationType {
 		internal Disposable disp;
-
-		internal TextEditorDecorationTypeState nextUpd;
 	}
 
 	/// <summary>
@@ -1658,8 +1665,6 @@ namespace VscAppz {
 	/// </summary>
 	public partial class InputBox {
 		internal Disposable disp;
-
-		internal InputBoxState nextUpd;
 	}
 
 	/// <summary>Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).</summary>
@@ -1675,6 +1680,20 @@ namespace VscAppz {
 		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
 		[JsonProperty("my")]
 		public dict My;
+	}
+
+	/// <summary>
+	/// A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
+	/// list of items of type T. The items can be filtered through a filter text field and
+	/// there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
+	/// selecting multiple items.
+	/// 
+	/// Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+	/// is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+	/// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+	/// </summary>
+	public partial class QuickPick {
+		internal Disposable disp;
 	}
 
 	/// <summary>An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).</summary>
@@ -1904,6 +1923,88 @@ namespace VscAppz {
 		/// <summary>An optional validation message indicating a problem with the current input value.</summary>
 		[JsonProperty("validationMessage")]
 		public string ValidationMessage;
+
+		/// <summary>An optional title.</summary>
+		[JsonProperty("title")]
+		public string Title;
+
+		/// <summary>An optional current step count.</summary>
+		[JsonProperty("step")]
+		public int? Step;
+
+		/// <summary>An optional total step count.</summary>
+		[JsonProperty("totalSteps")]
+		public int? TotalSteps;
+
+		/// <summary>
+		/// If the UI should allow for user input. Defaults to true.
+		/// 
+		/// Change this to false, e.g., while validating user input or
+		/// loading data for the next step in user input.
+		/// </summary>
+		[JsonProperty("enabled")]
+		public bool Enabled;
+
+		/// <summary>
+		/// If the UI should show a progress indicator. Defaults to false.
+		/// 
+		/// Change this to true, e.g., while loading more data or validating
+		/// user input.
+		/// </summary>
+		[JsonProperty("busy")]
+		public bool Busy;
+
+		/// <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
+		[JsonProperty("ignoreFocusOut")]
+		public bool IgnoreFocusOut;
+	}
+
+	/// <summary>
+	/// A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
+	/// list of items of type T. The items can be filtered through a filter text field and
+	/// there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
+	/// selecting multiple items.
+	/// 
+	/// Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+	/// is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+	/// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+	/// </summary>
+	public partial class QuickPickState {
+		/// <summary>Current value of the filter text.</summary>
+		[JsonProperty("value")]
+		public string Value;
+
+		/// <summary>Optional placeholder in the filter text.</summary>
+		[JsonProperty("placeholder")]
+		public string Placeholder;
+
+		/// <summary>Buttons for actions in the UI.</summary>
+		[JsonProperty("buttons")]
+		public QuickInputButton[] Buttons;
+
+		/// <summary>Items to pick from.</summary>
+		[JsonProperty("items")]
+		public QuickPickItem[] Items;
+
+		/// <summary>If multiple items can be selected at the same time. Defaults to false.</summary>
+		[JsonProperty("canSelectMany")]
+		public bool CanSelectMany;
+
+		/// <summary>If the filter text should also be matched against the description of the items. Defaults to false.</summary>
+		[JsonProperty("matchOnDescription")]
+		public bool MatchOnDescription;
+
+		/// <summary>If the filter text should also be matched against the detail of the items. Defaults to false.</summary>
+		[JsonProperty("matchOnDetail")]
+		public bool MatchOnDetail;
+
+		/// <summary>Active items. This can be read and updated by the extension.</summary>
+		[JsonProperty("activeItems")]
+		public QuickPickItem[] ActiveItems;
+
+		/// <summary>Selected items. This can be read and updated by the extension.</summary>
+		[JsonProperty("selectedItems")]
+		public QuickPickItem[] SelectedItems;
 
 		/// <summary>An optional title.</summary>
 		[JsonProperty("title")]
@@ -3007,7 +3108,7 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<StatusBarItem>> IWindow.CreateStatusBarItem(StatusBarAlignment? alignment, int? priority) {
+		Action<Action<StatusBarItem, StatusBarItemState>> IWindow.CreateStatusBarItem(StatusBarAlignment? alignment, int? priority) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createStatusBarItem";
@@ -3019,7 +3120,7 @@ namespace VscAppz {
 				msg.Data["priority"] = priority;
 			}
 			Func<any, bool> onresp = default;
-			Action<StatusBarItem> onret = default;
+			Action<StatusBarItem, StatusBarItemState> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
 				StatusBarItem result = default;
@@ -3031,25 +3132,27 @@ namespace VscAppz {
 					}
 					result.disp.impl = this.Impl();
 				}
-				if ((null != onret)) {
-					onret(result);
-				}
+				result.Get()((StatusBarItemState state) => {
+					if ((null != onret)) {
+						onret(result, state);
+					}
+				});
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<StatusBarItem> a0) => {
+			return (Action<StatusBarItem, StatusBarItemState> a0) => {
 				onret = a0;
 			};
 		}
 
-		Action<Action<OutputChannel>> IWindow.CreateOutputChannel(string name) {
+		Action<Action<OutputChannel, OutputChannelState>> IWindow.CreateOutputChannel(string name) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createOutputChannel";
 			msg.Data = new dict(1);
 			msg.Data["name"] = name;
 			Func<any, bool> onresp = default;
-			Action<OutputChannel> onret = default;
+			Action<OutputChannel, OutputChannelState> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
 				OutputChannel result = default;
@@ -3061,25 +3164,27 @@ namespace VscAppz {
 					}
 					result.disp.impl = this.Impl();
 				}
-				if ((null != onret)) {
-					onret(result);
-				}
+				result.Get()((OutputChannelState state) => {
+					if ((null != onret)) {
+						onret(result, state);
+					}
+				});
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<OutputChannel> a0) => {
+			return (Action<OutputChannel, OutputChannelState> a0) => {
 				onret = a0;
 			};
 		}
 
-		Action<Action<TextEditorDecorationType>> IWindow.CreateTextEditorDecorationType(DecorationRenderOptions options) {
+		Action<Action<TextEditorDecorationType, TextEditorDecorationTypeState>> IWindow.CreateTextEditorDecorationType(DecorationRenderOptions options) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createTextEditorDecorationType";
 			msg.Data = new dict(1);
 			msg.Data["options"] = options;
 			Func<any, bool> onresp = default;
-			Action<TextEditorDecorationType> onret = default;
+			Action<TextEditorDecorationType, TextEditorDecorationTypeState> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
 				TextEditorDecorationType result = default;
@@ -3091,24 +3196,26 @@ namespace VscAppz {
 					}
 					result.disp.impl = this.Impl();
 				}
-				if ((null != onret)) {
-					onret(result);
-				}
+				result.Get()((TextEditorDecorationTypeState state) => {
+					if ((null != onret)) {
+						onret(result, state);
+					}
+				});
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<TextEditorDecorationType> a0) => {
+			return (Action<TextEditorDecorationType, TextEditorDecorationTypeState> a0) => {
 				onret = a0;
 			};
 		}
 
-		Action<Action<InputBox>> IWindow.CreateInputBox() {
+		Action<Action<InputBox, InputBoxState>> IWindow.CreateInputBox() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createInputBox";
 			msg.Data = new dict(0);
 			Func<any, bool> onresp = default;
-			Action<InputBox> onret = default;
+			Action<InputBox, InputBoxState> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
 				InputBox result = default;
@@ -3120,13 +3227,46 @@ namespace VscAppz {
 					}
 					result.disp.impl = this.Impl();
 				}
-				if ((null != onret)) {
-					onret(result);
-				}
+				result.Get()((InputBoxState state) => {
+					if ((null != onret)) {
+						onret(result, state);
+					}
+				});
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<InputBox> a0) => {
+			return (Action<InputBox, InputBoxState> a0) => {
+				onret = a0;
+			};
+		}
+
+		Action<Action<QuickPick, QuickPickState>> IWindow.CreateQuickPick() {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.createQuickPick";
+			msg.Data = new dict(0);
+			Func<any, bool> onresp = default;
+			Action<QuickPick, QuickPickState> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				QuickPick result = default;
+				if ((null != payload)) {
+					result = new QuickPick();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+					result.disp.impl = this.Impl();
+				}
+				result.Get()((QuickPickState state) => {
+					if ((null != onret)) {
+						onret(result, state);
+					}
+				});
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<QuickPick, QuickPickState> a0) => {
 				onret = a0;
 			};
 		}
@@ -4048,25 +4188,31 @@ namespace VscAppz {
 
 	public partial class StatusBarItem {
 		/// <summary>Shows the entry in the status bar.</summary>
-		public Action<Action> Show() {
+		public Action<Action<StatusBarItemState>> Show() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.show";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action onret = default;
+			Action<StatusBarItemState> onret = default;
 			onresp = (any payload) => {
+				bool ok = default;
+				StatusBarItemState result = default;
 				if ((null != payload)) {
-					return false;
+					result = new StatusBarItemState();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
 				}
 				if ((null != onret)) {
-					onret();
+					onret(result);
 				}
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action a0) => {
+			return (Action<StatusBarItemState> a0) => {
 				onret = a0;
 			};
 		}
@@ -4074,25 +4220,31 @@ namespace VscAppz {
 
 	public partial class StatusBarItem {
 		/// <summary>Hide the entry in the status bar.</summary>
-		public Action<Action> Hide() {
+		public Action<Action<StatusBarItemState>> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.hide";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action onret = default;
+			Action<StatusBarItemState> onret = default;
 			onresp = (any payload) => {
+				bool ok = default;
+				StatusBarItemState result = default;
 				if ((null != payload)) {
-					return false;
+					result = new StatusBarItemState();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
 				}
 				if ((null != onret)) {
-					onret();
+					onret(result);
 				}
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action a0) => {
+			return (Action<StatusBarItemState> a0) => {
 				onret = a0;
 			};
 		}
@@ -4176,7 +4328,7 @@ namespace VscAppz {
 		/// `value` ── A string, falsy values will not be printed.
 		/// </summary>
 		/// <param name="value">A string, falsy values will not be printed.</param>
-		public Action<Action> Append(string value = default) {
+		public Action<Action<OutputChannelState>> Append(string value = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.append";
@@ -4184,18 +4336,24 @@ namespace VscAppz {
 			msg.Data[""] = this.disp.id;
 			msg.Data["value"] = value;
 			Func<any, bool> onresp = default;
-			Action onret = default;
+			Action<OutputChannelState> onret = default;
 			onresp = (any payload) => {
+				bool ok = default;
+				OutputChannelState result = default;
 				if ((null != payload)) {
-					return false;
+					result = new OutputChannelState();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
 				}
 				if ((null != onret)) {
-					onret();
+					onret(result);
 				}
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action a0) => {
+			return (Action<OutputChannelState> a0) => {
 				onret = a0;
 			};
 		}
@@ -4209,7 +4367,7 @@ namespace VscAppz {
 		/// `value` ── A string, falsy values will be printed.
 		/// </summary>
 		/// <param name="value">A string, falsy values will be printed.</param>
-		public Action<Action> AppendLine(string value = default) {
+		public Action<Action<OutputChannelState>> AppendLine(string value = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.appendLine";
@@ -4217,18 +4375,24 @@ namespace VscAppz {
 			msg.Data[""] = this.disp.id;
 			msg.Data["value"] = value;
 			Func<any, bool> onresp = default;
-			Action onret = default;
+			Action<OutputChannelState> onret = default;
 			onresp = (any payload) => {
+				bool ok = default;
+				OutputChannelState result = default;
 				if ((null != payload)) {
-					return false;
+					result = new OutputChannelState();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
 				}
 				if ((null != onret)) {
-					onret();
+					onret(result);
 				}
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action a0) => {
+			return (Action<OutputChannelState> a0) => {
 				onret = a0;
 			};
 		}
@@ -4236,25 +4400,31 @@ namespace VscAppz {
 
 	public partial class OutputChannel {
 		/// <summary>Removes all output from the channel.</summary>
-		public Action<Action> Clear() {
+		public Action<Action<OutputChannelState>> Clear() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.clear";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action onret = default;
+			Action<OutputChannelState> onret = default;
 			onresp = (any payload) => {
+				bool ok = default;
+				OutputChannelState result = default;
 				if ((null != payload)) {
-					return false;
+					result = new OutputChannelState();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
 				}
 				if ((null != onret)) {
-					onret();
+					onret(result);
 				}
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action a0) => {
+			return (Action<OutputChannelState> a0) => {
 				onret = a0;
 			};
 		}
@@ -4267,7 +4437,7 @@ namespace VscAppz {
 		/// `preserveFocus` ── When `true` the channel will not take focus.
 		/// </summary>
 		/// <param name="preserveFocus">When `true` the channel will not take focus.</param>
-		public Action<Action> Show(bool preserveFocus = default) {
+		public Action<Action<OutputChannelState>> Show(bool preserveFocus = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.show";
@@ -4275,18 +4445,24 @@ namespace VscAppz {
 			msg.Data[""] = this.disp.id;
 			msg.Data["preserveFocus"] = preserveFocus;
 			Func<any, bool> onresp = default;
-			Action onret = default;
+			Action<OutputChannelState> onret = default;
 			onresp = (any payload) => {
+				bool ok = default;
+				OutputChannelState result = default;
 				if ((null != payload)) {
-					return false;
+					result = new OutputChannelState();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
 				}
 				if ((null != onret)) {
-					onret();
+					onret(result);
 				}
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action a0) => {
+			return (Action<OutputChannelState> a0) => {
 				onret = a0;
 			};
 		}
@@ -4294,25 +4470,31 @@ namespace VscAppz {
 
 	public partial class OutputChannel {
 		/// <summary>Hide this channel from the UI.</summary>
-		public Action<Action> Hide() {
+		public Action<Action<OutputChannelState>> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.hide";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action onret = default;
+			Action<OutputChannelState> onret = default;
 			onresp = (any payload) => {
+				bool ok = default;
+				OutputChannelState result = default;
 				if ((null != payload)) {
-					return false;
+					result = new OutputChannelState();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
 				}
 				if ((null != onret)) {
-					onret();
+					onret(result);
 				}
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action a0) => {
+			return (Action<OutputChannelState> a0) => {
 				onret = a0;
 			};
 		}
@@ -4402,7 +4584,7 @@ namespace VscAppz {
 
 	public partial class InputBox {
 		/// <summary>An event signaling when the value has changed.</summary>
-		public Action<Action<Disposable>> OnDidChangeValue(Action<string> handler = default) {
+		public Action<Action<Disposable>> OnDidChangeValue(Action<string, InputBoxState> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.onDidChangeValue";
@@ -4415,7 +4597,7 @@ namespace VscAppz {
 			}
 			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
 				bool ok = default;
-				if (1 != args.Length) {
+				if (2 != args.Length) {
 					return ok;
 				}
 				string _a_0_ = default;
@@ -4423,7 +4605,13 @@ namespace VscAppz {
 				if (!ok) {
 					return false;
 				}
-				handler(_a_0_);
+				InputBoxState _a_1_ = default;
+				_a_1_ = new InputBoxState();
+				ok = _a_1_.populateFrom(args[1]);
+				if (!ok) {
+					return false;
+				}
+				handler(_a_0_, _a_1_);
 				return true;
 			}, null);
 			msg.Data["handler"] = _fnid_handler;
@@ -4455,7 +4643,7 @@ namespace VscAppz {
 
 	public partial class InputBox {
 		/// <summary>An event signaling when the user indicated acceptance of the input value.</summary>
-		public Action<Action<Disposable>> OnDidAccept(Action handler = default) {
+		public Action<Action<Disposable>> OnDidAccept(Action<InputBoxState> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.onDidAccept";
@@ -4468,59 +4656,11 @@ namespace VscAppz {
 			}
 			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
 				bool ok = default;
-				if (0 != args.Length) {
-					return ok;
-				}
-				handler();
-				return true;
-			}, null);
-			msg.Data["handler"] = _fnid_handler;
-			Func<any, bool> onresp = default;
-			Action<Disposable> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				Disposable result = default;
-				if ((null != payload)) {
-					result = new Disposable();
-					ok = result.populateFrom(payload);
-					if (!ok) {
-						return false;
-					}
-				} else {
-					return false;
-				}
-				if ((null != onret)) {
-					onret(result.bind(this.disp.impl, _fnid_handler));
-				}
-				return true;
-			};
-			this.disp.impl.send(msg, onresp);
-			return (Action<Disposable> a0) => {
-				onret = a0;
-			};
-		}
-	}
-
-	public partial class InputBox {
-		/// <summary>An event signaling when a button was triggered.</summary>
-		public Action<Action<Disposable>> OnDidTriggerButton(Action<QuickInputButton> handler = default) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "InputBox.onDidTriggerButton";
-			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
-			string _fnid_handler = default;
-			if ((null == handler)) {
-				OnError(this.disp.impl, "InputBox.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
-				return null;
-			}
-			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
-				bool ok = default;
 				if (1 != args.Length) {
 					return ok;
 				}
-				QuickInputButton _a_0_ = default;
-				_a_0_ = new QuickInputButton();
+				InputBoxState _a_0_ = default;
+				_a_0_ = new InputBoxState();
 				ok = _a_0_.populateFrom(args[0]);
 				if (!ok) {
 					return false;
@@ -4556,29 +4696,95 @@ namespace VscAppz {
 	}
 
 	public partial class InputBox {
+		/// <summary>An event signaling when a button was triggered.</summary>
+		public Action<Action<Disposable>> OnDidTriggerButton(Action<QuickInputButton, InputBoxState> handler = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "InputBox.onDidTriggerButton";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.disp.id;
+			string _fnid_handler = default;
+			if ((null == handler)) {
+				OnError(this.disp.impl, "InputBox.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				return null;
+			}
+			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+				bool ok = default;
+				if (2 != args.Length) {
+					return ok;
+				}
+				QuickInputButton _a_0_ = default;
+				_a_0_ = new QuickInputButton();
+				ok = _a_0_.populateFrom(args[0]);
+				if (!ok) {
+					return false;
+				}
+				InputBoxState _a_1_ = default;
+				_a_1_ = new InputBoxState();
+				ok = _a_1_.populateFrom(args[1]);
+				if (!ok) {
+					return false;
+				}
+				handler(_a_0_, _a_1_);
+				return true;
+			}, null);
+			msg.Data["handler"] = _fnid_handler;
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.disp.impl, _fnid_handler));
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class InputBox {
 		/// <summary>
 		/// Makes the input UI visible in its current configuration. Any other input
 		/// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 		/// </summary>
-		public Action<Action> Show() {
+		public Action<Action<InputBoxState>> Show() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.show";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action onret = default;
+			Action<InputBoxState> onret = default;
 			onresp = (any payload) => {
+				bool ok = default;
+				InputBoxState result = default;
 				if ((null != payload)) {
-					return false;
+					result = new InputBoxState();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
 				}
 				if ((null != onret)) {
-					onret();
+					onret(result);
 				}
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action a0) => {
+			return (Action<InputBoxState> a0) => {
 				onret = a0;
 			};
 		}
@@ -4589,25 +4795,31 @@ namespace VscAppz {
 		/// Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 		/// event.
 		/// </summary>
-		public Action<Action> Hide() {
+		public Action<Action<InputBoxState>> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.hide";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action onret = default;
+			Action<InputBoxState> onret = default;
 			onresp = (any payload) => {
+				bool ok = default;
+				InputBoxState result = default;
 				if ((null != payload)) {
-					return false;
+					result = new InputBoxState();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
 				}
 				if ((null != onret)) {
-					onret();
+					onret(result);
 				}
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action a0) => {
+			return (Action<InputBoxState> a0) => {
 				onret = a0;
 			};
 		}
@@ -4622,7 +4834,7 @@ namespace VscAppz {
 		/// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 		/// the user pressing Esc, some other input UI opening, etc.)
 		/// </summary>
-		public Action<Action<Disposable>> OnDidHide(Action handler = default) {
+		public Action<Action<Disposable>> OnDidHide(Action<InputBoxState> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.onDidHide";
@@ -4635,10 +4847,16 @@ namespace VscAppz {
 			}
 			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
 				bool ok = default;
-				if (0 != args.Length) {
+				if (1 != args.Length) {
 					return ok;
 				}
-				handler();
+				InputBoxState _a_0_ = default;
+				_a_0_ = new InputBoxState();
+				ok = _a_0_.populateFrom(args[0]);
+				if (!ok) {
+					return false;
+				}
+				handler(_a_0_);
 				return true;
 			}, null);
 			msg.Data["handler"] = _fnid_handler;
@@ -4720,6 +4938,529 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.appzObjPropsSet";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.disp.id;
+			msg.Data["allUpdates"] = allUpdates;
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onresp = (any payload) => {
+				if ((null != payload)) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class QuickPick {
+		/// <summary>An event signaling when the value of the filter text has changed.</summary>
+		public Action<Action<Disposable>> OnDidChangeValue(Action<string, QuickPickState> handler = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "QuickPick.onDidChangeValue";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.disp.id;
+			string _fnid_handler = default;
+			if ((null == handler)) {
+				OnError(this.disp.impl, "QuickPick.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				return null;
+			}
+			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+				bool ok = default;
+				if (2 != args.Length) {
+					return ok;
+				}
+				string _a_0_ = default;
+				(_a_0_, ok) = (args[0] is string) ? (((string)(args[0])), true) : (default, false);
+				if (!ok) {
+					return false;
+				}
+				QuickPickState _a_1_ = default;
+				_a_1_ = new QuickPickState();
+				ok = _a_1_.populateFrom(args[1]);
+				if (!ok) {
+					return false;
+				}
+				handler(_a_0_, _a_1_);
+				return true;
+			}, null);
+			msg.Data["handler"] = _fnid_handler;
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.disp.impl, _fnid_handler));
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class QuickPick {
+		/// <summary>An event signaling when the user indicated acceptance of the selected item(s).</summary>
+		public Action<Action<Disposable>> OnDidAccept(Action<QuickPickState> handler = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "QuickPick.onDidAccept";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.disp.id;
+			string _fnid_handler = default;
+			if ((null == handler)) {
+				OnError(this.disp.impl, "QuickPick.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				return null;
+			}
+			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+				bool ok = default;
+				if (1 != args.Length) {
+					return ok;
+				}
+				QuickPickState _a_0_ = default;
+				_a_0_ = new QuickPickState();
+				ok = _a_0_.populateFrom(args[0]);
+				if (!ok) {
+					return false;
+				}
+				handler(_a_0_);
+				return true;
+			}, null);
+			msg.Data["handler"] = _fnid_handler;
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.disp.impl, _fnid_handler));
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class QuickPick {
+		/// <summary>An event signaling when a button was triggered.</summary>
+		public Action<Action<Disposable>> OnDidTriggerButton(Action<QuickInputButton, QuickPickState> handler = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "QuickPick.onDidTriggerButton";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.disp.id;
+			string _fnid_handler = default;
+			if ((null == handler)) {
+				OnError(this.disp.impl, "QuickPick.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				return null;
+			}
+			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+				bool ok = default;
+				if (2 != args.Length) {
+					return ok;
+				}
+				QuickInputButton _a_0_ = default;
+				_a_0_ = new QuickInputButton();
+				ok = _a_0_.populateFrom(args[0]);
+				if (!ok) {
+					return false;
+				}
+				QuickPickState _a_1_ = default;
+				_a_1_ = new QuickPickState();
+				ok = _a_1_.populateFrom(args[1]);
+				if (!ok) {
+					return false;
+				}
+				handler(_a_0_, _a_1_);
+				return true;
+			}, null);
+			msg.Data["handler"] = _fnid_handler;
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.disp.impl, _fnid_handler));
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class QuickPick {
+		/// <summary>An event signaling when the active items have changed.</summary>
+		public Action<Action<Disposable>> OnDidChangeActive(Action<QuickPickItem[], QuickPickState> handler = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "QuickPick.onDidChangeActive";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.disp.id;
+			string _fnid_handler = default;
+			if ((null == handler)) {
+				OnError(this.disp.impl, "QuickPick.OnDidChangeActive: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				return null;
+			}
+			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+				bool ok = default;
+				if (2 != args.Length) {
+					return ok;
+				}
+				QuickPickItem[] _a_0_ = default;
+				any[] __coll___a_0_ = default;
+				(__coll___a_0_, ok) = (args[0] is any[]) ? (((any[])(args[0])), true) : (default, false);
+				if (!ok) {
+					return false;
+				}
+				_a_0_ = new QuickPickItem[__coll___a_0_.Length];
+				int __idx___a_0_ = default;
+				__idx___a_0_ = 0;
+				foreach (var __item___a_0_ in __coll___a_0_) {
+					QuickPickItem __val___a_0_ = default;
+					__val___a_0_ = new QuickPickItem();
+					ok = __val___a_0_.populateFrom(__item___a_0_);
+					if (!ok) {
+						return false;
+					}
+					_a_0_[__idx___a_0_] = __val___a_0_;
+					__idx___a_0_ = __idx___a_0_ + 1;
+				}
+				QuickPickState _a_1_ = default;
+				_a_1_ = new QuickPickState();
+				ok = _a_1_.populateFrom(args[1]);
+				if (!ok) {
+					return false;
+				}
+				handler(_a_0_, _a_1_);
+				return true;
+			}, null);
+			msg.Data["handler"] = _fnid_handler;
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.disp.impl, _fnid_handler));
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class QuickPick {
+		/// <summary>An event signaling when the selected items have changed.</summary>
+		public Action<Action<Disposable>> OnDidChangeSelection(Action<QuickPickItem[], QuickPickState> handler = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "QuickPick.onDidChangeSelection";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.disp.id;
+			string _fnid_handler = default;
+			if ((null == handler)) {
+				OnError(this.disp.impl, "QuickPick.OnDidChangeSelection: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				return null;
+			}
+			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+				bool ok = default;
+				if (2 != args.Length) {
+					return ok;
+				}
+				QuickPickItem[] _a_0_ = default;
+				any[] __coll___a_0_ = default;
+				(__coll___a_0_, ok) = (args[0] is any[]) ? (((any[])(args[0])), true) : (default, false);
+				if (!ok) {
+					return false;
+				}
+				_a_0_ = new QuickPickItem[__coll___a_0_.Length];
+				int __idx___a_0_ = default;
+				__idx___a_0_ = 0;
+				foreach (var __item___a_0_ in __coll___a_0_) {
+					QuickPickItem __val___a_0_ = default;
+					__val___a_0_ = new QuickPickItem();
+					ok = __val___a_0_.populateFrom(__item___a_0_);
+					if (!ok) {
+						return false;
+					}
+					_a_0_[__idx___a_0_] = __val___a_0_;
+					__idx___a_0_ = __idx___a_0_ + 1;
+				}
+				QuickPickState _a_1_ = default;
+				_a_1_ = new QuickPickState();
+				ok = _a_1_.populateFrom(args[1]);
+				if (!ok) {
+					return false;
+				}
+				handler(_a_0_, _a_1_);
+				return true;
+			}, null);
+			msg.Data["handler"] = _fnid_handler;
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.disp.impl, _fnid_handler));
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class QuickPick {
+		/// <summary>
+		/// Makes the input UI visible in its current configuration. Any other input
+		/// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+		/// </summary>
+		public Action<Action<QuickPickState>> Show() {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "QuickPick.show";
+			msg.Data = new dict(1);
+			msg.Data[""] = this.disp.id;
+			Func<any, bool> onresp = default;
+			Action<QuickPickState> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				QuickPickState result = default;
+				if ((null != payload)) {
+					result = new QuickPickState();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<QuickPickState> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class QuickPick {
+		/// <summary>
+		/// Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+		/// event.
+		/// </summary>
+		public Action<Action<QuickPickState>> Hide() {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "QuickPick.hide";
+			msg.Data = new dict(1);
+			msg.Data[""] = this.disp.id;
+			Func<any, bool> onresp = default;
+			Action<QuickPickState> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				QuickPickState result = default;
+				if ((null != payload)) {
+					result = new QuickPickState();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<QuickPickState> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class QuickPick {
+		/// <summary>
+		/// An event signaling when this input UI is hidden.
+		/// 
+		/// There are several reasons why this UI might have to be hidden and
+		/// the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+		/// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+		/// the user pressing Esc, some other input UI opening, etc.)
+		/// </summary>
+		public Action<Action<Disposable>> OnDidHide(Action<QuickPickState> handler = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "QuickPick.onDidHide";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.disp.id;
+			string _fnid_handler = default;
+			if ((null == handler)) {
+				OnError(this.disp.impl, "QuickPick.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				return null;
+			}
+			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+				bool ok = default;
+				if (1 != args.Length) {
+					return ok;
+				}
+				QuickPickState _a_0_ = default;
+				_a_0_ = new QuickPickState();
+				ok = _a_0_.populateFrom(args[0]);
+				if (!ok) {
+					return false;
+				}
+				handler(_a_0_);
+				return true;
+			}, null);
+			msg.Data["handler"] = _fnid_handler;
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.disp.impl, _fnid_handler));
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class QuickPick : IDisposable {
+		/// <summary>
+		/// Dispose of this input UI and any associated resources. If it is still
+		/// visible, it is first hidden. After this call the input UI is no longer
+		/// functional and no additional methods or properties on it should be
+		/// accessed. Instead a new input UI should be created.
+		/// </summary>
+		public Action<Action> Dispose() {
+			return this.disp.Dispose();
+		}
+		void IDisposable.Dispose() { this.Dispose(); }
+		internal Action<IVscode, any, any> OnError { get => this.disp?.impl?.OnError; }
+	}
+
+	public partial class QuickPick {
+		/// <summary>Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+		public Action<Action<QuickPickState>> Get() {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "QuickPick.appzObjPropsGet";
+			msg.Data = new dict(1);
+			msg.Data[""] = this.disp.id;
+			Func<any, bool> onresp = default;
+			Action<QuickPickState> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				QuickPickState result = default;
+				if ((null != payload)) {
+					result = new QuickPickState();
+					ok = result.populateFrom(payload);
+					if (!ok) {
+						return false;
+					}
+				}
+				if ((null != onret)) {
+					onret(result);
+				}
+				return true;
+			};
+			this.disp.impl.send(msg, onresp);
+			return (Action<QuickPickState> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class QuickPick {
+		/// <summary>Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+		public Action<Action> Set(QuickPickState allUpdates = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "QuickPick.appzObjPropsSet";
 			msg.Data = new dict(2);
 			msg.Data[""] = this.disp.id;
 			msg.Data["allUpdates"] = allUpdates;
@@ -4985,6 +5726,15 @@ namespace VscAppz {
 	}
 
 	public partial class InputBox {
+		internal bool populateFrom(any payload = default) {
+			bool ok = default;
+			this.disp = new Disposable();
+			ok = this.disp.populateFrom(payload);
+			return ok;
+		}
+	}
+
+	public partial class QuickPick {
 		internal bool populateFrom(any payload = default) {
 			bool ok = default;
 			this.disp = new Disposable();
@@ -5427,56 +6177,6 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class QuickInputButton {
-		internal bool populateFrom(any payload = default) {
-			dict it = default;
-			bool ok = default;
-			any val = default;
-			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
-			if (!ok) {
-				return false;
-			}
-			(val, ok) = (it.TryGetValue("iconPath", out var __) ? (__, true) : (default, false));
-			if (ok) {
-				string iconPath = default;
-				if ((null != val)) {
-					(iconPath, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-				}
-				this.IconPath = iconPath;
-			} else {
-				return false;
-			}
-			(val, ok) = (it.TryGetValue("tooltip", out var ___) ? (___, true) : (default, false));
-			if (ok) {
-				string tooltip = default;
-				if ((null != val)) {
-					string _tooltip_ = default;
-					(_tooltip_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-					tooltip = _tooltip_;
-				}
-				this.Tooltip = tooltip;
-			}
-			(val, ok) = (it.TryGetValue("my", out var ____) ? (____, true) : (default, false));
-			if (ok) {
-				dict my = default;
-				if ((null != val)) {
-					(my, ok) = (val is dict) ? (((dict)(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-				}
-				this.My = my;
-			}
-			return true;
-		}
-	}
-
 	public partial class InputBoxState {
 		internal bool populateFrom(any payload = default) {
 			dict it = default;
@@ -5626,6 +6326,294 @@ namespace VscAppz {
 				this.Busy = busy;
 			}
 			(val, ok) = (it.TryGetValue("ignoreFocusOut", out var _____________) ? (_____________, true) : (default, false));
+			if (ok) {
+				bool ignoreFocusOut = default;
+				if ((null != val)) {
+					(ignoreFocusOut, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.IgnoreFocusOut = ignoreFocusOut;
+			}
+			return true;
+		}
+	}
+
+	public partial class QuickInputButton {
+		internal bool populateFrom(any payload = default) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if (!ok) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("iconPath", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				string iconPath = default;
+				if ((null != val)) {
+					(iconPath, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.IconPath = iconPath;
+			} else {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("tooltip", out var ___) ? (___, true) : (default, false));
+			if (ok) {
+				string tooltip = default;
+				if ((null != val)) {
+					string _tooltip_ = default;
+					(_tooltip_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					tooltip = _tooltip_;
+				}
+				this.Tooltip = tooltip;
+			}
+			(val, ok) = (it.TryGetValue("my", out var ____) ? (____, true) : (default, false));
+			if (ok) {
+				dict my = default;
+				if ((null != val)) {
+					(my, ok) = (val is dict) ? (((dict)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.My = my;
+			}
+			return true;
+		}
+	}
+
+	public partial class QuickPickState {
+		internal bool populateFrom(any payload = default) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if (!ok) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("value", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				string value = default;
+				if ((null != val)) {
+					(value, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Value = value;
+			}
+			(val, ok) = (it.TryGetValue("placeholder", out var ___) ? (___, true) : (default, false));
+			if (ok) {
+				string placeholder = default;
+				if ((null != val)) {
+					(placeholder, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Placeholder = placeholder;
+			}
+			(val, ok) = (it.TryGetValue("buttons", out var ____) ? (____, true) : (default, false));
+			if (ok) {
+				QuickInputButton[] buttons = default;
+				if ((null != val)) {
+					any[] __coll__buttons = default;
+					(__coll__buttons, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					buttons = new QuickInputButton[__coll__buttons.Length];
+					int __idx__buttons = default;
+					__idx__buttons = 0;
+					foreach (var __item__buttons in __coll__buttons) {
+						QuickInputButton __val__buttons = default;
+						__val__buttons = new QuickInputButton();
+						ok = __val__buttons.populateFrom(__item__buttons);
+						if (!ok) {
+							return false;
+						}
+						buttons[__idx__buttons] = __val__buttons;
+						__idx__buttons = __idx__buttons + 1;
+					}
+				}
+				this.Buttons = buttons;
+			}
+			(val, ok) = (it.TryGetValue("items", out var _____) ? (_____, true) : (default, false));
+			if (ok) {
+				QuickPickItem[] items = default;
+				if ((null != val)) {
+					any[] __coll__items = default;
+					(__coll__items, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					items = new QuickPickItem[__coll__items.Length];
+					int __idx__items = default;
+					__idx__items = 0;
+					foreach (var __item__items in __coll__items) {
+						QuickPickItem __val__items = default;
+						__val__items = new QuickPickItem();
+						ok = __val__items.populateFrom(__item__items);
+						if (!ok) {
+							return false;
+						}
+						items[__idx__items] = __val__items;
+						__idx__items = __idx__items + 1;
+					}
+				}
+				this.Items = items;
+			}
+			(val, ok) = (it.TryGetValue("canSelectMany", out var ______) ? (______, true) : (default, false));
+			if (ok) {
+				bool canSelectMany = default;
+				if ((null != val)) {
+					(canSelectMany, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.CanSelectMany = canSelectMany;
+			}
+			(val, ok) = (it.TryGetValue("matchOnDescription", out var _______) ? (_______, true) : (default, false));
+			if (ok) {
+				bool matchOnDescription = default;
+				if ((null != val)) {
+					(matchOnDescription, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.MatchOnDescription = matchOnDescription;
+			}
+			(val, ok) = (it.TryGetValue("matchOnDetail", out var ________) ? (________, true) : (default, false));
+			if (ok) {
+				bool matchOnDetail = default;
+				if ((null != val)) {
+					(matchOnDetail, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.MatchOnDetail = matchOnDetail;
+			}
+			(val, ok) = (it.TryGetValue("activeItems", out var _________) ? (_________, true) : (default, false));
+			if (ok) {
+				QuickPickItem[] activeItems = default;
+				if ((null != val)) {
+					any[] __coll__activeItems = default;
+					(__coll__activeItems, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					activeItems = new QuickPickItem[__coll__activeItems.Length];
+					int __idx__activeItems = default;
+					__idx__activeItems = 0;
+					foreach (var __item__activeItems in __coll__activeItems) {
+						QuickPickItem __val__activeItems = default;
+						__val__activeItems = new QuickPickItem();
+						ok = __val__activeItems.populateFrom(__item__activeItems);
+						if (!ok) {
+							return false;
+						}
+						activeItems[__idx__activeItems] = __val__activeItems;
+						__idx__activeItems = __idx__activeItems + 1;
+					}
+				}
+				this.ActiveItems = activeItems;
+			}
+			(val, ok) = (it.TryGetValue("selectedItems", out var __________) ? (__________, true) : (default, false));
+			if (ok) {
+				QuickPickItem[] selectedItems = default;
+				if ((null != val)) {
+					any[] __coll__selectedItems = default;
+					(__coll__selectedItems, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					selectedItems = new QuickPickItem[__coll__selectedItems.Length];
+					int __idx__selectedItems = default;
+					__idx__selectedItems = 0;
+					foreach (var __item__selectedItems in __coll__selectedItems) {
+						QuickPickItem __val__selectedItems = default;
+						__val__selectedItems = new QuickPickItem();
+						ok = __val__selectedItems.populateFrom(__item__selectedItems);
+						if (!ok) {
+							return false;
+						}
+						selectedItems[__idx__selectedItems] = __val__selectedItems;
+						__idx__selectedItems = __idx__selectedItems + 1;
+					}
+				}
+				this.SelectedItems = selectedItems;
+			}
+			(val, ok) = (it.TryGetValue("title", out var ___________) ? (___________, true) : (default, false));
+			if (ok) {
+				string title = default;
+				if ((null != val)) {
+					(title, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Title = title;
+			}
+			(val, ok) = (it.TryGetValue("step", out var ____________) ? (____________, true) : (default, false));
+			if (ok) {
+				int? step = default;
+				if ((null != val)) {
+					int _step_ = default;
+					(_step_, ok) = (val is int) ? (((int)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					step = _step_;
+				}
+				this.Step = step;
+			}
+			(val, ok) = (it.TryGetValue("totalSteps", out var _____________) ? (_____________, true) : (default, false));
+			if (ok) {
+				int? totalSteps = default;
+				if ((null != val)) {
+					int _totalSteps_ = default;
+					(_totalSteps_, ok) = (val is int) ? (((int)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+					totalSteps = _totalSteps_;
+				}
+				this.TotalSteps = totalSteps;
+			}
+			(val, ok) = (it.TryGetValue("enabled", out var ______________) ? (______________, true) : (default, false));
+			if (ok) {
+				bool enabled = default;
+				if ((null != val)) {
+					(enabled, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Enabled = enabled;
+			}
+			(val, ok) = (it.TryGetValue("busy", out var _______________) ? (_______________, true) : (default, false));
+			if (ok) {
+				bool busy = default;
+				if ((null != val)) {
+					(busy, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Busy = busy;
+			}
+			(val, ok) = (it.TryGetValue("ignoreFocusOut", out var ________________) ? (________________, true) : (default, false));
 			if (ok) {
 				bool ignoreFocusOut = default;
 				if ((null != val)) {

@@ -87,6 +87,7 @@
 - [IWindow](#T-VscAppz-IWindow 'VscAppz.IWindow')
   - [CreateInputBox()](#M-VscAppz-IWindow-CreateInputBox 'VscAppz.IWindow.CreateInputBox')
   - [CreateOutputChannel(name)](#M-VscAppz-IWindow-CreateOutputChannel-System-String- 'VscAppz.IWindow.CreateOutputChannel(System.String)')
+  - [CreateQuickPick()](#M-VscAppz-IWindow-CreateQuickPick 'VscAppz.IWindow.CreateQuickPick')
   - [CreateStatusBarItem(alignment,priority)](#M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32}- 'VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32})')
   - [CreateTextEditorDecorationType(options)](#M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions- 'VscAppz.IWindow.CreateTextEditorDecorationType(VscAppz.DecorationRenderOptions)')
   - [OnDidChangeWindowState()](#M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState}- 'VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState})')
@@ -127,10 +128,10 @@
   - [Dispose()](#M-VscAppz-InputBox-Dispose 'VscAppz.InputBox.Dispose')
   - [Get()](#M-VscAppz-InputBox-Get 'VscAppz.InputBox.Get')
   - [Hide()](#M-VscAppz-InputBox-Hide 'VscAppz.InputBox.Hide')
-  - [OnDidAccept()](#M-VscAppz-InputBox-OnDidAccept-System-Action- 'VscAppz.InputBox.OnDidAccept(System.Action)')
-  - [OnDidChangeValue()](#M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String}- 'VscAppz.InputBox.OnDidChangeValue(System.Action{System.String})')
-  - [OnDidHide()](#M-VscAppz-InputBox-OnDidHide-System-Action- 'VscAppz.InputBox.OnDidHide(System.Action)')
-  - [OnDidTriggerButton()](#M-VscAppz-InputBox-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton}- 'VscAppz.InputBox.OnDidTriggerButton(System.Action{VscAppz.QuickInputButton})')
+  - [OnDidAccept()](#M-VscAppz-InputBox-OnDidAccept-System-Action{VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidAccept(System.Action{VscAppz.InputBoxState})')
+  - [OnDidChangeValue()](#M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String,VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidChangeValue(System.Action{System.String,VscAppz.InputBoxState})')
+  - [OnDidHide()](#M-VscAppz-InputBox-OnDidHide-System-Action{VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidHide(System.Action{VscAppz.InputBoxState})')
+  - [OnDidTriggerButton()](#M-VscAppz-InputBox-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton,VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidTriggerButton(System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState})')
   - [Set()](#M-VscAppz-InputBox-Set-VscAppz-InputBoxState- 'VscAppz.InputBox.Set(VscAppz.InputBoxState)')
   - [Show()](#M-VscAppz-InputBox-Show 'VscAppz.InputBox.Show')
 - [InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions')
@@ -187,6 +188,18 @@
   - [IconPath](#F-VscAppz-QuickInputButton-IconPath 'VscAppz.QuickInputButton.IconPath')
   - [My](#F-VscAppz-QuickInputButton-My 'VscAppz.QuickInputButton.My')
   - [Tooltip](#F-VscAppz-QuickInputButton-Tooltip 'VscAppz.QuickInputButton.Tooltip')
+- [QuickPick](#T-VscAppz-QuickPick 'VscAppz.QuickPick')
+  - [Dispose()](#M-VscAppz-QuickPick-Dispose 'VscAppz.QuickPick.Dispose')
+  - [Get()](#M-VscAppz-QuickPick-Get 'VscAppz.QuickPick.Get')
+  - [Hide()](#M-VscAppz-QuickPick-Hide 'VscAppz.QuickPick.Hide')
+  - [OnDidAccept()](#M-VscAppz-QuickPick-OnDidAccept-System-Action{VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidAccept(System.Action{VscAppz.QuickPickState})')
+  - [OnDidChangeActive()](#M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidChangeActive(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState})')
+  - [OnDidChangeSelection()](#M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidChangeSelection(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState})')
+  - [OnDidChangeValue()](#M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String,VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String,VscAppz.QuickPickState})')
+  - [OnDidHide()](#M-VscAppz-QuickPick-OnDidHide-System-Action{VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidHide(System.Action{VscAppz.QuickPickState})')
+  - [OnDidTriggerButton()](#M-VscAppz-QuickPick-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton,VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidTriggerButton(System.Action{VscAppz.QuickInputButton,VscAppz.QuickPickState})')
+  - [Set()](#M-VscAppz-QuickPick-Set-VscAppz-QuickPickState- 'VscAppz.QuickPick.Set(VscAppz.QuickPickState)')
+  - [Show()](#M-VscAppz-QuickPick-Show 'VscAppz.QuickPick.Show')
 - [QuickPickItem](#T-VscAppz-QuickPickItem 'VscAppz.QuickPickItem')
   - [AlwaysShow](#F-VscAppz-QuickPickItem-AlwaysShow 'VscAppz.QuickPickItem.AlwaysShow')
   - [Description](#F-VscAppz-QuickPickItem-Description 'VscAppz.QuickPickItem.Description')
@@ -202,6 +215,22 @@
   - [OnDidSelectItem](#F-VscAppz-QuickPickOptions-OnDidSelectItem 'VscAppz.QuickPickOptions.OnDidSelectItem')
   - [OnDidSelectItem_AppzFuncId](#F-VscAppz-QuickPickOptions-OnDidSelectItem_AppzFuncId 'VscAppz.QuickPickOptions.OnDidSelectItem_AppzFuncId')
   - [PlaceHolder](#F-VscAppz-QuickPickOptions-PlaceHolder 'VscAppz.QuickPickOptions.PlaceHolder')
+- [QuickPickState](#T-VscAppz-QuickPickState 'VscAppz.QuickPickState')
+  - [ActiveItems](#F-VscAppz-QuickPickState-ActiveItems 'VscAppz.QuickPickState.ActiveItems')
+  - [Busy](#F-VscAppz-QuickPickState-Busy 'VscAppz.QuickPickState.Busy')
+  - [Buttons](#F-VscAppz-QuickPickState-Buttons 'VscAppz.QuickPickState.Buttons')
+  - [CanSelectMany](#F-VscAppz-QuickPickState-CanSelectMany 'VscAppz.QuickPickState.CanSelectMany')
+  - [Enabled](#F-VscAppz-QuickPickState-Enabled 'VscAppz.QuickPickState.Enabled')
+  - [IgnoreFocusOut](#F-VscAppz-QuickPickState-IgnoreFocusOut 'VscAppz.QuickPickState.IgnoreFocusOut')
+  - [Items](#F-VscAppz-QuickPickState-Items 'VscAppz.QuickPickState.Items')
+  - [MatchOnDescription](#F-VscAppz-QuickPickState-MatchOnDescription 'VscAppz.QuickPickState.MatchOnDescription')
+  - [MatchOnDetail](#F-VscAppz-QuickPickState-MatchOnDetail 'VscAppz.QuickPickState.MatchOnDetail')
+  - [Placeholder](#F-VscAppz-QuickPickState-Placeholder 'VscAppz.QuickPickState.Placeholder')
+  - [SelectedItems](#F-VscAppz-QuickPickState-SelectedItems 'VscAppz.QuickPickState.SelectedItems')
+  - [Step](#F-VscAppz-QuickPickState-Step 'VscAppz.QuickPickState.Step')
+  - [Title](#F-VscAppz-QuickPickState-Title 'VscAppz.QuickPickState.Title')
+  - [TotalSteps](#F-VscAppz-QuickPickState-TotalSteps 'VscAppz.QuickPickState.TotalSteps')
+  - [Value](#F-VscAppz-QuickPickState-Value 'VscAppz.QuickPickState.Value')
 - [SaveDialogOptions](#T-VscAppz-SaveDialogOptions 'VscAppz.SaveDialogOptions')
   - [DefaultUri](#F-VscAppz-SaveDialogOptions-DefaultUri 'VscAppz.SaveDialogOptions.DefaultUri')
   - [Filters](#F-VscAppz-SaveDialogOptions-Filters 'VscAppz.SaveDialogOptions.Filters')
@@ -1337,6 +1366,24 @@ Creates a new [output channel](https://code.visualstudio.com/api/references/vsco
 | ---- | ---- | ----------- |
 | name | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Human-readable string which will be used to represent the channel in the UI. |
 
+<a name='M-VscAppz-IWindow-CreateQuickPick'></a>
+### CreateQuickPick() `method`
+
+##### Summary
+
+Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
+of items of type T.
+
+Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+
+`return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
+
+##### Parameters
+
+This method has no parameters.
+
 <a name='M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32}-'></a>
 ### CreateStatusBarItem(alignment,priority) `method`
 
@@ -2118,7 +2165,7 @@ event.
 
 This method has no parameters.
 
-<a name='M-VscAppz-InputBox-OnDidAccept-System-Action-'></a>
+<a name='M-VscAppz-InputBox-OnDidAccept-System-Action{VscAppz-InputBoxState}-'></a>
 ### OnDidAccept() `method`
 
 ##### Summary
@@ -2129,7 +2176,7 @@ An event signaling when the user indicated acceptance of the input value.
 
 This method has no parameters.
 
-<a name='M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String}-'></a>
+<a name='M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String,VscAppz-InputBoxState}-'></a>
 ### OnDidChangeValue() `method`
 
 ##### Summary
@@ -2140,7 +2187,7 @@ An event signaling when the value has changed.
 
 This method has no parameters.
 
-<a name='M-VscAppz-InputBox-OnDidHide-System-Action-'></a>
+<a name='M-VscAppz-InputBox-OnDidHide-System-Action{VscAppz-InputBoxState}-'></a>
 ### OnDidHide() `method`
 
 ##### Summary
@@ -2156,7 +2203,7 @@ the user pressing Esc, some other input UI opening, etc.)
 
 This method has no parameters.
 
-<a name='M-VscAppz-InputBox-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton}-'></a>
+<a name='M-VscAppz-InputBox-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton,VscAppz-InputBoxState}-'></a>
 ### OnDidTriggerButton() `method`
 
 ##### Summary
@@ -2695,6 +2742,155 @@ Free-form custom data, preserved across a roundtrip.
 
 An optional tooltip.
 
+<a name='T-VscAppz-QuickPick'></a>
+## QuickPick `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
+list of items of type T. The items can be filtered through a filter text field and
+there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
+selecting multiple items.
+
+Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+
+<a name='M-VscAppz-QuickPick-Dispose'></a>
+### Dispose() `method`
+
+##### Summary
+
+Dispose of this input UI and any associated resources. If it is still
+visible, it is first hidden. After this call the input UI is no longer
+functional and no additional methods or properties on it should be
+accessed. Instead a new input UI should be created.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-QuickPick-Get'></a>
+### Get() `method`
+
+##### Summary
+
+Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-QuickPick-Hide'></a>
+### Hide() `method`
+
+##### Summary
+
+Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+event.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-QuickPick-OnDidAccept-System-Action{VscAppz-QuickPickState}-'></a>
+### OnDidAccept() `method`
+
+##### Summary
+
+An event signaling when the user indicated acceptance of the selected item(s).
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}-'></a>
+### OnDidChangeActive() `method`
+
+##### Summary
+
+An event signaling when the active items have changed.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}-'></a>
+### OnDidChangeSelection() `method`
+
+##### Summary
+
+An event signaling when the selected items have changed.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String,VscAppz-QuickPickState}-'></a>
+### OnDidChangeValue() `method`
+
+##### Summary
+
+An event signaling when the value of the filter text has changed.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-QuickPick-OnDidHide-System-Action{VscAppz-QuickPickState}-'></a>
+### OnDidHide() `method`
+
+##### Summary
+
+An event signaling when this input UI is hidden.
+
+There are several reasons why this UI might have to be hidden and
+the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+(Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+the user pressing Esc, some other input UI opening, etc.)
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-QuickPick-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton,VscAppz-QuickPickState}-'></a>
+### OnDidTriggerButton() `method`
+
+##### Summary
+
+An event signaling when a button was triggered.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-QuickPick-Set-VscAppz-QuickPickState-'></a>
+### Set() `method`
+
+##### Summary
+
+Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-QuickPick-Show'></a>
+### Show() `method`
+
+##### Summary
+
+Makes the input UI visible in its current configuration. Any other input
+UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+
+##### Parameters
+
+This method has no parameters.
+
 <a name='T-VscAppz-QuickPickItem'></a>
 ## QuickPickItem `type`
 
@@ -2809,6 +3005,135 @@ For internal runtime use only.
 ##### Summary
 
 An optional string to show as place holder in the input box to guide the user what to pick on.
+
+<a name='T-VscAppz-QuickPickState'></a>
+## QuickPickState `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
+list of items of type T. The items can be filtered through a filter text field and
+there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
+selecting multiple items.
+
+Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+
+<a name='F-VscAppz-QuickPickState-ActiveItems'></a>
+### ActiveItems `constants`
+
+##### Summary
+
+Active items. This can be read and updated by the extension.
+
+<a name='F-VscAppz-QuickPickState-Busy'></a>
+### Busy `constants`
+
+##### Summary
+
+If the UI should show a progress indicator. Defaults to false.
+
+Change this to true, e.g., while loading more data or validating
+user input.
+
+<a name='F-VscAppz-QuickPickState-Buttons'></a>
+### Buttons `constants`
+
+##### Summary
+
+Buttons for actions in the UI.
+
+<a name='F-VscAppz-QuickPickState-CanSelectMany'></a>
+### CanSelectMany `constants`
+
+##### Summary
+
+If multiple items can be selected at the same time. Defaults to false.
+
+<a name='F-VscAppz-QuickPickState-Enabled'></a>
+### Enabled `constants`
+
+##### Summary
+
+If the UI should allow for user input. Defaults to true.
+
+Change this to false, e.g., while validating user input or
+loading data for the next step in user input.
+
+<a name='F-VscAppz-QuickPickState-IgnoreFocusOut'></a>
+### IgnoreFocusOut `constants`
+
+##### Summary
+
+If the UI should stay open even when loosing UI focus. Defaults to false.
+
+<a name='F-VscAppz-QuickPickState-Items'></a>
+### Items `constants`
+
+##### Summary
+
+Items to pick from.
+
+<a name='F-VscAppz-QuickPickState-MatchOnDescription'></a>
+### MatchOnDescription `constants`
+
+##### Summary
+
+If the filter text should also be matched against the description of the items. Defaults to false.
+
+<a name='F-VscAppz-QuickPickState-MatchOnDetail'></a>
+### MatchOnDetail `constants`
+
+##### Summary
+
+If the filter text should also be matched against the detail of the items. Defaults to false.
+
+<a name='F-VscAppz-QuickPickState-Placeholder'></a>
+### Placeholder `constants`
+
+##### Summary
+
+Optional placeholder in the filter text.
+
+<a name='F-VscAppz-QuickPickState-SelectedItems'></a>
+### SelectedItems `constants`
+
+##### Summary
+
+Selected items. This can be read and updated by the extension.
+
+<a name='F-VscAppz-QuickPickState-Step'></a>
+### Step `constants`
+
+##### Summary
+
+An optional current step count.
+
+<a name='F-VscAppz-QuickPickState-Title'></a>
+### Title `constants`
+
+##### Summary
+
+An optional title.
+
+<a name='F-VscAppz-QuickPickState-TotalSteps'></a>
+### TotalSteps `constants`
+
+##### Summary
+
+An optional total step count.
+
+<a name='F-VscAppz-QuickPickState-Value'></a>
+### Value `constants`
+
+##### Summary
+
+Current value of the filter text.
 
 <a name='T-VscAppz-SaveDialogOptions'></a>
 ## SaveDialogOptions `type`

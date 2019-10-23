@@ -453,20 +453,20 @@ export interface Window {
      * @param priority The priority of the item. Higher values mean the item should be shown more to the left.
      * @return A new status bar item.
      */
-    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number) => (_: (_: StatusBarItem) => void) => void;
+    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number) => (_: (_: StatusBarItem, __: StatusBarItemState) => void) => void;
     /**
      * Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 
      * @param name Human-readable string which will be used to represent the channel in the UI.
      */
-    CreateOutputChannel: (name: string) => (_: (_: OutputChannel) => void) => void;
+    CreateOutputChannel: (name: string) => (_: (_: OutputChannel, __: OutputChannelState) => void) => void;
     /**
      * Create a TextEditorDecorationType that can be used to add decorations to text editors.
 
      * @param options Rendering options for the decoration type.
      * @return A new decoration type instance.
      */
-    CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType) => void) => void;
+    CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType, __: TextEditorDecorationTypeState) => void) => void;
     /**
      * Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
      *
@@ -476,7 +476,18 @@ export interface Window {
 
      * @return A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
      */
-    CreateInputBox: (_: (_: InputBox) => void) => void;
+    CreateInputBox: (_: (_: InputBox, __: InputBoxState) => void) => void;
+    /**
+     * Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
+     * of items of type T.
+     *
+     * Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+     * is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+     * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+
+     * @return A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
+     */
+    CreateQuickPick: (_: (_: QuickPick, __: QuickPickState) => void) => void;
 }
 /**
  * Namespace describing the environment the editor runs in.
@@ -1702,6 +1713,76 @@ export interface QuickInputButton extends fromJson {
 }
 export declare function newQuickInputButton(): QuickInputButton;
 /**
+ * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
+ * list of items of type T. The items can be filtered through a filter text field and
+ * there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
+ * selecting multiple items.
+ *
+ * Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+ * is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+ * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+
+ */
+export interface QuickPick extends fromJson, withDisp {
+    /**
+     * An event signaling when the value of the filter text has changed.
+
+     */
+    OnDidChangeValue: (_: (_: string) => void) => (_: (_: Disposable) => void) => void;
+    /**
+     * An event signaling when the user indicated acceptance of the selected item(s).
+
+     */
+    OnDidAccept: (_: () => void) => (_: (_: Disposable) => void) => void;
+    /**
+     * An event signaling when a button was triggered.
+
+     */
+    OnDidTriggerButton: (_: (_: QuickInputButton) => void) => (_: (_: Disposable) => void) => void;
+    /**
+     * An event signaling when the active items have changed.
+
+     */
+    OnDidChangeActive: (_: (_: QuickPickItem[]) => void) => (_: (_: Disposable) => void) => void;
+    /**
+     * An event signaling when the selected items have changed.
+
+     */
+    OnDidChangeSelection: (_: (_: QuickPickItem[]) => void) => (_: (_: Disposable) => void) => void;
+    /**
+     * Makes the input UI visible in its current configuration. Any other input
+     * UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+
+     */
+    Show: () => (_: () => void) => void;
+    /**
+     * Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+     * event.
+
+     */
+    Hide: () => (_: () => void) => void;
+    /**
+     * An event signaling when this input UI is hidden.
+     *
+     * There are several reasons why this UI might have to be hidden and
+     * the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+     * (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+     * the user pressing Esc, some other input UI opening, etc.)
+
+     */
+    OnDidHide: (_: () => void) => (_: (_: Disposable) => void) => void;
+    /**
+     * Dispose of this input UI and any associated resources. If it is still
+     * visible, it is first hidden. After this call the input UI is no longer
+     * functional and no additional methods or properties on it should be
+     * accessed. Instead a new input UI should be created.
+
+     */
+    Dispose: () => (_: () => void) => void;
+    Get: () => (_: (_: QuickPickState) => void) => void;
+    Set: (_: QuickPickState) => (_: () => void) => void;
+}
+/**
  * An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).
 
  */
@@ -1994,6 +2075,101 @@ export interface InputBoxState extends fromJson {
     ignoreFocusOut?: boolean;
 }
 export declare function newInputBoxState(): InputBoxState;
+/**
+ * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
+ * list of items of type T. The items can be filtered through a filter text field and
+ * there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
+ * selecting multiple items.
+ *
+ * Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+ * is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+ * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+
+ */
+export interface QuickPickState extends fromJson {
+    /**
+     * Current value of the filter text.
+
+     */
+    value?: string;
+    /**
+     * Optional placeholder in the filter text.
+
+     */
+    placeholder?: string;
+    /**
+     * Buttons for actions in the UI.
+
+     */
+    buttons?: QuickInputButton[];
+    /**
+     * Items to pick from.
+
+     */
+    items?: QuickPickItem[];
+    /**
+     * If multiple items can be selected at the same time. Defaults to false.
+
+     */
+    canSelectMany?: boolean;
+    /**
+     * If the filter text should also be matched against the description of the items. Defaults to false.
+
+     */
+    matchOnDescription?: boolean;
+    /**
+     * If the filter text should also be matched against the detail of the items. Defaults to false.
+
+     */
+    matchOnDetail?: boolean;
+    /**
+     * Active items. This can be read and updated by the extension.
+
+     */
+    activeItems?: QuickPickItem[];
+    /**
+     * Selected items. This can be read and updated by the extension.
+
+     */
+    selectedItems?: QuickPickItem[];
+    /**
+     * An optional title.
+
+     */
+    title?: string;
+    /**
+     * An optional current step count.
+
+     */
+    step?: number;
+    /**
+     * An optional total step count.
+
+     */
+    totalSteps?: number;
+    /**
+     * If the UI should allow for user input. Defaults to true.
+     *
+     * Change this to false, e.g., while validating user input or
+     * loading data for the next step in user input.
+
+     */
+    enabled?: boolean;
+    /**
+     * If the UI should show a progress indicator. Defaults to false.
+     *
+     * Change this to true, e.g., while loading more data or validating
+     * user input.
+
+     */
+    busy?: boolean;
+    /**
+     * If the UI should stay open even when loosing UI focus. Defaults to false.
+
+     */
+    ignoreFocusOut?: boolean;
+}
+export declare function newQuickPickState(): QuickPickState;
 export declare abstract class impl implements Vscode {
     Window: Window;
     Env: Env;

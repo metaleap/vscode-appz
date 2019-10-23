@@ -112,6 +112,19 @@ class Builder {
                     Type: null,
                     Args: method.args.map((arg) => this.fromArg(arg, method)),
                 };
+                if (me.Args.length) {
+                    const tf = this.gen.typeUnMaybe(me.Args[me.Args.length - 1].Type);
+                    if (tf.From && tf.From.length) {
+                        const tn = this.gen.typeUnMaybe(tf.From[0]);
+                        if (tn && tn.Name && tn.Name.length) {
+                            const struct = this.prep.structs.find(_ => this.gen.nameRewriters.types.structs(_.name) === tn.Name);
+                            if (struct && struct.isDispObj) {
+                                me.IsObjCtor = tn.Name;
+                                me.Args[me.Args.length - 1].Type = { From: [tn, { Name: tn.Name + "State" }], To: null };
+                            }
+                        }
+                    }
+                }
                 me.Type = { From: [this.gen.typeUnMaybe(me.Args[me.Args.length - 1].Type)], To: null };
                 me.Args = me.Args.slice(0, me.Args.length - 1);
                 return me;
@@ -140,7 +153,6 @@ class Builder {
             IsIncoming: it.isIncoming ? true : false,
             Fields: it.isDispObj ? [
                 { Name: "disp", Type: { Maybe: { Name: "Disposable" } } },
-                { Name: "nextUpd", Type: { Maybe: { Name: structname + "State" } } },
             ] : it.fields.map((_) => ({
                 fromPrep: _,
                 name: _.name,
@@ -683,7 +695,7 @@ class Gen extends gen.Gen {
         this.genMethodImpl_methodCall(struct, method, _, body, _.oDot(_.eThis(), _.n("disp"), _.n("id")), _.oDot(_.eThis(), _.n("disp"), _.n("impl")));
     }
     genMethodImpl_ObjMethodCall(struct, method, _, body) {
-        if (method.Name === 'Dispose')
+        if (method.Name === "Dispose")
             body.push(_.iRet(_.eCall(_.oDot(_.eThis(), _.n("disp"), _.n("Dispose")))));
         else
             this.genMethodImpl_methodCall(struct, method, _, body, _.oDot(_.eThis(), _.n("disp"), _.n("id")), _.oDot(_.eThis(), _.n("disp"), _.n("impl")));
@@ -695,7 +707,7 @@ class Gen extends gen.Gen {
             this.genMethodImpl_methodCall(typeRef, method, _, body);
     }
     genMethodImpl_methodCall(ifaceOrStruct, method, _, body, idVal, impl) {
-        const __ = gen.idents(method.fromPrep ? method.fromPrep.args : [], 'msg', 'onresp', 'onret', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok', 'ret');
+        const __ = gen.idents(method.fromPrep ? method.fromPrep.args : [], 'msg', 'onresp', 'onret', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok', 'ret', 'state');
         const funcfields = method.fromPrep ? gen.argsFuncFields(_.prep, method.fromPrep.args) : [];
         const numargs = method.fromPrep ? method.fromPrep.args.filter(_ => !_.isFromRetThenable).length : method.Args.length;
         if (!impl)
@@ -756,8 +768,7 @@ class Gen extends gen.Gen {
                 _.iRet(_.eZilch()),
             ]), _.iSet(_.n(fnid), _.eCall(_.oDot(impl, _.n("nextSub")), rettype ? _.eZilch() : handler, rettype ? handler : _.eZilch())), _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n(fnid)));
         };
-        if ((!method.Type) || method.Type.From.length !== 1 || method.Type.To
-            || method.Type.From[0].From.length !== 1 || method.Type.From[0].To)
+        if ((!method.Type) || method.Type.From.length !== 1 || method.Type.To || method.Type.From[0].To)
             throw method.Type;
         const rettype = method.Type.From[0].From[0];
         const isdisp = this.typeOwnOf(rettype, "Disposable");
@@ -816,9 +827,15 @@ class Gen extends gen.Gen {
             _.iIf(_.oIs(_.n(__.payload)), this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok), _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => [])),
             _.WHEN(isdisp, () => [_.iIf(_.oIs(_.n(__.onret)), [
                     _.eCall(_.n(__.onret), _.eCall(_.oDot(_.n(__.result), _.n('bind')), ...[impl].concat(...evtsubfnids.map(fnid => _.n(fnid))))),
-                ])], () => [_.iIf(_.oIs(_.n(__.onret)), [
+                ])], () => (method.IsObjCtor && method.IsObjCtor.length) ? [
+                _.eCall(_.eCall(_.oDot(_.n(__.result), _.n("Get"))), _.eFunc([{ Name: __.state, Type: { Name: method.IsObjCtor + "State" } }], null, _.iIf(_.oIs(_.n(__.onret)), [
+                    _.eCall(_.n(__.onret), _.n(__.result), _.n(__.state)),
+                ]))),
+            ] : [
+                _.iIf(_.oIs(_.n(__.onret)), [
                     _.eCall(_.n(__.onret), _.n(__.result)),
-                ])])[0],
+                ]),
+            ])[0],
             _.iRet(_.eLit(true)),
         ], () => [
             _.iIf(_.oIs(_.n(__.payload)), [_.iRet(_.eLit(false))]),
@@ -951,9 +968,16 @@ class Gen extends gen.Gen {
                         const prepargs = isevt
                             ? [{ name: "handler", optional: false, typeSpec: field.typeSpec.From[0] }]
                             : (tfun[0].map((_, i) => gen.argFrom(_, orig.parameters[i])));
+                        if (isevt) {
+                            const tf = gen.typeFun(prepargs[0].typeSpec);
+                            if (tf)
+                                prepargs[0].typeSpec = { From: tf[0].concat(struct.Name + "State"), To: tf[1] };
+                        }
                         let tret = tfun[1];
                         if (!gen.typeProm(tret))
-                            tret = { Thens: [tret] };
+                            if (field.name !== "dispose" && !tret)
+                                tret = struct.Name + "State";
+                        tret = { Thens: [tret] };
                         prepargs.push({ name: "onDone", isFromRetThenable: true, optional: true, typeSpec: tret });
                         const me = {
                             name: field.name, Name: this.nameRewriters.methods(field.name),

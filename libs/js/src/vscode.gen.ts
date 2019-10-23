@@ -502,14 +502,14 @@ export interface Window {
      * @param priority The priority of the item. Higher values mean the item should be shown more to the left.
      * @return A new status bar item.
      */
-    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number) => (_: (_: StatusBarItem) => void) => void
+    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number) => (_: (_: StatusBarItem, __: StatusBarItemState) => void) => void
 
     /**
      * Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 
      * @param name Human-readable string which will be used to represent the channel in the UI.
      */
-    CreateOutputChannel: (name: string) => (_: (_: OutputChannel) => void) => void
+    CreateOutputChannel: (name: string) => (_: (_: OutputChannel, __: OutputChannelState) => void) => void
 
     /**
      * Create a TextEditorDecorationType that can be used to add decorations to text editors.
@@ -517,7 +517,7 @@ export interface Window {
      * @param options Rendering options for the decoration type.
      * @return A new decoration type instance.
      */
-    CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType) => void) => void
+    CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType, __: TextEditorDecorationTypeState) => void) => void
 
     /**
      * Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
@@ -528,7 +528,19 @@ export interface Window {
 
      * @return A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
      */
-    CreateInputBox: (_: (_: InputBox) => void) => void
+    CreateInputBox: (_: (_: InputBox, __: InputBoxState) => void) => void
+
+    /**
+     * Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
+     * of items of type T.
+     * 
+     * Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+     * is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+     * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+
+     * @return A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
+     */
+    CreateQuickPick: (_: (_: QuickPick, __: QuickPickState) => void) => void
 }
 
 /**
@@ -1976,6 +1988,104 @@ export function newQuickInputButton (): QuickInputButton {
 }
 
 /**
+ * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
+ * list of items of type T. The items can be filtered through a filter text field and
+ * there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
+ * selecting multiple items.
+ * 
+ * Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+ * is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+ * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+
+ */
+export interface QuickPick extends fromJson, withDisp {
+    /**
+     * An event signaling when the value of the filter text has changed.
+
+     */
+    OnDidChangeValue: (_: (_: string) => void) => (_: (_: Disposable) => void) => void
+
+    /**
+     * An event signaling when the user indicated acceptance of the selected item(s).
+
+     */
+    OnDidAccept: (_: () => void) => (_: (_: Disposable) => void) => void
+
+    /**
+     * An event signaling when a button was triggered.
+
+     */
+    OnDidTriggerButton: (_: (_: QuickInputButton) => void) => (_: (_: Disposable) => void) => void
+
+    /**
+     * An event signaling when the active items have changed.
+
+     */
+    OnDidChangeActive: (_: (_: QuickPickItem[]) => void) => (_: (_: Disposable) => void) => void
+
+    /**
+     * An event signaling when the selected items have changed.
+
+     */
+    OnDidChangeSelection: (_: (_: QuickPickItem[]) => void) => (_: (_: Disposable) => void) => void
+
+    /**
+     * Makes the input UI visible in its current configuration. Any other input
+     * UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+
+     */
+    Show: () => (_: () => void) => void
+
+    /**
+     * Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+     * event.
+
+     */
+    Hide: () => (_: () => void) => void
+
+    /**
+     * An event signaling when this input UI is hidden.
+     * 
+     * There are several reasons why this UI might have to be hidden and
+     * the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+     * (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+     * the user pressing Esc, some other input UI opening, etc.)
+
+     */
+    OnDidHide: (_: () => void) => (_: (_: Disposable) => void) => void
+
+    /**
+     * Dispose of this input UI and any associated resources. If it is still
+     * visible, it is first hidden. After this call the input UI is no longer
+     * functional and no additional methods or properties on it should be
+     * accessed. Instead a new input UI should be created.
+
+     */
+    Dispose: () => (_: () => void) => void
+
+    Get: () => (_: (_: QuickPickState) => void) => void
+
+    Set: (_: QuickPickState) => (_: () => void) => void
+}
+
+function newQuickPick (): QuickPick {
+    let me: QuickPick
+    me = { populateFrom: _ => QuickPick_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPick
+    me.OnDidChangeValue = (a0) => QuickPick_OnDidChangeValue.call(me, a0)
+    me.OnDidAccept = (a0) => QuickPick_OnDidAccept.call(me, a0)
+    me.OnDidTriggerButton = (a0) => QuickPick_OnDidTriggerButton.call(me, a0)
+    me.OnDidChangeActive = (a0) => QuickPick_OnDidChangeActive.call(me, a0)
+    me.OnDidChangeSelection = (a0) => QuickPick_OnDidChangeSelection.call(me, a0)
+    me.Show = () => QuickPick_Show.call(me, )
+    me.Hide = () => QuickPick_Hide.call(me, )
+    me.OnDidHide = (a0) => QuickPick_OnDidHide.call(me, a0)
+    me.Dispose = () => QuickPick_Dispose.call(me, )
+    me.Get = () => QuickPick_Get.call(me, )
+    me.Set = (a0) => QuickPick_Set.call(me, a0)
+    return me
+}
+
+/**
  * An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).
 
  */
@@ -2343,6 +2453,121 @@ export interface InputBoxState extends fromJson {
 export function newInputBoxState (): InputBoxState {
     let me: InputBoxState
     me = { populateFrom: _ => InputBoxState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBoxState
+    return me
+}
+
+/**
+ * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
+ * list of items of type T. The items can be filtered through a filter text field and
+ * there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
+ * selecting multiple items.
+ * 
+ * Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+ * is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+ * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+
+ */
+export interface QuickPickState extends fromJson {
+    /**
+     * Current value of the filter text.
+
+     */
+    value?: string
+
+    /**
+     * Optional placeholder in the filter text.
+
+     */
+    placeholder?: string
+
+    /**
+     * Buttons for actions in the UI.
+
+     */
+    buttons?: QuickInputButton[]
+
+    /**
+     * Items to pick from.
+
+     */
+    items?: QuickPickItem[]
+
+    /**
+     * If multiple items can be selected at the same time. Defaults to false.
+
+     */
+    canSelectMany?: boolean
+
+    /**
+     * If the filter text should also be matched against the description of the items. Defaults to false.
+
+     */
+    matchOnDescription?: boolean
+
+    /**
+     * If the filter text should also be matched against the detail of the items. Defaults to false.
+
+     */
+    matchOnDetail?: boolean
+
+    /**
+     * Active items. This can be read and updated by the extension.
+
+     */
+    activeItems?: QuickPickItem[]
+
+    /**
+     * Selected items. This can be read and updated by the extension.
+
+     */
+    selectedItems?: QuickPickItem[]
+
+    /**
+     * An optional title.
+
+     */
+    title?: string
+
+    /**
+     * An optional current step count.
+
+     */
+    step?: number
+
+    /**
+     * An optional total step count.
+
+     */
+    totalSteps?: number
+
+    /**
+     * If the UI should allow for user input. Defaults to true.
+     * 
+     * Change this to false, e.g., while validating user input or
+     * loading data for the next step in user input.
+
+     */
+    enabled?: boolean
+
+    /**
+     * If the UI should show a progress indicator. Defaults to false.
+     * 
+     * Change this to true, e.g., while loading more data or validating
+     * user input.
+
+     */
+    busy?: boolean
+
+    /**
+     * If the UI should stay open even when loosing UI focus. Defaults to false.
+
+     */
+    ignoreFocusOut?: boolean
+}
+
+export function newQuickPickState (): QuickPickState {
+    let me: QuickPickState
+    me = { populateFrom: _ => QuickPickState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPickState
     return me
 }
 
@@ -3408,7 +3633,7 @@ class implWindow extends implBase implements Window {
         }
     }
 
-    CreateStatusBarItem(alignment?: StatusBarAlignment, priority?: number): (_: (_: StatusBarItem) => void) => void {
+    CreateStatusBarItem(alignment?: StatusBarAlignment, priority?: number): (_: (_: StatusBarItem, __: StatusBarItemState) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createStatusBarItem"
@@ -3420,7 +3645,7 @@ class implWindow extends implBase implements Window {
             msg.Data["priority"] = priority
         }
         let onresp: (_: any) => boolean
-        let onret: (_: StatusBarItem) => void
+        let onret: (_: StatusBarItem, __: StatusBarItemState) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
             let result: StatusBarItem
@@ -3432,25 +3657,27 @@ class implWindow extends implBase implements Window {
                 }
                 result.disp.impl = this.Impl()
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
+            result.Get()((state: StatusBarItemState): void => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result, state)
+                }
+            })
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: StatusBarItem) => void): void => {
+        return (a0: (_: StatusBarItem, __: StatusBarItemState) => void): void => {
             onret = a0
         }
     }
 
-    CreateOutputChannel(name: string): (_: (_: OutputChannel) => void) => void {
+    CreateOutputChannel(name: string): (_: (_: OutputChannel, __: OutputChannelState) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createOutputChannel"
         msg.Data = {}
         msg.Data["name"] = name
         let onresp: (_: any) => boolean
-        let onret: (_: OutputChannel) => void
+        let onret: (_: OutputChannel, __: OutputChannelState) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
             let result: OutputChannel
@@ -3462,25 +3689,27 @@ class implWindow extends implBase implements Window {
                 }
                 result.disp.impl = this.Impl()
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
+            result.Get()((state: OutputChannelState): void => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result, state)
+                }
+            })
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: OutputChannel) => void): void => {
+        return (a0: (_: OutputChannel, __: OutputChannelState) => void): void => {
             onret = a0
         }
     }
 
-    CreateTextEditorDecorationType(options: DecorationRenderOptions): (_: (_: TextEditorDecorationType) => void) => void {
+    CreateTextEditorDecorationType(options: DecorationRenderOptions): (_: (_: TextEditorDecorationType, __: TextEditorDecorationTypeState) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createTextEditorDecorationType"
         msg.Data = {}
         msg.Data["options"] = options
         let onresp: (_: any) => boolean
-        let onret: (_: TextEditorDecorationType) => void
+        let onret: (_: TextEditorDecorationType, __: TextEditorDecorationTypeState) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
             let result: TextEditorDecorationType
@@ -3492,24 +3721,26 @@ class implWindow extends implBase implements Window {
                 }
                 result.disp.impl = this.Impl()
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
+            result.Get()((state: TextEditorDecorationTypeState): void => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result, state)
+                }
+            })
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: TextEditorDecorationType) => void): void => {
+        return (a0: (_: TextEditorDecorationType, __: TextEditorDecorationTypeState) => void): void => {
             onret = a0
         }
     }
 
-    CreateInputBox(): (_: (_: InputBox) => void) => void {
+    CreateInputBox(): (_: (_: InputBox, __: InputBoxState) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createInputBox"
         msg.Data = {}
         let onresp: (_: any) => boolean
-        let onret: (_: InputBox) => void
+        let onret: (_: InputBox, __: InputBoxState) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
             let result: InputBox
@@ -3521,13 +3752,46 @@ class implWindow extends implBase implements Window {
                 }
                 result.disp.impl = this.Impl()
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
+            result.Get()((state: InputBoxState): void => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result, state)
+                }
+            })
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: InputBox) => void): void => {
+        return (a0: (_: InputBox, __: InputBoxState) => void): void => {
+            onret = a0
+        }
+    }
+
+    CreateQuickPick(): (_: (_: QuickPick, __: QuickPickState) => void) => void {
+        let msg: ipcMsg
+        msg = newipcMsg()
+        msg.QName = "window.createQuickPick"
+        msg.Data = {}
+        let onresp: (_: any) => boolean
+        let onret: (_: QuickPick, __: QuickPickState) => void
+        onresp = (payload: any): boolean => {
+            let ok: boolean
+            let result: QuickPick
+            if ((undefined !== payload && null !== payload)) {
+                result = newQuickPick()
+                ok = result.populateFrom(payload)
+                if (!ok) {
+                    return false
+                }
+                result.disp.impl = this.Impl()
+            }
+            result.Get()((state: QuickPickState): void => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result, state)
+                }
+            })
+            return true
+        }
+        this.Impl().send(msg, onresp)
+        return (a0: (_: QuickPick, __: QuickPickState) => void): void => {
             onret = a0
         }
     }
@@ -4471,48 +4735,60 @@ class implCommands extends implBase implements Commands {
 
 }
 
-function StatusBarItem_Show(this: StatusBarItem, ): (_: () => void) => void {
+function StatusBarItem_Show(this: StatusBarItem, ): (_: (_: StatusBarItemState) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "StatusBarItem.show"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: () => void
+    let onret: (_: StatusBarItemState) => void
     onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: StatusBarItemState
         if ((undefined !== payload && null !== payload)) {
-            return false
+            result = newStatusBarItemState()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret()
+            onret(result)
         }
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: () => void): void => {
+    return (a0: (_: StatusBarItemState) => void): void => {
         onret = a0
     }
 }
 
-function StatusBarItem_Hide(this: StatusBarItem, ): (_: () => void) => void {
+function StatusBarItem_Hide(this: StatusBarItem, ): (_: (_: StatusBarItemState) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "StatusBarItem.hide"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: () => void
+    let onret: (_: StatusBarItemState) => void
     onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: StatusBarItemState
         if ((undefined !== payload && null !== payload)) {
-            return false
+            result = newStatusBarItemState()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret()
+            onret(result)
         }
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: () => void): void => {
+    return (a0: (_: StatusBarItemState) => void): void => {
         onret = a0
     }
 }
@@ -4574,7 +4850,7 @@ function StatusBarItem_Set(this: StatusBarItem, allUpdates: StatusBarItemState):
     }
 }
 
-function OutputChannel_Append(this: OutputChannel, value: string): (_: () => void) => void {
+function OutputChannel_Append(this: OutputChannel, value: string): (_: (_: OutputChannelState) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.append"
@@ -4582,23 +4858,29 @@ function OutputChannel_Append(this: OutputChannel, value: string): (_: () => voi
     msg.Data[""] = this.disp.id
     msg.Data["value"] = value
     let onresp: (_: any) => boolean
-    let onret: () => void
+    let onret: (_: OutputChannelState) => void
     onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: OutputChannelState
         if ((undefined !== payload && null !== payload)) {
-            return false
+            result = newOutputChannelState()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret()
+            onret(result)
         }
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: () => void): void => {
+    return (a0: (_: OutputChannelState) => void): void => {
         onret = a0
     }
 }
 
-function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: () => void) => void {
+function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: (_: OutputChannelState) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.appendLine"
@@ -4606,46 +4888,58 @@ function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: () =>
     msg.Data[""] = this.disp.id
     msg.Data["value"] = value
     let onresp: (_: any) => boolean
-    let onret: () => void
+    let onret: (_: OutputChannelState) => void
     onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: OutputChannelState
         if ((undefined !== payload && null !== payload)) {
-            return false
+            result = newOutputChannelState()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret()
+            onret(result)
         }
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: () => void): void => {
+    return (a0: (_: OutputChannelState) => void): void => {
         onret = a0
     }
 }
 
-function OutputChannel_Clear(this: OutputChannel, ): (_: () => void) => void {
+function OutputChannel_Clear(this: OutputChannel, ): (_: (_: OutputChannelState) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.clear"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: () => void
+    let onret: (_: OutputChannelState) => void
     onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: OutputChannelState
         if ((undefined !== payload && null !== payload)) {
-            return false
+            result = newOutputChannelState()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret()
+            onret(result)
         }
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: () => void): void => {
+    return (a0: (_: OutputChannelState) => void): void => {
         onret = a0
     }
 }
 
-function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: () => void) => void {
+function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (_: OutputChannelState) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.show"
@@ -4653,41 +4947,53 @@ function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (
     msg.Data[""] = this.disp.id
     msg.Data["preserveFocus"] = preserveFocus
     let onresp: (_: any) => boolean
-    let onret: () => void
+    let onret: (_: OutputChannelState) => void
     onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: OutputChannelState
         if ((undefined !== payload && null !== payload)) {
-            return false
+            result = newOutputChannelState()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret()
+            onret(result)
         }
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: () => void): void => {
+    return (a0: (_: OutputChannelState) => void): void => {
         onret = a0
     }
 }
 
-function OutputChannel_Hide(this: OutputChannel, ): (_: () => void) => void {
+function OutputChannel_Hide(this: OutputChannel, ): (_: (_: OutputChannelState) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.hide"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: () => void
+    let onret: (_: OutputChannelState) => void
     onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: OutputChannelState
         if ((undefined !== payload && null !== payload)) {
-            return false
+            result = newOutputChannelState()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret()
+            onret(result)
         }
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: () => void): void => {
+    return (a0: (_: OutputChannelState) => void): void => {
         onret = a0
     }
 }
@@ -4758,7 +5064,7 @@ function TextEditorDecorationType_Get(this: TextEditorDecorationType, ): (_: (_:
     }
 }
 
-function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string) => void): (_: (_: Disposable) => void) => void {
+function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string, __: InputBoxState) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.onDidChangeValue"
@@ -4771,7 +5077,7 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string) => void)
     }
     _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
         let ok: boolean
-        if (1 !== args.length) {
+        if (2 !== args.length) {
             return ok
         }
         let _a_0_: string
@@ -4779,7 +5085,13 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string) => void)
         if (!ok) {
             return false
         }
-        handler(_a_0_)
+        let _a_1_: InputBoxState
+        _a_1_ = newInputBoxState()
+        ok = _a_1_.populateFrom(args[1])
+        if (!ok) {
+            return false
+        }
+        handler(_a_0_, _a_1_)
         return true
     }, null)
     msg.Data["handler"] = _fnid_handler
@@ -4808,7 +5120,7 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string) => void)
     }
 }
 
-function InputBox_OnDidAccept(this: InputBox, handler: () => void): (_: (_: Disposable) => void) => void {
+function InputBox_OnDidAccept(this: InputBox, handler: (_: InputBoxState) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.onDidAccept"
@@ -4821,56 +5133,11 @@ function InputBox_OnDidAccept(this: InputBox, handler: () => void): (_: (_: Disp
     }
     _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
         let ok: boolean
-        if (0 !== args.length) {
-            return ok
-        }
-        handler()
-        return true
-    }, null)
-    msg.Data["handler"] = _fnid_handler
-    let onresp: (_: any) => boolean
-    let onret: (_: Disposable) => void
-    onresp = (payload: any): boolean => {
-        let ok: boolean
-        let result: Disposable
-        if ((undefined !== payload && null !== payload)) {
-            result = newDisposable()
-            ok = result.populateFrom(payload)
-            if (!ok) {
-                return false
-            }
-        } else {
-            return false
-        }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler))
-        }
-        return true
-    }
-    this.disp.impl.send(msg, onresp)
-    return (a0: (_: Disposable) => void): void => {
-        onret = a0
-    }
-}
-
-function InputBox_OnDidTriggerButton(this: InputBox, handler: (_: QuickInputButton) => void): (_: (_: Disposable) => void) => void {
-    let msg: ipcMsg
-    msg = newipcMsg()
-    msg.QName = "InputBox.onDidTriggerButton"
-    msg.Data = {}
-    msg.Data[""] = this.disp.id
-    let _fnid_handler: string
-    if ((undefined === handler || null === handler)) {
-        OnError(this.disp.impl, "InputBox.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
-        return null
-    }
-    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
-        let ok: boolean
         if (1 !== args.length) {
             return ok
         }
-        let _a_0_: QuickInputButton
-        _a_0_ = newQuickInputButton()
+        let _a_0_: InputBoxState
+        _a_0_ = newInputBoxState()
         ok = _a_0_.populateFrom(args[0])
         if (!ok) {
             return false
@@ -4904,53 +5171,122 @@ function InputBox_OnDidTriggerButton(this: InputBox, handler: (_: QuickInputButt
     }
 }
 
-function InputBox_Show(this: InputBox, ): (_: () => void) => void {
+function InputBox_OnDidTriggerButton(this: InputBox, handler: (_: QuickInputButton, __: InputBoxState) => void): (_: (_: Disposable) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "InputBox.onDidTriggerButton"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let _fnid_handler: string
+    if ((undefined === handler || null === handler)) {
+        OnError(this.disp.impl, "InputBox.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    }
+    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+        let ok: boolean
+        if (2 !== args.length) {
+            return ok
+        }
+        let _a_0_: QuickInputButton
+        _a_0_ = newQuickInputButton()
+        ok = _a_0_.populateFrom(args[0])
+        if (!ok) {
+            return false
+        }
+        let _a_1_: InputBoxState
+        _a_1_ = newInputBoxState()
+        ok = _a_1_.populateFrom(args[1])
+        if (!ok) {
+            return false
+        }
+        handler(_a_0_, _a_1_)
+        return true
+    }, null)
+    msg.Data["handler"] = _fnid_handler
+    let onresp: (_: any) => boolean
+    let onret: (_: Disposable) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: Disposable
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        } else {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: Disposable) => void): void => {
+        onret = a0
+    }
+}
+
+function InputBox_Show(this: InputBox, ): (_: (_: InputBoxState) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.show"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: () => void
+    let onret: (_: InputBoxState) => void
     onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: InputBoxState
         if ((undefined !== payload && null !== payload)) {
-            return false
+            result = newInputBoxState()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret()
+            onret(result)
         }
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: () => void): void => {
+    return (a0: (_: InputBoxState) => void): void => {
         onret = a0
     }
 }
 
-function InputBox_Hide(this: InputBox, ): (_: () => void) => void {
+function InputBox_Hide(this: InputBox, ): (_: (_: InputBoxState) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.hide"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: () => void
+    let onret: (_: InputBoxState) => void
     onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: InputBoxState
         if ((undefined !== payload && null !== payload)) {
-            return false
+            result = newInputBoxState()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret()
+            onret(result)
         }
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: () => void): void => {
+    return (a0: (_: InputBoxState) => void): void => {
         onret = a0
     }
 }
 
-function InputBox_OnDidHide(this: InputBox, handler: () => void): (_: (_: Disposable) => void) => void {
+function InputBox_OnDidHide(this: InputBox, handler: (_: InputBoxState) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.onDidHide"
@@ -4963,10 +5299,16 @@ function InputBox_OnDidHide(this: InputBox, handler: () => void): (_: (_: Dispos
     }
     _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
         let ok: boolean
-        if (0 !== args.length) {
+        if (1 !== args.length) {
             return ok
         }
-        handler()
+        let _a_0_: InputBoxState
+        _a_0_ = newInputBoxState()
+        ok = _a_0_.populateFrom(args[0])
+        if (!ok) {
+            return false
+        }
+        handler(_a_0_)
         return true
     }, null)
     msg.Data["handler"] = _fnid_handler
@@ -5032,6 +5374,476 @@ function InputBox_Set(this: InputBox, allUpdates: InputBoxState): (_: () => void
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.appzObjPropsSet"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    msg.Data["allUpdates"] = allUpdates
+    let onresp: (_: any) => boolean
+    let onret: () => void
+    onresp = (payload: any): boolean => {
+        if ((undefined !== payload && null !== payload)) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: () => void): void => {
+        onret = a0
+    }
+}
+
+function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string, __: QuickPickState) => void): (_: (_: Disposable) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "QuickPick.onDidChangeValue"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let _fnid_handler: string
+    if ((undefined === handler || null === handler)) {
+        OnError(this.disp.impl, "QuickPick.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    }
+    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+        let ok: boolean
+        if (2 !== args.length) {
+            return ok
+        }
+        let _a_0_: string
+        [_a_0_, ok] = [args[0] as string, typeof args[0] === "string"]
+        if (!ok) {
+            return false
+        }
+        let _a_1_: QuickPickState
+        _a_1_ = newQuickPickState()
+        ok = _a_1_.populateFrom(args[1])
+        if (!ok) {
+            return false
+        }
+        handler(_a_0_, _a_1_)
+        return true
+    }, null)
+    msg.Data["handler"] = _fnid_handler
+    let onresp: (_: any) => boolean
+    let onret: (_: Disposable) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: Disposable
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        } else {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: Disposable) => void): void => {
+        onret = a0
+    }
+}
+
+function QuickPick_OnDidAccept(this: QuickPick, handler: (_: QuickPickState) => void): (_: (_: Disposable) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "QuickPick.onDidAccept"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let _fnid_handler: string
+    if ((undefined === handler || null === handler)) {
+        OnError(this.disp.impl, "QuickPick.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    }
+    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+        let ok: boolean
+        if (1 !== args.length) {
+            return ok
+        }
+        let _a_0_: QuickPickState
+        _a_0_ = newQuickPickState()
+        ok = _a_0_.populateFrom(args[0])
+        if (!ok) {
+            return false
+        }
+        handler(_a_0_)
+        return true
+    }, null)
+    msg.Data["handler"] = _fnid_handler
+    let onresp: (_: any) => boolean
+    let onret: (_: Disposable) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: Disposable
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        } else {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: Disposable) => void): void => {
+        onret = a0
+    }
+}
+
+function QuickPick_OnDidTriggerButton(this: QuickPick, handler: (_: QuickInputButton, __: QuickPickState) => void): (_: (_: Disposable) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "QuickPick.onDidTriggerButton"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let _fnid_handler: string
+    if ((undefined === handler || null === handler)) {
+        OnError(this.disp.impl, "QuickPick.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    }
+    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+        let ok: boolean
+        if (2 !== args.length) {
+            return ok
+        }
+        let _a_0_: QuickInputButton
+        _a_0_ = newQuickInputButton()
+        ok = _a_0_.populateFrom(args[0])
+        if (!ok) {
+            return false
+        }
+        let _a_1_: QuickPickState
+        _a_1_ = newQuickPickState()
+        ok = _a_1_.populateFrom(args[1])
+        if (!ok) {
+            return false
+        }
+        handler(_a_0_, _a_1_)
+        return true
+    }, null)
+    msg.Data["handler"] = _fnid_handler
+    let onresp: (_: any) => boolean
+    let onret: (_: Disposable) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: Disposable
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        } else {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: Disposable) => void): void => {
+        onret = a0
+    }
+}
+
+function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem[], __: QuickPickState) => void): (_: (_: Disposable) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "QuickPick.onDidChangeActive"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let _fnid_handler: string
+    if ((undefined === handler || null === handler)) {
+        OnError(this.disp.impl, "QuickPick.OnDidChangeActive: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    }
+    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+        let ok: boolean
+        if (2 !== args.length) {
+            return ok
+        }
+        let _a_0_: QuickPickItem[]
+        let __coll___a_0_: any[]
+        [__coll___a_0_, ok] = [args[0] as any[], (typeof args[0] === "object") && (typeof args[0]["length"] === "number")]
+        if (!ok) {
+            return false
+        }
+        _a_0_ = new Array(__coll___a_0_.length)
+        let __idx___a_0_: number
+        __idx___a_0_ = 0
+        for (const __item___a_0_ of __coll___a_0_) {
+            let __val___a_0_: QuickPickItem
+            __val___a_0_ = newQuickPickItem()
+            ok = __val___a_0_.populateFrom(__item___a_0_)
+            if (!ok) {
+                return false
+            }
+            _a_0_[__idx___a_0_] = __val___a_0_
+            __idx___a_0_ = __idx___a_0_ + 1
+        }
+        let _a_1_: QuickPickState
+        _a_1_ = newQuickPickState()
+        ok = _a_1_.populateFrom(args[1])
+        if (!ok) {
+            return false
+        }
+        handler(_a_0_, _a_1_)
+        return true
+    }, null)
+    msg.Data["handler"] = _fnid_handler
+    let onresp: (_: any) => boolean
+    let onret: (_: Disposable) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: Disposable
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        } else {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: Disposable) => void): void => {
+        onret = a0
+    }
+}
+
+function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickItem[], __: QuickPickState) => void): (_: (_: Disposable) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "QuickPick.onDidChangeSelection"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let _fnid_handler: string
+    if ((undefined === handler || null === handler)) {
+        OnError(this.disp.impl, "QuickPick.OnDidChangeSelection: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    }
+    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+        let ok: boolean
+        if (2 !== args.length) {
+            return ok
+        }
+        let _a_0_: QuickPickItem[]
+        let __coll___a_0_: any[]
+        [__coll___a_0_, ok] = [args[0] as any[], (typeof args[0] === "object") && (typeof args[0]["length"] === "number")]
+        if (!ok) {
+            return false
+        }
+        _a_0_ = new Array(__coll___a_0_.length)
+        let __idx___a_0_: number
+        __idx___a_0_ = 0
+        for (const __item___a_0_ of __coll___a_0_) {
+            let __val___a_0_: QuickPickItem
+            __val___a_0_ = newQuickPickItem()
+            ok = __val___a_0_.populateFrom(__item___a_0_)
+            if (!ok) {
+                return false
+            }
+            _a_0_[__idx___a_0_] = __val___a_0_
+            __idx___a_0_ = __idx___a_0_ + 1
+        }
+        let _a_1_: QuickPickState
+        _a_1_ = newQuickPickState()
+        ok = _a_1_.populateFrom(args[1])
+        if (!ok) {
+            return false
+        }
+        handler(_a_0_, _a_1_)
+        return true
+    }, null)
+    msg.Data["handler"] = _fnid_handler
+    let onresp: (_: any) => boolean
+    let onret: (_: Disposable) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: Disposable
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        } else {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: Disposable) => void): void => {
+        onret = a0
+    }
+}
+
+function QuickPick_Show(this: QuickPick, ): (_: (_: QuickPickState) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "QuickPick.show"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let onresp: (_: any) => boolean
+    let onret: (_: QuickPickState) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: QuickPickState
+        if ((undefined !== payload && null !== payload)) {
+            result = newQuickPickState()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result)
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: QuickPickState) => void): void => {
+        onret = a0
+    }
+}
+
+function QuickPick_Hide(this: QuickPick, ): (_: (_: QuickPickState) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "QuickPick.hide"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let onresp: (_: any) => boolean
+    let onret: (_: QuickPickState) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: QuickPickState
+        if ((undefined !== payload && null !== payload)) {
+            result = newQuickPickState()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result)
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: QuickPickState) => void): void => {
+        onret = a0
+    }
+}
+
+function QuickPick_OnDidHide(this: QuickPick, handler: (_: QuickPickState) => void): (_: (_: Disposable) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "QuickPick.onDidHide"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let _fnid_handler: string
+    if ((undefined === handler || null === handler)) {
+        OnError(this.disp.impl, "QuickPick.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    }
+    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+        let ok: boolean
+        if (1 !== args.length) {
+            return ok
+        }
+        let _a_0_: QuickPickState
+        _a_0_ = newQuickPickState()
+        ok = _a_0_.populateFrom(args[0])
+        if (!ok) {
+            return false
+        }
+        handler(_a_0_)
+        return true
+    }, null)
+    msg.Data["handler"] = _fnid_handler
+    let onresp: (_: any) => boolean
+    let onret: (_: Disposable) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: Disposable
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        } else {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler))
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: Disposable) => void): void => {
+        onret = a0
+    }
+}
+
+function QuickPick_Dispose(this: QuickPick, ): (_: () => void) => void {
+    return this.disp.Dispose()
+}
+
+function QuickPick_Get(this: QuickPick, ): (_: (_: QuickPickState) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "QuickPick.appzObjPropsGet"
+    msg.Data = {}
+    msg.Data[""] = this.disp.id
+    let onresp: (_: any) => boolean
+    let onret: (_: QuickPickState) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: QuickPickState
+        if ((undefined !== payload && null !== payload)) {
+            result = newQuickPickState()
+            ok = result.populateFrom(payload)
+            if (!ok) {
+                return false
+            }
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result)
+        }
+        return true
+    }
+    this.disp.impl.send(msg, onresp)
+    return (a0: (_: QuickPickState) => void): void => {
+        onret = a0
+    }
+}
+
+function QuickPick_Set(this: QuickPick, allUpdates: QuickPickState): (_: () => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "QuickPick.appzObjPropsSet"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     msg.Data["allUpdates"] = allUpdates
@@ -5288,6 +6100,13 @@ function TextEditorDecorationType_populateFrom(this: TextEditorDecorationType, p
 }
 
 function InputBox_populateFrom(this: InputBox, payload: any): boolean {
+    let ok: boolean
+    this.disp = newDisposable()
+    ok = this.disp.populateFrom(payload)
+    return ok
+}
+
+function QuickPick_populateFrom(this: QuickPick, payload: any): boolean {
     let ok: boolean
     this.disp = newDisposable()
     ok = this.disp.populateFrom(payload)
@@ -5714,54 +6533,6 @@ function TextEditorDecorationTypeState_populateFrom(this: TextEditorDecorationTy
     return true
 }
 
-function QuickInputButton_populateFrom(this: QuickInputButton, payload: any): boolean {
-    let it: { [_: string]: any }
-    let ok: boolean
-    let val: any
-    [it, ok] = [payload as { [_: string]: any }, typeof payload === "object"]
-    if (!ok) {
-        return false
-    }
-    [val, ok] = [it["iconPath"], undefined !== it["iconPath"]]
-    if (ok) {
-        let iconPath: string
-        if ((undefined !== val && null !== val)) {
-            [iconPath, ok] = [val as string, typeof val === "string"]
-            if (!ok) {
-                return false
-            }
-        }
-        this.iconPath = iconPath
-    } else {
-        return false
-    }
-    [val, ok] = [it["tooltip"], undefined !== it["tooltip"]]
-    if (ok) {
-        let tooltip: string
-        if ((undefined !== val && null !== val)) {
-            let _tooltip_: string
-            [_tooltip_, ok] = [val as string, typeof val === "string"]
-            if (!ok) {
-                return false
-            }
-            tooltip = _tooltip_
-        }
-        this.tooltip = tooltip
-    }
-    [val, ok] = [it["my"], undefined !== it["my"]]
-    if (ok) {
-        let my: { [_: string]: any }
-        if ((undefined !== val && null !== val)) {
-            [my, ok] = [val as { [_: string]: any }, typeof val === "object"]
-            if (!ok) {
-                return false
-            }
-        }
-        this.my = my
-    }
-    return true
-}
-
 function InputBoxState_populateFrom(this: InputBoxState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
@@ -5849,6 +6620,290 @@ function InputBoxState_populateFrom(this: InputBoxState, payload: any): boolean 
             }
         }
         this.validationMessage = validationMessage
+    }
+    [val, ok] = [it["title"], undefined !== it["title"]]
+    if (ok) {
+        let title: string
+        if ((undefined !== val && null !== val)) {
+            [title, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.title = title
+    }
+    [val, ok] = [it["step"], undefined !== it["step"]]
+    if (ok) {
+        let step: number
+        if ((undefined !== val && null !== val)) {
+            let _step_: number
+            [_step_, ok] = [val as number, typeof val === "number"]
+            if (!ok) {
+                return false
+            }
+            step = _step_
+        }
+        this.step = step
+    }
+    [val, ok] = [it["totalSteps"], undefined !== it["totalSteps"]]
+    if (ok) {
+        let totalSteps: number
+        if ((undefined !== val && null !== val)) {
+            let _totalSteps_: number
+            [_totalSteps_, ok] = [val as number, typeof val === "number"]
+            if (!ok) {
+                return false
+            }
+            totalSteps = _totalSteps_
+        }
+        this.totalSteps = totalSteps
+    }
+    [val, ok] = [it["enabled"], undefined !== it["enabled"]]
+    if (ok) {
+        let enabled: boolean
+        if ((undefined !== val && null !== val)) {
+            [enabled, ok] = [val as boolean, typeof val === "boolean"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.enabled = enabled
+    }
+    [val, ok] = [it["busy"], undefined !== it["busy"]]
+    if (ok) {
+        let busy: boolean
+        if ((undefined !== val && null !== val)) {
+            [busy, ok] = [val as boolean, typeof val === "boolean"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.busy = busy
+    }
+    [val, ok] = [it["ignoreFocusOut"], undefined !== it["ignoreFocusOut"]]
+    if (ok) {
+        let ignoreFocusOut: boolean
+        if ((undefined !== val && null !== val)) {
+            [ignoreFocusOut, ok] = [val as boolean, typeof val === "boolean"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.ignoreFocusOut = ignoreFocusOut
+    }
+    return true
+}
+
+function QuickInputButton_populateFrom(this: QuickInputButton, payload: any): boolean {
+    let it: { [_: string]: any }
+    let ok: boolean
+    let val: any
+    [it, ok] = [payload as { [_: string]: any }, typeof payload === "object"]
+    if (!ok) {
+        return false
+    }
+    [val, ok] = [it["iconPath"], undefined !== it["iconPath"]]
+    if (ok) {
+        let iconPath: string
+        if ((undefined !== val && null !== val)) {
+            [iconPath, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.iconPath = iconPath
+    } else {
+        return false
+    }
+    [val, ok] = [it["tooltip"], undefined !== it["tooltip"]]
+    if (ok) {
+        let tooltip: string
+        if ((undefined !== val && null !== val)) {
+            let _tooltip_: string
+            [_tooltip_, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+            tooltip = _tooltip_
+        }
+        this.tooltip = tooltip
+    }
+    [val, ok] = [it["my"], undefined !== it["my"]]
+    if (ok) {
+        let my: { [_: string]: any }
+        if ((undefined !== val && null !== val)) {
+            [my, ok] = [val as { [_: string]: any }, typeof val === "object"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.my = my
+    }
+    return true
+}
+
+function QuickPickState_populateFrom(this: QuickPickState, payload: any): boolean {
+    let it: { [_: string]: any }
+    let ok: boolean
+    let val: any
+    [it, ok] = [payload as { [_: string]: any }, typeof payload === "object"]
+    if (!ok) {
+        return false
+    }
+    [val, ok] = [it["value"], undefined !== it["value"]]
+    if (ok) {
+        let value: string
+        if ((undefined !== val && null !== val)) {
+            [value, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.value = value
+    }
+    [val, ok] = [it["placeholder"], undefined !== it["placeholder"]]
+    if (ok) {
+        let placeholder: string
+        if ((undefined !== val && null !== val)) {
+            [placeholder, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.placeholder = placeholder
+    }
+    [val, ok] = [it["buttons"], undefined !== it["buttons"]]
+    if (ok) {
+        let buttons: QuickInputButton[]
+        if ((undefined !== val && null !== val)) {
+            let __coll__buttons: any[]
+            [__coll__buttons, ok] = [val as any[], (typeof val === "object") && (typeof val["length"] === "number")]
+            if (!ok) {
+                return false
+            }
+            buttons = new Array(__coll__buttons.length)
+            let __idx__buttons: number
+            __idx__buttons = 0
+            for (const __item__buttons of __coll__buttons) {
+                let __val__buttons: QuickInputButton
+                __val__buttons = newQuickInputButton()
+                ok = __val__buttons.populateFrom(__item__buttons)
+                if (!ok) {
+                    return false
+                }
+                buttons[__idx__buttons] = __val__buttons
+                __idx__buttons = __idx__buttons + 1
+            }
+        }
+        this.buttons = buttons
+    }
+    [val, ok] = [it["items"], undefined !== it["items"]]
+    if (ok) {
+        let items: QuickPickItem[]
+        if ((undefined !== val && null !== val)) {
+            let __coll__items: any[]
+            [__coll__items, ok] = [val as any[], (typeof val === "object") && (typeof val["length"] === "number")]
+            if (!ok) {
+                return false
+            }
+            items = new Array(__coll__items.length)
+            let __idx__items: number
+            __idx__items = 0
+            for (const __item__items of __coll__items) {
+                let __val__items: QuickPickItem
+                __val__items = newQuickPickItem()
+                ok = __val__items.populateFrom(__item__items)
+                if (!ok) {
+                    return false
+                }
+                items[__idx__items] = __val__items
+                __idx__items = __idx__items + 1
+            }
+        }
+        this.items = items
+    }
+    [val, ok] = [it["canSelectMany"], undefined !== it["canSelectMany"]]
+    if (ok) {
+        let canSelectMany: boolean
+        if ((undefined !== val && null !== val)) {
+            [canSelectMany, ok] = [val as boolean, typeof val === "boolean"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.canSelectMany = canSelectMany
+    }
+    [val, ok] = [it["matchOnDescription"], undefined !== it["matchOnDescription"]]
+    if (ok) {
+        let matchOnDescription: boolean
+        if ((undefined !== val && null !== val)) {
+            [matchOnDescription, ok] = [val as boolean, typeof val === "boolean"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.matchOnDescription = matchOnDescription
+    }
+    [val, ok] = [it["matchOnDetail"], undefined !== it["matchOnDetail"]]
+    if (ok) {
+        let matchOnDetail: boolean
+        if ((undefined !== val && null !== val)) {
+            [matchOnDetail, ok] = [val as boolean, typeof val === "boolean"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.matchOnDetail = matchOnDetail
+    }
+    [val, ok] = [it["activeItems"], undefined !== it["activeItems"]]
+    if (ok) {
+        let activeItems: QuickPickItem[]
+        if ((undefined !== val && null !== val)) {
+            let __coll__activeItems: any[]
+            [__coll__activeItems, ok] = [val as any[], (typeof val === "object") && (typeof val["length"] === "number")]
+            if (!ok) {
+                return false
+            }
+            activeItems = new Array(__coll__activeItems.length)
+            let __idx__activeItems: number
+            __idx__activeItems = 0
+            for (const __item__activeItems of __coll__activeItems) {
+                let __val__activeItems: QuickPickItem
+                __val__activeItems = newQuickPickItem()
+                ok = __val__activeItems.populateFrom(__item__activeItems)
+                if (!ok) {
+                    return false
+                }
+                activeItems[__idx__activeItems] = __val__activeItems
+                __idx__activeItems = __idx__activeItems + 1
+            }
+        }
+        this.activeItems = activeItems
+    }
+    [val, ok] = [it["selectedItems"], undefined !== it["selectedItems"]]
+    if (ok) {
+        let selectedItems: QuickPickItem[]
+        if ((undefined !== val && null !== val)) {
+            let __coll__selectedItems: any[]
+            [__coll__selectedItems, ok] = [val as any[], (typeof val === "object") && (typeof val["length"] === "number")]
+            if (!ok) {
+                return false
+            }
+            selectedItems = new Array(__coll__selectedItems.length)
+            let __idx__selectedItems: number
+            __idx__selectedItems = 0
+            for (const __item__selectedItems of __coll__selectedItems) {
+                let __val__selectedItems: QuickPickItem
+                __val__selectedItems = newQuickPickItem()
+                ok = __val__selectedItems.populateFrom(__item__selectedItems)
+                if (!ok) {
+                    return false
+                }
+                selectedItems[__idx__selectedItems] = __val__selectedItems
+                __idx__selectedItems = __idx__selectedItems + 1
+            }
+        }
+        this.selectedItems = selectedItems
     }
     [val, ok] = [it["title"], undefined !== it["title"]]
     if (ok) {

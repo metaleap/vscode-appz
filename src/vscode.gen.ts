@@ -262,6 +262,12 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
+				case "createQuickPick": {
+					const ret = vscode.window.createQuickPick()
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
 				default:
 					throw (methodname)
 			}
@@ -471,21 +477,17 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					throw (methodname)
 			}
 		case "StatusBarItem":
-			const thisStatusBarItem = prog.objects[msg.data[""]] as vscode.StatusBarItem
+			const thisStatusBarItem = prog.objects[msg.data[""]] as StatusBarItem
 			if (!thisStatusBarItem)
 				throw "Called vscode.StatusBarItem." + methodname + " for an already disposed-and-forgotten instance"
 			switch (methodname) {
 				case "show": {
-					const ret = thisStatusBarItem.show()
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+					thisStatusBarItem.show()
+					return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && ((thisStatusBarItem.color as any)["id"])) ? ((thisStatusBarItem.color as any)["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command })
 				}
 				case "hide": {
-					const ret = thisStatusBarItem.hide()
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+					thisStatusBarItem.hide()
+					return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && ((thisStatusBarItem.color as any)["id"])) ? ((thisStatusBarItem.color as any)["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command })
 				}
 				case "dispose": {
 					const ret = thisStatusBarItem.dispose()
@@ -494,14 +496,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				case "appzObjPropsGet": {
-					return Promise.resolve({
-						alignment: thisStatusBarItem.alignment,
-						priority: thisStatusBarItem.priority,
-						text: thisStatusBarItem.text,
-						tooltip: thisStatusBarItem.tooltip,
-						color: (thisStatusBarItem.color && ((thisStatusBarItem.color as any)["id"])) ? ((thisStatusBarItem.color as any)["id"]) : thisStatusBarItem.color,
-						command: thisStatusBarItem.command,
-					})
+					return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && ((thisStatusBarItem.color as any)["id"])) ? ((thisStatusBarItem.color as any)["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command })
 				}
 				case "appzObjPropsSet": {
 					const allUpdates = msg.data['allUpdates'] as { [_:string]: any }
@@ -525,42 +520,32 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					throw methodname
 			}
 		case "OutputChannel":
-			const thisOutputChannel = prog.objects[msg.data[""]] as vscode.OutputChannel
+			const thisOutputChannel = prog.objects[msg.data[""]] as OutputChannel
 			if (!thisOutputChannel)
 				throw "Called vscode.OutputChannel." + methodname + " for an already disposed-and-forgotten instance"
 			switch (methodname) {
 				case "append": {
 					const arg_value = (msg.data['value']) as string
-					const ret = thisOutputChannel.append(arg_value, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+					thisOutputChannel.append(arg_value, )
+					return Promise.resolve({ name: thisOutputChannel.name })
 				}
 				case "appendLine": {
 					const arg_value = (msg.data['value']) as string
-					const ret = thisOutputChannel.appendLine(arg_value, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+					thisOutputChannel.appendLine(arg_value, )
+					return Promise.resolve({ name: thisOutputChannel.name })
 				}
 				case "clear": {
-					const ret = thisOutputChannel.clear()
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+					thisOutputChannel.clear()
+					return Promise.resolve({ name: thisOutputChannel.name })
 				}
 				case "show": {
 					const arg_preserveFocus = (msg.data['preserveFocus']) as boolean
-					const ret = thisOutputChannel.show(arg_preserveFocus, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+					thisOutputChannel.show(arg_preserveFocus, )
+					return Promise.resolve({ name: thisOutputChannel.name })
 				}
 				case "hide": {
-					const ret = thisOutputChannel.hide()
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+					thisOutputChannel.hide()
+					return Promise.resolve({ name: thisOutputChannel.name })
 				}
 				case "dispose": {
 					const ret = thisOutputChannel.dispose()
@@ -569,15 +554,13 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				case "appzObjPropsGet": {
-					return Promise.resolve({
-						name: thisOutputChannel.name,
-					})
+					return Promise.resolve({ name: thisOutputChannel.name })
 				}
 				default:
 					throw methodname
 			}
 		case "TextEditorDecorationType":
-			const thisTextEditorDecorationType = prog.objects[msg.data[""]] as vscode.TextEditorDecorationType
+			const thisTextEditorDecorationType = prog.objects[msg.data[""]] as TextEditorDecorationType
 			if (!thisTextEditorDecorationType)
 				throw "Called vscode.TextEditorDecorationType." + methodname + " for an already disposed-and-forgotten instance"
 			switch (methodname) {
@@ -588,15 +571,13 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				case "appzObjPropsGet": {
-					return Promise.resolve({
-						key: thisTextEditorDecorationType.key,
-					})
+					return Promise.resolve({ key: thisTextEditorDecorationType.key })
 				}
 				default:
 					throw methodname
 			}
 		case "InputBox":
-			const thisInputBox = prog.objects[msg.data[""]] as vscode.InputBox
+			const thisInputBox = prog.objects[msg.data[""]] as InputBox
 			if (!thisInputBox)
 				throw "Called vscode.InputBox." + methodname + " for an already disposed-and-forgotten instance"
 			switch (methodname) {
@@ -606,7 +587,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 						return Promise.reject(msg.data)
 					const arg_handler = (_0: string): unknown => {
 						if (prog && prog.proc)
-							return prog.callBack(false, _fnid_handler, _0)
+							return prog.callBack(false, _fnid_handler, _0, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }))
 						return undefined
 					}
 					const ret = thisInputBox.onDidChangeValue(arg_handler, )
@@ -620,7 +601,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 						return Promise.reject(msg.data)
 					const arg_handler = (): unknown => {
 						if (prog && prog.proc)
-							return prog.callBack(false, _fnid_handler, )
+							return prog.callBack(false, _fnid_handler, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }))
 						return undefined
 					}
 					const ret = thisInputBox.onDidAccept(arg_handler, )
@@ -634,7 +615,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 						return Promise.reject(msg.data)
 					const arg_handler = (_0: QuickInputButton): unknown => {
 						if (prog && prog.proc)
-							return prog.callBack(false, _fnid_handler, _0)
+							return prog.callBack(false, _fnid_handler, _0, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }))
 						return undefined
 					}
 					const ret = thisInputBox.onDidTriggerButton(arg_handler, )
@@ -643,16 +624,12 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				case "show": {
-					const ret = thisInputBox.show()
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+					thisInputBox.show()
+					return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut })
 				}
 				case "hide": {
-					const ret = thisInputBox.hide()
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+					thisInputBox.hide()
+					return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut })
 				}
 				case "onDidHide": {
 					const _fnid_handler = msg.data['handler'] as string
@@ -660,7 +637,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 						return Promise.reject(msg.data)
 					const arg_handler = (): unknown => {
 						if (prog && prog.proc)
-							return prog.callBack(false, _fnid_handler, )
+							return prog.callBack(false, _fnid_handler, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }))
 						return undefined
 					}
 					const ret = thisInputBox.onDidHide(arg_handler, )
@@ -675,20 +652,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
 				case "appzObjPropsGet": {
-					return Promise.resolve({
-						value: thisInputBox.value,
-						placeholder: thisInputBox.placeholder,
-						password: thisInputBox.password,
-						buttons: thisInputBox.buttons,
-						prompt: thisInputBox.prompt,
-						validationMessage: thisInputBox.validationMessage,
-						title: thisInputBox.title,
-						step: thisInputBox.step,
-						totalSteps: thisInputBox.totalSteps,
-						enabled: thisInputBox.enabled,
-						busy: thisInputBox.busy,
-						ignoreFocusOut: thisInputBox.ignoreFocusOut,
-					})
+					return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut })
 				}
 				case "appzObjPropsSet": {
 					const allUpdates = msg.data['allUpdates'] as { [_:string]: any }
@@ -735,6 +699,166 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				default:
 					throw methodname
 			}
+		case "QuickPick":
+			const thisQuickPick = prog.objects[msg.data[""]] as QuickPick
+			if (!thisQuickPick)
+				throw "Called vscode.QuickPick." + methodname + " for an already disposed-and-forgotten instance"
+			switch (methodname) {
+				case "onDidChangeValue": {
+					const _fnid_handler = msg.data['handler'] as string
+					if (!(_fnid_handler && _fnid_handler.length))
+						return Promise.reject(msg.data)
+					const arg_handler = (_0: string): unknown => {
+						if (prog && prog.proc)
+							return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
+						return undefined
+					}
+					const ret = thisQuickPick.onDidChangeValue(arg_handler, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "onDidAccept": {
+					const _fnid_handler = msg.data['handler'] as string
+					if (!(_fnid_handler && _fnid_handler.length))
+						return Promise.reject(msg.data)
+					const arg_handler = (): unknown => {
+						if (prog && prog.proc)
+							return prog.callBack(false, _fnid_handler, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
+						return undefined
+					}
+					const ret = thisQuickPick.onDidAccept(arg_handler, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "onDidTriggerButton": {
+					const _fnid_handler = msg.data['handler'] as string
+					if (!(_fnid_handler && _fnid_handler.length))
+						return Promise.reject(msg.data)
+					const arg_handler = (_0: QuickInputButton): unknown => {
+						if (prog && prog.proc)
+							return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
+						return undefined
+					}
+					const ret = thisQuickPick.onDidTriggerButton(arg_handler, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "onDidChangeActive": {
+					const _fnid_handler = msg.data['handler'] as string
+					if (!(_fnid_handler && _fnid_handler.length))
+						return Promise.reject(msg.data)
+					const arg_handler = (_0: QuickPickItem[]): unknown => {
+						if (prog && prog.proc)
+							return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
+						return undefined
+					}
+					const ret = thisQuickPick.onDidChangeActive(arg_handler, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "onDidChangeSelection": {
+					const _fnid_handler = msg.data['handler'] as string
+					if (!(_fnid_handler && _fnid_handler.length))
+						return Promise.reject(msg.data)
+					const arg_handler = (_0: QuickPickItem[]): unknown => {
+						if (prog && prog.proc)
+							return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
+						return undefined
+					}
+					const ret = thisQuickPick.onDidChangeSelection(arg_handler, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "show": {
+					thisQuickPick.show()
+					return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut })
+				}
+				case "hide": {
+					thisQuickPick.hide()
+					return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut })
+				}
+				case "onDidHide": {
+					const _fnid_handler = msg.data['handler'] as string
+					if (!(_fnid_handler && _fnid_handler.length))
+						return Promise.reject(msg.data)
+					const arg_handler = (): unknown => {
+						if (prog && prog.proc)
+							return prog.callBack(false, _fnid_handler, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
+						return undefined
+					}
+					const ret = thisQuickPick.onDidHide(arg_handler, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "dispose": {
+					const ret = thisQuickPick.dispose()
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "appzObjPropsGet": {
+					return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut })
+				}
+				case "appzObjPropsSet": {
+					const allUpdates = msg.data['allUpdates'] as { [_:string]: any }
+					if (!allUpdates)
+						return Promise.reject(msg.data)
+					const prop_value = allUpdates["value"] as string
+					if (prop_value !== undefined && prop_value !== thisQuickPick.value)
+						thisQuickPick.value = prop_value
+					const prop_placeholder = allUpdates["placeholder"] as string
+					if (prop_placeholder !== undefined && prop_placeholder !== thisQuickPick.placeholder)
+						thisQuickPick.placeholder = prop_placeholder
+					const prop_buttons = allUpdates["buttons"] as QuickInputButton[]
+					if (prop_buttons !== undefined && prop_buttons !== thisQuickPick.buttons)
+						thisQuickPick.buttons = prop_buttons
+					const prop_items = allUpdates["items"] as QuickPickItem[]
+					if (prop_items !== undefined && prop_items !== thisQuickPick.items)
+						thisQuickPick.items = prop_items
+					const prop_canSelectMany = allUpdates["canSelectMany"] as boolean
+					if (prop_canSelectMany !== undefined && prop_canSelectMany !== thisQuickPick.canSelectMany)
+						thisQuickPick.canSelectMany = prop_canSelectMany
+					const prop_matchOnDescription = allUpdates["matchOnDescription"] as boolean
+					if (prop_matchOnDescription !== undefined && prop_matchOnDescription !== thisQuickPick.matchOnDescription)
+						thisQuickPick.matchOnDescription = prop_matchOnDescription
+					const prop_matchOnDetail = allUpdates["matchOnDetail"] as boolean
+					if (prop_matchOnDetail !== undefined && prop_matchOnDetail !== thisQuickPick.matchOnDetail)
+						thisQuickPick.matchOnDetail = prop_matchOnDetail
+					const prop_activeItems = allUpdates["activeItems"] as QuickPickItem[]
+					if (prop_activeItems !== undefined && prop_activeItems !== thisQuickPick.activeItems)
+						thisQuickPick.activeItems = prop_activeItems
+					const prop_selectedItems = allUpdates["selectedItems"] as QuickPickItem[]
+					if (prop_selectedItems !== undefined && prop_selectedItems !== thisQuickPick.selectedItems)
+						thisQuickPick.selectedItems = prop_selectedItems
+					const prop_title = allUpdates["title"] as string
+					if (prop_title !== undefined && prop_title !== thisQuickPick.title)
+						thisQuickPick.title = prop_title
+					const prop_step = allUpdates["step"] as number
+					if (prop_step !== undefined && prop_step !== thisQuickPick.step)
+						thisQuickPick.step = prop_step
+					const prop_totalSteps = allUpdates["totalSteps"] as number
+					if (prop_totalSteps !== undefined && prop_totalSteps !== thisQuickPick.totalSteps)
+						thisQuickPick.totalSteps = prop_totalSteps
+					const prop_enabled = allUpdates["enabled"] as boolean
+					if (prop_enabled !== undefined && prop_enabled !== thisQuickPick.enabled)
+						thisQuickPick.enabled = prop_enabled
+					const prop_busy = allUpdates["busy"] as boolean
+					if (prop_busy !== undefined && prop_busy !== thisQuickPick.busy)
+						thisQuickPick.busy = prop_busy
+					const prop_ignoreFocusOut = allUpdates["ignoreFocusOut"] as boolean
+					if (prop_ignoreFocusOut !== undefined && prop_ignoreFocusOut !== thisQuickPick.ignoreFocusOut)
+						thisQuickPick.ignoreFocusOut = prop_ignoreFocusOut
+					return Promise.resolve()
+				}
+				default:
+					throw methodname
+			}
 		default:
 			throw (apiname)
 	}
@@ -757,7 +881,12 @@ interface QuickPickItem extends vscode.QuickPickItem {
 type SaveDialogOptions = vscode.SaveDialogOptions
 type OpenDialogOptions = vscode.OpenDialogOptions
 type WorkspaceFolderPickOptions = vscode.WorkspaceFolderPickOptions
+type StatusBarItem = vscode.StatusBarItem
+type OutputChannel = vscode.OutputChannel
 type DecorationRenderOptions = vscode.DecorationRenderOptions
+type TextEditorDecorationType = vscode.TextEditorDecorationType
+type InputBox = vscode.InputBox
 interface QuickInputButton extends vscode.QuickInputButton {
 	my?: { [_: string]: any }
 }
+type QuickPick = vscode.QuickPick<QuickPickItem>

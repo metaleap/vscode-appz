@@ -1,3 +1,5 @@
+import * as node_fs from 'fs'
+import * as node_path from 'path'
 import * as gen from './gen'
 import * as gen_syn from './gen-syn'
 
@@ -12,13 +14,22 @@ export class Gen extends gen_syn.Gen {
         this.options.haveProps = false
         this.options.optionalEnumsZeroNotZilch = true
         super.gen(prep)
+        if (this.isDemos) {
+            const srcmain = node_fs.readFileSync(node_path.join(node_path.dirname(this.options.demoOutFilePath), "main.go")).toString()
+            const srcmiscdemosgen = node_fs.readFileSync(this.options.demoOutFilePath).toString()
+            node_fs.writeFileSync(node_path.join(node_path.dirname(this.options.demoOutFilePath), "localrun", "automerged.go"),
+                "// Auto-merged-and-`sed`ed from parent dir's .go files to have a readily `go run`-able (even outside GOPATH) demo proggie..\n" +
+                (srcmain.replace('"github.com/metaleap/vscode-appz/libs/go"', '"../../../libs/go"') + srcmiscdemosgen.slice(srcmiscdemosgen.indexOf("\nfunc ")))
+            )
+        }
     }
 
     emitIntro(): Gen {
         return this.lines(
             "package " + (this.isDemos ? "main" : "vscAppz"),
+            "",
             "// " + this.doNotEditComment("golang"),
-            (this.isDemos ? '\nimport (\n\t. "github.com/metaleap/vscode-appz/libs/go"\n)\n' : "")
+            (this.isDemos ? '\nimport (\n\t . "github.com/metaleap/vscode-appz/libs/go"\n)\n' : "")
         )
     }
 

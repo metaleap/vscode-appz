@@ -282,7 +282,7 @@ class Gen extends gen_syn.Gen {
         const tfun = this.typeFunc(it);
         if (tfun)
             return this.s("(")
-                .each(tfun.From.filter(_ => _ ? true : false), ", ", t => this.s("_").s(": ").emitTypeRef(t))
+                .each(tfun.From.filter(_ => _ ? true : false), ", ", (t, i) => this.s("_".repeat(i + 1)).s(": ").emitTypeRef(t))
                 .s(") => ").emitTypeRef(tfun.To);
         if (it === gen_syn.TypeRefPrim.Real || it === gen_syn.TypeRefPrim.Int)
             return this.s("number");

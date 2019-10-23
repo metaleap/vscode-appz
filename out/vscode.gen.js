@@ -262,6 +262,12 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
+                case "createQuickPick": {
+                    const ret = vscode.window.createQuickPick();
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
                 default:
                     throw (methodname);
             }
@@ -476,16 +482,12 @@ function handle(msg, prog, remoteCancellationTokens) {
                 throw "Called vscode.StatusBarItem." + methodname + " for an already disposed-and-forgotten instance";
             switch (methodname) {
                 case "show": {
-                    const ret = thisStatusBarItem.show();
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                    thisStatusBarItem.show();
+                    return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && (thisStatusBarItem.color["id"])) ? (thisStatusBarItem.color["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command });
                 }
                 case "hide": {
-                    const ret = thisStatusBarItem.hide();
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                    thisStatusBarItem.hide();
+                    return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && (thisStatusBarItem.color["id"])) ? (thisStatusBarItem.color["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command });
                 }
                 case "dispose": {
                     const ret = thisStatusBarItem.dispose();
@@ -494,14 +496,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "appzObjPropsGet": {
-                    return Promise.resolve({
-                        alignment: thisStatusBarItem.alignment,
-                        priority: thisStatusBarItem.priority,
-                        text: thisStatusBarItem.text,
-                        tooltip: thisStatusBarItem.tooltip,
-                        color: (thisStatusBarItem.color && (thisStatusBarItem.color["id"])) ? (thisStatusBarItem.color["id"]) : thisStatusBarItem.color,
-                        command: thisStatusBarItem.command,
-                    });
+                    return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && (thisStatusBarItem.color["id"])) ? (thisStatusBarItem.color["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command });
                 }
                 case "appzObjPropsSet": {
                     const allUpdates = msg.data['allUpdates'];
@@ -531,36 +526,26 @@ function handle(msg, prog, remoteCancellationTokens) {
             switch (methodname) {
                 case "append": {
                     const arg_value = (msg.data['value']);
-                    const ret = thisOutputChannel.append(arg_value);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                    thisOutputChannel.append(arg_value);
+                    return Promise.resolve({ name: thisOutputChannel.name });
                 }
                 case "appendLine": {
                     const arg_value = (msg.data['value']);
-                    const ret = thisOutputChannel.appendLine(arg_value);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                    thisOutputChannel.appendLine(arg_value);
+                    return Promise.resolve({ name: thisOutputChannel.name });
                 }
                 case "clear": {
-                    const ret = thisOutputChannel.clear();
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                    thisOutputChannel.clear();
+                    return Promise.resolve({ name: thisOutputChannel.name });
                 }
                 case "show": {
                     const arg_preserveFocus = (msg.data['preserveFocus']);
-                    const ret = thisOutputChannel.show(arg_preserveFocus);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                    thisOutputChannel.show(arg_preserveFocus);
+                    return Promise.resolve({ name: thisOutputChannel.name });
                 }
                 case "hide": {
-                    const ret = thisOutputChannel.hide();
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                    thisOutputChannel.hide();
+                    return Promise.resolve({ name: thisOutputChannel.name });
                 }
                 case "dispose": {
                     const ret = thisOutputChannel.dispose();
@@ -569,9 +554,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "appzObjPropsGet": {
-                    return Promise.resolve({
-                        name: thisOutputChannel.name,
-                    });
+                    return Promise.resolve({ name: thisOutputChannel.name });
                 }
                 default:
                     throw methodname;
@@ -588,9 +571,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "appzObjPropsGet": {
-                    return Promise.resolve({
-                        key: thisTextEditorDecorationType.key,
-                    });
+                    return Promise.resolve({ key: thisTextEditorDecorationType.key });
                 }
                 default:
                     throw methodname;
@@ -606,7 +587,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         return Promise.reject(msg.data);
                     const arg_handler = (_0) => {
                         if (prog && prog.proc)
-                            return prog.callBack(false, _fnid_handler, _0);
+                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }));
                         return undefined;
                     };
                     const ret = thisInputBox.onDidChangeValue(arg_handler);
@@ -620,7 +601,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         return Promise.reject(msg.data);
                     const arg_handler = () => {
                         if (prog && prog.proc)
-                            return prog.callBack(false, _fnid_handler);
+                            return prog.callBack(false, _fnid_handler, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }));
                         return undefined;
                     };
                     const ret = thisInputBox.onDidAccept(arg_handler);
@@ -634,7 +615,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         return Promise.reject(msg.data);
                     const arg_handler = (_0) => {
                         if (prog && prog.proc)
-                            return prog.callBack(false, _fnid_handler, _0);
+                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }));
                         return undefined;
                     };
                     const ret = thisInputBox.onDidTriggerButton(arg_handler);
@@ -643,16 +624,12 @@ function handle(msg, prog, remoteCancellationTokens) {
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "show": {
-                    const ret = thisInputBox.show();
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                    thisInputBox.show();
+                    return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut });
                 }
                 case "hide": {
-                    const ret = thisInputBox.hide();
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                    thisInputBox.hide();
+                    return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut });
                 }
                 case "onDidHide": {
                     const _fnid_handler = msg.data['handler'];
@@ -660,7 +637,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         return Promise.reject(msg.data);
                     const arg_handler = () => {
                         if (prog && prog.proc)
-                            return prog.callBack(false, _fnid_handler);
+                            return prog.callBack(false, _fnid_handler, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }));
                         return undefined;
                     };
                     const ret = thisInputBox.onDidHide(arg_handler);
@@ -675,20 +652,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "appzObjPropsGet": {
-                    return Promise.resolve({
-                        value: thisInputBox.value,
-                        placeholder: thisInputBox.placeholder,
-                        password: thisInputBox.password,
-                        buttons: thisInputBox.buttons,
-                        prompt: thisInputBox.prompt,
-                        validationMessage: thisInputBox.validationMessage,
-                        title: thisInputBox.title,
-                        step: thisInputBox.step,
-                        totalSteps: thisInputBox.totalSteps,
-                        enabled: thisInputBox.enabled,
-                        busy: thisInputBox.busy,
-                        ignoreFocusOut: thisInputBox.ignoreFocusOut,
-                    });
+                    return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut });
                 }
                 case "appzObjPropsSet": {
                     const allUpdates = msg.data['allUpdates'];
@@ -730,6 +694,166 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const prop_ignoreFocusOut = allUpdates["ignoreFocusOut"];
                     if (prop_ignoreFocusOut !== undefined && prop_ignoreFocusOut !== thisInputBox.ignoreFocusOut)
                         thisInputBox.ignoreFocusOut = prop_ignoreFocusOut;
+                    return Promise.resolve();
+                }
+                default:
+                    throw methodname;
+            }
+        case "QuickPick":
+            const thisQuickPick = prog.objects[msg.data[""]];
+            if (!thisQuickPick)
+                throw "Called vscode.QuickPick." + methodname + " for an already disposed-and-forgotten instance";
+            switch (methodname) {
+                case "onDidChangeValue": {
+                    const _fnid_handler = msg.data['handler'];
+                    if (!(_fnid_handler && _fnid_handler.length))
+                        return Promise.reject(msg.data);
+                    const arg_handler = (_0) => {
+                        if (prog && prog.proc)
+                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
+                        return undefined;
+                    };
+                    const ret = thisQuickPick.onDidChangeValue(arg_handler);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "onDidAccept": {
+                    const _fnid_handler = msg.data['handler'];
+                    if (!(_fnid_handler && _fnid_handler.length))
+                        return Promise.reject(msg.data);
+                    const arg_handler = () => {
+                        if (prog && prog.proc)
+                            return prog.callBack(false, _fnid_handler, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
+                        return undefined;
+                    };
+                    const ret = thisQuickPick.onDidAccept(arg_handler);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "onDidTriggerButton": {
+                    const _fnid_handler = msg.data['handler'];
+                    if (!(_fnid_handler && _fnid_handler.length))
+                        return Promise.reject(msg.data);
+                    const arg_handler = (_0) => {
+                        if (prog && prog.proc)
+                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
+                        return undefined;
+                    };
+                    const ret = thisQuickPick.onDidTriggerButton(arg_handler);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "onDidChangeActive": {
+                    const _fnid_handler = msg.data['handler'];
+                    if (!(_fnid_handler && _fnid_handler.length))
+                        return Promise.reject(msg.data);
+                    const arg_handler = (_0) => {
+                        if (prog && prog.proc)
+                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
+                        return undefined;
+                    };
+                    const ret = thisQuickPick.onDidChangeActive(arg_handler);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "onDidChangeSelection": {
+                    const _fnid_handler = msg.data['handler'];
+                    if (!(_fnid_handler && _fnid_handler.length))
+                        return Promise.reject(msg.data);
+                    const arg_handler = (_0) => {
+                        if (prog && prog.proc)
+                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
+                        return undefined;
+                    };
+                    const ret = thisQuickPick.onDidChangeSelection(arg_handler);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "show": {
+                    thisQuickPick.show();
+                    return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut });
+                }
+                case "hide": {
+                    thisQuickPick.hide();
+                    return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut });
+                }
+                case "onDidHide": {
+                    const _fnid_handler = msg.data['handler'];
+                    if (!(_fnid_handler && _fnid_handler.length))
+                        return Promise.reject(msg.data);
+                    const arg_handler = () => {
+                        if (prog && prog.proc)
+                            return prog.callBack(false, _fnid_handler, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
+                        return undefined;
+                    };
+                    const ret = thisQuickPick.onDidHide(arg_handler);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "dispose": {
+                    const ret = thisQuickPick.dispose();
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "appzObjPropsGet": {
+                    return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut });
+                }
+                case "appzObjPropsSet": {
+                    const allUpdates = msg.data['allUpdates'];
+                    if (!allUpdates)
+                        return Promise.reject(msg.data);
+                    const prop_value = allUpdates["value"];
+                    if (prop_value !== undefined && prop_value !== thisQuickPick.value)
+                        thisQuickPick.value = prop_value;
+                    const prop_placeholder = allUpdates["placeholder"];
+                    if (prop_placeholder !== undefined && prop_placeholder !== thisQuickPick.placeholder)
+                        thisQuickPick.placeholder = prop_placeholder;
+                    const prop_buttons = allUpdates["buttons"];
+                    if (prop_buttons !== undefined && prop_buttons !== thisQuickPick.buttons)
+                        thisQuickPick.buttons = prop_buttons;
+                    const prop_items = allUpdates["items"];
+                    if (prop_items !== undefined && prop_items !== thisQuickPick.items)
+                        thisQuickPick.items = prop_items;
+                    const prop_canSelectMany = allUpdates["canSelectMany"];
+                    if (prop_canSelectMany !== undefined && prop_canSelectMany !== thisQuickPick.canSelectMany)
+                        thisQuickPick.canSelectMany = prop_canSelectMany;
+                    const prop_matchOnDescription = allUpdates["matchOnDescription"];
+                    if (prop_matchOnDescription !== undefined && prop_matchOnDescription !== thisQuickPick.matchOnDescription)
+                        thisQuickPick.matchOnDescription = prop_matchOnDescription;
+                    const prop_matchOnDetail = allUpdates["matchOnDetail"];
+                    if (prop_matchOnDetail !== undefined && prop_matchOnDetail !== thisQuickPick.matchOnDetail)
+                        thisQuickPick.matchOnDetail = prop_matchOnDetail;
+                    const prop_activeItems = allUpdates["activeItems"];
+                    if (prop_activeItems !== undefined && prop_activeItems !== thisQuickPick.activeItems)
+                        thisQuickPick.activeItems = prop_activeItems;
+                    const prop_selectedItems = allUpdates["selectedItems"];
+                    if (prop_selectedItems !== undefined && prop_selectedItems !== thisQuickPick.selectedItems)
+                        thisQuickPick.selectedItems = prop_selectedItems;
+                    const prop_title = allUpdates["title"];
+                    if (prop_title !== undefined && prop_title !== thisQuickPick.title)
+                        thisQuickPick.title = prop_title;
+                    const prop_step = allUpdates["step"];
+                    if (prop_step !== undefined && prop_step !== thisQuickPick.step)
+                        thisQuickPick.step = prop_step;
+                    const prop_totalSteps = allUpdates["totalSteps"];
+                    if (prop_totalSteps !== undefined && prop_totalSteps !== thisQuickPick.totalSteps)
+                        thisQuickPick.totalSteps = prop_totalSteps;
+                    const prop_enabled = allUpdates["enabled"];
+                    if (prop_enabled !== undefined && prop_enabled !== thisQuickPick.enabled)
+                        thisQuickPick.enabled = prop_enabled;
+                    const prop_busy = allUpdates["busy"];
+                    if (prop_busy !== undefined && prop_busy !== thisQuickPick.busy)
+                        thisQuickPick.busy = prop_busy;
+                    const prop_ignoreFocusOut = allUpdates["ignoreFocusOut"];
+                    if (prop_ignoreFocusOut !== undefined && prop_ignoreFocusOut !== thisQuickPick.ignoreFocusOut)
+                        thisQuickPick.ignoreFocusOut = prop_ignoreFocusOut;
                     return Promise.resolve();
                 }
                 default:

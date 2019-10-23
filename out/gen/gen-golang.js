@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const node_fs = require("fs");
+const node_path = require("path");
 const gen_syn = require("./gen-syn");
 class Gen extends gen_syn.Gen {
     gen(prep) {
@@ -11,9 +13,15 @@ class Gen extends gen_syn.Gen {
         this.options.haveProps = false;
         this.options.optionalEnumsZeroNotZilch = true;
         super.gen(prep);
+        if (this.isDemos) {
+            const srcmain = node_fs.readFileSync(node_path.join(node_path.dirname(this.options.demoOutFilePath), "main.go")).toString();
+            const srcmiscdemosgen = node_fs.readFileSync(this.options.demoOutFilePath).toString();
+            node_fs.writeFileSync(node_path.join(node_path.dirname(this.options.demoOutFilePath), "localrun", "automerged.go"), "// Auto-merged-and-`sed`ed from parent dir's .go files to have a readily `go run`-able (even outside GOPATH) demo proggie..\n" +
+                (srcmain.replace('"github.com/metaleap/vscode-appz/libs/go"', '"../../../libs/go"') + srcmiscdemosgen.slice(srcmiscdemosgen.indexOf("\nfunc "))));
+        }
     }
     emitIntro() {
-        return this.lines("package " + (this.isDemos ? "main" : "vscAppz"), "// " + this.doNotEditComment("golang"), (this.isDemos ? '\nimport (\n\t. "github.com/metaleap/vscode-appz/libs/go"\n)\n' : ""));
+        return this.lines("package " + (this.isDemos ? "main" : "vscAppz"), "", "// " + this.doNotEditComment("golang"), (this.isDemos ? '\nimport (\n\t . "github.com/metaleap/vscode-appz/libs/go"\n)\n' : ""));
     }
     emitOutro() { return this; }
     emitDocs(it) {

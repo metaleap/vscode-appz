@@ -58,7 +58,7 @@ class Gen extends gen.Gen {
             if (it.isDispObj) {
                 this.typeNamesUsed[it.name] = true;
                 src += `\t\tcase "${it.name}":\n`;
-                src += `\t\t\tconst this${it.name} = prog.objects[msg.data[""]] as ${this.pkg}.${it.name}\n`;
+                src += `\t\t\tconst this${it.name} = prog.objects[msg.data[""]] as ${it.name}\n`;
                 src += `\t\t\tif (!this${it.name})\n`;
                 src += `\t\t\t\tthrow "Called ${this.pkg}.${it.name}." + methodname + " for an already disposed-and-forgotten instance"\n`;
                 src += "\t\t\tswitch (methodname) {\n";
@@ -68,25 +68,21 @@ class Gen extends gen.Gen {
                     if (tfun = gen.typeFun(mem.typeSpec)) {
                         const orig = mem.fromOrig;
                         const isevt = (ts.isPropertySignature(orig) && ts.isTypeReferenceNode(orig.type) && orig.type.typeName.getText() === "Event");
+                        const isvoidmethod = (mem.name !== "dispose" && !isevt);
                         const args = isevt ? [
                             { name: "handler", optional: false, typeSpec: mem.typeSpec.From[0] },
                         ] : (tfun[0].map((_, i) => gen.argFrom(_, orig.parameters[i])).filter(_ => !_.isFromRetThenable));
                         src += `\t\t\t\tcase "${mem.name}": {\n`;
                         for (const arg of args)
-                            src += this.argsSrc(prep, arg, isevt);
-                        src += this.retArgsSrc(`this${it.name}.${mem.name}`, args);
+                            src += this.argsSrc(prep, arg, isevt, it);
+                        src += this.retArgsSrc(`this${it.name}.${mem.name}`, args, (!isvoidmethod) ? "" : ("{ " + this.propSrc(it) + " }"));
                         src += "\t\t\t\t}\n";
                     }
                     else
                         [hasgets, hassets] = [true, hassets || !mem.readOnly];
                 if (hasgets) {
                     src += '\t\t\t\tcase "appzObjPropsGet": {\n';
-                    src += "\t\t\t\t\treturn Promise.resolve({\n";
-                    for (const prop of it.fields.filter(_ => !gen.typeFun(_.typeSpec)))
-                        src += `\t\t\t\t\t\t${prop.name}: `
-                            + (!gen.typeSumOf(prop.typeSpec, 'ThemeColor') ? `this${it.name}.${prop.name}` : `(this${it.name}.${prop.name} && ((this${it.name}.${prop.name} as any)["id"])) ? ((this${it.name}.${prop.name} as any)["id"]) : this${it.name}.${prop.name}`)
-                            + ",\n";
-                    src += "\t\t\t\t\t})\n";
+                    src += "\t\t\t\t\treturn Promise.resolve({ " + this.propSrc(it) + " })\n";
                     src += "\t\t\t\t}\n";
                 }
                 if (hassets) {
@@ -118,9 +114,9 @@ class Gen extends gen.Gen {
             if (this.typeNamesUsed[it.name])
                 src += "type " + it.name + " = " + this.pkg + "." + it.name + "\n";
         for (const it of prep.structs)
-            if ((!(it.isPropsOfIface || it.isPropsOfStruct)) && it.isOutgoing && this.typeNamesUsed[it.name]) {
+            if (this.typeNamesUsed[it.name]) {
                 const fieldsextra = it.fields.filter(_ => _.isExtBaggage);
-                if ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length)) {
+                if (((!(it.isPropsOfIface || it.isPropsOfStruct)) && it.isOutgoing) && ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length))) {
                     src += "interface " + it.name + " extends " + this.pkg + "." + it.name + " {\n";
                     for (const f of fieldsextra)
                         src += `\t${f.name + (f.optional ? '?' : '')}: ${this.typeSpec(f.typeSpec)}\n`;
@@ -128,12 +124,16 @@ class Gen extends gen.Gen {
                         src += `\t${ff}_AppzFuncId: string\n`;
                     src += "}\n";
                 }
-                else
-                    src += "type " + it.name + " = " + this.pkg + "." + it.name + "\n";
+                else {
+                    let tgen;
+                    if (it.fromOrig && it.fromOrig.decl && it.fromOrig.decl.typeParameters && it.fromOrig.decl.typeParameters.length)
+                        tgen = ts.getEffectiveConstraintOfTypeParameter(it.fromOrig.decl.typeParameters[0]).getText();
+                    src += "type " + it.name + " = " + this.pkg + "." + it.name + (tgen ? `<${tgen}>` : "") + "\n";
+                }
             }
         this.writeFileSync(this.pkg, src);
     }
-    argsSrc(prep, arg, isEvt) {
+    argsSrc(prep, arg, isEvt, curDispObjInst) {
         let src = "";
         let tfunc;
         if (arg.isCancellationToken !== undefined) {
@@ -152,7 +152,7 @@ class Gen extends gen.Gen {
             src += "\t\t\t\t\t\treturn Promise.reject(msg.data)\n";
             src += `\t\t\t\t\tconst arg_${arg.name} = (${tfunc[0].map((_, i) => (gen.typeArrSpreads(_) ? '...' : '') + '_' + i + ': ' + this.typeSpec(_)).join(', ')}): ${this.typeSpec(tfunc[1])} => {\n`;
             src += "\t\t\t\t\t\tif (prog && prog.proc)\n";
-            src += `\t\t\t\t\t\t\treturn prog.callBack(${!isEvt}, ${fnid}, ${tfunc[0].map((_, i) => '_' + i).join(', ')})\n`;
+            src += `\t\t\t\t\t\t\treturn prog.callBack(${!isEvt}, ${fnid}, ${tfunc[0].map((_, i) => '_' + i).join(', ') + ((!(isEvt && curDispObjInst)) ? "" : ("" + (tfunc[0].length ? ", " : "") + "({ " + this.propSrc(curDispObjInst) + " })"))})\n`;
             src += "\t\t\t\t\t\treturn undefined\n";
             src += "\t\t\t\t\t}\n";
         }
@@ -179,16 +179,26 @@ class Gen extends gen.Gen {
         }
         return src;
     }
-    retArgsSrc(callee, args) {
+    retArgsSrc(callee, args, altRet) {
         let src = "";
-        src += `\t\t\t\t\tconst ret = ${callee}(`;
+        if (altRet && altRet.length)
+            src += `\t\t\t\t\t${callee}(`;
+        else
+            src += `\t\t\t\t\tconst ret = ${callee}(`;
         for (const arg of args)
             src += (arg.spreads ? '...' : '') + 'arg_' + arg.name + ', ';
         src += ")\n";
-        src += `\t\t\t\t\tconst retdisp = ret as any as ${this.pkg}.Disposable\n`;
-        src += `\t\t\t\t\tconst retprom = ret as any as Thenable<any>\n`;
-        src += `\t\t\t\t\treturn (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))\n`;
+        if (altRet && altRet.length)
+            src += "\t\t\t\t\treturn Promise.resolve(" + altRet + ")\n";
+        else {
+            src += `\t\t\t\t\tconst retdisp = ret as any as ${this.pkg}.Disposable\n`;
+            src += `\t\t\t\t\tconst retprom = ret as any as Thenable<any>\n`;
+            src += `\t\t\t\t\treturn (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))\n`;
+        }
         return src;
+    }
+    propSrc(it) {
+        return it.fields.filter(_ => !gen.typeFun(_.typeSpec)).map(prop => `${prop.name}: ` + (!gen.typeSumOf(prop.typeSpec, 'ThemeColor') ? `this${it.name}.${prop.name}` : `(this${it.name}.${prop.name} && ((this${it.name}.${prop.name} as any)["id"])) ? ((this${it.name}.${prop.name} as any)["id"]) : this${it.name}.${prop.name}`)).join(", ");
     }
     typeSpec(from, intoProm = false) {
         if (!from)

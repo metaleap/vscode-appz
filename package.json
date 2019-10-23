@@ -35,7 +35,7 @@
 					"appz.allProgs": {
 						"type": "array",
 						"default": [
-							"go run \"${appz}/demos/go-vsc-appz-demo\" \"${Enter name}\" \"${Pick greeting:|Hello|Hiya|Hola|}\"",
+							"go run \"${appz}/demos/go-vsc-appz-demo/localrun/automerged.go\" \"${Enter name}\" \"${Pick greeting:|Hello|Hiya|Hola|}\"",
 							"dotnet run --project \"${appz}/demos/cs-vsc-appz-demo\"",
 							"node \"${appz}/demos/nodejs-vsc-appz-demo/main.js\""
 						]

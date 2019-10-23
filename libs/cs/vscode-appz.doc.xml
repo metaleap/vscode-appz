@@ -649,6 +649,19 @@
             </summary>
             <return>A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).</return>
         </member>
+        <member name="M:VscAppz.IWindow.CreateQuickPick">
+            <summary>
+            Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
+            of items of type T.
+            
+            Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+            is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+            when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+            
+            `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
+            </summary>
+            <return>A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).</return>
+        </member>
         <member name="T:VscAppz.IEnv">
             <summary>Namespace describing the environment the editor runs in.</summary>
         </member>
@@ -1643,13 +1656,13 @@
             when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
             </summary>
         </member>
-        <member name="M:VscAppz.InputBox.OnDidChangeValue(System.Action{System.String})">
+        <member name="M:VscAppz.InputBox.OnDidChangeValue(System.Action{System.String,VscAppz.InputBoxState})">
             <summary>An event signaling when the value has changed.</summary>
         </member>
-        <member name="M:VscAppz.InputBox.OnDidAccept(System.Action)">
+        <member name="M:VscAppz.InputBox.OnDidAccept(System.Action{VscAppz.InputBoxState})">
             <summary>An event signaling when the user indicated acceptance of the input value.</summary>
         </member>
-        <member name="M:VscAppz.InputBox.OnDidTriggerButton(System.Action{VscAppz.QuickInputButton})">
+        <member name="M:VscAppz.InputBox.OnDidTriggerButton(System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState})">
             <summary>An event signaling when a button was triggered.</summary>
         </member>
         <member name="M:VscAppz.InputBox.Show">
@@ -1664,7 +1677,7 @@
             event.
             </summary>
         </member>
-        <member name="M:VscAppz.InputBox.OnDidHide(System.Action)">
+        <member name="M:VscAppz.InputBox.OnDidHide(System.Action{VscAppz.InputBoxState})">
             <summary>
             An event signaling when this input UI is hidden.
             
@@ -1699,6 +1712,69 @@
         </member>
         <member name="F:VscAppz.QuickInputButton.My">
             <summary>Free-form custom data, preserved across a roundtrip.</summary>
+        </member>
+        <member name="T:VscAppz.QuickPick">
+            <summary>
+            A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
+            list of items of type T. The items can be filtered through a filter text field and
+            there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
+            selecting multiple items.
+            
+            Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+            is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+            when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+            </summary>
+        </member>
+        <member name="M:VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String,VscAppz.QuickPickState})">
+            <summary>An event signaling when the value of the filter text has changed.</summary>
+        </member>
+        <member name="M:VscAppz.QuickPick.OnDidAccept(System.Action{VscAppz.QuickPickState})">
+            <summary>An event signaling when the user indicated acceptance of the selected item(s).</summary>
+        </member>
+        <member name="M:VscAppz.QuickPick.OnDidTriggerButton(System.Action{VscAppz.QuickInputButton,VscAppz.QuickPickState})">
+            <summary>An event signaling when a button was triggered.</summary>
+        </member>
+        <member name="M:VscAppz.QuickPick.OnDidChangeActive(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState})">
+            <summary>An event signaling when the active items have changed.</summary>
+        </member>
+        <member name="M:VscAppz.QuickPick.OnDidChangeSelection(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState})">
+            <summary>An event signaling when the selected items have changed.</summary>
+        </member>
+        <member name="M:VscAppz.QuickPick.Show">
+            <summary>
+            Makes the input UI visible in its current configuration. Any other input
+            UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+            </summary>
+        </member>
+        <member name="M:VscAppz.QuickPick.Hide">
+            <summary>
+            Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+            event.
+            </summary>
+        </member>
+        <member name="M:VscAppz.QuickPick.OnDidHide(System.Action{VscAppz.QuickPickState})">
+            <summary>
+            An event signaling when this input UI is hidden.
+            
+            There are several reasons why this UI might have to be hidden and
+            the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+            (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+            the user pressing Esc, some other input UI opening, etc.)
+            </summary>
+        </member>
+        <member name="M:VscAppz.QuickPick.Dispose">
+            <summary>
+            Dispose of this input UI and any associated resources. If it is still
+            visible, it is first hidden. After this call the input UI is no longer
+            functional and no additional methods or properties on it should be
+            accessed. Instead a new input UI should be created.
+            </summary>
+        </member>
+        <member name="M:VscAppz.QuickPick.Get">
+            <summary>Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+        </member>
+        <member name="M:VscAppz.QuickPick.Set(VscAppz.QuickPickState)">
+            <summary>Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
         </member>
         <member name="T:VscAppz.WorkspaceFoldersChangeEvent">
             <summary>An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).</summary>
@@ -1927,6 +2003,73 @@
             </summary>
         </member>
         <member name="F:VscAppz.InputBoxState.IgnoreFocusOut">
+            <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
+        </member>
+        <member name="T:VscAppz.QuickPickState">
+            <summary>
+            A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
+            list of items of type T. The items can be filtered through a filter text field and
+            there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
+            selecting multiple items.
+            
+            Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+            is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+            when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+            </summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.Value">
+            <summary>Current value of the filter text.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.Placeholder">
+            <summary>Optional placeholder in the filter text.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.Buttons">
+            <summary>Buttons for actions in the UI.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.Items">
+            <summary>Items to pick from.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.CanSelectMany">
+            <summary>If multiple items can be selected at the same time. Defaults to false.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.MatchOnDescription">
+            <summary>If the filter text should also be matched against the description of the items. Defaults to false.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.MatchOnDetail">
+            <summary>If the filter text should also be matched against the detail of the items. Defaults to false.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.ActiveItems">
+            <summary>Active items. This can be read and updated by the extension.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.SelectedItems">
+            <summary>Selected items. This can be read and updated by the extension.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.Title">
+            <summary>An optional title.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.Step">
+            <summary>An optional current step count.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.TotalSteps">
+            <summary>An optional total step count.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.Enabled">
+            <summary>
+            If the UI should allow for user input. Defaults to true.
+            
+            Change this to false, e.g., while validating user input or
+            loading data for the next step in user input.
+            </summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.Busy">
+            <summary>
+            If the UI should show a progress indicator. Defaults to false.
+            
+            Change this to true, e.g., while loading more data or validating
+            user input.
+            </summary>
+        </member>
+        <member name="F:VscAppz.QuickPickState.IgnoreFocusOut">
             <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
         </member>
     </members>

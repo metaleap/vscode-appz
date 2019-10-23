@@ -156,6 +156,22 @@ function newQuickInputButton() {
     return me;
 }
 exports.newQuickInputButton = newQuickInputButton;
+function newQuickPick() {
+    let me;
+    me = { populateFrom: _ => QuickPick_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me.OnDidChangeValue = (a0) => QuickPick_OnDidChangeValue.call(me, a0);
+    me.OnDidAccept = (a0) => QuickPick_OnDidAccept.call(me, a0);
+    me.OnDidTriggerButton = (a0) => QuickPick_OnDidTriggerButton.call(me, a0);
+    me.OnDidChangeActive = (a0) => QuickPick_OnDidChangeActive.call(me, a0);
+    me.OnDidChangeSelection = (a0) => QuickPick_OnDidChangeSelection.call(me, a0);
+    me.Show = () => QuickPick_Show.call(me);
+    me.Hide = () => QuickPick_Hide.call(me);
+    me.OnDidHide = (a0) => QuickPick_OnDidHide.call(me, a0);
+    me.Dispose = () => QuickPick_Dispose.call(me);
+    me.Get = () => QuickPick_Get.call(me);
+    me.Set = (a0) => QuickPick_Set.call(me, a0);
+    return me;
+}
 function newWorkspaceFoldersChangeEvent() {
     let me;
     me = { populateFrom: _ => WorkspaceFoldersChangeEvent_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
@@ -200,6 +216,12 @@ function newInputBoxState() {
     return me;
 }
 exports.newInputBoxState = newInputBoxState;
+function newQuickPickState() {
+    let me;
+    me = { populateFrom: _ => QuickPickState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    return me;
+}
+exports.newQuickPickState = newQuickPickState;
 class impl {
     constructor() {
         this.Window = new implWindow(this);
@@ -1267,9 +1289,11 @@ class implWindow extends implBase {
                 }
                 result.disp.impl = this.Impl();
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            result.Get()((state) => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result, state);
+                }
+            });
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -1296,9 +1320,11 @@ class implWindow extends implBase {
                 }
                 result.disp.impl = this.Impl();
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            result.Get()((state) => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result, state);
+                }
+            });
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -1325,9 +1351,11 @@ class implWindow extends implBase {
                 }
                 result.disp.impl = this.Impl();
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            result.Get()((state) => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result, state);
+                }
+            });
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -1353,9 +1381,41 @@ class implWindow extends implBase {
                 }
                 result.disp.impl = this.Impl();
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            result.Get()((state) => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result, state);
+                }
+            });
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
+    }
+    CreateQuickPick() {
+        let msg;
+        msg = newipcMsg();
+        msg.QName = "window.createQuickPick";
+        msg.Data = {};
+        let onresp;
+        let onret;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newQuickPick();
+                ok = result.populateFrom(payload);
+                if (!ok) {
+                    return false;
+                }
+                result.disp.impl = this.Impl();
             }
+            result.Get()((state) => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result, state);
+                }
+            });
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -2284,11 +2344,17 @@ function StatusBarItem_Show() {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let ok;
+        let result;
         if ((undefined !== payload && null !== payload)) {
-            return false;
+            result = newStatusBarItemState();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret();
+            onret(result);
         }
         return true;
     };
@@ -2306,11 +2372,17 @@ function StatusBarItem_Hide() {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let ok;
+        let result;
         if ((undefined !== payload && null !== payload)) {
-            return false;
+            result = newStatusBarItemState();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret();
+            onret(result);
         }
         return true;
     };
@@ -2383,11 +2455,17 @@ function OutputChannel_Append(value) {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let ok;
+        let result;
         if ((undefined !== payload && null !== payload)) {
-            return false;
+            result = newOutputChannelState();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret();
+            onret(result);
         }
         return true;
     };
@@ -2406,11 +2484,17 @@ function OutputChannel_AppendLine(value) {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let ok;
+        let result;
         if ((undefined !== payload && null !== payload)) {
-            return false;
+            result = newOutputChannelState();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret();
+            onret(result);
         }
         return true;
     };
@@ -2428,11 +2512,17 @@ function OutputChannel_Clear() {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let ok;
+        let result;
         if ((undefined !== payload && null !== payload)) {
-            return false;
+            result = newOutputChannelState();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret();
+            onret(result);
         }
         return true;
     };
@@ -2451,11 +2541,17 @@ function OutputChannel_Show(preserveFocus) {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let ok;
+        let result;
         if ((undefined !== payload && null !== payload)) {
-            return false;
+            result = newOutputChannelState();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret();
+            onret(result);
         }
         return true;
     };
@@ -2473,11 +2569,17 @@ function OutputChannel_Hide() {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let ok;
+        let result;
         if ((undefined !== payload && null !== payload)) {
-            return false;
+            result = newOutputChannelState();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret();
+            onret(result);
         }
         return true;
     };
@@ -2561,7 +2663,7 @@ function InputBox_OnDidChangeValue(handler) {
     }
     _fnid_handler = this.disp.impl.nextSub((args) => {
         let ok;
-        if (1 !== args.length) {
+        if (2 !== args.length) {
             return ok;
         }
         let _a_0_;
@@ -2569,7 +2671,13 @@ function InputBox_OnDidChangeValue(handler) {
         if (!ok) {
             return false;
         }
-        handler(_a_0_);
+        let _a_1_;
+        _a_1_ = newInputBoxState();
+        ok = _a_1_.populateFrom(args[1]);
+        if (!ok) {
+            return false;
+        }
+        handler(_a_0_, _a_1_);
         return true;
     }, null);
     msg.Data["handler"] = _fnid_handler;
@@ -2611,10 +2719,16 @@ function InputBox_OnDidAccept(handler) {
     }
     _fnid_handler = this.disp.impl.nextSub((args) => {
         let ok;
-        if (0 !== args.length) {
+        if (1 !== args.length) {
             return ok;
         }
-        handler();
+        let _a_0_;
+        _a_0_ = newInputBoxState();
+        ok = _a_0_.populateFrom(args[0]);
+        if (!ok) {
+            return false;
+        }
+        handler(_a_0_);
         return true;
     }, null);
     msg.Data["handler"] = _fnid_handler;
@@ -2656,7 +2770,7 @@ function InputBox_OnDidTriggerButton(handler) {
     }
     _fnid_handler = this.disp.impl.nextSub((args) => {
         let ok;
-        if (1 !== args.length) {
+        if (2 !== args.length) {
             return ok;
         }
         let _a_0_;
@@ -2665,7 +2779,13 @@ function InputBox_OnDidTriggerButton(handler) {
         if (!ok) {
             return false;
         }
-        handler(_a_0_);
+        let _a_1_;
+        _a_1_ = newInputBoxState();
+        ok = _a_1_.populateFrom(args[1]);
+        if (!ok) {
+            return false;
+        }
+        handler(_a_0_, _a_1_);
         return true;
     }, null);
     msg.Data["handler"] = _fnid_handler;
@@ -2703,11 +2823,17 @@ function InputBox_Show() {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let ok;
+        let result;
         if ((undefined !== payload && null !== payload)) {
-            return false;
+            result = newInputBoxState();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret();
+            onret(result);
         }
         return true;
     };
@@ -2725,11 +2851,17 @@ function InputBox_Hide() {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let ok;
+        let result;
         if ((undefined !== payload && null !== payload)) {
-            return false;
+            result = newInputBoxState();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
         }
         if ((undefined !== onret && null !== onret)) {
-            onret();
+            onret(result);
         }
         return true;
     };
@@ -2751,10 +2883,16 @@ function InputBox_OnDidHide(handler) {
     }
     _fnid_handler = this.disp.impl.nextSub((args) => {
         let ok;
-        if (0 !== args.length) {
+        if (1 !== args.length) {
             return ok;
         }
-        handler();
+        let _a_0_;
+        _a_0_ = newInputBoxState();
+        ok = _a_0_.populateFrom(args[0]);
+        if (!ok) {
+            return false;
+        }
+        handler(_a_0_);
         return true;
     }, null);
     msg.Data["handler"] = _fnid_handler;
@@ -2818,6 +2956,471 @@ function InputBox_Set(allUpdates) {
     let msg;
     msg = newipcMsg();
     msg.QName = "InputBox.appzObjPropsSet";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    msg.Data["allUpdates"] = allUpdates;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        if ((undefined !== payload && null !== payload)) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function QuickPick_OnDidChangeValue(handler) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "QuickPick.onDidChangeValue";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let _fnid_handler;
+    if ((undefined === handler || null === handler)) {
+        vsc_appz_1.OnError(this.disp.impl, "QuickPick.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        return null;
+    }
+    _fnid_handler = this.disp.impl.nextSub((args) => {
+        let ok;
+        if (2 !== args.length) {
+            return ok;
+        }
+        let _a_0_;
+        [_a_0_, ok] = [args[0], typeof args[0] === "string"];
+        if (!ok) {
+            return false;
+        }
+        let _a_1_;
+        _a_1_ = newQuickPickState();
+        ok = _a_1_.populateFrom(args[1]);
+        if (!ok) {
+            return false;
+        }
+        handler(_a_0_, _a_1_);
+        return true;
+    }, null);
+    msg.Data["handler"] = _fnid_handler;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler));
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function QuickPick_OnDidAccept(handler) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "QuickPick.onDidAccept";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let _fnid_handler;
+    if ((undefined === handler || null === handler)) {
+        vsc_appz_1.OnError(this.disp.impl, "QuickPick.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        return null;
+    }
+    _fnid_handler = this.disp.impl.nextSub((args) => {
+        let ok;
+        if (1 !== args.length) {
+            return ok;
+        }
+        let _a_0_;
+        _a_0_ = newQuickPickState();
+        ok = _a_0_.populateFrom(args[0]);
+        if (!ok) {
+            return false;
+        }
+        handler(_a_0_);
+        return true;
+    }, null);
+    msg.Data["handler"] = _fnid_handler;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler));
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function QuickPick_OnDidTriggerButton(handler) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "QuickPick.onDidTriggerButton";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let _fnid_handler;
+    if ((undefined === handler || null === handler)) {
+        vsc_appz_1.OnError(this.disp.impl, "QuickPick.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        return null;
+    }
+    _fnid_handler = this.disp.impl.nextSub((args) => {
+        let ok;
+        if (2 !== args.length) {
+            return ok;
+        }
+        let _a_0_;
+        _a_0_ = newQuickInputButton();
+        ok = _a_0_.populateFrom(args[0]);
+        if (!ok) {
+            return false;
+        }
+        let _a_1_;
+        _a_1_ = newQuickPickState();
+        ok = _a_1_.populateFrom(args[1]);
+        if (!ok) {
+            return false;
+        }
+        handler(_a_0_, _a_1_);
+        return true;
+    }, null);
+    msg.Data["handler"] = _fnid_handler;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler));
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function QuickPick_OnDidChangeActive(handler) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "QuickPick.onDidChangeActive";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let _fnid_handler;
+    if ((undefined === handler || null === handler)) {
+        vsc_appz_1.OnError(this.disp.impl, "QuickPick.OnDidChangeActive: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        return null;
+    }
+    _fnid_handler = this.disp.impl.nextSub((args) => {
+        let ok;
+        if (2 !== args.length) {
+            return ok;
+        }
+        let _a_0_;
+        let __coll___a_0_;
+        [__coll___a_0_, ok] = [args[0], (typeof args[0] === "object") && (typeof args[0]["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        _a_0_ = new Array(__coll___a_0_.length);
+        let __idx___a_0_;
+        __idx___a_0_ = 0;
+        for (const __item___a_0_ of __coll___a_0_) {
+            let __val___a_0_;
+            __val___a_0_ = newQuickPickItem();
+            ok = __val___a_0_.populateFrom(__item___a_0_);
+            if (!ok) {
+                return false;
+            }
+            _a_0_[__idx___a_0_] = __val___a_0_;
+            __idx___a_0_ = __idx___a_0_ + 1;
+        }
+        let _a_1_;
+        _a_1_ = newQuickPickState();
+        ok = _a_1_.populateFrom(args[1]);
+        if (!ok) {
+            return false;
+        }
+        handler(_a_0_, _a_1_);
+        return true;
+    }, null);
+    msg.Data["handler"] = _fnid_handler;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler));
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function QuickPick_OnDidChangeSelection(handler) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "QuickPick.onDidChangeSelection";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let _fnid_handler;
+    if ((undefined === handler || null === handler)) {
+        vsc_appz_1.OnError(this.disp.impl, "QuickPick.OnDidChangeSelection: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        return null;
+    }
+    _fnid_handler = this.disp.impl.nextSub((args) => {
+        let ok;
+        if (2 !== args.length) {
+            return ok;
+        }
+        let _a_0_;
+        let __coll___a_0_;
+        [__coll___a_0_, ok] = [args[0], (typeof args[0] === "object") && (typeof args[0]["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        _a_0_ = new Array(__coll___a_0_.length);
+        let __idx___a_0_;
+        __idx___a_0_ = 0;
+        for (const __item___a_0_ of __coll___a_0_) {
+            let __val___a_0_;
+            __val___a_0_ = newQuickPickItem();
+            ok = __val___a_0_.populateFrom(__item___a_0_);
+            if (!ok) {
+                return false;
+            }
+            _a_0_[__idx___a_0_] = __val___a_0_;
+            __idx___a_0_ = __idx___a_0_ + 1;
+        }
+        let _a_1_;
+        _a_1_ = newQuickPickState();
+        ok = _a_1_.populateFrom(args[1]);
+        if (!ok) {
+            return false;
+        }
+        handler(_a_0_, _a_1_);
+        return true;
+    }, null);
+    msg.Data["handler"] = _fnid_handler;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler));
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function QuickPick_Show() {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "QuickPick.show";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newQuickPickState();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result);
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function QuickPick_Hide() {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "QuickPick.hide";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newQuickPickState();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result);
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function QuickPick_OnDidHide(handler) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "QuickPick.onDidHide";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let _fnid_handler;
+    if ((undefined === handler || null === handler)) {
+        vsc_appz_1.OnError(this.disp.impl, "QuickPick.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        return null;
+    }
+    _fnid_handler = this.disp.impl.nextSub((args) => {
+        let ok;
+        if (1 !== args.length) {
+            return ok;
+        }
+        let _a_0_;
+        _a_0_ = newQuickPickState();
+        ok = _a_0_.populateFrom(args[0]);
+        if (!ok) {
+            return false;
+        }
+        handler(_a_0_);
+        return true;
+    }, null);
+    msg.Data["handler"] = _fnid_handler;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.disp.impl, _fnid_handler));
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function QuickPick_Dispose() {
+    return this.disp.Dispose();
+}
+function QuickPick_Get() {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "QuickPick.appzObjPropsGet";
+    msg.Data = {};
+    msg.Data[""] = this.disp.id;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newQuickPickState();
+            ok = result.populateFrom(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result);
+        }
+        return true;
+    };
+    this.disp.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function QuickPick_Set(allUpdates) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "QuickPick.appzObjPropsSet";
     msg.Data = {};
     msg.Data[""] = this.disp.id;
     msg.Data["allUpdates"] = allUpdates;
@@ -3072,6 +3675,12 @@ function TextEditorDecorationType_populateFrom(payload) {
     return ok;
 }
 function InputBox_populateFrom(payload) {
+    let ok;
+    this.disp = newDisposable();
+    ok = this.disp.populateFrom(payload);
+    return ok;
+}
+function QuickPick_populateFrom(payload) {
     let ok;
     this.disp = newDisposable();
     ok = this.disp.populateFrom(payload);
@@ -3493,54 +4102,6 @@ function TextEditorDecorationTypeState_populateFrom(payload) {
     }
     return true;
 }
-function QuickInputButton_populateFrom(payload) {
-    let it;
-    let ok;
-    let val;
-    [it, ok] = [payload, typeof payload === "object"];
-    if (!ok) {
-        return false;
-    }
-    [val, ok] = [it["iconPath"], undefined !== it["iconPath"]];
-    if (ok) {
-        let iconPath;
-        if ((undefined !== val && null !== val)) {
-            [iconPath, ok] = [val, typeof val === "string"];
-            if (!ok) {
-                return false;
-            }
-        }
-        this.iconPath = iconPath;
-    }
-    else {
-        return false;
-    }
-    [val, ok] = [it["tooltip"], undefined !== it["tooltip"]];
-    if (ok) {
-        let tooltip;
-        if ((undefined !== val && null !== val)) {
-            let _tooltip_;
-            [_tooltip_, ok] = [val, typeof val === "string"];
-            if (!ok) {
-                return false;
-            }
-            tooltip = _tooltip_;
-        }
-        this.tooltip = tooltip;
-    }
-    [val, ok] = [it["my"], undefined !== it["my"]];
-    if (ok) {
-        let my;
-        if ((undefined !== val && null !== val)) {
-            [my, ok] = [val, typeof val === "object"];
-            if (!ok) {
-                return false;
-            }
-        }
-        this.my = my;
-    }
-    return true;
-}
 function InputBoxState_populateFrom(payload) {
     let it;
     let ok;
@@ -3628,6 +4189,289 @@ function InputBoxState_populateFrom(payload) {
             }
         }
         this.validationMessage = validationMessage;
+    }
+    [val, ok] = [it["title"], undefined !== it["title"]];
+    if (ok) {
+        let title;
+        if ((undefined !== val && null !== val)) {
+            [title, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.title = title;
+    }
+    [val, ok] = [it["step"], undefined !== it["step"]];
+    if (ok) {
+        let step;
+        if ((undefined !== val && null !== val)) {
+            let _step_;
+            [_step_, ok] = [val, typeof val === "number"];
+            if (!ok) {
+                return false;
+            }
+            step = _step_;
+        }
+        this.step = step;
+    }
+    [val, ok] = [it["totalSteps"], undefined !== it["totalSteps"]];
+    if (ok) {
+        let totalSteps;
+        if ((undefined !== val && null !== val)) {
+            let _totalSteps_;
+            [_totalSteps_, ok] = [val, typeof val === "number"];
+            if (!ok) {
+                return false;
+            }
+            totalSteps = _totalSteps_;
+        }
+        this.totalSteps = totalSteps;
+    }
+    [val, ok] = [it["enabled"], undefined !== it["enabled"]];
+    if (ok) {
+        let enabled;
+        if ((undefined !== val && null !== val)) {
+            [enabled, ok] = [val, typeof val === "boolean"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.enabled = enabled;
+    }
+    [val, ok] = [it["busy"], undefined !== it["busy"]];
+    if (ok) {
+        let busy;
+        if ((undefined !== val && null !== val)) {
+            [busy, ok] = [val, typeof val === "boolean"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.busy = busy;
+    }
+    [val, ok] = [it["ignoreFocusOut"], undefined !== it["ignoreFocusOut"]];
+    if (ok) {
+        let ignoreFocusOut;
+        if ((undefined !== val && null !== val)) {
+            [ignoreFocusOut, ok] = [val, typeof val === "boolean"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.ignoreFocusOut = ignoreFocusOut;
+    }
+    return true;
+}
+function QuickInputButton_populateFrom(payload) {
+    let it;
+    let ok;
+    let val;
+    [it, ok] = [payload, typeof payload === "object"];
+    if (!ok) {
+        return false;
+    }
+    [val, ok] = [it["iconPath"], undefined !== it["iconPath"]];
+    if (ok) {
+        let iconPath;
+        if ((undefined !== val && null !== val)) {
+            [iconPath, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.iconPath = iconPath;
+    }
+    else {
+        return false;
+    }
+    [val, ok] = [it["tooltip"], undefined !== it["tooltip"]];
+    if (ok) {
+        let tooltip;
+        if ((undefined !== val && null !== val)) {
+            let _tooltip_;
+            [_tooltip_, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+            tooltip = _tooltip_;
+        }
+        this.tooltip = tooltip;
+    }
+    [val, ok] = [it["my"], undefined !== it["my"]];
+    if (ok) {
+        let my;
+        if ((undefined !== val && null !== val)) {
+            [my, ok] = [val, typeof val === "object"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.my = my;
+    }
+    return true;
+}
+function QuickPickState_populateFrom(payload) {
+    let it;
+    let ok;
+    let val;
+    [it, ok] = [payload, typeof payload === "object"];
+    if (!ok) {
+        return false;
+    }
+    [val, ok] = [it["value"], undefined !== it["value"]];
+    if (ok) {
+        let value;
+        if ((undefined !== val && null !== val)) {
+            [value, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.value = value;
+    }
+    [val, ok] = [it["placeholder"], undefined !== it["placeholder"]];
+    if (ok) {
+        let placeholder;
+        if ((undefined !== val && null !== val)) {
+            [placeholder, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.placeholder = placeholder;
+    }
+    [val, ok] = [it["buttons"], undefined !== it["buttons"]];
+    if (ok) {
+        let buttons;
+        if ((undefined !== val && null !== val)) {
+            let __coll__buttons;
+            [__coll__buttons, ok] = [val, (typeof val === "object") && (typeof val["length"] === "number")];
+            if (!ok) {
+                return false;
+            }
+            buttons = new Array(__coll__buttons.length);
+            let __idx__buttons;
+            __idx__buttons = 0;
+            for (const __item__buttons of __coll__buttons) {
+                let __val__buttons;
+                __val__buttons = newQuickInputButton();
+                ok = __val__buttons.populateFrom(__item__buttons);
+                if (!ok) {
+                    return false;
+                }
+                buttons[__idx__buttons] = __val__buttons;
+                __idx__buttons = __idx__buttons + 1;
+            }
+        }
+        this.buttons = buttons;
+    }
+    [val, ok] = [it["items"], undefined !== it["items"]];
+    if (ok) {
+        let items;
+        if ((undefined !== val && null !== val)) {
+            let __coll__items;
+            [__coll__items, ok] = [val, (typeof val === "object") && (typeof val["length"] === "number")];
+            if (!ok) {
+                return false;
+            }
+            items = new Array(__coll__items.length);
+            let __idx__items;
+            __idx__items = 0;
+            for (const __item__items of __coll__items) {
+                let __val__items;
+                __val__items = newQuickPickItem();
+                ok = __val__items.populateFrom(__item__items);
+                if (!ok) {
+                    return false;
+                }
+                items[__idx__items] = __val__items;
+                __idx__items = __idx__items + 1;
+            }
+        }
+        this.items = items;
+    }
+    [val, ok] = [it["canSelectMany"], undefined !== it["canSelectMany"]];
+    if (ok) {
+        let canSelectMany;
+        if ((undefined !== val && null !== val)) {
+            [canSelectMany, ok] = [val, typeof val === "boolean"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.canSelectMany = canSelectMany;
+    }
+    [val, ok] = [it["matchOnDescription"], undefined !== it["matchOnDescription"]];
+    if (ok) {
+        let matchOnDescription;
+        if ((undefined !== val && null !== val)) {
+            [matchOnDescription, ok] = [val, typeof val === "boolean"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.matchOnDescription = matchOnDescription;
+    }
+    [val, ok] = [it["matchOnDetail"], undefined !== it["matchOnDetail"]];
+    if (ok) {
+        let matchOnDetail;
+        if ((undefined !== val && null !== val)) {
+            [matchOnDetail, ok] = [val, typeof val === "boolean"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.matchOnDetail = matchOnDetail;
+    }
+    [val, ok] = [it["activeItems"], undefined !== it["activeItems"]];
+    if (ok) {
+        let activeItems;
+        if ((undefined !== val && null !== val)) {
+            let __coll__activeItems;
+            [__coll__activeItems, ok] = [val, (typeof val === "object") && (typeof val["length"] === "number")];
+            if (!ok) {
+                return false;
+            }
+            activeItems = new Array(__coll__activeItems.length);
+            let __idx__activeItems;
+            __idx__activeItems = 0;
+            for (const __item__activeItems of __coll__activeItems) {
+                let __val__activeItems;
+                __val__activeItems = newQuickPickItem();
+                ok = __val__activeItems.populateFrom(__item__activeItems);
+                if (!ok) {
+                    return false;
+                }
+                activeItems[__idx__activeItems] = __val__activeItems;
+                __idx__activeItems = __idx__activeItems + 1;
+            }
+        }
+        this.activeItems = activeItems;
+    }
+    [val, ok] = [it["selectedItems"], undefined !== it["selectedItems"]];
+    if (ok) {
+        let selectedItems;
+        if ((undefined !== val && null !== val)) {
+            let __coll__selectedItems;
+            [__coll__selectedItems, ok] = [val, (typeof val === "object") && (typeof val["length"] === "number")];
+            if (!ok) {
+                return false;
+            }
+            selectedItems = new Array(__coll__selectedItems.length);
+            let __idx__selectedItems;
+            __idx__selectedItems = 0;
+            for (const __item__selectedItems of __coll__selectedItems) {
+                let __val__selectedItems;
+                __val__selectedItems = newQuickPickItem();
+                ok = __val__selectedItems.populateFrom(__item__selectedItems);
+                if (!ok) {
+                    return false;
+                }
+                selectedItems[__idx__selectedItems] = __val__selectedItems;
+                __idx__selectedItems = __idx__selectedItems + 1;
+            }
+        }
+        this.selectedItems = selectedItems;
     }
     [val, ok] = [it["title"], undefined !== it["title"]];
     if (ok) {

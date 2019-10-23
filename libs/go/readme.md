@@ -531,7 +531,7 @@ Obtains this `InputBox`'s current property values for: `value`, `placeholder`,
 #### func (*InputBox) Hide
 
 ```go
-func (me *InputBox) Hide() func(func())
+func (me *InputBox) Hide() func(func(*InputBoxState))
 ```
 Hides this input UI. This will also fire an
 [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
@@ -540,21 +540,21 @@ event.
 #### func (*InputBox) OnDidAccept
 
 ```go
-func (me *InputBox) OnDidAccept(handler func()) func(func(*Disposable))
+func (me *InputBox) OnDidAccept(handler func(InputBoxState)) func(func(*Disposable))
 ```
 An event signaling when the user indicated acceptance of the input value.
 
 #### func (*InputBox) OnDidChangeValue
 
 ```go
-func (me *InputBox) OnDidChangeValue(handler func(string)) func(func(*Disposable))
+func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxState)) func(func(*Disposable))
 ```
 An event signaling when the value has changed.
 
 #### func (*InputBox) OnDidHide
 
 ```go
-func (me *InputBox) OnDidHide(handler func()) func(func(*Disposable))
+func (me *InputBox) OnDidHide(handler func(InputBoxState)) func(func(*Disposable))
 ```
 An event signaling when this input UI is hidden.
 
@@ -568,7 +568,7 @@ the user pressing Esc, some other input UI opening, etc.)
 #### func (*InputBox) OnDidTriggerButton
 
 ```go
-func (me *InputBox) OnDidTriggerButton(handler func(QuickInputButton)) func(func(*Disposable))
+func (me *InputBox) OnDidTriggerButton(handler func(QuickInputButton, InputBoxState)) func(func(*Disposable))
 ```
 An event signaling when a button was triggered.
 
@@ -584,7 +584,7 @@ Updates this `InputBox`'s current property values for: `value`, `placeholder`,
 #### func (*InputBox) Show
 
 ```go
-func (me *InputBox) Show() func(func())
+func (me *InputBox) Show() func(func(*InputBoxState))
 ```
 Makes the input UI visible in its current configuration. Any other input UI will
 first fire an
@@ -839,7 +839,7 @@ To get an instance of an `OutputChannel` use
 #### func (*OutputChannel) Append
 
 ```go
-func (me *OutputChannel) Append(value string) func(func())
+func (me *OutputChannel) Append(value string) func(func(*OutputChannelState))
 ```
 Append the given value to the channel.
 
@@ -848,7 +848,7 @@ Append the given value to the channel.
 #### func (*OutputChannel) AppendLine
 
 ```go
-func (me *OutputChannel) AppendLine(value string) func(func())
+func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelState))
 ```
 Append the given value and a line feed character to the channel.
 
@@ -857,7 +857,7 @@ Append the given value and a line feed character to the channel.
 #### func (*OutputChannel) Clear
 
 ```go
-func (me *OutputChannel) Clear() func(func())
+func (me *OutputChannel) Clear() func(func(*OutputChannelState))
 ```
 Removes all output from the channel.
 
@@ -878,14 +878,14 @@ Obtains this `OutputChannel`'s current property value for: `name`.
 #### func (*OutputChannel) Hide
 
 ```go
-func (me *OutputChannel) Hide() func(func())
+func (me *OutputChannel) Hide() func(func(*OutputChannelState))
 ```
 Hide this channel from the UI.
 
 #### func (*OutputChannel) Show
 
 ```go
-func (me *OutputChannel) Show(preserveFocus bool) func(func())
+func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelState))
 ```
 Reveal this channel in the UI.
 
@@ -954,6 +954,126 @@ Button for an action in a
 [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick)
 or [InputBox](#InputBox).
 
+#### type QuickPick
+
+```go
+type QuickPick struct {
+}
+```
+
+A concrete
+[QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput)
+to let the user pick an item from a list of items of type T. The items can be
+filtered through a filter text field and there is an option
+[canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany)
+to allow for selecting multiple items.
+
+Note that in many cases the more convenient
+[window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+is easier to use.
+[window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick)
+should be used when
+[window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+does not offer the required flexibility.
+
+#### func (*QuickPick) Dispose
+
+```go
+func (me *QuickPick) Dispose() func(func())
+```
+Dispose of this input UI and any associated resources. If it is still visible,
+it is first hidden. After this call the input UI is no longer functional and no
+additional methods or properties on it should be accessed. Instead a new input
+UI should be created.
+
+#### func (*QuickPick) Get
+
+```go
+func (me *QuickPick) Get() func(func(QuickPickState))
+```
+Obtains this `QuickPick`'s current property values for: `value`, `placeholder`,
+`buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`,
+`activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`,
+`busy`, `ignoreFocusOut`.
+
+#### func (*QuickPick) Hide
+
+```go
+func (me *QuickPick) Hide() func(func(*QuickPickState))
+```
+Hides this input UI. This will also fire an
+[QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+event.
+
+#### func (*QuickPick) OnDidAccept
+
+```go
+func (me *QuickPick) OnDidAccept(handler func(QuickPickState)) func(func(*Disposable))
+```
+An event signaling when the user indicated acceptance of the selected item(s).
+
+#### func (*QuickPick) OnDidChangeActive
+
+```go
+func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickState)) func(func(*Disposable))
+```
+An event signaling when the active items have changed.
+
+#### func (*QuickPick) OnDidChangeSelection
+
+```go
+func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPickState)) func(func(*Disposable))
+```
+An event signaling when the selected items have changed.
+
+#### func (*QuickPick) OnDidChangeValue
+
+```go
+func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickState)) func(func(*Disposable))
+```
+An event signaling when the value of the filter text has changed.
+
+#### func (*QuickPick) OnDidHide
+
+```go
+func (me *QuickPick) OnDidHide(handler func(QuickPickState)) func(func(*Disposable))
+```
+An event signaling when this input UI is hidden.
+
+There are several reasons why this UI might have to be hidden and the extension
+will be notified through
+[QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
+(Examples include: an explicit call to
+[QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
+the user pressing Esc, some other input UI opening, etc.)
+
+#### func (*QuickPick) OnDidTriggerButton
+
+```go
+func (me *QuickPick) OnDidTriggerButton(handler func(QuickInputButton, QuickPickState)) func(func(*Disposable))
+```
+An event signaling when a button was triggered.
+
+#### func (*QuickPick) Set
+
+```go
+func (me *QuickPick) Set(allUpdates QuickPickState) func(func())
+```
+Updates this `QuickPick`'s current property values for: `value`, `placeholder`,
+`buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`,
+`activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`,
+`busy`, `ignoreFocusOut`.
+
+#### func (*QuickPick) Show
+
+```go
+func (me *QuickPick) Show() func(func(*QuickPickState))
+```
+Makes the input UI visible in its current configuration. Any other input UI will
+first fire an
+[QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
+event.
+
 #### type QuickPickItem
 
 ```go
@@ -1006,6 +1126,78 @@ type QuickPickOptions struct {
 ```
 
 Options to configure the behavior of the quick pick UI.
+
+#### type QuickPickState
+
+```go
+type QuickPickState struct {
+	// Current value of the filter text.
+	Value string `json:"value,omitempty"`
+
+	// Optional placeholder in the filter text.
+	Placeholder string `json:"placeholder,omitempty"`
+
+	// Buttons for actions in the UI.
+	Buttons []QuickInputButton `json:"buttons,omitempty"`
+
+	// Items to pick from.
+	Items []QuickPickItem `json:"items,omitempty"`
+
+	// If multiple items can be selected at the same time. Defaults to false.
+	CanSelectMany bool `json:"canSelectMany,omitempty"`
+
+	// If the filter text should also be matched against the description of the items. Defaults to false.
+	MatchOnDescription bool `json:"matchOnDescription,omitempty"`
+
+	// If the filter text should also be matched against the detail of the items. Defaults to false.
+	MatchOnDetail bool `json:"matchOnDetail,omitempty"`
+
+	// Active items. This can be read and updated by the extension.
+	ActiveItems []QuickPickItem `json:"activeItems,omitempty"`
+
+	// Selected items. This can be read and updated by the extension.
+	SelectedItems []QuickPickItem `json:"selectedItems,omitempty"`
+
+	// An optional title.
+	Title string `json:"title,omitempty"`
+
+	// An optional current step count.
+	Step int `json:"step,omitempty"`
+
+	// An optional total step count.
+	TotalSteps int `json:"totalSteps,omitempty"`
+
+	// If the UI should allow for user input. Defaults to true.
+	//
+	// Change this to false, e.g., while validating user input or
+	// loading data for the next step in user input.
+	Enabled bool `json:"enabled,omitempty"`
+
+	// If the UI should show a progress indicator. Defaults to false.
+	//
+	// Change this to true, e.g., while loading more data or validating
+	// user input.
+	Busy bool `json:"busy,omitempty"`
+
+	// If the UI should stay open even when loosing UI focus. Defaults to false.
+	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
+}
+```
+
+A concrete
+[QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput)
+to let the user pick an item from a list of items of type T. The items can be
+filtered through a filter text field and there is an option
+[canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany)
+to allow for selecting multiple items.
+
+Note that in many cases the more convenient
+[window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+is easier to use.
+[window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick)
+should be used when
+[window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+does not offer the required flexibility.
 
 #### type SaveDialogOptions
 
@@ -1082,7 +1274,7 @@ Obtains this `StatusBarItem`'s current property values for: `alignment`,
 #### func (*StatusBarItem) Hide
 
 ```go
-func (me *StatusBarItem) Hide() func(func())
+func (me *StatusBarItem) Hide() func(func(*StatusBarItemState))
 ```
 Hide the entry in the status bar.
 
@@ -1097,7 +1289,7 @@ Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`,
 #### func (*StatusBarItem) Show
 
 ```go
-func (me *StatusBarItem) Show() func(func())
+func (me *StatusBarItem) Show() func(func(*StatusBarItemState))
 ```
 Shows the entry in the status bar.
 
@@ -1698,19 +1890,19 @@ type Window interface {
 	// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 	//
 	// `return` ── A new status bar item.
-	CreateStatusBarItem(alignment StatusBarAlignment, priority *int) func(func(*StatusBarItem))
+	CreateStatusBarItem(alignment StatusBarAlignment, priority *int) func(func(StatusBarItem, StatusBarItemState))
 
 	// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 	//
 	// `name` ── Human-readable string which will be used to represent the channel in the UI.
-	CreateOutputChannel(name string) func(func(*OutputChannel))
+	CreateOutputChannel(name string) func(func(OutputChannel, OutputChannelState))
 
 	// Create a TextEditorDecorationType that can be used to add decorations to text editors.
 	//
 	// `options` ── Rendering options for the decoration type.
 	//
 	// `return` ── A new decoration type instance.
-	CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(*TextEditorDecorationType))
+	CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(TextEditorDecorationType, TextEditorDecorationTypeState))
 
 	// Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
 	//
@@ -1719,7 +1911,17 @@ type Window interface {
 	// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 	//
 	// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
-	CreateInputBox() func(func(*InputBox))
+	CreateInputBox() func(func(InputBox, InputBoxState))
+
+	// Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
+	// of items of type T.
+	//
+	// Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
+	// is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
+	// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+	//
+	// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
+	CreateQuickPick() func(func(QuickPick, QuickPickState))
 }
 ```
 

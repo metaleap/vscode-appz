@@ -283,38 +283,31 @@ namespace VscAppzDemo {
 			});
 		}
 		private static void demo_Window_CreateInputBox() {
-			vsc.Window.CreateInputBox()((InputBox inputbox) => {
-				inputbox.Get()((InputBoxState props) => {
-					props.IgnoreFocusOut = true;
-					props.Placeholder = "The initial Placeholder";
-					props.Prompt = "The initial Prompt";
-					props.Title = "The initial Title";
-					inputbox.Set(props)(() => {
-						inputbox.OnDidChangeValue((string input) => {
-							inputbox.Get()((InputBoxState p) => {
-								p.Prompt = strFmt("Lower: {0}", strLo(p.Value));
-								p.Title = strFmt("Upper: {0}", strUp(p.Value));
-								inputbox.Set(p);
-							});
-						});
-						string finalinputvalue = default;
-						inputbox.OnDidAccept(() => {
-							inputbox.Get()((InputBoxState p) => {
-								finalinputvalue = p.Value;
-								inputbox.Hide();
-							});
-						});
-						inputbox.OnDidHide(() => {
-							inputbox.Dispose();
-							if ((null != finalinputvalue)) {
-								vsc.Window.ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", finalinputvalue)), null);
-							} else {
-								vsc.Window.ShowWarningMessage1(logLn("Backing off or backing up?"), null);
-							}
-						});
-						inputbox.Show();
-					});
+			vsc.Window.CreateInputBox()((InputBox inputbox, InputBoxState props) => {
+				props.IgnoreFocusOut = true;
+				props.Placeholder = "The initial Placeholder";
+				props.Prompt = "The initial Prompt";
+				props.Title = "The initial Title";
+				inputbox.Set(props);
+				inputbox.OnDidChangeValue((string input, InputBoxState ctl) => {
+					ctl.Prompt = strFmt("Lower: {0}", strLo(ctl.Value));
+					ctl.Title = strFmt("Upper: {0}", strUp(ctl.Value));
+					inputbox.Set(ctl);
 				});
+				string finalinputvalue = default;
+				inputbox.OnDidAccept((InputBoxState ctl) => {
+					finalinputvalue = ctl.Value;
+					inputbox.Hide();
+				});
+				inputbox.OnDidHide((InputBoxState ctl) => {
+					inputbox.Dispose();
+					if ((null != finalinputvalue)) {
+						vsc.Window.ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", finalinputvalue)), null);
+					} else {
+						vsc.Window.ShowWarningMessage1(logLn("Backing off or backing up?"), null);
+					}
+				});
+				inputbox.Show();
 			});
 		}
 		private static void subscribeToMiscEvents() {
@@ -403,7 +396,7 @@ namespace VscAppzDemo {
 			OutputChannel logchan = default;
 			bool toggleonclick = default;
 			{
-				vsc.Window.CreateOutputChannel(appName)((OutputChannel it) => {
+				vsc.Window.CreateOutputChannel(appName)((OutputChannel it, OutputChannelState _unused) => {
 					logchan = it;
 					setOutChan(logchan);
 					logLn(strFmt("Hi, I'm `{0}`, this is my own custom `OutputChannel` where I leisurely log all your interactions with me. When I'm ended, it too will disappear.", appName));
@@ -442,9 +435,8 @@ namespace VscAppzDemo {
 					return null;
 				};
 				vsc.Commands.RegisterCommand(cmdName, mycmd)((Disposable _commandRegisteredAtThisPoint) => {
-					vsc.Window.CreateStatusBarItem(0, null)((StatusBarItem it) => {
+					vsc.Window.CreateStatusBarItem(0, null)((StatusBarItem it, StatusBarItemState props) => {
 						statusitem = it;
-						StatusBarItemState props = default;
 						props = new StatusBarItemState();
 						props.Tooltip = strFmt("Hi from {0}!", appName);
 						props.Text = "You clicked me 0 time(s).";

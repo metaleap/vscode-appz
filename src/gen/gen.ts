@@ -182,11 +182,12 @@ export class Prep {
 
             if (struct.isIncoming && struct.fields.find(_ => typeFun(_.typeSpec))) {
                 struct.isDispObj = true
-                if (struct.fields.find(_ => !typeFun(_.typeSpec))) {
+                const propfields = struct.fields.filter(_ => !typeFun(_.typeSpec))
+                if (propfields.length) {
                     const propstruct: PrepStruct = {
                         funcFields: [], name: struct.name + "State", isPropsOfStruct: struct,
                         fromOrig: struct.fromOrig, isIncoming: true, isOutgoing: true,
-                        fields: struct.fields.filter(_ => !typeFun(_.typeSpec)).map(_ => {
+                        fields: propfields.map(_ => {
                             _.optional = true
                             for (const tname of typeNames(_.typeSpec)) {
                                 const tstruct = this.structs.find(_ => _.name === tname)
@@ -255,7 +256,7 @@ export class Prep {
                         isExtBaggage: false,
                     }
                     if (ts.isPropertySignature(_) && ts.isTypeReferenceNode(_.type) && _.type.typeName.getText() === "Event")
-                        field.typeSpec = { From: [{ From: _.type.typeArguments.map(_ => this.typeSpec(_)).filter(_ => _ ? true : false), To: null }], To: "Disposable" }
+                        field.typeSpec = { From: [{ From: _.type.typeArguments.map(_ => this.typeSpec(_, combine(it.decl.typeParameters, mtparams ? mtparams.typeParameters : []))).filter(_ => _ ? true : false), To: null }], To: "Disposable" }
                     fields.push(field)
                 }
             }

@@ -293,38 +293,31 @@ function demo_Window_ShowQuickPick() {
 }
 
 function demo_Window_CreateInputBox() {
-    vsc.Window.CreateInputBox()((inputbox) => {
-        inputbox.Get()((props) => {
-            props.ignoreFocusOut = true
-            props.placeholder = "The initial Placeholder"
-            props.prompt = "The initial Prompt"
-            props.title = "The initial Title"
-            inputbox.Set(props)(() => {
-                inputbox.OnDidChangeValue((input) => {
-                    inputbox.Get()((p) => {
-                        p.prompt = strFmt("Lower: {0}", strLo(p.value))
-                        p.title = strFmt("Upper: {0}", strUp(p.value))
-                        inputbox.Set(p)
-                    })
-                })
-                let finalinputvalue
-                inputbox.OnDidAccept(() => {
-                    inputbox.Get()((p) => {
-                        finalinputvalue = p.value
-                        inputbox.Hide()
-                    })
-                })
-                inputbox.OnDidHide(() => {
-                    inputbox.Dispose()
-                    if ((undefined !== finalinputvalue && null !== finalinputvalue)) {
-                        vsc.Window.ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", finalinputvalue)), null)
-                    } else {
-                        vsc.Window.ShowWarningMessage1(logLn("Backing off or backing up?"), null)
-                    }
-                })
-                inputbox.Show()
-            })
+    vsc.Window.CreateInputBox()((inputbox, props) => {
+        props.ignoreFocusOut = true
+        props.placeholder = "The initial Placeholder"
+        props.prompt = "The initial Prompt"
+        props.title = "The initial Title"
+        inputbox.Set(props)
+        inputbox.OnDidChangeValue((input, ctl) => {
+            ctl.prompt = strFmt("Lower: {0}", strLo(ctl.value))
+            ctl.title = strFmt("Upper: {0}", strUp(ctl.value))
+            inputbox.Set(ctl)
         })
+        let finalinputvalue
+        inputbox.OnDidAccept((ctl) => {
+            finalinputvalue = ctl.value
+            inputbox.Hide()
+        })
+        inputbox.OnDidHide((ctl) => {
+            inputbox.Dispose()
+            if ((undefined !== finalinputvalue && null !== finalinputvalue)) {
+                vsc.Window.ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", finalinputvalue)), null)
+            } else {
+                vsc.Window.ShowWarningMessage1(logLn("Backing off or backing up?"), null)
+            }
+        })
+        inputbox.Show()
     })
 }
 
@@ -416,7 +409,7 @@ function onUpAndRunning() {
     let logchan
     let toggleonclick
     {
-        vsc.Window.CreateOutputChannel(appName)((it) => {
+        vsc.Window.CreateOutputChannel(appName)((it, _unused) => {
             logchan = it
             setOutChan(logchan)
             logLn(strFmt("Hi, I'm `{0}`, this is my own custom `OutputChannel` where I leisurely log all your interactions with me. When I'm ended, it too will disappear.", appName))
@@ -455,9 +448,8 @@ function onUpAndRunning() {
             return null
         }
         vsc.Commands.RegisterCommand(cmdName, mycmd)((_commandRegisteredAtThisPoint) => {
-            vsc.Window.CreateStatusBarItem(0, null)((it) => {
+            vsc.Window.CreateStatusBarItem(0, null)((it, props) => {
                 statusitem = it
-                let props
                 props = {}
                 props.tooltip = strFmt("Hi from {0}!", appName)
                 props.text = "You clicked me 0 time(s)."
