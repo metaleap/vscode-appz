@@ -1,4 +1,4 @@
-// Auto-merged-and-`sed`ed from parent dir's .go files to have a readily `go run`-able (even outside GOPATH) demo proggie..
+// Auto-merged-and-`sed`ed from `./proper-cmd/go-vsc-appz-demo` .go files to have a readily `go run`-able (even outside GOPATH) demo proggie that always imports our extension-local `../../libs/go` package
 package main
 
 import (
@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	. "../../../libs/go"
+	. "../../libs/go"
 )
 
 type any = interface{}

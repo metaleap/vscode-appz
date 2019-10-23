@@ -23,7 +23,7 @@ export let uxStr = {
 }
 
 let extDirPathStrVarProvider: { [_: string]: ((_: string) => string) } = {
-	'appz': _ => vscCtx.extensionPath,
+	'': _ => vscCtx.extensionPath,
 }
 
 

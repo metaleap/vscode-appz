@@ -12,7 +12,7 @@ const gen_vscext = require("./gen-vscext");
 const filePathDts = 'node_modules/@types/vscode/index.d.ts';
 const gens = [
     new gen_syn.Gen(['libs/tmpdbg/', '.gen.coffee']),
-    new gen_golang.Gen(['libs/go/', '.gen.go'], 'demos/go-vsc-appz-demo/miscdemos.gen.go'),
+    new gen_golang.Gen(['libs/go/', '.gen.go'], 'demos/go/proper-cmd/go-vsc-appz-demo/miscdemos.gen.go'),
     new gen_csharp.Gen(['libs/cs/', '.gen.cs'], 'demos/csharp/miscdemos.gen.cs'),
     new gen_nodets.Gen(['libs/js/src/', '.gen.ts'], 'demos/nodejs/miscdemos.gen.js'),
     new gen_python.Gen(['libs/py/', '.gen.py']),

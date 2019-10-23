@@ -19,7 +19,7 @@ exports.uxStr = {
     exitCodeNonZero: uxStrAppzPref + "Exited with code _: ",
 };
 let extDirPathStrVarProvider = {
-    'appz': _ => exports.vscCtx.extensionPath,
+    '': _ => exports.vscCtx.extensionPath,
 };
 function deactivate() { ppio.disposeAll(); }
 exports.deactivate = deactivate;

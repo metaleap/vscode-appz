@@ -17,9 +17,10 @@ export class Gen extends gen_syn.Gen {
         if (this.isDemos) {
             const srcmain = node_fs.readFileSync(node_path.join(node_path.dirname(this.options.demoOutFilePath), "main.go")).toString()
             const srcmiscdemosgen = node_fs.readFileSync(this.options.demoOutFilePath).toString()
-            node_fs.writeFileSync(node_path.join(node_path.dirname(this.options.demoOutFilePath), "localrun", "automerged.go"),
-                "// Auto-merged-and-`sed`ed from parent dir's .go files to have a readily `go run`-able (even outside GOPATH) demo proggie..\n" +
-                (srcmain.replace('"github.com/metaleap/vscode-appz/libs/go"', '"../../../libs/go"') + srcmiscdemosgen.slice(srcmiscdemosgen.indexOf("\nfunc ")))
+            const outfilepath = node_path.join(node_path.dirname(node_path.dirname(node_path.dirname(this.options.demoOutFilePath))), "localrun-automerged.go")
+            node_fs.writeFileSync(outfilepath,
+                "// Auto-merged-and-`sed`ed from `./proper-cmd/go-vsc-appz-demo` .go files to have a readily `go run`-able (even outside GOPATH) demo proggie that always imports our extension-local `../../libs/go` package\n" +
+                (srcmain.replace('"github.com/metaleap/vscode-appz/libs/go"', '"../../libs/go"') + srcmiscdemosgen.slice(srcmiscdemosgen.indexOf("\nfunc ")))
             )
         }
     }
