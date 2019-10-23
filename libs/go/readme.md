@@ -430,13 +430,6 @@ type EnvProperties struct {
 
 Namespace describing the environment the editor runs in.
 
-#### type Event
-
-```go
-type Event string
-```
-
-
 #### type Extensions
 
 ```go

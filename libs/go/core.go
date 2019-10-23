@@ -234,7 +234,3 @@ func (me Disposable) Dispose() func(func()) {
 	}
 	return func(on func()) { ondone = on }
 }
-
-type Event string
-
-func (me *Event) populateFrom(payload any) (ok bool) { return }
