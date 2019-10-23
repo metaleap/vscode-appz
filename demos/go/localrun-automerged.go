@@ -48,7 +48,8 @@ func main() {
 					} else {
 						switch button := *btn; button {
 						case buttons[0]:
-							demo_Window_ShowQuickPick()
+							demoQP()
+							// demo_Window_ShowQuickPick()
 						case buttons[1]:
 							demo_Window_ShowInputBox()
 						case buttons[2]:
@@ -110,6 +111,38 @@ func strFmt(s string, args ...any) string {
 }
 func strLo(s string) string { return strings.ToLower(s) }
 func strUp(s string) string { return strings.ToUpper(s) }
+
+func demoQP() {
+	win.CreateQuickPick()(func(qp QuickPick, qps QuickPickState) {
+		qp.OnDidTriggerButton(func(btn QuickInputButton, _ QuickPickState) {
+		})
+		qp.OnDidAccept(func(_ QuickPickState) {
+		})
+		qps.IgnoreFocusOut = true
+		qps.Buttons = append(qps.Buttons,
+			QuickInputButton{Tooltip: "jersey", IconPath: "jersey.svg"},
+			QuickInputButton{Tooltip: "d-jersey", IconPath: "dark/jersey.svg"},
+			QuickInputButton{Tooltip: "u-jersey", IconPath: "https://raw.githubusercontent.com/microsoft/vscode-icons/master/icons/dark/jersey.svg"},
+			QuickInputButton{Tooltip: "location", IconPath: "location.svg"},
+			QuickInputButton{Tooltip: "d-location", IconPath: "dark/location.svg"},
+			QuickInputButton{Tooltip: "u-location", IconPath: "https://raw.githubusercontent.com/microsoft/vscode-icons/master/icons/dark/location.svg"},
+		)
+		for i := 1; i <= 123; i++ {
+			s := strconv.Itoa(i)
+			qps.Items = append(qps.Items, QuickPickItem{
+				Description: "$(gift) Description " + s, Detail: "$(globe~spin) Detail " + s, Label: "$(eye) Label " + s, AlwaysShow: (i == 42),
+			})
+		}
+		qps.Step = 23
+		qps.TotalSteps = 42
+		qps.Title = "Funky"
+		qp.Set(qps)
+		qp.OnDidTriggerButton(func(btn QuickInputButton, _ QuickPickState) {
+		})
+		qp.OnDidHide(func(_ QuickPickState) { qp.Dispose() })
+		qp.Show()
+	})
+}
 
 func demo_promptToExit() {
 	vsc.Window().ShowWarningMessage1(strFmt("Are you sure you want `{0}` to exit?", appName), []string{"Sure I'm sure"})(func(btn *string) {
