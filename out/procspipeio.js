@@ -200,7 +200,7 @@ class Prog {
         let sendret = false;
         const onfail = (err) => {
             if (err)
-                vsc.window.showErrorMessage(err).then();
+                vsc.window.showErrorMessage(err);
             if (this.proc && msg && msg.cbId && !sendret)
                 this.send({ cbId: msg.cbId, data: { nay: ensureWillShowUpInJson(err) } });
         };
