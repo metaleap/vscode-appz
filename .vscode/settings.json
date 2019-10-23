@@ -5,8 +5,8 @@
         "out": true,
         "libs/cs/bin": true,
         "libs/cs/obj": true,
-        "demos/cs-vsc-appz-demo/bin": true,
-        "demos/cs-vsc-appz-demo/obj": true,
+        "demos/csharp/bin": true,
+        "demos/csharp/obj": true,
     },
     "search.exclude": {
         "out": true // set this to false to include "out" folder in search results

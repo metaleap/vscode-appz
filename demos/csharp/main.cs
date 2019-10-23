@@ -4,7 +4,7 @@ namespace VscAppzDemo {
 
     public static partial class App {
 
-        private const string appName = "cs-vsc-appz-demo";
+        private const string appName = "csharp-vsc-appz-demo";
         private static readonly string cmdName = appName + Environment.TickCount;
 
         private static IVscode vsc;

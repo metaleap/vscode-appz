@@ -1,5 +1,5 @@
 libs/cs/bin
 libs/cs/obj
-demos/cs-vsc-appz-demo/bin
-demos/cs-vsc-appz-demo/obj
+demos/csharp/bin
+demos/csharp/obj
 node_modules

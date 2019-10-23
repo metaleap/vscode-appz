@@ -37,7 +37,7 @@
 			"command": [
 				"dotnet build -c Release",
 				"&& dotnet pack -c Release",
-				"&& cd ../../demos/cs-vsc-appz-demo",
+				"&& cd ../../demos/csharp",
 				"&& dotnet build -c Release"
 			],
 			"group": "build",
