@@ -590,11 +590,20 @@ Window: interface
 
     # state:
     # Represents the current window's state.
+    #
+    # @return:
+    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
     State: ((WindowState->void)->void)
 
     # onDidChangeWindowState:
     # An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
     # changes. The value of the event represents whether the window is focused.
+    #
+    # @listener:
+    # Will be invoked whenever this event fires; mandatory, not optional.
+    #
+    # @return:
+    # A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
     OnDidChangeWindowState: ((?Disposable->void)->void)
         listener: (WindowState->void)
 
@@ -609,15 +618,22 @@ Window: interface
     #
     # @return:
     # A new status bar item.
+    #
+    # @optionallyInitialStateToApplyUponCreation:
+    # If specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
     CreateStatusBarItem: ((StatusBarItem->StatusBarItemState->void)->void)
         alignment: ?StatusBarAlignment
         priority: ?int
+        optionallyInitialStateToApplyUponCreation: ?StatusBarItemState # undefined
 
     # createOutputChannel:
     # Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
     #
     # @name:
     # Human-readable string which will be used to represent the channel in the UI.
+    #
+    # @return:
+    # A thenable that resolves when the `OutputChannel` has been created and initialized.
     CreateOutputChannel: ((OutputChannel->OutputChannelState->void)->void)
         name: string
 
@@ -641,7 +657,11 @@ Window: interface
     #
     # @return:
     # A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
+    #
+    # @optionallyInitialStateToApplyUponCreation:
+    # If specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
     CreateInputBox: ((InputBox->InputBoxState->void)->void)
+        optionallyInitialStateToApplyUponCreation: ?InputBoxState # undefined
 
     # createQuickPick:
     # Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
@@ -653,7 +673,11 @@ Window: interface
     #
     # @return:
     # A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
+    #
+    # @optionallyInitialStateToApplyUponCreation:
+    # If specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
     CreateQuickPick: ((QuickPick->QuickPickState->void)->void)
+        optionallyInitialStateToApplyUponCreation: ?QuickPickState # undefined
 
 
 
@@ -679,18 +703,30 @@ Env: interface
 
     # appName:
     # The application name of the editor, like 'VS Code'.
+    #
+    # @return:
+    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
     AppName: ((string->void)->void)
 
     # appRoot:
     # The application root folder from which the editor is running.
+    #
+    # @return:
+    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
     AppRoot: ((string->void)->void)
 
     # language:
     # Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
+    #
+    # @return:
+    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
     Language: ((string->void)->void)
 
     # machineId:
     # A unique identifier for the computer.
+    #
+    # @return:
+    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
     MachineId: ((string->void)->void)
 
     # remoteName:
@@ -701,20 +737,32 @@ Env: interface
     # value is defined in all extension hosts (local and remote) in case a remote extension host
     # exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
     # a specific extension runs remote or not.
+    #
+    # @return:
+    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
     RemoteName: ((?string->void)->void)
 
     # sessionId:
     # A unique identifier for the current session.
     # Changes each time the editor is started.
+    #
+    # @return:
+    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
     SessionId: ((string->void)->void)
 
     # shell:
     # The detected default shell for the extension host, this is overridden by the
     # `terminal.integrated.shell` setting for the extension host's platform.
+    #
+    # @return:
+    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
     Shell: ((string->void)->void)
 
     # uriScheme:
     # The custom uri scheme the editor registers to in the operating system.
+    #
+    # @return:
+    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
     UriScheme: ((string->void)->void)
 
     # Provides single-call access to numerous individual `Env` properties at once.
@@ -742,6 +790,9 @@ Clipboard: interface
     #
     # @return:
     # A thenable that resolves when writing happened.
+    #
+    # @value:
+    # 
     WriteText: ((void->void)->void)
         value: string
 
@@ -761,6 +812,9 @@ Workspace: interface
     # name:
     # The name of the workspace. `undefined` when no folder
     # has been opened.
+    #
+    # @return:
+    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
     Name: ((?string->void)->void)
 
     # workspaceFile:
@@ -795,6 +849,9 @@ Workspace: interface
     # configuration data into the file. You can use `workspace.getConfiguration().update()`
     # for that purpose which will work both when a single folder is opened as
     # well as an untitled or saved workspace.
+    #
+    # @return:
+    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
     WorkspaceFile: ((?string->void)->void)
 
     # saveAll:
@@ -810,6 +867,12 @@ Workspace: interface
 
     # onDidChangeWorkspaceFolders:
     # An event that is emitted when a workspace folder is added or removed.
+    #
+    # @listener:
+    # Will be invoked whenever this event fires; mandatory, not optional.
+    #
+    # @return:
+    # A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
     OnDidChangeWorkspaceFolders: ((?Disposable->void)->void)
         listener: (WorkspaceFoldersChangeEvent->void)
 
@@ -829,6 +892,9 @@ Workspace: interface
     # workspaceFolders:
     # List of workspace folders or `undefined` when no folder is open.
     # *Note* that the first entry corresponds to the value of `rootPath`.
+    #
+    # @return:
+    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
     WorkspaceFolders: ((?[WorkspaceFolder]->void)->void)
 
     # findFiles:
@@ -929,6 +995,12 @@ Languages: interface
     # onDidChangeDiagnostics:
     # An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
     # newly added and removed diagnostics.
+    #
+    # @listener:
+    # Will be invoked whenever this event fires; mandatory, not optional.
+    #
+    # @return:
+    # A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
     OnDidChangeDiagnostics: ((?Disposable->void)->void)
         listener: (DiagnosticChangeEvent->void)
 
@@ -979,6 +1051,12 @@ Extensions: interface
     # onDidChange:
     # An event which fires when `extensions.all` changes. This can happen when extensions are
     # installed, uninstalled, enabled or disabled.
+    #
+    # @listener:
+    # Will be invoked whenever this event fires; mandatory, not optional.
+    #
+    # @return:
+    # A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
     OnDidChange: ((?Disposable->void)->void)
         listener: (->void)
 
@@ -2294,12 +2372,6 @@ QuickPickState: class
     # JSON FLAGS: {"Name":"placeholder","Required":false,"Excluded":false}
     Placeholder: string
 
-    # buttons:
-    # Buttons for actions in the UI.
-    #
-    # JSON FLAGS: {"Name":"buttons","Required":false,"Excluded":false}
-    Buttons: ?[QuickInputButton]
-
     # items:
     # Items to pick from.
     #
@@ -2435,8 +2507,8 @@ Window·ShowInformationMessage1: (message:string -> items:[string] -> ((?string-
             if !ok
                 return false
             result = &_result_
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2466,8 +2538,8 @@ Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> it
             if !ok
                 return false
             result = &_result_
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2495,8 +2567,8 @@ Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> ((?Me
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2525,8 +2597,8 @@ Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> it
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2555,8 +2627,8 @@ Window·ShowWarningMessage1: (message:string -> items:[string] -> ((?string->voi
             if !ok
                 return false
             result = &_result_
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2586,8 +2658,8 @@ Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:
             if !ok
                 return false
             result = &_result_
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2615,8 +2687,8 @@ Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> ((?Messag
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2645,8 +2717,8 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2675,8 +2747,8 @@ Window·ShowErrorMessage1: (message:string -> items:[string] -> ((?string->void)
             if !ok
                 return false
             result = &_result_
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2706,8 +2778,8 @@ Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[s
             if !ok
                 return false
             result = &_result_
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2735,8 +2807,8 @@ Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> ((?MessageI
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2765,8 +2837,8 @@ Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[M
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2823,8 +2895,8 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> ((?string->v
             if !ok
                 return false
             result = &_result_
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, (payload:any -> bool)
@@ -2900,8 +2972,8 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
                     return false
                 result@__idx__result = __val__result
                 __idx__result = __idx__result + 1
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, (payload:any -> bool)
@@ -2968,8 +3040,8 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
             if !ok
                 return false
             result = &_result_
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, (payload:any -> bool)
@@ -3046,8 +3118,8 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
                     return false
                 result@__idx__result = __val__result
                 __idx__result = __idx__result + 1
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, (payload:any -> bool)
@@ -3113,8 +3185,8 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, (payload:any -> bool)
@@ -3150,8 +3222,8 @@ Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> ((?Disposa
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.Impl()))
+            if =?onret
+                onret(result.bind(this.Impl()))
         return true
     
     this.Impl().send(msg, onresp)
@@ -3180,8 +3252,8 @@ Window·SetStatusBarMessage2: (text:string -> ((?Disposable->void)->void))
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.Impl()))
+            if =?onret
+                onret(result.bind(this.Impl()))
         return true
     
     this.Impl().send(msg, onresp)
@@ -3209,8 +3281,8 @@ Window·ShowSaveDialog: (options:SaveDialogOptions -> ((?string->void)->void))
             if !ok
                 return false
             result = &_result_
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3247,8 +3319,8 @@ Window·ShowOpenDialog: (options:OpenDialogOptions -> ((?[string]->void)->void))
                     return false
                 result@__idx__result = __val__result
                 __idx__result = __idx__result + 1
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3276,8 +3348,8 @@ Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> ((?Work
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3303,8 +3375,8 @@ Window·State: ( -> ((WindowState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3349,8 +3421,8 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> ((?Disposable->
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.Impl(), _fnid_listener))
+            if =?onret
+                onret(result.bind(this.Impl(), _fnid_listener))
         return true
     
     this.Impl().send(msg, onresp)
@@ -3361,7 +3433,7 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> ((?Disposable->
 
 
 
-Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> ((StatusBarItem->StatusBarItemState->void)->void))
+Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> optionallyInitialStateToApplyUponCreation:?StatusBarItemState -> ((StatusBarItem->StatusBarItemState->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createStatusBarItem"
@@ -3381,10 +3453,12 @@ Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> 
             if !ok
                 return false
             result.disp.impl = this.Impl()
-        result.Get()((state:StatusBarItemState -> void)
-            if =?onret
-                onret(result, state)
-        )
+            if =?optionallyInitialStateToApplyUponCreation
+                result.Set(*optionallyInitialStateToApplyUponCreation)
+            result.Get()((state:StatusBarItemState -> void)
+                if =?onret
+                    onret(result, state)
+            )
         return true
     
     this.Impl().send(msg, onresp)
@@ -3412,10 +3486,10 @@ Window·CreateOutputChannel: (name:string -> ((OutputChannel->OutputChannelState
             if !ok
                 return false
             result.disp.impl = this.Impl()
-        result.Get()((state:OutputChannelState -> void)
-            if =?onret
-                onret(result, state)
-        )
+            result.Get()((state:OutputChannelState -> void)
+                if =?onret
+                    onret(result, state)
+            )
         return true
     
     this.Impl().send(msg, onresp)
@@ -3443,10 +3517,10 @@ Window·CreateTextEditorDecorationType: (options:DecorationRenderOptions -> ((Te
             if !ok
                 return false
             result.disp.impl = this.Impl()
-        result.Get()((state:TextEditorDecorationTypeState -> void)
-            if =?onret
-                onret(result, state)
-        )
+            result.Get()((state:TextEditorDecorationTypeState -> void)
+                if =?onret
+                    onret(result, state)
+            )
         return true
     
     this.Impl().send(msg, onresp)
@@ -3457,7 +3531,7 @@ Window·CreateTextEditorDecorationType: (options:DecorationRenderOptions -> ((Te
 
 
 
-Window·CreateInputBox: ( -> ((InputBox->InputBoxState->void)->void))
+Window·CreateInputBox: (optionallyInitialStateToApplyUponCreation:?InputBoxState -> ((InputBox->InputBoxState->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createInputBox"
@@ -3473,10 +3547,12 @@ Window·CreateInputBox: ( -> ((InputBox->InputBoxState->void)->void))
             if !ok
                 return false
             result.disp.impl = this.Impl()
-        result.Get()((state:InputBoxState -> void)
-            if =?onret
-                onret(result, state)
-        )
+            if =?optionallyInitialStateToApplyUponCreation
+                result.Set(*optionallyInitialStateToApplyUponCreation)
+            result.Get()((state:InputBoxState -> void)
+                if =?onret
+                    onret(result, state)
+            )
         return true
     
     this.Impl().send(msg, onresp)
@@ -3487,7 +3563,7 @@ Window·CreateInputBox: ( -> ((InputBox->InputBoxState->void)->void))
 
 
 
-Window·CreateQuickPick: ( -> ((QuickPick->QuickPickState->void)->void))
+Window·CreateQuickPick: (optionallyInitialStateToApplyUponCreation:?QuickPickState -> ((QuickPick->QuickPickState->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createQuickPick"
@@ -3503,10 +3579,12 @@ Window·CreateQuickPick: ( -> ((QuickPick->QuickPickState->void)->void))
             if !ok
                 return false
             result.disp.impl = this.Impl()
-        result.Get()((state:QuickPickState -> void)
-            if =?onret
-                onret(result, state)
-        )
+            if =?optionallyInitialStateToApplyUponCreation
+                result.Set(*optionallyInitialStateToApplyUponCreation)
+            result.Get()((state:QuickPickState -> void)
+                if =?onret
+                    onret(result, state)
+            )
         return true
     
     this.Impl().send(msg, onresp)
@@ -3534,8 +3612,8 @@ Env·OpenExternal: (target:string -> ((bool->void)->void))
                 return false
         else
             return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3560,8 +3638,8 @@ Env·AppName: ( -> ((string->void)->void))
             [result, ok] = ((payload)·(string))
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3586,8 +3664,8 @@ Env·AppRoot: ( -> ((string->void)->void))
             [result, ok] = ((payload)·(string))
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3612,8 +3690,8 @@ Env·Language: ( -> ((string->void)->void))
             [result, ok] = ((payload)·(string))
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3638,8 +3716,8 @@ Env·MachineId: ( -> ((string->void)->void))
             [result, ok] = ((payload)·(string))
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3666,8 +3744,8 @@ Env·RemoteName: ( -> ((?string->void)->void))
             if !ok
                 return false
             result = &_result_
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3692,8 +3770,8 @@ Env·SessionId: ( -> ((string->void)->void))
             [result, ok] = ((payload)·(string))
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3718,8 +3796,8 @@ Env·Shell: ( -> ((string->void)->void))
             [result, ok] = ((payload)·(string))
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3744,8 +3822,8 @@ Env·UriScheme: ( -> ((string->void)->void))
             [result, ok] = ((payload)·(string))
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3773,8 +3851,8 @@ Env·Properties: ( -> ((EnvProperties->void)->void))
                 return false
         else
             return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3807,8 +3885,8 @@ Clipboard·ReadText: ( -> ((?string->void)->void))
             if !ok
                 return false
             result = &_result_
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3858,8 +3936,8 @@ Workspace·Name: ( -> ((?string->void)->void))
             if !ok
                 return false
             result = &_result_
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3886,8 +3964,8 @@ Workspace·WorkspaceFile: ( -> ((?string->void)->void))
             if !ok
                 return false
             result = &_result_
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3915,8 +3993,8 @@ Workspace·SaveAll: (includeUntitled:bool -> ((bool->void)->void))
                 return false
         else
             return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3961,8 +4039,8 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.Impl(), _fnid_listener))
+            if =?onret
+                onret(result.bind(this.Impl(), _fnid_listener))
         return true
     
     this.Impl().send(msg, onresp)
@@ -3989,8 +4067,8 @@ Workspace·GetWorkspaceFolder: (uri:string -> ((?WorkspaceFolder->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4027,8 +4105,8 @@ Workspace·WorkspaceFolders: ( -> ((?[WorkspaceFolder]->void)->void))
                     return false
                 result@__idx__result = __val__result
                 __idx__result = __idx__result + 1
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4075,8 +4153,8 @@ Workspace·FindFiles: (include:string -> exclude:?string -> maxResults:?int -> t
                     return false
                 result@__idx__result = __val__result
                 __idx__result = __idx__result + 1
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4105,8 +4183,8 @@ Workspace·AsRelativePath: (pathOrUri:string -> includeWorkspaceFolder:bool -> (
             if !ok
                 return false
             result = &_result_
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4134,8 +4212,8 @@ Workspace·Properties: ( -> ((WorkspaceProperties->void)->void))
                 return false
         else
             return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4171,8 +4249,8 @@ Languages·GetLanguages: ( -> ((?[string]->void)->void))
                     return false
                 result@__idx__result = __val__result
                 __idx__result = __idx__result + 1
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4217,8 +4295,8 @@ Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> ((
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.Impl(), _fnid_listener))
+            if =?onret
+                onret(result.bind(this.Impl(), _fnid_listener))
         return true
     
     this.Impl().send(msg, onresp)
@@ -4258,8 +4336,8 @@ Extensions·OnDidChange: (listener:(->void) -> ((?Disposable->void)->void))
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.Impl(), _fnid_listener))
+            if =?onret
+                onret(result.bind(this.Impl(), _fnid_listener))
         return true
     
     this.Impl().send(msg, onresp)
@@ -4305,8 +4383,8 @@ Commands·RegisterCommand: (command:string -> callback:([any]->any) -> ((?Dispos
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.Impl(), _fnid_callback))
+            if =?onret
+                onret(result.bind(this.Impl(), _fnid_callback))
         return true
     
     this.Impl().send(msg, onresp)
@@ -4332,8 +4410,8 @@ Commands·ExecuteCommand: (command:string -> rest:[any] -> ((?any->void)->void))
         if =?payload
             [result, ok] = [payload, true]
             if ok
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4370,8 +4448,8 @@ Commands·GetCommands: (filterInternal:bool -> ((?[string]->void)->void))
                     return false
                 result@__idx__result = __val__result
                 __idx__result = __idx__result + 1
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4398,8 +4476,8 @@ StatusBarItem·Show: ( -> ((?StatusBarItemState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4426,8 +4504,8 @@ StatusBarItem·Hide: ( -> ((?StatusBarItemState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4460,8 +4538,8 @@ StatusBarItem·Get: ( -> ((StatusBarItemState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4513,8 +4591,8 @@ OutputChannel·Append: (value:string -> ((?OutputChannelState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4542,8 +4620,8 @@ OutputChannel·AppendLine: (value:string -> ((?OutputChannelState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4570,8 +4648,8 @@ OutputChannel·Clear: ( -> ((?OutputChannelState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4599,8 +4677,8 @@ OutputChannel·Show: (preserveFocus:bool -> ((?OutputChannelState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4627,8 +4705,8 @@ OutputChannel·Hide: ( -> ((?OutputChannelState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4661,8 +4739,8 @@ OutputChannel·Get: ( -> ((OutputChannelState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4695,8 +4773,8 @@ TextEditorDecorationType·Get: ( -> ((TextEditorDecorationTypeState->void)->void
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4746,8 +4824,8 @@ InputBox·OnDidChangeValue: (handler:(string->InputBoxState->void) -> ((?Disposa
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.disp.impl, _fnid_handler))
+            if =?onret
+                onret(result.bind(this.disp.impl, _fnid_handler))
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4793,8 +4871,8 @@ InputBox·OnDidAccept: (handler:(InputBoxState->void) -> ((?Disposable->void)->v
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.disp.impl, _fnid_handler))
+            if =?onret
+                onret(result.bind(this.disp.impl, _fnid_handler))
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4845,8 +4923,8 @@ InputBox·OnDidTriggerButton: (handler:(QuickInputButton->InputBoxState->void) -
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.disp.impl, _fnid_handler))
+            if =?onret
+                onret(result.bind(this.disp.impl, _fnid_handler))
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4873,8 +4951,8 @@ InputBox·Show: ( -> ((?InputBoxState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4901,8 +4979,8 @@ InputBox·Hide: ( -> ((?InputBoxState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4948,8 +5026,8 @@ InputBox·OnDidHide: (handler:(InputBoxState->void) -> ((?Disposable->void)->voi
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.disp.impl, _fnid_handler))
+            if =?onret
+                onret(result.bind(this.disp.impl, _fnid_handler))
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -4982,8 +5060,8 @@ InputBox·Get: ( -> ((InputBoxState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -5057,8 +5135,8 @@ QuickPick·OnDidChangeValue: (handler:(string->QuickPickState->void) -> ((?Dispo
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.disp.impl, _fnid_handler))
+            if =?onret
+                onret(result.bind(this.disp.impl, _fnid_handler))
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -5104,60 +5182,8 @@ QuickPick·OnDidAccept: (handler:(QuickPickState->void) -> ((?Disposable->void)-
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.disp.impl, _fnid_handler))
-        return true
-    
-    this.disp.impl.send(msg, onresp)
-    return (a0:(?Disposable->void) -> void)
-        onret = a0
-    
-
-
-
-
-QuickPick·OnDidTriggerButton: (handler:(QuickInputButton->QuickPickState->void) -> ((?Disposable->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "QuickPick.onDidTriggerButton"
-    msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
-    var _fnid_handler of string
-    if =!handler
-        OnError(this.disp.impl, "QuickPick.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
-        return null
-    _fnid_handler = this.disp.impl.nextSub((args:[any] -> bool)
-        var ok of bool
-        if 2 != args·len
-            return ok
-        var _a_0_ of QuickInputButton
-        _a_0_ = QuickInputButton·new
-        ok = _a_0_.populateFrom(args@0)
-        if !ok
-            return false
-        var _a_1_ of QuickPickState
-        _a_1_ = QuickPickState·new
-        ok = _a_1_.populateFrom(args@1)
-        if !ok
-            return false
-        handler(_a_0_, _a_1_)
-        return true
-    , null)
-    msg.Data@"handler" = _fnid_handler
-    var onresp of (any->bool)
-    var onret of (?Disposable->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?Disposable
-        if =?payload
-            result = ?Disposable·new
-            ok = result.populateFrom(payload)
-            if !ok
-                return false
-        else
-            return false
-        if =?onret
-            onret(result.bind(this.disp.impl, _fnid_handler))
+            if =?onret
+                onret(result.bind(this.disp.impl, _fnid_handler))
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -5219,8 +5245,8 @@ QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->QuickPickState->void) -
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.disp.impl, _fnid_handler))
+            if =?onret
+                onret(result.bind(this.disp.impl, _fnid_handler))
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -5282,8 +5308,8 @@ QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->QuickPickState->void
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.disp.impl, _fnid_handler))
+            if =?onret
+                onret(result.bind(this.disp.impl, _fnid_handler))
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -5310,8 +5336,8 @@ QuickPick·Show: ( -> ((?QuickPickState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -5338,8 +5364,8 @@ QuickPick·Hide: ( -> ((?QuickPickState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -5385,8 +5411,8 @@ QuickPick·OnDidHide: (handler:(QuickPickState->void) -> ((?Disposable->void)->v
                 return false
         else
             return false
-        if =?onret
-            onret(result.bind(this.disp.impl, _fnid_handler))
+            if =?onret
+                onret(result.bind(this.disp.impl, _fnid_handler))
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -5419,8 +5445,8 @@ QuickPick·Get: ( -> ((QuickPickState->void)->void))
             ok = result.populateFrom(payload)
             if !ok
                 return false
-        if =?onret
-            onret(result)
+            if =?onret
+                onret(result)
         return true
     
     this.disp.impl.send(msg, onresp)
@@ -6216,26 +6242,6 @@ QuickPickState·populateFrom: (payload:any -> bool)
             if !ok
                 return false
         this.Placeholder = placeholder
-    [val, ok] = it@?"buttons"
-    if ok
-        var buttons of ?[QuickInputButton]
-        if =?val
-            var __coll__buttons of [any]
-            [__coll__buttons, ok] = ((val)·([any]))
-            if !ok
-                return false
-            buttons = [QuickInputButton]·new(__coll__buttons·len)
-            var __idx__buttons of int
-            __idx__buttons = 0
-            for __item__buttons in __coll__buttons
-                var __val__buttons of QuickInputButton
-                __val__buttons = QuickInputButton·new
-                ok = __val__buttons.populateFrom(__item__buttons)
-                if !ok
-                    return false
-                buttons@__idx__buttons = __val__buttons
-                __idx__buttons = __idx__buttons + 1
-        this.Buttons = buttons
     [val, ok] = it@?"items"
     if ok
         var items of ?[QuickPickItem]

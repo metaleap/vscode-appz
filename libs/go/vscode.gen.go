@@ -428,7 +428,7 @@ type Window interface {
 	// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 	// 
 	// `return` ── A new status bar item.
-	CreateStatusBarItem(alignment StatusBarAlignment, priority *int) func(func(StatusBarItem, StatusBarItemState))
+	CreateStatusBarItem(alignment StatusBarAlignment, priority *int, optionallyInitialStateToApplyUponCreation *StatusBarItemState) func(func(StatusBarItem, StatusBarItemState))
 
 	// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 	// 
@@ -449,7 +449,7 @@ type Window interface {
 	// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 	// 
 	// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
-	CreateInputBox() func(func(InputBox, InputBoxState))
+	CreateInputBox(optionallyInitialStateToApplyUponCreation *InputBoxState) func(func(InputBox, InputBoxState))
 
 	// Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
 	// of items of type T.
@@ -459,7 +459,7 @@ type Window interface {
 	// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 	// 
 	// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
-	CreateQuickPick() func(func(QuickPick, QuickPickState))
+	CreateQuickPick(optionallyInitialStateToApplyUponCreation *QuickPickState) func(func(QuickPick, QuickPickState))
 }
 type implWindow struct{ *impl }
 
@@ -1499,9 +1499,6 @@ type QuickPickState struct {
 	// Optional placeholder in the filter text.
 	Placeholder string `json:"placeholder,omitempty"`
 
-	// Buttons for actions in the UI.
-	Buttons []QuickInputButton `json:"buttons,omitempty"`
-
 	// Items to pick from.
 	Items []QuickPickItem `json:"items,omitempty"`
 
@@ -1589,8 +1586,10 @@ func (me implWindow) ShowInformationMessage1(message string, items []string) fun
 			}
 			result = &_result_
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -1621,8 +1620,10 @@ func (me implWindow) ShowInformationMessage2(message string, options MessageOpti
 			}
 			result = &_result_
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -1651,8 +1652,10 @@ func (me implWindow) ShowInformationMessage3(message string, items []MessageItem
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -1682,8 +1685,10 @@ func (me implWindow) ShowInformationMessage4(message string, options MessageOpti
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -1713,8 +1718,10 @@ func (me implWindow) ShowWarningMessage1(message string, items []string) func(fu
 			}
 			result = &_result_
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -1745,8 +1752,10 @@ func (me implWindow) ShowWarningMessage2(message string, options MessageOptions,
 			}
 			result = &_result_
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -1775,8 +1784,10 @@ func (me implWindow) ShowWarningMessage3(message string, items []MessageItem) fu
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -1806,8 +1817,10 @@ func (me implWindow) ShowWarningMessage4(message string, options MessageOptions,
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -1837,8 +1850,10 @@ func (me implWindow) ShowErrorMessage1(message string, items []string) func(func
 			}
 			result = &_result_
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -1869,8 +1884,10 @@ func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, i
 			}
 			result = &_result_
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -1899,8 +1916,10 @@ func (me implWindow) ShowErrorMessage3(message string, items []MessageItem) func
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -1930,8 +1949,10 @@ func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, i
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2006,8 +2027,10 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel) func(
 			}
 			result = &_result_
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2106,8 +2129,10 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 				__idx__result = __idx__result + 1
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2196,8 +2221,10 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 			}
 			result = &_result_
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2296,8 +2323,10 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 				__idx__result = __idx__result + 1
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2385,8 +2414,10 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2428,8 +2459,10 @@ func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int) fun
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.Impl()))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.Impl()))
+			}
 		}
 		return true
 	}
@@ -2459,8 +2492,10 @@ func (me implWindow) SetStatusBarMessage2(text string) func(func(*Disposable)) {
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.Impl()))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.Impl()))
+			}
 		}
 		return true
 	}
@@ -2489,8 +2524,10 @@ func (me implWindow) ShowSaveDialog(options SaveDialogOptions) func(func(*string
 			}
 			result = &_result_
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2530,8 +2567,10 @@ func (me implWindow) ShowOpenDialog(options OpenDialogOptions) func(func([]strin
 				__idx__result = __idx__result + 1
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2561,8 +2600,10 @@ func (me implWindow) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2588,8 +2629,10 @@ func (me implWindow) State() func(func(WindowState)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2637,8 +2680,10 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState)) func(fun
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.Impl(), _fnid_listener))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.Impl(), _fnid_listener))
+			}
 		}
 		return true
 	}
@@ -2648,7 +2693,7 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState)) func(fun
 	}
 }
 
-func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority *int) func(func(StatusBarItem, StatusBarItemState)) {
+func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority *int, optionallyInitialStateToApplyUponCreation *StatusBarItemState) func(func(StatusBarItem, StatusBarItemState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createStatusBarItem"
@@ -2671,11 +2716,16 @@ func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority 
 			}
 			result.disp.impl = me.Impl()
 		}
-		result.Get()(func(state StatusBarItemState) {
-			if (nil != onret) {
-				onret(result, state)
+		{
+			if (nil != optionallyInitialStateToApplyUponCreation) {
+				result.Set(*optionallyInitialStateToApplyUponCreation)
 			}
-		})
+			result.Get()(func(state StatusBarItemState) {
+				if (nil != onret) {
+					onret(result, state)
+				}
+			})
+		}
 		return true
 	}
 	me.Impl().send(msg, onresp)
@@ -2702,11 +2752,13 @@ func (me implWindow) CreateOutputChannel(name string) func(func(OutputChannel, O
 			}
 			result.disp.impl = me.Impl()
 		}
-		result.Get()(func(state OutputChannelState) {
-			if (nil != onret) {
-				onret(result, state)
-			}
-		})
+		{
+			result.Get()(func(state OutputChannelState) {
+				if (nil != onret) {
+					onret(result, state)
+				}
+			})
+		}
 		return true
 	}
 	me.Impl().send(msg, onresp)
@@ -2733,11 +2785,13 @@ func (me implWindow) CreateTextEditorDecorationType(options DecorationRenderOpti
 			}
 			result.disp.impl = me.Impl()
 		}
-		result.Get()(func(state TextEditorDecorationTypeState) {
-			if (nil != onret) {
-				onret(result, state)
-			}
-		})
+		{
+			result.Get()(func(state TextEditorDecorationTypeState) {
+				if (nil != onret) {
+					onret(result, state)
+				}
+			})
+		}
 		return true
 	}
 	me.Impl().send(msg, onresp)
@@ -2746,7 +2800,7 @@ func (me implWindow) CreateTextEditorDecorationType(options DecorationRenderOpti
 	}
 }
 
-func (me implWindow) CreateInputBox() func(func(InputBox, InputBoxState)) {
+func (me implWindow) CreateInputBox(optionallyInitialStateToApplyUponCreation *InputBoxState) func(func(InputBox, InputBoxState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createInputBox"
@@ -2763,11 +2817,16 @@ func (me implWindow) CreateInputBox() func(func(InputBox, InputBoxState)) {
 			}
 			result.disp.impl = me.Impl()
 		}
-		result.Get()(func(state InputBoxState) {
-			if (nil != onret) {
-				onret(result, state)
+		{
+			if (nil != optionallyInitialStateToApplyUponCreation) {
+				result.Set(*optionallyInitialStateToApplyUponCreation)
 			}
-		})
+			result.Get()(func(state InputBoxState) {
+				if (nil != onret) {
+					onret(result, state)
+				}
+			})
+		}
 		return true
 	}
 	me.Impl().send(msg, onresp)
@@ -2776,7 +2835,7 @@ func (me implWindow) CreateInputBox() func(func(InputBox, InputBoxState)) {
 	}
 }
 
-func (me implWindow) CreateQuickPick() func(func(QuickPick, QuickPickState)) {
+func (me implWindow) CreateQuickPick(optionallyInitialStateToApplyUponCreation *QuickPickState) func(func(QuickPick, QuickPickState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createQuickPick"
@@ -2793,11 +2852,16 @@ func (me implWindow) CreateQuickPick() func(func(QuickPick, QuickPickState)) {
 			}
 			result.disp.impl = me.Impl()
 		}
-		result.Get()(func(state QuickPickState) {
-			if (nil != onret) {
-				onret(result, state)
+		{
+			if (nil != optionallyInitialStateToApplyUponCreation) {
+				result.Set(*optionallyInitialStateToApplyUponCreation)
 			}
-		})
+			result.Get()(func(state QuickPickState) {
+				if (nil != onret) {
+					onret(result, state)
+				}
+			})
+		}
 		return true
 	}
 	me.Impl().send(msg, onresp)
@@ -2825,8 +2889,10 @@ func (me implEnv) OpenExternal(target string) func(func(bool)) {
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2852,8 +2918,10 @@ func (me implEnv) AppName() func(func(string)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2879,8 +2947,10 @@ func (me implEnv) AppRoot() func(func(string)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2906,8 +2976,10 @@ func (me implEnv) Language() func(func(string)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2933,8 +3005,10 @@ func (me implEnv) MachineId() func(func(string)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2962,8 +3036,10 @@ func (me implEnv) RemoteName() func(func(*string)) {
 			}
 			result = &_result_
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -2989,8 +3065,10 @@ func (me implEnv) SessionId() func(func(string)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3016,8 +3094,10 @@ func (me implEnv) Shell() func(func(string)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3043,8 +3123,10 @@ func (me implEnv) UriScheme() func(func(string)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3072,8 +3154,10 @@ func (me implEnv) Properties() func(func(EnvProperties)) {
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3105,8 +3189,10 @@ func (me implClipboard) ReadText() func(func(*string)) {
 			}
 			result = &_result_
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3157,8 +3243,10 @@ func (me implWorkspace) Name() func(func(*string)) {
 			}
 			result = &_result_
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3186,8 +3274,10 @@ func (me implWorkspace) WorkspaceFile() func(func(*string)) {
 			}
 			result = &_result_
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3216,8 +3306,10 @@ func (me implWorkspace) SaveAll(includeUntitled bool) func(func(bool)) {
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3265,8 +3357,10 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.Impl(), _fnid_listener))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.Impl(), _fnid_listener))
+			}
 		}
 		return true
 	}
@@ -3294,8 +3388,10 @@ func (me implWorkspace) GetWorkspaceFolder(uri string) func(func(*WorkspaceFolde
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3334,8 +3430,10 @@ func (me implWorkspace) WorkspaceFolders() func(func([]WorkspaceFolder)) {
 				__idx__result = __idx__result + 1
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3392,8 +3490,10 @@ func (me implWorkspace) FindFiles(include string, exclude *string, maxResults *i
 				__idx__result = __idx__result + 1
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3423,8 +3523,10 @@ func (me implWorkspace) AsRelativePath(pathOrUri string, includeWorkspaceFolder 
 			}
 			result = &_result_
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3452,8 +3554,10 @@ func (me implWorkspace) Properties() func(func(WorkspaceProperties)) {
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3492,8 +3596,10 @@ func (me implLanguages) GetLanguages() func(func([]string)) {
 				__idx__result = __idx__result + 1
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3541,8 +3647,10 @@ func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEve
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.Impl(), _fnid_listener))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.Impl(), _fnid_listener))
+			}
 		}
 		return true
 	}
@@ -3585,8 +3693,10 @@ func (me implExtensions) OnDidChange(listener func()) func(func(*Disposable)) {
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.Impl(), _fnid_listener))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.Impl(), _fnid_listener))
+			}
 		}
 		return true
 	}
@@ -3636,8 +3746,10 @@ func (me implCommands) RegisterCommand(command string, callback func([]any) any)
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.Impl(), _fnid_callback))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.Impl(), _fnid_callback))
+			}
 		}
 		return true
 	}
@@ -3664,8 +3776,10 @@ func (me implCommands) ExecuteCommand(command string, rest []any) func(func(any)
 			if ok {
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3705,8 +3819,10 @@ func (me implCommands) GetCommands(filterInternal bool) func(func([]string)) {
 				__idx__result = __idx__result + 1
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3735,8 +3851,10 @@ func (me *StatusBarItem) Show() func(func(*StatusBarItemState)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3765,8 +3883,10 @@ func (me *StatusBarItem) Hide() func(func(*StatusBarItemState)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3800,8 +3920,10 @@ func (me *StatusBarItem) Get() func(func(StatusBarItemState)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3858,8 +3980,10 @@ func (me *OutputChannel) Append(value string) func(func(*OutputChannelState)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3892,8 +4016,10 @@ func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelState)
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3922,8 +4048,10 @@ func (me *OutputChannel) Clear() func(func(*OutputChannelState)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3955,8 +4083,10 @@ func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelState)
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -3985,8 +4115,10 @@ func (me *OutputChannel) Hide() func(func(*OutputChannelState)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -4019,8 +4151,10 @@ func (me *OutputChannel) Get() func(func(OutputChannelState)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -4053,8 +4187,10 @@ func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeStat
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -4109,8 +4245,10 @@ func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxState)) func(f
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.disp.impl, _fnid_handler))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.disp.impl, _fnid_handler))
+			}
 		}
 		return true
 	}
@@ -4160,8 +4298,10 @@ func (me *InputBox) OnDidAccept(handler func(InputBoxState)) func(func(*Disposab
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.disp.impl, _fnid_handler))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.disp.impl, _fnid_handler))
+			}
 		}
 		return true
 	}
@@ -4216,8 +4356,10 @@ func (me *InputBox) OnDidTriggerButton(handler func(QuickInputButton, InputBoxSt
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.disp.impl, _fnid_handler))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.disp.impl, _fnid_handler))
+			}
 		}
 		return true
 	}
@@ -4247,8 +4389,10 @@ func (me *InputBox) Show() func(func(*InputBoxState)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -4278,8 +4422,10 @@ func (me *InputBox) Hide() func(func(*InputBoxState)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -4334,8 +4480,10 @@ func (me *InputBox) OnDidHide(handler func(InputBoxState)) func(func(*Disposable
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.disp.impl, _fnid_handler))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.disp.impl, _fnid_handler))
+			}
 		}
 		return true
 	}
@@ -4371,8 +4519,10 @@ func (me *InputBox) Get() func(func(InputBoxState)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -4452,8 +4602,10 @@ func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickState)) func
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.disp.impl, _fnid_handler))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.disp.impl, _fnid_handler))
+			}
 		}
 		return true
 	}
@@ -4503,64 +4655,10 @@ func (me *QuickPick) OnDidAccept(handler func(QuickPickState)) func(func(*Dispos
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.disp.impl, _fnid_handler))
-		}
-		return true
-	}
-	me.disp.impl.send(msg, onresp)
-	return func(a0 func(*Disposable)) {
-		onret = a0
-	}
-}
-
-// An event signaling when a button was triggered.
-func (me *QuickPick) OnDidTriggerButton(handler func(QuickInputButton, QuickPickState)) func(func(*Disposable)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "QuickPick.onDidTriggerButton"
-	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
-	var _fnid_handler string
-	if (nil == handler) {
-		OnError(me.disp.impl, "QuickPick.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
-		return nil
-	}
-	_fnid_handler = me.disp.impl.nextSub(func(args []any) bool {
-		var ok bool
-		if 2 != len(args) {
-			return ok
-		}
-		var _a_0_ QuickInputButton
-		ok = _a_0_.populateFrom(args[0])
-		if !ok {
-			return false
-		}
-		var _a_1_ QuickPickState
-		ok = _a_1_.populateFrom(args[1])
-		if !ok {
-			return false
-		}
-		handler(_a_0_, _a_1_)
-		return true
-	}, nil)
-	msg.Data["handler"] = _fnid_handler
-	var onresp func(any) bool
-	var onret func(*Disposable)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *Disposable
-		if (nil != payload) {
-			result = new(Disposable)
-			ok = result.populateFrom(payload)
-			if !ok {
-				return false
+		{
+			if (nil != onret) {
+				onret(result.bind(me.disp.impl, _fnid_handler))
 			}
-		} else {
-			return false
-		}
-		if (nil != onret) {
-			onret(result.bind(me.disp.impl, _fnid_handler))
 		}
 		return true
 	}
@@ -4628,8 +4726,10 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickSt
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.disp.impl, _fnid_handler))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.disp.impl, _fnid_handler))
+			}
 		}
 		return true
 	}
@@ -4697,8 +4797,10 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPic
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.disp.impl, _fnid_handler))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.disp.impl, _fnid_handler))
+			}
 		}
 		return true
 	}
@@ -4728,8 +4830,10 @@ func (me *QuickPick) Show() func(func(*QuickPickState)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -4759,8 +4863,10 @@ func (me *QuickPick) Hide() func(func(*QuickPickState)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -4815,8 +4921,10 @@ func (me *QuickPick) OnDidHide(handler func(QuickPickState)) func(func(*Disposab
 		} else {
 			return false
 		}
-		if (nil != onret) {
-			onret(result.bind(me.disp.impl, _fnid_handler))
+		{
+			if (nil != onret) {
+				onret(result.bind(me.disp.impl, _fnid_handler))
+			}
 		}
 		return true
 	}
@@ -4834,7 +4942,7 @@ func (me *QuickPick) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
-// Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+// Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 func (me *QuickPick) Get() func(func(QuickPickState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4852,8 +4960,10 @@ func (me *QuickPick) Get() func(func(QuickPickState)) {
 				return false
 			}
 		}
-		if (nil != onret) {
-			onret(result)
+		{
+			if (nil != onret) {
+				onret(result)
+			}
 		}
 		return true
 	}
@@ -4863,7 +4973,7 @@ func (me *QuickPick) Get() func(func(QuickPickState)) {
 	}
 }
 
-// Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+// Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 func (me *QuickPick) Set(allUpdates QuickPickState) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -5765,30 +5875,6 @@ func (me *QuickPickState) populateFrom(payload any) bool {
 			}
 		}
 		me.Placeholder = placeholder
-	}
-	val, ok = it["buttons"]
-	if ok {
-		var buttons []QuickInputButton
-		if (nil != val) {
-			var __coll__buttons []any
-			__coll__buttons, ok = val.([]any)
-			if !ok {
-				return false
-			}
-			buttons = make([]QuickInputButton, len(__coll__buttons))
-			var __idx__buttons int
-			__idx__buttons = 0
-			for _, __item__buttons := range __coll__buttons {
-				var __val__buttons QuickInputButton
-				ok = __val__buttons.populateFrom(__item__buttons)
-				if !ok {
-					return false
-				}
-				buttons[__idx__buttons] = __val__buttons
-				__idx__buttons = __idx__buttons + 1
-			}
-		}
-		me.Buttons = buttons
 	}
 	val, ok = it["items"]
 	if ok {

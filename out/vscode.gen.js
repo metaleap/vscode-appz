@@ -710,7 +710,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         return Promise.reject(msg.data);
                     const arg_handler = (_0) => {
                         if (prog && prog.proc)
-                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
+                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
                         return undefined;
                     };
                     const ret = thisQuickPick.onDidChangeValue(arg_handler);
@@ -724,24 +724,10 @@ function handle(msg, prog, remoteCancellationTokens) {
                         return Promise.reject(msg.data);
                     const arg_handler = () => {
                         if (prog && prog.proc)
-                            return prog.callBack(false, _fnid_handler, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
+                            return prog.callBack(false, _fnid_handler, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
                         return undefined;
                     };
                     const ret = thisQuickPick.onDidAccept(arg_handler);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "onDidTriggerButton": {
-                    const _fnid_handler = msg.data['handler'];
-                    if (!(_fnid_handler && _fnid_handler.length))
-                        return Promise.reject(msg.data);
-                    const arg_handler = (_0) => {
-                        if (prog && prog.proc)
-                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
-                        return undefined;
-                    };
-                    const ret = thisQuickPick.onDidTriggerButton(arg_handler);
                     const retdisp = ret;
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
@@ -752,7 +738,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         return Promise.reject(msg.data);
                     const arg_handler = (_0) => {
                         if (prog && prog.proc)
-                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
+                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
                         return undefined;
                     };
                     const ret = thisQuickPick.onDidChangeActive(arg_handler);
@@ -766,7 +752,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         return Promise.reject(msg.data);
                     const arg_handler = (_0) => {
                         if (prog && prog.proc)
-                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
+                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
                         return undefined;
                     };
                     const ret = thisQuickPick.onDidChangeSelection(arg_handler);
@@ -776,11 +762,11 @@ function handle(msg, prog, remoteCancellationTokens) {
                 }
                 case "show": {
                     thisQuickPick.show();
-                    return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut });
+                    return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut });
                 }
                 case "hide": {
                     thisQuickPick.hide();
-                    return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut });
+                    return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut });
                 }
                 case "onDidHide": {
                     const _fnid_handler = msg.data['handler'];
@@ -788,7 +774,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         return Promise.reject(msg.data);
                     const arg_handler = () => {
                         if (prog && prog.proc)
-                            return prog.callBack(false, _fnid_handler, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
+                            return prog.callBack(false, _fnid_handler, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }));
                         return undefined;
                     };
                     const ret = thisQuickPick.onDidHide(arg_handler);
@@ -803,7 +789,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "appzObjPropsGet": {
-                    return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, buttons: thisQuickPick.buttons, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut });
+                    return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut });
                 }
                 case "appzObjPropsSet": {
                     const allUpdates = msg.data['allUpdates'];
@@ -815,9 +801,6 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const prop_placeholder = allUpdates["placeholder"];
                     if (prop_placeholder !== undefined && prop_placeholder !== thisQuickPick.placeholder)
                         thisQuickPick.placeholder = prop_placeholder;
-                    const prop_buttons = allUpdates["buttons"];
-                    if (prop_buttons !== undefined && prop_buttons !== thisQuickPick.buttons)
-                        thisQuickPick.buttons = prop_buttons;
                     const prop_items = allUpdates["items"];
                     if (prop_items !== undefined && prop_items !== thisQuickPick.items)
                         thisQuickPick.items = prop_items;

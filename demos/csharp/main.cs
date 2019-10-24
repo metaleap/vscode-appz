@@ -16,7 +16,7 @@ namespace VscAppzDemo {
                 (vsc, win) = (vscode, vscode.Window);
                 onUpAndRunning();
 
-                win.SetStatusBarMessage2("Choosing a demo now WILL remove me")(statusmsg => {
+                win.SetStatusBarMessage2("React to the Welcome msg-box to remove me..")(statusmsg => {
 
                     var buttons = new[] {"Demo Pick Input", "Demo Text Input", "All Demos"};
                     win.ShowInformationMessage1("What to try out? (If you cancel here, I quit.)", buttons)(
@@ -74,6 +74,11 @@ namespace VscAppzDemo {
             string.Format(s,args);
         private static string strLo(string s) => s==null ? "" : s.ToLower();
         private static string strUp(string s) => s==null ? "" : s.ToUpper();
+        private static int[] nums1To(int n){
+            var ret = new int[n];
+            for (int i = 0; i < ret.Length; i++) ret[i] = i+1;
+            return ret;
+        }
 
     }
 

@@ -485,6 +485,7 @@ export interface Window {
     /**
      * Represents the current window's state.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     State: (_: (_: WindowState) => void) => void
 
@@ -492,6 +493,8 @@ export interface Window {
      * An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
      * changes. The value of the event represents whether the window is focused.
 
+     * @param listener Will be invoked whenever this event fires; mandatory, not optional.
+     * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
      */
     OnDidChangeWindowState: (listener: (_: WindowState) => void) => (_: (_: Disposable) => void) => void
 
@@ -501,13 +504,15 @@ export interface Window {
      * @param alignment The alignment of the item.
      * @param priority The priority of the item. Higher values mean the item should be shown more to the left.
      * @return A new status bar item.
+     * @param optionallyInitialStateToApplyUponCreation If specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number) => (_: (_: StatusBarItem, __: StatusBarItemState) => void) => void
+    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number, optionallyInitialStateToApplyUponCreation?: StatusBarItemState) => (_: (_: StatusBarItem, __: StatusBarItemState) => void) => void
 
     /**
      * Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 
      * @param name Human-readable string which will be used to represent the channel in the UI.
+     * @return A thenable that resolves when the `OutputChannel` has been created and initialized.
      */
     CreateOutputChannel: (name: string) => (_: (_: OutputChannel, __: OutputChannelState) => void) => void
 
@@ -527,8 +532,9 @@ export interface Window {
      * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
      * @return A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
+     * @param optionallyInitialStateToApplyUponCreation If specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateInputBox: (_: (_: InputBox, __: InputBoxState) => void) => void
+    CreateInputBox: (optionallyInitialStateToApplyUponCreation?: InputBoxState) => (_: (_: InputBox, __: InputBoxState) => void) => void
 
     /**
      * Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
@@ -539,8 +545,9 @@ export interface Window {
      * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
      * @return A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
+     * @param optionallyInitialStateToApplyUponCreation If specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateQuickPick: (_: (_: QuickPick, __: QuickPickState) => void) => void
+    CreateQuickPick: (optionallyInitialStateToApplyUponCreation?: QuickPickState) => (_: (_: QuickPick, __: QuickPickState) => void) => void
 }
 
 /**
@@ -563,24 +570,28 @@ export interface Env {
     /**
      * The application name of the editor, like 'VS Code'.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     AppName: (_: (_: string) => void) => void
 
     /**
      * The application root folder from which the editor is running.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     AppRoot: (_: (_: string) => void) => void
 
     /**
      * Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     Language: (_: (_: string) => void) => void
 
     /**
      * A unique identifier for the computer.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     MachineId: (_: (_: string) => void) => void
 
@@ -593,6 +604,7 @@ export interface Env {
      * exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
      * a specific extension runs remote or not.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     RemoteName: (_: (_: string) => void) => void
 
@@ -600,6 +612,7 @@ export interface Env {
      * A unique identifier for the current session.
      * Changes each time the editor is started.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     SessionId: (_: (_: string) => void) => void
 
@@ -607,12 +620,14 @@ export interface Env {
      * The detected default shell for the extension host, this is overridden by the
      * `terminal.integrated.shell` setting for the extension host's platform.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     Shell: (_: (_: string) => void) => void
 
     /**
      * The custom uri scheme the editor registers to in the operating system.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     UriScheme: (_: (_: string) => void) => void
 
@@ -645,6 +660,7 @@ export interface Clipboard {
      * Writes text into the clipboard.
 
      * @return A thenable that resolves when writing happened.
+     * @param value 
      */
     WriteText: (value: string) => (_: () => void) => void
 }
@@ -664,6 +680,7 @@ export interface Workspace {
      * The name of the workspace. `undefined` when no folder
      * has been opened.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     Name: (_: (_: string) => void) => void
 
@@ -700,6 +717,7 @@ export interface Workspace {
      * for that purpose which will work both when a single folder is opened as
      * well as an untitled or saved workspace.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     WorkspaceFile: (_: (_: string) => void) => void
 
@@ -714,6 +732,8 @@ export interface Workspace {
     /**
      * An event that is emitted when a workspace folder is added or removed.
 
+     * @param listener Will be invoked whenever this event fires; mandatory, not optional.
+     * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
      */
     OnDidChangeWorkspaceFolders: (listener: (_: WorkspaceFoldersChangeEvent) => void) => (_: (_: Disposable) => void) => void
 
@@ -731,6 +751,7 @@ export interface Workspace {
      * List of workspace folders or `undefined` when no folder is open.
      * *Note* that the first entry corresponds to the value of `rootPath`.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     WorkspaceFolders: (_: (_: WorkspaceFolder[]) => void) => void
 
@@ -810,6 +831,8 @@ export interface Languages {
      * An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
      * newly added and removed diagnostics.
 
+     * @param listener Will be invoked whenever this event fires; mandatory, not optional.
+     * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
      */
     OnDidChangeDiagnostics: (listener: (_: DiagnosticChangeEvent) => void) => (_: (_: Disposable) => void) => void
 }
@@ -860,6 +883,8 @@ export interface Extensions {
      * An event which fires when `extensions.all` changes. This can happen when extensions are
      * installed, uninstalled, enabled or disabled.
 
+     * @param listener Will be invoked whenever this event fires; mandatory, not optional.
+     * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
      */
     OnDidChange: (listener: () => void) => (_: (_: Disposable) => void) => void
 }
@@ -2012,12 +2037,6 @@ export interface QuickPick extends fromJson, withDisp {
     OnDidAccept: (_: () => void) => (_: (_: Disposable) => void) => void
 
     /**
-     * An event signaling when a button was triggered.
-
-     */
-    OnDidTriggerButton: (_: (_: QuickInputButton) => void) => (_: (_: Disposable) => void) => void
-
-    /**
      * An event signaling when the active items have changed.
 
      */
@@ -2073,7 +2092,6 @@ function newQuickPick (): QuickPick {
     me = { populateFrom: _ => QuickPick_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPick
     me.OnDidChangeValue = (a0) => QuickPick_OnDidChangeValue.call(me, a0)
     me.OnDidAccept = (a0) => QuickPick_OnDidAccept.call(me, a0)
-    me.OnDidTriggerButton = (a0) => QuickPick_OnDidTriggerButton.call(me, a0)
     me.OnDidChangeActive = (a0) => QuickPick_OnDidChangeActive.call(me, a0)
     me.OnDidChangeSelection = (a0) => QuickPick_OnDidChangeSelection.call(me, a0)
     me.Show = () => QuickPick_Show.call(me, )
@@ -2481,12 +2499,6 @@ export interface QuickPickState extends fromJson {
     placeholder?: string
 
     /**
-     * Buttons for actions in the UI.
-
-     */
-    buttons?: QuickInputButton[]
-
-    /**
      * Items to pick from.
 
      */
@@ -2612,8 +2624,10 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -2644,8 +2658,10 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -2674,8 +2690,10 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -2705,8 +2723,10 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -2736,8 +2756,10 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -2768,8 +2790,10 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -2798,8 +2822,10 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -2829,8 +2855,10 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -2860,8 +2888,10 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -2892,8 +2922,10 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -2922,8 +2954,10 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -2953,8 +2987,10 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3022,8 +3058,10 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3114,8 +3152,10 @@ class implWindow extends implBase implements Window {
                     __idx__result = __idx__result + 1
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3196,8 +3236,10 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3289,8 +3331,10 @@ class implWindow extends implBase implements Window {
                     __idx__result = __idx__result + 1
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3370,8 +3414,10 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3411,8 +3457,10 @@ class implWindow extends implBase implements Window {
             } else {
                 return false
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl()))
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result.bind(this.Impl()))
+                }
             }
             return true
         }
@@ -3442,8 +3490,10 @@ class implWindow extends implBase implements Window {
             } else {
                 return false
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl()))
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result.bind(this.Impl()))
+                }
             }
             return true
         }
@@ -3472,8 +3522,10 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3513,8 +3565,10 @@ class implWindow extends implBase implements Window {
                     __idx__result = __idx__result + 1
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3544,8 +3598,10 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3572,8 +3628,10 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3622,8 +3680,10 @@ class implWindow extends implBase implements Window {
             } else {
                 return false
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl(), _fnid_listener))
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result.bind(this.Impl(), _fnid_listener))
+                }
             }
             return true
         }
@@ -3633,7 +3693,7 @@ class implWindow extends implBase implements Window {
         }
     }
 
-    CreateStatusBarItem(alignment?: StatusBarAlignment, priority?: number): (_: (_: StatusBarItem, __: StatusBarItemState) => void) => void {
+    CreateStatusBarItem(alignment?: StatusBarAlignment, priority?: number, optionallyInitialStateToApplyUponCreation?: StatusBarItemState): (_: (_: StatusBarItem, __: StatusBarItemState) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createStatusBarItem"
@@ -3657,11 +3717,16 @@ class implWindow extends implBase implements Window {
                 }
                 result.disp.impl = this.Impl()
             }
-            result.Get()((state: StatusBarItemState): void => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result, state)
+            {
+                if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
+                    result.Set(optionallyInitialStateToApplyUponCreation)
                 }
-            })
+                result.Get()((state: StatusBarItemState): void => {
+                    if ((undefined !== onret && null !== onret)) {
+                        onret(result, state)
+                    }
+                })
+            }
             return true
         }
         this.Impl().send(msg, onresp)
@@ -3689,11 +3754,13 @@ class implWindow extends implBase implements Window {
                 }
                 result.disp.impl = this.Impl()
             }
-            result.Get()((state: OutputChannelState): void => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result, state)
-                }
-            })
+            {
+                result.Get()((state: OutputChannelState): void => {
+                    if ((undefined !== onret && null !== onret)) {
+                        onret(result, state)
+                    }
+                })
+            }
             return true
         }
         this.Impl().send(msg, onresp)
@@ -3721,11 +3788,13 @@ class implWindow extends implBase implements Window {
                 }
                 result.disp.impl = this.Impl()
             }
-            result.Get()((state: TextEditorDecorationTypeState): void => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result, state)
-                }
-            })
+            {
+                result.Get()((state: TextEditorDecorationTypeState): void => {
+                    if ((undefined !== onret && null !== onret)) {
+                        onret(result, state)
+                    }
+                })
+            }
             return true
         }
         this.Impl().send(msg, onresp)
@@ -3734,7 +3803,7 @@ class implWindow extends implBase implements Window {
         }
     }
 
-    CreateInputBox(): (_: (_: InputBox, __: InputBoxState) => void) => void {
+    CreateInputBox(optionallyInitialStateToApplyUponCreation?: InputBoxState): (_: (_: InputBox, __: InputBoxState) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createInputBox"
@@ -3752,11 +3821,16 @@ class implWindow extends implBase implements Window {
                 }
                 result.disp.impl = this.Impl()
             }
-            result.Get()((state: InputBoxState): void => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result, state)
+            {
+                if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
+                    result.Set(optionallyInitialStateToApplyUponCreation)
                 }
-            })
+                result.Get()((state: InputBoxState): void => {
+                    if ((undefined !== onret && null !== onret)) {
+                        onret(result, state)
+                    }
+                })
+            }
             return true
         }
         this.Impl().send(msg, onresp)
@@ -3765,7 +3839,7 @@ class implWindow extends implBase implements Window {
         }
     }
 
-    CreateQuickPick(): (_: (_: QuickPick, __: QuickPickState) => void) => void {
+    CreateQuickPick(optionallyInitialStateToApplyUponCreation?: QuickPickState): (_: (_: QuickPick, __: QuickPickState) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createQuickPick"
@@ -3783,11 +3857,16 @@ class implWindow extends implBase implements Window {
                 }
                 result.disp.impl = this.Impl()
             }
-            result.Get()((state: QuickPickState): void => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result, state)
+            {
+                if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
+                    result.Set(optionallyInitialStateToApplyUponCreation)
                 }
-            })
+                result.Get()((state: QuickPickState): void => {
+                    if ((undefined !== onret && null !== onret)) {
+                        onret(result, state)
+                    }
+                })
+            }
             return true
         }
         this.Impl().send(msg, onresp)
@@ -3819,8 +3898,10 @@ class implEnv extends implBase implements Env {
             } else {
                 return false
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3846,8 +3927,10 @@ class implEnv extends implBase implements Env {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3873,8 +3956,10 @@ class implEnv extends implBase implements Env {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3900,8 +3985,10 @@ class implEnv extends implBase implements Env {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3927,8 +4014,10 @@ class implEnv extends implBase implements Env {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3956,8 +4045,10 @@ class implEnv extends implBase implements Env {
                 }
                 result = _result_
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -3983,8 +4074,10 @@ class implEnv extends implBase implements Env {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4010,8 +4103,10 @@ class implEnv extends implBase implements Env {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4037,8 +4132,10 @@ class implEnv extends implBase implements Env {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4067,8 +4164,10 @@ class implEnv extends implBase implements Env {
             } else {
                 return false
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4104,8 +4203,10 @@ class implClipboard extends implBase implements Clipboard {
                 }
                 result = _result_
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4160,8 +4261,10 @@ class implWorkspace extends implBase implements Workspace {
                 }
                 result = _result_
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4189,8 +4292,10 @@ class implWorkspace extends implBase implements Workspace {
                 }
                 result = _result_
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4219,8 +4324,10 @@ class implWorkspace extends implBase implements Workspace {
             } else {
                 return false
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4269,8 +4376,10 @@ class implWorkspace extends implBase implements Workspace {
             } else {
                 return false
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl(), _fnid_listener))
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result.bind(this.Impl(), _fnid_listener))
+                }
             }
             return true
         }
@@ -4298,8 +4407,10 @@ class implWorkspace extends implBase implements Workspace {
                     return false
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4339,8 +4450,10 @@ class implWorkspace extends implBase implements Workspace {
                     __idx__result = __idx__result + 1
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4395,8 +4508,10 @@ class implWorkspace extends implBase implements Workspace {
                     __idx__result = __idx__result + 1
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4426,8 +4541,10 @@ class implWorkspace extends implBase implements Workspace {
                 }
                 result = _result_
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4456,8 +4573,10 @@ class implWorkspace extends implBase implements Workspace {
             } else {
                 return false
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4500,8 +4619,10 @@ class implLanguages extends implBase implements Languages {
                     __idx__result = __idx__result + 1
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4550,8 +4671,10 @@ class implLanguages extends implBase implements Languages {
             } else {
                 return false
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl(), _fnid_listener))
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result.bind(this.Impl(), _fnid_listener))
+                }
             }
             return true
         }
@@ -4598,8 +4721,10 @@ class implExtensions extends implBase implements Extensions {
             } else {
                 return false
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl(), _fnid_listener))
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result.bind(this.Impl(), _fnid_listener))
+                }
             }
             return true
         }
@@ -4653,8 +4778,10 @@ class implCommands extends implBase implements Commands {
             } else {
                 return false
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl(), _fnid_callback))
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result.bind(this.Impl(), _fnid_callback))
+                }
             }
             return true
         }
@@ -4681,8 +4808,10 @@ class implCommands extends implBase implements Commands {
                 if (ok) {
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4722,8 +4851,10 @@ class implCommands extends implBase implements Commands {
                     __idx__result = __idx__result + 1
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
             }
             return true
         }
@@ -4753,8 +4884,10 @@ function StatusBarItem_Show(this: StatusBarItem, ): (_: (_: StatusBarItemState) 
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -4782,8 +4915,10 @@ function StatusBarItem_Hide(this: StatusBarItem, ): (_: (_: StatusBarItemState) 
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -4815,8 +4950,10 @@ function StatusBarItem_Get(this: StatusBarItem, ): (_: (_: StatusBarItemState) =
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -4869,8 +5006,10 @@ function OutputChannel_Append(this: OutputChannel, value: string): (_: (_: Outpu
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -4899,8 +5038,10 @@ function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: (_: O
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -4928,8 +5069,10 @@ function OutputChannel_Clear(this: OutputChannel, ): (_: (_: OutputChannelState)
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -4958,8 +5101,10 @@ function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -4987,8 +5132,10 @@ function OutputChannel_Hide(this: OutputChannel, ): (_: (_: OutputChannelState) 
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -5020,8 +5167,10 @@ function OutputChannel_Get(this: OutputChannel, ): (_: (_: OutputChannelState) =
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -5053,8 +5202,10 @@ function TextEditorDecorationType_Get(this: TextEditorDecorationType, ): (_: (_:
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -5109,8 +5260,10 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string, __: Inpu
         } else {
             return false
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler))
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler))
+            }
         }
         return true
     }
@@ -5160,8 +5313,10 @@ function InputBox_OnDidAccept(this: InputBox, handler: (_: InputBoxState) => voi
         } else {
             return false
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler))
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler))
+            }
         }
         return true
     }
@@ -5217,8 +5372,10 @@ function InputBox_OnDidTriggerButton(this: InputBox, handler: (_: QuickInputButt
         } else {
             return false
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler))
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler))
+            }
         }
         return true
     }
@@ -5246,8 +5403,10 @@ function InputBox_Show(this: InputBox, ): (_: (_: InputBoxState) => void) => voi
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -5275,8 +5434,10 @@ function InputBox_Hide(this: InputBox, ): (_: (_: InputBoxState) => void) => voi
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -5326,8 +5487,10 @@ function InputBox_OnDidHide(this: InputBox, handler: (_: InputBoxState) => void)
         } else {
             return false
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler))
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler))
+            }
         }
         return true
     }
@@ -5359,8 +5522,10 @@ function InputBox_Get(this: InputBox, ): (_: (_: InputBoxState) => void) => void
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -5439,8 +5604,10 @@ function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string, __: Qu
         } else {
             return false
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler))
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler))
+            }
         }
         return true
     }
@@ -5490,65 +5657,10 @@ function QuickPick_OnDidAccept(this: QuickPick, handler: (_: QuickPickState) => 
         } else {
             return false
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler))
-        }
-        return true
-    }
-    this.disp.impl.send(msg, onresp)
-    return (a0: (_: Disposable) => void): void => {
-        onret = a0
-    }
-}
-
-function QuickPick_OnDidTriggerButton(this: QuickPick, handler: (_: QuickInputButton, __: QuickPickState) => void): (_: (_: Disposable) => void) => void {
-    let msg: ipcMsg
-    msg = newipcMsg()
-    msg.QName = "QuickPick.onDidTriggerButton"
-    msg.Data = {}
-    msg.Data[""] = this.disp.id
-    let _fnid_handler: string
-    if ((undefined === handler || null === handler)) {
-        OnError(this.disp.impl, "QuickPick.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
-        return null
-    }
-    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
-        let ok: boolean
-        if (2 !== args.length) {
-            return ok
-        }
-        let _a_0_: QuickInputButton
-        _a_0_ = newQuickInputButton()
-        ok = _a_0_.populateFrom(args[0])
-        if (!ok) {
-            return false
-        }
-        let _a_1_: QuickPickState
-        _a_1_ = newQuickPickState()
-        ok = _a_1_.populateFrom(args[1])
-        if (!ok) {
-            return false
-        }
-        handler(_a_0_, _a_1_)
-        return true
-    }, null)
-    msg.Data["handler"] = _fnid_handler
-    let onresp: (_: any) => boolean
-    let onret: (_: Disposable) => void
-    onresp = (payload: any): boolean => {
-        let ok: boolean
-        let result: Disposable
-        if ((undefined !== payload && null !== payload)) {
-            result = newDisposable()
-            ok = result.populateFrom(payload)
-            if (!ok) {
-                return false
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler))
             }
-        } else {
-            return false
-        }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler))
         }
         return true
     }
@@ -5617,8 +5729,10 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
         } else {
             return false
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler))
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler))
+            }
         }
         return true
     }
@@ -5687,8 +5801,10 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
         } else {
             return false
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler))
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler))
+            }
         }
         return true
     }
@@ -5716,8 +5832,10 @@ function QuickPick_Show(this: QuickPick, ): (_: (_: QuickPickState) => void) => 
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -5745,8 +5863,10 @@ function QuickPick_Hide(this: QuickPick, ): (_: (_: QuickPickState) => void) => 
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -5796,8 +5916,10 @@ function QuickPick_OnDidHide(this: QuickPick, handler: (_: QuickPickState) => vo
         } else {
             return false
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler))
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler))
+            }
         }
         return true
     }
@@ -5829,8 +5951,10 @@ function QuickPick_Get(this: QuickPick, ): (_: (_: QuickPickState) => void) => v
                 return false
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result)
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
+            }
         }
         return true
     }
@@ -6771,31 +6895,6 @@ function QuickPickState_populateFrom(this: QuickPickState, payload: any): boolea
             }
         }
         this.placeholder = placeholder
-    }
-    [val, ok] = [it["buttons"], undefined !== it["buttons"]]
-    if (ok) {
-        let buttons: QuickInputButton[]
-        if ((undefined !== val && null !== val)) {
-            let __coll__buttons: any[]
-            [__coll__buttons, ok] = [val as any[], (typeof val === "object") && (typeof val["length"] === "number")]
-            if (!ok) {
-                return false
-            }
-            buttons = new Array(__coll__buttons.length)
-            let __idx__buttons: number
-            __idx__buttons = 0
-            for (const __item__buttons of __coll__buttons) {
-                let __val__buttons: QuickInputButton
-                __val__buttons = newQuickInputButton()
-                ok = __val__buttons.populateFrom(__item__buttons)
-                if (!ok) {
-                    return false
-                }
-                buttons[__idx__buttons] = __val__buttons
-                __idx__buttons = __idx__buttons + 1
-            }
-        }
-        this.buttons = buttons
     }
     [val, ok] = [it["items"], undefined !== it["items"]]
     if (ok) {

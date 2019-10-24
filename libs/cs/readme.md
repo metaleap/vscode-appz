@@ -55,7 +55,7 @@
   - [UriScheme](#F-VscAppz-EnvProperties-UriScheme 'VscAppz.EnvProperties.UriScheme')
 - [IClipboard](#T-VscAppz-IClipboard 'VscAppz.IClipboard')
   - [ReadText()](#M-VscAppz-IClipboard-ReadText 'VscAppz.IClipboard.ReadText')
-  - [WriteText()](#M-VscAppz-IClipboard-WriteText-System-String- 'VscAppz.IClipboard.WriteText(System.String)')
+  - [WriteText(value)](#M-VscAppz-IClipboard-WriteText-System-String- 'VscAppz.IClipboard.WriteText(System.String)')
 - [ICommands](#T-VscAppz-ICommands 'VscAppz.ICommands')
   - [ExecuteCommand(command,rest)](#M-VscAppz-ICommands-ExecuteCommand-System-String,System-Object[]- 'VscAppz.ICommands.ExecuteCommand(System.String,System.Object[])')
   - [GetCommands(filterInternal)](#M-VscAppz-ICommands-GetCommands-System-Boolean- 'VscAppz.ICommands.GetCommands(System.Boolean)')
@@ -73,10 +73,10 @@
   - [Shell()](#M-VscAppz-IEnv-Shell 'VscAppz.IEnv.Shell')
   - [UriScheme()](#M-VscAppz-IEnv-UriScheme 'VscAppz.IEnv.UriScheme')
 - [IExtensions](#T-VscAppz-IExtensions 'VscAppz.IExtensions')
-  - [OnDidChange()](#M-VscAppz-IExtensions-OnDidChange-System-Action- 'VscAppz.IExtensions.OnDidChange(System.Action)')
+  - [OnDidChange(listener)](#M-VscAppz-IExtensions-OnDidChange-System-Action- 'VscAppz.IExtensions.OnDidChange(System.Action)')
 - [ILanguages](#T-VscAppz-ILanguages 'VscAppz.ILanguages')
   - [GetLanguages()](#M-VscAppz-ILanguages-GetLanguages 'VscAppz.ILanguages.GetLanguages')
-  - [OnDidChangeDiagnostics()](#M-VscAppz-ILanguages-OnDidChangeDiagnostics-System-Action{VscAppz-DiagnosticChangeEvent}- 'VscAppz.ILanguages.OnDidChangeDiagnostics(System.Action{VscAppz.DiagnosticChangeEvent})')
+  - [OnDidChangeDiagnostics(listener)](#M-VscAppz-ILanguages-OnDidChangeDiagnostics-System-Action{VscAppz-DiagnosticChangeEvent}- 'VscAppz.ILanguages.OnDidChangeDiagnostics(System.Action{VscAppz.DiagnosticChangeEvent})')
 - [IVscode](#T-VscAppz-IVscode 'VscAppz.IVscode')
   - [Commands](#P-VscAppz-IVscode-Commands 'VscAppz.IVscode.Commands')
   - [Env](#P-VscAppz-IVscode-Env 'VscAppz.IVscode.Env')
@@ -85,12 +85,12 @@
   - [Window](#P-VscAppz-IVscode-Window 'VscAppz.IVscode.Window')
   - [Workspace](#P-VscAppz-IVscode-Workspace 'VscAppz.IVscode.Workspace')
 - [IWindow](#T-VscAppz-IWindow 'VscAppz.IWindow')
-  - [CreateInputBox()](#M-VscAppz-IWindow-CreateInputBox 'VscAppz.IWindow.CreateInputBox')
+  - [CreateInputBox(optionallyInitialStateToApplyUponCreation)](#M-VscAppz-IWindow-CreateInputBox-VscAppz-InputBoxState- 'VscAppz.IWindow.CreateInputBox(VscAppz.InputBoxState)')
   - [CreateOutputChannel(name)](#M-VscAppz-IWindow-CreateOutputChannel-System-String- 'VscAppz.IWindow.CreateOutputChannel(System.String)')
-  - [CreateQuickPick()](#M-VscAppz-IWindow-CreateQuickPick 'VscAppz.IWindow.CreateQuickPick')
-  - [CreateStatusBarItem(alignment,priority)](#M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32}- 'VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32})')
+  - [CreateQuickPick(optionallyInitialStateToApplyUponCreation)](#M-VscAppz-IWindow-CreateQuickPick-VscAppz-QuickPickState- 'VscAppz.IWindow.CreateQuickPick(VscAppz.QuickPickState)')
+  - [CreateStatusBarItem(alignment,priority,optionallyInitialStateToApplyUponCreation)](#M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32},VscAppz-StatusBarItemState- 'VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32},VscAppz.StatusBarItemState)')
   - [CreateTextEditorDecorationType(options)](#M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions- 'VscAppz.IWindow.CreateTextEditorDecorationType(VscAppz.DecorationRenderOptions)')
-  - [OnDidChangeWindowState()](#M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState}- 'VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState})')
+  - [OnDidChangeWindowState(listener)](#M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState}- 'VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState})')
   - [SetStatusBarMessage1(text,hideAfterTimeout)](#M-VscAppz-IWindow-SetStatusBarMessage1-System-String,System-Int32- 'VscAppz.IWindow.SetStatusBarMessage1(System.String,System.Int32)')
   - [SetStatusBarMessage2(text)](#M-VscAppz-IWindow-SetStatusBarMessage2-System-String- 'VscAppz.IWindow.SetStatusBarMessage2(System.String)')
   - [ShowErrorMessage1(message,items)](#M-VscAppz-IWindow-ShowErrorMessage1-System-String,System-String[]- 'VscAppz.IWindow.ShowErrorMessage1(System.String,System.String[])')
@@ -119,7 +119,7 @@
   - [FindFiles(include,exclude,maxResults,token)](#M-VscAppz-IWorkspace-FindFiles-System-String,System-String,System-Nullable{System-Int32},VscAppz-Cancel- 'VscAppz.IWorkspace.FindFiles(System.String,System.String,System.Nullable{System.Int32},VscAppz.Cancel)')
   - [GetWorkspaceFolder(uri)](#M-VscAppz-IWorkspace-GetWorkspaceFolder-System-String- 'VscAppz.IWorkspace.GetWorkspaceFolder(System.String)')
   - [Name()](#M-VscAppz-IWorkspace-Name 'VscAppz.IWorkspace.Name')
-  - [OnDidChangeWorkspaceFolders()](#M-VscAppz-IWorkspace-OnDidChangeWorkspaceFolders-System-Action{VscAppz-WorkspaceFoldersChangeEvent}- 'VscAppz.IWorkspace.OnDidChangeWorkspaceFolders(System.Action{VscAppz.WorkspaceFoldersChangeEvent})')
+  - [OnDidChangeWorkspaceFolders(listener)](#M-VscAppz-IWorkspace-OnDidChangeWorkspaceFolders-System-Action{VscAppz-WorkspaceFoldersChangeEvent}- 'VscAppz.IWorkspace.OnDidChangeWorkspaceFolders(System.Action{VscAppz.WorkspaceFoldersChangeEvent})')
   - [Properties()](#M-VscAppz-IWorkspace-Properties 'VscAppz.IWorkspace.Properties')
   - [SaveAll(includeUntitled)](#M-VscAppz-IWorkspace-SaveAll-System-Boolean- 'VscAppz.IWorkspace.SaveAll(System.Boolean)')
   - [WorkspaceFile()](#M-VscAppz-IWorkspace-WorkspaceFile 'VscAppz.IWorkspace.WorkspaceFile')
@@ -128,10 +128,10 @@
   - [Dispose()](#M-VscAppz-InputBox-Dispose 'VscAppz.InputBox.Dispose')
   - [Get()](#M-VscAppz-InputBox-Get 'VscAppz.InputBox.Get')
   - [Hide()](#M-VscAppz-InputBox-Hide 'VscAppz.InputBox.Hide')
-  - [OnDidAccept()](#M-VscAppz-InputBox-OnDidAccept-System-Action{VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidAccept(System.Action{VscAppz.InputBoxState})')
-  - [OnDidChangeValue()](#M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String,VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidChangeValue(System.Action{System.String,VscAppz.InputBoxState})')
-  - [OnDidHide()](#M-VscAppz-InputBox-OnDidHide-System-Action{VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidHide(System.Action{VscAppz.InputBoxState})')
-  - [OnDidTriggerButton()](#M-VscAppz-InputBox-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton,VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidTriggerButton(System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState})')
+  - [OnDidAccept(handler)](#M-VscAppz-InputBox-OnDidAccept-System-Action{VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidAccept(System.Action{VscAppz.InputBoxState})')
+  - [OnDidChangeValue(handler)](#M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String,VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidChangeValue(System.Action{System.String,VscAppz.InputBoxState})')
+  - [OnDidHide(handler)](#M-VscAppz-InputBox-OnDidHide-System-Action{VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidHide(System.Action{VscAppz.InputBoxState})')
+  - [OnDidTriggerButton(handler)](#M-VscAppz-InputBox-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton,VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidTriggerButton(System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState})')
   - [Set()](#M-VscAppz-InputBox-Set-VscAppz-InputBoxState- 'VscAppz.InputBox.Set(VscAppz.InputBoxState)')
   - [Show()](#M-VscAppz-InputBox-Show 'VscAppz.InputBox.Show')
 - [InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions')
@@ -192,12 +192,11 @@
   - [Dispose()](#M-VscAppz-QuickPick-Dispose 'VscAppz.QuickPick.Dispose')
   - [Get()](#M-VscAppz-QuickPick-Get 'VscAppz.QuickPick.Get')
   - [Hide()](#M-VscAppz-QuickPick-Hide 'VscAppz.QuickPick.Hide')
-  - [OnDidAccept()](#M-VscAppz-QuickPick-OnDidAccept-System-Action{VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidAccept(System.Action{VscAppz.QuickPickState})')
-  - [OnDidChangeActive()](#M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidChangeActive(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState})')
-  - [OnDidChangeSelection()](#M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidChangeSelection(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState})')
-  - [OnDidChangeValue()](#M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String,VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String,VscAppz.QuickPickState})')
-  - [OnDidHide()](#M-VscAppz-QuickPick-OnDidHide-System-Action{VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidHide(System.Action{VscAppz.QuickPickState})')
-  - [OnDidTriggerButton()](#M-VscAppz-QuickPick-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton,VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidTriggerButton(System.Action{VscAppz.QuickInputButton,VscAppz.QuickPickState})')
+  - [OnDidAccept(handler)](#M-VscAppz-QuickPick-OnDidAccept-System-Action{VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidAccept(System.Action{VscAppz.QuickPickState})')
+  - [OnDidChangeActive(handler)](#M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidChangeActive(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState})')
+  - [OnDidChangeSelection(handler)](#M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidChangeSelection(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState})')
+  - [OnDidChangeValue(handler)](#M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String,VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String,VscAppz.QuickPickState})')
+  - [OnDidHide(handler)](#M-VscAppz-QuickPick-OnDidHide-System-Action{VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidHide(System.Action{VscAppz.QuickPickState})')
   - [Set()](#M-VscAppz-QuickPick-Set-VscAppz-QuickPickState- 'VscAppz.QuickPick.Set(VscAppz.QuickPickState)')
   - [Show()](#M-VscAppz-QuickPick-Show 'VscAppz.QuickPick.Show')
 - [QuickPickItem](#T-VscAppz-QuickPickItem 'VscAppz.QuickPickItem')
@@ -218,7 +217,6 @@
 - [QuickPickState](#T-VscAppz-QuickPickState 'VscAppz.QuickPickState')
   - [ActiveItems](#F-VscAppz-QuickPickState-ActiveItems 'VscAppz.QuickPickState.ActiveItems')
   - [Busy](#F-VscAppz-QuickPickState-Busy 'VscAppz.QuickPickState.Busy')
-  - [Buttons](#F-VscAppz-QuickPickState-Buttons 'VscAppz.QuickPickState.Buttons')
   - [CanSelectMany](#F-VscAppz-QuickPickState-CanSelectMany 'VscAppz.QuickPickState.CanSelectMany')
   - [Enabled](#F-VscAppz-QuickPickState-Enabled 'VscAppz.QuickPickState.Enabled')
   - [IgnoreFocusOut](#F-VscAppz-QuickPickState-IgnoreFocusOut 'VscAppz.QuickPickState.IgnoreFocusOut')
@@ -748,7 +746,7 @@ Read the current clipboard contents as text.
 This method has no parameters.
 
 <a name='M-VscAppz-IClipboard-WriteText-System-String-'></a>
-### WriteText() `method`
+### WriteText(value) `method`
 
 ##### Summary
 
@@ -758,7 +756,9 @@ Writes text into the clipboard.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| value | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') |  |
 
 <a name='T-VscAppz-ICommands'></a>
 ## ICommands `type`
@@ -1078,7 +1078,7 @@ console.log(importedApi.mul(42, 1));
 ```
 
 <a name='M-VscAppz-IExtensions-OnDidChange-System-Action-'></a>
-### OnDidChange() `method`
+### OnDidChange(listener) `method`
 
 ##### Summary
 
@@ -1087,7 +1087,9 @@ installed, uninstalled, enabled or disabled.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| listener | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='T-VscAppz-ILanguages'></a>
 ## ILanguages `type`
@@ -1143,7 +1145,7 @@ Return the identifiers of all known languages.
 This method has no parameters.
 
 <a name='M-VscAppz-ILanguages-OnDidChangeDiagnostics-System-Action{VscAppz-DiagnosticChangeEvent}-'></a>
-### OnDidChangeDiagnostics() `method`
+### OnDidChangeDiagnostics(listener) `method`
 
 ##### Summary
 
@@ -1152,7 +1154,9 @@ newly added and removed diagnostics.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| listener | [System.Action{VscAppz.DiagnosticChangeEvent}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.DiagnosticChangeEvent}') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='T-VscAppz-IVscode'></a>
 ## IVscode `type`
@@ -1334,8 +1338,8 @@ Namespace for dealing with the current window of the editor. That is visible
 and active editors, as well as, UI elements to show messages, selections, and
 asking for user input.
 
-<a name='M-VscAppz-IWindow-CreateInputBox'></a>
-### CreateInputBox() `method`
+<a name='M-VscAppz-IWindow-CreateInputBox-VscAppz-InputBoxState-'></a>
+### CreateInputBox(optionallyInitialStateToApplyUponCreation) `method`
 
 ##### Summary
 
@@ -1349,7 +1353,9 @@ when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-a
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| optionallyInitialStateToApplyUponCreation | [VscAppz.InputBoxState](#T-VscAppz-InputBoxState 'VscAppz.InputBoxState') | If specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
 
 <a name='M-VscAppz-IWindow-CreateOutputChannel-System-String-'></a>
 ### CreateOutputChannel(name) `method`
@@ -1366,8 +1372,8 @@ Creates a new [output channel](https://code.visualstudio.com/api/references/vsco
 | ---- | ---- | ----------- |
 | name | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Human-readable string which will be used to represent the channel in the UI. |
 
-<a name='M-VscAppz-IWindow-CreateQuickPick'></a>
-### CreateQuickPick() `method`
+<a name='M-VscAppz-IWindow-CreateQuickPick-VscAppz-QuickPickState-'></a>
+### CreateQuickPick(optionallyInitialStateToApplyUponCreation) `method`
 
 ##### Summary
 
@@ -1382,10 +1388,12 @@ when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| optionallyInitialStateToApplyUponCreation | [VscAppz.QuickPickState](#T-VscAppz-QuickPickState 'VscAppz.QuickPickState') | If specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
 
-<a name='M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32}-'></a>
-### CreateStatusBarItem(alignment,priority) `method`
+<a name='M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32},VscAppz-StatusBarItemState-'></a>
+### CreateStatusBarItem(alignment,priority,optionallyInitialStateToApplyUponCreation) `method`
 
 ##### Summary
 
@@ -1403,6 +1411,7 @@ Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-
 | ---- | ---- | ----------- |
 | alignment | [System.Nullable{VscAppz.StatusBarAlignment}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{VscAppz.StatusBarAlignment}') | The alignment of the item. |
 | priority | [System.Nullable{System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.Int32}') | The priority of the item. Higher values mean the item should be shown more to the left. |
+| optionallyInitialStateToApplyUponCreation | [VscAppz.StatusBarItemState](#T-VscAppz-StatusBarItemState 'VscAppz.StatusBarItemState') | If specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
 
 <a name='M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions-'></a>
 ### CreateTextEditorDecorationType(options) `method`
@@ -1422,7 +1431,7 @@ Create a TextEditorDecorationType that can be used to add decorations to text ed
 | options | [VscAppz.DecorationRenderOptions](#T-VscAppz-DecorationRenderOptions 'VscAppz.DecorationRenderOptions') | Rendering options for the decoration type. |
 
 <a name='M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState}-'></a>
-### OnDidChangeWindowState() `method`
+### OnDidChangeWindowState(listener) `method`
 
 ##### Summary
 
@@ -1431,7 +1440,9 @@ changes. The value of the event represents whether the window is focused.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| listener | [System.Action{VscAppz.WindowState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.WindowState}') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-IWindow-SetStatusBarMessage1-System-String,System-Int32-'></a>
 ### SetStatusBarMessage1(text,hideAfterTimeout) `method`
@@ -2022,7 +2033,7 @@ has been opened.
 This method has no parameters.
 
 <a name='M-VscAppz-IWorkspace-OnDidChangeWorkspaceFolders-System-Action{VscAppz-WorkspaceFoldersChangeEvent}-'></a>
-### OnDidChangeWorkspaceFolders() `method`
+### OnDidChangeWorkspaceFolders(listener) `method`
 
 ##### Summary
 
@@ -2030,7 +2041,9 @@ An event that is emitted when a workspace folder is added or removed.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| listener | [System.Action{VscAppz.WorkspaceFoldersChangeEvent}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.WorkspaceFoldersChangeEvent}') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-IWorkspace-Properties'></a>
 ### Properties() `method`
@@ -2166,7 +2179,7 @@ event.
 This method has no parameters.
 
 <a name='M-VscAppz-InputBox-OnDidAccept-System-Action{VscAppz-InputBoxState}-'></a>
-### OnDidAccept() `method`
+### OnDidAccept(handler) `method`
 
 ##### Summary
 
@@ -2174,10 +2187,12 @@ An event signaling when the user indicated acceptance of the input value.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| handler | [System.Action{VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.InputBoxState}') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String,VscAppz-InputBoxState}-'></a>
-### OnDidChangeValue() `method`
+### OnDidChangeValue(handler) `method`
 
 ##### Summary
 
@@ -2185,10 +2200,12 @@ An event signaling when the value has changed.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| handler | [System.Action{System.String,VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String,VscAppz.InputBoxState}') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-InputBox-OnDidHide-System-Action{VscAppz-InputBoxState}-'></a>
-### OnDidHide() `method`
+### OnDidHide(handler) `method`
 
 ##### Summary
 
@@ -2201,10 +2218,12 @@ the user pressing Esc, some other input UI opening, etc.)
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| handler | [System.Action{VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.InputBoxState}') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-InputBox-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton,VscAppz-InputBoxState}-'></a>
-### OnDidTriggerButton() `method`
+### OnDidTriggerButton(handler) `method`
 
 ##### Summary
 
@@ -2212,7 +2231,9 @@ An event signaling when a button was triggered.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| handler | [System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState}') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-InputBox-Set-VscAppz-InputBoxState-'></a>
 ### Set() `method`
@@ -2779,7 +2800,7 @@ This method has no parameters.
 
 ##### Summary
 
-Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 
 ##### Parameters
 
@@ -2798,7 +2819,7 @@ event.
 This method has no parameters.
 
 <a name='M-VscAppz-QuickPick-OnDidAccept-System-Action{VscAppz-QuickPickState}-'></a>
-### OnDidAccept() `method`
+### OnDidAccept(handler) `method`
 
 ##### Summary
 
@@ -2806,10 +2827,12 @@ An event signaling when the user indicated acceptance of the selected item(s).
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| handler | [System.Action{VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickState}') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}-'></a>
-### OnDidChangeActive() `method`
+### OnDidChangeActive(handler) `method`
 
 ##### Summary
 
@@ -2817,10 +2840,12 @@ An event signaling when the active items have changed.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| handler | [System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}-'></a>
-### OnDidChangeSelection() `method`
+### OnDidChangeSelection(handler) `method`
 
 ##### Summary
 
@@ -2828,10 +2853,12 @@ An event signaling when the selected items have changed.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| handler | [System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String,VscAppz-QuickPickState}-'></a>
-### OnDidChangeValue() `method`
+### OnDidChangeValue(handler) `method`
 
 ##### Summary
 
@@ -2839,10 +2866,12 @@ An event signaling when the value of the filter text has changed.
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| handler | [System.Action{System.String,VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String,VscAppz.QuickPickState}') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-QuickPick-OnDidHide-System-Action{VscAppz-QuickPickState}-'></a>
-### OnDidHide() `method`
+### OnDidHide(handler) `method`
 
 ##### Summary
 
@@ -2855,25 +2884,16 @@ the user pressing Esc, some other input UI opening, etc.)
 
 ##### Parameters
 
-This method has no parameters.
-
-<a name='M-VscAppz-QuickPick-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton,VscAppz-QuickPickState}-'></a>
-### OnDidTriggerButton() `method`
-
-##### Summary
-
-An event signaling when a button was triggered.
-
-##### Parameters
-
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| handler | [System.Action{VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickState}') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-QuickPick-Set-VscAppz-QuickPickState-'></a>
 ### Set() `method`
 
 ##### Summary
 
-Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 
 ##### Parameters
 
@@ -3040,13 +3060,6 @@ If the UI should show a progress indicator. Defaults to false.
 
 Change this to true, e.g., while loading more data or validating
 user input.
-
-<a name='F-VscAppz-QuickPickState-Buttons'></a>
-### Buttons `constants`
-
-##### Summary
-
-Buttons for actions in the UI.
 
 <a name='F-VscAppz-QuickPickState-CanSelectMany'></a>
 ### CanSelectMany `constants`

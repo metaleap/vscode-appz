@@ -282,8 +282,34 @@ namespace VscAppzDemo {
 				}
 			});
 		}
+		private static void demo_Window_CreateQuickPick() {
+			QuickPickState cfg = default;
+			cfg = new QuickPickState();
+			cfg.IgnoreFocusOut = true;
+			cfg.Title = "I'm a full-fledged QuickPick";
+			cfg.Step = 23;
+			cfg.TotalSteps = 42;
+			cfg.Items = new QuickPickItem[88];
+			foreach (var i in nums1To(88)) {
+				cfg.Items[i] = new QuickPickItem();
+				cfg.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i);
+				cfg.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i);
+				cfg.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i);
+				cfg.Items[(i - 1)].AlwaysShow = i == 42;
+			}
+			vsc.Window.CreateQuickPick(cfg)((QuickPick ctl, QuickPickState _unused) => {
+				ctl.OnDidAccept((QuickPickState props) => {
+					logLn(strFmt("Picked: {0}", props.SelectedItems));
+					ctl.Hide();
+				});
+				ctl.OnDidHide((QuickPickState _) => {
+					ctl.Dispose();
+				});
+				ctl.Show();
+			});
+		}
 		private static void demo_Window_CreateInputBox() {
-			vsc.Window.CreateInputBox()((InputBox inputbox, InputBoxState props) => {
+			vsc.Window.CreateInputBox(null)((InputBox inputbox, InputBoxState props) => {
 				props.IgnoreFocusOut = true;
 				props.Placeholder = "The initial Placeholder";
 				props.Prompt = "The initial Prompt";
@@ -323,7 +349,7 @@ namespace VscAppzDemo {
 		}
 		private static void demosMenu() {
 			string[] items = default;
-			items = new[] { "demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_CreateInputBox", "demo_Window_ShowInputBox" };
+			items = new[] { "demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_CreateQuickPick", "demo_Window_CreateInputBox", "demo_Window_ShowInputBox" };
 			QuickPickOptions opts = default;
 			opts = new QuickPickOptions();
 			opts.IgnoreFocusOut = true;
@@ -377,6 +403,10 @@ namespace VscAppzDemo {
 					if ("demo_Window_ShowQuickPick" == menuitem) {
 						logLn("Picked `demo_Window_ShowQuickPick` from main menu");
 						demo_Window_ShowQuickPick();
+					}
+					if ("demo_Window_CreateQuickPick" == menuitem) {
+						logLn("Picked `demo_Window_CreateQuickPick` from main menu");
+						demo_Window_CreateQuickPick();
 					}
 					if ("demo_Window_CreateInputBox" == menuitem) {
 						logLn("Picked `demo_Window_CreateInputBox` from main menu");
@@ -435,16 +465,15 @@ namespace VscAppzDemo {
 					return null;
 				};
 				vsc.Commands.RegisterCommand(cmdName, mycmd)((Disposable _commandRegisteredAtThisPoint) => {
-					vsc.Window.CreateStatusBarItem(0, null)((StatusBarItem it, StatusBarItemState props) => {
+					StatusBarItemState cfg = default;
+					cfg = new StatusBarItemState();
+					cfg.Tooltip = strFmt("Hi from {0}!", appName);
+					cfg.Text = "You clicked me 0 time(s).";
+					cfg.Color = "#42BEEF";
+					cfg.Command = cmdName;
+					vsc.Window.CreateStatusBarItem(0, null, cfg)((StatusBarItem it, StatusBarItemState _unused) => {
 						statusitem = it;
-						props = new StatusBarItemState();
-						props.Tooltip = strFmt("Hi from {0}!", appName);
-						props.Text = "You clicked me 0 time(s).";
-						props.Color = "#42BEEF";
-						props.Command = cmdName;
-						statusitem.Set(props)(() => {
-							statusitem.Show();
-						});
+						statusitem.Show();
 					});
 				});
 			}

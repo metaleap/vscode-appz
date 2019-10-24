@@ -36,6 +36,7 @@ export class Gen extends gen_syn.Gen {
     }
 
     emitDocs(it: gen_syn.WithDocs): Gen {
+        this.ensureMethodDocsArgsAndRet(it)
         const paramnames: string[] = []
         if (it.Docs && it.Docs.length)
             for (const doc of it.Docs)

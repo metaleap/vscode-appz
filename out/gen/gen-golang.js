@@ -26,6 +26,7 @@ class Gen extends gen_syn.Gen {
     }
     emitOutro() { return this; }
     emitDocs(it) {
+        this.ensureMethodDocsArgsAndRet(it);
         if (it.Docs && it.Docs.length)
             for (const doc of it.Docs)
                 if (doc.Lines && doc.Lines.length)
@@ -45,8 +46,7 @@ class Gen extends gen_syn.Gen {
             .line("type " + it.Name + " interface {").indented(() => this.each(it.Methods, "\n", m => emitTypeRet(this.emitDocs(m).lf()
             .s(m.Name)
             .s("(").each(m.Args, ", ", a => this.s(a.Name, " ").emitTypeRef(a.Type))
-            .s(") "), m.Type)
-            .line()))
+            .s(") "), m.Type).line()))
             .line("}")
             .when(!it.IsTop, () => this.line("type " + this.options.idents.typeImpl + it.Name + " struct{ *" + this.options.idents.typeImpl + " }"))
             .line("");

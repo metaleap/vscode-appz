@@ -29,9 +29,9 @@ export class Gen extends gen_syn.Gen {
             "const main = require('./main')",
             'Object.defineProperty(exports, "__esModule", { value: true })',
             "// " + this.doNotEditComment("nodejs"),
-            "let vsc, appName, cmdName, strFmt, quit, cancelIn, demo_Window_ShowInputBox, setOutChan, logLn, strLo, strUp",
+            "let vsc, appName, cmdName, strFmt, quit, cancelIn, demo_Window_ShowInputBox, setOutChan, logLn, strLo, strUp, nums1To",
+            "exports.onUpAndRunning = () => { /* crikey!.. */ vsc = main.vsc; appName = main.appName; cmdName = main.cmdName; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox; setOutChan = main.setOutChan; logLn = main.logLn; strLo = main.strLo; strUp = main.strUp; nums1To = main.nums1To; onUpAndRunning() }",
             "exports.demosMenu = demosMenu",
-            "exports.onUpAndRunning = () => { /* crikey!.. */ vsc = main.vsc; appName = main.appName; cmdName = main.cmdName; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox; setOutChan = main.setOutChan; logLn = main.logLn; strLo = main.strLo; strUp = main.strUp; onUpAndRunning() }",
             "",
         ) : this.lines(
             "// " + this.doNotEditComment("nodejs"),
@@ -58,6 +58,7 @@ export class Gen extends gen_syn.Gen {
     emitOutro(): Gen { return this }
 
     emitDocs(it: gen_syn.WithDocs): Gen {
+        this.ensureMethodDocsArgsAndRet(it)
         if (it.Docs && it.Docs.length) {
             this.line("/**")
             for (const doc of it.Docs)
@@ -89,9 +90,9 @@ export class Gen extends gen_syn.Gen {
                         .when(m.IsSubNs || (m.Args && m.Args.length),
                             () => {
                                 this.s(": (")
-                                    .each(m.Args, ", ", a =>
+                                    .each(m.Args, ", ", (a, i) =>
                                         this.s(a.Name)
-                                            .s((a.fromPrep && a.fromPrep.optional) ? "?: " : ": ")
+                                            .s(((a.fromPrep && a.fromPrep.optional) || (this.typeMaybe(a.Type) && i === m.Args.length - 1)) ? "?: " : ": ")
                                             .emitTypeRef(a.Type)
                                     )
                                     .s(") => ").emitTypeRef(m.Type)
@@ -217,8 +218,8 @@ export class Gen extends gen_syn.Gen {
         const struct = (tnamed && tnamed.Name && tnamed.Name.length) ? this.allStructs[tnamed.Name] : null
         this.lf().s((struct ? ("function " + struct.Name + "_") : this.isDemos ? "function " : "") + it.Name + "(")
             .s(struct ? ("this: " + struct.Name + ", ") : "")
-            .each(it.Func.Args, ", ", a =>
-                this.s(a.Name, jsMode ? "" : ((a.fromPrep && a.fromPrep.optional) ? "?: " : ": ")).emitTypeRef(a.Type)
+            .each(it.Func.Args, ", ", (a, i) =>
+                this.s(a.Name, jsMode ? "" : (((a.fromPrep && a.fromPrep.optional) || (this.typeMaybe(a.Type) && i === it.Func.Args.length - 1)) ? "?: " : ": ")).emitTypeRef(a.Type)
             )
             .s(jsMode ? ")" : "): ")
             .emitTypeRef(it.Func.Type).s(" ")
@@ -272,8 +273,8 @@ export class Gen extends gen_syn.Gen {
             if (efn && efn.Body !== undefined && efn.Type !== undefined && efn.Args !== undefined)
                 return this
                     .s("(")
-                    .each(efn.Args, ", ", _ =>
-                        this.s(_.Name, jsMode ? "" : ((_.fromPrep && _.fromPrep.optional) ? "?: " : ": "))
+                    .each(efn.Args, ", ", (_, i) =>
+                        this.s(_.Name, jsMode ? "" : (((_.fromPrep && _.fromPrep.optional) || (this.typeMaybe(_.Type) && i === efn.Args.length - 1)) ? "?: " : ": "))
                             .emitTypeRef(_.Type))
                     .s(jsMode ? ")" : "): ").emitTypeRef(efn.Type).s(" => ")
                     .emitInstr(efn.Body)

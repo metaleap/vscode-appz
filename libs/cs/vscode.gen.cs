@@ -556,12 +556,15 @@ namespace VscAppz {
 		Action<Action<WorkspaceFolder>> ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options = default);
 
 		/// <summary>Represents the current window's state.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<WindowState>> State();
 
 		/// <summary>
 		/// An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
 		/// changes. The value of the event represents whether the window is focused.
 		/// </summary>
+		/// <param name="listener">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.</return>
 		Action<Action<Disposable>> OnDidChangeWindowState(Action<WindowState> listener = default);
 
 		/// <summary>
@@ -576,7 +579,8 @@ namespace VscAppz {
 		/// <param name="alignment">The alignment of the item.</param>
 		/// <param name="priority">The priority of the item. Higher values mean the item should be shown more to the left.</param>
 		/// <return>A new status bar item.</return>
-		Action<Action<StatusBarItem, StatusBarItemState>> CreateStatusBarItem(StatusBarAlignment? alignment = default, int? priority = default);
+		/// <param name="optionallyInitialStateToApplyUponCreation">If specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
+		Action<Action<StatusBarItem, StatusBarItemState>> CreateStatusBarItem(StatusBarAlignment? alignment = default, int? priority = default, StatusBarItemState optionallyInitialStateToApplyUponCreation = default);
 
 		/// <summary>
 		/// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
@@ -584,6 +588,7 @@ namespace VscAppz {
 		/// `name` ── Human-readable string which will be used to represent the channel in the UI.
 		/// </summary>
 		/// <param name="name">Human-readable string which will be used to represent the channel in the UI.</param>
+		/// <return>A thenable that resolves when the `OutputChannel` has been created and initialized.</return>
 		Action<Action<OutputChannel, OutputChannelState>> CreateOutputChannel(string name = default);
 
 		/// <summary>
@@ -607,7 +612,8 @@ namespace VscAppz {
 		/// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
 		/// </summary>
 		/// <return>A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).</return>
-		Action<Action<InputBox, InputBoxState>> CreateInputBox();
+		/// <param name="optionallyInitialStateToApplyUponCreation">If specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
+		Action<Action<InputBox, InputBoxState>> CreateInputBox(InputBoxState optionallyInitialStateToApplyUponCreation = default);
 
 		/// <summary>
 		/// Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
@@ -620,7 +626,8 @@ namespace VscAppz {
 		/// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
 		/// </summary>
 		/// <return>A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).</return>
-		Action<Action<QuickPick, QuickPickState>> CreateQuickPick();
+		/// <param name="optionallyInitialStateToApplyUponCreation">If specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
+		Action<Action<QuickPick, QuickPickState>> CreateQuickPick(QuickPickState optionallyInitialStateToApplyUponCreation = default);
 	}
 
 	/// <summary>Namespace describing the environment the editor runs in.</summary>
@@ -641,15 +648,19 @@ namespace VscAppz {
 		Action<Action<bool>> OpenExternal(string target = default);
 
 		/// <summary>The application name of the editor, like 'VS Code'.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> AppName();
 
 		/// <summary>The application root folder from which the editor is running.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> AppRoot();
 
 		/// <summary>Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> Language();
 
 		/// <summary>A unique identifier for the computer.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> MachineId();
 
 		/// <summary>
@@ -661,21 +672,25 @@ namespace VscAppz {
 		/// exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 		/// a specific extension runs remote or not.
 		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> RemoteName();
 
 		/// <summary>
 		/// A unique identifier for the current session.
 		/// Changes each time the editor is started.
 		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> SessionId();
 
 		/// <summary>
 		/// The detected default shell for the extension host, this is overridden by the
 		/// `terminal.integrated.shell` setting for the extension host's platform.
 		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> Shell();
 
 		/// <summary>The custom uri scheme the editor registers to in the operating system.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> UriScheme();
 
 		/// <summary>Provides single-call access to numerous individual `IEnv` properties at once.</summary>
@@ -701,6 +716,7 @@ namespace VscAppz {
 		/// `return` ── A thenable that resolves when writing happened.
 		/// </summary>
 		/// <return>A thenable that resolves when writing happened.</return>
+		/// <param name="value"></param>
 		Action<Action> WriteText(string value = default);
 	}
 
@@ -718,6 +734,7 @@ namespace VscAppz {
 		/// The name of the workspace. `undefined` when no folder
 		/// has been opened.
 		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> Name();
 
 		/// <summary>
@@ -753,6 +770,7 @@ namespace VscAppz {
 		/// for that purpose which will work both when a single folder is opened as
 		/// well as an untitled or saved workspace.
 		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> WorkspaceFile();
 
 		/// <summary>
@@ -767,6 +785,8 @@ namespace VscAppz {
 		Action<Action<bool>> SaveAll(bool includeUntitled = default);
 
 		/// <summary>An event that is emitted when a workspace folder is added or removed.</summary>
+		/// <param name="listener">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.</return>
 		Action<Action<Disposable>> OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener = default);
 
 		/// <summary>
@@ -786,6 +806,7 @@ namespace VscAppz {
 		/// List of workspace folders or `undefined` when no folder is open.
 		/// *Note* that the first entry corresponds to the value of `rootPath`.
 		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<WorkspaceFolder[]>> WorkspaceFolders();
 
 		/// <summary>
@@ -882,6 +903,8 @@ namespace VscAppz {
 		/// An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
 		/// newly added and removed diagnostics.
 		/// </summary>
+		/// <param name="listener">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.</return>
 		Action<Action<Disposable>> OnDidChangeDiagnostics(Action<DiagnosticChangeEvent> listener = default);
 	}
 
@@ -930,6 +953,8 @@ namespace VscAppz {
 		/// An event which fires when `extensions.all` changes. This can happen when extensions are
 		/// installed, uninstalled, enabled or disabled.
 		/// </summary>
+		/// <param name="listener">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.</return>
 		Action<Action<Disposable>> OnDidChange(Action listener = default);
 	}
 
@@ -1978,10 +2003,6 @@ namespace VscAppz {
 		[JsonProperty("placeholder")]
 		public string Placeholder;
 
-		/// <summary>Buttons for actions in the UI.</summary>
-		[JsonProperty("buttons")]
-		public QuickInputButton[] Buttons;
-
 		/// <summary>Items to pick from.</summary>
 		[JsonProperty("items")]
 		public QuickPickItem[] Items;
@@ -2087,8 +2108,10 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2119,8 +2142,10 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2149,8 +2174,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2180,8 +2207,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2211,8 +2240,10 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2243,8 +2274,10 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2273,8 +2306,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2304,8 +2339,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2335,8 +2372,10 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2367,8 +2406,10 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2397,8 +2438,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2428,8 +2471,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2497,8 +2542,10 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2589,8 +2636,10 @@ namespace VscAppz {
 						__idx__result = __idx__result + 1;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2671,8 +2720,10 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2764,8 +2815,10 @@ namespace VscAppz {
 						__idx__result = __idx__result + 1;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2845,8 +2898,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2886,8 +2941,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.Impl()));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.Impl()));
+					}
 				}
 				return true;
 			};
@@ -2917,8 +2974,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.Impl()));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.Impl()));
+					}
 				}
 				return true;
 			};
@@ -2947,8 +3006,10 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -2988,8 +3049,10 @@ namespace VscAppz {
 						__idx__result = __idx__result + 1;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3019,8 +3082,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3047,8 +3112,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3097,8 +3164,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.Impl(), _fnid_listener));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.Impl(), _fnid_listener));
+					}
 				}
 				return true;
 			};
@@ -3108,7 +3177,7 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<StatusBarItem, StatusBarItemState>> IWindow.CreateStatusBarItem(StatusBarAlignment? alignment, int? priority) {
+		Action<Action<StatusBarItem, StatusBarItemState>> IWindow.CreateStatusBarItem(StatusBarAlignment? alignment, int? priority, StatusBarItemState optionallyInitialStateToApplyUponCreation) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createStatusBarItem";
@@ -3132,11 +3201,16 @@ namespace VscAppz {
 					}
 					result.disp.impl = this.Impl();
 				}
-				result.Get()((StatusBarItemState state) => {
-					if ((null != onret)) {
-						onret(result, state);
+				{
+					if ((null != optionallyInitialStateToApplyUponCreation)) {
+						result.Set(optionallyInitialStateToApplyUponCreation);
 					}
-				});
+					result.Get()((StatusBarItemState state) => {
+						if ((null != onret)) {
+							onret(result, state);
+						}
+					});
+				}
 				return true;
 			};
 			this.Impl().send(msg, onresp);
@@ -3164,11 +3238,13 @@ namespace VscAppz {
 					}
 					result.disp.impl = this.Impl();
 				}
-				result.Get()((OutputChannelState state) => {
-					if ((null != onret)) {
-						onret(result, state);
-					}
-				});
+				{
+					result.Get()((OutputChannelState state) => {
+						if ((null != onret)) {
+							onret(result, state);
+						}
+					});
+				}
 				return true;
 			};
 			this.Impl().send(msg, onresp);
@@ -3196,11 +3272,13 @@ namespace VscAppz {
 					}
 					result.disp.impl = this.Impl();
 				}
-				result.Get()((TextEditorDecorationTypeState state) => {
-					if ((null != onret)) {
-						onret(result, state);
-					}
-				});
+				{
+					result.Get()((TextEditorDecorationTypeState state) => {
+						if ((null != onret)) {
+							onret(result, state);
+						}
+					});
+				}
 				return true;
 			};
 			this.Impl().send(msg, onresp);
@@ -3209,7 +3287,7 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<InputBox, InputBoxState>> IWindow.CreateInputBox() {
+		Action<Action<InputBox, InputBoxState>> IWindow.CreateInputBox(InputBoxState optionallyInitialStateToApplyUponCreation) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createInputBox";
@@ -3227,11 +3305,16 @@ namespace VscAppz {
 					}
 					result.disp.impl = this.Impl();
 				}
-				result.Get()((InputBoxState state) => {
-					if ((null != onret)) {
-						onret(result, state);
+				{
+					if ((null != optionallyInitialStateToApplyUponCreation)) {
+						result.Set(optionallyInitialStateToApplyUponCreation);
 					}
-				});
+					result.Get()((InputBoxState state) => {
+						if ((null != onret)) {
+							onret(result, state);
+						}
+					});
+				}
 				return true;
 			};
 			this.Impl().send(msg, onresp);
@@ -3240,7 +3323,7 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<QuickPick, QuickPickState>> IWindow.CreateQuickPick() {
+		Action<Action<QuickPick, QuickPickState>> IWindow.CreateQuickPick(QuickPickState optionallyInitialStateToApplyUponCreation) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createQuickPick";
@@ -3258,11 +3341,16 @@ namespace VscAppz {
 					}
 					result.disp.impl = this.Impl();
 				}
-				result.Get()((QuickPickState state) => {
-					if ((null != onret)) {
-						onret(result, state);
+				{
+					if ((null != optionallyInitialStateToApplyUponCreation)) {
+						result.Set(optionallyInitialStateToApplyUponCreation);
 					}
-				});
+					result.Get()((QuickPickState state) => {
+						if ((null != onret)) {
+							onret(result, state);
+						}
+					});
+				}
 				return true;
 			};
 			this.Impl().send(msg, onresp);
@@ -3290,8 +3378,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3317,8 +3407,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3344,8 +3436,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3371,8 +3465,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3398,8 +3494,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3427,8 +3525,10 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3454,8 +3554,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3481,8 +3583,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3508,8 +3612,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3538,8 +3644,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3571,8 +3679,10 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3623,8 +3733,10 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3652,8 +3764,10 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3682,8 +3796,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3732,8 +3848,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.Impl(), _fnid_listener));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.Impl(), _fnid_listener));
+					}
 				}
 				return true;
 			};
@@ -3761,8 +3879,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3802,8 +3922,10 @@ namespace VscAppz {
 						__idx__result = __idx__result + 1;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3858,8 +3980,10 @@ namespace VscAppz {
 						__idx__result = __idx__result + 1;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3889,8 +4013,10 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3919,8 +4045,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -3959,8 +4087,10 @@ namespace VscAppz {
 						__idx__result = __idx__result + 1;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4009,8 +4139,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.Impl(), _fnid_listener));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.Impl(), _fnid_listener));
+					}
 				}
 				return true;
 			};
@@ -4053,8 +4185,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.Impl(), _fnid_listener));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.Impl(), _fnid_listener));
+					}
 				}
 				return true;
 			};
@@ -4104,8 +4238,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.Impl(), _fnid_callback));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.Impl(), _fnid_callback));
+					}
 				}
 				return true;
 			};
@@ -4132,8 +4268,10 @@ namespace VscAppz {
 					if (ok) {
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4173,8 +4311,10 @@ namespace VscAppz {
 						__idx__result = __idx__result + 1;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4188,6 +4328,7 @@ namespace VscAppz {
 
 	public partial class StatusBarItem {
 		/// <summary>Shows the entry in the status bar.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<StatusBarItemState>> Show() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4206,8 +4347,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4220,6 +4363,7 @@ namespace VscAppz {
 
 	public partial class StatusBarItem {
 		/// <summary>Hide the entry in the status bar.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<StatusBarItemState>> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4238,8 +4382,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4255,6 +4401,7 @@ namespace VscAppz {
 		/// Dispose and free associated resources. Call
 		/// [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
 		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Dispose() {
 			return this.disp.Dispose();
 		}
@@ -4282,8 +4429,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4328,6 +4477,7 @@ namespace VscAppz {
 		/// `value` ── A string, falsy values will not be printed.
 		/// </summary>
 		/// <param name="value">A string, falsy values will not be printed.</param>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<OutputChannelState>> Append(string value = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4347,8 +4497,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4367,6 +4519,7 @@ namespace VscAppz {
 		/// `value` ── A string, falsy values will be printed.
 		/// </summary>
 		/// <param name="value">A string, falsy values will be printed.</param>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<OutputChannelState>> AppendLine(string value = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4386,8 +4539,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4400,6 +4555,7 @@ namespace VscAppz {
 
 	public partial class OutputChannel {
 		/// <summary>Removes all output from the channel.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<OutputChannelState>> Clear() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4418,8 +4574,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4437,6 +4595,7 @@ namespace VscAppz {
 		/// `preserveFocus` ── When `true` the channel will not take focus.
 		/// </summary>
 		/// <param name="preserveFocus">When `true` the channel will not take focus.</param>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<OutputChannelState>> Show(bool preserveFocus = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4456,8 +4615,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4470,6 +4631,7 @@ namespace VscAppz {
 
 	public partial class OutputChannel {
 		/// <summary>Hide this channel from the UI.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<OutputChannelState>> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4488,8 +4650,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4502,6 +4666,7 @@ namespace VscAppz {
 
 	public partial class OutputChannel : IDisposable {
 		/// <summary>Dispose and free associated resources.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Dispose() {
 			return this.disp.Dispose();
 		}
@@ -4529,8 +4694,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4543,6 +4710,7 @@ namespace VscAppz {
 
 	public partial class TextEditorDecorationType : IDisposable {
 		/// <summary>Remove this decoration type and all decorations on all text editors using it.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Dispose() {
 			return this.disp.Dispose();
 		}
@@ -4570,8 +4738,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4584,6 +4754,8 @@ namespace VscAppz {
 
 	public partial class InputBox {
 		/// <summary>An event signaling when the value has changed.</summary>
+		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidChangeValue(Action<string, InputBoxState> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4629,8 +4801,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.disp.impl, _fnid_handler));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.disp.impl, _fnid_handler));
+					}
 				}
 				return true;
 			};
@@ -4643,6 +4817,8 @@ namespace VscAppz {
 
 	public partial class InputBox {
 		/// <summary>An event signaling when the user indicated acceptance of the input value.</summary>
+		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidAccept(Action<InputBoxState> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4683,8 +4859,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.disp.impl, _fnid_handler));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.disp.impl, _fnid_handler));
+					}
 				}
 				return true;
 			};
@@ -4697,6 +4875,8 @@ namespace VscAppz {
 
 	public partial class InputBox {
 		/// <summary>An event signaling when a button was triggered.</summary>
+		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidTriggerButton` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidTriggerButton(Action<QuickInputButton, InputBoxState> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4743,8 +4923,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.disp.impl, _fnid_handler));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.disp.impl, _fnid_handler));
+					}
 				}
 				return true;
 			};
@@ -4760,6 +4942,7 @@ namespace VscAppz {
 		/// Makes the input UI visible in its current configuration. Any other input
 		/// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<InputBoxState>> Show() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4778,8 +4961,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4795,6 +4980,7 @@ namespace VscAppz {
 		/// Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 		/// event.
 		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<InputBoxState>> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4813,8 +4999,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4834,6 +5022,8 @@ namespace VscAppz {
 		/// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 		/// the user pressing Esc, some other input UI opening, etc.)
 		/// </summary>
+		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidHide(Action<InputBoxState> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4874,8 +5064,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.disp.impl, _fnid_handler));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.disp.impl, _fnid_handler));
+					}
 				}
 				return true;
 			};
@@ -4893,6 +5085,7 @@ namespace VscAppz {
 		/// functional and no additional methods or properties on it should be
 		/// accessed. Instead a new input UI should be created.
 		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Dispose() {
 			return this.disp.Dispose();
 		}
@@ -4920,8 +5113,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -4961,6 +5156,8 @@ namespace VscAppz {
 
 	public partial class QuickPick {
 		/// <summary>An event signaling when the value of the filter text has changed.</summary>
+		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidChangeValue(Action<string, QuickPickState> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5006,8 +5203,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.disp.impl, _fnid_handler));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.disp.impl, _fnid_handler));
+					}
 				}
 				return true;
 			};
@@ -5020,6 +5219,8 @@ namespace VscAppz {
 
 	public partial class QuickPick {
 		/// <summary>An event signaling when the user indicated acceptance of the selected item(s).</summary>
+		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidAccept(Action<QuickPickState> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5060,68 +5261,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.disp.impl, _fnid_handler));
-				}
-				return true;
-			};
-			this.disp.impl.send(msg, onresp);
-			return (Action<Disposable> a0) => {
-				onret = a0;
-			};
-		}
-	}
-
-	public partial class QuickPick {
-		/// <summary>An event signaling when a button was triggered.</summary>
-		public Action<Action<Disposable>> OnDidTriggerButton(Action<QuickInputButton, QuickPickState> handler = default) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "QuickPick.onDidTriggerButton";
-			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
-			string _fnid_handler = default;
-			if ((null == handler)) {
-				OnError(this.disp.impl, "QuickPick.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
-				return null;
-			}
-			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
-				bool ok = default;
-				if (2 != args.Length) {
-					return ok;
-				}
-				QuickInputButton _a_0_ = default;
-				_a_0_ = new QuickInputButton();
-				ok = _a_0_.populateFrom(args[0]);
-				if (!ok) {
-					return false;
-				}
-				QuickPickState _a_1_ = default;
-				_a_1_ = new QuickPickState();
-				ok = _a_1_.populateFrom(args[1]);
-				if (!ok) {
-					return false;
-				}
-				handler(_a_0_, _a_1_);
-				return true;
-			}, null);
-			msg.Data["handler"] = _fnid_handler;
-			Func<any, bool> onresp = default;
-			Action<Disposable> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				Disposable result = default;
-				if ((null != payload)) {
-					result = new Disposable();
-					ok = result.populateFrom(payload);
-					if (!ok) {
-						return false;
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.disp.impl, _fnid_handler));
 					}
-				} else {
-					return false;
-				}
-				if ((null != onret)) {
-					onret(result.bind(this.disp.impl, _fnid_handler));
 				}
 				return true;
 			};
@@ -5134,6 +5277,8 @@ namespace VscAppz {
 
 	public partial class QuickPick {
 		/// <summary>An event signaling when the active items have changed.</summary>
+		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidChangeActive(Action<QuickPickItem[], QuickPickState> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5193,8 +5338,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.disp.impl, _fnid_handler));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.disp.impl, _fnid_handler));
+					}
 				}
 				return true;
 			};
@@ -5207,6 +5354,8 @@ namespace VscAppz {
 
 	public partial class QuickPick {
 		/// <summary>An event signaling when the selected items have changed.</summary>
+		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidChangeSelection(Action<QuickPickItem[], QuickPickState> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5266,8 +5415,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.disp.impl, _fnid_handler));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.disp.impl, _fnid_handler));
+					}
 				}
 				return true;
 			};
@@ -5283,6 +5434,7 @@ namespace VscAppz {
 		/// Makes the input UI visible in its current configuration. Any other input
 		/// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<QuickPickState>> Show() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5301,8 +5453,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -5318,6 +5472,7 @@ namespace VscAppz {
 		/// Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 		/// event.
 		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<QuickPickState>> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5336,8 +5491,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -5357,6 +5514,8 @@ namespace VscAppz {
 		/// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 		/// the user pressing Esc, some other input UI opening, etc.)
 		/// </summary>
+		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidHide(Action<QuickPickState> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5397,8 +5556,10 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				if ((null != onret)) {
-					onret(result.bind(this.disp.impl, _fnid_handler));
+				{
+					if ((null != onret)) {
+						onret(result.bind(this.disp.impl, _fnid_handler));
+					}
 				}
 				return true;
 			};
@@ -5416,6 +5577,7 @@ namespace VscAppz {
 		/// functional and no additional methods or properties on it should be
 		/// accessed. Instead a new input UI should be created.
 		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Dispose() {
 			return this.disp.Dispose();
 		}
@@ -5424,7 +5586,7 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPick {
-		/// <summary>Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+		/// <summary>Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
 		public Action<Action<QuickPickState>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5443,8 +5605,10 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				if ((null != onret)) {
-					onret(result);
+				{
+					if ((null != onret)) {
+						onret(result);
+					}
 				}
 				return true;
 			};
@@ -5456,7 +5620,7 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPick {
-		/// <summary>Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+		/// <summary>Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
 		public Action<Action> Set(QuickPickState allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -6421,32 +6585,7 @@ namespace VscAppz {
 				}
 				this.Placeholder = placeholder;
 			}
-			(val, ok) = (it.TryGetValue("buttons", out var ____) ? (____, true) : (default, false));
-			if (ok) {
-				QuickInputButton[] buttons = default;
-				if ((null != val)) {
-					any[] __coll__buttons = default;
-					(__coll__buttons, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-					buttons = new QuickInputButton[__coll__buttons.Length];
-					int __idx__buttons = default;
-					__idx__buttons = 0;
-					foreach (var __item__buttons in __coll__buttons) {
-						QuickInputButton __val__buttons = default;
-						__val__buttons = new QuickInputButton();
-						ok = __val__buttons.populateFrom(__item__buttons);
-						if (!ok) {
-							return false;
-						}
-						buttons[__idx__buttons] = __val__buttons;
-						__idx__buttons = __idx__buttons + 1;
-					}
-				}
-				this.Buttons = buttons;
-			}
-			(val, ok) = (it.TryGetValue("items", out var _____) ? (_____, true) : (default, false));
+			(val, ok) = (it.TryGetValue("items", out var ____) ? (____, true) : (default, false));
 			if (ok) {
 				QuickPickItem[] items = default;
 				if ((null != val)) {
@@ -6471,7 +6610,7 @@ namespace VscAppz {
 				}
 				this.Items = items;
 			}
-			(val, ok) = (it.TryGetValue("canSelectMany", out var ______) ? (______, true) : (default, false));
+			(val, ok) = (it.TryGetValue("canSelectMany", out var _____) ? (_____, true) : (default, false));
 			if (ok) {
 				bool canSelectMany = default;
 				if ((null != val)) {
@@ -6482,7 +6621,7 @@ namespace VscAppz {
 				}
 				this.CanSelectMany = canSelectMany;
 			}
-			(val, ok) = (it.TryGetValue("matchOnDescription", out var _______) ? (_______, true) : (default, false));
+			(val, ok) = (it.TryGetValue("matchOnDescription", out var ______) ? (______, true) : (default, false));
 			if (ok) {
 				bool matchOnDescription = default;
 				if ((null != val)) {
@@ -6493,7 +6632,7 @@ namespace VscAppz {
 				}
 				this.MatchOnDescription = matchOnDescription;
 			}
-			(val, ok) = (it.TryGetValue("matchOnDetail", out var ________) ? (________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("matchOnDetail", out var _______) ? (_______, true) : (default, false));
 			if (ok) {
 				bool matchOnDetail = default;
 				if ((null != val)) {
@@ -6504,7 +6643,7 @@ namespace VscAppz {
 				}
 				this.MatchOnDetail = matchOnDetail;
 			}
-			(val, ok) = (it.TryGetValue("activeItems", out var _________) ? (_________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("activeItems", out var ________) ? (________, true) : (default, false));
 			if (ok) {
 				QuickPickItem[] activeItems = default;
 				if ((null != val)) {
@@ -6529,7 +6668,7 @@ namespace VscAppz {
 				}
 				this.ActiveItems = activeItems;
 			}
-			(val, ok) = (it.TryGetValue("selectedItems", out var __________) ? (__________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("selectedItems", out var _________) ? (_________, true) : (default, false));
 			if (ok) {
 				QuickPickItem[] selectedItems = default;
 				if ((null != val)) {
@@ -6554,7 +6693,7 @@ namespace VscAppz {
 				}
 				this.SelectedItems = selectedItems;
 			}
-			(val, ok) = (it.TryGetValue("title", out var ___________) ? (___________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("title", out var __________) ? (__________, true) : (default, false));
 			if (ok) {
 				string title = default;
 				if ((null != val)) {
@@ -6565,7 +6704,7 @@ namespace VscAppz {
 				}
 				this.Title = title;
 			}
-			(val, ok) = (it.TryGetValue("step", out var ____________) ? (____________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("step", out var ___________) ? (___________, true) : (default, false));
 			if (ok) {
 				int? step = default;
 				if ((null != val)) {
@@ -6578,7 +6717,7 @@ namespace VscAppz {
 				}
 				this.Step = step;
 			}
-			(val, ok) = (it.TryGetValue("totalSteps", out var _____________) ? (_____________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("totalSteps", out var ____________) ? (____________, true) : (default, false));
 			if (ok) {
 				int? totalSteps = default;
 				if ((null != val)) {
@@ -6591,7 +6730,7 @@ namespace VscAppz {
 				}
 				this.TotalSteps = totalSteps;
 			}
-			(val, ok) = (it.TryGetValue("enabled", out var ______________) ? (______________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("enabled", out var _____________) ? (_____________, true) : (default, false));
 			if (ok) {
 				bool enabled = default;
 				if ((null != val)) {
@@ -6602,7 +6741,7 @@ namespace VscAppz {
 				}
 				this.Enabled = enabled;
 			}
-			(val, ok) = (it.TryGetValue("busy", out var _______________) ? (_______________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("busy", out var ______________) ? (______________, true) : (default, false));
 			if (ok) {
 				bool busy = default;
 				if ((null != val)) {
@@ -6613,7 +6752,7 @@ namespace VscAppz {
 				}
 				this.Busy = busy;
 			}
-			(val, ok) = (it.TryGetValue("ignoreFocusOut", out var ________________) ? (________________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("ignoreFocusOut", out var _______________) ? (_______________, true) : (default, false));
 			if (ok) {
 				bool ignoreFocusOut = default;
 				if ((null != val)) {

@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const node_fs = require("fs");
 const ts = require("typescript");
 const dbgJsonPrintEnums = false, dbgJsonPrintStructs = false, dbgJsonPrintIfaces = false;
+const tmpSuppressObjMembers = {
+    "QuickPick": ["onDidTriggerButton", "buttons"],
+};
 exports.docStrs = {
     extBaggage: "Free-form custom data, preserved across a roundtrip.",
     internalOnly: "For internal runtime use only."
@@ -130,6 +133,9 @@ class Prep {
             return;
         const addMember = (_) => {
             if (_.name && !seemsDeprecated(_)) {
+                const tmpsuppress = tmpSuppressObjMembers[it.qName.slice(it.qName.indexOf('.') + 1)];
+                if (tmpsuppress && tmpsuppress.length && tmpsuppress.includes(_.name.getText()))
+                    return;
                 let tspec = null;
                 const mtyped = _;
                 const mtparams = (_.kind === ts.SyntaxKind.MethodSignature || _.kind === ts.SyntaxKind.MethodDeclaration) ? _ : null;

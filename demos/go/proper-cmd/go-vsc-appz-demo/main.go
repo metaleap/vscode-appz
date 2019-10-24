@@ -20,26 +20,16 @@ var win Window
 var logChan *OutputChannel
 
 func main() {
-	greethow, greetname := "Hallo", "Welt"
-	if len(os.Args) > 1 {
-		if os.Args[1] != "" {
-			greetname = os.Args[1]
-		}
-		if len(os.Args) > 2 && os.Args[2] != "" {
-			greethow = os.Args[2]
-		}
-	}
-
 	Main(func(vscode Vscode) {
 		vsc = vscode
 		win = vsc.Window()
 
 		onUpAndRunning()
 
-		win.SetStatusBarMessage2("Choosing a demo now WILL remove me")(func(statusmsg *Disposable) {
-			buttons := []string{"Demo Pick Input", "Demo Text Input", "All Demos"}
+		win.SetStatusBarMessage2("React to the Welcome msg-box to remove me..")(func(statusmsg *Disposable) {
+			buttons := []string{"Demo Text Input", "All Demos"}
 			win.ShowInformationMessage1(
-				greethow+", "+greetname+"! What to try out? (If you cancel here, I quit.)", buttons)(
+				"What to try out? (If you cancel here, I quit.)", buttons)(
 				func(btn *string) {
 					statusmsg.Dispose()
 					if btn == nil {
@@ -47,11 +37,8 @@ func main() {
 					} else {
 						switch button := *btn; button {
 						case buttons[0]:
-							demoQP()
-							// demo_Window_ShowQuickPick()
-						case buttons[1]:
 							demo_Window_ShowInputBox()
-						case buttons[2]:
+						case buttons[1]:
 							demosMenu()
 						default:
 							win.ShowErrorMessage1("Unknown: `"+button+"`", nil)(demosmenu)
@@ -111,34 +98,10 @@ func strFmt(s string, args ...any) string {
 func strLo(s string) string { return strings.ToLower(s) }
 func strUp(s string) string { return strings.ToUpper(s) }
 
-func demoQP() {
-	win.CreateQuickPick()(func(qp QuickPick, qps QuickPickState) {
-		qp.OnDidTriggerButton(func(btn QuickInputButton, _ QuickPickState) {
-		})
-		qp.OnDidAccept(func(_ QuickPickState) {
-		})
-		qps.IgnoreFocusOut = true
-		qps.Buttons = append(qps.Buttons,
-			QuickInputButton{Tooltip: "jersey", IconPath: "jersey.svg"},
-			QuickInputButton{Tooltip: "d-jersey", IconPath: "dark/jersey.svg"},
-			QuickInputButton{Tooltip: "u-jersey", IconPath: "https://raw.githubusercontent.com/microsoft/vscode-icons/master/icons/dark/jersey.svg"},
-			QuickInputButton{Tooltip: "location", IconPath: "location.svg"},
-			QuickInputButton{Tooltip: "d-location", IconPath: "dark/location.svg"},
-			QuickInputButton{Tooltip: "u-location", IconPath: "https://raw.githubusercontent.com/microsoft/vscode-icons/master/icons/dark/location.svg"},
-		)
-		for i := 1; i <= 123; i++ {
-			s := strconv.Itoa(i)
-			qps.Items = append(qps.Items, QuickPickItem{
-				Description: "$(gift) Description " + s, Detail: "$(globe~spin) Detail " + s, Label: "$(eye) Label " + s, AlwaysShow: (i == 42),
-			})
-		}
-		qps.Step = 23
-		qps.TotalSteps = 42
-		qps.Title = "Funky"
-		qp.Set(qps)
-		qp.OnDidTriggerButton(func(btn QuickInputButton, _ QuickPickState) {
-		})
-		qp.OnDidHide(func(_ QuickPickState) { qp.Dispose() })
-		qp.Show()
-	})
+func nums1To(n int) (nums []int) {
+	nums = make([]int, n)
+	for i := range nums {
+		nums[i] = i + 1
+	}
+	return
 }

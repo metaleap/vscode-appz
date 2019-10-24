@@ -18,6 +18,7 @@ class Gen extends gen_syn.Gen {
         return this.undent(this.isDemos ? 2 : 1).lines("}".repeat(this.isDemos ? 2 : 1));
     }
     emitDocs(it) {
+        this.ensureMethodDocsArgsAndRet(it);
         const paramnames = [];
         if (it.Docs && it.Docs.length)
             for (const doc of it.Docs)

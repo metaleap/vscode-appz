@@ -37,6 +37,7 @@ export class Gen extends gen_syn.Gen {
     emitOutro(): Gen { return this }
 
     emitDocs(it: (gen_syn.WithDocs & gen_syn.WithName)): Gen {
+        this.ensureMethodDocsArgsAndRet(it)
         if (it.Docs && it.Docs.length)
             for (const doc of it.Docs)
                 if (doc.Lines && doc.Lines.length)
@@ -59,12 +60,13 @@ export class Gen extends gen_syn.Gen {
         this.emitDocs(it)
             .line("type " + it.Name + " interface {").indented(() =>
                 this.each(it.Methods, "\n", m =>
-                    emitTypeRet(this.emitDocs(m).lf()
-                        .s(m.Name)
-                        .s("(").each(m.Args, ", ", a =>
-                            this.s(a.Name, " ").emitTypeRef(a.Type))
-                        .s(") "), m.Type)
-                        .line()
+                    emitTypeRet(
+                        this.emitDocs(m).lf()
+                            .s(m.Name)
+                            .s("(").each(m.Args, ", ", a =>
+                                this.s(a.Name, " ").emitTypeRef(a.Type))
+                            .s(") "),
+                        m.Type).line()
                 )
             )
             .line("}")

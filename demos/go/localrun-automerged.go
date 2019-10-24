@@ -21,26 +21,16 @@ var win Window
 var logChan *OutputChannel
 
 func main() {
-	greethow, greetname := "Hallo", "Welt"
-	if len(os.Args) > 1 {
-		if os.Args[1] != "" {
-			greetname = os.Args[1]
-		}
-		if len(os.Args) > 2 && os.Args[2] != "" {
-			greethow = os.Args[2]
-		}
-	}
-
 	Main(func(vscode Vscode) {
 		vsc = vscode
 		win = vsc.Window()
 
 		onUpAndRunning()
 
-		win.SetStatusBarMessage2("Choosing a demo now WILL remove me")(func(statusmsg *Disposable) {
-			buttons := []string{"Demo Pick Input", "Demo Text Input", "All Demos"}
+		win.SetStatusBarMessage2("React to the Welcome msg-box to remove me..")(func(statusmsg *Disposable) {
+			buttons := []string{"Demo Text Input", "All Demos"}
 			win.ShowInformationMessage1(
-				greethow+", "+greetname+"! What to try out? (If you cancel here, I quit.)", buttons)(
+				"What to try out? (If you cancel here, I quit.)", buttons)(
 				func(btn *string) {
 					statusmsg.Dispose()
 					if btn == nil {
@@ -48,11 +38,8 @@ func main() {
 					} else {
 						switch button := *btn; button {
 						case buttons[0]:
-							demoQP()
-							// demo_Window_ShowQuickPick()
-						case buttons[1]:
 							demo_Window_ShowInputBox()
-						case buttons[2]:
+						case buttons[1]:
 							demosMenu()
 						default:
 							win.ShowErrorMessage1("Unknown: `"+button+"`", nil)(demosmenu)
@@ -112,36 +99,12 @@ func strFmt(s string, args ...any) string {
 func strLo(s string) string { return strings.ToLower(s) }
 func strUp(s string) string { return strings.ToUpper(s) }
 
-func demoQP() {
-	win.CreateQuickPick()(func(qp QuickPick, qps QuickPickState) {
-		qp.OnDidTriggerButton(func(btn QuickInputButton, _ QuickPickState) {
-		})
-		qp.OnDidAccept(func(_ QuickPickState) {
-		})
-		qps.IgnoreFocusOut = true
-		qps.Buttons = append(qps.Buttons,
-			QuickInputButton{Tooltip: "jersey", IconPath: "jersey.svg"},
-			QuickInputButton{Tooltip: "d-jersey", IconPath: "dark/jersey.svg"},
-			QuickInputButton{Tooltip: "u-jersey", IconPath: "https://raw.githubusercontent.com/microsoft/vscode-icons/master/icons/dark/jersey.svg"},
-			QuickInputButton{Tooltip: "location", IconPath: "location.svg"},
-			QuickInputButton{Tooltip: "d-location", IconPath: "dark/location.svg"},
-			QuickInputButton{Tooltip: "u-location", IconPath: "https://raw.githubusercontent.com/microsoft/vscode-icons/master/icons/dark/location.svg"},
-		)
-		for i := 1; i <= 123; i++ {
-			s := strconv.Itoa(i)
-			qps.Items = append(qps.Items, QuickPickItem{
-				Description: "$(gift) Description " + s, Detail: "$(globe~spin) Detail " + s, Label: "$(eye) Label " + s, AlwaysShow: (i == 42),
-			})
-		}
-		qps.Step = 23
-		qps.TotalSteps = 42
-		qps.Title = "Funky"
-		qp.Set(qps)
-		qp.OnDidTriggerButton(func(btn QuickInputButton, _ QuickPickState) {
-		})
-		qp.OnDidHide(func(_ QuickPickState) { qp.Dispose() })
-		qp.Show()
-	})
+func nums1To(n int) (nums []int) {
+	nums = make([]int, n)
+	for i := range nums {
+		nums[i] = i + 1
+	}
+	return
 }
 
 func demo_promptToExit() {
@@ -420,8 +383,33 @@ func demo_Window_ShowQuickPick() {
 	})
 }
 
+func demo_Window_CreateQuickPick() {
+	var cfg QuickPickState
+	cfg.IgnoreFocusOut = true
+	cfg.Title = "I'm a full-fledged QuickPick"
+	cfg.Step = 23
+	cfg.TotalSteps = 42
+	cfg.Items = make([]QuickPickItem, 88)
+	for _, i := range nums1To(88) {
+		cfg.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i)
+		cfg.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i)
+		cfg.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i)
+		cfg.Items[(i - 1)].AlwaysShow = i == 42
+	}
+	vsc.Window().CreateQuickPick(&cfg)(func(ctl QuickPick, _unused QuickPickState) {
+		ctl.OnDidAccept(func(props QuickPickState) {
+			logLn(strFmt("Picked: {0}", props.SelectedItems))
+			ctl.Hide()
+		})
+		ctl.OnDidHide(func(_ QuickPickState) {
+			ctl.Dispose()
+		})
+		ctl.Show()
+	})
+}
+
 func demo_Window_CreateInputBox() {
-	vsc.Window().CreateInputBox()(func(inputbox InputBox, props InputBoxState) {
+	vsc.Window().CreateInputBox(nil)(func(inputbox InputBox, props InputBoxState) {
 		props.IgnoreFocusOut = true
 		props.Placeholder = "The initial Placeholder"
 		props.Prompt = "The initial Prompt"
@@ -463,7 +451,7 @@ func subscribeToMiscEvents() {
 
 func demosMenu() {
 	var items []string
-	items = []string{"demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_CreateInputBox", "demo_Window_ShowInputBox"}
+	items = []string{"demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_CreateQuickPick", "demo_Window_CreateInputBox", "demo_Window_ShowInputBox"}
 	var opts QuickPickOptions
 	opts.IgnoreFocusOut = true
 	opts.PlaceHolder = "This menu can be re-opened any time via our custom status-bar item."
@@ -516,6 +504,10 @@ func demosMenu() {
 			if "demo_Window_ShowQuickPick" == (*menuitem) {
 				logLn("Picked `demo_Window_ShowQuickPick` from main menu")
 				demo_Window_ShowQuickPick()
+			}
+			if "demo_Window_CreateQuickPick" == (*menuitem) {
+				logLn("Picked `demo_Window_CreateQuickPick` from main menu")
+				demo_Window_CreateQuickPick()
 			}
 			if "demo_Window_CreateInputBox" == (*menuitem) {
 				logLn("Picked `demo_Window_CreateInputBox` from main menu")
@@ -575,15 +567,14 @@ func onUpAndRunning() {
 			return nil
 		}
 		vsc.Commands().RegisterCommand(cmdName, mycmd)(func(_commandRegisteredAtThisPoint *Disposable) {
-			vsc.Window().CreateStatusBarItem(0, nil)(func(it StatusBarItem, props StatusBarItemState) {
+			var cfg StatusBarItemState
+			cfg.Tooltip = strFmt("Hi from {0}!", appName)
+			cfg.Text = "You clicked me 0 time(s)."
+			cfg.Color = "#42BEEF"
+			cfg.Command = cmdName
+			vsc.Window().CreateStatusBarItem(0, nil, &cfg)(func(it StatusBarItem, _unused StatusBarItemState) {
 				statusitem = it
-				props.Tooltip = strFmt("Hi from {0}!", appName)
-				props.Text = "You clicked me 0 time(s)."
-				props.Color = "#42BEEF"
-				props.Command = cmdName
-				statusitem.Set(props)(func() {
-					statusitem.Show()
-				})
+				statusitem.Show()
 			})
 		})
 	}

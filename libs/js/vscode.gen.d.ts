@@ -438,12 +438,15 @@ export interface Window {
     /**
      * Represents the current window's state.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     State: (_: (_: WindowState) => void) => void;
     /**
      * An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
      * changes. The value of the event represents whether the window is focused.
 
+     * @param listener Will be invoked whenever this event fires; mandatory, not optional.
+     * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
      */
     OnDidChangeWindowState: (listener: (_: WindowState) => void) => (_: (_: Disposable) => void) => void;
     /**
@@ -452,12 +455,14 @@ export interface Window {
      * @param alignment The alignment of the item.
      * @param priority The priority of the item. Higher values mean the item should be shown more to the left.
      * @return A new status bar item.
+     * @param optionallyInitialStateToApplyUponCreation If specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number) => (_: (_: StatusBarItem, __: StatusBarItemState) => void) => void;
+    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number, optionallyInitialStateToApplyUponCreation?: StatusBarItemState) => (_: (_: StatusBarItem, __: StatusBarItemState) => void) => void;
     /**
      * Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 
      * @param name Human-readable string which will be used to represent the channel in the UI.
+     * @return A thenable that resolves when the `OutputChannel` has been created and initialized.
      */
     CreateOutputChannel: (name: string) => (_: (_: OutputChannel, __: OutputChannelState) => void) => void;
     /**
@@ -475,8 +480,9 @@ export interface Window {
      * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
      * @return A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
+     * @param optionallyInitialStateToApplyUponCreation If specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateInputBox: (_: (_: InputBox, __: InputBoxState) => void) => void;
+    CreateInputBox: (optionallyInitialStateToApplyUponCreation?: InputBoxState) => (_: (_: InputBox, __: InputBoxState) => void) => void;
     /**
      * Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
      * of items of type T.
@@ -486,8 +492,9 @@ export interface Window {
      * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
      * @return A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
+     * @param optionallyInitialStateToApplyUponCreation If specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateQuickPick: (_: (_: QuickPick, __: QuickPickState) => void) => void;
+    CreateQuickPick: (optionallyInitialStateToApplyUponCreation?: QuickPickState) => (_: (_: QuickPick, __: QuickPickState) => void) => void;
 }
 /**
  * Namespace describing the environment the editor runs in.
@@ -508,21 +515,25 @@ export interface Env {
     /**
      * The application name of the editor, like 'VS Code'.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     AppName: (_: (_: string) => void) => void;
     /**
      * The application root folder from which the editor is running.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     AppRoot: (_: (_: string) => void) => void;
     /**
      * Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     Language: (_: (_: string) => void) => void;
     /**
      * A unique identifier for the computer.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     MachineId: (_: (_: string) => void) => void;
     /**
@@ -534,23 +545,27 @@ export interface Env {
      * exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
      * a specific extension runs remote or not.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     RemoteName: (_: (_: string) => void) => void;
     /**
      * A unique identifier for the current session.
      * Changes each time the editor is started.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     SessionId: (_: (_: string) => void) => void;
     /**
      * The detected default shell for the extension host, this is overridden by the
      * `terminal.integrated.shell` setting for the extension host's platform.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     Shell: (_: (_: string) => void) => void;
     /**
      * The custom uri scheme the editor registers to in the operating system.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     UriScheme: (_: (_: string) => void) => void;
     /**
@@ -579,6 +594,7 @@ export interface Clipboard {
      * Writes text into the clipboard.
 
      * @return A thenable that resolves when writing happened.
+     * @param value
      */
     WriteText: (value: string) => (_: () => void) => void;
 }
@@ -597,6 +613,7 @@ export interface Workspace {
      * The name of the workspace. `undefined` when no folder
      * has been opened.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     Name: (_: (_: string) => void) => void;
     /**
@@ -632,6 +649,7 @@ export interface Workspace {
      * for that purpose which will work both when a single folder is opened as
      * well as an untitled or saved workspace.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     WorkspaceFile: (_: (_: string) => void) => void;
     /**
@@ -644,6 +662,8 @@ export interface Workspace {
     /**
      * An event that is emitted when a workspace folder is added or removed.
 
+     * @param listener Will be invoked whenever this event fires; mandatory, not optional.
+     * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
      */
     OnDidChangeWorkspaceFolders: (listener: (_: WorkspaceFoldersChangeEvent) => void) => (_: (_: Disposable) => void) => void;
     /**
@@ -659,6 +679,7 @@ export interface Workspace {
      * List of workspace folders or `undefined` when no folder is open.
      * *Note* that the first entry corresponds to the value of `rootPath`.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
      */
     WorkspaceFolders: (_: (_: WorkspaceFolder[]) => void) => void;
     /**
@@ -733,6 +754,8 @@ export interface Languages {
      * An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
      * newly added and removed diagnostics.
 
+     * @param listener Will be invoked whenever this event fires; mandatory, not optional.
+     * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
      */
     OnDidChangeDiagnostics: (listener: (_: DiagnosticChangeEvent) => void) => (_: (_: Disposable) => void) => void;
 }
@@ -782,6 +805,8 @@ export interface Extensions {
      * An event which fires when `extensions.all` changes. This can happen when extensions are
      * installed, uninstalled, enabled or disabled.
 
+     * @param listener Will be invoked whenever this event fires; mandatory, not optional.
+     * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
      */
     OnDidChange: (listener: () => void) => (_: (_: Disposable) => void) => void;
 }
@@ -1735,11 +1760,6 @@ export interface QuickPick extends fromJson, withDisp {
      */
     OnDidAccept: (_: () => void) => (_: (_: Disposable) => void) => void;
     /**
-     * An event signaling when a button was triggered.
-
-     */
-    OnDidTriggerButton: (_: (_: QuickInputButton) => void) => (_: (_: Disposable) => void) => void;
-    /**
      * An event signaling when the active items have changed.
 
      */
@@ -2097,11 +2117,6 @@ export interface QuickPickState extends fromJson {
 
      */
     placeholder?: string;
-    /**
-     * Buttons for actions in the UI.
-
-     */
-    buttons?: QuickInputButton[];
     /**
      * Items to pick from.
 

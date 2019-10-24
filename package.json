@@ -12,7 +12,7 @@
 	"description": "Exposes Visual Studio Code as a GUI layer to your written-in-[Go|C#|Python|your-lang-here] programs (for that sweet spot where printf/TUIs no longer suffice but a full-fledged Native App or reactive SPA would be overkill).",
 	"version": "1.38.1",
 	"engines": {
-		"vscode": "^1.39.1"
+		"vscode": "^1.39.2"
 	},
 	"categories": [
 		"Other"
@@ -35,8 +35,8 @@
 					"appz.allProgs": {
 						"type": "array",
 						"default": [
-							"go run \"${}/demos/go/localrun-automerged.go\" \"${Enter name}\" \"${Pick greeting:|Hello|Hiya|Hola|}\"",
-							"node \"${}/demos/nodejs/main.js\"",
+							"go run \"${}/demos/go/localrun-automerged.go\"",
+							"node \"${}/demos/nodejs/main.js\" \"${Enter name}\" \"${Pick greeting:|Hello|Hiya|Hola|}\"",
 							"dotnet run --project \"${}/demos/csharp\""
 						]
 					},

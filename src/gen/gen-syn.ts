@@ -177,6 +177,10 @@ export class Builder {
     oNot(arg: Expr): EOp { return this.eOp(BuilderOperators.Not, arg) }
     oIs(arg: Expr): EOp { return this.eOp(BuilderOperators.Is, arg) }
     oIsnt(arg: Expr): EOp { return this.eOp(BuilderOperators.Isnt, arg) }
+    _(...args: (Expr | string)[]): Expr {
+        const expr = (_: Expr | string): Expr => typeof _ === "string" ? this.n(_) : _
+        return (args && args.length && args.length === 1) ? expr(args[0]) : this.eOp(BuilderOperators.Dot, ...args.map(expr))
+    }
     oDot(...args: Expr[]): EOp { return (args.length === 1) ? this.oDot(this.eThis(), args[0]) : this.eOp(BuilderOperators.Dot, ...args) }
 
     EACH<TIn, TOut>(from: TIn[], fn: ((_: TIn, idx?: number) => TOut[])): TOut[] {
@@ -240,6 +244,11 @@ export class Builder {
                             if (struct && struct.isDispObj) {
                                 me.IsObjCtor = tn.Name
                                 me.Args[me.Args.length - 1].Type = { From: [tn, { Name: tn.Name + "State" }], To: null }
+                                if (struct.fields.some(_ => (!gen.typeFun(_.typeSpec)) && !_.readOnly)) {
+                                    const lastarg = me.Args[me.Args.length - 1]
+                                    me.Args = me.Args.slice(0, me.Args.length - 1)
+                                    me.Args.push({ Name: this.gen.options.idents.dispObjCtorArg, Type: { Maybe: { Name: me.IsObjCtor + "State" } } }, lastarg)
+                                }
                             }
                         }
                     }
@@ -468,6 +477,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             typeAny: "any",
             typeDict: "dict",
             typeImpl: "impl",
+            dispObjCtorArg: "optionallyInitialStateToApplyUponCreation",
         },
         unMaybeOutgoingTypes: [TypeRefPrim.String, TypeRefPrim.Bool] as TypeRef[],
         oneIndent: '    ',
@@ -551,7 +561,36 @@ export class Gen extends gen.Gen implements gen.IGen {
         return this
     }
 
+    ensureMethodDocsArgsAndRet(it: WithDocs): Gen {
+        if (it.Docs && it.Docs.length) {
+            const me = it as Method
+            if (me && me.Name && me.Name.length && me.Args !== undefined && me.Args !== null) {
+                let docarg = "", docret = ""
+                if (me.IsObjCtor)
+                    [docarg, docret] = ["If specified, the newly created `" + me.IsObjCtor + "` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.", "A thenable that resolves when the `" + me.IsObjCtor + "` has been created and initialized."]
+                else if (me.IsObjEvt)
+                    [docarg, docret] = ["Will be invoked whenever this event fires; mandatory, not optional.", "A `Disposable` that will unsubscribe `handler` from the `" + me.Name + "` event on `Dispose`."]
+                else if (me.Args.length === 1 && me.Args[0].Name === "listener" && this.typeFunc(me.Args[0].Type) && this.typeFunc(me.Type) && gen.typePromOf(me.fromPrep.args.find(_ => _.isFromRetThenable).typeSpec, "Disposable"))
+                    [docarg, docret] = ["Will be invoked whenever this event fires; mandatory, not optional.", "A `Disposable` that will unsubscribe `listener` from the `" + me.Name + "` event on `Dispose`."]
+                else if (me.IsSubNs)
+                    docarg = "TODO_ARG_SUB"
+                else if (me.fromPrep && me.fromPrep.isProps)
+                    docarg = "TODO_ARG_PROPS"
+                else if (this.typeFunc(me.Type) && (me.Type as TypeRefFunc).From && (me.Type as TypeRefFunc).From.length && this.typeFunc((me.Type as TypeRefFunc).From[0]))
+                    docret = "A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained."
+
+                for (const arg of me.Args)
+                    if (!me.Docs.some(_ => _.ForParam === arg.Name))
+                        me.Docs.push({ ForParam: arg.Name, Lines: [docarg] })
+                if (docret && docret.length && me.Type && !me.Docs.some(_ => _.ForParam === "return"))
+                    me.Docs.push({ ForParam: "return", Lines: [docret] })
+            }
+        }
+        return this
+    }
+
     emitDocs(it: (WithDocs & WithName)): Gen {
+        this.ensureMethodDocsArgsAndRet(it)
         if (it.name && it.Name && it.name !== it.Name)
             this.line("# " + it.name + ":")
         if (it.Docs && it.Docs.length)
@@ -965,10 +1004,10 @@ export class Gen extends gen.Gen implements gen.IGen {
             _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit(
                 (ifaceOrStruct.name + '.' + (method.fromPrep ? method.fromPrep.name : (method.name && method.name.startsWith("appz")) ? method.name : method.Name))
             )),
-            _.iSet(_.oDot(_.n(__.msg), _.n('Data')), _.eCollNew(_.eLit(numargs + (idVal ? 1 : 0)))),
+            _.iSet(_.oDot(_.n(__.msg), _.n("Data")), _.eCollNew(_.eLit(numargs + (idVal ? 1 : 0)))),
         )
         if (idVal)
-            body.push(_.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit("")), idVal))
+            body.push(_.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n("Data")), _.eLit("")), idVal))
 
         const twinargs: { [_: string]: { origStruct: TStruct, twinStructName: string, altName: string } } = {}
         if (funcfields.length) {
@@ -1070,7 +1109,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 _.iSet(_.n(fnid), _.eCall(_.oDot(impl, _.n("nextSub")),
                     rettype ? _.eZilch() : handler, rettype ? handler : _.eZilch(),
                 )),
-                _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.n(fnid)),
+                _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n("Data")), _.eLit(arg.name)), _.n(fnid)),
             )
         }
 
@@ -1092,7 +1131,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                                     _.iSet(_.oDot(_.n(arg.Name), _.n("fnId")), _.eCall(_.oDot(impl, _.n("nextFuncId")))),
                                 ),
                             ]),
-                            _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit(arg.name)), _.oDot(_.n(arg.Name), _.n("fnId"))),
+                            _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n("Data")), _.eLit(arg.name)), _.oDot(_.n(arg.Name), _.n("fnId"))),
                         ]))
                     else if (this.typeFunc(arg.Type))
                         eventlike(arg)
@@ -1112,18 +1151,20 @@ export class Gen extends gen.Gen implements gen.IGen {
                         }
 
                         const twinarg = twinargs[arg.Name]
-                        let set: Instr = _.iSet(
-                            _.oIdx(_.oDot(_.n(__.msg), _.n('Data')), _.eLit((arg.name && arg.name.length) ? arg.name : arg.Name)),
-                            _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name),
-                        )
-                        if (arg.fromPrep && arg.fromPrep.optional && !this.options.unMaybeOutgoingTypes.includes(arg.Type)) {
-                            const town = this.typeOwn(this.typeUnMaybe(arg.Type))
-                            const tenum = (town && town.Name && town.Name.length) ? this.allEnums.find(_ => _.Name === town.Name) : null
-                            set = _.iIf((tenum && this.options.optionalEnumsZeroNotZilch) ? _.oNeq(_.eLit(0), _.n(arg.Name)) : _.oIs(_.n(arg.Name)), [
-                                set
-                            ])
+                        if (!(arg.Name === this.options.idents.dispObjCtorArg && this.typeMaybe(arg.Type))) {
+                            let set: Instr = _.iSet(
+                                _.oIdx(_.oDot(_.n(__.msg), _.n("Data")), _.eLit((arg.name && arg.name.length) ? arg.name : arg.Name)),
+                                _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name),
+                            )
+                            if (arg.fromPrep && arg.fromPrep.optional && !this.options.unMaybeOutgoingTypes.includes(arg.Type)) {
+                                const town = this.typeOwn(this.typeUnMaybe(arg.Type))
+                                const tenum = (town && town.Name && town.Name.length) ? this.allEnums.find(_ => _.Name === town.Name) : null
+                                set = _.iIf((tenum && this.options.optionalEnumsZeroNotZilch) ? _.oNeq(_.eLit(0), _.n(arg.Name)) : _.oIs(_.n(arg.Name)), [
+                                    set
+                                ])
+                            }
+                            body.push(set)
                         }
-                        body.push(set)
                     }
 
         body.push(
@@ -1148,19 +1189,28 @@ export class Gen extends gen.Gen implements gen.IGen {
                         this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok),
                         _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => []),
                     ),
-                    _.WHEN(isdisp, () => [_.iIf(_.oIs(_.n(__.onret)), [
-                        _.eCall(_.n(__.onret), _.eCall(_.oDot(_.n(__.result), _.n('bind')), ...[impl].concat(...evtsubfnids.map(fnid => _.n(fnid))))),
-                    ])], () => (method.IsObjCtor && method.IsObjCtor.length) ? [
-                        _.eCall(_.eCall(_.oDot(_.n(__.result), _.n("Get"))), _.eFunc([{ Name: __.state, Type: { Name: method.IsObjCtor + "State" } }], null,
-                            _.iIf(_.oIs(_.n(__.onret)), [
-                                _.eCall(_.n(__.onret), _.n(__.result), _.n(__.state)),
-                            ]),
-                        )),
-                    ] : [
-                            _.iIf(_.oIs(_.n(__.onret)), [
+                    _.iBlock(..._.WHEN(isdisp,
+                        () => [_.iIf(_.oIs(_.n(__.onret)), [
+                            _.eCall(_.n(__.onret), _.eCall(_.oDot(_.n(__.result), _.n('bind')), ...[impl].concat(...evtsubfnids.map(fnid => _.n(fnid))))),
+                        ])],
+                        () => (!(method.IsObjCtor && method.IsObjCtor.length))
+                            ? [_.iIf(_.oIs(_.n(__.onret)), [
                                 _.eCall(_.n(__.onret), _.n(__.result)),
-                            ]),
-                        ])[0],
+                            ])]
+                            : _.WHEN(
+                                method.Args.some(_ => _.Name === this.options.idents.dispObjCtorArg && this.typeMaybe(_.Type)),
+                                () => [_.iIf(_.oIs(_.n(this.options.idents.dispObjCtorArg)), [
+                                    _.eCall(_.oDot(_.n(__.result), _.n("Set")), _.oDeref(_.n(this.options.idents.dispObjCtorArg))),
+                                ])],
+                                () => []
+                            ).concat(...[_.eCall(_.eCall(_.oDot(_.n(__.result), _.n("Get"))),
+                                _.eFunc([{ Name: __.state, Type: { Name: method.IsObjCtor + "State" } }], null,
+                                    _.iIf(_.oIs(_.n(__.onret)), [
+                                        _.eCall(_.n(__.onret), _.n(__.result), _.n(__.state)),
+                                    ]),
+                                ),
+                            )]),
+                    )),
                     _.iRet(_.eLit(true)),
                 ], () => [
                     _.iIf(_.oIs(_.n(__.payload)), [_.iRet(_.eLit(false))]),
@@ -1359,6 +1409,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                         }
                         me.Type = { From: [this.typeUnMaybe(me.Args[me.Args.length - 1].Type)], To: null }
                         me.Args = me.Args.slice(0, me.Args.length - 1)
+                        this.ensureMethodDocsArgsAndRet(me)
                         this.emitMethodImpl(struct, me, this.genMethodImpl_ObjMethodCall)
                     }
                 }

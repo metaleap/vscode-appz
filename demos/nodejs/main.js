@@ -8,15 +8,24 @@ exports.appName = "nodejs-vsc-appz-demo"
 exports.cmdName = exports.appName + new Date().getTime()
 
 function main() {
+    let greethow = "Hallo", greetname = "Welt"
+    if (process.argv && process.argv.length &&
+        process.argv.length > 2 && process.argv[2] && process.argv[2].length
+    ) {
+        greetname = process.argv[2]
+        if (process.argv.length > 3 && process.argv[3] && process.argv[3].length)
+            greethow = process.argv[3]
+    }
+
     vscAppz.Main(vscode => {
         exports.vsc = vscode
         win = vscode.Window
         miscdemos.onUpAndRunning()
 
-        win.SetStatusBarMessage2("Choosing a demo now WILL remove me")(statusmsg => {
+        win.SetStatusBarMessage2("React to the Welcome msg-box to remove me..")(statusmsg => {
 
             const buttons = ["Demo Text Input", "All Demos"]
-            win.ShowInformationMessage1("What to try out? (If you cancel here, I quit.)", buttons)(
+            win.ShowInformationMessage1(greethow + ", " + greetname + "! What to try out? (If you cancel here, I quit.)", buttons)(
                 btn => {
                     statusmsg.Dispose()
                     if (btn === undefined || btn === null)
@@ -76,5 +85,11 @@ exports.strFmt = (s, ...args) => {
 }
 exports.strLo = s => s.toLowerCase()
 exports.strUp = s => s.toUpperCase()
+exports.nums1To = n => {
+    const ret = new Array(n)
+    for (let i = 0; i < n; i++)
+        ret[i] = i + 1
+    return ret
+}
 
 main()

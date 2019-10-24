@@ -282,8 +282,33 @@ func demo_Window_ShowQuickPick() {
 	})
 }
 
+func demo_Window_CreateQuickPick() {
+	var cfg QuickPickState
+	cfg.IgnoreFocusOut = true
+	cfg.Title = "I'm a full-fledged QuickPick"
+	cfg.Step = 23
+	cfg.TotalSteps = 42
+	cfg.Items = make([]QuickPickItem, 88)
+	for _, i := range nums1To(88) {
+		cfg.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i)
+		cfg.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i)
+		cfg.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i)
+		cfg.Items[(i - 1)].AlwaysShow = i == 42
+	}
+	vsc.Window().CreateQuickPick(&cfg)(func(ctl QuickPick, _unused QuickPickState) {
+		ctl.OnDidAccept(func(props QuickPickState) {
+			logLn(strFmt("Picked: {0}", props.SelectedItems))
+			ctl.Hide()
+		})
+		ctl.OnDidHide(func(_ QuickPickState) {
+			ctl.Dispose()
+		})
+		ctl.Show()
+	})
+}
+
 func demo_Window_CreateInputBox() {
-	vsc.Window().CreateInputBox()(func(inputbox InputBox, props InputBoxState) {
+	vsc.Window().CreateInputBox(nil)(func(inputbox InputBox, props InputBoxState) {
 		props.IgnoreFocusOut = true
 		props.Placeholder = "The initial Placeholder"
 		props.Prompt = "The initial Prompt"
@@ -325,7 +350,7 @@ func subscribeToMiscEvents() {
 
 func demosMenu() {
 	var items []string
-	items = []string{"demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_CreateInputBox", "demo_Window_ShowInputBox"}
+	items = []string{"demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_CreateQuickPick", "demo_Window_CreateInputBox", "demo_Window_ShowInputBox"}
 	var opts QuickPickOptions
 	opts.IgnoreFocusOut = true
 	opts.PlaceHolder = "This menu can be re-opened any time via our custom status-bar item."
@@ -378,6 +403,10 @@ func demosMenu() {
 			if "demo_Window_ShowQuickPick" == (*menuitem) {
 				logLn("Picked `demo_Window_ShowQuickPick` from main menu")
 				demo_Window_ShowQuickPick()
+			}
+			if "demo_Window_CreateQuickPick" == (*menuitem) {
+				logLn("Picked `demo_Window_CreateQuickPick` from main menu")
+				demo_Window_CreateQuickPick()
 			}
 			if "demo_Window_CreateInputBox" == (*menuitem) {
 				logLn("Picked `demo_Window_CreateInputBox` from main menu")
@@ -437,15 +466,14 @@ func onUpAndRunning() {
 			return nil
 		}
 		vsc.Commands().RegisterCommand(cmdName, mycmd)(func(_commandRegisteredAtThisPoint *Disposable) {
-			vsc.Window().CreateStatusBarItem(0, nil)(func(it StatusBarItem, props StatusBarItemState) {
+			var cfg StatusBarItemState
+			cfg.Tooltip = strFmt("Hi from {0}!", appName)
+			cfg.Text = "You clicked me 0 time(s)."
+			cfg.Color = "#42BEEF"
+			cfg.Command = cmdName
+			vsc.Window().CreateStatusBarItem(0, nil, &cfg)(func(it StatusBarItem, _unused StatusBarItemState) {
 				statusitem = it
-				props.Tooltip = strFmt("Hi from {0}!", appName)
-				props.Text = "You clicked me 0 time(s)."
-				props.Color = "#42BEEF"
-				props.Command = cmdName
-				statusitem.Set(props)(func() {
-					statusitem.Show()
-				})
+				statusitem.Show()
 			})
 		})
 	}

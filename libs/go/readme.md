@@ -985,9 +985,9 @@ UI should be created.
 func (me *QuickPick) Get() func(func(QuickPickState))
 ```
 Obtains this `QuickPick`'s current property values for: `value`, `placeholder`,
-`buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`,
-`activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`,
-`busy`, `ignoreFocusOut`.
+`items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`,
+`selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`,
+`ignoreFocusOut`.
 
 #### func (*QuickPick) Hide
 
@@ -1040,22 +1040,15 @@ will be notified through
 [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 the user pressing Esc, some other input UI opening, etc.)
 
-#### func (*QuickPick) OnDidTriggerButton
-
-```go
-func (me *QuickPick) OnDidTriggerButton(handler func(QuickInputButton, QuickPickState)) func(func(*Disposable))
-```
-An event signaling when a button was triggered.
-
 #### func (*QuickPick) Set
 
 ```go
 func (me *QuickPick) Set(allUpdates QuickPickState) func(func())
 ```
 Updates this `QuickPick`'s current property values for: `value`, `placeholder`,
-`buttons`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`,
-`activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`,
-`busy`, `ignoreFocusOut`.
+`items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`,
+`selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`,
+`ignoreFocusOut`.
 
 #### func (*QuickPick) Show
 
@@ -1129,9 +1122,6 @@ type QuickPickState struct {
 
 	// Optional placeholder in the filter text.
 	Placeholder string `json:"placeholder,omitempty"`
-
-	// Buttons for actions in the UI.
-	Buttons []QuickInputButton `json:"buttons,omitempty"`
 
 	// Items to pick from.
 	Items []QuickPickItem `json:"items,omitempty"`
@@ -1883,7 +1873,7 @@ type Window interface {
 	// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 	//
 	// `return` ── A new status bar item.
-	CreateStatusBarItem(alignment StatusBarAlignment, priority *int) func(func(StatusBarItem, StatusBarItemState))
+	CreateStatusBarItem(alignment StatusBarAlignment, priority *int, optionallyInitialStateToApplyUponCreation *StatusBarItemState) func(func(StatusBarItem, StatusBarItemState))
 
 	// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 	//
@@ -1904,7 +1894,7 @@ type Window interface {
 	// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 	//
 	// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
-	CreateInputBox() func(func(InputBox, InputBoxState))
+	CreateInputBox(optionallyInitialStateToApplyUponCreation *InputBoxState) func(func(InputBox, InputBoxState))
 
 	// Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
 	// of items of type T.
@@ -1914,7 +1904,7 @@ type Window interface {
 	// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 	//
 	// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
-	CreateQuickPick() func(func(QuickPick, QuickPickState))
+	CreateQuickPick(optionallyInitialStateToApplyUponCreation *QuickPickState) func(func(QuickPick, QuickPickState))
 }
 ```
 

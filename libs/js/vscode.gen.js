@@ -161,7 +161,6 @@ function newQuickPick() {
     me = { populateFrom: _ => QuickPick_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     me.OnDidChangeValue = (a0) => QuickPick_OnDidChangeValue.call(me, a0);
     me.OnDidAccept = (a0) => QuickPick_OnDidAccept.call(me, a0);
-    me.OnDidTriggerButton = (a0) => QuickPick_OnDidTriggerButton.call(me, a0);
     me.OnDidChangeActive = (a0) => QuickPick_OnDidChangeActive.call(me, a0);
     me.OnDidChangeSelection = (a0) => QuickPick_OnDidChangeSelection.call(me, a0);
     me.Show = () => QuickPick_Show.call(me);
@@ -256,8 +255,10 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -287,8 +288,10 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -316,8 +319,10 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -346,8 +351,10 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -376,8 +383,10 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -407,8 +416,10 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -436,8 +447,10 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -466,8 +479,10 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -496,8 +511,10 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -527,8 +544,10 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -556,8 +575,10 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -586,8 +607,10 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -655,8 +678,10 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -748,8 +773,10 @@ class implWindow extends implBase {
                     __idx__result = __idx__result + 1;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -831,8 +858,10 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -925,8 +954,10 @@ class implWindow extends implBase {
                     __idx__result = __idx__result + 1;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1007,8 +1038,10 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1048,8 +1081,10 @@ class implWindow extends implBase {
             else {
                 return false;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl()));
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result.bind(this.Impl()));
+                }
             }
             return true;
         };
@@ -1079,8 +1114,10 @@ class implWindow extends implBase {
             else {
                 return false;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl()));
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result.bind(this.Impl()));
+                }
             }
             return true;
         };
@@ -1108,8 +1145,10 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1148,8 +1187,10 @@ class implWindow extends implBase {
                     __idx__result = __idx__result + 1;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1178,8 +1219,10 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1205,8 +1248,10 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1255,8 +1300,10 @@ class implWindow extends implBase {
             else {
                 return false;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl(), _fnid_listener));
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result.bind(this.Impl(), _fnid_listener));
+                }
             }
             return true;
         };
@@ -1265,7 +1312,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    CreateStatusBarItem(alignment, priority) {
+    CreateStatusBarItem(alignment, priority, optionallyInitialStateToApplyUponCreation) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.createStatusBarItem";
@@ -1289,11 +1336,16 @@ class implWindow extends implBase {
                 }
                 result.disp.impl = this.Impl();
             }
-            result.Get()((state) => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result, state);
+            {
+                if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
+                    result.Set(optionallyInitialStateToApplyUponCreation);
                 }
-            });
+                result.Get()((state) => {
+                    if ((undefined !== onret && null !== onret)) {
+                        onret(result, state);
+                    }
+                });
+            }
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -1320,11 +1372,13 @@ class implWindow extends implBase {
                 }
                 result.disp.impl = this.Impl();
             }
-            result.Get()((state) => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result, state);
-                }
-            });
+            {
+                result.Get()((state) => {
+                    if ((undefined !== onret && null !== onret)) {
+                        onret(result, state);
+                    }
+                });
+            }
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -1351,11 +1405,13 @@ class implWindow extends implBase {
                 }
                 result.disp.impl = this.Impl();
             }
-            result.Get()((state) => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result, state);
-                }
-            });
+            {
+                result.Get()((state) => {
+                    if ((undefined !== onret && null !== onret)) {
+                        onret(result, state);
+                    }
+                });
+            }
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -1363,7 +1419,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    CreateInputBox() {
+    CreateInputBox(optionallyInitialStateToApplyUponCreation) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.createInputBox";
@@ -1381,11 +1437,16 @@ class implWindow extends implBase {
                 }
                 result.disp.impl = this.Impl();
             }
-            result.Get()((state) => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result, state);
+            {
+                if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
+                    result.Set(optionallyInitialStateToApplyUponCreation);
                 }
-            });
+                result.Get()((state) => {
+                    if ((undefined !== onret && null !== onret)) {
+                        onret(result, state);
+                    }
+                });
+            }
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -1393,7 +1454,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    CreateQuickPick() {
+    CreateQuickPick(optionallyInitialStateToApplyUponCreation) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.createQuickPick";
@@ -1411,11 +1472,16 @@ class implWindow extends implBase {
                 }
                 result.disp.impl = this.Impl();
             }
-            result.Get()((state) => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result, state);
+            {
+                if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
+                    result.Set(optionallyInitialStateToApplyUponCreation);
                 }
-            });
+                result.Get()((state) => {
+                    if ((undefined !== onret && null !== onret)) {
+                        onret(result, state);
+                    }
+                });
+            }
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -1446,8 +1512,10 @@ class implEnv extends implBase {
             else {
                 return false;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1472,8 +1540,10 @@ class implEnv extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1498,8 +1568,10 @@ class implEnv extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1524,8 +1596,10 @@ class implEnv extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1550,8 +1624,10 @@ class implEnv extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1578,8 +1654,10 @@ class implEnv extends implBase {
                 }
                 result = _result_;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1604,8 +1682,10 @@ class implEnv extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1630,8 +1710,10 @@ class implEnv extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1656,8 +1738,10 @@ class implEnv extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1686,8 +1770,10 @@ class implEnv extends implBase {
             else {
                 return false;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1720,8 +1806,10 @@ class implClipboard extends implBase {
                 }
                 result = _result_;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1773,8 +1861,10 @@ class implWorkspace extends implBase {
                 }
                 result = _result_;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1801,8 +1891,10 @@ class implWorkspace extends implBase {
                 }
                 result = _result_;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1831,8 +1923,10 @@ class implWorkspace extends implBase {
             else {
                 return false;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1881,8 +1975,10 @@ class implWorkspace extends implBase {
             else {
                 return false;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl(), _fnid_listener));
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result.bind(this.Impl(), _fnid_listener));
+                }
             }
             return true;
         };
@@ -1909,8 +2005,10 @@ class implWorkspace extends implBase {
                     return false;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -1949,8 +2047,10 @@ class implWorkspace extends implBase {
                     __idx__result = __idx__result + 1;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -2004,8 +2104,10 @@ class implWorkspace extends implBase {
                     __idx__result = __idx__result + 1;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -2034,8 +2136,10 @@ class implWorkspace extends implBase {
                 }
                 result = _result_;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -2064,8 +2168,10 @@ class implWorkspace extends implBase {
             else {
                 return false;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -2106,8 +2212,10 @@ class implLanguages extends implBase {
                     __idx__result = __idx__result + 1;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -2156,8 +2264,10 @@ class implLanguages extends implBase {
             else {
                 return false;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl(), _fnid_listener));
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result.bind(this.Impl(), _fnid_listener));
+                }
             }
             return true;
         };
@@ -2203,8 +2313,10 @@ class implExtensions extends implBase {
             else {
                 return false;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl(), _fnid_listener));
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result.bind(this.Impl(), _fnid_listener));
+                }
             }
             return true;
         };
@@ -2257,8 +2369,10 @@ class implCommands extends implBase {
             else {
                 return false;
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl(), _fnid_callback));
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result.bind(this.Impl(), _fnid_callback));
+                }
             }
             return true;
         };
@@ -2284,8 +2398,10 @@ class implCommands extends implBase {
                 if (ok) {
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -2324,8 +2440,10 @@ class implCommands extends implBase {
                     __idx__result = __idx__result + 1;
                 }
             }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
+            {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
             }
             return true;
         };
@@ -2353,8 +2471,10 @@ function StatusBarItem_Show() {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -2381,8 +2501,10 @@ function StatusBarItem_Hide() {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -2412,8 +2534,10 @@ function StatusBarItem_Get() {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -2464,8 +2588,10 @@ function OutputChannel_Append(value) {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -2493,8 +2619,10 @@ function OutputChannel_AppendLine(value) {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -2521,8 +2649,10 @@ function OutputChannel_Clear() {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -2550,8 +2680,10 @@ function OutputChannel_Show(preserveFocus) {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -2578,8 +2710,10 @@ function OutputChannel_Hide() {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -2609,8 +2743,10 @@ function OutputChannel_Get() {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -2640,8 +2776,10 @@ function TextEditorDecorationType_Get() {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -2696,8 +2834,10 @@ function InputBox_OnDidChangeValue(handler) {
         else {
             return false;
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler));
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler));
+            }
         }
         return true;
     };
@@ -2747,8 +2887,10 @@ function InputBox_OnDidAccept(handler) {
         else {
             return false;
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler));
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler));
+            }
         }
         return true;
     };
@@ -2804,8 +2946,10 @@ function InputBox_OnDidTriggerButton(handler) {
         else {
             return false;
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler));
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler));
+            }
         }
         return true;
     };
@@ -2832,8 +2976,10 @@ function InputBox_Show() {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -2860,8 +3006,10 @@ function InputBox_Hide() {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -2911,8 +3059,10 @@ function InputBox_OnDidHide(handler) {
         else {
             return false;
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler));
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler));
+            }
         }
         return true;
     };
@@ -2942,8 +3092,10 @@ function InputBox_Get() {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -3021,8 +3173,10 @@ function QuickPick_OnDidChangeValue(handler) {
         else {
             return false;
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler));
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler));
+            }
         }
         return true;
     };
@@ -3072,65 +3226,10 @@ function QuickPick_OnDidAccept(handler) {
         else {
             return false;
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler));
-        }
-        return true;
-    };
-    this.disp.impl.send(msg, onresp);
-    return (a0) => {
-        onret = a0;
-    };
-}
-function QuickPick_OnDidTriggerButton(handler) {
-    let msg;
-    msg = newipcMsg();
-    msg.QName = "QuickPick.onDidTriggerButton";
-    msg.Data = {};
-    msg.Data[""] = this.disp.id;
-    let _fnid_handler;
-    if ((undefined === handler || null === handler)) {
-        vsc_appz_1.OnError(this.disp.impl, "QuickPick.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
-        return null;
-    }
-    _fnid_handler = this.disp.impl.nextSub((args) => {
-        let ok;
-        if (2 !== args.length) {
-            return ok;
-        }
-        let _a_0_;
-        _a_0_ = newQuickInputButton();
-        ok = _a_0_.populateFrom(args[0]);
-        if (!ok) {
-            return false;
-        }
-        let _a_1_;
-        _a_1_ = newQuickPickState();
-        ok = _a_1_.populateFrom(args[1]);
-        if (!ok) {
-            return false;
-        }
-        handler(_a_0_, _a_1_);
-        return true;
-    }, null);
-    msg.Data["handler"] = _fnid_handler;
-    let onresp;
-    let onret;
-    onresp = (payload) => {
-        let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newDisposable();
-            ok = result.populateFrom(payload);
-            if (!ok) {
-                return false;
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler));
             }
-        }
-        else {
-            return false;
-        }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler));
         }
         return true;
     };
@@ -3199,8 +3298,10 @@ function QuickPick_OnDidChangeActive(handler) {
         else {
             return false;
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler));
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler));
+            }
         }
         return true;
     };
@@ -3269,8 +3370,10 @@ function QuickPick_OnDidChangeSelection(handler) {
         else {
             return false;
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler));
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler));
+            }
         }
         return true;
     };
@@ -3297,8 +3400,10 @@ function QuickPick_Show() {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -3325,8 +3430,10 @@ function QuickPick_Hide() {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -3376,8 +3483,10 @@ function QuickPick_OnDidHide(handler) {
         else {
             return false;
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result.bind(this.disp.impl, _fnid_handler));
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.disp.impl, _fnid_handler));
+            }
         }
         return true;
     };
@@ -3407,8 +3516,10 @@ function QuickPick_Get() {
                 return false;
             }
         }
-        if ((undefined !== onret && null !== onret)) {
-            onret(result);
+        {
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
+            }
         }
         return true;
     };
@@ -4339,31 +4450,6 @@ function QuickPickState_populateFrom(payload) {
             }
         }
         this.placeholder = placeholder;
-    }
-    [val, ok] = [it["buttons"], undefined !== it["buttons"]];
-    if (ok) {
-        let buttons;
-        if ((undefined !== val && null !== val)) {
-            let __coll__buttons;
-            [__coll__buttons, ok] = [val, (typeof val === "object") && (typeof val["length"] === "number")];
-            if (!ok) {
-                return false;
-            }
-            buttons = new Array(__coll__buttons.length);
-            let __idx__buttons;
-            __idx__buttons = 0;
-            for (const __item__buttons of __coll__buttons) {
-                let __val__buttons;
-                __val__buttons = newQuickInputButton();
-                ok = __val__buttons.populateFrom(__item__buttons);
-                if (!ok) {
-                    return false;
-                }
-                buttons[__idx__buttons] = __val__buttons;
-                __idx__buttons = __idx__buttons + 1;
-            }
-        }
-        this.buttons = buttons;
     }
     [val, ok] = [it["items"], undefined !== it["items"]];
     if (ok) {

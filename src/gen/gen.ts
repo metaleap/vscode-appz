@@ -3,6 +3,9 @@ import * as ts from 'typescript'
 
 
 const dbgJsonPrintEnums = false, dbgJsonPrintStructs = false, dbgJsonPrintIfaces = false
+const tmpSuppressObjMembers: { [_: string]: string[] } = {
+    "QuickPick": ["onDidTriggerButton", "buttons"],
+}
 export const docStrs = {
     extBaggage: "Free-form custom data, preserved across a roundtrip.",
     internalOnly: "For internal runtime use only."
@@ -237,6 +240,9 @@ export class Prep {
 
         const addMember = (_: ts.TypeElement | ts.ClassElement) => {
             if (_.name && !seemsDeprecated(_)) {
+                const tmpsuppress = tmpSuppressObjMembers[it.qName.slice(it.qName.indexOf('.') + 1)]
+                if (tmpsuppress && tmpsuppress.length && tmpsuppress.includes(_.name.getText()))
+                    return
                 let tspec: TypeSpec = null
                 const mtyped = _ as TsNodeWithType
                 const mtparams = (_.kind === ts.SyntaxKind.MethodSignature || _.kind === ts.SyntaxKind.MethodDeclaration) ? _ as TsNodeWithTypeParams : null
