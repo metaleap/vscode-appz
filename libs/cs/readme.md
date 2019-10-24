@@ -132,7 +132,7 @@
   - [OnDidChangeValue(handler)](#M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String,VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidChangeValue(System.Action{System.String,VscAppz.InputBoxState})')
   - [OnDidHide(handler)](#M-VscAppz-InputBox-OnDidHide-System-Action{VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidHide(System.Action{VscAppz.InputBoxState})')
   - [OnDidTriggerButton(handler)](#M-VscAppz-InputBox-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton,VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidTriggerButton(System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState})')
-  - [Set()](#M-VscAppz-InputBox-Set-VscAppz-InputBoxState- 'VscAppz.InputBox.Set(VscAppz.InputBoxState)')
+  - [Set(allUpdates)](#M-VscAppz-InputBox-Set-VscAppz-InputBoxState- 'VscAppz.InputBox.Set(VscAppz.InputBoxState)')
   - [Show()](#M-VscAppz-InputBox-Show 'VscAppz.InputBox.Show')
 - [InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions')
   - [IgnoreFocusOut](#F-VscAppz-InputBoxOptions-IgnoreFocusOut 'VscAppz.InputBoxOptions.IgnoreFocusOut')
@@ -197,7 +197,7 @@
   - [OnDidChangeSelection(handler)](#M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidChangeSelection(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState})')
   - [OnDidChangeValue(handler)](#M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String,VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String,VscAppz.QuickPickState})')
   - [OnDidHide(handler)](#M-VscAppz-QuickPick-OnDidHide-System-Action{VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidHide(System.Action{VscAppz.QuickPickState})')
-  - [Set()](#M-VscAppz-QuickPick-Set-VscAppz-QuickPickState- 'VscAppz.QuickPick.Set(VscAppz.QuickPickState)')
+  - [Set(allUpdates)](#M-VscAppz-QuickPick-Set-VscAppz-QuickPickState- 'VscAppz.QuickPick.Set(VscAppz.QuickPickState)')
   - [Show()](#M-VscAppz-QuickPick-Show 'VscAppz.QuickPick.Show')
 - [QuickPickItem](#T-VscAppz-QuickPickItem 'VscAppz.QuickPickItem')
   - [AlwaysShow](#F-VscAppz-QuickPickItem-AlwaysShow 'VscAppz.QuickPickItem.AlwaysShow')
@@ -240,7 +240,7 @@
   - [Dispose()](#M-VscAppz-StatusBarItem-Dispose 'VscAppz.StatusBarItem.Dispose')
   - [Get()](#M-VscAppz-StatusBarItem-Get 'VscAppz.StatusBarItem.Get')
   - [Hide()](#M-VscAppz-StatusBarItem-Hide 'VscAppz.StatusBarItem.Hide')
-  - [Set()](#M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemState- 'VscAppz.StatusBarItem.Set(VscAppz.StatusBarItemState)')
+  - [Set(allUpdates)](#M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemState- 'VscAppz.StatusBarItem.Set(VscAppz.StatusBarItemState)')
   - [Show()](#M-VscAppz-StatusBarItem-Show 'VscAppz.StatusBarItem.Show')
 - [StatusBarItemState](#T-VscAppz-StatusBarItemState 'VscAppz.StatusBarItemState')
   - [Alignment](#F-VscAppz-StatusBarItemState-Alignment 'VscAppz.StatusBarItemState.Alignment')
@@ -2236,7 +2236,7 @@ An event signaling when a button was triggered.
 | handler | [System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState}') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-InputBox-Set-VscAppz-InputBoxState-'></a>
-### Set() `method`
+### Set(allUpdates) `method`
 
 ##### Summary
 
@@ -2244,7 +2244,9 @@ Updates this `InputBox`'s current property values for: `value`, `placeholder`, `
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| allUpdates | [VscAppz.InputBoxState](#T-VscAppz-InputBoxState 'VscAppz.InputBoxState') |  |
 
 <a name='M-VscAppz-InputBox-Show'></a>
 ### Show() `method`
@@ -2889,7 +2891,7 @@ the user pressing Esc, some other input UI opening, etc.)
 | handler | [System.Action{VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickState}') | Will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-QuickPick-Set-VscAppz-QuickPickState-'></a>
-### Set() `method`
+### Set(allUpdates) `method`
 
 ##### Summary
 
@@ -2897,7 +2899,9 @@ Updates this `QuickPick`'s current property values for: `value`, `placeholder`, 
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| allUpdates | [VscAppz.QuickPickState](#T-VscAppz-QuickPickState 'VscAppz.QuickPickState') |  |
 
 <a name='M-VscAppz-QuickPick-Show'></a>
 ### Show() `method`
@@ -3262,7 +3266,7 @@ Hide the entry in the status bar.
 This method has no parameters.
 
 <a name='M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemState-'></a>
-### Set() `method`
+### Set(allUpdates) `method`
 
 ##### Summary
 
@@ -3270,7 +3274,9 @@ Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `
 
 ##### Parameters
 
-This method has no parameters.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| allUpdates | [VscAppz.StatusBarItemState](#T-VscAppz-StatusBarItemState 'VscAppz.StatusBarItemState') |  |
 
 <a name='M-VscAppz-StatusBarItem-Show'></a>
 ### Show() `method`

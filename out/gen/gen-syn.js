@@ -511,6 +511,7 @@ class Gen extends gen.Gen {
         throw JSON.stringify(it);
     }
     emitMethodImpl(interfaceOrStruct, method, fillBody) {
+        this.ensureMethodDocsArgsAndRet(method);
         const me = {
             name: method.name, Name: method.Name, Type: interfaceOrStruct, Func: {
                 Args: method.Args, Type: method.Type, Body: { Instrs: [] }
@@ -1033,7 +1034,6 @@ class Gen extends gen.Gen {
                         };
                         me.Type = { From: [this.typeUnMaybe(me.Args[me.Args.length - 1].Type)], To: null };
                         me.Args = me.Args.slice(0, me.Args.length - 1);
-                        this.ensureMethodDocsArgsAndRet(me);
                         this.emitMethodImpl(struct, me, this.genMethodImpl_ObjMethodCall);
                     }
                 }

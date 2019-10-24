@@ -1442,9 +1442,12 @@
         </member>
         <member name="M:VscAppz.StatusBarItem.Get">
             <summary>Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.</summary>
+            <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.StatusBarItem.Set(VscAppz.StatusBarItemState)">
             <summary>Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.</summary>
+            <param name="allUpdates"></param>
+            <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="T:VscAppz.OutputChannel">
             <summary>
@@ -1496,6 +1499,7 @@
         </member>
         <member name="M:VscAppz.OutputChannel.Get">
             <summary>Obtains this `OutputChannel`'s current property value for: `name`.</summary>
+            <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="T:VscAppz.ThemableDecorationAttachmentRenderOptions">
             <summary>
@@ -1681,6 +1685,7 @@
         </member>
         <member name="M:VscAppz.TextEditorDecorationType.Get">
             <summary>Obtains this `TextEditorDecorationType`'s current property value for: `key`.</summary>
+            <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="T:VscAppz.InputBox">
             <summary>
@@ -1743,9 +1748,12 @@
         </member>
         <member name="M:VscAppz.InputBox.Get">
             <summary>Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+            <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.InputBox.Set(VscAppz.InputBoxState)">
             <summary>Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+            <param name="allUpdates"></param>
+            <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="T:VscAppz.QuickInputButton">
             <summary>Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).</summary>
@@ -1828,9 +1836,12 @@
         </member>
         <member name="M:VscAppz.QuickPick.Get">
             <summary>Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+            <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.QuickPick.Set(VscAppz.QuickPickState)">
             <summary>Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+            <param name="allUpdates"></param>
+            <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="T:VscAppz.WorkspaceFoldersChangeEvent">
             <summary>An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).</summary>

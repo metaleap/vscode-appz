@@ -681,6 +681,7 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     emitMethodImpl(interfaceOrStruct: TypeRefOwn, method: Method, fillBody: ((interfaceOrStruct: TypeRefOwn, method: Method, _: Builder, bodyToFill: Instr[]) => void)) {
+        this.ensureMethodDocsArgsAndRet(method)
         const me: Func = {
             name: method.name, Name: method.Name, Type: interfaceOrStruct, Func: {
                 Args: method.Args, Type: method.Type, Body: { Instrs: [] }
@@ -1409,7 +1410,6 @@ export class Gen extends gen.Gen implements gen.IGen {
                         }
                         me.Type = { From: [this.typeUnMaybe(me.Args[me.Args.length - 1].Type)], To: null }
                         me.Args = me.Args.slice(0, me.Args.length - 1)
-                        this.ensureMethodDocsArgsAndRet(me)
                         this.emitMethodImpl(struct, me, this.genMethodImpl_ObjMethodCall)
                     }
                 }

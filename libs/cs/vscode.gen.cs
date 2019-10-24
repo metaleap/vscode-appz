@@ -4411,6 +4411,7 @@ namespace VscAppz {
 
 	public partial class StatusBarItem {
 		/// <summary>Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<StatusBarItemState>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4445,6 +4446,8 @@ namespace VscAppz {
 
 	public partial class StatusBarItem {
 		/// <summary>Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.</summary>
+		/// <param name="allUpdates"></param>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Set(StatusBarItemState allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4676,6 +4679,7 @@ namespace VscAppz {
 
 	public partial class OutputChannel {
 		/// <summary>Obtains this `OutputChannel`'s current property value for: `name`.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<OutputChannelState>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4720,6 +4724,7 @@ namespace VscAppz {
 
 	public partial class TextEditorDecorationType {
 		/// <summary>Obtains this `TextEditorDecorationType`'s current property value for: `key`.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<TextEditorDecorationTypeState>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5095,6 +5100,7 @@ namespace VscAppz {
 
 	public partial class InputBox {
 		/// <summary>Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<InputBoxState>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5129,6 +5135,8 @@ namespace VscAppz {
 
 	public partial class InputBox {
 		/// <summary>Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+		/// <param name="allUpdates"></param>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Set(InputBoxState allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5587,6 +5595,7 @@ namespace VscAppz {
 
 	public partial class QuickPick {
 		/// <summary>Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<QuickPickState>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5621,6 +5630,8 @@ namespace VscAppz {
 
 	public partial class QuickPick {
 		/// <summary>Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+		/// <param name="allUpdates"></param>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Set(QuickPickState allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
