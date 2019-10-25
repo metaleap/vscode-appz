@@ -283,21 +283,21 @@ func demo_Window_ShowQuickPick() {
 }
 
 func demo_Window_CreateQuickPick() {
-	var cfg QuickPickBag
-	cfg.IgnoreFocusOut = true
-	cfg.Title = "I'm a full-fledged QuickPick"
-	cfg.Step = 23
-	cfg.TotalSteps = 42
-	cfg.Items = make([]QuickPickItem, 88)
-	for _, i := range nums1To(88) {
-		cfg.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i)
-		cfg.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i)
-		cfg.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i)
-		cfg.Items[(i - 1)].AlwaysShow = i == 42
-	}
-	vsc.Window().CreateQuickPick(&cfg)(func(ctl QuickPick, _unused QuickPickBag) {
-		ctl.OnDidAccept(func(props QuickPickBag) {
-			logLn(strFmt("Picked: {0}", props.SelectedItems))
+	vsc.Window().CreateQuickPick()(func(ctl QuickPick, cfg QuickPickBag) {
+		cfg.IgnoreFocusOut = true
+		cfg.Title = "I'm a full-fledged QuickPick"
+		cfg.Step = 23
+		cfg.TotalSteps = 42
+		cfg.Items = make([]QuickPickItem, 88)
+		for _, i := range nums1To(88) {
+			cfg.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i)
+			cfg.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i)
+			cfg.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i)
+			cfg.Items[(i - 1)].AlwaysShow = i == 42
+		}
+		ctl.Set(cfg)
+		ctl.OnDidAccept(func(bag QuickPickBag) {
+			logLn(strFmt("Picked: {0}", bag.SelectedItems))
 			ctl.Hide()
 		})
 		ctl.OnDidHide(func(_ QuickPickBag) {
@@ -308,31 +308,31 @@ func demo_Window_CreateQuickPick() {
 }
 
 func demo_Window_CreateInputBox() {
-	vsc.Window().CreateInputBox(nil)(func(inputbox InputBox, props InputBoxBag) {
-		props.IgnoreFocusOut = true
-		props.Placeholder = "The initial Placeholder"
-		props.Prompt = "The initial Prompt"
-		props.Title = "The initial Title"
-		inputbox.Set(props)
-		inputbox.OnDidChangeValue(func(input string, ctl InputBoxBag) {
-			ctl.Prompt = strFmt("Lower: {0}", strLo(ctl.Value))
-			ctl.Title = strFmt("Upper: {0}", strUp(ctl.Value))
-			inputbox.Set(ctl)
+	vsc.Window().CreateInputBox()(func(ctl InputBox, cfg InputBoxBag) {
+		cfg.IgnoreFocusOut = true
+		cfg.Placeholder = "The initial Placeholder"
+		cfg.Prompt = "The initial Prompt"
+		cfg.Title = "The initial Title"
+		ctl.Set(cfg)
+		ctl.OnDidChangeValue(func(input string, bag InputBoxBag) {
+			bag.Prompt = strFmt("Lower: {0}", strLo(bag.Value))
+			bag.Title = strFmt("Upper: {0}", strUp(bag.Value))
+			ctl.Set(bag)
 		})
 		var finalinputvalue *string
-		inputbox.OnDidAccept(func(ctl InputBoxBag) {
-			finalinputvalue = &ctl.Value
-			inputbox.Hide()
+		ctl.OnDidAccept(func(bag InputBoxBag) {
+			finalinputvalue = &bag.Value
+			ctl.Hide()
 		})
-		inputbox.OnDidHide(func(ctl InputBoxBag) {
-			inputbox.Dispose()
+		ctl.OnDidHide(func(bag InputBoxBag) {
+			ctl.Dispose()
 			if (nil != finalinputvalue) {
 				vsc.Window().ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", *finalinputvalue)), nil)
 			} else {
 				vsc.Window().ShowWarningMessage1(logLn("Backing off or backing up?"), nil)
 			}
 		})
-		inputbox.Show()
+		ctl.Show()
 	})
 }
 
@@ -465,16 +465,15 @@ func onUpAndRunning() {
 			})
 			return nil
 		}
-		vsc.Commands().RegisterCommand(cmdName, mycmd)(func(_commandRegisteredAtThisPoint *Disposable) {
-			var cfg StatusBarItemBag
+		vsc.Commands().RegisterCommand(cmdName, mycmd)
+		vsc.Window().CreateStatusBarItem(0, nil)(func(it StatusBarItem, cfg StatusBarItemBag) {
+			statusitem = it
 			cfg.Tooltip = strFmt("Hi from {0}!", appName)
 			cfg.Text = "You clicked me 0 time(s)."
 			cfg.Color = "#42BEEF"
 			cfg.Command = cmdName
-			vsc.Window().CreateStatusBarItem(0, nil, &cfg)(func(it StatusBarItem, _unused StatusBarItemBag) {
-				statusitem = it
-				statusitem.Show()
-			})
+			statusitem.Set(cfg)
+			statusitem.Show()
 		})
 	}
 }

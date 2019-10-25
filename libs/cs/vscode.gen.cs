@@ -582,15 +582,12 @@ namespace VscAppz {
 		/// 
 		/// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 		/// 
-		/// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-		/// 
 		/// `return` ── A new status bar item.
 		/// </summary>
 		/// <param name="alignment">The alignment of the item.</param>
 		/// <param name="priority">The priority of the item. Higher values mean the item should be shown more to the left.</param>
 		/// <return>A new status bar item.</return>
-		/// <param name="optionallyInitialStateToApplyUponCreation">if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
-		Action<Action<StatusBarItem, StatusBarItemBag>> CreateStatusBarItem(StatusBarAlignment? alignment = default, int? priority = default, StatusBarItemBag optionallyInitialStateToApplyUponCreation = default);
+		Action<Action<StatusBarItem, StatusBarItemBag>> CreateStatusBarItem(StatusBarAlignment? alignment = default, int? priority = default);
 
 		/// <summary>
 		/// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
@@ -621,13 +618,10 @@ namespace VscAppz {
 		/// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 		/// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 		/// 
-		/// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-		/// 
 		/// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
 		/// </summary>
 		/// <return>A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).</return>
-		/// <param name="optionallyInitialStateToApplyUponCreation">if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
-		Action<Action<InputBox, InputBoxBag>> CreateInputBox(InputBoxBag optionallyInitialStateToApplyUponCreation = default);
+		Action<Action<InputBox, InputBoxBag>> CreateInputBox();
 
 		/// <summary>
 		/// Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
@@ -637,13 +631,10 @@ namespace VscAppz {
 		/// is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
 		/// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 		/// 
-		/// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-		/// 
 		/// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
 		/// </summary>
 		/// <return>A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).</return>
-		/// <param name="optionallyInitialStateToApplyUponCreation">if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
-		Action<Action<QuickPick, QuickPickBag>> CreateQuickPick(QuickPickBag optionallyInitialStateToApplyUponCreation = default);
+		Action<Action<QuickPick, QuickPickBag>> CreateQuickPick();
 	}
 
 	/// <summary>Namespace describing the environment the editor runs in.</summary>
@@ -3206,7 +3197,7 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<StatusBarItem, StatusBarItemBag>> IWindow.CreateStatusBarItem(StatusBarAlignment? alignment, int? priority, StatusBarItemBag optionallyInitialStateToApplyUponCreation) {
+		Action<Action<StatusBarItem, StatusBarItemBag>> IWindow.CreateStatusBarItem(StatusBarAlignment? alignment, int? priority) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createStatusBarItem";
@@ -3231,9 +3222,6 @@ namespace VscAppz {
 					result.disp.impl = this.Impl();
 				}
 				{
-					if ((null != optionallyInitialStateToApplyUponCreation)) {
-						result.Set(optionallyInitialStateToApplyUponCreation);
-					}
 					result.Get()((StatusBarItemBag state) => {
 						if ((null != onret)) {
 							onret(result, state);
@@ -3316,7 +3304,7 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<InputBox, InputBoxBag>> IWindow.CreateInputBox(InputBoxBag optionallyInitialStateToApplyUponCreation) {
+		Action<Action<InputBox, InputBoxBag>> IWindow.CreateInputBox() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createInputBox";
@@ -3335,9 +3323,6 @@ namespace VscAppz {
 					result.disp.impl = this.Impl();
 				}
 				{
-					if ((null != optionallyInitialStateToApplyUponCreation)) {
-						result.Set(optionallyInitialStateToApplyUponCreation);
-					}
 					result.Get()((InputBoxBag state) => {
 						if ((null != onret)) {
 							onret(result, state);
@@ -3352,7 +3337,7 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<QuickPick, QuickPickBag>> IWindow.CreateQuickPick(QuickPickBag optionallyInitialStateToApplyUponCreation) {
+		Action<Action<QuickPick, QuickPickBag>> IWindow.CreateQuickPick() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createQuickPick";
@@ -3371,9 +3356,6 @@ namespace VscAppz {
 					result.disp.impl = this.Impl();
 				}
 				{
-					if ((null != optionallyInitialStateToApplyUponCreation)) {
-						result.Set(optionallyInitialStateToApplyUponCreation);
-					}
 					result.Get()((QuickPickBag state) => {
 						if ((null != onret)) {
 							onret(result, state);

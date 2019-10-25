@@ -497,17 +497,29 @@ function handle(msg, prog, remoteCancellationTokens) {
                     if (!allUpdates)
                         return ppio.promRej("StatusBarItem.set#allUpdates", msg.data);
                     const prop_text = allUpdates["text"];
-                    if (prop_text !== undefined && prop_text !== thisStatusBarItem.text)
-                        thisStatusBarItem.text = prop_text;
+                    if (prop_text !== undefined) {
+                        let val = prop_text;
+                        if (val !== thisStatusBarItem.text)
+                            thisStatusBarItem.text = val;
+                    }
                     const prop_tooltip = allUpdates["tooltip"];
-                    if (prop_tooltip !== undefined && prop_tooltip !== thisStatusBarItem.tooltip)
-                        thisStatusBarItem.tooltip = prop_tooltip;
+                    if (prop_tooltip !== undefined) {
+                        let val = prop_tooltip;
+                        if (val !== thisStatusBarItem.tooltip)
+                            thisStatusBarItem.tooltip = val;
+                    }
                     const prop_color = allUpdates["color"];
-                    if (prop_color !== undefined && prop_color !== thisStatusBarItem.color)
-                        thisStatusBarItem.color = (!(prop_color && prop_color.length)) ? undefined : prop_color.startsWith("#") ? prop_color : new vscode.ThemeColor(prop_color);
+                    if (prop_color !== undefined) {
+                        let val = (!((typeof prop_color === "string") && prop_color && prop_color.length)) ? undefined : prop_color.startsWith("#") ? prop_color : new vscode.ThemeColor(prop_color);
+                        if (val !== thisStatusBarItem.color)
+                            thisStatusBarItem.color = val;
+                    }
                     const prop_command = allUpdates["command"];
-                    if (prop_command !== undefined && prop_command !== thisStatusBarItem.command)
-                        thisStatusBarItem.command = prop_command;
+                    if (prop_command !== undefined) {
+                        let val = prop_command;
+                        if (val !== thisStatusBarItem.command)
+                            thisStatusBarItem.command = val;
+                    }
                     return Promise.resolve();
                 }
                 default:
@@ -621,38 +633,71 @@ function handle(msg, prog, remoteCancellationTokens) {
                     if (!allUpdates)
                         return ppio.promRej("InputBox.set#allUpdates", msg.data);
                     const prop_value = allUpdates["value"];
-                    if (prop_value !== undefined && prop_value !== thisInputBox.value)
-                        thisInputBox.value = prop_value;
+                    if (prop_value !== undefined) {
+                        let val = prop_value;
+                        if (val !== thisInputBox.value)
+                            thisInputBox.value = val;
+                    }
                     const prop_placeholder = allUpdates["placeholder"];
-                    if (prop_placeholder !== undefined && prop_placeholder !== thisInputBox.placeholder)
-                        thisInputBox.placeholder = prop_placeholder;
+                    if (prop_placeholder !== undefined) {
+                        let val = prop_placeholder;
+                        if (val !== thisInputBox.placeholder)
+                            thisInputBox.placeholder = val;
+                    }
                     const prop_password = allUpdates["password"];
-                    if (prop_password !== undefined && prop_password !== thisInputBox.password)
-                        thisInputBox.password = prop_password;
+                    if (prop_password !== undefined) {
+                        let val = prop_password;
+                        if (val !== thisInputBox.password)
+                            thisInputBox.password = val;
+                    }
                     const prop_prompt = allUpdates["prompt"];
-                    if (prop_prompt !== undefined && prop_prompt !== thisInputBox.prompt)
-                        thisInputBox.prompt = prop_prompt;
+                    if (prop_prompt !== undefined) {
+                        let val = prop_prompt;
+                        if (val !== thisInputBox.prompt)
+                            thisInputBox.prompt = val;
+                    }
                     const prop_validationMessage = allUpdates["validationMessage"];
-                    if (prop_validationMessage !== undefined && prop_validationMessage !== thisInputBox.validationMessage)
-                        thisInputBox.validationMessage = prop_validationMessage;
+                    if (prop_validationMessage !== undefined) {
+                        let val = prop_validationMessage;
+                        if (val !== thisInputBox.validationMessage)
+                            thisInputBox.validationMessage = val;
+                    }
                     const prop_title = allUpdates["title"];
-                    if (prop_title !== undefined && prop_title !== thisInputBox.title)
-                        thisInputBox.title = prop_title;
+                    if (prop_title !== undefined) {
+                        let val = prop_title;
+                        if (val !== thisInputBox.title)
+                            thisInputBox.title = val;
+                    }
                     const prop_step = allUpdates["step"];
-                    if (prop_step !== undefined && prop_step !== thisInputBox.step)
-                        thisInputBox.step = prop_step;
+                    if (prop_step !== undefined) {
+                        let val = prop_step;
+                        if (val !== thisInputBox.step)
+                            thisInputBox.step = val;
+                    }
                     const prop_totalSteps = allUpdates["totalSteps"];
-                    if (prop_totalSteps !== undefined && prop_totalSteps !== thisInputBox.totalSteps)
-                        thisInputBox.totalSteps = prop_totalSteps;
+                    if (prop_totalSteps !== undefined) {
+                        let val = prop_totalSteps;
+                        if (val !== thisInputBox.totalSteps)
+                            thisInputBox.totalSteps = val;
+                    }
                     const prop_enabled = allUpdates["enabled"];
-                    if (prop_enabled !== undefined && prop_enabled !== thisInputBox.enabled)
-                        thisInputBox.enabled = prop_enabled;
+                    if (prop_enabled !== undefined) {
+                        let val = prop_enabled;
+                        if (val !== thisInputBox.enabled)
+                            thisInputBox.enabled = val;
+                    }
                     const prop_busy = allUpdates["busy"];
-                    if (prop_busy !== undefined && prop_busy !== thisInputBox.busy)
-                        thisInputBox.busy = prop_busy;
+                    if (prop_busy !== undefined) {
+                        let val = prop_busy;
+                        if (val !== thisInputBox.busy)
+                            thisInputBox.busy = val;
+                    }
                     const prop_ignoreFocusOut = allUpdates["ignoreFocusOut"];
-                    if (prop_ignoreFocusOut !== undefined && prop_ignoreFocusOut !== thisInputBox.ignoreFocusOut)
-                        thisInputBox.ignoreFocusOut = prop_ignoreFocusOut;
+                    if (prop_ignoreFocusOut !== undefined) {
+                        let val = prop_ignoreFocusOut;
+                        if (val !== thisInputBox.ignoreFocusOut)
+                            thisInputBox.ignoreFocusOut = val;
+                    }
                     return Promise.resolve();
                 }
                 default:
@@ -749,47 +794,89 @@ function handle(msg, prog, remoteCancellationTokens) {
                     if (!allUpdates)
                         return ppio.promRej("QuickPick.set#allUpdates", msg.data);
                     const prop_value = allUpdates["value"];
-                    if (prop_value !== undefined && prop_value !== thisQuickPick.value)
-                        thisQuickPick.value = prop_value;
+                    if (prop_value !== undefined) {
+                        let val = prop_value;
+                        if (val !== thisQuickPick.value)
+                            thisQuickPick.value = val;
+                    }
                     const prop_placeholder = allUpdates["placeholder"];
-                    if (prop_placeholder !== undefined && prop_placeholder !== thisQuickPick.placeholder)
-                        thisQuickPick.placeholder = prop_placeholder;
+                    if (prop_placeholder !== undefined) {
+                        let val = prop_placeholder;
+                        if (val !== thisQuickPick.placeholder)
+                            thisQuickPick.placeholder = val;
+                    }
                     const prop_items = allUpdates["items"];
-                    if (prop_items !== undefined && prop_items !== thisQuickPick.items)
-                        thisQuickPick.items = prop_items;
+                    if (prop_items !== undefined) {
+                        let val = prop_items;
+                        if (val !== thisQuickPick.items)
+                            thisQuickPick.items = val;
+                    }
                     const prop_canSelectMany = allUpdates["canSelectMany"];
-                    if (prop_canSelectMany !== undefined && prop_canSelectMany !== thisQuickPick.canSelectMany)
-                        thisQuickPick.canSelectMany = prop_canSelectMany;
+                    if (prop_canSelectMany !== undefined) {
+                        let val = prop_canSelectMany;
+                        if (val !== thisQuickPick.canSelectMany)
+                            thisQuickPick.canSelectMany = val;
+                    }
                     const prop_matchOnDescription = allUpdates["matchOnDescription"];
-                    if (prop_matchOnDescription !== undefined && prop_matchOnDescription !== thisQuickPick.matchOnDescription)
-                        thisQuickPick.matchOnDescription = prop_matchOnDescription;
+                    if (prop_matchOnDescription !== undefined) {
+                        let val = prop_matchOnDescription;
+                        if (val !== thisQuickPick.matchOnDescription)
+                            thisQuickPick.matchOnDescription = val;
+                    }
                     const prop_matchOnDetail = allUpdates["matchOnDetail"];
-                    if (prop_matchOnDetail !== undefined && prop_matchOnDetail !== thisQuickPick.matchOnDetail)
-                        thisQuickPick.matchOnDetail = prop_matchOnDetail;
+                    if (prop_matchOnDetail !== undefined) {
+                        let val = prop_matchOnDetail;
+                        if (val !== thisQuickPick.matchOnDetail)
+                            thisQuickPick.matchOnDetail = val;
+                    }
                     const prop_activeItems = allUpdates["activeItems"];
-                    if (prop_activeItems !== undefined && prop_activeItems !== thisQuickPick.activeItems)
-                        thisQuickPick.activeItems = prop_activeItems;
+                    if (prop_activeItems !== undefined) {
+                        let val = prop_activeItems;
+                        if (val !== thisQuickPick.activeItems)
+                            thisQuickPick.activeItems = val;
+                    }
                     const prop_selectedItems = allUpdates["selectedItems"];
-                    if (prop_selectedItems !== undefined && prop_selectedItems !== thisQuickPick.selectedItems)
-                        thisQuickPick.selectedItems = prop_selectedItems;
+                    if (prop_selectedItems !== undefined) {
+                        let val = prop_selectedItems;
+                        if (val !== thisQuickPick.selectedItems)
+                            thisQuickPick.selectedItems = val;
+                    }
                     const prop_title = allUpdates["title"];
-                    if (prop_title !== undefined && prop_title !== thisQuickPick.title)
-                        thisQuickPick.title = prop_title;
+                    if (prop_title !== undefined) {
+                        let val = prop_title;
+                        if (val !== thisQuickPick.title)
+                            thisQuickPick.title = val;
+                    }
                     const prop_step = allUpdates["step"];
-                    if (prop_step !== undefined && prop_step !== thisQuickPick.step)
-                        thisQuickPick.step = prop_step;
+                    if (prop_step !== undefined) {
+                        let val = prop_step;
+                        if (val !== thisQuickPick.step)
+                            thisQuickPick.step = val;
+                    }
                     const prop_totalSteps = allUpdates["totalSteps"];
-                    if (prop_totalSteps !== undefined && prop_totalSteps !== thisQuickPick.totalSteps)
-                        thisQuickPick.totalSteps = prop_totalSteps;
+                    if (prop_totalSteps !== undefined) {
+                        let val = prop_totalSteps;
+                        if (val !== thisQuickPick.totalSteps)
+                            thisQuickPick.totalSteps = val;
+                    }
                     const prop_enabled = allUpdates["enabled"];
-                    if (prop_enabled !== undefined && prop_enabled !== thisQuickPick.enabled)
-                        thisQuickPick.enabled = prop_enabled;
+                    if (prop_enabled !== undefined) {
+                        let val = prop_enabled;
+                        if (val !== thisQuickPick.enabled)
+                            thisQuickPick.enabled = val;
+                    }
                     const prop_busy = allUpdates["busy"];
-                    if (prop_busy !== undefined && prop_busy !== thisQuickPick.busy)
-                        thisQuickPick.busy = prop_busy;
+                    if (prop_busy !== undefined) {
+                        let val = prop_busy;
+                        if (val !== thisQuickPick.busy)
+                            thisQuickPick.busy = val;
+                    }
                     const prop_ignoreFocusOut = allUpdates["ignoreFocusOut"];
-                    if (prop_ignoreFocusOut !== undefined && prop_ignoreFocusOut !== thisQuickPick.ignoreFocusOut)
-                        thisQuickPick.ignoreFocusOut = prop_ignoreFocusOut;
+                    if (prop_ignoreFocusOut !== undefined) {
+                        let val = prop_ignoreFocusOut;
+                        if (val !== thisQuickPick.ignoreFocusOut)
+                            thisQuickPick.ignoreFocusOut = val;
+                    }
                     return Promise.resolve();
                 }
                 default:

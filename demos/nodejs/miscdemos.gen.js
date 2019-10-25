@@ -293,23 +293,22 @@ function demo_Window_ShowQuickPick() {
 }
 
 function demo_Window_CreateQuickPick() {
-    let cfg
-    cfg = {}
-    cfg.IgnoreFocusOut = true
-    cfg.Title = "I'm a full-fledged QuickPick"
-    cfg.Step = 23
-    cfg.TotalSteps = 42
-    cfg.Items = new Array(88)
-    for (const i of nums1To(88)) {
-        cfg.Items[i] = {}
-        cfg.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i)
-        cfg.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i)
-        cfg.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i)
-        cfg.Items[(i - 1)].AlwaysShow = i === 42
-    }
-    vsc.Window.CreateQuickPick(cfg)((ctl, _unused) => {
-        ctl.OnDidAccept((props) => {
-            logLn(strFmt("Picked: {0}", props.SelectedItems))
+    vsc.Window.CreateQuickPick()((ctl, cfg) => {
+        cfg.IgnoreFocusOut = true
+        cfg.Title = "I'm a full-fledged QuickPick"
+        cfg.Step = 23
+        cfg.TotalSteps = 42
+        cfg.Items = new Array(88)
+        for (const i of nums1To(88)) {
+            cfg.Items[i] = {}
+            cfg.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i)
+            cfg.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i)
+            cfg.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i)
+            cfg.Items[(i - 1)].AlwaysShow = i === 42
+        }
+        ctl.Set(cfg)
+        ctl.OnDidAccept((bag) => {
+            logLn(strFmt("Picked: {0}", bag.SelectedItems))
             ctl.Hide()
         })
         ctl.OnDidHide((_) => {
@@ -320,31 +319,31 @@ function demo_Window_CreateQuickPick() {
 }
 
 function demo_Window_CreateInputBox() {
-    vsc.Window.CreateInputBox(null)((inputbox, props) => {
-        props.ignoreFocusOut = true
-        props.placeholder = "The initial Placeholder"
-        props.prompt = "The initial Prompt"
-        props.title = "The initial Title"
-        inputbox.Set(props)
-        inputbox.OnDidChangeValue((input, ctl) => {
-            ctl.prompt = strFmt("Lower: {0}", strLo(ctl.value))
-            ctl.title = strFmt("Upper: {0}", strUp(ctl.value))
-            inputbox.Set(ctl)
+    vsc.Window.CreateInputBox()((ctl, cfg) => {
+        cfg.ignoreFocusOut = true
+        cfg.placeholder = "The initial Placeholder"
+        cfg.prompt = "The initial Prompt"
+        cfg.title = "The initial Title"
+        ctl.Set(cfg)
+        ctl.OnDidChangeValue((input, bag) => {
+            bag.prompt = strFmt("Lower: {0}", strLo(bag.value))
+            bag.title = strFmt("Upper: {0}", strUp(bag.value))
+            ctl.Set(bag)
         })
         let finalinputvalue
-        inputbox.OnDidAccept((ctl) => {
-            finalinputvalue = ctl.value
-            inputbox.Hide()
+        ctl.OnDidAccept((bag) => {
+            finalinputvalue = bag.value
+            ctl.Hide()
         })
-        inputbox.OnDidHide((ctl) => {
-            inputbox.Dispose()
+        ctl.OnDidHide((bag) => {
+            ctl.Dispose()
             if ((undefined !== finalinputvalue && null !== finalinputvalue)) {
                 vsc.Window.ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", finalinputvalue)), null)
             } else {
                 vsc.Window.ShowWarningMessage1(logLn("Backing off or backing up?"), null)
             }
         })
-        inputbox.Show()
+        ctl.Show()
     })
 }
 
@@ -478,17 +477,15 @@ function onUpAndRunning() {
             })
             return null
         }
-        vsc.Commands.RegisterCommand(cmdName, mycmd)((_commandRegisteredAtThisPoint) => {
-            let cfg
-            cfg = {}
+        vsc.Commands.RegisterCommand(cmdName, mycmd)
+        vsc.Window.CreateStatusBarItem(0, null)((it, cfg) => {
+            statusitem = it
             cfg.tooltip = strFmt("Hi from {0}!", appName)
             cfg.text = "You clicked me 0 time(s)."
             cfg.color = "#42BEEF"
             cfg.command = cmdName
-            vsc.Window.CreateStatusBarItem(0, null, cfg)((it, _unused) => {
-                statusitem = it
-                statusitem.Show()
-            })
+            statusitem.Set(cfg)
+            statusitem.Show()
         })
     }
 }

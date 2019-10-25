@@ -504,9 +504,8 @@ export interface Window {
      * @param alignment The alignment of the item.
      * @param priority The priority of the item. Higher values mean the item should be shown more to the left.
      * @return A new status bar item.
-     * @param optionallyInitialStateToApplyUponCreation if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number, optionallyInitialStateToApplyUponCreation?: StatusBarItemBag) => (_: (_: StatusBarItem, __: StatusBarItemBag) => void) => void
+    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number) => (_: (_: StatusBarItem, __: StatusBarItemBag) => void) => void
 
     /**
      * Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
@@ -532,9 +531,8 @@ export interface Window {
      * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
      * @return A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
-     * @param optionallyInitialStateToApplyUponCreation if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateInputBox: (optionallyInitialStateToApplyUponCreation?: InputBoxBag) => (_: (_: InputBox, __: InputBoxBag) => void) => void
+    CreateInputBox: (_: (_: InputBox, __: InputBoxBag) => void) => void
 
     /**
      * Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
@@ -545,9 +543,8 @@ export interface Window {
      * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
      * @return A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
-     * @param optionallyInitialStateToApplyUponCreation if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateQuickPick: (optionallyInitialStateToApplyUponCreation?: QuickPickBag) => (_: (_: QuickPick, __: QuickPickBag) => void) => void
+    CreateQuickPick: (_: (_: QuickPick, __: QuickPickBag) => void) => void
 }
 
 /**
@@ -3645,7 +3642,7 @@ class implWindow extends implBase implements Window {
         }
     }
 
-    CreateStatusBarItem(alignment?: StatusBarAlignment, priority?: number, optionallyInitialStateToApplyUponCreation?: StatusBarItemBag): (_: (_: StatusBarItem, __: StatusBarItemBag) => void) => void {
+    CreateStatusBarItem(alignment?: StatusBarAlignment, priority?: number): (_: (_: StatusBarItem, __: StatusBarItemBag) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createStatusBarItem"
@@ -3670,9 +3667,6 @@ class implWindow extends implBase implements Window {
                 result.disp.impl = this.Impl()
             }
             {
-                if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
-                    result.Set(optionallyInitialStateToApplyUponCreation)
-                }
                 result.Get()((state: StatusBarItemBag): void => {
                     if ((undefined !== onret && null !== onret)) {
                         onret(result, state)
@@ -3755,7 +3749,7 @@ class implWindow extends implBase implements Window {
         }
     }
 
-    CreateInputBox(optionallyInitialStateToApplyUponCreation?: InputBoxBag): (_: (_: InputBox, __: InputBoxBag) => void) => void {
+    CreateInputBox(): (_: (_: InputBox, __: InputBoxBag) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createInputBox"
@@ -3774,9 +3768,6 @@ class implWindow extends implBase implements Window {
                 result.disp.impl = this.Impl()
             }
             {
-                if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
-                    result.Set(optionallyInitialStateToApplyUponCreation)
-                }
                 result.Get()((state: InputBoxBag): void => {
                     if ((undefined !== onret && null !== onret)) {
                         onret(result, state)
@@ -3791,7 +3782,7 @@ class implWindow extends implBase implements Window {
         }
     }
 
-    CreateQuickPick(optionallyInitialStateToApplyUponCreation?: QuickPickBag): (_: (_: QuickPick, __: QuickPickBag) => void) => void {
+    CreateQuickPick(): (_: (_: QuickPick, __: QuickPickBag) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createQuickPick"
@@ -3810,9 +3801,6 @@ class implWindow extends implBase implements Window {
                 result.disp.impl = this.Impl()
             }
             {
-                if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
-                    result.Set(optionallyInitialStateToApplyUponCreation)
-                }
                 result.Get()((state: QuickPickBag): void => {
                     if ((undefined !== onret && null !== onret)) {
                         onret(result, state)

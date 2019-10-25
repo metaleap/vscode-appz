@@ -1305,7 +1305,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    CreateStatusBarItem(alignment, priority, optionallyInitialStateToApplyUponCreation) {
+    CreateStatusBarItem(alignment, priority) {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.createStatusBarItem";
@@ -1330,9 +1330,6 @@ class implWindow extends implBase {
                 result.disp.impl = this.Impl();
             }
             {
-                if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
-                    result.Set(optionallyInitialStateToApplyUponCreation);
-                }
                 result.Get()((state) => {
                     if ((undefined !== onret && null !== onret)) {
                         onret(result, state);
@@ -1412,7 +1409,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    CreateInputBox(optionallyInitialStateToApplyUponCreation) {
+    CreateInputBox() {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.createInputBox";
@@ -1431,9 +1428,6 @@ class implWindow extends implBase {
                 result.disp.impl = this.Impl();
             }
             {
-                if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
-                    result.Set(optionallyInitialStateToApplyUponCreation);
-                }
                 result.Get()((state) => {
                     if ((undefined !== onret && null !== onret)) {
                         onret(result, state);
@@ -1447,7 +1441,7 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    CreateQuickPick(optionallyInitialStateToApplyUponCreation) {
+    CreateQuickPick() {
         let msg;
         msg = newipcMsg();
         msg.QName = "window.createQuickPick";
@@ -1466,9 +1460,6 @@ class implWindow extends implBase {
                 result.disp.impl = this.Impl();
             }
             {
-                if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
-                    result.Set(optionallyInitialStateToApplyUponCreation);
-                }
                 result.Get()((state) => {
                     if ((undefined !== onret && null !== onret)) {
                         onret(result, state);

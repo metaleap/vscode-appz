@@ -2015,10 +2015,8 @@ type Window interface {
 	//
 	// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 	//
-	// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-	//
 	// `return` ── A new status bar item.
-	CreateStatusBarItem(alignment StatusBarAlignment, priority *int, optionallyInitialStateToApplyUponCreation *StatusBarItemBag) func(func(StatusBarItem, StatusBarItemBag))
+	CreateStatusBarItem(alignment StatusBarAlignment, priority *int) func(func(StatusBarItem, StatusBarItemBag))
 
 	// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 	//
@@ -2040,10 +2038,8 @@ type Window interface {
 	// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 	// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 	//
-	// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-	//
 	// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
-	CreateInputBox(optionallyInitialStateToApplyUponCreation *InputBoxBag) func(func(InputBox, InputBoxBag))
+	CreateInputBox() func(func(InputBox, InputBoxBag))
 
 	// Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
 	// of items of type T.
@@ -2052,10 +2048,8 @@ type Window interface {
 	// is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
 	// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 	//
-	// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-	//
 	// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
-	CreateQuickPick(optionallyInitialStateToApplyUponCreation *QuickPickBag) func(func(QuickPick, QuickPickBag))
+	CreateQuickPick() func(func(QuickPick, QuickPickBag))
 }
 ```
 

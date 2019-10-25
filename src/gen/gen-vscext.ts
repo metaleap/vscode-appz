@@ -97,10 +97,14 @@ export class Gen extends gen.Gen implements gen.IGen {
                         for (const tname of gen.typeNames(prop.typeSpec))
                             this.typeNamesUsed[tname] = true
                         src += `\t\t\t\t\tconst prop_${prop.name} = allUpdates["${prop.name}"] as ${this.typeSpec(prop.typeSpec)}\n`
-                        src += `\t\t\t\t\tif (prop_${prop.name} !== undefined && prop_${prop.name} !== this${it.name}.${prop.name})\n\t\t\t\t\t\tthis${it.name}.${prop.name} = `
+                        src += `\t\t\t\t\tif (prop_${prop.name} !== undefined) {\n`
+                            + `\t\t\t\t\t\tlet val = `
                             + ((!tcol) ? `prop_${prop.name}`
-                                : (`(!(prop_${prop.name} && prop_${prop.name}.length)) ? undefined : prop_${prop.name}.startsWith("#") ? prop_${prop.name} : new ${this.pkg}.ThemeColor(prop_${prop.name})`))
+                                : (`(!((typeof prop_${prop.name} === "string") && prop_${prop.name} && prop_${prop.name}.length)) ? undefined : prop_${prop.name}.startsWith("#") ? prop_${prop.name} : new ${this.pkg}.ThemeColor(prop_${prop.name})`))
                             + "\n"
+                            + `\t\t\t\t\t\tif (val !== this${it.name}.${prop.name})\n`
+                            + `\t\t\t\t\t\t\tthis${it.name}.${prop.name} = val\n`
+                            + "\t\t\t\t\t}\n"
                     }
                     src += "\t\t\t\t\treturn Promise.resolve()\n"
                     src += "\t\t\t\t}\n"

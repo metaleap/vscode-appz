@@ -283,23 +283,22 @@ namespace VscAppzDemo {
 			});
 		}
 		private static void demo_Window_CreateQuickPick() {
-			QuickPickBag cfg = default;
-			cfg = new QuickPickBag();
-			cfg.IgnoreFocusOut = true;
-			cfg.Title = "I'm a full-fledged QuickPick";
-			cfg.Step = 23;
-			cfg.TotalSteps = 42;
-			cfg.Items = new QuickPickItem[88];
-			foreach (var i in nums1To(88)) {
-				cfg.Items[i] = new QuickPickItem();
-				cfg.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i);
-				cfg.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i);
-				cfg.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i);
-				cfg.Items[(i - 1)].AlwaysShow = i == 42;
-			}
-			vsc.Window.CreateQuickPick(cfg)((QuickPick ctl, QuickPickBag _unused) => {
-				ctl.OnDidAccept((QuickPickBag props) => {
-					logLn(strFmt("Picked: {0}", props.SelectedItems));
+			vsc.Window.CreateQuickPick()((QuickPick ctl, QuickPickBag cfg) => {
+				cfg.IgnoreFocusOut = true;
+				cfg.Title = "I'm a full-fledged QuickPick";
+				cfg.Step = 23;
+				cfg.TotalSteps = 42;
+				cfg.Items = new QuickPickItem[88];
+				foreach (var i in nums1To(88)) {
+					cfg.Items[i] = new QuickPickItem();
+					cfg.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i);
+					cfg.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i);
+					cfg.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i);
+					cfg.Items[(i - 1)].AlwaysShow = i == 42;
+				}
+				ctl.Set(cfg);
+				ctl.OnDidAccept((QuickPickBag bag) => {
+					logLn(strFmt("Picked: {0}", bag.SelectedItems));
 					ctl.Hide();
 				});
 				ctl.OnDidHide((QuickPickBag _) => {
@@ -309,31 +308,31 @@ namespace VscAppzDemo {
 			});
 		}
 		private static void demo_Window_CreateInputBox() {
-			vsc.Window.CreateInputBox(null)((InputBox inputbox, InputBoxBag props) => {
-				props.IgnoreFocusOut = true;
-				props.Placeholder = "The initial Placeholder";
-				props.Prompt = "The initial Prompt";
-				props.Title = "The initial Title";
-				inputbox.Set(props);
-				inputbox.OnDidChangeValue((string input, InputBoxBag ctl) => {
-					ctl.Prompt = strFmt("Lower: {0}", strLo(ctl.Value));
-					ctl.Title = strFmt("Upper: {0}", strUp(ctl.Value));
-					inputbox.Set(ctl);
+			vsc.Window.CreateInputBox()((InputBox ctl, InputBoxBag cfg) => {
+				cfg.IgnoreFocusOut = true;
+				cfg.Placeholder = "The initial Placeholder";
+				cfg.Prompt = "The initial Prompt";
+				cfg.Title = "The initial Title";
+				ctl.Set(cfg);
+				ctl.OnDidChangeValue((string input, InputBoxBag bag) => {
+					bag.Prompt = strFmt("Lower: {0}", strLo(bag.Value));
+					bag.Title = strFmt("Upper: {0}", strUp(bag.Value));
+					ctl.Set(bag);
 				});
 				string finalinputvalue = default;
-				inputbox.OnDidAccept((InputBoxBag ctl) => {
-					finalinputvalue = ctl.Value;
-					inputbox.Hide();
+				ctl.OnDidAccept((InputBoxBag bag) => {
+					finalinputvalue = bag.Value;
+					ctl.Hide();
 				});
-				inputbox.OnDidHide((InputBoxBag ctl) => {
-					inputbox.Dispose();
+				ctl.OnDidHide((InputBoxBag bag) => {
+					ctl.Dispose();
 					if ((null != finalinputvalue)) {
 						vsc.Window.ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", finalinputvalue)), null);
 					} else {
 						vsc.Window.ShowWarningMessage1(logLn("Backing off or backing up?"), null);
 					}
 				});
-				inputbox.Show();
+				ctl.Show();
 			});
 		}
 		private static void subscribeToMiscEvents() {
@@ -464,17 +463,15 @@ namespace VscAppzDemo {
 					});
 					return null;
 				};
-				vsc.Commands.RegisterCommand(cmdName, mycmd)((Disposable _commandRegisteredAtThisPoint) => {
-					StatusBarItemBag cfg = default;
-					cfg = new StatusBarItemBag();
+				vsc.Commands.RegisterCommand(cmdName, mycmd);
+				vsc.Window.CreateStatusBarItem(0, null)((StatusBarItem it, StatusBarItemBag cfg) => {
+					statusitem = it;
 					cfg.Tooltip = strFmt("Hi from {0}!", appName);
 					cfg.Text = "You clicked me 0 time(s).";
 					cfg.Color = "#42BEEF";
 					cfg.Command = cmdName;
-					vsc.Window.CreateStatusBarItem(0, null, cfg)((StatusBarItem it, StatusBarItemBag _unused) => {
-						statusitem = it;
-						statusitem.Show();
-					});
+					statusitem.Set(cfg);
+					statusitem.Show();
 				});
 			}
 		}

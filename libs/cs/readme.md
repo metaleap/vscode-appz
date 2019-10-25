@@ -85,10 +85,10 @@
   - [Window](#P-VscAppz-IVscode-Window 'VscAppz.IVscode.Window')
   - [Workspace](#P-VscAppz-IVscode-Workspace 'VscAppz.IVscode.Workspace')
 - [IWindow](#T-VscAppz-IWindow 'VscAppz.IWindow')
-  - [CreateInputBox(optionallyInitialStateToApplyUponCreation)](#M-VscAppz-IWindow-CreateInputBox-VscAppz-InputBoxBag- 'VscAppz.IWindow.CreateInputBox(VscAppz.InputBoxBag)')
+  - [CreateInputBox()](#M-VscAppz-IWindow-CreateInputBox 'VscAppz.IWindow.CreateInputBox')
   - [CreateOutputChannel(name)](#M-VscAppz-IWindow-CreateOutputChannel-System-String- 'VscAppz.IWindow.CreateOutputChannel(System.String)')
-  - [CreateQuickPick(optionallyInitialStateToApplyUponCreation)](#M-VscAppz-IWindow-CreateQuickPick-VscAppz-QuickPickBag- 'VscAppz.IWindow.CreateQuickPick(VscAppz.QuickPickBag)')
-  - [CreateStatusBarItem(alignment,priority,optionallyInitialStateToApplyUponCreation)](#M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32},VscAppz-StatusBarItemBag- 'VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32},VscAppz.StatusBarItemBag)')
+  - [CreateQuickPick()](#M-VscAppz-IWindow-CreateQuickPick 'VscAppz.IWindow.CreateQuickPick')
+  - [CreateStatusBarItem(alignment,priority)](#M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32}- 'VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32})')
   - [CreateTextEditorDecorationType(options)](#M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions- 'VscAppz.IWindow.CreateTextEditorDecorationType(VscAppz.DecorationRenderOptions)')
   - [OnDidChangeWindowState(listener)](#M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState}- 'VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState})')
   - [SetStatusBarMessage1(text,hideAfterTimeout)](#M-VscAppz-IWindow-SetStatusBarMessage1-System-String,System-Int32- 'VscAppz.IWindow.SetStatusBarMessage1(System.String,System.Int32)')
@@ -1363,8 +1363,8 @@ Namespace for dealing with the current window of the editor. That is visible
 and active editors, as well as, UI elements to show messages, selections, and
 asking for user input.
 
-<a name='M-VscAppz-IWindow-CreateInputBox-VscAppz-InputBoxBag-'></a>
-### CreateInputBox(optionallyInitialStateToApplyUponCreation) `method`
+<a name='M-VscAppz-IWindow-CreateInputBox'></a>
+### CreateInputBox() `method`
 
 ##### Summary
 
@@ -1374,15 +1374,11 @@ Note that in many cases the more convenient [window.showInputBox](https://code.v
 is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
-`optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-
 `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
 
 ##### Parameters
 
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| optionallyInitialStateToApplyUponCreation | [VscAppz.InputBoxBag](#T-VscAppz-InputBoxBag 'VscAppz.InputBoxBag') | if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
+This method has no parameters.
 
 <a name='M-VscAppz-IWindow-CreateOutputChannel-System-String-'></a>
 ### CreateOutputChannel(name) `method`
@@ -1401,8 +1397,8 @@ Creates a new [output channel](https://code.visualstudio.com/api/references/vsco
 | ---- | ---- | ----------- |
 | name | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Human-readable string which will be used to represent the channel in the UI. |
 
-<a name='M-VscAppz-IWindow-CreateQuickPick-VscAppz-QuickPickBag-'></a>
-### CreateQuickPick(optionallyInitialStateToApplyUponCreation) `method`
+<a name='M-VscAppz-IWindow-CreateQuickPick'></a>
+### CreateQuickPick() `method`
 
 ##### Summary
 
@@ -1413,18 +1409,14 @@ Note that in many cases the more convenient [window.showQuickPick](https://code.
 is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
 when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
-`optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-
 `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
 
 ##### Parameters
 
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| optionallyInitialStateToApplyUponCreation | [VscAppz.QuickPickBag](#T-VscAppz-QuickPickBag 'VscAppz.QuickPickBag') | if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
+This method has no parameters.
 
-<a name='M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32},VscAppz-StatusBarItemBag-'></a>
-### CreateStatusBarItem(alignment,priority,optionallyInitialStateToApplyUponCreation) `method`
+<a name='M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32}-'></a>
+### CreateStatusBarItem(alignment,priority) `method`
 
 ##### Summary
 
@@ -1434,8 +1426,6 @@ Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-
 
 `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 
-`optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-
 `return` ── A new status bar item.
 
 ##### Parameters
@@ -1444,7 +1434,6 @@ Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-
 | ---- | ---- | ----------- |
 | alignment | [System.Nullable{VscAppz.StatusBarAlignment}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{VscAppz.StatusBarAlignment}') | The alignment of the item. |
 | priority | [System.Nullable{System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.Int32}') | The priority of the item. Higher values mean the item should be shown more to the left. |
-| optionallyInitialStateToApplyUponCreation | [VscAppz.StatusBarItemBag](#T-VscAppz-StatusBarItemBag 'VscAppz.StatusBarItemBag') | if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
 
 <a name='M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions-'></a>
 ### CreateTextEditorDecorationType(options) `method`

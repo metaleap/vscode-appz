@@ -618,13 +618,9 @@ Window: interface
     #
     # @return:
     # A new status bar item.
-    #
-    # @optionallyInitialStateToApplyUponCreation:
-    # if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
     CreateStatusBarItem: ((StatusBarItem->StatusBarItemBag->void)->void)
         alignment: ?StatusBarAlignment
         priority: ?int
-        optionallyInitialStateToApplyUponCreation: ?StatusBarItemBag # undefined
 
     # createOutputChannel:
     # Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
@@ -657,11 +653,7 @@ Window: interface
     #
     # @return:
     # A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
-    #
-    # @optionallyInitialStateToApplyUponCreation:
-    # if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
     CreateInputBox: ((InputBox->InputBoxBag->void)->void)
-        optionallyInitialStateToApplyUponCreation: ?InputBoxBag # undefined
 
     # createQuickPick:
     # Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
@@ -673,11 +665,7 @@ Window: interface
     #
     # @return:
     # A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
-    #
-    # @optionallyInitialStateToApplyUponCreation:
-    # if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
     CreateQuickPick: ((QuickPick->QuickPickBag->void)->void)
-        optionallyInitialStateToApplyUponCreation: ?QuickPickBag # undefined
 
 
 
@@ -3402,7 +3390,7 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> ((?Disposable->
 
 
 
-Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> optionallyInitialStateToApplyUponCreation:?StatusBarItemBag -> ((StatusBarItem->StatusBarItemBag->void)->void))
+Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> ((StatusBarItem->StatusBarItemBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createStatusBarItem"
@@ -3422,8 +3410,6 @@ Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> 
             if !ok
                 return false
             result.disp.impl = this.Impl()
-            if =?optionallyInitialStateToApplyUponCreation
-                result.Set(*optionallyInitialStateToApplyUponCreation)
             result.Get()((state:StatusBarItemBag -> void)
                 if =?onret
                     onret(result, state)
@@ -3500,7 +3486,7 @@ Window·CreateTextEditorDecorationType: (options:DecorationRenderOptions -> ((Te
 
 
 
-Window·CreateInputBox: (optionallyInitialStateToApplyUponCreation:?InputBoxBag -> ((InputBox->InputBoxBag->void)->void))
+Window·CreateInputBox: ( -> ((InputBox->InputBoxBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createInputBox"
@@ -3516,8 +3502,6 @@ Window·CreateInputBox: (optionallyInitialStateToApplyUponCreation:?InputBoxBag 
             if !ok
                 return false
             result.disp.impl = this.Impl()
-            if =?optionallyInitialStateToApplyUponCreation
-                result.Set(*optionallyInitialStateToApplyUponCreation)
             result.Get()((state:InputBoxBag -> void)
                 if =?onret
                     onret(result, state)
@@ -3532,7 +3516,7 @@ Window·CreateInputBox: (optionallyInitialStateToApplyUponCreation:?InputBoxBag 
 
 
 
-Window·CreateQuickPick: (optionallyInitialStateToApplyUponCreation:?QuickPickBag -> ((QuickPick->QuickPickBag->void)->void))
+Window·CreateQuickPick: ( -> ((QuickPick->QuickPickBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createQuickPick"
@@ -3548,8 +3532,6 @@ Window·CreateQuickPick: (optionallyInitialStateToApplyUponCreation:?QuickPickBa
             if !ok
                 return false
             result.disp.impl = this.Impl()
-            if =?optionallyInitialStateToApplyUponCreation
-                result.Set(*optionallyInitialStateToApplyUponCreation)
             result.Get()((state:QuickPickBag -> void)
                 if =?onret
                     onret(result, state)

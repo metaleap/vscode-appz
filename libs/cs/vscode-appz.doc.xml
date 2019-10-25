@@ -615,7 +615,7 @@
             <param name="listener">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.</return>
         </member>
-        <member name="M:VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32},VscAppz.StatusBarItemBag)">
+        <member name="M:VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32})">
             <summary>
             Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem).
             
@@ -623,14 +623,11 @@
             
             `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
             
-            `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-            
             `return` ── A new status bar item.
             </summary>
             <param name="alignment">The alignment of the item.</param>
             <param name="priority">The priority of the item. Higher values mean the item should be shown more to the left.</param>
             <return>A new status bar item.</return>
-            <param name="optionallyInitialStateToApplyUponCreation">if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
         </member>
         <member name="M:VscAppz.IWindow.CreateOutputChannel(System.String)">
             <summary>
@@ -654,7 +651,7 @@
             <param name="options">Rendering options for the decoration type.</param>
             <return>A new decoration type instance.</return>
         </member>
-        <member name="M:VscAppz.IWindow.CreateInputBox(VscAppz.InputBoxBag)">
+        <member name="M:VscAppz.IWindow.CreateInputBox">
             <summary>
             Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
             
@@ -662,14 +659,11 @@
             is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
             when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
             
-            `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-            
             `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
             </summary>
             <return>A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).</return>
-            <param name="optionallyInitialStateToApplyUponCreation">if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
         </member>
-        <member name="M:VscAppz.IWindow.CreateQuickPick(VscAppz.QuickPickBag)">
+        <member name="M:VscAppz.IWindow.CreateQuickPick">
             <summary>
             Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
             of items of type T.
@@ -678,12 +672,9 @@
             is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
             when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
             
-            `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-            
             `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
             </summary>
             <return>A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).</return>
-            <param name="optionallyInitialStateToApplyUponCreation">if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
         </member>
         <member name="T:VscAppz.IEnv">
             <summary>Namespace describing the environment the editor runs in.</summary>

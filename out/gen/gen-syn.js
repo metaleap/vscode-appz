@@ -125,11 +125,6 @@ class Builder {
                             if (struct && struct.isDispObj) {
                                 me.IsObjCtor = tn.Name;
                                 me.Args[me.Args.length - 1].Type = { From: [tn, { Name: tn.Name + "Bag" }], To: null };
-                                if (struct.fields.some(_ => (!gen.typeFun(_.typeSpec)) && !_.readOnly)) {
-                                    const lastarg = me.Args[me.Args.length - 1];
-                                    me.Args = me.Args.slice(0, me.Args.length - 1);
-                                    me.Args.push({ Name: this.gen.options.idents.dispObjCtorArg, Type: { Maybe: { Name: me.IsObjCtor + "Bag" } } }, lastarg);
-                                }
                             }
                         }
                     }
@@ -347,7 +342,6 @@ class Gen extends gen.Gen {
                 typeAny: "any",
                 typeDict: "dict",
                 typeImpl: "impl",
-                dispObjCtorArg: "optionallyInitialStateToApplyUponCreation",
             },
             unMaybeOutgoingTypes: [TypeRefPrim.String, TypeRefPrim.Bool],
             oneIndent: '    ',
@@ -876,17 +870,15 @@ class Gen extends gen.Gen {
                                         body.push(_.iSet(_.oDot(_.n(arg.Name), _.n(fld.Name)), town.Ands[and]));
                         }
                         const twinarg = twinargs[arg.Name];
-                        if (!(arg.Name === this.options.idents.dispObjCtorArg && this.typeMaybe(arg.Type))) {
-                            let set = _.iSet(_.oIdx(_.oDot(_.n("msg"), _.n("Data")), _.eLit((arg.name && arg.name.length) ? arg.name : arg.Name)), _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name));
-                            if (arg.fromPrep && arg.fromPrep.optional && !this.options.unMaybeOutgoingTypes.includes(arg.Type)) {
-                                const town = this.typeOwn(this.typeUnMaybe(arg.Type));
-                                const tenum = (town && town.Name && town.Name.length) ? this.allEnums.find(_ => _.Name === town.Name) : null;
-                                set = _.iIf((tenum && this.options.optionalEnumsZeroNotZilch) ? _.oNeq(_.eLit(0), _.n(arg.Name)) : _.oIs(_.n(arg.Name)), [
-                                    set
-                                ]);
-                            }
-                            body.push(set);
+                        let set = _.iSet(_.oIdx(_.oDot(_.n("msg"), _.n("Data")), _.eLit((arg.name && arg.name.length) ? arg.name : arg.Name)), _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name));
+                        if (arg.fromPrep && arg.fromPrep.optional && !this.options.unMaybeOutgoingTypes.includes(arg.Type)) {
+                            const town = this.typeOwn(this.typeUnMaybe(arg.Type));
+                            const tenum = (town && town.Name && town.Name.length) ? this.allEnums.find(_ => _.Name === town.Name) : null;
+                            set = _.iIf((tenum && this.options.optionalEnumsZeroNotZilch) ? _.oNeq(_.eLit(0), _.n(arg.Name)) : _.oIs(_.n(arg.Name)), [
+                                set
+                            ]);
                         }
+                        body.push(set);
                     }
         body.push(_.iVar("onresp", { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }), _.iVar("onret", method.Type.From[0]));
         // const meprop = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl as gen.MemberProp : null
@@ -906,11 +898,9 @@ class Gen extends gen.Gen {
                 ? [_.iIf(_.oIs(_.n("onret")), [
                         _.eCall(_.n("onret"), _.n("result")),
                     ])]
-                : _.WHEN(method.Args.some(_ => _.Name === this.options.idents.dispObjCtorArg && this.typeMaybe(_.Type)), () => [_.iIf(_.oIs(_.n(this.options.idents.dispObjCtorArg)), [
-                        _.eCall(_.oDot(_.n("result"), _.n("Set")), _.oDeref(_.n(this.options.idents.dispObjCtorArg))),
-                    ])], () => []).concat(...[_.eCall(_.eCall(_.oDot(_.n("result"), _.n("Get"))), _.eFunc([{ Name: "state", Type: { Name: method.IsObjCtor + "Bag" } }], null, _.iIf(_.oIs(_.n("onret")), [
+                : [_.eCall(_.eCall(_.oDot(_.n("result"), _.n("Get"))), _.eFunc([{ Name: "state", Type: { Name: method.IsObjCtor + "Bag" } }], null, _.iIf(_.oIs(_.n("onret")), [
                         _.eCall(_.n("onret"), _.n("result"), _.n("state")),
-                    ])))]))),
+                    ])))])),
             _.iRet(_.eLit(true)),
         ], () => [
             _.iIf(_.oIs(_.n("payload")), [_.iRet(_.eLit(false))]),
