@@ -70,12 +70,12 @@ class Gen extends gen_syn.Gen {
                 if (fprops && fprops.length) {
                     ffuncs.push({
                         name: gen.pickName("get", this.options.objPropsGetSetNamePicks, it.fromPrep.fields),
-                        typeSpec: { From: [], To: it.Name + "State" }
+                        typeSpec: { From: [], To: it.Name + "Bag" }
                     });
                     if (fprops.find(_ => !_.readOnly))
                         ffuncs.push({
                             name: gen.pickName("set", this.options.objPropsGetSetNamePicks, it.fromPrep.fields),
-                            typeSpec: { From: [it.Name + "State"], To: null }
+                            typeSpec: { From: [it.Name + "Bag"], To: null }
                         });
                 }
                 this.each(ffuncs, "\n", f => {

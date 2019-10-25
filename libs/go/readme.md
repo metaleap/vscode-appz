@@ -352,22 +352,22 @@ type Env interface {
 
 	// The application name of the editor, like 'VS Code'.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	AppName() func(func(string))
 
 	// The application root folder from which the editor is running.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	AppRoot() func(func(string))
 
 	// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	Language() func(func(string))
 
 	// A unique identifier for the computer.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	MachineId() func(func(string))
 
 	// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
@@ -378,28 +378,30 @@ type Env interface {
 	// exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 	// a specific extension runs remote or not.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	RemoteName() func(func(*string))
 
 	// A unique identifier for the current session.
 	// Changes each time the editor is started.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	SessionId() func(func(string))
 
 	// The detected default shell for the extension host, this is overridden by the
 	// `terminal.integrated.shell` setting for the extension host's platform.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	Shell() func(func(string))
 
 	// The custom uri scheme the editor registers to in the operating system.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	UriScheme() func(func(string))
 
 	// Provides single-call access to numerous individual `Env` properties at once.
-	Properties() func(func(EnvProperties))
+	//
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
+	AllProperties() func(func(EnvBag))
 
 	// The clipboard provides read and write access to the system's clipboard.
 	Clipboard() Clipboard
@@ -408,10 +410,10 @@ type Env interface {
 
 Namespace describing the environment the editor runs in.
 
-#### type EnvProperties
+#### type EnvBag
 
 ```go
-type EnvProperties struct {
+type EnvBag struct {
 	// The application name of the editor, like 'VS Code'.
 	AppName string `json:"appName,omitempty"`
 
@@ -446,7 +448,8 @@ type EnvProperties struct {
 }
 ```
 
-Namespace describing the environment the editor runs in.
+EnvBag gathers various properties of `Env`, obtainable via its `AllProperties`
+method.
 
 #### type Extensions
 
@@ -535,36 +538,36 @@ additional methods or properties on it should be accessed. Instead a new input
 UI should be created.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty.
 
 #### func (*InputBox) Get
 
 ```go
-func (me *InputBox) Get() func(func(InputBoxState))
+func (me *InputBox) Get() func(func(InputBoxBag))
 ```
 Obtains this `InputBox`'s current property values for: `value`, `placeholder`,
-`password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`,
-`totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+`password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`,
+`enabled`, `busy`, `ignoreFocusOut`.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `InputBoxBag` result obtained.
 
 #### func (*InputBox) Hide
 
 ```go
-func (me *InputBox) Hide() func(func(*InputBoxState))
+func (me *InputBox) Hide() func(func(*InputBoxBag))
 ```
 Hides this input UI. This will also fire an
 [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `InputBoxBag` result obtained.
 
 #### func (*InputBox) OnDidAccept
 
 ```go
-func (me *InputBox) OnDidAccept(handler func(InputBoxState)) func(func(*Disposable))
+func (me *InputBox) OnDidAccept(handler func(InputBoxBag)) func(func(*Disposable))
 ```
 An event signaling when the user indicated acceptance of the input value.
 
@@ -576,7 +579,7 @@ An event signaling when the user indicated acceptance of the input value.
 #### func (*InputBox) OnDidChangeValue
 
 ```go
-func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxState)) func(func(*Disposable))
+func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxBag)) func(func(*Disposable))
 ```
 An event signaling when the value has changed.
 
@@ -588,7 +591,7 @@ An event signaling when the value has changed.
 #### func (*InputBox) OnDidHide
 
 ```go
-func (me *InputBox) OnDidHide(handler func(InputBoxState)) func(func(*Disposable))
+func (me *InputBox) OnDidHide(handler func(InputBoxBag)) func(func(*Disposable))
 ```
 An event signaling when this input UI is hidden.
 
@@ -604,36 +607,27 @@ the user pressing Esc, some other input UI opening, etc.)
 `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide`
 event on `Dispose`.
 
-#### func (*InputBox) OnDidTriggerButton
-
-```go
-func (me *InputBox) OnDidTriggerButton(handler func(QuickInputButton, InputBoxState)) func(func(*Disposable))
-```
-An event signaling when a button was triggered.
-
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
-
-`return` ── A `Disposable` that will unsubscribe `handler` from the
-`OnDidTriggerButton` event on `Dispose`.
-
 #### func (*InputBox) Set
 
 ```go
-func (me *InputBox) Set(allUpdates InputBoxState) func(func())
+func (me *InputBox) Set(allUpdates InputBoxBag) func(func())
 ```
 Updates this `InputBox`'s current property values for: `value`, `placeholder`,
-`password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`,
-`totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+`password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`,
+`enabled`, `busy`, `ignoreFocusOut`.
 
-`allUpdates` ──
+`allUpdates` ── be aware that *all* its fields are sent for update, no
+omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty
+`InputBoxBag` with your select modifications applied, rather than construct a
+new one from scratch.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty.
 
 #### func (*InputBox) Show
 
 ```go
-func (me *InputBox) Show() func(func(*InputBoxState))
+func (me *InputBox) Show() func(func(*InputBoxBag))
 ```
 Makes the input UI visible in its current configuration. Any other input UI will
 first fire an
@@ -641,7 +635,59 @@ first fire an
 event.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `InputBoxBag` result obtained.
+
+#### type InputBoxBag
+
+```go
+type InputBoxBag struct {
+	// Current input value.
+	Value string `json:"value,omitempty"`
+
+	// Optional placeholder in the filter text.
+	Placeholder string `json:"placeholder,omitempty"`
+
+	// If the input value should be hidden. Defaults to false.
+	Password bool `json:"password,omitempty"`
+
+	// An optional prompt text providing some ask or explanation to the user.
+	Prompt string `json:"prompt,omitempty"`
+
+	// An optional validation message indicating a problem with the current input value.
+	ValidationMessage string `json:"validationMessage,omitempty"`
+
+	// An optional title.
+	Title string `json:"title,omitempty"`
+
+	// An optional current step count.
+	Step int `json:"step,omitempty"`
+
+	// An optional total step count.
+	TotalSteps int `json:"totalSteps,omitempty"`
+
+	// If the UI should allow for user input. Defaults to true.
+	//
+	// Change this to false, e.g., while validating user input or
+	// loading data for the next step in user input.
+	Enabled bool `json:"enabled,omitempty"`
+
+	// If the UI should show a progress indicator. Defaults to false.
+	//
+	// Change this to true, e.g., while loading more data or validating
+	// user input.
+	Busy bool `json:"busy,omitempty"`
+
+	// If the UI should stay open even when loosing UI focus. Defaults to false.
+	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
+}
+```
+
+InputBoxBag is a snapshot of `InputBox` state at the counterparty. It is
+obtained whenever `InputBox` creations and method calls (incl. the dedicated
+`Get`) resolve or its event subscribers are invoked, and therefore (to help
+always retain a factual view of the real full-picture) should not be constructed
+manually. Changes to any non-function-valued fields must be propagated to the
+counterparty via the `Set` method.
 
 #### type InputBoxOptions
 
@@ -680,66 +726,6 @@ type InputBoxOptions struct {
 ```
 
 Options to configure the behavior of the input box UI.
-
-#### type InputBoxState
-
-```go
-type InputBoxState struct {
-	// Current input value.
-	Value string `json:"value,omitempty"`
-
-	// Optional placeholder in the filter text.
-	Placeholder string `json:"placeholder,omitempty"`
-
-	// If the input value should be hidden. Defaults to false.
-	Password bool `json:"password,omitempty"`
-
-	// Buttons for actions in the UI.
-	Buttons []QuickInputButton `json:"buttons,omitempty"`
-
-	// An optional prompt text providing some ask or explanation to the user.
-	Prompt string `json:"prompt,omitempty"`
-
-	// An optional validation message indicating a problem with the current input value.
-	ValidationMessage string `json:"validationMessage,omitempty"`
-
-	// An optional title.
-	Title string `json:"title,omitempty"`
-
-	// An optional current step count.
-	Step int `json:"step,omitempty"`
-
-	// An optional total step count.
-	TotalSteps int `json:"totalSteps,omitempty"`
-
-	// If the UI should allow for user input. Defaults to true.
-	//
-	// Change this to false, e.g., while validating user input or
-	// loading data for the next step in user input.
-	Enabled bool `json:"enabled,omitempty"`
-
-	// If the UI should show a progress indicator. Defaults to false.
-	//
-	// Change this to true, e.g., while loading more data or validating
-	// user input.
-	Busy bool `json:"busy,omitempty"`
-
-	// If the UI should stay open even when loosing UI focus. Defaults to false.
-	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
-}
-```
-
-A concrete
-[QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput)
-to let the user input a text value.
-
-Note that in many cases the more convenient
-[window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
-is easier to use.
-[window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox)
-should be used when
-[window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
-does not offer the required flexibility.
 
 #### type Languages
 
@@ -895,36 +881,36 @@ To get an instance of an `OutputChannel` use
 #### func (*OutputChannel) Append
 
 ```go
-func (me *OutputChannel) Append(value string) func(func(*OutputChannelState))
+func (me *OutputChannel) Append(value string) func(func(*OutputChannelBag))
 ```
 Append the given value to the channel.
 
 `value` ── A string, falsy values will not be printed.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `OutputChannelBag` result obtained.
 
 #### func (*OutputChannel) AppendLine
 
 ```go
-func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelState))
+func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelBag))
 ```
 Append the given value and a line feed character to the channel.
 
 `value` ── A string, falsy values will be printed.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `OutputChannelBag` result obtained.
 
 #### func (*OutputChannel) Clear
 
 ```go
-func (me *OutputChannel) Clear() func(func(*OutputChannelState))
+func (me *OutputChannel) Clear() func(func(*OutputChannelBag))
 ```
 Removes all output from the channel.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `OutputChannelBag` result obtained.
 
 #### func (*OutputChannel) Dispose
 
@@ -934,53 +920,55 @@ func (me *OutputChannel) Dispose() func(func())
 Dispose and free associated resources.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty.
 
 #### func (*OutputChannel) Get
 
 ```go
-func (me *OutputChannel) Get() func(func(OutputChannelState))
+func (me *OutputChannel) Get() func(func(OutputChannelBag))
 ```
 Obtains this `OutputChannel`'s current property value for: `name`.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `OutputChannelBag` result obtained.
 
 #### func (*OutputChannel) Hide
 
 ```go
-func (me *OutputChannel) Hide() func(func(*OutputChannelState))
+func (me *OutputChannel) Hide() func(func(*OutputChannelBag))
 ```
 Hide this channel from the UI.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `OutputChannelBag` result obtained.
 
 #### func (*OutputChannel) Show
 
 ```go
-func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelState))
+func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelBag))
 ```
 Reveal this channel in the UI.
 
 `preserveFocus` ── When `true` the channel will not take focus.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `OutputChannelBag` result obtained.
 
-#### type OutputChannelState
+#### type OutputChannelBag
 
 ```go
-type OutputChannelState struct {
+type OutputChannelBag struct {
 	// The human-readable name of this output channel.
 	Name func() string `json:"-"`
 }
 ```
 
-An output channel is a container for readonly textual information.
-
-To get an instance of an `OutputChannel` use
-[createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
+OutputChannelBag is a snapshot of `OutputChannel` state at the counterparty. It
+is obtained whenever `OutputChannel` creations and method calls (incl. the
+dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to
+help always retain a factual view of the real full-picture) should not be
+constructed manually. All read-only properties are exposed as function-valued
+fields.
 
 #### type OverviewRulerLane
 
@@ -1021,9 +1009,6 @@ type QuickInputButton struct {
 
 	// An optional tooltip.
 	Tooltip string `json:"tooltip,omitempty"`
-
-	// Free-form custom data, preserved across a roundtrip.
-	My dict `json:"my,omitempty"`
 }
 ```
 
@@ -1064,12 +1049,12 @@ additional methods or properties on it should be accessed. Instead a new input
 UI should be created.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty.
 
 #### func (*QuickPick) Get
 
 ```go
-func (me *QuickPick) Get() func(func(QuickPickState))
+func (me *QuickPick) Get() func(func(QuickPickBag))
 ```
 Obtains this `QuickPick`'s current property values for: `value`, `placeholder`,
 `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`,
@@ -1077,24 +1062,24 @@ Obtains this `QuickPick`'s current property values for: `value`, `placeholder`,
 `ignoreFocusOut`.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `QuickPickBag` result obtained.
 
 #### func (*QuickPick) Hide
 
 ```go
-func (me *QuickPick) Hide() func(func(*QuickPickState))
+func (me *QuickPick) Hide() func(func(*QuickPickBag))
 ```
 Hides this input UI. This will also fire an
 [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `QuickPickBag` result obtained.
 
 #### func (*QuickPick) OnDidAccept
 
 ```go
-func (me *QuickPick) OnDidAccept(handler func(QuickPickState)) func(func(*Disposable))
+func (me *QuickPick) OnDidAccept(handler func(QuickPickBag)) func(func(*Disposable))
 ```
 An event signaling when the user indicated acceptance of the selected item(s).
 
@@ -1106,7 +1091,7 @@ An event signaling when the user indicated acceptance of the selected item(s).
 #### func (*QuickPick) OnDidChangeActive
 
 ```go
-func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickState)) func(func(*Disposable))
+func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickBag)) func(func(*Disposable))
 ```
 An event signaling when the active items have changed.
 
@@ -1118,7 +1103,7 @@ An event signaling when the active items have changed.
 #### func (*QuickPick) OnDidChangeSelection
 
 ```go
-func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPickState)) func(func(*Disposable))
+func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPickBag)) func(func(*Disposable))
 ```
 An event signaling when the selected items have changed.
 
@@ -1130,7 +1115,7 @@ An event signaling when the selected items have changed.
 #### func (*QuickPick) OnDidChangeValue
 
 ```go
-func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickState)) func(func(*Disposable))
+func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickBag)) func(func(*Disposable))
 ```
 An event signaling when the value of the filter text has changed.
 
@@ -1142,7 +1127,7 @@ An event signaling when the value of the filter text has changed.
 #### func (*QuickPick) OnDidHide
 
 ```go
-func (me *QuickPick) OnDidHide(handler func(QuickPickState)) func(func(*Disposable))
+func (me *QuickPick) OnDidHide(handler func(QuickPickBag)) func(func(*Disposable))
 ```
 An event signaling when this input UI is hidden.
 
@@ -1161,22 +1146,25 @@ event on `Dispose`.
 #### func (*QuickPick) Set
 
 ```go
-func (me *QuickPick) Set(allUpdates QuickPickState) func(func())
+func (me *QuickPick) Set(allUpdates QuickPickBag) func(func())
 ```
 Updates this `QuickPick`'s current property values for: `value`, `placeholder`,
 `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`,
 `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`,
 `ignoreFocusOut`.
 
-`allUpdates` ──
+`allUpdates` ── be aware that *all* its fields are sent for update, no
+omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty
+`QuickPickBag` with your select modifications applied, rather than construct a
+new one from scratch.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty.
 
 #### func (*QuickPick) Show
 
 ```go
-func (me *QuickPick) Show() func(func(*QuickPickState))
+func (me *QuickPick) Show() func(func(*QuickPickBag))
 ```
 Makes the input UI visible in its current configuration. Any other input UI will
 first fire an
@@ -1184,7 +1172,68 @@ first fire an
 event.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `QuickPickBag` result obtained.
+
+#### type QuickPickBag
+
+```go
+type QuickPickBag struct {
+	// Current value of the filter text.
+	Value string `json:"value,omitempty"`
+
+	// Optional placeholder in the filter text.
+	Placeholder string `json:"placeholder,omitempty"`
+
+	// Items to pick from.
+	Items []QuickPickItem `json:"items,omitempty"`
+
+	// If multiple items can be selected at the same time. Defaults to false.
+	CanSelectMany bool `json:"canSelectMany,omitempty"`
+
+	// If the filter text should also be matched against the description of the items. Defaults to false.
+	MatchOnDescription bool `json:"matchOnDescription,omitempty"`
+
+	// If the filter text should also be matched against the detail of the items. Defaults to false.
+	MatchOnDetail bool `json:"matchOnDetail,omitempty"`
+
+	// Active items. This can be read and updated by the extension.
+	ActiveItems []QuickPickItem `json:"activeItems,omitempty"`
+
+	// Selected items. This can be read and updated by the extension.
+	SelectedItems []QuickPickItem `json:"selectedItems,omitempty"`
+
+	// An optional title.
+	Title string `json:"title,omitempty"`
+
+	// An optional current step count.
+	Step int `json:"step,omitempty"`
+
+	// An optional total step count.
+	TotalSteps int `json:"totalSteps,omitempty"`
+
+	// If the UI should allow for user input. Defaults to true.
+	//
+	// Change this to false, e.g., while validating user input or
+	// loading data for the next step in user input.
+	Enabled bool `json:"enabled,omitempty"`
+
+	// If the UI should show a progress indicator. Defaults to false.
+	//
+	// Change this to true, e.g., while loading more data or validating
+	// user input.
+	Busy bool `json:"busy,omitempty"`
+
+	// If the UI should stay open even when loosing UI focus. Defaults to false.
+	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
+}
+```
+
+QuickPickBag is a snapshot of `QuickPick` state at the counterparty. It is
+obtained whenever `QuickPick` creations and method calls (incl. the dedicated
+`Get`) resolve or its event subscribers are invoked, and therefore (to help
+always retain a factual view of the real full-picture) should not be constructed
+manually. Changes to any non-function-valued fields must be propagated to the
+counterparty via the `Set` method.
 
 #### type QuickPickItem
 
@@ -1238,75 +1287,6 @@ type QuickPickOptions struct {
 ```
 
 Options to configure the behavior of the quick pick UI.
-
-#### type QuickPickState
-
-```go
-type QuickPickState struct {
-	// Current value of the filter text.
-	Value string `json:"value,omitempty"`
-
-	// Optional placeholder in the filter text.
-	Placeholder string `json:"placeholder,omitempty"`
-
-	// Items to pick from.
-	Items []QuickPickItem `json:"items,omitempty"`
-
-	// If multiple items can be selected at the same time. Defaults to false.
-	CanSelectMany bool `json:"canSelectMany,omitempty"`
-
-	// If the filter text should also be matched against the description of the items. Defaults to false.
-	MatchOnDescription bool `json:"matchOnDescription,omitempty"`
-
-	// If the filter text should also be matched against the detail of the items. Defaults to false.
-	MatchOnDetail bool `json:"matchOnDetail,omitempty"`
-
-	// Active items. This can be read and updated by the extension.
-	ActiveItems []QuickPickItem `json:"activeItems,omitempty"`
-
-	// Selected items. This can be read and updated by the extension.
-	SelectedItems []QuickPickItem `json:"selectedItems,omitempty"`
-
-	// An optional title.
-	Title string `json:"title,omitempty"`
-
-	// An optional current step count.
-	Step int `json:"step,omitempty"`
-
-	// An optional total step count.
-	TotalSteps int `json:"totalSteps,omitempty"`
-
-	// If the UI should allow for user input. Defaults to true.
-	//
-	// Change this to false, e.g., while validating user input or
-	// loading data for the next step in user input.
-	Enabled bool `json:"enabled,omitempty"`
-
-	// If the UI should show a progress indicator. Defaults to false.
-	//
-	// Change this to true, e.g., while loading more data or validating
-	// user input.
-	Busy bool `json:"busy,omitempty"`
-
-	// If the UI should stay open even when loosing UI focus. Defaults to false.
-	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
-}
-```
-
-A concrete
-[QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput)
-to let the user pick an item from a list of items of type T. The items can be
-filtered through a filter text field and there is an option
-[canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany)
-to allow for selecting multiple items.
-
-Note that in many cases the more convenient
-[window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
-is easier to use.
-[window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick)
-should be used when
-[window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
-does not offer the required flexibility.
 
 #### type SaveDialogOptions
 
@@ -1373,56 +1353,59 @@ Dispose and free associated resources. Call
 [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty.
 
 #### func (*StatusBarItem) Get
 
 ```go
-func (me *StatusBarItem) Get() func(func(StatusBarItemState))
+func (me *StatusBarItem) Get() func(func(StatusBarItemBag))
 ```
 Obtains this `StatusBarItem`'s current property values for: `alignment`,
 `priority`, `text`, `tooltip`, `color`, `command`.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `StatusBarItemBag` result obtained.
 
 #### func (*StatusBarItem) Hide
 
 ```go
-func (me *StatusBarItem) Hide() func(func(*StatusBarItemState))
+func (me *StatusBarItem) Hide() func(func(*StatusBarItemBag))
 ```
 Hide the entry in the status bar.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `StatusBarItemBag` result obtained.
 
 #### func (*StatusBarItem) Set
 
 ```go
-func (me *StatusBarItem) Set(allUpdates StatusBarItemState) func(func())
+func (me *StatusBarItem) Set(allUpdates StatusBarItemBag) func(func())
 ```
 Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`,
 `color`, `command`.
 
-`allUpdates` ──
+`allUpdates` ── be aware that *all* its fields are sent for update, no
+omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty
+`StatusBarItemBag` with your select modifications applied, rather than construct
+a new one from scratch.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty.
 
 #### func (*StatusBarItem) Show
 
 ```go
-func (me *StatusBarItem) Show() func(func(*StatusBarItemState))
+func (me *StatusBarItem) Show() func(func(*StatusBarItemBag))
 ```
 Shows the entry in the status bar.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `StatusBarItemBag` result obtained.
 
-#### type StatusBarItemState
+#### type StatusBarItemBag
 
 ```go
-type StatusBarItemState struct {
+type StatusBarItemBag struct {
 	// The alignment of this item.
 	Alignment func() StatusBarAlignment `json:"-"`
 
@@ -1450,8 +1433,13 @@ type StatusBarItemState struct {
 }
 ```
 
-A status bar item is a status bar contribution that can show text and icons and
-run a command on click.
+StatusBarItemBag is a snapshot of `StatusBarItem` state at the counterparty. It
+is obtained whenever `StatusBarItem` creations and method calls (incl. the
+dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to
+help always retain a factual view of the real full-picture) should not be
+constructed manually. All read-only properties are exposed as function-valued
+fields. Changes to any non-function-valued fields must be propagated to the
+counterparty via the `Set` method.
 
 #### type TextEditorDecorationType
 
@@ -1475,33 +1463,33 @@ func (me *TextEditorDecorationType) Dispose() func(func())
 Remove this decoration type and all decorations on all text editors using it.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty.
 
 #### func (*TextEditorDecorationType) Get
 
 ```go
-func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeState))
+func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeBag))
 ```
 Obtains this `TextEditorDecorationType`'s current property value for: `key`.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its result (if any) obtained.
+counterparty and its `TextEditorDecorationTypeBag` result obtained.
 
-#### type TextEditorDecorationTypeState
+#### type TextEditorDecorationTypeBag
 
 ```go
-type TextEditorDecorationTypeState struct {
+type TextEditorDecorationTypeBag struct {
 	// Internal representation of the handle.
 	Key func() string `json:"-"`
 }
 ```
 
-Represents a handle to a set of decorations sharing the same [styling
-options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions)
-in a [text editor](#TextEditor).
-
-To get an instance of a `TextEditorDecorationType` use
-[createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
+TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at
+the counterparty. It is obtained whenever `TextEditorDecorationType` creations
+and method calls (incl. the dedicated `Get`) resolve or its event subscribers
+are invoked, and therefore (to help always retain a factual view of the real
+full-picture) should not be constructed manually. All read-only properties are
+exposed as function-valued fields.
 
 #### type ThemableDecorationAttachmentRenderOptions
 
@@ -2010,7 +1998,7 @@ type Window interface {
 
 	// Represents the current window's state.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
 	State() func(func(WindowState))
 
 	// An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
@@ -2027,24 +2015,24 @@ type Window interface {
 	//
 	// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 	//
-	// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+	// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
 	//
 	// `return` ── A new status bar item.
-	CreateStatusBarItem(alignment StatusBarAlignment, priority *int, optionallyInitialStateToApplyUponCreation *StatusBarItemState) func(func(StatusBarItem, StatusBarItemState))
+	CreateStatusBarItem(alignment StatusBarAlignment, priority *int, optionallyInitialStateToApplyUponCreation *StatusBarItemBag) func(func(StatusBarItem, StatusBarItemBag))
 
 	// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 	//
 	// `name` ── Human-readable string which will be used to represent the channel in the UI.
 	//
 	// `return` ── A thenable that resolves when the `OutputChannel` has been created and initialized.
-	CreateOutputChannel(name string) func(func(OutputChannel, OutputChannelState))
+	CreateOutputChannel(name string) func(func(OutputChannel, OutputChannelBag))
 
 	// Create a TextEditorDecorationType that can be used to add decorations to text editors.
 	//
 	// `options` ── Rendering options for the decoration type.
 	//
 	// `return` ── A new decoration type instance.
-	CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(TextEditorDecorationType, TextEditorDecorationTypeState))
+	CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(TextEditorDecorationType, TextEditorDecorationTypeBag))
 
 	// Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
 	//
@@ -2052,10 +2040,10 @@ type Window interface {
 	// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 	// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 	//
-	// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+	// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
 	//
 	// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
-	CreateInputBox(optionallyInitialStateToApplyUponCreation *InputBoxState) func(func(InputBox, InputBoxState))
+	CreateInputBox(optionallyInitialStateToApplyUponCreation *InputBoxBag) func(func(InputBox, InputBoxBag))
 
 	// Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
 	// of items of type T.
@@ -2064,10 +2052,10 @@ type Window interface {
 	// is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
 	// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 	//
-	// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+	// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
 	//
 	// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
-	CreateQuickPick(optionallyInitialStateToApplyUponCreation *QuickPickState) func(func(QuickPick, QuickPickState))
+	CreateQuickPick(optionallyInitialStateToApplyUponCreation *QuickPickBag) func(func(QuickPick, QuickPickBag))
 }
 ```
 
@@ -2093,7 +2081,7 @@ type Workspace interface {
 	// The name of the workspace. `undefined` when no folder
 	// has been opened.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	Name() func(func(*string))
 
 	// The location of the workspace file, for example:
@@ -2128,7 +2116,7 @@ type Workspace interface {
 	// for that purpose which will work both when a single folder is opened as
 	// well as an untitled or saved workspace.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	WorkspaceFile() func(func(*string))
 
 	// Save all dirty files.
@@ -2157,7 +2145,7 @@ type Workspace interface {
 	// List of workspace folders or `undefined` when no folder is open.
 	// *Note* that the first entry corresponds to the value of `rootPath`.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	WorkspaceFolders() func(func([]WorkspaceFolder))
 
 	// Find files across all [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) in the workspace.
@@ -2194,7 +2182,9 @@ type Workspace interface {
 	AsRelativePath(pathOrUri string, includeWorkspaceFolder bool) func(func(*string))
 
 	// Provides single-call access to numerous individual `Workspace` properties at once.
-	Properties() func(func(WorkspaceProperties))
+	//
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
+	AllProperties() func(func(WorkspaceBag))
 }
 ```
 
@@ -2208,6 +2198,56 @@ to fs events and for
 [finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles)
 files. Both perform well and run _outside_ the editor-process so that they
 should be always used instead of nodejs-equivalents.
+
+#### type WorkspaceBag
+
+```go
+type WorkspaceBag struct {
+	// The name of the workspace. `undefined` when no folder
+	// has been opened.
+	Name string `json:"name,omitempty"`
+
+	// The location of the workspace file, for example:
+	//
+	// `file:///Users/name/Development/myProject.code-workspace`
+	//
+	// or
+	//
+	// `untitled:1555503116870`
+	//
+	// for a workspace that is untitled and not yet saved.
+	//
+	// Depending on the workspace that is opened, the value will be:
+	//   * `undefined` when no workspace or  a single folder is opened
+	//   * the path of the workspace file as `Uri` otherwise. if the workspace
+	// is untitled, the returned URI will use the `untitled:` scheme
+	//
+	// The location can e.g. be used with the `vscode.openFolder` command to
+	// open the workspace again after it has been closed.
+	//
+	// **Example:**
+	//
+	// ```typescript
+	//
+	// vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
+	//
+	// ```
+	//
+	//
+	// **Note:** it is not advised to use `workspace.workspaceFile` to write
+	// configuration data into the file. You can use `workspace.getConfiguration().update()`
+	// for that purpose which will work both when a single folder is opened as
+	// well as an untitled or saved workspace.
+	WorkspaceFile string `json:"workspaceFile,omitempty"`
+
+	// List of workspace folders or `undefined` when no folder is open.
+	// *Note* that the first entry corresponds to the value of `rootPath`.
+	WorkspaceFolders []WorkspaceFolder `json:"workspaceFolders,omitempty"`
+}
+```
+
+WorkspaceBag gathers various properties of `Workspace`, obtainable via its
+`AllProperties` method.
 
 #### type WorkspaceFolder
 
@@ -2262,61 +2302,3 @@ type WorkspaceFoldersChangeEvent struct {
 
 An event describing a change to the set of [workspace
 folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).
-
-#### type WorkspaceProperties
-
-```go
-type WorkspaceProperties struct {
-	// The name of the workspace. `undefined` when no folder
-	// has been opened.
-	Name string `json:"name,omitempty"`
-
-	// The location of the workspace file, for example:
-	//
-	// `file:///Users/name/Development/myProject.code-workspace`
-	//
-	// or
-	//
-	// `untitled:1555503116870`
-	//
-	// for a workspace that is untitled and not yet saved.
-	//
-	// Depending on the workspace that is opened, the value will be:
-	//   * `undefined` when no workspace or  a single folder is opened
-	//   * the path of the workspace file as `Uri` otherwise. if the workspace
-	// is untitled, the returned URI will use the `untitled:` scheme
-	//
-	// The location can e.g. be used with the `vscode.openFolder` command to
-	// open the workspace again after it has been closed.
-	//
-	// **Example:**
-	//
-	// ```typescript
-	//
-	// vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
-	//
-	// ```
-	//
-	//
-	// **Note:** it is not advised to use `workspace.workspaceFile` to write
-	// configuration data into the file. You can use `workspace.getConfiguration().update()`
-	// for that purpose which will work both when a single folder is opened as
-	// well as an untitled or saved workspace.
-	WorkspaceFile string `json:"workspaceFile,omitempty"`
-
-	// List of workspace folders or `undefined` when no folder is open.
-	// *Note* that the first entry corresponds to the value of `rootPath`.
-	WorkspaceFolders []WorkspaceFolder `json:"workspaceFolders,omitempty"`
-}
-```
-
-Namespace for dealing with the current workspace. A workspace is the
-representation of the folder that has been opened. There is no workspace when
-just a file but not a folder has been opened.
-
-The workspace offers support for
-[listening](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher)
-to fs events and for
-[finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles)
-files. Both perform well and run _outside_ the editor-process so that they
-should be always used instead of nodejs-equivalents.

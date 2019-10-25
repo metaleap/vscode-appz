@@ -44,15 +44,15 @@
   - [Uris](#F-VscAppz-DiagnosticChangeEvent-Uris 'VscAppz.DiagnosticChangeEvent.Uris')
 - [Disposable](#T-VscAppz-Disposable 'VscAppz.Disposable')
   - [Dispose()](#M-VscAppz-Disposable-Dispose 'VscAppz.Disposable.Dispose')
-- [EnvProperties](#T-VscAppz-EnvProperties 'VscAppz.EnvProperties')
-  - [AppName](#F-VscAppz-EnvProperties-AppName 'VscAppz.EnvProperties.AppName')
-  - [AppRoot](#F-VscAppz-EnvProperties-AppRoot 'VscAppz.EnvProperties.AppRoot')
-  - [Language](#F-VscAppz-EnvProperties-Language 'VscAppz.EnvProperties.Language')
-  - [MachineId](#F-VscAppz-EnvProperties-MachineId 'VscAppz.EnvProperties.MachineId')
-  - [RemoteName](#F-VscAppz-EnvProperties-RemoteName 'VscAppz.EnvProperties.RemoteName')
-  - [SessionId](#F-VscAppz-EnvProperties-SessionId 'VscAppz.EnvProperties.SessionId')
-  - [Shell](#F-VscAppz-EnvProperties-Shell 'VscAppz.EnvProperties.Shell')
-  - [UriScheme](#F-VscAppz-EnvProperties-UriScheme 'VscAppz.EnvProperties.UriScheme')
+- [EnvBag](#T-VscAppz-EnvBag 'VscAppz.EnvBag')
+  - [AppName](#F-VscAppz-EnvBag-AppName 'VscAppz.EnvBag.AppName')
+  - [AppRoot](#F-VscAppz-EnvBag-AppRoot 'VscAppz.EnvBag.AppRoot')
+  - [Language](#F-VscAppz-EnvBag-Language 'VscAppz.EnvBag.Language')
+  - [MachineId](#F-VscAppz-EnvBag-MachineId 'VscAppz.EnvBag.MachineId')
+  - [RemoteName](#F-VscAppz-EnvBag-RemoteName 'VscAppz.EnvBag.RemoteName')
+  - [SessionId](#F-VscAppz-EnvBag-SessionId 'VscAppz.EnvBag.SessionId')
+  - [Shell](#F-VscAppz-EnvBag-Shell 'VscAppz.EnvBag.Shell')
+  - [UriScheme](#F-VscAppz-EnvBag-UriScheme 'VscAppz.EnvBag.UriScheme')
 - [IClipboard](#T-VscAppz-IClipboard 'VscAppz.IClipboard')
   - [ReadText()](#M-VscAppz-IClipboard-ReadText 'VscAppz.IClipboard.ReadText')
   - [WriteText(value)](#M-VscAppz-IClipboard-WriteText-System-String- 'VscAppz.IClipboard.WriteText(System.String)')
@@ -61,13 +61,13 @@
   - [GetCommands(filterInternal)](#M-VscAppz-ICommands-GetCommands-System-Boolean- 'VscAppz.ICommands.GetCommands(System.Boolean)')
   - [RegisterCommand(command,callback)](#M-VscAppz-ICommands-RegisterCommand-System-String,System-Func{System-Object[],System-Object}- 'VscAppz.ICommands.RegisterCommand(System.String,System.Func{System.Object[],System.Object})')
 - [IEnv](#T-VscAppz-IEnv 'VscAppz.IEnv')
+  - [AllProperties()](#M-VscAppz-IEnv-AllProperties 'VscAppz.IEnv.AllProperties')
   - [AppName()](#M-VscAppz-IEnv-AppName 'VscAppz.IEnv.AppName')
   - [AppRoot()](#M-VscAppz-IEnv-AppRoot 'VscAppz.IEnv.AppRoot')
   - [Clipboard()](#M-VscAppz-IEnv-Clipboard 'VscAppz.IEnv.Clipboard')
   - [Language()](#M-VscAppz-IEnv-Language 'VscAppz.IEnv.Language')
   - [MachineId()](#M-VscAppz-IEnv-MachineId 'VscAppz.IEnv.MachineId')
   - [OpenExternal(target)](#M-VscAppz-IEnv-OpenExternal-System-String- 'VscAppz.IEnv.OpenExternal(System.String)')
-  - [Properties()](#M-VscAppz-IEnv-Properties 'VscAppz.IEnv.Properties')
   - [RemoteName()](#M-VscAppz-IEnv-RemoteName 'VscAppz.IEnv.RemoteName')
   - [SessionId()](#M-VscAppz-IEnv-SessionId 'VscAppz.IEnv.SessionId')
   - [Shell()](#M-VscAppz-IEnv-Shell 'VscAppz.IEnv.Shell')
@@ -85,10 +85,10 @@
   - [Window](#P-VscAppz-IVscode-Window 'VscAppz.IVscode.Window')
   - [Workspace](#P-VscAppz-IVscode-Workspace 'VscAppz.IVscode.Workspace')
 - [IWindow](#T-VscAppz-IWindow 'VscAppz.IWindow')
-  - [CreateInputBox(optionallyInitialStateToApplyUponCreation)](#M-VscAppz-IWindow-CreateInputBox-VscAppz-InputBoxState- 'VscAppz.IWindow.CreateInputBox(VscAppz.InputBoxState)')
+  - [CreateInputBox(optionallyInitialStateToApplyUponCreation)](#M-VscAppz-IWindow-CreateInputBox-VscAppz-InputBoxBag- 'VscAppz.IWindow.CreateInputBox(VscAppz.InputBoxBag)')
   - [CreateOutputChannel(name)](#M-VscAppz-IWindow-CreateOutputChannel-System-String- 'VscAppz.IWindow.CreateOutputChannel(System.String)')
-  - [CreateQuickPick(optionallyInitialStateToApplyUponCreation)](#M-VscAppz-IWindow-CreateQuickPick-VscAppz-QuickPickState- 'VscAppz.IWindow.CreateQuickPick(VscAppz.QuickPickState)')
-  - [CreateStatusBarItem(alignment,priority,optionallyInitialStateToApplyUponCreation)](#M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32},VscAppz-StatusBarItemState- 'VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32},VscAppz.StatusBarItemState)')
+  - [CreateQuickPick(optionallyInitialStateToApplyUponCreation)](#M-VscAppz-IWindow-CreateQuickPick-VscAppz-QuickPickBag- 'VscAppz.IWindow.CreateQuickPick(VscAppz.QuickPickBag)')
+  - [CreateStatusBarItem(alignment,priority,optionallyInitialStateToApplyUponCreation)](#M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32},VscAppz-StatusBarItemBag- 'VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32},VscAppz.StatusBarItemBag)')
   - [CreateTextEditorDecorationType(options)](#M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions- 'VscAppz.IWindow.CreateTextEditorDecorationType(VscAppz.DecorationRenderOptions)')
   - [OnDidChangeWindowState(listener)](#M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState}- 'VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState})')
   - [SetStatusBarMessage1(text,hideAfterTimeout)](#M-VscAppz-IWindow-SetStatusBarMessage1-System-String,System-Int32- 'VscAppz.IWindow.SetStatusBarMessage1(System.String,System.Int32)')
@@ -115,12 +115,12 @@
   - [ShowWorkspaceFolderPick(options)](#M-VscAppz-IWindow-ShowWorkspaceFolderPick-VscAppz-WorkspaceFolderPickOptions- 'VscAppz.IWindow.ShowWorkspaceFolderPick(VscAppz.WorkspaceFolderPickOptions)')
   - [State()](#M-VscAppz-IWindow-State 'VscAppz.IWindow.State')
 - [IWorkspace](#T-VscAppz-IWorkspace 'VscAppz.IWorkspace')
+  - [AllProperties()](#M-VscAppz-IWorkspace-AllProperties 'VscAppz.IWorkspace.AllProperties')
   - [AsRelativePath(pathOrUri,includeWorkspaceFolder)](#M-VscAppz-IWorkspace-AsRelativePath-System-String,System-Boolean- 'VscAppz.IWorkspace.AsRelativePath(System.String,System.Boolean)')
   - [FindFiles(include,exclude,maxResults,token)](#M-VscAppz-IWorkspace-FindFiles-System-String,System-String,System-Nullable{System-Int32},VscAppz-Cancel- 'VscAppz.IWorkspace.FindFiles(System.String,System.String,System.Nullable{System.Int32},VscAppz.Cancel)')
   - [GetWorkspaceFolder(uri)](#M-VscAppz-IWorkspace-GetWorkspaceFolder-System-String- 'VscAppz.IWorkspace.GetWorkspaceFolder(System.String)')
   - [Name()](#M-VscAppz-IWorkspace-Name 'VscAppz.IWorkspace.Name')
   - [OnDidChangeWorkspaceFolders(listener)](#M-VscAppz-IWorkspace-OnDidChangeWorkspaceFolders-System-Action{VscAppz-WorkspaceFoldersChangeEvent}- 'VscAppz.IWorkspace.OnDidChangeWorkspaceFolders(System.Action{VscAppz.WorkspaceFoldersChangeEvent})')
-  - [Properties()](#M-VscAppz-IWorkspace-Properties 'VscAppz.IWorkspace.Properties')
   - [SaveAll(includeUntitled)](#M-VscAppz-IWorkspace-SaveAll-System-Boolean- 'VscAppz.IWorkspace.SaveAll(System.Boolean)')
   - [WorkspaceFile()](#M-VscAppz-IWorkspace-WorkspaceFile 'VscAppz.IWorkspace.WorkspaceFile')
   - [WorkspaceFolders()](#M-VscAppz-IWorkspace-WorkspaceFolders 'VscAppz.IWorkspace.WorkspaceFolders')
@@ -128,12 +128,23 @@
   - [Dispose()](#M-VscAppz-InputBox-Dispose 'VscAppz.InputBox.Dispose')
   - [Get()](#M-VscAppz-InputBox-Get 'VscAppz.InputBox.Get')
   - [Hide()](#M-VscAppz-InputBox-Hide 'VscAppz.InputBox.Hide')
-  - [OnDidAccept(handler)](#M-VscAppz-InputBox-OnDidAccept-System-Action{VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidAccept(System.Action{VscAppz.InputBoxState})')
-  - [OnDidChangeValue(handler)](#M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String,VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidChangeValue(System.Action{System.String,VscAppz.InputBoxState})')
-  - [OnDidHide(handler)](#M-VscAppz-InputBox-OnDidHide-System-Action{VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidHide(System.Action{VscAppz.InputBoxState})')
-  - [OnDidTriggerButton(handler)](#M-VscAppz-InputBox-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton,VscAppz-InputBoxState}- 'VscAppz.InputBox.OnDidTriggerButton(System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState})')
-  - [Set(allUpdates)](#M-VscAppz-InputBox-Set-VscAppz-InputBoxState- 'VscAppz.InputBox.Set(VscAppz.InputBoxState)')
+  - [OnDidAccept(handler)](#M-VscAppz-InputBox-OnDidAccept-System-Action{VscAppz-InputBoxBag}- 'VscAppz.InputBox.OnDidAccept(System.Action{VscAppz.InputBoxBag})')
+  - [OnDidChangeValue(handler)](#M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String,VscAppz-InputBoxBag}- 'VscAppz.InputBox.OnDidChangeValue(System.Action{System.String,VscAppz.InputBoxBag})')
+  - [OnDidHide(handler)](#M-VscAppz-InputBox-OnDidHide-System-Action{VscAppz-InputBoxBag}- 'VscAppz.InputBox.OnDidHide(System.Action{VscAppz.InputBoxBag})')
+  - [Set(allUpdates)](#M-VscAppz-InputBox-Set-VscAppz-InputBoxBag- 'VscAppz.InputBox.Set(VscAppz.InputBoxBag)')
   - [Show()](#M-VscAppz-InputBox-Show 'VscAppz.InputBox.Show')
+- [InputBoxBag](#T-VscAppz-InputBoxBag 'VscAppz.InputBoxBag')
+  - [Busy](#F-VscAppz-InputBoxBag-Busy 'VscAppz.InputBoxBag.Busy')
+  - [Enabled](#F-VscAppz-InputBoxBag-Enabled 'VscAppz.InputBoxBag.Enabled')
+  - [IgnoreFocusOut](#F-VscAppz-InputBoxBag-IgnoreFocusOut 'VscAppz.InputBoxBag.IgnoreFocusOut')
+  - [Password](#F-VscAppz-InputBoxBag-Password 'VscAppz.InputBoxBag.Password')
+  - [Placeholder](#F-VscAppz-InputBoxBag-Placeholder 'VscAppz.InputBoxBag.Placeholder')
+  - [Prompt](#F-VscAppz-InputBoxBag-Prompt 'VscAppz.InputBoxBag.Prompt')
+  - [Step](#F-VscAppz-InputBoxBag-Step 'VscAppz.InputBoxBag.Step')
+  - [Title](#F-VscAppz-InputBoxBag-Title 'VscAppz.InputBoxBag.Title')
+  - [TotalSteps](#F-VscAppz-InputBoxBag-TotalSteps 'VscAppz.InputBoxBag.TotalSteps')
+  - [ValidationMessage](#F-VscAppz-InputBoxBag-ValidationMessage 'VscAppz.InputBoxBag.ValidationMessage')
+  - [Value](#F-VscAppz-InputBoxBag-Value 'VscAppz.InputBoxBag.Value')
 - [InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions')
   - [IgnoreFocusOut](#F-VscAppz-InputBoxOptions-IgnoreFocusOut 'VscAppz.InputBoxOptions.IgnoreFocusOut')
   - [Password](#F-VscAppz-InputBoxOptions-Password 'VscAppz.InputBoxOptions.Password')
@@ -143,19 +154,6 @@
   - [ValidateInput_AppzFuncId](#F-VscAppz-InputBoxOptions-ValidateInput_AppzFuncId 'VscAppz.InputBoxOptions.ValidateInput_AppzFuncId')
   - [Value](#F-VscAppz-InputBoxOptions-Value 'VscAppz.InputBoxOptions.Value')
   - [ValueSelection](#F-VscAppz-InputBoxOptions-ValueSelection 'VscAppz.InputBoxOptions.ValueSelection')
-- [InputBoxState](#T-VscAppz-InputBoxState 'VscAppz.InputBoxState')
-  - [Busy](#F-VscAppz-InputBoxState-Busy 'VscAppz.InputBoxState.Busy')
-  - [Buttons](#F-VscAppz-InputBoxState-Buttons 'VscAppz.InputBoxState.Buttons')
-  - [Enabled](#F-VscAppz-InputBoxState-Enabled 'VscAppz.InputBoxState.Enabled')
-  - [IgnoreFocusOut](#F-VscAppz-InputBoxState-IgnoreFocusOut 'VscAppz.InputBoxState.IgnoreFocusOut')
-  - [Password](#F-VscAppz-InputBoxState-Password 'VscAppz.InputBoxState.Password')
-  - [Placeholder](#F-VscAppz-InputBoxState-Placeholder 'VscAppz.InputBoxState.Placeholder')
-  - [Prompt](#F-VscAppz-InputBoxState-Prompt 'VscAppz.InputBoxState.Prompt')
-  - [Step](#F-VscAppz-InputBoxState-Step 'VscAppz.InputBoxState.Step')
-  - [Title](#F-VscAppz-InputBoxState-Title 'VscAppz.InputBoxState.Title')
-  - [TotalSteps](#F-VscAppz-InputBoxState-TotalSteps 'VscAppz.InputBoxState.TotalSteps')
-  - [ValidationMessage](#F-VscAppz-InputBoxState-ValidationMessage 'VscAppz.InputBoxState.ValidationMessage')
-  - [Value](#F-VscAppz-InputBoxState-Value 'VscAppz.InputBoxState.Value')
 - [MessageItem](#T-VscAppz-MessageItem 'VscAppz.MessageItem')
   - [IsCloseAffordance](#F-VscAppz-MessageItem-IsCloseAffordance 'VscAppz.MessageItem.IsCloseAffordance')
   - [My](#F-VscAppz-MessageItem-My 'VscAppz.MessageItem.My')
@@ -177,8 +175,8 @@
   - [Get()](#M-VscAppz-OutputChannel-Get 'VscAppz.OutputChannel.Get')
   - [Hide()](#M-VscAppz-OutputChannel-Hide 'VscAppz.OutputChannel.Hide')
   - [Show(preserveFocus)](#M-VscAppz-OutputChannel-Show-System-Boolean- 'VscAppz.OutputChannel.Show(System.Boolean)')
-- [OutputChannelState](#T-VscAppz-OutputChannelState 'VscAppz.OutputChannelState')
-  - [Name](#F-VscAppz-OutputChannelState-Name 'VscAppz.OutputChannelState.Name')
+- [OutputChannelBag](#T-VscAppz-OutputChannelBag 'VscAppz.OutputChannelBag')
+  - [Name](#F-VscAppz-OutputChannelBag-Name 'VscAppz.OutputChannelBag.Name')
 - [OverviewRulerLane](#T-VscAppz-OverviewRulerLane 'VscAppz.OverviewRulerLane')
   - [Center](#F-VscAppz-OverviewRulerLane-Center 'VscAppz.OverviewRulerLane.Center')
   - [Full](#F-VscAppz-OverviewRulerLane-Full 'VscAppz.OverviewRulerLane.Full')
@@ -186,19 +184,33 @@
   - [Right](#F-VscAppz-OverviewRulerLane-Right 'VscAppz.OverviewRulerLane.Right')
 - [QuickInputButton](#T-VscAppz-QuickInputButton 'VscAppz.QuickInputButton')
   - [IconPath](#F-VscAppz-QuickInputButton-IconPath 'VscAppz.QuickInputButton.IconPath')
-  - [My](#F-VscAppz-QuickInputButton-My 'VscAppz.QuickInputButton.My')
   - [Tooltip](#F-VscAppz-QuickInputButton-Tooltip 'VscAppz.QuickInputButton.Tooltip')
 - [QuickPick](#T-VscAppz-QuickPick 'VscAppz.QuickPick')
   - [Dispose()](#M-VscAppz-QuickPick-Dispose 'VscAppz.QuickPick.Dispose')
   - [Get()](#M-VscAppz-QuickPick-Get 'VscAppz.QuickPick.Get')
   - [Hide()](#M-VscAppz-QuickPick-Hide 'VscAppz.QuickPick.Hide')
-  - [OnDidAccept(handler)](#M-VscAppz-QuickPick-OnDidAccept-System-Action{VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidAccept(System.Action{VscAppz.QuickPickState})')
-  - [OnDidChangeActive(handler)](#M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidChangeActive(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState})')
-  - [OnDidChangeSelection(handler)](#M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidChangeSelection(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState})')
-  - [OnDidChangeValue(handler)](#M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String,VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String,VscAppz.QuickPickState})')
-  - [OnDidHide(handler)](#M-VscAppz-QuickPick-OnDidHide-System-Action{VscAppz-QuickPickState}- 'VscAppz.QuickPick.OnDidHide(System.Action{VscAppz.QuickPickState})')
-  - [Set(allUpdates)](#M-VscAppz-QuickPick-Set-VscAppz-QuickPickState- 'VscAppz.QuickPick.Set(VscAppz.QuickPickState)')
+  - [OnDidAccept(handler)](#M-VscAppz-QuickPick-OnDidAccept-System-Action{VscAppz-QuickPickBag}- 'VscAppz.QuickPick.OnDidAccept(System.Action{VscAppz.QuickPickBag})')
+  - [OnDidChangeActive(handler)](#M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickBag}- 'VscAppz.QuickPick.OnDidChangeActive(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickBag})')
+  - [OnDidChangeSelection(handler)](#M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickBag}- 'VscAppz.QuickPick.OnDidChangeSelection(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickBag})')
+  - [OnDidChangeValue(handler)](#M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String,VscAppz-QuickPickBag}- 'VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String,VscAppz.QuickPickBag})')
+  - [OnDidHide(handler)](#M-VscAppz-QuickPick-OnDidHide-System-Action{VscAppz-QuickPickBag}- 'VscAppz.QuickPick.OnDidHide(System.Action{VscAppz.QuickPickBag})')
+  - [Set(allUpdates)](#M-VscAppz-QuickPick-Set-VscAppz-QuickPickBag- 'VscAppz.QuickPick.Set(VscAppz.QuickPickBag)')
   - [Show()](#M-VscAppz-QuickPick-Show 'VscAppz.QuickPick.Show')
+- [QuickPickBag](#T-VscAppz-QuickPickBag 'VscAppz.QuickPickBag')
+  - [ActiveItems](#F-VscAppz-QuickPickBag-ActiveItems 'VscAppz.QuickPickBag.ActiveItems')
+  - [Busy](#F-VscAppz-QuickPickBag-Busy 'VscAppz.QuickPickBag.Busy')
+  - [CanSelectMany](#F-VscAppz-QuickPickBag-CanSelectMany 'VscAppz.QuickPickBag.CanSelectMany')
+  - [Enabled](#F-VscAppz-QuickPickBag-Enabled 'VscAppz.QuickPickBag.Enabled')
+  - [IgnoreFocusOut](#F-VscAppz-QuickPickBag-IgnoreFocusOut 'VscAppz.QuickPickBag.IgnoreFocusOut')
+  - [Items](#F-VscAppz-QuickPickBag-Items 'VscAppz.QuickPickBag.Items')
+  - [MatchOnDescription](#F-VscAppz-QuickPickBag-MatchOnDescription 'VscAppz.QuickPickBag.MatchOnDescription')
+  - [MatchOnDetail](#F-VscAppz-QuickPickBag-MatchOnDetail 'VscAppz.QuickPickBag.MatchOnDetail')
+  - [Placeholder](#F-VscAppz-QuickPickBag-Placeholder 'VscAppz.QuickPickBag.Placeholder')
+  - [SelectedItems](#F-VscAppz-QuickPickBag-SelectedItems 'VscAppz.QuickPickBag.SelectedItems')
+  - [Step](#F-VscAppz-QuickPickBag-Step 'VscAppz.QuickPickBag.Step')
+  - [Title](#F-VscAppz-QuickPickBag-Title 'VscAppz.QuickPickBag.Title')
+  - [TotalSteps](#F-VscAppz-QuickPickBag-TotalSteps 'VscAppz.QuickPickBag.TotalSteps')
+  - [Value](#F-VscAppz-QuickPickBag-Value 'VscAppz.QuickPickBag.Value')
 - [QuickPickItem](#T-VscAppz-QuickPickItem 'VscAppz.QuickPickItem')
   - [AlwaysShow](#F-VscAppz-QuickPickItem-AlwaysShow 'VscAppz.QuickPickItem.AlwaysShow')
   - [Description](#F-VscAppz-QuickPickItem-Description 'VscAppz.QuickPickItem.Description')
@@ -214,21 +226,6 @@
   - [OnDidSelectItem](#F-VscAppz-QuickPickOptions-OnDidSelectItem 'VscAppz.QuickPickOptions.OnDidSelectItem')
   - [OnDidSelectItem_AppzFuncId](#F-VscAppz-QuickPickOptions-OnDidSelectItem_AppzFuncId 'VscAppz.QuickPickOptions.OnDidSelectItem_AppzFuncId')
   - [PlaceHolder](#F-VscAppz-QuickPickOptions-PlaceHolder 'VscAppz.QuickPickOptions.PlaceHolder')
-- [QuickPickState](#T-VscAppz-QuickPickState 'VscAppz.QuickPickState')
-  - [ActiveItems](#F-VscAppz-QuickPickState-ActiveItems 'VscAppz.QuickPickState.ActiveItems')
-  - [Busy](#F-VscAppz-QuickPickState-Busy 'VscAppz.QuickPickState.Busy')
-  - [CanSelectMany](#F-VscAppz-QuickPickState-CanSelectMany 'VscAppz.QuickPickState.CanSelectMany')
-  - [Enabled](#F-VscAppz-QuickPickState-Enabled 'VscAppz.QuickPickState.Enabled')
-  - [IgnoreFocusOut](#F-VscAppz-QuickPickState-IgnoreFocusOut 'VscAppz.QuickPickState.IgnoreFocusOut')
-  - [Items](#F-VscAppz-QuickPickState-Items 'VscAppz.QuickPickState.Items')
-  - [MatchOnDescription](#F-VscAppz-QuickPickState-MatchOnDescription 'VscAppz.QuickPickState.MatchOnDescription')
-  - [MatchOnDetail](#F-VscAppz-QuickPickState-MatchOnDetail 'VscAppz.QuickPickState.MatchOnDetail')
-  - [Placeholder](#F-VscAppz-QuickPickState-Placeholder 'VscAppz.QuickPickState.Placeholder')
-  - [SelectedItems](#F-VscAppz-QuickPickState-SelectedItems 'VscAppz.QuickPickState.SelectedItems')
-  - [Step](#F-VscAppz-QuickPickState-Step 'VscAppz.QuickPickState.Step')
-  - [Title](#F-VscAppz-QuickPickState-Title 'VscAppz.QuickPickState.Title')
-  - [TotalSteps](#F-VscAppz-QuickPickState-TotalSteps 'VscAppz.QuickPickState.TotalSteps')
-  - [Value](#F-VscAppz-QuickPickState-Value 'VscAppz.QuickPickState.Value')
 - [SaveDialogOptions](#T-VscAppz-SaveDialogOptions 'VscAppz.SaveDialogOptions')
   - [DefaultUri](#F-VscAppz-SaveDialogOptions-DefaultUri 'VscAppz.SaveDialogOptions.DefaultUri')
   - [Filters](#F-VscAppz-SaveDialogOptions-Filters 'VscAppz.SaveDialogOptions.Filters')
@@ -240,20 +237,20 @@
   - [Dispose()](#M-VscAppz-StatusBarItem-Dispose 'VscAppz.StatusBarItem.Dispose')
   - [Get()](#M-VscAppz-StatusBarItem-Get 'VscAppz.StatusBarItem.Get')
   - [Hide()](#M-VscAppz-StatusBarItem-Hide 'VscAppz.StatusBarItem.Hide')
-  - [Set(allUpdates)](#M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemState- 'VscAppz.StatusBarItem.Set(VscAppz.StatusBarItemState)')
+  - [Set(allUpdates)](#M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemBag- 'VscAppz.StatusBarItem.Set(VscAppz.StatusBarItemBag)')
   - [Show()](#M-VscAppz-StatusBarItem-Show 'VscAppz.StatusBarItem.Show')
-- [StatusBarItemState](#T-VscAppz-StatusBarItemState 'VscAppz.StatusBarItemState')
-  - [Alignment](#F-VscAppz-StatusBarItemState-Alignment 'VscAppz.StatusBarItemState.Alignment')
-  - [Color](#F-VscAppz-StatusBarItemState-Color 'VscAppz.StatusBarItemState.Color')
-  - [Command](#F-VscAppz-StatusBarItemState-Command 'VscAppz.StatusBarItemState.Command')
-  - [Priority](#F-VscAppz-StatusBarItemState-Priority 'VscAppz.StatusBarItemState.Priority')
-  - [Text](#F-VscAppz-StatusBarItemState-Text 'VscAppz.StatusBarItemState.Text')
-  - [Tooltip](#F-VscAppz-StatusBarItemState-Tooltip 'VscAppz.StatusBarItemState.Tooltip')
+- [StatusBarItemBag](#T-VscAppz-StatusBarItemBag 'VscAppz.StatusBarItemBag')
+  - [Alignment](#F-VscAppz-StatusBarItemBag-Alignment 'VscAppz.StatusBarItemBag.Alignment')
+  - [Color](#F-VscAppz-StatusBarItemBag-Color 'VscAppz.StatusBarItemBag.Color')
+  - [Command](#F-VscAppz-StatusBarItemBag-Command 'VscAppz.StatusBarItemBag.Command')
+  - [Priority](#F-VscAppz-StatusBarItemBag-Priority 'VscAppz.StatusBarItemBag.Priority')
+  - [Text](#F-VscAppz-StatusBarItemBag-Text 'VscAppz.StatusBarItemBag.Text')
+  - [Tooltip](#F-VscAppz-StatusBarItemBag-Tooltip 'VscAppz.StatusBarItemBag.Tooltip')
 - [TextEditorDecorationType](#T-VscAppz-TextEditorDecorationType 'VscAppz.TextEditorDecorationType')
   - [Dispose()](#M-VscAppz-TextEditorDecorationType-Dispose 'VscAppz.TextEditorDecorationType.Dispose')
   - [Get()](#M-VscAppz-TextEditorDecorationType-Get 'VscAppz.TextEditorDecorationType.Get')
-- [TextEditorDecorationTypeState](#T-VscAppz-TextEditorDecorationTypeState 'VscAppz.TextEditorDecorationTypeState')
-  - [Key](#F-VscAppz-TextEditorDecorationTypeState-Key 'VscAppz.TextEditorDecorationTypeState.Key')
+- [TextEditorDecorationTypeBag](#T-VscAppz-TextEditorDecorationTypeBag 'VscAppz.TextEditorDecorationTypeBag')
+  - [Key](#F-VscAppz-TextEditorDecorationTypeBag-Key 'VscAppz.TextEditorDecorationTypeBag.Key')
 - [ThemableDecorationAttachmentRenderOptions](#T-VscAppz-ThemableDecorationAttachmentRenderOptions 'VscAppz.ThemableDecorationAttachmentRenderOptions')
   - [BackgroundColor](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-BackgroundColor 'VscAppz.ThemableDecorationAttachmentRenderOptions.BackgroundColor')
   - [Border](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-Border 'VscAppz.ThemableDecorationAttachmentRenderOptions.Border')
@@ -297,6 +294,10 @@
   - [Main(main,stdIn,stdOut)](#M-VscAppz-Vsc-Main-System-Action{VscAppz-IVscode},System-IO-TextReader,System-IO-TextWriter- 'VscAppz.Vsc.Main(System.Action{VscAppz.IVscode},System.IO.TextReader,System.IO.TextWriter)')
 - [WindowState](#T-VscAppz-WindowState 'VscAppz.WindowState')
   - [Focused](#F-VscAppz-WindowState-Focused 'VscAppz.WindowState.Focused')
+- [WorkspaceBag](#T-VscAppz-WorkspaceBag 'VscAppz.WorkspaceBag')
+  - [Name](#F-VscAppz-WorkspaceBag-Name 'VscAppz.WorkspaceBag.Name')
+  - [WorkspaceFile](#F-VscAppz-WorkspaceBag-WorkspaceFile 'VscAppz.WorkspaceBag.WorkspaceFile')
+  - [WorkspaceFolders](#F-VscAppz-WorkspaceBag-WorkspaceFolders 'VscAppz.WorkspaceBag.WorkspaceFolders')
 - [WorkspaceFolder](#T-VscAppz-WorkspaceFolder 'VscAppz.WorkspaceFolder')
   - [Index](#F-VscAppz-WorkspaceFolder-Index 'VscAppz.WorkspaceFolder.Index')
   - [Name](#F-VscAppz-WorkspaceFolder-Name 'VscAppz.WorkspaceFolder.Name')
@@ -307,10 +308,6 @@
 - [WorkspaceFoldersChangeEvent](#T-VscAppz-WorkspaceFoldersChangeEvent 'VscAppz.WorkspaceFoldersChangeEvent')
   - [Added](#F-VscAppz-WorkspaceFoldersChangeEvent-Added 'VscAppz.WorkspaceFoldersChangeEvent.Added')
   - [Removed](#F-VscAppz-WorkspaceFoldersChangeEvent-Removed 'VscAppz.WorkspaceFoldersChangeEvent.Removed')
-- [WorkspaceProperties](#T-VscAppz-WorkspaceProperties 'VscAppz.WorkspaceProperties')
-  - [Name](#F-VscAppz-WorkspaceProperties-Name 'VscAppz.WorkspaceProperties.Name')
-  - [WorkspaceFile](#F-VscAppz-WorkspaceProperties-WorkspaceFile 'VscAppz.WorkspaceProperties.WorkspaceFile')
-  - [WorkspaceFolders](#F-VscAppz-WorkspaceProperties-WorkspaceFolders 'VscAppz.WorkspaceProperties.WorkspaceFolders')
 
 <a name='T-VscAppz-Cancel'></a>
 ## Cancel `type`
@@ -646,8 +643,8 @@ Dispose signals to the counterparty to destroy the object.
 
 This method has no parameters.
 
-<a name='T-VscAppz-EnvProperties'></a>
-## EnvProperties `type`
+<a name='T-VscAppz-EnvBag'></a>
+## EnvBag `type`
 
 ##### Namespace
 
@@ -655,37 +652,37 @@ VscAppz
 
 ##### Summary
 
-Namespace describing the environment the editor runs in.
+EnvBag gathers various properties of `IEnv`, obtainable via its `AllProperties` method.
 
-<a name='F-VscAppz-EnvProperties-AppName'></a>
+<a name='F-VscAppz-EnvBag-AppName'></a>
 ### AppName `constants`
 
 ##### Summary
 
 The application name of the editor, like 'VS Code'.
 
-<a name='F-VscAppz-EnvProperties-AppRoot'></a>
+<a name='F-VscAppz-EnvBag-AppRoot'></a>
 ### AppRoot `constants`
 
 ##### Summary
 
 The application root folder from which the editor is running.
 
-<a name='F-VscAppz-EnvProperties-Language'></a>
+<a name='F-VscAppz-EnvBag-Language'></a>
 ### Language `constants`
 
 ##### Summary
 
 Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
-<a name='F-VscAppz-EnvProperties-MachineId'></a>
+<a name='F-VscAppz-EnvBag-MachineId'></a>
 ### MachineId `constants`
 
 ##### Summary
 
 A unique identifier for the computer.
 
-<a name='F-VscAppz-EnvProperties-RemoteName'></a>
+<a name='F-VscAppz-EnvBag-RemoteName'></a>
 ### RemoteName `constants`
 
 ##### Summary
@@ -698,7 +695,7 @@ value is defined in all extension hosts (local and remote) in case a remote exte
 exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 a specific extension runs remote or not.
 
-<a name='F-VscAppz-EnvProperties-SessionId'></a>
+<a name='F-VscAppz-EnvBag-SessionId'></a>
 ### SessionId `constants`
 
 ##### Summary
@@ -706,7 +703,7 @@ a specific extension runs remote or not.
 A unique identifier for the current session.
 Changes each time the editor is started.
 
-<a name='F-VscAppz-EnvProperties-Shell'></a>
+<a name='F-VscAppz-EnvBag-Shell'></a>
 ### Shell `constants`
 
 ##### Summary
@@ -714,7 +711,7 @@ Changes each time the editor is started.
 The detected default shell for the extension host, this is overridden by the
 `terminal.integrated.shell` setting for the extension host's platform.
 
-<a name='F-VscAppz-EnvProperties-UriScheme'></a>
+<a name='F-VscAppz-EnvBag-UriScheme'></a>
 ### UriScheme `constants`
 
 ##### Summary
@@ -893,6 +890,19 @@ VscAppz
 
 Namespace describing the environment the editor runs in.
 
+<a name='M-VscAppz-IEnv-AllProperties'></a>
+### AllProperties() `method`
+
+##### Summary
+
+Provides single-call access to numerous individual `IEnv` properties at once.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
+
+##### Parameters
+
+This method has no parameters.
+
 <a name='M-VscAppz-IEnv-AppName'></a>
 ### AppName() `method`
 
@@ -900,7 +910,7 @@ Namespace describing the environment the editor runs in.
 
 The application name of the editor, like 'VS Code'.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -913,7 +923,7 @@ This method has no parameters.
 
 The application root folder from which the editor is running.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -937,7 +947,7 @@ This method has no parameters.
 
 Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -950,7 +960,7 @@ This method has no parameters.
 
 A unique identifier for the computer.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -977,17 +987,6 @@ way to open a text document inside the editor, not this function.
 | ---- | ---- | ----------- |
 | target | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The uri that should be opened. |
 
-<a name='M-VscAppz-IEnv-Properties'></a>
-### Properties() `method`
-
-##### Summary
-
-Provides single-call access to numerous individual `IEnv` properties at once.
-
-##### Parameters
-
-This method has no parameters.
-
 <a name='M-VscAppz-IEnv-RemoteName'></a>
 ### RemoteName() `method`
 
@@ -1001,7 +1000,7 @@ value is defined in all extension hosts (local and remote) in case a remote exte
 exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 a specific extension runs remote or not.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -1015,7 +1014,7 @@ This method has no parameters.
 A unique identifier for the current session.
 Changes each time the editor is started.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -1029,7 +1028,7 @@ This method has no parameters.
 The detected default shell for the extension host, this is overridden by the
 `terminal.integrated.shell` setting for the extension host's platform.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -1042,7 +1041,7 @@ This method has no parameters.
 
 The custom uri scheme the editor registers to in the operating system.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -1364,7 +1363,7 @@ Namespace for dealing with the current window of the editor. That is visible
 and active editors, as well as, UI elements to show messages, selections, and
 asking for user input.
 
-<a name='M-VscAppz-IWindow-CreateInputBox-VscAppz-InputBoxState-'></a>
+<a name='M-VscAppz-IWindow-CreateInputBox-VscAppz-InputBoxBag-'></a>
 ### CreateInputBox(optionallyInitialStateToApplyUponCreation) `method`
 
 ##### Summary
@@ -1375,7 +1374,7 @@ Note that in many cases the more convenient [window.showInputBox](https://code.v
 is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
-`optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+`optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
 
 `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
 
@@ -1383,7 +1382,7 @@ when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-a
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| optionallyInitialStateToApplyUponCreation | [VscAppz.InputBoxState](#T-VscAppz-InputBoxState 'VscAppz.InputBoxState') | ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
+| optionallyInitialStateToApplyUponCreation | [VscAppz.InputBoxBag](#T-VscAppz-InputBoxBag 'VscAppz.InputBoxBag') | if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
 
 <a name='M-VscAppz-IWindow-CreateOutputChannel-System-String-'></a>
 ### CreateOutputChannel(name) `method`
@@ -1402,7 +1401,7 @@ Creates a new [output channel](https://code.visualstudio.com/api/references/vsco
 | ---- | ---- | ----------- |
 | name | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Human-readable string which will be used to represent the channel in the UI. |
 
-<a name='M-VscAppz-IWindow-CreateQuickPick-VscAppz-QuickPickState-'></a>
+<a name='M-VscAppz-IWindow-CreateQuickPick-VscAppz-QuickPickBag-'></a>
 ### CreateQuickPick(optionallyInitialStateToApplyUponCreation) `method`
 
 ##### Summary
@@ -1414,7 +1413,7 @@ Note that in many cases the more convenient [window.showQuickPick](https://code.
 is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
 when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
-`optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+`optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
 
 `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
 
@@ -1422,9 +1421,9 @@ when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| optionallyInitialStateToApplyUponCreation | [VscAppz.QuickPickState](#T-VscAppz-QuickPickState 'VscAppz.QuickPickState') | ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
+| optionallyInitialStateToApplyUponCreation | [VscAppz.QuickPickBag](#T-VscAppz-QuickPickBag 'VscAppz.QuickPickBag') | if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
 
-<a name='M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32},VscAppz-StatusBarItemState-'></a>
+<a name='M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32},VscAppz-StatusBarItemBag-'></a>
 ### CreateStatusBarItem(alignment,priority,optionallyInitialStateToApplyUponCreation) `method`
 
 ##### Summary
@@ -1435,7 +1434,7 @@ Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-
 
 `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 
-`optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+`optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
 
 `return` ── A new status bar item.
 
@@ -1445,7 +1444,7 @@ Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-
 | ---- | ---- | ----------- |
 | alignment | [System.Nullable{VscAppz.StatusBarAlignment}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{VscAppz.StatusBarAlignment}') | The alignment of the item. |
 | priority | [System.Nullable{System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.Int32}') | The priority of the item. Higher values mean the item should be shown more to the left. |
-| optionallyInitialStateToApplyUponCreation | [VscAppz.StatusBarItemState](#T-VscAppz-StatusBarItemState 'VscAppz.StatusBarItemState') | ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
+| optionallyInitialStateToApplyUponCreation | [VscAppz.StatusBarItemBag](#T-VscAppz-StatusBarItemBag 'VscAppz.StatusBarItemBag') | if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
 
 <a name='M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions-'></a>
 ### CreateTextEditorDecorationType(options) `method`
@@ -1961,7 +1960,7 @@ Returns `undefined` if no folder is open.
 
 Represents the current window's state.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
 
 ##### Parameters
 
@@ -1983,6 +1982,19 @@ folder has been opened.
 The workspace offers support for [listening](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher) to fs
 events and for [finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles) files. Both perform well and run _outside_
 the editor-process so that they should be always used instead of nodejs-equivalents.
+
+<a name='M-VscAppz-IWorkspace-AllProperties'></a>
+### AllProperties() `method`
+
+##### Summary
+
+Provides single-call access to numerous individual `IWorkspace` properties at once.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='M-VscAppz-IWorkspace-AsRelativePath-System-String,System-Boolean-'></a>
 ### AsRelativePath(pathOrUri,includeWorkspaceFolder) `method`
@@ -2068,7 +2080,7 @@ Returns the [workspace folder](https://code.visualstudio.com/api/references/vsco
 The name of the workspace. `undefined` when no folder
 has been opened.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -2090,17 +2102,6 @@ An event that is emitted when a workspace folder is added or removed.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | listener | [System.Action{VscAppz.WorkspaceFoldersChangeEvent}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.WorkspaceFoldersChangeEvent}') | will be invoked whenever this event fires; mandatory, not optional. |
-
-<a name='M-VscAppz-IWorkspace-Properties'></a>
-### Properties() `method`
-
-##### Summary
-
-Provides single-call access to numerous individual `IWorkspace` properties at once.
-
-##### Parameters
-
-This method has no parameters.
 
 <a name='M-VscAppz-IWorkspace-SaveAll-System-Boolean-'></a>
 ### SaveAll(includeUntitled) `method`
@@ -2156,7 +2157,7 @@ configuration data into the file. You can use `workspace.getConfiguration().upda
 for that purpose which will work both when a single folder is opened as
 well as an untitled or saved workspace.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -2170,7 +2171,7 @@ This method has no parameters.
 List of workspace folders or `undefined` when no folder is open.
 *Note* that the first entry corresponds to the value of `rootPath`.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -2201,7 +2202,7 @@ visible, it is first hidden. After this call the input UI is no longer
 functional and no additional methods or properties on it should be
 accessed. Instead a new input UI should be created.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -2212,9 +2213,9 @@ This method has no parameters.
 
 ##### Summary
 
-Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
 
 ##### Parameters
 
@@ -2228,13 +2229,13 @@ This method has no parameters.
 Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
 
 ##### Parameters
 
 This method has no parameters.
 
-<a name='M-VscAppz-InputBox-OnDidAccept-System-Action{VscAppz-InputBoxState}-'></a>
+<a name='M-VscAppz-InputBox-OnDidAccept-System-Action{VscAppz-InputBoxBag}-'></a>
 ### OnDidAccept(handler) `method`
 
 ##### Summary
@@ -2249,9 +2250,9 @@ An event signaling when the user indicated acceptance of the input value.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.InputBoxState}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.InputBoxBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.InputBoxBag}') | will be invoked whenever this event fires; mandatory, not optional. |
 
-<a name='M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String,VscAppz-InputBoxState}-'></a>
+<a name='M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String,VscAppz-InputBoxBag}-'></a>
 ### OnDidChangeValue(handler) `method`
 
 ##### Summary
@@ -2266,9 +2267,9 @@ An event signaling when the value has changed.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{System.String,VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String,VscAppz.InputBoxState}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{System.String,VscAppz.InputBoxBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String,VscAppz.InputBoxBag}') | will be invoked whenever this event fires; mandatory, not optional. |
 
-<a name='M-VscAppz-InputBox-OnDidHide-System-Action{VscAppz-InputBoxState}-'></a>
+<a name='M-VscAppz-InputBox-OnDidHide-System-Action{VscAppz-InputBoxBag}-'></a>
 ### OnDidHide(handler) `method`
 
 ##### Summary
@@ -2288,41 +2289,24 @@ the user pressing Esc, some other input UI opening, etc.)
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.InputBoxState}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.InputBoxBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.InputBoxBag}') | will be invoked whenever this event fires; mandatory, not optional. |
 
-<a name='M-VscAppz-InputBox-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton,VscAppz-InputBoxState}-'></a>
-### OnDidTriggerButton(handler) `method`
-
-##### Summary
-
-An event signaling when a button was triggered.
-
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
-
-`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidTriggerButton` event on `Dispose`.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState}') | will be invoked whenever this event fires; mandatory, not optional. |
-
-<a name='M-VscAppz-InputBox-Set-VscAppz-InputBoxState-'></a>
+<a name='M-VscAppz-InputBox-Set-VscAppz-InputBoxBag-'></a>
 ### Set(allUpdates) `method`
 
 ##### Summary
 
-Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 
-`allUpdates` ── 
+`allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `InputBoxBag` with your select modifications applied, rather than construct a new one from scratch.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| allUpdates | [VscAppz.InputBoxState](#T-VscAppz-InputBoxState 'VscAppz.InputBoxState') |  |
+| allUpdates | [VscAppz.InputBoxBag](#T-VscAppz-InputBoxBag 'VscAppz.InputBoxBag') | be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `InputBoxBag` with your select modifications applied, rather than construct a new one from scratch. |
 
 <a name='M-VscAppz-InputBox-Show'></a>
 ### Show() `method`
@@ -2332,11 +2316,105 @@ Updates this `InputBox`'s current property values for: `value`, `placeholder`, `
 Makes the input UI visible in its current configuration. Any other input
 UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
 
 ##### Parameters
 
 This method has no parameters.
+
+<a name='T-VscAppz-InputBoxBag'></a>
+## InputBoxBag `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+InputBoxBag is a snapshot of `InputBox` state at the counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+
+<a name='F-VscAppz-InputBoxBag-Busy'></a>
+### Busy `constants`
+
+##### Summary
+
+If the UI should show a progress indicator. Defaults to false.
+
+Change this to true, e.g., while loading more data or validating
+user input.
+
+<a name='F-VscAppz-InputBoxBag-Enabled'></a>
+### Enabled `constants`
+
+##### Summary
+
+If the UI should allow for user input. Defaults to true.
+
+Change this to false, e.g., while validating user input or
+loading data for the next step in user input.
+
+<a name='F-VscAppz-InputBoxBag-IgnoreFocusOut'></a>
+### IgnoreFocusOut `constants`
+
+##### Summary
+
+If the UI should stay open even when loosing UI focus. Defaults to false.
+
+<a name='F-VscAppz-InputBoxBag-Password'></a>
+### Password `constants`
+
+##### Summary
+
+If the input value should be hidden. Defaults to false.
+
+<a name='F-VscAppz-InputBoxBag-Placeholder'></a>
+### Placeholder `constants`
+
+##### Summary
+
+Optional placeholder in the filter text.
+
+<a name='F-VscAppz-InputBoxBag-Prompt'></a>
+### Prompt `constants`
+
+##### Summary
+
+An optional prompt text providing some ask or explanation to the user.
+
+<a name='F-VscAppz-InputBoxBag-Step'></a>
+### Step `constants`
+
+##### Summary
+
+An optional current step count.
+
+<a name='F-VscAppz-InputBoxBag-Title'></a>
+### Title `constants`
+
+##### Summary
+
+An optional title.
+
+<a name='F-VscAppz-InputBoxBag-TotalSteps'></a>
+### TotalSteps `constants`
+
+##### Summary
+
+An optional total step count.
+
+<a name='F-VscAppz-InputBoxBag-ValidationMessage'></a>
+### ValidationMessage `constants`
+
+##### Summary
+
+An optional validation message indicating a problem with the current input value.
+
+<a name='F-VscAppz-InputBoxBag-Value'></a>
+### Value `constants`
+
+##### Summary
+
+Current input value.
 
 <a name='T-VscAppz-InputBoxOptions'></a>
 ## InputBoxOptions `type`
@@ -2413,111 +2491,6 @@ Selection of the prefilled [`value`](https://code.visualstudio.com/api/reference
 first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
 word will be selected, when empty (start equals end) only the cursor will be set,
 otherwise the defined range will be selected.
-
-<a name='T-VscAppz-InputBoxState'></a>
-## InputBoxState `type`
-
-##### Namespace
-
-VscAppz
-
-##### Summary
-
-A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
-
-Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
-is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
-when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
-
-<a name='F-VscAppz-InputBoxState-Busy'></a>
-### Busy `constants`
-
-##### Summary
-
-If the UI should show a progress indicator. Defaults to false.
-
-Change this to true, e.g., while loading more data or validating
-user input.
-
-<a name='F-VscAppz-InputBoxState-Buttons'></a>
-### Buttons `constants`
-
-##### Summary
-
-Buttons for actions in the UI.
-
-<a name='F-VscAppz-InputBoxState-Enabled'></a>
-### Enabled `constants`
-
-##### Summary
-
-If the UI should allow for user input. Defaults to true.
-
-Change this to false, e.g., while validating user input or
-loading data for the next step in user input.
-
-<a name='F-VscAppz-InputBoxState-IgnoreFocusOut'></a>
-### IgnoreFocusOut `constants`
-
-##### Summary
-
-If the UI should stay open even when loosing UI focus. Defaults to false.
-
-<a name='F-VscAppz-InputBoxState-Password'></a>
-### Password `constants`
-
-##### Summary
-
-If the input value should be hidden. Defaults to false.
-
-<a name='F-VscAppz-InputBoxState-Placeholder'></a>
-### Placeholder `constants`
-
-##### Summary
-
-Optional placeholder in the filter text.
-
-<a name='F-VscAppz-InputBoxState-Prompt'></a>
-### Prompt `constants`
-
-##### Summary
-
-An optional prompt text providing some ask or explanation to the user.
-
-<a name='F-VscAppz-InputBoxState-Step'></a>
-### Step `constants`
-
-##### Summary
-
-An optional current step count.
-
-<a name='F-VscAppz-InputBoxState-Title'></a>
-### Title `constants`
-
-##### Summary
-
-An optional title.
-
-<a name='F-VscAppz-InputBoxState-TotalSteps'></a>
-### TotalSteps `constants`
-
-##### Summary
-
-An optional total step count.
-
-<a name='F-VscAppz-InputBoxState-ValidationMessage'></a>
-### ValidationMessage `constants`
-
-##### Summary
-
-An optional validation message indicating a problem with the current input value.
-
-<a name='F-VscAppz-InputBoxState-Value'></a>
-### Value `constants`
-
-##### Summary
-
-Current input value.
 
 <a name='T-VscAppz-MessageItem'></a>
 ## MessageItem `type`
@@ -2665,7 +2638,7 @@ Append the given value to the channel.
 
 `value` ── A string, falsy values will not be printed.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 
 ##### Parameters
 
@@ -2683,7 +2656,7 @@ to the channel.
 
 `value` ── A string, falsy values will be printed.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 
 ##### Parameters
 
@@ -2698,7 +2671,7 @@ to the channel.
 
 Removes all output from the channel.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 
 ##### Parameters
 
@@ -2711,7 +2684,7 @@ This method has no parameters.
 
 Dispose and free associated resources.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -2724,7 +2697,7 @@ This method has no parameters.
 
 Obtains this `OutputChannel`'s current property value for: `name`.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 
 ##### Parameters
 
@@ -2737,7 +2710,7 @@ This method has no parameters.
 
 Hide this channel from the UI.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 
 ##### Parameters
 
@@ -2752,7 +2725,7 @@ Reveal this channel in the UI.
 
 `preserveFocus` ── When `true` the channel will not take focus.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 
 ##### Parameters
 
@@ -2760,8 +2733,8 @@ Reveal this channel in the UI.
 | ---- | ---- | ----------- |
 | preserveFocus | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | When `true` the channel will not take focus. |
 
-<a name='T-VscAppz-OutputChannelState'></a>
-## OutputChannelState `type`
+<a name='T-VscAppz-OutputChannelBag'></a>
+## OutputChannelBag `type`
 
 ##### Namespace
 
@@ -2769,12 +2742,9 @@ VscAppz
 
 ##### Summary
 
-An output channel is a container for readonly textual information.
+OutputChannelBag is a snapshot of `OutputChannel` state at the counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 
-To get an instance of an `OutputChannel` use
-[createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
-
-<a name='F-VscAppz-OutputChannelState-Name'></a>
+<a name='F-VscAppz-OutputChannelBag-Name'></a>
 ### Name `constants`
 
 ##### Summary
@@ -2843,13 +2813,6 @@ Button for an action in a [QuickPick](https://code.visualstudio.com/api/referenc
 
 Icon for the button.
 
-<a name='F-VscAppz-QuickInputButton-My'></a>
-### My `constants`
-
-##### Summary
-
-Free-form custom data, preserved across a roundtrip.
-
 <a name='F-VscAppz-QuickInputButton-Tooltip'></a>
 ### Tooltip `constants`
 
@@ -2885,7 +2848,7 @@ visible, it is first hidden. After this call the input UI is no longer
 functional and no additional methods or properties on it should be
 accessed. Instead a new input UI should be created.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -2898,7 +2861,7 @@ This method has no parameters.
 
 Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
 
 ##### Parameters
 
@@ -2912,13 +2875,13 @@ This method has no parameters.
 Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
 
 ##### Parameters
 
 This method has no parameters.
 
-<a name='M-VscAppz-QuickPick-OnDidAccept-System-Action{VscAppz-QuickPickState}-'></a>
+<a name='M-VscAppz-QuickPick-OnDidAccept-System-Action{VscAppz-QuickPickBag}-'></a>
 ### OnDidAccept(handler) `method`
 
 ##### Summary
@@ -2933,9 +2896,9 @@ An event signaling when the user indicated acceptance of the selected item(s).
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickState}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.QuickPickBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickBag}') | will be invoked whenever this event fires; mandatory, not optional. |
 
-<a name='M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}-'></a>
+<a name='M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickBag}-'></a>
 ### OnDidChangeActive(handler) `method`
 
 ##### Summary
@@ -2950,9 +2913,9 @@ An event signaling when the active items have changed.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickBag}') | will be invoked whenever this event fires; mandatory, not optional. |
 
-<a name='M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}-'></a>
+<a name='M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickBag}-'></a>
 ### OnDidChangeSelection(handler) `method`
 
 ##### Summary
@@ -2967,9 +2930,9 @@ An event signaling when the selected items have changed.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickBag}') | will be invoked whenever this event fires; mandatory, not optional. |
 
-<a name='M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String,VscAppz-QuickPickState}-'></a>
+<a name='M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String,VscAppz-QuickPickBag}-'></a>
 ### OnDidChangeValue(handler) `method`
 
 ##### Summary
@@ -2984,9 +2947,9 @@ An event signaling when the value of the filter text has changed.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{System.String,VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String,VscAppz.QuickPickState}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{System.String,VscAppz.QuickPickBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String,VscAppz.QuickPickBag}') | will be invoked whenever this event fires; mandatory, not optional. |
 
-<a name='M-VscAppz-QuickPick-OnDidHide-System-Action{VscAppz-QuickPickState}-'></a>
+<a name='M-VscAppz-QuickPick-OnDidHide-System-Action{VscAppz-QuickPickBag}-'></a>
 ### OnDidHide(handler) `method`
 
 ##### Summary
@@ -3006,24 +2969,24 @@ the user pressing Esc, some other input UI opening, etc.)
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickState}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.QuickPickBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickBag}') | will be invoked whenever this event fires; mandatory, not optional. |
 
-<a name='M-VscAppz-QuickPick-Set-VscAppz-QuickPickState-'></a>
+<a name='M-VscAppz-QuickPick-Set-VscAppz-QuickPickBag-'></a>
 ### Set(allUpdates) `method`
 
 ##### Summary
 
 Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 
-`allUpdates` ── 
+`allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `QuickPickBag` with your select modifications applied, rather than construct a new one from scratch.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| allUpdates | [VscAppz.QuickPickState](#T-VscAppz-QuickPickState 'VscAppz.QuickPickState') |  |
+| allUpdates | [VscAppz.QuickPickBag](#T-VscAppz-QuickPickBag 'VscAppz.QuickPickBag') | be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `QuickPickBag` with your select modifications applied, rather than construct a new one from scratch. |
 
 <a name='M-VscAppz-QuickPick-Show'></a>
 ### Show() `method`
@@ -3033,11 +2996,126 @@ Updates this `QuickPick`'s current property values for: `value`, `placeholder`, 
 Makes the input UI visible in its current configuration. Any other input
 UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
 
 ##### Parameters
 
 This method has no parameters.
+
+<a name='T-VscAppz-QuickPickBag'></a>
+## QuickPickBag `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+QuickPickBag is a snapshot of `QuickPick` state at the counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+
+<a name='F-VscAppz-QuickPickBag-ActiveItems'></a>
+### ActiveItems `constants`
+
+##### Summary
+
+Active items. This can be read and updated by the extension.
+
+<a name='F-VscAppz-QuickPickBag-Busy'></a>
+### Busy `constants`
+
+##### Summary
+
+If the UI should show a progress indicator. Defaults to false.
+
+Change this to true, e.g., while loading more data or validating
+user input.
+
+<a name='F-VscAppz-QuickPickBag-CanSelectMany'></a>
+### CanSelectMany `constants`
+
+##### Summary
+
+If multiple items can be selected at the same time. Defaults to false.
+
+<a name='F-VscAppz-QuickPickBag-Enabled'></a>
+### Enabled `constants`
+
+##### Summary
+
+If the UI should allow for user input. Defaults to true.
+
+Change this to false, e.g., while validating user input or
+loading data for the next step in user input.
+
+<a name='F-VscAppz-QuickPickBag-IgnoreFocusOut'></a>
+### IgnoreFocusOut `constants`
+
+##### Summary
+
+If the UI should stay open even when loosing UI focus. Defaults to false.
+
+<a name='F-VscAppz-QuickPickBag-Items'></a>
+### Items `constants`
+
+##### Summary
+
+Items to pick from.
+
+<a name='F-VscAppz-QuickPickBag-MatchOnDescription'></a>
+### MatchOnDescription `constants`
+
+##### Summary
+
+If the filter text should also be matched against the description of the items. Defaults to false.
+
+<a name='F-VscAppz-QuickPickBag-MatchOnDetail'></a>
+### MatchOnDetail `constants`
+
+##### Summary
+
+If the filter text should also be matched against the detail of the items. Defaults to false.
+
+<a name='F-VscAppz-QuickPickBag-Placeholder'></a>
+### Placeholder `constants`
+
+##### Summary
+
+Optional placeholder in the filter text.
+
+<a name='F-VscAppz-QuickPickBag-SelectedItems'></a>
+### SelectedItems `constants`
+
+##### Summary
+
+Selected items. This can be read and updated by the extension.
+
+<a name='F-VscAppz-QuickPickBag-Step'></a>
+### Step `constants`
+
+##### Summary
+
+An optional current step count.
+
+<a name='F-VscAppz-QuickPickBag-Title'></a>
+### Title `constants`
+
+##### Summary
+
+An optional title.
+
+<a name='F-VscAppz-QuickPickBag-TotalSteps'></a>
+### TotalSteps `constants`
+
+##### Summary
+
+An optional total step count.
+
+<a name='F-VscAppz-QuickPickBag-Value'></a>
+### Value `constants`
+
+##### Summary
+
+Current value of the filter text.
 
 <a name='T-VscAppz-QuickPickItem'></a>
 ## QuickPickItem `type`
@@ -3154,128 +3232,6 @@ For internal runtime use only.
 
 An optional string to show as place holder in the input box to guide the user what to pick on.
 
-<a name='T-VscAppz-QuickPickState'></a>
-## QuickPickState `type`
-
-##### Namespace
-
-VscAppz
-
-##### Summary
-
-A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
-list of items of type T. The items can be filtered through a filter text field and
-there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
-selecting multiple items.
-
-Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
-is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
-when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
-
-<a name='F-VscAppz-QuickPickState-ActiveItems'></a>
-### ActiveItems `constants`
-
-##### Summary
-
-Active items. This can be read and updated by the extension.
-
-<a name='F-VscAppz-QuickPickState-Busy'></a>
-### Busy `constants`
-
-##### Summary
-
-If the UI should show a progress indicator. Defaults to false.
-
-Change this to true, e.g., while loading more data or validating
-user input.
-
-<a name='F-VscAppz-QuickPickState-CanSelectMany'></a>
-### CanSelectMany `constants`
-
-##### Summary
-
-If multiple items can be selected at the same time. Defaults to false.
-
-<a name='F-VscAppz-QuickPickState-Enabled'></a>
-### Enabled `constants`
-
-##### Summary
-
-If the UI should allow for user input. Defaults to true.
-
-Change this to false, e.g., while validating user input or
-loading data for the next step in user input.
-
-<a name='F-VscAppz-QuickPickState-IgnoreFocusOut'></a>
-### IgnoreFocusOut `constants`
-
-##### Summary
-
-If the UI should stay open even when loosing UI focus. Defaults to false.
-
-<a name='F-VscAppz-QuickPickState-Items'></a>
-### Items `constants`
-
-##### Summary
-
-Items to pick from.
-
-<a name='F-VscAppz-QuickPickState-MatchOnDescription'></a>
-### MatchOnDescription `constants`
-
-##### Summary
-
-If the filter text should also be matched against the description of the items. Defaults to false.
-
-<a name='F-VscAppz-QuickPickState-MatchOnDetail'></a>
-### MatchOnDetail `constants`
-
-##### Summary
-
-If the filter text should also be matched against the detail of the items. Defaults to false.
-
-<a name='F-VscAppz-QuickPickState-Placeholder'></a>
-### Placeholder `constants`
-
-##### Summary
-
-Optional placeholder in the filter text.
-
-<a name='F-VscAppz-QuickPickState-SelectedItems'></a>
-### SelectedItems `constants`
-
-##### Summary
-
-Selected items. This can be read and updated by the extension.
-
-<a name='F-VscAppz-QuickPickState-Step'></a>
-### Step `constants`
-
-##### Summary
-
-An optional current step count.
-
-<a name='F-VscAppz-QuickPickState-Title'></a>
-### Title `constants`
-
-##### Summary
-
-An optional title.
-
-<a name='F-VscAppz-QuickPickState-TotalSteps'></a>
-### TotalSteps `constants`
-
-##### Summary
-
-An optional total step count.
-
-<a name='F-VscAppz-QuickPickState-Value'></a>
-### Value `constants`
-
-##### Summary
-
-Current value of the filter text.
-
 <a name='T-VscAppz-SaveDialogOptions'></a>
 ## SaveDialogOptions `type`
 
@@ -3363,7 +3319,7 @@ show text and icons and run a command on click.
 Dispose and free associated resources. Call
 [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -3376,7 +3332,7 @@ This method has no parameters.
 
 Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
 
 ##### Parameters
 
@@ -3389,28 +3345,28 @@ This method has no parameters.
 
 Hide the entry in the status bar.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
 
 ##### Parameters
 
 This method has no parameters.
 
-<a name='M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemState-'></a>
+<a name='M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemBag-'></a>
 ### Set(allUpdates) `method`
 
 ##### Summary
 
 Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
 
-`allUpdates` ── 
+`allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `StatusBarItemBag` with your select modifications applied, rather than construct a new one from scratch.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| allUpdates | [VscAppz.StatusBarItemState](#T-VscAppz-StatusBarItemState 'VscAppz.StatusBarItemState') |  |
+| allUpdates | [VscAppz.StatusBarItemBag](#T-VscAppz-StatusBarItemBag 'VscAppz.StatusBarItemBag') | be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `StatusBarItemBag` with your select modifications applied, rather than construct a new one from scratch. |
 
 <a name='M-VscAppz-StatusBarItem-Show'></a>
 ### Show() `method`
@@ -3419,14 +3375,14 @@ Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `
 
 Shows the entry in the status bar.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
 
 ##### Parameters
 
 This method has no parameters.
 
-<a name='T-VscAppz-StatusBarItemState'></a>
-## StatusBarItemState `type`
+<a name='T-VscAppz-StatusBarItemBag'></a>
+## StatusBarItemBag `type`
 
 ##### Namespace
 
@@ -3434,24 +3390,23 @@ VscAppz
 
 ##### Summary
 
-A status bar item is a status bar contribution that can
-show text and icons and run a command on click.
+StatusBarItemBag is a snapshot of `StatusBarItem` state at the counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 
-<a name='F-VscAppz-StatusBarItemState-Alignment'></a>
+<a name='F-VscAppz-StatusBarItemBag-Alignment'></a>
 ### Alignment `constants`
 
 ##### Summary
 
 The alignment of this item.
 
-<a name='F-VscAppz-StatusBarItemState-Color'></a>
+<a name='F-VscAppz-StatusBarItemBag-Color'></a>
 ### Color `constants`
 
 ##### Summary
 
 The foreground color for this entry.
 
-<a name='F-VscAppz-StatusBarItemState-Command'></a>
+<a name='F-VscAppz-StatusBarItemBag-Command'></a>
 ### Command `constants`
 
 ##### Summary
@@ -3459,7 +3414,7 @@ The foreground color for this entry.
 The identifier of a command to run on click. The command must be
 [known](https://code.visualstudio.com/api/references/vscode-api#commands.getCommands).
 
-<a name='F-VscAppz-StatusBarItemState-Priority'></a>
+<a name='F-VscAppz-StatusBarItemBag-Priority'></a>
 ### Priority `constants`
 
 ##### Summary
@@ -3467,7 +3422,7 @@ The identifier of a command to run on click. The command must be
 The priority of this item. Higher value means the item should
 be shown more to the left.
 
-<a name='F-VscAppz-StatusBarItemState-Text'></a>
+<a name='F-VscAppz-StatusBarItemBag-Text'></a>
 ### Text `constants`
 
 ##### Summary
@@ -3479,7 +3434,7 @@ The text to show for the entry. You can embed icons in the text by leveraging th
 Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
 `light-bulb`, `thumbsup`, `zap` etc.
 
-<a name='F-VscAppz-StatusBarItemState-Tooltip'></a>
+<a name='F-VscAppz-StatusBarItemBag-Tooltip'></a>
 ### Tooltip `constants`
 
 ##### Summary
@@ -3508,7 +3463,7 @@ To get an instance of a `TextEditorDecorationType` use
 
 Remove this decoration type and all decorations on all text editors using it.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -3521,14 +3476,14 @@ This method has no parameters.
 
 Obtains this `TextEditorDecorationType`'s current property value for: `key`.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `TextEditorDecorationTypeBag` result obtained.
 
 ##### Parameters
 
 This method has no parameters.
 
-<a name='T-VscAppz-TextEditorDecorationTypeState'></a>
-## TextEditorDecorationTypeState `type`
+<a name='T-VscAppz-TextEditorDecorationTypeBag'></a>
+## TextEditorDecorationTypeBag `type`
 
 ##### Namespace
 
@@ -3536,13 +3491,9 @@ VscAppz
 
 ##### Summary
 
-Represents a handle to a set of decorations
-sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
+TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 
-To get an instance of a `TextEditorDecorationType` use
-[createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
-
-<a name='F-VscAppz-TextEditorDecorationTypeState-Key'></a>
+<a name='F-VscAppz-TextEditorDecorationTypeBag-Key'></a>
 ### Key `constants`
 
 ##### Summary
@@ -3895,6 +3846,70 @@ Represents the state of a window.
 
 Whether the current window is focused.
 
+<a name='T-VscAppz-WorkspaceBag'></a>
+## WorkspaceBag `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+WorkspaceBag gathers various properties of `IWorkspace`, obtainable via its `AllProperties` method.
+
+<a name='F-VscAppz-WorkspaceBag-Name'></a>
+### Name `constants`
+
+##### Summary
+
+The name of the workspace. `undefined` when no folder
+has been opened.
+
+<a name='F-VscAppz-WorkspaceBag-WorkspaceFile'></a>
+### WorkspaceFile `constants`
+
+##### Summary
+
+The location of the workspace file, for example:
+
+`file:///Users/name/Development/myProject.code-workspace`
+
+or
+
+`untitled:1555503116870`
+
+for a workspace that is untitled and not yet saved.
+
+Depending on the workspace that is opened, the value will be:
+  * `undefined` when no workspace or  a single folder is opened
+  * the path of the workspace file as `Uri` otherwise. if the workspace
+is untitled, the returned URI will use the `untitled:` scheme
+
+The location can e.g. be used with the `vscode.openFolder` command to
+open the workspace again after it has been closed.
+
+**Example:**
+
+```typescript
+
+vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
+
+```
+
+
+**Note:** it is not advised to use `workspace.workspaceFile` to write
+configuration data into the file. You can use `workspace.getConfiguration().update()`
+for that purpose which will work both when a single folder is opened as
+well as an untitled or saved workspace.
+
+<a name='F-VscAppz-WorkspaceBag-WorkspaceFolders'></a>
+### WorkspaceFolders `constants`
+
+##### Summary
+
+List of workspace folders or `undefined` when no folder is open.
+*Note* that the first entry corresponds to the value of `rootPath`.
+
 <a name='T-VscAppz-WorkspaceFolder'></a>
 ## WorkspaceFolder `type`
 
@@ -3981,73 +3996,3 @@ Added workspace folders.
 ##### Summary
 
 Removed workspace folders.
-
-<a name='T-VscAppz-WorkspaceProperties'></a>
-## WorkspaceProperties `type`
-
-##### Namespace
-
-VscAppz
-
-##### Summary
-
-Namespace for dealing with the current workspace. A workspace is the representation
-of the folder that has been opened. There is no workspace when just a file but not a
-folder has been opened.
-
-The workspace offers support for [listening](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher) to fs
-events and for [finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles) files. Both perform well and run _outside_
-the editor-process so that they should be always used instead of nodejs-equivalents.
-
-<a name='F-VscAppz-WorkspaceProperties-Name'></a>
-### Name `constants`
-
-##### Summary
-
-The name of the workspace. `undefined` when no folder
-has been opened.
-
-<a name='F-VscAppz-WorkspaceProperties-WorkspaceFile'></a>
-### WorkspaceFile `constants`
-
-##### Summary
-
-The location of the workspace file, for example:
-
-`file:///Users/name/Development/myProject.code-workspace`
-
-or
-
-`untitled:1555503116870`
-
-for a workspace that is untitled and not yet saved.
-
-Depending on the workspace that is opened, the value will be:
-  * `undefined` when no workspace or  a single folder is opened
-  * the path of the workspace file as `Uri` otherwise. if the workspace
-is untitled, the returned URI will use the `untitled:` scheme
-
-The location can e.g. be used with the `vscode.openFolder` command to
-open the workspace again after it has been closed.
-
-**Example:**
-
-```typescript
-
-vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
-
-```
-
-
-**Note:** it is not advised to use `workspace.workspaceFile` to write
-configuration data into the file. You can use `workspace.getConfiguration().update()`
-for that purpose which will work both when a single folder is opened as
-well as an untitled or saved workspace.
-
-<a name='F-VscAppz-WorkspaceProperties-WorkspaceFolders'></a>
-### WorkspaceFolders `constants`
-
-##### Summary
-
-List of workspace folders or `undefined` when no folder is open.
-*Note* that the first entry corresponds to the value of `rootPath`.

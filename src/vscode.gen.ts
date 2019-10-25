@@ -115,7 +115,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "showInputBox": {
 					const arg_options = (msg.data['options']) as InputBoxOptions
 					if (arg_options && arg_options.validateInput_AppzFuncId && arg_options.validateInput_AppzFuncId.length)
-						arg_options.validateInput = (a0) => prog.callBack(true, arg_options.validateInput_AppzFuncId, a0)
+						arg_options.validateInput = (a0) => prog.callBack("window.showInputBox", true, arg_options.validateInput_AppzFuncId, a0)
 					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
 					if (!arg_token)
 						arg_token = prog.cancellers[''].token
@@ -130,7 +130,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const arg_items = (msg.data['items']) as string[]
 					const arg_options = (msg.data['options']) as QuickPickOptions
 					if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
-						arg_options.onDidSelectItem = (a0) => prog.callBack(true, arg_options.onDidSelectItem_AppzFuncId, a0)
+						arg_options.onDidSelectItem = (a0) => prog.callBack("window.showQuickPick1", true, arg_options.onDidSelectItem_AppzFuncId, a0)
 					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
 					if (!arg_token)
 						arg_token = prog.cancellers[''].token
@@ -145,7 +145,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const arg_items = (msg.data['items']) as string[]
 					const arg_options = (msg.data['options']) as QuickPickOptions
 					if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
-						arg_options.onDidSelectItem = (a0) => prog.callBack(true, arg_options.onDidSelectItem_AppzFuncId, a0)
+						arg_options.onDidSelectItem = (a0) => prog.callBack("window.showQuickPick2", true, arg_options.onDidSelectItem_AppzFuncId, a0)
 					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
 					if (!arg_token)
 						arg_token = prog.cancellers[''].token
@@ -160,7 +160,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const arg_items = (msg.data['items']) as QuickPickItem[]
 					const arg_options = (msg.data['options']) as QuickPickOptions
 					if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
-						arg_options.onDidSelectItem = (a0) => prog.callBack(true, arg_options.onDidSelectItem_AppzFuncId, a0)
+						arg_options.onDidSelectItem = (a0) => prog.callBack("window.showQuickPick3", true, arg_options.onDidSelectItem_AppzFuncId, a0)
 					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
 					if (!arg_token)
 						arg_token = prog.cancellers[''].token
@@ -175,7 +175,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const arg_items = (msg.data['items']) as QuickPickItem[]
 					const arg_options = (msg.data['options']) as QuickPickOptions
 					if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
-						arg_options.onDidSelectItem = (a0) => prog.callBack(true, arg_options.onDidSelectItem_AppzFuncId, a0)
+						arg_options.onDidSelectItem = (a0) => prog.callBack("window.showQuickPick4", true, arg_options.onDidSelectItem_AppzFuncId, a0)
 					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
 					if (!arg_token)
 						arg_token = prog.cancellers[''].token
@@ -228,10 +228,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "onDidChangeWindowState": {
 					const _fnid_listener = msg.data['listener'] as string
 					return (!(_fnid_listener && _fnid_listener.length))
-						? Promise.reject(msg.data)
+						? ppio.promRej("window.onDidChangeWindowState.listener", msg.data)
 						: vscode.window.onDidChangeWindowState((a0) => {
 							if (prog && prog.proc)
-								prog.callBack(false, _fnid_listener, a0).then(noOp, noOp)
+								prog.callBack("window.onDidChangeWindowState", false, _fnid_listener, a0).then(noOp, noOp)
 						})
 				}
 				case "createStatusBarItem": {
@@ -276,7 +276,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "openExternal": {
 					const arg_target = ppio.tryUnmarshalUri(msg.data['target'])
 					if (!arg_target)
-						return Promise.reject(msg.data['target'])
+						return ppio.promRej("env.openExternal", msg.data['target'])
 					const ret = vscode.env.openExternal(arg_target, )
 					const retdisp = ret as any as vscode.Disposable
 					const retprom = ret as any as Thenable<any>
@@ -306,7 +306,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "uriScheme": {
 					return Promise.resolve(vscode.env.uriScheme)
 				}
-				case "Properties": {
+				case "AllProperties": {
 					return Promise.resolve({
 						appName: vscode.env.appName,
 						appRoot: vscode.env.appRoot,
@@ -357,16 +357,16 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "onDidChangeWorkspaceFolders": {
 					const _fnid_listener = msg.data['listener'] as string
 					return (!(_fnid_listener && _fnid_listener.length))
-						? Promise.reject(msg.data)
+						? ppio.promRej("workspace.onDidChangeWorkspaceFolders.listener", msg.data)
 						: vscode.workspace.onDidChangeWorkspaceFolders((a0) => {
 							if (prog && prog.proc)
-								prog.callBack(false, _fnid_listener, a0).then(noOp, noOp)
+								prog.callBack("workspace.onDidChangeWorkspaceFolders", false, _fnid_listener, a0).then(noOp, noOp)
 						})
 				}
 				case "getWorkspaceFolder": {
 					const arg_uri = ppio.tryUnmarshalUri(msg.data['uri'])
 					if (!arg_uri)
-						return Promise.reject(msg.data['uri'])
+						return ppio.promRej("workspace.getWorkspaceFolder", msg.data['uri'])
 					const ret = vscode.workspace.getWorkspaceFolder(arg_uri, )
 					const retdisp = ret as any as vscode.Disposable
 					const retprom = ret as any as Thenable<any>
@@ -397,7 +397,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
-				case "Properties": {
+				case "AllProperties": {
 					return Promise.resolve({
 						name: vscode.workspace.name,
 						workspaceFile: vscode.workspace.workspaceFile,
@@ -418,10 +418,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "onDidChangeDiagnostics": {
 					const _fnid_listener = msg.data['listener'] as string
 					return (!(_fnid_listener && _fnid_listener.length))
-						? Promise.reject(msg.data)
+						? ppio.promRej("languages.onDidChangeDiagnostics.listener", msg.data)
 						: vscode.languages.onDidChangeDiagnostics((a0) => {
 							if (prog && prog.proc)
-								prog.callBack(false, _fnid_listener, a0).then(noOp, noOp)
+								prog.callBack("languages.onDidChangeDiagnostics", false, _fnid_listener, a0).then(noOp, noOp)
 						})
 				}
 				default:
@@ -432,10 +432,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "onDidChange": {
 					const _fnid_listener = msg.data['listener'] as string
 					return (!(_fnid_listener && _fnid_listener.length))
-						? Promise.reject(msg.data)
+						? ppio.promRej("extensions.onDidChange.listener", msg.data)
 						: vscode.extensions.onDidChange(() => {
 							if (prog && prog.proc)
-								prog.callBack(false, _fnid_listener, ).then(noOp, noOp)
+								prog.callBack("extensions.onDidChange", false, _fnid_listener, ).then(noOp, noOp)
 						})
 				}
 				default:
@@ -447,10 +447,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const arg_command = (msg.data['command']) as string
 					const _fnid_callback = msg.data['callback'] as string
 					if (!(_fnid_callback && _fnid_callback.length))
-						return Promise.reject(msg.data)
+						return ppio.promRej("commands.registerCommand", msg.data)
 					const arg_callback = (..._0: any[]): any => {
 						if (prog && prog.proc)
-							return prog.callBack(true, _fnid_callback, _0)
+							return prog.callBack("commands.registerCommand", true, _fnid_callback, _0)
 						return undefined
 					}
 					const ret = vscode.commands.registerCommand(arg_command, arg_callback, )
@@ -495,7 +495,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "appzObjPropsSet": {
 					const allUpdates = msg.data['allUpdates'] as { [_:string]: any }
 					if (!allUpdates)
-						return Promise.reject(msg.data)
+						return ppio.promRej("StatusBarItem.set#allUpdates", msg.data)
 					const prop_text = allUpdates["text"] as string
 					if (prop_text !== undefined && prop_text !== thisStatusBarItem.text)
 						thisStatusBarItem.text = prop_text
@@ -566,10 +566,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "onDidChangeValue": {
 					const _fnid_handler = msg.data['handler'] as string
 					if (!(_fnid_handler && _fnid_handler.length))
-						return Promise.reject(msg.data)
+						return ppio.promRej("InputBox.onDidChangeValue.handler", msg.data)
 					const arg_handler = (_0: string): unknown => {
 						if (prog && prog.proc)
-							return prog.callBack(false, _fnid_handler, _0, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }))
+							return prog.callBack("InputBox.onDidChangeValue.handler", false, _fnid_handler, _0, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }))
 						return undefined
 					}
 					const ret = thisInputBox.onDidChangeValue(arg_handler, )
@@ -580,10 +580,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "onDidAccept": {
 					const _fnid_handler = msg.data['handler'] as string
 					if (!(_fnid_handler && _fnid_handler.length))
-						return Promise.reject(msg.data)
+						return ppio.promRej("InputBox.onDidAccept.handler", msg.data)
 					const arg_handler = (): unknown => {
 						if (prog && prog.proc)
-							return prog.callBack(false, _fnid_handler, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }))
+							return prog.callBack("InputBox.onDidAccept.handler", false, _fnid_handler, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }))
 						return undefined
 					}
 					const ret = thisInputBox.onDidAccept(arg_handler, )
@@ -602,10 +602,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "onDidHide": {
 					const _fnid_handler = msg.data['handler'] as string
 					if (!(_fnid_handler && _fnid_handler.length))
-						return Promise.reject(msg.data)
+						return ppio.promRej("InputBox.onDidHide.handler", msg.data)
 					const arg_handler = (): unknown => {
 						if (prog && prog.proc)
-							return prog.callBack(false, _fnid_handler, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }))
+							return prog.callBack("InputBox.onDidHide.handler", false, _fnid_handler, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }))
 						return undefined
 					}
 					const ret = thisInputBox.onDidHide(arg_handler, )
@@ -619,7 +619,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "appzObjPropsSet": {
 					const allUpdates = msg.data['allUpdates'] as { [_:string]: any }
 					if (!allUpdates)
-						return Promise.reject(msg.data)
+						return ppio.promRej("InputBox.set#allUpdates", msg.data)
 					const prop_value = allUpdates["value"] as string
 					if (prop_value !== undefined && prop_value !== thisInputBox.value)
 						thisInputBox.value = prop_value
@@ -666,10 +666,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "onDidChangeValue": {
 					const _fnid_handler = msg.data['handler'] as string
 					if (!(_fnid_handler && _fnid_handler.length))
-						return Promise.reject(msg.data)
+						return ppio.promRej("QuickPick.onDidChangeValue.handler", msg.data)
 					const arg_handler = (_0: string): unknown => {
 						if (prog && prog.proc)
-							return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
+							return prog.callBack("QuickPick.onDidChangeValue.handler", false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
 						return undefined
 					}
 					const ret = thisQuickPick.onDidChangeValue(arg_handler, )
@@ -680,10 +680,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "onDidAccept": {
 					const _fnid_handler = msg.data['handler'] as string
 					if (!(_fnid_handler && _fnid_handler.length))
-						return Promise.reject(msg.data)
+						return ppio.promRej("QuickPick.onDidAccept.handler", msg.data)
 					const arg_handler = (): unknown => {
 						if (prog && prog.proc)
-							return prog.callBack(false, _fnid_handler, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
+							return prog.callBack("QuickPick.onDidAccept.handler", false, _fnid_handler, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
 						return undefined
 					}
 					const ret = thisQuickPick.onDidAccept(arg_handler, )
@@ -694,10 +694,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "onDidChangeActive": {
 					const _fnid_handler = msg.data['handler'] as string
 					if (!(_fnid_handler && _fnid_handler.length))
-						return Promise.reject(msg.data)
+						return ppio.promRej("QuickPick.onDidChangeActive.handler", msg.data)
 					const arg_handler = (_0: QuickPickItem[]): unknown => {
 						if (prog && prog.proc)
-							return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
+							return prog.callBack("QuickPick.onDidChangeActive.handler", false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
 						return undefined
 					}
 					const ret = thisQuickPick.onDidChangeActive(arg_handler, )
@@ -708,10 +708,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "onDidChangeSelection": {
 					const _fnid_handler = msg.data['handler'] as string
 					if (!(_fnid_handler && _fnid_handler.length))
-						return Promise.reject(msg.data)
+						return ppio.promRej("QuickPick.onDidChangeSelection.handler", msg.data)
 					const arg_handler = (_0: QuickPickItem[]): unknown => {
 						if (prog && prog.proc)
-							return prog.callBack(false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
+							return prog.callBack("QuickPick.onDidChangeSelection.handler", false, _fnid_handler, _0, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
 						return undefined
 					}
 					const ret = thisQuickPick.onDidChangeSelection(arg_handler, )
@@ -730,10 +730,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "onDidHide": {
 					const _fnid_handler = msg.data['handler'] as string
 					if (!(_fnid_handler && _fnid_handler.length))
-						return Promise.reject(msg.data)
+						return ppio.promRej("QuickPick.onDidHide.handler", msg.data)
 					const arg_handler = (): unknown => {
 						if (prog && prog.proc)
-							return prog.callBack(false, _fnid_handler, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
+							return prog.callBack("QuickPick.onDidHide.handler", false, _fnid_handler, ({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }))
 						return undefined
 					}
 					const ret = thisQuickPick.onDidHide(arg_handler, )
@@ -747,7 +747,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "appzObjPropsSet": {
 					const allUpdates = msg.data['allUpdates'] as { [_:string]: any }
 					if (!allUpdates)
-						return Promise.reject(msg.data)
+						return ppio.promRej("QuickPick.set#allUpdates", msg.data)
 					const prop_value = allUpdates["value"] as string
 					if (prop_value !== undefined && prop_value !== thisQuickPick.value)
 						thisQuickPick.value = prop_value

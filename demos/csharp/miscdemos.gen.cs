@@ -128,7 +128,7 @@ namespace VscAppzDemo {
 			});
 		}
 		private static void demo_Env_Properties() {
-			vsc.Env.Properties()((EnvProperties props) => {
+			vsc.Env.AllProperties()((EnvBag props) => {
 				string[] items = default;
 				items = new string[8];
 				{
@@ -153,7 +153,7 @@ namespace VscAppzDemo {
 			});
 		}
 		private static void demo_Workspace_Properties() {
-			vsc.Workspace.Properties()((WorkspaceProperties props) => {
+			vsc.Workspace.AllProperties()((WorkspaceBag props) => {
 				string[] items = default;
 				items = new string[3];
 				{
@@ -283,8 +283,8 @@ namespace VscAppzDemo {
 			});
 		}
 		private static void demo_Window_CreateQuickPick() {
-			QuickPickState cfg = default;
-			cfg = new QuickPickState();
+			QuickPickBag cfg = default;
+			cfg = new QuickPickBag();
 			cfg.IgnoreFocusOut = true;
 			cfg.Title = "I'm a full-fledged QuickPick";
 			cfg.Step = 23;
@@ -297,35 +297,35 @@ namespace VscAppzDemo {
 				cfg.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i);
 				cfg.Items[(i - 1)].AlwaysShow = i == 42;
 			}
-			vsc.Window.CreateQuickPick(cfg)((QuickPick ctl, QuickPickState _unused) => {
-				ctl.OnDidAccept((QuickPickState props) => {
+			vsc.Window.CreateQuickPick(cfg)((QuickPick ctl, QuickPickBag _unused) => {
+				ctl.OnDidAccept((QuickPickBag props) => {
 					logLn(strFmt("Picked: {0}", props.SelectedItems));
 					ctl.Hide();
 				});
-				ctl.OnDidHide((QuickPickState _) => {
+				ctl.OnDidHide((QuickPickBag _) => {
 					ctl.Dispose();
 				});
 				ctl.Show();
 			});
 		}
 		private static void demo_Window_CreateInputBox() {
-			vsc.Window.CreateInputBox(null)((InputBox inputbox, InputBoxState props) => {
+			vsc.Window.CreateInputBox(null)((InputBox inputbox, InputBoxBag props) => {
 				props.IgnoreFocusOut = true;
 				props.Placeholder = "The initial Placeholder";
 				props.Prompt = "The initial Prompt";
 				props.Title = "The initial Title";
 				inputbox.Set(props);
-				inputbox.OnDidChangeValue((string input, InputBoxState ctl) => {
+				inputbox.OnDidChangeValue((string input, InputBoxBag ctl) => {
 					ctl.Prompt = strFmt("Lower: {0}", strLo(ctl.Value));
 					ctl.Title = strFmt("Upper: {0}", strUp(ctl.Value));
 					inputbox.Set(ctl);
 				});
 				string finalinputvalue = default;
-				inputbox.OnDidAccept((InputBoxState ctl) => {
+				inputbox.OnDidAccept((InputBoxBag ctl) => {
 					finalinputvalue = ctl.Value;
 					inputbox.Hide();
 				});
-				inputbox.OnDidHide((InputBoxState ctl) => {
+				inputbox.OnDidHide((InputBoxBag ctl) => {
 					inputbox.Dispose();
 					if ((null != finalinputvalue)) {
 						vsc.Window.ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", finalinputvalue)), null);
@@ -426,7 +426,7 @@ namespace VscAppzDemo {
 			OutputChannel logchan = default;
 			bool toggleonclick = default;
 			{
-				vsc.Window.CreateOutputChannel(appName)((OutputChannel it, OutputChannelState _unused) => {
+				vsc.Window.CreateOutputChannel(appName)((OutputChannel it, OutputChannelBag _unused) => {
 					logchan = it;
 					setOutChan(logchan);
 					logLn(strFmt("Hi, I'm `{0}`, this is my own custom `OutputChannel` where I leisurely log all your interactions with me. When I'm ended, it too will disappear.", appName));
@@ -447,7 +447,7 @@ namespace VscAppzDemo {
 				Func<any[], any> mycmd = default;
 				mycmd = (any[] _unused) => {
 					clickcount = 1 + clickcount;
-					statusitem.Get()((StatusBarItemState props) => {
+					statusitem.Get()((StatusBarItemBag props) => {
 						props.Text = logLn(strFmt("You clicked me {0} time(s).", clickcount));
 						if ("editorLightBulb.foreground" == props.Color) {
 							props.Color = "terminal.ansiGreen";
@@ -465,13 +465,13 @@ namespace VscAppzDemo {
 					return null;
 				};
 				vsc.Commands.RegisterCommand(cmdName, mycmd)((Disposable _commandRegisteredAtThisPoint) => {
-					StatusBarItemState cfg = default;
-					cfg = new StatusBarItemState();
+					StatusBarItemBag cfg = default;
+					cfg = new StatusBarItemBag();
 					cfg.Tooltip = strFmt("Hi from {0}!", appName);
 					cfg.Text = "You clicked me 0 time(s).";
 					cfg.Color = "#42BEEF";
 					cfg.Command = cmdName;
-					vsc.Window.CreateStatusBarItem(0, null, cfg)((StatusBarItem it, StatusBarItemState _unused) => {
+					vsc.Window.CreateStatusBarItem(0, null, cfg)((StatusBarItem it, StatusBarItemBag _unused) => {
 						statusitem = it;
 						statusitem.Show();
 					});

@@ -39,7 +39,7 @@ class Prep {
             }
             if (propmethods.length > 1) {
                 const struct = {
-                    isPropsOfIface: iface, name: iface.name + "Properties", funcFields: [],
+                    isPropsOfIface: iface, name: iface.name + "Bag", funcFields: [],
                     fields: propmethods.map(me => ({
                         fromOrig: me.fromOrig.decl,
                         name: me.name,
@@ -50,7 +50,7 @@ class Prep {
                 };
                 this.structs.push(struct);
                 iface.methods.push({
-                    name: pickName("", ["Properties", "Props", "Info", "Current", "Self", "It", "Cur"], iface.methods),
+                    name: pickName("", ["AllProperties", "Properties", "Props", "Info", "Current", "Self", "It", "Cur"], iface.methods),
                     isProps: struct, args: [{
                             isFromRetThenable: true, name: "onDone", optional: false,
                             typeSpec: { Thens: [struct.name] },
@@ -89,7 +89,7 @@ class Prep {
                 const propfields = struct.fields.filter(_ => !typeFun(_.typeSpec));
                 if (propfields.length) {
                     const propstruct = {
-                        funcFields: [], name: struct.name + "State", isPropsOfStruct: struct,
+                        funcFields: [], name: struct.name + "Bag", isPropsOfStruct: struct,
                         fromOrig: struct.fromOrig, isIncoming: true, isOutgoing: true,
                         fields: propfields.map(_ => {
                             _.optional = true;

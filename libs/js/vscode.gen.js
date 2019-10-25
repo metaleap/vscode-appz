@@ -141,7 +141,6 @@ function newInputBox() {
     me = { populateFrom: _ => InputBox_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     me.OnDidChangeValue = (a0) => InputBox_OnDidChangeValue.call(me, a0);
     me.OnDidAccept = (a0) => InputBox_OnDidAccept.call(me, a0);
-    me.OnDidTriggerButton = (a0) => InputBox_OnDidTriggerButton.call(me, a0);
     me.Show = () => InputBox_Show.call(me);
     me.Hide = () => InputBox_Hide.call(me);
     me.OnDidHide = (a0) => InputBox_OnDidHide.call(me, a0);
@@ -150,12 +149,6 @@ function newInputBox() {
     me.Set = (a0) => InputBox_Set.call(me, a0);
     return me;
 }
-function newQuickInputButton() {
-    let me;
-    me = { populateFrom: _ => QuickInputButton_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
-    return me;
-}
-exports.newQuickInputButton = newQuickInputButton;
 function newQuickPick() {
     let me;
     me = { populateFrom: _ => QuickPick_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
@@ -181,46 +174,46 @@ function newDiagnosticChangeEvent() {
     me = { populateFrom: _ => DiagnosticChangeEvent_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-function newEnvProperties() {
+function newEnvBag() {
     let me;
-    me = { populateFrom: _ => EnvProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { populateFrom: _ => EnvBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-function newWorkspaceProperties() {
+function newWorkspaceBag() {
     let me;
-    me = { populateFrom: _ => WorkspaceProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { populateFrom: _ => WorkspaceBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-function newStatusBarItemState() {
+function newStatusBarItemBag() {
     let me;
-    me = { populateFrom: _ => StatusBarItemState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { populateFrom: _ => StatusBarItemBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-exports.newStatusBarItemState = newStatusBarItemState;
-function newOutputChannelState() {
+exports.newStatusBarItemBag = newStatusBarItemBag;
+function newOutputChannelBag() {
     let me;
-    me = { populateFrom: _ => OutputChannelState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { populateFrom: _ => OutputChannelBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-exports.newOutputChannelState = newOutputChannelState;
-function newTextEditorDecorationTypeState() {
+exports.newOutputChannelBag = newOutputChannelBag;
+function newTextEditorDecorationTypeBag() {
     let me;
-    me = { populateFrom: _ => TextEditorDecorationTypeState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { populateFrom: _ => TextEditorDecorationTypeBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-exports.newTextEditorDecorationTypeState = newTextEditorDecorationTypeState;
-function newInputBoxState() {
+exports.newTextEditorDecorationTypeBag = newTextEditorDecorationTypeBag;
+function newInputBoxBag() {
     let me;
-    me = { populateFrom: _ => InputBoxState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { populateFrom: _ => InputBoxBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-exports.newInputBoxState = newInputBoxState;
-function newQuickPickState() {
+exports.newInputBoxBag = newInputBoxBag;
+function newQuickPickBag() {
     let me;
-    me = { populateFrom: _ => QuickPickState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { populateFrom: _ => QuickPickBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-exports.newQuickPickState = newQuickPickState;
+exports.newQuickPickBag = newQuickPickBag;
 class impl {
     constructor() {
         this.Window = new implWindow(this);
@@ -1750,10 +1743,10 @@ class implEnv extends implBase {
             onret = a0;
         };
     }
-    Properties() {
+    AllProperties() {
         let msg;
         msg = newipcMsg();
-        msg.QName = "env.Properties";
+        msg.QName = "env.AllProperties";
         msg.Data = {};
         let onresp;
         let onret;
@@ -1761,7 +1754,7 @@ class implEnv extends implBase {
             let ok;
             let result;
             if ((undefined !== payload && null !== payload)) {
-                result = newEnvProperties();
+                result = newEnvBag();
                 ok = result.populateFrom(payload);
                 if (!ok) {
                     return false;
@@ -2148,10 +2141,10 @@ class implWorkspace extends implBase {
             onret = a0;
         };
     }
-    Properties() {
+    AllProperties() {
         let msg;
         msg = newipcMsg();
-        msg.QName = "workspace.Properties";
+        msg.QName = "workspace.AllProperties";
         msg.Data = {};
         let onresp;
         let onret;
@@ -2159,7 +2152,7 @@ class implWorkspace extends implBase {
             let ok;
             let result;
             if ((undefined !== payload && null !== payload)) {
-                result = newWorkspaceProperties();
+                result = newWorkspaceBag();
                 ok = result.populateFrom(payload);
                 if (!ok) {
                     return false;
@@ -2465,7 +2458,7 @@ function StatusBarItem_Show() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newStatusBarItemState();
+            result = newStatusBarItemBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -2495,7 +2488,7 @@ function StatusBarItem_Hide() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newStatusBarItemState();
+            result = newStatusBarItemBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -2528,7 +2521,7 @@ function StatusBarItem_Get() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newStatusBarItemState();
+            result = newStatusBarItemBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -2582,7 +2575,7 @@ function OutputChannel_Append(value) {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelState();
+            result = newOutputChannelBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -2613,7 +2606,7 @@ function OutputChannel_AppendLine(value) {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelState();
+            result = newOutputChannelBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -2643,7 +2636,7 @@ function OutputChannel_Clear() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelState();
+            result = newOutputChannelBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -2674,7 +2667,7 @@ function OutputChannel_Show(preserveFocus) {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelState();
+            result = newOutputChannelBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -2704,7 +2697,7 @@ function OutputChannel_Hide() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelState();
+            result = newOutputChannelBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -2737,7 +2730,7 @@ function OutputChannel_Get() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelState();
+            result = newOutputChannelBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -2770,7 +2763,7 @@ function TextEditorDecorationType_Get() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newTextEditorDecorationTypeState();
+            result = newTextEditorDecorationTypeBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -2810,7 +2803,7 @@ function InputBox_OnDidChangeValue(handler) {
             return false;
         }
         let _a_1_;
-        _a_1_ = newInputBoxState();
+        _a_1_ = newInputBoxBag();
         ok = _a_1_.populateFrom(args[1]);
         if (!ok) {
             return false;
@@ -2864,72 +2857,12 @@ function InputBox_OnDidAccept(handler) {
             return ok;
         }
         let _a_0_;
-        _a_0_ = newInputBoxState();
+        _a_0_ = newInputBoxBag();
         ok = _a_0_.populateFrom(args[0]);
         if (!ok) {
             return false;
         }
         handler(_a_0_);
-        return true;
-    }, null);
-    msg.Data["handler"] = _fnid_handler;
-    this.disp.addSub(_fnid_handler);
-    let onresp;
-    let onret;
-    onresp = (payload) => {
-        let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newDisposable();
-            ok = result.populateFrom(payload);
-            if (!ok) {
-                return false;
-            }
-        }
-        else {
-            return false;
-        }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler));
-            }
-        }
-        return true;
-    };
-    this.disp.impl.send(msg, onresp);
-    return (a0) => {
-        onret = a0;
-    };
-}
-function InputBox_OnDidTriggerButton(handler) {
-    let msg;
-    msg = newipcMsg();
-    msg.QName = "InputBox.onDidTriggerButton";
-    msg.Data = {};
-    msg.Data[""] = this.disp.id;
-    let _fnid_handler;
-    if ((undefined === handler || null === handler)) {
-        vsc_appz_1.OnError(this.disp.impl, "InputBox.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
-        return null;
-    }
-    _fnid_handler = this.disp.impl.nextSub((args) => {
-        let ok;
-        if (2 !== args.length) {
-            return ok;
-        }
-        let _a_0_;
-        _a_0_ = newQuickInputButton();
-        ok = _a_0_.populateFrom(args[0]);
-        if (!ok) {
-            return false;
-        }
-        let _a_1_;
-        _a_1_ = newInputBoxState();
-        ok = _a_1_.populateFrom(args[1]);
-        if (!ok) {
-            return false;
-        }
-        handler(_a_0_, _a_1_);
         return true;
     }, null);
     msg.Data["handler"] = _fnid_handler;
@@ -2973,7 +2906,7 @@ function InputBox_Show() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newInputBoxState();
+            result = newInputBoxBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -3003,7 +2936,7 @@ function InputBox_Hide() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newInputBoxState();
+            result = newInputBoxBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -3038,7 +2971,7 @@ function InputBox_OnDidHide(handler) {
             return ok;
         }
         let _a_0_;
-        _a_0_ = newInputBoxState();
+        _a_0_ = newInputBoxBag();
         ok = _a_0_.populateFrom(args[0]);
         if (!ok) {
             return false;
@@ -3090,7 +3023,7 @@ function InputBox_Get() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newInputBoxState();
+            result = newInputBoxBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -3153,7 +3086,7 @@ function QuickPick_OnDidChangeValue(handler) {
             return false;
         }
         let _a_1_;
-        _a_1_ = newQuickPickState();
+        _a_1_ = newQuickPickBag();
         ok = _a_1_.populateFrom(args[1]);
         if (!ok) {
             return false;
@@ -3207,7 +3140,7 @@ function QuickPick_OnDidAccept(handler) {
             return ok;
         }
         let _a_0_;
-        _a_0_ = newQuickPickState();
+        _a_0_ = newQuickPickBag();
         ok = _a_0_.populateFrom(args[0]);
         if (!ok) {
             return false;
@@ -3280,7 +3213,7 @@ function QuickPick_OnDidChangeActive(handler) {
             __idx___a_0_ = __idx___a_0_ + 1;
         }
         let _a_1_;
-        _a_1_ = newQuickPickState();
+        _a_1_ = newQuickPickBag();
         ok = _a_1_.populateFrom(args[1]);
         if (!ok) {
             return false;
@@ -3353,7 +3286,7 @@ function QuickPick_OnDidChangeSelection(handler) {
             __idx___a_0_ = __idx___a_0_ + 1;
         }
         let _a_1_;
-        _a_1_ = newQuickPickState();
+        _a_1_ = newQuickPickBag();
         ok = _a_1_.populateFrom(args[1]);
         if (!ok) {
             return false;
@@ -3402,7 +3335,7 @@ function QuickPick_Show() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newQuickPickState();
+            result = newQuickPickBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -3432,7 +3365,7 @@ function QuickPick_Hide() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newQuickPickState();
+            result = newQuickPickBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -3467,7 +3400,7 @@ function QuickPick_OnDidHide(handler) {
             return ok;
         }
         let _a_0_;
-        _a_0_ = newQuickPickState();
+        _a_0_ = newQuickPickBag();
         ok = _a_0_.populateFrom(args[0]);
         if (!ok) {
             return false;
@@ -3519,7 +3452,7 @@ function QuickPick_Get() {
         let ok;
         let result;
         if ((undefined !== payload && null !== payload)) {
-            result = newQuickPickState();
+            result = newQuickPickBag();
             ok = result.populateFrom(payload);
             if (!ok) {
                 return false;
@@ -3806,7 +3739,7 @@ function QuickPick_populateFrom(payload) {
     ok = this.disp.populateFrom(payload);
     return ok;
 }
-function EnvProperties_populateFrom(payload) {
+function EnvBag_populateFrom(payload) {
     let it;
     let ok;
     let val;
@@ -3986,7 +3919,7 @@ function WorkspaceFoldersChangeEvent_populateFrom(payload) {
     }
     return true;
 }
-function WorkspaceProperties_populateFrom(payload) {
+function WorkspaceBag_populateFrom(payload) {
     let it;
     let ok;
     let val;
@@ -4084,7 +4017,7 @@ function DiagnosticChangeEvent_populateFrom(payload) {
     }
     return true;
 }
-function StatusBarItemState_populateFrom(payload) {
+function StatusBarItemBag_populateFrom(payload) {
     let it;
     let ok;
     let val;
@@ -4176,7 +4109,7 @@ function StatusBarItemState_populateFrom(payload) {
     }
     return true;
 }
-function OutputChannelState_populateFrom(payload) {
+function OutputChannelBag_populateFrom(payload) {
     let it;
     let ok;
     let val;
@@ -4199,7 +4132,7 @@ function OutputChannelState_populateFrom(payload) {
     }
     return true;
 }
-function TextEditorDecorationTypeState_populateFrom(payload) {
+function TextEditorDecorationTypeBag_populateFrom(payload) {
     let it;
     let ok;
     let val;
@@ -4222,7 +4155,7 @@ function TextEditorDecorationTypeState_populateFrom(payload) {
     }
     return true;
 }
-function InputBoxState_populateFrom(payload) {
+function InputBoxBag_populateFrom(payload) {
     let it;
     let ok;
     let val;
@@ -4262,31 +4195,6 @@ function InputBoxState_populateFrom(payload) {
             }
         }
         this.password = password;
-    }
-    [val, ok] = [it["buttons"], undefined !== it["buttons"]];
-    if (ok) {
-        let buttons;
-        if ((undefined !== val && null !== val)) {
-            let __coll__buttons;
-            [__coll__buttons, ok] = [val, (typeof val === "object") && (typeof val["length"] === "number")];
-            if (!ok) {
-                return false;
-            }
-            buttons = new Array(__coll__buttons.length);
-            let __idx__buttons;
-            __idx__buttons = 0;
-            for (const __item__buttons of __coll__buttons) {
-                let __val__buttons;
-                __val__buttons = newQuickInputButton();
-                ok = __val__buttons.populateFrom(__item__buttons);
-                if (!ok) {
-                    return false;
-                }
-                buttons[__idx__buttons] = __val__buttons;
-                __idx__buttons = __idx__buttons + 1;
-            }
-        }
-        this.buttons = buttons;
     }
     [val, ok] = [it["prompt"], undefined !== it["prompt"]];
     if (ok) {
@@ -4382,55 +4290,7 @@ function InputBoxState_populateFrom(payload) {
     }
     return true;
 }
-function QuickInputButton_populateFrom(payload) {
-    let it;
-    let ok;
-    let val;
-    [it, ok] = [payload, typeof payload === "object"];
-    if (!ok) {
-        return false;
-    }
-    [val, ok] = [it["iconPath"], undefined !== it["iconPath"]];
-    if (ok) {
-        let iconPath;
-        if ((undefined !== val && null !== val)) {
-            [iconPath, ok] = [val, typeof val === "string"];
-            if (!ok) {
-                return false;
-            }
-        }
-        this.iconPath = iconPath;
-    }
-    else {
-        return false;
-    }
-    [val, ok] = [it["tooltip"], undefined !== it["tooltip"]];
-    if (ok) {
-        let tooltip;
-        if ((undefined !== val && null !== val)) {
-            let _tooltip_;
-            [_tooltip_, ok] = [val, typeof val === "string"];
-            if (!ok) {
-                return false;
-            }
-            tooltip = _tooltip_;
-        }
-        this.tooltip = tooltip;
-    }
-    [val, ok] = [it["my"], undefined !== it["my"]];
-    if (ok) {
-        let my;
-        if ((undefined !== val && null !== val)) {
-            [my, ok] = [val, typeof val === "object"];
-            if (!ok) {
-                return false;
-            }
-        }
-        this.my = my;
-    }
-    return true;
-}
-function QuickPickState_populateFrom(payload) {
+function QuickPickBag_populateFrom(payload) {
     let it;
     let ok;
     let val;

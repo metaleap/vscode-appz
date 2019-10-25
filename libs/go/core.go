@@ -54,6 +54,7 @@ func init() {
 		stderr.Lock()
 		defer stderr.Unlock()
 		_, _ = os.Stderr.WriteString(fmt.Sprintf(OnErrorDefaultOutputFormat, err, jsonmsg))
+		os.Stderr.WriteString(string(debug.Stack()) + "\n\n")
 	}
 }
 

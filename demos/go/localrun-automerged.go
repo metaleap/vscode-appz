@@ -231,7 +231,7 @@ func demo_Languages_GetLanguages() {
 }
 
 func demo_Env_Properties() {
-	vsc.Env().Properties()(func(props EnvProperties) {
+	vsc.Env().AllProperties()(func(props EnvBag) {
 		var items []string
 		items = make([]string, 8)
 		{
@@ -256,7 +256,7 @@ func demo_Env_Properties() {
 }
 
 func demo_Workspace_Properties() {
-	vsc.Workspace().Properties()(func(props WorkspaceProperties) {
+	vsc.Workspace().AllProperties()(func(props WorkspaceBag) {
 		var items []string
 		items = make([]string, 3)
 		{
@@ -384,7 +384,7 @@ func demo_Window_ShowQuickPick() {
 }
 
 func demo_Window_CreateQuickPick() {
-	var cfg QuickPickState
+	var cfg QuickPickBag
 	cfg.IgnoreFocusOut = true
 	cfg.Title = "I'm a full-fledged QuickPick"
 	cfg.Step = 23
@@ -396,12 +396,12 @@ func demo_Window_CreateQuickPick() {
 		cfg.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i)
 		cfg.Items[(i - 1)].AlwaysShow = i == 42
 	}
-	vsc.Window().CreateQuickPick(&cfg)(func(ctl QuickPick, _unused QuickPickState) {
-		ctl.OnDidAccept(func(props QuickPickState) {
+	vsc.Window().CreateQuickPick(&cfg)(func(ctl QuickPick, _unused QuickPickBag) {
+		ctl.OnDidAccept(func(props QuickPickBag) {
 			logLn(strFmt("Picked: {0}", props.SelectedItems))
 			ctl.Hide()
 		})
-		ctl.OnDidHide(func(_ QuickPickState) {
+		ctl.OnDidHide(func(_ QuickPickBag) {
 			ctl.Dispose()
 		})
 		ctl.Show()
@@ -409,23 +409,23 @@ func demo_Window_CreateQuickPick() {
 }
 
 func demo_Window_CreateInputBox() {
-	vsc.Window().CreateInputBox(nil)(func(inputbox InputBox, props InputBoxState) {
+	vsc.Window().CreateInputBox(nil)(func(inputbox InputBox, props InputBoxBag) {
 		props.IgnoreFocusOut = true
 		props.Placeholder = "The initial Placeholder"
 		props.Prompt = "The initial Prompt"
 		props.Title = "The initial Title"
 		inputbox.Set(props)
-		inputbox.OnDidChangeValue(func(input string, ctl InputBoxState) {
+		inputbox.OnDidChangeValue(func(input string, ctl InputBoxBag) {
 			ctl.Prompt = strFmt("Lower: {0}", strLo(ctl.Value))
 			ctl.Title = strFmt("Upper: {0}", strUp(ctl.Value))
 			inputbox.Set(ctl)
 		})
 		var finalinputvalue *string
-		inputbox.OnDidAccept(func(ctl InputBoxState) {
+		inputbox.OnDidAccept(func(ctl InputBoxBag) {
 			finalinputvalue = &ctl.Value
 			inputbox.Hide()
 		})
-		inputbox.OnDidHide(func(ctl InputBoxState) {
+		inputbox.OnDidHide(func(ctl InputBoxBag) {
 			inputbox.Dispose()
 			if (nil != finalinputvalue) {
 				vsc.Window().ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", *finalinputvalue)), nil)
@@ -528,7 +528,7 @@ func onUpAndRunning() {
 	var logchan *OutputChannel
 	var toggleonclick bool
 	{
-		vsc.Window().CreateOutputChannel(appName)(func(it OutputChannel, _unused OutputChannelState) {
+		vsc.Window().CreateOutputChannel(appName)(func(it OutputChannel, _unused OutputChannelBag) {
 			logchan = &it
 			setOutChan(logchan)
 			logLn(strFmt("Hi, I'm `{0}`, this is my own custom `OutputChannel` where I leisurely log all your interactions with me. When I'm ended, it too will disappear.", appName))
@@ -549,7 +549,7 @@ func onUpAndRunning() {
 		var mycmd func([]any) any
 		mycmd = func(_unused []any) any {
 			clickcount = 1 + clickcount
-			statusitem.Get()(func(props StatusBarItemState) {
+			statusitem.Get()(func(props StatusBarItemBag) {
 				props.Text = logLn(strFmt("You clicked me {0} time(s).", clickcount))
 				if "editorLightBulb.foreground" == props.Color {
 					props.Color = "terminal.ansiGreen"
@@ -567,12 +567,12 @@ func onUpAndRunning() {
 			return nil
 		}
 		vsc.Commands().RegisterCommand(cmdName, mycmd)(func(_commandRegisteredAtThisPoint *Disposable) {
-			var cfg StatusBarItemState
+			var cfg StatusBarItemBag
 			cfg.Tooltip = strFmt("Hi from {0}!", appName)
 			cfg.Text = "You clicked me 0 time(s)."
 			cfg.Color = "#42BEEF"
 			cfg.Command = cmdName
-			vsc.Window().CreateStatusBarItem(0, nil, &cfg)(func(it StatusBarItem, _unused StatusBarItemState) {
+			vsc.Window().CreateStatusBarItem(0, nil, &cfg)(func(it StatusBarItem, _unused StatusBarItemBag) {
 				statusitem = it
 				statusitem.Show()
 			})

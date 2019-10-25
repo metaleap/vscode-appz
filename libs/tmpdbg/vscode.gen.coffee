@@ -592,7 +592,7 @@ Window: interface
     # Represents the current window's state.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+    # A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
     State: ((WindowState->void)->void)
 
     # onDidChangeWindowState:
@@ -620,11 +620,11 @@ Window: interface
     # A new status bar item.
     #
     # @optionallyInitialStateToApplyUponCreation:
-    # ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-    CreateStatusBarItem: ((StatusBarItem->StatusBarItemState->void)->void)
+    # if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+    CreateStatusBarItem: ((StatusBarItem->StatusBarItemBag->void)->void)
         alignment: ?StatusBarAlignment
         priority: ?int
-        optionallyInitialStateToApplyUponCreation: ?StatusBarItemState # undefined
+        optionallyInitialStateToApplyUponCreation: ?StatusBarItemBag # undefined
 
     # createOutputChannel:
     # Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
@@ -634,7 +634,7 @@ Window: interface
     #
     # @return:
     # A thenable that resolves when the `OutputChannel` has been created and initialized.
-    CreateOutputChannel: ((OutputChannel->OutputChannelState->void)->void)
+    CreateOutputChannel: ((OutputChannel->OutputChannelBag->void)->void)
         name: string
 
     # createTextEditorDecorationType:
@@ -645,7 +645,7 @@ Window: interface
     #
     # @return:
     # A new decoration type instance.
-    CreateTextEditorDecorationType: ((TextEditorDecorationType->TextEditorDecorationTypeState->void)->void)
+    CreateTextEditorDecorationType: ((TextEditorDecorationType->TextEditorDecorationTypeBag->void)->void)
         options: DecorationRenderOptions
 
     # createInputBox:
@@ -659,9 +659,9 @@ Window: interface
     # A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
     #
     # @optionallyInitialStateToApplyUponCreation:
-    # ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-    CreateInputBox: ((InputBox->InputBoxState->void)->void)
-        optionallyInitialStateToApplyUponCreation: ?InputBoxState # undefined
+    # if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+    CreateInputBox: ((InputBox->InputBoxBag->void)->void)
+        optionallyInitialStateToApplyUponCreation: ?InputBoxBag # undefined
 
     # createQuickPick:
     # Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
@@ -675,9 +675,9 @@ Window: interface
     # A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
     #
     # @optionallyInitialStateToApplyUponCreation:
-    # ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
-    CreateQuickPick: ((QuickPick->QuickPickState->void)->void)
-        optionallyInitialStateToApplyUponCreation: ?QuickPickState # undefined
+    # if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+    CreateQuickPick: ((QuickPick->QuickPickBag->void)->void)
+        optionallyInitialStateToApplyUponCreation: ?QuickPickBag # undefined
 
 
 
@@ -705,28 +705,28 @@ Env: interface
     # The application name of the editor, like 'VS Code'.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
     AppName: ((string->void)->void)
 
     # appRoot:
     # The application root folder from which the editor is running.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
     AppRoot: ((string->void)->void)
 
     # language:
     # Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
     Language: ((string->void)->void)
 
     # machineId:
     # A unique identifier for the computer.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
     MachineId: ((string->void)->void)
 
     # remoteName:
@@ -739,7 +739,7 @@ Env: interface
     # a specific extension runs remote or not.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
     RemoteName: ((?string->void)->void)
 
     # sessionId:
@@ -747,7 +747,7 @@ Env: interface
     # Changes each time the editor is started.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
     SessionId: ((string->void)->void)
 
     # shell:
@@ -755,18 +755,21 @@ Env: interface
     # `terminal.integrated.shell` setting for the extension host's platform.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
     Shell: ((string->void)->void)
 
     # uriScheme:
     # The custom uri scheme the editor registers to in the operating system.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
     UriScheme: ((string->void)->void)
 
     # Provides single-call access to numerous individual `Env` properties at once.
-    Properties: ((EnvProperties->void)->void)
+    #
+    # @return:
+    # A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
+    AllProperties: ((EnvBag->void)->void)
 
     # The clipboard provides read and write access to the system's clipboard.
     Clipboard: Clipboard
@@ -814,7 +817,7 @@ Workspace: interface
     # has been opened.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
     Name: ((?string->void)->void)
 
     # workspaceFile:
@@ -851,7 +854,7 @@ Workspace: interface
     # well as an untitled or saved workspace.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
     WorkspaceFile: ((?string->void)->void)
 
     # saveAll:
@@ -894,7 +897,7 @@ Workspace: interface
     # *Note* that the first entry corresponds to the value of `rootPath`.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
     WorkspaceFolders: ((?[WorkspaceFolder]->void)->void)
 
     # findFiles:
@@ -947,7 +950,10 @@ Workspace: interface
         includeWorkspaceFolder: bool
 
     # Provides single-call access to numerous individual `Workspace` properties at once.
-    Properties: ((WorkspaceProperties->void)->void)
+    #
+    # @return:
+    # A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
+    AllProperties: ((WorkspaceBag->void)->void)
 
 
 
@@ -2049,9 +2055,9 @@ DiagnosticChangeEvent: class
 
 
 
-# envProperties:
-# Namespace describing the environment the editor runs in.
-EnvProperties: class
+# envBag:
+# EnvBag gathers various properties of `Env`, obtainable via its `AllProperties` method.
+EnvBag: class
 
     # appName:
     # The application name of the editor, like 'VS Code'.
@@ -2112,15 +2118,9 @@ EnvProperties: class
 
 
 
-# workspaceProperties:
-# Namespace for dealing with the current workspace. A workspace is the representation
-# of the folder that has been opened. There is no workspace when just a file but not a
-# folder has been opened.
-# 
-# The workspace offers support for [listening](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher) to fs
-# events and for [finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles) files. Both perform well and run _outside_
-# the editor-process so that they should be always used instead of nodejs-equivalents.
-WorkspaceProperties: class
+# workspaceBag:
+# WorkspaceBag gathers various properties of `Workspace`, obtainable via its `AllProperties` method.
+WorkspaceBag: class
 
     # name:
     # The name of the workspace. `undefined` when no folder
@@ -2175,9 +2175,8 @@ WorkspaceProperties: class
 
 
 
-# A status bar item is a status bar contribution that can
-# show text and icons and run a command on click.
-StatusBarItemState: class
+# StatusBarItemBag is a snapshot of `StatusBarItem` state at the counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+StatusBarItemBag: class
 
     # alignment:
     # The alignment of this item.
@@ -2225,11 +2224,8 @@ StatusBarItemState: class
 
 
 
-# An output channel is a container for readonly textual information.
-# 
-# To get an instance of an `OutputChannel` use
-# [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
-OutputChannelState: class
+# OutputChannelBag is a snapshot of `OutputChannel` state at the counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+OutputChannelBag: class
 
     # name:
     # The human-readable name of this output channel.
@@ -2240,12 +2236,8 @@ OutputChannelState: class
 
 
 
-# Represents a handle to a set of decorations
-# sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
-# 
-# To get an instance of a `TextEditorDecorationType` use
-# [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
-TextEditorDecorationTypeState: class
+# TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+TextEditorDecorationTypeBag: class
 
     # key:
     # Internal representation of the handle.
@@ -2256,12 +2248,8 @@ TextEditorDecorationTypeState: class
 
 
 
-# A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
-# 
-# Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
-# is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
-# when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
-InputBoxState: class
+# InputBoxBag is a snapshot of `InputBox` state at the counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+InputBoxBag: class
 
     # value:
     # Current input value.
@@ -2338,15 +2326,8 @@ InputBoxState: class
 
 
 
-# A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
-# list of items of type T. The items can be filtered through a filter text field and
-# there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
-# selecting multiple items.
-# 
-# Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
-# is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
-# when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
-QuickPickState: class
+# QuickPickBag is a snapshot of `QuickPick` state at the counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+QuickPickBag: class
 
     # value:
     # Current value of the filter text.
@@ -3421,7 +3402,7 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> ((?Disposable->
 
 
 
-Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> optionallyInitialStateToApplyUponCreation:?StatusBarItemState -> ((StatusBarItem->StatusBarItemState->void)->void))
+Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> optionallyInitialStateToApplyUponCreation:?StatusBarItemBag -> ((StatusBarItem->StatusBarItemBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createStatusBarItem"
@@ -3431,7 +3412,7 @@ Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> 
     if =?priority
         msg.Data@"priority" = priority
     var onresp of (any->bool)
-    var onret of (StatusBarItem->StatusBarItemState->void)
+    var onret of (StatusBarItem->StatusBarItemBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
         var result of StatusBarItem
@@ -3443,28 +3424,28 @@ Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> 
             result.disp.impl = this.Impl()
             if =?optionallyInitialStateToApplyUponCreation
                 result.Set(*optionallyInitialStateToApplyUponCreation)
-            result.Get()((state:StatusBarItemState -> void)
+            result.Get()((state:StatusBarItemBag -> void)
                 if =?onret
                     onret(result, state)
             )
         return true
     
     this.Impl().send(msg, onresp)
-    return (a0:(StatusBarItem->StatusBarItemState->void) -> void)
+    return (a0:(StatusBarItem->StatusBarItemBag->void) -> void)
         onret = a0
     
 
 
 
 
-Window·CreateOutputChannel: (name:string -> ((OutputChannel->OutputChannelState->void)->void))
+Window·CreateOutputChannel: (name:string -> ((OutputChannel->OutputChannelBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createOutputChannel"
     msg.Data = dict·new(1)
     msg.Data@"name" = name
     var onresp of (any->bool)
-    var onret of (OutputChannel->OutputChannelState->void)
+    var onret of (OutputChannel->OutputChannelBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
         var result of OutputChannel
@@ -3474,28 +3455,28 @@ Window·CreateOutputChannel: (name:string -> ((OutputChannel->OutputChannelState
             if !ok
                 return false
             result.disp.impl = this.Impl()
-            result.Get()((state:OutputChannelState -> void)
+            result.Get()((state:OutputChannelBag -> void)
                 if =?onret
                     onret(result, state)
             )
         return true
     
     this.Impl().send(msg, onresp)
-    return (a0:(OutputChannel->OutputChannelState->void) -> void)
+    return (a0:(OutputChannel->OutputChannelBag->void) -> void)
         onret = a0
     
 
 
 
 
-Window·CreateTextEditorDecorationType: (options:DecorationRenderOptions -> ((TextEditorDecorationType->TextEditorDecorationTypeState->void)->void))
+Window·CreateTextEditorDecorationType: (options:DecorationRenderOptions -> ((TextEditorDecorationType->TextEditorDecorationTypeBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createTextEditorDecorationType"
     msg.Data = dict·new(1)
     msg.Data@"options" = options
     var onresp of (any->bool)
-    var onret of (TextEditorDecorationType->TextEditorDecorationTypeState->void)
+    var onret of (TextEditorDecorationType->TextEditorDecorationTypeBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
         var result of TextEditorDecorationType
@@ -3505,27 +3486,27 @@ Window·CreateTextEditorDecorationType: (options:DecorationRenderOptions -> ((Te
             if !ok
                 return false
             result.disp.impl = this.Impl()
-            result.Get()((state:TextEditorDecorationTypeState -> void)
+            result.Get()((state:TextEditorDecorationTypeBag -> void)
                 if =?onret
                     onret(result, state)
             )
         return true
     
     this.Impl().send(msg, onresp)
-    return (a0:(TextEditorDecorationType->TextEditorDecorationTypeState->void) -> void)
+    return (a0:(TextEditorDecorationType->TextEditorDecorationTypeBag->void) -> void)
         onret = a0
     
 
 
 
 
-Window·CreateInputBox: (optionallyInitialStateToApplyUponCreation:?InputBoxState -> ((InputBox->InputBoxState->void)->void))
+Window·CreateInputBox: (optionallyInitialStateToApplyUponCreation:?InputBoxBag -> ((InputBox->InputBoxBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createInputBox"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
-    var onret of (InputBox->InputBoxState->void)
+    var onret of (InputBox->InputBoxBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
         var result of InputBox
@@ -3537,27 +3518,27 @@ Window·CreateInputBox: (optionallyInitialStateToApplyUponCreation:?InputBoxStat
             result.disp.impl = this.Impl()
             if =?optionallyInitialStateToApplyUponCreation
                 result.Set(*optionallyInitialStateToApplyUponCreation)
-            result.Get()((state:InputBoxState -> void)
+            result.Get()((state:InputBoxBag -> void)
                 if =?onret
                     onret(result, state)
             )
         return true
     
     this.Impl().send(msg, onresp)
-    return (a0:(InputBox->InputBoxState->void) -> void)
+    return (a0:(InputBox->InputBoxBag->void) -> void)
         onret = a0
     
 
 
 
 
-Window·CreateQuickPick: (optionallyInitialStateToApplyUponCreation:?QuickPickState -> ((QuickPick->QuickPickState->void)->void))
+Window·CreateQuickPick: (optionallyInitialStateToApplyUponCreation:?QuickPickBag -> ((QuickPick->QuickPickBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createQuickPick"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
-    var onret of (QuickPick->QuickPickState->void)
+    var onret of (QuickPick->QuickPickBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
         var result of QuickPick
@@ -3569,14 +3550,14 @@ Window·CreateQuickPick: (optionallyInitialStateToApplyUponCreation:?QuickPickSt
             result.disp.impl = this.Impl()
             if =?optionallyInitialStateToApplyUponCreation
                 result.Set(*optionallyInitialStateToApplyUponCreation)
-            result.Get()((state:QuickPickState -> void)
+            result.Get()((state:QuickPickBag -> void)
                 if =?onret
                     onret(result, state)
             )
         return true
     
     this.Impl().send(msg, onresp)
-    return (a0:(QuickPick->QuickPickState->void) -> void)
+    return (a0:(QuickPick->QuickPickBag->void) -> void)
         onret = a0
     
 
@@ -3822,18 +3803,18 @@ Env·UriScheme: ( -> ((string->void)->void))
 
 
 
-Env·Properties: ( -> ((EnvProperties->void)->void))
+Env·AllProperties: ( -> ((EnvBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "env.Properties"
+    msg.QName = "env.AllProperties"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
-    var onret of (EnvProperties->void)
+    var onret of (EnvBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of EnvProperties
+        var result of EnvBag
         if =?payload
-            result = EnvProperties·new
+            result = EnvBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -3844,7 +3825,7 @@ Env·Properties: ( -> ((EnvProperties->void)->void))
         return true
     
     this.Impl().send(msg, onresp)
-    return (a0:(EnvProperties->void) -> void)
+    return (a0:(EnvBag->void) -> void)
         onret = a0
     
 
@@ -4183,18 +4164,18 @@ Workspace·AsRelativePath: (pathOrUri:string -> includeWorkspaceFolder:bool -> (
 
 
 
-Workspace·Properties: ( -> ((WorkspaceProperties->void)->void))
+Workspace·AllProperties: ( -> ((WorkspaceBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "workspace.Properties"
+    msg.QName = "workspace.AllProperties"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
-    var onret of (WorkspaceProperties->void)
+    var onret of (WorkspaceBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of WorkspaceProperties
+        var result of WorkspaceBag
         if =?payload
-            result = WorkspaceProperties·new
+            result = WorkspaceBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4205,7 +4186,7 @@ Workspace·Properties: ( -> ((WorkspaceProperties->void)->void))
         return true
     
     this.Impl().send(msg, onresp)
-    return (a0:(WorkspaceProperties->void) -> void)
+    return (a0:(WorkspaceBag->void) -> void)
         onret = a0
     
 
@@ -4448,19 +4429,19 @@ Commands·GetCommands: (filterInternal:bool -> ((?[string]->void)->void))
 
 
 
-StatusBarItem·Show: ( -> ((?StatusBarItemState->void)->void))
+StatusBarItem·Show: ( -> ((?StatusBarItemBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.show"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (?StatusBarItemState->void)
+    var onret of (?StatusBarItemBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of ?StatusBarItemState
+        var result of ?StatusBarItemBag
         if =?payload
-            result = ?StatusBarItemState·new
+            result = ?StatusBarItemBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4469,26 +4450,26 @@ StatusBarItem·Show: ( -> ((?StatusBarItemState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(?StatusBarItemState->void) -> void)
+    return (a0:(?StatusBarItemBag->void) -> void)
         onret = a0
     
 
 
 
 
-StatusBarItem·Hide: ( -> ((?StatusBarItemState->void)->void))
+StatusBarItem·Hide: ( -> ((?StatusBarItemBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.hide"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (?StatusBarItemState->void)
+    var onret of (?StatusBarItemBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of ?StatusBarItemState
+        var result of ?StatusBarItemBag
         if =?payload
-            result = ?StatusBarItemState·new
+            result = ?StatusBarItemBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4497,7 +4478,7 @@ StatusBarItem·Hide: ( -> ((?StatusBarItemState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(?StatusBarItemState->void) -> void)
+    return (a0:(?StatusBarItemBag->void) -> void)
         onret = a0
     
 
@@ -4510,19 +4491,19 @@ StatusBarItem·Dispose: ( -> ((void->void)->void))
 
 
 
-StatusBarItem·Get: ( -> ((StatusBarItemState->void)->void))
+StatusBarItem·Get: ( -> ((StatusBarItemBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.appzObjPropsGet"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (StatusBarItemState->void)
+    var onret of (StatusBarItemBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of StatusBarItemState
+        var result of StatusBarItemBag
         if =?payload
-            result = StatusBarItemState·new
+            result = StatusBarItemBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4531,14 +4512,14 @@ StatusBarItem·Get: ( -> ((StatusBarItemState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(StatusBarItemState->void) -> void)
+    return (a0:(StatusBarItemBag->void) -> void)
         onret = a0
     
 
 
 
 
-StatusBarItem·Set: (allUpdates:StatusBarItemState -> ((void->void)->void))
+StatusBarItem·Set: (allUpdates:StatusBarItemBag -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.appzObjPropsSet"
@@ -4562,7 +4543,7 @@ StatusBarItem·Set: (allUpdates:StatusBarItemState -> ((void->void)->void))
 
 
 
-OutputChannel·Append: (value:string -> ((?OutputChannelState->void)->void))
+OutputChannel·Append: (value:string -> ((?OutputChannelBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.append"
@@ -4570,12 +4551,12 @@ OutputChannel·Append: (value:string -> ((?OutputChannelState->void)->void))
     msg.Data@"" = this.disp.id
     msg.Data@"value" = value
     var onresp of (any->bool)
-    var onret of (?OutputChannelState->void)
+    var onret of (?OutputChannelBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of ?OutputChannelState
+        var result of ?OutputChannelBag
         if =?payload
-            result = ?OutputChannelState·new
+            result = ?OutputChannelBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4584,14 +4565,14 @@ OutputChannel·Append: (value:string -> ((?OutputChannelState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(?OutputChannelState->void) -> void)
+    return (a0:(?OutputChannelBag->void) -> void)
         onret = a0
     
 
 
 
 
-OutputChannel·AppendLine: (value:string -> ((?OutputChannelState->void)->void))
+OutputChannel·AppendLine: (value:string -> ((?OutputChannelBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.appendLine"
@@ -4599,12 +4580,12 @@ OutputChannel·AppendLine: (value:string -> ((?OutputChannelState->void)->void))
     msg.Data@"" = this.disp.id
     msg.Data@"value" = value
     var onresp of (any->bool)
-    var onret of (?OutputChannelState->void)
+    var onret of (?OutputChannelBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of ?OutputChannelState
+        var result of ?OutputChannelBag
         if =?payload
-            result = ?OutputChannelState·new
+            result = ?OutputChannelBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4613,26 +4594,26 @@ OutputChannel·AppendLine: (value:string -> ((?OutputChannelState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(?OutputChannelState->void) -> void)
+    return (a0:(?OutputChannelBag->void) -> void)
         onret = a0
     
 
 
 
 
-OutputChannel·Clear: ( -> ((?OutputChannelState->void)->void))
+OutputChannel·Clear: ( -> ((?OutputChannelBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.clear"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (?OutputChannelState->void)
+    var onret of (?OutputChannelBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of ?OutputChannelState
+        var result of ?OutputChannelBag
         if =?payload
-            result = ?OutputChannelState·new
+            result = ?OutputChannelBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4641,14 +4622,14 @@ OutputChannel·Clear: ( -> ((?OutputChannelState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(?OutputChannelState->void) -> void)
+    return (a0:(?OutputChannelBag->void) -> void)
         onret = a0
     
 
 
 
 
-OutputChannel·Show: (preserveFocus:bool -> ((?OutputChannelState->void)->void))
+OutputChannel·Show: (preserveFocus:bool -> ((?OutputChannelBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.show"
@@ -4656,12 +4637,12 @@ OutputChannel·Show: (preserveFocus:bool -> ((?OutputChannelState->void)->void))
     msg.Data@"" = this.disp.id
     msg.Data@"preserveFocus" = preserveFocus
     var onresp of (any->bool)
-    var onret of (?OutputChannelState->void)
+    var onret of (?OutputChannelBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of ?OutputChannelState
+        var result of ?OutputChannelBag
         if =?payload
-            result = ?OutputChannelState·new
+            result = ?OutputChannelBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4670,26 +4651,26 @@ OutputChannel·Show: (preserveFocus:bool -> ((?OutputChannelState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(?OutputChannelState->void) -> void)
+    return (a0:(?OutputChannelBag->void) -> void)
         onret = a0
     
 
 
 
 
-OutputChannel·Hide: ( -> ((?OutputChannelState->void)->void))
+OutputChannel·Hide: ( -> ((?OutputChannelBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.hide"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (?OutputChannelState->void)
+    var onret of (?OutputChannelBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of ?OutputChannelState
+        var result of ?OutputChannelBag
         if =?payload
-            result = ?OutputChannelState·new
+            result = ?OutputChannelBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4698,7 +4679,7 @@ OutputChannel·Hide: ( -> ((?OutputChannelState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(?OutputChannelState->void) -> void)
+    return (a0:(?OutputChannelBag->void) -> void)
         onret = a0
     
 
@@ -4711,19 +4692,19 @@ OutputChannel·Dispose: ( -> ((void->void)->void))
 
 
 
-OutputChannel·Get: ( -> ((OutputChannelState->void)->void))
+OutputChannel·Get: ( -> ((OutputChannelBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.appzObjPropsGet"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (OutputChannelState->void)
+    var onret of (OutputChannelBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of OutputChannelState
+        var result of OutputChannelBag
         if =?payload
-            result = OutputChannelState·new
+            result = OutputChannelBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4732,7 +4713,7 @@ OutputChannel·Get: ( -> ((OutputChannelState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(OutputChannelState->void) -> void)
+    return (a0:(OutputChannelBag->void) -> void)
         onret = a0
     
 
@@ -4745,19 +4726,19 @@ TextEditorDecorationType·Dispose: ( -> ((void->void)->void))
 
 
 
-TextEditorDecorationType·Get: ( -> ((TextEditorDecorationTypeState->void)->void))
+TextEditorDecorationType·Get: ( -> ((TextEditorDecorationTypeBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "TextEditorDecorationType.appzObjPropsGet"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (TextEditorDecorationTypeState->void)
+    var onret of (TextEditorDecorationTypeBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of TextEditorDecorationTypeState
+        var result of TextEditorDecorationTypeBag
         if =?payload
-            result = TextEditorDecorationTypeState·new
+            result = TextEditorDecorationTypeBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4766,14 +4747,14 @@ TextEditorDecorationType·Get: ( -> ((TextEditorDecorationTypeState->void)->void
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(TextEditorDecorationTypeState->void) -> void)
+    return (a0:(TextEditorDecorationTypeBag->void) -> void)
         onret = a0
     
 
 
 
 
-InputBox·OnDidChangeValue: (handler:(string->InputBoxState->void) -> ((?Disposable->void)->void))
+InputBox·OnDidChangeValue: (handler:(string->InputBoxBag->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.onDidChangeValue"
@@ -4791,8 +4772,8 @@ InputBox·OnDidChangeValue: (handler:(string->InputBoxState->void) -> ((?Disposa
         [_a_0_, ok] = ((args@0)·(string))
         if !ok
             return false
-        var _a_1_ of InputBoxState
-        _a_1_ = InputBoxState·new
+        var _a_1_ of InputBoxBag
+        _a_1_ = InputBoxBag·new
         ok = _a_1_.populateFrom(args@1)
         if !ok
             return false
@@ -4825,7 +4806,7 @@ InputBox·OnDidChangeValue: (handler:(string->InputBoxState->void) -> ((?Disposa
 
 
 
-InputBox·OnDidAccept: (handler:(InputBoxState->void) -> ((?Disposable->void)->void))
+InputBox·OnDidAccept: (handler:(InputBoxBag->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.onDidAccept"
@@ -4839,8 +4820,8 @@ InputBox·OnDidAccept: (handler:(InputBoxState->void) -> ((?Disposable->void)->v
         var ok of bool
         if 1 != args·len
             return ok
-        var _a_0_ of InputBoxState
-        _a_0_ = InputBoxState·new
+        var _a_0_ of InputBoxBag
+        _a_0_ = InputBoxBag·new
         ok = _a_0_.populateFrom(args@0)
         if !ok
             return false
@@ -4873,19 +4854,19 @@ InputBox·OnDidAccept: (handler:(InputBoxState->void) -> ((?Disposable->void)->v
 
 
 
-InputBox·Show: ( -> ((?InputBoxState->void)->void))
+InputBox·Show: ( -> ((?InputBoxBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.show"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (?InputBoxState->void)
+    var onret of (?InputBoxBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of ?InputBoxState
+        var result of ?InputBoxBag
         if =?payload
-            result = ?InputBoxState·new
+            result = ?InputBoxBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4894,26 +4875,26 @@ InputBox·Show: ( -> ((?InputBoxState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(?InputBoxState->void) -> void)
+    return (a0:(?InputBoxBag->void) -> void)
         onret = a0
     
 
 
 
 
-InputBox·Hide: ( -> ((?InputBoxState->void)->void))
+InputBox·Hide: ( -> ((?InputBoxBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.hide"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (?InputBoxState->void)
+    var onret of (?InputBoxBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of ?InputBoxState
+        var result of ?InputBoxBag
         if =?payload
-            result = ?InputBoxState·new
+            result = ?InputBoxBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -4922,14 +4903,14 @@ InputBox·Hide: ( -> ((?InputBoxState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(?InputBoxState->void) -> void)
+    return (a0:(?InputBoxBag->void) -> void)
         onret = a0
     
 
 
 
 
-InputBox·OnDidHide: (handler:(InputBoxState->void) -> ((?Disposable->void)->void))
+InputBox·OnDidHide: (handler:(InputBoxBag->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.onDidHide"
@@ -4943,8 +4924,8 @@ InputBox·OnDidHide: (handler:(InputBoxState->void) -> ((?Disposable->void)->voi
         var ok of bool
         if 1 != args·len
             return ok
-        var _a_0_ of InputBoxState
-        _a_0_ = InputBoxState·new
+        var _a_0_ of InputBoxBag
+        _a_0_ = InputBoxBag·new
         ok = _a_0_.populateFrom(args@0)
         if !ok
             return false
@@ -4983,19 +4964,19 @@ InputBox·Dispose: ( -> ((void->void)->void))
 
 
 
-InputBox·Get: ( -> ((InputBoxState->void)->void))
+InputBox·Get: ( -> ((InputBoxBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.appzObjPropsGet"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (InputBoxState->void)
+    var onret of (InputBoxBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of InputBoxState
+        var result of InputBoxBag
         if =?payload
-            result = InputBoxState·new
+            result = InputBoxBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -5004,14 +4985,14 @@ InputBox·Get: ( -> ((InputBoxState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(InputBoxState->void) -> void)
+    return (a0:(InputBoxBag->void) -> void)
         onret = a0
     
 
 
 
 
-InputBox·Set: (allUpdates:InputBoxState -> ((void->void)->void))
+InputBox·Set: (allUpdates:InputBoxBag -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.appzObjPropsSet"
@@ -5035,7 +5016,7 @@ InputBox·Set: (allUpdates:InputBoxState -> ((void->void)->void))
 
 
 
-QuickPick·OnDidChangeValue: (handler:(string->QuickPickState->void) -> ((?Disposable->void)->void))
+QuickPick·OnDidChangeValue: (handler:(string->QuickPickBag->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidChangeValue"
@@ -5053,8 +5034,8 @@ QuickPick·OnDidChangeValue: (handler:(string->QuickPickState->void) -> ((?Dispo
         [_a_0_, ok] = ((args@0)·(string))
         if !ok
             return false
-        var _a_1_ of QuickPickState
-        _a_1_ = QuickPickState·new
+        var _a_1_ of QuickPickBag
+        _a_1_ = QuickPickBag·new
         ok = _a_1_.populateFrom(args@1)
         if !ok
             return false
@@ -5087,7 +5068,7 @@ QuickPick·OnDidChangeValue: (handler:(string->QuickPickState->void) -> ((?Dispo
 
 
 
-QuickPick·OnDidAccept: (handler:(QuickPickState->void) -> ((?Disposable->void)->void))
+QuickPick·OnDidAccept: (handler:(QuickPickBag->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidAccept"
@@ -5101,8 +5082,8 @@ QuickPick·OnDidAccept: (handler:(QuickPickState->void) -> ((?Disposable->void)-
         var ok of bool
         if 1 != args·len
             return ok
-        var _a_0_ of QuickPickState
-        _a_0_ = QuickPickState·new
+        var _a_0_ of QuickPickBag
+        _a_0_ = QuickPickBag·new
         ok = _a_0_.populateFrom(args@0)
         if !ok
             return false
@@ -5135,7 +5116,7 @@ QuickPick·OnDidAccept: (handler:(QuickPickState->void) -> ((?Disposable->void)-
 
 
 
-QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->QuickPickState->void) -> ((?Disposable->void)->void))
+QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->QuickPickBag->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidChangeActive"
@@ -5165,8 +5146,8 @@ QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->QuickPickState->void) -
                 return false
             _a_0_@__idx___a_0_ = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
-        var _a_1_ of QuickPickState
-        _a_1_ = QuickPickState·new
+        var _a_1_ of QuickPickBag
+        _a_1_ = QuickPickBag·new
         ok = _a_1_.populateFrom(args@1)
         if !ok
             return false
@@ -5199,7 +5180,7 @@ QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->QuickPickState->void) -
 
 
 
-QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->QuickPickState->void) -> ((?Disposable->void)->void))
+QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->QuickPickBag->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidChangeSelection"
@@ -5229,8 +5210,8 @@ QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->QuickPickState->void
                 return false
             _a_0_@__idx___a_0_ = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
-        var _a_1_ of QuickPickState
-        _a_1_ = QuickPickState·new
+        var _a_1_ of QuickPickBag
+        _a_1_ = QuickPickBag·new
         ok = _a_1_.populateFrom(args@1)
         if !ok
             return false
@@ -5263,19 +5244,19 @@ QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->QuickPickState->void
 
 
 
-QuickPick·Show: ( -> ((?QuickPickState->void)->void))
+QuickPick·Show: ( -> ((?QuickPickBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.show"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (?QuickPickState->void)
+    var onret of (?QuickPickBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of ?QuickPickState
+        var result of ?QuickPickBag
         if =?payload
-            result = ?QuickPickState·new
+            result = ?QuickPickBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -5284,26 +5265,26 @@ QuickPick·Show: ( -> ((?QuickPickState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(?QuickPickState->void) -> void)
+    return (a0:(?QuickPickBag->void) -> void)
         onret = a0
     
 
 
 
 
-QuickPick·Hide: ( -> ((?QuickPickState->void)->void))
+QuickPick·Hide: ( -> ((?QuickPickBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.hide"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (?QuickPickState->void)
+    var onret of (?QuickPickBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of ?QuickPickState
+        var result of ?QuickPickBag
         if =?payload
-            result = ?QuickPickState·new
+            result = ?QuickPickBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -5312,14 +5293,14 @@ QuickPick·Hide: ( -> ((?QuickPickState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(?QuickPickState->void) -> void)
+    return (a0:(?QuickPickBag->void) -> void)
         onret = a0
     
 
 
 
 
-QuickPick·OnDidHide: (handler:(QuickPickState->void) -> ((?Disposable->void)->void))
+QuickPick·OnDidHide: (handler:(QuickPickBag->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidHide"
@@ -5333,8 +5314,8 @@ QuickPick·OnDidHide: (handler:(QuickPickState->void) -> ((?Disposable->void)->v
         var ok of bool
         if 1 != args·len
             return ok
-        var _a_0_ of QuickPickState
-        _a_0_ = QuickPickState·new
+        var _a_0_ of QuickPickBag
+        _a_0_ = QuickPickBag·new
         ok = _a_0_.populateFrom(args@0)
         if !ok
             return false
@@ -5373,19 +5354,19 @@ QuickPick·Dispose: ( -> ((void->void)->void))
 
 
 
-QuickPick·Get: ( -> ((QuickPickState->void)->void))
+QuickPick·Get: ( -> ((QuickPickBag->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.appzObjPropsGet"
     msg.Data = dict·new(1)
     msg.Data@"" = this.disp.id
     var onresp of (any->bool)
-    var onret of (QuickPickState->void)
+    var onret of (QuickPickBag->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of QuickPickState
+        var result of QuickPickBag
         if =?payload
-            result = QuickPickState·new
+            result = QuickPickBag·new
             ok = result.populateFrom(payload)
             if !ok
                 return false
@@ -5394,14 +5375,14 @@ QuickPick·Get: ( -> ((QuickPickState->void)->void))
         return true
     
     this.disp.impl.send(msg, onresp)
-    return (a0:(QuickPickState->void) -> void)
+    return (a0:(QuickPickBag->void) -> void)
         onret = a0
     
 
 
 
 
-QuickPick·Set: (allUpdates:QuickPickState -> ((void->void)->void))
+QuickPick·Set: (allUpdates:QuickPickBag -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.appzObjPropsSet"
@@ -5648,7 +5629,7 @@ QuickPick·populateFrom: (payload:any -> bool)
 
 
 
-EnvProperties·populateFrom: (payload:any -> bool)
+EnvBag·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5796,7 +5777,7 @@ WorkspaceFoldersChangeEvent·populateFrom: (payload:any -> bool)
 
 
 
-WorkspaceProperties·populateFrom: (payload:any -> bool)
+WorkspaceBag·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5881,7 +5862,7 @@ DiagnosticChangeEvent·populateFrom: (payload:any -> bool)
 
 
 
-StatusBarItemState·populateFrom: (payload:any -> bool)
+StatusBarItemBag·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5955,7 +5936,7 @@ StatusBarItemState·populateFrom: (payload:any -> bool)
 
 
 
-OutputChannelState·populateFrom: (payload:any -> bool)
+OutputChannelBag·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5977,7 +5958,7 @@ OutputChannelState·populateFrom: (payload:any -> bool)
 
 
 
-TextEditorDecorationTypeState·populateFrom: (payload:any -> bool)
+TextEditorDecorationTypeBag·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5999,7 +5980,7 @@ TextEditorDecorationTypeState·populateFrom: (payload:any -> bool)
 
 
 
-InputBoxState·populateFrom: (payload:any -> bool)
+InputBoxBag·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -6103,7 +6084,7 @@ InputBoxState·populateFrom: (payload:any -> bool)
 
 
 
-QuickPickState·populateFrom: (payload:any -> bool)
+QuickPickBag·populateFrom: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any

@@ -416,7 +416,7 @@ type Window interface {
 
 	// Represents the current window's state.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
 	State() func(func(WindowState))
 
 	// An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
@@ -433,24 +433,24 @@ type Window interface {
 	// 
 	// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 	// 
-	// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+	// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
 	// 
 	// `return` ── A new status bar item.
-	CreateStatusBarItem(alignment StatusBarAlignment, priority *int, optionallyInitialStateToApplyUponCreation *StatusBarItemState) func(func(StatusBarItem, StatusBarItemState))
+	CreateStatusBarItem(alignment StatusBarAlignment, priority *int, optionallyInitialStateToApplyUponCreation *StatusBarItemBag) func(func(StatusBarItem, StatusBarItemBag))
 
 	// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 	// 
 	// `name` ── Human-readable string which will be used to represent the channel in the UI.
 	// 
 	// `return` ── A thenable that resolves when the `OutputChannel` has been created and initialized.
-	CreateOutputChannel(name string) func(func(OutputChannel, OutputChannelState))
+	CreateOutputChannel(name string) func(func(OutputChannel, OutputChannelBag))
 
 	// Create a TextEditorDecorationType that can be used to add decorations to text editors.
 	// 
 	// `options` ── Rendering options for the decoration type.
 	// 
 	// `return` ── A new decoration type instance.
-	CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(TextEditorDecorationType, TextEditorDecorationTypeState))
+	CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(TextEditorDecorationType, TextEditorDecorationTypeBag))
 
 	// Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
 	// 
@@ -458,10 +458,10 @@ type Window interface {
 	// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 	// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 	// 
-	// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+	// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
 	// 
 	// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
-	CreateInputBox(optionallyInitialStateToApplyUponCreation *InputBoxState) func(func(InputBox, InputBoxState))
+	CreateInputBox(optionallyInitialStateToApplyUponCreation *InputBoxBag) func(func(InputBox, InputBoxBag))
 
 	// Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
 	// of items of type T.
@@ -470,10 +470,10 @@ type Window interface {
 	// is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
 	// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 	// 
-	// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+	// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
 	// 
 	// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
-	CreateQuickPick(optionallyInitialStateToApplyUponCreation *QuickPickState) func(func(QuickPick, QuickPickState))
+	CreateQuickPick(optionallyInitialStateToApplyUponCreation *QuickPickBag) func(func(QuickPick, QuickPickBag))
 }
 type implWindow struct{ *impl }
 
@@ -492,22 +492,22 @@ type Env interface {
 
 	// The application name of the editor, like 'VS Code'.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	AppName() func(func(string))
 
 	// The application root folder from which the editor is running.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	AppRoot() func(func(string))
 
 	// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	Language() func(func(string))
 
 	// A unique identifier for the computer.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	MachineId() func(func(string))
 
 	// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
@@ -518,28 +518,30 @@ type Env interface {
 	// exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 	// a specific extension runs remote or not.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	RemoteName() func(func(*string))
 
 	// A unique identifier for the current session.
 	// Changes each time the editor is started.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	SessionId() func(func(string))
 
 	// The detected default shell for the extension host, this is overridden by the
 	// `terminal.integrated.shell` setting for the extension host's platform.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	Shell() func(func(string))
 
 	// The custom uri scheme the editor registers to in the operating system.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	UriScheme() func(func(string))
 
 	// Provides single-call access to numerous individual `Env` properties at once.
-	Properties() func(func(EnvProperties))
+	// 
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
+	AllProperties() func(func(EnvBag))
 
 	// The clipboard provides read and write access to the system's clipboard.
 	Clipboard() Clipboard
@@ -573,7 +575,7 @@ type Workspace interface {
 	// The name of the workspace. `undefined` when no folder
 	// has been opened.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	Name() func(func(*string))
 
 	// The location of the workspace file, for example:
@@ -608,7 +610,7 @@ type Workspace interface {
 	// for that purpose which will work both when a single folder is opened as
 	// well as an untitled or saved workspace.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	WorkspaceFile() func(func(*string))
 
 	// Save all dirty files.
@@ -637,7 +639,7 @@ type Workspace interface {
 	// List of workspace folders or `undefined` when no folder is open.
 	// *Note* that the first entry corresponds to the value of `rootPath`.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 	WorkspaceFolders() func(func([]WorkspaceFolder))
 
 	// Find files across all [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) in the workspace.
@@ -674,7 +676,9 @@ type Workspace interface {
 	AsRelativePath(pathOrUri string, includeWorkspaceFolder bool) func(func(*string))
 
 	// Provides single-call access to numerous individual `Workspace` properties at once.
-	Properties() func(func(WorkspaceProperties))
+	// 
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
+	AllProperties() func(func(WorkspaceBag))
 }
 type implWorkspace struct{ *impl }
 
@@ -1349,8 +1353,8 @@ type DiagnosticChangeEvent struct {
 	Uris []string `json:"uris"`
 }
 
-// Namespace describing the environment the editor runs in.
-type EnvProperties struct {
+// EnvBag gathers various properties of `Env`, obtainable via its `AllProperties` method.
+type EnvBag struct {
 	// The application name of the editor, like 'VS Code'.
 	AppName string `json:"appName,omitempty"`
 
@@ -1384,14 +1388,8 @@ type EnvProperties struct {
 	UriScheme string `json:"uriScheme,omitempty"`
 }
 
-// Namespace for dealing with the current workspace. A workspace is the representation
-// of the folder that has been opened. There is no workspace when just a file but not a
-// folder has been opened.
-// 
-// The workspace offers support for [listening](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher) to fs
-// events and for [finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles) files. Both perform well and run _outside_
-// the editor-process so that they should be always used instead of nodejs-equivalents.
-type WorkspaceProperties struct {
+// WorkspaceBag gathers various properties of `Workspace`, obtainable via its `AllProperties` method.
+type WorkspaceBag struct {
 	// The name of the workspace. `undefined` when no folder
 	// has been opened.
 	Name string `json:"name,omitempty"`
@@ -1434,9 +1432,8 @@ type WorkspaceProperties struct {
 	WorkspaceFolders []WorkspaceFolder `json:"workspaceFolders,omitempty"`
 }
 
-// A status bar item is a status bar contribution that can
-// show text and icons and run a command on click.
-type StatusBarItemState struct {
+// StatusBarItemBag is a snapshot of `StatusBarItem` state at the counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+type StatusBarItemBag struct {
 	// The alignment of this item.
 	Alignment func() StatusBarAlignment `json:"-"`
 
@@ -1463,31 +1460,20 @@ type StatusBarItemState struct {
 	Command string `json:"command,omitempty"`
 }
 
-// An output channel is a container for readonly textual information.
-// 
-// To get an instance of an `OutputChannel` use
-// [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
-type OutputChannelState struct {
+// OutputChannelBag is a snapshot of `OutputChannel` state at the counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+type OutputChannelBag struct {
 	// The human-readable name of this output channel.
 	Name func() string `json:"-"`
 }
 
-// Represents a handle to a set of decorations
-// sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
-// 
-// To get an instance of a `TextEditorDecorationType` use
-// [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
-type TextEditorDecorationTypeState struct {
+// TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+type TextEditorDecorationTypeBag struct {
 	// Internal representation of the handle.
 	Key func() string `json:"-"`
 }
 
-// A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
-// 
-// Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
-// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
-// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
-type InputBoxState struct {
+// InputBoxBag is a snapshot of `InputBox` state at the counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+type InputBoxBag struct {
 	// Current input value.
 	Value string `json:"value,omitempty"`
 
@@ -1528,15 +1514,8 @@ type InputBoxState struct {
 	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
 }
 
-// A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
-// list of items of type T. The items can be filtered through a filter text field and
-// there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
-// selecting multiple items.
-// 
-// Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
-// is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
-// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
-type QuickPickState struct {
+// QuickPickBag is a snapshot of `QuickPick` state at the counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+type QuickPickBag struct {
 	// Current value of the filter text.
 	Value string `json:"value,omitempty"`
 
@@ -2737,7 +2716,7 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState)) func(fun
 	}
 }
 
-func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority *int, optionallyInitialStateToApplyUponCreation *StatusBarItemState) func(func(StatusBarItem, StatusBarItemState)) {
+func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority *int, optionallyInitialStateToApplyUponCreation *StatusBarItemBag) func(func(StatusBarItem, StatusBarItemBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createStatusBarItem"
@@ -2749,7 +2728,7 @@ func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority 
 		msg.Data["priority"] = priority
 	}
 	var onresp func(any) bool
-	var onret func(StatusBarItem, StatusBarItemState)
+	var onret func(StatusBarItem, StatusBarItemBag)
 	onresp = func(payload any) bool {
 		var ok bool
 		var result StatusBarItem
@@ -2764,7 +2743,7 @@ func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority 
 			if (nil != optionallyInitialStateToApplyUponCreation) {
 				result.Set(*optionallyInitialStateToApplyUponCreation)
 			}
-			result.Get()(func(state StatusBarItemState) {
+			result.Get()(func(state StatusBarItemBag) {
 				if (nil != onret) {
 					onret(result, state)
 				}
@@ -2773,19 +2752,19 @@ func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority 
 		return true
 	}
 	me.Impl().send(msg, onresp)
-	return func(a0 func(StatusBarItem, StatusBarItemState)) {
+	return func(a0 func(StatusBarItem, StatusBarItemBag)) {
 		onret = a0
 	}
 }
 
-func (me implWindow) CreateOutputChannel(name string) func(func(OutputChannel, OutputChannelState)) {
+func (me implWindow) CreateOutputChannel(name string) func(func(OutputChannel, OutputChannelBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createOutputChannel"
 	msg.Data = make(dict, 1)
 	msg.Data["name"] = name
 	var onresp func(any) bool
-	var onret func(OutputChannel, OutputChannelState)
+	var onret func(OutputChannel, OutputChannelBag)
 	onresp = func(payload any) bool {
 		var ok bool
 		var result OutputChannel
@@ -2797,7 +2776,7 @@ func (me implWindow) CreateOutputChannel(name string) func(func(OutputChannel, O
 			result.disp.impl = me.Impl()
 		}
 		{
-			result.Get()(func(state OutputChannelState) {
+			result.Get()(func(state OutputChannelBag) {
 				if (nil != onret) {
 					onret(result, state)
 				}
@@ -2806,19 +2785,19 @@ func (me implWindow) CreateOutputChannel(name string) func(func(OutputChannel, O
 		return true
 	}
 	me.Impl().send(msg, onresp)
-	return func(a0 func(OutputChannel, OutputChannelState)) {
+	return func(a0 func(OutputChannel, OutputChannelBag)) {
 		onret = a0
 	}
 }
 
-func (me implWindow) CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(TextEditorDecorationType, TextEditorDecorationTypeState)) {
+func (me implWindow) CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(TextEditorDecorationType, TextEditorDecorationTypeBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createTextEditorDecorationType"
 	msg.Data = make(dict, 1)
 	msg.Data["options"] = options
 	var onresp func(any) bool
-	var onret func(TextEditorDecorationType, TextEditorDecorationTypeState)
+	var onret func(TextEditorDecorationType, TextEditorDecorationTypeBag)
 	onresp = func(payload any) bool {
 		var ok bool
 		var result TextEditorDecorationType
@@ -2830,7 +2809,7 @@ func (me implWindow) CreateTextEditorDecorationType(options DecorationRenderOpti
 			result.disp.impl = me.Impl()
 		}
 		{
-			result.Get()(func(state TextEditorDecorationTypeState) {
+			result.Get()(func(state TextEditorDecorationTypeBag) {
 				if (nil != onret) {
 					onret(result, state)
 				}
@@ -2839,18 +2818,18 @@ func (me implWindow) CreateTextEditorDecorationType(options DecorationRenderOpti
 		return true
 	}
 	me.Impl().send(msg, onresp)
-	return func(a0 func(TextEditorDecorationType, TextEditorDecorationTypeState)) {
+	return func(a0 func(TextEditorDecorationType, TextEditorDecorationTypeBag)) {
 		onret = a0
 	}
 }
 
-func (me implWindow) CreateInputBox(optionallyInitialStateToApplyUponCreation *InputBoxState) func(func(InputBox, InputBoxState)) {
+func (me implWindow) CreateInputBox(optionallyInitialStateToApplyUponCreation *InputBoxBag) func(func(InputBox, InputBoxBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createInputBox"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
-	var onret func(InputBox, InputBoxState)
+	var onret func(InputBox, InputBoxBag)
 	onresp = func(payload any) bool {
 		var ok bool
 		var result InputBox
@@ -2865,7 +2844,7 @@ func (me implWindow) CreateInputBox(optionallyInitialStateToApplyUponCreation *I
 			if (nil != optionallyInitialStateToApplyUponCreation) {
 				result.Set(*optionallyInitialStateToApplyUponCreation)
 			}
-			result.Get()(func(state InputBoxState) {
+			result.Get()(func(state InputBoxBag) {
 				if (nil != onret) {
 					onret(result, state)
 				}
@@ -2874,18 +2853,18 @@ func (me implWindow) CreateInputBox(optionallyInitialStateToApplyUponCreation *I
 		return true
 	}
 	me.Impl().send(msg, onresp)
-	return func(a0 func(InputBox, InputBoxState)) {
+	return func(a0 func(InputBox, InputBoxBag)) {
 		onret = a0
 	}
 }
 
-func (me implWindow) CreateQuickPick(optionallyInitialStateToApplyUponCreation *QuickPickState) func(func(QuickPick, QuickPickState)) {
+func (me implWindow) CreateQuickPick(optionallyInitialStateToApplyUponCreation *QuickPickBag) func(func(QuickPick, QuickPickBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createQuickPick"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
-	var onret func(QuickPick, QuickPickState)
+	var onret func(QuickPick, QuickPickBag)
 	onresp = func(payload any) bool {
 		var ok bool
 		var result QuickPick
@@ -2900,7 +2879,7 @@ func (me implWindow) CreateQuickPick(optionallyInitialStateToApplyUponCreation *
 			if (nil != optionallyInitialStateToApplyUponCreation) {
 				result.Set(*optionallyInitialStateToApplyUponCreation)
 			}
-			result.Get()(func(state QuickPickState) {
+			result.Get()(func(state QuickPickBag) {
 				if (nil != onret) {
 					onret(result, state)
 				}
@@ -2909,7 +2888,7 @@ func (me implWindow) CreateQuickPick(optionallyInitialStateToApplyUponCreation *
 		return true
 	}
 	me.Impl().send(msg, onresp)
-	return func(a0 func(QuickPick, QuickPickState)) {
+	return func(a0 func(QuickPick, QuickPickBag)) {
 		onret = a0
 	}
 }
@@ -3180,16 +3159,16 @@ func (me implEnv) UriScheme() func(func(string)) {
 	}
 }
 
-func (me implEnv) Properties() func(func(EnvProperties)) {
+func (me implEnv) AllProperties() func(func(EnvBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "env.Properties"
+	msg.QName = "env.AllProperties"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
-	var onret func(EnvProperties)
+	var onret func(EnvBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result EnvProperties
+		var result EnvBag
 		if (nil != payload) {
 			ok = result.populateFrom(payload)
 			if !ok {
@@ -3206,7 +3185,7 @@ func (me implEnv) Properties() func(func(EnvProperties)) {
 		return true
 	}
 	me.Impl().send(msg, onresp)
-	return func(a0 func(EnvProperties)) {
+	return func(a0 func(EnvBag)) {
 		onret = a0
 	}
 }
@@ -3580,16 +3559,16 @@ func (me implWorkspace) AsRelativePath(pathOrUri string, includeWorkspaceFolder 
 	}
 }
 
-func (me implWorkspace) Properties() func(func(WorkspaceProperties)) {
+func (me implWorkspace) AllProperties() func(func(WorkspaceBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "workspace.Properties"
+	msg.QName = "workspace.AllProperties"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
-	var onret func(WorkspaceProperties)
+	var onret func(WorkspaceBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result WorkspaceProperties
+		var result WorkspaceBag
 		if (nil != payload) {
 			ok = result.populateFrom(payload)
 			if !ok {
@@ -3606,7 +3585,7 @@ func (me implWorkspace) Properties() func(func(WorkspaceProperties)) {
 		return true
 	}
 	me.Impl().send(msg, onresp)
-	return func(a0 func(WorkspaceProperties)) {
+	return func(a0 func(WorkspaceBag)) {
 		onret = a0
 	}
 }
@@ -3878,20 +3857,20 @@ func (me implCommands) GetCommands(filterInternal bool) func(func([]string)) {
 
 // Shows the entry in the status bar.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *StatusBarItem) Show() func(func(*StatusBarItemState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
+func (me *StatusBarItem) Show() func(func(*StatusBarItemBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.show"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(*StatusBarItemState)
+	var onret func(*StatusBarItemBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result *StatusBarItemState
+		var result *StatusBarItemBag
 		if (nil != payload) {
-			result = new(StatusBarItemState)
+			result = new(StatusBarItemBag)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -3905,27 +3884,27 @@ func (me *StatusBarItem) Show() func(func(*StatusBarItemState)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(*StatusBarItemState)) {
+	return func(a0 func(*StatusBarItemBag)) {
 		onret = a0
 	}
 }
 
 // Hide the entry in the status bar.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *StatusBarItem) Hide() func(func(*StatusBarItemState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
+func (me *StatusBarItem) Hide() func(func(*StatusBarItemBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.hide"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(*StatusBarItemState)
+	var onret func(*StatusBarItemBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result *StatusBarItemState
+		var result *StatusBarItemBag
 		if (nil != payload) {
-			result = new(StatusBarItemState)
+			result = new(StatusBarItemBag)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -3939,7 +3918,7 @@ func (me *StatusBarItem) Hide() func(func(*StatusBarItemState)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(*StatusBarItemState)) {
+	return func(a0 func(*StatusBarItemBag)) {
 		onret = a0
 	}
 }
@@ -3947,25 +3926,25 @@ func (me *StatusBarItem) Hide() func(func(*StatusBarItemState)) {
 // Dispose and free associated resources. Call
 // [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *StatusBarItem) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
 // Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *StatusBarItem) Get() func(func(StatusBarItemState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
+func (me *StatusBarItem) Get() func(func(StatusBarItemBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.appzObjPropsGet"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(StatusBarItemState)
+	var onret func(StatusBarItemBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result StatusBarItemState
+		var result StatusBarItemBag
 		if (nil != payload) {
 			ok = result.populateFrom(payload)
 			if !ok {
@@ -3980,17 +3959,17 @@ func (me *StatusBarItem) Get() func(func(StatusBarItemState)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(StatusBarItemState)) {
+	return func(a0 func(StatusBarItemBag)) {
 		onret = a0
 	}
 }
 
 // Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
 // 
-// `allUpdates` ── 
+// `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `StatusBarItemBag` with your select modifications applied, rather than construct a new one from scratch.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *StatusBarItem) Set(allUpdates StatusBarItemState) func(func()) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *StatusBarItem) Set(allUpdates StatusBarItemBag) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.appzObjPropsSet"
@@ -4018,8 +3997,8 @@ func (me *StatusBarItem) Set(allUpdates StatusBarItemState) func(func()) {
 // 
 // `value` ── A string, falsy values will not be printed.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *OutputChannel) Append(value string) func(func(*OutputChannelState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+func (me *OutputChannel) Append(value string) func(func(*OutputChannelBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.append"
@@ -4027,12 +4006,12 @@ func (me *OutputChannel) Append(value string) func(func(*OutputChannelState)) {
 	msg.Data[""] = me.disp.id
 	msg.Data["value"] = value
 	var onresp func(any) bool
-	var onret func(*OutputChannelState)
+	var onret func(*OutputChannelBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result *OutputChannelState
+		var result *OutputChannelBag
 		if (nil != payload) {
-			result = new(OutputChannelState)
+			result = new(OutputChannelBag)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -4046,7 +4025,7 @@ func (me *OutputChannel) Append(value string) func(func(*OutputChannelState)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(*OutputChannelState)) {
+	return func(a0 func(*OutputChannelBag)) {
 		onret = a0
 	}
 }
@@ -4056,8 +4035,8 @@ func (me *OutputChannel) Append(value string) func(func(*OutputChannelState)) {
 // 
 // `value` ── A string, falsy values will be printed.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.appendLine"
@@ -4065,12 +4044,12 @@ func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelState)
 	msg.Data[""] = me.disp.id
 	msg.Data["value"] = value
 	var onresp func(any) bool
-	var onret func(*OutputChannelState)
+	var onret func(*OutputChannelBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result *OutputChannelState
+		var result *OutputChannelBag
 		if (nil != payload) {
-			result = new(OutputChannelState)
+			result = new(OutputChannelBag)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -4084,27 +4063,27 @@ func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelState)
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(*OutputChannelState)) {
+	return func(a0 func(*OutputChannelBag)) {
 		onret = a0
 	}
 }
 
 // Removes all output from the channel.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *OutputChannel) Clear() func(func(*OutputChannelState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+func (me *OutputChannel) Clear() func(func(*OutputChannelBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.clear"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(*OutputChannelState)
+	var onret func(*OutputChannelBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result *OutputChannelState
+		var result *OutputChannelBag
 		if (nil != payload) {
-			result = new(OutputChannelState)
+			result = new(OutputChannelBag)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -4118,7 +4097,7 @@ func (me *OutputChannel) Clear() func(func(*OutputChannelState)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(*OutputChannelState)) {
+	return func(a0 func(*OutputChannelBag)) {
 		onret = a0
 	}
 }
@@ -4127,8 +4106,8 @@ func (me *OutputChannel) Clear() func(func(*OutputChannelState)) {
 // 
 // `preserveFocus` ── When `true` the channel will not take focus.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.show"
@@ -4136,12 +4115,12 @@ func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelState)
 	msg.Data[""] = me.disp.id
 	msg.Data["preserveFocus"] = preserveFocus
 	var onresp func(any) bool
-	var onret func(*OutputChannelState)
+	var onret func(*OutputChannelBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result *OutputChannelState
+		var result *OutputChannelBag
 		if (nil != payload) {
-			result = new(OutputChannelState)
+			result = new(OutputChannelBag)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -4155,27 +4134,27 @@ func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelState)
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(*OutputChannelState)) {
+	return func(a0 func(*OutputChannelBag)) {
 		onret = a0
 	}
 }
 
 // Hide this channel from the UI.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *OutputChannel) Hide() func(func(*OutputChannelState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+func (me *OutputChannel) Hide() func(func(*OutputChannelBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.hide"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(*OutputChannelState)
+	var onret func(*OutputChannelBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result *OutputChannelState
+		var result *OutputChannelBag
 		if (nil != payload) {
-			result = new(OutputChannelState)
+			result = new(OutputChannelBag)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -4189,32 +4168,32 @@ func (me *OutputChannel) Hide() func(func(*OutputChannelState)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(*OutputChannelState)) {
+	return func(a0 func(*OutputChannelBag)) {
 		onret = a0
 	}
 }
 
 // Dispose and free associated resources.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *OutputChannel) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
 // Obtains this `OutputChannel`'s current property value for: `name`.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *OutputChannel) Get() func(func(OutputChannelState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+func (me *OutputChannel) Get() func(func(OutputChannelBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.appzObjPropsGet"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(OutputChannelState)
+	var onret func(OutputChannelBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result OutputChannelState
+		var result OutputChannelBag
 		if (nil != payload) {
 			ok = result.populateFrom(payload)
 			if !ok {
@@ -4229,32 +4208,32 @@ func (me *OutputChannel) Get() func(func(OutputChannelState)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(OutputChannelState)) {
+	return func(a0 func(OutputChannelBag)) {
 		onret = a0
 	}
 }
 
 // Remove this decoration type and all decorations on all text editors using it.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *TextEditorDecorationType) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
 // Obtains this `TextEditorDecorationType`'s current property value for: `key`.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `TextEditorDecorationTypeBag` result obtained.
+func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "TextEditorDecorationType.appzObjPropsGet"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(TextEditorDecorationTypeState)
+	var onret func(TextEditorDecorationTypeBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result TextEditorDecorationTypeState
+		var result TextEditorDecorationTypeBag
 		if (nil != payload) {
 			ok = result.populateFrom(payload)
 			if !ok {
@@ -4269,7 +4248,7 @@ func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeStat
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(TextEditorDecorationTypeState)) {
+	return func(a0 func(TextEditorDecorationTypeBag)) {
 		onret = a0
 	}
 }
@@ -4279,7 +4258,7 @@ func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeStat
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
-func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxState)) func(func(*Disposable)) {
+func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxBag)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.onDidChangeValue"
@@ -4300,7 +4279,7 @@ func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxState)) func(f
 		if !ok {
 			return false
 		}
-		var _a_1_ InputBoxState
+		var _a_1_ InputBoxBag
 		ok = _a_1_.populateFrom(args[1])
 		if !ok {
 			return false
@@ -4342,7 +4321,7 @@ func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxState)) func(f
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
-func (me *InputBox) OnDidAccept(handler func(InputBoxState)) func(func(*Disposable)) {
+func (me *InputBox) OnDidAccept(handler func(InputBoxBag)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.onDidAccept"
@@ -4358,7 +4337,7 @@ func (me *InputBox) OnDidAccept(handler func(InputBoxState)) func(func(*Disposab
 		if 1 != len(args) {
 			return ok
 		}
-		var _a_0_ InputBoxState
+		var _a_0_ InputBoxBag
 		ok = _a_0_.populateFrom(args[0])
 		if !ok {
 			return false
@@ -4398,20 +4377,20 @@ func (me *InputBox) OnDidAccept(handler func(InputBoxState)) func(func(*Disposab
 // Makes the input UI visible in its current configuration. Any other input
 // UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *InputBox) Show() func(func(*InputBoxState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
+func (me *InputBox) Show() func(func(*InputBoxBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.show"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(*InputBoxState)
+	var onret func(*InputBoxBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result *InputBoxState
+		var result *InputBoxBag
 		if (nil != payload) {
-			result = new(InputBoxState)
+			result = new(InputBoxBag)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -4425,7 +4404,7 @@ func (me *InputBox) Show() func(func(*InputBoxState)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(*InputBoxState)) {
+	return func(a0 func(*InputBoxBag)) {
 		onret = a0
 	}
 }
@@ -4433,20 +4412,20 @@ func (me *InputBox) Show() func(func(*InputBoxState)) {
 // Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 // event.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *InputBox) Hide() func(func(*InputBoxState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
+func (me *InputBox) Hide() func(func(*InputBoxBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.hide"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(*InputBoxState)
+	var onret func(*InputBoxBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result *InputBoxState
+		var result *InputBoxBag
 		if (nil != payload) {
-			result = new(InputBoxState)
+			result = new(InputBoxBag)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -4460,7 +4439,7 @@ func (me *InputBox) Hide() func(func(*InputBoxState)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(*InputBoxState)) {
+	return func(a0 func(*InputBoxBag)) {
 		onret = a0
 	}
 }
@@ -4475,7 +4454,7 @@ func (me *InputBox) Hide() func(func(*InputBoxState)) {
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
-func (me *InputBox) OnDidHide(handler func(InputBoxState)) func(func(*Disposable)) {
+func (me *InputBox) OnDidHide(handler func(InputBoxBag)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.onDidHide"
@@ -4491,7 +4470,7 @@ func (me *InputBox) OnDidHide(handler func(InputBoxState)) func(func(*Disposable
 		if 1 != len(args) {
 			return ok
 		}
-		var _a_0_ InputBoxState
+		var _a_0_ InputBoxBag
 		ok = _a_0_.populateFrom(args[0])
 		if !ok {
 			return false
@@ -4533,25 +4512,25 @@ func (me *InputBox) OnDidHide(handler func(InputBoxState)) func(func(*Disposable
 // functional and no additional methods or properties on it should be
 // accessed. Instead a new input UI should be created.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *InputBox) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
 // Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *InputBox) Get() func(func(InputBoxState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
+func (me *InputBox) Get() func(func(InputBoxBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.appzObjPropsGet"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(InputBoxState)
+	var onret func(InputBoxBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result InputBoxState
+		var result InputBoxBag
 		if (nil != payload) {
 			ok = result.populateFrom(payload)
 			if !ok {
@@ -4566,17 +4545,17 @@ func (me *InputBox) Get() func(func(InputBoxState)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(InputBoxState)) {
+	return func(a0 func(InputBoxBag)) {
 		onret = a0
 	}
 }
 
 // Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 // 
-// `allUpdates` ── 
+// `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `InputBoxBag` with your select modifications applied, rather than construct a new one from scratch.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *InputBox) Set(allUpdates InputBoxState) func(func()) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *InputBox) Set(allUpdates InputBoxBag) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.appzObjPropsSet"
@@ -4605,7 +4584,7 @@ func (me *InputBox) Set(allUpdates InputBoxState) func(func()) {
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
-func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickState)) func(func(*Disposable)) {
+func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickBag)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidChangeValue"
@@ -4626,7 +4605,7 @@ func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickState)) func
 		if !ok {
 			return false
 		}
-		var _a_1_ QuickPickState
+		var _a_1_ QuickPickBag
 		ok = _a_1_.populateFrom(args[1])
 		if !ok {
 			return false
@@ -4668,7 +4647,7 @@ func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickState)) func
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
-func (me *QuickPick) OnDidAccept(handler func(QuickPickState)) func(func(*Disposable)) {
+func (me *QuickPick) OnDidAccept(handler func(QuickPickBag)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidAccept"
@@ -4684,7 +4663,7 @@ func (me *QuickPick) OnDidAccept(handler func(QuickPickState)) func(func(*Dispos
 		if 1 != len(args) {
 			return ok
 		}
-		var _a_0_ QuickPickState
+		var _a_0_ QuickPickBag
 		ok = _a_0_.populateFrom(args[0])
 		if !ok {
 			return false
@@ -4726,7 +4705,7 @@ func (me *QuickPick) OnDidAccept(handler func(QuickPickState)) func(func(*Dispos
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.
-func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickState)) func(func(*Disposable)) {
+func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickBag)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidChangeActive"
@@ -4760,7 +4739,7 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickSt
 			_a_0_[__idx___a_0_] = __val___a_0_
 			__idx___a_0_ = __idx___a_0_ + 1
 		}
-		var _a_1_ QuickPickState
+		var _a_1_ QuickPickBag
 		ok = _a_1_.populateFrom(args[1])
 		if !ok {
 			return false
@@ -4802,7 +4781,7 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickSt
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.
-func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPickState)) func(func(*Disposable)) {
+func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPickBag)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidChangeSelection"
@@ -4836,7 +4815,7 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPic
 			_a_0_[__idx___a_0_] = __val___a_0_
 			__idx___a_0_ = __idx___a_0_ + 1
 		}
-		var _a_1_ QuickPickState
+		var _a_1_ QuickPickBag
 		ok = _a_1_.populateFrom(args[1])
 		if !ok {
 			return false
@@ -4876,20 +4855,20 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPic
 // Makes the input UI visible in its current configuration. Any other input
 // UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *QuickPick) Show() func(func(*QuickPickState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
+func (me *QuickPick) Show() func(func(*QuickPickBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.show"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(*QuickPickState)
+	var onret func(*QuickPickBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result *QuickPickState
+		var result *QuickPickBag
 		if (nil != payload) {
-			result = new(QuickPickState)
+			result = new(QuickPickBag)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -4903,7 +4882,7 @@ func (me *QuickPick) Show() func(func(*QuickPickState)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(*QuickPickState)) {
+	return func(a0 func(*QuickPickBag)) {
 		onret = a0
 	}
 }
@@ -4911,20 +4890,20 @@ func (me *QuickPick) Show() func(func(*QuickPickState)) {
 // Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 // event.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *QuickPick) Hide() func(func(*QuickPickState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
+func (me *QuickPick) Hide() func(func(*QuickPickBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.hide"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(*QuickPickState)
+	var onret func(*QuickPickBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result *QuickPickState
+		var result *QuickPickBag
 		if (nil != payload) {
-			result = new(QuickPickState)
+			result = new(QuickPickBag)
 			ok = result.populateFrom(payload)
 			if !ok {
 				return false
@@ -4938,7 +4917,7 @@ func (me *QuickPick) Hide() func(func(*QuickPickState)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(*QuickPickState)) {
+	return func(a0 func(*QuickPickBag)) {
 		onret = a0
 	}
 }
@@ -4953,7 +4932,7 @@ func (me *QuickPick) Hide() func(func(*QuickPickState)) {
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
-func (me *QuickPick) OnDidHide(handler func(QuickPickState)) func(func(*Disposable)) {
+func (me *QuickPick) OnDidHide(handler func(QuickPickBag)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidHide"
@@ -4969,7 +4948,7 @@ func (me *QuickPick) OnDidHide(handler func(QuickPickState)) func(func(*Disposab
 		if 1 != len(args) {
 			return ok
 		}
-		var _a_0_ QuickPickState
+		var _a_0_ QuickPickBag
 		ok = _a_0_.populateFrom(args[0])
 		if !ok {
 			return false
@@ -5011,25 +4990,25 @@ func (me *QuickPick) OnDidHide(handler func(QuickPickState)) func(func(*Disposab
 // functional and no additional methods or properties on it should be
 // accessed. Instead a new input UI should be created.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *QuickPick) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
 // Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *QuickPick) Get() func(func(QuickPickState)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
+func (me *QuickPick) Get() func(func(QuickPickBag)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.appzObjPropsGet"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.disp.id
 	var onresp func(any) bool
-	var onret func(QuickPickState)
+	var onret func(QuickPickBag)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result QuickPickState
+		var result QuickPickBag
 		if (nil != payload) {
 			ok = result.populateFrom(payload)
 			if !ok {
@@ -5044,17 +5023,17 @@ func (me *QuickPick) Get() func(func(QuickPickState)) {
 		return true
 	}
 	me.disp.impl.send(msg, onresp)
-	return func(a0 func(QuickPickState)) {
+	return func(a0 func(QuickPickBag)) {
 		onret = a0
 	}
 }
 
 // Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 // 
-// `allUpdates` ── 
+// `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `QuickPickBag` with your select modifications applied, rather than construct a new one from scratch.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
-func (me *QuickPick) Set(allUpdates QuickPickState) func(func()) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *QuickPick) Set(allUpdates QuickPickBag) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.appzObjPropsSet"
@@ -5317,7 +5296,7 @@ func (me *QuickPick) populateFrom(payload any) bool {
 	return ok
 }
 
-func (me *EnvProperties) populateFrom(payload any) bool {
+func (me *EnvBag) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5479,7 +5458,7 @@ func (me *WorkspaceFoldersChangeEvent) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *WorkspaceProperties) populateFrom(payload any) bool {
+func (me *WorkspaceBag) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5573,7 +5552,7 @@ func (me *DiagnosticChangeEvent) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *StatusBarItemState) populateFrom(payload any) bool {
+func (me *StatusBarItemBag) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5666,7 +5645,7 @@ func (me *StatusBarItemState) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *OutputChannelState) populateFrom(payload any) bool {
+func (me *OutputChannelBag) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5690,7 +5669,7 @@ func (me *OutputChannelState) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *TextEditorDecorationTypeState) populateFrom(payload any) bool {
+func (me *TextEditorDecorationTypeBag) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5714,7 +5693,7 @@ func (me *TextEditorDecorationTypeState) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *InputBoxState) populateFrom(payload any) bool {
+func (me *InputBoxBag) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5856,7 +5835,7 @@ func (me *InputBoxState) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *QuickPickState) populateFrom(payload any) bool {
+func (me *QuickPickBag) populateFrom(payload any) bool {
 	var it dict
 	var ok bool
 	var val any

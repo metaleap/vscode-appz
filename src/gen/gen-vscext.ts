@@ -40,15 +40,15 @@ export class Gen extends gen.Gen implements gen.IGen {
                         const fnid = "_fnid_" + method.args[0].name
                         src += `\t\t\t\t\tconst ${fnid} = msg.data['${method.args[0].name}'] as string\n`
                         src += `\t\t\t\t\treturn (!(${fnid} && ${fnid}.length))\n`
-                        src += `\t\t\t\t\t\t? Promise.reject(msg.data)\n`
+                        src += `\t\t\t\t\t\t? ppio.promRej("${it.name}.${method.name}.${method.args[0].name}", msg.data)\n`
                         src += `\t\t\t\t\t\t: ${method.fromOrig.qName}((${isevt.EvtArgs.map((_ea, i) => 'a' + i).join(', ')}) => {\n`
                         src += `\t\t\t\t\t\t\tif (prog && prog.proc)\n`
-                        src += `\t\t\t\t\t\t\t\tprog.callBack(false, ${fnid}, ${isevt.EvtArgs.map((_ea, i) => 'a' + i).join(', ')}).then(noOp, noOp)\n`
+                        src += `\t\t\t\t\t\t\t\tprog.callBack("${it.name}.${method.name}", false, ${fnid}, ${isevt.EvtArgs.map((_ea, i) => 'a' + i).join(', ')}).then(noOp, noOp)\n`
                         src += `\t\t\t\t\t\t})\n`
                     } else {
                         const args = method.args.filter(_ => !_.isFromRetThenable)
                         for (const arg of args)
-                            src += this.argsSrc(prep, arg)
+                            src += this.argsSrc(prep, it.name + "." + method.name, arg)
                         src += this.retArgsSrc(method.fromOrig.qName, args)
                     }
                     src += `\t\t\t\t}\n`
@@ -79,7 +79,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                         ] : (tfun[0].map((_, i): gen.PrepArg => gen.argFrom(_, (orig as ts.MethodSignature).parameters[i])).filter(_ => !_.isFromRetThenable))
                         src += `\t\t\t\tcase "${mem.name}": {\n`
                         for (const arg of args)
-                            src += this.argsSrc(prep, arg, isevt, it)
+                            src += this.argsSrc(prep, it.name + "." + mem.name + "." + arg.name, arg, isevt, it)
                         src += this.retArgsSrc(`this${it.name}.${mem.name}`, args, (!isvoidmethod) ? "" : ("{ " + this.propSrc(it) + " }"))
                         src += "\t\t\t\t}\n"
                     }
@@ -91,7 +91,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 if (hassets) {
                     src += '\t\t\t\tcase "appzObjPropsSet": {\n'
                     src += "\t\t\t\t\tconst allUpdates = msg.data['allUpdates'] as { [_:string]: any }\n"
-                    src += "\t\t\t\t\tif (!allUpdates)\n\t\t\t\t\t\treturn Promise.reject(msg.data)\n"
+                    src += `\t\t\t\t\tif (!allUpdates)\n\t\t\t\t\t\treturn ppio.promRej("${it.name}.set#allUpdates", msg.data)\n`
                     for (const prop of it.fields.filter(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec))) {
                         const tcol = gen.typeNames(prop.typeSpec).includes("ThemeColor")
                         for (const tname of gen.typeNames(prop.typeSpec))
@@ -139,7 +139,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         this.writeFileSync(this.pkg, src)
     }
 
-    argsSrc(prep: gen.Prep, arg: gen.PrepArg, isEvt?: boolean, curDispObjInst?: gen.PrepStruct) {
+    argsSrc(prep: gen.Prep, hint: string, arg: gen.PrepArg, isEvt?: boolean, curDispObjInst?: gen.PrepStruct) {
         let src = ""
         let tfunc: [gen.TypeSpec[], gen.TypeSpec]
         if (arg.isCancellationToken !== undefined) {
@@ -154,10 +154,10 @@ export class Gen extends gen.Gen implements gen.IGen {
             const fnid = "_fnid_" + arg.name
             src += `\t\t\t\t\tconst ${fnid} = msg.data['${arg.name}'] as string\n`
             src += `\t\t\t\t\tif (!(${fnid} && ${fnid}.length))\n`
-            src += "\t\t\t\t\t\treturn Promise.reject(msg.data)\n"
+            src += `\t\t\t\t\t\treturn ppio.promRej("${hint}", msg.data)\n`
             src += `\t\t\t\t\tconst arg_${arg.name} = (${tfunc[0].map((_, i) => (gen.typeArrSpreads(_) ? '...' : '') + '_' + i + ': ' + this.typeSpec(_)).join(', ')}): ${this.typeSpec(tfunc[1])} => {\n`
             src += "\t\t\t\t\t\tif (prog && prog.proc)\n"
-            src += `\t\t\t\t\t\t\treturn prog.callBack(${!isEvt}, ${fnid}, ${tfunc[0].map((_, i) => '_' + i).join(', ') + ((!(isEvt && curDispObjInst)) ? "" : ("" + (tfunc[0].length ? ", " : "") + "({ " + this.propSrc(curDispObjInst) + " })"))})\n`
+            src += `\t\t\t\t\t\t\treturn prog.callBack("${hint}", ${!isEvt}, ${fnid}, ${tfunc[0].map((_, i) => '_' + i).join(', ') + ((!(isEvt && curDispObjInst)) ? "" : ("" + (tfunc[0].length ? ", " : "") + "({ " + this.propSrc(curDispObjInst) + " })"))})\n`
             src += "\t\t\t\t\t\treturn undefined\n"
             src += "\t\t\t\t\t}\n"
         } else {
@@ -168,7 +168,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             } else {
                 src += `\t\t\t\t\tconst arg_${arg.name} = ppio.tryUnmarshalUri(msg.data['${arg.name}'])\n`
                 src += `\t\t\t\t\tif (!arg_${arg.name})\n`
-                src += `\t\t\t\t\t\treturn Promise.reject(msg.data['${arg.name}'])\n`
+                src += `\t\t\t\t\t\treturn ppio.promRej("${hint}", msg.data['${arg.name}'])\n`
             }
             const funcfields = gen.argsFuncFields(prep, [arg])
             if (funcfields && funcfields.length)
@@ -176,7 +176,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                     const tfn = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)
                     if (tfn && tfn.length) {
                         src += `\t\t\t\t\tif (arg_${arg.name} && arg_${arg.name}.${ff.name}_AppzFuncId && arg_${arg.name}.${ff.name}_AppzFuncId.length)\n`
-                        src += `\t\t\t\t\t\targ_${arg.name}.${ff.name} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => prog.callBack(true, arg_${arg.name}.${ff.name}_AppzFuncId, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`
+                        src += `\t\t\t\t\t\targ_${arg.name}.${ff.name} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => prog.callBack("${hint}", true, arg_${arg.name}.${ff.name}_AppzFuncId, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`
                     }
                 }
         }

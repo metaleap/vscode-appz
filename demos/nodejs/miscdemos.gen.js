@@ -131,7 +131,7 @@ function demo_Languages_GetLanguages() {
 }
 
 function demo_Env_Properties() {
-    vsc.Env.Properties()((props) => {
+    vsc.Env.AllProperties()((props) => {
         let items
         items = new Array(8)
         {
@@ -157,7 +157,7 @@ function demo_Env_Properties() {
 }
 
 function demo_Workspace_Properties() {
-    vsc.Workspace.Properties()((props) => {
+    vsc.Workspace.AllProperties()((props) => {
         let items
         items = new Array(3)
         {

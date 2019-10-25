@@ -124,11 +124,11 @@ class Builder {
                             const struct = this.prep.structs.find(_ => this.gen.nameRewriters.types.structs(_.name) === tn.Name);
                             if (struct && struct.isDispObj) {
                                 me.IsObjCtor = tn.Name;
-                                me.Args[me.Args.length - 1].Type = { From: [tn, { Name: tn.Name + "State" }], To: null };
+                                me.Args[me.Args.length - 1].Type = { From: [tn, { Name: tn.Name + "Bag" }], To: null };
                                 if (struct.fields.some(_ => (!gen.typeFun(_.typeSpec)) && !_.readOnly)) {
                                     const lastarg = me.Args[me.Args.length - 1];
                                     me.Args = me.Args.slice(0, me.Args.length - 1);
-                                    me.Args.push({ Name: this.gen.options.idents.dispObjCtorArg, Type: { Maybe: { Name: me.IsObjCtor + "State" } } }, lastarg);
+                                    me.Args.push({ Name: this.gen.options.idents.dispObjCtorArg, Type: { Maybe: { Name: me.IsObjCtor + "Bag" } } }, lastarg);
                                 }
                             }
                         }
@@ -151,13 +151,20 @@ class Builder {
         };
     }
     fromStruct(it) {
-        const docssrcnode = it.fromOrig ? it.fromOrig.decl : it.isPropsOfIface ? it.isPropsOfIface.fromOrig : it.isPropsOfStruct.fromOrig.decl;
         const structname = this.gen.nameRewriters.types.structs(it.name);
         let ret = {
             fromPrep: it,
             name: it.name,
             Name: structname,
-            Docs: this.docs(gen.docs(docssrcnode)),
+            Docs: it.isPropsOfIface ? [{
+                    Lines: [
+                        structname + " gathers various properties of `" + this.gen.nameRewriters.types.interfaces(it.isPropsOfIface.name) + "`, obtainable via its `AllProperties` method."
+                    ]
+                }] : it.isPropsOfStruct ? [{
+                    Lines: [
+                        structname + " is a snapshot of `" + this.gen.nameRewriters.types.structs(it.isPropsOfStruct.name) + "` state at the counterparty. It is obtained whenever `" + this.gen.nameRewriters.types.structs(it.isPropsOfStruct.name) + "` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually." + (it.fields.some(_ => _.readOnly) ? " All read-only properties are exposed as function-valued fields." : "") + (it.fields.some(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec)) ? " Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method." : "")
+                    ]
+                }] : this.docs(gen.docs(it.fromOrig.decl)),
             IsOutgoing: it.isOutgoing ? true : false,
             IsIncoming: it.isIncoming ? true : false,
             Fields: it.isDispObj ? [
@@ -348,7 +355,7 @@ class Gen extends gen.Gen {
             haveProps: true,
             demoOutFilePath: "",
             typeNamesToString: ["Uri", "ThemeColor", "ThemeIcon"],
-            objPropsGetSetNamePicks: ["", "Props", "Properties", "P", "Ps", "Details"]
+            objPropsGetSetNamePicks: ["", "Props", "Properties", "P", "Ps", "Details", "Fields", "Infos", "Info"]
         };
         this.options.demoOutFilePath = demoOutFilePath;
     }
@@ -417,7 +424,7 @@ class Gen extends gen.Gen {
             if (me && me.Name && me.Name.length && me.Args !== undefined && me.Args !== null) {
                 let docarg = "", docret = "";
                 if (me.IsObjCtor)
-                    [docarg, docret] = ["ff specified, the newly created `" + me.IsObjCtor + "` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.", "A thenable that resolves when the `" + me.IsObjCtor + "` has been created and initialized."];
+                    [docarg, docret] = ["if specified, the newly created `" + me.IsObjCtor + "` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.", "A thenable that resolves when the `" + me.IsObjCtor + "` has been created and initialized."];
                 else if (me.IsObjEvt)
                     [docarg, docret] = ["will be invoked whenever this event fires; mandatory, not optional.", "A `Disposable` that will unsubscribe `handler` from the `" + me.Name + "` event on `Dispose`."];
                 else if (me.Args.length === 1 && me.Args[0].Name === "listener" && this.typeFunc(me.Args[0].Type) && this.typeFunc(me.Type) && gen.typePromOf(me.fromPrep.args.find(_ => _.isFromRetThenable).typeSpec, "Disposable"))
@@ -426,8 +433,12 @@ class Gen extends gen.Gen {
                     docarg = "TODO_ARG_SUB";
                 else if (me.fromPrep && me.fromPrep.isProps)
                     docarg = "TODO_ARG_PROPS";
-                else if (this.typeFunc(me.Type) && me.Type.From && me.Type.From.length && this.typeFunc(me.Type.From[0]))
-                    docret = "A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.";
+                else if (me.Name === "Set" && me.Args.length === 1 && me.Args[0].Name === "allUpdates")
+                    docarg = "be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `" + me.Args[0].Type.Name + "` with your select modifications applied, rather than construct a new one from scratch.";
+                if ((!docret) && this.typeFunc(me.Type) && me.Type.From && me.Type.From.length && this.typeFunc(me.Type.From[0])) {
+                    const tret = this.typeUnMaybe((this.typeFunc(me.Type.From[0])).From[0]);
+                    docret = "A thenable that resolves when this call has completed at the counterparty" + ((!tret) ? "" : (" and its" + ((!tret.Name) ? " " : (" `" + tret.Name + "` ")) + "result obtained")) + ".";
+                }
                 const docsadded = [];
                 for (const arg of me.Args)
                     if (!me.Docs.some(_ => _.ForParam === arg.Name)) {
@@ -899,7 +910,7 @@ class Gen extends gen.Gen {
                     ])]
                 : _.WHEN(method.Args.some(_ => _.Name === this.options.idents.dispObjCtorArg && this.typeMaybe(_.Type)), () => [_.iIf(_.oIs(_.n(this.options.idents.dispObjCtorArg)), [
                         _.eCall(_.oDot(_.n(__.result), _.n("Set")), _.oDeref(_.n(this.options.idents.dispObjCtorArg))),
-                    ])], () => []).concat(...[_.eCall(_.eCall(_.oDot(_.n(__.result), _.n("Get"))), _.eFunc([{ Name: __.state, Type: { Name: method.IsObjCtor + "State" } }], null, _.iIf(_.oIs(_.n(__.onret)), [
+                    ])], () => []).concat(...[_.eCall(_.eCall(_.oDot(_.n(__.result), _.n("Get"))), _.eFunc([{ Name: __.state, Type: { Name: method.IsObjCtor + "Bag" } }], null, _.iIf(_.oIs(_.n(__.onret)), [
                         _.eCall(_.n(__.onret), _.n(__.result), _.n(__.state)),
                     ])))]))),
             _.iRet(_.eLit(true)),
@@ -1037,12 +1048,12 @@ class Gen extends gen.Gen {
                         if (isevt) {
                             const tf = gen.typeFun(prepargs[0].typeSpec);
                             if (tf)
-                                prepargs[0].typeSpec = { From: tf[0].concat(struct.Name + "State"), To: tf[1] };
+                                prepargs[0].typeSpec = { From: tf[0].concat(struct.Name + "Bag"), To: tf[1] };
                         }
                         let tret = tfun[1];
                         if (!gen.typeProm(tret))
                             if (field.name !== "dispose" && !tret)
-                                tret = struct.Name + "State";
+                                tret = struct.Name + "Bag";
                         tret = { Thens: [tret] };
                         prepargs.push({ name: "onDone", isFromRetThenable: true, optional: true, typeSpec: tret });
                         const me = {
@@ -1068,16 +1079,16 @@ class Gen extends gen.Gen {
                     const nameget = gen.pickName("get", this.options.objPropsGetSetNamePicks, struct.fromPrep.fields), nameset = gen.pickName("set", this.options.objPropsGetSetNamePicks, struct.fromPrep.fields);
                     const mget = {
                         name: "appzObjPropsGet", Name: this.nameRewriters.methods(nameget), Args: [],
-                        Type: { From: [{ From: [{ Name: struct.Name + "State" }], To: null }], To: null },
+                        Type: { From: [{ From: [{ Name: struct.Name + "Bag" }], To: null }], To: null },
                         Docs: [{ Lines: ["Obtains this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
                     };
-                    this.state.genPopulateFor[struct.Name + "State"] = true;
+                    this.state.genPopulateFor[struct.Name + "Bag"] = true;
                     this.emitMethodImpl(struct, mget, this.genMethodImpl_ObjPropsGet);
                     propsfields = propsfields.filter(_ => !_.readOnly);
                     if (propsfields.length) {
                         const mset = {
                             name: "appzObjPropsSet", Name: this.nameRewriters.methods(nameset),
-                            Args: [{ Name: "allUpdates", Type: { Name: struct.Name + "State" } }],
+                            Args: [{ Name: "allUpdates", Type: { Name: struct.Name + "Bag" } }],
                             Type: { From: [{ From: [null], To: null }], To: null },
                             Docs: [{ Lines: ["Updates this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
                         };

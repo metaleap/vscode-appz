@@ -558,9 +558,9 @@ namespace VscAppz {
 		/// <summary>
 		/// Represents the current window's state.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.</return>
 		Action<Action<WindowState>> State();
 
 		/// <summary>
@@ -582,15 +582,15 @@ namespace VscAppz {
 		/// 
 		/// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 		/// 
-		/// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+		/// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
 		/// 
 		/// `return` ── A new status bar item.
 		/// </summary>
 		/// <param name="alignment">The alignment of the item.</param>
 		/// <param name="priority">The priority of the item. Higher values mean the item should be shown more to the left.</param>
 		/// <return>A new status bar item.</return>
-		/// <param name="optionallyInitialStateToApplyUponCreation">ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
-		Action<Action<StatusBarItem, StatusBarItemState>> CreateStatusBarItem(StatusBarAlignment? alignment = default, int? priority = default, StatusBarItemState optionallyInitialStateToApplyUponCreation = default);
+		/// <param name="optionallyInitialStateToApplyUponCreation">if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
+		Action<Action<StatusBarItem, StatusBarItemBag>> CreateStatusBarItem(StatusBarAlignment? alignment = default, int? priority = default, StatusBarItemBag optionallyInitialStateToApplyUponCreation = default);
 
 		/// <summary>
 		/// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
@@ -601,7 +601,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="name">Human-readable string which will be used to represent the channel in the UI.</param>
 		/// <return>A thenable that resolves when the `OutputChannel` has been created and initialized.</return>
-		Action<Action<OutputChannel, OutputChannelState>> CreateOutputChannel(string name = default);
+		Action<Action<OutputChannel, OutputChannelBag>> CreateOutputChannel(string name = default);
 
 		/// <summary>
 		/// Create a TextEditorDecorationType that can be used to add decorations to text editors.
@@ -612,7 +612,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="options">Rendering options for the decoration type.</param>
 		/// <return>A new decoration type instance.</return>
-		Action<Action<TextEditorDecorationType, TextEditorDecorationTypeState>> CreateTextEditorDecorationType(DecorationRenderOptions options = default);
+		Action<Action<TextEditorDecorationType, TextEditorDecorationTypeBag>> CreateTextEditorDecorationType(DecorationRenderOptions options = default);
 
 		/// <summary>
 		/// Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
@@ -621,13 +621,13 @@ namespace VscAppz {
 		/// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 		/// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 		/// 
-		/// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+		/// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
 		/// 
 		/// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
 		/// </summary>
 		/// <return>A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).</return>
-		/// <param name="optionallyInitialStateToApplyUponCreation">ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
-		Action<Action<InputBox, InputBoxState>> CreateInputBox(InputBoxState optionallyInitialStateToApplyUponCreation = default);
+		/// <param name="optionallyInitialStateToApplyUponCreation">if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
+		Action<Action<InputBox, InputBoxBag>> CreateInputBox(InputBoxBag optionallyInitialStateToApplyUponCreation = default);
 
 		/// <summary>
 		/// Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
@@ -637,13 +637,13 @@ namespace VscAppz {
 		/// is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
 		/// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 		/// 
-		/// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+		/// `optionallyInitialStateToApplyUponCreation` ── if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
 		/// 
 		/// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
 		/// </summary>
 		/// <return>A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).</return>
-		/// <param name="optionallyInitialStateToApplyUponCreation">ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
-		Action<Action<QuickPick, QuickPickState>> CreateQuickPick(QuickPickState optionallyInitialStateToApplyUponCreation = default);
+		/// <param name="optionallyInitialStateToApplyUponCreation">if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
+		Action<Action<QuickPick, QuickPickBag>> CreateQuickPick(QuickPickBag optionallyInitialStateToApplyUponCreation = default);
 	}
 
 	/// <summary>Namespace describing the environment the editor runs in.</summary>
@@ -666,33 +666,33 @@ namespace VscAppz {
 		/// <summary>
 		/// The application name of the editor, like 'VS Code'.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
 		Action<Action<string>> AppName();
 
 		/// <summary>
 		/// The application root folder from which the editor is running.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
 		Action<Action<string>> AppRoot();
 
 		/// <summary>
 		/// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
 		Action<Action<string>> Language();
 
 		/// <summary>
 		/// A unique identifier for the computer.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
 		Action<Action<string>> MachineId();
 
 		/// <summary>
@@ -704,39 +704,44 @@ namespace VscAppz {
 		/// exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 		/// a specific extension runs remote or not.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
 		Action<Action<string>> RemoteName();
 
 		/// <summary>
 		/// A unique identifier for the current session.
 		/// Changes each time the editor is started.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
 		Action<Action<string>> SessionId();
 
 		/// <summary>
 		/// The detected default shell for the extension host, this is overridden by the
 		/// `terminal.integrated.shell` setting for the extension host's platform.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
 		Action<Action<string>> Shell();
 
 		/// <summary>
 		/// The custom uri scheme the editor registers to in the operating system.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
 		Action<Action<string>> UriScheme();
 
-		/// <summary>Provides single-call access to numerous individual `IEnv` properties at once.</summary>
-		Action<Action<EnvProperties>> Properties();
+		/// <summary>
+		/// Provides single-call access to numerous individual `IEnv` properties at once.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
+		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.</return>
+		Action<Action<EnvBag>> AllProperties();
 
 		/// <summary>The clipboard provides read and write access to the system's clipboard.</summary>
 		IClipboard Clipboard();
@@ -778,9 +783,9 @@ namespace VscAppz {
 		/// The name of the workspace. `undefined` when no folder
 		/// has been opened.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
 		Action<Action<string>> Name();
 
 		/// <summary>
@@ -816,9 +821,9 @@ namespace VscAppz {
 		/// for that purpose which will work both when a single folder is opened as
 		/// well as an untitled or saved workspace.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
 		Action<Action<string>> WorkspaceFile();
 
 		/// <summary>
@@ -860,9 +865,9 @@ namespace VscAppz {
 		/// List of workspace folders or `undefined` when no folder is open.
 		/// *Note* that the first entry corresponds to the value of `rootPath`.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
 		Action<Action<WorkspaceFolder[]>> WorkspaceFolders();
 
 		/// <summary>
@@ -910,8 +915,13 @@ namespace VscAppz {
 		/// <return>A path relative to the root or the input.</return>
 		Action<Action<string>> AsRelativePath(string pathOrUri = default, bool includeWorkspaceFolder = default);
 
-		/// <summary>Provides single-call access to numerous individual `IWorkspace` properties at once.</summary>
-		Action<Action<WorkspaceProperties>> Properties();
+		/// <summary>
+		/// Provides single-call access to numerous individual `IWorkspace` properties at once.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
+		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.</return>
+		Action<Action<WorkspaceBag>> AllProperties();
 	}
 
 	/// <summary>
@@ -1799,8 +1809,8 @@ namespace VscAppz {
 		public string[] Uris;
 	}
 
-	/// <summary>Namespace describing the environment the editor runs in.</summary>
-	public partial class EnvProperties {
+	/// <summary>EnvBag gathers various properties of `IEnv`, obtainable via its `AllProperties` method.</summary>
+	public partial class EnvBag {
 		/// <summary>The application name of the editor, like 'VS Code'.</summary>
 		[JsonProperty("appName")]
 		public string AppName;
@@ -1848,16 +1858,8 @@ namespace VscAppz {
 		public string UriScheme;
 	}
 
-	/// <summary>
-	/// Namespace for dealing with the current workspace. A workspace is the representation
-	/// of the folder that has been opened. There is no workspace when just a file but not a
-	/// folder has been opened.
-	/// 
-	/// The workspace offers support for [listening](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher) to fs
-	/// events and for [finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles) files. Both perform well and run _outside_
-	/// the editor-process so that they should be always used instead of nodejs-equivalents.
-	/// </summary>
-	public partial class WorkspaceProperties {
+	/// <summary>WorkspaceBag gathers various properties of `IWorkspace`, obtainable via its `AllProperties` method.</summary>
+	public partial class WorkspaceBag {
 		/// <summary>
 		/// The name of the workspace. `undefined` when no folder
 		/// has been opened.
@@ -1909,11 +1911,8 @@ namespace VscAppz {
 		public WorkspaceFolder[] WorkspaceFolders;
 	}
 
-	/// <summary>
-	/// A status bar item is a status bar contribution that can
-	/// show text and icons and run a command on click.
-	/// </summary>
-	public partial class StatusBarItemState {
+	/// <summary>StatusBarItemBag is a snapshot of `StatusBarItem` state at the counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
+	public partial class StatusBarItemBag {
 		/// <summary>The alignment of this item.</summary>
 		[JsonIgnore]
 		public Func<StatusBarAlignment> Alignment;
@@ -1952,39 +1951,22 @@ namespace VscAppz {
 		public string Command;
 	}
 
-	/// <summary>
-	/// An output channel is a container for readonly textual information.
-	/// 
-	/// To get an instance of an `OutputChannel` use
-	/// [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
-	/// </summary>
-	public partial class OutputChannelState {
+	/// <summary>OutputChannelBag is a snapshot of `OutputChannel` state at the counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
+	public partial class OutputChannelBag {
 		/// <summary>The human-readable name of this output channel.</summary>
 		[JsonIgnore]
 		public Func<string> Name;
 	}
 
-	/// <summary>
-	/// Represents a handle to a set of decorations
-	/// sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
-	/// 
-	/// To get an instance of a `TextEditorDecorationType` use
-	/// [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
-	/// </summary>
-	public partial class TextEditorDecorationTypeState {
+	/// <summary>TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
+	public partial class TextEditorDecorationTypeBag {
 		/// <summary>Internal representation of the handle.</summary>
 		[JsonIgnore]
 		public Func<string> Key;
 	}
 
-	/// <summary>
-	/// A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
-	/// 
-	/// Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
-	/// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
-	/// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
-	/// </summary>
-	public partial class InputBoxState {
+	/// <summary>InputBoxBag is a snapshot of `InputBox` state at the counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
+	public partial class InputBoxBag {
 		/// <summary>Current input value.</summary>
 		[JsonProperty("value")]
 		public string Value;
@@ -2040,17 +2022,8 @@ namespace VscAppz {
 		public bool IgnoreFocusOut;
 	}
 
-	/// <summary>
-	/// A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
-	/// list of items of type T. The items can be filtered through a filter text field and
-	/// there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
-	/// selecting multiple items.
-	/// 
-	/// Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
-	/// is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
-	/// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
-	/// </summary>
-	public partial class QuickPickState {
+	/// <summary>QuickPickBag is a snapshot of `QuickPick` state at the counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
+	public partial class QuickPickBag {
 		/// <summary>Current value of the filter text.</summary>
 		[JsonProperty("value")]
 		public string Value;
@@ -3233,7 +3206,7 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<StatusBarItem, StatusBarItemState>> IWindow.CreateStatusBarItem(StatusBarAlignment? alignment, int? priority, StatusBarItemState optionallyInitialStateToApplyUponCreation) {
+		Action<Action<StatusBarItem, StatusBarItemBag>> IWindow.CreateStatusBarItem(StatusBarAlignment? alignment, int? priority, StatusBarItemBag optionallyInitialStateToApplyUponCreation) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createStatusBarItem";
@@ -3245,7 +3218,7 @@ namespace VscAppz {
 				msg.Data["priority"] = priority;
 			}
 			Func<any, bool> onresp = default;
-			Action<StatusBarItem, StatusBarItemState> onret = default;
+			Action<StatusBarItem, StatusBarItemBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
 				StatusBarItem result = default;
@@ -3261,7 +3234,7 @@ namespace VscAppz {
 					if ((null != optionallyInitialStateToApplyUponCreation)) {
 						result.Set(optionallyInitialStateToApplyUponCreation);
 					}
-					result.Get()((StatusBarItemState state) => {
+					result.Get()((StatusBarItemBag state) => {
 						if ((null != onret)) {
 							onret(result, state);
 						}
@@ -3270,19 +3243,19 @@ namespace VscAppz {
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<StatusBarItem, StatusBarItemState> a0) => {
+			return (Action<StatusBarItem, StatusBarItemBag> a0) => {
 				onret = a0;
 			};
 		}
 
-		Action<Action<OutputChannel, OutputChannelState>> IWindow.CreateOutputChannel(string name) {
+		Action<Action<OutputChannel, OutputChannelBag>> IWindow.CreateOutputChannel(string name) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createOutputChannel";
 			msg.Data = new dict(1);
 			msg.Data["name"] = name;
 			Func<any, bool> onresp = default;
-			Action<OutputChannel, OutputChannelState> onret = default;
+			Action<OutputChannel, OutputChannelBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
 				OutputChannel result = default;
@@ -3295,7 +3268,7 @@ namespace VscAppz {
 					result.disp.impl = this.Impl();
 				}
 				{
-					result.Get()((OutputChannelState state) => {
+					result.Get()((OutputChannelBag state) => {
 						if ((null != onret)) {
 							onret(result, state);
 						}
@@ -3304,19 +3277,19 @@ namespace VscAppz {
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<OutputChannel, OutputChannelState> a0) => {
+			return (Action<OutputChannel, OutputChannelBag> a0) => {
 				onret = a0;
 			};
 		}
 
-		Action<Action<TextEditorDecorationType, TextEditorDecorationTypeState>> IWindow.CreateTextEditorDecorationType(DecorationRenderOptions options) {
+		Action<Action<TextEditorDecorationType, TextEditorDecorationTypeBag>> IWindow.CreateTextEditorDecorationType(DecorationRenderOptions options) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createTextEditorDecorationType";
 			msg.Data = new dict(1);
 			msg.Data["options"] = options;
 			Func<any, bool> onresp = default;
-			Action<TextEditorDecorationType, TextEditorDecorationTypeState> onret = default;
+			Action<TextEditorDecorationType, TextEditorDecorationTypeBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
 				TextEditorDecorationType result = default;
@@ -3329,7 +3302,7 @@ namespace VscAppz {
 					result.disp.impl = this.Impl();
 				}
 				{
-					result.Get()((TextEditorDecorationTypeState state) => {
+					result.Get()((TextEditorDecorationTypeBag state) => {
 						if ((null != onret)) {
 							onret(result, state);
 						}
@@ -3338,18 +3311,18 @@ namespace VscAppz {
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<TextEditorDecorationType, TextEditorDecorationTypeState> a0) => {
+			return (Action<TextEditorDecorationType, TextEditorDecorationTypeBag> a0) => {
 				onret = a0;
 			};
 		}
 
-		Action<Action<InputBox, InputBoxState>> IWindow.CreateInputBox(InputBoxState optionallyInitialStateToApplyUponCreation) {
+		Action<Action<InputBox, InputBoxBag>> IWindow.CreateInputBox(InputBoxBag optionallyInitialStateToApplyUponCreation) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createInputBox";
 			msg.Data = new dict(0);
 			Func<any, bool> onresp = default;
-			Action<InputBox, InputBoxState> onret = default;
+			Action<InputBox, InputBoxBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
 				InputBox result = default;
@@ -3365,7 +3338,7 @@ namespace VscAppz {
 					if ((null != optionallyInitialStateToApplyUponCreation)) {
 						result.Set(optionallyInitialStateToApplyUponCreation);
 					}
-					result.Get()((InputBoxState state) => {
+					result.Get()((InputBoxBag state) => {
 						if ((null != onret)) {
 							onret(result, state);
 						}
@@ -3374,18 +3347,18 @@ namespace VscAppz {
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<InputBox, InputBoxState> a0) => {
+			return (Action<InputBox, InputBoxBag> a0) => {
 				onret = a0;
 			};
 		}
 
-		Action<Action<QuickPick, QuickPickState>> IWindow.CreateQuickPick(QuickPickState optionallyInitialStateToApplyUponCreation) {
+		Action<Action<QuickPick, QuickPickBag>> IWindow.CreateQuickPick(QuickPickBag optionallyInitialStateToApplyUponCreation) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createQuickPick";
 			msg.Data = new dict(0);
 			Func<any, bool> onresp = default;
-			Action<QuickPick, QuickPickState> onret = default;
+			Action<QuickPick, QuickPickBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
 				QuickPick result = default;
@@ -3401,7 +3374,7 @@ namespace VscAppz {
 					if ((null != optionallyInitialStateToApplyUponCreation)) {
 						result.Set(optionallyInitialStateToApplyUponCreation);
 					}
-					result.Get()((QuickPickState state) => {
+					result.Get()((QuickPickBag state) => {
 						if ((null != onret)) {
 							onret(result, state);
 						}
@@ -3410,7 +3383,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<QuickPick, QuickPickState> a0) => {
+			return (Action<QuickPick, QuickPickBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -3681,18 +3654,18 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<EnvProperties>> IEnv.Properties() {
+		Action<Action<EnvBag>> IEnv.AllProperties() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "env.Properties";
+			msg.QName = "env.AllProperties";
 			msg.Data = new dict(0);
 			Func<any, bool> onresp = default;
-			Action<EnvProperties> onret = default;
+			Action<EnvBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				EnvProperties result = default;
+				EnvBag result = default;
 				if ((null != payload)) {
-					result = new EnvProperties();
+					result = new EnvBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -3708,7 +3681,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<EnvProperties> a0) => {
+			return (Action<EnvBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -4082,18 +4055,18 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<WorkspaceProperties>> IWorkspace.Properties() {
+		Action<Action<WorkspaceBag>> IWorkspace.AllProperties() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "workspace.Properties";
+			msg.QName = "workspace.AllProperties";
 			msg.Data = new dict(0);
 			Func<any, bool> onresp = default;
-			Action<WorkspaceProperties> onret = default;
+			Action<WorkspaceBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				WorkspaceProperties result = default;
+				WorkspaceBag result = default;
 				if ((null != payload)) {
-					result = new WorkspaceProperties();
+					result = new WorkspaceBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4109,7 +4082,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<WorkspaceProperties> a0) => {
+			return (Action<WorkspaceBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -4386,22 +4359,22 @@ namespace VscAppz {
 		/// <summary>
 		/// Shows the entry in the status bar.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<StatusBarItemState>> Show() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.</return>
+		public Action<Action<StatusBarItemBag>> Show() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.show";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<StatusBarItemState> onret = default;
+			Action<StatusBarItemBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				StatusBarItemState result = default;
+				StatusBarItemBag result = default;
 				if ((null != payload)) {
-					result = new StatusBarItemState();
+					result = new StatusBarItemBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4415,7 +4388,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<StatusBarItemState> a0) => {
+			return (Action<StatusBarItemBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -4425,22 +4398,22 @@ namespace VscAppz {
 		/// <summary>
 		/// Hide the entry in the status bar.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<StatusBarItemState>> Hide() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.</return>
+		public Action<Action<StatusBarItemBag>> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.hide";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<StatusBarItemState> onret = default;
+			Action<StatusBarItemBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				StatusBarItemState result = default;
+				StatusBarItemBag result = default;
 				if ((null != payload)) {
-					result = new StatusBarItemState();
+					result = new StatusBarItemBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4454,7 +4427,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<StatusBarItemState> a0) => {
+			return (Action<StatusBarItemBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -4465,9 +4438,9 @@ namespace VscAppz {
 		/// Dispose and free associated resources. Call
 		/// [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> Dispose() {
 			return this.disp.Dispose();
 		}
@@ -4479,22 +4452,22 @@ namespace VscAppz {
 		/// <summary>
 		/// Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<StatusBarItemState>> Get() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.</return>
+		public Action<Action<StatusBarItemBag>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.appzObjPropsGet";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<StatusBarItemState> onret = default;
+			Action<StatusBarItemBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				StatusBarItemState result = default;
+				StatusBarItemBag result = default;
 				if ((null != payload)) {
-					result = new StatusBarItemState();
+					result = new StatusBarItemBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4508,7 +4481,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<StatusBarItemState> a0) => {
+			return (Action<StatusBarItemBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -4518,13 +4491,13 @@ namespace VscAppz {
 		/// <summary>
 		/// Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
 		/// 
-		/// `allUpdates` ── 
+		/// `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `StatusBarItemBag` with your select modifications applied, rather than construct a new one from scratch.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <param name="allUpdates"></param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action> Set(StatusBarItemState allUpdates = default) {
+		/// <param name="allUpdates">be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `StatusBarItemBag` with your select modifications applied, rather than construct a new one from scratch.</param>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> Set(StatusBarItemBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.appzObjPropsSet";
@@ -4555,11 +4528,11 @@ namespace VscAppz {
 		/// 
 		/// `value` ── A string, falsy values will not be printed.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 		/// </summary>
 		/// <param name="value">A string, falsy values will not be printed.</param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<OutputChannelState>> Append(string value = default) {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
+		public Action<Action<OutputChannelBag>> Append(string value = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.append";
@@ -4567,12 +4540,12 @@ namespace VscAppz {
 			msg.Data[""] = this.disp.id;
 			msg.Data["value"] = value;
 			Func<any, bool> onresp = default;
-			Action<OutputChannelState> onret = default;
+			Action<OutputChannelBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				OutputChannelState result = default;
+				OutputChannelBag result = default;
 				if ((null != payload)) {
-					result = new OutputChannelState();
+					result = new OutputChannelBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4586,7 +4559,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<OutputChannelState> a0) => {
+			return (Action<OutputChannelBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -4599,11 +4572,11 @@ namespace VscAppz {
 		/// 
 		/// `value` ── A string, falsy values will be printed.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 		/// </summary>
 		/// <param name="value">A string, falsy values will be printed.</param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<OutputChannelState>> AppendLine(string value = default) {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
+		public Action<Action<OutputChannelBag>> AppendLine(string value = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.appendLine";
@@ -4611,12 +4584,12 @@ namespace VscAppz {
 			msg.Data[""] = this.disp.id;
 			msg.Data["value"] = value;
 			Func<any, bool> onresp = default;
-			Action<OutputChannelState> onret = default;
+			Action<OutputChannelBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				OutputChannelState result = default;
+				OutputChannelBag result = default;
 				if ((null != payload)) {
-					result = new OutputChannelState();
+					result = new OutputChannelBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4630,7 +4603,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<OutputChannelState> a0) => {
+			return (Action<OutputChannelBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -4640,22 +4613,22 @@ namespace VscAppz {
 		/// <summary>
 		/// Removes all output from the channel.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<OutputChannelState>> Clear() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
+		public Action<Action<OutputChannelBag>> Clear() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.clear";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<OutputChannelState> onret = default;
+			Action<OutputChannelBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				OutputChannelState result = default;
+				OutputChannelBag result = default;
 				if ((null != payload)) {
-					result = new OutputChannelState();
+					result = new OutputChannelBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4669,7 +4642,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<OutputChannelState> a0) => {
+			return (Action<OutputChannelBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -4681,11 +4654,11 @@ namespace VscAppz {
 		/// 
 		/// `preserveFocus` ── When `true` the channel will not take focus.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 		/// </summary>
 		/// <param name="preserveFocus">When `true` the channel will not take focus.</param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<OutputChannelState>> Show(bool preserveFocus = default) {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
+		public Action<Action<OutputChannelBag>> Show(bool preserveFocus = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.show";
@@ -4693,12 +4666,12 @@ namespace VscAppz {
 			msg.Data[""] = this.disp.id;
 			msg.Data["preserveFocus"] = preserveFocus;
 			Func<any, bool> onresp = default;
-			Action<OutputChannelState> onret = default;
+			Action<OutputChannelBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				OutputChannelState result = default;
+				OutputChannelBag result = default;
 				if ((null != payload)) {
-					result = new OutputChannelState();
+					result = new OutputChannelBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4712,7 +4685,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<OutputChannelState> a0) => {
+			return (Action<OutputChannelBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -4722,22 +4695,22 @@ namespace VscAppz {
 		/// <summary>
 		/// Hide this channel from the UI.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<OutputChannelState>> Hide() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
+		public Action<Action<OutputChannelBag>> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.hide";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<OutputChannelState> onret = default;
+			Action<OutputChannelBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				OutputChannelState result = default;
+				OutputChannelBag result = default;
 				if ((null != payload)) {
-					result = new OutputChannelState();
+					result = new OutputChannelBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4751,7 +4724,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<OutputChannelState> a0) => {
+			return (Action<OutputChannelBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -4761,9 +4734,9 @@ namespace VscAppz {
 		/// <summary>
 		/// Dispose and free associated resources.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> Dispose() {
 			return this.disp.Dispose();
 		}
@@ -4775,22 +4748,22 @@ namespace VscAppz {
 		/// <summary>
 		/// Obtains this `OutputChannel`'s current property value for: `name`.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<OutputChannelState>> Get() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
+		public Action<Action<OutputChannelBag>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.appzObjPropsGet";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<OutputChannelState> onret = default;
+			Action<OutputChannelBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				OutputChannelState result = default;
+				OutputChannelBag result = default;
 				if ((null != payload)) {
-					result = new OutputChannelState();
+					result = new OutputChannelBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4804,7 +4777,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<OutputChannelState> a0) => {
+			return (Action<OutputChannelBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -4814,9 +4787,9 @@ namespace VscAppz {
 		/// <summary>
 		/// Remove this decoration type and all decorations on all text editors using it.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> Dispose() {
 			return this.disp.Dispose();
 		}
@@ -4828,22 +4801,22 @@ namespace VscAppz {
 		/// <summary>
 		/// Obtains this `TextEditorDecorationType`'s current property value for: `key`.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `TextEditorDecorationTypeBag` result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<TextEditorDecorationTypeState>> Get() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `TextEditorDecorationTypeBag` result obtained.</return>
+		public Action<Action<TextEditorDecorationTypeBag>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "TextEditorDecorationType.appzObjPropsGet";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<TextEditorDecorationTypeState> onret = default;
+			Action<TextEditorDecorationTypeBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				TextEditorDecorationTypeState result = default;
+				TextEditorDecorationTypeBag result = default;
 				if ((null != payload)) {
-					result = new TextEditorDecorationTypeState();
+					result = new TextEditorDecorationTypeBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -4857,7 +4830,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<TextEditorDecorationTypeState> a0) => {
+			return (Action<TextEditorDecorationTypeBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -4873,7 +4846,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidChangeValue(Action<string, InputBoxState> handler = default) {
+		public Action<Action<Disposable>> OnDidChangeValue(Action<string, InputBoxBag> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.onDidChangeValue";
@@ -4894,8 +4867,8 @@ namespace VscAppz {
 				if (!ok) {
 					return false;
 				}
-				InputBoxState _a_1_ = default;
-				_a_1_ = new InputBoxState();
+				InputBoxBag _a_1_ = default;
+				_a_1_ = new InputBoxBag();
 				ok = _a_1_.populateFrom(args[1]);
 				if (!ok) {
 					return false;
@@ -4943,7 +4916,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidAccept(Action<InputBoxState> handler = default) {
+		public Action<Action<Disposable>> OnDidAccept(Action<InputBoxBag> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.onDidAccept";
@@ -4959,8 +4932,8 @@ namespace VscAppz {
 				if (1 != args.Length) {
 					return ok;
 				}
-				InputBoxState _a_0_ = default;
-				_a_0_ = new InputBoxState();
+				InputBoxBag _a_0_ = default;
+				_a_0_ = new InputBoxBag();
 				ok = _a_0_.populateFrom(args[0]);
 				if (!ok) {
 					return false;
@@ -5003,22 +4976,22 @@ namespace VscAppz {
 		/// Makes the input UI visible in its current configuration. Any other input
 		/// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<InputBoxState>> Show() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.</return>
+		public Action<Action<InputBoxBag>> Show() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.show";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<InputBoxState> onret = default;
+			Action<InputBoxBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				InputBoxState result = default;
+				InputBoxBag result = default;
 				if ((null != payload)) {
-					result = new InputBoxState();
+					result = new InputBoxBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -5032,7 +5005,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<InputBoxState> a0) => {
+			return (Action<InputBoxBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -5043,22 +5016,22 @@ namespace VscAppz {
 		/// Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 		/// event.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<InputBoxState>> Hide() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.</return>
+		public Action<Action<InputBoxBag>> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.hide";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<InputBoxState> onret = default;
+			Action<InputBoxBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				InputBoxState result = default;
+				InputBoxBag result = default;
 				if ((null != payload)) {
-					result = new InputBoxState();
+					result = new InputBoxBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -5072,7 +5045,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<InputBoxState> a0) => {
+			return (Action<InputBoxBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -5093,7 +5066,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidHide(Action<InputBoxState> handler = default) {
+		public Action<Action<Disposable>> OnDidHide(Action<InputBoxBag> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.onDidHide";
@@ -5109,8 +5082,8 @@ namespace VscAppz {
 				if (1 != args.Length) {
 					return ok;
 				}
-				InputBoxState _a_0_ = default;
-				_a_0_ = new InputBoxState();
+				InputBoxBag _a_0_ = default;
+				_a_0_ = new InputBoxBag();
 				ok = _a_0_.populateFrom(args[0]);
 				if (!ok) {
 					return false;
@@ -5155,9 +5128,9 @@ namespace VscAppz {
 		/// functional and no additional methods or properties on it should be
 		/// accessed. Instead a new input UI should be created.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> Dispose() {
 			return this.disp.Dispose();
 		}
@@ -5169,22 +5142,22 @@ namespace VscAppz {
 		/// <summary>
 		/// Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<InputBoxState>> Get() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.</return>
+		public Action<Action<InputBoxBag>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.appzObjPropsGet";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<InputBoxState> onret = default;
+			Action<InputBoxBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				InputBoxState result = default;
+				InputBoxBag result = default;
 				if ((null != payload)) {
-					result = new InputBoxState();
+					result = new InputBoxBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -5198,7 +5171,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<InputBoxState> a0) => {
+			return (Action<InputBoxBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -5208,13 +5181,13 @@ namespace VscAppz {
 		/// <summary>
 		/// Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 		/// 
-		/// `allUpdates` ── 
+		/// `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `InputBoxBag` with your select modifications applied, rather than construct a new one from scratch.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <param name="allUpdates"></param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action> Set(InputBoxState allUpdates = default) {
+		/// <param name="allUpdates">be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `InputBoxBag` with your select modifications applied, rather than construct a new one from scratch.</param>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> Set(InputBoxBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.appzObjPropsSet";
@@ -5249,7 +5222,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidChangeValue(Action<string, QuickPickState> handler = default) {
+		public Action<Action<Disposable>> OnDidChangeValue(Action<string, QuickPickBag> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidChangeValue";
@@ -5270,8 +5243,8 @@ namespace VscAppz {
 				if (!ok) {
 					return false;
 				}
-				QuickPickState _a_1_ = default;
-				_a_1_ = new QuickPickState();
+				QuickPickBag _a_1_ = default;
+				_a_1_ = new QuickPickBag();
 				ok = _a_1_.populateFrom(args[1]);
 				if (!ok) {
 					return false;
@@ -5319,7 +5292,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidAccept(Action<QuickPickState> handler = default) {
+		public Action<Action<Disposable>> OnDidAccept(Action<QuickPickBag> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidAccept";
@@ -5335,8 +5308,8 @@ namespace VscAppz {
 				if (1 != args.Length) {
 					return ok;
 				}
-				QuickPickState _a_0_ = default;
-				_a_0_ = new QuickPickState();
+				QuickPickBag _a_0_ = default;
+				_a_0_ = new QuickPickBag();
 				ok = _a_0_.populateFrom(args[0]);
 				if (!ok) {
 					return false;
@@ -5384,7 +5357,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidChangeActive(Action<QuickPickItem[], QuickPickState> handler = default) {
+		public Action<Action<Disposable>> OnDidChangeActive(Action<QuickPickItem[], QuickPickBag> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidChangeActive";
@@ -5419,8 +5392,8 @@ namespace VscAppz {
 					_a_0_[__idx___a_0_] = __val___a_0_;
 					__idx___a_0_ = __idx___a_0_ + 1;
 				}
-				QuickPickState _a_1_ = default;
-				_a_1_ = new QuickPickState();
+				QuickPickBag _a_1_ = default;
+				_a_1_ = new QuickPickBag();
 				ok = _a_1_.populateFrom(args[1]);
 				if (!ok) {
 					return false;
@@ -5468,7 +5441,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidChangeSelection(Action<QuickPickItem[], QuickPickState> handler = default) {
+		public Action<Action<Disposable>> OnDidChangeSelection(Action<QuickPickItem[], QuickPickBag> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidChangeSelection";
@@ -5503,8 +5476,8 @@ namespace VscAppz {
 					_a_0_[__idx___a_0_] = __val___a_0_;
 					__idx___a_0_ = __idx___a_0_ + 1;
 				}
-				QuickPickState _a_1_ = default;
-				_a_1_ = new QuickPickState();
+				QuickPickBag _a_1_ = default;
+				_a_1_ = new QuickPickBag();
 				ok = _a_1_.populateFrom(args[1]);
 				if (!ok) {
 					return false;
@@ -5547,22 +5520,22 @@ namespace VscAppz {
 		/// Makes the input UI visible in its current configuration. Any other input
 		/// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<QuickPickState>> Show() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.</return>
+		public Action<Action<QuickPickBag>> Show() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.show";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<QuickPickState> onret = default;
+			Action<QuickPickBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				QuickPickState result = default;
+				QuickPickBag result = default;
 				if ((null != payload)) {
-					result = new QuickPickState();
+					result = new QuickPickBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -5576,7 +5549,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<QuickPickState> a0) => {
+			return (Action<QuickPickBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -5587,22 +5560,22 @@ namespace VscAppz {
 		/// Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 		/// event.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<QuickPickState>> Hide() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.</return>
+		public Action<Action<QuickPickBag>> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.hide";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<QuickPickState> onret = default;
+			Action<QuickPickBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				QuickPickState result = default;
+				QuickPickBag result = default;
 				if ((null != payload)) {
-					result = new QuickPickState();
+					result = new QuickPickBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -5616,7 +5589,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<QuickPickState> a0) => {
+			return (Action<QuickPickBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -5637,7 +5610,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidHide(Action<QuickPickState> handler = default) {
+		public Action<Action<Disposable>> OnDidHide(Action<QuickPickBag> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidHide";
@@ -5653,8 +5626,8 @@ namespace VscAppz {
 				if (1 != args.Length) {
 					return ok;
 				}
-				QuickPickState _a_0_ = default;
-				_a_0_ = new QuickPickState();
+				QuickPickBag _a_0_ = default;
+				_a_0_ = new QuickPickBag();
 				ok = _a_0_.populateFrom(args[0]);
 				if (!ok) {
 					return false;
@@ -5699,9 +5672,9 @@ namespace VscAppz {
 		/// functional and no additional methods or properties on it should be
 		/// accessed. Instead a new input UI should be created.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> Dispose() {
 			return this.disp.Dispose();
 		}
@@ -5713,22 +5686,22 @@ namespace VscAppz {
 		/// <summary>
 		/// Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action<QuickPickState>> Get() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.</return>
+		public Action<Action<QuickPickBag>> Get() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.appzObjPropsGet";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.disp.id;
 			Func<any, bool> onresp = default;
-			Action<QuickPickState> onret = default;
+			Action<QuickPickBag> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				QuickPickState result = default;
+				QuickPickBag result = default;
 				if ((null != payload)) {
-					result = new QuickPickState();
+					result = new QuickPickBag();
 					ok = result.populateFrom(payload);
 					if (!ok) {
 						return false;
@@ -5742,7 +5715,7 @@ namespace VscAppz {
 				return true;
 			};
 			this.disp.impl.send(msg, onresp);
-			return (Action<QuickPickState> a0) => {
+			return (Action<QuickPickBag> a0) => {
 				onret = a0;
 			};
 		}
@@ -5752,13 +5725,13 @@ namespace VscAppz {
 		/// <summary>
 		/// Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 		/// 
-		/// `allUpdates` ── 
+		/// `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `QuickPickBag` with your select modifications applied, rather than construct a new one from scratch.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <param name="allUpdates"></param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
-		public Action<Action> Set(QuickPickState allUpdates = default) {
+		/// <param name="allUpdates">be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `QuickPickBag` with your select modifications applied, rather than construct a new one from scratch.</param>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> Set(QuickPickBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.appzObjPropsSet";
@@ -6044,7 +6017,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class EnvProperties {
+	public partial class EnvBag {
 		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
@@ -6228,7 +6201,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class WorkspaceProperties {
+	public partial class WorkspaceBag {
 		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
@@ -6331,7 +6304,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class StatusBarItemState {
+	public partial class StatusBarItemBag {
 		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
@@ -6426,7 +6399,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class OutputChannelState {
+	public partial class OutputChannelBag {
 		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
@@ -6452,7 +6425,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class TextEditorDecorationTypeState {
+	public partial class TextEditorDecorationTypeBag {
 		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
@@ -6478,7 +6451,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class InputBoxState {
+	public partial class InputBoxBag {
 		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;
@@ -6616,7 +6589,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class QuickPickState {
+	public partial class QuickPickBag {
 		internal bool populateFrom(any payload = default) {
 			dict it = default;
 			bool ok = default;

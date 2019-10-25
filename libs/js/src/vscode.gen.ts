@@ -485,7 +485,7 @@ export interface Window {
     /**
      * Represents the current window's state.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
      */
     State: (_: (_: WindowState) => void) => void
 
@@ -504,9 +504,9 @@ export interface Window {
      * @param alignment The alignment of the item.
      * @param priority The priority of the item. Higher values mean the item should be shown more to the left.
      * @return A new status bar item.
-     * @param optionallyInitialStateToApplyUponCreation ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+     * @param optionallyInitialStateToApplyUponCreation if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number, optionallyInitialStateToApplyUponCreation?: StatusBarItemState) => (_: (_: StatusBarItem, __: StatusBarItemState) => void) => void
+    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number, optionallyInitialStateToApplyUponCreation?: StatusBarItemBag) => (_: (_: StatusBarItem, __: StatusBarItemBag) => void) => void
 
     /**
      * Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
@@ -514,7 +514,7 @@ export interface Window {
      * @param name Human-readable string which will be used to represent the channel in the UI.
      * @return A thenable that resolves when the `OutputChannel` has been created and initialized.
      */
-    CreateOutputChannel: (name: string) => (_: (_: OutputChannel, __: OutputChannelState) => void) => void
+    CreateOutputChannel: (name: string) => (_: (_: OutputChannel, __: OutputChannelBag) => void) => void
 
     /**
      * Create a TextEditorDecorationType that can be used to add decorations to text editors.
@@ -522,7 +522,7 @@ export interface Window {
      * @param options Rendering options for the decoration type.
      * @return A new decoration type instance.
      */
-    CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType, __: TextEditorDecorationTypeState) => void) => void
+    CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType, __: TextEditorDecorationTypeBag) => void) => void
 
     /**
      * Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
@@ -532,9 +532,9 @@ export interface Window {
      * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
      * @return A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
-     * @param optionallyInitialStateToApplyUponCreation ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+     * @param optionallyInitialStateToApplyUponCreation if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateInputBox: (optionallyInitialStateToApplyUponCreation?: InputBoxState) => (_: (_: InputBox, __: InputBoxState) => void) => void
+    CreateInputBox: (optionallyInitialStateToApplyUponCreation?: InputBoxBag) => (_: (_: InputBox, __: InputBoxBag) => void) => void
 
     /**
      * Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
@@ -545,9 +545,9 @@ export interface Window {
      * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
      * @return A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
-     * @param optionallyInitialStateToApplyUponCreation ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+     * @param optionallyInitialStateToApplyUponCreation if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateQuickPick: (optionallyInitialStateToApplyUponCreation?: QuickPickState) => (_: (_: QuickPick, __: QuickPickState) => void) => void
+    CreateQuickPick: (optionallyInitialStateToApplyUponCreation?: QuickPickBag) => (_: (_: QuickPick, __: QuickPickBag) => void) => void
 }
 
 /**
@@ -570,28 +570,28 @@ export interface Env {
     /**
      * The application name of the editor, like 'VS Code'.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     AppName: (_: (_: string) => void) => void
 
     /**
      * The application root folder from which the editor is running.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     AppRoot: (_: (_: string) => void) => void
 
     /**
      * Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     Language: (_: (_: string) => void) => void
 
     /**
      * A unique identifier for the computer.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     MachineId: (_: (_: string) => void) => void
 
@@ -604,7 +604,7 @@ export interface Env {
      * exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
      * a specific extension runs remote or not.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     RemoteName: (_: (_: string) => void) => void
 
@@ -612,7 +612,7 @@ export interface Env {
      * A unique identifier for the current session.
      * Changes each time the editor is started.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     SessionId: (_: (_: string) => void) => void
 
@@ -620,22 +620,23 @@ export interface Env {
      * The detected default shell for the extension host, this is overridden by the
      * `terminal.integrated.shell` setting for the extension host's platform.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     Shell: (_: (_: string) => void) => void
 
     /**
      * The custom uri scheme the editor registers to in the operating system.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     UriScheme: (_: (_: string) => void) => void
 
     /**
      * Provides single-call access to numerous individual `Env` properties at once.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
      */
-    Properties: (_: (_: EnvProperties) => void) => void
+    AllProperties: (_: (_: EnvBag) => void) => void
 
     /**
      * The clipboard provides read and write access to the system's clipboard.
@@ -680,7 +681,7 @@ export interface Workspace {
      * The name of the workspace. `undefined` when no folder
      * has been opened.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     Name: (_: (_: string) => void) => void
 
@@ -717,7 +718,7 @@ export interface Workspace {
      * for that purpose which will work both when a single folder is opened as
      * well as an untitled or saved workspace.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     WorkspaceFile: (_: (_: string) => void) => void
 
@@ -751,7 +752,7 @@ export interface Workspace {
      * List of workspace folders or `undefined` when no folder is open.
      * *Note* that the first entry corresponds to the value of `rootPath`.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     WorkspaceFolders: (_: (_: WorkspaceFolder[]) => void) => void
 
@@ -782,8 +783,9 @@ export interface Workspace {
     /**
      * Provides single-call access to numerous individual `Workspace` properties at once.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
      */
-    Properties: (_: (_: WorkspaceProperties) => void) => void
+    AllProperties: (_: (_: WorkspaceBag) => void) => void
 }
 
 /**
@@ -1525,9 +1527,9 @@ export interface StatusBarItem extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    Get: () => (_: (_: StatusBarItemState) => void) => void
+    Get: () => (_: (_: StatusBarItemBag) => void) => void
 
-    Set: (_: StatusBarItemState) => (_: () => void) => void
+    Set: (_: StatusBarItemBag) => (_: () => void) => void
 }
 
 function newStatusBarItem (): StatusBarItem {
@@ -1592,7 +1594,7 @@ export interface OutputChannel extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    Get: () => (_: (_: OutputChannelState) => void) => void
+    Get: () => (_: (_: OutputChannelBag) => void) => void
 }
 
 function newOutputChannel (): OutputChannel {
@@ -1890,7 +1892,7 @@ export interface TextEditorDecorationType extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    Get: () => (_: (_: TextEditorDecorationTypeState) => void) => void
+    Get: () => (_: (_: TextEditorDecorationTypeBag) => void) => void
 }
 
 function newTextEditorDecorationType (): TextEditorDecorationType {
@@ -1956,9 +1958,9 @@ export interface InputBox extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    Get: () => (_: (_: InputBoxState) => void) => void
+    Get: () => (_: (_: InputBoxBag) => void) => void
 
-    Set: (_: InputBoxState) => (_: () => void) => void
+    Set: (_: InputBoxBag) => (_: () => void) => void
 }
 
 function newInputBox (): InputBox {
@@ -2063,9 +2065,9 @@ export interface QuickPick extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    Get: () => (_: (_: QuickPickState) => void) => void
+    Get: () => (_: (_: QuickPickBag) => void) => void
 
-    Set: (_: QuickPickState) => (_: () => void) => void
+    Set: (_: QuickPickBag) => (_: () => void) => void
 }
 
 function newQuickPick (): QuickPick {
@@ -2127,10 +2129,10 @@ function newDiagnosticChangeEvent (): DiagnosticChangeEvent {
 }
 
 /**
- * Namespace describing the environment the editor runs in.
+ * EnvBag gathers various properties of `Env`, obtainable via its `AllProperties` method.
 
  */
-export interface EnvProperties extends fromJson {
+export interface EnvBag extends fromJson {
     /**
      * The application name of the editor, like 'VS Code'.
 
@@ -2188,23 +2190,17 @@ export interface EnvProperties extends fromJson {
     uriScheme?: string
 }
 
-function newEnvProperties (): EnvProperties {
-    let me: EnvProperties
-    me = { populateFrom: _ => EnvProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as EnvProperties
+function newEnvBag (): EnvBag {
+    let me: EnvBag
+    me = { populateFrom: _ => EnvBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as EnvBag
     return me
 }
 
 /**
- * Namespace for dealing with the current workspace. A workspace is the representation
- * of the folder that has been opened. There is no workspace when just a file but not a
- * folder has been opened.
- * 
- * The workspace offers support for [listening](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher) to fs
- * events and for [finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles) files. Both perform well and run _outside_
- * the editor-process so that they should be always used instead of nodejs-equivalents.
+ * WorkspaceBag gathers various properties of `Workspace`, obtainable via its `AllProperties` method.
 
  */
-export interface WorkspaceProperties extends fromJson {
+export interface WorkspaceBag extends fromJson {
     /**
      * The name of the workspace. `undefined` when no folder
      * has been opened.
@@ -2256,18 +2252,17 @@ export interface WorkspaceProperties extends fromJson {
     workspaceFolders?: WorkspaceFolder[]
 }
 
-function newWorkspaceProperties (): WorkspaceProperties {
-    let me: WorkspaceProperties
-    me = { populateFrom: _ => WorkspaceProperties_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceProperties
+function newWorkspaceBag (): WorkspaceBag {
+    let me: WorkspaceBag
+    me = { populateFrom: _ => WorkspaceBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceBag
     return me
 }
 
 /**
- * A status bar item is a status bar contribution that can
- * show text and icons and run a command on click.
+ * StatusBarItemBag is a snapshot of `StatusBarItem` state at the counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 
  */
-export interface StatusBarItemState extends fromJson {
+export interface StatusBarItemBag extends fromJson {
     /**
      * The alignment of this item.
 
@@ -2312,20 +2307,17 @@ export interface StatusBarItemState extends fromJson {
     command?: string
 }
 
-export function newStatusBarItemState (): StatusBarItemState {
-    let me: StatusBarItemState
-    me = { populateFrom: _ => StatusBarItemState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as StatusBarItemState
+export function newStatusBarItemBag (): StatusBarItemBag {
+    let me: StatusBarItemBag
+    me = { populateFrom: _ => StatusBarItemBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as StatusBarItemBag
     return me
 }
 
 /**
- * An output channel is a container for readonly textual information.
- * 
- * To get an instance of an `OutputChannel` use
- * [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
+ * OutputChannelBag is a snapshot of `OutputChannel` state at the counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 
  */
-export interface OutputChannelState extends fromJson {
+export interface OutputChannelBag extends fromJson {
     /**
      * The human-readable name of this output channel.
 
@@ -2333,21 +2325,17 @@ export interface OutputChannelState extends fromJson {
     Name: () => string
 }
 
-export function newOutputChannelState (): OutputChannelState {
-    let me: OutputChannelState
-    me = { populateFrom: _ => OutputChannelState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as OutputChannelState
+export function newOutputChannelBag (): OutputChannelBag {
+    let me: OutputChannelBag
+    me = { populateFrom: _ => OutputChannelBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as OutputChannelBag
     return me
 }
 
 /**
- * Represents a handle to a set of decorations
- * sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
- * 
- * To get an instance of a `TextEditorDecorationType` use
- * [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
+ * TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 
  */
-export interface TextEditorDecorationTypeState extends fromJson {
+export interface TextEditorDecorationTypeBag extends fromJson {
     /**
      * Internal representation of the handle.
 
@@ -2355,21 +2343,17 @@ export interface TextEditorDecorationTypeState extends fromJson {
     Key: () => string
 }
 
-export function newTextEditorDecorationTypeState (): TextEditorDecorationTypeState {
-    let me: TextEditorDecorationTypeState
-    me = { populateFrom: _ => TextEditorDecorationTypeState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as TextEditorDecorationTypeState
+export function newTextEditorDecorationTypeBag (): TextEditorDecorationTypeBag {
+    let me: TextEditorDecorationTypeBag
+    me = { populateFrom: _ => TextEditorDecorationTypeBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as TextEditorDecorationTypeBag
     return me
 }
 
 /**
- * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
- * 
- * Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
- * is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
- * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+ * InputBoxBag is a snapshot of `InputBox` state at the counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 
  */
-export interface InputBoxState extends fromJson {
+export interface InputBoxBag extends fromJson {
     /**
      * Current input value.
 
@@ -2443,24 +2427,17 @@ export interface InputBoxState extends fromJson {
     ignoreFocusOut?: boolean
 }
 
-export function newInputBoxState (): InputBoxState {
-    let me: InputBoxState
-    me = { populateFrom: _ => InputBoxState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBoxState
+export function newInputBoxBag (): InputBoxBag {
+    let me: InputBoxBag
+    me = { populateFrom: _ => InputBoxBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBoxBag
     return me
 }
 
 /**
- * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
- * list of items of type T. The items can be filtered through a filter text field and
- * there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
- * selecting multiple items.
- * 
- * Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
- * is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
- * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+ * QuickPickBag is a snapshot of `QuickPick` state at the counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 
  */
-export interface QuickPickState extends fromJson {
+export interface QuickPickBag extends fromJson {
     /**
      * Current value of the filter text.
 
@@ -2552,9 +2529,9 @@ export interface QuickPickState extends fromJson {
     ignoreFocusOut?: boolean
 }
 
-export function newQuickPickState (): QuickPickState {
-    let me: QuickPickState
-    me = { populateFrom: _ => QuickPickState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPickState
+export function newQuickPickBag (): QuickPickBag {
+    let me: QuickPickBag
+    me = { populateFrom: _ => QuickPickBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPickBag
     return me
 }
 
@@ -3668,7 +3645,7 @@ class implWindow extends implBase implements Window {
         }
     }
 
-    CreateStatusBarItem(alignment?: StatusBarAlignment, priority?: number, optionallyInitialStateToApplyUponCreation?: StatusBarItemState): (_: (_: StatusBarItem, __: StatusBarItemState) => void) => void {
+    CreateStatusBarItem(alignment?: StatusBarAlignment, priority?: number, optionallyInitialStateToApplyUponCreation?: StatusBarItemBag): (_: (_: StatusBarItem, __: StatusBarItemBag) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createStatusBarItem"
@@ -3680,7 +3657,7 @@ class implWindow extends implBase implements Window {
             msg.Data["priority"] = priority
         }
         let onresp: (_: any) => boolean
-        let onret: (_: StatusBarItem, __: StatusBarItemState) => void
+        let onret: (_: StatusBarItem, __: StatusBarItemBag) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
             let result: StatusBarItem
@@ -3696,7 +3673,7 @@ class implWindow extends implBase implements Window {
                 if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
                     result.Set(optionallyInitialStateToApplyUponCreation)
                 }
-                result.Get()((state: StatusBarItemState): void => {
+                result.Get()((state: StatusBarItemBag): void => {
                     if ((undefined !== onret && null !== onret)) {
                         onret(result, state)
                     }
@@ -3705,19 +3682,19 @@ class implWindow extends implBase implements Window {
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: StatusBarItem, __: StatusBarItemState) => void): void => {
+        return (a0: (_: StatusBarItem, __: StatusBarItemBag) => void): void => {
             onret = a0
         }
     }
 
-    CreateOutputChannel(name: string): (_: (_: OutputChannel, __: OutputChannelState) => void) => void {
+    CreateOutputChannel(name: string): (_: (_: OutputChannel, __: OutputChannelBag) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createOutputChannel"
         msg.Data = {}
         msg.Data["name"] = name
         let onresp: (_: any) => boolean
-        let onret: (_: OutputChannel, __: OutputChannelState) => void
+        let onret: (_: OutputChannel, __: OutputChannelBag) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
             let result: OutputChannel
@@ -3730,7 +3707,7 @@ class implWindow extends implBase implements Window {
                 result.disp.impl = this.Impl()
             }
             {
-                result.Get()((state: OutputChannelState): void => {
+                result.Get()((state: OutputChannelBag): void => {
                     if ((undefined !== onret && null !== onret)) {
                         onret(result, state)
                     }
@@ -3739,19 +3716,19 @@ class implWindow extends implBase implements Window {
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: OutputChannel, __: OutputChannelState) => void): void => {
+        return (a0: (_: OutputChannel, __: OutputChannelBag) => void): void => {
             onret = a0
         }
     }
 
-    CreateTextEditorDecorationType(options: DecorationRenderOptions): (_: (_: TextEditorDecorationType, __: TextEditorDecorationTypeState) => void) => void {
+    CreateTextEditorDecorationType(options: DecorationRenderOptions): (_: (_: TextEditorDecorationType, __: TextEditorDecorationTypeBag) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createTextEditorDecorationType"
         msg.Data = {}
         msg.Data["options"] = options
         let onresp: (_: any) => boolean
-        let onret: (_: TextEditorDecorationType, __: TextEditorDecorationTypeState) => void
+        let onret: (_: TextEditorDecorationType, __: TextEditorDecorationTypeBag) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
             let result: TextEditorDecorationType
@@ -3764,7 +3741,7 @@ class implWindow extends implBase implements Window {
                 result.disp.impl = this.Impl()
             }
             {
-                result.Get()((state: TextEditorDecorationTypeState): void => {
+                result.Get()((state: TextEditorDecorationTypeBag): void => {
                     if ((undefined !== onret && null !== onret)) {
                         onret(result, state)
                     }
@@ -3773,18 +3750,18 @@ class implWindow extends implBase implements Window {
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: TextEditorDecorationType, __: TextEditorDecorationTypeState) => void): void => {
+        return (a0: (_: TextEditorDecorationType, __: TextEditorDecorationTypeBag) => void): void => {
             onret = a0
         }
     }
 
-    CreateInputBox(optionallyInitialStateToApplyUponCreation?: InputBoxState): (_: (_: InputBox, __: InputBoxState) => void) => void {
+    CreateInputBox(optionallyInitialStateToApplyUponCreation?: InputBoxBag): (_: (_: InputBox, __: InputBoxBag) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createInputBox"
         msg.Data = {}
         let onresp: (_: any) => boolean
-        let onret: (_: InputBox, __: InputBoxState) => void
+        let onret: (_: InputBox, __: InputBoxBag) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
             let result: InputBox
@@ -3800,7 +3777,7 @@ class implWindow extends implBase implements Window {
                 if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
                     result.Set(optionallyInitialStateToApplyUponCreation)
                 }
-                result.Get()((state: InputBoxState): void => {
+                result.Get()((state: InputBoxBag): void => {
                     if ((undefined !== onret && null !== onret)) {
                         onret(result, state)
                     }
@@ -3809,18 +3786,18 @@ class implWindow extends implBase implements Window {
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: InputBox, __: InputBoxState) => void): void => {
+        return (a0: (_: InputBox, __: InputBoxBag) => void): void => {
             onret = a0
         }
     }
 
-    CreateQuickPick(optionallyInitialStateToApplyUponCreation?: QuickPickState): (_: (_: QuickPick, __: QuickPickState) => void) => void {
+    CreateQuickPick(optionallyInitialStateToApplyUponCreation?: QuickPickBag): (_: (_: QuickPick, __: QuickPickBag) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createQuickPick"
         msg.Data = {}
         let onresp: (_: any) => boolean
-        let onret: (_: QuickPick, __: QuickPickState) => void
+        let onret: (_: QuickPick, __: QuickPickBag) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
             let result: QuickPick
@@ -3836,7 +3813,7 @@ class implWindow extends implBase implements Window {
                 if ((undefined !== optionallyInitialStateToApplyUponCreation && null !== optionallyInitialStateToApplyUponCreation)) {
                     result.Set(optionallyInitialStateToApplyUponCreation)
                 }
-                result.Get()((state: QuickPickState): void => {
+                result.Get()((state: QuickPickBag): void => {
                     if ((undefined !== onret && null !== onret)) {
                         onret(result, state)
                     }
@@ -3845,7 +3822,7 @@ class implWindow extends implBase implements Window {
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: QuickPick, __: QuickPickState) => void): void => {
+        return (a0: (_: QuickPick, __: QuickPickBag) => void): void => {
             onret = a0
         }
     }
@@ -4120,18 +4097,18 @@ class implEnv extends implBase implements Env {
         }
     }
 
-    Properties(): (_: (_: EnvProperties) => void) => void {
+    AllProperties(): (_: (_: EnvBag) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "env.Properties"
+        msg.QName = "env.AllProperties"
         msg.Data = {}
         let onresp: (_: any) => boolean
-        let onret: (_: EnvProperties) => void
+        let onret: (_: EnvBag) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
-            let result: EnvProperties
+            let result: EnvBag
             if ((undefined !== payload && null !== payload)) {
-                result = newEnvProperties()
+                result = newEnvBag()
                 ok = result.populateFrom(payload)
                 if (!ok) {
                     return false
@@ -4147,7 +4124,7 @@ class implEnv extends implBase implements Env {
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: EnvProperties) => void): void => {
+        return (a0: (_: EnvBag) => void): void => {
             onret = a0
         }
     }
@@ -4529,18 +4506,18 @@ class implWorkspace extends implBase implements Workspace {
         }
     }
 
-    Properties(): (_: (_: WorkspaceProperties) => void) => void {
+    AllProperties(): (_: (_: WorkspaceBag) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "workspace.Properties"
+        msg.QName = "workspace.AllProperties"
         msg.Data = {}
         let onresp: (_: any) => boolean
-        let onret: (_: WorkspaceProperties) => void
+        let onret: (_: WorkspaceBag) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
-            let result: WorkspaceProperties
+            let result: WorkspaceBag
             if ((undefined !== payload && null !== payload)) {
-                result = newWorkspaceProperties()
+                result = newWorkspaceBag()
                 ok = result.populateFrom(payload)
                 if (!ok) {
                     return false
@@ -4556,7 +4533,7 @@ class implWorkspace extends implBase implements Workspace {
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: WorkspaceProperties) => void): void => {
+        return (a0: (_: WorkspaceBag) => void): void => {
             onret = a0
         }
     }
@@ -4841,19 +4818,19 @@ class implCommands extends implBase implements Commands {
 
 }
 
-function StatusBarItem_Show(this: StatusBarItem, ): (_: (_: StatusBarItemState) => void) => void {
+function StatusBarItem_Show(this: StatusBarItem, ): (_: (_: StatusBarItemBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "StatusBarItem.show"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: StatusBarItemState) => void
+    let onret: (_: StatusBarItemBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: StatusBarItemState
+        let result: StatusBarItemBag
         if ((undefined !== payload && null !== payload)) {
-            result = newStatusBarItemState()
+            result = newStatusBarItemBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -4867,24 +4844,24 @@ function StatusBarItem_Show(this: StatusBarItem, ): (_: (_: StatusBarItemState) 
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: StatusBarItemState) => void): void => {
+    return (a0: (_: StatusBarItemBag) => void): void => {
         onret = a0
     }
 }
 
-function StatusBarItem_Hide(this: StatusBarItem, ): (_: (_: StatusBarItemState) => void) => void {
+function StatusBarItem_Hide(this: StatusBarItem, ): (_: (_: StatusBarItemBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "StatusBarItem.hide"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: StatusBarItemState) => void
+    let onret: (_: StatusBarItemBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: StatusBarItemState
+        let result: StatusBarItemBag
         if ((undefined !== payload && null !== payload)) {
-            result = newStatusBarItemState()
+            result = newStatusBarItemBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -4898,7 +4875,7 @@ function StatusBarItem_Hide(this: StatusBarItem, ): (_: (_: StatusBarItemState) 
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: StatusBarItemState) => void): void => {
+    return (a0: (_: StatusBarItemBag) => void): void => {
         onret = a0
     }
 }
@@ -4907,19 +4884,19 @@ function StatusBarItem_Dispose(this: StatusBarItem, ): (_: () => void) => void {
     return this.disp.Dispose()
 }
 
-function StatusBarItem_Get(this: StatusBarItem, ): (_: (_: StatusBarItemState) => void) => void {
+function StatusBarItem_Get(this: StatusBarItem, ): (_: (_: StatusBarItemBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "StatusBarItem.appzObjPropsGet"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: StatusBarItemState) => void
+    let onret: (_: StatusBarItemBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: StatusBarItemState
+        let result: StatusBarItemBag
         if ((undefined !== payload && null !== payload)) {
-            result = newStatusBarItemState()
+            result = newStatusBarItemBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -4933,12 +4910,12 @@ function StatusBarItem_Get(this: StatusBarItem, ): (_: (_: StatusBarItemState) =
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: StatusBarItemState) => void): void => {
+    return (a0: (_: StatusBarItemBag) => void): void => {
         onret = a0
     }
 }
 
-function StatusBarItem_Set(this: StatusBarItem, allUpdates: StatusBarItemState): (_: () => void) => void {
+function StatusBarItem_Set(this: StatusBarItem, allUpdates: StatusBarItemBag): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "StatusBarItem.appzObjPropsSet"
@@ -4962,7 +4939,7 @@ function StatusBarItem_Set(this: StatusBarItem, allUpdates: StatusBarItemState):
     }
 }
 
-function OutputChannel_Append(this: OutputChannel, value: string): (_: (_: OutputChannelState) => void) => void {
+function OutputChannel_Append(this: OutputChannel, value: string): (_: (_: OutputChannelBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.append"
@@ -4970,12 +4947,12 @@ function OutputChannel_Append(this: OutputChannel, value: string): (_: (_: Outpu
     msg.Data[""] = this.disp.id
     msg.Data["value"] = value
     let onresp: (_: any) => boolean
-    let onret: (_: OutputChannelState) => void
+    let onret: (_: OutputChannelBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: OutputChannelState
+        let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelState()
+            result = newOutputChannelBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -4989,12 +4966,12 @@ function OutputChannel_Append(this: OutputChannel, value: string): (_: (_: Outpu
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: OutputChannelState) => void): void => {
+    return (a0: (_: OutputChannelBag) => void): void => {
         onret = a0
     }
 }
 
-function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: (_: OutputChannelState) => void) => void {
+function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: (_: OutputChannelBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.appendLine"
@@ -5002,12 +4979,12 @@ function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: (_: O
     msg.Data[""] = this.disp.id
     msg.Data["value"] = value
     let onresp: (_: any) => boolean
-    let onret: (_: OutputChannelState) => void
+    let onret: (_: OutputChannelBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: OutputChannelState
+        let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelState()
+            result = newOutputChannelBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -5021,24 +4998,24 @@ function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: (_: O
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: OutputChannelState) => void): void => {
+    return (a0: (_: OutputChannelBag) => void): void => {
         onret = a0
     }
 }
 
-function OutputChannel_Clear(this: OutputChannel, ): (_: (_: OutputChannelState) => void) => void {
+function OutputChannel_Clear(this: OutputChannel, ): (_: (_: OutputChannelBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.clear"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: OutputChannelState) => void
+    let onret: (_: OutputChannelBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: OutputChannelState
+        let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelState()
+            result = newOutputChannelBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -5052,12 +5029,12 @@ function OutputChannel_Clear(this: OutputChannel, ): (_: (_: OutputChannelState)
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: OutputChannelState) => void): void => {
+    return (a0: (_: OutputChannelBag) => void): void => {
         onret = a0
     }
 }
 
-function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (_: OutputChannelState) => void) => void {
+function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (_: OutputChannelBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.show"
@@ -5065,12 +5042,12 @@ function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (
     msg.Data[""] = this.disp.id
     msg.Data["preserveFocus"] = preserveFocus
     let onresp: (_: any) => boolean
-    let onret: (_: OutputChannelState) => void
+    let onret: (_: OutputChannelBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: OutputChannelState
+        let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelState()
+            result = newOutputChannelBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -5084,24 +5061,24 @@ function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: OutputChannelState) => void): void => {
+    return (a0: (_: OutputChannelBag) => void): void => {
         onret = a0
     }
 }
 
-function OutputChannel_Hide(this: OutputChannel, ): (_: (_: OutputChannelState) => void) => void {
+function OutputChannel_Hide(this: OutputChannel, ): (_: (_: OutputChannelBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.hide"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: OutputChannelState) => void
+    let onret: (_: OutputChannelBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: OutputChannelState
+        let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelState()
+            result = newOutputChannelBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -5115,7 +5092,7 @@ function OutputChannel_Hide(this: OutputChannel, ): (_: (_: OutputChannelState) 
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: OutputChannelState) => void): void => {
+    return (a0: (_: OutputChannelBag) => void): void => {
         onret = a0
     }
 }
@@ -5124,19 +5101,19 @@ function OutputChannel_Dispose(this: OutputChannel, ): (_: () => void) => void {
     return this.disp.Dispose()
 }
 
-function OutputChannel_Get(this: OutputChannel, ): (_: (_: OutputChannelState) => void) => void {
+function OutputChannel_Get(this: OutputChannel, ): (_: (_: OutputChannelBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.appzObjPropsGet"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: OutputChannelState) => void
+    let onret: (_: OutputChannelBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: OutputChannelState
+        let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelState()
+            result = newOutputChannelBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -5150,7 +5127,7 @@ function OutputChannel_Get(this: OutputChannel, ): (_: (_: OutputChannelState) =
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: OutputChannelState) => void): void => {
+    return (a0: (_: OutputChannelBag) => void): void => {
         onret = a0
     }
 }
@@ -5159,19 +5136,19 @@ function TextEditorDecorationType_Dispose(this: TextEditorDecorationType, ): (_:
     return this.disp.Dispose()
 }
 
-function TextEditorDecorationType_Get(this: TextEditorDecorationType, ): (_: (_: TextEditorDecorationTypeState) => void) => void {
+function TextEditorDecorationType_Get(this: TextEditorDecorationType, ): (_: (_: TextEditorDecorationTypeBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "TextEditorDecorationType.appzObjPropsGet"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: TextEditorDecorationTypeState) => void
+    let onret: (_: TextEditorDecorationTypeBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: TextEditorDecorationTypeState
+        let result: TextEditorDecorationTypeBag
         if ((undefined !== payload && null !== payload)) {
-            result = newTextEditorDecorationTypeState()
+            result = newTextEditorDecorationTypeBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -5185,12 +5162,12 @@ function TextEditorDecorationType_Get(this: TextEditorDecorationType, ): (_: (_:
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: TextEditorDecorationTypeState) => void): void => {
+    return (a0: (_: TextEditorDecorationTypeBag) => void): void => {
         onret = a0
     }
 }
 
-function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string, __: InputBoxState) => void): (_: (_: Disposable) => void) => void {
+function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string, __: InputBoxBag) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.onDidChangeValue"
@@ -5211,8 +5188,8 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string, __: Inpu
         if (!ok) {
             return false
         }
-        let _a_1_: InputBoxState
-        _a_1_ = newInputBoxState()
+        let _a_1_: InputBoxBag
+        _a_1_ = newInputBoxBag()
         ok = _a_1_.populateFrom(args[1])
         if (!ok) {
             return false
@@ -5249,7 +5226,7 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string, __: Inpu
     }
 }
 
-function InputBox_OnDidAccept(this: InputBox, handler: (_: InputBoxState) => void): (_: (_: Disposable) => void) => void {
+function InputBox_OnDidAccept(this: InputBox, handler: (_: InputBoxBag) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.onDidAccept"
@@ -5265,8 +5242,8 @@ function InputBox_OnDidAccept(this: InputBox, handler: (_: InputBoxState) => voi
         if (1 !== args.length) {
             return ok
         }
-        let _a_0_: InputBoxState
-        _a_0_ = newInputBoxState()
+        let _a_0_: InputBoxBag
+        _a_0_ = newInputBoxBag()
         ok = _a_0_.populateFrom(args[0])
         if (!ok) {
             return false
@@ -5303,19 +5280,19 @@ function InputBox_OnDidAccept(this: InputBox, handler: (_: InputBoxState) => voi
     }
 }
 
-function InputBox_Show(this: InputBox, ): (_: (_: InputBoxState) => void) => void {
+function InputBox_Show(this: InputBox, ): (_: (_: InputBoxBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.show"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: InputBoxState) => void
+    let onret: (_: InputBoxBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: InputBoxState
+        let result: InputBoxBag
         if ((undefined !== payload && null !== payload)) {
-            result = newInputBoxState()
+            result = newInputBoxBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -5329,24 +5306,24 @@ function InputBox_Show(this: InputBox, ): (_: (_: InputBoxState) => void) => voi
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: InputBoxState) => void): void => {
+    return (a0: (_: InputBoxBag) => void): void => {
         onret = a0
     }
 }
 
-function InputBox_Hide(this: InputBox, ): (_: (_: InputBoxState) => void) => void {
+function InputBox_Hide(this: InputBox, ): (_: (_: InputBoxBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.hide"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: InputBoxState) => void
+    let onret: (_: InputBoxBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: InputBoxState
+        let result: InputBoxBag
         if ((undefined !== payload && null !== payload)) {
-            result = newInputBoxState()
+            result = newInputBoxBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -5360,12 +5337,12 @@ function InputBox_Hide(this: InputBox, ): (_: (_: InputBoxState) => void) => voi
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: InputBoxState) => void): void => {
+    return (a0: (_: InputBoxBag) => void): void => {
         onret = a0
     }
 }
 
-function InputBox_OnDidHide(this: InputBox, handler: (_: InputBoxState) => void): (_: (_: Disposable) => void) => void {
+function InputBox_OnDidHide(this: InputBox, handler: (_: InputBoxBag) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.onDidHide"
@@ -5381,8 +5358,8 @@ function InputBox_OnDidHide(this: InputBox, handler: (_: InputBoxState) => void)
         if (1 !== args.length) {
             return ok
         }
-        let _a_0_: InputBoxState
-        _a_0_ = newInputBoxState()
+        let _a_0_: InputBoxBag
+        _a_0_ = newInputBoxBag()
         ok = _a_0_.populateFrom(args[0])
         if (!ok) {
             return false
@@ -5423,19 +5400,19 @@ function InputBox_Dispose(this: InputBox, ): (_: () => void) => void {
     return this.disp.Dispose()
 }
 
-function InputBox_Get(this: InputBox, ): (_: (_: InputBoxState) => void) => void {
+function InputBox_Get(this: InputBox, ): (_: (_: InputBoxBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.appzObjPropsGet"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: InputBoxState) => void
+    let onret: (_: InputBoxBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: InputBoxState
+        let result: InputBoxBag
         if ((undefined !== payload && null !== payload)) {
-            result = newInputBoxState()
+            result = newInputBoxBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -5449,12 +5426,12 @@ function InputBox_Get(this: InputBox, ): (_: (_: InputBoxState) => void) => void
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: InputBoxState) => void): void => {
+    return (a0: (_: InputBoxBag) => void): void => {
         onret = a0
     }
 }
 
-function InputBox_Set(this: InputBox, allUpdates: InputBoxState): (_: () => void) => void {
+function InputBox_Set(this: InputBox, allUpdates: InputBoxBag): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.appzObjPropsSet"
@@ -5478,7 +5455,7 @@ function InputBox_Set(this: InputBox, allUpdates: InputBoxState): (_: () => void
     }
 }
 
-function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string, __: QuickPickState) => void): (_: (_: Disposable) => void) => void {
+function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string, __: QuickPickBag) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidChangeValue"
@@ -5499,8 +5476,8 @@ function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string, __: Qu
         if (!ok) {
             return false
         }
-        let _a_1_: QuickPickState
-        _a_1_ = newQuickPickState()
+        let _a_1_: QuickPickBag
+        _a_1_ = newQuickPickBag()
         ok = _a_1_.populateFrom(args[1])
         if (!ok) {
             return false
@@ -5537,7 +5514,7 @@ function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string, __: Qu
     }
 }
 
-function QuickPick_OnDidAccept(this: QuickPick, handler: (_: QuickPickState) => void): (_: (_: Disposable) => void) => void {
+function QuickPick_OnDidAccept(this: QuickPick, handler: (_: QuickPickBag) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidAccept"
@@ -5553,8 +5530,8 @@ function QuickPick_OnDidAccept(this: QuickPick, handler: (_: QuickPickState) => 
         if (1 !== args.length) {
             return ok
         }
-        let _a_0_: QuickPickState
-        _a_0_ = newQuickPickState()
+        let _a_0_: QuickPickBag
+        _a_0_ = newQuickPickBag()
         ok = _a_0_.populateFrom(args[0])
         if (!ok) {
             return false
@@ -5591,7 +5568,7 @@ function QuickPick_OnDidAccept(this: QuickPick, handler: (_: QuickPickState) => 
     }
 }
 
-function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem[], __: QuickPickState) => void): (_: (_: Disposable) => void) => void {
+function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem[], __: QuickPickBag) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidChangeActive"
@@ -5626,8 +5603,8 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
             _a_0_[__idx___a_0_] = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
         }
-        let _a_1_: QuickPickState
-        _a_1_ = newQuickPickState()
+        let _a_1_: QuickPickBag
+        _a_1_ = newQuickPickBag()
         ok = _a_1_.populateFrom(args[1])
         if (!ok) {
             return false
@@ -5664,7 +5641,7 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
     }
 }
 
-function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickItem[], __: QuickPickState) => void): (_: (_: Disposable) => void) => void {
+function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickItem[], __: QuickPickBag) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidChangeSelection"
@@ -5699,8 +5676,8 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
             _a_0_[__idx___a_0_] = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
         }
-        let _a_1_: QuickPickState
-        _a_1_ = newQuickPickState()
+        let _a_1_: QuickPickBag
+        _a_1_ = newQuickPickBag()
         ok = _a_1_.populateFrom(args[1])
         if (!ok) {
             return false
@@ -5737,19 +5714,19 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
     }
 }
 
-function QuickPick_Show(this: QuickPick, ): (_: (_: QuickPickState) => void) => void {
+function QuickPick_Show(this: QuickPick, ): (_: (_: QuickPickBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.show"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: QuickPickState) => void
+    let onret: (_: QuickPickBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: QuickPickState
+        let result: QuickPickBag
         if ((undefined !== payload && null !== payload)) {
-            result = newQuickPickState()
+            result = newQuickPickBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -5763,24 +5740,24 @@ function QuickPick_Show(this: QuickPick, ): (_: (_: QuickPickState) => void) => 
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: QuickPickState) => void): void => {
+    return (a0: (_: QuickPickBag) => void): void => {
         onret = a0
     }
 }
 
-function QuickPick_Hide(this: QuickPick, ): (_: (_: QuickPickState) => void) => void {
+function QuickPick_Hide(this: QuickPick, ): (_: (_: QuickPickBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.hide"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: QuickPickState) => void
+    let onret: (_: QuickPickBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: QuickPickState
+        let result: QuickPickBag
         if ((undefined !== payload && null !== payload)) {
-            result = newQuickPickState()
+            result = newQuickPickBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -5794,12 +5771,12 @@ function QuickPick_Hide(this: QuickPick, ): (_: (_: QuickPickState) => void) => 
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: QuickPickState) => void): void => {
+    return (a0: (_: QuickPickBag) => void): void => {
         onret = a0
     }
 }
 
-function QuickPick_OnDidHide(this: QuickPick, handler: (_: QuickPickState) => void): (_: (_: Disposable) => void) => void {
+function QuickPick_OnDidHide(this: QuickPick, handler: (_: QuickPickBag) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidHide"
@@ -5815,8 +5792,8 @@ function QuickPick_OnDidHide(this: QuickPick, handler: (_: QuickPickState) => vo
         if (1 !== args.length) {
             return ok
         }
-        let _a_0_: QuickPickState
-        _a_0_ = newQuickPickState()
+        let _a_0_: QuickPickBag
+        _a_0_ = newQuickPickBag()
         ok = _a_0_.populateFrom(args[0])
         if (!ok) {
             return false
@@ -5857,19 +5834,19 @@ function QuickPick_Dispose(this: QuickPick, ): (_: () => void) => void {
     return this.disp.Dispose()
 }
 
-function QuickPick_Get(this: QuickPick, ): (_: (_: QuickPickState) => void) => void {
+function QuickPick_Get(this: QuickPick, ): (_: (_: QuickPickBag) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.appzObjPropsGet"
     msg.Data = {}
     msg.Data[""] = this.disp.id
     let onresp: (_: any) => boolean
-    let onret: (_: QuickPickState) => void
+    let onret: (_: QuickPickBag) => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: QuickPickState
+        let result: QuickPickBag
         if ((undefined !== payload && null !== payload)) {
-            result = newQuickPickState()
+            result = newQuickPickBag()
             ok = result.populateFrom(payload)
             if (!ok) {
                 return false
@@ -5883,12 +5860,12 @@ function QuickPick_Get(this: QuickPick, ): (_: (_: QuickPickState) => void) => v
         return true
     }
     this.disp.impl.send(msg, onresp)
-    return (a0: (_: QuickPickState) => void): void => {
+    return (a0: (_: QuickPickBag) => void): void => {
         onret = a0
     }
 }
 
-function QuickPick_Set(this: QuickPick, allUpdates: QuickPickState): (_: () => void) => void {
+function QuickPick_Set(this: QuickPick, allUpdates: QuickPickBag): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.appzObjPropsSet"
@@ -6161,7 +6138,7 @@ function QuickPick_populateFrom(this: QuickPick, payload: any): boolean {
     return ok
 }
 
-function EnvProperties_populateFrom(this: EnvProperties, payload: any): boolean {
+function EnvBag_populateFrom(this: EnvBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6341,7 +6318,7 @@ function WorkspaceFoldersChangeEvent_populateFrom(this: WorkspaceFoldersChangeEv
     return true
 }
 
-function WorkspaceProperties_populateFrom(this: WorkspaceProperties, payload: any): boolean {
+function WorkspaceBag_populateFrom(this: WorkspaceBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6440,7 +6417,7 @@ function DiagnosticChangeEvent_populateFrom(this: DiagnosticChangeEvent, payload
     return true
 }
 
-function StatusBarItemState_populateFrom(this: StatusBarItemState, payload: any): boolean {
+function StatusBarItemBag_populateFrom(this: StatusBarItemBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6533,7 +6510,7 @@ function StatusBarItemState_populateFrom(this: StatusBarItemState, payload: any)
     return true
 }
 
-function OutputChannelState_populateFrom(this: OutputChannelState, payload: any): boolean {
+function OutputChannelBag_populateFrom(this: OutputChannelBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6557,7 +6534,7 @@ function OutputChannelState_populateFrom(this: OutputChannelState, payload: any)
     return true
 }
 
-function TextEditorDecorationTypeState_populateFrom(this: TextEditorDecorationTypeState, payload: any): boolean {
+function TextEditorDecorationTypeBag_populateFrom(this: TextEditorDecorationTypeBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6581,7 +6558,7 @@ function TextEditorDecorationTypeState_populateFrom(this: TextEditorDecorationTy
     return true
 }
 
-function InputBoxState_populateFrom(this: InputBoxState, payload: any): boolean {
+function InputBoxBag_populateFrom(this: InputBoxBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6717,7 +6694,7 @@ function InputBoxState_populateFrom(this: InputBoxState, payload: any): boolean 
     return true
 }
 
-function QuickPickState_populateFrom(this: QuickPickState, payload: any): boolean {
+function QuickPickBag_populateFrom(this: QuickPickBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any

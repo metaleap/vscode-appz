@@ -438,7 +438,7 @@ export interface Window {
     /**
      * Represents the current window's state.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
      */
     State: (_: (_: WindowState) => void) => void;
     /**
@@ -455,23 +455,23 @@ export interface Window {
      * @param alignment The alignment of the item.
      * @param priority The priority of the item. Higher values mean the item should be shown more to the left.
      * @return A new status bar item.
-     * @param optionallyInitialStateToApplyUponCreation ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+     * @param optionallyInitialStateToApplyUponCreation if specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number, optionallyInitialStateToApplyUponCreation?: StatusBarItemState) => (_: (_: StatusBarItem, __: StatusBarItemState) => void) => void;
+    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number, optionallyInitialStateToApplyUponCreation?: StatusBarItemBag) => (_: (_: StatusBarItem, __: StatusBarItemBag) => void) => void;
     /**
      * Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 
      * @param name Human-readable string which will be used to represent the channel in the UI.
      * @return A thenable that resolves when the `OutputChannel` has been created and initialized.
      */
-    CreateOutputChannel: (name: string) => (_: (_: OutputChannel, __: OutputChannelState) => void) => void;
+    CreateOutputChannel: (name: string) => (_: (_: OutputChannel, __: OutputChannelBag) => void) => void;
     /**
      * Create a TextEditorDecorationType that can be used to add decorations to text editors.
 
      * @param options Rendering options for the decoration type.
      * @return A new decoration type instance.
      */
-    CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType, __: TextEditorDecorationTypeState) => void) => void;
+    CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType, __: TextEditorDecorationTypeBag) => void) => void;
     /**
      * Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
      *
@@ -480,9 +480,9 @@ export interface Window {
      * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
      * @return A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
-     * @param optionallyInitialStateToApplyUponCreation ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+     * @param optionallyInitialStateToApplyUponCreation if specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateInputBox: (optionallyInitialStateToApplyUponCreation?: InputBoxState) => (_: (_: InputBox, __: InputBoxState) => void) => void;
+    CreateInputBox: (optionallyInitialStateToApplyUponCreation?: InputBoxBag) => (_: (_: InputBox, __: InputBoxBag) => void) => void;
     /**
      * Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
      * of items of type T.
@@ -492,9 +492,9 @@ export interface Window {
      * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
      * @return A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
-     * @param optionallyInitialStateToApplyUponCreation ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+     * @param optionallyInitialStateToApplyUponCreation if specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
-    CreateQuickPick: (optionallyInitialStateToApplyUponCreation?: QuickPickState) => (_: (_: QuickPick, __: QuickPickState) => void) => void;
+    CreateQuickPick: (optionallyInitialStateToApplyUponCreation?: QuickPickBag) => (_: (_: QuickPick, __: QuickPickBag) => void) => void;
 }
 /**
  * Namespace describing the environment the editor runs in.
@@ -515,25 +515,25 @@ export interface Env {
     /**
      * The application name of the editor, like 'VS Code'.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     AppName: (_: (_: string) => void) => void;
     /**
      * The application root folder from which the editor is running.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     AppRoot: (_: (_: string) => void) => void;
     /**
      * Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     Language: (_: (_: string) => void) => void;
     /**
      * A unique identifier for the computer.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     MachineId: (_: (_: string) => void) => void;
     /**
@@ -545,34 +545,35 @@ export interface Env {
      * exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
      * a specific extension runs remote or not.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     RemoteName: (_: (_: string) => void) => void;
     /**
      * A unique identifier for the current session.
      * Changes each time the editor is started.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     SessionId: (_: (_: string) => void) => void;
     /**
      * The detected default shell for the extension host, this is overridden by the
      * `terminal.integrated.shell` setting for the extension host's platform.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     Shell: (_: (_: string) => void) => void;
     /**
      * The custom uri scheme the editor registers to in the operating system.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     UriScheme: (_: (_: string) => void) => void;
     /**
      * Provides single-call access to numerous individual `Env` properties at once.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
      */
-    Properties: (_: (_: EnvProperties) => void) => void;
+    AllProperties: (_: (_: EnvBag) => void) => void;
     /**
      * The clipboard provides read and write access to the system's clipboard.
 
@@ -613,7 +614,7 @@ export interface Workspace {
      * The name of the workspace. `undefined` when no folder
      * has been opened.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     Name: (_: (_: string) => void) => void;
     /**
@@ -649,7 +650,7 @@ export interface Workspace {
      * for that purpose which will work both when a single folder is opened as
      * well as an untitled or saved workspace.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     WorkspaceFile: (_: (_: string) => void) => void;
     /**
@@ -679,7 +680,7 @@ export interface Workspace {
      * List of workspace folders or `undefined` when no folder is open.
      * *Note* that the first entry corresponds to the value of `rootPath`.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
      */
     WorkspaceFolders: (_: (_: WorkspaceFolder[]) => void) => void;
     /**
@@ -707,8 +708,9 @@ export interface Workspace {
     /**
      * Provides single-call access to numerous individual `Workspace` properties at once.
 
+     * @return A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
      */
-    Properties: (_: (_: WorkspaceProperties) => void) => void;
+    AllProperties: (_: (_: WorkspaceBag) => void) => void;
 }
 /**
  * Namespace for participating in language-specific editor [features](https://code.visualstudio.com/docs/editor/editingevolved),
@@ -1363,8 +1365,8 @@ export interface StatusBarItem extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void;
-    Get: () => (_: (_: StatusBarItemState) => void) => void;
-    Set: (_: StatusBarItemState) => (_: () => void) => void;
+    Get: () => (_: (_: StatusBarItemBag) => void) => void;
+    Set: (_: StatusBarItemBag) => (_: () => void) => void;
 }
 /**
  * An output channel is a container for readonly textual information.
@@ -1411,7 +1413,7 @@ export interface OutputChannel extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void;
-    Get: () => (_: (_: OutputChannelState) => void) => void;
+    Get: () => (_: (_: OutputChannelBag) => void) => void;
 }
 /**
  * Type Definition for Visual Studio Code 1.39 Extension API
@@ -1654,7 +1656,7 @@ export interface TextEditorDecorationType extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void;
-    Get: () => (_: (_: TextEditorDecorationTypeState) => void) => void;
+    Get: () => (_: (_: TextEditorDecorationTypeBag) => void) => void;
 }
 /**
  * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
@@ -1675,11 +1677,6 @@ export interface InputBox extends fromJson, withDisp {
 
      */
     OnDidAccept: (_: () => void) => (_: (_: Disposable) => void) => void;
-    /**
-     * An event signaling when a button was triggered.
-
-     */
-    OnDidTriggerButton: (_: (_: QuickInputButton) => void) => (_: (_: Disposable) => void) => void;
     /**
      * Makes the input UI visible in its current configuration. Any other input
      * UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
@@ -1710,14 +1707,14 @@ export interface InputBox extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void;
-    Get: () => (_: (_: InputBoxState) => void) => void;
-    Set: (_: InputBoxState) => (_: () => void) => void;
+    Get: () => (_: (_: InputBoxBag) => void) => void;
+    Set: (_: InputBoxBag) => (_: () => void) => void;
 }
 /**
  * Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
 
  */
-export interface QuickInputButton extends fromJson {
+export interface QuickInputButton {
     /**
      * Icon for the button.
 
@@ -1728,15 +1725,7 @@ export interface QuickInputButton extends fromJson {
 
      */
     tooltip?: string;
-    /**
-     * Free-form custom data, preserved across a roundtrip.
-
-     */
-    my?: {
-        [_: string]: any;
-    };
 }
-export declare function newQuickInputButton(): QuickInputButton;
 /**
  * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
  * list of items of type T. The items can be filtered through a filter text field and
@@ -1799,8 +1788,8 @@ export interface QuickPick extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void;
-    Get: () => (_: (_: QuickPickState) => void) => void;
-    Set: (_: QuickPickState) => (_: () => void) => void;
+    Get: () => (_: (_: QuickPickBag) => void) => void;
+    Set: (_: QuickPickBag) => (_: () => void) => void;
 }
 /**
  * An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).
@@ -1830,10 +1819,10 @@ export interface DiagnosticChangeEvent extends fromJson {
     uris: string[];
 }
 /**
- * Namespace describing the environment the editor runs in.
+ * EnvBag gathers various properties of `Env`, obtainable via its `AllProperties` method.
 
  */
-export interface EnvProperties extends fromJson {
+export interface EnvBag extends fromJson {
     /**
      * The application name of the editor, like 'VS Code'.
 
@@ -1884,16 +1873,10 @@ export interface EnvProperties extends fromJson {
     uriScheme?: string;
 }
 /**
- * Namespace for dealing with the current workspace. A workspace is the representation
- * of the folder that has been opened. There is no workspace when just a file but not a
- * folder has been opened.
- *
- * The workspace offers support for [listening](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher) to fs
- * events and for [finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles) files. Both perform well and run _outside_
- * the editor-process so that they should be always used instead of nodejs-equivalents.
+ * WorkspaceBag gathers various properties of `Workspace`, obtainable via its `AllProperties` method.
 
  */
-export interface WorkspaceProperties extends fromJson {
+export interface WorkspaceBag extends fromJson {
     /**
      * The name of the workspace. `undefined` when no folder
      * has been opened.
@@ -1943,11 +1926,10 @@ export interface WorkspaceProperties extends fromJson {
     workspaceFolders?: WorkspaceFolder[];
 }
 /**
- * A status bar item is a status bar contribution that can
- * show text and icons and run a command on click.
+ * StatusBarItemBag is a snapshot of `StatusBarItem` state at the counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 
  */
-export interface StatusBarItemState extends fromJson {
+export interface StatusBarItemBag extends fromJson {
     /**
      * The alignment of this item.
 
@@ -1986,47 +1968,36 @@ export interface StatusBarItemState extends fromJson {
      */
     command?: string;
 }
-export declare function newStatusBarItemState(): StatusBarItemState;
+export declare function newStatusBarItemBag(): StatusBarItemBag;
 /**
- * An output channel is a container for readonly textual information.
- *
- * To get an instance of an `OutputChannel` use
- * [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
+ * OutputChannelBag is a snapshot of `OutputChannel` state at the counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 
  */
-export interface OutputChannelState extends fromJson {
+export interface OutputChannelBag extends fromJson {
     /**
      * The human-readable name of this output channel.
 
      */
     Name: () => string;
 }
-export declare function newOutputChannelState(): OutputChannelState;
+export declare function newOutputChannelBag(): OutputChannelBag;
 /**
- * Represents a handle to a set of decorations
- * sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
- *
- * To get an instance of a `TextEditorDecorationType` use
- * [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
+ * TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 
  */
-export interface TextEditorDecorationTypeState extends fromJson {
+export interface TextEditorDecorationTypeBag extends fromJson {
     /**
      * Internal representation of the handle.
 
      */
     Key: () => string;
 }
-export declare function newTextEditorDecorationTypeState(): TextEditorDecorationTypeState;
+export declare function newTextEditorDecorationTypeBag(): TextEditorDecorationTypeBag;
 /**
- * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
- *
- * Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
- * is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
- * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+ * InputBoxBag is a snapshot of `InputBox` state at the counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 
  */
-export interface InputBoxState extends fromJson {
+export interface InputBoxBag extends fromJson {
     /**
      * Current input value.
 
@@ -2042,11 +2013,6 @@ export interface InputBoxState extends fromJson {
 
      */
     password?: boolean;
-    /**
-     * Buttons for actions in the UI.
-
-     */
-    buttons?: QuickInputButton[];
     /**
      * An optional prompt text providing some ask or explanation to the user.
 
@@ -2094,19 +2060,12 @@ export interface InputBoxState extends fromJson {
      */
     ignoreFocusOut?: boolean;
 }
-export declare function newInputBoxState(): InputBoxState;
+export declare function newInputBoxBag(): InputBoxBag;
 /**
- * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
- * list of items of type T. The items can be filtered through a filter text field and
- * there is an option [canSelectMany](https://code.visualstudio.com/api/references/vscode-api#QuickPick.canSelectMany) to allow for
- * selecting multiple items.
- *
- * Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
- * is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
- * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+ * QuickPickBag is a snapshot of `QuickPick` state at the counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 
  */
-export interface QuickPickState extends fromJson {
+export interface QuickPickBag extends fromJson {
     /**
      * Current value of the filter text.
 
@@ -2184,7 +2143,7 @@ export interface QuickPickState extends fromJson {
      */
     ignoreFocusOut?: boolean;
 }
-export declare function newQuickPickState(): QuickPickState;
+export declare function newQuickPickBag(): QuickPickBag;
 export declare abstract class impl implements Vscode {
     Window: Window;
     Env: Env;

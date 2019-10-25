@@ -33,7 +33,7 @@ export class Prog {
     stderrKept: string = ''
     stdinBufsUntilPipeDrained: string[] = null
     cancellers: { [_: string]: Canceller } = {}
-    callBacks: { [_: string]: { resolve: ((_: any) => void), reject: ((_?: any) => void) } } = {}
+    callBacks: { [_: string]: { resolve: ((_: any) => void), reject: ((_?: any) => void), hint?: string } } = {}
     objects: { [_: string]: any } = {}
     lastDynId: number = 0
     onAliveOrDead: () => void
@@ -122,13 +122,13 @@ export class Prog {
         }
     }
 
-    callBack<T>(willRet: boolean, fnId: string, ...args: any[]): Thenable<T> {
-        return (!this.proc) ? Promise.reject() : new Promise<T>((resolve, reject) => {
+    callBack<T>(hint: string, willRet: boolean, fnId: string, ...args: any[]): Thenable<T> {
+        return (!this.proc) ? promRej(hint) : new Promise<T>((resolve, reject) => {
             if (!this.proc)
-                reject()
+                reject(hint)
             else {
                 if (willRet)
-                    this.callBacks[fnId] = { resolve: resolve, reject: reject }
+                    this.callBacks[fnId] = { resolve: resolve, reject: reject, hint: hint }
                 this.send({ cbId: fnId, data: { "[]": args ? args : [] } })
             }
         })
@@ -220,6 +220,8 @@ export class Prog {
     private handleIncomingRequestMsg(msg: IpcMsg) {
         let sendret = false
         const onfail = (err: any) => {
+            // console.trace(err)
+            // throw err
             if (err)
                 vsc.window.showErrorMessage(err)
             if (this.proc && msg && msg.cbId && !sendret)
@@ -286,7 +288,7 @@ export class Prog {
             delete this.callBacks[msg.cbId]
             if (prom)
                 if (nay)
-                    prom.reject(nay)
+                    prom.reject((nay && prom.hint) ? [prom.hint, nay] : nay ? nay : prom.hint)
                 else
                     prom.resolve(yay)
         } else if (msg.cbId) {
@@ -404,6 +406,10 @@ function cfgAutoCloseStderrOutputsOnProgExit() {
 
 function ensureWillShowUpInJson(_: any) {
     return (_ === undefined) ? null : _
+}
+
+export function promRej(hint: string, rejectReason?: any) {
+    return Promise.reject([hint, rejectReason])
 }
 
 export function tryUnmarshalUri(data: any) {

@@ -105,13 +105,13 @@ class Prog {
             }
         }
     }
-    callBack(willRet, fnId, ...args) {
-        return (!this.proc) ? Promise.reject() : new Promise((resolve, reject) => {
+    callBack(hint, willRet, fnId, ...args) {
+        return (!this.proc) ? promRej(hint) : new Promise((resolve, reject) => {
             if (!this.proc)
-                reject();
+                reject(hint);
             else {
                 if (willRet)
-                    this.callBacks[fnId] = { resolve: resolve, reject: reject };
+                    this.callBacks[fnId] = { resolve: resolve, reject: reject, hint: hint };
                 this.send({ cbId: fnId, data: { "[]": args ? args : [] } });
             }
         });
@@ -199,6 +199,8 @@ class Prog {
     handleIncomingRequestMsg(msg) {
         let sendret = false;
         const onfail = (err) => {
+            // console.trace(err)
+            // throw err
             if (err)
                 vsc.window.showErrorMessage(err);
             if (this.proc && msg && msg.cbId && !sendret)
@@ -264,7 +266,7 @@ class Prog {
             delete this.callBacks[msg.cbId];
             if (prom)
                 if (nay)
-                    prom.reject(nay);
+                    prom.reject((nay && prom.hint) ? [prom.hint, nay] : nay ? nay : prom.hint);
                 else
                     prom.resolve(yay);
         }
@@ -381,6 +383,10 @@ function cfgAutoCloseStderrOutputsOnProgExit() {
 function ensureWillShowUpInJson(_) {
     return (_ === undefined) ? null : _;
 }
+function promRej(hint, rejectReason) {
+    return Promise.reject([hint, rejectReason]);
+}
+exports.promRej = promRej;
 function tryUnmarshalUri(data) {
     try {
         return vsc.Uri.parse(data, true);
