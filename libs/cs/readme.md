@@ -752,6 +752,8 @@ This method has no parameters.
 
 Writes text into the clipboard.
 
+`value` ── 
+
 `return` ── A thenable that resolves when writing happened.
 
 ##### Parameters
@@ -898,6 +900,8 @@ Namespace describing the environment the editor runs in.
 
 The application name of the editor, like 'VS Code'.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -908,6 +912,8 @@ This method has no parameters.
 ##### Summary
 
 The application root folder from which the editor is running.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -931,6 +937,8 @@ This method has no parameters.
 
 Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -941,6 +949,8 @@ This method has no parameters.
 ##### Summary
 
 A unique identifier for the computer.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -991,6 +1001,8 @@ value is defined in all extension hosts (local and remote) in case a remote exte
 exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 a specific extension runs remote or not.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -1002,6 +1014,8 @@ This method has no parameters.
 
 A unique identifier for the current session.
 Changes each time the editor is started.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -1015,6 +1029,8 @@ This method has no parameters.
 The detected default shell for the extension host, this is overridden by the
 `terminal.integrated.shell` setting for the extension host's platform.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -1025,6 +1041,8 @@ This method has no parameters.
 ##### Summary
 
 The custom uri scheme the editor registers to in the operating system.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -1085,11 +1103,15 @@ console.log(importedApi.mul(42, 1));
 An event which fires when `extensions.all` changes. This can happen when extensions are
 installed, uninstalled, enabled or disabled.
 
+`listener` ── will be invoked whenever this event fires; mandatory, not optional.
+
+`return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
+
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| listener | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | Will be invoked whenever this event fires; mandatory, not optional. |
+| listener | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='T-VscAppz-ILanguages'></a>
 ## ILanguages `type`
@@ -1152,11 +1174,15 @@ This method has no parameters.
 An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
 newly added and removed diagnostics.
 
+`listener` ── will be invoked whenever this event fires; mandatory, not optional.
+
+`return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
+
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| listener | [System.Action{VscAppz.DiagnosticChangeEvent}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.DiagnosticChangeEvent}') | Will be invoked whenever this event fires; mandatory, not optional. |
+| listener | [System.Action{VscAppz.DiagnosticChangeEvent}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.DiagnosticChangeEvent}') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='T-VscAppz-IVscode'></a>
 ## IVscode `type`
@@ -1349,13 +1375,15 @@ Note that in many cases the more convenient [window.showInputBox](https://code.v
 is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
+`optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+
 `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| optionallyInitialStateToApplyUponCreation | [VscAppz.InputBoxState](#T-VscAppz-InputBoxState 'VscAppz.InputBoxState') | If specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
+| optionallyInitialStateToApplyUponCreation | [VscAppz.InputBoxState](#T-VscAppz-InputBoxState 'VscAppz.InputBoxState') | ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
 
 <a name='M-VscAppz-IWindow-CreateOutputChannel-System-String-'></a>
 ### CreateOutputChannel(name) `method`
@@ -1365,6 +1393,8 @@ when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-a
 Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 
 `name` ── Human-readable string which will be used to represent the channel in the UI.
+
+`return` ── A thenable that resolves when the `OutputChannel` has been created and initialized.
 
 ##### Parameters
 
@@ -1384,13 +1414,15 @@ Note that in many cases the more convenient [window.showQuickPick](https://code.
 is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
 when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
+`optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+
 `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| optionallyInitialStateToApplyUponCreation | [VscAppz.QuickPickState](#T-VscAppz-QuickPickState 'VscAppz.QuickPickState') | If specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
+| optionallyInitialStateToApplyUponCreation | [VscAppz.QuickPickState](#T-VscAppz-QuickPickState 'VscAppz.QuickPickState') | ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
 
 <a name='M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32},VscAppz-StatusBarItemState-'></a>
 ### CreateStatusBarItem(alignment,priority,optionallyInitialStateToApplyUponCreation) `method`
@@ -1403,6 +1435,8 @@ Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-
 
 `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 
+`optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+
 `return` ── A new status bar item.
 
 ##### Parameters
@@ -1411,7 +1445,7 @@ Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-
 | ---- | ---- | ----------- |
 | alignment | [System.Nullable{VscAppz.StatusBarAlignment}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{VscAppz.StatusBarAlignment}') | The alignment of the item. |
 | priority | [System.Nullable{System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.Int32}') | The priority of the item. Higher values mean the item should be shown more to the left. |
-| optionallyInitialStateToApplyUponCreation | [VscAppz.StatusBarItemState](#T-VscAppz-StatusBarItemState 'VscAppz.StatusBarItemState') | If specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
+| optionallyInitialStateToApplyUponCreation | [VscAppz.StatusBarItemState](#T-VscAppz-StatusBarItemState 'VscAppz.StatusBarItemState') | ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked. |
 
 <a name='M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions-'></a>
 ### CreateTextEditorDecorationType(options) `method`
@@ -1438,11 +1472,15 @@ Create a TextEditorDecorationType that can be used to add decorations to text ed
 An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
 changes. The value of the event represents whether the window is focused.
 
+`listener` ── will be invoked whenever this event fires; mandatory, not optional.
+
+`return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
+
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| listener | [System.Action{VscAppz.WindowState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.WindowState}') | Will be invoked whenever this event fires; mandatory, not optional. |
+| listener | [System.Action{VscAppz.WindowState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.WindowState}') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-IWindow-SetStatusBarMessage1-System-String,System-Int32-'></a>
 ### SetStatusBarMessage1(text,hideAfterTimeout) `method`
@@ -1923,6 +1961,8 @@ Returns `undefined` if no folder is open.
 
 Represents the current window's state.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -2028,6 +2068,8 @@ Returns the [workspace folder](https://code.visualstudio.com/api/references/vsco
 The name of the workspace. `undefined` when no folder
 has been opened.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -2039,11 +2081,15 @@ This method has no parameters.
 
 An event that is emitted when a workspace folder is added or removed.
 
+`listener` ── will be invoked whenever this event fires; mandatory, not optional.
+
+`return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
+
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| listener | [System.Action{VscAppz.WorkspaceFoldersChangeEvent}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.WorkspaceFoldersChangeEvent}') | Will be invoked whenever this event fires; mandatory, not optional. |
+| listener | [System.Action{VscAppz.WorkspaceFoldersChangeEvent}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.WorkspaceFoldersChangeEvent}') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-IWorkspace-Properties'></a>
 ### Properties() `method`
@@ -2110,6 +2156,8 @@ configuration data into the file. You can use `workspace.getConfiguration().upda
 for that purpose which will work both when a single folder is opened as
 well as an untitled or saved workspace.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -2121,6 +2169,8 @@ This method has no parameters.
 
 List of workspace folders or `undefined` when no folder is open.
 *Note* that the first entry corresponds to the value of `rootPath`.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -2151,6 +2201,8 @@ visible, it is first hidden. After this call the input UI is no longer
 functional and no additional methods or properties on it should be
 accessed. Instead a new input UI should be created.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -2161,6 +2213,8 @@ This method has no parameters.
 ##### Summary
 
 Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -2174,6 +2228,8 @@ This method has no parameters.
 Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -2185,11 +2241,15 @@ This method has no parameters.
 
 An event signaling when the user indicated acceptance of the input value.
 
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
+
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.InputBoxState}') | Will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.InputBoxState}') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String,VscAppz-InputBoxState}-'></a>
 ### OnDidChangeValue(handler) `method`
@@ -2198,11 +2258,15 @@ An event signaling when the user indicated acceptance of the input value.
 
 An event signaling when the value has changed.
 
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
+
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{System.String,VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String,VscAppz.InputBoxState}') | Will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{System.String,VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String,VscAppz.InputBoxState}') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-InputBox-OnDidHide-System-Action{VscAppz-InputBoxState}-'></a>
 ### OnDidHide(handler) `method`
@@ -2216,11 +2280,15 @@ the extension will be notified through [QuickInput.onDidHide](https://code.visua
 (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 the user pressing Esc, some other input UI opening, etc.)
 
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
+
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.InputBoxState}') | Will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.InputBoxState}') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-InputBox-OnDidTriggerButton-System-Action{VscAppz-QuickInputButton,VscAppz-InputBoxState}-'></a>
 ### OnDidTriggerButton(handler) `method`
@@ -2229,11 +2297,15 @@ the user pressing Esc, some other input UI opening, etc.)
 
 An event signaling when a button was triggered.
 
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidTriggerButton` event on `Dispose`.
+
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState}') | Will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState}') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-InputBox-Set-VscAppz-InputBoxState-'></a>
 ### Set(allUpdates) `method`
@@ -2241,6 +2313,10 @@ An event signaling when a button was triggered.
 ##### Summary
 
 Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+
+`allUpdates` ── 
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -2255,6 +2331,8 @@ Updates this `InputBox`'s current property values for: `value`, `placeholder`, `
 
 Makes the input UI visible in its current configuration. Any other input
 UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -2587,6 +2665,8 @@ Append the given value to the channel.
 
 `value` ── A string, falsy values will not be printed.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 | Name | Type | Description |
@@ -2603,6 +2683,8 @@ to the channel.
 
 `value` ── A string, falsy values will be printed.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 | Name | Type | Description |
@@ -2616,6 +2698,8 @@ to the channel.
 
 Removes all output from the channel.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -2626,6 +2710,8 @@ This method has no parameters.
 ##### Summary
 
 Dispose and free associated resources.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -2638,6 +2724,8 @@ This method has no parameters.
 
 Obtains this `OutputChannel`'s current property value for: `name`.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -2648,6 +2736,8 @@ This method has no parameters.
 ##### Summary
 
 Hide this channel from the UI.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -2661,6 +2751,8 @@ This method has no parameters.
 Reveal this channel in the UI.
 
 `preserveFocus` ── When `true` the channel will not take focus.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -2793,6 +2885,8 @@ visible, it is first hidden. After this call the input UI is no longer
 functional and no additional methods or properties on it should be
 accessed. Instead a new input UI should be created.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -2803,6 +2897,8 @@ This method has no parameters.
 ##### Summary
 
 Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -2816,6 +2912,8 @@ This method has no parameters.
 Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -2827,11 +2925,15 @@ This method has no parameters.
 
 An event signaling when the user indicated acceptance of the selected item(s).
 
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
+
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickState}') | Will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickState}') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}-'></a>
 ### OnDidChangeActive(handler) `method`
@@ -2840,11 +2942,15 @@ An event signaling when the user indicated acceptance of the selected item(s).
 
 An event signaling when the active items have changed.
 
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.
+
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}') | Will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickState}-'></a>
 ### OnDidChangeSelection(handler) `method`
@@ -2853,11 +2959,15 @@ An event signaling when the active items have changed.
 
 An event signaling when the selected items have changed.
 
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.
+
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}') | Will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState}') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String,VscAppz-QuickPickState}-'></a>
 ### OnDidChangeValue(handler) `method`
@@ -2866,11 +2976,15 @@ An event signaling when the selected items have changed.
 
 An event signaling when the value of the filter text has changed.
 
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
+
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{System.String,VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String,VscAppz.QuickPickState}') | Will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{System.String,VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String,VscAppz.QuickPickState}') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-QuickPick-OnDidHide-System-Action{VscAppz-QuickPickState}-'></a>
 ### OnDidHide(handler) `method`
@@ -2884,11 +2998,15 @@ the extension will be notified through [QuickInput.onDidHide](https://code.visua
 (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 the user pressing Esc, some other input UI opening, etc.)
 
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
+
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickState}') | Will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.QuickPickState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickState}') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-QuickPick-Set-VscAppz-QuickPickState-'></a>
 ### Set(allUpdates) `method`
@@ -2896,6 +3014,10 @@ the user pressing Esc, some other input UI opening, etc.)
 ##### Summary
 
 Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+
+`allUpdates` ── 
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -2910,6 +3032,8 @@ Updates this `QuickPick`'s current property values for: `value`, `placeholder`, 
 
 Makes the input UI visible in its current configuration. Any other input
 UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -3239,6 +3363,8 @@ show text and icons and run a command on click.
 Dispose and free associated resources. Call
 [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -3249,6 +3375,8 @@ This method has no parameters.
 ##### Summary
 
 Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -3261,6 +3389,8 @@ This method has no parameters.
 
 Hide the entry in the status bar.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -3271,6 +3401,10 @@ This method has no parameters.
 ##### Summary
 
 Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
+
+`allUpdates` ── 
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -3284,6 +3418,8 @@ Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `
 ##### Summary
 
 Shows the entry in the status bar.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 
@@ -3372,6 +3508,8 @@ To get an instance of a `TextEditorDecorationType` use
 
 Remove this decoration type and all decorations on all text editors using it.
 
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+
 ##### Parameters
 
 This method has no parameters.
@@ -3382,6 +3520,8 @@ This method has no parameters.
 ##### Summary
 
 Obtains this `TextEditorDecorationType`'s current property value for: `key`.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 
 ##### Parameters
 

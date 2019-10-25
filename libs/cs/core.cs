@@ -178,6 +178,10 @@ namespace VscAppz {
         internal string id;
         internal string[] subFnIds;
         internal Disposable() {}
+        internal void addSub(string fnId){
+            Array.Resize(ref subFnIds, 1+subFnIds.Length);
+            subFnIds[subFnIds.Length-1] = fnId;
+        }
         internal Disposable bind(impl impl, params string[] subFnIds) {
             (this.impl, this.subFnIds) = (impl, subFnIds); return this; }
         internal bool populateFrom(any payload) =>

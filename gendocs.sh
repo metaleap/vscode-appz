@@ -20,4 +20,5 @@ cd libs/js
 npx typedoc --plugin typedoc-plugin-markdown --hideBreadcrumbs --hideSources
 npx concat-md docs > readme.md
 rm -rf ./docs
+sed -i -n '/^## Index$/,$p' readme.md
 cd ../..

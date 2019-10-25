@@ -555,15 +555,23 @@ namespace VscAppz {
 		/// <return>A promise that resolves to the workspace folder or `undefined`.</return>
 		Action<Action<WorkspaceFolder>> ShowWorkspaceFolderPick(WorkspaceFolderPickOptions options = default);
 
-		/// <summary>Represents the current window's state.</summary>
+		/// <summary>
+		/// Represents the current window's state.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<WindowState>> State();
 
 		/// <summary>
 		/// An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
 		/// changes. The value of the event represents whether the window is focused.
+		/// 
+		/// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
 		/// </summary>
-		/// <param name="listener">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="listener">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.</return>
 		Action<Action<Disposable>> OnDidChangeWindowState(Action<WindowState> listener = default);
 
@@ -574,18 +582,22 @@ namespace VscAppz {
 		/// 
 		/// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 		/// 
+		/// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+		/// 
 		/// `return` ── A new status bar item.
 		/// </summary>
 		/// <param name="alignment">The alignment of the item.</param>
 		/// <param name="priority">The priority of the item. Higher values mean the item should be shown more to the left.</param>
 		/// <return>A new status bar item.</return>
-		/// <param name="optionallyInitialStateToApplyUponCreation">If specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
+		/// <param name="optionallyInitialStateToApplyUponCreation">ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
 		Action<Action<StatusBarItem, StatusBarItemState>> CreateStatusBarItem(StatusBarAlignment? alignment = default, int? priority = default, StatusBarItemState optionallyInitialStateToApplyUponCreation = default);
 
 		/// <summary>
 		/// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 		/// 
 		/// `name` ── Human-readable string which will be used to represent the channel in the UI.
+		/// 
+		/// `return` ── A thenable that resolves when the `OutputChannel` has been created and initialized.
 		/// </summary>
 		/// <param name="name">Human-readable string which will be used to represent the channel in the UI.</param>
 		/// <return>A thenable that resolves when the `OutputChannel` has been created and initialized.</return>
@@ -609,10 +621,12 @@ namespace VscAppz {
 		/// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 		/// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 		/// 
+		/// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+		/// 
 		/// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
 		/// </summary>
 		/// <return>A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).</return>
-		/// <param name="optionallyInitialStateToApplyUponCreation">If specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
+		/// <param name="optionallyInitialStateToApplyUponCreation">ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
 		Action<Action<InputBox, InputBoxState>> CreateInputBox(InputBoxState optionallyInitialStateToApplyUponCreation = default);
 
 		/// <summary>
@@ -623,10 +637,12 @@ namespace VscAppz {
 		/// is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
 		/// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 		/// 
+		/// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+		/// 
 		/// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
 		/// </summary>
 		/// <return>A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).</return>
-		/// <param name="optionallyInitialStateToApplyUponCreation">If specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
+		/// <param name="optionallyInitialStateToApplyUponCreation">ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
 		Action<Action<QuickPick, QuickPickState>> CreateQuickPick(QuickPickState optionallyInitialStateToApplyUponCreation = default);
 	}
 
@@ -647,19 +663,35 @@ namespace VscAppz {
 		/// <return>A promise indicating if open was successful.</return>
 		Action<Action<bool>> OpenExternal(string target = default);
 
-		/// <summary>The application name of the editor, like 'VS Code'.</summary>
+		/// <summary>
+		/// The application name of the editor, like 'VS Code'.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> AppName();
 
-		/// <summary>The application root folder from which the editor is running.</summary>
+		/// <summary>
+		/// The application root folder from which the editor is running.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> AppRoot();
 
-		/// <summary>Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.</summary>
+		/// <summary>
+		/// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> Language();
 
-		/// <summary>A unique identifier for the computer.</summary>
+		/// <summary>
+		/// A unique identifier for the computer.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> MachineId();
 
@@ -671,6 +703,8 @@ namespace VscAppz {
 		/// value is defined in all extension hosts (local and remote) in case a remote extension host
 		/// exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 		/// a specific extension runs remote or not.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> RemoteName();
@@ -678,6 +712,8 @@ namespace VscAppz {
 		/// <summary>
 		/// A unique identifier for the current session.
 		/// Changes each time the editor is started.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> SessionId();
@@ -685,11 +721,17 @@ namespace VscAppz {
 		/// <summary>
 		/// The detected default shell for the extension host, this is overridden by the
 		/// `terminal.integrated.shell` setting for the extension host's platform.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> Shell();
 
-		/// <summary>The custom uri scheme the editor registers to in the operating system.</summary>
+		/// <summary>
+		/// The custom uri scheme the editor registers to in the operating system.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> UriScheme();
 
@@ -713,6 +755,8 @@ namespace VscAppz {
 		/// <summary>
 		/// Writes text into the clipboard.
 		/// 
+		/// `value` ── 
+		/// 
 		/// `return` ── A thenable that resolves when writing happened.
 		/// </summary>
 		/// <return>A thenable that resolves when writing happened.</return>
@@ -733,6 +777,8 @@ namespace VscAppz {
 		/// <summary>
 		/// The name of the workspace. `undefined` when no folder
 		/// has been opened.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> Name();
@@ -769,6 +815,8 @@ namespace VscAppz {
 		/// configuration data into the file. You can use `workspace.getConfiguration().update()`
 		/// for that purpose which will work both when a single folder is opened as
 		/// well as an untitled or saved workspace.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<string>> WorkspaceFile();
@@ -784,8 +832,14 @@ namespace VscAppz {
 		/// <return>A thenable that resolves when the files have been saved.</return>
 		Action<Action<bool>> SaveAll(bool includeUntitled = default);
 
-		/// <summary>An event that is emitted when a workspace folder is added or removed.</summary>
-		/// <param name="listener">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <summary>
+		/// An event that is emitted when a workspace folder is added or removed.
+		/// 
+		/// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
+		/// </summary>
+		/// <param name="listener">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.</return>
 		Action<Action<Disposable>> OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener = default);
 
@@ -805,6 +859,8 @@ namespace VscAppz {
 		/// <summary>
 		/// List of workspace folders or `undefined` when no folder is open.
 		/// *Note* that the first entry corresponds to the value of `rootPath`.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		Action<Action<WorkspaceFolder[]>> WorkspaceFolders();
@@ -902,8 +958,12 @@ namespace VscAppz {
 		/// <summary>
 		/// An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
 		/// newly added and removed diagnostics.
+		/// 
+		/// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
 		/// </summary>
-		/// <param name="listener">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="listener">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.</return>
 		Action<Action<Disposable>> OnDidChangeDiagnostics(Action<DiagnosticChangeEvent> listener = default);
 	}
@@ -952,8 +1012,12 @@ namespace VscAppz {
 		/// <summary>
 		/// An event which fires when `extensions.all` changes. This can happen when extensions are
 		/// installed, uninstalled, enabled or disabled.
+		/// 
+		/// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
 		/// </summary>
-		/// <param name="listener">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="listener">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.</return>
 		Action<Action<Disposable>> OnDidChange(Action listener = default);
 	}
@@ -4327,7 +4391,11 @@ namespace VscAppz {
 	}
 
 	public partial class StatusBarItem {
-		/// <summary>Shows the entry in the status bar.</summary>
+		/// <summary>
+		/// Shows the entry in the status bar.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<StatusBarItemState>> Show() {
 			ipcMsg msg = default;
@@ -4362,7 +4430,11 @@ namespace VscAppz {
 	}
 
 	public partial class StatusBarItem {
-		/// <summary>Hide the entry in the status bar.</summary>
+		/// <summary>
+		/// Hide the entry in the status bar.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<StatusBarItemState>> Hide() {
 			ipcMsg msg = default;
@@ -4400,6 +4472,8 @@ namespace VscAppz {
 		/// <summary>
 		/// Dispose and free associated resources. Call
 		/// [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Dispose() {
@@ -4410,7 +4484,11 @@ namespace VscAppz {
 	}
 
 	public partial class StatusBarItem {
-		/// <summary>Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.</summary>
+		/// <summary>
+		/// Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<StatusBarItemState>> Get() {
 			ipcMsg msg = default;
@@ -4445,7 +4523,13 @@ namespace VscAppz {
 	}
 
 	public partial class StatusBarItem {
-		/// <summary>Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.</summary>
+		/// <summary>
+		/// Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
+		/// 
+		/// `allUpdates` ── 
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <param name="allUpdates"></param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Set(StatusBarItemState allUpdates = default) {
@@ -4478,6 +4562,8 @@ namespace VscAppz {
 		/// Append the given value to the channel.
 		/// 
 		/// `value` ── A string, falsy values will not be printed.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <param name="value">A string, falsy values will not be printed.</param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
@@ -4520,6 +4606,8 @@ namespace VscAppz {
 		/// to the channel.
 		/// 
 		/// `value` ── A string, falsy values will be printed.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <param name="value">A string, falsy values will be printed.</param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
@@ -4557,7 +4645,11 @@ namespace VscAppz {
 	}
 
 	public partial class OutputChannel {
-		/// <summary>Removes all output from the channel.</summary>
+		/// <summary>
+		/// Removes all output from the channel.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<OutputChannelState>> Clear() {
 			ipcMsg msg = default;
@@ -4596,6 +4688,8 @@ namespace VscAppz {
 		/// Reveal this channel in the UI.
 		/// 
 		/// `preserveFocus` ── When `true` the channel will not take focus.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <param name="preserveFocus">When `true` the channel will not take focus.</param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
@@ -4633,7 +4727,11 @@ namespace VscAppz {
 	}
 
 	public partial class OutputChannel {
-		/// <summary>Hide this channel from the UI.</summary>
+		/// <summary>
+		/// Hide this channel from the UI.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<OutputChannelState>> Hide() {
 			ipcMsg msg = default;
@@ -4668,7 +4766,11 @@ namespace VscAppz {
 	}
 
 	public partial class OutputChannel : IDisposable {
-		/// <summary>Dispose and free associated resources.</summary>
+		/// <summary>
+		/// Dispose and free associated resources.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Dispose() {
 			return this.disp.Dispose();
@@ -4678,7 +4780,11 @@ namespace VscAppz {
 	}
 
 	public partial class OutputChannel {
-		/// <summary>Obtains this `OutputChannel`'s current property value for: `name`.</summary>
+		/// <summary>
+		/// Obtains this `OutputChannel`'s current property value for: `name`.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<OutputChannelState>> Get() {
 			ipcMsg msg = default;
@@ -4713,7 +4819,11 @@ namespace VscAppz {
 	}
 
 	public partial class TextEditorDecorationType : IDisposable {
-		/// <summary>Remove this decoration type and all decorations on all text editors using it.</summary>
+		/// <summary>
+		/// Remove this decoration type and all decorations on all text editors using it.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Dispose() {
 			return this.disp.Dispose();
@@ -4723,7 +4833,11 @@ namespace VscAppz {
 	}
 
 	public partial class TextEditorDecorationType {
-		/// <summary>Obtains this `TextEditorDecorationType`'s current property value for: `key`.</summary>
+		/// <summary>
+		/// Obtains this `TextEditorDecorationType`'s current property value for: `key`.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<TextEditorDecorationTypeState>> Get() {
 			ipcMsg msg = default;
@@ -4758,8 +4872,14 @@ namespace VscAppz {
 	}
 
 	public partial class InputBox {
-		/// <summary>An event signaling when the value has changed.</summary>
-		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <summary>
+		/// An event signaling when the value has changed.
+		/// 
+		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
+		/// </summary>
+		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidChangeValue(Action<string, InputBoxState> handler = default) {
 			ipcMsg msg = default;
@@ -4792,6 +4912,7 @@ namespace VscAppz {
 				return true;
 			}, null);
 			msg.Data["handler"] = _fnid_handler;
+			this.disp.addSub(_fnid_handler);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -4821,8 +4942,14 @@ namespace VscAppz {
 	}
 
 	public partial class InputBox {
-		/// <summary>An event signaling when the user indicated acceptance of the input value.</summary>
-		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <summary>
+		/// An event signaling when the user indicated acceptance of the input value.
+		/// 
+		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
+		/// </summary>
+		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidAccept(Action<InputBoxState> handler = default) {
 			ipcMsg msg = default;
@@ -4850,6 +4977,7 @@ namespace VscAppz {
 				return true;
 			}, null);
 			msg.Data["handler"] = _fnid_handler;
+			this.disp.addSub(_fnid_handler);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -4879,8 +5007,14 @@ namespace VscAppz {
 	}
 
 	public partial class InputBox {
-		/// <summary>An event signaling when a button was triggered.</summary>
-		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <summary>
+		/// An event signaling when a button was triggered.
+		/// 
+		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidTriggerButton` event on `Dispose`.
+		/// </summary>
+		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidTriggerButton` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidTriggerButton(Action<QuickInputButton, InputBoxState> handler = default) {
 			ipcMsg msg = default;
@@ -4914,6 +5048,7 @@ namespace VscAppz {
 				return true;
 			}, null);
 			msg.Data["handler"] = _fnid_handler;
+			this.disp.addSub(_fnid_handler);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -4946,6 +5081,8 @@ namespace VscAppz {
 		/// <summary>
 		/// Makes the input UI visible in its current configuration. Any other input
 		/// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<InputBoxState>> Show() {
@@ -4984,6 +5121,8 @@ namespace VscAppz {
 		/// <summary>
 		/// Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 		/// event.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<InputBoxState>> Hide() {
@@ -5026,8 +5165,12 @@ namespace VscAppz {
 		/// the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
 		/// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 		/// the user pressing Esc, some other input UI opening, etc.)
+		/// 
+		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
 		/// </summary>
-		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidHide(Action<InputBoxState> handler = default) {
 			ipcMsg msg = default;
@@ -5055,6 +5198,7 @@ namespace VscAppz {
 				return true;
 			}, null);
 			msg.Data["handler"] = _fnid_handler;
+			this.disp.addSub(_fnid_handler);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -5089,6 +5233,8 @@ namespace VscAppz {
 		/// visible, it is first hidden. After this call the input UI is no longer
 		/// functional and no additional methods or properties on it should be
 		/// accessed. Instead a new input UI should be created.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Dispose() {
@@ -5099,7 +5245,11 @@ namespace VscAppz {
 	}
 
 	public partial class InputBox {
-		/// <summary>Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+		/// <summary>
+		/// Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<InputBoxState>> Get() {
 			ipcMsg msg = default;
@@ -5134,7 +5284,13 @@ namespace VscAppz {
 	}
 
 	public partial class InputBox {
-		/// <summary>Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+		/// <summary>
+		/// Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+		/// 
+		/// `allUpdates` ── 
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <param name="allUpdates"></param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Set(InputBoxState allUpdates = default) {
@@ -5163,8 +5319,14 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPick {
-		/// <summary>An event signaling when the value of the filter text has changed.</summary>
-		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <summary>
+		/// An event signaling when the value of the filter text has changed.
+		/// 
+		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
+		/// </summary>
+		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidChangeValue(Action<string, QuickPickState> handler = default) {
 			ipcMsg msg = default;
@@ -5197,6 +5359,7 @@ namespace VscAppz {
 				return true;
 			}, null);
 			msg.Data["handler"] = _fnid_handler;
+			this.disp.addSub(_fnid_handler);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -5226,8 +5389,14 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPick {
-		/// <summary>An event signaling when the user indicated acceptance of the selected item(s).</summary>
-		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <summary>
+		/// An event signaling when the user indicated acceptance of the selected item(s).
+		/// 
+		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
+		/// </summary>
+		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidAccept(Action<QuickPickState> handler = default) {
 			ipcMsg msg = default;
@@ -5255,6 +5424,7 @@ namespace VscAppz {
 				return true;
 			}, null);
 			msg.Data["handler"] = _fnid_handler;
+			this.disp.addSub(_fnid_handler);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -5284,8 +5454,14 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPick {
-		/// <summary>An event signaling when the active items have changed.</summary>
-		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <summary>
+		/// An event signaling when the active items have changed.
+		/// 
+		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.
+		/// </summary>
+		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidChangeActive(Action<QuickPickItem[], QuickPickState> handler = default) {
 			ipcMsg msg = default;
@@ -5332,6 +5508,7 @@ namespace VscAppz {
 				return true;
 			}, null);
 			msg.Data["handler"] = _fnid_handler;
+			this.disp.addSub(_fnid_handler);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -5361,8 +5538,14 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPick {
-		/// <summary>An event signaling when the selected items have changed.</summary>
-		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <summary>
+		/// An event signaling when the selected items have changed.
+		/// 
+		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.
+		/// </summary>
+		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidChangeSelection(Action<QuickPickItem[], QuickPickState> handler = default) {
 			ipcMsg msg = default;
@@ -5409,6 +5592,7 @@ namespace VscAppz {
 				return true;
 			}, null);
 			msg.Data["handler"] = _fnid_handler;
+			this.disp.addSub(_fnid_handler);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -5441,6 +5625,8 @@ namespace VscAppz {
 		/// <summary>
 		/// Makes the input UI visible in its current configuration. Any other input
 		/// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<QuickPickState>> Show() {
@@ -5479,6 +5665,8 @@ namespace VscAppz {
 		/// <summary>
 		/// Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 		/// event.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<QuickPickState>> Hide() {
@@ -5521,8 +5709,12 @@ namespace VscAppz {
 		/// the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
 		/// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 		/// the user pressing Esc, some other input UI opening, etc.)
+		/// 
+		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
 		/// </summary>
-		/// <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidHide(Action<QuickPickState> handler = default) {
 			ipcMsg msg = default;
@@ -5550,6 +5742,7 @@ namespace VscAppz {
 				return true;
 			}, null);
 			msg.Data["handler"] = _fnid_handler;
+			this.disp.addSub(_fnid_handler);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -5584,6 +5777,8 @@ namespace VscAppz {
 		/// visible, it is first hidden. After this call the input UI is no longer
 		/// functional and no additional methods or properties on it should be
 		/// accessed. Instead a new input UI should be created.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Dispose() {
@@ -5594,7 +5789,11 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPick {
-		/// <summary>Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+		/// <summary>
+		/// Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action<QuickPickState>> Get() {
 			ipcMsg msg = default;
@@ -5629,7 +5828,13 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPick {
-		/// <summary>Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+		/// <summary>
+		/// Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+		/// 
+		/// `allUpdates` ── 
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+		/// </summary>
 		/// <param name="allUpdates"></param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
 		public Action<Action> Set(QuickPickState allUpdates = default) {

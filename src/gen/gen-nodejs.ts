@@ -11,8 +11,8 @@ export class Gen extends gen_syn.Gen {
     gen(prep: gen.Prep) {
         jsMode = false
         this.options.oneIndent = " ".repeat(4)
-        this.options.doc.appendArgsToSummaryFor.funcFields = true
-        this.options.doc.appendArgsToSummaryFor.methods = false
+        this.options.doc.appendArgsToSummary.forFuncFields = true
+        this.options.doc.appendArgsToSummary.forMethods = false
         this.nameRewriters.types.interfaces = _ => this.caseUp(_)
         this.nameRewriters.fields = _ => this.caseLo(_)
         prevImplTypeName = ""
@@ -66,7 +66,7 @@ export class Gen extends gen_syn.Gen {
                     if (!(doc.ForParam && doc.ForParam.length))
                         this.lines(...doc.Lines.map(_ => " * " + _)).line()
                     else
-                        this.line(" * @" + (doc.ForParam === "return" ? "" : "param ") + doc.ForParam + " " + doc.Lines.join(" "))
+                        this.line(" * @" + ((doc.ForParam === "return" || doc.ForParam === "returns") ? "" : "param ") + doc.ForParam + " " + doc.Lines.join(" "))
             this.line(" */")
         }
         return this

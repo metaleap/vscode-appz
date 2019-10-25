@@ -736,7 +736,7 @@ export function docs(from: ts.Node): Docs {
     return ret
 }
 
-export function docPrependArgOrRetName(doc: Doc, ln: string, retFallback: string, argNameRewrite: ((_: string) => string) = undefined, pref = "`", suff = "` ── ") {
+export function docPrependArgOrRetName(doc: Doc, ln: string, retFallback: string, pref: string, suff: string, argNameRewrite: ((_: string) => string) = undefined) {
     let isfor = doc.isForArg
     if (isfor && isfor.length)
         isfor = argNameRewrite ? argNameRewrite(isfor) : isfor

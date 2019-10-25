@@ -596,15 +596,23 @@
             <return>A promise that resolves to the workspace folder or `undefined`.</return>
         </member>
         <member name="M:VscAppz.IWindow.State">
-            <summary>Represents the current window's state.</summary>
+            <summary>
+            Represents the current window's state.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState})">
             <summary>
             An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
             changes. The value of the event represents whether the window is focused.
+            
+            `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+            
+            `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
             </summary>
-            <param name="listener">Will be invoked whenever this event fires; mandatory, not optional.</param>
+            <param name="listener">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.</return>
         </member>
         <member name="M:VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32},VscAppz.StatusBarItemState)">
@@ -615,18 +623,22 @@
             
             `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
             
+            `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+            
             `return` ── A new status bar item.
             </summary>
             <param name="alignment">The alignment of the item.</param>
             <param name="priority">The priority of the item. Higher values mean the item should be shown more to the left.</param>
             <return>A new status bar item.</return>
-            <param name="optionallyInitialStateToApplyUponCreation">If specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
+            <param name="optionallyInitialStateToApplyUponCreation">ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
         </member>
         <member name="M:VscAppz.IWindow.CreateOutputChannel(System.String)">
             <summary>
             Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
             
             `name` ── Human-readable string which will be used to represent the channel in the UI.
+            
+            `return` ── A thenable that resolves when the `OutputChannel` has been created and initialized.
             </summary>
             <param name="name">Human-readable string which will be used to represent the channel in the UI.</param>
             <return>A thenable that resolves when the `OutputChannel` has been created and initialized.</return>
@@ -650,10 +662,12 @@
             is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
             when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
             
+            `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+            
             `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
             </summary>
             <return>A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).</return>
-            <param name="optionallyInitialStateToApplyUponCreation">If specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
+            <param name="optionallyInitialStateToApplyUponCreation">ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
         </member>
         <member name="M:VscAppz.IWindow.CreateQuickPick(VscAppz.QuickPickState)">
             <summary>
@@ -664,10 +678,12 @@
             is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
             when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
             
+            `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+            
             `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
             </summary>
             <return>A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).</return>
-            <param name="optionallyInitialStateToApplyUponCreation">If specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
+            <param name="optionallyInitialStateToApplyUponCreation">ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.</param>
         </member>
         <member name="T:VscAppz.IEnv">
             <summary>Namespace describing the environment the editor runs in.</summary>
@@ -688,19 +704,35 @@
             <return>A promise indicating if open was successful.</return>
         </member>
         <member name="M:VscAppz.IEnv.AppName">
-            <summary>The application name of the editor, like 'VS Code'.</summary>
+            <summary>
+            The application name of the editor, like 'VS Code'.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.IEnv.AppRoot">
-            <summary>The application root folder from which the editor is running.</summary>
+            <summary>
+            The application root folder from which the editor is running.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.IEnv.Language">
-            <summary>Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.</summary>
+            <summary>
+            Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.IEnv.MachineId">
-            <summary>A unique identifier for the computer.</summary>
+            <summary>
+            A unique identifier for the computer.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.IEnv.RemoteName">
@@ -712,6 +744,8 @@
             value is defined in all extension hosts (local and remote) in case a remote extension host
             exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
             a specific extension runs remote or not.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
@@ -719,6 +753,8 @@
             <summary>
             A unique identifier for the current session.
             Changes each time the editor is started.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
@@ -726,11 +762,17 @@
             <summary>
             The detected default shell for the extension host, this is overridden by the
             `terminal.integrated.shell` setting for the extension host's platform.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.IEnv.UriScheme">
-            <summary>The custom uri scheme the editor registers to in the operating system.</summary>
+            <summary>
+            The custom uri scheme the editor registers to in the operating system.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.IEnv.Properties">
@@ -754,6 +796,8 @@
             <summary>
             Writes text into the clipboard.
             
+            `value` ── 
+            
             `return` ── A thenable that resolves when writing happened.
             </summary>
             <return>A thenable that resolves when writing happened.</return>
@@ -774,6 +818,8 @@
             <summary>
             The name of the workspace. `undefined` when no folder
             has been opened.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
@@ -810,6 +856,8 @@
             configuration data into the file. You can use `workspace.getConfiguration().update()`
             for that purpose which will work both when a single folder is opened as
             well as an untitled or saved workspace.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
@@ -825,8 +873,14 @@
             <return>A thenable that resolves when the files have been saved.</return>
         </member>
         <member name="M:VscAppz.IWorkspace.OnDidChangeWorkspaceFolders(System.Action{VscAppz.WorkspaceFoldersChangeEvent})">
-            <summary>An event that is emitted when a workspace folder is added or removed.</summary>
-            <param name="listener">Will be invoked whenever this event fires; mandatory, not optional.</param>
+            <summary>
+            An event that is emitted when a workspace folder is added or removed.
+            
+            `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+            
+            `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
+            </summary>
+            <param name="listener">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.</return>
         </member>
         <member name="M:VscAppz.IWorkspace.GetWorkspaceFolder(System.String)">
@@ -846,6 +900,8 @@
             <summary>
             List of workspace folders or `undefined` when no folder is open.
             *Note* that the first entry corresponds to the value of `rootPath`.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
@@ -943,8 +999,12 @@
             <summary>
             An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
             newly added and removed diagnostics.
+            
+            `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+            
+            `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
             </summary>
-            <param name="listener">Will be invoked whenever this event fires; mandatory, not optional.</param>
+            <param name="listener">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.</return>
         </member>
         <member name="T:VscAppz.IExtensions">
@@ -993,8 +1053,12 @@
             <summary>
             An event which fires when `extensions.all` changes. This can happen when extensions are
             installed, uninstalled, enabled or disabled.
+            
+            `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+            
+            `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
             </summary>
-            <param name="listener">Will be invoked whenever this event fires; mandatory, not optional.</param>
+            <param name="listener">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.</return>
         </member>
         <member name="T:VscAppz.ICommands">
@@ -1426,26 +1490,46 @@
             </summary>
         </member>
         <member name="M:VscAppz.StatusBarItem.Show">
-            <summary>Shows the entry in the status bar.</summary>
+            <summary>
+            Shows the entry in the status bar.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.StatusBarItem.Hide">
-            <summary>Hide the entry in the status bar.</summary>
+            <summary>
+            Hide the entry in the status bar.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.StatusBarItem.Dispose">
             <summary>
             Dispose and free associated resources. Call
             [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.StatusBarItem.Get">
-            <summary>Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.</summary>
+            <summary>
+            Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.StatusBarItem.Set(VscAppz.StatusBarItemState)">
-            <summary>Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.</summary>
+            <summary>
+            Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
+            
+            `allUpdates` ── 
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <param name="allUpdates"></param>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
@@ -1462,6 +1546,8 @@
             Append the given value to the channel.
             
             `value` ── A string, falsy values will not be printed.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <param name="value">A string, falsy values will not be printed.</param>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
@@ -1472,12 +1558,18 @@
             to the channel.
             
             `value` ── A string, falsy values will be printed.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <param name="value">A string, falsy values will be printed.</param>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.OutputChannel.Clear">
-            <summary>Removes all output from the channel.</summary>
+            <summary>
+            Removes all output from the channel.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.OutputChannel.Show(System.Boolean)">
@@ -1485,20 +1577,34 @@
             Reveal this channel in the UI.
             
             `preserveFocus` ── When `true` the channel will not take focus.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <param name="preserveFocus">When `true` the channel will not take focus.</param>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.OutputChannel.Hide">
-            <summary>Hide this channel from the UI.</summary>
+            <summary>
+            Hide this channel from the UI.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.OutputChannel.Dispose">
-            <summary>Dispose and free associated resources.</summary>
+            <summary>
+            Dispose and free associated resources.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.OutputChannel.Get">
-            <summary>Obtains this `OutputChannel`'s current property value for: `name`.</summary>
+            <summary>
+            Obtains this `OutputChannel`'s current property value for: `name`.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="T:VscAppz.ThemableDecorationAttachmentRenderOptions">
@@ -1680,11 +1786,19 @@
             </summary>
         </member>
         <member name="M:VscAppz.TextEditorDecorationType.Dispose">
-            <summary>Remove this decoration type and all decorations on all text editors using it.</summary>
+            <summary>
+            Remove this decoration type and all decorations on all text editors using it.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.TextEditorDecorationType.Get">
-            <summary>Obtains this `TextEditorDecorationType`'s current property value for: `key`.</summary>
+            <summary>
+            Obtains this `TextEditorDecorationType`'s current property value for: `key`.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="T:VscAppz.InputBox">
@@ -1697,24 +1811,44 @@
             </summary>
         </member>
         <member name="M:VscAppz.InputBox.OnDidChangeValue(System.Action{System.String,VscAppz.InputBoxState})">
-            <summary>An event signaling when the value has changed.</summary>
-            <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+            <summary>
+            An event signaling when the value has changed.
+            
+            `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+            
+            `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
+            </summary>
+            <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
         </member>
         <member name="M:VscAppz.InputBox.OnDidAccept(System.Action{VscAppz.InputBoxState})">
-            <summary>An event signaling when the user indicated acceptance of the input value.</summary>
-            <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+            <summary>
+            An event signaling when the user indicated acceptance of the input value.
+            
+            `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+            
+            `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
+            </summary>
+            <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
         </member>
         <member name="M:VscAppz.InputBox.OnDidTriggerButton(System.Action{VscAppz.QuickInputButton,VscAppz.InputBoxState})">
-            <summary>An event signaling when a button was triggered.</summary>
-            <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+            <summary>
+            An event signaling when a button was triggered.
+            
+            `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+            
+            `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidTriggerButton` event on `Dispose`.
+            </summary>
+            <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidTriggerButton` event on `Dispose`.</return>
         </member>
         <member name="M:VscAppz.InputBox.Show">
             <summary>
             Makes the input UI visible in its current configuration. Any other input
             UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
@@ -1722,6 +1856,8 @@
             <summary>
             Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
             event.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
@@ -1733,8 +1869,12 @@
             the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
             (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
             the user pressing Esc, some other input UI opening, etc.)
+            
+            `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+            
+            `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
             </summary>
-            <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+            <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.</return>
         </member>
         <member name="M:VscAppz.InputBox.Dispose">
@@ -1743,15 +1883,27 @@
             visible, it is first hidden. After this call the input UI is no longer
             functional and no additional methods or properties on it should be
             accessed. Instead a new input UI should be created.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.InputBox.Get">
-            <summary>Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+            <summary>
+            Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.InputBox.Set(VscAppz.InputBoxState)">
-            <summary>Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+            <summary>
+            Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+            
+            `allUpdates` ── 
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <param name="allUpdates"></param>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
@@ -1780,29 +1932,55 @@
             </summary>
         </member>
         <member name="M:VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String,VscAppz.QuickPickState})">
-            <summary>An event signaling when the value of the filter text has changed.</summary>
-            <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+            <summary>
+            An event signaling when the value of the filter text has changed.
+            
+            `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+            
+            `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
+            </summary>
+            <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
         </member>
         <member name="M:VscAppz.QuickPick.OnDidAccept(System.Action{VscAppz.QuickPickState})">
-            <summary>An event signaling when the user indicated acceptance of the selected item(s).</summary>
-            <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+            <summary>
+            An event signaling when the user indicated acceptance of the selected item(s).
+            
+            `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+            
+            `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
+            </summary>
+            <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
         </member>
         <member name="M:VscAppz.QuickPick.OnDidChangeActive(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState})">
-            <summary>An event signaling when the active items have changed.</summary>
-            <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+            <summary>
+            An event signaling when the active items have changed.
+            
+            `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+            
+            `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.
+            </summary>
+            <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.</return>
         </member>
         <member name="M:VscAppz.QuickPick.OnDidChangeSelection(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickState})">
-            <summary>An event signaling when the selected items have changed.</summary>
-            <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+            <summary>
+            An event signaling when the selected items have changed.
+            
+            `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+            
+            `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.
+            </summary>
+            <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.</return>
         </member>
         <member name="M:VscAppz.QuickPick.Show">
             <summary>
             Makes the input UI visible in its current configuration. Any other input
             UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
@@ -1810,6 +1988,8 @@
             <summary>
             Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
             event.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
@@ -1821,8 +2001,12 @@
             the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
             (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
             the user pressing Esc, some other input UI opening, etc.)
+            
+            `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+            
+            `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
             </summary>
-            <param name="handler">Will be invoked whenever this event fires; mandatory, not optional.</param>
+            <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.</return>
         </member>
         <member name="M:VscAppz.QuickPick.Dispose">
@@ -1831,15 +2015,27 @@
             visible, it is first hidden. After this call the input UI is no longer
             functional and no additional methods or properties on it should be
             accessed. Instead a new input UI should be created.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.QuickPick.Get">
-            <summary>Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+            <summary>
+            Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>
         <member name="M:VscAppz.QuickPick.Set(VscAppz.QuickPickState)">
-            <summary>Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.</summary>
+            <summary>
+            Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+            
+            `allUpdates` ── 
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
+            </summary>
             <param name="allUpdates"></param>
             <return>A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.</return>
         </member>

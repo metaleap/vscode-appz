@@ -129,6 +129,9 @@ class Cancel {
 }
 exports.Cancel = Cancel;
 class Disposable {
+    addSub(fnId) {
+        this.subFnIds.push(fnId);
+    }
     bind(impl, ...subFnIds) {
         [this.impl, this.subFnIds] = [impl, subFnIds];
         return this;

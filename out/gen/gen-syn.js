@@ -112,7 +112,7 @@ class Builder {
                     Name: this.gen.nameRewriters.methods(method.name),
                     Docs: method.isProps
                         ? [{ Lines: ["Provides single-call access to numerous individual `" + this.gen.nameRewriters.types.interfaces(it.name) + "` properties at once."], ForParam: "" }]
-                        : this.docs(gen.docs(method.fromOrig ? method.fromOrig.decl : it.fromOrig), undefined, true, this.gen.options.doc.appendArgsToSummaryFor.methods),
+                        : this.docs(gen.docs(method.fromOrig ? method.fromOrig.decl : it.fromOrig), undefined, true, this.gen.options.doc.appendArgsToSummary.forMethods),
                     Type: null,
                     Args: method.args.map((arg) => this.fromArg(arg, method)),
                 };
@@ -166,7 +166,7 @@ class Builder {
                 fromPrep: _,
                 name: _.name,
                 Name: ((it.isPropsOfStruct && _.readOnly) ? this.gen.nameRewriters.methods : this.gen.nameRewriters.fields)(_.name),
-                Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummaryFor.funcFields),
+                Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummary.forFuncFields),
                 Type: (it.isPropsOfStruct && _.readOnly) ? { From: [], To: this.typeRef(_.typeSpec, false, true, true) } : this.gen.typeRefForField(this.typeRef(_.typeSpec, _.optional), _.optional),
                 Json: { Name: _.name, Required: !_.optional, Excluded: (it.isPropsOfStruct && _.readOnly) || it.funcFields.some(ff => _.name === ff) },
             }))
@@ -283,7 +283,7 @@ class Builder {
                 if (doc.lines && doc.lines.length) {
                     let name = doc.isForArg;
                     if (!(name && name.length))
-                        name = doc.isForRet ? "return" : "";
+                        name = doc.isForRet ? this.gen.options.doc.appendArgsToSummary.retArgName : "";
                     let dst = into.find(_ => _.ForParam === name);
                     if (isMethod || !(name && name.length)) {
                         if (!dst)
@@ -291,7 +291,7 @@ class Builder {
                         dst.Lines.push(...doc.lines);
                     }
                     if (name && name.length && appendArgsAndRetsToSummaryToo && (dst = into.find(_ => _.ForParam === '')))
-                        dst.Lines.push('', ...doc.lines.map((ln, idx) => (idx ? ln : gen.docPrependArgOrRetName(doc, ln, "return", this.gen.nameRewriters.args))));
+                        dst.Lines.push('', ...doc.lines.map((ln, idx) => (idx ? ln : gen.docPrependArgOrRetName(doc, ln, this.gen.options.doc.appendArgsToSummary.retArgName, this.gen.options.doc.appendArgsToSummary.prefix, this.gen.options.doc.appendArgsToSummary.suffix, this.gen.nameRewriters.args))));
                 }
                 if (doc.subs && doc.subs.length)
                     this.docs(doc.subs, undefined, isMethod, appendArgsAndRetsToSummaryToo, into);
@@ -326,9 +326,12 @@ class Gen extends gen.Gen {
         };
         this.options = {
             doc: {
-                appendArgsToSummaryFor: {
-                    methods: false,
-                    funcFields: true,
+                appendArgsToSummary: {
+                    prefix: "`",
+                    suffix: "` ── ",
+                    forMethods: false,
+                    forFuncFields: true,
+                    retArgName: "return",
                 }
             },
             idents: {
@@ -414,22 +417,41 @@ class Gen extends gen.Gen {
             if (me && me.Name && me.Name.length && me.Args !== undefined && me.Args !== null) {
                 let docarg = "", docret = "";
                 if (me.IsObjCtor)
-                    [docarg, docret] = ["If specified, the newly created `" + me.IsObjCtor + "` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.", "A thenable that resolves when the `" + me.IsObjCtor + "` has been created and initialized."];
+                    [docarg, docret] = ["ff specified, the newly created `" + me.IsObjCtor + "` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.", "A thenable that resolves when the `" + me.IsObjCtor + "` has been created and initialized."];
                 else if (me.IsObjEvt)
-                    [docarg, docret] = ["Will be invoked whenever this event fires; mandatory, not optional.", "A `Disposable` that will unsubscribe `handler` from the `" + me.Name + "` event on `Dispose`."];
+                    [docarg, docret] = ["will be invoked whenever this event fires; mandatory, not optional.", "A `Disposable` that will unsubscribe `handler` from the `" + me.Name + "` event on `Dispose`."];
                 else if (me.Args.length === 1 && me.Args[0].Name === "listener" && this.typeFunc(me.Args[0].Type) && this.typeFunc(me.Type) && gen.typePromOf(me.fromPrep.args.find(_ => _.isFromRetThenable).typeSpec, "Disposable"))
-                    [docarg, docret] = ["Will be invoked whenever this event fires; mandatory, not optional.", "A `Disposable` that will unsubscribe `listener` from the `" + me.Name + "` event on `Dispose`."];
+                    [docarg, docret] = ["will be invoked whenever this event fires; mandatory, not optional.", "A `Disposable` that will unsubscribe `listener` from the `" + me.Name + "` event on `Dispose`."];
                 else if (me.IsSubNs)
                     docarg = "TODO_ARG_SUB";
                 else if (me.fromPrep && me.fromPrep.isProps)
                     docarg = "TODO_ARG_PROPS";
                 else if (this.typeFunc(me.Type) && me.Type.From && me.Type.From.length && this.typeFunc(me.Type.From[0]))
                     docret = "A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.";
+                const docsadded = [];
                 for (const arg of me.Args)
-                    if (!me.Docs.some(_ => _.ForParam === arg.Name))
+                    if (!me.Docs.some(_ => _.ForParam === arg.Name)) {
+                        docsadded.push(arg.Name);
                         me.Docs.push({ ForParam: arg.Name, Lines: [docarg] });
-                if (docret && docret.length && me.Type && !me.Docs.some(_ => _.ForParam === "return"))
-                    me.Docs.push({ ForParam: "return", Lines: [docret] });
+                    }
+                if (docret && docret.length && me.Type && !me.Docs.some(_ => _.ForParam === this.options.doc.appendArgsToSummary.retArgName)) {
+                    me.Docs.push({ ForParam: this.options.doc.appendArgsToSummary.retArgName, Lines: [docret] });
+                    docsadded.push("");
+                }
+                const summary = me.Docs.find(_ => !_.ForParam);
+                if (docsadded.length && summary && this.options.doc.appendArgsToSummary.forMethods) {
+                    const retpos = -1 + summary.Lines.findIndex(_ => _.startsWith(this.options.doc.appendArgsToSummary.prefix + this.options.doc.appendArgsToSummary.retArgName + this.options.doc.appendArgsToSummary.suffix));
+                    const fromret = (retpos < 0) ? [] : summary.Lines.slice(retpos);
+                    if (fromret && fromret.length)
+                        summary.Lines = summary.Lines.slice(0, retpos);
+                    for (const argname of docsadded)
+                        if (argname && argname.length)
+                            summary.Lines.push("", this.options.doc.appendArgsToSummary.prefix + argname + this.options.doc.appendArgsToSummary.suffix + docarg);
+                    if (fromret && fromret.length)
+                        summary.Lines.push(...fromret);
+                    if (docsadded.includes(""))
+                        summary.Lines.push("", this.options.doc.appendArgsToSummary.prefix + this.options.doc.appendArgsToSummary.retArgName + this.options.doc.appendArgsToSummary.suffix + docret);
+                }
             }
         }
         return this;
@@ -805,6 +827,7 @@ class Gen extends gen.Gen {
                 _.eCall(_.n("OnError"), impl, _.eLit(`${ifaceOrStruct.Name}.${method.Name}: the '${arg.Name}' arg (which is not optional but required) was not passed by the caller`), _.eZilch()),
                 _.iRet(_.eZilch()),
             ]), _.iSet(_.n(fnid), _.eCall(_.oDot(impl, _.n("nextSub")), rettype ? _.eZilch() : handler, rettype ? handler : _.eZilch())), _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n("Data")), _.eLit(arg.name)), _.n(fnid)));
+            return fnid;
         };
         if ((!method.Type) || method.Type.From.length !== 1 || method.Type.To || method.Type.From[0].To)
             throw method.Type;
@@ -824,8 +847,11 @@ class Gen extends gen.Gen {
                             ]),
                             _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n("Data")), _.eLit(arg.name)), _.oDot(_.n(arg.Name), _.n("fnId"))),
                         ]));
-                    else if (this.typeFunc(arg.Type))
-                        eventlike(arg);
+                    else if (this.typeFunc(arg.Type)) {
+                        const fnid = eventlike(arg);
+                        if (method.IsObjEvt)
+                            body.push(_.eCall(_._(_.eThis(), "disp", "addSub"), _._(fnid)));
+                    }
                     else {
                         let town = this.typeOwn(arg.Type);
                         if (town && town.Ands) {

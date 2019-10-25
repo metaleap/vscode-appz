@@ -204,6 +204,8 @@ type Disposable struct {
 	subFnIds []string
 }
 
+func (me *Disposable) addSub(fnId string) { me.subFnIds = append(me.subFnIds, fnId) }
+
 func (me *Disposable) bind(impl *impl, subFnIds ...string) *Disposable {
 	me.impl, me.subFnIds = impl, subFnIds
 	return me

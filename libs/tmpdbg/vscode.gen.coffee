@@ -600,7 +600,7 @@ Window: interface
     # changes. The value of the event represents whether the window is focused.
     #
     # @listener:
-    # Will be invoked whenever this event fires; mandatory, not optional.
+    # will be invoked whenever this event fires; mandatory, not optional.
     #
     # @return:
     # A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
@@ -620,7 +620,7 @@ Window: interface
     # A new status bar item.
     #
     # @optionallyInitialStateToApplyUponCreation:
-    # If specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+    # ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
     CreateStatusBarItem: ((StatusBarItem->StatusBarItemState->void)->void)
         alignment: ?StatusBarAlignment
         priority: ?int
@@ -659,7 +659,7 @@ Window: interface
     # A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
     #
     # @optionallyInitialStateToApplyUponCreation:
-    # If specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+    # ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
     CreateInputBox: ((InputBox->InputBoxState->void)->void)
         optionallyInitialStateToApplyUponCreation: ?InputBoxState # undefined
 
@@ -675,7 +675,7 @@ Window: interface
     # A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
     #
     # @optionallyInitialStateToApplyUponCreation:
-    # If specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+    # ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
     CreateQuickPick: ((QuickPick->QuickPickState->void)->void)
         optionallyInitialStateToApplyUponCreation: ?QuickPickState # undefined
 
@@ -869,7 +869,7 @@ Workspace: interface
     # An event that is emitted when a workspace folder is added or removed.
     #
     # @listener:
-    # Will be invoked whenever this event fires; mandatory, not optional.
+    # will be invoked whenever this event fires; mandatory, not optional.
     #
     # @return:
     # A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
@@ -997,7 +997,7 @@ Languages: interface
     # newly added and removed diagnostics.
     #
     # @listener:
-    # Will be invoked whenever this event fires; mandatory, not optional.
+    # will be invoked whenever this event fires; mandatory, not optional.
     #
     # @return:
     # A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
@@ -1053,7 +1053,7 @@ Extensions: interface
     # installed, uninstalled, enabled or disabled.
     #
     # @listener:
-    # Will be invoked whenever this event fires; mandatory, not optional.
+    # will be invoked whenever this event fires; mandatory, not optional.
     #
     # @return:
     # A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
@@ -4812,6 +4812,7 @@ InputBox·OnDidChangeValue: (handler:(string->InputBoxState->void) -> ((?Disposa
         return true
     , null)
     msg.Data@"handler" = _fnid_handler
+    this.disp.addSub(_fnid_handler)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -4859,6 +4860,7 @@ InputBox·OnDidAccept: (handler:(InputBoxState->void) -> ((?Disposable->void)->v
         return true
     , null)
     msg.Data@"handler" = _fnid_handler
+    this.disp.addSub(_fnid_handler)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -4911,6 +4913,7 @@ InputBox·OnDidTriggerButton: (handler:(QuickInputButton->InputBoxState->void) -
         return true
     , null)
     msg.Data@"handler" = _fnid_handler
+    this.disp.addSub(_fnid_handler)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -5014,6 +5017,7 @@ InputBox·OnDidHide: (handler:(InputBoxState->void) -> ((?Disposable->void)->voi
         return true
     , null)
     msg.Data@"handler" = _fnid_handler
+    this.disp.addSub(_fnid_handler)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -5123,6 +5127,7 @@ QuickPick·OnDidChangeValue: (handler:(string->QuickPickState->void) -> ((?Dispo
         return true
     , null)
     msg.Data@"handler" = _fnid_handler
+    this.disp.addSub(_fnid_handler)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -5170,6 +5175,7 @@ QuickPick·OnDidAccept: (handler:(QuickPickState->void) -> ((?Disposable->void)-
         return true
     , null)
     msg.Data@"handler" = _fnid_handler
+    this.disp.addSub(_fnid_handler)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -5233,6 +5239,7 @@ QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->QuickPickState->void) -
         return true
     , null)
     msg.Data@"handler" = _fnid_handler
+    this.disp.addSub(_fnid_handler)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -5296,6 +5303,7 @@ QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->QuickPickState->void
         return true
     , null)
     msg.Data@"handler" = _fnid_handler
+    this.disp.addSub(_fnid_handler)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -5399,6 +5407,7 @@ QuickPick·OnDidHide: (handler:(QuickPickState->void) -> ((?Disposable->void)->v
         return true
     , null)
     msg.Data@"handler" = _fnid_handler
+    this.disp.addSub(_fnid_handler)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)

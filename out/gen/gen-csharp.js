@@ -6,8 +6,8 @@ class Gen extends gen_syn.Gen {
     gen(prep) {
         anonVarCounter = 1;
         this.options.oneIndent = "\t";
-        this.options.doc.appendArgsToSummaryFor.funcFields = true;
-        this.options.doc.appendArgsToSummaryFor.methods = true;
+        this.options.doc.appendArgsToSummary.forFuncFields = true;
+        this.options.doc.appendArgsToSummary.forMethods = true;
         this.nameRewriters.types.interfaces = _ => "I" + this.caseUp(_);
         super.gen(prep);
     }
@@ -24,9 +24,9 @@ class Gen extends gen_syn.Gen {
             for (const doc of it.Docs)
                 if (doc.Lines && doc.Lines.length)
                     if (doc.ForParam && doc.ForParam.length) {
-                        this.line((doc.ForParam === "return" ? "/// <return>" : "/// <param name=\"" + doc.ForParam + "\">")
+                        this.line((doc.ForParam === this.options.doc.appendArgsToSummary.retArgName ? "/// <return>" : "/// <param name=\"" + doc.ForParam + "\">")
                             + doc.Lines.join(" ")
-                            + (doc.ForParam === "return" ? "</return>" : "</param>"));
+                            + (doc.ForParam === this.options.doc.appendArgsToSummary.retArgName ? "</return>" : "</param>"));
                         if (!paramnames.includes(doc.ForParam))
                             paramnames.push(doc.ForParam);
                     }

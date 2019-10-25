@@ -581,7 +581,7 @@ function docs(from) {
     return ret;
 }
 exports.docs = docs;
-function docPrependArgOrRetName(doc, ln, retFallback, argNameRewrite = undefined, pref = "`", suff = "` ── ") {
+function docPrependArgOrRetName(doc, ln, retFallback, pref, suff, argNameRewrite = undefined) {
     let isfor = doc.isForArg;
     if (isfor && isfor.length)
         isfor = argNameRewrite ? argNameRewrite(isfor) : isfor;

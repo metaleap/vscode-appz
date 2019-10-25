@@ -445,7 +445,7 @@ export interface Window {
      * An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
      * changes. The value of the event represents whether the window is focused.
 
-     * @param listener Will be invoked whenever this event fires; mandatory, not optional.
+     * @param listener will be invoked whenever this event fires; mandatory, not optional.
      * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
      */
     OnDidChangeWindowState: (listener: (_: WindowState) => void) => (_: (_: Disposable) => void) => void;
@@ -455,7 +455,7 @@ export interface Window {
      * @param alignment The alignment of the item.
      * @param priority The priority of the item. Higher values mean the item should be shown more to the left.
      * @return A new status bar item.
-     * @param optionallyInitialStateToApplyUponCreation If specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+     * @param optionallyInitialStateToApplyUponCreation ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
     CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number, optionallyInitialStateToApplyUponCreation?: StatusBarItemState) => (_: (_: StatusBarItem, __: StatusBarItemState) => void) => void;
     /**
@@ -480,7 +480,7 @@ export interface Window {
      * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
      * @return A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
-     * @param optionallyInitialStateToApplyUponCreation If specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+     * @param optionallyInitialStateToApplyUponCreation ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
     CreateInputBox: (optionallyInitialStateToApplyUponCreation?: InputBoxState) => (_: (_: InputBox, __: InputBoxState) => void) => void;
     /**
@@ -492,7 +492,7 @@ export interface Window {
      * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
      * @return A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
-     * @param optionallyInitialStateToApplyUponCreation If specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+     * @param optionallyInitialStateToApplyUponCreation ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
      */
     CreateQuickPick: (optionallyInitialStateToApplyUponCreation?: QuickPickState) => (_: (_: QuickPick, __: QuickPickState) => void) => void;
 }
@@ -662,7 +662,7 @@ export interface Workspace {
     /**
      * An event that is emitted when a workspace folder is added or removed.
 
-     * @param listener Will be invoked whenever this event fires; mandatory, not optional.
+     * @param listener will be invoked whenever this event fires; mandatory, not optional.
      * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
      */
     OnDidChangeWorkspaceFolders: (listener: (_: WorkspaceFoldersChangeEvent) => void) => (_: (_: Disposable) => void) => void;
@@ -754,7 +754,7 @@ export interface Languages {
      * An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
      * newly added and removed diagnostics.
 
-     * @param listener Will be invoked whenever this event fires; mandatory, not optional.
+     * @param listener will be invoked whenever this event fires; mandatory, not optional.
      * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
      */
     OnDidChangeDiagnostics: (listener: (_: DiagnosticChangeEvent) => void) => (_: (_: Disposable) => void) => void;
@@ -805,7 +805,7 @@ export interface Extensions {
      * An event which fires when `extensions.all` changes. This can happen when extensions are
      * installed, uninstalled, enabled or disabled.
 
-     * @param listener Will be invoked whenever this event fires; mandatory, not optional.
+     * @param listener will be invoked whenever this event fires; mandatory, not optional.
      * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
      */
     OnDidChange: (listener: () => void) => (_: (_: Disposable) => void) => void;

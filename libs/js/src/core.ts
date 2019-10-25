@@ -150,6 +150,10 @@ export class Disposable {
     id: string
     subFnIds: string[]
 
+    addSub(fnId: string) {
+        this.subFnIds.push(fnId)
+    }
+
     bind(impl: impl, ...subFnIds: string[]) {
         [this.impl, this.subFnIds] = [impl, subFnIds]
         return this

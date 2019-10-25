@@ -415,10 +415,16 @@ type Window interface {
 	ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions) func(func(*WorkspaceFolder))
 
 	// Represents the current window's state.
+	// 
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 	State() func(func(WindowState))
 
 	// An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
 	// changes. The value of the event represents whether the window is focused.
+	// 
+	// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+	// 
+	// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
 	OnDidChangeWindowState(listener func(WindowState)) func(func(*Disposable))
 
 	// Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem).
@@ -427,12 +433,16 @@ type Window interface {
 	// 
 	// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 	// 
+	// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `StatusBarItem` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+	// 
 	// `return` ── A new status bar item.
 	CreateStatusBarItem(alignment StatusBarAlignment, priority *int, optionallyInitialStateToApplyUponCreation *StatusBarItemState) func(func(StatusBarItem, StatusBarItemState))
 
 	// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 	// 
 	// `name` ── Human-readable string which will be used to represent the channel in the UI.
+	// 
+	// `return` ── A thenable that resolves when the `OutputChannel` has been created and initialized.
 	CreateOutputChannel(name string) func(func(OutputChannel, OutputChannelState))
 
 	// Create a TextEditorDecorationType that can be used to add decorations to text editors.
@@ -448,6 +458,8 @@ type Window interface {
 	// is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 	// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 	// 
+	// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `InputBox` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
+	// 
 	// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
 	CreateInputBox(optionallyInitialStateToApplyUponCreation *InputBoxState) func(func(InputBox, InputBoxState))
 
@@ -457,6 +469,8 @@ type Window interface {
 	// Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
 	// is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
 	// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+	// 
+	// `optionallyInitialStateToApplyUponCreation` ── ff specified, the newly created `QuickPick` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.
 	// 
 	// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
 	CreateQuickPick(optionallyInitialStateToApplyUponCreation *QuickPickState) func(func(QuickPick, QuickPickState))
@@ -477,15 +491,23 @@ type Env interface {
 	OpenExternal(target string) func(func(bool))
 
 	// The application name of the editor, like 'VS Code'.
+	// 
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 	AppName() func(func(string))
 
 	// The application root folder from which the editor is running.
+	// 
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 	AppRoot() func(func(string))
 
 	// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
+	// 
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 	Language() func(func(string))
 
 	// A unique identifier for the computer.
+	// 
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 	MachineId() func(func(string))
 
 	// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
@@ -495,17 +517,25 @@ type Env interface {
 	// value is defined in all extension hosts (local and remote) in case a remote extension host
 	// exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 	// a specific extension runs remote or not.
+	// 
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 	RemoteName() func(func(*string))
 
 	// A unique identifier for the current session.
 	// Changes each time the editor is started.
+	// 
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 	SessionId() func(func(string))
 
 	// The detected default shell for the extension host, this is overridden by the
 	// `terminal.integrated.shell` setting for the extension host's platform.
+	// 
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 	Shell() func(func(string))
 
 	// The custom uri scheme the editor registers to in the operating system.
+	// 
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 	UriScheme() func(func(string))
 
 	// Provides single-call access to numerous individual `Env` properties at once.
@@ -525,6 +555,8 @@ type Clipboard interface {
 
 	// Writes text into the clipboard.
 	// 
+	// `value` ── 
+	// 
 	// `return` ── A thenable that resolves when writing happened.
 	WriteText(value string) func(func())
 }
@@ -540,6 +572,8 @@ type implClipboard struct{ *impl }
 type Workspace interface {
 	// The name of the workspace. `undefined` when no folder
 	// has been opened.
+	// 
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 	Name() func(func(*string))
 
 	// The location of the workspace file, for example:
@@ -573,6 +607,8 @@ type Workspace interface {
 	// configuration data into the file. You can use `workspace.getConfiguration().update()`
 	// for that purpose which will work both when a single folder is opened as
 	// well as an untitled or saved workspace.
+	// 
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 	WorkspaceFile() func(func(*string))
 
 	// Save all dirty files.
@@ -583,6 +619,10 @@ type Workspace interface {
 	SaveAll(includeUntitled bool) func(func(bool))
 
 	// An event that is emitted when a workspace folder is added or removed.
+	// 
+	// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+	// 
+	// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
 	OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent)) func(func(*Disposable))
 
 	// Returns the [workspace folder](https://code.visualstudio.com/api/references/vscode-api#WorkspaceFolder) that contains a given uri.
@@ -596,6 +636,8 @@ type Workspace interface {
 
 	// List of workspace folders or `undefined` when no folder is open.
 	// *Note* that the first entry corresponds to the value of `rootPath`.
+	// 
+	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 	WorkspaceFolders() func(func([]WorkspaceFolder))
 
 	// Find files across all [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) in the workspace.
@@ -674,6 +716,10 @@ type Languages interface {
 
 	// An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
 	// newly added and removed diagnostics.
+	// 
+	// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+	// 
+	// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
 	OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent)) func(func(*Disposable))
 }
 type implLanguages struct{ *impl }
@@ -719,6 +765,10 @@ type implLanguages struct{ *impl }
 type Extensions interface {
 	// An event which fires when `extensions.all` changes. This can happen when extensions are
 	// installed, uninstalled, enabled or disabled.
+	// 
+	// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+	// 
+	// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
 	OnDidChange(listener func()) func(func(*Disposable))
 }
 type implExtensions struct{ *impl }
@@ -3833,6 +3883,8 @@ func (me implCommands) GetCommands(filterInternal bool) func(func([]string)) {
 }
 
 // Shows the entry in the status bar.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *StatusBarItem) Show() func(func(*StatusBarItemState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -3865,6 +3917,8 @@ func (me *StatusBarItem) Show() func(func(*StatusBarItemState)) {
 }
 
 // Hide the entry in the status bar.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *StatusBarItem) Hide() func(func(*StatusBarItemState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -3898,11 +3952,15 @@ func (me *StatusBarItem) Hide() func(func(*StatusBarItemState)) {
 
 // Dispose and free associated resources. Call
 // [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *StatusBarItem) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
 // Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *StatusBarItem) Get() func(func(StatusBarItemState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -3934,6 +3992,10 @@ func (me *StatusBarItem) Get() func(func(StatusBarItemState)) {
 }
 
 // Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
+// 
+// `allUpdates` ── 
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *StatusBarItem) Set(allUpdates StatusBarItemState) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -3961,6 +4023,8 @@ func (me *StatusBarItem) Set(allUpdates StatusBarItemState) func(func()) {
 // Append the given value to the channel.
 // 
 // `value` ── A string, falsy values will not be printed.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *OutputChannel) Append(value string) func(func(*OutputChannelState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -3997,6 +4061,8 @@ func (me *OutputChannel) Append(value string) func(func(*OutputChannelState)) {
 // to the channel.
 // 
 // `value` ── A string, falsy values will be printed.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4030,6 +4096,8 @@ func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelState)
 }
 
 // Removes all output from the channel.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *OutputChannel) Clear() func(func(*OutputChannelState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4064,6 +4132,8 @@ func (me *OutputChannel) Clear() func(func(*OutputChannelState)) {
 // Reveal this channel in the UI.
 // 
 // `preserveFocus` ── When `true` the channel will not take focus.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4097,6 +4167,8 @@ func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelState)
 }
 
 // Hide this channel from the UI.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *OutputChannel) Hide() func(func(*OutputChannelState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4129,11 +4201,15 @@ func (me *OutputChannel) Hide() func(func(*OutputChannelState)) {
 }
 
 // Dispose and free associated resources.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *OutputChannel) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
 // Obtains this `OutputChannel`'s current property value for: `name`.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *OutputChannel) Get() func(func(OutputChannelState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4165,11 +4241,15 @@ func (me *OutputChannel) Get() func(func(OutputChannelState)) {
 }
 
 // Remove this decoration type and all decorations on all text editors using it.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *TextEditorDecorationType) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
 // Obtains this `TextEditorDecorationType`'s current property value for: `key`.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4201,6 +4281,10 @@ func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeStat
 }
 
 // An event signaling when the value has changed.
+// 
+// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+// 
+// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
 func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxState)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4231,6 +4315,7 @@ func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxState)) func(f
 		return true
 	}, nil)
 	msg.Data["handler"] = _fnid_handler
+	me.disp.addSub(_fnid_handler)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4259,6 +4344,10 @@ func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxState)) func(f
 }
 
 // An event signaling when the user indicated acceptance of the input value.
+// 
+// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+// 
+// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
 func (me *InputBox) OnDidAccept(handler func(InputBoxState)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4284,6 +4373,7 @@ func (me *InputBox) OnDidAccept(handler func(InputBoxState)) func(func(*Disposab
 		return true
 	}, nil)
 	msg.Data["handler"] = _fnid_handler
+	me.disp.addSub(_fnid_handler)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4312,6 +4402,10 @@ func (me *InputBox) OnDidAccept(handler func(InputBoxState)) func(func(*Disposab
 }
 
 // An event signaling when a button was triggered.
+// 
+// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+// 
+// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidTriggerButton` event on `Dispose`.
 func (me *InputBox) OnDidTriggerButton(handler func(QuickInputButton, InputBoxState)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4342,6 +4436,7 @@ func (me *InputBox) OnDidTriggerButton(handler func(QuickInputButton, InputBoxSt
 		return true
 	}, nil)
 	msg.Data["handler"] = _fnid_handler
+	me.disp.addSub(_fnid_handler)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4371,6 +4466,8 @@ func (me *InputBox) OnDidTriggerButton(handler func(QuickInputButton, InputBoxSt
 
 // Makes the input UI visible in its current configuration. Any other input
 // UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *InputBox) Show() func(func(*InputBoxState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4404,6 +4501,8 @@ func (me *InputBox) Show() func(func(*InputBoxState)) {
 
 // Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 // event.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *InputBox) Hide() func(func(*InputBoxState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4441,6 +4540,10 @@ func (me *InputBox) Hide() func(func(*InputBoxState)) {
 // the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
 // (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 // the user pressing Esc, some other input UI opening, etc.)
+// 
+// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+// 
+// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
 func (me *InputBox) OnDidHide(handler func(InputBoxState)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4466,6 +4569,7 @@ func (me *InputBox) OnDidHide(handler func(InputBoxState)) func(func(*Disposable
 		return true
 	}, nil)
 	msg.Data["handler"] = _fnid_handler
+	me.disp.addSub(_fnid_handler)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4497,11 +4601,15 @@ func (me *InputBox) OnDidHide(handler func(InputBoxState)) func(func(*Disposable
 // visible, it is first hidden. After this call the input UI is no longer
 // functional and no additional methods or properties on it should be
 // accessed. Instead a new input UI should be created.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *InputBox) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
 // Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *InputBox) Get() func(func(InputBoxState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4533,6 +4641,10 @@ func (me *InputBox) Get() func(func(InputBoxState)) {
 }
 
 // Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+// 
+// `allUpdates` ── 
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *InputBox) Set(allUpdates InputBoxState) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4558,6 +4670,10 @@ func (me *InputBox) Set(allUpdates InputBoxState) func(func()) {
 }
 
 // An event signaling when the value of the filter text has changed.
+// 
+// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+// 
+// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
 func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickState)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4588,6 +4704,7 @@ func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickState)) func
 		return true
 	}, nil)
 	msg.Data["handler"] = _fnid_handler
+	me.disp.addSub(_fnid_handler)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4616,6 +4733,10 @@ func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickState)) func
 }
 
 // An event signaling when the user indicated acceptance of the selected item(s).
+// 
+// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+// 
+// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
 func (me *QuickPick) OnDidAccept(handler func(QuickPickState)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4641,6 +4762,7 @@ func (me *QuickPick) OnDidAccept(handler func(QuickPickState)) func(func(*Dispos
 		return true
 	}, nil)
 	msg.Data["handler"] = _fnid_handler
+	me.disp.addSub(_fnid_handler)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4669,6 +4791,10 @@ func (me *QuickPick) OnDidAccept(handler func(QuickPickState)) func(func(*Dispos
 }
 
 // An event signaling when the active items have changed.
+// 
+// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+// 
+// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.
 func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickState)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4712,6 +4838,7 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickSt
 		return true
 	}, nil)
 	msg.Data["handler"] = _fnid_handler
+	me.disp.addSub(_fnid_handler)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4740,6 +4867,10 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickSt
 }
 
 // An event signaling when the selected items have changed.
+// 
+// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+// 
+// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.
 func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPickState)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4783,6 +4914,7 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPic
 		return true
 	}, nil)
 	msg.Data["handler"] = _fnid_handler
+	me.disp.addSub(_fnid_handler)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4812,6 +4944,8 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPic
 
 // Makes the input UI visible in its current configuration. Any other input
 // UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *QuickPick) Show() func(func(*QuickPickState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4845,6 +4979,8 @@ func (me *QuickPick) Show() func(func(*QuickPickState)) {
 
 // Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 // event.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *QuickPick) Hide() func(func(*QuickPickState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4882,6 +5018,10 @@ func (me *QuickPick) Hide() func(func(*QuickPickState)) {
 // the extension will be notified through [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide).
 // (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 // the user pressing Esc, some other input UI opening, etc.)
+// 
+// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+// 
+// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
 func (me *QuickPick) OnDidHide(handler func(QuickPickState)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4907,6 +5047,7 @@ func (me *QuickPick) OnDidHide(handler func(QuickPickState)) func(func(*Disposab
 		return true
 	}, nil)
 	msg.Data["handler"] = _fnid_handler
+	me.disp.addSub(_fnid_handler)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4938,11 +5079,15 @@ func (me *QuickPick) OnDidHide(handler func(QuickPickState)) func(func(*Disposab
 // visible, it is first hidden. After this call the input UI is no longer
 // functional and no additional methods or properties on it should be
 // accessed. Instead a new input UI should be created.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *QuickPick) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
 // Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *QuickPick) Get() func(func(QuickPickState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4974,6 +5119,10 @@ func (me *QuickPick) Get() func(func(QuickPickState)) {
 }
 
 // Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+// 
+// `allUpdates` ── 
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *QuickPick) Set(allUpdates QuickPickState) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)

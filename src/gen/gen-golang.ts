@@ -7,8 +7,8 @@ export class Gen extends gen_syn.Gen {
 
     gen(prep: gen.Prep) {
         this.options.oneIndent = "\t"
-        this.options.doc.appendArgsToSummaryFor.funcFields = true
-        this.options.doc.appendArgsToSummaryFor.methods = true
+        this.options.doc.appendArgsToSummary.forFuncFields = true
+        this.options.doc.appendArgsToSummary.forMethods = true
         this.options.idents.curInst = "me"
         this.options.idents.null = "nil"
         this.options.haveProps = false

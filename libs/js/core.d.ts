@@ -44,6 +44,7 @@ export declare class Disposable {
     impl: impl;
     id: string;
     subFnIds: string[];
+    addSub(fnId: string): void;
     bind(impl: impl, ...subFnIds: string[]): this;
     populateFrom(payload: any): boolean;
     Dispose(): (_: () => void) => void;

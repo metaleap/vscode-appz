@@ -2819,6 +2819,7 @@ function InputBox_OnDidChangeValue(handler) {
         return true;
     }, null);
     msg.Data["handler"] = _fnid_handler;
+    this.disp.addSub(_fnid_handler);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -2872,6 +2873,7 @@ function InputBox_OnDidAccept(handler) {
         return true;
     }, null);
     msg.Data["handler"] = _fnid_handler;
+    this.disp.addSub(_fnid_handler);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -2931,6 +2933,7 @@ function InputBox_OnDidTriggerButton(handler) {
         return true;
     }, null);
     msg.Data["handler"] = _fnid_handler;
+    this.disp.addSub(_fnid_handler);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3044,6 +3047,7 @@ function InputBox_OnDidHide(handler) {
         return true;
     }, null);
     msg.Data["handler"] = _fnid_handler;
+    this.disp.addSub(_fnid_handler);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3158,6 +3162,7 @@ function QuickPick_OnDidChangeValue(handler) {
         return true;
     }, null);
     msg.Data["handler"] = _fnid_handler;
+    this.disp.addSub(_fnid_handler);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3211,6 +3216,7 @@ function QuickPick_OnDidAccept(handler) {
         return true;
     }, null);
     msg.Data["handler"] = _fnid_handler;
+    this.disp.addSub(_fnid_handler);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3283,6 +3289,7 @@ function QuickPick_OnDidChangeActive(handler) {
         return true;
     }, null);
     msg.Data["handler"] = _fnid_handler;
+    this.disp.addSub(_fnid_handler);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3355,6 +3362,7 @@ function QuickPick_OnDidChangeSelection(handler) {
         return true;
     }, null);
     msg.Data["handler"] = _fnid_handler;
+    this.disp.addSub(_fnid_handler);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3468,6 +3476,7 @@ function QuickPick_OnDidHide(handler) {
         return true;
     }, null);
     msg.Data["handler"] = _fnid_handler;
+    this.disp.addSub(_fnid_handler);
     let onresp;
     let onret;
     onresp = (payload) => {
