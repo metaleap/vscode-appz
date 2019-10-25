@@ -158,7 +158,7 @@ export class Prep {
                 }
                 this.structs.push(struct)
                 iface.methods.push({
-                    name: pickName("", ["AllProperties", "Properties", "Props", "Info", "Current", "Self", "It", "Cur"], iface.methods),
+                    name: "AllProperties",
                     isProps: struct, args: [{
                         isFromRetThenable: true, name: "onDone", optional: false,
                         typeSpec: { Thens: [struct.name] },
@@ -177,12 +177,8 @@ export class Prep {
                 if (arg.isFromRetThenable || isinfunc) isargin = true
                 if (!arg.isFromRetThenable) isargout = !isinfunc
             }
-            if (((struct.isOutgoing = struct.isOutgoing || isargout) && (struct.isIncoming = struct.isIncoming || isargin)) && !(struct.isPropsOfStruct || struct.isPropsOfIface)) {
-                const fieldname = pickName('my', ['', 'tags', 'ext', 'extra', 'meta', 'baggage', 'payload'], struct.fields)
-                if (!fieldname)
-                    throw struct
-                struct.fields.push({ name: fieldname, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict })
-            }
+            if (((struct.isOutgoing = struct.isOutgoing || isargout) && (struct.isIncoming = struct.isIncoming || isargin)) && !(struct.isPropsOfStruct || struct.isPropsOfIface))
+                struct.fields.push({ name: "my", isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict })
 
             if (struct.isIncoming && struct.fields.find(_ => typeFun(_.typeSpec))) {
                 struct.isDispObj = true
@@ -327,7 +323,7 @@ export class Prep {
                 }
             }
             me.args.push({
-                name: pickName('', ['listener', 'handler', 'eventHandler', 'onEvent', 'onEventRaised', 'onEventFired', 'onEventTriggered', 'onFired', 'onTriggered', 'onRaised'], me.args),
+                name: "listener",
                 optional: false, typeSpec: { From: decle.EvtArgs.map((_, i) => evtargs[i]), To: null },
             })
         }
@@ -344,12 +340,8 @@ export class Prep {
         const tprom = typeProm(tret)
         if (!(tprom && tprom.length))
             tret = { Thens: [tret] }
-        if (tret) {
-            const argname = pickName('', ['onDone', 'andThen', 'onRet', 'onReturn', 'ret', 'cont', 'kont', 'continuation'], me.args)
-            if (!argname)
-                throw me
-            me.args.push({ name: argname, typeSpec: tret, isFromRetThenable: true, optional: true })
-        }
+        if (tret)
+            me.args.push({ name: "onDone", typeSpec: tret, isFromRetThenable: true, optional: true })
     }
 
     qName(memJob: GenJobNamed): string[] {
@@ -753,13 +745,6 @@ export function docsTraverse(docs: Docs, on: ((_: Doc) => void)) {
     }
 }
 
-export function idents(dontCollideWith: { name: string }[], ...names: string[]) {
-    const ret: { [_: string]: string } = {}
-    for (const name of names)
-        ret[name] = pickName('', [name], dontCollideWith)
-    return ret
-}
-
 function jsDocs(from: ts.Node): ts.JSDoc[] {
     while (from) {
         const have = (from as any) as { jsDoc: ts.JSDoc[] }
@@ -768,28 +753,6 @@ function jsDocs(from: ts.Node): ts.JSDoc[] {
         from = from.parent
     }
     return null
-}
-
-export function pickName(forcePrefix: string, pickFrom: string[], dontCollideWith: { name: string }[]): string {
-    if (!(forcePrefix && forcePrefix.length)) {
-        for (const name of pickFrom)
-            if (name && name.length && !dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
-                return name
-        if (pickFrom.length === 1 && pickFrom[0] && pickFrom[0].length)
-            for (let i = 1; true; i++) {
-                var name = '_'.repeat(i) + pickFrom[0]
-                if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
-                    return name
-            }
-    }
-    for (const pref of [forcePrefix, 'appz', 'vscAppz'])
-        if (pref && pref.length)
-            for (let name of pickFrom) {
-                name = pref + (name ? (name.charAt(0).toUpperCase() + name.slice(1)) : '')
-                if (!dontCollideWith.find(_ => _.name.toLowerCase() === name.toLowerCase()))
-                    return name
-            }
-    return undefined
 }
 
 export function combine<T extends ts.Node>(...arrs: (T[] | ts.NodeArray<T>)[]) {

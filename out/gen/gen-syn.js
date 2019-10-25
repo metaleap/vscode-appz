@@ -355,7 +355,6 @@ class Gen extends gen.Gen {
             haveProps: true,
             demoOutFilePath: "",
             typeNamesToString: ["Uri", "ThemeColor", "ThemeIcon"],
-            objPropsGetSetNamePicks: ["", "Props", "Properties", "P", "Ps", "Details", "Fields", "Infos", "Info"]
         };
         this.options.demoOutFilePath = demoOutFilePath;
     }
@@ -778,14 +777,13 @@ class Gen extends gen.Gen {
             this.genMethodImpl_methodCall(typeRef, method, _, body);
     }
     genMethodImpl_methodCall(ifaceOrStruct, method, _, body, idVal, impl) {
-        const __ = gen.idents(method.fromPrep ? method.fromPrep.args : [], 'msg', 'onresp', 'onret', 'fn', 'fnid', 'fnids', 'payload', 'result', 'args', 'ok', 'ret', 'state');
         const funcfields = method.fromPrep ? gen.argsFuncFields(_.prep, method.fromPrep.args) : [];
         const numargs = method.fromPrep ? method.fromPrep.args.filter(_ => !_.isFromRetThenable).length : method.Args.length;
         if (!impl)
             impl = _.eCall(_.oDot(_.n("Impl")));
-        body.push(_.iVar(__.msg, { Maybe: { Name: 'ipcMsg' } }), _.iSet(_.n(__.msg), _.eNew({ Maybe: { Name: 'ipcMsg' } })), _.iSet(_.oDot(_.n(__.msg), _.n('QName')), _.eLit((ifaceOrStruct.name + '.' + (method.fromPrep ? method.fromPrep.name : (method.name && method.name.startsWith("appz")) ? method.name : method.Name)))), _.iSet(_.oDot(_.n(__.msg), _.n("Data")), _.eCollNew(_.eLit(numargs + (idVal ? 1 : 0)))));
+        body.push(_.iVar("msg", { Maybe: { Name: 'ipcMsg' } }), _.iSet(_.n("msg"), _.eNew({ Maybe: { Name: 'ipcMsg' } })), _.iSet(_.oDot(_.n("msg"), _.n('QName')), _.eLit((ifaceOrStruct.name + '.' + (method.fromPrep ? method.fromPrep.name : (method.name && method.name.startsWith("appz")) ? method.name : method.Name)))), _.iSet(_.oDot(_.n("msg"), _.n("Data")), _.eCollNew(_.eLit(numargs + (idVal ? 1 : 0)))));
         if (idVal)
-            body.push(_.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n("Data")), _.eLit("")), idVal));
+            body.push(_.iSet(_.oIdx(_.oDot(_.n("msg"), _.n("Data")), _.eLit("")), idVal));
         const twinargs = {};
         if (funcfields.length) {
             for (const ff of funcfields)
@@ -797,20 +795,20 @@ class Gen extends gen.Gen {
                         break;
                     }
                 }
-            body.push(_.iVar(__.fnids, { ValsOf: TypeRefPrim.String, KeysOf: null }), _.iSet(_.n(__.fnids), _.eCollNew(_.eLit(funcfields.length), TypeRefPrim.String)));
+            body.push(_.iVar("fnids", { ValsOf: TypeRefPrim.String, KeysOf: null }), _.iSet(_.n("fnids"), _.eCollNew(_.eLit(funcfields.length), TypeRefPrim.String)));
             for (const ff of funcfields) {
                 let ffname = this.nameRewriters.fields(ff.name), ffld = ff.struct.fields.find(_ => _.name === ff.name), structfield = this.allStructs[this.nameRewriters.types.structs(ff.struct.name)].Fields.find(_ => _.fromPrep === ffld), fnargs = gen.typeFun(ffld.typeSpec)[0], twinarg = twinargs[ff.arg.name], origargname = this.nameRewriters.args(ff.arg.name), argname = (twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : origargname;
                 body.push(_.iIf((!ff.arg.optional) ? _.eLit(true) : _.oIs(_.n(origargname)), _.WHEN(twinarg, () => [
                     _.iSet(_.n(argname), _.eNew({ Maybe: { Name: twinarg.twinStructName } })),
                     _.iSet(_.oDot(_.n(argname), _.n(twinarg.origStruct.Name)), ff.arg.optional ? _.n(origargname) : _.oAddr(_.n(origargname))),
-                ]).concat(_.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eLit("")), _.iVar(__.fn, structfield.Type), _.iSet(_.n(__.fn), _.oDot(_.n(argname), _.n(ffname))), _.iIf(_.oIs(_.n(__.fn)), [_.iLock(_.eThis(), _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eCall(_.oDot(impl, _.n('nextFuncId')))), _.iAdd(_.n(__.fnids), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))), _.iSet(_.oIdx(_.oDot(impl, _.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))), _.eFunc([{ Name: __.args, Type: { ValsOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] }, _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n(__.args), true)), [
+                ]).concat(_.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eLit("")), _.iVar("fn", structfield.Type), _.iSet(_.n("fn"), _.oDot(_.n(argname), _.n(ffname))), _.iIf(_.oIs(_.n("fn")), [_.iLock(_.eThis(), _.iSet(_.oDot(_.n(argname), _.n(ffname + '_AppzFuncId')), _.eCall(_.oDot(impl, _.n('nextFuncId')))), _.iAdd(_.n("fnids"), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))), _.iSet(_.oIdx(_.oDot(impl, _.n('cbOther')), _.oDot(_.n(argname), _.n(ffname + '_AppzFuncId'))), _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] }, _.iIf(_.oNeq(_.eLit((fnargs.length)), _.eLen(_.n("args"), true)), [
                         _.iRet(_.eTup(_.eZilch(), _.eLit(false))),
-                    ], [_.iVar(__.ok, TypeRefPrim.Bool)].concat(..._.EACH(fnargs, (fnarg, idx) => [
+                    ], [_.iVar("ok", TypeRefPrim.Bool)].concat(..._.EACH(fnargs, (fnarg, idx) => [
                         _.iVar('__' + idx, this.b.typeRef(fnarg)),
-                        _.iIf(_.oIs(_.oIdx(_.n(__.args), _.eLit(idx))), this.convOrRet('__' + idx, _.oIdx(_.n(__.args), _.eLit(idx)), this.b.typeRef(fnarg), __.ok, _.eTup(_.eZilch(), _.eLit(false))), (fnarg === gen.ScriptPrimType.Number || this.typeOwn(this.b.typeRef(fnarg))) ? [
+                        _.iIf(_.oIs(_.oIdx(_.n("args"), _.eLit(idx))), this.convOrRet('__' + idx, _.oIdx(_.n("args"), _.eLit(idx)), this.b.typeRef(fnarg), "ok", _.eTup(_.eZilch(), _.eLit(false))), (fnarg === gen.ScriptPrimType.Number || this.typeOwn(this.b.typeRef(fnarg))) ? [
                             _.iRet(_.eTup(_.eZilch(), _.eLit(false))),
                         ] : []),
-                        _.iRet(_.eTup(_.eCall(_.n(__.fn), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
+                        _.iRet(_.eTup(_.eCall(_.n("fn"), ...fnargs.map((_a, idx) => _.n('__' + idx))), _.eLit(true))),
                     ]))))))]))));
             }
         }
@@ -825,19 +823,19 @@ class Gen extends gen.Gen {
             let call = _.eCall(_.n(arg.Name), ...argtypes.map((_a, i) => _.n(`_a_${i}_`)));
             let onerrret;
             if (rettype)
-                [call, onerrret] = [_.iSet(_.n(__.ret), call), _.eTup(_.eZilch(), _.eLit(false))];
+                [call, onerrret] = [_.iSet(_.n("ret"), call), _.eTup(_.eZilch(), _.eLit(false))];
             const handler = _.eFunc([{ Name: "args", Type: { ValsOf: TypeRefPrim.Any } }], rettype ? { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] } : TypeRefPrim.Bool, ...[
-                _.iVar(__.ok, TypeRefPrim.Bool),
+                _.iVar("ok", TypeRefPrim.Bool),
                 _.iIf(_.oNeq(_.eLit(numargs), _.eLen(_.n("args"), true)), [
-                    _.iRet(rettype ? _.eTup(_.eZilch(), _.n(__.ok)) : _.n(__.ok)),
+                    _.iRet(rettype ? _.eTup(_.eZilch(), _.n("ok")) : _.n("ok")),
                 ]),
             ].concat(..._.WHEN(rettype, () => [
-                _.iVar(__.ret, TypeRefPrim.Any),
-            ])).concat(_.EACH(argtypes, (atype, i) => _.LET(`_a_${i}_`, aname => [_.iVar(aname, atype)].concat(this.convOrRet(aname, _.oIdx(_.n("args"), _.eLit(i)), atype, __.ok, onerrret))))).concat(call, _.iRet(rettype ? _.eTup(_.n(__.ret), _.eLit(true)) : _.eLit(true))));
+                _.iVar("ret", TypeRefPrim.Any),
+            ])).concat(_.EACH(argtypes, (atype, i) => _.LET(`_a_${i}_`, aname => [_.iVar(aname, atype)].concat(this.convOrRet(aname, _.oIdx(_.n("args"), _.eLit(i)), atype, "ok", onerrret))))).concat(call, _.iRet(rettype ? _.eTup(_.n("ret"), _.eLit(true)) : _.eLit(true))));
             body.push(_.iVar(fnid, TypeRefPrim.String), _.iIf(_.oIsnt(_.n(arg.Name)), [
                 _.eCall(_.n("OnError"), impl, _.eLit(`${ifaceOrStruct.Name}.${method.Name}: the '${arg.Name}' arg (which is not optional but required) was not passed by the caller`), _.eZilch()),
                 _.iRet(_.eZilch()),
-            ]), _.iSet(_.n(fnid), _.eCall(_.oDot(impl, _.n("nextSub")), rettype ? _.eZilch() : handler, rettype ? handler : _.eZilch())), _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n("Data")), _.eLit(arg.name)), _.n(fnid)));
+            ]), _.iSet(_.n(fnid), _.eCall(_.oDot(impl, _.n("nextSub")), rettype ? _.eZilch() : handler, rettype ? handler : _.eZilch())), _.iSet(_.oIdx(_.oDot(_.n("msg"), _.n("Data")), _.eLit(arg.name)), _.n(fnid)));
             return fnid;
         };
         if ((!method.Type) || method.Type.From.length !== 1 || method.Type.To || method.Type.From[0].To)
@@ -856,7 +854,7 @@ class Gen extends gen.Gen {
                             _.iIf(_.oEq(_.eLit(""), _.oDot(_.n(arg.Name), _.n("fnId"))), [
                                 _.iLock(_.eThis(), _.iSet(_.oDot(_.n(arg.Name), _.n("fnId")), _.eCall(_.oDot(impl, _.n("nextFuncId"))))),
                             ]),
-                            _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n("Data")), _.eLit(arg.name)), _.oDot(_.n(arg.Name), _.n("fnId"))),
+                            _.iSet(_.oIdx(_.oDot(_.n("msg"), _.n("Data")), _.eLit(arg.name)), _.oDot(_.n(arg.Name), _.n("fnId"))),
                         ]));
                     else if (this.typeFunc(arg.Type)) {
                         const fnid = eventlike(arg);
@@ -879,7 +877,7 @@ class Gen extends gen.Gen {
                         }
                         const twinarg = twinargs[arg.Name];
                         if (!(arg.Name === this.options.idents.dispObjCtorArg && this.typeMaybe(arg.Type))) {
-                            let set = _.iSet(_.oIdx(_.oDot(_.n(__.msg), _.n("Data")), _.eLit((arg.name && arg.name.length) ? arg.name : arg.Name)), _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name));
+                            let set = _.iSet(_.oIdx(_.oDot(_.n("msg"), _.n("Data")), _.eLit((arg.name && arg.name.length) ? arg.name : arg.Name)), _.n((twinarg && twinarg.altName && twinarg.altName.length) ? twinarg.altName : arg.Name));
                             if (arg.fromPrep && arg.fromPrep.optional && !this.options.unMaybeOutgoingTypes.includes(arg.Type)) {
                                 const town = this.typeOwn(this.typeUnMaybe(arg.Type));
                                 const tenum = (town && town.Name && town.Name.length) ? this.allEnums.find(_ => _.Name === town.Name) : null;
@@ -890,7 +888,7 @@ class Gen extends gen.Gen {
                             body.push(set);
                         }
                     }
-        body.push(_.iVar(__.onresp, { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }), _.iVar(__.onret, method.Type.From[0]));
+        body.push(_.iVar("onresp", { From: [TypeRefPrim.Any], To: TypeRefPrim.Bool }), _.iVar("onret", method.Type.From[0]));
         // const meprop = (method.fromPrep && method.fromPrep.fromOrig) ? method.fromPrep.fromOrig.decl as gen.MemberProp : null
         // const isprop = meprop && meprop.PropType
         const isprops = method.fromPrep && method.fromPrep.isProps;
@@ -898,34 +896,34 @@ class Gen extends gen.Gen {
         let dsttype = (isval || isprops) ? this.typeUnMaybe(rettype) : rettype;
         if (this.typeMaybe(dsttype) && !this.typeMaybe(dsttype).Maybe)
             dsttype = null;
-        body.push(_.iSet(_.n(__.onresp), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, ..._.WHEN(dsttype, () => [
-            _.iVar(__.ok, TypeRefPrim.Bool),
-            _.iVar(__.result, dsttype),
-            _.iIf(_.oIs(_.n(__.payload)), this.convOrRet(__.result, _.n(__.payload), dsttype, __.ok), _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => [])),
-            _.iBlock(..._.WHEN(isdisp, () => [_.iIf(_.oIs(_.n(__.onret)), [
-                    _.eCall(_.n(__.onret), _.eCall(_.oDot(_.n(__.result), _.n('bind')), ...[impl].concat(...evtsubfnids.map(fnid => _.n(fnid))))),
+        body.push(_.iSet(_.n("onresp"), _.eFunc([{ Name: "payload", Type: TypeRefPrim.Any }], TypeRefPrim.Bool, ..._.WHEN(dsttype, () => [
+            _.iVar("ok", TypeRefPrim.Bool),
+            _.iVar("result", dsttype),
+            _.iIf(_.oIs(_.n("payload")), this.convOrRet("result", _.n("payload"), dsttype, "ok"), _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => [])),
+            _.iBlock(..._.WHEN(isdisp, () => [_.iIf(_.oIs(_.n("onret")), [
+                    _.eCall(_.n("onret"), _.eCall(_.oDot(_.n("result"), _.n('bind')), ...[impl].concat(...evtsubfnids.map(fnid => _.n(fnid))))),
                 ])], () => (!(method.IsObjCtor && method.IsObjCtor.length))
-                ? [_.iIf(_.oIs(_.n(__.onret)), [
-                        _.eCall(_.n(__.onret), _.n(__.result)),
+                ? [_.iIf(_.oIs(_.n("onret")), [
+                        _.eCall(_.n("onret"), _.n("result")),
                     ])]
                 : _.WHEN(method.Args.some(_ => _.Name === this.options.idents.dispObjCtorArg && this.typeMaybe(_.Type)), () => [_.iIf(_.oIs(_.n(this.options.idents.dispObjCtorArg)), [
-                        _.eCall(_.oDot(_.n(__.result), _.n("Set")), _.oDeref(_.n(this.options.idents.dispObjCtorArg))),
-                    ])], () => []).concat(...[_.eCall(_.eCall(_.oDot(_.n(__.result), _.n("Get"))), _.eFunc([{ Name: __.state, Type: { Name: method.IsObjCtor + "Bag" } }], null, _.iIf(_.oIs(_.n(__.onret)), [
-                        _.eCall(_.n(__.onret), _.n(__.result), _.n(__.state)),
+                        _.eCall(_.oDot(_.n("result"), _.n("Set")), _.oDeref(_.n(this.options.idents.dispObjCtorArg))),
+                    ])], () => []).concat(...[_.eCall(_.eCall(_.oDot(_.n("result"), _.n("Get"))), _.eFunc([{ Name: "state", Type: { Name: method.IsObjCtor + "Bag" } }], null, _.iIf(_.oIs(_.n("onret")), [
+                        _.eCall(_.n("onret"), _.n("result"), _.n("state")),
                     ])))]))),
             _.iRet(_.eLit(true)),
         ], () => [
-            _.iIf(_.oIs(_.n(__.payload)), [_.iRet(_.eLit(false))]),
-            _.iIf(_.oIs(_.n(__.onret)), [_.eCall(_.n(__.onret))]),
+            _.iIf(_.oIs(_.n("payload")), [_.iRet(_.eLit(false))]),
+            _.iIf(_.oIs(_.n("onret")), [_.eCall(_.n("onret"))]),
             _.iRet(_.eLit(true)),
         ]))));
         if (!funcfields.length)
-            body.push(_.eCall(_.oDot(impl, _.n('send')), _.n(__.msg), _.n(__.onresp)));
+            body.push(_.eCall(_.oDot(impl, _.n('send')), _.n("msg"), _.n("onresp")));
         else
-            body.push(_.eCall(_.oDot(impl, _.n('send')), _.n(__.msg), _.eFunc([{ Name: __.payload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iIf(_.oNeq(_.eLen(_.n(__.fnids), false), _.eLit(0)), [
-                _.iLock(_.eThis(), _.iFor(_.n(__.fnid), _.n(__.fnids), _.iDel(_.oDot(impl, _.n('cbOther')), _.n(__.fnid)))),
-            ]), _.iRet(_.oOr(_.oIsnt(_.n(__.onresp)), _.eCall(_.n(__.onresp), _.n(__.payload)))))));
-        body.push(_.iRet(_.eFunc(method.Type.From.map((_, i) => ({ Name: "a" + i, Type: _ })), null, _.iSet(_.n(__.onret), _.n("a0")))));
+            body.push(_.eCall(_.oDot(impl, _.n('send')), _.n("msg"), _.eFunc([{ Name: "payload", Type: TypeRefPrim.Any }], TypeRefPrim.Bool, _.iIf(_.oNeq(_.eLen(_.n("fnids"), false), _.eLit(0)), [
+                _.iLock(_.eThis(), _.iFor(_.n("fnid"), _.n("fnids"), _.iDel(_.oDot(impl, _.n('cbOther')), _.n("fnid")))),
+            ]), _.iRet(_.oOr(_.oIsnt(_.n("onresp")), _.eCall(_.n("onresp"), _.n("payload")))))));
+        body.push(_.iRet(_.eFunc(method.Type.From.map((_, i) => ({ Name: "a" + i, Type: _ })), null, _.iSet(_.n("onret"), _.n("a0")))));
     }
     emitIntro() {
         return this.lines("#", "# NOTE, this is not a CoffeeScript file: the .coffee extension is solely", "# for the convenience of syntax-highlighting in editors & source viewers.", "#", "# A debug-print of our in-memory-only intermediate-representation prepared", "# for code-gens that choose to inherit from `gen-ast.Gen` to stay lean &", "# mean & low on LoCs for maintainability & ease of porting & consistency.", "#", "# Again, all the below is just a debug-print: it's never to be parsed (and", "# the in-mem IR never to be interpreted, other than for actual code-gen).", "# Just a dump of all the structures available to a code-gen for emitting.", "#", "", "");
@@ -1076,9 +1074,8 @@ class Gen extends gen.Gen {
                 }
                 let propsfields = struct.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec));
                 if (propsfields && propsfields.length) {
-                    const nameget = gen.pickName("get", this.options.objPropsGetSetNamePicks, struct.fromPrep.fields), nameset = gen.pickName("set", this.options.objPropsGetSetNamePicks, struct.fromPrep.fields);
                     const mget = {
-                        name: "appzObjPropsGet", Name: this.nameRewriters.methods(nameget), Args: [],
+                        name: "appzObjPropsGet", Name: this.nameRewriters.methods("get"), Args: [],
                         Type: { From: [{ From: [{ Name: struct.Name + "Bag" }], To: null }], To: null },
                         Docs: [{ Lines: ["Obtains this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
                     };
@@ -1087,7 +1084,7 @@ class Gen extends gen.Gen {
                     propsfields = propsfields.filter(_ => !_.readOnly);
                     if (propsfields.length) {
                         const mset = {
-                            name: "appzObjPropsSet", Name: this.nameRewriters.methods(nameset),
+                            name: "appzObjPropsSet", Name: this.nameRewriters.methods("set"),
                             Args: [{ Name: "allUpdates", Type: { Name: struct.Name + "Bag" } }],
                             Type: { From: [{ From: [null], To: null }], To: null },
                             Docs: [{ Lines: ["Updates this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
