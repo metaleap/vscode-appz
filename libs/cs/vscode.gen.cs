@@ -594,10 +594,10 @@ namespace VscAppz {
 		/// 
 		/// `name` ── Human-readable string which will be used to represent the channel in the UI.
 		/// 
-		/// `return` ── A thenable that resolves when the `OutputChannel` has been created and initialized.
+		/// `return` ── A thenable that resolves to the newly created `OutputChannel`.
 		/// </summary>
 		/// <param name="name">Human-readable string which will be used to represent the channel in the UI.</param>
-		/// <return>A thenable that resolves when the `OutputChannel` has been created and initialized.</return>
+		/// <return>A thenable that resolves to the newly created `OutputChannel`.</return>
 		Action<Action<OutputChannel, OutputChannelBag>> CreateOutputChannel(string name = default);
 
 		/// <summary>

@@ -570,7 +570,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             if (me && me.Name && me.Name.length && me.Args !== undefined && me.Args !== null) {
                 let docarg = "", docret = ""
                 if (me.IsObjCtor)
-                    [docarg, docret] = ["if specified, the newly created `" + me.IsObjCtor + "` will be initialized with all the property values herein well before your return-continuation, if any, is invoked.", "A thenable that resolves when the `" + me.IsObjCtor + "` has been created and initialized."]
+                    docret = "A thenable that resolves to the newly created `" + me.IsObjCtor + "`."
                 else if (me.IsObjEvt)
                     [docarg, docret] = ["will be invoked whenever this event fires; mandatory, not optional.", "A `Disposable` that will unsubscribe `handler` from the `" + me.Name + "` event on `Dispose`."]
                 else if (me.Args.length === 1 && me.Args[0].Name === "listener" && this.typeFunc(me.Args[0].Type) && this.typeFunc(me.Type) && gen.typePromOf(me.fromPrep.args.find(_ => _.isFromRetThenable).typeSpec, "Disposable"))

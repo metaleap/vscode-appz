@@ -1389,7 +1389,7 @@ Creates a new [output channel](https://code.visualstudio.com/api/references/vsco
 
 `name` ── Human-readable string which will be used to represent the channel in the UI.
 
-`return` ── A thenable that resolves when the `OutputChannel` has been created and initialized.
+`return` ── A thenable that resolves to the newly created `OutputChannel`.
 
 ##### Parameters
 

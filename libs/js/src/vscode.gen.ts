@@ -511,7 +511,7 @@ export interface Window {
      * Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 
      * @param name Human-readable string which will be used to represent the channel in the UI.
-     * @return A thenable that resolves when the `OutputChannel` has been created and initialized.
+     * @return A thenable that resolves to the newly created `OutputChannel`.
      */
     CreateOutputChannel: (name: string) => (_: (_: OutputChannel, __: OutputChannelBag) => void) => void
 

@@ -2022,7 +2022,7 @@ type Window interface {
 	//
 	// `name` ── Human-readable string which will be used to represent the channel in the UI.
 	//
-	// `return` ── A thenable that resolves when the `OutputChannel` has been created and initialized.
+	// `return` ── A thenable that resolves to the newly created `OutputChannel`.
 	CreateOutputChannel(name string) func(func(OutputChannel, OutputChannelBag))
 
 	// Create a TextEditorDecorationType that can be used to add decorations to text editors.

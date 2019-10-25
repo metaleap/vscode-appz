@@ -635,10 +635,10 @@
             
             `name` ── Human-readable string which will be used to represent the channel in the UI.
             
-            `return` ── A thenable that resolves when the `OutputChannel` has been created and initialized.
+            `return` ── A thenable that resolves to the newly created `OutputChannel`.
             </summary>
             <param name="name">Human-readable string which will be used to represent the channel in the UI.</param>
-            <return>A thenable that resolves when the `OutputChannel` has been created and initialized.</return>
+            <return>A thenable that resolves to the newly created `OutputChannel`.</return>
         </member>
         <member name="M:VscAppz.IWindow.CreateTextEditorDecorationType(VscAppz.DecorationRenderOptions)">
             <summary>
