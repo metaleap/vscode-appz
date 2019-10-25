@@ -489,12 +489,6 @@ function handle(msg, prog, remoteCancellationTokens) {
                     thisStatusBarItem.hide();
                     return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && (thisStatusBarItem.color["id"])) ? (thisStatusBarItem.color["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command });
                 }
-                case "dispose": {
-                    const ret = thisStatusBarItem.dispose();
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
                 case "appzObjPropsGet": {
                     return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && (thisStatusBarItem.color["id"])) ? (thisStatusBarItem.color["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command });
                 }
@@ -547,14 +541,14 @@ function handle(msg, prog, remoteCancellationTokens) {
                     thisOutputChannel.hide();
                     return Promise.resolve({ name: thisOutputChannel.name });
                 }
-                case "dispose": {
-                    const ret = thisOutputChannel.dispose();
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
                 case "appzObjPropsGet": {
                     return Promise.resolve({ name: thisOutputChannel.name });
+                }
+                case "appzObjPropsSet": {
+                    const allUpdates = msg.data['allUpdates'];
+                    if (!allUpdates)
+                        return Promise.reject(msg.data);
+                    return Promise.resolve();
                 }
                 default:
                     throw methodname;
@@ -564,14 +558,14 @@ function handle(msg, prog, remoteCancellationTokens) {
             if (!thisTextEditorDecorationType)
                 throw "Called vscode.TextEditorDecorationType." + methodname + " for an already disposed-and-forgotten instance";
             switch (methodname) {
-                case "dispose": {
-                    const ret = thisTextEditorDecorationType.dispose();
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
                 case "appzObjPropsGet": {
                     return Promise.resolve({ key: thisTextEditorDecorationType.key });
+                }
+                case "appzObjPropsSet": {
+                    const allUpdates = msg.data['allUpdates'];
+                    if (!allUpdates)
+                        return Promise.reject(msg.data);
+                    return Promise.resolve();
                 }
                 default:
                     throw methodname;
@@ -641,12 +635,6 @@ function handle(msg, prog, remoteCancellationTokens) {
                         return undefined;
                     };
                     const ret = thisInputBox.onDidHide(arg_handler);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "dispose": {
-                    const ret = thisInputBox.dispose();
                     const retdisp = ret;
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
@@ -778,12 +766,6 @@ function handle(msg, prog, remoteCancellationTokens) {
                         return undefined;
                     };
                     const ret = thisQuickPick.onDidHide(arg_handler);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "dispose": {
-                    const ret = thisQuickPick.dispose();
                     const retdisp = ret;
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));

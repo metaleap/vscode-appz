@@ -489,12 +489,6 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					thisStatusBarItem.hide()
 					return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && ((thisStatusBarItem.color as any)["id"])) ? ((thisStatusBarItem.color as any)["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command })
 				}
-				case "dispose": {
-					const ret = thisStatusBarItem.dispose()
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
 				case "appzObjPropsGet": {
 					return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && ((thisStatusBarItem.color as any)["id"])) ? ((thisStatusBarItem.color as any)["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command })
 				}
@@ -547,14 +541,14 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					thisOutputChannel.hide()
 					return Promise.resolve({ name: thisOutputChannel.name })
 				}
-				case "dispose": {
-					const ret = thisOutputChannel.dispose()
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
 				case "appzObjPropsGet": {
 					return Promise.resolve({ name: thisOutputChannel.name })
+				}
+				case "appzObjPropsSet": {
+					const allUpdates = msg.data['allUpdates'] as { [_:string]: any }
+					if (!allUpdates)
+						return Promise.reject(msg.data)
+					return Promise.resolve()
 				}
 				default:
 					throw methodname
@@ -564,14 +558,14 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 			if (!thisTextEditorDecorationType)
 				throw "Called vscode.TextEditorDecorationType." + methodname + " for an already disposed-and-forgotten instance"
 			switch (methodname) {
-				case "dispose": {
-					const ret = thisTextEditorDecorationType.dispose()
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
 				case "appzObjPropsGet": {
 					return Promise.resolve({ key: thisTextEditorDecorationType.key })
+				}
+				case "appzObjPropsSet": {
+					const allUpdates = msg.data['allUpdates'] as { [_:string]: any }
+					if (!allUpdates)
+						return Promise.reject(msg.data)
+					return Promise.resolve()
 				}
 				default:
 					throw methodname
@@ -641,12 +635,6 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 						return undefined
 					}
 					const ret = thisInputBox.onDidHide(arg_handler, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "dispose": {
-					const ret = thisInputBox.dispose()
 					const retdisp = ret as any as vscode.Disposable
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
@@ -778,12 +766,6 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 						return undefined
 					}
 					const ret = thisQuickPick.onDidHide(arg_handler, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "dispose": {
-					const ret = thisQuickPick.dispose()
 					const retdisp = ret as any as vscode.Disposable
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
