@@ -1999,12 +1999,6 @@ QuickInputButton: class
     # JSON FLAGS: {"Name":"tooltip","Required":false,"Excluded":false}
     Tooltip: ?string
 
-    # my:
-    # Free-form custom data, preserved across a roundtrip.
-    #
-    # JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
-    My: ?dict
-
 
 
 
@@ -2286,12 +2280,6 @@ InputBoxState: class
     #
     # JSON FLAGS: {"Name":"password","Required":false,"Excluded":false}
     Password: bool
-
-    # buttons:
-    # Buttons for actions in the UI.
-    #
-    # JSON FLAGS: {"Name":"buttons","Required":false,"Excluded":false}
-    Buttons: ?[QuickInputButton]
 
     # prompt:
     # An optional prompt text providing some ask or explanation to the user.
@@ -4885,59 +4873,6 @@ InputBox·OnDidAccept: (handler:(InputBoxState->void) -> ((?Disposable->void)->v
 
 
 
-InputBox·OnDidTriggerButton: (handler:(QuickInputButton->InputBoxState->void) -> ((?Disposable->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "InputBox.onDidTriggerButton"
-    msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
-    var _fnid_handler of string
-    if =!handler
-        OnError(this.disp.impl, "InputBox.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
-        return null
-    _fnid_handler = this.disp.impl.nextSub((args:[any] -> bool)
-        var ok of bool
-        if 2 != args·len
-            return ok
-        var _a_0_ of QuickInputButton
-        _a_0_ = QuickInputButton·new
-        ok = _a_0_.populateFrom(args@0)
-        if !ok
-            return false
-        var _a_1_ of InputBoxState
-        _a_1_ = InputBoxState·new
-        ok = _a_1_.populateFrom(args@1)
-        if !ok
-            return false
-        handler(_a_0_, _a_1_)
-        return true
-    , null)
-    msg.Data@"handler" = _fnid_handler
-    this.disp.addSub(_fnid_handler)
-    var onresp of (any->bool)
-    var onret of (?Disposable->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?Disposable
-        if =?payload
-            result = ?Disposable·new
-            ok = result.populateFrom(payload)
-            if !ok
-                return false
-        else
-            return false
-            if =?onret
-                onret(result.bind(this.disp.impl, _fnid_handler))
-        return true
-    
-    this.disp.impl.send(msg, onresp)
-    return (a0:(?Disposable->void) -> void)
-        onret = a0
-    
-
-
-
-
 InputBox·Show: ( -> ((?InputBoxState->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
@@ -6095,26 +6030,6 @@ InputBoxState·populateFrom: (payload:any -> bool)
             if !ok
                 return false
         this.Password = password
-    [val, ok] = it@?"buttons"
-    if ok
-        var buttons of ?[QuickInputButton]
-        if =?val
-            var __coll__buttons of [any]
-            [__coll__buttons, ok] = ((val)·([any]))
-            if !ok
-                return false
-            buttons = [QuickInputButton]·new(__coll__buttons·len)
-            var __idx__buttons of int
-            __idx__buttons = 0
-            for __item__buttons in __coll__buttons
-                var __val__buttons of QuickInputButton
-                __val__buttons = QuickInputButton·new
-                ok = __val__buttons.populateFrom(__item__buttons)
-                if !ok
-                    return false
-                buttons@__idx__buttons = __val__buttons
-                __idx__buttons = __idx__buttons + 1
-        this.Buttons = buttons
     [val, ok] = it@?"prompt"
     if ok
         var prompt of string
@@ -6183,46 +6098,6 @@ InputBoxState·populateFrom: (payload:any -> bool)
             if !ok
                 return false
         this.IgnoreFocusOut = ignoreFocusOut
-    return true
-
-
-
-
-QuickInputButton·populateFrom: (payload:any -> bool)
-    var it of dict
-    var ok of bool
-    var val of any
-    [it, ok] = ((payload)·(dict))
-    if !ok
-        return false
-    [val, ok] = it@?"iconPath"
-    if ok
-        var iconPath of string
-        if =?val
-            [iconPath, ok] = ((val)·(string))
-            if !ok
-                return false
-        this.IconPath = iconPath
-    else
-        return false
-    [val, ok] = it@?"tooltip"
-    if ok
-        var tooltip of ?string
-        if =?val
-            var _tooltip_ of string
-            [_tooltip_, ok] = ((val)·(string))
-            if !ok
-                return false
-            tooltip = &_tooltip_
-        this.Tooltip = tooltip
-    [val, ok] = it@?"my"
-    if ok
-        var my of ?dict
-        if =?val
-            [my, ok] = ((val)·(?dict))
-            if !ok
-                return false
-        this.My = my
     return true
 
 

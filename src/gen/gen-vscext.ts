@@ -57,56 +57,58 @@ export class Gen extends gen.Gen implements gen.IGen {
             src += "\t\t\t\t\tthrow (methodname)\n"
             src += "\t\t\t}\n"
         }
-        for (const it of prep.structs.filter(_ => _.isDispObj)) {
-            this.typeNamesUsed[it.name] = true
-            src += `\t\tcase "${it.name}":\n`
-            src += `\t\t\tconst this${it.name} = prog.objects[msg.data[""]] as ${it.name}\n`
-            src += `\t\t\tif (!this${it.name})\n`
-            src += `\t\t\t\tthrow "Called ${this.pkg}.${it.name}." + methodname + " for an already disposed-and-forgotten instance"\n`
-            src += "\t\t\tswitch (methodname) {\n"
-            let tfun: [gen.TypeSpec[], gen.TypeSpec]
-            let hasgets = false, hassets = false
-            for (const mem of it.fields)
-                if (mem.name !== "dispose" && (tfun = gen.typeFun(mem.typeSpec))) {
-                    const orig = mem.fromOrig
-                    const isevt = (ts.isPropertySignature(orig) && ts.isTypeReferenceNode(orig.type) && orig.type.typeName.getText() === "Event")
-                    const isvoidmethod = (mem.name !== "dispose" && !isevt)
-                    const args = isevt ? [
-                        { name: "handler", optional: false, typeSpec: (mem.typeSpec as gen.TypeSpecFun).From[0] },
-                    ] : (tfun[0].map((_, i): gen.PrepArg => gen.argFrom(_, (orig as ts.MethodSignature).parameters[i])).filter(_ => !_.isFromRetThenable))
-                    src += `\t\t\t\tcase "${mem.name}": {\n`
-                    for (const arg of args)
-                        src += this.argsSrc(prep, arg, isevt, it)
-                    src += this.retArgsSrc(`this${it.name}.${mem.name}`, args, (!isvoidmethod) ? "" : ("{ " + this.propSrc(it) + " }"))
+        for (const it of prep.structs)
+            if (it.isDispObj) {
+                this.typeNamesUsed[it.name] = true
+                src += `\t\tcase "${it.name}":\n`
+                src += `\t\t\tconst this${it.name} = prog.objects[msg.data[""]] as ${it.name}\n`
+                src += `\t\t\tif (!this${it.name})\n`
+                src += `\t\t\t\tthrow "Called ${this.pkg}.${it.name}." + methodname + " for an already disposed-and-forgotten instance"\n`
+                src += "\t\t\tswitch (methodname) {\n"
+                let tfun: [gen.TypeSpec[], gen.TypeSpec]
+                let hasgets = false, hassets = false
+                for (const mem of it.fields)
+                    if (!(tfun = gen.typeFun(mem.typeSpec)))
+                        [hasgets, hassets] = [true, hassets || !mem.readOnly]
+                    else if (mem.name !== "dispose") {
+                        const orig = mem.fromOrig
+                        const isevt = (ts.isPropertySignature(orig) && ts.isTypeReferenceNode(orig.type) && orig.type.typeName.getText() === "Event")
+                        const isvoidmethod = (mem.name !== "dispose" && !isevt)
+                        const args = isevt ? [
+                            { name: "handler", optional: false, typeSpec: (mem.typeSpec as gen.TypeSpecFun).From[0] },
+                        ] : (tfun[0].map((_, i): gen.PrepArg => gen.argFrom(_, (orig as ts.MethodSignature).parameters[i])).filter(_ => !_.isFromRetThenable))
+                        src += `\t\t\t\tcase "${mem.name}": {\n`
+                        for (const arg of args)
+                            src += this.argsSrc(prep, arg, isevt, it)
+                        src += this.retArgsSrc(`this${it.name}.${mem.name}`, args, (!isvoidmethod) ? "" : ("{ " + this.propSrc(it) + " }"))
+                        src += "\t\t\t\t}\n"
+                    }
+                if (hasgets) {
+                    src += '\t\t\t\tcase "appzObjPropsGet": {\n'
+                    src += "\t\t\t\t\treturn Promise.resolve({ " + this.propSrc(it) + " })\n"
                     src += "\t\t\t\t}\n"
-                } else
-                    [hasgets, hassets] = [true, hassets || !mem.readOnly]
-            if (hasgets) {
-                src += '\t\t\t\tcase "appzObjPropsGet": {\n'
-                src += "\t\t\t\t\treturn Promise.resolve({ " + this.propSrc(it) + " })\n"
-                src += "\t\t\t\t}\n"
-            }
-            if (hassets) {
-                src += '\t\t\t\tcase "appzObjPropsSet": {\n'
-                src += "\t\t\t\t\tconst allUpdates = msg.data['allUpdates'] as { [_:string]: any }\n"
-                src += "\t\t\t\t\tif (!allUpdates)\n\t\t\t\t\t\treturn Promise.reject(msg.data)\n"
-                for (const prop of it.fields.filter(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec))) {
-                    const tcol = gen.typeNames(prop.typeSpec).includes("ThemeColor")
-                    for (const tname of gen.typeNames(prop.typeSpec))
-                        this.typeNamesUsed[tname] = true
-                    src += `\t\t\t\t\tconst prop_${prop.name} = allUpdates["${prop.name}"] as ${this.typeSpec(prop.typeSpec)}\n`
-                    src += `\t\t\t\t\tif (prop_${prop.name} !== undefined && prop_${prop.name} !== this${it.name}.${prop.name})\n\t\t\t\t\t\tthis${it.name}.${prop.name} = `
-                        + ((!tcol) ? `prop_${prop.name}`
-                            : (`(!(prop_${prop.name} && prop_${prop.name}.length)) ? undefined : prop_${prop.name}.startsWith("#") ? prop_${prop.name} : new ${this.pkg}.ThemeColor(prop_${prop.name})`))
-                        + "\n"
                 }
-                src += "\t\t\t\t\treturn Promise.resolve()\n"
-                src += "\t\t\t\t}\n"
+                if (hassets) {
+                    src += '\t\t\t\tcase "appzObjPropsSet": {\n'
+                    src += "\t\t\t\t\tconst allUpdates = msg.data['allUpdates'] as { [_:string]: any }\n"
+                    src += "\t\t\t\t\tif (!allUpdates)\n\t\t\t\t\t\treturn Promise.reject(msg.data)\n"
+                    for (const prop of it.fields.filter(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec))) {
+                        const tcol = gen.typeNames(prop.typeSpec).includes("ThemeColor")
+                        for (const tname of gen.typeNames(prop.typeSpec))
+                            this.typeNamesUsed[tname] = true
+                        src += `\t\t\t\t\tconst prop_${prop.name} = allUpdates["${prop.name}"] as ${this.typeSpec(prop.typeSpec)}\n`
+                        src += `\t\t\t\t\tif (prop_${prop.name} !== undefined && prop_${prop.name} !== this${it.name}.${prop.name})\n\t\t\t\t\t\tthis${it.name}.${prop.name} = `
+                            + ((!tcol) ? `prop_${prop.name}`
+                                : (`(!(prop_${prop.name} && prop_${prop.name}.length)) ? undefined : prop_${prop.name}.startsWith("#") ? prop_${prop.name} : new ${this.pkg}.ThemeColor(prop_${prop.name})`))
+                            + "\n"
+                    }
+                    src += "\t\t\t\t\treturn Promise.resolve()\n"
+                    src += "\t\t\t\t}\n"
+                }
+                src += "\t\t\t\tdefault:\n"
+                src += "\t\t\t\t\tthrow methodname\n"
+                src += "\t\t\t}\n"
             }
-            src += "\t\t\t\tdefault:\n"
-            src += "\t\t\t\t\tthrow methodname\n"
-            src += "\t\t\t}\n"
-        }
 
         src += "\t\tdefault:\n"
         src += "\t\t\tthrow (apiname)\n"

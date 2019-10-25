@@ -1320,9 +1320,6 @@ type QuickInputButton struct {
 
 	// An optional tooltip.
 	Tooltip string `json:"tooltip,omitempty"`
-
-	// Free-form custom data, preserved across a roundtrip.
-	My dict `json:"my,omitempty"`
 }
 
 // A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user pick an item from a
@@ -1499,9 +1496,6 @@ type InputBoxState struct {
 
 	// If the input value should be hidden. Defaults to false.
 	Password bool `json:"password,omitempty"`
-
-	// Buttons for actions in the UI.
-	Buttons []QuickInputButton `json:"buttons,omitempty"`
 
 	// An optional prompt text providing some ask or explanation to the user.
 	Prompt string `json:"prompt,omitempty"`
@@ -4401,69 +4395,6 @@ func (me *InputBox) OnDidAccept(handler func(InputBoxState)) func(func(*Disposab
 	}
 }
 
-// An event signaling when a button was triggered.
-// 
-// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
-// 
-// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidTriggerButton` event on `Dispose`.
-func (me *InputBox) OnDidTriggerButton(handler func(QuickInputButton, InputBoxState)) func(func(*Disposable)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "InputBox.onDidTriggerButton"
-	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
-	var _fnid_handler string
-	if (nil == handler) {
-		OnError(me.disp.impl, "InputBox.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
-		return nil
-	}
-	_fnid_handler = me.disp.impl.nextSub(func(args []any) bool {
-		var ok bool
-		if 2 != len(args) {
-			return ok
-		}
-		var _a_0_ QuickInputButton
-		ok = _a_0_.populateFrom(args[0])
-		if !ok {
-			return false
-		}
-		var _a_1_ InputBoxState
-		ok = _a_1_.populateFrom(args[1])
-		if !ok {
-			return false
-		}
-		handler(_a_0_, _a_1_)
-		return true
-	}, nil)
-	msg.Data["handler"] = _fnid_handler
-	me.disp.addSub(_fnid_handler)
-	var onresp func(any) bool
-	var onret func(*Disposable)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *Disposable
-		if (nil != payload) {
-			result = new(Disposable)
-			ok = result.populateFrom(payload)
-			if !ok {
-				return false
-			}
-		} else {
-			return false
-		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.disp.impl, _fnid_handler))
-			}
-		}
-		return true
-	}
-	me.disp.impl.send(msg, onresp)
-	return func(a0 func(*Disposable)) {
-		onret = a0
-	}
-}
-
 // Makes the input UI visible in its current configuration. Any other input
 // UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 // 
@@ -4607,7 +4538,7 @@ func (me *InputBox) Dispose() func(func()) {
 	return me.disp.Dispose()
 }
 
-// Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+// Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 func (me *InputBox) Get() func(func(InputBoxState)) {
@@ -4640,7 +4571,7 @@ func (me *InputBox) Get() func(func(InputBoxState)) {
 	}
 }
 
-// Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+// Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 // 
 // `allUpdates` ── 
 // 
@@ -5824,30 +5755,6 @@ func (me *InputBoxState) populateFrom(payload any) bool {
 		}
 		me.Password = password
 	}
-	val, ok = it["buttons"]
-	if ok {
-		var buttons []QuickInputButton
-		if (nil != val) {
-			var __coll__buttons []any
-			__coll__buttons, ok = val.([]any)
-			if !ok {
-				return false
-			}
-			buttons = make([]QuickInputButton, len(__coll__buttons))
-			var __idx__buttons int
-			__idx__buttons = 0
-			for _, __item__buttons := range __coll__buttons {
-				var __val__buttons QuickInputButton
-				ok = __val__buttons.populateFrom(__item__buttons)
-				if !ok {
-					return false
-				}
-				buttons[__idx__buttons] = __val__buttons
-				__idx__buttons = __idx__buttons + 1
-			}
-		}
-		me.Buttons = buttons
-	}
 	val, ok = it["prompt"]
 	if ok {
 		var prompt string
@@ -5945,52 +5852,6 @@ func (me *InputBoxState) populateFrom(payload any) bool {
 			}
 		}
 		me.IgnoreFocusOut = ignoreFocusOut
-	}
-	return true
-}
-
-func (me *QuickInputButton) populateFrom(payload any) bool {
-	var it dict
-	var ok bool
-	var val any
-	it, ok = payload.(dict)
-	if !ok {
-		return false
-	}
-	val, ok = it["iconPath"]
-	if ok {
-		var iconPath string
-		if (nil != val) {
-			iconPath, ok = val.(string)
-			if !ok {
-				return false
-			}
-		}
-		me.IconPath = iconPath
-	} else {
-		return false
-	}
-	val, ok = it["tooltip"]
-	if ok {
-		var tooltip string
-		if (nil != val) {
-			tooltip, ok = val.(string)
-			if !ok {
-				return false
-			}
-		}
-		me.Tooltip = tooltip
-	}
-	val, ok = it["my"]
-	if ok {
-		var my dict
-		if (nil != val) {
-			my, ok = val.(dict)
-			if !ok {
-				return false
-			}
-		}
-		me.My = my
 	}
 	return true
 }

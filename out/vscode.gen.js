@@ -544,12 +544,6 @@ function handle(msg, prog, remoteCancellationTokens) {
                 case "appzObjPropsGet": {
                     return Promise.resolve({ name: thisOutputChannel.name });
                 }
-                case "appzObjPropsSet": {
-                    const allUpdates = msg.data['allUpdates'];
-                    if (!allUpdates)
-                        return Promise.reject(msg.data);
-                    return Promise.resolve();
-                }
                 default:
                     throw methodname;
             }
@@ -560,12 +554,6 @@ function handle(msg, prog, remoteCancellationTokens) {
             switch (methodname) {
                 case "appzObjPropsGet": {
                     return Promise.resolve({ key: thisTextEditorDecorationType.key });
-                }
-                case "appzObjPropsSet": {
-                    const allUpdates = msg.data['allUpdates'];
-                    if (!allUpdates)
-                        return Promise.reject(msg.data);
-                    return Promise.resolve();
                 }
                 default:
                     throw methodname;
@@ -581,7 +569,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         return Promise.reject(msg.data);
                     const arg_handler = (_0) => {
                         if (prog && prog.proc)
-                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }));
+                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }));
                         return undefined;
                     };
                     const ret = thisInputBox.onDidChangeValue(arg_handler);
@@ -595,7 +583,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         return Promise.reject(msg.data);
                     const arg_handler = () => {
                         if (prog && prog.proc)
-                            return prog.callBack(false, _fnid_handler, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }));
+                            return prog.callBack(false, _fnid_handler, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }));
                         return undefined;
                     };
                     const ret = thisInputBox.onDidAccept(arg_handler);
@@ -603,27 +591,13 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
-                case "onDidTriggerButton": {
-                    const _fnid_handler = msg.data['handler'];
-                    if (!(_fnid_handler && _fnid_handler.length))
-                        return Promise.reject(msg.data);
-                    const arg_handler = (_0) => {
-                        if (prog && prog.proc)
-                            return prog.callBack(false, _fnid_handler, _0, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }));
-                        return undefined;
-                    };
-                    const ret = thisInputBox.onDidTriggerButton(arg_handler);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
                 case "show": {
                     thisInputBox.show();
-                    return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut });
+                    return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut });
                 }
                 case "hide": {
                     thisInputBox.hide();
-                    return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut });
+                    return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut });
                 }
                 case "onDidHide": {
                     const _fnid_handler = msg.data['handler'];
@@ -631,7 +605,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         return Promise.reject(msg.data);
                     const arg_handler = () => {
                         if (prog && prog.proc)
-                            return prog.callBack(false, _fnid_handler, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }));
+                            return prog.callBack(false, _fnid_handler, ({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }));
                         return undefined;
                     };
                     const ret = thisInputBox.onDidHide(arg_handler);
@@ -640,7 +614,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "appzObjPropsGet": {
-                    return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, buttons: thisInputBox.buttons, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut });
+                    return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut });
                 }
                 case "appzObjPropsSet": {
                     const allUpdates = msg.data['allUpdates'];
@@ -655,9 +629,6 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const prop_password = allUpdates["password"];
                     if (prop_password !== undefined && prop_password !== thisInputBox.password)
                         thisInputBox.password = prop_password;
-                    const prop_buttons = allUpdates["buttons"];
-                    if (prop_buttons !== undefined && prop_buttons !== thisInputBox.buttons)
-                        thisInputBox.buttons = prop_buttons;
                     const prop_prompt = allUpdates["prompt"];
                     if (prop_prompt !== undefined && prop_prompt !== thisInputBox.prompt)
                         thisInputBox.prompt = prop_prompt;

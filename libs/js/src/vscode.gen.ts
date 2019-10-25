@@ -1923,12 +1923,6 @@ export interface InputBox extends fromJson, withDisp {
     OnDidAccept: (_: () => void) => (_: (_: Disposable) => void) => void
 
     /**
-     * An event signaling when a button was triggered.
-
-     */
-    OnDidTriggerButton: (_: (_: QuickInputButton) => void) => (_: (_: Disposable) => void) => void
-
-    /**
      * Makes the input UI visible in its current configuration. Any other input
      * UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 
@@ -1972,7 +1966,6 @@ function newInputBox (): InputBox {
     me = { populateFrom: _ => InputBox_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBox
     me.OnDidChangeValue = (a0) => InputBox_OnDidChangeValue.call(me, a0)
     me.OnDidAccept = (a0) => InputBox_OnDidAccept.call(me, a0)
-    me.OnDidTriggerButton = (a0) => InputBox_OnDidTriggerButton.call(me, a0)
     me.Show = () => InputBox_Show.call(me, )
     me.Hide = () => InputBox_Hide.call(me, )
     me.OnDidHide = (a0) => InputBox_OnDidHide.call(me, a0)
@@ -1986,7 +1979,7 @@ function newInputBox (): InputBox {
  * Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
 
  */
-export interface QuickInputButton extends fromJson {
+export interface QuickInputButton {
     /**
      * Icon for the button.
 
@@ -1998,18 +1991,6 @@ export interface QuickInputButton extends fromJson {
 
      */
     tooltip?: string
-
-    /**
-     * Free-form custom data, preserved across a roundtrip.
-
-     */
-    my?: { [_: string]: any }
-}
-
-export function newQuickInputButton (): QuickInputButton {
-    let me: QuickInputButton
-    me = { populateFrom: _ => QuickInputButton_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickInputButton
-    return me
 }
 
 /**
@@ -2406,12 +2387,6 @@ export interface InputBoxState extends fromJson {
 
      */
     password?: boolean
-
-    /**
-     * Buttons for actions in the UI.
-
-     */
-    buttons?: QuickInputButton[]
 
     /**
      * An optional prompt text providing some ask or explanation to the user.
@@ -5328,66 +5303,6 @@ function InputBox_OnDidAccept(this: InputBox, handler: (_: InputBoxState) => voi
     }
 }
 
-function InputBox_OnDidTriggerButton(this: InputBox, handler: (_: QuickInputButton, __: InputBoxState) => void): (_: (_: Disposable) => void) => void {
-    let msg: ipcMsg
-    msg = newipcMsg()
-    msg.QName = "InputBox.onDidTriggerButton"
-    msg.Data = {}
-    msg.Data[""] = this.disp.id
-    let _fnid_handler: string
-    if ((undefined === handler || null === handler)) {
-        OnError(this.disp.impl, "InputBox.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
-        return null
-    }
-    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
-        let ok: boolean
-        if (2 !== args.length) {
-            return ok
-        }
-        let _a_0_: QuickInputButton
-        _a_0_ = newQuickInputButton()
-        ok = _a_0_.populateFrom(args[0])
-        if (!ok) {
-            return false
-        }
-        let _a_1_: InputBoxState
-        _a_1_ = newInputBoxState()
-        ok = _a_1_.populateFrom(args[1])
-        if (!ok) {
-            return false
-        }
-        handler(_a_0_, _a_1_)
-        return true
-    }, null)
-    msg.Data["handler"] = _fnid_handler
-    this.disp.addSub(_fnid_handler)
-    let onresp: (_: any) => boolean
-    let onret: (_: Disposable) => void
-    onresp = (payload: any): boolean => {
-        let ok: boolean
-        let result: Disposable
-        if ((undefined !== payload && null !== payload)) {
-            result = newDisposable()
-            ok = result.populateFrom(payload)
-            if (!ok) {
-                return false
-            }
-        } else {
-            return false
-        }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler))
-            }
-        }
-        return true
-    }
-    this.disp.impl.send(msg, onresp)
-    return (a0: (_: Disposable) => void): void => {
-        onret = a0
-    }
-}
-
 function InputBox_Show(this: InputBox, ): (_: (_: InputBoxState) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
@@ -6707,31 +6622,6 @@ function InputBoxState_populateFrom(this: InputBoxState, payload: any): boolean 
         }
         this.password = password
     }
-    [val, ok] = [it["buttons"], undefined !== it["buttons"]]
-    if (ok) {
-        let buttons: QuickInputButton[]
-        if ((undefined !== val && null !== val)) {
-            let __coll__buttons: any[]
-            [__coll__buttons, ok] = [val as any[], (typeof val === "object") && (typeof val["length"] === "number")]
-            if (!ok) {
-                return false
-            }
-            buttons = new Array(__coll__buttons.length)
-            let __idx__buttons: number
-            __idx__buttons = 0
-            for (const __item__buttons of __coll__buttons) {
-                let __val__buttons: QuickInputButton
-                __val__buttons = newQuickInputButton()
-                ok = __val__buttons.populateFrom(__item__buttons)
-                if (!ok) {
-                    return false
-                }
-                buttons[__idx__buttons] = __val__buttons
-                __idx__buttons = __idx__buttons + 1
-            }
-        }
-        this.buttons = buttons
-    }
     [val, ok] = [it["prompt"], undefined !== it["prompt"]]
     if (ok) {
         let prompt: string
@@ -6823,54 +6713,6 @@ function InputBoxState_populateFrom(this: InputBoxState, payload: any): boolean 
             }
         }
         this.ignoreFocusOut = ignoreFocusOut
-    }
-    return true
-}
-
-function QuickInputButton_populateFrom(this: QuickInputButton, payload: any): boolean {
-    let it: { [_: string]: any }
-    let ok: boolean
-    let val: any
-    [it, ok] = [payload as { [_: string]: any }, typeof payload === "object"]
-    if (!ok) {
-        return false
-    }
-    [val, ok] = [it["iconPath"], undefined !== it["iconPath"]]
-    if (ok) {
-        let iconPath: string
-        if ((undefined !== val && null !== val)) {
-            [iconPath, ok] = [val as string, typeof val === "string"]
-            if (!ok) {
-                return false
-            }
-        }
-        this.iconPath = iconPath
-    } else {
-        return false
-    }
-    [val, ok] = [it["tooltip"], undefined !== it["tooltip"]]
-    if (ok) {
-        let tooltip: string
-        if ((undefined !== val && null !== val)) {
-            let _tooltip_: string
-            [_tooltip_, ok] = [val as string, typeof val === "string"]
-            if (!ok) {
-                return false
-            }
-            tooltip = _tooltip_
-        }
-        this.tooltip = tooltip
-    }
-    [val, ok] = [it["my"], undefined !== it["my"]]
-    if (ok) {
-        let my: { [_: string]: any }
-        if ((undefined !== val && null !== val)) {
-            [my, ok] = [val as { [_: string]: any }, typeof val === "object"]
-            if (!ok) {
-                return false
-            }
-        }
-        this.my = my
     }
     return true
 }

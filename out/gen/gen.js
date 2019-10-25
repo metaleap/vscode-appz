@@ -5,6 +5,7 @@ const ts = require("typescript");
 const dbgJsonPrintEnums = false, dbgJsonPrintStructs = false, dbgJsonPrintIfaces = false;
 const tmpSuppressObjMembers = {
     "QuickPick": ["onDidTriggerButton", "buttons"],
+    "InputBox": ["onDidTriggerButton", "buttons"],
 };
 exports.docStrs = {
     extBaggage: "Free-form custom data, preserved across a roundtrip.",

@@ -1765,10 +1765,6 @@ namespace VscAppz {
 		/// <summary>An optional tooltip.</summary>
 		[JsonProperty("tooltip")]
 		public string Tooltip;
-
-		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
-		[JsonProperty("my")]
-		public dict My;
 	}
 
 	/// <summary>
@@ -2000,10 +1996,6 @@ namespace VscAppz {
 		/// <summary>If the input value should be hidden. Defaults to false.</summary>
 		[JsonProperty("password")]
 		public bool Password;
-
-		/// <summary>Buttons for actions in the UI.</summary>
-		[JsonProperty("buttons")]
-		public QuickInputButton[] Buttons;
 
 		/// <summary>An optional prompt text providing some ask or explanation to the user.</summary>
 		[JsonProperty("prompt")]
@@ -5008,77 +5000,6 @@ namespace VscAppz {
 
 	public partial class InputBox {
 		/// <summary>
-		/// An event signaling when a button was triggered.
-		/// 
-		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
-		/// 
-		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidTriggerButton` event on `Dispose`.
-		/// </summary>
-		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
-		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidTriggerButton` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidTriggerButton(Action<QuickInputButton, InputBoxState> handler = default) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "InputBox.onDidTriggerButton";
-			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
-			string _fnid_handler = default;
-			if ((null == handler)) {
-				OnError(this.disp.impl, "InputBox.OnDidTriggerButton: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
-				return null;
-			}
-			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
-				bool ok = default;
-				if (2 != args.Length) {
-					return ok;
-				}
-				QuickInputButton _a_0_ = default;
-				_a_0_ = new QuickInputButton();
-				ok = _a_0_.populateFrom(args[0]);
-				if (!ok) {
-					return false;
-				}
-				InputBoxState _a_1_ = default;
-				_a_1_ = new InputBoxState();
-				ok = _a_1_.populateFrom(args[1]);
-				if (!ok) {
-					return false;
-				}
-				handler(_a_0_, _a_1_);
-				return true;
-			}, null);
-			msg.Data["handler"] = _fnid_handler;
-			this.disp.addSub(_fnid_handler);
-			Func<any, bool> onresp = default;
-			Action<Disposable> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				Disposable result = default;
-				if ((null != payload)) {
-					result = new Disposable();
-					ok = result.populateFrom(payload);
-					if (!ok) {
-						return false;
-					}
-				} else {
-					return false;
-				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.disp.impl, _fnid_handler));
-					}
-				}
-				return true;
-			};
-			this.disp.impl.send(msg, onresp);
-			return (Action<Disposable> a0) => {
-				onret = a0;
-			};
-		}
-	}
-
-	public partial class InputBox {
-		/// <summary>
 		/// Makes the input UI visible in its current configuration. Any other input
 		/// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 		/// 
@@ -5246,7 +5167,7 @@ namespace VscAppz {
 
 	public partial class InputBox {
 		/// <summary>
-		/// Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+		/// Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 		/// 
 		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result (if any) obtained.
 		/// </summary>
@@ -5285,7 +5206,7 @@ namespace VscAppz {
 
 	public partial class InputBox {
 		/// <summary>
-		/// Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `buttons`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+		/// Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 		/// 
 		/// `allUpdates` ── 
 		/// 
@@ -6599,32 +6520,7 @@ namespace VscAppz {
 				}
 				this.Password = password;
 			}
-			(val, ok) = (it.TryGetValue("buttons", out var _____) ? (_____, true) : (default, false));
-			if (ok) {
-				QuickInputButton[] buttons = default;
-				if ((null != val)) {
-					any[] __coll__buttons = default;
-					(__coll__buttons, ok) = (val is any[]) ? (((any[])(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-					buttons = new QuickInputButton[__coll__buttons.Length];
-					int __idx__buttons = default;
-					__idx__buttons = 0;
-					foreach (var __item__buttons in __coll__buttons) {
-						QuickInputButton __val__buttons = default;
-						__val__buttons = new QuickInputButton();
-						ok = __val__buttons.populateFrom(__item__buttons);
-						if (!ok) {
-							return false;
-						}
-						buttons[__idx__buttons] = __val__buttons;
-						__idx__buttons = __idx__buttons + 1;
-					}
-				}
-				this.Buttons = buttons;
-			}
-			(val, ok) = (it.TryGetValue("prompt", out var ______) ? (______, true) : (default, false));
+			(val, ok) = (it.TryGetValue("prompt", out var _____) ? (_____, true) : (default, false));
 			if (ok) {
 				string prompt = default;
 				if ((null != val)) {
@@ -6635,7 +6531,7 @@ namespace VscAppz {
 				}
 				this.Prompt = prompt;
 			}
-			(val, ok) = (it.TryGetValue("validationMessage", out var _______) ? (_______, true) : (default, false));
+			(val, ok) = (it.TryGetValue("validationMessage", out var ______) ? (______, true) : (default, false));
 			if (ok) {
 				string validationMessage = default;
 				if ((null != val)) {
@@ -6646,7 +6542,7 @@ namespace VscAppz {
 				}
 				this.ValidationMessage = validationMessage;
 			}
-			(val, ok) = (it.TryGetValue("title", out var ________) ? (________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("title", out var _______) ? (_______, true) : (default, false));
 			if (ok) {
 				string title = default;
 				if ((null != val)) {
@@ -6657,7 +6553,7 @@ namespace VscAppz {
 				}
 				this.Title = title;
 			}
-			(val, ok) = (it.TryGetValue("step", out var _________) ? (_________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("step", out var ________) ? (________, true) : (default, false));
 			if (ok) {
 				int? step = default;
 				if ((null != val)) {
@@ -6670,7 +6566,7 @@ namespace VscAppz {
 				}
 				this.Step = step;
 			}
-			(val, ok) = (it.TryGetValue("totalSteps", out var __________) ? (__________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("totalSteps", out var _________) ? (_________, true) : (default, false));
 			if (ok) {
 				int? totalSteps = default;
 				if ((null != val)) {
@@ -6683,7 +6579,7 @@ namespace VscAppz {
 				}
 				this.TotalSteps = totalSteps;
 			}
-			(val, ok) = (it.TryGetValue("enabled", out var ___________) ? (___________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("enabled", out var __________) ? (__________, true) : (default, false));
 			if (ok) {
 				bool enabled = default;
 				if ((null != val)) {
@@ -6694,7 +6590,7 @@ namespace VscAppz {
 				}
 				this.Enabled = enabled;
 			}
-			(val, ok) = (it.TryGetValue("busy", out var ____________) ? (____________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("busy", out var ___________) ? (___________, true) : (default, false));
 			if (ok) {
 				bool busy = default;
 				if ((null != val)) {
@@ -6705,7 +6601,7 @@ namespace VscAppz {
 				}
 				this.Busy = busy;
 			}
-			(val, ok) = (it.TryGetValue("ignoreFocusOut", out var _____________) ? (_____________, true) : (default, false));
+			(val, ok) = (it.TryGetValue("ignoreFocusOut", out var ____________) ? (____________, true) : (default, false));
 			if (ok) {
 				bool ignoreFocusOut = default;
 				if ((null != val)) {
@@ -6715,56 +6611,6 @@ namespace VscAppz {
 					}
 				}
 				this.IgnoreFocusOut = ignoreFocusOut;
-			}
-			return true;
-		}
-	}
-
-	public partial class QuickInputButton {
-		internal bool populateFrom(any payload = default) {
-			dict it = default;
-			bool ok = default;
-			any val = default;
-			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
-			if (!ok) {
-				return false;
-			}
-			(val, ok) = (it.TryGetValue("iconPath", out var __) ? (__, true) : (default, false));
-			if (ok) {
-				string iconPath = default;
-				if ((null != val)) {
-					(iconPath, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-				}
-				this.IconPath = iconPath;
-			} else {
-				return false;
-			}
-			(val, ok) = (it.TryGetValue("tooltip", out var ___) ? (___, true) : (default, false));
-			if (ok) {
-				string tooltip = default;
-				if ((null != val)) {
-					string _tooltip_ = default;
-					(_tooltip_, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-					tooltip = _tooltip_;
-				}
-				this.Tooltip = tooltip;
-			}
-			(val, ok) = (it.TryGetValue("my", out var ____) ? (____, true) : (default, false));
-			if (ok) {
-				dict my = default;
-				if ((null != val)) {
-					(my, ok) = (val is dict) ? (((dict)(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-				}
-				this.My = my;
 			}
 			return true;
 		}
