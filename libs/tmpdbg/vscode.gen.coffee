@@ -629,7 +629,7 @@ Window: interface
     # Human-readable string which will be used to represent the channel in the UI.
     #
     # @return:
-    # A thenable that resolves to the newly created `OutputChannel`.
+    # a thenable that resolves to the newly created `OutputChannel`.
     CreateOutputChannel: ((OutputChannel->OutputChannelBag->void)->void)
         name: string
 
@@ -1665,7 +1665,7 @@ StatusBarItem: class
 
     #
     # JSON FLAGS: undefined
-    disp: ?Disposable
+    __disp__: ?Disposable
 
     # CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
     #
@@ -1683,7 +1683,7 @@ OutputChannel: class
 
     #
     # JSON FLAGS: undefined
-    disp: ?Disposable
+    __disp__: ?Disposable
 
     # CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
     #
@@ -1969,7 +1969,7 @@ TextEditorDecorationType: class
 
     #
     # JSON FLAGS: undefined
-    disp: ?Disposable
+    __disp__: ?Disposable
 
     # CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
     #
@@ -1988,7 +1988,7 @@ InputBox: class
 
     #
     # JSON FLAGS: undefined
-    disp: ?Disposable
+    __disp__: ?Disposable
 
     # CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
     #
@@ -2028,7 +2028,7 @@ QuickPick: class
 
     #
     # JSON FLAGS: undefined
-    disp: ?Disposable
+    __disp__: ?Disposable
 
     # CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
     #
@@ -2566,7 +2566,7 @@ Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> ((?Me
         var result of ?MessageItem
         if =?payload
             result = ?MessageItem·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
@@ -2596,7 +2596,7 @@ Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> it
         var result of ?MessageItem
         if =?payload
             result = ?MessageItem·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
@@ -2686,7 +2686,7 @@ Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> ((?Messag
         var result of ?MessageItem
         if =?payload
             result = ?MessageItem·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
@@ -2716,7 +2716,7 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
         var result of ?MessageItem
         if =?payload
             result = ?MessageItem·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
@@ -2806,7 +2806,7 @@ Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> ((?MessageI
         var result of ?MessageItem
         if =?payload
             result = ?MessageItem·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
@@ -2836,7 +2836,7 @@ Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[M
         var result of ?MessageItem
         if =?payload
             result = ?MessageItem·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
@@ -2938,7 +2938,7 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
                         var __0 of QuickPickItem
                         if =?args@0
                             __0 = QuickPickItem·new
-                            ok = __0.populateFrom(args@0)
+                            ok = __0.loadFromJsonish(args@0)
                             if !ok
                                 return [null, false]
                         else
@@ -3015,7 +3015,7 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
                         var __0 of QuickPickItem
                         if =?args@0
                             __0 = QuickPickItem·new
-                            ok = __0.populateFrom(args@0)
+                            ok = __0.loadFromJsonish(args@0)
                             if !ok
                                 return [null, false]
                         else
@@ -3083,7 +3083,7 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
                         var __0 of QuickPickItem
                         if =?args@0
                             __0 = QuickPickItem·new
-                            ok = __0.populateFrom(args@0)
+                            ok = __0.loadFromJsonish(args@0)
                             if !ok
                                 return [null, false]
                         else
@@ -3115,7 +3115,7 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
             for __item__result in __coll__result
                 var __val__result of QuickPickItem
                 __val__result = QuickPickItem·new
-                ok = __val__result.populateFrom(__item__result)
+                ok = __val__result.loadFromJsonish(__item__result)
                 if !ok
                     return false
                 result@__idx__result = __val__result
@@ -3161,7 +3161,7 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
                         var __0 of QuickPickItem
                         if =?args@0
                             __0 = QuickPickItem·new
-                            ok = __0.populateFrom(args@0)
+                            ok = __0.loadFromJsonish(args@0)
                             if !ok
                                 return [null, false]
                         else
@@ -3184,7 +3184,7 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
         var result of ?QuickPickItem
         if =?payload
             result = ?QuickPickItem·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
@@ -3219,7 +3219,7 @@ Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> ((?Disposa
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
@@ -3249,7 +3249,7 @@ Window·SetStatusBarMessage2: (text:string -> ((?Disposable->void)->void))
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
@@ -3347,7 +3347,7 @@ Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> ((?Work
         var result of ?WorkspaceFolder
         if =?payload
             result = ?WorkspaceFolder·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
@@ -3374,7 +3374,7 @@ Window·State: ( -> ((WindowState->void)->void))
         var result of WindowState
         if =?payload
             result = WindowState·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
@@ -3394,23 +3394,23 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> ((?Disposable->
     msg = ?ipcMsg·new
     msg.QName = "window.onDidChangeWindowState"
     msg.Data = dict·new(1)
-    var _fnid_listener of string
+    var listenerFnId of string
     if =!listener
         OnError(this.Impl(), "Window.OnDidChangeWindowState: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
         return null
-    _fnid_listener = this.Impl().nextSub((args:[any] -> bool)
+    listenerFnId = this.Impl().nextSub((args:[any] -> bool)
         var ok of bool
         if 1 != args·len
             return ok
         var _a_0_ of WindowState
         _a_0_ = WindowState·new
-        ok = _a_0_.populateFrom(args@0)
+        ok = _a_0_.loadFromJsonish(args@0)
         if !ok
             return false
         listener(_a_0_)
         return true
     , null)
-    msg.Data@"listener" = _fnid_listener
+    msg.Data@"listener" = listenerFnId
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -3418,13 +3418,13 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> ((?Disposable->
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
             return false
             if =?onret
-                onret(result.bind(this.Impl(), _fnid_listener))
+                onret(result.bind(this.Impl(), listenerFnId))
         return true
     
     this.Impl().send(msg, onresp)
@@ -3451,10 +3451,10 @@ Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> 
         var result of StatusBarItem
         if =?payload
             result = StatusBarItem·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            result.disp.impl = this.Impl()
+            result.__disp__.impl = this.Impl()
             result.Get()((state:StatusBarItemBag -> void)
                 if =?onret
                     onret(result, state)
@@ -3482,10 +3482,10 @@ Window·CreateOutputChannel: (name:string -> ((OutputChannel->OutputChannelBag->
         var result of OutputChannel
         if =?payload
             result = OutputChannel·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            result.disp.impl = this.Impl()
+            result.__disp__.impl = this.Impl()
             result.Get()((state:OutputChannelBag -> void)
                 if =?onret
                     onret(result, state)
@@ -3513,10 +3513,10 @@ Window·CreateTextEditorDecorationType: (options:DecorationRenderOptions -> ((Te
         var result of TextEditorDecorationType
         if =?payload
             result = TextEditorDecorationType·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            result.disp.impl = this.Impl()
+            result.__disp__.impl = this.Impl()
             result.Get()((state:TextEditorDecorationTypeBag -> void)
                 if =?onret
                     onret(result, state)
@@ -3543,10 +3543,10 @@ Window·CreateInputBox: ( -> ((InputBox->InputBoxBag->void)->void))
         var result of InputBox
         if =?payload
             result = InputBox·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            result.disp.impl = this.Impl()
+            result.__disp__.impl = this.Impl()
             result.Get()((state:InputBoxBag -> void)
                 if =?onret
                     onret(result, state)
@@ -3573,10 +3573,10 @@ Window·CreateQuickPick: ( -> ((QuickPick->QuickPickBag->void)->void))
         var result of QuickPick
         if =?payload
             result = QuickPick·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            result.disp.impl = this.Impl()
+            result.__disp__.impl = this.Impl()
             result.Get()((state:QuickPickBag -> void)
                 if =?onret
                     onret(result, state)
@@ -3842,7 +3842,7 @@ Env·AllProperties: ( -> ((EnvBag->void)->void))
         var result of EnvBag
         if =?payload
             result = EnvBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
@@ -4006,23 +4006,23 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
     msg = ?ipcMsg·new
     msg.QName = "workspace.onDidChangeWorkspaceFolders"
     msg.Data = dict·new(1)
-    var _fnid_listener of string
+    var listenerFnId of string
     if =!listener
         OnError(this.Impl(), "Workspace.OnDidChangeWorkspaceFolders: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
         return null
-    _fnid_listener = this.Impl().nextSub((args:[any] -> bool)
+    listenerFnId = this.Impl().nextSub((args:[any] -> bool)
         var ok of bool
         if 1 != args·len
             return ok
         var _a_0_ of WorkspaceFoldersChangeEvent
         _a_0_ = WorkspaceFoldersChangeEvent·new
-        ok = _a_0_.populateFrom(args@0)
+        ok = _a_0_.loadFromJsonish(args@0)
         if !ok
             return false
         listener(_a_0_)
         return true
     , null)
-    msg.Data@"listener" = _fnid_listener
+    msg.Data@"listener" = listenerFnId
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -4030,13 +4030,13 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
             return false
             if =?onret
-                onret(result.bind(this.Impl(), _fnid_listener))
+                onret(result.bind(this.Impl(), listenerFnId))
         return true
     
     this.Impl().send(msg, onresp)
@@ -4060,7 +4060,7 @@ Workspace·GetWorkspaceFolder: (uri:string -> ((?WorkspaceFolder->void)->void))
         var result of ?WorkspaceFolder
         if =?payload
             result = ?WorkspaceFolder·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
@@ -4096,7 +4096,7 @@ Workspace·WorkspaceFolders: ( -> ((?[WorkspaceFolder]->void)->void))
             for __item__result in __coll__result
                 var __val__result of WorkspaceFolder
                 __val__result = WorkspaceFolder·new
-                ok = __val__result.populateFrom(__item__result)
+                ok = __val__result.loadFromJsonish(__item__result)
                 if !ok
                     return false
                 result@__idx__result = __val__result
@@ -4203,7 +4203,7 @@ Workspace·AllProperties: ( -> ((WorkspaceBag->void)->void))
         var result of WorkspaceBag
         if =?payload
             result = WorkspaceBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
@@ -4262,23 +4262,23 @@ Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> ((
     msg = ?ipcMsg·new
     msg.QName = "languages.onDidChangeDiagnostics"
     msg.Data = dict·new(1)
-    var _fnid_listener of string
+    var listenerFnId of string
     if =!listener
         OnError(this.Impl(), "Languages.OnDidChangeDiagnostics: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
         return null
-    _fnid_listener = this.Impl().nextSub((args:[any] -> bool)
+    listenerFnId = this.Impl().nextSub((args:[any] -> bool)
         var ok of bool
         if 1 != args·len
             return ok
         var _a_0_ of DiagnosticChangeEvent
         _a_0_ = DiagnosticChangeEvent·new
-        ok = _a_0_.populateFrom(args@0)
+        ok = _a_0_.loadFromJsonish(args@0)
         if !ok
             return false
         listener(_a_0_)
         return true
     , null)
-    msg.Data@"listener" = _fnid_listener
+    msg.Data@"listener" = listenerFnId
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -4286,13 +4286,13 @@ Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> ((
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
             return false
             if =?onret
-                onret(result.bind(this.Impl(), _fnid_listener))
+                onret(result.bind(this.Impl(), listenerFnId))
         return true
     
     this.Impl().send(msg, onresp)
@@ -4308,18 +4308,18 @@ Extensions·OnDidChange: (listener:(->void) -> ((?Disposable->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "extensions.onDidChange"
     msg.Data = dict·new(1)
-    var _fnid_listener of string
+    var listenerFnId of string
     if =!listener
         OnError(this.Impl(), "Extensions.OnDidChange: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
         return null
-    _fnid_listener = this.Impl().nextSub((args:[any] -> bool)
+    listenerFnId = this.Impl().nextSub((args:[any] -> bool)
         var ok of bool
         if 0 != args·len
             return ok
         listener()
         return true
     , null)
-    msg.Data@"listener" = _fnid_listener
+    msg.Data@"listener" = listenerFnId
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -4327,13 +4327,13 @@ Extensions·OnDidChange: (listener:(->void) -> ((?Disposable->void)->void))
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
             return false
             if =?onret
-                onret(result.bind(this.Impl(), _fnid_listener))
+                onret(result.bind(this.Impl(), listenerFnId))
         return true
     
     this.Impl().send(msg, onresp)
@@ -4350,11 +4350,11 @@ Commands·RegisterCommand: (command:string -> callback:([any]->any) -> ((?Dispos
     msg.QName = "commands.registerCommand"
     msg.Data = dict·new(2)
     msg.Data@"command" = command
-    var _fnid_callback of string
+    var callbackFnId of string
     if =!callback
         OnError(this.Impl(), "Commands.RegisterCommand: the 'callback' arg (which is not optional but required) was not passed by the caller", null)
         return null
-    _fnid_callback = this.Impl().nextSub(null, (args:[any] -> [any,bool])
+    callbackFnId = this.Impl().nextSub(null, (args:[any] -> [any,bool])
         var ok of bool
         if 1 != args·len
             return [null, ok]
@@ -4366,7 +4366,7 @@ Commands·RegisterCommand: (command:string -> callback:([any]->any) -> ((?Dispos
         ret = callback(_a_0_)
         return [ret, true]
     )
-    msg.Data@"callback" = _fnid_callback
+    msg.Data@"callback" = callbackFnId
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -4374,13 +4374,13 @@ Commands·RegisterCommand: (command:string -> callback:([any]->any) -> ((?Dispos
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
             return false
             if =?onret
-                onret(result.bind(this.Impl(), _fnid_callback))
+                onret(result.bind(this.Impl(), callbackFnId))
         return true
     
     this.Impl().send(msg, onresp)
@@ -4461,7 +4461,7 @@ StatusBarItem·Show: ( -> ((?StatusBarItemBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.show"
     msg.Data = dict·new(1)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
     var onret of (?StatusBarItemBag->void)
     onresp = (payload:any -> bool)
@@ -4469,14 +4469,14 @@ StatusBarItem·Show: ( -> ((?StatusBarItemBag->void)->void))
         var result of ?StatusBarItemBag
         if =?payload
             result = ?StatusBarItemBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?StatusBarItemBag->void) -> void)
         onret = a0
     
@@ -4489,7 +4489,7 @@ StatusBarItem·Hide: ( -> ((?StatusBarItemBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.hide"
     msg.Data = dict·new(1)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
     var onret of (?StatusBarItemBag->void)
     onresp = (payload:any -> bool)
@@ -4497,14 +4497,14 @@ StatusBarItem·Hide: ( -> ((?StatusBarItemBag->void)->void))
         var result of ?StatusBarItemBag
         if =?payload
             result = ?StatusBarItemBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?StatusBarItemBag->void) -> void)
         onret = a0
     
@@ -4513,7 +4513,7 @@ StatusBarItem·Hide: ( -> ((?StatusBarItemBag->void)->void))
 
 
 StatusBarItem·Dispose: ( -> ((void->void)->void))
-    return this.disp.Dispose()
+    return this.__disp__.Dispose()
 
 
 
@@ -4523,7 +4523,7 @@ StatusBarItem·Get: ( -> ((StatusBarItemBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.appzObjPropsGet"
     msg.Data = dict·new(1)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
     var onret of (StatusBarItemBag->void)
     onresp = (payload:any -> bool)
@@ -4531,14 +4531,14 @@ StatusBarItem·Get: ( -> ((StatusBarItemBag->void)->void))
         var result of StatusBarItemBag
         if =?payload
             result = StatusBarItemBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(StatusBarItemBag->void) -> void)
         onret = a0
     
@@ -4551,7 +4551,7 @@ StatusBarItem·Set: (allUpdates:StatusBarItemBag -> ((void->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.appzObjPropsSet"
     msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     msg.Data@"allUpdates" = allUpdates
     var onresp of (any->bool)
     var onret of (void->void)
@@ -4562,7 +4562,7 @@ StatusBarItem·Set: (allUpdates:StatusBarItemBag -> ((void->void)->void))
             onret()
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(void->void) -> void)
         onret = a0
     
@@ -4575,7 +4575,7 @@ OutputChannel·Append: (value:string -> ((?OutputChannelBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.append"
     msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     msg.Data@"value" = value
     var onresp of (any->bool)
     var onret of (?OutputChannelBag->void)
@@ -4584,14 +4584,14 @@ OutputChannel·Append: (value:string -> ((?OutputChannelBag->void)->void))
         var result of ?OutputChannelBag
         if =?payload
             result = ?OutputChannelBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?OutputChannelBag->void) -> void)
         onret = a0
     
@@ -4604,7 +4604,7 @@ OutputChannel·AppendLine: (value:string -> ((?OutputChannelBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.appendLine"
     msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     msg.Data@"value" = value
     var onresp of (any->bool)
     var onret of (?OutputChannelBag->void)
@@ -4613,14 +4613,14 @@ OutputChannel·AppendLine: (value:string -> ((?OutputChannelBag->void)->void))
         var result of ?OutputChannelBag
         if =?payload
             result = ?OutputChannelBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?OutputChannelBag->void) -> void)
         onret = a0
     
@@ -4633,7 +4633,7 @@ OutputChannel·Clear: ( -> ((?OutputChannelBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.clear"
     msg.Data = dict·new(1)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
     var onret of (?OutputChannelBag->void)
     onresp = (payload:any -> bool)
@@ -4641,14 +4641,14 @@ OutputChannel·Clear: ( -> ((?OutputChannelBag->void)->void))
         var result of ?OutputChannelBag
         if =?payload
             result = ?OutputChannelBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?OutputChannelBag->void) -> void)
         onret = a0
     
@@ -4661,7 +4661,7 @@ OutputChannel·Show: (preserveFocus:bool -> ((?OutputChannelBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.show"
     msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     msg.Data@"preserveFocus" = preserveFocus
     var onresp of (any->bool)
     var onret of (?OutputChannelBag->void)
@@ -4670,14 +4670,14 @@ OutputChannel·Show: (preserveFocus:bool -> ((?OutputChannelBag->void)->void))
         var result of ?OutputChannelBag
         if =?payload
             result = ?OutputChannelBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?OutputChannelBag->void) -> void)
         onret = a0
     
@@ -4690,7 +4690,7 @@ OutputChannel·Hide: ( -> ((?OutputChannelBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.hide"
     msg.Data = dict·new(1)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
     var onret of (?OutputChannelBag->void)
     onresp = (payload:any -> bool)
@@ -4698,14 +4698,14 @@ OutputChannel·Hide: ( -> ((?OutputChannelBag->void)->void))
         var result of ?OutputChannelBag
         if =?payload
             result = ?OutputChannelBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?OutputChannelBag->void) -> void)
         onret = a0
     
@@ -4714,7 +4714,7 @@ OutputChannel·Hide: ( -> ((?OutputChannelBag->void)->void))
 
 
 OutputChannel·Dispose: ( -> ((void->void)->void))
-    return this.disp.Dispose()
+    return this.__disp__.Dispose()
 
 
 
@@ -4724,7 +4724,7 @@ OutputChannel·Get: ( -> ((OutputChannelBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.appzObjPropsGet"
     msg.Data = dict·new(1)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
     var onret of (OutputChannelBag->void)
     onresp = (payload:any -> bool)
@@ -4732,14 +4732,14 @@ OutputChannel·Get: ( -> ((OutputChannelBag->void)->void))
         var result of OutputChannelBag
         if =?payload
             result = OutputChannelBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(OutputChannelBag->void) -> void)
         onret = a0
     
@@ -4748,7 +4748,7 @@ OutputChannel·Get: ( -> ((OutputChannelBag->void)->void))
 
 
 TextEditorDecorationType·Dispose: ( -> ((void->void)->void))
-    return this.disp.Dispose()
+    return this.__disp__.Dispose()
 
 
 
@@ -4758,7 +4758,7 @@ TextEditorDecorationType·Get: ( -> ((TextEditorDecorationTypeBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "TextEditorDecorationType.appzObjPropsGet"
     msg.Data = dict·new(1)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
     var onret of (TextEditorDecorationTypeBag->void)
     onresp = (payload:any -> bool)
@@ -4766,14 +4766,14 @@ TextEditorDecorationType·Get: ( -> ((TextEditorDecorationTypeBag->void)->void))
         var result of TextEditorDecorationTypeBag
         if =?payload
             result = TextEditorDecorationTypeBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(TextEditorDecorationTypeBag->void) -> void)
         onret = a0
     
@@ -4786,12 +4786,12 @@ InputBox·OnDidChangeValue: (handler:(string->InputBoxBag->void) -> ((?Disposabl
     msg = ?ipcMsg·new
     msg.QName = "InputBox.onDidChangeValue"
     msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
-    var _fnid_handler of string
+    msg.Data@"" = this.__disp__.id
+    var handlerFnId of string
     if =!handler
-        OnError(this.disp.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
-    _fnid_handler = this.disp.impl.nextSub((args:[any] -> bool)
+    handlerFnId = this.__disp__.impl.nextSub((args:[any] -> bool)
         var ok of bool
         if 2 != args·len
             return ok
@@ -4801,14 +4801,14 @@ InputBox·OnDidChangeValue: (handler:(string->InputBoxBag->void) -> ((?Disposabl
             return false
         var _a_1_ of InputBoxBag
         _a_1_ = InputBoxBag·new
-        ok = _a_1_.populateFrom(args@1)
+        ok = _a_1_.loadFromJsonish(args@1)
         if !ok
             return false
         handler(_a_0_, _a_1_)
         return true
     , null)
-    msg.Data@"handler" = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data@"handler" = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -4816,16 +4816,16 @@ InputBox·OnDidChangeValue: (handler:(string->InputBoxBag->void) -> ((?Disposabl
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
             return false
             if =?onret
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?Disposable->void) -> void)
         onret = a0
     
@@ -4838,25 +4838,25 @@ InputBox·OnDidAccept: (handler:(InputBoxBag->void) -> ((?Disposable->void)->voi
     msg = ?ipcMsg·new
     msg.QName = "InputBox.onDidAccept"
     msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
-    var _fnid_handler of string
+    msg.Data@"" = this.__disp__.id
+    var handlerFnId of string
     if =!handler
-        OnError(this.disp.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
-    _fnid_handler = this.disp.impl.nextSub((args:[any] -> bool)
+    handlerFnId = this.__disp__.impl.nextSub((args:[any] -> bool)
         var ok of bool
         if 1 != args·len
             return ok
         var _a_0_ of InputBoxBag
         _a_0_ = InputBoxBag·new
-        ok = _a_0_.populateFrom(args@0)
+        ok = _a_0_.loadFromJsonish(args@0)
         if !ok
             return false
         handler(_a_0_)
         return true
     , null)
-    msg.Data@"handler" = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data@"handler" = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -4864,16 +4864,16 @@ InputBox·OnDidAccept: (handler:(InputBoxBag->void) -> ((?Disposable->void)->voi
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
             return false
             if =?onret
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?Disposable->void) -> void)
         onret = a0
     
@@ -4886,7 +4886,7 @@ InputBox·Show: ( -> ((?InputBoxBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "InputBox.show"
     msg.Data = dict·new(1)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
     var onret of (?InputBoxBag->void)
     onresp = (payload:any -> bool)
@@ -4894,14 +4894,14 @@ InputBox·Show: ( -> ((?InputBoxBag->void)->void))
         var result of ?InputBoxBag
         if =?payload
             result = ?InputBoxBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?InputBoxBag->void) -> void)
         onret = a0
     
@@ -4914,7 +4914,7 @@ InputBox·Hide: ( -> ((?InputBoxBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "InputBox.hide"
     msg.Data = dict·new(1)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
     var onret of (?InputBoxBag->void)
     onresp = (payload:any -> bool)
@@ -4922,14 +4922,14 @@ InputBox·Hide: ( -> ((?InputBoxBag->void)->void))
         var result of ?InputBoxBag
         if =?payload
             result = ?InputBoxBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?InputBoxBag->void) -> void)
         onret = a0
     
@@ -4942,25 +4942,25 @@ InputBox·OnDidHide: (handler:(InputBoxBag->void) -> ((?Disposable->void)->void)
     msg = ?ipcMsg·new
     msg.QName = "InputBox.onDidHide"
     msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
-    var _fnid_handler of string
+    msg.Data@"" = this.__disp__.id
+    var handlerFnId of string
     if =!handler
-        OnError(this.disp.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
-    _fnid_handler = this.disp.impl.nextSub((args:[any] -> bool)
+    handlerFnId = this.__disp__.impl.nextSub((args:[any] -> bool)
         var ok of bool
         if 1 != args·len
             return ok
         var _a_0_ of InputBoxBag
         _a_0_ = InputBoxBag·new
-        ok = _a_0_.populateFrom(args@0)
+        ok = _a_0_.loadFromJsonish(args@0)
         if !ok
             return false
         handler(_a_0_)
         return true
     , null)
-    msg.Data@"handler" = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data@"handler" = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -4968,16 +4968,16 @@ InputBox·OnDidHide: (handler:(InputBoxBag->void) -> ((?Disposable->void)->void)
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
             return false
             if =?onret
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?Disposable->void) -> void)
         onret = a0
     
@@ -4986,7 +4986,7 @@ InputBox·OnDidHide: (handler:(InputBoxBag->void) -> ((?Disposable->void)->void)
 
 
 InputBox·Dispose: ( -> ((void->void)->void))
-    return this.disp.Dispose()
+    return this.__disp__.Dispose()
 
 
 
@@ -4996,7 +4996,7 @@ InputBox·Get: ( -> ((InputBoxBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "InputBox.appzObjPropsGet"
     msg.Data = dict·new(1)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
     var onret of (InputBoxBag->void)
     onresp = (payload:any -> bool)
@@ -5004,14 +5004,14 @@ InputBox·Get: ( -> ((InputBoxBag->void)->void))
         var result of InputBoxBag
         if =?payload
             result = InputBoxBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(InputBoxBag->void) -> void)
         onret = a0
     
@@ -5024,7 +5024,7 @@ InputBox·Set: (allUpdates:InputBoxBag -> ((void->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "InputBox.appzObjPropsSet"
     msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     msg.Data@"allUpdates" = allUpdates
     var onresp of (any->bool)
     var onret of (void->void)
@@ -5035,7 +5035,7 @@ InputBox·Set: (allUpdates:InputBoxBag -> ((void->void)->void))
             onret()
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(void->void) -> void)
         onret = a0
     
@@ -5048,12 +5048,12 @@ QuickPick·OnDidChangeValue: (handler:(string->QuickPickBag->void) -> ((?Disposa
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidChangeValue"
     msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
-    var _fnid_handler of string
+    msg.Data@"" = this.__disp__.id
+    var handlerFnId of string
     if =!handler
-        OnError(this.disp.impl, "QuickPick.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "QuickPick.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
-    _fnid_handler = this.disp.impl.nextSub((args:[any] -> bool)
+    handlerFnId = this.__disp__.impl.nextSub((args:[any] -> bool)
         var ok of bool
         if 2 != args·len
             return ok
@@ -5063,14 +5063,14 @@ QuickPick·OnDidChangeValue: (handler:(string->QuickPickBag->void) -> ((?Disposa
             return false
         var _a_1_ of QuickPickBag
         _a_1_ = QuickPickBag·new
-        ok = _a_1_.populateFrom(args@1)
+        ok = _a_1_.loadFromJsonish(args@1)
         if !ok
             return false
         handler(_a_0_, _a_1_)
         return true
     , null)
-    msg.Data@"handler" = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data@"handler" = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -5078,16 +5078,16 @@ QuickPick·OnDidChangeValue: (handler:(string->QuickPickBag->void) -> ((?Disposa
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
             return false
             if =?onret
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?Disposable->void) -> void)
         onret = a0
     
@@ -5100,25 +5100,25 @@ QuickPick·OnDidAccept: (handler:(QuickPickBag->void) -> ((?Disposable->void)->v
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidAccept"
     msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
-    var _fnid_handler of string
+    msg.Data@"" = this.__disp__.id
+    var handlerFnId of string
     if =!handler
-        OnError(this.disp.impl, "QuickPick.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "QuickPick.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
-    _fnid_handler = this.disp.impl.nextSub((args:[any] -> bool)
+    handlerFnId = this.__disp__.impl.nextSub((args:[any] -> bool)
         var ok of bool
         if 1 != args·len
             return ok
         var _a_0_ of QuickPickBag
         _a_0_ = QuickPickBag·new
-        ok = _a_0_.populateFrom(args@0)
+        ok = _a_0_.loadFromJsonish(args@0)
         if !ok
             return false
         handler(_a_0_)
         return true
     , null)
-    msg.Data@"handler" = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data@"handler" = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -5126,16 +5126,16 @@ QuickPick·OnDidAccept: (handler:(QuickPickBag->void) -> ((?Disposable->void)->v
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
             return false
             if =?onret
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?Disposable->void) -> void)
         onret = a0
     
@@ -5148,12 +5148,12 @@ QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->QuickPickBag->void) -> 
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidChangeActive"
     msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
-    var _fnid_handler of string
+    msg.Data@"" = this.__disp__.id
+    var handlerFnId of string
     if =!handler
-        OnError(this.disp.impl, "QuickPick.OnDidChangeActive: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "QuickPick.OnDidChangeActive: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
-    _fnid_handler = this.disp.impl.nextSub((args:[any] -> bool)
+    handlerFnId = this.__disp__.impl.nextSub((args:[any] -> bool)
         var ok of bool
         if 2 != args·len
             return ok
@@ -5168,21 +5168,21 @@ QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->QuickPickBag->void) -> 
         for __item___a_0_ in __coll___a_0_
             var __val___a_0_ of QuickPickItem
             __val___a_0_ = QuickPickItem·new
-            ok = __val___a_0_.populateFrom(__item___a_0_)
+            ok = __val___a_0_.loadFromJsonish(__item___a_0_)
             if !ok
                 return false
             _a_0_@__idx___a_0_ = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
         var _a_1_ of QuickPickBag
         _a_1_ = QuickPickBag·new
-        ok = _a_1_.populateFrom(args@1)
+        ok = _a_1_.loadFromJsonish(args@1)
         if !ok
             return false
         handler(_a_0_, _a_1_)
         return true
     , null)
-    msg.Data@"handler" = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data@"handler" = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -5190,16 +5190,16 @@ QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->QuickPickBag->void) -> 
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
             return false
             if =?onret
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?Disposable->void) -> void)
         onret = a0
     
@@ -5212,12 +5212,12 @@ QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->QuickPickBag->void) 
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidChangeSelection"
     msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
-    var _fnid_handler of string
+    msg.Data@"" = this.__disp__.id
+    var handlerFnId of string
     if =!handler
-        OnError(this.disp.impl, "QuickPick.OnDidChangeSelection: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "QuickPick.OnDidChangeSelection: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
-    _fnid_handler = this.disp.impl.nextSub((args:[any] -> bool)
+    handlerFnId = this.__disp__.impl.nextSub((args:[any] -> bool)
         var ok of bool
         if 2 != args·len
             return ok
@@ -5232,21 +5232,21 @@ QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->QuickPickBag->void) 
         for __item___a_0_ in __coll___a_0_
             var __val___a_0_ of QuickPickItem
             __val___a_0_ = QuickPickItem·new
-            ok = __val___a_0_.populateFrom(__item___a_0_)
+            ok = __val___a_0_.loadFromJsonish(__item___a_0_)
             if !ok
                 return false
             _a_0_@__idx___a_0_ = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
         var _a_1_ of QuickPickBag
         _a_1_ = QuickPickBag·new
-        ok = _a_1_.populateFrom(args@1)
+        ok = _a_1_.loadFromJsonish(args@1)
         if !ok
             return false
         handler(_a_0_, _a_1_)
         return true
     , null)
-    msg.Data@"handler" = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data@"handler" = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -5254,16 +5254,16 @@ QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->QuickPickBag->void) 
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
             return false
             if =?onret
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?Disposable->void) -> void)
         onret = a0
     
@@ -5276,7 +5276,7 @@ QuickPick·Show: ( -> ((?QuickPickBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.show"
     msg.Data = dict·new(1)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
     var onret of (?QuickPickBag->void)
     onresp = (payload:any -> bool)
@@ -5284,14 +5284,14 @@ QuickPick·Show: ( -> ((?QuickPickBag->void)->void))
         var result of ?QuickPickBag
         if =?payload
             result = ?QuickPickBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?QuickPickBag->void) -> void)
         onret = a0
     
@@ -5304,7 +5304,7 @@ QuickPick·Hide: ( -> ((?QuickPickBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.hide"
     msg.Data = dict·new(1)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
     var onret of (?QuickPickBag->void)
     onresp = (payload:any -> bool)
@@ -5312,14 +5312,14 @@ QuickPick·Hide: ( -> ((?QuickPickBag->void)->void))
         var result of ?QuickPickBag
         if =?payload
             result = ?QuickPickBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?QuickPickBag->void) -> void)
         onret = a0
     
@@ -5332,25 +5332,25 @@ QuickPick·OnDidHide: (handler:(QuickPickBag->void) -> ((?Disposable->void)->voi
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidHide"
     msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
-    var _fnid_handler of string
+    msg.Data@"" = this.__disp__.id
+    var handlerFnId of string
     if =!handler
-        OnError(this.disp.impl, "QuickPick.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "QuickPick.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
-    _fnid_handler = this.disp.impl.nextSub((args:[any] -> bool)
+    handlerFnId = this.__disp__.impl.nextSub((args:[any] -> bool)
         var ok of bool
         if 1 != args·len
             return ok
         var _a_0_ of QuickPickBag
         _a_0_ = QuickPickBag·new
-        ok = _a_0_.populateFrom(args@0)
+        ok = _a_0_.loadFromJsonish(args@0)
         if !ok
             return false
         handler(_a_0_)
         return true
     , null)
-    msg.Data@"handler" = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data@"handler" = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -5358,16 +5358,16 @@ QuickPick·OnDidHide: (handler:(QuickPickBag->void) -> ((?Disposable->void)->voi
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
         else
             return false
             if =?onret
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(?Disposable->void) -> void)
         onret = a0
     
@@ -5376,7 +5376,7 @@ QuickPick·OnDidHide: (handler:(QuickPickBag->void) -> ((?Disposable->void)->voi
 
 
 QuickPick·Dispose: ( -> ((void->void)->void))
-    return this.disp.Dispose()
+    return this.__disp__.Dispose()
 
 
 
@@ -5386,7 +5386,7 @@ QuickPick·Get: ( -> ((QuickPickBag->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.appzObjPropsGet"
     msg.Data = dict·new(1)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
     var onret of (QuickPickBag->void)
     onresp = (payload:any -> bool)
@@ -5394,14 +5394,14 @@ QuickPick·Get: ( -> ((QuickPickBag->void)->void))
         var result of QuickPickBag
         if =?payload
             result = QuickPickBag·new
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             if =?onret
                 onret(result)
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(QuickPickBag->void) -> void)
         onret = a0
     
@@ -5414,7 +5414,7 @@ QuickPick·Set: (allUpdates:QuickPickBag -> ((void->void)->void))
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.appzObjPropsSet"
     msg.Data = dict·new(2)
-    msg.Data@"" = this.disp.id
+    msg.Data@"" = this.__disp__.id
     msg.Data@"allUpdates" = allUpdates
     var onresp of (any->bool)
     var onret of (void->void)
@@ -5425,7 +5425,7 @@ QuickPick·Set: (allUpdates:QuickPickBag -> ((void->void)->void))
             onret()
         return true
     
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0:(void->void) -> void)
         onret = a0
     
@@ -5433,7 +5433,7 @@ QuickPick·Set: (allUpdates:QuickPickBag -> ((void->void)->void))
 
 
 
-MessageItem·populateFrom: (payload:any -> bool)
+MessageItem·loadFromJsonish: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5473,7 +5473,7 @@ MessageItem·populateFrom: (payload:any -> bool)
 
 
 
-QuickPickItem·populateFrom: (payload:any -> bool)
+QuickPickItem·loadFromJsonish: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5543,7 +5543,7 @@ QuickPickItem·populateFrom: (payload:any -> bool)
 
 
 
-WorkspaceFolder·populateFrom: (payload:any -> bool)
+WorkspaceFolder·loadFromJsonish: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5589,7 +5589,7 @@ WorkspaceFolder·populateFrom: (payload:any -> bool)
 
 
 
-WindowState·populateFrom: (payload:any -> bool)
+WindowState·loadFromJsonish: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5611,52 +5611,52 @@ WindowState·populateFrom: (payload:any -> bool)
 
 
 
-StatusBarItem·populateFrom: (payload:any -> bool)
+StatusBarItem·loadFromJsonish: (payload:any -> bool)
     var ok of bool
-    this.disp = ?Disposable·new
-    ok = this.disp.populateFrom(payload)
+    this.__disp__ = ?Disposable·new
+    ok = this.__disp__.loadFromJsonish(payload)
     return ok
 
 
 
 
-OutputChannel·populateFrom: (payload:any -> bool)
+OutputChannel·loadFromJsonish: (payload:any -> bool)
     var ok of bool
-    this.disp = ?Disposable·new
-    ok = this.disp.populateFrom(payload)
+    this.__disp__ = ?Disposable·new
+    ok = this.__disp__.loadFromJsonish(payload)
     return ok
 
 
 
 
-TextEditorDecorationType·populateFrom: (payload:any -> bool)
+TextEditorDecorationType·loadFromJsonish: (payload:any -> bool)
     var ok of bool
-    this.disp = ?Disposable·new
-    ok = this.disp.populateFrom(payload)
+    this.__disp__ = ?Disposable·new
+    ok = this.__disp__.loadFromJsonish(payload)
     return ok
 
 
 
 
-InputBox·populateFrom: (payload:any -> bool)
+InputBox·loadFromJsonish: (payload:any -> bool)
     var ok of bool
-    this.disp = ?Disposable·new
-    ok = this.disp.populateFrom(payload)
+    this.__disp__ = ?Disposable·new
+    ok = this.__disp__.loadFromJsonish(payload)
     return ok
 
 
 
 
-QuickPick·populateFrom: (payload:any -> bool)
+QuickPick·loadFromJsonish: (payload:any -> bool)
     var ok of bool
-    this.disp = ?Disposable·new
-    ok = this.disp.populateFrom(payload)
+    this.__disp__ = ?Disposable·new
+    ok = this.__disp__.loadFromJsonish(payload)
     return ok
 
 
 
 
-EnvBag·populateFrom: (payload:any -> bool)
+EnvBag·loadFromJsonish: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5748,7 +5748,7 @@ EnvBag·populateFrom: (payload:any -> bool)
 
 
 
-WorkspaceFoldersChangeEvent·populateFrom: (payload:any -> bool)
+WorkspaceFoldersChangeEvent·loadFromJsonish: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5769,7 +5769,7 @@ WorkspaceFoldersChangeEvent·populateFrom: (payload:any -> bool)
             for __item__added in __coll__added
                 var __val__added of WorkspaceFolder
                 __val__added = WorkspaceFolder·new
-                ok = __val__added.populateFrom(__item__added)
+                ok = __val__added.loadFromJsonish(__item__added)
                 if !ok
                     return false
                 added@__idx__added = __val__added
@@ -5791,7 +5791,7 @@ WorkspaceFoldersChangeEvent·populateFrom: (payload:any -> bool)
             for __item__removed in __coll__removed
                 var __val__removed of WorkspaceFolder
                 __val__removed = WorkspaceFolder·new
-                ok = __val__removed.populateFrom(__item__removed)
+                ok = __val__removed.loadFromJsonish(__item__removed)
                 if !ok
                     return false
                 removed@__idx__removed = __val__removed
@@ -5804,7 +5804,7 @@ WorkspaceFoldersChangeEvent·populateFrom: (payload:any -> bool)
 
 
 
-WorkspaceBag·populateFrom: (payload:any -> bool)
+WorkspaceBag·loadFromJsonish: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5845,7 +5845,7 @@ WorkspaceBag·populateFrom: (payload:any -> bool)
             for __item__workspaceFolders in __coll__workspaceFolders
                 var __val__workspaceFolders of WorkspaceFolder
                 __val__workspaceFolders = WorkspaceFolder·new
-                ok = __val__workspaceFolders.populateFrom(__item__workspaceFolders)
+                ok = __val__workspaceFolders.loadFromJsonish(__item__workspaceFolders)
                 if !ok
                     return false
                 workspaceFolders@__idx__workspaceFolders = __val__workspaceFolders
@@ -5856,7 +5856,7 @@ WorkspaceBag·populateFrom: (payload:any -> bool)
 
 
 
-DiagnosticChangeEvent·populateFrom: (payload:any -> bool)
+DiagnosticChangeEvent·loadFromJsonish: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5889,7 +5889,7 @@ DiagnosticChangeEvent·populateFrom: (payload:any -> bool)
 
 
 
-StatusBarItemBag·populateFrom: (payload:any -> bool)
+StatusBarItemBag·loadFromJsonish: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5963,7 +5963,7 @@ StatusBarItemBag·populateFrom: (payload:any -> bool)
 
 
 
-OutputChannelBag·populateFrom: (payload:any -> bool)
+OutputChannelBag·loadFromJsonish: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5985,7 +5985,7 @@ OutputChannelBag·populateFrom: (payload:any -> bool)
 
 
 
-TextEditorDecorationTypeBag·populateFrom: (payload:any -> bool)
+TextEditorDecorationTypeBag·loadFromJsonish: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -6007,7 +6007,7 @@ TextEditorDecorationTypeBag·populateFrom: (payload:any -> bool)
 
 
 
-InputBoxBag·populateFrom: (payload:any -> bool)
+InputBoxBag·loadFromJsonish: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -6111,7 +6111,7 @@ InputBoxBag·populateFrom: (payload:any -> bool)
 
 
 
-QuickPickBag·populateFrom: (payload:any -> bool)
+QuickPickBag·loadFromJsonish: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -6148,7 +6148,7 @@ QuickPickBag·populateFrom: (payload:any -> bool)
             for __item__items in __coll__items
                 var __val__items of QuickPickItem
                 __val__items = QuickPickItem·new
-                ok = __val__items.populateFrom(__item__items)
+                ok = __val__items.loadFromJsonish(__item__items)
                 if !ok
                     return false
                 items@__idx__items = __val__items
@@ -6192,7 +6192,7 @@ QuickPickBag·populateFrom: (payload:any -> bool)
             for __item__activeItems in __coll__activeItems
                 var __val__activeItems of QuickPickItem
                 __val__activeItems = QuickPickItem·new
-                ok = __val__activeItems.populateFrom(__item__activeItems)
+                ok = __val__activeItems.loadFromJsonish(__item__activeItems)
                 if !ok
                     return false
                 activeItems@__idx__activeItems = __val__activeItems
@@ -6212,7 +6212,7 @@ QuickPickBag·populateFrom: (payload:any -> bool)
             for __item__selectedItems in __coll__selectedItems
                 var __val__selectedItems of QuickPickItem
                 __val__selectedItems = QuickPickItem·new
-                ok = __val__selectedItems.populateFrom(__item__selectedItems)
+                ok = __val__selectedItems.loadFromJsonish(__item__selectedItems)
                 if !ok
                     return false
                 selectedItems@__idx__selectedItems = __val__selectedItems

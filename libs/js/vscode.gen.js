@@ -87,29 +87,29 @@ var OverviewRulerLane;
 })(OverviewRulerLane = exports.OverviewRulerLane || (exports.OverviewRulerLane = {}));
 function newMessageItem() {
     let me;
-    me = { populateFrom: _ => MessageItem_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => MessageItem_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 exports.newMessageItem = newMessageItem;
 function newQuickPickItem() {
     let me;
-    me = { populateFrom: _ => QuickPickItem_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => QuickPickItem_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 exports.newQuickPickItem = newQuickPickItem;
 function newWorkspaceFolder() {
     let me;
-    me = { populateFrom: _ => WorkspaceFolder_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => WorkspaceFolder_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 function newWindowState() {
     let me;
-    me = { populateFrom: _ => WindowState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => WindowState_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 function newStatusBarItem() {
     let me;
-    me = { populateFrom: _ => StatusBarItem_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => StatusBarItem_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     me.Show = () => StatusBarItem_Show.call(me);
     me.Hide = () => StatusBarItem_Hide.call(me);
     me.Dispose = () => StatusBarItem_Dispose.call(me);
@@ -119,7 +119,7 @@ function newStatusBarItem() {
 }
 function newOutputChannel() {
     let me;
-    me = { populateFrom: _ => OutputChannel_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => OutputChannel_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     me.Append = (a0) => OutputChannel_Append.call(me, a0);
     me.AppendLine = (a0) => OutputChannel_AppendLine.call(me, a0);
     me.Clear = () => OutputChannel_Clear.call(me);
@@ -131,14 +131,14 @@ function newOutputChannel() {
 }
 function newTextEditorDecorationType() {
     let me;
-    me = { populateFrom: _ => TextEditorDecorationType_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => TextEditorDecorationType_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     me.Dispose = () => TextEditorDecorationType_Dispose.call(me);
     me.Get = () => TextEditorDecorationType_Get.call(me);
     return me;
 }
 function newInputBox() {
     let me;
-    me = { populateFrom: _ => InputBox_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => InputBox_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     me.OnDidChangeValue = (a0) => InputBox_OnDidChangeValue.call(me, a0);
     me.OnDidAccept = (a0) => InputBox_OnDidAccept.call(me, a0);
     me.Show = () => InputBox_Show.call(me);
@@ -151,7 +151,7 @@ function newInputBox() {
 }
 function newQuickPick() {
     let me;
-    me = { populateFrom: _ => QuickPick_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => QuickPick_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     me.OnDidChangeValue = (a0) => QuickPick_OnDidChangeValue.call(me, a0);
     me.OnDidAccept = (a0) => QuickPick_OnDidAccept.call(me, a0);
     me.OnDidChangeActive = (a0) => QuickPick_OnDidChangeActive.call(me, a0);
@@ -166,51 +166,51 @@ function newQuickPick() {
 }
 function newWorkspaceFoldersChangeEvent() {
     let me;
-    me = { populateFrom: _ => WorkspaceFoldersChangeEvent_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => WorkspaceFoldersChangeEvent_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 function newDiagnosticChangeEvent() {
     let me;
-    me = { populateFrom: _ => DiagnosticChangeEvent_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => DiagnosticChangeEvent_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 function newEnvBag() {
     let me;
-    me = { populateFrom: _ => EnvBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => EnvBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 function newWorkspaceBag() {
     let me;
-    me = { populateFrom: _ => WorkspaceBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => WorkspaceBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 function newStatusBarItemBag() {
     let me;
-    me = { populateFrom: _ => StatusBarItemBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => StatusBarItemBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 exports.newStatusBarItemBag = newStatusBarItemBag;
 function newOutputChannelBag() {
     let me;
-    me = { populateFrom: _ => OutputChannelBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => OutputChannelBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 exports.newOutputChannelBag = newOutputChannelBag;
 function newTextEditorDecorationTypeBag() {
     let me;
-    me = { populateFrom: _ => TextEditorDecorationTypeBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => TextEditorDecorationTypeBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 exports.newTextEditorDecorationTypeBag = newTextEditorDecorationTypeBag;
 function newInputBoxBag() {
     let me;
-    me = { populateFrom: _ => InputBoxBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => InputBoxBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 exports.newInputBoxBag = newInputBoxBag;
 function newQuickPickBag() {
     let me;
-    me = { populateFrom: _ => QuickPickBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => QuickPickBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
 exports.newQuickPickBag = newQuickPickBag;
@@ -307,7 +307,7 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -339,7 +339,7 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -435,7 +435,7 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -467,7 +467,7 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -563,7 +563,7 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -595,7 +595,7 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -716,7 +716,7 @@ class implWindow extends implBase {
                             let __0;
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = newQuickPickItem();
-                                ok = __0.populateFrom(args[0]);
+                                ok = __0.loadFromJsonish(args[0]);
                                 if (!ok) {
                                     return [null, false];
                                 }
@@ -811,7 +811,7 @@ class implWindow extends implBase {
                             let __0;
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = newQuickPickItem();
-                                ok = __0.populateFrom(args[0]);
+                                ok = __0.loadFromJsonish(args[0]);
                                 if (!ok) {
                                     return [null, false];
                                 }
@@ -896,7 +896,7 @@ class implWindow extends implBase {
                             let __0;
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = newQuickPickItem();
-                                ok = __0.populateFrom(args[0]);
+                                ok = __0.loadFromJsonish(args[0]);
                                 if (!ok) {
                                     return [null, false];
                                 }
@@ -939,7 +939,7 @@ class implWindow extends implBase {
                 for (const __item__result of __coll__result) {
                     let __val__result;
                     __val__result = newQuickPickItem();
-                    ok = __val__result.populateFrom(__item__result);
+                    ok = __val__result.loadFromJsonish(__item__result);
                     if (!ok) {
                         return false;
                     }
@@ -992,7 +992,7 @@ class implWindow extends implBase {
                             let __0;
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = newQuickPickItem();
-                                ok = __0.populateFrom(args[0]);
+                                ok = __0.loadFromJsonish(args[0]);
                                 if (!ok) {
                                     return [null, false];
                                 }
@@ -1026,7 +1026,7 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newQuickPickItem();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -1066,7 +1066,7 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -1099,7 +1099,7 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -1207,7 +1207,7 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newWorkspaceFolder();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -1236,7 +1236,7 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newWindowState();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -1258,26 +1258,26 @@ class implWindow extends implBase {
         msg = newipcMsg();
         msg.QName = "window.onDidChangeWindowState";
         msg.Data = {};
-        let _fnid_listener;
+        let listenerFnId;
         if ((undefined === listener || null === listener)) {
             vsc_appz_1.OnError(this.Impl(), "Window.OnDidChangeWindowState: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
             return null;
         }
-        _fnid_listener = this.Impl().nextSub((args) => {
+        listenerFnId = this.Impl().nextSub((args) => {
             let ok;
             if (1 !== args.length) {
                 return ok;
             }
             let _a_0_;
             _a_0_ = newWindowState();
-            ok = _a_0_.populateFrom(args[0]);
+            ok = _a_0_.loadFromJsonish(args[0]);
             if (!ok) {
                 return false;
             }
             listener(_a_0_);
             return true;
         }, null);
-        msg.Data["listener"] = _fnid_listener;
+        msg.Data["listener"] = listenerFnId;
         let onresp;
         let onret;
         onresp = (payload) => {
@@ -1285,7 +1285,7 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -1295,7 +1295,7 @@ class implWindow extends implBase {
             }
             {
                 if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), _fnid_listener));
+                    onret(result.bind(this.Impl(), listenerFnId));
                 }
             }
             return true;
@@ -1323,11 +1323,11 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newStatusBarItem();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
-                result.disp.impl = this.Impl();
+                result.__disp__.impl = this.Impl();
             }
             {
                 result.Get()((state) => {
@@ -1356,11 +1356,11 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newOutputChannel();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
-                result.disp.impl = this.Impl();
+                result.__disp__.impl = this.Impl();
             }
             {
                 result.Get()((state) => {
@@ -1389,11 +1389,11 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newTextEditorDecorationType();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
-                result.disp.impl = this.Impl();
+                result.__disp__.impl = this.Impl();
             }
             {
                 result.Get()((state) => {
@@ -1421,11 +1421,11 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newInputBox();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
-                result.disp.impl = this.Impl();
+                result.__disp__.impl = this.Impl();
             }
             {
                 result.Get()((state) => {
@@ -1453,11 +1453,11 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newQuickPick();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
-                result.disp.impl = this.Impl();
+                result.__disp__.impl = this.Impl();
             }
             {
                 result.Get()((state) => {
@@ -1746,7 +1746,7 @@ class implEnv extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newEnvBag();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -1924,26 +1924,26 @@ class implWorkspace extends implBase {
         msg = newipcMsg();
         msg.QName = "workspace.onDidChangeWorkspaceFolders";
         msg.Data = {};
-        let _fnid_listener;
+        let listenerFnId;
         if ((undefined === listener || null === listener)) {
             vsc_appz_1.OnError(this.Impl(), "Workspace.OnDidChangeWorkspaceFolders: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
             return null;
         }
-        _fnid_listener = this.Impl().nextSub((args) => {
+        listenerFnId = this.Impl().nextSub((args) => {
             let ok;
             if (1 !== args.length) {
                 return ok;
             }
             let _a_0_;
             _a_0_ = newWorkspaceFoldersChangeEvent();
-            ok = _a_0_.populateFrom(args[0]);
+            ok = _a_0_.loadFromJsonish(args[0]);
             if (!ok) {
                 return false;
             }
             listener(_a_0_);
             return true;
         }, null);
-        msg.Data["listener"] = _fnid_listener;
+        msg.Data["listener"] = listenerFnId;
         let onresp;
         let onret;
         onresp = (payload) => {
@@ -1951,7 +1951,7 @@ class implWorkspace extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -1961,7 +1961,7 @@ class implWorkspace extends implBase {
             }
             {
                 if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), _fnid_listener));
+                    onret(result.bind(this.Impl(), listenerFnId));
                 }
             }
             return true;
@@ -1984,7 +1984,7 @@ class implWorkspace extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newWorkspaceFolder();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -2023,7 +2023,7 @@ class implWorkspace extends implBase {
                 for (const __item__result of __coll__result) {
                     let __val__result;
                     __val__result = newWorkspaceFolder();
-                    ok = __val__result.populateFrom(__item__result);
+                    ok = __val__result.loadFromJsonish(__item__result);
                     if (!ok) {
                         return false;
                     }
@@ -2144,7 +2144,7 @@ class implWorkspace extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newWorkspaceBag();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -2213,26 +2213,26 @@ class implLanguages extends implBase {
         msg = newipcMsg();
         msg.QName = "languages.onDidChangeDiagnostics";
         msg.Data = {};
-        let _fnid_listener;
+        let listenerFnId;
         if ((undefined === listener || null === listener)) {
             vsc_appz_1.OnError(this.Impl(), "Languages.OnDidChangeDiagnostics: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
             return null;
         }
-        _fnid_listener = this.Impl().nextSub((args) => {
+        listenerFnId = this.Impl().nextSub((args) => {
             let ok;
             if (1 !== args.length) {
                 return ok;
             }
             let _a_0_;
             _a_0_ = newDiagnosticChangeEvent();
-            ok = _a_0_.populateFrom(args[0]);
+            ok = _a_0_.loadFromJsonish(args[0]);
             if (!ok) {
                 return false;
             }
             listener(_a_0_);
             return true;
         }, null);
-        msg.Data["listener"] = _fnid_listener;
+        msg.Data["listener"] = listenerFnId;
         let onresp;
         let onret;
         onresp = (payload) => {
@@ -2240,7 +2240,7 @@ class implLanguages extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -2250,7 +2250,7 @@ class implLanguages extends implBase {
             }
             {
                 if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), _fnid_listener));
+                    onret(result.bind(this.Impl(), listenerFnId));
                 }
             }
             return true;
@@ -2268,12 +2268,12 @@ class implExtensions extends implBase {
         msg = newipcMsg();
         msg.QName = "extensions.onDidChange";
         msg.Data = {};
-        let _fnid_listener;
+        let listenerFnId;
         if ((undefined === listener || null === listener)) {
             vsc_appz_1.OnError(this.Impl(), "Extensions.OnDidChange: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
             return null;
         }
-        _fnid_listener = this.Impl().nextSub((args) => {
+        listenerFnId = this.Impl().nextSub((args) => {
             let ok;
             if (0 !== args.length) {
                 return ok;
@@ -2281,7 +2281,7 @@ class implExtensions extends implBase {
             listener();
             return true;
         }, null);
-        msg.Data["listener"] = _fnid_listener;
+        msg.Data["listener"] = listenerFnId;
         let onresp;
         let onret;
         onresp = (payload) => {
@@ -2289,7 +2289,7 @@ class implExtensions extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -2299,7 +2299,7 @@ class implExtensions extends implBase {
             }
             {
                 if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), _fnid_listener));
+                    onret(result.bind(this.Impl(), listenerFnId));
                 }
             }
             return true;
@@ -2318,12 +2318,12 @@ class implCommands extends implBase {
         msg.QName = "commands.registerCommand";
         msg.Data = {};
         msg.Data["command"] = command;
-        let _fnid_callback;
+        let callbackFnId;
         if ((undefined === callback || null === callback)) {
             vsc_appz_1.OnError(this.Impl(), "Commands.RegisterCommand: the 'callback' arg (which is not optional but required) was not passed by the caller", null);
             return null;
         }
-        _fnid_callback = this.Impl().nextSub(null, (args) => {
+        callbackFnId = this.Impl().nextSub(null, (args) => {
             let ok;
             if (1 !== args.length) {
                 return [null, ok];
@@ -2337,7 +2337,7 @@ class implCommands extends implBase {
             ret = callback(_a_0_);
             return [ret, true];
         });
-        msg.Data["callback"] = _fnid_callback;
+        msg.Data["callback"] = callbackFnId;
         let onresp;
         let onret;
         onresp = (payload) => {
@@ -2345,7 +2345,7 @@ class implCommands extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable();
-                ok = result.populateFrom(payload);
+                ok = result.loadFromJsonish(payload);
                 if (!ok) {
                     return false;
                 }
@@ -2355,7 +2355,7 @@ class implCommands extends implBase {
             }
             {
                 if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), _fnid_callback));
+                    onret(result.bind(this.Impl(), callbackFnId));
                 }
             }
             return true;
@@ -2442,7 +2442,7 @@ function StatusBarItem_Show() {
     msg = newipcMsg();
     msg.QName = "StatusBarItem.show";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -2450,7 +2450,7 @@ function StatusBarItem_Show() {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newStatusBarItemBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2462,7 +2462,7 @@ function StatusBarItem_Show() {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -2472,7 +2472,7 @@ function StatusBarItem_Hide() {
     msg = newipcMsg();
     msg.QName = "StatusBarItem.hide";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -2480,7 +2480,7 @@ function StatusBarItem_Hide() {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newStatusBarItemBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2492,20 +2492,20 @@ function StatusBarItem_Hide() {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
 }
 function StatusBarItem_Dispose() {
-    return this.disp.Dispose();
+    return this.__disp__.Dispose();
 }
 function StatusBarItem_Get() {
     let msg;
     msg = newipcMsg();
     msg.QName = "StatusBarItem.appzObjPropsGet";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -2513,7 +2513,7 @@ function StatusBarItem_Get() {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newStatusBarItemBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2525,7 +2525,7 @@ function StatusBarItem_Get() {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -2535,7 +2535,7 @@ function StatusBarItem_Set(allUpdates) {
     msg = newipcMsg();
     msg.QName = "StatusBarItem.appzObjPropsSet";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     msg.Data["allUpdates"] = allUpdates;
     let onresp;
     let onret;
@@ -2548,7 +2548,7 @@ function StatusBarItem_Set(allUpdates) {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -2558,7 +2558,7 @@ function OutputChannel_Append(value) {
     msg = newipcMsg();
     msg.QName = "OutputChannel.append";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     msg.Data["value"] = value;
     let onresp;
     let onret;
@@ -2567,7 +2567,7 @@ function OutputChannel_Append(value) {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newOutputChannelBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2579,7 +2579,7 @@ function OutputChannel_Append(value) {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -2589,7 +2589,7 @@ function OutputChannel_AppendLine(value) {
     msg = newipcMsg();
     msg.QName = "OutputChannel.appendLine";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     msg.Data["value"] = value;
     let onresp;
     let onret;
@@ -2598,7 +2598,7 @@ function OutputChannel_AppendLine(value) {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newOutputChannelBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2610,7 +2610,7 @@ function OutputChannel_AppendLine(value) {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -2620,7 +2620,7 @@ function OutputChannel_Clear() {
     msg = newipcMsg();
     msg.QName = "OutputChannel.clear";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -2628,7 +2628,7 @@ function OutputChannel_Clear() {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newOutputChannelBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2640,7 +2640,7 @@ function OutputChannel_Clear() {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -2650,7 +2650,7 @@ function OutputChannel_Show(preserveFocus) {
     msg = newipcMsg();
     msg.QName = "OutputChannel.show";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     msg.Data["preserveFocus"] = preserveFocus;
     let onresp;
     let onret;
@@ -2659,7 +2659,7 @@ function OutputChannel_Show(preserveFocus) {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newOutputChannelBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2671,7 +2671,7 @@ function OutputChannel_Show(preserveFocus) {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -2681,7 +2681,7 @@ function OutputChannel_Hide() {
     msg = newipcMsg();
     msg.QName = "OutputChannel.hide";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -2689,7 +2689,7 @@ function OutputChannel_Hide() {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newOutputChannelBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2701,20 +2701,20 @@ function OutputChannel_Hide() {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
 }
 function OutputChannel_Dispose() {
-    return this.disp.Dispose();
+    return this.__disp__.Dispose();
 }
 function OutputChannel_Get() {
     let msg;
     msg = newipcMsg();
     msg.QName = "OutputChannel.appzObjPropsGet";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -2722,7 +2722,7 @@ function OutputChannel_Get() {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newOutputChannelBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2734,20 +2734,20 @@ function OutputChannel_Get() {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
 }
 function TextEditorDecorationType_Dispose() {
-    return this.disp.Dispose();
+    return this.__disp__.Dispose();
 }
 function TextEditorDecorationType_Get() {
     let msg;
     msg = newipcMsg();
     msg.QName = "TextEditorDecorationType.appzObjPropsGet";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -2755,7 +2755,7 @@ function TextEditorDecorationType_Get() {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newTextEditorDecorationTypeBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2767,7 +2767,7 @@ function TextEditorDecorationType_Get() {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -2777,13 +2777,13 @@ function InputBox_OnDidChangeValue(handler) {
     msg = newipcMsg();
     msg.QName = "InputBox.onDidChangeValue";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
-    let _fnid_handler;
+    msg.Data[""] = this.__disp__.id;
+    let handlerFnId;
     if ((undefined === handler || null === handler)) {
-        vsc_appz_1.OnError(this.disp.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        vsc_appz_1.OnError(this.__disp__.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
         return null;
     }
-    _fnid_handler = this.disp.impl.nextSub((args) => {
+    handlerFnId = this.__disp__.impl.nextSub((args) => {
         let ok;
         if (2 !== args.length) {
             return ok;
@@ -2795,15 +2795,15 @@ function InputBox_OnDidChangeValue(handler) {
         }
         let _a_1_;
         _a_1_ = newInputBoxBag();
-        ok = _a_1_.populateFrom(args[1]);
+        ok = _a_1_.loadFromJsonish(args[1]);
         if (!ok) {
             return false;
         }
         handler(_a_0_, _a_1_);
         return true;
     }, null);
-    msg.Data["handler"] = _fnid_handler;
-    this.disp.addSub(_fnid_handler);
+    msg.Data["handler"] = handlerFnId;
+    this.__disp__.addSub(handlerFnId);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -2811,7 +2811,7 @@ function InputBox_OnDidChangeValue(handler) {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2821,12 +2821,12 @@ function InputBox_OnDidChangeValue(handler) {
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler));
+                onret(result.bind(this.__disp__.impl, handlerFnId));
             }
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -2836,28 +2836,28 @@ function InputBox_OnDidAccept(handler) {
     msg = newipcMsg();
     msg.QName = "InputBox.onDidAccept";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
-    let _fnid_handler;
+    msg.Data[""] = this.__disp__.id;
+    let handlerFnId;
     if ((undefined === handler || null === handler)) {
-        vsc_appz_1.OnError(this.disp.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        vsc_appz_1.OnError(this.__disp__.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
         return null;
     }
-    _fnid_handler = this.disp.impl.nextSub((args) => {
+    handlerFnId = this.__disp__.impl.nextSub((args) => {
         let ok;
         if (1 !== args.length) {
             return ok;
         }
         let _a_0_;
         _a_0_ = newInputBoxBag();
-        ok = _a_0_.populateFrom(args[0]);
+        ok = _a_0_.loadFromJsonish(args[0]);
         if (!ok) {
             return false;
         }
         handler(_a_0_);
         return true;
     }, null);
-    msg.Data["handler"] = _fnid_handler;
-    this.disp.addSub(_fnid_handler);
+    msg.Data["handler"] = handlerFnId;
+    this.__disp__.addSub(handlerFnId);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -2865,7 +2865,7 @@ function InputBox_OnDidAccept(handler) {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2875,12 +2875,12 @@ function InputBox_OnDidAccept(handler) {
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler));
+                onret(result.bind(this.__disp__.impl, handlerFnId));
             }
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -2890,7 +2890,7 @@ function InputBox_Show() {
     msg = newipcMsg();
     msg.QName = "InputBox.show";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -2898,7 +2898,7 @@ function InputBox_Show() {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newInputBoxBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2910,7 +2910,7 @@ function InputBox_Show() {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -2920,7 +2920,7 @@ function InputBox_Hide() {
     msg = newipcMsg();
     msg.QName = "InputBox.hide";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -2928,7 +2928,7 @@ function InputBox_Hide() {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newInputBoxBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2940,7 +2940,7 @@ function InputBox_Hide() {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -2950,28 +2950,28 @@ function InputBox_OnDidHide(handler) {
     msg = newipcMsg();
     msg.QName = "InputBox.onDidHide";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
-    let _fnid_handler;
+    msg.Data[""] = this.__disp__.id;
+    let handlerFnId;
     if ((undefined === handler || null === handler)) {
-        vsc_appz_1.OnError(this.disp.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        vsc_appz_1.OnError(this.__disp__.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
         return null;
     }
-    _fnid_handler = this.disp.impl.nextSub((args) => {
+    handlerFnId = this.__disp__.impl.nextSub((args) => {
         let ok;
         if (1 !== args.length) {
             return ok;
         }
         let _a_0_;
         _a_0_ = newInputBoxBag();
-        ok = _a_0_.populateFrom(args[0]);
+        ok = _a_0_.loadFromJsonish(args[0]);
         if (!ok) {
             return false;
         }
         handler(_a_0_);
         return true;
     }, null);
-    msg.Data["handler"] = _fnid_handler;
-    this.disp.addSub(_fnid_handler);
+    msg.Data["handler"] = handlerFnId;
+    this.__disp__.addSub(handlerFnId);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -2979,7 +2979,7 @@ function InputBox_OnDidHide(handler) {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -2989,25 +2989,25 @@ function InputBox_OnDidHide(handler) {
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler));
+                onret(result.bind(this.__disp__.impl, handlerFnId));
             }
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
 }
 function InputBox_Dispose() {
-    return this.disp.Dispose();
+    return this.__disp__.Dispose();
 }
 function InputBox_Get() {
     let msg;
     msg = newipcMsg();
     msg.QName = "InputBox.appzObjPropsGet";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3015,7 +3015,7 @@ function InputBox_Get() {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newInputBoxBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -3027,7 +3027,7 @@ function InputBox_Get() {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -3037,7 +3037,7 @@ function InputBox_Set(allUpdates) {
     msg = newipcMsg();
     msg.QName = "InputBox.appzObjPropsSet";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     msg.Data["allUpdates"] = allUpdates;
     let onresp;
     let onret;
@@ -3050,7 +3050,7 @@ function InputBox_Set(allUpdates) {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -3060,13 +3060,13 @@ function QuickPick_OnDidChangeValue(handler) {
     msg = newipcMsg();
     msg.QName = "QuickPick.onDidChangeValue";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
-    let _fnid_handler;
+    msg.Data[""] = this.__disp__.id;
+    let handlerFnId;
     if ((undefined === handler || null === handler)) {
-        vsc_appz_1.OnError(this.disp.impl, "QuickPick.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        vsc_appz_1.OnError(this.__disp__.impl, "QuickPick.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
         return null;
     }
-    _fnid_handler = this.disp.impl.nextSub((args) => {
+    handlerFnId = this.__disp__.impl.nextSub((args) => {
         let ok;
         if (2 !== args.length) {
             return ok;
@@ -3078,15 +3078,15 @@ function QuickPick_OnDidChangeValue(handler) {
         }
         let _a_1_;
         _a_1_ = newQuickPickBag();
-        ok = _a_1_.populateFrom(args[1]);
+        ok = _a_1_.loadFromJsonish(args[1]);
         if (!ok) {
             return false;
         }
         handler(_a_0_, _a_1_);
         return true;
     }, null);
-    msg.Data["handler"] = _fnid_handler;
-    this.disp.addSub(_fnid_handler);
+    msg.Data["handler"] = handlerFnId;
+    this.__disp__.addSub(handlerFnId);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3094,7 +3094,7 @@ function QuickPick_OnDidChangeValue(handler) {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -3104,12 +3104,12 @@ function QuickPick_OnDidChangeValue(handler) {
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler));
+                onret(result.bind(this.__disp__.impl, handlerFnId));
             }
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -3119,28 +3119,28 @@ function QuickPick_OnDidAccept(handler) {
     msg = newipcMsg();
     msg.QName = "QuickPick.onDidAccept";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
-    let _fnid_handler;
+    msg.Data[""] = this.__disp__.id;
+    let handlerFnId;
     if ((undefined === handler || null === handler)) {
-        vsc_appz_1.OnError(this.disp.impl, "QuickPick.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        vsc_appz_1.OnError(this.__disp__.impl, "QuickPick.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
         return null;
     }
-    _fnid_handler = this.disp.impl.nextSub((args) => {
+    handlerFnId = this.__disp__.impl.nextSub((args) => {
         let ok;
         if (1 !== args.length) {
             return ok;
         }
         let _a_0_;
         _a_0_ = newQuickPickBag();
-        ok = _a_0_.populateFrom(args[0]);
+        ok = _a_0_.loadFromJsonish(args[0]);
         if (!ok) {
             return false;
         }
         handler(_a_0_);
         return true;
     }, null);
-    msg.Data["handler"] = _fnid_handler;
-    this.disp.addSub(_fnid_handler);
+    msg.Data["handler"] = handlerFnId;
+    this.__disp__.addSub(handlerFnId);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3148,7 +3148,7 @@ function QuickPick_OnDidAccept(handler) {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -3158,12 +3158,12 @@ function QuickPick_OnDidAccept(handler) {
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler));
+                onret(result.bind(this.__disp__.impl, handlerFnId));
             }
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -3173,13 +3173,13 @@ function QuickPick_OnDidChangeActive(handler) {
     msg = newipcMsg();
     msg.QName = "QuickPick.onDidChangeActive";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
-    let _fnid_handler;
+    msg.Data[""] = this.__disp__.id;
+    let handlerFnId;
     if ((undefined === handler || null === handler)) {
-        vsc_appz_1.OnError(this.disp.impl, "QuickPick.OnDidChangeActive: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        vsc_appz_1.OnError(this.__disp__.impl, "QuickPick.OnDidChangeActive: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
         return null;
     }
-    _fnid_handler = this.disp.impl.nextSub((args) => {
+    handlerFnId = this.__disp__.impl.nextSub((args) => {
         let ok;
         if (2 !== args.length) {
             return ok;
@@ -3196,7 +3196,7 @@ function QuickPick_OnDidChangeActive(handler) {
         for (const __item___a_0_ of __coll___a_0_) {
             let __val___a_0_;
             __val___a_0_ = newQuickPickItem();
-            ok = __val___a_0_.populateFrom(__item___a_0_);
+            ok = __val___a_0_.loadFromJsonish(__item___a_0_);
             if (!ok) {
                 return false;
             }
@@ -3205,15 +3205,15 @@ function QuickPick_OnDidChangeActive(handler) {
         }
         let _a_1_;
         _a_1_ = newQuickPickBag();
-        ok = _a_1_.populateFrom(args[1]);
+        ok = _a_1_.loadFromJsonish(args[1]);
         if (!ok) {
             return false;
         }
         handler(_a_0_, _a_1_);
         return true;
     }, null);
-    msg.Data["handler"] = _fnid_handler;
-    this.disp.addSub(_fnid_handler);
+    msg.Data["handler"] = handlerFnId;
+    this.__disp__.addSub(handlerFnId);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3221,7 +3221,7 @@ function QuickPick_OnDidChangeActive(handler) {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -3231,12 +3231,12 @@ function QuickPick_OnDidChangeActive(handler) {
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler));
+                onret(result.bind(this.__disp__.impl, handlerFnId));
             }
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -3246,13 +3246,13 @@ function QuickPick_OnDidChangeSelection(handler) {
     msg = newipcMsg();
     msg.QName = "QuickPick.onDidChangeSelection";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
-    let _fnid_handler;
+    msg.Data[""] = this.__disp__.id;
+    let handlerFnId;
     if ((undefined === handler || null === handler)) {
-        vsc_appz_1.OnError(this.disp.impl, "QuickPick.OnDidChangeSelection: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        vsc_appz_1.OnError(this.__disp__.impl, "QuickPick.OnDidChangeSelection: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
         return null;
     }
-    _fnid_handler = this.disp.impl.nextSub((args) => {
+    handlerFnId = this.__disp__.impl.nextSub((args) => {
         let ok;
         if (2 !== args.length) {
             return ok;
@@ -3269,7 +3269,7 @@ function QuickPick_OnDidChangeSelection(handler) {
         for (const __item___a_0_ of __coll___a_0_) {
             let __val___a_0_;
             __val___a_0_ = newQuickPickItem();
-            ok = __val___a_0_.populateFrom(__item___a_0_);
+            ok = __val___a_0_.loadFromJsonish(__item___a_0_);
             if (!ok) {
                 return false;
             }
@@ -3278,15 +3278,15 @@ function QuickPick_OnDidChangeSelection(handler) {
         }
         let _a_1_;
         _a_1_ = newQuickPickBag();
-        ok = _a_1_.populateFrom(args[1]);
+        ok = _a_1_.loadFromJsonish(args[1]);
         if (!ok) {
             return false;
         }
         handler(_a_0_, _a_1_);
         return true;
     }, null);
-    msg.Data["handler"] = _fnid_handler;
-    this.disp.addSub(_fnid_handler);
+    msg.Data["handler"] = handlerFnId;
+    this.__disp__.addSub(handlerFnId);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3294,7 +3294,7 @@ function QuickPick_OnDidChangeSelection(handler) {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -3304,12 +3304,12 @@ function QuickPick_OnDidChangeSelection(handler) {
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler));
+                onret(result.bind(this.__disp__.impl, handlerFnId));
             }
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -3319,7 +3319,7 @@ function QuickPick_Show() {
     msg = newipcMsg();
     msg.QName = "QuickPick.show";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3327,7 +3327,7 @@ function QuickPick_Show() {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newQuickPickBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -3339,7 +3339,7 @@ function QuickPick_Show() {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -3349,7 +3349,7 @@ function QuickPick_Hide() {
     msg = newipcMsg();
     msg.QName = "QuickPick.hide";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3357,7 +3357,7 @@ function QuickPick_Hide() {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newQuickPickBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -3369,7 +3369,7 @@ function QuickPick_Hide() {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -3379,28 +3379,28 @@ function QuickPick_OnDidHide(handler) {
     msg = newipcMsg();
     msg.QName = "QuickPick.onDidHide";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
-    let _fnid_handler;
+    msg.Data[""] = this.__disp__.id;
+    let handlerFnId;
     if ((undefined === handler || null === handler)) {
-        vsc_appz_1.OnError(this.disp.impl, "QuickPick.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        vsc_appz_1.OnError(this.__disp__.impl, "QuickPick.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
         return null;
     }
-    _fnid_handler = this.disp.impl.nextSub((args) => {
+    handlerFnId = this.__disp__.impl.nextSub((args) => {
         let ok;
         if (1 !== args.length) {
             return ok;
         }
         let _a_0_;
         _a_0_ = newQuickPickBag();
-        ok = _a_0_.populateFrom(args[0]);
+        ok = _a_0_.loadFromJsonish(args[0]);
         if (!ok) {
             return false;
         }
         handler(_a_0_);
         return true;
     }, null);
-    msg.Data["handler"] = _fnid_handler;
-    this.disp.addSub(_fnid_handler);
+    msg.Data["handler"] = handlerFnId;
+    this.__disp__.addSub(handlerFnId);
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3408,7 +3408,7 @@ function QuickPick_OnDidHide(handler) {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -3418,25 +3418,25 @@ function QuickPick_OnDidHide(handler) {
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler));
+                onret(result.bind(this.__disp__.impl, handlerFnId));
             }
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
 }
 function QuickPick_Dispose() {
-    return this.disp.Dispose();
+    return this.__disp__.Dispose();
 }
 function QuickPick_Get() {
     let msg;
     msg = newipcMsg();
     msg.QName = "QuickPick.appzObjPropsGet";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
@@ -3444,7 +3444,7 @@ function QuickPick_Get() {
         let result;
         if ((undefined !== payload && null !== payload)) {
             result = newQuickPickBag();
-            ok = result.populateFrom(payload);
+            ok = result.loadFromJsonish(payload);
             if (!ok) {
                 return false;
             }
@@ -3456,7 +3456,7 @@ function QuickPick_Get() {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
@@ -3466,7 +3466,7 @@ function QuickPick_Set(allUpdates) {
     msg = newipcMsg();
     msg.QName = "QuickPick.appzObjPropsSet";
     msg.Data = {};
-    msg.Data[""] = this.disp.id;
+    msg.Data[""] = this.__disp__.id;
     msg.Data["allUpdates"] = allUpdates;
     let onresp;
     let onret;
@@ -3479,12 +3479,12 @@ function QuickPick_Set(allUpdates) {
         }
         return true;
     };
-    this.disp.impl.send(msg, onresp);
+    this.__disp__.impl.send(msg, onresp);
     return (a0) => {
         onret = a0;
     };
 }
-function MessageItem_populateFrom(payload) {
+function MessageItem_loadFromJsonish(payload) {
     let it;
     let ok;
     let val;
@@ -3532,7 +3532,7 @@ function MessageItem_populateFrom(payload) {
     }
     return true;
 }
-function QuickPickItem_populateFrom(payload) {
+function QuickPickItem_loadFromJsonish(payload) {
     let it;
     let ok;
     let val;
@@ -3619,7 +3619,7 @@ function QuickPickItem_populateFrom(payload) {
     }
     return true;
 }
-function WorkspaceFolder_populateFrom(payload) {
+function WorkspaceFolder_loadFromJsonish(payload) {
     let it;
     let ok;
     let val;
@@ -3676,7 +3676,7 @@ function WorkspaceFolder_populateFrom(payload) {
     }
     return true;
 }
-function WindowState_populateFrom(payload) {
+function WindowState_loadFromJsonish(payload) {
     let it;
     let ok;
     let val;
@@ -3700,37 +3700,37 @@ function WindowState_populateFrom(payload) {
     }
     return true;
 }
-function StatusBarItem_populateFrom(payload) {
+function StatusBarItem_loadFromJsonish(payload) {
     let ok;
-    this.disp = newDisposable();
-    ok = this.disp.populateFrom(payload);
+    this.__disp__ = newDisposable();
+    ok = this.__disp__.loadFromJsonish(payload);
     return ok;
 }
-function OutputChannel_populateFrom(payload) {
+function OutputChannel_loadFromJsonish(payload) {
     let ok;
-    this.disp = newDisposable();
-    ok = this.disp.populateFrom(payload);
+    this.__disp__ = newDisposable();
+    ok = this.__disp__.loadFromJsonish(payload);
     return ok;
 }
-function TextEditorDecorationType_populateFrom(payload) {
+function TextEditorDecorationType_loadFromJsonish(payload) {
     let ok;
-    this.disp = newDisposable();
-    ok = this.disp.populateFrom(payload);
+    this.__disp__ = newDisposable();
+    ok = this.__disp__.loadFromJsonish(payload);
     return ok;
 }
-function InputBox_populateFrom(payload) {
+function InputBox_loadFromJsonish(payload) {
     let ok;
-    this.disp = newDisposable();
-    ok = this.disp.populateFrom(payload);
+    this.__disp__ = newDisposable();
+    ok = this.__disp__.loadFromJsonish(payload);
     return ok;
 }
-function QuickPick_populateFrom(payload) {
+function QuickPick_loadFromJsonish(payload) {
     let ok;
-    this.disp = newDisposable();
-    ok = this.disp.populateFrom(payload);
+    this.__disp__ = newDisposable();
+    ok = this.__disp__.loadFromJsonish(payload);
     return ok;
 }
-function EnvBag_populateFrom(payload) {
+function EnvBag_loadFromJsonish(payload) {
     let it;
     let ok;
     let val;
@@ -3844,7 +3844,7 @@ function EnvBag_populateFrom(payload) {
     }
     return true;
 }
-function WorkspaceFoldersChangeEvent_populateFrom(payload) {
+function WorkspaceFoldersChangeEvent_loadFromJsonish(payload) {
     let it;
     let ok;
     let val;
@@ -3867,7 +3867,7 @@ function WorkspaceFoldersChangeEvent_populateFrom(payload) {
             for (const __item__added of __coll__added) {
                 let __val__added;
                 __val__added = newWorkspaceFolder();
-                ok = __val__added.populateFrom(__item__added);
+                ok = __val__added.loadFromJsonish(__item__added);
                 if (!ok) {
                     return false;
                 }
@@ -3895,7 +3895,7 @@ function WorkspaceFoldersChangeEvent_populateFrom(payload) {
             for (const __item__removed of __coll__removed) {
                 let __val__removed;
                 __val__removed = newWorkspaceFolder();
-                ok = __val__removed.populateFrom(__item__removed);
+                ok = __val__removed.loadFromJsonish(__item__removed);
                 if (!ok) {
                     return false;
                 }
@@ -3910,7 +3910,7 @@ function WorkspaceFoldersChangeEvent_populateFrom(payload) {
     }
     return true;
 }
-function WorkspaceBag_populateFrom(payload) {
+function WorkspaceBag_loadFromJsonish(payload) {
     let it;
     let ok;
     let val;
@@ -3959,7 +3959,7 @@ function WorkspaceBag_populateFrom(payload) {
             for (const __item__workspaceFolders of __coll__workspaceFolders) {
                 let __val__workspaceFolders;
                 __val__workspaceFolders = newWorkspaceFolder();
-                ok = __val__workspaceFolders.populateFrom(__item__workspaceFolders);
+                ok = __val__workspaceFolders.loadFromJsonish(__item__workspaceFolders);
                 if (!ok) {
                     return false;
                 }
@@ -3971,7 +3971,7 @@ function WorkspaceBag_populateFrom(payload) {
     }
     return true;
 }
-function DiagnosticChangeEvent_populateFrom(payload) {
+function DiagnosticChangeEvent_loadFromJsonish(payload) {
     let it;
     let ok;
     let val;
@@ -4008,7 +4008,7 @@ function DiagnosticChangeEvent_populateFrom(payload) {
     }
     return true;
 }
-function StatusBarItemBag_populateFrom(payload) {
+function StatusBarItemBag_loadFromJsonish(payload) {
     let it;
     let ok;
     let val;
@@ -4100,7 +4100,7 @@ function StatusBarItemBag_populateFrom(payload) {
     }
     return true;
 }
-function OutputChannelBag_populateFrom(payload) {
+function OutputChannelBag_loadFromJsonish(payload) {
     let it;
     let ok;
     let val;
@@ -4123,7 +4123,7 @@ function OutputChannelBag_populateFrom(payload) {
     }
     return true;
 }
-function TextEditorDecorationTypeBag_populateFrom(payload) {
+function TextEditorDecorationTypeBag_loadFromJsonish(payload) {
     let it;
     let ok;
     let val;
@@ -4146,7 +4146,7 @@ function TextEditorDecorationTypeBag_populateFrom(payload) {
     }
     return true;
 }
-function InputBoxBag_populateFrom(payload) {
+function InputBoxBag_loadFromJsonish(payload) {
     let it;
     let ok;
     let val;
@@ -4281,7 +4281,7 @@ function InputBoxBag_populateFrom(payload) {
     }
     return true;
 }
-function QuickPickBag_populateFrom(payload) {
+function QuickPickBag_loadFromJsonish(payload) {
     let it;
     let ok;
     let val;
@@ -4326,7 +4326,7 @@ function QuickPickBag_populateFrom(payload) {
             for (const __item__items of __coll__items) {
                 let __val__items;
                 __val__items = newQuickPickItem();
-                ok = __val__items.populateFrom(__item__items);
+                ok = __val__items.loadFromJsonish(__item__items);
                 if (!ok) {
                     return false;
                 }
@@ -4384,7 +4384,7 @@ function QuickPickBag_populateFrom(payload) {
             for (const __item__activeItems of __coll__activeItems) {
                 let __val__activeItems;
                 __val__activeItems = newQuickPickItem();
-                ok = __val__activeItems.populateFrom(__item__activeItems);
+                ok = __val__activeItems.loadFromJsonish(__item__activeItems);
                 if (!ok) {
                     return false;
                 }
@@ -4409,7 +4409,7 @@ function QuickPickBag_populateFrom(payload) {
             for (const __item__selectedItems of __coll__selectedItems) {
                 let __val__selectedItems;
                 __val__selectedItems = newQuickPickItem();
-                ok = __val__selectedItems.populateFrom(__item__selectedItems);
+                ok = __val__selectedItems.loadFromJsonish(__item__selectedItems);
                 if (!ok) {
                     return false;
                 }

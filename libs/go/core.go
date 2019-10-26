@@ -212,7 +212,7 @@ func (me *Disposable) bind(impl *impl, subFnIds ...string) *Disposable {
 	return me
 }
 
-func (me *Disposable) populateFrom(payload any) (ok bool) {
+func (me *Disposable) loadFromJsonish(payload any) (ok bool) {
 	me.id, ok = payload.(string)
 	return ok && me.id != ""
 }

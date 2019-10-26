@@ -11,7 +11,50 @@ exports.docStrs = {
     extBaggage: "Free-form custom data, preserved across a roundtrip.",
     internalOnly: "For internal runtime use only."
 };
-exports.__ = {};
+exports.idents = {
+    typeSuffBag: "Bag",
+    methodNsProps: "AllProperties",
+    methodBagFetch: "Restore",
+    methodBagPublish: "ApplyChanges",
+    methodLoadFrom: "loadFromJsonish",
+    methodImpl: "Impl",
+    argHandler: "handler",
+    argListener: "listener",
+    argPayload: "payload",
+    argArgs: "args",
+    fldMyTags: "my",
+    fldDisp: "__disp__",
+    fldImpl: "impl",
+    fldBagHolder: "__holder__",
+    fldSuffFuncId: "_AppzFuncId",
+    fldDispObjBag: "CfgBag",
+    varOk: "ok",
+    varRes: "result",
+    varRet: "ret",
+    varIt: "it",
+    varVal: "val",
+    varMsg: "msg",
+    varFn: "fn",
+    varFnid: "fnid",
+    varFnids: "fnids",
+    varSuffFnid: "FnId",
+    varOnResp: "onresp",
+    varOnRet: "onret",
+    coreTypeCancel: "Cancel",
+    coreTypeDisp: "Disposable",
+    coreTypeMsg: "ipcMsg",
+    coreFldId: "id",
+    coreFldFnId: "fnId",
+    coreFldMsgQn: "QName",
+    coreFldMsgData: "Data",
+    coreFldCbOther: "cbOther",
+    coreMethodNextId: "nextFuncId",
+    coreMethodNextSub: "nextSub",
+    coreMethodAddSub: "addSub",
+    coreMethodBind: "bind",
+    coreMethodSend: "send",
+    coreMethodOnErr: "OnError",
+};
 class Prep {
     constructor(job) {
         this.enums = [];
@@ -33,14 +76,14 @@ class Prep {
                 let n = 0;
                 for (const arg of method.args)
                     if (arg.typeSpec === 'CancellationToken')
-                        [arg.isCancellationToken, arg.typeSpec] = [n++, 'Cancel'];
+                        [arg.isCancellationToken, arg.typeSpec] = [n++, exports.idents.coreTypeCancel];
                 const fromprop = method.fromOrig.decl;
                 if (fromprop && fromprop.PropType)
                     propmethods.push(method);
             }
             if (propmethods.length > 1) {
                 const struct = {
-                    isPropsOfIface: iface, name: iface.name + "Bag", funcFields: [],
+                    isPropsOfIface: iface, name: iface.name + exports.idents.typeSuffBag, funcFields: [],
                     fields: propmethods.map(me => ({
                         fromOrig: me.fromOrig.decl,
                         name: me.name,
@@ -51,9 +94,9 @@ class Prep {
                 };
                 this.structs.push(struct);
                 iface.methods.push({
-                    name: "AllProperties",
+                    name: exports.idents.methodNsProps,
                     isProps: struct, args: [{
-                            isFromRetThenable: true, name: "onDone", optional: false,
+                            isFromRetThenable: true, name: "?", optional: false,
                             typeSpec: { Thens: [struct.name] },
                         }],
                 });
@@ -80,13 +123,13 @@ class Prep {
                                         isargout = !isinfunc;
                                 }
             if (((struct.isOutgoing = struct.isOutgoing || isargout) && (struct.isIncoming = struct.isIncoming || isargin)) && !(struct.isPropsOfStruct || struct.isPropsOfIface))
-                struct.fields.push({ name: "my", isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict });
+                struct.fields.push({ name: exports.idents.fldMyTags, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict });
             if (struct.isIncoming && struct.fields.find(_ => typeFun(_.typeSpec))) {
                 struct.isDispObj = true;
                 const propfields = struct.fields.filter(_ => !typeFun(_.typeSpec));
                 if (propfields.length) {
                     const propstruct = {
-                        funcFields: [], name: struct.name + "Bag", isPropsOfStruct: struct,
+                        funcFields: [], name: struct.name + exports.idents.typeSuffBag, isPropsOfStruct: struct,
                         fromOrig: struct.fromOrig, isIncoming: true, isOutgoing: true,
                         fields: propfields.map(_ => {
                             _.optional = true;
@@ -153,7 +196,7 @@ class Prep {
                         isExtBaggage: false,
                     };
                     if (ts.isPropertySignature(_) && ts.isTypeReferenceNode(_.type) && _.type.typeName.getText() === "Event")
-                        field.typeSpec = { From: [{ From: _.type.typeArguments.map(_ => this.typeSpec(_, combine(it.decl.typeParameters, mtparams ? mtparams.typeParameters : []))).filter(_ => _ ? true : false), To: null }], To: "Disposable" };
+                        field.typeSpec = { From: [{ From: _.type.typeArguments.map(_ => this.typeSpec(_, combine(it.decl.typeParameters, mtparams ? mtparams.typeParameters : []))).filter(_ => _ ? true : false), To: null }], To: exports.idents.coreTypeDisp };
                     fields.push(field);
                 }
             }
@@ -214,14 +257,14 @@ class Prep {
                 }
             }
             me.args.push({
-                name: "listener",
+                name: exports.idents.argListener,
                 optional: false, typeSpec: { From: decle.EvtArgs.map((_, i) => evtargs[i]), To: null },
             });
         }
         let tret = (declp && declp.PropType) ?
             this.typeSpec(declp.PropType) :
             (decle && decle.EvtName && decle.EvtName.length) ?
-                "Disposable" :
+                exports.idents.coreTypeDisp :
                 this.typeSpec(declf.type, declf.typeParameters);
         if (typeof tret === 'string') {
             const struct = this.structs.find(_ => _.name === tret);
@@ -232,7 +275,7 @@ class Prep {
         if (!(tprom && tprom.length))
             tret = { Thens: [tret] };
         if (tret)
-            me.args.push({ name: "onDone", typeSpec: tret, isFromRetThenable: true, optional: true });
+            me.args.push({ name: "?", typeSpec: tret, isFromRetThenable: true, optional: true });
     }
     qName(memJob) {
         const qname = memJob.qName.split('.');

@@ -440,7 +440,7 @@ type Window interface {
 	// 
 	// `name` ── Human-readable string which will be used to represent the channel in the UI.
 	// 
-	// `return` ── A thenable that resolves to the newly created `OutputChannel`.
+	// `return` ── a thenable that resolves to the newly created `OutputChannel`.
 	CreateOutputChannel(name string) func(func(OutputChannel, OutputChannelBag))
 
 	// Create a TextEditorDecorationType that can be used to add decorations to text editors.
@@ -1141,7 +1141,7 @@ type WindowState struct {
 // A status bar item is a status bar contribution that can
 // show text and icons and run a command on click.
 type StatusBarItem struct {
-	disp *Disposable
+	__disp__ *Disposable
 
 	// CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 	CfgBag *StatusBarItemBag
@@ -1152,7 +1152,7 @@ type StatusBarItem struct {
 // To get an instance of an `OutputChannel` use
 // [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 type OutputChannel struct {
-	disp *Disposable
+	__disp__ *Disposable
 
 	// CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
 	CfgBag *OutputChannelBag
@@ -1305,7 +1305,7 @@ type DecorationRenderOptions struct {
 // To get an instance of a `TextEditorDecorationType` use
 // [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 type TextEditorDecorationType struct {
-	disp *Disposable
+	__disp__ *Disposable
 
 	// CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
 	CfgBag *TextEditorDecorationTypeBag
@@ -1317,7 +1317,7 @@ type TextEditorDecorationType struct {
 // is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 // when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 type InputBox struct {
-	disp *Disposable
+	__disp__ *Disposable
 
 	// CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 	CfgBag *InputBoxBag
@@ -1341,7 +1341,7 @@ type QuickInputButton struct {
 // is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
 // when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 type QuickPick struct {
-	disp *Disposable
+	__disp__ *Disposable
 
 	// CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 	CfgBag *QuickPickBag
@@ -1689,7 +1689,7 @@ func (me implWindow) ShowInformationMessage3(message string, items []MessageItem
 		var result *MessageItem
 		if (nil != payload) {
 			result = new(MessageItem)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -1722,7 +1722,7 @@ func (me implWindow) ShowInformationMessage4(message string, options MessageOpti
 		var result *MessageItem
 		if (nil != payload) {
 			result = new(MessageItem)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -1821,7 +1821,7 @@ func (me implWindow) ShowWarningMessage3(message string, items []MessageItem) fu
 		var result *MessageItem
 		if (nil != payload) {
 			result = new(MessageItem)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -1854,7 +1854,7 @@ func (me implWindow) ShowWarningMessage4(message string, options MessageOptions,
 		var result *MessageItem
 		if (nil != payload) {
 			result = new(MessageItem)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -1953,7 +1953,7 @@ func (me implWindow) ShowErrorMessage3(message string, items []MessageItem) func
 		var result *MessageItem
 		if (nil != payload) {
 			result = new(MessageItem)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -1986,7 +1986,7 @@ func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, i
 		var result *MessageItem
 		if (nil != payload) {
 			result = new(MessageItem)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -2119,7 +2119,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 						var ok bool
 						var __0 QuickPickItem
 						if (nil != args[0]) {
-							ok = __0.populateFrom(args[0])
+							ok = __0.loadFromJsonish(args[0])
 							if !ok {
 								return nil, false
 							}
@@ -2221,7 +2221,7 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 						var ok bool
 						var __0 QuickPickItem
 						if (nil != args[0]) {
-							ok = __0.populateFrom(args[0])
+							ok = __0.loadFromJsonish(args[0])
 							if !ok {
 								return nil, false
 							}
@@ -2313,7 +2313,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 						var ok bool
 						var __0 QuickPickItem
 						if (nil != args[0]) {
-							ok = __0.populateFrom(args[0])
+							ok = __0.loadFromJsonish(args[0])
 							if !ok {
 								return nil, false
 							}
@@ -2357,7 +2357,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 			__idx__result = 0
 			for _, __item__result := range __coll__result {
 				var __val__result QuickPickItem
-				ok = __val__result.populateFrom(__item__result)
+				ok = __val__result.loadFromJsonish(__item__result)
 				if !ok {
 					return false
 				}
@@ -2415,7 +2415,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 						var ok bool
 						var __0 QuickPickItem
 						if (nil != args[0]) {
-							ok = __0.populateFrom(args[0])
+							ok = __0.loadFromJsonish(args[0])
 							if !ok {
 								return nil, false
 							}
@@ -2451,7 +2451,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 		var result *QuickPickItem
 		if (nil != payload) {
 			result = new(QuickPickItem)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -2494,7 +2494,7 @@ func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int) fun
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -2527,7 +2527,7 @@ func (me implWindow) SetStatusBarMessage2(text string) func(func(*Disposable)) {
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -2637,7 +2637,7 @@ func (me implWindow) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions
 		var result *WorkspaceFolder
 		if (nil != payload) {
 			result = new(WorkspaceFolder)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -2666,7 +2666,7 @@ func (me implWindow) State() func(func(WindowState)) {
 		var ok bool
 		var result WindowState
 		if (nil != payload) {
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -2689,25 +2689,25 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState)) func(fun
 	msg = new(ipcMsg)
 	msg.QName = "window.onDidChangeWindowState"
 	msg.Data = make(dict, 1)
-	var _fnid_listener string
+	var listenerFnId string
 	if (nil == listener) {
 		OnError(me.Impl(), "Window.OnDidChangeWindowState: the 'listener' arg (which is not optional but required) was not passed by the caller", nil)
 		return nil
 	}
-	_fnid_listener = me.Impl().nextSub(func(args []any) bool {
+	listenerFnId = me.Impl().nextSub(func(args []any) bool {
 		var ok bool
 		if 1 != len(args) {
 			return ok
 		}
 		var _a_0_ WindowState
-		ok = _a_0_.populateFrom(args[0])
+		ok = _a_0_.loadFromJsonish(args[0])
 		if !ok {
 			return false
 		}
 		listener(_a_0_)
 		return true
 	}, nil)
-	msg.Data["listener"] = _fnid_listener
+	msg.Data["listener"] = listenerFnId
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -2715,7 +2715,7 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState)) func(fun
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -2724,7 +2724,7 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState)) func(fun
 		}
 		{
 			if (nil != onret) {
-				onret(result.bind(me.Impl(), _fnid_listener))
+				onret(result.bind(me.Impl(), listenerFnId))
 			}
 		}
 		return true
@@ -2752,11 +2752,11 @@ func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority 
 		var ok bool
 		var result StatusBarItem
 		if (nil != payload) {
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
-			result.disp.impl = me.Impl()
+			result.__disp__.impl = me.Impl()
 		}
 		{
 			result.Get()(func(state StatusBarItemBag) {
@@ -2785,11 +2785,11 @@ func (me implWindow) CreateOutputChannel(name string) func(func(OutputChannel, O
 		var ok bool
 		var result OutputChannel
 		if (nil != payload) {
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
-			result.disp.impl = me.Impl()
+			result.__disp__.impl = me.Impl()
 		}
 		{
 			result.Get()(func(state OutputChannelBag) {
@@ -2818,11 +2818,11 @@ func (me implWindow) CreateTextEditorDecorationType(options DecorationRenderOpti
 		var ok bool
 		var result TextEditorDecorationType
 		if (nil != payload) {
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
-			result.disp.impl = me.Impl()
+			result.__disp__.impl = me.Impl()
 		}
 		{
 			result.Get()(func(state TextEditorDecorationTypeBag) {
@@ -2850,11 +2850,11 @@ func (me implWindow) CreateInputBox() func(func(InputBox, InputBoxBag)) {
 		var ok bool
 		var result InputBox
 		if (nil != payload) {
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
-			result.disp.impl = me.Impl()
+			result.__disp__.impl = me.Impl()
 		}
 		{
 			result.Get()(func(state InputBoxBag) {
@@ -2882,11 +2882,11 @@ func (me implWindow) CreateQuickPick() func(func(QuickPick, QuickPickBag)) {
 		var ok bool
 		var result QuickPick
 		if (nil != payload) {
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
-			result.disp.impl = me.Impl()
+			result.__disp__.impl = me.Impl()
 		}
 		{
 			result.Get()(func(state QuickPickBag) {
@@ -3180,7 +3180,7 @@ func (me implEnv) AllProperties() func(func(EnvBag)) {
 		var ok bool
 		var result EnvBag
 		if (nil != payload) {
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -3357,25 +3357,25 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 	msg = new(ipcMsg)
 	msg.QName = "workspace.onDidChangeWorkspaceFolders"
 	msg.Data = make(dict, 1)
-	var _fnid_listener string
+	var listenerFnId string
 	if (nil == listener) {
 		OnError(me.Impl(), "Workspace.OnDidChangeWorkspaceFolders: the 'listener' arg (which is not optional but required) was not passed by the caller", nil)
 		return nil
 	}
-	_fnid_listener = me.Impl().nextSub(func(args []any) bool {
+	listenerFnId = me.Impl().nextSub(func(args []any) bool {
 		var ok bool
 		if 1 != len(args) {
 			return ok
 		}
 		var _a_0_ WorkspaceFoldersChangeEvent
-		ok = _a_0_.populateFrom(args[0])
+		ok = _a_0_.loadFromJsonish(args[0])
 		if !ok {
 			return false
 		}
 		listener(_a_0_)
 		return true
 	}, nil)
-	msg.Data["listener"] = _fnid_listener
+	msg.Data["listener"] = listenerFnId
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -3383,7 +3383,7 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -3392,7 +3392,7 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 		}
 		{
 			if (nil != onret) {
-				onret(result.bind(me.Impl(), _fnid_listener))
+				onret(result.bind(me.Impl(), listenerFnId))
 			}
 		}
 		return true
@@ -3416,7 +3416,7 @@ func (me implWorkspace) GetWorkspaceFolder(uri string) func(func(*WorkspaceFolde
 		var result *WorkspaceFolder
 		if (nil != payload) {
 			result = new(WorkspaceFolder)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -3455,7 +3455,7 @@ func (me implWorkspace) WorkspaceFolders() func(func([]WorkspaceFolder)) {
 			__idx__result = 0
 			for _, __item__result := range __coll__result {
 				var __val__result WorkspaceFolder
-				ok = __val__result.populateFrom(__item__result)
+				ok = __val__result.loadFromJsonish(__item__result)
 				if !ok {
 					return false
 				}
@@ -3580,7 +3580,7 @@ func (me implWorkspace) AllProperties() func(func(WorkspaceBag)) {
 		var ok bool
 		var result WorkspaceBag
 		if (nil != payload) {
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -3647,25 +3647,25 @@ func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEve
 	msg = new(ipcMsg)
 	msg.QName = "languages.onDidChangeDiagnostics"
 	msg.Data = make(dict, 1)
-	var _fnid_listener string
+	var listenerFnId string
 	if (nil == listener) {
 		OnError(me.Impl(), "Languages.OnDidChangeDiagnostics: the 'listener' arg (which is not optional but required) was not passed by the caller", nil)
 		return nil
 	}
-	_fnid_listener = me.Impl().nextSub(func(args []any) bool {
+	listenerFnId = me.Impl().nextSub(func(args []any) bool {
 		var ok bool
 		if 1 != len(args) {
 			return ok
 		}
 		var _a_0_ DiagnosticChangeEvent
-		ok = _a_0_.populateFrom(args[0])
+		ok = _a_0_.loadFromJsonish(args[0])
 		if !ok {
 			return false
 		}
 		listener(_a_0_)
 		return true
 	}, nil)
-	msg.Data["listener"] = _fnid_listener
+	msg.Data["listener"] = listenerFnId
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -3673,7 +3673,7 @@ func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEve
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -3682,7 +3682,7 @@ func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEve
 		}
 		{
 			if (nil != onret) {
-				onret(result.bind(me.Impl(), _fnid_listener))
+				onret(result.bind(me.Impl(), listenerFnId))
 			}
 		}
 		return true
@@ -3698,12 +3698,12 @@ func (me implExtensions) OnDidChange(listener func()) func(func(*Disposable)) {
 	msg = new(ipcMsg)
 	msg.QName = "extensions.onDidChange"
 	msg.Data = make(dict, 1)
-	var _fnid_listener string
+	var listenerFnId string
 	if (nil == listener) {
 		OnError(me.Impl(), "Extensions.OnDidChange: the 'listener' arg (which is not optional but required) was not passed by the caller", nil)
 		return nil
 	}
-	_fnid_listener = me.Impl().nextSub(func(args []any) bool {
+	listenerFnId = me.Impl().nextSub(func(args []any) bool {
 		var ok bool
 		if 0 != len(args) {
 			return ok
@@ -3711,7 +3711,7 @@ func (me implExtensions) OnDidChange(listener func()) func(func(*Disposable)) {
 		listener()
 		return true
 	}, nil)
-	msg.Data["listener"] = _fnid_listener
+	msg.Data["listener"] = listenerFnId
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -3719,7 +3719,7 @@ func (me implExtensions) OnDidChange(listener func()) func(func(*Disposable)) {
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -3728,7 +3728,7 @@ func (me implExtensions) OnDidChange(listener func()) func(func(*Disposable)) {
 		}
 		{
 			if (nil != onret) {
-				onret(result.bind(me.Impl(), _fnid_listener))
+				onret(result.bind(me.Impl(), listenerFnId))
 			}
 		}
 		return true
@@ -3745,12 +3745,12 @@ func (me implCommands) RegisterCommand(command string, callback func([]any) any)
 	msg.QName = "commands.registerCommand"
 	msg.Data = make(dict, 2)
 	msg.Data["command"] = command
-	var _fnid_callback string
+	var callbackFnId string
 	if (nil == callback) {
 		OnError(me.Impl(), "Commands.RegisterCommand: the 'callback' arg (which is not optional but required) was not passed by the caller", nil)
 		return nil
 	}
-	_fnid_callback = me.Impl().nextSub(nil, func(args []any) (any, bool) {
+	callbackFnId = me.Impl().nextSub(nil, func(args []any) (any, bool) {
 		var ok bool
 		if 1 != len(args) {
 			return nil, ok
@@ -3764,7 +3764,7 @@ func (me implCommands) RegisterCommand(command string, callback func([]any) any)
 		ret = callback(_a_0_)
 		return ret, true
 	})
-	msg.Data["callback"] = _fnid_callback
+	msg.Data["callback"] = callbackFnId
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -3772,7 +3772,7 @@ func (me implCommands) RegisterCommand(command string, callback func([]any) any)
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -3781,7 +3781,7 @@ func (me implCommands) RegisterCommand(command string, callback func([]any) any)
 		}
 		{
 			if (nil != onret) {
-				onret(result.bind(me.Impl(), _fnid_callback))
+				onret(result.bind(me.Impl(), callbackFnId))
 			}
 		}
 		return true
@@ -3873,7 +3873,7 @@ func (me *StatusBarItem) Show() func(func(*StatusBarItemBag)) {
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.show"
 	msg.Data = make(dict, 1)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
 	var onret func(*StatusBarItemBag)
 	onresp = func(payload any) bool {
@@ -3881,7 +3881,7 @@ func (me *StatusBarItem) Show() func(func(*StatusBarItemBag)) {
 		var result *StatusBarItemBag
 		if (nil != payload) {
 			result = new(StatusBarItemBag)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -3893,7 +3893,7 @@ func (me *StatusBarItem) Show() func(func(*StatusBarItemBag)) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*StatusBarItemBag)) {
 		onret = a0
 	}
@@ -3907,7 +3907,7 @@ func (me *StatusBarItem) Hide() func(func(*StatusBarItemBag)) {
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.hide"
 	msg.Data = make(dict, 1)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
 	var onret func(*StatusBarItemBag)
 	onresp = func(payload any) bool {
@@ -3915,7 +3915,7 @@ func (me *StatusBarItem) Hide() func(func(*StatusBarItemBag)) {
 		var result *StatusBarItemBag
 		if (nil != payload) {
 			result = new(StatusBarItemBag)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -3927,7 +3927,7 @@ func (me *StatusBarItem) Hide() func(func(*StatusBarItemBag)) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*StatusBarItemBag)) {
 		onret = a0
 	}
@@ -3938,7 +3938,7 @@ func (me *StatusBarItem) Hide() func(func(*StatusBarItemBag)) {
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *StatusBarItem) Dispose() func(func()) {
-	return me.disp.Dispose()
+	return me.__disp__.Dispose()
 }
 
 // Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
@@ -3949,14 +3949,14 @@ func (me *StatusBarItem) Get() func(func(StatusBarItemBag)) {
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.appzObjPropsGet"
 	msg.Data = make(dict, 1)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
 	var onret func(StatusBarItemBag)
 	onresp = func(payload any) bool {
 		var ok bool
 		var result StatusBarItemBag
 		if (nil != payload) {
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -3968,7 +3968,7 @@ func (me *StatusBarItem) Get() func(func(StatusBarItemBag)) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(StatusBarItemBag)) {
 		onret = a0
 	}
@@ -3976,7 +3976,7 @@ func (me *StatusBarItem) Get() func(func(StatusBarItemBag)) {
 
 // Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
 // 
-// `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `StatusBarItemBag` with your select modifications applied, rather than construct a new one from scratch.
+// `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *StatusBarItem) Set(allUpdates StatusBarItemBag) func(func()) {
@@ -3984,7 +3984,7 @@ func (me *StatusBarItem) Set(allUpdates StatusBarItemBag) func(func()) {
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.appzObjPropsSet"
 	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	msg.Data["allUpdates"] = allUpdates
 	var onresp func(any) bool
 	var onret func()
@@ -3997,7 +3997,7 @@ func (me *StatusBarItem) Set(allUpdates StatusBarItemBag) func(func()) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func()) {
 		onret = a0
 	}
@@ -4013,7 +4013,7 @@ func (me *OutputChannel) Append(value string) func(func(*OutputChannelBag)) {
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.append"
 	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	msg.Data["value"] = value
 	var onresp func(any) bool
 	var onret func(*OutputChannelBag)
@@ -4022,7 +4022,7 @@ func (me *OutputChannel) Append(value string) func(func(*OutputChannelBag)) {
 		var result *OutputChannelBag
 		if (nil != payload) {
 			result = new(OutputChannelBag)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4034,7 +4034,7 @@ func (me *OutputChannel) Append(value string) func(func(*OutputChannelBag)) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*OutputChannelBag)) {
 		onret = a0
 	}
@@ -4051,7 +4051,7 @@ func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelBag)) 
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.appendLine"
 	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	msg.Data["value"] = value
 	var onresp func(any) bool
 	var onret func(*OutputChannelBag)
@@ -4060,7 +4060,7 @@ func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelBag)) 
 		var result *OutputChannelBag
 		if (nil != payload) {
 			result = new(OutputChannelBag)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4072,7 +4072,7 @@ func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelBag)) 
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*OutputChannelBag)) {
 		onret = a0
 	}
@@ -4086,7 +4086,7 @@ func (me *OutputChannel) Clear() func(func(*OutputChannelBag)) {
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.clear"
 	msg.Data = make(dict, 1)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
 	var onret func(*OutputChannelBag)
 	onresp = func(payload any) bool {
@@ -4094,7 +4094,7 @@ func (me *OutputChannel) Clear() func(func(*OutputChannelBag)) {
 		var result *OutputChannelBag
 		if (nil != payload) {
 			result = new(OutputChannelBag)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4106,7 +4106,7 @@ func (me *OutputChannel) Clear() func(func(*OutputChannelBag)) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*OutputChannelBag)) {
 		onret = a0
 	}
@@ -4122,7 +4122,7 @@ func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelBag)) 
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.show"
 	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	msg.Data["preserveFocus"] = preserveFocus
 	var onresp func(any) bool
 	var onret func(*OutputChannelBag)
@@ -4131,7 +4131,7 @@ func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelBag)) 
 		var result *OutputChannelBag
 		if (nil != payload) {
 			result = new(OutputChannelBag)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4143,7 +4143,7 @@ func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelBag)) 
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*OutputChannelBag)) {
 		onret = a0
 	}
@@ -4157,7 +4157,7 @@ func (me *OutputChannel) Hide() func(func(*OutputChannelBag)) {
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.hide"
 	msg.Data = make(dict, 1)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
 	var onret func(*OutputChannelBag)
 	onresp = func(payload any) bool {
@@ -4165,7 +4165,7 @@ func (me *OutputChannel) Hide() func(func(*OutputChannelBag)) {
 		var result *OutputChannelBag
 		if (nil != payload) {
 			result = new(OutputChannelBag)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4177,7 +4177,7 @@ func (me *OutputChannel) Hide() func(func(*OutputChannelBag)) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*OutputChannelBag)) {
 		onret = a0
 	}
@@ -4187,7 +4187,7 @@ func (me *OutputChannel) Hide() func(func(*OutputChannelBag)) {
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *OutputChannel) Dispose() func(func()) {
-	return me.disp.Dispose()
+	return me.__disp__.Dispose()
 }
 
 // Obtains this `OutputChannel`'s current property value for: `name`.
@@ -4198,14 +4198,14 @@ func (me *OutputChannel) Get() func(func(OutputChannelBag)) {
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.appzObjPropsGet"
 	msg.Data = make(dict, 1)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
 	var onret func(OutputChannelBag)
 	onresp = func(payload any) bool {
 		var ok bool
 		var result OutputChannelBag
 		if (nil != payload) {
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4217,7 +4217,7 @@ func (me *OutputChannel) Get() func(func(OutputChannelBag)) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(OutputChannelBag)) {
 		onret = a0
 	}
@@ -4227,7 +4227,7 @@ func (me *OutputChannel) Get() func(func(OutputChannelBag)) {
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *TextEditorDecorationType) Dispose() func(func()) {
-	return me.disp.Dispose()
+	return me.__disp__.Dispose()
 }
 
 // Obtains this `TextEditorDecorationType`'s current property value for: `key`.
@@ -4238,14 +4238,14 @@ func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeBag)
 	msg = new(ipcMsg)
 	msg.QName = "TextEditorDecorationType.appzObjPropsGet"
 	msg.Data = make(dict, 1)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
 	var onret func(TextEditorDecorationTypeBag)
 	onresp = func(payload any) bool {
 		var ok bool
 		var result TextEditorDecorationTypeBag
 		if (nil != payload) {
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4257,7 +4257,7 @@ func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeBag)
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(TextEditorDecorationTypeBag)) {
 		onret = a0
 	}
@@ -4273,13 +4273,13 @@ func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxBag)) func(fun
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.onDidChangeValue"
 	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
-	var _fnid_handler string
+	msg.Data[""] = me.__disp__.id
+	var handlerFnId string
 	if (nil == handler) {
-		OnError(me.disp.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		OnError(me.__disp__.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
 		return nil
 	}
-	_fnid_handler = me.disp.impl.nextSub(func(args []any) bool {
+	handlerFnId = me.__disp__.impl.nextSub(func(args []any) bool {
 		var ok bool
 		if 2 != len(args) {
 			return ok
@@ -4290,15 +4290,15 @@ func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxBag)) func(fun
 			return false
 		}
 		var _a_1_ InputBoxBag
-		ok = _a_1_.populateFrom(args[1])
+		ok = _a_1_.loadFromJsonish(args[1])
 		if !ok {
 			return false
 		}
 		handler(_a_0_, _a_1_)
 		return true
 	}, nil)
-	msg.Data["handler"] = _fnid_handler
-	me.disp.addSub(_fnid_handler)
+	msg.Data["handler"] = handlerFnId
+	me.__disp__.addSub(handlerFnId)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4306,7 +4306,7 @@ func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxBag)) func(fun
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4315,12 +4315,12 @@ func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxBag)) func(fun
 		}
 		{
 			if (nil != onret) {
-				onret(result.bind(me.disp.impl, _fnid_handler))
+				onret(result.bind(me.__disp__.impl, handlerFnId))
 			}
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*Disposable)) {
 		onret = a0
 	}
@@ -4336,27 +4336,27 @@ func (me *InputBox) OnDidAccept(handler func(InputBoxBag)) func(func(*Disposable
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.onDidAccept"
 	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
-	var _fnid_handler string
+	msg.Data[""] = me.__disp__.id
+	var handlerFnId string
 	if (nil == handler) {
-		OnError(me.disp.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		OnError(me.__disp__.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
 		return nil
 	}
-	_fnid_handler = me.disp.impl.nextSub(func(args []any) bool {
+	handlerFnId = me.__disp__.impl.nextSub(func(args []any) bool {
 		var ok bool
 		if 1 != len(args) {
 			return ok
 		}
 		var _a_0_ InputBoxBag
-		ok = _a_0_.populateFrom(args[0])
+		ok = _a_0_.loadFromJsonish(args[0])
 		if !ok {
 			return false
 		}
 		handler(_a_0_)
 		return true
 	}, nil)
-	msg.Data["handler"] = _fnid_handler
-	me.disp.addSub(_fnid_handler)
+	msg.Data["handler"] = handlerFnId
+	me.__disp__.addSub(handlerFnId)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4364,7 +4364,7 @@ func (me *InputBox) OnDidAccept(handler func(InputBoxBag)) func(func(*Disposable
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4373,12 +4373,12 @@ func (me *InputBox) OnDidAccept(handler func(InputBoxBag)) func(func(*Disposable
 		}
 		{
 			if (nil != onret) {
-				onret(result.bind(me.disp.impl, _fnid_handler))
+				onret(result.bind(me.__disp__.impl, handlerFnId))
 			}
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*Disposable)) {
 		onret = a0
 	}
@@ -4393,7 +4393,7 @@ func (me *InputBox) Show() func(func(*InputBoxBag)) {
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.show"
 	msg.Data = make(dict, 1)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
 	var onret func(*InputBoxBag)
 	onresp = func(payload any) bool {
@@ -4401,7 +4401,7 @@ func (me *InputBox) Show() func(func(*InputBoxBag)) {
 		var result *InputBoxBag
 		if (nil != payload) {
 			result = new(InputBoxBag)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4413,7 +4413,7 @@ func (me *InputBox) Show() func(func(*InputBoxBag)) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*InputBoxBag)) {
 		onret = a0
 	}
@@ -4428,7 +4428,7 @@ func (me *InputBox) Hide() func(func(*InputBoxBag)) {
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.hide"
 	msg.Data = make(dict, 1)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
 	var onret func(*InputBoxBag)
 	onresp = func(payload any) bool {
@@ -4436,7 +4436,7 @@ func (me *InputBox) Hide() func(func(*InputBoxBag)) {
 		var result *InputBoxBag
 		if (nil != payload) {
 			result = new(InputBoxBag)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4448,7 +4448,7 @@ func (me *InputBox) Hide() func(func(*InputBoxBag)) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*InputBoxBag)) {
 		onret = a0
 	}
@@ -4469,27 +4469,27 @@ func (me *InputBox) OnDidHide(handler func(InputBoxBag)) func(func(*Disposable))
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.onDidHide"
 	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
-	var _fnid_handler string
+	msg.Data[""] = me.__disp__.id
+	var handlerFnId string
 	if (nil == handler) {
-		OnError(me.disp.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		OnError(me.__disp__.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
 		return nil
 	}
-	_fnid_handler = me.disp.impl.nextSub(func(args []any) bool {
+	handlerFnId = me.__disp__.impl.nextSub(func(args []any) bool {
 		var ok bool
 		if 1 != len(args) {
 			return ok
 		}
 		var _a_0_ InputBoxBag
-		ok = _a_0_.populateFrom(args[0])
+		ok = _a_0_.loadFromJsonish(args[0])
 		if !ok {
 			return false
 		}
 		handler(_a_0_)
 		return true
 	}, nil)
-	msg.Data["handler"] = _fnid_handler
-	me.disp.addSub(_fnid_handler)
+	msg.Data["handler"] = handlerFnId
+	me.__disp__.addSub(handlerFnId)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4497,7 +4497,7 @@ func (me *InputBox) OnDidHide(handler func(InputBoxBag)) func(func(*Disposable))
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4506,12 +4506,12 @@ func (me *InputBox) OnDidHide(handler func(InputBoxBag)) func(func(*Disposable))
 		}
 		{
 			if (nil != onret) {
-				onret(result.bind(me.disp.impl, _fnid_handler))
+				onret(result.bind(me.__disp__.impl, handlerFnId))
 			}
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*Disposable)) {
 		onret = a0
 	}
@@ -4524,7 +4524,7 @@ func (me *InputBox) OnDidHide(handler func(InputBoxBag)) func(func(*Disposable))
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *InputBox) Dispose() func(func()) {
-	return me.disp.Dispose()
+	return me.__disp__.Dispose()
 }
 
 // Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
@@ -4535,14 +4535,14 @@ func (me *InputBox) Get() func(func(InputBoxBag)) {
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.appzObjPropsGet"
 	msg.Data = make(dict, 1)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
 	var onret func(InputBoxBag)
 	onresp = func(payload any) bool {
 		var ok bool
 		var result InputBoxBag
 		if (nil != payload) {
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4554,7 +4554,7 @@ func (me *InputBox) Get() func(func(InputBoxBag)) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(InputBoxBag)) {
 		onret = a0
 	}
@@ -4562,7 +4562,7 @@ func (me *InputBox) Get() func(func(InputBoxBag)) {
 
 // Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 // 
-// `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `InputBoxBag` with your select modifications applied, rather than construct a new one from scratch.
+// `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *InputBox) Set(allUpdates InputBoxBag) func(func()) {
@@ -4570,7 +4570,7 @@ func (me *InputBox) Set(allUpdates InputBoxBag) func(func()) {
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.appzObjPropsSet"
 	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	msg.Data["allUpdates"] = allUpdates
 	var onresp func(any) bool
 	var onret func()
@@ -4583,7 +4583,7 @@ func (me *InputBox) Set(allUpdates InputBoxBag) func(func()) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func()) {
 		onret = a0
 	}
@@ -4599,13 +4599,13 @@ func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickBag)) func(f
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidChangeValue"
 	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
-	var _fnid_handler string
+	msg.Data[""] = me.__disp__.id
+	var handlerFnId string
 	if (nil == handler) {
-		OnError(me.disp.impl, "QuickPick.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		OnError(me.__disp__.impl, "QuickPick.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
 		return nil
 	}
-	_fnid_handler = me.disp.impl.nextSub(func(args []any) bool {
+	handlerFnId = me.__disp__.impl.nextSub(func(args []any) bool {
 		var ok bool
 		if 2 != len(args) {
 			return ok
@@ -4616,15 +4616,15 @@ func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickBag)) func(f
 			return false
 		}
 		var _a_1_ QuickPickBag
-		ok = _a_1_.populateFrom(args[1])
+		ok = _a_1_.loadFromJsonish(args[1])
 		if !ok {
 			return false
 		}
 		handler(_a_0_, _a_1_)
 		return true
 	}, nil)
-	msg.Data["handler"] = _fnid_handler
-	me.disp.addSub(_fnid_handler)
+	msg.Data["handler"] = handlerFnId
+	me.__disp__.addSub(handlerFnId)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4632,7 +4632,7 @@ func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickBag)) func(f
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4641,12 +4641,12 @@ func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickBag)) func(f
 		}
 		{
 			if (nil != onret) {
-				onret(result.bind(me.disp.impl, _fnid_handler))
+				onret(result.bind(me.__disp__.impl, handlerFnId))
 			}
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*Disposable)) {
 		onret = a0
 	}
@@ -4662,27 +4662,27 @@ func (me *QuickPick) OnDidAccept(handler func(QuickPickBag)) func(func(*Disposab
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidAccept"
 	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
-	var _fnid_handler string
+	msg.Data[""] = me.__disp__.id
+	var handlerFnId string
 	if (nil == handler) {
-		OnError(me.disp.impl, "QuickPick.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		OnError(me.__disp__.impl, "QuickPick.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
 		return nil
 	}
-	_fnid_handler = me.disp.impl.nextSub(func(args []any) bool {
+	handlerFnId = me.__disp__.impl.nextSub(func(args []any) bool {
 		var ok bool
 		if 1 != len(args) {
 			return ok
 		}
 		var _a_0_ QuickPickBag
-		ok = _a_0_.populateFrom(args[0])
+		ok = _a_0_.loadFromJsonish(args[0])
 		if !ok {
 			return false
 		}
 		handler(_a_0_)
 		return true
 	}, nil)
-	msg.Data["handler"] = _fnid_handler
-	me.disp.addSub(_fnid_handler)
+	msg.Data["handler"] = handlerFnId
+	me.__disp__.addSub(handlerFnId)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4690,7 +4690,7 @@ func (me *QuickPick) OnDidAccept(handler func(QuickPickBag)) func(func(*Disposab
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4699,12 +4699,12 @@ func (me *QuickPick) OnDidAccept(handler func(QuickPickBag)) func(func(*Disposab
 		}
 		{
 			if (nil != onret) {
-				onret(result.bind(me.disp.impl, _fnid_handler))
+				onret(result.bind(me.__disp__.impl, handlerFnId))
 			}
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*Disposable)) {
 		onret = a0
 	}
@@ -4720,13 +4720,13 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickBa
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidChangeActive"
 	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
-	var _fnid_handler string
+	msg.Data[""] = me.__disp__.id
+	var handlerFnId string
 	if (nil == handler) {
-		OnError(me.disp.impl, "QuickPick.OnDidChangeActive: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		OnError(me.__disp__.impl, "QuickPick.OnDidChangeActive: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
 		return nil
 	}
-	_fnid_handler = me.disp.impl.nextSub(func(args []any) bool {
+	handlerFnId = me.__disp__.impl.nextSub(func(args []any) bool {
 		var ok bool
 		if 2 != len(args) {
 			return ok
@@ -4742,7 +4742,7 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickBa
 		__idx___a_0_ = 0
 		for _, __item___a_0_ := range __coll___a_0_ {
 			var __val___a_0_ QuickPickItem
-			ok = __val___a_0_.populateFrom(__item___a_0_)
+			ok = __val___a_0_.loadFromJsonish(__item___a_0_)
 			if !ok {
 				return false
 			}
@@ -4750,15 +4750,15 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickBa
 			__idx___a_0_ = __idx___a_0_ + 1
 		}
 		var _a_1_ QuickPickBag
-		ok = _a_1_.populateFrom(args[1])
+		ok = _a_1_.loadFromJsonish(args[1])
 		if !ok {
 			return false
 		}
 		handler(_a_0_, _a_1_)
 		return true
 	}, nil)
-	msg.Data["handler"] = _fnid_handler
-	me.disp.addSub(_fnid_handler)
+	msg.Data["handler"] = handlerFnId
+	me.__disp__.addSub(handlerFnId)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4766,7 +4766,7 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickBa
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4775,12 +4775,12 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickBa
 		}
 		{
 			if (nil != onret) {
-				onret(result.bind(me.disp.impl, _fnid_handler))
+				onret(result.bind(me.__disp__.impl, handlerFnId))
 			}
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*Disposable)) {
 		onret = a0
 	}
@@ -4796,13 +4796,13 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPic
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidChangeSelection"
 	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
-	var _fnid_handler string
+	msg.Data[""] = me.__disp__.id
+	var handlerFnId string
 	if (nil == handler) {
-		OnError(me.disp.impl, "QuickPick.OnDidChangeSelection: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		OnError(me.__disp__.impl, "QuickPick.OnDidChangeSelection: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
 		return nil
 	}
-	_fnid_handler = me.disp.impl.nextSub(func(args []any) bool {
+	handlerFnId = me.__disp__.impl.nextSub(func(args []any) bool {
 		var ok bool
 		if 2 != len(args) {
 			return ok
@@ -4818,7 +4818,7 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPic
 		__idx___a_0_ = 0
 		for _, __item___a_0_ := range __coll___a_0_ {
 			var __val___a_0_ QuickPickItem
-			ok = __val___a_0_.populateFrom(__item___a_0_)
+			ok = __val___a_0_.loadFromJsonish(__item___a_0_)
 			if !ok {
 				return false
 			}
@@ -4826,15 +4826,15 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPic
 			__idx___a_0_ = __idx___a_0_ + 1
 		}
 		var _a_1_ QuickPickBag
-		ok = _a_1_.populateFrom(args[1])
+		ok = _a_1_.loadFromJsonish(args[1])
 		if !ok {
 			return false
 		}
 		handler(_a_0_, _a_1_)
 		return true
 	}, nil)
-	msg.Data["handler"] = _fnid_handler
-	me.disp.addSub(_fnid_handler)
+	msg.Data["handler"] = handlerFnId
+	me.__disp__.addSub(handlerFnId)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4842,7 +4842,7 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPic
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4851,12 +4851,12 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPic
 		}
 		{
 			if (nil != onret) {
-				onret(result.bind(me.disp.impl, _fnid_handler))
+				onret(result.bind(me.__disp__.impl, handlerFnId))
 			}
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*Disposable)) {
 		onret = a0
 	}
@@ -4871,7 +4871,7 @@ func (me *QuickPick) Show() func(func(*QuickPickBag)) {
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.show"
 	msg.Data = make(dict, 1)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
 	var onret func(*QuickPickBag)
 	onresp = func(payload any) bool {
@@ -4879,7 +4879,7 @@ func (me *QuickPick) Show() func(func(*QuickPickBag)) {
 		var result *QuickPickBag
 		if (nil != payload) {
 			result = new(QuickPickBag)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4891,7 +4891,7 @@ func (me *QuickPick) Show() func(func(*QuickPickBag)) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*QuickPickBag)) {
 		onret = a0
 	}
@@ -4906,7 +4906,7 @@ func (me *QuickPick) Hide() func(func(*QuickPickBag)) {
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.hide"
 	msg.Data = make(dict, 1)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
 	var onret func(*QuickPickBag)
 	onresp = func(payload any) bool {
@@ -4914,7 +4914,7 @@ func (me *QuickPick) Hide() func(func(*QuickPickBag)) {
 		var result *QuickPickBag
 		if (nil != payload) {
 			result = new(QuickPickBag)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4926,7 +4926,7 @@ func (me *QuickPick) Hide() func(func(*QuickPickBag)) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*QuickPickBag)) {
 		onret = a0
 	}
@@ -4947,27 +4947,27 @@ func (me *QuickPick) OnDidHide(handler func(QuickPickBag)) func(func(*Disposable
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidHide"
 	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
-	var _fnid_handler string
+	msg.Data[""] = me.__disp__.id
+	var handlerFnId string
 	if (nil == handler) {
-		OnError(me.disp.impl, "QuickPick.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		OnError(me.__disp__.impl, "QuickPick.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
 		return nil
 	}
-	_fnid_handler = me.disp.impl.nextSub(func(args []any) bool {
+	handlerFnId = me.__disp__.impl.nextSub(func(args []any) bool {
 		var ok bool
 		if 1 != len(args) {
 			return ok
 		}
 		var _a_0_ QuickPickBag
-		ok = _a_0_.populateFrom(args[0])
+		ok = _a_0_.loadFromJsonish(args[0])
 		if !ok {
 			return false
 		}
 		handler(_a_0_)
 		return true
 	}, nil)
-	msg.Data["handler"] = _fnid_handler
-	me.disp.addSub(_fnid_handler)
+	msg.Data["handler"] = handlerFnId
+	me.__disp__.addSub(handlerFnId)
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -4975,7 +4975,7 @@ func (me *QuickPick) OnDidHide(handler func(QuickPickBag)) func(func(*Disposable
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -4984,12 +4984,12 @@ func (me *QuickPick) OnDidHide(handler func(QuickPickBag)) func(func(*Disposable
 		}
 		{
 			if (nil != onret) {
-				onret(result.bind(me.disp.impl, _fnid_handler))
+				onret(result.bind(me.__disp__.impl, handlerFnId))
 			}
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(*Disposable)) {
 		onret = a0
 	}
@@ -5002,7 +5002,7 @@ func (me *QuickPick) OnDidHide(handler func(QuickPickBag)) func(func(*Disposable
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *QuickPick) Dispose() func(func()) {
-	return me.disp.Dispose()
+	return me.__disp__.Dispose()
 }
 
 // Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
@@ -5013,14 +5013,14 @@ func (me *QuickPick) Get() func(func(QuickPickBag)) {
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.appzObjPropsGet"
 	msg.Data = make(dict, 1)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
 	var onret func(QuickPickBag)
 	onresp = func(payload any) bool {
 		var ok bool
 		var result QuickPickBag
 		if (nil != payload) {
-			ok = result.populateFrom(payload)
+			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
@@ -5032,7 +5032,7 @@ func (me *QuickPick) Get() func(func(QuickPickBag)) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func(QuickPickBag)) {
 		onret = a0
 	}
@@ -5040,7 +5040,7 @@ func (me *QuickPick) Get() func(func(QuickPickBag)) {
 
 // Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 // 
-// `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `QuickPickBag` with your select modifications applied, rather than construct a new one from scratch.
+// `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *QuickPick) Set(allUpdates QuickPickBag) func(func()) {
@@ -5048,7 +5048,7 @@ func (me *QuickPick) Set(allUpdates QuickPickBag) func(func()) {
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.appzObjPropsSet"
 	msg.Data = make(dict, 2)
-	msg.Data[""] = me.disp.id
+	msg.Data[""] = me.__disp__.id
 	msg.Data["allUpdates"] = allUpdates
 	var onresp func(any) bool
 	var onret func()
@@ -5061,13 +5061,13 @@ func (me *QuickPick) Set(allUpdates QuickPickBag) func(func()) {
 		}
 		return true
 	}
-	me.disp.impl.send(msg, onresp)
+	me.__disp__.impl.send(msg, onresp)
 	return func(a0 func()) {
 		onret = a0
 	}
 }
 
-func (me *MessageItem) populateFrom(payload any) bool {
+func (me *MessageItem) loadFromJsonish(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5113,7 +5113,7 @@ func (me *MessageItem) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *QuickPickItem) populateFrom(payload any) bool {
+func (me *QuickPickItem) loadFromJsonish(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5192,7 +5192,7 @@ func (me *QuickPickItem) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *WorkspaceFolder) populateFrom(payload any) bool {
+func (me *WorkspaceFolder) loadFromJsonish(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5247,7 +5247,7 @@ func (me *WorkspaceFolder) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *WindowState) populateFrom(payload any) bool {
+func (me *WindowState) loadFromJsonish(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5271,42 +5271,42 @@ func (me *WindowState) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *StatusBarItem) populateFrom(payload any) bool {
+func (me *StatusBarItem) loadFromJsonish(payload any) bool {
 	var ok bool
-	me.disp = new(Disposable)
-	ok = me.disp.populateFrom(payload)
+	me.__disp__ = new(Disposable)
+	ok = me.__disp__.loadFromJsonish(payload)
 	return ok
 }
 
-func (me *OutputChannel) populateFrom(payload any) bool {
+func (me *OutputChannel) loadFromJsonish(payload any) bool {
 	var ok bool
-	me.disp = new(Disposable)
-	ok = me.disp.populateFrom(payload)
+	me.__disp__ = new(Disposable)
+	ok = me.__disp__.loadFromJsonish(payload)
 	return ok
 }
 
-func (me *TextEditorDecorationType) populateFrom(payload any) bool {
+func (me *TextEditorDecorationType) loadFromJsonish(payload any) bool {
 	var ok bool
-	me.disp = new(Disposable)
-	ok = me.disp.populateFrom(payload)
+	me.__disp__ = new(Disposable)
+	ok = me.__disp__.loadFromJsonish(payload)
 	return ok
 }
 
-func (me *InputBox) populateFrom(payload any) bool {
+func (me *InputBox) loadFromJsonish(payload any) bool {
 	var ok bool
-	me.disp = new(Disposable)
-	ok = me.disp.populateFrom(payload)
+	me.__disp__ = new(Disposable)
+	ok = me.__disp__.loadFromJsonish(payload)
 	return ok
 }
 
-func (me *QuickPick) populateFrom(payload any) bool {
+func (me *QuickPick) loadFromJsonish(payload any) bool {
 	var ok bool
-	me.disp = new(Disposable)
-	ok = me.disp.populateFrom(payload)
+	me.__disp__ = new(Disposable)
+	ok = me.__disp__.loadFromJsonish(payload)
 	return ok
 }
 
-func (me *EnvBag) populateFrom(payload any) bool {
+func (me *EnvBag) loadFromJsonish(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5405,7 +5405,7 @@ func (me *EnvBag) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *WorkspaceFoldersChangeEvent) populateFrom(payload any) bool {
+func (me *WorkspaceFoldersChangeEvent) loadFromJsonish(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5427,7 +5427,7 @@ func (me *WorkspaceFoldersChangeEvent) populateFrom(payload any) bool {
 			__idx__added = 0
 			for _, __item__added := range __coll__added {
 				var __val__added WorkspaceFolder
-				ok = __val__added.populateFrom(__item__added)
+				ok = __val__added.loadFromJsonish(__item__added)
 				if !ok {
 					return false
 				}
@@ -5453,7 +5453,7 @@ func (me *WorkspaceFoldersChangeEvent) populateFrom(payload any) bool {
 			__idx__removed = 0
 			for _, __item__removed := range __coll__removed {
 				var __val__removed WorkspaceFolder
-				ok = __val__removed.populateFrom(__item__removed)
+				ok = __val__removed.loadFromJsonish(__item__removed)
 				if !ok {
 					return false
 				}
@@ -5468,7 +5468,7 @@ func (me *WorkspaceFoldersChangeEvent) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *WorkspaceBag) populateFrom(payload any) bool {
+func (me *WorkspaceBag) loadFromJsonish(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5512,7 +5512,7 @@ func (me *WorkspaceBag) populateFrom(payload any) bool {
 			__idx__workspaceFolders = 0
 			for _, __item__workspaceFolders := range __coll__workspaceFolders {
 				var __val__workspaceFolders WorkspaceFolder
-				ok = __val__workspaceFolders.populateFrom(__item__workspaceFolders)
+				ok = __val__workspaceFolders.loadFromJsonish(__item__workspaceFolders)
 				if !ok {
 					return false
 				}
@@ -5525,7 +5525,7 @@ func (me *WorkspaceBag) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *DiagnosticChangeEvent) populateFrom(payload any) bool {
+func (me *DiagnosticChangeEvent) loadFromJsonish(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5562,7 +5562,7 @@ func (me *DiagnosticChangeEvent) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *StatusBarItemBag) populateFrom(payload any) bool {
+func (me *StatusBarItemBag) loadFromJsonish(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5655,7 +5655,7 @@ func (me *StatusBarItemBag) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *OutputChannelBag) populateFrom(payload any) bool {
+func (me *OutputChannelBag) loadFromJsonish(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5679,7 +5679,7 @@ func (me *OutputChannelBag) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *TextEditorDecorationTypeBag) populateFrom(payload any) bool {
+func (me *TextEditorDecorationTypeBag) loadFromJsonish(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5703,7 +5703,7 @@ func (me *TextEditorDecorationTypeBag) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *InputBoxBag) populateFrom(payload any) bool {
+func (me *InputBoxBag) loadFromJsonish(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5845,7 +5845,7 @@ func (me *InputBoxBag) populateFrom(payload any) bool {
 	return true
 }
 
-func (me *QuickPickBag) populateFrom(payload any) bool {
+func (me *QuickPickBag) loadFromJsonish(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5889,7 +5889,7 @@ func (me *QuickPickBag) populateFrom(payload any) bool {
 			__idx__items = 0
 			for _, __item__items := range __coll__items {
 				var __val__items QuickPickItem
-				ok = __val__items.populateFrom(__item__items)
+				ok = __val__items.loadFromJsonish(__item__items)
 				if !ok {
 					return false
 				}
@@ -5946,7 +5946,7 @@ func (me *QuickPickBag) populateFrom(payload any) bool {
 			__idx__activeItems = 0
 			for _, __item__activeItems := range __coll__activeItems {
 				var __val__activeItems QuickPickItem
-				ok = __val__activeItems.populateFrom(__item__activeItems)
+				ok = __val__activeItems.loadFromJsonish(__item__activeItems)
 				if !ok {
 					return false
 				}
@@ -5970,7 +5970,7 @@ func (me *QuickPickBag) populateFrom(payload any) bool {
 			__idx__selectedItems = 0
 			for _, __item__selectedItems := range __coll__selectedItems {
 				var __val__selectedItems QuickPickItem
-				ok = __val__selectedItems.populateFrom(__item__selectedItems)
+				ok = __val__selectedItems.loadFromJsonish(__item__selectedItems)
 				if !ok {
 					return false
 				}

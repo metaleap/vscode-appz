@@ -36,21 +36,21 @@ export class Gen extends gen_syn.Gen {
         ) : this.lines(
             "// " + this.doNotEditComment("nodejs"),
             "import * as core from './core'",
-            "import { OnError } from './vsc-appz'",
-            "type ipcMsg = core.ipcMsg",
-            "type Cancel = core.Cancel",
-            "type Disposable = core.Disposable",
-            "interface fromJson { populateFrom: (_: any) => boolean }",
-            "interface withDisp { disp: Disposable }",
+            "import { " + gen.idents.coreMethodOnErr + " } from './vsc-appz'",
+            "type " + gen.idents.coreTypeMsg + " = core." + gen.idents.coreTypeMsg + "",
+            "type " + gen.idents.coreTypeCancel + " = core." + gen.idents.coreTypeCancel + "",
+            "type " + gen.idents.coreTypeDisp + " = core." + gen.idents.coreTypeDisp + "",
+            "interface fromJson { " + gen.idents.methodLoadFrom + ": (_: any) => boolean }",
+            "interface withDisp { " + gen.idents.fldDisp + ": " + gen.idents.coreTypeDisp + " }",
             "",
             "abstract class implBase {",
             "    impl: impl",
             "    constructor(impl: impl) { this.impl = impl }",
-            "    Impl() { return this.impl as any as core.impl /* crikey, codegen life.. */ }",
+            "    " + gen.idents.methodImpl + "() { return this.impl as any as core.impl /* crikey, codegen life.. */ }",
             "}",
             "",
-            "function newipcMsg() { return new core.ipcMsg() }",
-            "function newDisposable() { return new core.Disposable() }",
+            "function new" + gen.idents.coreTypeMsg + "() { return new core." + gen.idents.coreTypeMsg + "() }",
+            "function new" + gen.idents.coreTypeDisp + "() { return new core." + gen.idents.coreTypeDisp + "() }",
             ""
         )
     }
@@ -115,9 +115,9 @@ export class Gen extends gen_syn.Gen {
                     const ffuncs = it.fromPrep.fields.filter(_ => gen.typeFun(_.typeSpec))
                     const fprops = it.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec))
                     if (fprops && fprops.length) {
-                        ffuncs.push({ name: "get", typeSpec: { From: [], To: it.Name + "Bag" } })
+                        ffuncs.push({ name: "get", typeSpec: { From: [], To: it.Name + gen.idents.typeSuffBag } })
                         if (fprops.find(_ => !_.readOnly))
-                            ffuncs.push({ name: "set", typeSpec: { From: [it.Name + "Bag"], To: null } })
+                            ffuncs.push({ name: "set", typeSpec: { From: [it.Name + gen.idents.typeSuffBag], To: null } })
                     }
                     this.each(ffuncs, "\n", f => {
                         const tfun = gen.typeFun(f.typeSpec)
@@ -146,7 +146,7 @@ export class Gen extends gen_syn.Gen {
             this.lines(
                 (it.IsOutgoing ? "export " : "") + "function new" + it.Name + " (): " + it.Name + " {",
                 "    let me: " + it.Name,
-                "    me = { populateFrom: _ => " + it.Name + "_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as " + it.Name
+                "    me = { " + gen.idents.methodLoadFrom + ": _ => " + it.Name + "_" + gen.idents.methodLoadFrom + ".call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as " + it.Name
             ).each(dispmethods, "", f => {
                 const tfun = gen.typeFun(f.typeSpec)
                 const args = tfun[0].map((_, i) => 'a' + i).join(', ')
@@ -201,7 +201,7 @@ export class Gen extends gen_syn.Gen {
         if (method.IsSubNs)
             super.emitMethodImpl(it, method, (_t: gen_syn.TypeRefOwn, _m: gen_syn.Method, _: gen_syn.Builder, body: gen_syn.Instr[]) => {
                 body.length = 1
-                body[0] = _.iRet(_._(_.eCall(_._(_.eThis(), "Impl")), method.Name))
+                body[0] = _.iRet(_._(_.eCall(_._(_.eThis(), gen.idents.methodImpl)), method.Name))
             })
         else
             super.emitMethodImpl(it, method, fillBody)

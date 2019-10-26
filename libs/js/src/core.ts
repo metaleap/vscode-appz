@@ -159,7 +159,7 @@ export class Disposable {
         return this
     }
 
-    populateFrom(payload: any): boolean {
+    loadFromJsonish(payload: any): boolean {
         return ((typeof payload === 'string') && (this.id = payload) && this.id.length) ? true : false
     }
 

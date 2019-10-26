@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const gen = require("./gen");
 const gen_syn = require("./gen-syn");
 let anonVarCounter;
 class Gen extends gen_syn.Gen {
@@ -61,7 +62,7 @@ class Gen extends gen_syn.Gen {
                 ? "[JsonIgnore]"
                 : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnMaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")))
                 .ln(() => this
-                .s(((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel) || (isdispobj && f.Name !== this.options.idents.dispObjCfgBag) || (f.Name.startsWith("__") && f.Name.endsWith("__"))) ? "internal " : "public ")
+                .s(((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel) || (isdispobj && f.Name !== gen.idents.fldDispObjBag) || (f.Name.startsWith("__") && f.Name.endsWith("__"))) ? "internal " : "public ")
                 .emitTypeRef(f.Type)
                 .s(" ", f.Name, ";"));
         })).lines("}", "");
@@ -82,7 +83,7 @@ class Gen extends gen_syn.Gen {
         [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null];
         const isdisp = struct && (it.Name === "Dispose");
         const isproperty = it.Func.Type && !(it.Func.Args && it.Func.Args.length) && iface && iface.IsTop;
-        const emitsigheadln = () => this.lf(iface ? "" : (struct ? ((it.Name !== "populateFrom") ? "public " : "internal ") : "private static "))
+        const emitsigheadln = () => this.lf(iface ? "" : (struct ? ((it.Name !== gen.idents.methodLoadFrom) ? "public " : "internal ") : "private static "))
             .emitTypeRef(it.Func.Type)
             .s(" ", (iface ? (iface.Name + ".") : "") + it.Name)
             .when(isproperty, () => this.s(" { get "), () => this.s("(")
@@ -94,7 +95,7 @@ class Gen extends gen_syn.Gen {
                 this.emitDocs(it);
                 emitsigheadln().emitInstr(it.Func.Body).line();
                 if (isdisp)
-                    this.lines("void IDisposable.Dispose() { this.Dispose(); }", "internal Action<IVscode, any, any> OnError { get => this.disp?.impl?.OnError; }");
+                    this.lines("void IDisposable.Dispose() { this.Dispose(); }", "internal Action<IVscode, any, any> " + gen.idents.coreMethodOnErr + " { get => this." + gen.idents.fldDisp + "?." + gen.idents.fldImpl + "?." + gen.idents.coreMethodOnErr + "; }");
             }).lines("}", "");
         else if (iface)
             emitsigheadln()

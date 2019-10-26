@@ -4,8 +4,8 @@ import { OnError } from './vsc-appz'
 type ipcMsg = core.ipcMsg
 type Cancel = core.Cancel
 type Disposable = core.Disposable
-interface fromJson { populateFrom: (_: any) => boolean }
-interface withDisp { disp: Disposable }
+interface fromJson { loadFromJsonish: (_: any) => boolean }
+interface withDisp { __disp__: Disposable }
 
 abstract class implBase {
     impl: impl
@@ -511,7 +511,7 @@ export interface Window {
      * Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 
      * @param name Human-readable string which will be used to represent the channel in the UI.
-     * @return A thenable that resolves to the newly created `OutputChannel`.
+     * @return a thenable that resolves to the newly created `OutputChannel`.
      */
     CreateOutputChannel: (name: string) => (_: (_: OutputChannel, __: OutputChannelBag) => void) => void
 
@@ -1170,7 +1170,7 @@ export interface MessageItem extends fromJson {
 
 export function newMessageItem (): MessageItem {
     let me: MessageItem
-    me = { populateFrom: _ => MessageItem_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as MessageItem
+    me = { loadFromJsonish: _ => MessageItem_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as MessageItem
     return me
 }
 
@@ -1331,7 +1331,7 @@ export interface QuickPickItem extends fromJson {
 
 export function newQuickPickItem (): QuickPickItem {
     let me: QuickPickItem
-    me = { populateFrom: _ => QuickPickItem_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPickItem
+    me = { loadFromJsonish: _ => QuickPickItem_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPickItem
     return me
 }
 
@@ -1477,7 +1477,7 @@ export interface WorkspaceFolder extends fromJson {
 
 function newWorkspaceFolder (): WorkspaceFolder {
     let me: WorkspaceFolder
-    me = { populateFrom: _ => WorkspaceFolder_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceFolder
+    me = { loadFromJsonish: _ => WorkspaceFolder_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceFolder
     return me
 }
 
@@ -1495,7 +1495,7 @@ export interface WindowState extends fromJson {
 
 function newWindowState (): WindowState {
     let me: WindowState
-    me = { populateFrom: _ => WindowState_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WindowState
+    me = { loadFromJsonish: _ => WindowState_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WindowState
     return me
 }
 
@@ -1531,7 +1531,7 @@ export interface StatusBarItem extends fromJson, withDisp {
 
 function newStatusBarItem (): StatusBarItem {
     let me: StatusBarItem
-    me = { populateFrom: _ => StatusBarItem_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as StatusBarItem
+    me = { loadFromJsonish: _ => StatusBarItem_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as StatusBarItem
     me.Show = () => StatusBarItem_Show.call(me, )
     me.Hide = () => StatusBarItem_Hide.call(me, )
     me.Dispose = () => StatusBarItem_Dispose.call(me, )
@@ -1596,7 +1596,7 @@ export interface OutputChannel extends fromJson, withDisp {
 
 function newOutputChannel (): OutputChannel {
     let me: OutputChannel
-    me = { populateFrom: _ => OutputChannel_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as OutputChannel
+    me = { loadFromJsonish: _ => OutputChannel_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as OutputChannel
     me.Append = (a0) => OutputChannel_Append.call(me, a0)
     me.AppendLine = (a0) => OutputChannel_AppendLine.call(me, a0)
     me.Clear = () => OutputChannel_Clear.call(me, )
@@ -1894,7 +1894,7 @@ export interface TextEditorDecorationType extends fromJson, withDisp {
 
 function newTextEditorDecorationType (): TextEditorDecorationType {
     let me: TextEditorDecorationType
-    me = { populateFrom: _ => TextEditorDecorationType_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as TextEditorDecorationType
+    me = { loadFromJsonish: _ => TextEditorDecorationType_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as TextEditorDecorationType
     me.Dispose = () => TextEditorDecorationType_Dispose.call(me, )
     me.Get = () => TextEditorDecorationType_Get.call(me, )
     return me
@@ -1962,7 +1962,7 @@ export interface InputBox extends fromJson, withDisp {
 
 function newInputBox (): InputBox {
     let me: InputBox
-    me = { populateFrom: _ => InputBox_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBox
+    me = { loadFromJsonish: _ => InputBox_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBox
     me.OnDidChangeValue = (a0) => InputBox_OnDidChangeValue.call(me, a0)
     me.OnDidAccept = (a0) => InputBox_OnDidAccept.call(me, a0)
     me.Show = () => InputBox_Show.call(me, )
@@ -2069,7 +2069,7 @@ export interface QuickPick extends fromJson, withDisp {
 
 function newQuickPick (): QuickPick {
     let me: QuickPick
-    me = { populateFrom: _ => QuickPick_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPick
+    me = { loadFromJsonish: _ => QuickPick_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPick
     me.OnDidChangeValue = (a0) => QuickPick_OnDidChangeValue.call(me, a0)
     me.OnDidAccept = (a0) => QuickPick_OnDidAccept.call(me, a0)
     me.OnDidChangeActive = (a0) => QuickPick_OnDidChangeActive.call(me, a0)
@@ -2103,7 +2103,7 @@ export interface WorkspaceFoldersChangeEvent extends fromJson {
 
 function newWorkspaceFoldersChangeEvent (): WorkspaceFoldersChangeEvent {
     let me: WorkspaceFoldersChangeEvent
-    me = { populateFrom: _ => WorkspaceFoldersChangeEvent_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceFoldersChangeEvent
+    me = { loadFromJsonish: _ => WorkspaceFoldersChangeEvent_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceFoldersChangeEvent
     return me
 }
 
@@ -2121,7 +2121,7 @@ export interface DiagnosticChangeEvent extends fromJson {
 
 function newDiagnosticChangeEvent (): DiagnosticChangeEvent {
     let me: DiagnosticChangeEvent
-    me = { populateFrom: _ => DiagnosticChangeEvent_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as DiagnosticChangeEvent
+    me = { loadFromJsonish: _ => DiagnosticChangeEvent_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as DiagnosticChangeEvent
     return me
 }
 
@@ -2189,7 +2189,7 @@ export interface EnvBag extends fromJson {
 
 function newEnvBag (): EnvBag {
     let me: EnvBag
-    me = { populateFrom: _ => EnvBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as EnvBag
+    me = { loadFromJsonish: _ => EnvBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as EnvBag
     return me
 }
 
@@ -2251,7 +2251,7 @@ export interface WorkspaceBag extends fromJson {
 
 function newWorkspaceBag (): WorkspaceBag {
     let me: WorkspaceBag
-    me = { populateFrom: _ => WorkspaceBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceBag
+    me = { loadFromJsonish: _ => WorkspaceBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceBag
     return me
 }
 
@@ -2308,7 +2308,7 @@ export interface StatusBarItemBag extends fromJson {
 
 export function newStatusBarItemBag (): StatusBarItemBag {
     let me: StatusBarItemBag
-    me = { populateFrom: _ => StatusBarItemBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as StatusBarItemBag
+    me = { loadFromJsonish: _ => StatusBarItemBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as StatusBarItemBag
     return me
 }
 
@@ -2328,7 +2328,7 @@ export interface OutputChannelBag extends fromJson {
 
 export function newOutputChannelBag (): OutputChannelBag {
     let me: OutputChannelBag
-    me = { populateFrom: _ => OutputChannelBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as OutputChannelBag
+    me = { loadFromJsonish: _ => OutputChannelBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as OutputChannelBag
     return me
 }
 
@@ -2348,7 +2348,7 @@ export interface TextEditorDecorationTypeBag extends fromJson {
 
 export function newTextEditorDecorationTypeBag (): TextEditorDecorationTypeBag {
     let me: TextEditorDecorationTypeBag
-    me = { populateFrom: _ => TextEditorDecorationTypeBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as TextEditorDecorationTypeBag
+    me = { loadFromJsonish: _ => TextEditorDecorationTypeBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as TextEditorDecorationTypeBag
     return me
 }
 
@@ -2434,7 +2434,7 @@ export interface InputBoxBag extends fromJson {
 
 export function newInputBoxBag (): InputBoxBag {
     let me: InputBoxBag
-    me = { populateFrom: _ => InputBoxBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBoxBag
+    me = { loadFromJsonish: _ => InputBoxBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBoxBag
     return me
 }
 
@@ -2538,7 +2538,7 @@ export interface QuickPickBag extends fromJson {
 
 export function newQuickPickBag (): QuickPickBag {
     let me: QuickPickBag
-    me = { populateFrom: _ => QuickPickBag_populateFrom.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPickBag
+    me = { loadFromJsonish: _ => QuickPickBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPickBag
     return me
 }
 
@@ -2644,7 +2644,7 @@ class implWindow extends implBase implements Window {
             let result: MessageItem
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -2677,7 +2677,7 @@ class implWindow extends implBase implements Window {
             let result: MessageItem
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -2776,7 +2776,7 @@ class implWindow extends implBase implements Window {
             let result: MessageItem
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -2809,7 +2809,7 @@ class implWindow extends implBase implements Window {
             let result: MessageItem
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -2908,7 +2908,7 @@ class implWindow extends implBase implements Window {
             let result: MessageItem
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -2941,7 +2941,7 @@ class implWindow extends implBase implements Window {
             let result: MessageItem
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -3062,7 +3062,7 @@ class implWindow extends implBase implements Window {
                             let __0: QuickPickItem
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = newQuickPickItem()
-                                ok = __0.populateFrom(args[0])
+                                ok = __0.loadFromJsonish(args[0])
                                 if (!ok) {
                                     return [null, false]
                                 }
@@ -3156,7 +3156,7 @@ class implWindow extends implBase implements Window {
                             let __0: QuickPickItem
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = newQuickPickItem()
-                                ok = __0.populateFrom(args[0])
+                                ok = __0.loadFromJsonish(args[0])
                                 if (!ok) {
                                     return [null, false]
                                 }
@@ -3240,7 +3240,7 @@ class implWindow extends implBase implements Window {
                             let __0: QuickPickItem
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = newQuickPickItem()
-                                ok = __0.populateFrom(args[0])
+                                ok = __0.loadFromJsonish(args[0])
                                 if (!ok) {
                                     return [null, false]
                                 }
@@ -3282,7 +3282,7 @@ class implWindow extends implBase implements Window {
                 for (const __item__result of __coll__result) {
                     let __val__result: QuickPickItem
                     __val__result = newQuickPickItem()
-                    ok = __val__result.populateFrom(__item__result)
+                    ok = __val__result.loadFromJsonish(__item__result)
                     if (!ok) {
                         return false
                     }
@@ -3335,7 +3335,7 @@ class implWindow extends implBase implements Window {
                             let __0: QuickPickItem
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = newQuickPickItem()
-                                ok = __0.populateFrom(args[0])
+                                ok = __0.loadFromJsonish(args[0])
                                 if (!ok) {
                                     return [null, false]
                                 }
@@ -3368,7 +3368,7 @@ class implWindow extends implBase implements Window {
             let result: QuickPickItem
             if ((undefined !== payload && null !== payload)) {
                 result = newQuickPickItem()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -3409,7 +3409,7 @@ class implWindow extends implBase implements Window {
             let result: Disposable
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -3442,7 +3442,7 @@ class implWindow extends implBase implements Window {
             let result: Disposable
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -3552,7 +3552,7 @@ class implWindow extends implBase implements Window {
             let result: WorkspaceFolder
             if ((undefined !== payload && null !== payload)) {
                 result = newWorkspaceFolder()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -3582,7 +3582,7 @@ class implWindow extends implBase implements Window {
             let result: WindowState
             if ((undefined !== payload && null !== payload)) {
                 result = newWindowState()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -3605,26 +3605,26 @@ class implWindow extends implBase implements Window {
         msg = newipcMsg()
         msg.QName = "window.onDidChangeWindowState"
         msg.Data = {}
-        let _fnid_listener: string
+        let listenerFnId: string
         if ((undefined === listener || null === listener)) {
             OnError(this.Impl(), "Window.OnDidChangeWindowState: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
             return null
         }
-        _fnid_listener = this.Impl().nextSub((args: any[]): boolean => {
+        listenerFnId = this.Impl().nextSub((args: any[]): boolean => {
             let ok: boolean
             if (1 !== args.length) {
                 return ok
             }
             let _a_0_: WindowState
             _a_0_ = newWindowState()
-            ok = _a_0_.populateFrom(args[0])
+            ok = _a_0_.loadFromJsonish(args[0])
             if (!ok) {
                 return false
             }
             listener(_a_0_)
             return true
         }, null)
-        msg.Data["listener"] = _fnid_listener
+        msg.Data["listener"] = listenerFnId
         let onresp: (_: any) => boolean
         let onret: (_: Disposable) => void
         onresp = (payload: any): boolean => {
@@ -3632,7 +3632,7 @@ class implWindow extends implBase implements Window {
             let result: Disposable
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -3641,7 +3641,7 @@ class implWindow extends implBase implements Window {
             }
             {
                 if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), _fnid_listener))
+                    onret(result.bind(this.Impl(), listenerFnId))
                 }
             }
             return true
@@ -3670,11 +3670,11 @@ class implWindow extends implBase implements Window {
             let result: StatusBarItem
             if ((undefined !== payload && null !== payload)) {
                 result = newStatusBarItem()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
-                result.disp.impl = this.Impl()
+                result.__disp__.impl = this.Impl()
             }
             {
                 result.Get()((state: StatusBarItemBag): void => {
@@ -3704,11 +3704,11 @@ class implWindow extends implBase implements Window {
             let result: OutputChannel
             if ((undefined !== payload && null !== payload)) {
                 result = newOutputChannel()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
-                result.disp.impl = this.Impl()
+                result.__disp__.impl = this.Impl()
             }
             {
                 result.Get()((state: OutputChannelBag): void => {
@@ -3738,11 +3738,11 @@ class implWindow extends implBase implements Window {
             let result: TextEditorDecorationType
             if ((undefined !== payload && null !== payload)) {
                 result = newTextEditorDecorationType()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
-                result.disp.impl = this.Impl()
+                result.__disp__.impl = this.Impl()
             }
             {
                 result.Get()((state: TextEditorDecorationTypeBag): void => {
@@ -3771,11 +3771,11 @@ class implWindow extends implBase implements Window {
             let result: InputBox
             if ((undefined !== payload && null !== payload)) {
                 result = newInputBox()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
-                result.disp.impl = this.Impl()
+                result.__disp__.impl = this.Impl()
             }
             {
                 result.Get()((state: InputBoxBag): void => {
@@ -3804,11 +3804,11 @@ class implWindow extends implBase implements Window {
             let result: QuickPick
             if ((undefined !== payload && null !== payload)) {
                 result = newQuickPick()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
-                result.disp.impl = this.Impl()
+                result.__disp__.impl = this.Impl()
             }
             {
                 result.Get()((state: QuickPickBag): void => {
@@ -4107,7 +4107,7 @@ class implEnv extends implBase implements Env {
             let result: EnvBag
             if ((undefined !== payload && null !== payload)) {
                 result = newEnvBag()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -4292,26 +4292,26 @@ class implWorkspace extends implBase implements Workspace {
         msg = newipcMsg()
         msg.QName = "workspace.onDidChangeWorkspaceFolders"
         msg.Data = {}
-        let _fnid_listener: string
+        let listenerFnId: string
         if ((undefined === listener || null === listener)) {
             OnError(this.Impl(), "Workspace.OnDidChangeWorkspaceFolders: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
             return null
         }
-        _fnid_listener = this.Impl().nextSub((args: any[]): boolean => {
+        listenerFnId = this.Impl().nextSub((args: any[]): boolean => {
             let ok: boolean
             if (1 !== args.length) {
                 return ok
             }
             let _a_0_: WorkspaceFoldersChangeEvent
             _a_0_ = newWorkspaceFoldersChangeEvent()
-            ok = _a_0_.populateFrom(args[0])
+            ok = _a_0_.loadFromJsonish(args[0])
             if (!ok) {
                 return false
             }
             listener(_a_0_)
             return true
         }, null)
-        msg.Data["listener"] = _fnid_listener
+        msg.Data["listener"] = listenerFnId
         let onresp: (_: any) => boolean
         let onret: (_: Disposable) => void
         onresp = (payload: any): boolean => {
@@ -4319,7 +4319,7 @@ class implWorkspace extends implBase implements Workspace {
             let result: Disposable
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -4328,7 +4328,7 @@ class implWorkspace extends implBase implements Workspace {
             }
             {
                 if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), _fnid_listener))
+                    onret(result.bind(this.Impl(), listenerFnId))
                 }
             }
             return true
@@ -4352,7 +4352,7 @@ class implWorkspace extends implBase implements Workspace {
             let result: WorkspaceFolder
             if ((undefined !== payload && null !== payload)) {
                 result = newWorkspaceFolder()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -4392,7 +4392,7 @@ class implWorkspace extends implBase implements Workspace {
                 for (const __item__result of __coll__result) {
                     let __val__result: WorkspaceFolder
                     __val__result = newWorkspaceFolder()
-                    ok = __val__result.populateFrom(__item__result)
+                    ok = __val__result.loadFromJsonish(__item__result)
                     if (!ok) {
                         return false
                     }
@@ -4516,7 +4516,7 @@ class implWorkspace extends implBase implements Workspace {
             let result: WorkspaceBag
             if ((undefined !== payload && null !== payload)) {
                 result = newWorkspaceBag()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -4587,26 +4587,26 @@ class implLanguages extends implBase implements Languages {
         msg = newipcMsg()
         msg.QName = "languages.onDidChangeDiagnostics"
         msg.Data = {}
-        let _fnid_listener: string
+        let listenerFnId: string
         if ((undefined === listener || null === listener)) {
             OnError(this.Impl(), "Languages.OnDidChangeDiagnostics: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
             return null
         }
-        _fnid_listener = this.Impl().nextSub((args: any[]): boolean => {
+        listenerFnId = this.Impl().nextSub((args: any[]): boolean => {
             let ok: boolean
             if (1 !== args.length) {
                 return ok
             }
             let _a_0_: DiagnosticChangeEvent
             _a_0_ = newDiagnosticChangeEvent()
-            ok = _a_0_.populateFrom(args[0])
+            ok = _a_0_.loadFromJsonish(args[0])
             if (!ok) {
                 return false
             }
             listener(_a_0_)
             return true
         }, null)
-        msg.Data["listener"] = _fnid_listener
+        msg.Data["listener"] = listenerFnId
         let onresp: (_: any) => boolean
         let onret: (_: Disposable) => void
         onresp = (payload: any): boolean => {
@@ -4614,7 +4614,7 @@ class implLanguages extends implBase implements Languages {
             let result: Disposable
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -4623,7 +4623,7 @@ class implLanguages extends implBase implements Languages {
             }
             {
                 if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), _fnid_listener))
+                    onret(result.bind(this.Impl(), listenerFnId))
                 }
             }
             return true
@@ -4643,12 +4643,12 @@ class implExtensions extends implBase implements Extensions {
         msg = newipcMsg()
         msg.QName = "extensions.onDidChange"
         msg.Data = {}
-        let _fnid_listener: string
+        let listenerFnId: string
         if ((undefined === listener || null === listener)) {
             OnError(this.Impl(), "Extensions.OnDidChange: the 'listener' arg (which is not optional but required) was not passed by the caller", null)
             return null
         }
-        _fnid_listener = this.Impl().nextSub((args: any[]): boolean => {
+        listenerFnId = this.Impl().nextSub((args: any[]): boolean => {
             let ok: boolean
             if (0 !== args.length) {
                 return ok
@@ -4656,7 +4656,7 @@ class implExtensions extends implBase implements Extensions {
             listener()
             return true
         }, null)
-        msg.Data["listener"] = _fnid_listener
+        msg.Data["listener"] = listenerFnId
         let onresp: (_: any) => boolean
         let onret: (_: Disposable) => void
         onresp = (payload: any): boolean => {
@@ -4664,7 +4664,7 @@ class implExtensions extends implBase implements Extensions {
             let result: Disposable
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -4673,7 +4673,7 @@ class implExtensions extends implBase implements Extensions {
             }
             {
                 if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), _fnid_listener))
+                    onret(result.bind(this.Impl(), listenerFnId))
                 }
             }
             return true
@@ -4694,12 +4694,12 @@ class implCommands extends implBase implements Commands {
         msg.QName = "commands.registerCommand"
         msg.Data = {}
         msg.Data["command"] = command
-        let _fnid_callback: string
+        let callbackFnId: string
         if ((undefined === callback || null === callback)) {
             OnError(this.Impl(), "Commands.RegisterCommand: the 'callback' arg (which is not optional but required) was not passed by the caller", null)
             return null
         }
-        _fnid_callback = this.Impl().nextSub(null, (args: any[]): [any, boolean] => {
+        callbackFnId = this.Impl().nextSub(null, (args: any[]): [any, boolean] => {
             let ok: boolean
             if (1 !== args.length) {
                 return [null, ok]
@@ -4713,7 +4713,7 @@ class implCommands extends implBase implements Commands {
             ret = callback(_a_0_)
             return [ret, true]
         })
-        msg.Data["callback"] = _fnid_callback
+        msg.Data["callback"] = callbackFnId
         let onresp: (_: any) => boolean
         let onret: (_: Disposable) => void
         onresp = (payload: any): boolean => {
@@ -4721,7 +4721,7 @@ class implCommands extends implBase implements Commands {
             let result: Disposable
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable()
-                ok = result.populateFrom(payload)
+                ok = result.loadFromJsonish(payload)
                 if (!ok) {
                     return false
                 }
@@ -4730,7 +4730,7 @@ class implCommands extends implBase implements Commands {
             }
             {
                 if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), _fnid_callback))
+                    onret(result.bind(this.Impl(), callbackFnId))
                 }
             }
             return true
@@ -4821,7 +4821,7 @@ function StatusBarItem_Show(this: StatusBarItem, ): (_: (_: StatusBarItemBag) =>
     msg = newipcMsg()
     msg.QName = "StatusBarItem.show"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
     let onret: (_: StatusBarItemBag) => void
     onresp = (payload: any): boolean => {
@@ -4829,7 +4829,7 @@ function StatusBarItem_Show(this: StatusBarItem, ): (_: (_: StatusBarItemBag) =>
         let result: StatusBarItemBag
         if ((undefined !== payload && null !== payload)) {
             result = newStatusBarItemBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -4841,7 +4841,7 @@ function StatusBarItem_Show(this: StatusBarItem, ): (_: (_: StatusBarItemBag) =>
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: StatusBarItemBag) => void): void => {
         onret = a0
     }
@@ -4852,7 +4852,7 @@ function StatusBarItem_Hide(this: StatusBarItem, ): (_: (_: StatusBarItemBag) =>
     msg = newipcMsg()
     msg.QName = "StatusBarItem.hide"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
     let onret: (_: StatusBarItemBag) => void
     onresp = (payload: any): boolean => {
@@ -4860,7 +4860,7 @@ function StatusBarItem_Hide(this: StatusBarItem, ): (_: (_: StatusBarItemBag) =>
         let result: StatusBarItemBag
         if ((undefined !== payload && null !== payload)) {
             result = newStatusBarItemBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -4872,14 +4872,14 @@ function StatusBarItem_Hide(this: StatusBarItem, ): (_: (_: StatusBarItemBag) =>
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: StatusBarItemBag) => void): void => {
         onret = a0
     }
 }
 
 function StatusBarItem_Dispose(this: StatusBarItem, ): (_: () => void) => void {
-    return this.disp.Dispose()
+    return this.__disp__.Dispose()
 }
 
 function StatusBarItem_Get(this: StatusBarItem, ): (_: (_: StatusBarItemBag) => void) => void {
@@ -4887,7 +4887,7 @@ function StatusBarItem_Get(this: StatusBarItem, ): (_: (_: StatusBarItemBag) => 
     msg = newipcMsg()
     msg.QName = "StatusBarItem.appzObjPropsGet"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
     let onret: (_: StatusBarItemBag) => void
     onresp = (payload: any): boolean => {
@@ -4895,7 +4895,7 @@ function StatusBarItem_Get(this: StatusBarItem, ): (_: (_: StatusBarItemBag) => 
         let result: StatusBarItemBag
         if ((undefined !== payload && null !== payload)) {
             result = newStatusBarItemBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -4907,7 +4907,7 @@ function StatusBarItem_Get(this: StatusBarItem, ): (_: (_: StatusBarItemBag) => 
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: StatusBarItemBag) => void): void => {
         onret = a0
     }
@@ -4918,7 +4918,7 @@ function StatusBarItem_Set(this: StatusBarItem, allUpdates: StatusBarItemBag): (
     msg = newipcMsg()
     msg.QName = "StatusBarItem.appzObjPropsSet"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     msg.Data["allUpdates"] = allUpdates
     let onresp: (_: any) => boolean
     let onret: () => void
@@ -4931,7 +4931,7 @@ function StatusBarItem_Set(this: StatusBarItem, allUpdates: StatusBarItemBag): (
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: () => void): void => {
         onret = a0
     }
@@ -4942,7 +4942,7 @@ function OutputChannel_Append(this: OutputChannel, value: string): (_: (_: Outpu
     msg = newipcMsg()
     msg.QName = "OutputChannel.append"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     msg.Data["value"] = value
     let onresp: (_: any) => boolean
     let onret: (_: OutputChannelBag) => void
@@ -4951,7 +4951,7 @@ function OutputChannel_Append(this: OutputChannel, value: string): (_: (_: Outpu
         let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
             result = newOutputChannelBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -4963,7 +4963,7 @@ function OutputChannel_Append(this: OutputChannel, value: string): (_: (_: Outpu
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: OutputChannelBag) => void): void => {
         onret = a0
     }
@@ -4974,7 +4974,7 @@ function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: (_: O
     msg = newipcMsg()
     msg.QName = "OutputChannel.appendLine"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     msg.Data["value"] = value
     let onresp: (_: any) => boolean
     let onret: (_: OutputChannelBag) => void
@@ -4983,7 +4983,7 @@ function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: (_: O
         let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
             result = newOutputChannelBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -4995,7 +4995,7 @@ function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: (_: O
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: OutputChannelBag) => void): void => {
         onret = a0
     }
@@ -5006,7 +5006,7 @@ function OutputChannel_Clear(this: OutputChannel, ): (_: (_: OutputChannelBag) =
     msg = newipcMsg()
     msg.QName = "OutputChannel.clear"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
     let onret: (_: OutputChannelBag) => void
     onresp = (payload: any): boolean => {
@@ -5014,7 +5014,7 @@ function OutputChannel_Clear(this: OutputChannel, ): (_: (_: OutputChannelBag) =
         let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
             result = newOutputChannelBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5026,7 +5026,7 @@ function OutputChannel_Clear(this: OutputChannel, ): (_: (_: OutputChannelBag) =
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: OutputChannelBag) => void): void => {
         onret = a0
     }
@@ -5037,7 +5037,7 @@ function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (
     msg = newipcMsg()
     msg.QName = "OutputChannel.show"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     msg.Data["preserveFocus"] = preserveFocus
     let onresp: (_: any) => boolean
     let onret: (_: OutputChannelBag) => void
@@ -5046,7 +5046,7 @@ function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (
         let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
             result = newOutputChannelBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5058,7 +5058,7 @@ function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: OutputChannelBag) => void): void => {
         onret = a0
     }
@@ -5069,7 +5069,7 @@ function OutputChannel_Hide(this: OutputChannel, ): (_: (_: OutputChannelBag) =>
     msg = newipcMsg()
     msg.QName = "OutputChannel.hide"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
     let onret: (_: OutputChannelBag) => void
     onresp = (payload: any): boolean => {
@@ -5077,7 +5077,7 @@ function OutputChannel_Hide(this: OutputChannel, ): (_: (_: OutputChannelBag) =>
         let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
             result = newOutputChannelBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5089,14 +5089,14 @@ function OutputChannel_Hide(this: OutputChannel, ): (_: (_: OutputChannelBag) =>
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: OutputChannelBag) => void): void => {
         onret = a0
     }
 }
 
 function OutputChannel_Dispose(this: OutputChannel, ): (_: () => void) => void {
-    return this.disp.Dispose()
+    return this.__disp__.Dispose()
 }
 
 function OutputChannel_Get(this: OutputChannel, ): (_: (_: OutputChannelBag) => void) => void {
@@ -5104,7 +5104,7 @@ function OutputChannel_Get(this: OutputChannel, ): (_: (_: OutputChannelBag) => 
     msg = newipcMsg()
     msg.QName = "OutputChannel.appzObjPropsGet"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
     let onret: (_: OutputChannelBag) => void
     onresp = (payload: any): boolean => {
@@ -5112,7 +5112,7 @@ function OutputChannel_Get(this: OutputChannel, ): (_: (_: OutputChannelBag) => 
         let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
             result = newOutputChannelBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5124,14 +5124,14 @@ function OutputChannel_Get(this: OutputChannel, ): (_: (_: OutputChannelBag) => 
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: OutputChannelBag) => void): void => {
         onret = a0
     }
 }
 
 function TextEditorDecorationType_Dispose(this: TextEditorDecorationType, ): (_: () => void) => void {
-    return this.disp.Dispose()
+    return this.__disp__.Dispose()
 }
 
 function TextEditorDecorationType_Get(this: TextEditorDecorationType, ): (_: (_: TextEditorDecorationTypeBag) => void) => void {
@@ -5139,7 +5139,7 @@ function TextEditorDecorationType_Get(this: TextEditorDecorationType, ): (_: (_:
     msg = newipcMsg()
     msg.QName = "TextEditorDecorationType.appzObjPropsGet"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
     let onret: (_: TextEditorDecorationTypeBag) => void
     onresp = (payload: any): boolean => {
@@ -5147,7 +5147,7 @@ function TextEditorDecorationType_Get(this: TextEditorDecorationType, ): (_: (_:
         let result: TextEditorDecorationTypeBag
         if ((undefined !== payload && null !== payload)) {
             result = newTextEditorDecorationTypeBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5159,7 +5159,7 @@ function TextEditorDecorationType_Get(this: TextEditorDecorationType, ): (_: (_:
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: TextEditorDecorationTypeBag) => void): void => {
         onret = a0
     }
@@ -5170,13 +5170,13 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string, __: Inpu
     msg = newipcMsg()
     msg.QName = "InputBox.onDidChangeValue"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
-    let _fnid_handler: string
+    msg.Data[""] = this.__disp__.id
+    let handlerFnId: string
     if ((undefined === handler || null === handler)) {
-        OnError(this.disp.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
     }
-    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+    handlerFnId = this.__disp__.impl.nextSub((args: any[]): boolean => {
         let ok: boolean
         if (2 !== args.length) {
             return ok
@@ -5188,15 +5188,15 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string, __: Inpu
         }
         let _a_1_: InputBoxBag
         _a_1_ = newInputBoxBag()
-        ok = _a_1_.populateFrom(args[1])
+        ok = _a_1_.loadFromJsonish(args[1])
         if (!ok) {
             return false
         }
         handler(_a_0_, _a_1_)
         return true
     }, null)
-    msg.Data["handler"] = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data["handler"] = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     let onresp: (_: any) => boolean
     let onret: (_: Disposable) => void
     onresp = (payload: any): boolean => {
@@ -5204,7 +5204,7 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string, __: Inpu
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5213,12 +5213,12 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string, __: Inpu
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
             }
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: Disposable) => void): void => {
         onret = a0
     }
@@ -5229,28 +5229,28 @@ function InputBox_OnDidAccept(this: InputBox, handler: (_: InputBoxBag) => void)
     msg = newipcMsg()
     msg.QName = "InputBox.onDidAccept"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
-    let _fnid_handler: string
+    msg.Data[""] = this.__disp__.id
+    let handlerFnId: string
     if ((undefined === handler || null === handler)) {
-        OnError(this.disp.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
     }
-    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+    handlerFnId = this.__disp__.impl.nextSub((args: any[]): boolean => {
         let ok: boolean
         if (1 !== args.length) {
             return ok
         }
         let _a_0_: InputBoxBag
         _a_0_ = newInputBoxBag()
-        ok = _a_0_.populateFrom(args[0])
+        ok = _a_0_.loadFromJsonish(args[0])
         if (!ok) {
             return false
         }
         handler(_a_0_)
         return true
     }, null)
-    msg.Data["handler"] = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data["handler"] = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     let onresp: (_: any) => boolean
     let onret: (_: Disposable) => void
     onresp = (payload: any): boolean => {
@@ -5258,7 +5258,7 @@ function InputBox_OnDidAccept(this: InputBox, handler: (_: InputBoxBag) => void)
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5267,12 +5267,12 @@ function InputBox_OnDidAccept(this: InputBox, handler: (_: InputBoxBag) => void)
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
             }
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: Disposable) => void): void => {
         onret = a0
     }
@@ -5283,7 +5283,7 @@ function InputBox_Show(this: InputBox, ): (_: (_: InputBoxBag) => void) => void 
     msg = newipcMsg()
     msg.QName = "InputBox.show"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
     let onret: (_: InputBoxBag) => void
     onresp = (payload: any): boolean => {
@@ -5291,7 +5291,7 @@ function InputBox_Show(this: InputBox, ): (_: (_: InputBoxBag) => void) => void 
         let result: InputBoxBag
         if ((undefined !== payload && null !== payload)) {
             result = newInputBoxBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5303,7 +5303,7 @@ function InputBox_Show(this: InputBox, ): (_: (_: InputBoxBag) => void) => void 
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: InputBoxBag) => void): void => {
         onret = a0
     }
@@ -5314,7 +5314,7 @@ function InputBox_Hide(this: InputBox, ): (_: (_: InputBoxBag) => void) => void 
     msg = newipcMsg()
     msg.QName = "InputBox.hide"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
     let onret: (_: InputBoxBag) => void
     onresp = (payload: any): boolean => {
@@ -5322,7 +5322,7 @@ function InputBox_Hide(this: InputBox, ): (_: (_: InputBoxBag) => void) => void 
         let result: InputBoxBag
         if ((undefined !== payload && null !== payload)) {
             result = newInputBoxBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5334,7 +5334,7 @@ function InputBox_Hide(this: InputBox, ): (_: (_: InputBoxBag) => void) => void 
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: InputBoxBag) => void): void => {
         onret = a0
     }
@@ -5345,28 +5345,28 @@ function InputBox_OnDidHide(this: InputBox, handler: (_: InputBoxBag) => void): 
     msg = newipcMsg()
     msg.QName = "InputBox.onDidHide"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
-    let _fnid_handler: string
+    msg.Data[""] = this.__disp__.id
+    let handlerFnId: string
     if ((undefined === handler || null === handler)) {
-        OnError(this.disp.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
     }
-    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+    handlerFnId = this.__disp__.impl.nextSub((args: any[]): boolean => {
         let ok: boolean
         if (1 !== args.length) {
             return ok
         }
         let _a_0_: InputBoxBag
         _a_0_ = newInputBoxBag()
-        ok = _a_0_.populateFrom(args[0])
+        ok = _a_0_.loadFromJsonish(args[0])
         if (!ok) {
             return false
         }
         handler(_a_0_)
         return true
     }, null)
-    msg.Data["handler"] = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data["handler"] = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     let onresp: (_: any) => boolean
     let onret: (_: Disposable) => void
     onresp = (payload: any): boolean => {
@@ -5374,7 +5374,7 @@ function InputBox_OnDidHide(this: InputBox, handler: (_: InputBoxBag) => void): 
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5383,19 +5383,19 @@ function InputBox_OnDidHide(this: InputBox, handler: (_: InputBoxBag) => void): 
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
             }
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: Disposable) => void): void => {
         onret = a0
     }
 }
 
 function InputBox_Dispose(this: InputBox, ): (_: () => void) => void {
-    return this.disp.Dispose()
+    return this.__disp__.Dispose()
 }
 
 function InputBox_Get(this: InputBox, ): (_: (_: InputBoxBag) => void) => void {
@@ -5403,7 +5403,7 @@ function InputBox_Get(this: InputBox, ): (_: (_: InputBoxBag) => void) => void {
     msg = newipcMsg()
     msg.QName = "InputBox.appzObjPropsGet"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
     let onret: (_: InputBoxBag) => void
     onresp = (payload: any): boolean => {
@@ -5411,7 +5411,7 @@ function InputBox_Get(this: InputBox, ): (_: (_: InputBoxBag) => void) => void {
         let result: InputBoxBag
         if ((undefined !== payload && null !== payload)) {
             result = newInputBoxBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5423,7 +5423,7 @@ function InputBox_Get(this: InputBox, ): (_: (_: InputBoxBag) => void) => void {
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: InputBoxBag) => void): void => {
         onret = a0
     }
@@ -5434,7 +5434,7 @@ function InputBox_Set(this: InputBox, allUpdates: InputBoxBag): (_: () => void) 
     msg = newipcMsg()
     msg.QName = "InputBox.appzObjPropsSet"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     msg.Data["allUpdates"] = allUpdates
     let onresp: (_: any) => boolean
     let onret: () => void
@@ -5447,7 +5447,7 @@ function InputBox_Set(this: InputBox, allUpdates: InputBoxBag): (_: () => void) 
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: () => void): void => {
         onret = a0
     }
@@ -5458,13 +5458,13 @@ function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string, __: Qu
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidChangeValue"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
-    let _fnid_handler: string
+    msg.Data[""] = this.__disp__.id
+    let handlerFnId: string
     if ((undefined === handler || null === handler)) {
-        OnError(this.disp.impl, "QuickPick.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "QuickPick.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
     }
-    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+    handlerFnId = this.__disp__.impl.nextSub((args: any[]): boolean => {
         let ok: boolean
         if (2 !== args.length) {
             return ok
@@ -5476,15 +5476,15 @@ function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string, __: Qu
         }
         let _a_1_: QuickPickBag
         _a_1_ = newQuickPickBag()
-        ok = _a_1_.populateFrom(args[1])
+        ok = _a_1_.loadFromJsonish(args[1])
         if (!ok) {
             return false
         }
         handler(_a_0_, _a_1_)
         return true
     }, null)
-    msg.Data["handler"] = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data["handler"] = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     let onresp: (_: any) => boolean
     let onret: (_: Disposable) => void
     onresp = (payload: any): boolean => {
@@ -5492,7 +5492,7 @@ function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string, __: Qu
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5501,12 +5501,12 @@ function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string, __: Qu
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
             }
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: Disposable) => void): void => {
         onret = a0
     }
@@ -5517,28 +5517,28 @@ function QuickPick_OnDidAccept(this: QuickPick, handler: (_: QuickPickBag) => vo
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidAccept"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
-    let _fnid_handler: string
+    msg.Data[""] = this.__disp__.id
+    let handlerFnId: string
     if ((undefined === handler || null === handler)) {
-        OnError(this.disp.impl, "QuickPick.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "QuickPick.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
     }
-    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+    handlerFnId = this.__disp__.impl.nextSub((args: any[]): boolean => {
         let ok: boolean
         if (1 !== args.length) {
             return ok
         }
         let _a_0_: QuickPickBag
         _a_0_ = newQuickPickBag()
-        ok = _a_0_.populateFrom(args[0])
+        ok = _a_0_.loadFromJsonish(args[0])
         if (!ok) {
             return false
         }
         handler(_a_0_)
         return true
     }, null)
-    msg.Data["handler"] = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data["handler"] = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     let onresp: (_: any) => boolean
     let onret: (_: Disposable) => void
     onresp = (payload: any): boolean => {
@@ -5546,7 +5546,7 @@ function QuickPick_OnDidAccept(this: QuickPick, handler: (_: QuickPickBag) => vo
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5555,12 +5555,12 @@ function QuickPick_OnDidAccept(this: QuickPick, handler: (_: QuickPickBag) => vo
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
             }
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: Disposable) => void): void => {
         onret = a0
     }
@@ -5571,13 +5571,13 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidChangeActive"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
-    let _fnid_handler: string
+    msg.Data[""] = this.__disp__.id
+    let handlerFnId: string
     if ((undefined === handler || null === handler)) {
-        OnError(this.disp.impl, "QuickPick.OnDidChangeActive: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "QuickPick.OnDidChangeActive: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
     }
-    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+    handlerFnId = this.__disp__.impl.nextSub((args: any[]): boolean => {
         let ok: boolean
         if (2 !== args.length) {
             return ok
@@ -5594,7 +5594,7 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
         for (const __item___a_0_ of __coll___a_0_) {
             let __val___a_0_: QuickPickItem
             __val___a_0_ = newQuickPickItem()
-            ok = __val___a_0_.populateFrom(__item___a_0_)
+            ok = __val___a_0_.loadFromJsonish(__item___a_0_)
             if (!ok) {
                 return false
             }
@@ -5603,15 +5603,15 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
         }
         let _a_1_: QuickPickBag
         _a_1_ = newQuickPickBag()
-        ok = _a_1_.populateFrom(args[1])
+        ok = _a_1_.loadFromJsonish(args[1])
         if (!ok) {
             return false
         }
         handler(_a_0_, _a_1_)
         return true
     }, null)
-    msg.Data["handler"] = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data["handler"] = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     let onresp: (_: any) => boolean
     let onret: (_: Disposable) => void
     onresp = (payload: any): boolean => {
@@ -5619,7 +5619,7 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5628,12 +5628,12 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
             }
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: Disposable) => void): void => {
         onret = a0
     }
@@ -5644,13 +5644,13 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidChangeSelection"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
-    let _fnid_handler: string
+    msg.Data[""] = this.__disp__.id
+    let handlerFnId: string
     if ((undefined === handler || null === handler)) {
-        OnError(this.disp.impl, "QuickPick.OnDidChangeSelection: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "QuickPick.OnDidChangeSelection: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
     }
-    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+    handlerFnId = this.__disp__.impl.nextSub((args: any[]): boolean => {
         let ok: boolean
         if (2 !== args.length) {
             return ok
@@ -5667,7 +5667,7 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
         for (const __item___a_0_ of __coll___a_0_) {
             let __val___a_0_: QuickPickItem
             __val___a_0_ = newQuickPickItem()
-            ok = __val___a_0_.populateFrom(__item___a_0_)
+            ok = __val___a_0_.loadFromJsonish(__item___a_0_)
             if (!ok) {
                 return false
             }
@@ -5676,15 +5676,15 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
         }
         let _a_1_: QuickPickBag
         _a_1_ = newQuickPickBag()
-        ok = _a_1_.populateFrom(args[1])
+        ok = _a_1_.loadFromJsonish(args[1])
         if (!ok) {
             return false
         }
         handler(_a_0_, _a_1_)
         return true
     }, null)
-    msg.Data["handler"] = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data["handler"] = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     let onresp: (_: any) => boolean
     let onret: (_: Disposable) => void
     onresp = (payload: any): boolean => {
@@ -5692,7 +5692,7 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5701,12 +5701,12 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
             }
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: Disposable) => void): void => {
         onret = a0
     }
@@ -5717,7 +5717,7 @@ function QuickPick_Show(this: QuickPick, ): (_: (_: QuickPickBag) => void) => vo
     msg = newipcMsg()
     msg.QName = "QuickPick.show"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
     let onret: (_: QuickPickBag) => void
     onresp = (payload: any): boolean => {
@@ -5725,7 +5725,7 @@ function QuickPick_Show(this: QuickPick, ): (_: (_: QuickPickBag) => void) => vo
         let result: QuickPickBag
         if ((undefined !== payload && null !== payload)) {
             result = newQuickPickBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5737,7 +5737,7 @@ function QuickPick_Show(this: QuickPick, ): (_: (_: QuickPickBag) => void) => vo
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: QuickPickBag) => void): void => {
         onret = a0
     }
@@ -5748,7 +5748,7 @@ function QuickPick_Hide(this: QuickPick, ): (_: (_: QuickPickBag) => void) => vo
     msg = newipcMsg()
     msg.QName = "QuickPick.hide"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
     let onret: (_: QuickPickBag) => void
     onresp = (payload: any): boolean => {
@@ -5756,7 +5756,7 @@ function QuickPick_Hide(this: QuickPick, ): (_: (_: QuickPickBag) => void) => vo
         let result: QuickPickBag
         if ((undefined !== payload && null !== payload)) {
             result = newQuickPickBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5768,7 +5768,7 @@ function QuickPick_Hide(this: QuickPick, ): (_: (_: QuickPickBag) => void) => vo
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: QuickPickBag) => void): void => {
         onret = a0
     }
@@ -5779,28 +5779,28 @@ function QuickPick_OnDidHide(this: QuickPick, handler: (_: QuickPickBag) => void
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidHide"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
-    let _fnid_handler: string
+    msg.Data[""] = this.__disp__.id
+    let handlerFnId: string
     if ((undefined === handler || null === handler)) {
-        OnError(this.disp.impl, "QuickPick.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        OnError(this.__disp__.impl, "QuickPick.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
         return null
     }
-    _fnid_handler = this.disp.impl.nextSub((args: any[]): boolean => {
+    handlerFnId = this.__disp__.impl.nextSub((args: any[]): boolean => {
         let ok: boolean
         if (1 !== args.length) {
             return ok
         }
         let _a_0_: QuickPickBag
         _a_0_ = newQuickPickBag()
-        ok = _a_0_.populateFrom(args[0])
+        ok = _a_0_.loadFromJsonish(args[0])
         if (!ok) {
             return false
         }
         handler(_a_0_)
         return true
     }, null)
-    msg.Data["handler"] = _fnid_handler
-    this.disp.addSub(_fnid_handler)
+    msg.Data["handler"] = handlerFnId
+    this.__disp__.addSub(handlerFnId)
     let onresp: (_: any) => boolean
     let onret: (_: Disposable) => void
     onresp = (payload: any): boolean => {
@@ -5808,7 +5808,7 @@ function QuickPick_OnDidHide(this: QuickPick, handler: (_: QuickPickBag) => void
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5817,19 +5817,19 @@ function QuickPick_OnDidHide(this: QuickPick, handler: (_: QuickPickBag) => void
         }
         {
             if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.disp.impl, _fnid_handler))
+                onret(result.bind(this.__disp__.impl, handlerFnId))
             }
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: Disposable) => void): void => {
         onret = a0
     }
 }
 
 function QuickPick_Dispose(this: QuickPick, ): (_: () => void) => void {
-    return this.disp.Dispose()
+    return this.__disp__.Dispose()
 }
 
 function QuickPick_Get(this: QuickPick, ): (_: (_: QuickPickBag) => void) => void {
@@ -5837,7 +5837,7 @@ function QuickPick_Get(this: QuickPick, ): (_: (_: QuickPickBag) => void) => voi
     msg = newipcMsg()
     msg.QName = "QuickPick.appzObjPropsGet"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
     let onret: (_: QuickPickBag) => void
     onresp = (payload: any): boolean => {
@@ -5845,7 +5845,7 @@ function QuickPick_Get(this: QuickPick, ): (_: (_: QuickPickBag) => void) => voi
         let result: QuickPickBag
         if ((undefined !== payload && null !== payload)) {
             result = newQuickPickBag()
-            ok = result.populateFrom(payload)
+            ok = result.loadFromJsonish(payload)
             if (!ok) {
                 return false
             }
@@ -5857,7 +5857,7 @@ function QuickPick_Get(this: QuickPick, ): (_: (_: QuickPickBag) => void) => voi
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: (_: QuickPickBag) => void): void => {
         onret = a0
     }
@@ -5868,7 +5868,7 @@ function QuickPick_Set(this: QuickPick, allUpdates: QuickPickBag): (_: () => voi
     msg = newipcMsg()
     msg.QName = "QuickPick.appzObjPropsSet"
     msg.Data = {}
-    msg.Data[""] = this.disp.id
+    msg.Data[""] = this.__disp__.id
     msg.Data["allUpdates"] = allUpdates
     let onresp: (_: any) => boolean
     let onret: () => void
@@ -5881,13 +5881,13 @@ function QuickPick_Set(this: QuickPick, allUpdates: QuickPickBag): (_: () => voi
         }
         return true
     }
-    this.disp.impl.send(msg, onresp)
+    this.__disp__.impl.send(msg, onresp)
     return (a0: () => void): void => {
         onret = a0
     }
 }
 
-function MessageItem_populateFrom(this: MessageItem, payload: any): boolean {
+function MessageItem_loadFromJsonish(this: MessageItem, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -5935,7 +5935,7 @@ function MessageItem_populateFrom(this: MessageItem, payload: any): boolean {
     return true
 }
 
-function QuickPickItem_populateFrom(this: QuickPickItem, payload: any): boolean {
+function QuickPickItem_loadFromJsonish(this: QuickPickItem, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6022,7 +6022,7 @@ function QuickPickItem_populateFrom(this: QuickPickItem, payload: any): boolean 
     return true
 }
 
-function WorkspaceFolder_populateFrom(this: WorkspaceFolder, payload: any): boolean {
+function WorkspaceFolder_loadFromJsonish(this: WorkspaceFolder, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6077,7 +6077,7 @@ function WorkspaceFolder_populateFrom(this: WorkspaceFolder, payload: any): bool
     return true
 }
 
-function WindowState_populateFrom(this: WindowState, payload: any): boolean {
+function WindowState_loadFromJsonish(this: WindowState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6101,42 +6101,42 @@ function WindowState_populateFrom(this: WindowState, payload: any): boolean {
     return true
 }
 
-function StatusBarItem_populateFrom(this: StatusBarItem, payload: any): boolean {
+function StatusBarItem_loadFromJsonish(this: StatusBarItem, payload: any): boolean {
     let ok: boolean
-    this.disp = newDisposable()
-    ok = this.disp.populateFrom(payload)
+    this.__disp__ = newDisposable()
+    ok = this.__disp__.loadFromJsonish(payload)
     return ok
 }
 
-function OutputChannel_populateFrom(this: OutputChannel, payload: any): boolean {
+function OutputChannel_loadFromJsonish(this: OutputChannel, payload: any): boolean {
     let ok: boolean
-    this.disp = newDisposable()
-    ok = this.disp.populateFrom(payload)
+    this.__disp__ = newDisposable()
+    ok = this.__disp__.loadFromJsonish(payload)
     return ok
 }
 
-function TextEditorDecorationType_populateFrom(this: TextEditorDecorationType, payload: any): boolean {
+function TextEditorDecorationType_loadFromJsonish(this: TextEditorDecorationType, payload: any): boolean {
     let ok: boolean
-    this.disp = newDisposable()
-    ok = this.disp.populateFrom(payload)
+    this.__disp__ = newDisposable()
+    ok = this.__disp__.loadFromJsonish(payload)
     return ok
 }
 
-function InputBox_populateFrom(this: InputBox, payload: any): boolean {
+function InputBox_loadFromJsonish(this: InputBox, payload: any): boolean {
     let ok: boolean
-    this.disp = newDisposable()
-    ok = this.disp.populateFrom(payload)
+    this.__disp__ = newDisposable()
+    ok = this.__disp__.loadFromJsonish(payload)
     return ok
 }
 
-function QuickPick_populateFrom(this: QuickPick, payload: any): boolean {
+function QuickPick_loadFromJsonish(this: QuickPick, payload: any): boolean {
     let ok: boolean
-    this.disp = newDisposable()
-    ok = this.disp.populateFrom(payload)
+    this.__disp__ = newDisposable()
+    ok = this.__disp__.loadFromJsonish(payload)
     return ok
 }
 
-function EnvBag_populateFrom(this: EnvBag, payload: any): boolean {
+function EnvBag_loadFromJsonish(this: EnvBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6251,7 +6251,7 @@ function EnvBag_populateFrom(this: EnvBag, payload: any): boolean {
     return true
 }
 
-function WorkspaceFoldersChangeEvent_populateFrom(this: WorkspaceFoldersChangeEvent, payload: any): boolean {
+function WorkspaceFoldersChangeEvent_loadFromJsonish(this: WorkspaceFoldersChangeEvent, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6274,7 +6274,7 @@ function WorkspaceFoldersChangeEvent_populateFrom(this: WorkspaceFoldersChangeEv
             for (const __item__added of __coll__added) {
                 let __val__added: WorkspaceFolder
                 __val__added = newWorkspaceFolder()
-                ok = __val__added.populateFrom(__item__added)
+                ok = __val__added.loadFromJsonish(__item__added)
                 if (!ok) {
                     return false
                 }
@@ -6301,7 +6301,7 @@ function WorkspaceFoldersChangeEvent_populateFrom(this: WorkspaceFoldersChangeEv
             for (const __item__removed of __coll__removed) {
                 let __val__removed: WorkspaceFolder
                 __val__removed = newWorkspaceFolder()
-                ok = __val__removed.populateFrom(__item__removed)
+                ok = __val__removed.loadFromJsonish(__item__removed)
                 if (!ok) {
                     return false
                 }
@@ -6316,7 +6316,7 @@ function WorkspaceFoldersChangeEvent_populateFrom(this: WorkspaceFoldersChangeEv
     return true
 }
 
-function WorkspaceBag_populateFrom(this: WorkspaceBag, payload: any): boolean {
+function WorkspaceBag_loadFromJsonish(this: WorkspaceBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6365,7 +6365,7 @@ function WorkspaceBag_populateFrom(this: WorkspaceBag, payload: any): boolean {
             for (const __item__workspaceFolders of __coll__workspaceFolders) {
                 let __val__workspaceFolders: WorkspaceFolder
                 __val__workspaceFolders = newWorkspaceFolder()
-                ok = __val__workspaceFolders.populateFrom(__item__workspaceFolders)
+                ok = __val__workspaceFolders.loadFromJsonish(__item__workspaceFolders)
                 if (!ok) {
                     return false
                 }
@@ -6378,7 +6378,7 @@ function WorkspaceBag_populateFrom(this: WorkspaceBag, payload: any): boolean {
     return true
 }
 
-function DiagnosticChangeEvent_populateFrom(this: DiagnosticChangeEvent, payload: any): boolean {
+function DiagnosticChangeEvent_loadFromJsonish(this: DiagnosticChangeEvent, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6415,7 +6415,7 @@ function DiagnosticChangeEvent_populateFrom(this: DiagnosticChangeEvent, payload
     return true
 }
 
-function StatusBarItemBag_populateFrom(this: StatusBarItemBag, payload: any): boolean {
+function StatusBarItemBag_loadFromJsonish(this: StatusBarItemBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6508,7 +6508,7 @@ function StatusBarItemBag_populateFrom(this: StatusBarItemBag, payload: any): bo
     return true
 }
 
-function OutputChannelBag_populateFrom(this: OutputChannelBag, payload: any): boolean {
+function OutputChannelBag_loadFromJsonish(this: OutputChannelBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6532,7 +6532,7 @@ function OutputChannelBag_populateFrom(this: OutputChannelBag, payload: any): bo
     return true
 }
 
-function TextEditorDecorationTypeBag_populateFrom(this: TextEditorDecorationTypeBag, payload: any): boolean {
+function TextEditorDecorationTypeBag_loadFromJsonish(this: TextEditorDecorationTypeBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6556,7 +6556,7 @@ function TextEditorDecorationTypeBag_populateFrom(this: TextEditorDecorationType
     return true
 }
 
-function InputBoxBag_populateFrom(this: InputBoxBag, payload: any): boolean {
+function InputBoxBag_loadFromJsonish(this: InputBoxBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6692,7 +6692,7 @@ function InputBoxBag_populateFrom(this: InputBoxBag, payload: any): boolean {
     return true
 }
 
-function QuickPickBag_populateFrom(this: QuickPickBag, payload: any): boolean {
+function QuickPickBag_loadFromJsonish(this: QuickPickBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6737,7 +6737,7 @@ function QuickPickBag_populateFrom(this: QuickPickBag, payload: any): boolean {
             for (const __item__items of __coll__items) {
                 let __val__items: QuickPickItem
                 __val__items = newQuickPickItem()
-                ok = __val__items.populateFrom(__item__items)
+                ok = __val__items.loadFromJsonish(__item__items)
                 if (!ok) {
                     return false
                 }
@@ -6795,7 +6795,7 @@ function QuickPickBag_populateFrom(this: QuickPickBag, payload: any): boolean {
             for (const __item__activeItems of __coll__activeItems) {
                 let __val__activeItems: QuickPickItem
                 __val__activeItems = newQuickPickItem()
-                ok = __val__activeItems.populateFrom(__item__activeItems)
+                ok = __val__activeItems.loadFromJsonish(__item__activeItems)
                 if (!ok) {
                     return false
                 }
@@ -6820,7 +6820,7 @@ function QuickPickBag_populateFrom(this: QuickPickBag, payload: any): boolean {
             for (const __item__selectedItems of __coll__selectedItems) {
                 let __val__selectedItems: QuickPickItem
                 __val__selectedItems = newQuickPickItem()
-                ok = __val__selectedItems.populateFrom(__item__selectedItems)
+                ok = __val__selectedItems.loadFromJsonish(__item__selectedItems)
                 if (!ok) {
                     return false
                 }

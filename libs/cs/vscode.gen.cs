@@ -594,10 +594,10 @@ namespace VscAppz {
 		/// 
 		/// `name` ── Human-readable string which will be used to represent the channel in the UI.
 		/// 
-		/// `return` ── A thenable that resolves to the newly created `OutputChannel`.
+		/// `return` ── a thenable that resolves to the newly created `OutputChannel`.
 		/// </summary>
 		/// <param name="name">Human-readable string which will be used to represent the channel in the UI.</param>
-		/// <return>A thenable that resolves to the newly created `OutputChannel`.</return>
+		/// <return>a thenable that resolves to the newly created `OutputChannel`.</return>
 		Action<Action<OutputChannel, OutputChannelBag>> CreateOutputChannel(string name = default);
 
 		/// <summary>
@@ -1513,7 +1513,7 @@ namespace VscAppz {
 	/// show text and icons and run a command on click.
 	/// </summary>
 	public partial class StatusBarItem {
-		internal Disposable disp;
+		internal Disposable __disp__;
 
 		/// <summary>CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
 		public StatusBarItemBag CfgBag;
@@ -1526,7 +1526,7 @@ namespace VscAppz {
 	/// [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 	/// </summary>
 	public partial class OutputChannel {
-		internal Disposable disp;
+		internal Disposable __disp__;
 
 		/// <summary>CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.</summary>
 		public OutputChannelBag CfgBag;
@@ -1749,7 +1749,7 @@ namespace VscAppz {
 	/// [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 	/// </summary>
 	public partial class TextEditorDecorationType {
-		internal Disposable disp;
+		internal Disposable __disp__;
 
 		/// <summary>CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.</summary>
 		public TextEditorDecorationTypeBag CfgBag;
@@ -1763,7 +1763,7 @@ namespace VscAppz {
 	/// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 	/// </summary>
 	public partial class InputBox {
-		internal Disposable disp;
+		internal Disposable __disp__;
 
 		/// <summary>CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
 		public InputBoxBag CfgBag;
@@ -1791,7 +1791,7 @@ namespace VscAppz {
 	/// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 	/// </summary>
 	public partial class QuickPick {
-		internal Disposable disp;
+		internal Disposable __disp__;
 
 		/// <summary>CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
 		public QuickPickBag CfgBag;
@@ -2219,7 +2219,7 @@ namespace VscAppz {
 				MessageItem result = default;
 				if ((null != payload)) {
 					result = new MessageItem();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2252,7 +2252,7 @@ namespace VscAppz {
 				MessageItem result = default;
 				if ((null != payload)) {
 					result = new MessageItem();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2351,7 +2351,7 @@ namespace VscAppz {
 				MessageItem result = default;
 				if ((null != payload)) {
 					result = new MessageItem();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2384,7 +2384,7 @@ namespace VscAppz {
 				MessageItem result = default;
 				if ((null != payload)) {
 					result = new MessageItem();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2483,7 +2483,7 @@ namespace VscAppz {
 				MessageItem result = default;
 				if ((null != payload)) {
 					result = new MessageItem();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2516,7 +2516,7 @@ namespace VscAppz {
 				MessageItem result = default;
 				if ((null != payload)) {
 					result = new MessageItem();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2637,7 +2637,7 @@ namespace VscAppz {
 								QuickPickItem __0 = default;
 								if ((null != args[0])) {
 									__0 = new QuickPickItem();
-									ok = __0.populateFrom(args[0]);
+									ok = __0.loadFromJsonish(args[0]);
 									if (!ok) {
 										return (null, false);
 									}
@@ -2731,7 +2731,7 @@ namespace VscAppz {
 								QuickPickItem __0 = default;
 								if ((null != args[0])) {
 									__0 = new QuickPickItem();
-									ok = __0.populateFrom(args[0]);
+									ok = __0.loadFromJsonish(args[0]);
 									if (!ok) {
 										return (null, false);
 									}
@@ -2815,7 +2815,7 @@ namespace VscAppz {
 								QuickPickItem __0 = default;
 								if ((null != args[0])) {
 									__0 = new QuickPickItem();
-									ok = __0.populateFrom(args[0]);
+									ok = __0.loadFromJsonish(args[0]);
 									if (!ok) {
 										return (null, false);
 									}
@@ -2857,7 +2857,7 @@ namespace VscAppz {
 					foreach (var __item__result in __coll__result) {
 						QuickPickItem __val__result = default;
 						__val__result = new QuickPickItem();
-						ok = __val__result.populateFrom(__item__result);
+						ok = __val__result.loadFromJsonish(__item__result);
 						if (!ok) {
 							return false;
 						}
@@ -2910,7 +2910,7 @@ namespace VscAppz {
 								QuickPickItem __0 = default;
 								if ((null != args[0])) {
 									__0 = new QuickPickItem();
-									ok = __0.populateFrom(args[0]);
+									ok = __0.loadFromJsonish(args[0]);
 									if (!ok) {
 										return (null, false);
 									}
@@ -2943,7 +2943,7 @@ namespace VscAppz {
 				QuickPickItem result = default;
 				if ((null != payload)) {
 					result = new QuickPickItem();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2984,7 +2984,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3017,7 +3017,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3127,7 +3127,7 @@ namespace VscAppz {
 				WorkspaceFolder result = default;
 				if ((null != payload)) {
 					result = new WorkspaceFolder();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3157,7 +3157,7 @@ namespace VscAppz {
 				WindowState result = default;
 				if ((null != payload)) {
 					result = new WindowState();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3180,26 +3180,26 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "window.onDidChangeWindowState";
 			msg.Data = new dict(1);
-			string _fnid_listener = default;
+			string listenerFnId = default;
 			if ((null == listener)) {
 				OnError(this.Impl(), "IWindow.OnDidChangeWindowState: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
 				return null;
 			}
-			_fnid_listener = this.Impl().nextSub((any[] args) => {
+			listenerFnId = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
 				if (1 != args.Length) {
 					return ok;
 				}
 				WindowState _a_0_ = default;
 				_a_0_ = new WindowState();
-				ok = _a_0_.populateFrom(args[0]);
+				ok = _a_0_.loadFromJsonish(args[0]);
 				if (!ok) {
 					return false;
 				}
 				listener(_a_0_);
 				return true;
 			}, null);
-			msg.Data["listener"] = _fnid_listener;
+			msg.Data["listener"] = listenerFnId;
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -3207,7 +3207,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3216,7 +3216,7 @@ namespace VscAppz {
 				}
 				{
 					if ((null != onret)) {
-						onret(result.bind(this.Impl(), _fnid_listener));
+						onret(result.bind(this.Impl(), listenerFnId));
 					}
 				}
 				return true;
@@ -3245,11 +3245,11 @@ namespace VscAppz {
 				StatusBarItem result = default;
 				if ((null != payload)) {
 					result = new StatusBarItem();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
-					result.disp.impl = this.Impl();
+					result.__disp__.impl = this.Impl();
 				}
 				{
 					result.Get()((StatusBarItemBag state) => {
@@ -3279,11 +3279,11 @@ namespace VscAppz {
 				OutputChannel result = default;
 				if ((null != payload)) {
 					result = new OutputChannel();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
-					result.disp.impl = this.Impl();
+					result.__disp__.impl = this.Impl();
 				}
 				{
 					result.Get()((OutputChannelBag state) => {
@@ -3313,11 +3313,11 @@ namespace VscAppz {
 				TextEditorDecorationType result = default;
 				if ((null != payload)) {
 					result = new TextEditorDecorationType();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
-					result.disp.impl = this.Impl();
+					result.__disp__.impl = this.Impl();
 				}
 				{
 					result.Get()((TextEditorDecorationTypeBag state) => {
@@ -3346,11 +3346,11 @@ namespace VscAppz {
 				InputBox result = default;
 				if ((null != payload)) {
 					result = new InputBox();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
-					result.disp.impl = this.Impl();
+					result.__disp__.impl = this.Impl();
 				}
 				{
 					result.Get()((InputBoxBag state) => {
@@ -3379,11 +3379,11 @@ namespace VscAppz {
 				QuickPick result = default;
 				if ((null != payload)) {
 					result = new QuickPick();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
-					result.disp.impl = this.Impl();
+					result.__disp__.impl = this.Impl();
 				}
 				{
 					result.Get()((QuickPickBag state) => {
@@ -3678,7 +3678,7 @@ namespace VscAppz {
 				EnvBag result = default;
 				if ((null != payload)) {
 					result = new EnvBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3855,26 +3855,26 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "workspace.onDidChangeWorkspaceFolders";
 			msg.Data = new dict(1);
-			string _fnid_listener = default;
+			string listenerFnId = default;
 			if ((null == listener)) {
 				OnError(this.Impl(), "IWorkspace.OnDidChangeWorkspaceFolders: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
 				return null;
 			}
-			_fnid_listener = this.Impl().nextSub((any[] args) => {
+			listenerFnId = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
 				if (1 != args.Length) {
 					return ok;
 				}
 				WorkspaceFoldersChangeEvent _a_0_ = default;
 				_a_0_ = new WorkspaceFoldersChangeEvent();
-				ok = _a_0_.populateFrom(args[0]);
+				ok = _a_0_.loadFromJsonish(args[0]);
 				if (!ok) {
 					return false;
 				}
 				listener(_a_0_);
 				return true;
 			}, null);
-			msg.Data["listener"] = _fnid_listener;
+			msg.Data["listener"] = listenerFnId;
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -3882,7 +3882,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3891,7 +3891,7 @@ namespace VscAppz {
 				}
 				{
 					if ((null != onret)) {
-						onret(result.bind(this.Impl(), _fnid_listener));
+						onret(result.bind(this.Impl(), listenerFnId));
 					}
 				}
 				return true;
@@ -3915,7 +3915,7 @@ namespace VscAppz {
 				WorkspaceFolder result = default;
 				if ((null != payload)) {
 					result = new WorkspaceFolder();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3955,7 +3955,7 @@ namespace VscAppz {
 					foreach (var __item__result in __coll__result) {
 						WorkspaceFolder __val__result = default;
 						__val__result = new WorkspaceFolder();
-						ok = __val__result.populateFrom(__item__result);
+						ok = __val__result.loadFromJsonish(__item__result);
 						if (!ok) {
 							return false;
 						}
@@ -4079,7 +4079,7 @@ namespace VscAppz {
 				WorkspaceBag result = default;
 				if ((null != payload)) {
 					result = new WorkspaceBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4146,26 +4146,26 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "languages.onDidChangeDiagnostics";
 			msg.Data = new dict(1);
-			string _fnid_listener = default;
+			string listenerFnId = default;
 			if ((null == listener)) {
 				OnError(this.Impl(), "ILanguages.OnDidChangeDiagnostics: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
 				return null;
 			}
-			_fnid_listener = this.Impl().nextSub((any[] args) => {
+			listenerFnId = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
 				if (1 != args.Length) {
 					return ok;
 				}
 				DiagnosticChangeEvent _a_0_ = default;
 				_a_0_ = new DiagnosticChangeEvent();
-				ok = _a_0_.populateFrom(args[0]);
+				ok = _a_0_.loadFromJsonish(args[0]);
 				if (!ok) {
 					return false;
 				}
 				listener(_a_0_);
 				return true;
 			}, null);
-			msg.Data["listener"] = _fnid_listener;
+			msg.Data["listener"] = listenerFnId;
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -4173,7 +4173,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4182,7 +4182,7 @@ namespace VscAppz {
 				}
 				{
 					if ((null != onret)) {
-						onret(result.bind(this.Impl(), _fnid_listener));
+						onret(result.bind(this.Impl(), listenerFnId));
 					}
 				}
 				return true;
@@ -4198,12 +4198,12 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "extensions.onDidChange";
 			msg.Data = new dict(1);
-			string _fnid_listener = default;
+			string listenerFnId = default;
 			if ((null == listener)) {
 				OnError(this.Impl(), "IExtensions.OnDidChange: the 'listener' arg (which is not optional but required) was not passed by the caller", null);
 				return null;
 			}
-			_fnid_listener = this.Impl().nextSub((any[] args) => {
+			listenerFnId = this.Impl().nextSub((any[] args) => {
 				bool ok = default;
 				if (0 != args.Length) {
 					return ok;
@@ -4211,7 +4211,7 @@ namespace VscAppz {
 				listener();
 				return true;
 			}, null);
-			msg.Data["listener"] = _fnid_listener;
+			msg.Data["listener"] = listenerFnId;
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -4219,7 +4219,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4228,7 +4228,7 @@ namespace VscAppz {
 				}
 				{
 					if ((null != onret)) {
-						onret(result.bind(this.Impl(), _fnid_listener));
+						onret(result.bind(this.Impl(), listenerFnId));
 					}
 				}
 				return true;
@@ -4245,12 +4245,12 @@ namespace VscAppz {
 			msg.QName = "commands.registerCommand";
 			msg.Data = new dict(2);
 			msg.Data["command"] = command;
-			string _fnid_callback = default;
+			string callbackFnId = default;
 			if ((null == callback)) {
 				OnError(this.Impl(), "ICommands.RegisterCommand: the 'callback' arg (which is not optional but required) was not passed by the caller", null);
 				return null;
 			}
-			_fnid_callback = this.Impl().nextSub(null, (any[] args) => {
+			callbackFnId = this.Impl().nextSub(null, (any[] args) => {
 				bool ok = default;
 				if (1 != args.Length) {
 					return (null, ok);
@@ -4264,7 +4264,7 @@ namespace VscAppz {
 				ret = callback(_a_0_);
 				return (ret, true);
 			});
-			msg.Data["callback"] = _fnid_callback;
+			msg.Data["callback"] = callbackFnId;
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -4272,7 +4272,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4281,7 +4281,7 @@ namespace VscAppz {
 				}
 				{
 					if ((null != onret)) {
-						onret(result.bind(this.Impl(), _fnid_callback));
+						onret(result.bind(this.Impl(), callbackFnId));
 					}
 				}
 				return true;
@@ -4379,7 +4379,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.show";
 			msg.Data = new dict(1);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
 			Action<StatusBarItemBag> onret = default;
 			onresp = (any payload) => {
@@ -4387,7 +4387,7 @@ namespace VscAppz {
 				StatusBarItemBag result = default;
 				if ((null != payload)) {
 					result = new StatusBarItemBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4399,7 +4399,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<StatusBarItemBag> a0) => {
 				onret = a0;
 			};
@@ -4418,7 +4418,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.hide";
 			msg.Data = new dict(1);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
 			Action<StatusBarItemBag> onret = default;
 			onresp = (any payload) => {
@@ -4426,7 +4426,7 @@ namespace VscAppz {
 				StatusBarItemBag result = default;
 				if ((null != payload)) {
 					result = new StatusBarItemBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4438,7 +4438,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<StatusBarItemBag> a0) => {
 				onret = a0;
 			};
@@ -4454,10 +4454,10 @@ namespace VscAppz {
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> Dispose() {
-			return this.disp.Dispose();
+			return this.__disp__.Dispose();
 		}
 		void IDisposable.Dispose() { this.Dispose(); }
-		internal Action<IVscode, any, any> OnError { get => this.disp?.impl?.OnError; }
+		internal Action<IVscode, any, any> OnError { get => this.__disp__?.impl?.OnError; }
 	}
 
 	public partial class StatusBarItem {
@@ -4472,7 +4472,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.appzObjPropsGet";
 			msg.Data = new dict(1);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
 			Action<StatusBarItemBag> onret = default;
 			onresp = (any payload) => {
@@ -4480,7 +4480,7 @@ namespace VscAppz {
 				StatusBarItemBag result = default;
 				if ((null != payload)) {
 					result = new StatusBarItemBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4492,7 +4492,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<StatusBarItemBag> a0) => {
 				onret = a0;
 			};
@@ -4503,18 +4503,18 @@ namespace VscAppz {
 		/// <summary>
 		/// Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
 		/// 
-		/// `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `StatusBarItemBag` with your select modifications applied, rather than construct a new one from scratch.
+		/// `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
 		/// 
 		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <param name="allUpdates">be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `StatusBarItemBag` with your select modifications applied, rather than construct a new one from scratch.</param>
+		/// <param name="allUpdates">be aware that **all** its fields are sent for update, no omissions.</param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> Set(StatusBarItemBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.appzObjPropsSet";
 			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			msg.Data["allUpdates"] = allUpdates;
 			Func<any, bool> onresp = default;
 			Action onret = default;
@@ -4527,7 +4527,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action a0) => {
 				onret = a0;
 			};
@@ -4549,7 +4549,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.append";
 			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			msg.Data["value"] = value;
 			Func<any, bool> onresp = default;
 			Action<OutputChannelBag> onret = default;
@@ -4558,7 +4558,7 @@ namespace VscAppz {
 				OutputChannelBag result = default;
 				if ((null != payload)) {
 					result = new OutputChannelBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4570,7 +4570,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<OutputChannelBag> a0) => {
 				onret = a0;
 			};
@@ -4593,7 +4593,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.appendLine";
 			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			msg.Data["value"] = value;
 			Func<any, bool> onresp = default;
 			Action<OutputChannelBag> onret = default;
@@ -4602,7 +4602,7 @@ namespace VscAppz {
 				OutputChannelBag result = default;
 				if ((null != payload)) {
 					result = new OutputChannelBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4614,7 +4614,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<OutputChannelBag> a0) => {
 				onret = a0;
 			};
@@ -4633,7 +4633,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.clear";
 			msg.Data = new dict(1);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
 			Action<OutputChannelBag> onret = default;
 			onresp = (any payload) => {
@@ -4641,7 +4641,7 @@ namespace VscAppz {
 				OutputChannelBag result = default;
 				if ((null != payload)) {
 					result = new OutputChannelBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4653,7 +4653,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<OutputChannelBag> a0) => {
 				onret = a0;
 			};
@@ -4675,7 +4675,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.show";
 			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			msg.Data["preserveFocus"] = preserveFocus;
 			Func<any, bool> onresp = default;
 			Action<OutputChannelBag> onret = default;
@@ -4684,7 +4684,7 @@ namespace VscAppz {
 				OutputChannelBag result = default;
 				if ((null != payload)) {
 					result = new OutputChannelBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4696,7 +4696,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<OutputChannelBag> a0) => {
 				onret = a0;
 			};
@@ -4715,7 +4715,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.hide";
 			msg.Data = new dict(1);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
 			Action<OutputChannelBag> onret = default;
 			onresp = (any payload) => {
@@ -4723,7 +4723,7 @@ namespace VscAppz {
 				OutputChannelBag result = default;
 				if ((null != payload)) {
 					result = new OutputChannelBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4735,7 +4735,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<OutputChannelBag> a0) => {
 				onret = a0;
 			};
@@ -4750,10 +4750,10 @@ namespace VscAppz {
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> Dispose() {
-			return this.disp.Dispose();
+			return this.__disp__.Dispose();
 		}
 		void IDisposable.Dispose() { this.Dispose(); }
-		internal Action<IVscode, any, any> OnError { get => this.disp?.impl?.OnError; }
+		internal Action<IVscode, any, any> OnError { get => this.__disp__?.impl?.OnError; }
 	}
 
 	public partial class OutputChannel {
@@ -4768,7 +4768,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.appzObjPropsGet";
 			msg.Data = new dict(1);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
 			Action<OutputChannelBag> onret = default;
 			onresp = (any payload) => {
@@ -4776,7 +4776,7 @@ namespace VscAppz {
 				OutputChannelBag result = default;
 				if ((null != payload)) {
 					result = new OutputChannelBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4788,7 +4788,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<OutputChannelBag> a0) => {
 				onret = a0;
 			};
@@ -4803,10 +4803,10 @@ namespace VscAppz {
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> Dispose() {
-			return this.disp.Dispose();
+			return this.__disp__.Dispose();
 		}
 		void IDisposable.Dispose() { this.Dispose(); }
-		internal Action<IVscode, any, any> OnError { get => this.disp?.impl?.OnError; }
+		internal Action<IVscode, any, any> OnError { get => this.__disp__?.impl?.OnError; }
 	}
 
 	public partial class TextEditorDecorationType {
@@ -4821,7 +4821,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "TextEditorDecorationType.appzObjPropsGet";
 			msg.Data = new dict(1);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
 			Action<TextEditorDecorationTypeBag> onret = default;
 			onresp = (any payload) => {
@@ -4829,7 +4829,7 @@ namespace VscAppz {
 				TextEditorDecorationTypeBag result = default;
 				if ((null != payload)) {
 					result = new TextEditorDecorationTypeBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4841,7 +4841,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<TextEditorDecorationTypeBag> a0) => {
 				onret = a0;
 			};
@@ -4863,13 +4863,13 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "InputBox.onDidChangeValue";
 			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
-			string _fnid_handler = default;
+			msg.Data[""] = this.__disp__.id;
+			string handlerFnId = default;
 			if ((null == handler)) {
-				OnError(this.disp.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				OnError(this.__disp__.impl, "InputBox.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
 				return null;
 			}
-			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+			handlerFnId = this.__disp__.impl.nextSub((any[] args) => {
 				bool ok = default;
 				if (2 != args.Length) {
 					return ok;
@@ -4881,15 +4881,15 @@ namespace VscAppz {
 				}
 				InputBoxBag _a_1_ = default;
 				_a_1_ = new InputBoxBag();
-				ok = _a_1_.populateFrom(args[1]);
+				ok = _a_1_.loadFromJsonish(args[1]);
 				if (!ok) {
 					return false;
 				}
 				handler(_a_0_, _a_1_);
 				return true;
 			}, null);
-			msg.Data["handler"] = _fnid_handler;
-			this.disp.addSub(_fnid_handler);
+			msg.Data["handler"] = handlerFnId;
+			this.__disp__.addSub(handlerFnId);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -4897,7 +4897,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4906,12 +4906,12 @@ namespace VscAppz {
 				}
 				{
 					if ((null != onret)) {
-						onret(result.bind(this.disp.impl, _fnid_handler));
+						onret(result.bind(this.__disp__.impl, handlerFnId));
 					}
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<Disposable> a0) => {
 				onret = a0;
 			};
@@ -4933,28 +4933,28 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "InputBox.onDidAccept";
 			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
-			string _fnid_handler = default;
+			msg.Data[""] = this.__disp__.id;
+			string handlerFnId = default;
 			if ((null == handler)) {
-				OnError(this.disp.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				OnError(this.__disp__.impl, "InputBox.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
 				return null;
 			}
-			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+			handlerFnId = this.__disp__.impl.nextSub((any[] args) => {
 				bool ok = default;
 				if (1 != args.Length) {
 					return ok;
 				}
 				InputBoxBag _a_0_ = default;
 				_a_0_ = new InputBoxBag();
-				ok = _a_0_.populateFrom(args[0]);
+				ok = _a_0_.loadFromJsonish(args[0]);
 				if (!ok) {
 					return false;
 				}
 				handler(_a_0_);
 				return true;
 			}, null);
-			msg.Data["handler"] = _fnid_handler;
-			this.disp.addSub(_fnid_handler);
+			msg.Data["handler"] = handlerFnId;
+			this.__disp__.addSub(handlerFnId);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -4962,7 +4962,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4971,12 +4971,12 @@ namespace VscAppz {
 				}
 				{
 					if ((null != onret)) {
-						onret(result.bind(this.disp.impl, _fnid_handler));
+						onret(result.bind(this.__disp__.impl, handlerFnId));
 					}
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<Disposable> a0) => {
 				onret = a0;
 			};
@@ -4996,7 +4996,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "InputBox.show";
 			msg.Data = new dict(1);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
 			Action<InputBoxBag> onret = default;
 			onresp = (any payload) => {
@@ -5004,7 +5004,7 @@ namespace VscAppz {
 				InputBoxBag result = default;
 				if ((null != payload)) {
 					result = new InputBoxBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5016,7 +5016,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<InputBoxBag> a0) => {
 				onret = a0;
 			};
@@ -5036,7 +5036,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "InputBox.hide";
 			msg.Data = new dict(1);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
 			Action<InputBoxBag> onret = default;
 			onresp = (any payload) => {
@@ -5044,7 +5044,7 @@ namespace VscAppz {
 				InputBoxBag result = default;
 				if ((null != payload)) {
 					result = new InputBoxBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5056,7 +5056,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<InputBoxBag> a0) => {
 				onret = a0;
 			};
@@ -5083,28 +5083,28 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "InputBox.onDidHide";
 			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
-			string _fnid_handler = default;
+			msg.Data[""] = this.__disp__.id;
+			string handlerFnId = default;
 			if ((null == handler)) {
-				OnError(this.disp.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				OnError(this.__disp__.impl, "InputBox.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
 				return null;
 			}
-			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+			handlerFnId = this.__disp__.impl.nextSub((any[] args) => {
 				bool ok = default;
 				if (1 != args.Length) {
 					return ok;
 				}
 				InputBoxBag _a_0_ = default;
 				_a_0_ = new InputBoxBag();
-				ok = _a_0_.populateFrom(args[0]);
+				ok = _a_0_.loadFromJsonish(args[0]);
 				if (!ok) {
 					return false;
 				}
 				handler(_a_0_);
 				return true;
 			}, null);
-			msg.Data["handler"] = _fnid_handler;
-			this.disp.addSub(_fnid_handler);
+			msg.Data["handler"] = handlerFnId;
+			this.__disp__.addSub(handlerFnId);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -5112,7 +5112,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5121,12 +5121,12 @@ namespace VscAppz {
 				}
 				{
 					if ((null != onret)) {
-						onret(result.bind(this.disp.impl, _fnid_handler));
+						onret(result.bind(this.__disp__.impl, handlerFnId));
 					}
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<Disposable> a0) => {
 				onret = a0;
 			};
@@ -5144,10 +5144,10 @@ namespace VscAppz {
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> Dispose() {
-			return this.disp.Dispose();
+			return this.__disp__.Dispose();
 		}
 		void IDisposable.Dispose() { this.Dispose(); }
-		internal Action<IVscode, any, any> OnError { get => this.disp?.impl?.OnError; }
+		internal Action<IVscode, any, any> OnError { get => this.__disp__?.impl?.OnError; }
 	}
 
 	public partial class InputBox {
@@ -5162,7 +5162,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "InputBox.appzObjPropsGet";
 			msg.Data = new dict(1);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
 			Action<InputBoxBag> onret = default;
 			onresp = (any payload) => {
@@ -5170,7 +5170,7 @@ namespace VscAppz {
 				InputBoxBag result = default;
 				if ((null != payload)) {
 					result = new InputBoxBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5182,7 +5182,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<InputBoxBag> a0) => {
 				onret = a0;
 			};
@@ -5193,18 +5193,18 @@ namespace VscAppz {
 		/// <summary>
 		/// Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 		/// 
-		/// `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `InputBoxBag` with your select modifications applied, rather than construct a new one from scratch.
+		/// `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
 		/// 
 		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <param name="allUpdates">be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `InputBoxBag` with your select modifications applied, rather than construct a new one from scratch.</param>
+		/// <param name="allUpdates">be aware that **all** its fields are sent for update, no omissions.</param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> Set(InputBoxBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.appzObjPropsSet";
 			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			msg.Data["allUpdates"] = allUpdates;
 			Func<any, bool> onresp = default;
 			Action onret = default;
@@ -5217,7 +5217,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action a0) => {
 				onret = a0;
 			};
@@ -5239,13 +5239,13 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidChangeValue";
 			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
-			string _fnid_handler = default;
+			msg.Data[""] = this.__disp__.id;
+			string handlerFnId = default;
 			if ((null == handler)) {
-				OnError(this.disp.impl, "QuickPick.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				OnError(this.__disp__.impl, "QuickPick.OnDidChangeValue: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
 				return null;
 			}
-			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+			handlerFnId = this.__disp__.impl.nextSub((any[] args) => {
 				bool ok = default;
 				if (2 != args.Length) {
 					return ok;
@@ -5257,15 +5257,15 @@ namespace VscAppz {
 				}
 				QuickPickBag _a_1_ = default;
 				_a_1_ = new QuickPickBag();
-				ok = _a_1_.populateFrom(args[1]);
+				ok = _a_1_.loadFromJsonish(args[1]);
 				if (!ok) {
 					return false;
 				}
 				handler(_a_0_, _a_1_);
 				return true;
 			}, null);
-			msg.Data["handler"] = _fnid_handler;
-			this.disp.addSub(_fnid_handler);
+			msg.Data["handler"] = handlerFnId;
+			this.__disp__.addSub(handlerFnId);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -5273,7 +5273,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5282,12 +5282,12 @@ namespace VscAppz {
 				}
 				{
 					if ((null != onret)) {
-						onret(result.bind(this.disp.impl, _fnid_handler));
+						onret(result.bind(this.__disp__.impl, handlerFnId));
 					}
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<Disposable> a0) => {
 				onret = a0;
 			};
@@ -5309,28 +5309,28 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidAccept";
 			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
-			string _fnid_handler = default;
+			msg.Data[""] = this.__disp__.id;
+			string handlerFnId = default;
 			if ((null == handler)) {
-				OnError(this.disp.impl, "QuickPick.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				OnError(this.__disp__.impl, "QuickPick.OnDidAccept: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
 				return null;
 			}
-			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+			handlerFnId = this.__disp__.impl.nextSub((any[] args) => {
 				bool ok = default;
 				if (1 != args.Length) {
 					return ok;
 				}
 				QuickPickBag _a_0_ = default;
 				_a_0_ = new QuickPickBag();
-				ok = _a_0_.populateFrom(args[0]);
+				ok = _a_0_.loadFromJsonish(args[0]);
 				if (!ok) {
 					return false;
 				}
 				handler(_a_0_);
 				return true;
 			}, null);
-			msg.Data["handler"] = _fnid_handler;
-			this.disp.addSub(_fnid_handler);
+			msg.Data["handler"] = handlerFnId;
+			this.__disp__.addSub(handlerFnId);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -5338,7 +5338,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5347,12 +5347,12 @@ namespace VscAppz {
 				}
 				{
 					if ((null != onret)) {
-						onret(result.bind(this.disp.impl, _fnid_handler));
+						onret(result.bind(this.__disp__.impl, handlerFnId));
 					}
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<Disposable> a0) => {
 				onret = a0;
 			};
@@ -5374,13 +5374,13 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidChangeActive";
 			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
-			string _fnid_handler = default;
+			msg.Data[""] = this.__disp__.id;
+			string handlerFnId = default;
 			if ((null == handler)) {
-				OnError(this.disp.impl, "QuickPick.OnDidChangeActive: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				OnError(this.__disp__.impl, "QuickPick.OnDidChangeActive: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
 				return null;
 			}
-			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+			handlerFnId = this.__disp__.impl.nextSub((any[] args) => {
 				bool ok = default;
 				if (2 != args.Length) {
 					return ok;
@@ -5397,7 +5397,7 @@ namespace VscAppz {
 				foreach (var __item___a_0_ in __coll___a_0_) {
 					QuickPickItem __val___a_0_ = default;
 					__val___a_0_ = new QuickPickItem();
-					ok = __val___a_0_.populateFrom(__item___a_0_);
+					ok = __val___a_0_.loadFromJsonish(__item___a_0_);
 					if (!ok) {
 						return false;
 					}
@@ -5406,15 +5406,15 @@ namespace VscAppz {
 				}
 				QuickPickBag _a_1_ = default;
 				_a_1_ = new QuickPickBag();
-				ok = _a_1_.populateFrom(args[1]);
+				ok = _a_1_.loadFromJsonish(args[1]);
 				if (!ok) {
 					return false;
 				}
 				handler(_a_0_, _a_1_);
 				return true;
 			}, null);
-			msg.Data["handler"] = _fnid_handler;
-			this.disp.addSub(_fnid_handler);
+			msg.Data["handler"] = handlerFnId;
+			this.__disp__.addSub(handlerFnId);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -5422,7 +5422,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5431,12 +5431,12 @@ namespace VscAppz {
 				}
 				{
 					if ((null != onret)) {
-						onret(result.bind(this.disp.impl, _fnid_handler));
+						onret(result.bind(this.__disp__.impl, handlerFnId));
 					}
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<Disposable> a0) => {
 				onret = a0;
 			};
@@ -5458,13 +5458,13 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidChangeSelection";
 			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
-			string _fnid_handler = default;
+			msg.Data[""] = this.__disp__.id;
+			string handlerFnId = default;
 			if ((null == handler)) {
-				OnError(this.disp.impl, "QuickPick.OnDidChangeSelection: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				OnError(this.__disp__.impl, "QuickPick.OnDidChangeSelection: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
 				return null;
 			}
-			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+			handlerFnId = this.__disp__.impl.nextSub((any[] args) => {
 				bool ok = default;
 				if (2 != args.Length) {
 					return ok;
@@ -5481,7 +5481,7 @@ namespace VscAppz {
 				foreach (var __item___a_0_ in __coll___a_0_) {
 					QuickPickItem __val___a_0_ = default;
 					__val___a_0_ = new QuickPickItem();
-					ok = __val___a_0_.populateFrom(__item___a_0_);
+					ok = __val___a_0_.loadFromJsonish(__item___a_0_);
 					if (!ok) {
 						return false;
 					}
@@ -5490,15 +5490,15 @@ namespace VscAppz {
 				}
 				QuickPickBag _a_1_ = default;
 				_a_1_ = new QuickPickBag();
-				ok = _a_1_.populateFrom(args[1]);
+				ok = _a_1_.loadFromJsonish(args[1]);
 				if (!ok) {
 					return false;
 				}
 				handler(_a_0_, _a_1_);
 				return true;
 			}, null);
-			msg.Data["handler"] = _fnid_handler;
-			this.disp.addSub(_fnid_handler);
+			msg.Data["handler"] = handlerFnId;
+			this.__disp__.addSub(handlerFnId);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -5506,7 +5506,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5515,12 +5515,12 @@ namespace VscAppz {
 				}
 				{
 					if ((null != onret)) {
-						onret(result.bind(this.disp.impl, _fnid_handler));
+						onret(result.bind(this.__disp__.impl, handlerFnId));
 					}
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<Disposable> a0) => {
 				onret = a0;
 			};
@@ -5540,7 +5540,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.show";
 			msg.Data = new dict(1);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
 			Action<QuickPickBag> onret = default;
 			onresp = (any payload) => {
@@ -5548,7 +5548,7 @@ namespace VscAppz {
 				QuickPickBag result = default;
 				if ((null != payload)) {
 					result = new QuickPickBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5560,7 +5560,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<QuickPickBag> a0) => {
 				onret = a0;
 			};
@@ -5580,7 +5580,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.hide";
 			msg.Data = new dict(1);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
 			Action<QuickPickBag> onret = default;
 			onresp = (any payload) => {
@@ -5588,7 +5588,7 @@ namespace VscAppz {
 				QuickPickBag result = default;
 				if ((null != payload)) {
 					result = new QuickPickBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5600,7 +5600,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<QuickPickBag> a0) => {
 				onret = a0;
 			};
@@ -5627,28 +5627,28 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidHide";
 			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
-			string _fnid_handler = default;
+			msg.Data[""] = this.__disp__.id;
+			string handlerFnId = default;
 			if ((null == handler)) {
-				OnError(this.disp.impl, "QuickPick.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				OnError(this.__disp__.impl, "QuickPick.OnDidHide: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
 				return null;
 			}
-			_fnid_handler = this.disp.impl.nextSub((any[] args) => {
+			handlerFnId = this.__disp__.impl.nextSub((any[] args) => {
 				bool ok = default;
 				if (1 != args.Length) {
 					return ok;
 				}
 				QuickPickBag _a_0_ = default;
 				_a_0_ = new QuickPickBag();
-				ok = _a_0_.populateFrom(args[0]);
+				ok = _a_0_.loadFromJsonish(args[0]);
 				if (!ok) {
 					return false;
 				}
 				handler(_a_0_);
 				return true;
 			}, null);
-			msg.Data["handler"] = _fnid_handler;
-			this.disp.addSub(_fnid_handler);
+			msg.Data["handler"] = handlerFnId;
+			this.__disp__.addSub(handlerFnId);
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -5656,7 +5656,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5665,12 +5665,12 @@ namespace VscAppz {
 				}
 				{
 					if ((null != onret)) {
-						onret(result.bind(this.disp.impl, _fnid_handler));
+						onret(result.bind(this.__disp__.impl, handlerFnId));
 					}
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<Disposable> a0) => {
 				onret = a0;
 			};
@@ -5688,10 +5688,10 @@ namespace VscAppz {
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> Dispose() {
-			return this.disp.Dispose();
+			return this.__disp__.Dispose();
 		}
 		void IDisposable.Dispose() { this.Dispose(); }
-		internal Action<IVscode, any, any> OnError { get => this.disp?.impl?.OnError; }
+		internal Action<IVscode, any, any> OnError { get => this.__disp__?.impl?.OnError; }
 	}
 
 	public partial class QuickPick {
@@ -5706,7 +5706,7 @@ namespace VscAppz {
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.appzObjPropsGet";
 			msg.Data = new dict(1);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
 			Action<QuickPickBag> onret = default;
 			onresp = (any payload) => {
@@ -5714,7 +5714,7 @@ namespace VscAppz {
 				QuickPickBag result = default;
 				if ((null != payload)) {
 					result = new QuickPickBag();
-					ok = result.populateFrom(payload);
+					ok = result.loadFromJsonish(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5726,7 +5726,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action<QuickPickBag> a0) => {
 				onret = a0;
 			};
@@ -5737,18 +5737,18 @@ namespace VscAppz {
 		/// <summary>
 		/// Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 		/// 
-		/// `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `QuickPickBag` with your select modifications applied, rather than construct a new one from scratch.
+		/// `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
 		/// 
 		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <param name="allUpdates">be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `QuickPickBag` with your select modifications applied, rather than construct a new one from scratch.</param>
+		/// <param name="allUpdates">be aware that **all** its fields are sent for update, no omissions.</param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> Set(QuickPickBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.appzObjPropsSet";
 			msg.Data = new dict(2);
-			msg.Data[""] = this.disp.id;
+			msg.Data[""] = this.__disp__.id;
 			msg.Data["allUpdates"] = allUpdates;
 			Func<any, bool> onresp = default;
 			Action onret = default;
@@ -5761,7 +5761,7 @@ namespace VscAppz {
 				}
 				return true;
 			};
-			this.disp.impl.send(msg, onresp);
+			this.__disp__.impl.send(msg, onresp);
 			return (Action a0) => {
 				onret = a0;
 			};
@@ -5769,7 +5769,7 @@ namespace VscAppz {
 	}
 
 	public partial class MessageItem {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -5817,7 +5817,7 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPickItem {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -5902,7 +5902,7 @@ namespace VscAppz {
 	}
 
 	public partial class WorkspaceFolder {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -5959,7 +5959,7 @@ namespace VscAppz {
 	}
 
 	public partial class WindowState {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -5985,52 +5985,52 @@ namespace VscAppz {
 	}
 
 	public partial class StatusBarItem {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			bool ok = default;
-			this.disp = new Disposable();
-			ok = this.disp.populateFrom(payload);
+			this.__disp__ = new Disposable();
+			ok = this.__disp__.loadFromJsonish(payload);
 			return ok;
 		}
 	}
 
 	public partial class OutputChannel {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			bool ok = default;
-			this.disp = new Disposable();
-			ok = this.disp.populateFrom(payload);
+			this.__disp__ = new Disposable();
+			ok = this.__disp__.loadFromJsonish(payload);
 			return ok;
 		}
 	}
 
 	public partial class TextEditorDecorationType {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			bool ok = default;
-			this.disp = new Disposable();
-			ok = this.disp.populateFrom(payload);
+			this.__disp__ = new Disposable();
+			ok = this.__disp__.loadFromJsonish(payload);
 			return ok;
 		}
 	}
 
 	public partial class InputBox {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			bool ok = default;
-			this.disp = new Disposable();
-			ok = this.disp.populateFrom(payload);
+			this.__disp__ = new Disposable();
+			ok = this.__disp__.loadFromJsonish(payload);
 			return ok;
 		}
 	}
 
 	public partial class QuickPick {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			bool ok = default;
-			this.disp = new Disposable();
-			ok = this.disp.populateFrom(payload);
+			this.__disp__ = new Disposable();
+			ok = this.__disp__.loadFromJsonish(payload);
 			return ok;
 		}
 	}
 
 	public partial class EnvBag {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6147,7 +6147,7 @@ namespace VscAppz {
 	}
 
 	public partial class WorkspaceFoldersChangeEvent {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6170,7 +6170,7 @@ namespace VscAppz {
 					foreach (var __item__added in __coll__added) {
 						WorkspaceFolder __val__added = default;
 						__val__added = new WorkspaceFolder();
-						ok = __val__added.populateFrom(__item__added);
+						ok = __val__added.loadFromJsonish(__item__added);
 						if (!ok) {
 							return false;
 						}
@@ -6197,7 +6197,7 @@ namespace VscAppz {
 					foreach (var __item__removed in __coll__removed) {
 						WorkspaceFolder __val__removed = default;
 						__val__removed = new WorkspaceFolder();
-						ok = __val__removed.populateFrom(__item__removed);
+						ok = __val__removed.loadFromJsonish(__item__removed);
 						if (!ok) {
 							return false;
 						}
@@ -6214,7 +6214,7 @@ namespace VscAppz {
 	}
 
 	public partial class WorkspaceBag {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6263,7 +6263,7 @@ namespace VscAppz {
 					foreach (var __item__workspaceFolders in __coll__workspaceFolders) {
 						WorkspaceFolder __val__workspaceFolders = default;
 						__val__workspaceFolders = new WorkspaceFolder();
-						ok = __val__workspaceFolders.populateFrom(__item__workspaceFolders);
+						ok = __val__workspaceFolders.loadFromJsonish(__item__workspaceFolders);
 						if (!ok) {
 							return false;
 						}
@@ -6278,7 +6278,7 @@ namespace VscAppz {
 	}
 
 	public partial class DiagnosticChangeEvent {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6317,7 +6317,7 @@ namespace VscAppz {
 	}
 
 	public partial class StatusBarItemBag {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6412,7 +6412,7 @@ namespace VscAppz {
 	}
 
 	public partial class OutputChannelBag {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6438,7 +6438,7 @@ namespace VscAppz {
 	}
 
 	public partial class TextEditorDecorationTypeBag {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6464,7 +6464,7 @@ namespace VscAppz {
 	}
 
 	public partial class InputBoxBag {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6602,7 +6602,7 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPickBag {
-		internal bool populateFrom(any payload = default) {
+		internal bool loadFromJsonish(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6647,7 +6647,7 @@ namespace VscAppz {
 					foreach (var __item__items in __coll__items) {
 						QuickPickItem __val__items = default;
 						__val__items = new QuickPickItem();
-						ok = __val__items.populateFrom(__item__items);
+						ok = __val__items.loadFromJsonish(__item__items);
 						if (!ok) {
 							return false;
 						}
@@ -6705,7 +6705,7 @@ namespace VscAppz {
 					foreach (var __item__activeItems in __coll__activeItems) {
 						QuickPickItem __val__activeItems = default;
 						__val__activeItems = new QuickPickItem();
-						ok = __val__activeItems.populateFrom(__item__activeItems);
+						ok = __val__activeItems.loadFromJsonish(__item__activeItems);
 						if (!ok) {
 							return false;
 						}
@@ -6730,7 +6730,7 @@ namespace VscAppz {
 					foreach (var __item__selectedItems in __coll__selectedItems) {
 						QuickPickItem __val__selectedItems = default;
 						__val__selectedItems = new QuickPickItem();
-						ok = __val__selectedItems.populateFrom(__item__selectedItems);
+						ok = __val__selectedItems.loadFromJsonish(__item__selectedItems);
 						if (!ok) {
 							return false;
 						}

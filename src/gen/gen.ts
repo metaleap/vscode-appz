@@ -11,8 +11,50 @@ export const docStrs = {
     extBaggage: "Free-form custom data, preserved across a roundtrip.",
     internalOnly: "For internal runtime use only."
 }
-export const __ = {
+export const idents = {
+    typeSuffBag: "Bag",
+    methodNsProps: "AllProperties",
+    methodBagFetch: "Restore",
+    methodBagPublish: "ApplyChanges",
+    methodLoadFrom: "loadFromJsonish",
+    methodImpl: "Impl",
+    argHandler: "handler",
+    argListener: "listener",
+    argPayload: "payload",
+    argArgs: "args",
+    fldMyTags: "my",
+    fldDisp: "__disp__",
+    fldImpl: "impl",
+    fldBagHolder: "__holder__",
+    fldSuffFuncId: "_AppzFuncId",
+    fldDispObjBag: "CfgBag",
+    varOk: "ok",
+    varRes: "result",
+    varRet: "ret",
+    varIt: "it",
+    varVal: "val",
+    varMsg: "msg",
+    varFn: "fn",
+    varFnid: "fnid",
+    varFnids: "fnids",
+    varSuffFnid: "FnId",
+    varOnResp: "onresp",
+    varOnRet: "onret",
 
+    coreTypeCancel: "Cancel",
+    coreTypeDisp: "Disposable",
+    coreTypeMsg: "ipcMsg",
+    coreFldId: "id",
+    coreFldFnId: "fnId",
+    coreFldMsgQn: "QName",
+    coreFldMsgData: "Data",
+    coreFldCbOther: "cbOther",
+    coreMethodNextId: "nextFuncId",
+    coreMethodNextSub: "nextSub",
+    coreMethodAddSub: "addSub",
+    coreMethodBind: "bind",
+    coreMethodSend: "send",
+    coreMethodOnErr: "OnError",
 }
 
 export interface TsNodeWithType { type?: ts.TypeNode }
@@ -143,14 +185,14 @@ export class Prep {
                 let n: number = 0
                 for (const arg of method.args)
                     if (arg.typeSpec === 'CancellationToken')
-                        [arg.isCancellationToken, arg.typeSpec] = [n++, 'Cancel']
+                        [arg.isCancellationToken, arg.typeSpec] = [n++, idents.coreTypeCancel]
                 const fromprop = method.fromOrig.decl as MemberProp
                 if (fromprop && fromprop.PropType)
                     propmethods.push(method)
             }
             if (propmethods.length > 1) {
                 const struct: PrepStruct = {
-                    isPropsOfIface: iface, name: iface.name + "Bag", funcFields: [],
+                    isPropsOfIface: iface, name: iface.name + idents.typeSuffBag, funcFields: [],
                     fields: propmethods.map(me => ({
                         fromOrig: me.fromOrig.decl,
                         name: me.name,
@@ -161,9 +203,9 @@ export class Prep {
                 }
                 this.structs.push(struct)
                 iface.methods.push({
-                    name: "AllProperties",
+                    name: idents.methodNsProps,
                     isProps: struct, args: [{
-                        isFromRetThenable: true, name: "onDone", optional: false,
+                        isFromRetThenable: true, name: "?", optional: false,
                         typeSpec: { Thens: [struct.name] },
                     }],
                 })
@@ -181,14 +223,14 @@ export class Prep {
                 if (!arg.isFromRetThenable) isargout = !isinfunc
             }
             if (((struct.isOutgoing = struct.isOutgoing || isargout) && (struct.isIncoming = struct.isIncoming || isargin)) && !(struct.isPropsOfStruct || struct.isPropsOfIface))
-                struct.fields.push({ name: "my", isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict })
+                struct.fields.push({ name: idents.fldMyTags, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict })
 
             if (struct.isIncoming && struct.fields.find(_ => typeFun(_.typeSpec))) {
                 struct.isDispObj = true
                 const propfields = struct.fields.filter(_ => !typeFun(_.typeSpec))
                 if (propfields.length) {
                     const propstruct: PrepStruct = {
-                        funcFields: [], name: struct.name + "Bag", isPropsOfStruct: struct,
+                        funcFields: [], name: struct.name + idents.typeSuffBag, isPropsOfStruct: struct,
                         fromOrig: struct.fromOrig, isIncoming: true, isOutgoing: true,
                         fields: propfields.map(_ => {
                             _.optional = true
@@ -262,7 +304,7 @@ export class Prep {
                         isExtBaggage: false,
                     }
                     if (ts.isPropertySignature(_) && ts.isTypeReferenceNode(_.type) && _.type.typeName.getText() === "Event")
-                        field.typeSpec = { From: [{ From: _.type.typeArguments.map(_ => this.typeSpec(_, combine(it.decl.typeParameters, mtparams ? mtparams.typeParameters : []))).filter(_ => _ ? true : false), To: null }], To: "Disposable" }
+                        field.typeSpec = { From: [{ From: _.type.typeArguments.map(_ => this.typeSpec(_, combine(it.decl.typeParameters, mtparams ? mtparams.typeParameters : []))).filter(_ => _ ? true : false), To: null }], To: idents.coreTypeDisp }
                     fields.push(field)
                 }
             }
@@ -326,14 +368,14 @@ export class Prep {
                 }
             }
             me.args.push({
-                name: "listener",
+                name: idents.argListener,
                 optional: false, typeSpec: { From: decle.EvtArgs.map((_, i) => evtargs[i]), To: null },
             })
         }
         let tret = (declp && declp.PropType) ?
             this.typeSpec(declp.PropType) :
             (decle && decle.EvtName && decle.EvtName.length) ?
-                "Disposable" :
+                idents.coreTypeDisp :
                 this.typeSpec(declf.type, declf.typeParameters)
         if (typeof tret === 'string') {
             const struct = this.structs.find(_ => _.name === tret)
@@ -344,7 +386,7 @@ export class Prep {
         if (!(tprom && tprom.length))
             tret = { Thens: [tret] }
         if (tret)
-            me.args.push({ name: "onDone", typeSpec: tret, isFromRetThenable: true, optional: true })
+            me.args.push({ name: "?", typeSpec: tret, isFromRetThenable: true, optional: true })
     }
 
     qName(memJob: GenJobNamed): string[] {
@@ -715,7 +757,10 @@ function docFrom(from: ts.JSDoc): Doc {
     }
     let relined = false
     ret.lines = ret.lines.map(_ => {
-        if (_.startsWith("```")) { relined = true; return ("\n" + _ + "\n") }
+        if (_.startsWith("```")) {
+            relined = true
+            return ("\n" + _ + "\n")
+        }
         return _.replace("](#", "](https://code.visualstudio.com/api/references/vscode-api#")
     })
     if (relined)

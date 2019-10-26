@@ -184,7 +184,7 @@ namespace VscAppz {
         }
         internal Disposable bind(impl impl, params string[] subFnIds) {
             (this.impl, this.subFnIds) = (impl, subFnIds); return this; }
-        internal bool populateFrom(any payload) =>
+        internal bool loadFromJsonish(any payload) =>
             (payload is string s) && !string.IsNullOrEmpty(id = s);
         void IDisposable.Dispose(){}
         /// <summary>Dispose signals to the counterparty to destroy the object.</summary>

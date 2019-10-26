@@ -2,10 +2,10 @@ import * as core from './core';
 declare type Cancel = core.Cancel;
 declare type Disposable = core.Disposable;
 interface fromJson {
-    populateFrom: (_: any) => boolean;
+    loadFromJsonish: (_: any) => boolean;
 }
 interface withDisp {
-    disp: Disposable;
+    __disp__: Disposable;
 }
 /**
  * Represents the alignment of status bar items.
@@ -461,7 +461,7 @@ export interface Window {
      * Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 
      * @param name Human-readable string which will be used to represent the channel in the UI.
-     * @return A thenable that resolves to the newly created `OutputChannel`.
+     * @return a thenable that resolves to the newly created `OutputChannel`.
      */
     CreateOutputChannel: (name: string) => (_: (_: OutputChannel, __: OutputChannelBag) => void) => void;
     /**

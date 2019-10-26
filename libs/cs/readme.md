@@ -1394,7 +1394,7 @@ Creates a new [output channel](https://code.visualstudio.com/api/references/vsco
 
 `name` ── Human-readable string which will be used to represent the channel in the UI.
 
-`return` ── A thenable that resolves to the newly created `OutputChannel`.
+`return` ── a thenable that resolves to the newly created `OutputChannel`.
 
 ##### Parameters
 
@@ -2299,7 +2299,7 @@ the user pressing Esc, some other input UI opening, etc.)
 
 Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 
-`allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `InputBoxBag` with your select modifications applied, rather than construct a new one from scratch.
+`allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
 
 `return` ── A thenable that resolves when this call has completed at the counterparty.
 
@@ -2307,7 +2307,7 @@ Updates this `InputBox`'s current property values for: `value`, `placeholder`, `
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| allUpdates | [VscAppz.InputBoxBag](#T-VscAppz-InputBoxBag 'VscAppz.InputBoxBag') | be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `InputBoxBag` with your select modifications applied, rather than construct a new one from scratch. |
+| allUpdates | [VscAppz.InputBoxBag](#T-VscAppz-InputBoxBag 'VscAppz.InputBoxBag') | be aware that **all** its fields are sent for update, no omissions. |
 
 <a name='M-VscAppz-InputBox-Show'></a>
 ### Show() `method`
@@ -2993,7 +2993,7 @@ the user pressing Esc, some other input UI opening, etc.)
 
 Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 
-`allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `QuickPickBag` with your select modifications applied, rather than construct a new one from scratch.
+`allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
 
 `return` ── A thenable that resolves when this call has completed at the counterparty.
 
@@ -3001,7 +3001,7 @@ Updates this `QuickPick`'s current property values for: `value`, `placeholder`, 
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| allUpdates | [VscAppz.QuickPickBag](#T-VscAppz-QuickPickBag 'VscAppz.QuickPickBag') | be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `QuickPickBag` with your select modifications applied, rather than construct a new one from scratch. |
+| allUpdates | [VscAppz.QuickPickBag](#T-VscAppz-QuickPickBag 'VscAppz.QuickPickBag') | be aware that **all** its fields are sent for update, no omissions. |
 
 <a name='M-VscAppz-QuickPick-Show'></a>
 ### Show() `method`
@@ -3380,7 +3380,7 @@ This method has no parameters.
 
 Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
 
-`allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `StatusBarItemBag` with your select modifications applied, rather than construct a new one from scratch.
+`allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
 
 `return` ── A thenable that resolves when this call has completed at the counterparty.
 
@@ -3388,7 +3388,7 @@ Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| allUpdates | [VscAppz.StatusBarItemBag](#T-VscAppz-StatusBarItemBag 'VscAppz.StatusBarItemBag') | be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `StatusBarItemBag` with your select modifications applied, rather than construct a new one from scratch. |
+| allUpdates | [VscAppz.StatusBarItemBag](#T-VscAppz-StatusBarItemBag 'VscAppz.StatusBarItemBag') | be aware that **all** its fields are sent for update, no omissions. |
 
 <a name='M-VscAppz-StatusBarItem-Show'></a>
 ### Show() `method`

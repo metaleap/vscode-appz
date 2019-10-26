@@ -619,10 +619,8 @@ Updates this `InputBox`'s current property values for: `value`, `placeholder`,
 `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`,
 `enabled`, `busy`, `ignoreFocusOut`.
 
-`allUpdates` ── be aware that *all* its fields are sent for update, no
-omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty
-`InputBoxBag` with your select modifications applied, rather than construct a
-new one from scratch.
+`allUpdates` ── be aware that **all** its fields are sent for update, no
+omissions.
 
 `return` ── A thenable that resolves when this call has completed at the
 counterparty.
@@ -1164,10 +1162,8 @@ Updates this `QuickPick`'s current property values for: `value`, `placeholder`,
 `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`,
 `ignoreFocusOut`.
 
-`allUpdates` ── be aware that *all* its fields are sent for update, no
-omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty
-`QuickPickBag` with your select modifications applied, rather than construct a
-new one from scratch.
+`allUpdates` ── be aware that **all** its fields are sent for update, no
+omissions.
 
 `return` ── A thenable that resolves when this call has completed at the
 counterparty.
@@ -1399,10 +1395,8 @@ func (me *StatusBarItem) Set(allUpdates StatusBarItemBag) func(func())
 Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`,
 `color`, `command`.
 
-`allUpdates` ── be aware that *all* its fields are sent for update, no
-omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty
-`StatusBarItemBag` with your select modifications applied, rather than construct
-a new one from scratch.
+`allUpdates` ── be aware that **all** its fields are sent for update, no
+omissions.
 
 `return` ── A thenable that resolves when this call has completed at the
 counterparty.
@@ -2042,7 +2036,7 @@ type Window interface {
 	//
 	// `name` ── Human-readable string which will be used to represent the channel in the UI.
 	//
-	// `return` ── A thenable that resolves to the newly created `OutputChannel`.
+	// `return` ── a thenable that resolves to the newly created `OutputChannel`.
 	CreateOutputChannel(name string) func(func(OutputChannel, OutputChannelBag))
 
 	// Create a TextEditorDecorationType that can be used to add decorations to text editors.

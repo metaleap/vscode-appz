@@ -635,10 +635,10 @@
             
             `name` ── Human-readable string which will be used to represent the channel in the UI.
             
-            `return` ── A thenable that resolves to the newly created `OutputChannel`.
+            `return` ── a thenable that resolves to the newly created `OutputChannel`.
             </summary>
             <param name="name">Human-readable string which will be used to represent the channel in the UI.</param>
-            <return>A thenable that resolves to the newly created `OutputChannel`.</return>
+            <return>a thenable that resolves to the newly created `OutputChannel`.</return>
         </member>
         <member name="M:VscAppz.IWindow.CreateTextEditorDecorationType(VscAppz.DecorationRenderOptions)">
             <summary>
@@ -1530,11 +1530,11 @@
             <summary>
             Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
             
-            `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `StatusBarItemBag` with your select modifications applied, rather than construct a new one from scratch.
+            `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
             
             `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <param name="allUpdates">be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `StatusBarItemBag` with your select modifications applied, rather than construct a new one from scratch.</param>
+            <param name="allUpdates">be aware that **all** its fields are sent for update, no omissions.</param>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="T:VscAppz.OutputChannel">
@@ -1902,11 +1902,11 @@
             <summary>
             Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
             
-            `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `InputBoxBag` with your select modifications applied, rather than construct a new one from scratch.
+            `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
             
             `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <param name="allUpdates">be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `InputBoxBag` with your select modifications applied, rather than construct a new one from scratch.</param>
+            <param name="allUpdates">be aware that **all** its fields are sent for update, no omissions.</param>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="T:VscAppz.QuickInputButton">
@@ -2034,11 +2034,11 @@
             <summary>
             Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
             
-            `allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `QuickPickBag` with your select modifications applied, rather than construct a new one from scratch.
+            `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
             
             `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <param name="allUpdates">be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `QuickPickBag` with your select modifications applied, rather than construct a new one from scratch.</param>
+            <param name="allUpdates">be aware that **all** its fields are sent for update, no omissions.</param>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="T:VscAppz.WorkspaceFoldersChangeEvent">
