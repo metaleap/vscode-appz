@@ -278,21 +278,27 @@ export class Builder {
                 ]
             }] : it.isPropsOfStruct ? [{
                 Lines: [
-                    structname + " is a snapshot of `" + this.gen.nameRewriters.types.structs(it.isPropsOfStruct.name) + "` state at the counterparty. It is obtained whenever `" + this.gen.nameRewriters.types.structs(it.isPropsOfStruct.name) + "` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually." + (it.fields.some(_ => _.readOnly) ? " All read-only properties are exposed as function-valued fields." : "") + (it.fields.some(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec)) ? " Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method." : "")
+                    structname + " is a snapshot of `" + this.gen.nameRewriters.types.structs(it.isPropsOfStruct.name) + "` state at the VSC counterparty. It is obtained whenever `" + this.gen.nameRewriters.types.structs(it.isPropsOfStruct.name) + "` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually." + (it.fields.some(_ => _.readOnly) ? " All read-only properties are exposed as function-valued fields." : "") + (it.fields.some(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec)) ? " Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method." : "")
                 ]
             }] : this.docs(gen.docs(it.fromOrig.decl)),
             IsOutgoing: it.isOutgoing ? true : false,
             IsIncoming: it.isIncoming ? true : false,
-            Fields: it.isDispObj ? [
-                { Name: "disp", Type: { Maybe: { Name: "Disposable" } } },
-            ] : it.fields.map((_: gen.PrepField): Field => ({
+            Fields: it.isDispObj ? [{ Name: "disp", Type: { Maybe: { Name: "Disposable" } } }, {
+                Name: this.gen.options.idents.dispObjCfgBag, Type: { Maybe: { Name: structname + "Bag" } },
+                Docs: [{
+                    Lines: [this.gen.options.idents.dispObjCfgBag + " represents this `" + structname + "`'s current state. All its members get auto-refreshed every time" + (it.fields.some(_ => {
+                        const tfun = gen.typeFun(_.typeSpec)
+                        return tfun && tfun[0] && tfun[0].length === 1 && tfun[0][0] && gen.typeFun(tfun[0][0])
+                    }) ? (" a (subscribed) `" + structname + "` event fires or ") : " ") + "any `" + structname + "` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method." + (it.fields.some(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec)) ? " Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method." : "")]
+                }]
+            },] : (((!it.isPropsOfStruct) ? [] : [{ Name: "__holder__", Json: { Excluded: true }, Type: { Maybe: { Name: this.gen.nameRewriters.types.structs(it.isPropsOfStruct.name) } } }]) as Field[]).concat(...it.fields.map((_: gen.PrepField): Field => ({
                 fromPrep: _,
                 name: _.name,
                 Name: ((it.isPropsOfStruct && _.readOnly) ? this.gen.nameRewriters.methods : this.gen.nameRewriters.fields)(_.name),
                 Docs: this.docs(gen.docs(_.fromOrig), _.isExtBaggage ? [gen.docStrs.extBaggage] : [], false, this.gen.options.doc.appendArgsToSummary.forFuncFields),
                 Type: (it.isPropsOfStruct && _.readOnly) ? { From: [], To: this.typeRef(_.typeSpec, false, true, true) } : this.gen.typeRefForField(this.typeRef(_.typeSpec, _.optional), _.optional),
                 Json: { Name: _.name, Required: !_.optional, Excluded: (it.isPropsOfStruct && _.readOnly) || it.funcFields.some(ff => _.name === ff) },
-            }))
+            })))
         }
         for (const ff of it.funcFields) {
             const ffname = this.gen.nameRewriters.fields(ff)
@@ -482,6 +488,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             typeAny: "any",
             typeDict: "dict",
             typeImpl: "impl",
+            dispObjCfgBag: "CfgBag",
         },
         unMaybeOutgoingTypes: [TypeRefPrim.String, TypeRefPrim.Bool] as TypeRef[],
         oneIndent: '    ',

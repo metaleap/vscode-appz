@@ -512,6 +512,7 @@ console.log(importedApi.mul(42, 1));
 
 ```go
 type InputBox struct {
+	CfgBag *InputBoxBag
 }
 ```
 
@@ -870,6 +871,7 @@ and the editor then silently adjusts the options to select files.
 
 ```go
 type OutputChannel struct {
+	CfgBag *OutputChannelBag
 }
 ```
 
@@ -1020,6 +1022,7 @@ or [InputBox](#InputBox).
 
 ```go
 type QuickPick struct {
+	CfgBag *QuickPickBag
 }
 ```
 
@@ -1338,6 +1341,7 @@ const (
 
 ```go
 type StatusBarItem struct {
+	CfgBag *StatusBarItemBag
 }
 ```
 
@@ -1445,6 +1449,7 @@ counterparty via the `Set` method.
 
 ```go
 type TextEditorDecorationType struct {
+	CfgBag *TextEditorDecorationTypeBag
 }
 ```
 

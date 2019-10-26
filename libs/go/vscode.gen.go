@@ -1142,6 +1142,9 @@ type WindowState struct {
 // show text and icons and run a command on click.
 type StatusBarItem struct {
 	disp *Disposable
+
+	// CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	CfgBag *StatusBarItemBag
 }
 
 // An output channel is a container for readonly textual information.
@@ -1150,6 +1153,9 @@ type StatusBarItem struct {
 // [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 type OutputChannel struct {
 	disp *Disposable
+
+	// CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
+	CfgBag *OutputChannelBag
 }
 
 // Type Definition for Visual Studio Code 1.39 Extension API
@@ -1300,6 +1306,9 @@ type DecorationRenderOptions struct {
 // [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 type TextEditorDecorationType struct {
 	disp *Disposable
+
+	// CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
+	CfgBag *TextEditorDecorationTypeBag
 }
 
 // A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
@@ -1309,6 +1318,9 @@ type TextEditorDecorationType struct {
 // when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 type InputBox struct {
 	disp *Disposable
+
+	// CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	CfgBag *InputBoxBag
 }
 
 // Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
@@ -1330,6 +1342,9 @@ type QuickInputButton struct {
 // when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 type QuickPick struct {
 	disp *Disposable
+
+	// CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	CfgBag *QuickPickBag
 }
 
 // An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).
@@ -1426,8 +1441,10 @@ type WorkspaceBag struct {
 	WorkspaceFolders []WorkspaceFolder `json:"workspaceFolders,omitempty"`
 }
 
-// StatusBarItemBag is a snapshot of `StatusBarItem` state at the counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+// StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 type StatusBarItemBag struct {
+	__holder__ *StatusBarItem `json:"-"`
+
 	// The alignment of this item.
 	Alignment func() StatusBarAlignment `json:"-"`
 
@@ -1454,20 +1471,26 @@ type StatusBarItemBag struct {
 	Command string `json:"command,omitempty"`
 }
 
-// OutputChannelBag is a snapshot of `OutputChannel` state at the counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+// OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 type OutputChannelBag struct {
+	__holder__ *OutputChannel `json:"-"`
+
 	// The human-readable name of this output channel.
 	Name func() string `json:"-"`
 }
 
-// TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+// TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 type TextEditorDecorationTypeBag struct {
+	__holder__ *TextEditorDecorationType `json:"-"`
+
 	// Internal representation of the handle.
 	Key func() string `json:"-"`
 }
 
-// InputBoxBag is a snapshot of `InputBox` state at the counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+// InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 type InputBoxBag struct {
+	__holder__ *InputBox `json:"-"`
+
 	// Current input value.
 	Value string `json:"value,omitempty"`
 
@@ -1508,8 +1531,10 @@ type InputBoxBag struct {
 	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
 }
 
-// QuickPickBag is a snapshot of `QuickPick` state at the counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+// QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 type QuickPickBag struct {
+	__holder__ *QuickPick `json:"-"`
+
 	// Current value of the filter text.
 	Value string `json:"value,omitempty"`
 

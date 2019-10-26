@@ -1490,6 +1490,9 @@
             show text and icons and run a command on click.
             </summary>
         </member>
+        <member name="F:VscAppz.StatusBarItem.CfgBag">
+            <summary>CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time a `StatusBarItem` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) `StatusBarItem` event fires, but can also be manually refreshed via its `PullFromPeer` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `PushToPeer` method.</summary>
+        </member>
         <member name="M:VscAppz.StatusBarItem.Show">
             <summary>
             Shows the entry in the status bar.
@@ -1541,6 +1544,9 @@
             To get an instance of an `OutputChannel` use
             [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
             </summary>
+        </member>
+        <member name="F:VscAppz.OutputChannel.CfgBag">
+            <summary>CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time a `OutputChannel` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) `OutputChannel` event fires, but can also be manually refreshed via its `PullFromPeer` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `PushToPeer` method.</summary>
         </member>
         <member name="M:VscAppz.OutputChannel.Append(System.String)">
             <summary>
@@ -1786,6 +1792,9 @@
             [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
             </summary>
         </member>
+        <member name="F:VscAppz.TextEditorDecorationType.CfgBag">
+            <summary>CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time a `TextEditorDecorationType` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) `TextEditorDecorationType` event fires, but can also be manually refreshed via its `PullFromPeer` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `PushToPeer` method.</summary>
+        </member>
         <member name="M:VscAppz.TextEditorDecorationType.Dispose">
             <summary>
             Remove this decoration type and all decorations on all text editors using it.
@@ -1810,6 +1819,9 @@
             is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
             when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
             </summary>
+        </member>
+        <member name="F:VscAppz.InputBox.CfgBag">
+            <summary>CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a `InputBox` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) `InputBox` event fires, but can also be manually refreshed via its `PullFromPeer` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `PushToPeer` method.</summary>
         </member>
         <member name="M:VscAppz.InputBox.OnDidChangeValue(System.Action{System.String,VscAppz.InputBoxBag})">
             <summary>
@@ -1917,6 +1929,9 @@
             is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
             when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
             </summary>
+        </member>
+        <member name="F:VscAppz.QuickPick.CfgBag">
+            <summary>CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a `QuickPick` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) `QuickPick` event fires, but can also be manually refreshed via its `PullFromPeer` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `PushToPeer` method.</summary>
         </member>
         <member name="M:VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String,VscAppz.QuickPickBag})">
             <summary>

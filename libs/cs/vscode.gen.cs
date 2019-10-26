@@ -1514,6 +1514,9 @@ namespace VscAppz {
 	/// </summary>
 	public partial class StatusBarItem {
 		internal Disposable disp;
+
+		/// <summary>CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+		public StatusBarItemBag CfgBag;
 	}
 
 	/// <summary>
@@ -1524,6 +1527,9 @@ namespace VscAppz {
 	/// </summary>
 	public partial class OutputChannel {
 		internal Disposable disp;
+
+		/// <summary>CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.</summary>
+		public OutputChannelBag CfgBag;
 	}
 
 	/// <summary>
@@ -1744,6 +1750,9 @@ namespace VscAppz {
 	/// </summary>
 	public partial class TextEditorDecorationType {
 		internal Disposable disp;
+
+		/// <summary>CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.</summary>
+		public TextEditorDecorationTypeBag CfgBag;
 	}
 
 	/// <summary>
@@ -1755,6 +1764,9 @@ namespace VscAppz {
 	/// </summary>
 	public partial class InputBox {
 		internal Disposable disp;
+
+		/// <summary>CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+		public InputBoxBag CfgBag;
 	}
 
 	/// <summary>Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).</summary>
@@ -1780,6 +1792,9 @@ namespace VscAppz {
 	/// </summary>
 	public partial class QuickPick {
 		internal Disposable disp;
+
+		/// <summary>CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+		public QuickPickBag CfgBag;
 	}
 
 	/// <summary>An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).</summary>
@@ -1902,8 +1917,11 @@ namespace VscAppz {
 		public WorkspaceFolder[] WorkspaceFolders;
 	}
 
-	/// <summary>StatusBarItemBag is a snapshot of `StatusBarItem` state at the counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
+	/// <summary>StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
 	public partial class StatusBarItemBag {
+		[JsonIgnore]
+		internal StatusBarItem __holder__;
+
 		/// <summary>The alignment of this item.</summary>
 		[JsonIgnore]
 		public Func<StatusBarAlignment> Alignment;
@@ -1942,22 +1960,31 @@ namespace VscAppz {
 		public string Command;
 	}
 
-	/// <summary>OutputChannelBag is a snapshot of `OutputChannel` state at the counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
+	/// <summary>OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
 	public partial class OutputChannelBag {
+		[JsonIgnore]
+		internal OutputChannel __holder__;
+
 		/// <summary>The human-readable name of this output channel.</summary>
 		[JsonIgnore]
 		public Func<string> Name;
 	}
 
-	/// <summary>TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
+	/// <summary>TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
 	public partial class TextEditorDecorationTypeBag {
+		[JsonIgnore]
+		internal TextEditorDecorationType __holder__;
+
 		/// <summary>Internal representation of the handle.</summary>
 		[JsonIgnore]
 		public Func<string> Key;
 	}
 
-	/// <summary>InputBoxBag is a snapshot of `InputBox` state at the counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
+	/// <summary>InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
 	public partial class InputBoxBag {
+		[JsonIgnore]
+		internal InputBox __holder__;
+
 		/// <summary>Current input value.</summary>
 		[JsonProperty("value")]
 		public string Value;
@@ -2013,8 +2040,11 @@ namespace VscAppz {
 		public bool IgnoreFocusOut;
 	}
 
-	/// <summary>QuickPickBag is a snapshot of `QuickPick` state at the counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
+	/// <summary>QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
 	public partial class QuickPickBag {
+		[JsonIgnore]
+		internal QuickPick __holder__;
+
 		/// <summary>Current value of the filter text.</summary>
 		[JsonProperty("value")]
 		public string Value;

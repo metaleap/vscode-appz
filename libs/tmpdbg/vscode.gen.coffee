@@ -1667,6 +1667,11 @@ StatusBarItem: class
     # JSON FLAGS: undefined
     disp: ?Disposable
 
+    # CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+    #
+    # JSON FLAGS: undefined
+    CfgBag: ?StatusBarItemBag
+
 
 
 
@@ -1679,6 +1684,11 @@ OutputChannel: class
     #
     # JSON FLAGS: undefined
     disp: ?Disposable
+
+    # CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
+    #
+    # JSON FLAGS: undefined
+    CfgBag: ?OutputChannelBag
 
 
 
@@ -1961,6 +1971,11 @@ TextEditorDecorationType: class
     # JSON FLAGS: undefined
     disp: ?Disposable
 
+    # CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
+    #
+    # JSON FLAGS: undefined
+    CfgBag: ?TextEditorDecorationTypeBag
+
 
 
 
@@ -1974,6 +1989,11 @@ InputBox: class
     #
     # JSON FLAGS: undefined
     disp: ?Disposable
+
+    # CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+    #
+    # JSON FLAGS: undefined
+    CfgBag: ?InputBoxBag
 
 
 
@@ -2009,6 +2029,11 @@ QuickPick: class
     #
     # JSON FLAGS: undefined
     disp: ?Disposable
+
+    # CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+    #
+    # JSON FLAGS: undefined
+    CfgBag: ?QuickPickBag
 
 
 
@@ -2163,8 +2188,12 @@ WorkspaceBag: class
 
 
 
-# StatusBarItemBag is a snapshot of `StatusBarItem` state at the counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+# StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 StatusBarItemBag: class
+
+    #
+    # JSON FLAGS: {"Excluded":true}
+    __holder__: ?StatusBarItem
 
     # alignment:
     # The alignment of this item.
@@ -2212,8 +2241,12 @@ StatusBarItemBag: class
 
 
 
-# OutputChannelBag is a snapshot of `OutputChannel` state at the counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+# OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 OutputChannelBag: class
+
+    #
+    # JSON FLAGS: {"Excluded":true}
+    __holder__: ?OutputChannel
 
     # name:
     # The human-readable name of this output channel.
@@ -2224,8 +2257,12 @@ OutputChannelBag: class
 
 
 
-# TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+# TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 TextEditorDecorationTypeBag: class
+
+    #
+    # JSON FLAGS: {"Excluded":true}
+    __holder__: ?TextEditorDecorationType
 
     # key:
     # Internal representation of the handle.
@@ -2236,8 +2273,12 @@ TextEditorDecorationTypeBag: class
 
 
 
-# InputBoxBag is a snapshot of `InputBox` state at the counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+# InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 InputBoxBag: class
+
+    #
+    # JSON FLAGS: {"Excluded":true}
+    __holder__: ?InputBox
 
     # value:
     # Current input value.
@@ -2314,8 +2355,12 @@ InputBoxBag: class
 
 
 
-# QuickPickBag is a snapshot of `QuickPick` state at the counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+# QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 QuickPickBag: class
+
+    #
+    # JSON FLAGS: {"Excluded":true}
+    __holder__: ?QuickPick
 
     # value:
     # Current value of the filter text.

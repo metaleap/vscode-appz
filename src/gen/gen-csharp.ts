@@ -84,6 +84,7 @@ export class Gen extends gen_syn.Gen {
     }
 
     emitStruct(it: gen_syn.TStruct) {
+        const isdispobj = it.fromPrep && it.fromPrep.isDispObj
         this.emitDocs(it)
             .line("public partial class " + it.Name + " {").indented(() =>
                 this.each(it.Fields, "\n", f => {
@@ -93,7 +94,7 @@ export class Gen extends gen_syn.Gen {
                             : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnMaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")
                         ))
                         .ln(() => this
-                            .s(((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel) || (it.fromPrep && it.fromPrep.isDispObj)) ? "internal " : "public ")
+                            .s(((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel) || (isdispobj && f.Name !== this.options.idents.dispObjCfgBag) || (f.Name.startsWith("__") && f.Name.endsWith("__"))) ? "internal " : "public ")
                             .emitTypeRef(f.Type)
                             .s(" ", f.Name, ";")
                         )

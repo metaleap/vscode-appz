@@ -11,6 +11,7 @@ exports.docStrs = {
     extBaggage: "Free-form custom data, preserved across a roundtrip.",
     internalOnly: "For internal runtime use only."
 };
+exports.__ = {};
 class Prep {
     constructor(job) {
         this.enums = [];

@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <DocumentationFile>vscode-appz.doc.xml</DocumentationFile>
     <DocumentationMarkdown>readme.md</DocumentationMarkdown>
-    <NoWarn>1573</NoWarn>
+    <!--NoWarn>1573</NoWarn-->
   </PropertyGroup>
   <PropertyGroup>
     <PackageId>metaleap_VscAppz</PackageId>

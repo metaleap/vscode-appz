@@ -11,6 +11,9 @@ export const docStrs = {
     extBaggage: "Free-form custom data, preserved across a roundtrip.",
     internalOnly: "For internal runtime use only."
 }
+export const __ = {
+
+}
 
 export interface TsNodeWithType { type?: ts.TypeNode }
 export interface TsNodeWithTypeParams { typeParameters?: ts.NodeArray<ts.TypeParameterDeclaration> }
