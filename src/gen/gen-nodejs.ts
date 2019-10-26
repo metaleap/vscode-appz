@@ -201,7 +201,7 @@ export class Gen extends gen_syn.Gen {
         if (method.IsSubNs)
             super.emitMethodImpl(it, method, (_t: gen_syn.TypeRefOwn, _m: gen_syn.Method, _: gen_syn.Builder, body: gen_syn.Instr[]) => {
                 body.length = 1
-                body[0] = _.iRet(_.oDot(_.eCall(_.oDot(_.n("Impl"))), _.n(method.Name)))
+                body[0] = _.iRet(_._(_.eCall(_._(_.eThis(), "Impl")), method.Name))
             })
         else
             super.emitMethodImpl(it, method, fillBody)
