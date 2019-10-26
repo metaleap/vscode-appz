@@ -21,7 +21,7 @@ export class GenDemos {
         this.all = {
 
             "demo_promptToExit": () => [
-                _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowWarningMessage", 1))), _.eLit("Are you sure you want `{0}` to exit?", _.n("appName")), _.eLit(["Sure I'm sure"])),
+                _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), this.fn("ShowWarningMessage", 1)), _.eLit("Are you sure you want `{0}` to exit?", _.n("appName")), _.eLit(["Sure I'm sure"])),
                     _.eFunc([{ Name: "btn", Type: { Maybe: TypeRefPrim.String } }], null,
                         _.iIf(_.oIs(_.n("btn")), [
                             this.genInfoMsg(_, _.eLit("So fish and long for all the thanks!")),
@@ -34,13 +34,13 @@ export class GenDemos {
             ],
 
             "demo_clipboard": () => [
-                _.eCall(_.eCall(_.oDot(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Env"))), _.n("Clipboard"))), _.n("ReadText"))),
+                _.eCall(_.eCall(_._(_.eCall(_._(_.eProp(_._("vsc", "Env")), "Clipboard")), "ReadText")),
                     _.eFunc([{ Name: "text", Type: { Maybe: TypeRefPrim.String } }], null,
                         _.iIf(_.oIsnt(_.n("text")), [
                             this.genByeMsg(_, "No text in clipboard"),
                         ], this.genInput(
                             _, "opts", "input", [{ k: "Value", v: _.oDeref(_.n("text")) }, { k: "Prompt", v: _.eLit("Enter new contents to write to your clipboard.") }],
-                            _.eCall(_.eCall(_.oDot(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Env"))), _.n("Clipboard"))), _.n("WriteText")), _.oDeref(_.n("input"))),
+                            _.eCall(_.eCall(_._(_.eCall(_._(_.eProp(_._("vsc", "Env")), "Clipboard")), "WriteText"), _.oDeref(_.n("input"))),
                                 _.eFunc([], null,
                                     this.genInfoMsg(_, _.eLit("Okay. Now double-check by pasting somewhere.")),
                                 ),
@@ -61,7 +61,7 @@ export class GenDemos {
                                 _.iSet(_.n("cmdargs"), _.eCollNew(_.eLit(1), TypeRefPrim.Any, true)),
                                 _.iSet(_.oIdx(_.n("cmdargs"), _.eLit(0)), _.oDeref(_.n("cmdarg"))),
                             ]),
-                            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("ExecuteCommand")),
+                            _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Commands")), "ExecuteCommand"),
                                 _.oDeref(_.n("item")), _.n("cmdargs"),
                             ), _.eFunc([{ Name: "ret", Type: TypeRefPrim.Any }], null,
                                 this.genInfoMsg(_, _.eLit("Command result was: `{0}`, kudos!", _.n("ret"))),
@@ -72,7 +72,7 @@ export class GenDemos {
 
             "demo_Commands_RegisterCommand": () =>
                 this.genInput(_, "opts", "cmdname", [{ k: "Value", v: _.eLit("foo.bar.baz") }, { k: "Prompt", v: _.eLit("Enter your command name. The command will accept a single text input and return a result built from it.") }],
-                    _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("RegisterCommand")),
+                    _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Commands")), "RegisterCommand"),
                         _.oDeref(_.n("cmdname")), _.eFunc([{ Name: "cmdargs", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Any,
                             this.genStatusMsg(_, _.eLit("Command `{0}` invoked with: `{1}`", _.oDeref(_.n("cmdname")), _.oIdx(_.n("cmdargs"), _.eLit(0)))),
                             _.iRet(_.eLit("Input to command `{0}` was: `{1}`", _.oDeref(_.n("cmdname")), _.oIdx(_.n("cmdargs"), _.eLit(0)))),
@@ -82,7 +82,7 @@ export class GenDemos {
                             _.iVar("cmdargs2", { ValsOf: TypeRefPrim.Any }),
                             _.iSet(_.n("cmdargs2"), _.eCollNew(_.eLit(1), TypeRefPrim.Any, true)),
                             _.iSet(_.oIdx(_.n("cmdargs2"), _.eLit(0)), _.oDeref(_.n("cmdarg"))),
-                            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("ExecuteCommand")),
+                            _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Commands")), "ExecuteCommand"),
                                 _.oDeref(_.n("cmdname")), _.n("cmdargs2")),
                                 _.eFunc([{ Name: "ret", Type: TypeRefPrim.Any }], null,
                                     this.genInfoMsg(_, _.eLit("Command result: `{0}`, mad props!", _.n("ret"))),
@@ -109,21 +109,21 @@ export class GenDemos {
             "demo_Window_ShowWorkspaceFolderPick": () => [
                 _.iVar("opts", { Maybe: { Name: "WorkspaceFolderPickOptions" } }),
                 _.iSet(_.n("opts"), _.eNew({ Maybe: { Name: "WorkspaceFolderPickOptions" } })),
-                _.iSet(_.oDot(_.n("opts"), _.n(this.fld("IgnoreFocusOut"))), _.eLit(true)),
-                _.iSet(_.oDot(_.n("opts"), _.n(this.fld("PlaceHolder"))), _.eLit("Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side.")),
-                _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("ShowWorkspaceFolderPick")), _.n("opts")),
+                _.iSet(_._("opts", this.fld("IgnoreFocusOut")), _.eLit(true)),
+                _.iSet(_._("opts", this.fld("PlaceHolder")), _.eLit("Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side.")),
+                _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), "ShowWorkspaceFolderPick"), _.n("opts")),
                     _.eFunc([{ Name: "pickedfolder", Type: { Maybe: { Name: "WorkspaceFolder" } } }], null,
                         _.iIf(_.oIsnt(_.n("pickedfolder")), [
                             this.genByeMsg(_, "Cancelled pick input, changed your mind?"),
                         ], [
-                            this.genInfoMsg(_, _.eLit("Selected `{0}` located at `{1}`, respect!", _.oDot(_.n("pickedfolder"), _.n(this.fld("Name"))), _.oDot(_.n("pickedfolder"), _.n(this.fld("Uri"))))),
+                            this.genInfoMsg(_, _.eLit("Selected `{0}` located at `{1}`, respect!", _._("pickedfolder", this.fld("Name")), _._("pickedfolder", this.fld("Uri")))),
                         ]),
                     )
                 )
             ],
 
             "demo_Env_OpenExternal": () => this.genInput(_, "opts", "uri", [{ k: "Value", v: _.eLit("http://github.com/metaleap/vscode-appz") }, { k: "Prompt", v: _.eLit("Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol.") }],
-                _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Env"))), _.n("OpenExternal")), _.oDeref(_.n("uri"))),
+                _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Env")), "OpenExternal"), _.oDeref(_.n("uri"))),
                     _.eFunc([{ Name: "ok", Type: TypeRefPrim.Bool }], null,
                         _.iVar("did", TypeRefPrim.String),
                         _.iSet(_.n("did"), _.eLit("Did")),
@@ -148,25 +148,25 @@ export class GenDemos {
                 ] as Instr[]).concat(
                     _.EACH(items, (item, idx) => [
                         _.iSet(_.oIdx(_.n("items"), _.eLit(idx)), _.eNew({ Name: "QuickPickItem" })),
-                        _.iSet(_.oDot(_.oIdx(_.n("items"), _.eLit(idx)), _.n(this.fld("Label"))), _.eLit(item[0])),
-                        _.iSet(_.oDot(_.oIdx(_.n("items"), _.eLit(idx)), _.n(this.fld("Description"))), _.eLit(item[1])),
-                        _.iSet(_.oDot(_.oIdx(_.n("items"), _.eLit(idx)), _.n(this.fld("Detail"))), _.eLit(item[2])),
+                        _.iSet(_._(_.oIdx(_._("items"), _.eLit(idx)), this.fld("Label")), _.eLit(item[0])),
+                        _.iSet(_._(_.oIdx(_._("items"), _.eLit(idx)), this.fld("Description")), _.eLit(item[1])),
+                        _.iSet(_._(_.oIdx(_._("items"), _.eLit(idx)), this.fld("Detail")), _.eLit(item[2])),
                     ])
                 ).concat(
                     _.iVar("opts", { Name: "QuickPickOptions" }),
                     _.iSet(_.n("opts"), _.eNew({ Name: "QuickPickOptions" })),
-                    _.iSet(_.oDot(_.n("opts"), _.n(this.fld("IgnoreFocusOut"))), _.eLit(true)),
-                    _.iSet(_.oDot(_.n("opts"), _.n(this.fld("MatchOnDescription"))), _.eLit(true)),
-                    _.iSet(_.oDot(_.n("opts"), _.n(this.fld("MatchOnDetail"))), _.eLit(true)),
-                    _.iSet(_.oDot(_.n("opts"), _.n(this.fld("PlaceHolder"))), _.eLit("You have 42 seconds before auto-cancellation!")),
-                    _.iSet(_.oDot(_.n("opts"), _.n(this.fld("OnDidSelectItem"))),
+                    _.iSet(_._("opts", this.fld("IgnoreFocusOut")), _.eLit(true)),
+                    _.iSet(_._("opts", this.fld("MatchOnDescription")), _.eLit(true)),
+                    _.iSet(_._("opts", this.fld("MatchOnDetail")), _.eLit(true)),
+                    _.iSet(_._("opts", this.fld("PlaceHolder")), _.eLit("You have 42 seconds before auto-cancellation!")),
+                    _.iSet(_._("opts", this.fld("OnDidSelectItem")),
                         _.eFunc([{ Name: "item", Type: { Name: "QuickPickItem" } }], TypeRefPrim.Any,
-                            this.genStatusMsg(_, _.eLit("Just selected: {0}", _.oDot(_.n("item"), _.n(this.fld("Label"))))),
+                            this.genStatusMsg(_, _.eLit("Just selected: {0}", _._("item", this.fld("Label")))),
                             _.iRet(_.eZilch()),
                         ),
                     ),
-                    _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowQuickPick", 3))),
-                        _.n("items"), _.n("opts"), _.eCall(_.n("cancelIn"), _.eLit(42)),
+                    _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), this.fn("ShowQuickPick", 3)),
+                        _._("items"), _._("opts"), _.eCall(_.n("cancelIn"), _.eLit(42)),
                     ), _.eFunc([{ Name: "pickeditems", Type: { ValsOf: { Name: "QuickPickItem" } } }], null,
                         _.iIf(_.oIsnt(_.n("pickeditems")), [
                             this.genByeMsg(_, "Cancelled pick input, not one to tick the boxes?"),
@@ -178,7 +178,7 @@ export class GenDemos {
             },
 
             "demo_Window_CreateQuickPick": () => [
-                _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("CreateQuickPick"))),
+                _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), "CreateQuickPick")),
                     _.eFunc([{ Name: "ctl", Type: { Name: "QuickPick" }, }, { Name: "cfg", Type: { Name: "QuickPickBag" } }], null,
                         _.iSet(_._("cfg", "IgnoreFocusOut"), _.eLit(true)),
                         _.iSet(_._("cfg", "Title"), _.eLit("I'm a full-fledged QuickPick")),
@@ -186,7 +186,7 @@ export class GenDemos {
                         _.iSet(_._("cfg", "TotalSteps"), _.eLit(42)),
                         _.iSet(_._("cfg", "Items"), _.eCollNew(_.eLit(88), { Name: "QuickPickItem" }, true)),
                         _.iFor(_.n("i"), _.eCall(_._("nums1To"), _.eLit(88)),
-                            _.iSet(_.oIdx(_._("cfg", "Items"), _.n("i")), _.eNew({ Name: "QuickPickItem" })),
+                            _.iSet(_.oIdx(_._("cfg", "Items"), _._("i")), _.eNew({ Name: "QuickPickItem" })),
                             _.iSet(_._(_.oIdx(_._("cfg", "Items"), _.eOp("-", _._("i"), _.eLit(1))), "Label"), _.eLit("$(eye) Label {0}", _._("i"))),
                             _.iSet(_._(_.oIdx(_._("cfg", "Items"), _.eOp("-", _._("i"), _.eLit(1))), "Description"), _.eLit("$(gift) Description {0}", _._("i"))),
                             _.iSet(_._(_.oIdx(_._("cfg", "Items"), _.eOp("-", _._("i"), _.eLit(1))), "Detail"), _.eLit("$(globe~spin) Detail {0}", _._("i"))),
@@ -204,40 +204,40 @@ export class GenDemos {
             ],
 
             "demo_Window_CreateInputBox": () => [
-                _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("CreateInputBox"))),
+                _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), "CreateInputBox")),
                     _.eFunc([{ Name: "ctl", Type: { Name: "InputBox" } }, { Name: "cfg", Type: { Name: "InputBoxBag" } }], null,
-                        _.iSet(_.oDot(_.n("cfg"), _.n(this.fld("IgnoreFocusOut"))), _.eLit(true)),
-                        _.iSet(_.oDot(_.n("cfg"), _.n(this.fld("Placeholder"))), _.eLit("The initial Placeholder")),
-                        _.iSet(_.oDot(_.n("cfg"), _.n(this.fld("Prompt"))), _.eLit("The initial Prompt")),
-                        _.iSet(_.oDot(_.n("cfg"), _.n(this.fld("Title"))), _.eLit("The initial Title")),
-                        _.eCall(_.oDot(_.n("ctl"), _.n("Set")), _.n("cfg")),
-                        _.eCall(_.oDot(_.n("ctl"), _.n("OnDidChangeValue")), _.eFunc([{ Name: "input", Type: TypeRefPrim.String }, { Name: "bag", Type: { Name: "InputBoxBag" } }], null,
-                            _.iSet(_.oDot(_.n("bag"), _.n(this.fld("Prompt"))), _.eLit("Lower: {0}", _.eCall(_.n("strLo"), _.oDot(_.n("bag"), _.n(this.fld("Value")))))),
-                            _.iSet(_.oDot(_.n("bag"), _.n(this.fld("Title"))), _.eLit("Upper: {0}", _.eCall(_.n("strUp"), _.oDot(_.n("bag"), _.n(this.fld("Value")))))),
-                            _.eCall(_.oDot(_.n("ctl"), _.n("Set")), _.n("bag")),
+                        _.iSet(_._("cfg", this.fld("IgnoreFocusOut")), _.eLit(true)),
+                        _.iSet(_._("cfg", this.fld("Placeholder")), _.eLit("The initial Placeholder")),
+                        _.iSet(_._("cfg", this.fld("Prompt")), _.eLit("The initial Prompt")),
+                        _.iSet(_._("cfg", this.fld("Title")), _.eLit("The initial Title")),
+                        _.eCall(_._("ctl", "Set"), _.n("cfg")),
+                        _.eCall(_._("ctl", "OnDidChangeValue"), _.eFunc([{ Name: "input", Type: TypeRefPrim.String }, { Name: "bag", Type: { Name: "InputBoxBag" } }], null,
+                            _.iSet(_._("bag", this.fld("Prompt")), _.eLit("Lower: {0}", _.eCall(_.n("strLo"), _._("bag", this.fld("Value"))))),
+                            _.iSet(_._("bag", this.fld("Title")), _.eLit("Upper: {0}", _.eCall(_.n("strUp"), _._("bag", this.fld("Value"))))),
+                            _.eCall(_._("ctl", "Set"), _.n("bag")),
                         )),
                         _.iVar("finalinputvalue", { Maybe: TypeRefPrim.String }),
-                        _.eCall(_.oDot(_.n("ctl"), _.n("OnDidAccept")), _.eFunc([{ Name: "bag", Type: { Name: "InputBoxBag" } }], null,
-                            _.iSet(_.n("finalinputvalue"), _.oAddr(_.oDot(_.n("bag"), _.n(this.fld("Value"))))),
-                            _.eCall(_.oDot(_.n("ctl"), _.n("Hide"))),
+                        _.eCall(_._("ctl", "OnDidAccept"), _.eFunc([{ Name: "bag", Type: { Name: "InputBoxBag" } }], null,
+                            _.iSet(_.n("finalinputvalue"), _.oAddr(_._("bag", this.fld("Value")))),
+                            _.eCall(_._("ctl", "Hide")),
                         )),
-                        _.eCall(_.oDot(_.n("ctl"), _.n("OnDidHide")), _.eFunc([{ Name: "bag", Type: { Name: "InputBoxBag" } }], null,
-                            _.eCall(_.oDot(_.n("ctl"), _.n("Dispose"))),
+                        _.eCall(_._("ctl", "OnDidHide"), _.eFunc([{ Name: "bag", Type: { Name: "InputBoxBag" } }], null,
+                            _.eCall(_._("ctl", "Dispose")),
                             _.iIf(_.oIs(_.n("finalinputvalue")), [
                                 this.genInfoMsg(_, _.eLit("You entered: `{0}`, ponderous!", _.oDeref(_.n("finalinputvalue")))),
                             ], [
                                 this.genByeMsg(_, "Backing off or backing up?"),
                             ]),
                         )),
-                        _.eCall(_.oDot(_.n("ctl"), _.n("Show"))),
+                        _.eCall(_._("ctl", "Show")),
                     ),
                 ),
             ],
 
             "subscribeToMiscEvents": () => this.genEventSubs(_, [
                 { ns: "Extensions", evtName: "OnDidChange", msg: _.eLit("Some extension(s) were just (un)installed or (de)activated.") },
-                { ns: "Window", evtName: "OnDidChangeWindowState", evtArgs: "WindowState", msg: _.eLit("Am I focused? {0}.", _.oDot(_.n("evt"), _.n(this.fld("Focused")))) },
-                { ns: "Languages", evtName: "OnDidChangeDiagnostics", evtArgs: "DiagnosticChangeEvent", msg: _.eLit("Diag(s) changed for {0} file path(s).", _.eLen(_.oDot(_.n("evt"), _.n(this.fld("Uris"))), true)) },
+                { ns: "Window", evtName: "OnDidChangeWindowState", evtArgs: "WindowState", msg: _.eLit("Am I focused? {0}.", _._("evt", this.fld("Focused"))) },
+                { ns: "Languages", evtName: "OnDidChangeDiagnostics", evtArgs: "DiagnosticChangeEvent", msg: _.eLit("Diag(s) changed for {0} file path(s).", _.eLen(_._("evt", this.fld("Uris")), true)) },
             ]),
 
         }
@@ -269,11 +269,11 @@ export class GenDemos {
             _.iVar("logchan", { Maybe: { Name: "OutputChannel" } }),
             _.iVar("toggleonclick", TypeRefPrim.Bool),
             _.iBlock(
-                _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("CreateOutputChannel")),
+                _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), "CreateOutputChannel"),
                     _.n("appName")), _.eFunc([{ Name: "it", Type: { Name: "OutputChannel" } }, { Name: "_unused", Type: { Name: "OutputChannelBag" } }], null,
                         _.iSet(_.n("logchan"), _.oAddr(_.n("it"))),
-                        _.eCall(_.n("setOutChan"), _.n("logchan")),
-                        _.eCall(_.n("logLn"), _.eCall(_.n("strFmt"), _.eLit("Hi, I'm `{0}`, this is my own custom `OutputChannel` where I leisurely log all your interactions with me. When I'm ended, it too will disappear."), _.n("appName"))),
+                        _.eCall(_._("setOutChan"), _._("logchan")),
+                        _.eCall(_.n("logLn"), _.eCall(_.n("strFmt"), _.eLit("Hi, I'm `{0}`, this is my own custom `OutputChannel` where I leisurely log all your interactions with me. When I'm ended, it too will disappear."), _._("appName"))),
                         _.eCall(_.n("logLn"), _.eLit("")),
                         _.eCall(_.n("logLn"), _.eLit("NOTE that for logging error messages, you won't need to manually create a custom `OutputChannel` at all: just have your prog print to its `stderr` as (presumably) usual, and `vscode-appz` will then create a dedicated `OutputChannel` for (both that initial and all subsequent) `stderr` prints from your prog while it's up and running.")),
                         _.eCall(_.n("logLn"), _.eLit("")),
@@ -281,7 +281,7 @@ export class GenDemos {
                             _.eCall(_.n("logLn"), _.eLit("Note also that every click on my status-bar item will toggle my visibility.")),
                             _.eCall(_.n("logLn"), _.eLit("")),
                         ]),
-                        _.eCall(_.oDot(_.n("logchan"), _.n("Show")), _.eLit(true)),
+                        _.eCall(_._("logchan", "Show"), _.eLit(true)),
                     )
                 ),
             ),
@@ -292,30 +292,30 @@ export class GenDemos {
                 _.iVar("mycmd", { From: [{ ValsOf: TypeRefPrim.Any }], To: TypeRefPrim.Any }),
                 _.iSet(_.n("mycmd"), _.eFunc([{ Name: "_unused", Type: { ValsOf: TypeRefPrim.Any } }], TypeRefPrim.Any,
                     _.iSet(_.n("clickcount"), _.eOp("+", _.eLit(1), _.n("clickcount"))),
-                    _.eCall(_.eCall(_.oDot(_.n("statusitem"), _.n("Get"))), _.eFunc([{ Name: "props", Type: { Name: "StatusBarItemBag" } }], null,
-                        _.iSet(_.oDot(_.n("props"), _.n(this.fld("Text"))), _.eCall(_.n("logLn"), _.eLit("You clicked me {0} time(s).", _.n("clickcount")))),
-                        _.iIf(_.oEq(_.eLit("editorLightBulb.foreground"), _.oDot(_.n("props"), _.n(this.fld("Color")))), [
-                            _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("terminal.ansiGreen")),
-                            _.iIf(_.oAnd(_.n("toggleonclick"), _.oIs(_.n("logchan"))), [_.eCall(_.oDot(_.n("logchan"), _.n("Hide")))]),
+                    _.eCall(_.eCall(_._("statusitem", "Get")), _.eFunc([{ Name: "props", Type: { Name: "StatusBarItemBag" } }], null,
+                        _.iSet(_._("props", this.fld("Text")), _.eCall(_.n("logLn"), _.eLit("You clicked me {0} time(s).", _.n("clickcount")))),
+                        _.iIf(_.oEq(_.eLit("editorLightBulb.foreground"), _._("props", this.fld("Color"))), [
+                            _.iSet(_._("props", this.fld("Color")), _.eLit("terminal.ansiGreen")),
+                            _.iIf(_.oAnd(_.n("toggleonclick"), _.oIs(_.n("logchan"))), [_.eCall(_._("logchan", "Hide"))]),
                         ], [
-                            _.iSet(_.oDot(_.n("props"), _.n(this.fld("Color"))), _.eLit("editorLightBulb.foreground")),
-                            _.iIf(_.oAnd(_.n("toggleonclick"), _.oIs(_.n("logchan"))), [_.eCall(_.oDot(_.n("logchan"), _.n("Show")), _.eLit(true))]),
+                            _.iSet(_._("props", this.fld("Color")), _.eLit("editorLightBulb.foreground")),
+                            _.iIf(_.oAnd(_.n("toggleonclick"), _.oIs(_.n("logchan"))), [_.eCall(_._("logchan", "Show"), _.eLit(true))]),
                         ]),
-                        _.eCall(_.eCall(_.oDot(_.n("statusitem"), _.n("Set")), _.n("props")), _.n("demosMenu")),
+                        _.eCall(_.eCall(_._("statusitem", "Set"), _.n("props")), _.n("demosMenu")),
                     )),
                     _.iRet(_.eZilch()),
                 )),
-                _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Commands"))), _.n("RegisterCommand")), _.n("cmdName"), _.n("mycmd")),
-                _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("CreateStatusBarItem")),
+                _.eCall(_._(_.eProp(_._("vsc", "Commands")), "RegisterCommand"), _._("cmdName"), _._("mycmd")),
+                _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), "CreateStatusBarItem"),
                     _.eLit(0), _.eZilch(),
                 ), _.eFunc([{ Name: "it", Type: { Name: "StatusBarItem" } }, { Name: "cfg", Type: { Name: "StatusBarItemBag" } }], null,
-                    _.iSet(_.n("statusitem"), _.n("it")),
-                    _.iSet(_.oDot(_.n("cfg"), _.n(this.fld("Tooltip"))), _.eLit("Hi from {0}!", _.n("appName"))),
-                    _.iSet(_.oDot(_.n("cfg"), _.n(this.fld("Text"))), _.eLit("You clicked me 0 time(s).")),
-                    _.iSet(_.oDot(_.n("cfg"), _.n(this.fld("Color"))), _.eLit("#42BEEF")),
-                    _.iSet(_.oDot(_.n("cfg"), _.n(this.fld("Command"))), _.n("cmdName")),
-                    _.eCall(_.oDot(_.n("statusitem"), _.n("Set")), _._("cfg")),
-                    _.eCall(_.oDot(_.n("statusitem"), _.n("Show"))),
+                    _.iSet(_._("statusitem"), _._("it")),
+                    _.iSet(_._("cfg", this.fld("Tooltip")), _.eLit("Hi from {0}!", _.n("appName"))),
+                    _.iSet(_._("cfg", this.fld("Text")), _.eLit("You clicked me 0 time(s).")),
+                    _.iSet(_._("cfg", this.fld("Color")), _.eLit("#42BEEF")),
+                    _.iSet(_._("cfg", this.fld("Command")), _.n("cmdName")),
+                    _.eCall(_._("statusitem", "Set"), _._("cfg")),
+                    _.eCall(_._("statusitem", "Show")),
                 )),
             ),
         ])
@@ -324,7 +324,7 @@ export class GenDemos {
     genEventSubs(_: Builder, subs: { ns: string, evtName: string, evtArgs?: string, msg: Expr }[]): Instr[] {
         const ret: Instr[] = []
         for (const sub of subs)
-            ret.push(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n(sub.ns))), _.n(sub.evtName)),
+            ret.push(_.eCall(_._(_.eProp(_._("vsc", sub.ns)), sub.evtName),
                 _.eFunc(sub.evtArgs ? [{ Name: "evt", Type: { Name: sub.evtArgs } }] : [], null,
                     this.genStatusMsg(_, sub.msg))))
         return ret
@@ -335,17 +335,17 @@ export class GenDemos {
         return [
             _.iVar("opts", { Name: which + "DialogOptions" }),
             _.iSet(_.n("opts"), _.eNew({ Name: which + "DialogOptions" })),
-            _.iSet(_.oDot(_.n("opts"), _.n(this.fld(which + "Label"))), _.eLit(label)),
-            _.iSet(_.oDot(_.n("opts"), _.n(this.fld("Filters"))), { KeyType: TypeRefPrim.String, ElemType: { ValsOf: TypeRefPrim.String }, Cap: _.eLit(2) }),
-            _.iSet(_.oIdx(_.oDot(_.n("opts"), _.n(this.fld("Filters"))), _.eLit("All")), _.eLit(["*"])),
-            _.iSet(_.oIdx(_.oDot(_.n("opts"), _.n(this.fld("Filters"))), _.eLit("Dummy Filter")), _.eLit(["dummy", "demo"])),
+            _.iSet(_._("opts", this.fld(which + "Label")), _.eLit(label)),
+            _.iSet(_._("opts", this.fld("Filters")), { KeyType: TypeRefPrim.String, ElemType: { ValsOf: TypeRefPrim.String }, Cap: _.eLit(2) }),
+            _.iSet(_.oIdx(_._("opts", this.fld("Filters")), _.eLit("All")), _.eLit(["*"])),
+            _.iSet(_.oIdx(_._("opts", this.fld("Filters")), _.eLit("Dummy Filter")), _.eLit(["dummy", "demo"])),
             _.iBlock(..._.WHEN(mult, () => [
-                _.iSet(_.oDot(_.n("opts"), _.n(this.fld("CanSelectFiles"))), _.eLit(true)),
-                _.iSet(_.oDot(_.n("opts"), _.n(this.fld("CanSelectFolders"))), _.eLit(false)),
-                _.iSet(_.oDot(_.n("opts"), _.n(this.fld("CanSelectMany"))), _.eLit(true)),
+                _.iSet(_._("opts", this.fld("CanSelectFiles")), _.eLit(true)),
+                _.iSet(_._("opts", this.fld("CanSelectFolders")), _.eLit(false)),
+                _.iSet(_._("opts", this.fld("CanSelectMany")), _.eLit(true)),
             ])),
             _.eCall(_.n("logLn"), _.eLit(`Showing File-${which} dialog...`)),
-            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(`Show${which}Dialog`)), _.n("opts")),
+            _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), `Show${which}Dialog`), _.n("opts")),
                 _.eFunc([{ Name: fp, Type: mult ? { ValsOf: TypeRefPrim.String } : { Maybe: TypeRefPrim.String } }], null,
                     _.iIf(_.oIsnt(_.n(fp)), [
                         this.genByeMsg(_, `Cancelled File-${which} dialog, chicken?`),
@@ -357,26 +357,26 @@ export class GenDemos {
     }
 
     genByeMsg(_: Builder, msg: string): Instr {
-        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowWarningMessage", 1))), _.eCall(_.n("logLn"), _.eLit(msg)), _.eZilch())
+        return _.eCall(_._(_.eProp(_._("vsc", "Window")), this.fn("ShowWarningMessage", 1)), _.eCall(_.n("logLn"), _.eLit(msg)), _.eZilch())
     }
 
     genInfoMsg(_: Builder, msg: Expr): Instr {
-        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowInformationMessage", 1))), _.eCall(_.n("logLn"), msg), _.eZilch())
+        return _.eCall(_._(_.eProp(_._("vsc", "Window")), this.fn("ShowInformationMessage", 1)), _.eCall(_.n("logLn"), msg), _.eZilch())
     }
 
     genInput(_: Builder, nameOpts: string, nameInput: string, props: { k: string, v: Expr }[], ...withInput: Instr[]): Instr[] {
         return ([
             _.iVar(nameOpts, { Maybe: { Name: "InputBoxOptions" } }),
             _.iSet(_.n(nameOpts), _.eNew({ Maybe: { Name: "InputBoxOptions" } })),
-            _.iSet(_.oDot(_.n(nameOpts), _.n(this.fld("IgnoreFocusOut"))), _.eLit(true)),
+            _.iSet(_._(nameOpts, this.fld("IgnoreFocusOut")), _.eLit(true)),
         ] as Instr[]).concat(..._.EACH(props, (prop): Instr[] => {
             return _.WHEN(prop.k === "Prompt" || prop.k === "PlaceHolder", () => [
                 _.eCall(_.n("logLn"), _.eLit(nameInput + "/" + nameOpts + "/{0}:\t{1}", _.eLit(prop.k), prop.v)),
             ]).concat([
-                _.iSet(_.oDot(_.n(nameOpts), _.n(this.fld(prop.k))), prop.v)
+                _.iSet(_._(nameOpts, this.fld(prop.k)), prop.v)
             ])
         })).concat(
-            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n("ShowInputBox")),
+            _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), "ShowInputBox"),
                 _.n(nameOpts), _.eZilch(),
             ), _.eFunc([{ Name: nameInput, Type: { Maybe: TypeRefPrim.String } }], null,
                 _.iIf(_.oIsnt(_.n(nameInput)), [
@@ -389,19 +389,19 @@ export class GenDemos {
     }
 
     genStatusMsg(_: Builder, msg: Expr): Instr {
-        return _.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("SetStatusBarMessage", 1))), _.eCall(_.n("logLn"), msg), _.eLit(4242))
+        return _.eCall(_._(_.eProp(_._("vsc", "Window")), this.fn("SetStatusBarMessage", 1)), _.eCall(_.n("logLn"), msg), _.eLit(4242))
     }
 
     genDemoOfPropsMenu(_: Builder, ns: string): Instr[] {
         const struct = this.gen.allStructs[ns + "Bag"]
 
         return [
-            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n(ns))), _.n("AllProperties"))),
+            _.eCall(_.eCall(_._(_.eProp(_._("vsc", ns)), "AllProperties")),
                 _.eFunc([{ Name: "props", Type: { Name: struct.Name } }], null,
                     _.iVar("items", { ValsOf: TypeRefPrim.String }),
                     _.iSet(_.n("items"), _.eCollNew(_.eLit(struct.Fields.length), TypeRefPrim.String, true)),
                     _.iBlock(..._.EACH(struct.Fields, (f, i): Instr[] => [
-                        _.iSet(_.oIdx(_.n("items"), _.eLit(i)), _.eLit(f.Name + "\t".repeat(f.Name.length < 8 ? 3 : f.Name.length >= 16 ? 1 : 2) + "{0}", _.oDot(_.n("props"), _.n(f.Name)))),
+                        _.iSet(_.oIdx(_.n("items"), _.eLit(i)), _.eLit(f.Name + "\t".repeat(f.Name.length < 8 ? 3 : f.Name.length >= 16 ? 1 : 2) + "{0}", _._("props", f.Name))),
                     ]).concat(
                         ...this.genMenu(_, _.eOp("+", _.eCall(_.n("logLn"), _.eLit(ns + " has {0} properties", _.eLen(_.n("items"), true))), _.eLit(":")))
                     )),
@@ -412,7 +412,7 @@ export class GenDemos {
 
     genDemoOfStrListMenu(_: Builder, ns: string, fn: string, desc: string, args: Expr[], onPick?: Expr): Instr[] {
         return [
-            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n(ns))), _.n(fn)),
+            _.eCall(_.eCall(_._(_.eProp(_._("vsc", ns)), fn),
                 ...args
             ), _.eFunc([{ Name: "items", Type: { ValsOf: TypeRefPrim.String } }], null,
                 ...this.genMenu(_, _.eLit("Retrieved {0} " + desc, _.eLen(_.n("items"), true)), onPick),
@@ -424,9 +424,9 @@ export class GenDemos {
         return [
             _.iVar("opts", { Name: "QuickPickOptions" }),
             _.iSet(_.n("opts"), _.eNew({ Name: "QuickPickOptions" })),
-            _.iSet(_.oDot(_.n("opts"), _.n(this.fld("IgnoreFocusOut"))), _.eLit(true)),
-            _.iSet(_.oDot(_.n("opts"), _.n(this.fld("PlaceHolder"))), msg),
-            _.eCall(_.eCall(_.oDot(_.eProp(_.oDot(_.n("vsc"), _.n("Window"))), _.n(this.fn("ShowQuickPick", 2))),
+            _.iSet(_._("opts", this.fld("IgnoreFocusOut")), _.eLit(true)),
+            _.iSet(_._("opts", this.fld("PlaceHolder")), msg),
+            _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), this.fn("ShowQuickPick", 2)),
                 _.n("items"), _.oAddr(_.n("opts")), _.eZilch()
             ), onPick ? onPick : _.eFunc([{ Name: "menuitem", Type: { Maybe: TypeRefPrim.String } }], null,
                 _.iIf(_.oIs(_.n("menuitem")), [_.eCall(_.n("logLn"), _.oDeref(_.n("menuitem")))]),
