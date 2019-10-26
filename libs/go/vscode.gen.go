@@ -1443,7 +1443,7 @@ type WorkspaceBag struct {
 
 // StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 type StatusBarItemBag struct {
-	__holder__ *StatusBarItem `json:"-"`
+	__holder__ *Disposable
 
 	// The alignment of this item.
 	Alignment func() StatusBarAlignment `json:"-"`
@@ -1473,7 +1473,7 @@ type StatusBarItemBag struct {
 
 // OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 type OutputChannelBag struct {
-	__holder__ *OutputChannel `json:"-"`
+	__holder__ *Disposable
 
 	// The human-readable name of this output channel.
 	Name func() string `json:"-"`
@@ -1481,7 +1481,7 @@ type OutputChannelBag struct {
 
 // TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 type TextEditorDecorationTypeBag struct {
-	__holder__ *TextEditorDecorationType `json:"-"`
+	__holder__ *Disposable
 
 	// Internal representation of the handle.
 	Key func() string `json:"-"`
@@ -1489,7 +1489,7 @@ type TextEditorDecorationTypeBag struct {
 
 // InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 type InputBoxBag struct {
-	__holder__ *InputBox `json:"-"`
+	__holder__ *Disposable
 
 	// Current input value.
 	Value string `json:"value,omitempty"`
@@ -1533,7 +1533,7 @@ type InputBoxBag struct {
 
 // QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 type QuickPickBag struct {
-	__holder__ *QuickPick `json:"-"`
+	__holder__ *Disposable
 
 	// Current value of the filter text.
 	Value string `json:"value,omitempty"`

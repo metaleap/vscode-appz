@@ -1491,7 +1491,7 @@
             </summary>
         </member>
         <member name="F:VscAppz.StatusBarItem.CfgBag">
-            <summary>CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time a `StatusBarItem` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) `StatusBarItem` event fires, but can also be manually refreshed via its `PullFromPeer` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `PushToPeer` method.</summary>
+            <summary>CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
         </member>
         <member name="M:VscAppz.StatusBarItem.Show">
             <summary>
@@ -1546,7 +1546,7 @@
             </summary>
         </member>
         <member name="F:VscAppz.OutputChannel.CfgBag">
-            <summary>CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time a `OutputChannel` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) `OutputChannel` event fires, but can also be manually refreshed via its `PullFromPeer` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `PushToPeer` method.</summary>
+            <summary>CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.</summary>
         </member>
         <member name="M:VscAppz.OutputChannel.Append(System.String)">
             <summary>
@@ -1793,7 +1793,7 @@
             </summary>
         </member>
         <member name="F:VscAppz.TextEditorDecorationType.CfgBag">
-            <summary>CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time a `TextEditorDecorationType` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) `TextEditorDecorationType` event fires, but can also be manually refreshed via its `PullFromPeer` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `PushToPeer` method.</summary>
+            <summary>CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.</summary>
         </member>
         <member name="M:VscAppz.TextEditorDecorationType.Dispose">
             <summary>
@@ -1821,7 +1821,7 @@
             </summary>
         </member>
         <member name="F:VscAppz.InputBox.CfgBag">
-            <summary>CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a `InputBox` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) `InputBox` event fires, but can also be manually refreshed via its `PullFromPeer` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `PushToPeer` method.</summary>
+            <summary>CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
         </member>
         <member name="M:VscAppz.InputBox.OnDidChangeValue(System.Action{System.String,VscAppz.InputBoxBag})">
             <summary>
@@ -1931,7 +1931,7 @@
             </summary>
         </member>
         <member name="F:VscAppz.QuickPick.CfgBag">
-            <summary>CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a `QuickPick` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) `QuickPick` event fires, but can also be manually refreshed via its `PullFromPeer` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `PushToPeer` method.</summary>
+            <summary>CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
         </member>
         <member name="M:VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String,VscAppz.QuickPickBag})">
             <summary>
@@ -2148,7 +2148,7 @@
             </summary>
         </member>
         <member name="T:VscAppz.StatusBarItemBag">
-            <summary>StatusBarItemBag is a snapshot of `StatusBarItem` state at the counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
+            <summary>StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
         </member>
         <member name="F:VscAppz.StatusBarItemBag.Alignment">
             <summary>The alignment of this item.</summary>
@@ -2182,19 +2182,19 @@
             </summary>
         </member>
         <member name="T:VscAppz.OutputChannelBag">
-            <summary>OutputChannelBag is a snapshot of `OutputChannel` state at the counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
+            <summary>OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
         </member>
         <member name="F:VscAppz.OutputChannelBag.Name">
             <summary>The human-readable name of this output channel.</summary>
         </member>
         <member name="T:VscAppz.TextEditorDecorationTypeBag">
-            <summary>TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
+            <summary>TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
         </member>
         <member name="F:VscAppz.TextEditorDecorationTypeBag.Key">
             <summary>Internal representation of the handle.</summary>
         </member>
         <member name="T:VscAppz.InputBoxBag">
-            <summary>InputBoxBag is a snapshot of `InputBox` state at the counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
+            <summary>InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
         </member>
         <member name="F:VscAppz.InputBoxBag.Value">
             <summary>Current input value.</summary>
@@ -2240,7 +2240,7 @@
             <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
         </member>
         <member name="T:VscAppz.QuickPickBag">
-            <summary>QuickPickBag is a snapshot of `QuickPick` state at the counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
+            <summary>QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
         </member>
         <member name="F:VscAppz.QuickPickBag.Value">
             <summary>Current value of the filter text.</summary>

@@ -82,7 +82,7 @@ export class Gen extends gen_syn.Gen {
                 this.each(it.Fields.filter(_ => (!_.FuncFieldRel) || _.Type !== gen_syn.TypeRefPrim.String),
                     "\n", f => {
                         this.emitDocs(f).ln(() =>
-                            this.s(f.Name, " ").emitTypeRef(f.Type).when(f.Json, () =>
+                            this.s(f.Name, " ").emitTypeRef(f.Type).when(f.Json && !(f.Name.startsWith("__") && f.Name.endsWith("__")), () =>
                                 this.s(" `json:\"")
                                     .when(f.Json.Excluded,
                                         () => this.s("-"),

@@ -512,6 +512,8 @@ console.log(importedApi.mul(42, 1));
 
 ```go
 type InputBox struct {
+
+	// CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 	CfgBag *InputBoxBag
 }
 ```
@@ -642,6 +644,7 @@ counterparty and its `InputBoxBag` result obtained.
 
 ```go
 type InputBoxBag struct {
+
 	// Current input value.
 	Value string `json:"value,omitempty"`
 
@@ -683,7 +686,7 @@ type InputBoxBag struct {
 }
 ```
 
-InputBoxBag is a snapshot of `InputBox` state at the counterparty. It is
+InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is
 obtained whenever `InputBox` creations and method calls (incl. the dedicated
 `Get`) resolve or its event subscribers are invoked, and therefore (to help
 always retain a factual view of the real full-picture) should not be constructed
@@ -871,6 +874,8 @@ and the editor then silently adjusts the options to select files.
 
 ```go
 type OutputChannel struct {
+
+	// CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
 	CfgBag *OutputChannelBag
 }
 ```
@@ -960,13 +965,14 @@ counterparty and its `OutputChannelBag` result obtained.
 
 ```go
 type OutputChannelBag struct {
+
 	// The human-readable name of this output channel.
 	Name func() string `json:"-"`
 }
 ```
 
-OutputChannelBag is a snapshot of `OutputChannel` state at the counterparty. It
-is obtained whenever `OutputChannel` creations and method calls (incl. the
+OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty.
+It is obtained whenever `OutputChannel` creations and method calls (incl. the
 dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to
 help always retain a factual view of the real full-picture) should not be
 constructed manually. All read-only properties are exposed as function-valued
@@ -1022,6 +1028,8 @@ or [InputBox](#InputBox).
 
 ```go
 type QuickPick struct {
+
+	// CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 	CfgBag *QuickPickBag
 }
 ```
@@ -1181,6 +1189,7 @@ counterparty and its `QuickPickBag` result obtained.
 
 ```go
 type QuickPickBag struct {
+
 	// Current value of the filter text.
 	Value string `json:"value,omitempty"`
 
@@ -1231,7 +1240,7 @@ type QuickPickBag struct {
 }
 ```
 
-QuickPickBag is a snapshot of `QuickPick` state at the counterparty. It is
+QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is
 obtained whenever `QuickPick` creations and method calls (incl. the dedicated
 `Get`) resolve or its event subscribers are invoked, and therefore (to help
 always retain a factual view of the real full-picture) should not be constructed
@@ -1341,6 +1350,8 @@ const (
 
 ```go
 type StatusBarItem struct {
+
+	// CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 	CfgBag *StatusBarItemBag
 }
 ```
@@ -1410,6 +1421,7 @@ counterparty and its `StatusBarItemBag` result obtained.
 
 ```go
 type StatusBarItemBag struct {
+
 	// The alignment of this item.
 	Alignment func() StatusBarAlignment `json:"-"`
 
@@ -1437,8 +1449,8 @@ type StatusBarItemBag struct {
 }
 ```
 
-StatusBarItemBag is a snapshot of `StatusBarItem` state at the counterparty. It
-is obtained whenever `StatusBarItem` creations and method calls (incl. the
+StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty.
+It is obtained whenever `StatusBarItem` creations and method calls (incl. the
 dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to
 help always retain a factual view of the real full-picture) should not be
 constructed manually. All read-only properties are exposed as function-valued
@@ -1449,6 +1461,8 @@ counterparty via the `Set` method.
 
 ```go
 type TextEditorDecorationType struct {
+
+	// CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
 	CfgBag *TextEditorDecorationTypeBag
 }
 ```
@@ -1484,17 +1498,18 @@ counterparty and its `TextEditorDecorationTypeBag` result obtained.
 
 ```go
 type TextEditorDecorationTypeBag struct {
+
 	// Internal representation of the handle.
 	Key func() string `json:"-"`
 }
 ```
 
 TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at
-the counterparty. It is obtained whenever `TextEditorDecorationType` creations
-and method calls (incl. the dedicated `Get`) resolve or its event subscribers
-are invoked, and therefore (to help always retain a factual view of the real
-full-picture) should not be constructed manually. All read-only properties are
-exposed as function-valued fields.
+the VSC counterparty. It is obtained whenever `TextEditorDecorationType`
+creations and method calls (incl. the dedicated `Get`) resolve or its event
+subscribers are invoked, and therefore (to help always retain a factual view of
+the real full-picture) should not be constructed manually. All read-only
+properties are exposed as function-valued fields.
 
 #### type ThemableDecorationAttachmentRenderOptions
 

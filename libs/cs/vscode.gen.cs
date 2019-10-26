@@ -1920,7 +1920,7 @@ namespace VscAppz {
 	/// <summary>StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
 	public partial class StatusBarItemBag {
 		[JsonIgnore]
-		internal StatusBarItem __holder__;
+		internal Disposable __holder__;
 
 		/// <summary>The alignment of this item.</summary>
 		[JsonIgnore]
@@ -1963,7 +1963,7 @@ namespace VscAppz {
 	/// <summary>OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
 	public partial class OutputChannelBag {
 		[JsonIgnore]
-		internal OutputChannel __holder__;
+		internal Disposable __holder__;
 
 		/// <summary>The human-readable name of this output channel.</summary>
 		[JsonIgnore]
@@ -1973,7 +1973,7 @@ namespace VscAppz {
 	/// <summary>TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
 	public partial class TextEditorDecorationTypeBag {
 		[JsonIgnore]
-		internal TextEditorDecorationType __holder__;
+		internal Disposable __holder__;
 
 		/// <summary>Internal representation of the handle.</summary>
 		[JsonIgnore]
@@ -1983,7 +1983,7 @@ namespace VscAppz {
 	/// <summary>InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
 	public partial class InputBoxBag {
 		[JsonIgnore]
-		internal InputBox __holder__;
+		internal Disposable __holder__;
 
 		/// <summary>Current input value.</summary>
 		[JsonProperty("value")]
@@ -2043,7 +2043,7 @@ namespace VscAppz {
 	/// <summary>QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
 	public partial class QuickPickBag {
 		[JsonIgnore]
-		internal QuickPick __holder__;
+		internal Disposable __holder__;
 
 		/// <summary>Current value of the filter text.</summary>
 		[JsonProperty("value")]

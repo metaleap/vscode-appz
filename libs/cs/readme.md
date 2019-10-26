@@ -330,7 +330,7 @@ Allows belated cancellation of ongoing / already-initiated interactions.
 
 ##### Summary
 
-Cancel.In returns a new \`Cancel\` with its \`Now\` already scheduled to be called in \`fromNow\` duration.
+Cancel.In returns a new `Cancel` with its `Now` already scheduled to be called in `fromNow` duration.
 
 ##### Parameters
 
@@ -525,7 +525,7 @@ For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.
 ##### Summary
 
 Should the decoration be rendered also on the whitespace after the line text.
-Defaults to \`false\`.
+Defaults to `false`.
 
 <a name='F-VscAppz-DecorationRenderOptions-LetterSpacing'></a>
 ### LetterSpacing `constants`
@@ -599,7 +599,7 @@ The position in the overview ruler where the decoration should be rendered.
 ##### Summary
 
 Customize the growing behavior of the decoration when edits occur at the edges of the decoration's range.
-Defaults to \`DecorationRangeBehavior.OpenOpen\`.
+Defaults to `DecorationRangeBehavior.OpenOpen`.
 
 <a name='F-VscAppz-DecorationRenderOptions-TextDecoration'></a>
 ### TextDecoration `constants`
@@ -657,7 +657,7 @@ VscAppz
 
 ##### Summary
 
-EnvBag gathers various properties of \`IEnv\`, obtainable via its \`AllProperties\` method.
+EnvBag gathers various properties of `IEnv`, obtainable via its `AllProperties` method.
 
 <a name='F-VscAppz-EnvBag-AppName'></a>
 ### AppName `constants`
@@ -678,7 +678,7 @@ The application root folder from which the editor is running.
 
 ##### Summary
 
-Represents the preferred user-language, like \`de-CH\`, \`fr\`, or \`en-US\`.
+Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
 <a name='F-VscAppz-EnvBag-MachineId'></a>
 ### MachineId `constants`
@@ -692,12 +692,12 @@ A unique identifier for the computer.
 
 ##### Summary
 
-The name of a remote. Defined by extensions, popular samples are \`wsl\` for the Windows
-Subsystem for Linux or \`ssh-remote\` for remotes using a secure shell.
+The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
+Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
 
-*Note* that the value is \`undefined\` when there is no remote extension host but that the
+*Note* that the value is `undefined` when there is no remote extension host but that the
 value is defined in all extension hosts (local and remote) in case a remote extension host
-exists. Use [\`Extension#extensionKind\`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
+exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 a specific extension runs remote or not.
 
 <a name='F-VscAppz-EnvBag-SessionId'></a>
@@ -714,7 +714,7 @@ Changes each time the editor is started.
 ##### Summary
 
 The detected default shell for the extension host, this is overridden by the
-\`terminal.integrated.shell\` setting for the extension host's platform.
+`terminal.integrated.shell` setting for the extension host's platform.
 
 <a name='F-VscAppz-EnvBag-UriScheme'></a>
 ### UriScheme `constants`
@@ -741,7 +741,7 @@ The clipboard provides read and write access to the system's clipboard.
 
 Read the current clipboard contents as text.
 
-\`return\` ── A thenable that resolves to a string.
+`return` ── A thenable that resolves to a string.
 
 ##### Parameters
 
@@ -754,9 +754,9 @@ This method has no parameters.
 
 Writes text into the clipboard.
 
-\`value\` ── 
+`value` ── 
 
-\`return\` ── A thenable that resolves when writing happened.
+`return` ── A thenable that resolves when writing happened.
 
 ##### Parameters
 
@@ -780,9 +780,9 @@ Commands can be added to the editor using the [registerCommand](https://code.vis
 and [registerTextEditorCommand](https://code.visualstudio.com/api/references/vscode-api#commands.registerTextEditorCommand) functions. Commands
 can be executed [manually](https://code.visualstudio.com/api/references/vscode-api#commands.executeCommand) or from a UI gesture. Those are:
 
-* palette - Use the \`commands\`-section in \`package.json\` to make a command show in
+* palette - Use the `commands`-section in `package.json` to make a command show in
 the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette).
-* keybinding - Use the \`keybindings\`-section in \`package.json\` to enable
+* keybinding - Use the `keybindings`-section in `package.json` to enable
 [keybindings](https://code.visualstudio.com/docs/getstarted/keybindings#_customizing-shortcuts)
 for your extension.
 
@@ -790,19 +790,19 @@ Commands from other extensions and from the editor itself are accessible to an e
 when invoking an editor command not all argument types are supported.
 
 This is a sample that registers a command handler and adds an entry for that command to the palette. First
-register a command handler with the identifier \`extension.sayHello\`.
+register a command handler with the identifier `extension.sayHello`.
 
-\`\`\`javascript
+```javascript
 
 commands.registerCommand('extension.sayHello', () => {
  	window.showInformationMessage('Hello World!');
 });
 
-\`\`\`
+```
 
-Second, bind the command identifier to a title under which it will show in the palette (\`package.json\`).
+Second, bind the command identifier to a title under which it will show in the palette (`package.json`).
 
-\`\`\`json
+```json
 
 {
  	"contributes": {
@@ -813,7 +813,7 @@ Second, bind the command identifier to a title under which it will show in the p
  	}
 }
 
-\`\`\`
+```
 
 <a name='M-VscAppz-ICommands-ExecuteCommand-System-String,System-Object[]-'></a>
 ### ExecuteCommand(command,rest) `method`
@@ -823,16 +823,16 @@ Second, bind the command identifier to a title under which it will show in the p
 Executes the command denoted by the given command identifier.
 
 * *Note 1:* When executing an editor command not all types are allowed to
-be passed as arguments. Allowed are the primitive types \`string\`, \`boolean\`,
-\`number\`, \`undefined\`, and \`null\`, as well as [\`Position\`](https://code.visualstudio.com/api/references/vscode-api#Position), [\`Range\`](#Range), [\`Uri\`](#Uri) and [\`Location\`](#Location).
+be passed as arguments. Allowed are the primitive types `string`, `boolean`,
+`number`, `undefined`, and `null`, as well as [`Position`](https://code.visualstudio.com/api/references/vscode-api#Position), [`Range`](#Range), [`Uri`](#Uri) and [`Location`](#Location).
 * *Note 2:* There are no restrictions when executing commands that have been contributed
 by extensions.
 
-\`command\` ── Identifier of the command to execute.
+`command` ── Identifier of the command to execute.
 
-\`rest\` ── Parameters passed to the command function.
+`rest` ── Parameters passed to the command function.
 
-\`return\` ── A thenable that resolves to the returned value of the given command. \`undefined\` when
+`return` ── A thenable that resolves to the returned value of the given command. `undefined` when
 the command handler function doesn't return anything.
 
 ##### Parameters
@@ -850,15 +850,15 @@ the command handler function doesn't return anything.
 Retrieve the list of all available commands. Commands starting an underscore are
 treated as internal commands.
 
-\`filterInternal\` ── Set \`true\` to not see internal commands (starting with an underscore)
+`filterInternal` ── Set `true` to not see internal commands (starting with an underscore)
 
-\`return\` ── Thenable that resolves to a list of command ids.
+`return` ── Thenable that resolves to a list of command ids.
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| filterInternal | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Set \`true\` to not see internal commands (starting with an underscore) |
+| filterInternal | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Set `true` to not see internal commands (starting with an underscore) |
 
 <a name='M-VscAppz-ICommands-RegisterCommand-System-String,System-Func{System-Object[],System-Object}-'></a>
 ### RegisterCommand(command,callback) `method`
@@ -871,11 +871,11 @@ a menu item, an action, or directly.
 Registering a command with an existing command identifier twice
 will cause an error.
 
-\`command\` ── A unique identifier for the command.
+`command` ── A unique identifier for the command.
 
-\`callback\` ── A command handler function.
+`callback` ── A command handler function.
 
-\`return\` ── Disposable which unregisters this command on disposal.
+`return` ── Disposable which unregisters this command on disposal.
 
 ##### Parameters
 
@@ -900,9 +900,9 @@ Namespace describing the environment the editor runs in.
 
 ##### Summary
 
-Provides single-call access to numerous individual \`IEnv\` properties at once.
+Provides single-call access to numerous individual `IEnv` properties at once.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`EnvBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
 
 ##### Parameters
 
@@ -915,7 +915,7 @@ This method has no parameters.
 
 The application name of the editor, like 'VS Code'.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -928,7 +928,7 @@ This method has no parameters.
 
 The application root folder from which the editor is running.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -950,9 +950,9 @@ This method has no parameters.
 
 ##### Summary
 
-Represents the preferred user-language, like \`de-CH\`, \`fr\`, or \`en-US\`.
+Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -965,7 +965,7 @@ This method has no parameters.
 
 A unique identifier for the computer.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -979,12 +979,12 @@ This method has no parameters.
 Opens an *external* item, e.g. a http(s) or mailto-link, using the
 default application.
 
-*Note* that [\`showTextDocument\`](https://code.visualstudio.com/api/references/vscode-api#window.showTextDocument) is the right
+*Note* that [`showTextDocument`](https://code.visualstudio.com/api/references/vscode-api#window.showTextDocument) is the right
 way to open a text document inside the editor, not this function.
 
-\`target\` ── The uri that should be opened.
+`target` ── The uri that should be opened.
 
-\`return\` ── A promise indicating if open was successful.
+`return` ── A promise indicating if open was successful.
 
 ##### Parameters
 
@@ -997,15 +997,15 @@ way to open a text document inside the editor, not this function.
 
 ##### Summary
 
-The name of a remote. Defined by extensions, popular samples are \`wsl\` for the Windows
-Subsystem for Linux or \`ssh-remote\` for remotes using a secure shell.
+The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
+Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
 
-*Note* that the value is \`undefined\` when there is no remote extension host but that the
+*Note* that the value is `undefined` when there is no remote extension host but that the
 value is defined in all extension hosts (local and remote) in case a remote extension host
-exists. Use [\`Extension#extensionKind\`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
+exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 a specific extension runs remote or not.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -1019,7 +1019,7 @@ This method has no parameters.
 A unique identifier for the current session.
 Changes each time the editor is started.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -1031,9 +1031,9 @@ This method has no parameters.
 ##### Summary
 
 The detected default shell for the extension host, this is overridden by the
-\`terminal.integrated.shell\` setting for the extension host's platform.
+`terminal.integrated.shell` setting for the extension host's platform.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -1046,7 +1046,7 @@ This method has no parameters.
 
 The custom uri scheme the editor registers to in the operating system.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -1065,10 +1065,10 @@ Namespace for dealing with installed extensions. Extensions are represented
 by an [extension](https://code.visualstudio.com/api/references/vscode-api#Extension)-interface which enables reflection on them.
 
 Extension writers can provide APIs to other extensions by returning their API public
-surface from the \`activate\`-call.
+surface from the `activate`-call.
 
 
-\`\`\`javascript
+```javascript
 
 export function activate(context: vscode.ExtensionContext) {
  	let api = {
@@ -1083,33 +1083,33 @@ export function activate(context: vscode.ExtensionContext) {
  	return api;
 }
 
-\`\`\`
+```
 
-When depending on the API of another extension add an \`extensionDependency\`-entry
-to \`package.json\`, and use the [getExtension](https://code.visualstudio.com/api/references/vscode-api#extensions.getExtension)-function
+When depending on the API of another extension add an `extensionDependency`-entry
+to `package.json`, and use the [getExtension](https://code.visualstudio.com/api/references/vscode-api#extensions.getExtension)-function
 and the [exports](https://code.visualstudio.com/api/references/vscode-api#Extension.exports)-property, like below:
 
 
-\`\`\`javascript
+```javascript
 
 let mathExt = extensions.getExtension('genius.math');
 let importedApi = mathExt.exports;
 
 console.log(importedApi.mul(42, 1));
 
-\`\`\`
+```
 
 <a name='M-VscAppz-IExtensions-OnDidChange-System-Action-'></a>
 ### OnDidChange(listener) `method`
 
 ##### Summary
 
-An event which fires when \`extensions.all\` changes. This can happen when extensions are
+An event which fires when `extensions.all` changes. This can happen when extensions are
 installed, uninstalled, enabled or disabled.
 
-\`listener\` ── will be invoked whenever this event fires; mandatory, not optional.
+`listener` ── will be invoked whenever this event fires; mandatory, not optional.
 
-\`return\` ── A \`Disposable\` that will unsubscribe \`listener\` from the \`OnDidChange\` event on \`Dispose\`.
+`return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
 
 ##### Parameters
 
@@ -1139,7 +1139,7 @@ that can be called with a [TextDocument](https://code.visualstudio.com/api/refer
 mouse, positioning the hover, keeping the hover stable etc. is taken care of by the editor.
 
 
-\`\`\`javascript
+```javascript
 
 languages.registerHoverProvider('javascript', {
  	provideHover(document, position, token) {
@@ -1147,14 +1147,14 @@ languages.registerHoverProvider('javascript', {
  	}
 });
 
-\`\`\`
+```
 
 
-Registration is done using a [document selector](https://code.visualstudio.com/api/references/vscode-api#DocumentSelector) which is either a language id, like \`javascript\` or
-a more complex [filter](https://code.visualstudio.com/api/references/vscode-api#DocumentFilter) like \`{ language: 'typescript', scheme: 'file' }\`. Matching a document against such
+Registration is done using a [document selector](https://code.visualstudio.com/api/references/vscode-api#DocumentSelector) which is either a language id, like `javascript` or
+a more complex [filter](https://code.visualstudio.com/api/references/vscode-api#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
 a selector will result in a [score](https://code.visualstudio.com/api/references/vscode-api#languages.match) that is used to determine if and how a provider shall be used. When
 scores are equal the provider that came last wins. For features that allow full arity, like [hover](https://code.visualstudio.com/api/references/vscode-api#languages.registerHoverProvider),
-the score is only checked to be \`>0\`, for other features, like [IntelliSense](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider) the
+the score is only checked to be `>0`, for other features, like [IntelliSense](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider) the
 score is used for determining the order in which providers are asked to participate.
 
 <a name='M-VscAppz-ILanguages-GetLanguages'></a>
@@ -1164,7 +1164,7 @@ score is used for determining the order in which providers are asked to particip
 
 Return the identifiers of all known languages.
 
-\`return\` ── Promise resolving to an array of identifier strings.
+`return` ── Promise resolving to an array of identifier strings.
 
 ##### Parameters
 
@@ -1178,9 +1178,9 @@ This method has no parameters.
 An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
 newly added and removed diagnostics.
 
-\`listener\` ── will be invoked whenever this event fires; mandatory, not optional.
+`listener` ── will be invoked whenever this event fires; mandatory, not optional.
 
-\`return\` ── A \`Disposable\` that will unsubscribe \`listener\` from the \`OnDidChangeDiagnostics\` event on \`Dispose\`.
+`return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
 
 ##### Parameters
 
@@ -1212,9 +1212,9 @@ Commands can be added to the editor using the [registerCommand](https://code.vis
 and [registerTextEditorCommand](https://code.visualstudio.com/api/references/vscode-api#commands.registerTextEditorCommand) functions. Commands
 can be executed [manually](https://code.visualstudio.com/api/references/vscode-api#commands.executeCommand) or from a UI gesture. Those are:
 
-* palette - Use the \`commands\`-section in \`package.json\` to make a command show in
+* palette - Use the `commands`-section in `package.json` to make a command show in
 the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette).
-* keybinding - Use the \`keybindings\`-section in \`package.json\` to enable
+* keybinding - Use the `keybindings`-section in `package.json` to enable
 [keybindings](https://code.visualstudio.com/docs/getstarted/keybindings#_customizing-shortcuts)
 for your extension.
 
@@ -1222,19 +1222,19 @@ Commands from other extensions and from the editor itself are accessible to an e
 when invoking an editor command not all argument types are supported.
 
 This is a sample that registers a command handler and adds an entry for that command to the palette. First
-register a command handler with the identifier \`extension.sayHello\`.
+register a command handler with the identifier `extension.sayHello`.
 
-\`\`\`javascript
+```javascript
 
 commands.registerCommand('extension.sayHello', () => {
  	window.showInformationMessage('Hello World!');
 });
 
-\`\`\`
+```
 
-Second, bind the command identifier to a title under which it will show in the palette (\`package.json\`).
+Second, bind the command identifier to a title under which it will show in the palette (`package.json`).
 
-\`\`\`json
+```json
 
 {
  	"contributes": {
@@ -1245,7 +1245,7 @@ Second, bind the command identifier to a title under which it will show in the p
  	}
 }
 
-\`\`\`
+```
 
 <a name='P-VscAppz-IVscode-Env'></a>
 ### Env `property`
@@ -1263,10 +1263,10 @@ Namespace for dealing with installed extensions. Extensions are represented
 by an [extension](https://code.visualstudio.com/api/references/vscode-api#Extension)-interface which enables reflection on them.
 
 Extension writers can provide APIs to other extensions by returning their API public
-surface from the \`activate\`-call.
+surface from the `activate`-call.
 
 
-\`\`\`javascript
+```javascript
 
 export function activate(context: vscode.ExtensionContext) {
  	let api = {
@@ -1281,21 +1281,21 @@ export function activate(context: vscode.ExtensionContext) {
  	return api;
 }
 
-\`\`\`
+```
 
-When depending on the API of another extension add an \`extensionDependency\`-entry
-to \`package.json\`, and use the [getExtension](https://code.visualstudio.com/api/references/vscode-api#extensions.getExtension)-function
+When depending on the API of another extension add an `extensionDependency`-entry
+to `package.json`, and use the [getExtension](https://code.visualstudio.com/api/references/vscode-api#extensions.getExtension)-function
 and the [exports](https://code.visualstudio.com/api/references/vscode-api#Extension.exports)-property, like below:
 
 
-\`\`\`javascript
+```javascript
 
 let mathExt = extensions.getExtension('genius.math');
 let importedApi = mathExt.exports;
 
 console.log(importedApi.mul(42, 1));
 
-\`\`\`
+```
 
 <a name='P-VscAppz-IVscode-Languages'></a>
 ### Languages `property`
@@ -1315,7 +1315,7 @@ that can be called with a [TextDocument](https://code.visualstudio.com/api/refer
 mouse, positioning the hover, keeping the hover stable etc. is taken care of by the editor.
 
 
-\`\`\`javascript
+```javascript
 
 languages.registerHoverProvider('javascript', {
  	provideHover(document, position, token) {
@@ -1323,14 +1323,14 @@ languages.registerHoverProvider('javascript', {
  	}
 });
 
-\`\`\`
+```
 
 
-Registration is done using a [document selector](https://code.visualstudio.com/api/references/vscode-api#DocumentSelector) which is either a language id, like \`javascript\` or
-a more complex [filter](https://code.visualstudio.com/api/references/vscode-api#DocumentFilter) like \`{ language: 'typescript', scheme: 'file' }\`. Matching a document against such
+Registration is done using a [document selector](https://code.visualstudio.com/api/references/vscode-api#DocumentSelector) which is either a language id, like `javascript` or
+a more complex [filter](https://code.visualstudio.com/api/references/vscode-api#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
 a selector will result in a [score](https://code.visualstudio.com/api/references/vscode-api#languages.match) that is used to determine if and how a provider shall be used. When
 scores are equal the provider that came last wins. For features that allow full arity, like [hover](https://code.visualstudio.com/api/references/vscode-api#languages.registerHoverProvider),
-the score is only checked to be \`>0\`, for other features, like [IntelliSense](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider) the
+the score is only checked to be `>0`, for other features, like [IntelliSense](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider) the
 score is used for determining the order in which providers are asked to participate.
 
 <a name='P-VscAppz-IVscode-Window'></a>
@@ -1379,7 +1379,7 @@ Note that in many cases the more convenient [window.showInputBox](https://code.v
 is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
-\`return\` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
+`return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
 
 ##### Parameters
 
@@ -1392,9 +1392,9 @@ This method has no parameters.
 
 Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 
-\`name\` ── Human-readable string which will be used to represent the channel in the UI.
+`name` ── Human-readable string which will be used to represent the channel in the UI.
 
-\`return\` ── A thenable that resolves to the newly created \`OutputChannel\`.
+`return` ── A thenable that resolves to the newly created `OutputChannel`.
 
 ##### Parameters
 
@@ -1414,7 +1414,7 @@ Note that in many cases the more convenient [window.showQuickPick](https://code.
 is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
 when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
-\`return\` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
+`return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
 
 ##### Parameters
 
@@ -1427,11 +1427,11 @@ This method has no parameters.
 
 Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem).
 
-\`alignment\` ── The alignment of the item.
+`alignment` ── The alignment of the item.
 
-\`priority\` ── The priority of the item. Higher values mean the item should be shown more to the left.
+`priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 
-\`return\` ── A new status bar item.
+`return` ── A new status bar item.
 
 ##### Parameters
 
@@ -1447,9 +1447,9 @@ Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-
 
 Create a TextEditorDecorationType that can be used to add decorations to text editors.
 
-\`options\` ── Rendering options for the decoration type.
+`options` ── Rendering options for the decoration type.
 
-\`return\` ── A new decoration type instance.
+`return` ── A new decoration type instance.
 
 ##### Parameters
 
@@ -1465,9 +1465,9 @@ Create a TextEditorDecorationType that can be used to add decorations to text ed
 An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
 changes. The value of the event represents whether the window is focused.
 
-\`listener\` ── will be invoked whenever this event fires; mandatory, not optional.
+`listener` ── will be invoked whenever this event fires; mandatory, not optional.
 
-\`return\` ── A \`Disposable\` that will unsubscribe \`listener\` from the \`OnDidChangeWindowState\` event on \`Dispose\`.
+`return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
 
 ##### Parameters
 
@@ -1483,11 +1483,11 @@ changes. The value of the event represents whether the window is focused.
 Set a message to the status bar. This is a short hand for the more powerful
 status bar [items](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem).
 
-\`text\` ── The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
+`text` ── The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
 
-\`hideAfterTimeout\` ── Timeout in milliseconds after which the message will be disposed.
+`hideAfterTimeout` ── Timeout in milliseconds after which the message will be disposed.
 
-\`return\` ── A disposable which hides the status bar message.
+`return` ── A disposable which hides the status bar message.
 
 ##### Parameters
 
@@ -1507,9 +1507,9 @@ status bar [items](https://code.visualstudio.com/api/references/vscode-api#windo
 *Note* that status bar messages stack and that they must be disposed when no
 longer used.
 
-\`text\` ── The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
+`text` ── The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
 
-\`return\` ── A disposable which hides the status bar message.
+`return` ── A disposable which hides the status bar message.
 
 ##### Parameters
 
@@ -1524,11 +1524,11 @@ longer used.
 
 Show an error message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`return\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -1544,13 +1544,13 @@ Show an error message.
 
 Show an error message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`options\` ── Configures the behaviour of the message.
+`options` ── Configures the behaviour of the message.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`return\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -1567,11 +1567,11 @@ Show an error message.
 
 Show an error message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`return\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -1587,13 +1587,13 @@ Show an error message.
 
 Show an error message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`options\` ── Configures the behaviour of the message.
+`options` ── Configures the behaviour of the message.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`return\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -1611,11 +1611,11 @@ Show an error message.
 Show an information message to users. Optionally provide an array of items which will be presented as
 clickable buttons.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`return\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -1632,13 +1632,13 @@ clickable buttons.
 Show an information message to users. Optionally provide an array of items which will be presented as
 clickable buttons.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`options\` ── Configures the behaviour of the message.
+`options` ── Configures the behaviour of the message.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`return\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -1655,11 +1655,11 @@ clickable buttons.
 
 Show an information message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`return\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -1675,13 +1675,13 @@ Show an information message.
 
 Show an information message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`options\` ── Configures the behaviour of the message.
+`options` ── Configures the behaviour of the message.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`return\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -1698,15 +1698,15 @@ Show an information message.
 
 Opens an input box to ask the user for input.
 
-The returned value will be \`undefined\` if the input box was canceled (e.g. pressing ESC). Otherwise the
+The returned value will be `undefined` if the input box was canceled (e.g. pressing ESC). Otherwise the
 returned value will be the string typed by the user or an empty string if the user did not type
 anything but dismissed the input box with OK.
 
-\`options\` ── Configures the behavior of the input box.
+`options` ── Configures the behavior of the input box.
 
-\`token\` ── A token that can be used to signal cancellation.
+`token` ── A token that can be used to signal cancellation.
 
-\`return\` ── A promise that resolves to a string the user provided or to \`undefined\` in case of dismissal.
+`return` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
 
 ##### Parameters
 
@@ -1723,9 +1723,9 @@ anything but dismissed the input box with OK.
 Shows a file open dialog to the user which allows to select a file
 for opening-purposes.
 
-\`options\` ── Options that control the dialog.
+`options` ── Options that control the dialog.
 
-\`return\` ── A promise that resolves to the selected resources or \`undefined\`.
+`return` ── A promise that resolves to the selected resources or `undefined`.
 
 ##### Parameters
 
@@ -1740,13 +1740,13 @@ for opening-purposes.
 
 Shows a selection list allowing multiple selections.
 
-\`items\` ── An array of strings, or a promise that resolves to an array of strings.
+`items` ── An array of strings, or a promise that resolves to an array of strings.
 
-\`options\` ── Configures the behavior of the selection list.
+`options` ── Configures the behavior of the selection list.
 
-\`token\` ── A token that can be used to signal cancellation.
+`token` ── A token that can be used to signal cancellation.
 
-\`return\` ── A promise that resolves to the selected items or \`undefined\`.
+`return` ── A promise that resolves to the selected items or `undefined`.
 
 ##### Parameters
 
@@ -1763,13 +1763,13 @@ Shows a selection list allowing multiple selections.
 
 Shows a selection list.
 
-\`items\` ── An array of strings, or a promise that resolves to an array of strings.
+`items` ── An array of strings, or a promise that resolves to an array of strings.
 
-\`options\` ── Configures the behavior of the selection list.
+`options` ── Configures the behavior of the selection list.
 
-\`token\` ── A token that can be used to signal cancellation.
+`token` ── A token that can be used to signal cancellation.
 
-\`return\` ── A promise that resolves to the selection or \`undefined\`.
+`return` ── A promise that resolves to the selection or `undefined`.
 
 ##### Parameters
 
@@ -1786,13 +1786,13 @@ Shows a selection list.
 
 Shows a selection list allowing multiple selections.
 
-\`items\` ── An array of items, or a promise that resolves to an array of items.
+`items` ── An array of items, or a promise that resolves to an array of items.
 
-\`options\` ── Configures the behavior of the selection list.
+`options` ── Configures the behavior of the selection list.
 
-\`token\` ── A token that can be used to signal cancellation.
+`token` ── A token that can be used to signal cancellation.
 
-\`return\` ── A promise that resolves to the selected items or \`undefined\`.
+`return` ── A promise that resolves to the selected items or `undefined`.
 
 ##### Parameters
 
@@ -1809,13 +1809,13 @@ Shows a selection list allowing multiple selections.
 
 Shows a selection list.
 
-\`items\` ── An array of items, or a promise that resolves to an array of items.
+`items` ── An array of items, or a promise that resolves to an array of items.
 
-\`options\` ── Configures the behavior of the selection list.
+`options` ── Configures the behavior of the selection list.
 
-\`token\` ── A token that can be used to signal cancellation.
+`token` ── A token that can be used to signal cancellation.
 
-\`return\` ── A promise that resolves to the selected item or \`undefined\`.
+`return` ── A promise that resolves to the selected item or `undefined`.
 
 ##### Parameters
 
@@ -1833,9 +1833,9 @@ Shows a selection list.
 Shows a file save dialog to the user which allows to select a file
 for saving-purposes.
 
-\`options\` ── Options that control the dialog.
+`options` ── Options that control the dialog.
 
-\`return\` ── A promise that resolves to the selected resource or \`undefined\`.
+`return` ── A promise that resolves to the selected resource or `undefined`.
 
 ##### Parameters
 
@@ -1850,11 +1850,11 @@ for saving-purposes.
 
 Show a warning message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`return\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -1870,13 +1870,13 @@ Show a warning message.
 
 Show a warning message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`options\` ── Configures the behaviour of the message.
+`options` ── Configures the behaviour of the message.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`return\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -1893,11 +1893,11 @@ Show a warning message.
 
 Show a warning message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`return\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -1913,13 +1913,13 @@ Show a warning message.
 
 Show a warning message.
 
-\`message\` ── The message to show.
+`message` ── The message to show.
 
-\`options\` ── Configures the behaviour of the message.
+`options` ── Configures the behaviour of the message.
 
-\`items\` ── A set of items that will be rendered as actions in the message.
+`items` ── A set of items that will be rendered as actions in the message.
 
-\`return\` ── A thenable that resolves to the selected item or \`undefined\` when being dismissed.
+`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
 
 ##### Parameters
 
@@ -1935,11 +1935,11 @@ Show a warning message.
 ##### Summary
 
 Shows a selection list of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) to pick from.
-Returns \`undefined\` if no folder is open.
+Returns `undefined` if no folder is open.
 
-\`options\` ── Configures the behavior of the workspace folder list.
+`options` ── Configures the behavior of the workspace folder list.
 
-\`return\` ── A promise that resolves to the workspace folder or \`undefined\`.
+`return` ── A promise that resolves to the workspace folder or `undefined`.
 
 ##### Parameters
 
@@ -1954,7 +1954,7 @@ Returns \`undefined\` if no folder is open.
 
 Represents the current window's state.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`WindowState\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
 
 ##### Parameters
 
@@ -1982,9 +1982,9 @@ the editor-process so that they should be always used instead of nodejs-equivale
 
 ##### Summary
 
-Provides single-call access to numerous individual \`IWorkspace\` properties at once.
+Provides single-call access to numerous individual `IWorkspace` properties at once.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`WorkspaceBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
 
 ##### Parameters
 
@@ -2000,20 +2000,20 @@ Returns a path that is relative to the workspace folder or folders.
 When there are no [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) or when the path
 is not contained in them, the input is returned.
 
-\`pathOrUri\` ── A path or uri. When a uri is given its [fsPath](https://code.visualstudio.com/api/references/vscode-api#Uri.fsPath) is used.
+`pathOrUri` ── A path or uri. When a uri is given its [fsPath](https://code.visualstudio.com/api/references/vscode-api#Uri.fsPath) is used.
 
-\`includeWorkspaceFolder\` ── When \`true\` and when the given path is contained inside a
-workspace folder the name of the workspace is prepended. Defaults to \`true\` when there are
-multiple workspace folders and \`false\` otherwise.
+`includeWorkspaceFolder` ── When `true` and when the given path is contained inside a
+workspace folder the name of the workspace is prepended. Defaults to `true` when there are
+multiple workspace folders and `false` otherwise.
 
-\`return\` ── A path relative to the root or the input.
+`return` ── A path relative to the root or the input.
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | pathOrUri | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | A path or uri. When a uri is given its [fsPath](https://code.visualstudio.com/api/references/vscode-api#Uri.fsPath) is used. |
-| includeWorkspaceFolder | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | When \`true\` and when the given path is contained inside a workspace folder the name of the workspace is prepended. Defaults to \`true\` when there are multiple workspace folders and \`false\` otherwise. |
+| includeWorkspaceFolder | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | When `true` and when the given path is contained inside a workspace folder the name of the workspace is prepended. Defaults to `true` when there are multiple workspace folders and `false` otherwise. |
 
 <a name='M-VscAppz-IWorkspace-FindFiles-System-String,System-String,System-Nullable{System-Int32},VscAppz-Cancel-'></a>
 ### FindFiles(include,exclude,maxResults,token) `method`
@@ -2021,21 +2021,21 @@ multiple workspace folders and \`false\` otherwise.
 ##### Summary
 
 Find files across all [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) in the workspace.
-\`findFiles('**​/*.js', '**​/node_modules/**', 10)\`
+`findFiles('**​/*.js', '**​/node_modules/**', 10)`
 
-\`include\` ── A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that defines the files to search for. The glob pattern
+`include` ── A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that defines the files to search for. The glob pattern
 will be matched against the file paths of resulting matches relative to their workspace. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern)
 to restrict the search results to a [workspace folder](https://code.visualstudio.com/api/references/vscode-api#WorkspaceFolder).
 
-\`exclude\` ── A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that defines files and folders to exclude. The glob pattern
-will be matched against the file paths of resulting matches relative to their workspace. When \`undefined\` only default excludes will
-apply, when \`null\` no excludes will apply.
+`exclude` ── A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that defines files and folders to exclude. The glob pattern
+will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will
+apply, when `null` no excludes will apply.
 
-\`maxResults\` ── An upper-bound for the result.
+`maxResults` ── An upper-bound for the result.
 
-\`token\` ── A token that can be used to signal cancellation to the underlying search engine.
+`token` ── A token that can be used to signal cancellation to the underlying search engine.
 
-\`return\` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
+`return` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
 [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) are opened.
 
 ##### Parameters
@@ -2043,7 +2043,7 @@ apply, when \`null\` no excludes will apply.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | include | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that defines the files to search for. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern) to restrict the search results to a [workspace folder](https://code.visualstudio.com/api/references/vscode-api#WorkspaceFolder). |
-| exclude | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that defines files and folders to exclude. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. When \`undefined\` only default excludes will apply, when \`null\` no excludes will apply. |
+| exclude | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that defines files and folders to exclude. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will apply, when `null` no excludes will apply. |
 | maxResults | [System.Nullable{System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.Int32}') | An upper-bound for the result. |
 | token | [VscAppz.Cancel](#T-VscAppz-Cancel 'VscAppz.Cancel') | A token that can be used to signal cancellation to the underlying search engine. |
 
@@ -2053,12 +2053,12 @@ apply, when \`null\` no excludes will apply.
 ##### Summary
 
 Returns the [workspace folder](https://code.visualstudio.com/api/references/vscode-api#WorkspaceFolder) that contains a given uri.
-* returns \`undefined\` when the given uri doesn't match any workspace folder
+* returns `undefined` when the given uri doesn't match any workspace folder
 * returns the *input* when the given uri is a workspace folder itself
 
-\`uri\` ── An uri.
+`uri` ── An uri.
 
-\`return\` ── A workspace folder or \`undefined\`
+`return` ── A workspace folder or `undefined`
 
 ##### Parameters
 
@@ -2071,10 +2071,10 @@ Returns the [workspace folder](https://code.visualstudio.com/api/references/vsco
 
 ##### Summary
 
-The name of the workspace. \`undefined\` when no folder
+The name of the workspace. `undefined` when no folder
 has been opened.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -2087,9 +2087,9 @@ This method has no parameters.
 
 An event that is emitted when a workspace folder is added or removed.
 
-\`listener\` ── will be invoked whenever this event fires; mandatory, not optional.
+`listener` ── will be invoked whenever this event fires; mandatory, not optional.
 
-\`return\` ── A \`Disposable\` that will unsubscribe \`listener\` from the \`OnDidChangeWorkspaceFolders\` event on \`Dispose\`.
+`return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
 
 ##### Parameters
 
@@ -2104,9 +2104,9 @@ An event that is emitted when a workspace folder is added or removed.
 
 Save all dirty files.
 
-\`includeUntitled\` ── Also save files that have been created during this session.
+`includeUntitled` ── Also save files that have been created during this session.
 
-\`return\` ── A thenable that resolves when the files have been saved.
+`return` ── A thenable that resolves when the files have been saved.
 
 ##### Parameters
 
@@ -2121,37 +2121,37 @@ Save all dirty files.
 
 The location of the workspace file, for example:
 
-\`file:///Users/name/Development/myProject.code-workspace\`
+`file:///Users/name/Development/myProject.code-workspace`
 
 or
 
-\`untitled:1555503116870\`
+`untitled:1555503116870`
 
 for a workspace that is untitled and not yet saved.
 
 Depending on the workspace that is opened, the value will be:
-  * \`undefined\` when no workspace or  a single folder is opened
-  * the path of the workspace file as \`Uri\` otherwise. if the workspace
-is untitled, the returned URI will use the \`untitled:\` scheme
+  * `undefined` when no workspace or  a single folder is opened
+  * the path of the workspace file as `Uri` otherwise. if the workspace
+is untitled, the returned URI will use the `untitled:` scheme
 
-The location can e.g. be used with the \`vscode.openFolder\` command to
+The location can e.g. be used with the `vscode.openFolder` command to
 open the workspace again after it has been closed.
 
 **Example:**
 
-\`\`\`typescript
+```typescript
 
 vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
 
-\`\`\`
+```
 
 
-**Note:** it is not advised to use \`workspace.workspaceFile\` to write
-configuration data into the file. You can use \`workspace.getConfiguration().update()\`
+**Note:** it is not advised to use `workspace.workspaceFile` to write
+configuration data into the file. You can use `workspace.getConfiguration().update()`
 for that purpose which will work both when a single folder is opened as
 well as an untitled or saved workspace.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -2162,10 +2162,10 @@ This method has no parameters.
 
 ##### Summary
 
-List of workspace folders or \`undefined\` when no folder is open.
-*Note* that the first entry corresponds to the value of \`rootPath\`.
+List of workspace folders or `undefined` when no folder is open.
+*Note* that the first entry corresponds to the value of `rootPath`.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
 
 ##### Parameters
 
@@ -2191,7 +2191,7 @@ when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-a
 
 ##### Summary
 
-CfgBag represents this \`InputBox\`'s current state. All its members get auto-refreshed every time a \`InputBox\` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) \`InputBox\` event fires, but can also be manually refreshed via its \`PullFromPeer\` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its \`PushToPeer\` method.
+CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 
 <a name='M-VscAppz-InputBox-Dispose'></a>
 ### Dispose() `method`
@@ -2203,7 +2203,7 @@ visible, it is first hidden. After this call the input UI is no longer
 functional and no additional methods or properties on it should be
 accessed. Instead a new input UI should be created.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -2214,9 +2214,9 @@ This method has no parameters.
 
 ##### Summary
 
-Obtains this \`InputBox\`'s current property values for: \`value\`, \`placeholder\`, \`password\`, \`prompt\`, \`validationMessage\`, \`title\`, \`step\`, \`totalSteps\`, \`enabled\`, \`busy\`, \`ignoreFocusOut\`.
+Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`InputBoxBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
 
 ##### Parameters
 
@@ -2230,7 +2230,7 @@ This method has no parameters.
 Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`InputBoxBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
 
 ##### Parameters
 
@@ -2243,9 +2243,9 @@ This method has no parameters.
 
 An event signaling when the user indicated acceptance of the input value.
 
-\`handler\` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
 
-\`return\` ── A \`Disposable\` that will unsubscribe \`handler\` from the \`OnDidAccept\` event on \`Dispose\`.
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
 
 ##### Parameters
 
@@ -2260,9 +2260,9 @@ An event signaling when the user indicated acceptance of the input value.
 
 An event signaling when the value has changed.
 
-\`handler\` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
 
-\`return\` ── A \`Disposable\` that will unsubscribe \`handler\` from the \`OnDidChangeValue\` event on \`Dispose\`.
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
 
 ##### Parameters
 
@@ -2282,9 +2282,9 @@ the extension will be notified through [QuickInput.onDidHide](https://code.visua
 (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 the user pressing Esc, some other input UI opening, etc.)
 
-\`handler\` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
 
-\`return\` ── A \`Disposable\` that will unsubscribe \`handler\` from the \`OnDidHide\` event on \`Dispose\`.
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
 
 ##### Parameters
 
@@ -2297,17 +2297,17 @@ the user pressing Esc, some other input UI opening, etc.)
 
 ##### Summary
 
-Updates this \`InputBox\`'s current property values for: \`value\`, \`placeholder\`, \`password\`, \`prompt\`, \`validationMessage\`, \`title\`, \`step\`, \`totalSteps\`, \`enabled\`, \`busy\`, \`ignoreFocusOut\`.
+Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 
-\`allUpdates\` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty \`InputBoxBag\` with your select modifications applied, rather than construct a new one from scratch.
+`allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `InputBoxBag` with your select modifications applied, rather than construct a new one from scratch.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| allUpdates | [VscAppz.InputBoxBag](#T-VscAppz-InputBoxBag 'VscAppz.InputBoxBag') | be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty \`InputBoxBag\` with your select modifications applied, rather than construct a new one from scratch. |
+| allUpdates | [VscAppz.InputBoxBag](#T-VscAppz-InputBoxBag 'VscAppz.InputBoxBag') | be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `InputBoxBag` with your select modifications applied, rather than construct a new one from scratch. |
 
 <a name='M-VscAppz-InputBox-Show'></a>
 ### Show() `method`
@@ -2317,7 +2317,7 @@ Updates this \`InputBox\`'s current property values for: \`value\`, \`placeholde
 Makes the input UI visible in its current configuration. Any other input
 UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`InputBoxBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
 
 ##### Parameters
 
@@ -2332,7 +2332,7 @@ VscAppz
 
 ##### Summary
 
-InputBoxBag is a snapshot of \`InputBox\` state at the counterparty. It is obtained whenever \`InputBox\` creations and method calls (incl. the dedicated \`Get\`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the \`Set\` method.
+InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 
 <a name='F-VscAppz-InputBoxBag-Busy'></a>
 ### Busy `constants`
@@ -2433,14 +2433,14 @@ Options to configure the behavior of the input box UI.
 
 ##### Summary
 
-Set to \`true\` to keep the input box open when focus moves to another part of the editor or to another window.
+Set to `true` to keep the input box open when focus moves to another part of the editor or to another window.
 
 <a name='F-VscAppz-InputBoxOptions-Password'></a>
 ### Password `constants`
 
 ##### Summary
 
-Set to \`true\` to show a password prompt that will not show the typed value.
+Set to `true` to show a password prompt that will not show the typed value.
 
 <a name='F-VscAppz-InputBoxOptions-PlaceHolder'></a>
 ### PlaceHolder `constants`
@@ -2464,10 +2464,10 @@ The text to display underneath the input box.
 An optional function that will be called to validate input and to give a hint
 to the user.
 
-\`value\` ── The current value of the input box.
+`value` ── The current value of the input box.
 
-\`return\` ── A human readable string which is presented as diagnostic message.
-Return \`undefined\`, \`null\`, or the empty string when 'value' is valid.
+`return` ── A human readable string which is presented as diagnostic message.
+Return `undefined`, `null`, or the empty string when 'value' is valid.
 
 <a name='F-VscAppz-InputBoxOptions-ValidateInput_AppzFuncId'></a>
 ### ValidateInput_AppzFuncId `constants`
@@ -2488,8 +2488,8 @@ The value to prefill in the input box.
 
 ##### Summary
 
-Selection of the prefilled [\`value\`](https://code.visualstudio.com/api/references/vscode-api#InputBoxOptions.value). Defined as tuple of two number where the
-first is the inclusive start index and the second the exclusive end index. When \`undefined\` the whole
+Selection of the prefilled [`value`](https://code.visualstudio.com/api/references/vscode-api#InputBoxOptions.value). Defined as tuple of two number where the
+first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
 word will be selected, when empty (start equals end) only the cursor will be set,
 otherwise the defined range will be selected.
 
@@ -2561,7 +2561,7 @@ Options to configure the behaviour of a file open dialog.
 
 * Note 1: A dialog can select files, folders, or both. This is not true for Windows
 which enforces to open either files or folder, but *not both*.
-* Note 2: Explicitly setting \`canSelectFiles\` and \`canSelectFolders\` to \`false\` is futile
+* Note 2: Explicitly setting `canSelectFiles` and `canSelectFolders` to `false` is futile
 and the editor then silently adjusts the options to select files.
 
 <a name='F-VscAppz-OpenDialogOptions-CanSelectFiles'></a>
@@ -2569,14 +2569,14 @@ and the editor then silently adjusts the options to select files.
 
 ##### Summary
 
-Allow to select files, defaults to \`true\`.
+Allow to select files, defaults to `true`.
 
 <a name='F-VscAppz-OpenDialogOptions-CanSelectFolders'></a>
 ### CanSelectFolders `constants`
 
 ##### Summary
 
-Allow to select folders, defaults to \`false\`.
+Allow to select folders, defaults to `false`.
 
 <a name='F-VscAppz-OpenDialogOptions-CanSelectMany'></a>
 ### CanSelectMany `constants`
@@ -2600,14 +2600,14 @@ The resource the dialog shows when opened.
 A set of file filters that are used by the dialog. Each entry is a human readable label,
 like "TypeScript", and an array of extensions, e.g.
 
-\`\`\`ts
+```ts
 
 {
  	'Images': ['png', 'jpg']
  	'TypeScript': ['ts', 'tsx']
 }
 
-\`\`\`
+```
 
 <a name='F-VscAppz-OpenDialogOptions-OpenLabel'></a>
 ### OpenLabel `constants`
@@ -2627,7 +2627,7 @@ VscAppz
 
 An output channel is a container for readonly textual information.
 
-To get an instance of an \`OutputChannel\` use
+To get an instance of an `OutputChannel` use
 [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 
 <a name='F-VscAppz-OutputChannel-CfgBag'></a>
@@ -2635,7 +2635,7 @@ To get an instance of an \`OutputChannel\` use
 
 ##### Summary
 
-CfgBag represents this \`OutputChannel\`'s current state. All its members get auto-refreshed every time a \`OutputChannel\` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) \`OutputChannel\` event fires, but can also be manually refreshed via its \`PullFromPeer\` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its \`PushToPeer\` method.
+CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
 
 <a name='M-VscAppz-OutputChannel-Append-System-String-'></a>
 ### Append(value) `method`
@@ -2644,9 +2644,9 @@ CfgBag represents this \`OutputChannel\`'s current state. All its members get au
 
 Append the given value to the channel.
 
-\`value\` ── A string, falsy values will not be printed.
+`value` ── A string, falsy values will not be printed.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`OutputChannelBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 
 ##### Parameters
 
@@ -2662,9 +2662,9 @@ Append the given value to the channel.
 Append the given value and a line feed character
 to the channel.
 
-\`value\` ── A string, falsy values will be printed.
+`value` ── A string, falsy values will be printed.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`OutputChannelBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 
 ##### Parameters
 
@@ -2679,7 +2679,7 @@ to the channel.
 
 Removes all output from the channel.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`OutputChannelBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 
 ##### Parameters
 
@@ -2692,7 +2692,7 @@ This method has no parameters.
 
 Dispose and free associated resources.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -2703,9 +2703,9 @@ This method has no parameters.
 
 ##### Summary
 
-Obtains this \`OutputChannel\`'s current property value for: \`name\`.
+Obtains this `OutputChannel`'s current property value for: `name`.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`OutputChannelBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 
 ##### Parameters
 
@@ -2718,7 +2718,7 @@ This method has no parameters.
 
 Hide this channel from the UI.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`OutputChannelBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 
 ##### Parameters
 
@@ -2731,15 +2731,15 @@ This method has no parameters.
 
 Reveal this channel in the UI.
 
-\`preserveFocus\` ── When \`true\` the channel will not take focus.
+`preserveFocus` ── When `true` the channel will not take focus.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`OutputChannelBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| preserveFocus | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | When \`true\` the channel will not take focus. |
+| preserveFocus | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | When `true` the channel will not take focus. |
 
 <a name='T-VscAppz-OutputChannelBag'></a>
 ## OutputChannelBag `type`
@@ -2750,7 +2750,7 @@ VscAppz
 
 ##### Summary
 
-OutputChannelBag is a snapshot of \`OutputChannel\` state at the counterparty. It is obtained whenever \`OutputChannel\` creations and method calls (incl. the dedicated \`Get\`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 
 <a name='F-VscAppz-OutputChannelBag-Name'></a>
 ### Name `constants`
@@ -2851,7 +2851,7 @@ when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-
 
 ##### Summary
 
-CfgBag represents this \`QuickPick\`'s current state. All its members get auto-refreshed every time a \`QuickPick\` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) \`QuickPick\` event fires, but can also be manually refreshed via its \`PullFromPeer\` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its \`PushToPeer\` method.
+CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 
 <a name='M-VscAppz-QuickPick-Dispose'></a>
 ### Dispose() `method`
@@ -2863,7 +2863,7 @@ visible, it is first hidden. After this call the input UI is no longer
 functional and no additional methods or properties on it should be
 accessed. Instead a new input UI should be created.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -2874,9 +2874,9 @@ This method has no parameters.
 
 ##### Summary
 
-Obtains this \`QuickPick\`'s current property values for: \`value\`, \`placeholder\`, \`items\`, \`canSelectMany\`, \`matchOnDescription\`, \`matchOnDetail\`, \`activeItems\`, \`selectedItems\`, \`title\`, \`step\`, \`totalSteps\`, \`enabled\`, \`busy\`, \`ignoreFocusOut\`.
+Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`QuickPickBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
 
 ##### Parameters
 
@@ -2890,7 +2890,7 @@ This method has no parameters.
 Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`QuickPickBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
 
 ##### Parameters
 
@@ -2903,9 +2903,9 @@ This method has no parameters.
 
 An event signaling when the user indicated acceptance of the selected item(s).
 
-\`handler\` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
 
-\`return\` ── A \`Disposable\` that will unsubscribe \`handler\` from the \`OnDidAccept\` event on \`Dispose\`.
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
 
 ##### Parameters
 
@@ -2920,9 +2920,9 @@ An event signaling when the user indicated acceptance of the selected item(s).
 
 An event signaling when the active items have changed.
 
-\`handler\` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
 
-\`return\` ── A \`Disposable\` that will unsubscribe \`handler\` from the \`OnDidChangeActive\` event on \`Dispose\`.
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.
 
 ##### Parameters
 
@@ -2937,9 +2937,9 @@ An event signaling when the active items have changed.
 
 An event signaling when the selected items have changed.
 
-\`handler\` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
 
-\`return\` ── A \`Disposable\` that will unsubscribe \`handler\` from the \`OnDidChangeSelection\` event on \`Dispose\`.
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.
 
 ##### Parameters
 
@@ -2954,9 +2954,9 @@ An event signaling when the selected items have changed.
 
 An event signaling when the value of the filter text has changed.
 
-\`handler\` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
 
-\`return\` ── A \`Disposable\` that will unsubscribe \`handler\` from the \`OnDidChangeValue\` event on \`Dispose\`.
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
 
 ##### Parameters
 
@@ -2976,9 +2976,9 @@ the extension will be notified through [QuickInput.onDidHide](https://code.visua
 (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 the user pressing Esc, some other input UI opening, etc.)
 
-\`handler\` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever this event fires; mandatory, not optional.
 
-\`return\` ── A \`Disposable\` that will unsubscribe \`handler\` from the \`OnDidHide\` event on \`Dispose\`.
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
 
 ##### Parameters
 
@@ -2991,17 +2991,17 @@ the user pressing Esc, some other input UI opening, etc.)
 
 ##### Summary
 
-Updates this \`QuickPick\`'s current property values for: \`value\`, \`placeholder\`, \`items\`, \`canSelectMany\`, \`matchOnDescription\`, \`matchOnDetail\`, \`activeItems\`, \`selectedItems\`, \`title\`, \`step\`, \`totalSteps\`, \`enabled\`, \`busy\`, \`ignoreFocusOut\`.
+Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 
-\`allUpdates\` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty \`QuickPickBag\` with your select modifications applied, rather than construct a new one from scratch.
+`allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `QuickPickBag` with your select modifications applied, rather than construct a new one from scratch.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| allUpdates | [VscAppz.QuickPickBag](#T-VscAppz-QuickPickBag 'VscAppz.QuickPickBag') | be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty \`QuickPickBag\` with your select modifications applied, rather than construct a new one from scratch. |
+| allUpdates | [VscAppz.QuickPickBag](#T-VscAppz-QuickPickBag 'VscAppz.QuickPickBag') | be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `QuickPickBag` with your select modifications applied, rather than construct a new one from scratch. |
 
 <a name='M-VscAppz-QuickPick-Show'></a>
 ### Show() `method`
@@ -3011,7 +3011,7 @@ Updates this \`QuickPick\`'s current property values for: \`value\`, \`placehold
 Makes the input UI visible in its current configuration. Any other input
 UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`QuickPickBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
 
 ##### Parameters
 
@@ -3026,7 +3026,7 @@ VscAppz
 
 ##### Summary
 
-QuickPickBag is a snapshot of \`QuickPick\` state at the counterparty. It is obtained whenever \`QuickPick\` creations and method calls (incl. the dedicated \`Get\`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the \`Set\` method.
+QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 
 <a name='F-VscAppz-QuickPickBag-ActiveItems'></a>
 ### ActiveItems `constants`
@@ -3210,7 +3210,7 @@ An optional flag to make the picker accept multiple selections, if true the resu
 
 ##### Summary
 
-Set to \`true\` to keep the picker open when focus moves to another part of the editor or to another window.
+Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.
 
 <a name='F-VscAppz-QuickPickOptions-MatchOnDescription'></a>
 ### MatchOnDescription `constants`
@@ -3273,14 +3273,14 @@ The resource the dialog shows when opened.
 A set of file filters that are used by the dialog. Each entry is a human readable label,
 like "TypeScript", and an array of extensions, e.g.
 
-\`\`\`ts
+```ts
 
 {
  	'Images': ['png', 'jpg']
  	'TypeScript': ['ts', 'tsx']
 }
 
-\`\`\`
+```
 
 <a name='F-VscAppz-SaveDialogOptions-SaveLabel'></a>
 ### SaveLabel `constants`
@@ -3331,7 +3331,7 @@ show text and icons and run a command on click.
 
 ##### Summary
 
-CfgBag represents this \`StatusBarItem\`'s current state. All its members get auto-refreshed every time a \`StatusBarItem\` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) \`StatusBarItem\` event fires, but can also be manually refreshed via its \`PullFromPeer\` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its \`PushToPeer\` method.
+CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 
 <a name='M-VscAppz-StatusBarItem-Dispose'></a>
 ### Dispose() `method`
@@ -3341,7 +3341,7 @@ CfgBag represents this \`StatusBarItem\`'s current state. All its members get au
 Dispose and free associated resources. Call
 [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -3352,9 +3352,9 @@ This method has no parameters.
 
 ##### Summary
 
-Obtains this \`StatusBarItem\`'s current property values for: \`alignment\`, \`priority\`, \`text\`, \`tooltip\`, \`color\`, \`command\`.
+Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`StatusBarItemBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
 
 ##### Parameters
 
@@ -3367,7 +3367,7 @@ This method has no parameters.
 
 Hide the entry in the status bar.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`StatusBarItemBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
 
 ##### Parameters
 
@@ -3378,17 +3378,17 @@ This method has no parameters.
 
 ##### Summary
 
-Updates this \`StatusBarItem\`'s current property values for: \`text\`, \`tooltip\`, \`color\`, \`command\`.
+Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
 
-\`allUpdates\` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty \`StatusBarItemBag\` with your select modifications applied, rather than construct a new one from scratch.
+`allUpdates` ── be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `StatusBarItemBag` with your select modifications applied, rather than construct a new one from scratch.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| allUpdates | [VscAppz.StatusBarItemBag](#T-VscAppz-StatusBarItemBag 'VscAppz.StatusBarItemBag') | be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty \`StatusBarItemBag\` with your select modifications applied, rather than construct a new one from scratch. |
+| allUpdates | [VscAppz.StatusBarItemBag](#T-VscAppz-StatusBarItemBag 'VscAppz.StatusBarItemBag') | be aware that *all* its fields are sent for update, no omissions. Best here to reuse a mostly-recently-obtained-from-the-counterparty `StatusBarItemBag` with your select modifications applied, rather than construct a new one from scratch. |
 
 <a name='M-VscAppz-StatusBarItem-Show'></a>
 ### Show() `method`
@@ -3397,7 +3397,7 @@ Updates this \`StatusBarItem\`'s current property values for: \`text\`, \`toolti
 
 Shows the entry in the status bar.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`StatusBarItemBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
 
 ##### Parameters
 
@@ -3412,7 +3412,7 @@ VscAppz
 
 ##### Summary
 
-StatusBarItemBag is a snapshot of \`StatusBarItem\` state at the counterparty. It is obtained whenever \`StatusBarItem\` creations and method calls (incl. the dedicated \`Get\`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the \`Set\` method.
+StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 
 <a name='F-VscAppz-StatusBarItemBag-Alignment'></a>
 ### Alignment `constants`
@@ -3451,10 +3451,10 @@ be shown more to the left.
 
 The text to show for the entry. You can embed icons in the text by leveraging the syntax:
 
-\`My text $(icon-name) contains icons like $(icon-name) this one.\`
+`My text $(icon-name) contains icons like $(icon-name) this one.`
 
 Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
-\`light-bulb\`, \`thumbsup\`, \`zap\` etc.
+`light-bulb`, `thumbsup`, `zap` etc.
 
 <a name='F-VscAppz-StatusBarItemBag-Tooltip'></a>
 ### Tooltip `constants`
@@ -3475,7 +3475,7 @@ VscAppz
 Represents a handle to a set of decorations
 sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
 
-To get an instance of a \`TextEditorDecorationType\` use
+To get an instance of a `TextEditorDecorationType` use
 [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 
 <a name='F-VscAppz-TextEditorDecorationType-CfgBag'></a>
@@ -3483,7 +3483,7 @@ To get an instance of a \`TextEditorDecorationType\` use
 
 ##### Summary
 
-CfgBag represents this \`TextEditorDecorationType\`'s current state. All its members get auto-refreshed every time a \`TextEditorDecorationType\` method is called (specifically: at some point _after_ the call is dispatched but _before_ its return-continuation is invoked) or a (subscribed) \`TextEditorDecorationType\` event fires, but can also be manually refreshed via its \`PullFromPeer\` method. Any modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its \`PushToPeer\` method.
+CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
 
 <a name='M-VscAppz-TextEditorDecorationType-Dispose'></a>
 ### Dispose() `method`
@@ -3492,7 +3492,7 @@ CfgBag represents this \`TextEditorDecorationType\`'s current state. All its mem
 
 Remove this decoration type and all decorations on all text editors using it.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -3503,9 +3503,9 @@ This method has no parameters.
 
 ##### Summary
 
-Obtains this \`TextEditorDecorationType\`'s current property value for: \`key\`.
+Obtains this `TextEditorDecorationType`'s current property value for: `key`.
 
-\`return\` ── A thenable that resolves when this call has completed at the counterparty and its \`TextEditorDecorationTypeBag\` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty and its `TextEditorDecorationTypeBag` result obtained.
 
 ##### Parameters
 
@@ -3520,7 +3520,7 @@ VscAppz
 
 ##### Summary
 
-TextEditorDecorationTypeBag is a snapshot of \`TextEditorDecorationType\` state at the counterparty. It is obtained whenever \`TextEditorDecorationType\` creations and method calls (incl. the dedicated \`Get\`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 
 <a name='F-VscAppz-TextEditorDecorationTypeBag-Key'></a>
 ### Key `constants`
@@ -3826,36 +3826,36 @@ Everything related to the running of your app.
 ##### Summary
 
 Reports problems during the ongoing forever-looping stdin/stdout communication
- with the \`vscode-appz\` VSC extension. Defaults to a stderr println. Must not be \`null\`.
- Any of its args must be checked for \`null\`-ness by your \`OnError\` handler.
+ with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be `null`.
+ Any of its args must be checked for `null`-ness by your `OnError` handler.
 
- \`IVscode self\`── the caller that encountered the problem being reported.
+ `IVscode self`── the caller that encountered the problem being reported.
 
- \`object err\` ── if an \`Exception\`, it occurred on the C# side (I/O or JSON), else some JSON-decoded C# value from whatever was transmitted as the problem data (if anything) by VS Code.
+ `object err` ── if an `Exception`, it occurred on the C# side (I/O or JSON), else some JSON-decoded C# value from whatever was transmitted as the problem data (if anything) by VS Code.
 
- \`object jsonMsg\` ─ if a \`string\`, the incoming JSON message; if a \`Dictionary<string, object>\`, the outgoing one.
+ `object jsonMsg` ─ if a `string`, the incoming JSON message; if a `Dictionary<string, object>`, the outgoing one.
 
 <a name='F-VscAppz-Vsc-OnErrorDefaultOutputFormat'></a>
 ### OnErrorDefaultOutputFormat `constants`
 
 ##### Summary
 
-Used by the default \`OnError\` handler to print error details to stderr (aka. \`Console.Error\`).
+Used by the default `OnError` handler to print error details to stderr (aka. `Console.Error`).
 
 <a name='M-VscAppz-Vsc-Main-System-Action{VscAppz-IVscode},System-IO-TextReader,System-IO-TextWriter-'></a>
 ### Main(main,stdIn,stdOut) `method`
 
 ##### Summary
 
-Creates an \`IVscode\` implementation that communicates via the specified input and output streams (with \`stdIn\` defaulting to \`Console.In\` and \`stdOut\` defaulting to \`Console.Out\`), then loops forever to never \`return\`.
+Creates an `IVscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `Console.In` and `stdOut` defaulting to `Console.Out`), then loops forever to never `return`.
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | main | [System.Action{VscAppz.IVscode}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.IVscode}') | Called whenever the counterparty demands, which usually means once at startup. |
-| stdIn | [System.IO.TextReader](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.IO.TextReader 'System.IO.TextReader') | If \`null\`, defaults to \`Console.In\`. |
-| stdOut | [System.IO.TextWriter](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.IO.TextWriter 'System.IO.TextWriter') | If \`null\`, defaults to \`Console.Out\` |
+| stdIn | [System.IO.TextReader](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.IO.TextReader 'System.IO.TextReader') | If `null`, defaults to `Console.In`. |
+| stdOut | [System.IO.TextWriter](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.IO.TextWriter 'System.IO.TextWriter') | If `null`, defaults to `Console.Out` |
 
 <a name='T-VscAppz-WindowState'></a>
 ## WindowState `type`
@@ -3884,14 +3884,14 @@ VscAppz
 
 ##### Summary
 
-WorkspaceBag gathers various properties of \`IWorkspace\`, obtainable via its \`AllProperties\` method.
+WorkspaceBag gathers various properties of `IWorkspace`, obtainable via its `AllProperties` method.
 
 <a name='F-VscAppz-WorkspaceBag-Name'></a>
 ### Name `constants`
 
 ##### Summary
 
-The name of the workspace. \`undefined\` when no folder
+The name of the workspace. `undefined` when no folder
 has been opened.
 
 <a name='F-VscAppz-WorkspaceBag-WorkspaceFile'></a>
@@ -3901,33 +3901,33 @@ has been opened.
 
 The location of the workspace file, for example:
 
-\`file:///Users/name/Development/myProject.code-workspace\`
+`file:///Users/name/Development/myProject.code-workspace`
 
 or
 
-\`untitled:1555503116870\`
+`untitled:1555503116870`
 
 for a workspace that is untitled and not yet saved.
 
 Depending on the workspace that is opened, the value will be:
-  * \`undefined\` when no workspace or  a single folder is opened
-  * the path of the workspace file as \`Uri\` otherwise. if the workspace
-is untitled, the returned URI will use the \`untitled:\` scheme
+  * `undefined` when no workspace or  a single folder is opened
+  * the path of the workspace file as `Uri` otherwise. if the workspace
+is untitled, the returned URI will use the `untitled:` scheme
 
-The location can e.g. be used with the \`vscode.openFolder\` command to
+The location can e.g. be used with the `vscode.openFolder` command to
 open the workspace again after it has been closed.
 
 **Example:**
 
-\`\`\`typescript
+```typescript
 
 vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
 
-\`\`\`
+```
 
 
-**Note:** it is not advised to use \`workspace.workspaceFile\` to write
-configuration data into the file. You can use \`workspace.getConfiguration().update()\`
+**Note:** it is not advised to use `workspace.workspaceFile` to write
+configuration data into the file. You can use `workspace.getConfiguration().update()`
 for that purpose which will work both when a single folder is opened as
 well as an untitled or saved workspace.
 
@@ -3936,8 +3936,8 @@ well as an untitled or saved workspace.
 
 ##### Summary
 
-List of workspace folders or \`undefined\` when no folder is open.
-*Note* that the first entry corresponds to the value of \`rootPath\`.
+List of workspace folders or `undefined` when no folder is open.
+*Note* that the first entry corresponds to the value of `rootPath`.
 
 <a name='T-VscAppz-WorkspaceFolder'></a>
 ## WorkspaceFolder `type`
@@ -3974,7 +3974,7 @@ the basename of its [uri-path](https://code.visualstudio.com/api/references/vsco
 The associated uri for this workspace folder.
 
 *Note:* The [Uri](https://code.visualstudio.com/api/references/vscode-api#Uri)-type was intentionally chosen such that future releases of the editor can support
-workspace folders that are not stored on the local disk, e.g. \`ftp://server/workspaces/foo\`.
+workspace folders that are not stored on the local disk, e.g. `ftp://server/workspaces/foo`.
 
 <a name='T-VscAppz-WorkspaceFolderPickOptions'></a>
 ## WorkspaceFolderPickOptions `type`
@@ -3992,7 +3992,7 @@ Options to configure the behaviour of the [workspace folder](https://code.visual
 
 ##### Summary
 
-Set to \`true\` to keep the picker open when focus moves to another part of the editor or to another window.
+Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.
 
 <a name='F-VscAppz-WorkspaceFolderPickOptions-PlaceHolder'></a>
 ### PlaceHolder `constants`

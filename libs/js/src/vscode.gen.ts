@@ -2260,7 +2260,7 @@ function newWorkspaceBag (): WorkspaceBag {
 
  */
 export interface StatusBarItemBag extends fromJson {
-    __holder__: StatusBarItem
+    __holder__: Disposable
 
     /**
      * The alignment of this item.
@@ -2317,7 +2317,7 @@ export function newStatusBarItemBag (): StatusBarItemBag {
 
  */
 export interface OutputChannelBag extends fromJson {
-    __holder__: OutputChannel
+    __holder__: Disposable
 
     /**
      * The human-readable name of this output channel.
@@ -2337,7 +2337,7 @@ export function newOutputChannelBag (): OutputChannelBag {
 
  */
 export interface TextEditorDecorationTypeBag extends fromJson {
-    __holder__: TextEditorDecorationType
+    __holder__: Disposable
 
     /**
      * Internal representation of the handle.
@@ -2357,7 +2357,7 @@ export function newTextEditorDecorationTypeBag (): TextEditorDecorationTypeBag {
 
  */
 export interface InputBoxBag extends fromJson {
-    __holder__: InputBox
+    __holder__: Disposable
 
     /**
      * Current input value.
@@ -2443,7 +2443,7 @@ export function newInputBoxBag (): InputBoxBag {
 
  */
 export interface QuickPickBag extends fromJson {
-    __holder__: QuickPick
+    __holder__: Disposable
 
     /**
      * Current value of the filter text.

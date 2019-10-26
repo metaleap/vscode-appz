@@ -1923,10 +1923,11 @@ export interface WorkspaceBag extends fromJson {
     workspaceFolders?: WorkspaceFolder[];
 }
 /**
- * StatusBarItemBag is a snapshot of `StatusBarItem` state at the counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+ * StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 
  */
 export interface StatusBarItemBag extends fromJson {
+    __holder__: Disposable;
     /**
      * The alignment of this item.
 
@@ -1967,10 +1968,11 @@ export interface StatusBarItemBag extends fromJson {
 }
 export declare function newStatusBarItemBag(): StatusBarItemBag;
 /**
- * OutputChannelBag is a snapshot of `OutputChannel` state at the counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+ * OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 
  */
 export interface OutputChannelBag extends fromJson {
+    __holder__: Disposable;
     /**
      * The human-readable name of this output channel.
 
@@ -1979,10 +1981,11 @@ export interface OutputChannelBag extends fromJson {
 }
 export declare function newOutputChannelBag(): OutputChannelBag;
 /**
- * TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+ * TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 
  */
 export interface TextEditorDecorationTypeBag extends fromJson {
+    __holder__: Disposable;
     /**
      * Internal representation of the handle.
 
@@ -1991,10 +1994,11 @@ export interface TextEditorDecorationTypeBag extends fromJson {
 }
 export declare function newTextEditorDecorationTypeBag(): TextEditorDecorationTypeBag;
 /**
- * InputBoxBag is a snapshot of `InputBox` state at the counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+ * InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 
  */
 export interface InputBoxBag extends fromJson {
+    __holder__: Disposable;
     /**
      * Current input value.
 
@@ -2059,10 +2063,11 @@ export interface InputBoxBag extends fromJson {
 }
 export declare function newInputBoxBag(): InputBoxBag;
 /**
- * QuickPickBag is a snapshot of `QuickPick` state at the counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+ * QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 
  */
 export interface QuickPickBag extends fromJson {
+    __holder__: Disposable;
     /**
      * Current value of the filter text.
 

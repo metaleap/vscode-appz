@@ -291,7 +291,7 @@ export class Builder {
                         return tfun && tfun[0] && tfun[0].length === 1 && tfun[0][0] && gen.typeFun(tfun[0][0])
                     }) ? (" a (subscribed) `" + structname + "` event fires or ") : " ") + "any `" + structname + "` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method." + (it.fields.some(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec)) ? " Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method." : "")]
                 }]
-            },] : (((!it.isPropsOfStruct) ? [] : [{ Name: "__holder__", Json: { Excluded: true }, Type: { Maybe: { Name: this.gen.nameRewriters.types.structs(it.isPropsOfStruct.name) } } }]) as Field[]).concat(...it.fields.map((_: gen.PrepField): Field => ({
+            },] : (((!it.isPropsOfStruct) ? [] : [{ Name: "__holder__", Json: { Excluded: true }, Type: { Maybe: { Name: "Disposable" } } }]) as Field[]).concat(...it.fields.map((_: gen.PrepField): Field => ({
                 fromPrep: _,
                 name: _.name,
                 Name: ((it.isPropsOfStruct && _.readOnly) ? this.gen.nameRewriters.methods : this.gen.nameRewriters.fields)(_.name),

@@ -2193,7 +2193,7 @@ StatusBarItemBag: class
 
     #
     # JSON FLAGS: {"Excluded":true}
-    __holder__: ?StatusBarItem
+    __holder__: ?Disposable
 
     # alignment:
     # The alignment of this item.
@@ -2246,7 +2246,7 @@ OutputChannelBag: class
 
     #
     # JSON FLAGS: {"Excluded":true}
-    __holder__: ?OutputChannel
+    __holder__: ?Disposable
 
     # name:
     # The human-readable name of this output channel.
@@ -2262,7 +2262,7 @@ TextEditorDecorationTypeBag: class
 
     #
     # JSON FLAGS: {"Excluded":true}
-    __holder__: ?TextEditorDecorationType
+    __holder__: ?Disposable
 
     # key:
     # Internal representation of the handle.
@@ -2278,7 +2278,7 @@ InputBoxBag: class
 
     #
     # JSON FLAGS: {"Excluded":true}
-    __holder__: ?InputBox
+    __holder__: ?Disposable
 
     # value:
     # Current input value.
@@ -2360,7 +2360,7 @@ QuickPickBag: class
 
     #
     # JSON FLAGS: {"Excluded":true}
-    __holder__: ?QuickPick
+    __holder__: ?Disposable
 
     # value:
     # Current value of the filter text.
