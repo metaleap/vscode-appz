@@ -618,7 +618,7 @@ Window: interface
     #
     # @return:
     # A new status bar item.
-    CreateStatusBarItem: ((StatusBarItem->StatusBarItemBag->void)->void)
+    CreateStatusBarItem: ((?StatusBarItem->void)->void)
         alignment: ?StatusBarAlignment
         priority: ?int
 
@@ -630,7 +630,7 @@ Window: interface
     #
     # @return:
     # a thenable that resolves to the newly created `OutputChannel`.
-    CreateOutputChannel: ((OutputChannel->OutputChannelBag->void)->void)
+    CreateOutputChannel: ((?OutputChannel->void)->void)
         name: string
 
     # createTextEditorDecorationType:
@@ -641,7 +641,7 @@ Window: interface
     #
     # @return:
     # A new decoration type instance.
-    CreateTextEditorDecorationType: ((TextEditorDecorationType->TextEditorDecorationTypeBag->void)->void)
+    CreateTextEditorDecorationType: ((?TextEditorDecorationType->void)->void)
         options: DecorationRenderOptions
 
     # createInputBox:
@@ -653,7 +653,7 @@ Window: interface
     #
     # @return:
     # A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
-    CreateInputBox: ((InputBox->InputBoxBag->void)->void)
+    CreateInputBox: ((?InputBox->void)->void)
 
     # createQuickPick:
     # Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
@@ -665,7 +665,7 @@ Window: interface
     #
     # @return:
     # A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
-    CreateQuickPick: ((QuickPick->QuickPickBag->void)->void)
+    CreateQuickPick: ((?QuickPick->void)->void)
 
 
 
@@ -1667,7 +1667,7 @@ StatusBarItem: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+    # CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
     #
     # JSON FLAGS: undefined
     CfgBag: ?StatusBarItemBag
@@ -1685,7 +1685,7 @@ OutputChannel: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
+    # CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
     #
     # JSON FLAGS: undefined
     CfgBag: ?OutputChannelBag
@@ -1971,7 +1971,7 @@ TextEditorDecorationType: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
+    # CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
     #
     # JSON FLAGS: undefined
     CfgBag: ?TextEditorDecorationTypeBag
@@ -1990,7 +1990,7 @@ InputBox: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+    # CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
     #
     # JSON FLAGS: undefined
     CfgBag: ?InputBoxBag
@@ -2030,7 +2030,7 @@ QuickPick: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+    # CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
     #
     # JSON FLAGS: undefined
     CfgBag: ?QuickPickBag
@@ -2193,7 +2193,7 @@ StatusBarItemBag: class
 
     #
     # JSON FLAGS: {"Excluded":true}
-    __holder__: ?Disposable
+    __holder__: ?StatusBarItem
 
     # alignment:
     # The alignment of this item.
@@ -2246,7 +2246,7 @@ OutputChannelBag: class
 
     #
     # JSON FLAGS: {"Excluded":true}
-    __holder__: ?Disposable
+    __holder__: ?OutputChannel
 
     # name:
     # The human-readable name of this output channel.
@@ -2262,7 +2262,7 @@ TextEditorDecorationTypeBag: class
 
     #
     # JSON FLAGS: {"Excluded":true}
-    __holder__: ?Disposable
+    __holder__: ?TextEditorDecorationType
 
     # key:
     # Internal representation of the handle.
@@ -2278,7 +2278,7 @@ InputBoxBag: class
 
     #
     # JSON FLAGS: {"Excluded":true}
-    __holder__: ?Disposable
+    __holder__: ?InputBox
 
     # value:
     # Current input value.
@@ -2360,7 +2360,7 @@ QuickPickBag: class
 
     #
     # JSON FLAGS: {"Excluded":true}
-    __holder__: ?Disposable
+    __holder__: ?QuickPick
 
     # value:
     # Current value of the filter text.
@@ -2509,8 +2509,8 @@ Window·ShowInformationMessage1: (message:string -> items:[string] -> ((?string-
             if !ok
                 return false
             result = &_result_
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2540,8 +2540,8 @@ Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> it
             if !ok
                 return false
             result = &_result_
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2569,8 +2569,8 @@ Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> ((?Me
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2599,8 +2599,8 @@ Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> it
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2629,8 +2629,8 @@ Window·ShowWarningMessage1: (message:string -> items:[string] -> ((?string->voi
             if !ok
                 return false
             result = &_result_
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2660,8 +2660,8 @@ Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:
             if !ok
                 return false
             result = &_result_
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2689,8 +2689,8 @@ Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> ((?Messag
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2719,8 +2719,8 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2749,8 +2749,8 @@ Window·ShowErrorMessage1: (message:string -> items:[string] -> ((?string->void)
             if !ok
                 return false
             result = &_result_
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2780,8 +2780,8 @@ Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[s
             if !ok
                 return false
             result = &_result_
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2809,8 +2809,8 @@ Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> ((?MessageI
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2839,8 +2839,8 @@ Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[M
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -2897,8 +2897,8 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> ((?string->v
             if !ok
                 return false
             result = &_result_
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, (payload:any -> bool)
@@ -2974,8 +2974,8 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
                     return false
                 result@__idx__result = __val__result
                 __idx__result = __idx__result + 1
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, (payload:any -> bool)
@@ -3042,8 +3042,8 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
             if !ok
                 return false
             result = &_result_
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, (payload:any -> bool)
@@ -3120,8 +3120,8 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
                     return false
                 result@__idx__result = __val__result
                 __idx__result = __idx__result + 1
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, (payload:any -> bool)
@@ -3187,8 +3187,8 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, (payload:any -> bool)
@@ -3224,8 +3224,8 @@ Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> ((?Disposa
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.Impl()))
+        if =?onret
+            onret(result.bind(this.Impl()))
         return true
     
     this.Impl().send(msg, onresp)
@@ -3254,8 +3254,8 @@ Window·SetStatusBarMessage2: (text:string -> ((?Disposable->void)->void))
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.Impl()))
+        if =?onret
+            onret(result.bind(this.Impl()))
         return true
     
     this.Impl().send(msg, onresp)
@@ -3283,8 +3283,8 @@ Window·ShowSaveDialog: (options:SaveDialogOptions -> ((?string->void)->void))
             if !ok
                 return false
             result = &_result_
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3321,8 +3321,8 @@ Window·ShowOpenDialog: (options:OpenDialogOptions -> ((?[string]->void)->void))
                     return false
                 result@__idx__result = __val__result
                 __idx__result = __idx__result + 1
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3350,8 +3350,8 @@ Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> ((?Work
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3377,8 +3377,8 @@ Window·State: ( -> ((WindowState->void)->void))
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3423,8 +3423,8 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> ((?Disposable->
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.Impl(), listenerFnId))
+        if =?onret
+            onret(result.bind(this.Impl(), listenerFnId))
         return true
     
     this.Impl().send(msg, onresp)
@@ -3435,7 +3435,7 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> ((?Disposable->
 
 
 
-Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> ((StatusBarItem->StatusBarItemBag->void)->void))
+Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> ((?StatusBarItem->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createStatusBarItem"
@@ -3445,146 +3445,156 @@ Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> 
     if =?priority
         msg.Data@"priority" = priority
     var onresp of (any->bool)
-    var onret of (StatusBarItem->StatusBarItemBag->void)
+    var onret of (?StatusBarItem->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of StatusBarItem
+        var result of ?StatusBarItem
         if =?payload
-            result = StatusBarItem·new
+            result = ?StatusBarItem·new
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             result.__disp__.impl = this.Impl()
-            result.Get()((state:StatusBarItemBag -> void)
-                if =?onret
-                    onret(result, state)
-            )
+        else
+            return false
+        result.__appzObjBagPullFromPeer__()(( -> void)
+            if =?onret
+                onret(result)
+        )
         return true
     
     this.Impl().send(msg, onresp)
-    return (a0:(StatusBarItem->StatusBarItemBag->void) -> void)
+    return (a0:(?StatusBarItem->void) -> void)
         onret = a0
     
 
 
 
 
-Window·CreateOutputChannel: (name:string -> ((OutputChannel->OutputChannelBag->void)->void))
+Window·CreateOutputChannel: (name:string -> ((?OutputChannel->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createOutputChannel"
     msg.Data = dict·new(1)
     msg.Data@"name" = name
     var onresp of (any->bool)
-    var onret of (OutputChannel->OutputChannelBag->void)
+    var onret of (?OutputChannel->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of OutputChannel
+        var result of ?OutputChannel
         if =?payload
-            result = OutputChannel·new
+            result = ?OutputChannel·new
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             result.__disp__.impl = this.Impl()
-            result.Get()((state:OutputChannelBag -> void)
-                if =?onret
-                    onret(result, state)
-            )
+        else
+            return false
+        result.__appzObjBagPullFromPeer__()(( -> void)
+            if =?onret
+                onret(result)
+        )
         return true
     
     this.Impl().send(msg, onresp)
-    return (a0:(OutputChannel->OutputChannelBag->void) -> void)
+    return (a0:(?OutputChannel->void) -> void)
         onret = a0
     
 
 
 
 
-Window·CreateTextEditorDecorationType: (options:DecorationRenderOptions -> ((TextEditorDecorationType->TextEditorDecorationTypeBag->void)->void))
+Window·CreateTextEditorDecorationType: (options:DecorationRenderOptions -> ((?TextEditorDecorationType->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createTextEditorDecorationType"
     msg.Data = dict·new(1)
     msg.Data@"options" = options
     var onresp of (any->bool)
-    var onret of (TextEditorDecorationType->TextEditorDecorationTypeBag->void)
+    var onret of (?TextEditorDecorationType->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of TextEditorDecorationType
+        var result of ?TextEditorDecorationType
         if =?payload
-            result = TextEditorDecorationType·new
+            result = ?TextEditorDecorationType·new
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             result.__disp__.impl = this.Impl()
-            result.Get()((state:TextEditorDecorationTypeBag -> void)
-                if =?onret
-                    onret(result, state)
-            )
+        else
+            return false
+        result.__appzObjBagPullFromPeer__()(( -> void)
+            if =?onret
+                onret(result)
+        )
         return true
     
     this.Impl().send(msg, onresp)
-    return (a0:(TextEditorDecorationType->TextEditorDecorationTypeBag->void) -> void)
+    return (a0:(?TextEditorDecorationType->void) -> void)
         onret = a0
     
 
 
 
 
-Window·CreateInputBox: ( -> ((InputBox->InputBoxBag->void)->void))
+Window·CreateInputBox: ( -> ((?InputBox->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createInputBox"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
-    var onret of (InputBox->InputBoxBag->void)
+    var onret of (?InputBox->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of InputBox
+        var result of ?InputBox
         if =?payload
-            result = InputBox·new
+            result = ?InputBox·new
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             result.__disp__.impl = this.Impl()
-            result.Get()((state:InputBoxBag -> void)
-                if =?onret
-                    onret(result, state)
-            )
+        else
+            return false
+        result.__appzObjBagPullFromPeer__()(( -> void)
+            if =?onret
+                onret(result)
+        )
         return true
     
     this.Impl().send(msg, onresp)
-    return (a0:(InputBox->InputBoxBag->void) -> void)
+    return (a0:(?InputBox->void) -> void)
         onret = a0
     
 
 
 
 
-Window·CreateQuickPick: ( -> ((QuickPick->QuickPickBag->void)->void))
+Window·CreateQuickPick: ( -> ((?QuickPick->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "window.createQuickPick"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
-    var onret of (QuickPick->QuickPickBag->void)
+    var onret of (?QuickPick->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of QuickPick
+        var result of ?QuickPick
         if =?payload
-            result = QuickPick·new
+            result = ?QuickPick·new
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
             result.__disp__.impl = this.Impl()
-            result.Get()((state:QuickPickBag -> void)
-                if =?onret
-                    onret(result, state)
-            )
+        else
+            return false
+        result.__appzObjBagPullFromPeer__()(( -> void)
+            if =?onret
+                onret(result)
+        )
         return true
     
     this.Impl().send(msg, onresp)
-    return (a0:(QuickPick->QuickPickBag->void) -> void)
+    return (a0:(?QuickPick->void) -> void)
         onret = a0
     
 
@@ -3608,8 +3618,8 @@ Env·OpenExternal: (target:string -> ((bool->void)->void))
                 return false
         else
             return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3634,8 +3644,8 @@ Env·AppName: ( -> ((string->void)->void))
             [result, ok] = ((payload)·(string))
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3660,8 +3670,8 @@ Env·AppRoot: ( -> ((string->void)->void))
             [result, ok] = ((payload)·(string))
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3686,8 +3696,8 @@ Env·Language: ( -> ((string->void)->void))
             [result, ok] = ((payload)·(string))
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3712,8 +3722,8 @@ Env·MachineId: ( -> ((string->void)->void))
             [result, ok] = ((payload)·(string))
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3740,8 +3750,8 @@ Env·RemoteName: ( -> ((?string->void)->void))
             if !ok
                 return false
             result = &_result_
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3766,8 +3776,8 @@ Env·SessionId: ( -> ((string->void)->void))
             [result, ok] = ((payload)·(string))
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3792,8 +3802,8 @@ Env·Shell: ( -> ((string->void)->void))
             [result, ok] = ((payload)·(string))
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3818,8 +3828,8 @@ Env·UriScheme: ( -> ((string->void)->void))
             [result, ok] = ((payload)·(string))
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3847,8 +3857,8 @@ Env·AllProperties: ( -> ((EnvBag->void)->void))
                 return false
         else
             return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3881,8 +3891,8 @@ Clipboard·ReadText: ( -> ((?string->void)->void))
             if !ok
                 return false
             result = &_result_
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3932,8 +3942,8 @@ Workspace·Name: ( -> ((?string->void)->void))
             if !ok
                 return false
             result = &_result_
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3960,8 +3970,8 @@ Workspace·WorkspaceFile: ( -> ((?string->void)->void))
             if !ok
                 return false
             result = &_result_
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -3989,8 +3999,8 @@ Workspace·SaveAll: (includeUntitled:bool -> ((bool->void)->void))
                 return false
         else
             return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4035,8 +4045,8 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.Impl(), listenerFnId))
+        if =?onret
+            onret(result.bind(this.Impl(), listenerFnId))
         return true
     
     this.Impl().send(msg, onresp)
@@ -4063,8 +4073,8 @@ Workspace·GetWorkspaceFolder: (uri:string -> ((?WorkspaceFolder->void)->void))
             ok = result.loadFromJsonish(payload)
             if !ok
                 return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4101,8 +4111,8 @@ Workspace·WorkspaceFolders: ( -> ((?[WorkspaceFolder]->void)->void))
                     return false
                 result@__idx__result = __val__result
                 __idx__result = __idx__result + 1
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4149,8 +4159,8 @@ Workspace·FindFiles: (include:string -> exclude:?string -> maxResults:?int -> t
                     return false
                 result@__idx__result = __val__result
                 __idx__result = __idx__result + 1
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4179,8 +4189,8 @@ Workspace·AsRelativePath: (pathOrUri:string -> includeWorkspaceFolder:bool -> (
             if !ok
                 return false
             result = &_result_
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4208,8 +4218,8 @@ Workspace·AllProperties: ( -> ((WorkspaceBag->void)->void))
                 return false
         else
             return false
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4245,8 +4255,8 @@ Languages·GetLanguages: ( -> ((?[string]->void)->void))
                     return false
                 result@__idx__result = __val__result
                 __idx__result = __idx__result + 1
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4291,8 +4301,8 @@ Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> ((
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.Impl(), listenerFnId))
+        if =?onret
+            onret(result.bind(this.Impl(), listenerFnId))
         return true
     
     this.Impl().send(msg, onresp)
@@ -4332,8 +4342,8 @@ Extensions·OnDidChange: (listener:(->void) -> ((?Disposable->void)->void))
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.Impl(), listenerFnId))
+        if =?onret
+            onret(result.bind(this.Impl(), listenerFnId))
         return true
     
     this.Impl().send(msg, onresp)
@@ -4379,8 +4389,8 @@ Commands·RegisterCommand: (command:string -> callback:([any]->any) -> ((?Dispos
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.Impl(), callbackFnId))
+        if =?onret
+            onret(result.bind(this.Impl(), callbackFnId))
         return true
     
     this.Impl().send(msg, onresp)
@@ -4406,8 +4416,8 @@ Commands·ExecuteCommand: (command:string -> rest:[any] -> ((?any->void)->void))
         if =?payload
             [result, ok] = [payload, true]
             if ok
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4444,8 +4454,8 @@ Commands·GetCommands: (filterInternal:bool -> ((?[string]->void)->void))
                     return false
                 result@__idx__result = __val__result
                 __idx__result = __idx__result + 1
-            if =?onret
-                onret(result)
+        if =?onret
+            onret(result)
         return true
     
     this.Impl().send(msg, onresp)
@@ -4456,56 +4466,50 @@ Commands·GetCommands: (filterInternal:bool -> ((?[string]->void)->void))
 
 
 
-StatusBarItem·Show: ( -> ((?StatusBarItemBag->void)->void))
+StatusBarItem·Show: ( -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.show"
     msg.Data = dict·new(1)
     msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
-    var onret of (?StatusBarItemBag->void)
+    var onret of (void->void)
     onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?StatusBarItemBag
         if =?payload
-            result = ?StatusBarItemBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
+            return false
+        this.__appzObjBagPullFromPeer__()(( -> void)
             if =?onret
-                onret(result)
+                onret()
+        )
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(?StatusBarItemBag->void) -> void)
+    return (a0:(void->void) -> void)
         onret = a0
     
 
 
 
 
-StatusBarItem·Hide: ( -> ((?StatusBarItemBag->void)->void))
+StatusBarItem·Hide: ( -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.hide"
     msg.Data = dict·new(1)
     msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
-    var onret of (?StatusBarItemBag->void)
+    var onret of (void->void)
     onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?StatusBarItemBag
         if =?payload
-            result = ?StatusBarItemBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
+            return false
+        this.__appzObjBagPullFromPeer__()(( -> void)
             if =?onret
-                onret(result)
+                onret()
+        )
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(?StatusBarItemBag->void) -> void)
+    return (a0:(void->void) -> void)
         onret = a0
     
 
@@ -4518,38 +4522,38 @@ StatusBarItem·Dispose: ( -> ((void->void)->void))
 
 
 
-StatusBarItem·Get: ( -> ((StatusBarItemBag->void)->void))
+StatusBarItem·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "StatusBarItem.appzObjPropsGet"
+    msg.QName = "StatusBarItem.__appzObjBagPullFromPeer__"
     msg.Data = dict·new(1)
     msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
-    var onret of (StatusBarItemBag->void)
+    var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of StatusBarItemBag
-        if =?payload
-            result = StatusBarItemBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
-            if =?onret
-                onret(result)
+        if =!this.CfgBag
+            this.CfgBag = ?StatusBarItemBag·new
+        this.CfgBag.__holder__ = this
+        ok = this.CfgBag.loadFromJsonish(payload)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(StatusBarItemBag->void) -> void)
+    return (a0:(->void) -> void)
         onret = a0
     
 
 
 
 
-StatusBarItem·Set: (allUpdates:StatusBarItemBag -> ((void->void)->void))
+StatusBarItem·__appzObjBagPushToPeer_: (allUpdates:?StatusBarItemBag -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "StatusBarItem.appzObjPropsSet"
+    msg.QName = "StatusBarItem.__appzObjBagPushToPeer_"
     msg.Data = dict·new(2)
     msg.Data@"" = this.__disp__.id
     msg.Data@"allUpdates" = allUpdates
@@ -4570,7 +4574,7 @@ StatusBarItem·Set: (allUpdates:StatusBarItemBag -> ((void->void)->void))
 
 
 
-OutputChannel·Append: (value:string -> ((?OutputChannelBag->void)->void))
+OutputChannel·Append: (value:string -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.append"
@@ -4578,28 +4582,25 @@ OutputChannel·Append: (value:string -> ((?OutputChannelBag->void)->void))
     msg.Data@"" = this.__disp__.id
     msg.Data@"value" = value
     var onresp of (any->bool)
-    var onret of (?OutputChannelBag->void)
+    var onret of (void->void)
     onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?OutputChannelBag
         if =?payload
-            result = ?OutputChannelBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
+            return false
+        this.__appzObjBagPullFromPeer__()(( -> void)
             if =?onret
-                onret(result)
+                onret()
+        )
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(?OutputChannelBag->void) -> void)
+    return (a0:(void->void) -> void)
         onret = a0
     
 
 
 
 
-OutputChannel·AppendLine: (value:string -> ((?OutputChannelBag->void)->void))
+OutputChannel·AppendLine: (value:string -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.appendLine"
@@ -4607,56 +4608,50 @@ OutputChannel·AppendLine: (value:string -> ((?OutputChannelBag->void)->void))
     msg.Data@"" = this.__disp__.id
     msg.Data@"value" = value
     var onresp of (any->bool)
-    var onret of (?OutputChannelBag->void)
+    var onret of (void->void)
     onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?OutputChannelBag
         if =?payload
-            result = ?OutputChannelBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
+            return false
+        this.__appzObjBagPullFromPeer__()(( -> void)
             if =?onret
-                onret(result)
+                onret()
+        )
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(?OutputChannelBag->void) -> void)
+    return (a0:(void->void) -> void)
         onret = a0
     
 
 
 
 
-OutputChannel·Clear: ( -> ((?OutputChannelBag->void)->void))
+OutputChannel·Clear: ( -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.clear"
     msg.Data = dict·new(1)
     msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
-    var onret of (?OutputChannelBag->void)
+    var onret of (void->void)
     onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?OutputChannelBag
         if =?payload
-            result = ?OutputChannelBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
+            return false
+        this.__appzObjBagPullFromPeer__()(( -> void)
             if =?onret
-                onret(result)
+                onret()
+        )
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(?OutputChannelBag->void) -> void)
+    return (a0:(void->void) -> void)
         onret = a0
     
 
 
 
 
-OutputChannel·Show: (preserveFocus:bool -> ((?OutputChannelBag->void)->void))
+OutputChannel·Show: (preserveFocus:bool -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.show"
@@ -4664,49 +4659,43 @@ OutputChannel·Show: (preserveFocus:bool -> ((?OutputChannelBag->void)->void))
     msg.Data@"" = this.__disp__.id
     msg.Data@"preserveFocus" = preserveFocus
     var onresp of (any->bool)
-    var onret of (?OutputChannelBag->void)
+    var onret of (void->void)
     onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?OutputChannelBag
         if =?payload
-            result = ?OutputChannelBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
+            return false
+        this.__appzObjBagPullFromPeer__()(( -> void)
             if =?onret
-                onret(result)
+                onret()
+        )
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(?OutputChannelBag->void) -> void)
+    return (a0:(void->void) -> void)
         onret = a0
     
 
 
 
 
-OutputChannel·Hide: ( -> ((?OutputChannelBag->void)->void))
+OutputChannel·Hide: ( -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "OutputChannel.hide"
     msg.Data = dict·new(1)
     msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
-    var onret of (?OutputChannelBag->void)
+    var onret of (void->void)
     onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?OutputChannelBag
         if =?payload
-            result = ?OutputChannelBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
+            return false
+        this.__appzObjBagPullFromPeer__()(( -> void)
             if =?onret
-                onret(result)
+                onret()
+        )
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(?OutputChannelBag->void) -> void)
+    return (a0:(void->void) -> void)
         onret = a0
     
 
@@ -4719,28 +4708,28 @@ OutputChannel·Dispose: ( -> ((void->void)->void))
 
 
 
-OutputChannel·Get: ( -> ((OutputChannelBag->void)->void))
+OutputChannel·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "OutputChannel.appzObjPropsGet"
+    msg.QName = "OutputChannel.__appzObjBagPullFromPeer__"
     msg.Data = dict·new(1)
     msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
-    var onret of (OutputChannelBag->void)
+    var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of OutputChannelBag
-        if =?payload
-            result = OutputChannelBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
-            if =?onret
-                onret(result)
+        if =!this.CfgBag
+            this.CfgBag = ?OutputChannelBag·new
+        this.CfgBag.__holder__ = this
+        ok = this.CfgBag.loadFromJsonish(payload)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(OutputChannelBag->void) -> void)
+    return (a0:(->void) -> void)
         onret = a0
     
 
@@ -4753,28 +4742,28 @@ TextEditorDecorationType·Dispose: ( -> ((void->void)->void))
 
 
 
-TextEditorDecorationType·Get: ( -> ((TextEditorDecorationTypeBag->void)->void))
+TextEditorDecorationType·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "TextEditorDecorationType.appzObjPropsGet"
+    msg.QName = "TextEditorDecorationType.__appzObjBagPullFromPeer__"
     msg.Data = dict·new(1)
     msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
-    var onret of (TextEditorDecorationTypeBag->void)
+    var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of TextEditorDecorationTypeBag
-        if =?payload
-            result = TextEditorDecorationTypeBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
-            if =?onret
-                onret(result)
+        if =!this.CfgBag
+            this.CfgBag = ?TextEditorDecorationTypeBag·new
+        this.CfgBag.__holder__ = this
+        ok = this.CfgBag.loadFromJsonish(payload)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(TextEditorDecorationTypeBag->void) -> void)
+    return (a0:(->void) -> void)
         onret = a0
     
 
@@ -4821,8 +4810,8 @@ InputBox·OnDidChangeValue: (handler:(string->InputBoxBag->void) -> ((?Disposabl
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.__disp__.impl, handlerFnId))
+        if =?onret
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -4869,8 +4858,8 @@ InputBox·OnDidAccept: (handler:(InputBoxBag->void) -> ((?Disposable->void)->voi
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.__disp__.impl, handlerFnId))
+        if =?onret
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -4881,56 +4870,50 @@ InputBox·OnDidAccept: (handler:(InputBoxBag->void) -> ((?Disposable->void)->voi
 
 
 
-InputBox·Show: ( -> ((?InputBoxBag->void)->void))
+InputBox·Show: ( -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.show"
     msg.Data = dict·new(1)
     msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
-    var onret of (?InputBoxBag->void)
+    var onret of (void->void)
     onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?InputBoxBag
         if =?payload
-            result = ?InputBoxBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
+            return false
+        this.__appzObjBagPullFromPeer__()(( -> void)
             if =?onret
-                onret(result)
+                onret()
+        )
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(?InputBoxBag->void) -> void)
+    return (a0:(void->void) -> void)
         onret = a0
     
 
 
 
 
-InputBox·Hide: ( -> ((?InputBoxBag->void)->void))
+InputBox·Hide: ( -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.hide"
     msg.Data = dict·new(1)
     msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
-    var onret of (?InputBoxBag->void)
+    var onret of (void->void)
     onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?InputBoxBag
         if =?payload
-            result = ?InputBoxBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
+            return false
+        this.__appzObjBagPullFromPeer__()(( -> void)
             if =?onret
-                onret(result)
+                onret()
+        )
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(?InputBoxBag->void) -> void)
+    return (a0:(void->void) -> void)
         onret = a0
     
 
@@ -4973,8 +4956,8 @@ InputBox·OnDidHide: (handler:(InputBoxBag->void) -> ((?Disposable->void)->void)
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.__disp__.impl, handlerFnId))
+        if =?onret
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -4991,38 +4974,38 @@ InputBox·Dispose: ( -> ((void->void)->void))
 
 
 
-InputBox·Get: ( -> ((InputBoxBag->void)->void))
+InputBox·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "InputBox.appzObjPropsGet"
+    msg.QName = "InputBox.__appzObjBagPullFromPeer__"
     msg.Data = dict·new(1)
     msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
-    var onret of (InputBoxBag->void)
+    var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of InputBoxBag
-        if =?payload
-            result = InputBoxBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
-            if =?onret
-                onret(result)
+        if =!this.CfgBag
+            this.CfgBag = ?InputBoxBag·new
+        this.CfgBag.__holder__ = this
+        ok = this.CfgBag.loadFromJsonish(payload)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(InputBoxBag->void) -> void)
+    return (a0:(->void) -> void)
         onret = a0
     
 
 
 
 
-InputBox·Set: (allUpdates:InputBoxBag -> ((void->void)->void))
+InputBox·__appzObjBagPushToPeer_: (allUpdates:?InputBoxBag -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "InputBox.appzObjPropsSet"
+    msg.QName = "InputBox.__appzObjBagPushToPeer_"
     msg.Data = dict·new(2)
     msg.Data@"" = this.__disp__.id
     msg.Data@"allUpdates" = allUpdates
@@ -5083,8 +5066,8 @@ QuickPick·OnDidChangeValue: (handler:(string->QuickPickBag->void) -> ((?Disposa
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.__disp__.impl, handlerFnId))
+        if =?onret
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -5131,8 +5114,8 @@ QuickPick·OnDidAccept: (handler:(QuickPickBag->void) -> ((?Disposable->void)->v
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.__disp__.impl, handlerFnId))
+        if =?onret
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -5195,8 +5178,8 @@ QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->QuickPickBag->void) -> 
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.__disp__.impl, handlerFnId))
+        if =?onret
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -5259,8 +5242,8 @@ QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->QuickPickBag->void) 
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.__disp__.impl, handlerFnId))
+        if =?onret
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -5271,56 +5254,50 @@ QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->QuickPickBag->void) 
 
 
 
-QuickPick·Show: ( -> ((?QuickPickBag->void)->void))
+QuickPick·Show: ( -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.show"
     msg.Data = dict·new(1)
     msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
-    var onret of (?QuickPickBag->void)
+    var onret of (void->void)
     onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?QuickPickBag
         if =?payload
-            result = ?QuickPickBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
+            return false
+        this.__appzObjBagPullFromPeer__()(( -> void)
             if =?onret
-                onret(result)
+                onret()
+        )
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(?QuickPickBag->void) -> void)
+    return (a0:(void->void) -> void)
         onret = a0
     
 
 
 
 
-QuickPick·Hide: ( -> ((?QuickPickBag->void)->void))
+QuickPick·Hide: ( -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.hide"
     msg.Data = dict·new(1)
     msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
-    var onret of (?QuickPickBag->void)
+    var onret of (void->void)
     onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?QuickPickBag
         if =?payload
-            result = ?QuickPickBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
+            return false
+        this.__appzObjBagPullFromPeer__()(( -> void)
             if =?onret
-                onret(result)
+                onret()
+        )
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(?QuickPickBag->void) -> void)
+    return (a0:(void->void) -> void)
         onret = a0
     
 
@@ -5363,8 +5340,8 @@ QuickPick·OnDidHide: (handler:(QuickPickBag->void) -> ((?Disposable->void)->voi
                 return false
         else
             return false
-            if =?onret
-                onret(result.bind(this.__disp__.impl, handlerFnId))
+        if =?onret
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -5381,38 +5358,38 @@ QuickPick·Dispose: ( -> ((void->void)->void))
 
 
 
-QuickPick·Get: ( -> ((QuickPickBag->void)->void))
+QuickPick·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "QuickPick.appzObjPropsGet"
+    msg.QName = "QuickPick.__appzObjBagPullFromPeer__"
     msg.Data = dict·new(1)
     msg.Data@"" = this.__disp__.id
     var onresp of (any->bool)
-    var onret of (QuickPickBag->void)
+    var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of QuickPickBag
-        if =?payload
-            result = QuickPickBag·new
-            ok = result.loadFromJsonish(payload)
-            if !ok
-                return false
-            if =?onret
-                onret(result)
+        if =!this.CfgBag
+            this.CfgBag = ?QuickPickBag·new
+        this.CfgBag.__holder__ = this
+        ok = this.CfgBag.loadFromJsonish(payload)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
-    return (a0:(QuickPickBag->void) -> void)
+    return (a0:(->void) -> void)
         onret = a0
     
 
 
 
 
-QuickPick·Set: (allUpdates:QuickPickBag -> ((void->void)->void))
+QuickPick·__appzObjBagPushToPeer_: (allUpdates:?QuickPickBag -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "QuickPick.appzObjPropsSet"
+    msg.QName = "QuickPick.__appzObjBagPushToPeer_"
     msg.Data = dict·new(2)
     msg.Data@"" = this.__disp__.id
     msg.Data@"allUpdates" = allUpdates
@@ -5429,6 +5406,54 @@ QuickPick·Set: (allUpdates:QuickPickBag -> ((void->void)->void))
     return (a0:(void->void) -> void)
         onret = a0
     
+
+
+
+
+StatusBarItemBag·ReFetch: ( -> ((->void)->void))
+    return this.__holder__.__appzObjBagPullFromPeer__()
+
+
+
+
+StatusBarItemBag·ApplyChanges: ( -> ((->void)->void))
+    return this.__holder__.__appzObjBagPushToPeer_(this)
+
+
+
+
+OutputChannelBag·ReFetch: ( -> ((->void)->void))
+    return this.__holder__.__appzObjBagPullFromPeer__()
+
+
+
+
+TextEditorDecorationTypeBag·ReFetch: ( -> ((->void)->void))
+    return this.__holder__.__appzObjBagPullFromPeer__()
+
+
+
+
+InputBoxBag·ReFetch: ( -> ((->void)->void))
+    return this.__holder__.__appzObjBagPullFromPeer__()
+
+
+
+
+InputBoxBag·ApplyChanges: ( -> ((->void)->void))
+    return this.__holder__.__appzObjBagPushToPeer_(this)
+
+
+
+
+QuickPickBag·ReFetch: ( -> ((->void)->void))
+    return this.__holder__.__appzObjBagPullFromPeer__()
+
+
+
+
+QuickPickBag·ApplyChanges: ( -> ((->void)->void))
+    return this.__holder__.__appzObjBagPushToPeer_(this)
 
 
 

@@ -115,9 +115,9 @@ export class Gen extends gen_syn.Gen {
                     const ffuncs = it.fromPrep.fields.filter(_ => gen.typeFun(_.typeSpec))
                     const fprops = it.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec))
                     if (fprops && fprops.length) {
-                        ffuncs.push({ name: "get", typeSpec: { From: [], To: it.Name + gen.idents.typeSuffBag } })
+                        ffuncs.push({ name: gen.idents.methodObjBagPull, typeSpec: { From: [], To: it.Name + gen.idents.typeSuffBag } })
                         if (fprops.find(_ => !_.readOnly))
-                            ffuncs.push({ name: "set", typeSpec: { From: [it.Name + gen.idents.typeSuffBag], To: null } })
+                            ffuncs.push({ name: gen.idents.methodObjBagPush, typeSpec: { From: [it.Name + gen.idents.typeSuffBag], To: null } })
                     }
                     this.each(ffuncs, "\n", f => {
                         const tfun = gen.typeFun(f.typeSpec)

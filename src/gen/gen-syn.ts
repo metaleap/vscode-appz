@@ -239,7 +239,6 @@ export class Builder {
                             const struct = this.prep.structs.find(_ => this.gen.nameRewriters.types.structs(_.name) === tn.Name)
                             if (struct && struct.isDispObj) {
                                 me.IsObjCtor = tn.Name
-                                me.Args[me.Args.length - 1].Type = { From: [tn, { Name: tn.Name + gen.idents.typeSuffBag }], To: null }
                             }
                         }
                     }
@@ -287,7 +286,7 @@ export class Builder {
                         return tfun && tfun[0] && tfun[0].length === 1 && tfun[0][0] && gen.typeFun(tfun[0][0])
                     }) ? (" a (subscribed) `" + structname + "` event fires or ") : " ") + "any `" + structname + "` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `" + gen.idents.methodBagFetch + "` method." + (it.fields.some(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec)) ? " Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `" + gen.idents.methodBagPublish + "` method." : "")]
                 }]
-            },] : (((!it.isPropsOfStruct) ? [] : [{ Name: gen.idents.fldBagHolder, Json: { Excluded: true }, Type: { Maybe: { Name: gen.idents.coreTypeDisp } } }]) as Field[]).concat(...it.fields.map((_: gen.PrepField): Field => ({
+            },] : (((!it.isPropsOfStruct) ? [] : [{ Name: gen.idents.fldBagHolder, Json: { Excluded: true }, Type: { Maybe: { Name: this.gen.nameRewriters.types.structs(it.isPropsOfStruct.name) } } }]) as Field[]).concat(...it.fields.map((_: gen.PrepField): Field => ({
                 fromPrep: _,
                 name: _.name,
                 Name: ((it.isPropsOfStruct && _.readOnly) ? this.gen.nameRewriters.methods : this.gen.nameRewriters.fields)(_.name),
@@ -581,8 +580,6 @@ export class Gen extends gen.Gen implements gen.IGen {
                     docarg = "TODO_ARG_SUB"
                 else if (me.fromPrep && me.fromPrep.isProps)
                     docarg = "TODO_ARG_PROPS"
-                else if (me.Name === "Set" && me.Args.length === 1 && me.Args[0].Name === "allUpdates")
-                    docarg = "be aware that **all** its fields are sent for update, no omissions."
                 if ((!docret) && this.typeFunc(me.Type) && (me.Type as TypeRefFunc).From && (me.Type as TypeRefFunc).From.length && this.typeFunc((me.Type as TypeRefFunc).From[0])) {
                     const tret = this.typeUnMaybe(((this.typeFunc((me.Type as TypeRefFunc).From[0])) as TypeRefFunc).From[0]) as TypeRefOwn
                     docret = "A thenable that resolves when this call has completed at the counterparty" + ((!tret) ? "" : (" and its" + ((!tret.Name) ? " " : (" `" + tret.Name + "` ")) + "result obtained")) + "."
@@ -1000,7 +997,7 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     private genMethodImpl_ObjPropsGet(struct: TypeRefOwn, method: Method, _: Builder, body: Instr[]) {
-        this.genMethodImpl_methodCall(struct, method, _, body, _._(_.eThis(), gen.idents.fldDisp, gen.idents.coreFldId), _._(_.eThis(), gen.idents.fldDisp, gen.idents.fldImpl))
+        this.genMethodImpl_methodCall(struct, method, _, body, _._(_.eThis(), gen.idents.fldDisp, gen.idents.coreFldId), _._(_.eThis(), gen.idents.fldDisp, gen.idents.fldImpl), gen.idents.fldDispObjBag)
     }
 
     private genMethodImpl_ObjPropsSet(struct: TypeRefOwn, method: Method, _: Builder, body: Instr[]) {
@@ -1023,7 +1020,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             this.genMethodImpl_methodCall(typeRef, method, _, body)
     }
 
-    private genMethodImpl_methodCall(ifaceOrStruct: TypeRefOwn, method: Method, _: Builder, body: Instr[], idVal?: Expr, impl?: Expr) {
+    private genMethodImpl_methodCall(ifaceOrStruct: TypeRefOwn, method: Method, _: Builder, body: Instr[], idVal?: Expr, impl?: Expr, retIntoFld?: string) {
         const funcfields = method.fromPrep ? gen.argsFuncFields(_.prep, method.fromPrep.args) : []
         const numargs = method.fromPrep ? method.fromPrep.args.filter(_ => !_.isFromRetThenable).length : method.Args.length
 
@@ -1034,7 +1031,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             _.iVar(gen.idents.varMsg, { Maybe: { Name: gen.idents.coreTypeMsg } }),
             _.iSet(_._(gen.idents.varMsg), _.eNew({ Maybe: { Name: gen.idents.coreTypeMsg } })),
             _.iSet(_._(gen.idents.varMsg, gen.idents.coreFldMsgQn), _.eLit(
-                (ifaceOrStruct.name + '.' + (method.fromPrep ? method.fromPrep.name : (method.name && method.name.startsWith("appz")) ? method.name : method.Name))
+                (ifaceOrStruct.name + '.' + (method.fromPrep ? method.fromPrep.name : method.Name))
             )),
             _.iSet(_._(gen.idents.varMsg, gen.idents.coreFldMsgData), _.eCollNew(_.eLit(numargs + (idVal ? 1 : 0)))),
         )
@@ -1212,38 +1209,60 @@ export class Gen extends gen.Gen implements gen.IGen {
         let dsttype = (isval || isprops) ? this.typeUnMaybe(rettype) : rettype
         if (this.typeMaybe(dsttype) && !this.typeMaybe(dsttype).Maybe)
             dsttype = null
+        const tstruct = (ifaceOrStruct as TStruct).Fields ? (ifaceOrStruct as TStruct) : null
+        const retintofld = retIntoFld ? tstruct.Fields.find(_ => _.Name === retIntoFld) : null
+        if (retintofld)
+            dsttype = retintofld.Type
 
+        const result: Expr = retIntoFld ? _._(_.eThis(), retIntoFld) : _._(gen.idents.varRes)
         body.push(
             _.iSet(_._(gen.idents.varOnResp), _.eFunc([{ Name: gen.idents.argPayload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool,
-                ..._.WHEN(dsttype, () => [
-                    _.iVar(gen.idents.varOk, TypeRefPrim.Bool),
-                    _.iVar(gen.idents.varRes, dsttype),
-                    _.iIf(_.oIs(_._(gen.idents.argPayload)),
-                        this.convOrRet(gen.idents.varRes, _._(gen.idents.argPayload), dsttype),
-                        _.WHEN(isdisp || isval || isprops, () => [_.iRet(_.eLit(false))], () => []),
-                    ),
-                    _.iBlock(..._.WHEN(isdisp,
+                ..._.WHEN(dsttype,
+                    () => _.WHEN(!retIntoFld,
+                        () => [
+                            _.iVar(gen.idents.varOk, TypeRefPrim.Bool),
+                            _.iVar(gen.idents.varRes, dsttype),
+                            _.iIf(_.oIs(_._(gen.idents.argPayload)),
+                                this.convOrRet(gen.idents.varRes, _._(gen.idents.argPayload), dsttype),
+                                _.WHEN(isdisp || isval || isprops || method.IsObjCtor, () => [_.iRet(_.eLit(false))], () => []),
+                            ),
+                        ],
+                        () => [
+                            _.iVar(gen.idents.varOk, TypeRefPrim.Bool),
+                            _.iIf(_.oIsnt(_._(_.eThis(), retIntoFld)), [_.iSet(_._(_.eThis(), retIntoFld), _.eNew(dsttype))]),
+                            _.iSet(_._(_.eThis(), retIntoFld, gen.idents.fldBagHolder), _.eThis()),
+                            _.iSet(_._(gen.idents.varOk), _.eCall(_._(_.eThis(), retIntoFld, gen.idents.methodLoadFrom), _._(gen.idents.argPayload))),
+                            _.iIf(_.oNot(_._(gen.idents.varOk)), [_.iRet(_.eLit(false))]),
+                        ],
+                    ).concat(..._.WHEN(isdisp,
                         () => [_.iIf(_.oIs(_._(gen.idents.varOnRet)), [
-                            _.eCall(_._(gen.idents.varOnRet), _.eCall(_._(gen.idents.varRes, gen.idents.coreMethodBind), ...[impl].concat(...evtsubfnids.map(fnid => _._(fnid))))),
+                            _.eCall(_._(gen.idents.varOnRet), _.eCall(_._(result, gen.idents.coreMethodBind), ...[impl].concat(...evtsubfnids.map(fnid => _._(fnid))))),
                         ])],
                         () => (!(method.IsObjCtor && method.IsObjCtor.length))
                             ? [_.iIf(_.oIs(_._(gen.idents.varOnRet)), [
-                                _.eCall(_._(gen.idents.varOnRet), _._(gen.idents.varRes)),
+                                _.eCall(_._(gen.idents.varOnRet), ...retintofld ? [] : [_._(result)]),
                             ])]
-                            : [_.eCall(_.eCall(_._(gen.idents.varRes, "Get")),
-                                _.eFunc([{ Name: "state", Type: { Name: method.IsObjCtor + gen.idents.typeSuffBag } }], null,
+                            : [_.eCall(_.eCall(_._(result, gen.idents.methodObjBagPull)),
+                                _.eFunc([], null,
                                     _.iIf(_.oIs(_._(gen.idents.varOnRet)), [
-                                        _.eCall(_._(gen.idents.varOnRet), _._(gen.idents.varRes), _._("state")),
+                                        _.eCall(_._(gen.idents.varOnRet), _._(result)),
                                     ]),
                                 ),
                             )],
-                    )),
-                    _.iRet(_.eLit(true)),
-                ], () => [
-                    _.iIf(_.oIs(_._(gen.idents.argPayload)), [_.iRet(_.eLit(false))]),
-                    _.iIf(_.oIs(_._(gen.idents.varOnRet)), [_.eCall(_._(gen.idents.varOnRet))]),
-                    _.iRet(_.eLit(true)),
-                ])
+                    )).concat(_.iRet(_.eLit(true))),
+                    () => {
+                        const refetch = (tstruct && tstruct.fromPrep && tstruct.fromPrep.isDispObj && !(method.IsObjCtor || method.IsObjEvt || method.Name === gen.idents.methodObjBagPush))
+                        return [
+                            _.iIf(_.oIs(_._(gen.idents.argPayload)), [_.iRet(_.eLit(false))]),
+                            refetch ?
+                                _.eCall(_.eCall(_._(_.eThis(), gen.idents.methodObjBagPull)), _.eFunc([], null,
+                                    _.iIf(_.oIs(_._(gen.idents.varOnRet)), [_.eCall(_._(gen.idents.varOnRet))]),
+                                )) :
+                                _.iIf(_.oIs(_._(gen.idents.varOnRet)), [_.eCall(_._(gen.idents.varOnRet))]),
+                            _.iRet(_.eLit(true)),
+                        ]
+                    },
+                )
             )),
         )
 
@@ -1402,64 +1421,82 @@ export class Gen extends gen.Gen implements gen.IGen {
         for (const structname in this.allStructs) {
             let tfun: [gen.TypeSpec[], gen.TypeSpec]
             const struct = this.allStructs[structname]
-            if (struct && struct.fromPrep && struct.fromPrep.isDispObj) {
-                for (const field of struct.fromPrep.fields) {
-                    const orig = field.fromOrig
-                    if (tfun = gen.typeFun(field.typeSpec)) {
-                        const isevt = (ts.isPropertySignature(orig) && ts.isTypeReferenceNode(orig.type) && orig.type.typeName.getText() === "Event")
-                        const prepargs = isevt
-                            ? [{ name: gen.idents.argHandler, optional: false, typeSpec: (field.typeSpec as gen.TypeSpecFun).From[0] }]
-                            : (tfun[0].map((_, i): gen.PrepArg => gen.argFrom(_, (orig as ts.MethodSignature).parameters[i])))
-                        if (isevt) {
-                            const tf = gen.typeFun(prepargs[0].typeSpec)
-                            if (tf)
-                                prepargs[0].typeSpec = { From: tf[0].concat(struct.Name + gen.idents.typeSuffBag), To: tf[1] }
+            if (struct && struct.fromPrep)
+                if (struct.fromPrep.isPropsOfStruct) {
+                    this.emitMethodImpl(struct, {
+                        Name: gen.idents.methodBagFetch, Type: { From: [{ From: [], To: null }], To: null }, Args: [], Docs: [{
+                            Lines: [
+                                "getter docs"
+                            ]
+                        }]
+                    }, (_t: TypeRefOwn, _m: Method, _: Builder, b: Instr[]) => {
+                        b.push(_.iRet(_.eCall(_._(_.eThis(), gen.idents.fldBagHolder, gen.idents.methodObjBagPull))))
+                    })
+                    if (struct.fromPrep.fields.some(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec)))
+                        this.emitMethodImpl(struct, {
+                            Name: gen.idents.methodBagPublish, Type: { From: [{ From: [], To: null }], To: null }, Args: [], Docs: [{
+                                Lines: [
+                                    "setter docs"
+                                ]
+                            }]
+                        }, (_t: TypeRefOwn, _m: Method, _: Builder, b: Instr[]) => {
+                            b.push(_.iRet(_.eCall(_._(_.eThis(), gen.idents.fldBagHolder, gen.idents.methodObjBagPush), _.eThis())))
+                        })
+                } if (struct.fromPrep.isDispObj) {
+                    for (const field of struct.fromPrep.fields) {
+                        const orig = field.fromOrig
+                        if (tfun = gen.typeFun(field.typeSpec)) {
+                            const isevt = (ts.isPropertySignature(orig) && ts.isTypeReferenceNode(orig.type) && orig.type.typeName.getText() === "Event")
+                            const prepargs = isevt
+                                ? [{ name: gen.idents.argHandler, optional: false, typeSpec: (field.typeSpec as gen.TypeSpecFun).From[0] }]
+                                : (tfun[0].map((_, i): gen.PrepArg => gen.argFrom(_, (orig as ts.MethodSignature).parameters[i])))
+                            if (isevt) {
+                                const tf = gen.typeFun(prepargs[0].typeSpec)
+                                if (tf)
+                                    prepargs[0].typeSpec = { From: tf[0].concat(struct.Name + gen.idents.typeSuffBag), To: tf[1] }
+                            }
+                            let tret = tfun[1]
+                            tret = { Thens: [tret] }
+                            prepargs.push({ name: "?", isFromRetThenable: true, optional: true, typeSpec: tret })
+                            const me: Method = {
+                                name: field.name, Name: this.nameRewriters.methods(field.name),
+                                Args: prepargs.map(_ => {
+                                    const arg = this.b.fromArg(_)
+                                    const tmay = this.typeMaybe(arg.Type)
+                                    if (_.optional && tmay && tmay.Maybe && this.options.unMaybeOutgoingTypes.includes(tmay.Maybe))
+                                        arg.Type = tmay.Maybe
+                                    return arg
+                                }),
+                                Type: null, IsObjEvt: isevt,
+                                Docs: this.b.docs(gen.docs(orig), [], true, true),
+                                fromPrep: { args: prepargs, name: field.name, nameOrig: orig.getText() }
+                            }
+                            me.Type = { From: [this.typeUnMaybe(me.Args[me.Args.length - 1].Type)], To: null }
+                            me.Args = me.Args.slice(0, me.Args.length - 1)
+                            this.emitMethodImpl(struct, me, this.genMethodImpl_ObjMethodCall)
                         }
-                        let tret = tfun[1]
-                        if (!gen.typeProm(tret))
-                            if (field.name !== "dispose" && !tret)
-                                tret = struct.Name + gen.idents.typeSuffBag
-                        tret = { Thens: [tret] }
-                        prepargs.push({ name: "?", isFromRetThenable: true, optional: true, typeSpec: tret })
-                        const me: Method = {
-                            name: field.name, Name: this.nameRewriters.methods(field.name),
-                            Args: prepargs.map(_ => {
-                                const arg = this.b.fromArg(_)
-                                const tmay = this.typeMaybe(arg.Type)
-                                if (_.optional && tmay && tmay.Maybe && this.options.unMaybeOutgoingTypes.includes(tmay.Maybe))
-                                    arg.Type = tmay.Maybe
-                                return arg
-                            }),
-                            Type: null, IsObjEvt: isevt,
-                            Docs: this.b.docs(gen.docs(orig), [], true, true),
-                            fromPrep: { args: prepargs, name: field.name, nameOrig: orig.getText() }
+                    }
+                    let propsfields = struct.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec))
+                    if (propsfields && propsfields.length) {
+                        const mget: Method = {
+                            name: gen.idents.methodObjBagPull, Name: gen.idents.methodObjBagPull, Args: [],
+                            Type: { From: [{ From: [], To: null }], To: null },
+                            Docs: [{ Lines: ["Obtains this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
                         }
-                        me.Type = { From: [this.typeUnMaybe(me.Args[me.Args.length - 1].Type)], To: null }
-                        me.Args = me.Args.slice(0, me.Args.length - 1)
-                        this.emitMethodImpl(struct, me, this.genMethodImpl_ObjMethodCall)
+                        this.state.genPopulateFor[struct.Name + gen.idents.typeSuffBag] = true
+                        this.emitMethodImpl(struct, mget, this.genMethodImpl_ObjPropsGet)
+                        propsfields = propsfields.filter(_ => !_.readOnly)
+                        if (propsfields.length) {
+                            const mset: Method = {
+                                name: gen.idents.methodObjBagPull, Name: gen.idents.methodObjBagPush,
+                                Args: [{ Name: gen.idents.argUpd, Type: { Maybe: { Name: struct.Name + gen.idents.typeSuffBag } } }],
+                                Type: { From: [{ From: [null], To: null }], To: null },
+                                Docs: [{ Lines: ["Updates this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
+                            }
+                            this.emitMethodImpl(struct, mset, this.genMethodImpl_ObjPropsSet)
+                        }
                     }
                 }
-                let propsfields = struct.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec))
-                if (propsfields && propsfields.length) {
-                    const mget: Method = {
-                        name: "appzObjPropsGet", Name: this.nameRewriters.methods("get"), Args: [],
-                        Type: { From: [{ From: [{ Name: struct.Name + gen.idents.typeSuffBag }], To: null }], To: null },
-                        Docs: [{ Lines: ["Obtains this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
-                    }
-                    this.state.genPopulateFor[struct.Name + gen.idents.typeSuffBag] = true
-                    this.emitMethodImpl(struct, mget, this.genMethodImpl_ObjPropsGet)
-                    propsfields = propsfields.filter(_ => !_.readOnly)
-                    if (propsfields.length) {
-                        const mset: Method = {
-                            name: "appzObjPropsSet", Name: this.nameRewriters.methods("set"),
-                            Args: [{ Name: "allUpdates", Type: { Name: struct.Name + gen.idents.typeSuffBag } }],
-                            Type: { From: [{ From: [null], To: null }], To: null },
-                            Docs: [{ Lines: ["Updates this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
-                        }
-                        this.emitMethodImpl(struct, mset, this.genMethodImpl_ObjPropsSet)
-                    }
-                }
-            }
         }
 
         let anydecoderstogenerate = true

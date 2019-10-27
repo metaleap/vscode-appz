@@ -434,21 +434,21 @@ type Window interface {
 	// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 	// 
 	// `return` ── A new status bar item.
-	CreateStatusBarItem(alignment StatusBarAlignment, priority *int) func(func(StatusBarItem, StatusBarItemBag))
+	CreateStatusBarItem(alignment StatusBarAlignment, priority *int) func(func(*StatusBarItem))
 
 	// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 	// 
 	// `name` ── Human-readable string which will be used to represent the channel in the UI.
 	// 
 	// `return` ── a thenable that resolves to the newly created `OutputChannel`.
-	CreateOutputChannel(name string) func(func(OutputChannel, OutputChannelBag))
+	CreateOutputChannel(name string) func(func(*OutputChannel))
 
 	// Create a TextEditorDecorationType that can be used to add decorations to text editors.
 	// 
 	// `options` ── Rendering options for the decoration type.
 	// 
 	// `return` ── A new decoration type instance.
-	CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(TextEditorDecorationType, TextEditorDecorationTypeBag))
+	CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(*TextEditorDecorationType))
 
 	// Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
 	// 
@@ -457,7 +457,7 @@ type Window interface {
 	// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 	// 
 	// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
-	CreateInputBox() func(func(InputBox, InputBoxBag))
+	CreateInputBox() func(func(*InputBox))
 
 	// Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
 	// of items of type T.
@@ -467,7 +467,7 @@ type Window interface {
 	// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 	// 
 	// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
-	CreateQuickPick() func(func(QuickPick, QuickPickBag))
+	CreateQuickPick() func(func(*QuickPick))
 }
 type implWindow struct{ *impl }
 
@@ -1143,7 +1143,7 @@ type WindowState struct {
 type StatusBarItem struct {
 	__disp__ *Disposable
 
-	// CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	// CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 	CfgBag *StatusBarItemBag
 }
 
@@ -1154,7 +1154,7 @@ type StatusBarItem struct {
 type OutputChannel struct {
 	__disp__ *Disposable
 
-	// CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
+	// CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
 	CfgBag *OutputChannelBag
 }
 
@@ -1307,7 +1307,7 @@ type DecorationRenderOptions struct {
 type TextEditorDecorationType struct {
 	__disp__ *Disposable
 
-	// CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
+	// CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
 	CfgBag *TextEditorDecorationTypeBag
 }
 
@@ -1319,7 +1319,7 @@ type TextEditorDecorationType struct {
 type InputBox struct {
 	__disp__ *Disposable
 
-	// CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	// CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 	CfgBag *InputBoxBag
 }
 
@@ -1343,7 +1343,7 @@ type QuickInputButton struct {
 type QuickPick struct {
 	__disp__ *Disposable
 
-	// CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	// CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 	CfgBag *QuickPickBag
 }
 
@@ -1443,7 +1443,7 @@ type WorkspaceBag struct {
 
 // StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 type StatusBarItemBag struct {
-	__holder__ *Disposable
+	__holder__ *StatusBarItem
 
 	// The alignment of this item.
 	Alignment func() StatusBarAlignment `json:"-"`
@@ -1473,7 +1473,7 @@ type StatusBarItemBag struct {
 
 // OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 type OutputChannelBag struct {
-	__holder__ *Disposable
+	__holder__ *OutputChannel
 
 	// The human-readable name of this output channel.
 	Name func() string `json:"-"`
@@ -1481,7 +1481,7 @@ type OutputChannelBag struct {
 
 // TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
 type TextEditorDecorationTypeBag struct {
-	__holder__ *Disposable
+	__holder__ *TextEditorDecorationType
 
 	// Internal representation of the handle.
 	Key func() string `json:"-"`
@@ -1489,7 +1489,7 @@ type TextEditorDecorationTypeBag struct {
 
 // InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 type InputBoxBag struct {
-	__holder__ *Disposable
+	__holder__ *InputBox
 
 	// Current input value.
 	Value string `json:"value,omitempty"`
@@ -1533,7 +1533,7 @@ type InputBoxBag struct {
 
 // QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
 type QuickPickBag struct {
-	__holder__ *Disposable
+	__holder__ *QuickPick
 
 	// Current value of the filter text.
 	Value string `json:"value,omitempty"`
@@ -1628,10 +1628,8 @@ func (me implWindow) ShowInformationMessage1(message string, items []string) fun
 			}
 			result = &_result_
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -1662,10 +1660,8 @@ func (me implWindow) ShowInformationMessage2(message string, options MessageOpti
 			}
 			result = &_result_
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -1694,10 +1690,8 @@ func (me implWindow) ShowInformationMessage3(message string, items []MessageItem
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -1727,10 +1721,8 @@ func (me implWindow) ShowInformationMessage4(message string, options MessageOpti
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -1760,10 +1752,8 @@ func (me implWindow) ShowWarningMessage1(message string, items []string) func(fu
 			}
 			result = &_result_
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -1794,10 +1784,8 @@ func (me implWindow) ShowWarningMessage2(message string, options MessageOptions,
 			}
 			result = &_result_
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -1826,10 +1814,8 @@ func (me implWindow) ShowWarningMessage3(message string, items []MessageItem) fu
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -1859,10 +1845,8 @@ func (me implWindow) ShowWarningMessage4(message string, options MessageOptions,
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -1892,10 +1876,8 @@ func (me implWindow) ShowErrorMessage1(message string, items []string) func(func
 			}
 			result = &_result_
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -1926,10 +1908,8 @@ func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, i
 			}
 			result = &_result_
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -1958,10 +1938,8 @@ func (me implWindow) ShowErrorMessage3(message string, items []MessageItem) func
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -1991,10 +1969,8 @@ func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, i
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -2069,10 +2045,8 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel) func(
 			}
 			result = &_result_
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -2171,10 +2145,8 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 				__idx__result = __idx__result + 1
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -2263,10 +2235,8 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 			}
 			result = &_result_
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -2365,10 +2335,8 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 				__idx__result = __idx__result + 1
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -2456,10 +2424,8 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -2501,10 +2467,8 @@ func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int) fun
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.Impl()))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.Impl()))
 		}
 		return true
 	}
@@ -2534,10 +2498,8 @@ func (me implWindow) SetStatusBarMessage2(text string) func(func(*Disposable)) {
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.Impl()))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.Impl()))
 		}
 		return true
 	}
@@ -2566,10 +2528,8 @@ func (me implWindow) ShowSaveDialog(options SaveDialogOptions) func(func(*string
 			}
 			result = &_result_
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -2609,10 +2569,8 @@ func (me implWindow) ShowOpenDialog(options OpenDialogOptions) func(func([]strin
 				__idx__result = __idx__result + 1
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -2642,10 +2600,8 @@ func (me implWindow) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -2671,10 +2627,8 @@ func (me implWindow) State() func(func(WindowState)) {
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -2722,10 +2676,8 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState)) func(fun
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.Impl(), listenerFnId))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.Impl(), listenerFnId))
 		}
 		return true
 	}
@@ -2735,7 +2687,7 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState)) func(fun
 	}
 }
 
-func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority *int) func(func(StatusBarItem, StatusBarItemBag)) {
+func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority *int) func(func(*StatusBarItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createStatusBarItem"
@@ -2747,158 +2699,163 @@ func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority 
 		msg.Data["priority"] = priority
 	}
 	var onresp func(any) bool
-	var onret func(StatusBarItem, StatusBarItemBag)
+	var onret func(*StatusBarItem)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result StatusBarItem
+		var result *StatusBarItem
 		if (nil != payload) {
+			result = new(StatusBarItem)
 			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
 			result.__disp__.impl = me.Impl()
+		} else {
+			return false
 		}
-		{
-			result.Get()(func(state StatusBarItemBag) {
-				if (nil != onret) {
-					onret(result, state)
-				}
-			})
-		}
+		result.__appzObjBagPullFromPeer__()(func() {
+			if (nil != onret) {
+				onret(result)
+			}
+		})
 		return true
 	}
 	me.Impl().send(msg, onresp)
-	return func(a0 func(StatusBarItem, StatusBarItemBag)) {
+	return func(a0 func(*StatusBarItem)) {
 		onret = a0
 	}
 }
 
-func (me implWindow) CreateOutputChannel(name string) func(func(OutputChannel, OutputChannelBag)) {
+func (me implWindow) CreateOutputChannel(name string) func(func(*OutputChannel)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createOutputChannel"
 	msg.Data = make(dict, 1)
 	msg.Data["name"] = name
 	var onresp func(any) bool
-	var onret func(OutputChannel, OutputChannelBag)
+	var onret func(*OutputChannel)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result OutputChannel
+		var result *OutputChannel
 		if (nil != payload) {
+			result = new(OutputChannel)
 			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
 			result.__disp__.impl = me.Impl()
+		} else {
+			return false
 		}
-		{
-			result.Get()(func(state OutputChannelBag) {
-				if (nil != onret) {
-					onret(result, state)
-				}
-			})
-		}
+		result.__appzObjBagPullFromPeer__()(func() {
+			if (nil != onret) {
+				onret(result)
+			}
+		})
 		return true
 	}
 	me.Impl().send(msg, onresp)
-	return func(a0 func(OutputChannel, OutputChannelBag)) {
+	return func(a0 func(*OutputChannel)) {
 		onret = a0
 	}
 }
 
-func (me implWindow) CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(TextEditorDecorationType, TextEditorDecorationTypeBag)) {
+func (me implWindow) CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(*TextEditorDecorationType)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createTextEditorDecorationType"
 	msg.Data = make(dict, 1)
 	msg.Data["options"] = options
 	var onresp func(any) bool
-	var onret func(TextEditorDecorationType, TextEditorDecorationTypeBag)
+	var onret func(*TextEditorDecorationType)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result TextEditorDecorationType
+		var result *TextEditorDecorationType
 		if (nil != payload) {
+			result = new(TextEditorDecorationType)
 			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
 			result.__disp__.impl = me.Impl()
+		} else {
+			return false
 		}
-		{
-			result.Get()(func(state TextEditorDecorationTypeBag) {
-				if (nil != onret) {
-					onret(result, state)
-				}
-			})
-		}
+		result.__appzObjBagPullFromPeer__()(func() {
+			if (nil != onret) {
+				onret(result)
+			}
+		})
 		return true
 	}
 	me.Impl().send(msg, onresp)
-	return func(a0 func(TextEditorDecorationType, TextEditorDecorationTypeBag)) {
+	return func(a0 func(*TextEditorDecorationType)) {
 		onret = a0
 	}
 }
 
-func (me implWindow) CreateInputBox() func(func(InputBox, InputBoxBag)) {
+func (me implWindow) CreateInputBox() func(func(*InputBox)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createInputBox"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
-	var onret func(InputBox, InputBoxBag)
+	var onret func(*InputBox)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result InputBox
+		var result *InputBox
 		if (nil != payload) {
+			result = new(InputBox)
 			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
 			result.__disp__.impl = me.Impl()
+		} else {
+			return false
 		}
-		{
-			result.Get()(func(state InputBoxBag) {
-				if (nil != onret) {
-					onret(result, state)
-				}
-			})
-		}
+		result.__appzObjBagPullFromPeer__()(func() {
+			if (nil != onret) {
+				onret(result)
+			}
+		})
 		return true
 	}
 	me.Impl().send(msg, onresp)
-	return func(a0 func(InputBox, InputBoxBag)) {
+	return func(a0 func(*InputBox)) {
 		onret = a0
 	}
 }
 
-func (me implWindow) CreateQuickPick() func(func(QuickPick, QuickPickBag)) {
+func (me implWindow) CreateQuickPick() func(func(*QuickPick)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "window.createQuickPick"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
-	var onret func(QuickPick, QuickPickBag)
+	var onret func(*QuickPick)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result QuickPick
+		var result *QuickPick
 		if (nil != payload) {
+			result = new(QuickPick)
 			ok = result.loadFromJsonish(payload)
 			if !ok {
 				return false
 			}
 			result.__disp__.impl = me.Impl()
+		} else {
+			return false
 		}
-		{
-			result.Get()(func(state QuickPickBag) {
-				if (nil != onret) {
-					onret(result, state)
-				}
-			})
-		}
+		result.__appzObjBagPullFromPeer__()(func() {
+			if (nil != onret) {
+				onret(result)
+			}
+		})
 		return true
 	}
 	me.Impl().send(msg, onresp)
-	return func(a0 func(QuickPick, QuickPickBag)) {
+	return func(a0 func(*QuickPick)) {
 		onret = a0
 	}
 }
@@ -2922,10 +2879,8 @@ func (me implEnv) OpenExternal(target string) func(func(bool)) {
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -2951,10 +2906,8 @@ func (me implEnv) AppName() func(func(string)) {
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -2980,10 +2933,8 @@ func (me implEnv) AppRoot() func(func(string)) {
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3009,10 +2960,8 @@ func (me implEnv) Language() func(func(string)) {
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3038,10 +2987,8 @@ func (me implEnv) MachineId() func(func(string)) {
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3069,10 +3016,8 @@ func (me implEnv) RemoteName() func(func(*string)) {
 			}
 			result = &_result_
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3098,10 +3043,8 @@ func (me implEnv) SessionId() func(func(string)) {
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3127,10 +3070,8 @@ func (me implEnv) Shell() func(func(string)) {
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3156,10 +3097,8 @@ func (me implEnv) UriScheme() func(func(string)) {
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3187,10 +3126,8 @@ func (me implEnv) AllProperties() func(func(EnvBag)) {
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3222,10 +3159,8 @@ func (me implClipboard) ReadText() func(func(*string)) {
 			}
 			result = &_result_
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3276,10 +3211,8 @@ func (me implWorkspace) Name() func(func(*string)) {
 			}
 			result = &_result_
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3307,10 +3240,8 @@ func (me implWorkspace) WorkspaceFile() func(func(*string)) {
 			}
 			result = &_result_
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3339,10 +3270,8 @@ func (me implWorkspace) SaveAll(includeUntitled bool) func(func(bool)) {
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3390,10 +3319,8 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.Impl(), listenerFnId))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.Impl(), listenerFnId))
 		}
 		return true
 	}
@@ -3421,10 +3348,8 @@ func (me implWorkspace) GetWorkspaceFolder(uri string) func(func(*WorkspaceFolde
 				return false
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3463,10 +3388,8 @@ func (me implWorkspace) WorkspaceFolders() func(func([]WorkspaceFolder)) {
 				__idx__result = __idx__result + 1
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3523,10 +3446,8 @@ func (me implWorkspace) FindFiles(include string, exclude *string, maxResults *i
 				__idx__result = __idx__result + 1
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3556,10 +3477,8 @@ func (me implWorkspace) AsRelativePath(pathOrUri string, includeWorkspaceFolder 
 			}
 			result = &_result_
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3587,10 +3506,8 @@ func (me implWorkspace) AllProperties() func(func(WorkspaceBag)) {
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3629,10 +3546,8 @@ func (me implLanguages) GetLanguages() func(func([]string)) {
 				__idx__result = __idx__result + 1
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3680,10 +3595,8 @@ func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEve
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.Impl(), listenerFnId))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.Impl(), listenerFnId))
 		}
 		return true
 	}
@@ -3726,10 +3639,8 @@ func (me implExtensions) OnDidChange(listener func()) func(func(*Disposable)) {
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.Impl(), listenerFnId))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.Impl(), listenerFnId))
 		}
 		return true
 	}
@@ -3779,10 +3690,8 @@ func (me implCommands) RegisterCommand(command string, callback func([]any) any)
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.Impl(), callbackFnId))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.Impl(), callbackFnId))
 		}
 		return true
 	}
@@ -3809,10 +3718,8 @@ func (me implCommands) ExecuteCommand(command string, rest []any) func(func(any)
 			if ok {
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3852,10 +3759,8 @@ func (me implCommands) GetCommands(filterInternal bool) func(func([]string)) {
 				__idx__result = __idx__result + 1
 			}
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		if (nil != onret) {
+			onret(result)
 		}
 		return true
 	}
@@ -3867,68 +3772,56 @@ func (me implCommands) GetCommands(filterInternal bool) func(func([]string)) {
 
 // Shows the entry in the status bar.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
-func (me *StatusBarItem) Show() func(func(*StatusBarItemBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *StatusBarItem) Show() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.show"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
-	var onret func(*StatusBarItemBag)
+	var onret func()
 	onresp = func(payload any) bool {
-		var ok bool
-		var result *StatusBarItemBag
 		if (nil != payload) {
-			result = new(StatusBarItemBag)
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+			return false
 		}
-		{
+		me.__appzObjBagPullFromPeer__()(func() {
 			if (nil != onret) {
-				onret(result)
+				onret()
 			}
-		}
+		})
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(*StatusBarItemBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
 
 // Hide the entry in the status bar.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
-func (me *StatusBarItem) Hide() func(func(*StatusBarItemBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *StatusBarItem) Hide() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.hide"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
-	var onret func(*StatusBarItemBag)
+	var onret func()
 	onresp = func(payload any) bool {
-		var ok bool
-		var result *StatusBarItemBag
 		if (nil != payload) {
-			result = new(StatusBarItemBag)
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+			return false
 		}
-		{
+		me.__appzObjBagPullFromPeer__()(func() {
 			if (nil != onret) {
-				onret(result)
+				onret()
 			}
-		}
+		})
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(*StatusBarItemBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
@@ -3943,46 +3836,45 @@ func (me *StatusBarItem) Dispose() func(func()) {
 
 // Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
-func (me *StatusBarItem) Get() func(func(StatusBarItemBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *StatusBarItem) __appzObjBagPullFromPeer__() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "StatusBarItem.appzObjPropsGet"
+	msg.QName = "StatusBarItem.__appzObjBagPullFromPeer__"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
-	var onret func(StatusBarItemBag)
+	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		var result StatusBarItemBag
-		if (nil != payload) {
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+		if (nil == me.CfgBag) {
+			me.CfgBag = new(StatusBarItemBag)
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		me.CfgBag.__holder__ = me
+		ok = me.CfgBag.loadFromJsonish(payload)
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
 		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(StatusBarItemBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
 
 // Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
 // 
-// `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
+// `allUpdates` ── 
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
-func (me *StatusBarItem) Set(allUpdates StatusBarItemBag) func(func()) {
+func (me *StatusBarItem) __appzObjBagPushToPeer_(allUpdates *StatusBarItemBag) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "StatusBarItem.appzObjPropsSet"
+	msg.QName = "StatusBarItem.__appzObjBagPushToPeer_"
 	msg.Data = make(dict, 2)
 	msg.Data[""] = me.__disp__.id
 	msg.Data["allUpdates"] = allUpdates
@@ -4007,8 +3899,8 @@ func (me *StatusBarItem) Set(allUpdates StatusBarItemBag) func(func()) {
 // 
 // `value` ── A string, falsy values will not be printed.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
-func (me *OutputChannel) Append(value string) func(func(*OutputChannelBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *OutputChannel) Append(value string) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.append"
@@ -4016,26 +3908,20 @@ func (me *OutputChannel) Append(value string) func(func(*OutputChannelBag)) {
 	msg.Data[""] = me.__disp__.id
 	msg.Data["value"] = value
 	var onresp func(any) bool
-	var onret func(*OutputChannelBag)
+	var onret func()
 	onresp = func(payload any) bool {
-		var ok bool
-		var result *OutputChannelBag
 		if (nil != payload) {
-			result = new(OutputChannelBag)
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+			return false
 		}
-		{
+		me.__appzObjBagPullFromPeer__()(func() {
 			if (nil != onret) {
-				onret(result)
+				onret()
 			}
-		}
+		})
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(*OutputChannelBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
@@ -4045,8 +3931,8 @@ func (me *OutputChannel) Append(value string) func(func(*OutputChannelBag)) {
 // 
 // `value` ── A string, falsy values will be printed.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
-func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *OutputChannel) AppendLine(value string) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.appendLine"
@@ -4054,60 +3940,48 @@ func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelBag)) 
 	msg.Data[""] = me.__disp__.id
 	msg.Data["value"] = value
 	var onresp func(any) bool
-	var onret func(*OutputChannelBag)
+	var onret func()
 	onresp = func(payload any) bool {
-		var ok bool
-		var result *OutputChannelBag
 		if (nil != payload) {
-			result = new(OutputChannelBag)
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+			return false
 		}
-		{
+		me.__appzObjBagPullFromPeer__()(func() {
 			if (nil != onret) {
-				onret(result)
+				onret()
 			}
-		}
+		})
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(*OutputChannelBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
 
 // Removes all output from the channel.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
-func (me *OutputChannel) Clear() func(func(*OutputChannelBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *OutputChannel) Clear() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.clear"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
-	var onret func(*OutputChannelBag)
+	var onret func()
 	onresp = func(payload any) bool {
-		var ok bool
-		var result *OutputChannelBag
 		if (nil != payload) {
-			result = new(OutputChannelBag)
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+			return false
 		}
-		{
+		me.__appzObjBagPullFromPeer__()(func() {
 			if (nil != onret) {
-				onret(result)
+				onret()
 			}
-		}
+		})
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(*OutputChannelBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
@@ -4116,8 +3990,8 @@ func (me *OutputChannel) Clear() func(func(*OutputChannelBag)) {
 // 
 // `preserveFocus` ── When `true` the channel will not take focus.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
-func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *OutputChannel) Show(preserveFocus bool) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.show"
@@ -4125,60 +3999,48 @@ func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelBag)) 
 	msg.Data[""] = me.__disp__.id
 	msg.Data["preserveFocus"] = preserveFocus
 	var onresp func(any) bool
-	var onret func(*OutputChannelBag)
+	var onret func()
 	onresp = func(payload any) bool {
-		var ok bool
-		var result *OutputChannelBag
 		if (nil != payload) {
-			result = new(OutputChannelBag)
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+			return false
 		}
-		{
+		me.__appzObjBagPullFromPeer__()(func() {
 			if (nil != onret) {
-				onret(result)
+				onret()
 			}
-		}
+		})
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(*OutputChannelBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
 
 // Hide this channel from the UI.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
-func (me *OutputChannel) Hide() func(func(*OutputChannelBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *OutputChannel) Hide() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "OutputChannel.hide"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
-	var onret func(*OutputChannelBag)
+	var onret func()
 	onresp = func(payload any) bool {
-		var ok bool
-		var result *OutputChannelBag
 		if (nil != payload) {
-			result = new(OutputChannelBag)
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+			return false
 		}
-		{
+		me.__appzObjBagPullFromPeer__()(func() {
 			if (nil != onret) {
-				onret(result)
+				onret()
 			}
-		}
+		})
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(*OutputChannelBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
@@ -4192,33 +4054,32 @@ func (me *OutputChannel) Dispose() func(func()) {
 
 // Obtains this `OutputChannel`'s current property value for: `name`.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
-func (me *OutputChannel) Get() func(func(OutputChannelBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *OutputChannel) __appzObjBagPullFromPeer__() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "OutputChannel.appzObjPropsGet"
+	msg.QName = "OutputChannel.__appzObjBagPullFromPeer__"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
-	var onret func(OutputChannelBag)
+	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		var result OutputChannelBag
-		if (nil != payload) {
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+		if (nil == me.CfgBag) {
+			me.CfgBag = new(OutputChannelBag)
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		me.CfgBag.__holder__ = me
+		ok = me.CfgBag.loadFromJsonish(payload)
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
 		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(OutputChannelBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
@@ -4232,33 +4093,32 @@ func (me *TextEditorDecorationType) Dispose() func(func()) {
 
 // Obtains this `TextEditorDecorationType`'s current property value for: `key`.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `TextEditorDecorationTypeBag` result obtained.
-func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *TextEditorDecorationType) __appzObjBagPullFromPeer__() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "TextEditorDecorationType.appzObjPropsGet"
+	msg.QName = "TextEditorDecorationType.__appzObjBagPullFromPeer__"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
-	var onret func(TextEditorDecorationTypeBag)
+	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		var result TextEditorDecorationTypeBag
-		if (nil != payload) {
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+		if (nil == me.CfgBag) {
+			me.CfgBag = new(TextEditorDecorationTypeBag)
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		me.CfgBag.__holder__ = me
+		ok = me.CfgBag.loadFromJsonish(payload)
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
 		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(TextEditorDecorationTypeBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
@@ -4313,10 +4173,8 @@ func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxBag)) func(fun
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.__disp__.impl, handlerFnId))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.__disp__.impl, handlerFnId))
 		}
 		return true
 	}
@@ -4371,10 +4229,8 @@ func (me *InputBox) OnDidAccept(handler func(InputBoxBag)) func(func(*Disposable
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.__disp__.impl, handlerFnId))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.__disp__.impl, handlerFnId))
 		}
 		return true
 	}
@@ -4387,34 +4243,28 @@ func (me *InputBox) OnDidAccept(handler func(InputBoxBag)) func(func(*Disposable
 // Makes the input UI visible in its current configuration. Any other input
 // UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
-func (me *InputBox) Show() func(func(*InputBoxBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *InputBox) Show() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.show"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
-	var onret func(*InputBoxBag)
+	var onret func()
 	onresp = func(payload any) bool {
-		var ok bool
-		var result *InputBoxBag
 		if (nil != payload) {
-			result = new(InputBoxBag)
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+			return false
 		}
-		{
+		me.__appzObjBagPullFromPeer__()(func() {
 			if (nil != onret) {
-				onret(result)
+				onret()
 			}
-		}
+		})
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(*InputBoxBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
@@ -4422,34 +4272,28 @@ func (me *InputBox) Show() func(func(*InputBoxBag)) {
 // Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 // event.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
-func (me *InputBox) Hide() func(func(*InputBoxBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *InputBox) Hide() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.hide"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
-	var onret func(*InputBoxBag)
+	var onret func()
 	onresp = func(payload any) bool {
-		var ok bool
-		var result *InputBoxBag
 		if (nil != payload) {
-			result = new(InputBoxBag)
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+			return false
 		}
-		{
+		me.__appzObjBagPullFromPeer__()(func() {
 			if (nil != onret) {
-				onret(result)
+				onret()
 			}
-		}
+		})
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(*InputBoxBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
@@ -4504,10 +4348,8 @@ func (me *InputBox) OnDidHide(handler func(InputBoxBag)) func(func(*Disposable))
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.__disp__.impl, handlerFnId))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.__disp__.impl, handlerFnId))
 		}
 		return true
 	}
@@ -4529,46 +4371,45 @@ func (me *InputBox) Dispose() func(func()) {
 
 // Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
-func (me *InputBox) Get() func(func(InputBoxBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *InputBox) __appzObjBagPullFromPeer__() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "InputBox.appzObjPropsGet"
+	msg.QName = "InputBox.__appzObjBagPullFromPeer__"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
-	var onret func(InputBoxBag)
+	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		var result InputBoxBag
-		if (nil != payload) {
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+		if (nil == me.CfgBag) {
+			me.CfgBag = new(InputBoxBag)
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		me.CfgBag.__holder__ = me
+		ok = me.CfgBag.loadFromJsonish(payload)
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
 		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(InputBoxBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
 
 // Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 // 
-// `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
+// `allUpdates` ── 
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
-func (me *InputBox) Set(allUpdates InputBoxBag) func(func()) {
+func (me *InputBox) __appzObjBagPushToPeer_(allUpdates *InputBoxBag) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "InputBox.appzObjPropsSet"
+	msg.QName = "InputBox.__appzObjBagPushToPeer_"
 	msg.Data = make(dict, 2)
 	msg.Data[""] = me.__disp__.id
 	msg.Data["allUpdates"] = allUpdates
@@ -4639,10 +4480,8 @@ func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickBag)) func(f
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.__disp__.impl, handlerFnId))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.__disp__.impl, handlerFnId))
 		}
 		return true
 	}
@@ -4697,10 +4536,8 @@ func (me *QuickPick) OnDidAccept(handler func(QuickPickBag)) func(func(*Disposab
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.__disp__.impl, handlerFnId))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.__disp__.impl, handlerFnId))
 		}
 		return true
 	}
@@ -4773,10 +4610,8 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickBa
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.__disp__.impl, handlerFnId))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.__disp__.impl, handlerFnId))
 		}
 		return true
 	}
@@ -4849,10 +4684,8 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPic
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.__disp__.impl, handlerFnId))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.__disp__.impl, handlerFnId))
 		}
 		return true
 	}
@@ -4865,34 +4698,28 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPic
 // Makes the input UI visible in its current configuration. Any other input
 // UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
-func (me *QuickPick) Show() func(func(*QuickPickBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *QuickPick) Show() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.show"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
-	var onret func(*QuickPickBag)
+	var onret func()
 	onresp = func(payload any) bool {
-		var ok bool
-		var result *QuickPickBag
 		if (nil != payload) {
-			result = new(QuickPickBag)
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+			return false
 		}
-		{
+		me.__appzObjBagPullFromPeer__()(func() {
 			if (nil != onret) {
-				onret(result)
+				onret()
 			}
-		}
+		})
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(*QuickPickBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
@@ -4900,34 +4727,28 @@ func (me *QuickPick) Show() func(func(*QuickPickBag)) {
 // Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 // event.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
-func (me *QuickPick) Hide() func(func(*QuickPickBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *QuickPick) Hide() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.hide"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
-	var onret func(*QuickPickBag)
+	var onret func()
 	onresp = func(payload any) bool {
-		var ok bool
-		var result *QuickPickBag
 		if (nil != payload) {
-			result = new(QuickPickBag)
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+			return false
 		}
-		{
+		me.__appzObjBagPullFromPeer__()(func() {
 			if (nil != onret) {
-				onret(result)
+				onret()
 			}
-		}
+		})
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(*QuickPickBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
@@ -4982,10 +4803,8 @@ func (me *QuickPick) OnDidHide(handler func(QuickPickBag)) func(func(*Disposable
 		} else {
 			return false
 		}
-		{
-			if (nil != onret) {
-				onret(result.bind(me.__disp__.impl, handlerFnId))
-			}
+		if (nil != onret) {
+			onret(result.bind(me.__disp__.impl, handlerFnId))
 		}
 		return true
 	}
@@ -5007,46 +4826,45 @@ func (me *QuickPick) Dispose() func(func()) {
 
 // Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
-func (me *QuickPick) Get() func(func(QuickPickBag)) {
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *QuickPick) __appzObjBagPullFromPeer__() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "QuickPick.appzObjPropsGet"
+	msg.QName = "QuickPick.__appzObjBagPullFromPeer__"
 	msg.Data = make(dict, 1)
 	msg.Data[""] = me.__disp__.id
 	var onresp func(any) bool
-	var onret func(QuickPickBag)
+	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		var result QuickPickBag
-		if (nil != payload) {
-			ok = result.loadFromJsonish(payload)
-			if !ok {
-				return false
-			}
+		if (nil == me.CfgBag) {
+			me.CfgBag = new(QuickPickBag)
 		}
-		{
-			if (nil != onret) {
-				onret(result)
-			}
+		me.CfgBag.__holder__ = me
+		ok = me.CfgBag.loadFromJsonish(payload)
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
 		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func(QuickPickBag)) {
+	return func(a0 func()) {
 		onret = a0
 	}
 }
 
 // Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 // 
-// `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
+// `allUpdates` ── 
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
-func (me *QuickPick) Set(allUpdates QuickPickBag) func(func()) {
+func (me *QuickPick) __appzObjBagPushToPeer_(allUpdates *QuickPickBag) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "QuickPick.appzObjPropsSet"
+	msg.QName = "QuickPick.__appzObjBagPushToPeer_"
 	msg.Data = make(dict, 2)
 	msg.Data[""] = me.__disp__.id
 	msg.Data["allUpdates"] = allUpdates
@@ -5065,6 +4883,62 @@ func (me *QuickPick) Set(allUpdates QuickPickBag) func(func()) {
 	return func(a0 func()) {
 		onret = a0
 	}
+}
+
+// getter docs
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *StatusBarItemBag) ReFetch() func(func()) {
+	return me.__holder__.__appzObjBagPullFromPeer__()
+}
+
+// setter docs
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *StatusBarItemBag) ApplyChanges() func(func()) {
+	return me.__holder__.__appzObjBagPushToPeer_(me)
+}
+
+// getter docs
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *OutputChannelBag) ReFetch() func(func()) {
+	return me.__holder__.__appzObjBagPullFromPeer__()
+}
+
+// getter docs
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *TextEditorDecorationTypeBag) ReFetch() func(func()) {
+	return me.__holder__.__appzObjBagPullFromPeer__()
+}
+
+// getter docs
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *InputBoxBag) ReFetch() func(func()) {
+	return me.__holder__.__appzObjBagPullFromPeer__()
+}
+
+// setter docs
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *InputBoxBag) ApplyChanges() func(func()) {
+	return me.__holder__.__appzObjBagPushToPeer_(me)
+}
+
+// getter docs
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *QuickPickBag) ReFetch() func(func()) {
+	return me.__holder__.__appzObjBagPullFromPeer__()
+}
+
+// setter docs
+// 
+// `return` ── A thenable that resolves when this call has completed at the counterparty.
+func (me *QuickPickBag) ApplyChanges() func(func()) {
+	return me.__holder__.__appzObjBagPushToPeer_(me)
 }
 
 func (me *MessageItem) loadFromJsonish(payload any) bool {

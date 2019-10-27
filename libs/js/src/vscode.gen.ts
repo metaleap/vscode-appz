@@ -505,7 +505,7 @@ export interface Window {
      * @param priority The priority of the item. Higher values mean the item should be shown more to the left.
      * @return A new status bar item.
      */
-    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number) => (_: (_: StatusBarItem, __: StatusBarItemBag) => void) => void
+    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number) => (_: (_: StatusBarItem) => void) => void
 
     /**
      * Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
@@ -513,7 +513,7 @@ export interface Window {
      * @param name Human-readable string which will be used to represent the channel in the UI.
      * @return a thenable that resolves to the newly created `OutputChannel`.
      */
-    CreateOutputChannel: (name: string) => (_: (_: OutputChannel, __: OutputChannelBag) => void) => void
+    CreateOutputChannel: (name: string) => (_: (_: OutputChannel) => void) => void
 
     /**
      * Create a TextEditorDecorationType that can be used to add decorations to text editors.
@@ -521,7 +521,7 @@ export interface Window {
      * @param options Rendering options for the decoration type.
      * @return A new decoration type instance.
      */
-    CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType, __: TextEditorDecorationTypeBag) => void) => void
+    CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType) => void) => void
 
     /**
      * Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
@@ -532,7 +532,7 @@ export interface Window {
 
      * @return A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
      */
-    CreateInputBox: (_: (_: InputBox, __: InputBoxBag) => void) => void
+    CreateInputBox: (_: (_: InputBox) => void) => void
 
     /**
      * Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
@@ -544,7 +544,7 @@ export interface Window {
 
      * @return A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
      */
-    CreateQuickPick: (_: (_: QuickPick, __: QuickPickBag) => void) => void
+    CreateQuickPick: (_: (_: QuickPick) => void) => void
 }
 
 /**
@@ -1524,9 +1524,9 @@ export interface StatusBarItem extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    Get: () => (_: (_: StatusBarItemBag) => void) => void
+    __appzObjBagPullFromPeer__: () => (_: (_: StatusBarItemBag) => void) => void
 
-    Set: (_: StatusBarItemBag) => (_: () => void) => void
+    __appzObjBagPushToPeer_: (_: StatusBarItemBag) => (_: () => void) => void
 }
 
 function newStatusBarItem (): StatusBarItem {
@@ -1535,8 +1535,8 @@ function newStatusBarItem (): StatusBarItem {
     me.Show = () => StatusBarItem_Show.call(me, )
     me.Hide = () => StatusBarItem_Hide.call(me, )
     me.Dispose = () => StatusBarItem_Dispose.call(me, )
-    me.Get = () => StatusBarItem_Get.call(me, )
-    me.Set = (a0) => StatusBarItem_Set.call(me, a0)
+    me.__appzObjBagPullFromPeer__ = () => StatusBarItem___appzObjBagPullFromPeer__.call(me, )
+    me.__appzObjBagPushToPeer_ = (a0) => StatusBarItem___appzObjBagPushToPeer_.call(me, a0)
     return me
 }
 
@@ -1591,7 +1591,7 @@ export interface OutputChannel extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    Get: () => (_: (_: OutputChannelBag) => void) => void
+    __appzObjBagPullFromPeer__: () => (_: (_: OutputChannelBag) => void) => void
 }
 
 function newOutputChannel (): OutputChannel {
@@ -1603,7 +1603,7 @@ function newOutputChannel (): OutputChannel {
     me.Show = (a0) => OutputChannel_Show.call(me, a0)
     me.Hide = () => OutputChannel_Hide.call(me, )
     me.Dispose = () => OutputChannel_Dispose.call(me, )
-    me.Get = () => OutputChannel_Get.call(me, )
+    me.__appzObjBagPullFromPeer__ = () => OutputChannel___appzObjBagPullFromPeer__.call(me, )
     return me
 }
 
@@ -1889,14 +1889,14 @@ export interface TextEditorDecorationType extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    Get: () => (_: (_: TextEditorDecorationTypeBag) => void) => void
+    __appzObjBagPullFromPeer__: () => (_: (_: TextEditorDecorationTypeBag) => void) => void
 }
 
 function newTextEditorDecorationType (): TextEditorDecorationType {
     let me: TextEditorDecorationType
     me = { loadFromJsonish: _ => TextEditorDecorationType_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as TextEditorDecorationType
     me.Dispose = () => TextEditorDecorationType_Dispose.call(me, )
-    me.Get = () => TextEditorDecorationType_Get.call(me, )
+    me.__appzObjBagPullFromPeer__ = () => TextEditorDecorationType___appzObjBagPullFromPeer__.call(me, )
     return me
 }
 
@@ -1955,9 +1955,9 @@ export interface InputBox extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    Get: () => (_: (_: InputBoxBag) => void) => void
+    __appzObjBagPullFromPeer__: () => (_: (_: InputBoxBag) => void) => void
 
-    Set: (_: InputBoxBag) => (_: () => void) => void
+    __appzObjBagPushToPeer_: (_: InputBoxBag) => (_: () => void) => void
 }
 
 function newInputBox (): InputBox {
@@ -1969,8 +1969,8 @@ function newInputBox (): InputBox {
     me.Hide = () => InputBox_Hide.call(me, )
     me.OnDidHide = (a0) => InputBox_OnDidHide.call(me, a0)
     me.Dispose = () => InputBox_Dispose.call(me, )
-    me.Get = () => InputBox_Get.call(me, )
-    me.Set = (a0) => InputBox_Set.call(me, a0)
+    me.__appzObjBagPullFromPeer__ = () => InputBox___appzObjBagPullFromPeer__.call(me, )
+    me.__appzObjBagPushToPeer_ = (a0) => InputBox___appzObjBagPushToPeer_.call(me, a0)
     return me
 }
 
@@ -2062,9 +2062,9 @@ export interface QuickPick extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    Get: () => (_: (_: QuickPickBag) => void) => void
+    __appzObjBagPullFromPeer__: () => (_: (_: QuickPickBag) => void) => void
 
-    Set: (_: QuickPickBag) => (_: () => void) => void
+    __appzObjBagPushToPeer_: (_: QuickPickBag) => (_: () => void) => void
 }
 
 function newQuickPick (): QuickPick {
@@ -2078,8 +2078,8 @@ function newQuickPick (): QuickPick {
     me.Hide = () => QuickPick_Hide.call(me, )
     me.OnDidHide = (a0) => QuickPick_OnDidHide.call(me, a0)
     me.Dispose = () => QuickPick_Dispose.call(me, )
-    me.Get = () => QuickPick_Get.call(me, )
-    me.Set = (a0) => QuickPick_Set.call(me, a0)
+    me.__appzObjBagPullFromPeer__ = () => QuickPick___appzObjBagPullFromPeer__.call(me, )
+    me.__appzObjBagPushToPeer_ = (a0) => QuickPick___appzObjBagPushToPeer_.call(me, a0)
     return me
 }
 
@@ -2260,7 +2260,7 @@ function newWorkspaceBag (): WorkspaceBag {
 
  */
 export interface StatusBarItemBag extends fromJson {
-    __holder__: Disposable
+    __holder__: StatusBarItem
 
     /**
      * The alignment of this item.
@@ -2317,7 +2317,7 @@ export function newStatusBarItemBag (): StatusBarItemBag {
 
  */
 export interface OutputChannelBag extends fromJson {
-    __holder__: Disposable
+    __holder__: OutputChannel
 
     /**
      * The human-readable name of this output channel.
@@ -2337,7 +2337,7 @@ export function newOutputChannelBag (): OutputChannelBag {
 
  */
 export interface TextEditorDecorationTypeBag extends fromJson {
-    __holder__: Disposable
+    __holder__: TextEditorDecorationType
 
     /**
      * Internal representation of the handle.
@@ -2357,7 +2357,7 @@ export function newTextEditorDecorationTypeBag (): TextEditorDecorationTypeBag {
 
  */
 export interface InputBoxBag extends fromJson {
-    __holder__: Disposable
+    __holder__: InputBox
 
     /**
      * Current input value.
@@ -2443,7 +2443,7 @@ export function newInputBoxBag (): InputBoxBag {
 
  */
 export interface QuickPickBag extends fromJson {
-    __holder__: Disposable
+    __holder__: QuickPick
 
     /**
      * Current value of the filter text.
@@ -2583,10 +2583,8 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -2617,10 +2615,8 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -2649,10 +2645,8 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -2682,10 +2676,8 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -2715,10 +2707,8 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -2749,10 +2739,8 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -2781,10 +2769,8 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -2814,10 +2800,8 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -2847,10 +2831,8 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -2881,10 +2863,8 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -2913,10 +2893,8 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -2946,10 +2924,8 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3017,10 +2993,8 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3111,10 +3085,8 @@ class implWindow extends implBase implements Window {
                     __idx__result = __idx__result + 1
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3195,10 +3167,8 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3290,10 +3260,8 @@ class implWindow extends implBase implements Window {
                     __idx__result = __idx__result + 1
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3373,10 +3341,8 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3416,10 +3382,8 @@ class implWindow extends implBase implements Window {
             } else {
                 return false
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl()))
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl()))
             }
             return true
         }
@@ -3449,10 +3413,8 @@ class implWindow extends implBase implements Window {
             } else {
                 return false
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl()))
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl()))
             }
             return true
         }
@@ -3481,10 +3443,8 @@ class implWindow extends implBase implements Window {
                 }
                 result = _result_
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3524,10 +3484,8 @@ class implWindow extends implBase implements Window {
                     __idx__result = __idx__result + 1
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3557,10 +3515,8 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3587,10 +3543,8 @@ class implWindow extends implBase implements Window {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3639,10 +3593,8 @@ class implWindow extends implBase implements Window {
             } else {
                 return false
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), listenerFnId))
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), listenerFnId))
             }
             return true
         }
@@ -3652,7 +3604,7 @@ class implWindow extends implBase implements Window {
         }
     }
 
-    CreateStatusBarItem(alignment?: StatusBarAlignment, priority?: number): (_: (_: StatusBarItem, __: StatusBarItemBag) => void) => void {
+    CreateStatusBarItem(alignment?: StatusBarAlignment, priority?: number): (_: (_: StatusBarItem) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createStatusBarItem"
@@ -3664,7 +3616,7 @@ class implWindow extends implBase implements Window {
             msg.Data["priority"] = priority
         }
         let onresp: (_: any) => boolean
-        let onret: (_: StatusBarItem, __: StatusBarItemBag) => void
+        let onret: (_: StatusBarItem) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
             let result: StatusBarItem
@@ -3675,30 +3627,30 @@ class implWindow extends implBase implements Window {
                     return false
                 }
                 result.__disp__.impl = this.Impl()
+            } else {
+                return false
             }
-            {
-                result.Get()((state: StatusBarItemBag): void => {
-                    if ((undefined !== onret && null !== onret)) {
-                        onret(result, state)
-                    }
-                })
-            }
+            result.__appzObjBagPullFromPeer__()((): void => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
+            })
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: StatusBarItem, __: StatusBarItemBag) => void): void => {
+        return (a0: (_: StatusBarItem) => void): void => {
             onret = a0
         }
     }
 
-    CreateOutputChannel(name: string): (_: (_: OutputChannel, __: OutputChannelBag) => void) => void {
+    CreateOutputChannel(name: string): (_: (_: OutputChannel) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createOutputChannel"
         msg.Data = {}
         msg.Data["name"] = name
         let onresp: (_: any) => boolean
-        let onret: (_: OutputChannel, __: OutputChannelBag) => void
+        let onret: (_: OutputChannel) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
             let result: OutputChannel
@@ -3709,30 +3661,30 @@ class implWindow extends implBase implements Window {
                     return false
                 }
                 result.__disp__.impl = this.Impl()
+            } else {
+                return false
             }
-            {
-                result.Get()((state: OutputChannelBag): void => {
-                    if ((undefined !== onret && null !== onret)) {
-                        onret(result, state)
-                    }
-                })
-            }
+            result.__appzObjBagPullFromPeer__()((): void => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
+            })
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: OutputChannel, __: OutputChannelBag) => void): void => {
+        return (a0: (_: OutputChannel) => void): void => {
             onret = a0
         }
     }
 
-    CreateTextEditorDecorationType(options: DecorationRenderOptions): (_: (_: TextEditorDecorationType, __: TextEditorDecorationTypeBag) => void) => void {
+    CreateTextEditorDecorationType(options: DecorationRenderOptions): (_: (_: TextEditorDecorationType) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createTextEditorDecorationType"
         msg.Data = {}
         msg.Data["options"] = options
         let onresp: (_: any) => boolean
-        let onret: (_: TextEditorDecorationType, __: TextEditorDecorationTypeBag) => void
+        let onret: (_: TextEditorDecorationType) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
             let result: TextEditorDecorationType
@@ -3743,29 +3695,29 @@ class implWindow extends implBase implements Window {
                     return false
                 }
                 result.__disp__.impl = this.Impl()
+            } else {
+                return false
             }
-            {
-                result.Get()((state: TextEditorDecorationTypeBag): void => {
-                    if ((undefined !== onret && null !== onret)) {
-                        onret(result, state)
-                    }
-                })
-            }
+            result.__appzObjBagPullFromPeer__()((): void => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
+            })
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: TextEditorDecorationType, __: TextEditorDecorationTypeBag) => void): void => {
+        return (a0: (_: TextEditorDecorationType) => void): void => {
             onret = a0
         }
     }
 
-    CreateInputBox(): (_: (_: InputBox, __: InputBoxBag) => void) => void {
+    CreateInputBox(): (_: (_: InputBox) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createInputBox"
         msg.Data = {}
         let onresp: (_: any) => boolean
-        let onret: (_: InputBox, __: InputBoxBag) => void
+        let onret: (_: InputBox) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
             let result: InputBox
@@ -3776,29 +3728,29 @@ class implWindow extends implBase implements Window {
                     return false
                 }
                 result.__disp__.impl = this.Impl()
+            } else {
+                return false
             }
-            {
-                result.Get()((state: InputBoxBag): void => {
-                    if ((undefined !== onret && null !== onret)) {
-                        onret(result, state)
-                    }
-                })
-            }
+            result.__appzObjBagPullFromPeer__()((): void => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
+            })
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: InputBox, __: InputBoxBag) => void): void => {
+        return (a0: (_: InputBox) => void): void => {
             onret = a0
         }
     }
 
-    CreateQuickPick(): (_: (_: QuickPick, __: QuickPickBag) => void) => void {
+    CreateQuickPick(): (_: (_: QuickPick) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "window.createQuickPick"
         msg.Data = {}
         let onresp: (_: any) => boolean
-        let onret: (_: QuickPick, __: QuickPickBag) => void
+        let onret: (_: QuickPick) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
             let result: QuickPick
@@ -3809,18 +3761,18 @@ class implWindow extends implBase implements Window {
                     return false
                 }
                 result.__disp__.impl = this.Impl()
+            } else {
+                return false
             }
-            {
-                result.Get()((state: QuickPickBag): void => {
-                    if ((undefined !== onret && null !== onret)) {
-                        onret(result, state)
-                    }
-                })
-            }
+            result.__appzObjBagPullFromPeer__()((): void => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
+            })
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: QuickPick, __: QuickPickBag) => void): void => {
+        return (a0: (_: QuickPick) => void): void => {
             onret = a0
         }
     }
@@ -3848,10 +3800,8 @@ class implEnv extends implBase implements Env {
             } else {
                 return false
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3877,10 +3827,8 @@ class implEnv extends implBase implements Env {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3906,10 +3854,8 @@ class implEnv extends implBase implements Env {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3935,10 +3881,8 @@ class implEnv extends implBase implements Env {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3964,10 +3908,8 @@ class implEnv extends implBase implements Env {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -3995,10 +3937,8 @@ class implEnv extends implBase implements Env {
                 }
                 result = _result_
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4024,10 +3964,8 @@ class implEnv extends implBase implements Env {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4053,10 +3991,8 @@ class implEnv extends implBase implements Env {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4082,10 +4018,8 @@ class implEnv extends implBase implements Env {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4114,10 +4048,8 @@ class implEnv extends implBase implements Env {
             } else {
                 return false
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4153,10 +4085,8 @@ class implClipboard extends implBase implements Clipboard {
                 }
                 result = _result_
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4211,10 +4141,8 @@ class implWorkspace extends implBase implements Workspace {
                 }
                 result = _result_
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4242,10 +4170,8 @@ class implWorkspace extends implBase implements Workspace {
                 }
                 result = _result_
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4274,10 +4200,8 @@ class implWorkspace extends implBase implements Workspace {
             } else {
                 return false
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4326,10 +4250,8 @@ class implWorkspace extends implBase implements Workspace {
             } else {
                 return false
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), listenerFnId))
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), listenerFnId))
             }
             return true
         }
@@ -4357,10 +4279,8 @@ class implWorkspace extends implBase implements Workspace {
                     return false
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4400,10 +4320,8 @@ class implWorkspace extends implBase implements Workspace {
                     __idx__result = __idx__result + 1
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4458,10 +4376,8 @@ class implWorkspace extends implBase implements Workspace {
                     __idx__result = __idx__result + 1
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4491,10 +4407,8 @@ class implWorkspace extends implBase implements Workspace {
                 }
                 result = _result_
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4523,10 +4437,8 @@ class implWorkspace extends implBase implements Workspace {
             } else {
                 return false
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4569,10 +4481,8 @@ class implLanguages extends implBase implements Languages {
                     __idx__result = __idx__result + 1
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4621,10 +4531,8 @@ class implLanguages extends implBase implements Languages {
             } else {
                 return false
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), listenerFnId))
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), listenerFnId))
             }
             return true
         }
@@ -4671,10 +4579,8 @@ class implExtensions extends implBase implements Extensions {
             } else {
                 return false
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), listenerFnId))
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), listenerFnId))
             }
             return true
         }
@@ -4728,10 +4634,8 @@ class implCommands extends implBase implements Commands {
             } else {
                 return false
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), callbackFnId))
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), callbackFnId))
             }
             return true
         }
@@ -4758,10 +4662,8 @@ class implCommands extends implBase implements Commands {
                 if (ok) {
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4801,10 +4703,8 @@ class implCommands extends implBase implements Commands {
                     __idx__result = __idx__result + 1
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result)
             }
             return true
         }
@@ -4816,64 +4716,52 @@ class implCommands extends implBase implements Commands {
 
 }
 
-function StatusBarItem_Show(this: StatusBarItem, ): (_: (_: StatusBarItemBag) => void) => void {
+function StatusBarItem_Show(this: StatusBarItem, ): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "StatusBarItem.show"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
-    let onret: (_: StatusBarItemBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
-        let ok: boolean
-        let result: StatusBarItemBag
         if ((undefined !== payload && null !== payload)) {
-            result = newStatusBarItemBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+            return false
         }
-        {
+        this.__appzObjBagPullFromPeer__()((): void => {
             if ((undefined !== onret && null !== onret)) {
-                onret(result)
+                onret()
             }
-        }
+        })
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: StatusBarItemBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
 
-function StatusBarItem_Hide(this: StatusBarItem, ): (_: (_: StatusBarItemBag) => void) => void {
+function StatusBarItem_Hide(this: StatusBarItem, ): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "StatusBarItem.hide"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
-    let onret: (_: StatusBarItemBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
-        let ok: boolean
-        let result: StatusBarItemBag
         if ((undefined !== payload && null !== payload)) {
-            result = newStatusBarItemBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+            return false
         }
-        {
+        this.__appzObjBagPullFromPeer__()((): void => {
             if ((undefined !== onret && null !== onret)) {
-                onret(result)
+                onret()
             }
-        }
+        })
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: StatusBarItemBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
@@ -4882,41 +4770,39 @@ function StatusBarItem_Dispose(this: StatusBarItem, ): (_: () => void) => void {
     return this.__disp__.Dispose()
 }
 
-function StatusBarItem_Get(this: StatusBarItem, ): (_: (_: StatusBarItemBag) => void) => void {
+function StatusBarItem___appzObjBagPullFromPeer__(this: StatusBarItem, ): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
-    msg.QName = "StatusBarItem.appzObjPropsGet"
+    msg.QName = "StatusBarItem.__appzObjBagPullFromPeer__"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
-    let onret: (_: StatusBarItemBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: StatusBarItemBag
-        if ((undefined !== payload && null !== payload)) {
-            result = newStatusBarItemBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+        if ((undefined === this.CfgBag || null === this.CfgBag)) {
+            this.CfgBag = newStatusBarItemBag()
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
+        this.CfgBag.__holder__ = this
+        ok = this.CfgBag.loadFromJsonish(payload)
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
         }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: StatusBarItemBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
 
-function StatusBarItem_Set(this: StatusBarItem, allUpdates: StatusBarItemBag): (_: () => void) => void {
+function StatusBarItem___appzObjBagPushToPeer_(this: StatusBarItem, allUpdates?: StatusBarItemBag): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
-    msg.QName = "StatusBarItem.appzObjPropsSet"
+    msg.QName = "StatusBarItem.__appzObjBagPushToPeer_"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     msg.Data["allUpdates"] = allUpdates
@@ -4937,7 +4823,7 @@ function StatusBarItem_Set(this: StatusBarItem, allUpdates: StatusBarItemBag): (
     }
 }
 
-function OutputChannel_Append(this: OutputChannel, value: string): (_: (_: OutputChannelBag) => void) => void {
+function OutputChannel_Append(this: OutputChannel, value: string): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.append"
@@ -4945,31 +4831,25 @@ function OutputChannel_Append(this: OutputChannel, value: string): (_: (_: Outpu
     msg.Data[""] = this.__disp__.id
     msg.Data["value"] = value
     let onresp: (_: any) => boolean
-    let onret: (_: OutputChannelBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
-        let ok: boolean
-        let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+            return false
         }
-        {
+        this.__appzObjBagPullFromPeer__()((): void => {
             if ((undefined !== onret && null !== onret)) {
-                onret(result)
+                onret()
             }
-        }
+        })
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: OutputChannelBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
 
-function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: (_: OutputChannelBag) => void) => void {
+function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.appendLine"
@@ -4977,62 +4857,50 @@ function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: (_: O
     msg.Data[""] = this.__disp__.id
     msg.Data["value"] = value
     let onresp: (_: any) => boolean
-    let onret: (_: OutputChannelBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
-        let ok: boolean
-        let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+            return false
         }
-        {
+        this.__appzObjBagPullFromPeer__()((): void => {
             if ((undefined !== onret && null !== onret)) {
-                onret(result)
+                onret()
             }
-        }
+        })
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: OutputChannelBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
 
-function OutputChannel_Clear(this: OutputChannel, ): (_: (_: OutputChannelBag) => void) => void {
+function OutputChannel_Clear(this: OutputChannel, ): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.clear"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
-    let onret: (_: OutputChannelBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
-        let ok: boolean
-        let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+            return false
         }
-        {
+        this.__appzObjBagPullFromPeer__()((): void => {
             if ((undefined !== onret && null !== onret)) {
-                onret(result)
+                onret()
             }
-        }
+        })
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: OutputChannelBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
 
-function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (_: OutputChannelBag) => void) => void {
+function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.show"
@@ -5040,57 +4908,45 @@ function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (
     msg.Data[""] = this.__disp__.id
     msg.Data["preserveFocus"] = preserveFocus
     let onresp: (_: any) => boolean
-    let onret: (_: OutputChannelBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
-        let ok: boolean
-        let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+            return false
         }
-        {
+        this.__appzObjBagPullFromPeer__()((): void => {
             if ((undefined !== onret && null !== onret)) {
-                onret(result)
+                onret()
             }
-        }
+        })
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: OutputChannelBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
 
-function OutputChannel_Hide(this: OutputChannel, ): (_: (_: OutputChannelBag) => void) => void {
+function OutputChannel_Hide(this: OutputChannel, ): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "OutputChannel.hide"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
-    let onret: (_: OutputChannelBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
-        let ok: boolean
-        let result: OutputChannelBag
         if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+            return false
         }
-        {
+        this.__appzObjBagPullFromPeer__()((): void => {
             if ((undefined !== onret && null !== onret)) {
-                onret(result)
+                onret()
             }
-        }
+        })
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: OutputChannelBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
@@ -5099,33 +4955,31 @@ function OutputChannel_Dispose(this: OutputChannel, ): (_: () => void) => void {
     return this.__disp__.Dispose()
 }
 
-function OutputChannel_Get(this: OutputChannel, ): (_: (_: OutputChannelBag) => void) => void {
+function OutputChannel___appzObjBagPullFromPeer__(this: OutputChannel, ): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
-    msg.QName = "OutputChannel.appzObjPropsGet"
+    msg.QName = "OutputChannel.__appzObjBagPullFromPeer__"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
-    let onret: (_: OutputChannelBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: OutputChannelBag
-        if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+        if ((undefined === this.CfgBag || null === this.CfgBag)) {
+            this.CfgBag = newOutputChannelBag()
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
+        this.CfgBag.__holder__ = this
+        ok = this.CfgBag.loadFromJsonish(payload)
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
         }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: OutputChannelBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
@@ -5134,33 +4988,31 @@ function TextEditorDecorationType_Dispose(this: TextEditorDecorationType, ): (_:
     return this.__disp__.Dispose()
 }
 
-function TextEditorDecorationType_Get(this: TextEditorDecorationType, ): (_: (_: TextEditorDecorationTypeBag) => void) => void {
+function TextEditorDecorationType___appzObjBagPullFromPeer__(this: TextEditorDecorationType, ): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
-    msg.QName = "TextEditorDecorationType.appzObjPropsGet"
+    msg.QName = "TextEditorDecorationType.__appzObjBagPullFromPeer__"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
-    let onret: (_: TextEditorDecorationTypeBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: TextEditorDecorationTypeBag
-        if ((undefined !== payload && null !== payload)) {
-            result = newTextEditorDecorationTypeBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+        if ((undefined === this.CfgBag || null === this.CfgBag)) {
+            this.CfgBag = newTextEditorDecorationTypeBag()
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
+        this.CfgBag.__holder__ = this
+        ok = this.CfgBag.loadFromJsonish(payload)
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
         }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: TextEditorDecorationTypeBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
@@ -5211,10 +5063,8 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string, __: Inpu
         } else {
             return false
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId))
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         }
         return true
     }
@@ -5265,10 +5115,8 @@ function InputBox_OnDidAccept(this: InputBox, handler: (_: InputBoxBag) => void)
         } else {
             return false
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId))
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         }
         return true
     }
@@ -5278,64 +5126,52 @@ function InputBox_OnDidAccept(this: InputBox, handler: (_: InputBoxBag) => void)
     }
 }
 
-function InputBox_Show(this: InputBox, ): (_: (_: InputBoxBag) => void) => void {
+function InputBox_Show(this: InputBox, ): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.show"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
-    let onret: (_: InputBoxBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
-        let ok: boolean
-        let result: InputBoxBag
         if ((undefined !== payload && null !== payload)) {
-            result = newInputBoxBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+            return false
         }
-        {
+        this.__appzObjBagPullFromPeer__()((): void => {
             if ((undefined !== onret && null !== onret)) {
-                onret(result)
+                onret()
             }
-        }
+        })
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: InputBoxBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
 
-function InputBox_Hide(this: InputBox, ): (_: (_: InputBoxBag) => void) => void {
+function InputBox_Hide(this: InputBox, ): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.hide"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
-    let onret: (_: InputBoxBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
-        let ok: boolean
-        let result: InputBoxBag
         if ((undefined !== payload && null !== payload)) {
-            result = newInputBoxBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+            return false
         }
-        {
+        this.__appzObjBagPullFromPeer__()((): void => {
             if ((undefined !== onret && null !== onret)) {
-                onret(result)
+                onret()
             }
-        }
+        })
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: InputBoxBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
@@ -5381,10 +5217,8 @@ function InputBox_OnDidHide(this: InputBox, handler: (_: InputBoxBag) => void): 
         } else {
             return false
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId))
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         }
         return true
     }
@@ -5398,41 +5232,39 @@ function InputBox_Dispose(this: InputBox, ): (_: () => void) => void {
     return this.__disp__.Dispose()
 }
 
-function InputBox_Get(this: InputBox, ): (_: (_: InputBoxBag) => void) => void {
+function InputBox___appzObjBagPullFromPeer__(this: InputBox, ): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
-    msg.QName = "InputBox.appzObjPropsGet"
+    msg.QName = "InputBox.__appzObjBagPullFromPeer__"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
-    let onret: (_: InputBoxBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: InputBoxBag
-        if ((undefined !== payload && null !== payload)) {
-            result = newInputBoxBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+        if ((undefined === this.CfgBag || null === this.CfgBag)) {
+            this.CfgBag = newInputBoxBag()
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
+        this.CfgBag.__holder__ = this
+        ok = this.CfgBag.loadFromJsonish(payload)
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
         }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: InputBoxBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
 
-function InputBox_Set(this: InputBox, allUpdates: InputBoxBag): (_: () => void) => void {
+function InputBox___appzObjBagPushToPeer_(this: InputBox, allUpdates?: InputBoxBag): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
-    msg.QName = "InputBox.appzObjPropsSet"
+    msg.QName = "InputBox.__appzObjBagPushToPeer_"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     msg.Data["allUpdates"] = allUpdates
@@ -5499,10 +5331,8 @@ function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string, __: Qu
         } else {
             return false
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId))
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         }
         return true
     }
@@ -5553,10 +5383,8 @@ function QuickPick_OnDidAccept(this: QuickPick, handler: (_: QuickPickBag) => vo
         } else {
             return false
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId))
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         }
         return true
     }
@@ -5626,10 +5454,8 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
         } else {
             return false
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId))
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         }
         return true
     }
@@ -5699,10 +5525,8 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
         } else {
             return false
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId))
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         }
         return true
     }
@@ -5712,64 +5536,52 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
     }
 }
 
-function QuickPick_Show(this: QuickPick, ): (_: (_: QuickPickBag) => void) => void {
+function QuickPick_Show(this: QuickPick, ): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.show"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
-    let onret: (_: QuickPickBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
-        let ok: boolean
-        let result: QuickPickBag
         if ((undefined !== payload && null !== payload)) {
-            result = newQuickPickBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+            return false
         }
-        {
+        this.__appzObjBagPullFromPeer__()((): void => {
             if ((undefined !== onret && null !== onret)) {
-                onret(result)
+                onret()
             }
-        }
+        })
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: QuickPickBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
 
-function QuickPick_Hide(this: QuickPick, ): (_: (_: QuickPickBag) => void) => void {
+function QuickPick_Hide(this: QuickPick, ): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.hide"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
-    let onret: (_: QuickPickBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
-        let ok: boolean
-        let result: QuickPickBag
         if ((undefined !== payload && null !== payload)) {
-            result = newQuickPickBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+            return false
         }
-        {
+        this.__appzObjBagPullFromPeer__()((): void => {
             if ((undefined !== onret && null !== onret)) {
-                onret(result)
+                onret()
             }
-        }
+        })
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: QuickPickBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
@@ -5815,10 +5627,8 @@ function QuickPick_OnDidHide(this: QuickPick, handler: (_: QuickPickBag) => void
         } else {
             return false
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId))
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId))
         }
         return true
     }
@@ -5832,41 +5642,39 @@ function QuickPick_Dispose(this: QuickPick, ): (_: () => void) => void {
     return this.__disp__.Dispose()
 }
 
-function QuickPick_Get(this: QuickPick, ): (_: (_: QuickPickBag) => void) => void {
+function QuickPick___appzObjBagPullFromPeer__(this: QuickPick, ): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
-    msg.QName = "QuickPick.appzObjPropsGet"
+    msg.QName = "QuickPick.__appzObjBagPullFromPeer__"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     let onresp: (_: any) => boolean
-    let onret: (_: QuickPickBag) => void
+    let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        let result: QuickPickBag
-        if ((undefined !== payload && null !== payload)) {
-            result = newQuickPickBag()
-            ok = result.loadFromJsonish(payload)
-            if (!ok) {
-                return false
-            }
+        if ((undefined === this.CfgBag || null === this.CfgBag)) {
+            this.CfgBag = newQuickPickBag()
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
+        this.CfgBag.__holder__ = this
+        ok = this.CfgBag.loadFromJsonish(payload)
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
         }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
-    return (a0: (_: QuickPickBag) => void): void => {
+    return (a0: () => void): void => {
         onret = a0
     }
 }
 
-function QuickPick_Set(this: QuickPick, allUpdates: QuickPickBag): (_: () => void) => void {
+function QuickPick___appzObjBagPushToPeer_(this: QuickPick, allUpdates?: QuickPickBag): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
-    msg.QName = "QuickPick.appzObjPropsSet"
+    msg.QName = "QuickPick.__appzObjBagPushToPeer_"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     msg.Data["allUpdates"] = allUpdates
@@ -5885,6 +5693,38 @@ function QuickPick_Set(this: QuickPick, allUpdates: QuickPickBag): (_: () => voi
     return (a0: () => void): void => {
         onret = a0
     }
+}
+
+function StatusBarItemBag_ReFetch(this: StatusBarItemBag, ): (_: () => void) => void {
+    return this.__holder__.__appzObjBagPullFromPeer__()
+}
+
+function StatusBarItemBag_ApplyChanges(this: StatusBarItemBag, ): (_: () => void) => void {
+    return this.__holder__.__appzObjBagPushToPeer_(this)
+}
+
+function OutputChannelBag_ReFetch(this: OutputChannelBag, ): (_: () => void) => void {
+    return this.__holder__.__appzObjBagPullFromPeer__()
+}
+
+function TextEditorDecorationTypeBag_ReFetch(this: TextEditorDecorationTypeBag, ): (_: () => void) => void {
+    return this.__holder__.__appzObjBagPullFromPeer__()
+}
+
+function InputBoxBag_ReFetch(this: InputBoxBag, ): (_: () => void) => void {
+    return this.__holder__.__appzObjBagPullFromPeer__()
+}
+
+function InputBoxBag_ApplyChanges(this: InputBoxBag, ): (_: () => void) => void {
+    return this.__holder__.__appzObjBagPushToPeer_(this)
+}
+
+function QuickPickBag_ReFetch(this: QuickPickBag, ): (_: () => void) => void {
+    return this.__holder__.__appzObjBagPullFromPeer__()
+}
+
+function QuickPickBag_ApplyChanges(this: QuickPickBag, ): (_: () => void) => void {
+    return this.__holder__.__appzObjBagPushToPeer_(this)
 }
 
 function MessageItem_loadFromJsonish(this: MessageItem, payload: any): boolean {

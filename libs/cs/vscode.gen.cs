@@ -587,7 +587,7 @@ namespace VscAppz {
 		/// <param name="alignment">The alignment of the item.</param>
 		/// <param name="priority">The priority of the item. Higher values mean the item should be shown more to the left.</param>
 		/// <return>A new status bar item.</return>
-		Action<Action<StatusBarItem, StatusBarItemBag>> CreateStatusBarItem(StatusBarAlignment? alignment = default, int? priority = default);
+		Action<Action<StatusBarItem>> CreateStatusBarItem(StatusBarAlignment? alignment = default, int? priority = default);
 
 		/// <summary>
 		/// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
@@ -598,7 +598,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="name">Human-readable string which will be used to represent the channel in the UI.</param>
 		/// <return>a thenable that resolves to the newly created `OutputChannel`.</return>
-		Action<Action<OutputChannel, OutputChannelBag>> CreateOutputChannel(string name = default);
+		Action<Action<OutputChannel>> CreateOutputChannel(string name = default);
 
 		/// <summary>
 		/// Create a TextEditorDecorationType that can be used to add decorations to text editors.
@@ -609,7 +609,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="options">Rendering options for the decoration type.</param>
 		/// <return>A new decoration type instance.</return>
-		Action<Action<TextEditorDecorationType, TextEditorDecorationTypeBag>> CreateTextEditorDecorationType(DecorationRenderOptions options = default);
+		Action<Action<TextEditorDecorationType>> CreateTextEditorDecorationType(DecorationRenderOptions options = default);
 
 		/// <summary>
 		/// Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
@@ -621,7 +621,7 @@ namespace VscAppz {
 		/// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
 		/// </summary>
 		/// <return>A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).</return>
-		Action<Action<InputBox, InputBoxBag>> CreateInputBox();
+		Action<Action<InputBox>> CreateInputBox();
 
 		/// <summary>
 		/// Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
@@ -634,7 +634,7 @@ namespace VscAppz {
 		/// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
 		/// </summary>
 		/// <return>A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).</return>
-		Action<Action<QuickPick, QuickPickBag>> CreateQuickPick();
+		Action<Action<QuickPick>> CreateQuickPick();
 	}
 
 	/// <summary>Namespace describing the environment the editor runs in.</summary>
@@ -1515,7 +1515,7 @@ namespace VscAppz {
 	public partial class StatusBarItem {
 		internal Disposable __disp__;
 
-		/// <summary>CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+		/// <summary>CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
 		public StatusBarItemBag CfgBag;
 	}
 
@@ -1528,7 +1528,7 @@ namespace VscAppz {
 	public partial class OutputChannel {
 		internal Disposable __disp__;
 
-		/// <summary>CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.</summary>
+		/// <summary>CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
 		public OutputChannelBag CfgBag;
 	}
 
@@ -1751,7 +1751,7 @@ namespace VscAppz {
 	public partial class TextEditorDecorationType {
 		internal Disposable __disp__;
 
-		/// <summary>CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.</summary>
+		/// <summary>CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
 		public TextEditorDecorationTypeBag CfgBag;
 	}
 
@@ -1765,7 +1765,7 @@ namespace VscAppz {
 	public partial class InputBox {
 		internal Disposable __disp__;
 
-		/// <summary>CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+		/// <summary>CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
 		public InputBoxBag CfgBag;
 	}
 
@@ -1793,7 +1793,7 @@ namespace VscAppz {
 	public partial class QuickPick {
 		internal Disposable __disp__;
 
-		/// <summary>CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+		/// <summary>CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
 		public QuickPickBag CfgBag;
 	}
 
@@ -1920,7 +1920,7 @@ namespace VscAppz {
 	/// <summary>StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
 	public partial class StatusBarItemBag {
 		[JsonIgnore]
-		internal Disposable __holder__;
+		internal StatusBarItem __holder__;
 
 		/// <summary>The alignment of this item.</summary>
 		[JsonIgnore]
@@ -1963,7 +1963,7 @@ namespace VscAppz {
 	/// <summary>OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
 	public partial class OutputChannelBag {
 		[JsonIgnore]
-		internal Disposable __holder__;
+		internal OutputChannel __holder__;
 
 		/// <summary>The human-readable name of this output channel.</summary>
 		[JsonIgnore]
@@ -1973,7 +1973,7 @@ namespace VscAppz {
 	/// <summary>TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
 	public partial class TextEditorDecorationTypeBag {
 		[JsonIgnore]
-		internal Disposable __holder__;
+		internal TextEditorDecorationType __holder__;
 
 		/// <summary>Internal representation of the handle.</summary>
 		[JsonIgnore]
@@ -1983,7 +1983,7 @@ namespace VscAppz {
 	/// <summary>InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
 	public partial class InputBoxBag {
 		[JsonIgnore]
-		internal Disposable __holder__;
+		internal InputBox __holder__;
 
 		/// <summary>Current input value.</summary>
 		[JsonProperty("value")]
@@ -2043,7 +2043,7 @@ namespace VscAppz {
 	/// <summary>QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
 	public partial class QuickPickBag {
 		[JsonIgnore]
-		internal Disposable __holder__;
+		internal QuickPick __holder__;
 
 		/// <summary>Current value of the filter text.</summary>
 		[JsonProperty("value")]
@@ -2158,10 +2158,8 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2192,10 +2190,8 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2224,10 +2220,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2257,10 +2251,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2290,10 +2282,8 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2324,10 +2314,8 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2356,10 +2344,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2389,10 +2375,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2422,10 +2406,8 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2456,10 +2438,8 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2488,10 +2468,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2521,10 +2499,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2592,10 +2568,8 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2686,10 +2660,8 @@ namespace VscAppz {
 						__idx__result = __idx__result + 1;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2770,10 +2742,8 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2865,10 +2835,8 @@ namespace VscAppz {
 						__idx__result = __idx__result + 1;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2948,10 +2916,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -2991,10 +2957,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.Impl()));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.Impl()));
 				}
 				return true;
 			};
@@ -3024,10 +2988,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.Impl()));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.Impl()));
 				}
 				return true;
 			};
@@ -3056,10 +3018,8 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3099,10 +3059,8 @@ namespace VscAppz {
 						__idx__result = __idx__result + 1;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3132,10 +3090,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3162,10 +3118,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3214,10 +3168,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.Impl(), listenerFnId));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.Impl(), listenerFnId));
 				}
 				return true;
 			};
@@ -3227,7 +3179,7 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<StatusBarItem, StatusBarItemBag>> IWindow.CreateStatusBarItem(StatusBarAlignment? alignment, int? priority) {
+		Action<Action<StatusBarItem>> IWindow.CreateStatusBarItem(StatusBarAlignment? alignment, int? priority) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createStatusBarItem";
@@ -3239,7 +3191,7 @@ namespace VscAppz {
 				msg.Data["priority"] = priority;
 			}
 			Func<any, bool> onresp = default;
-			Action<StatusBarItem, StatusBarItemBag> onret = default;
+			Action<StatusBarItem> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
 				StatusBarItem result = default;
@@ -3250,30 +3202,30 @@ namespace VscAppz {
 						return false;
 					}
 					result.__disp__.impl = this.Impl();
+				} else {
+					return false;
 				}
-				{
-					result.Get()((StatusBarItemBag state) => {
-						if ((null != onret)) {
-							onret(result, state);
-						}
-					});
-				}
+				result.__appzObjBagPullFromPeer__()(() => {
+					if ((null != onret)) {
+						onret(result);
+					}
+				});
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<StatusBarItem, StatusBarItemBag> a0) => {
+			return (Action<StatusBarItem> a0) => {
 				onret = a0;
 			};
 		}
 
-		Action<Action<OutputChannel, OutputChannelBag>> IWindow.CreateOutputChannel(string name) {
+		Action<Action<OutputChannel>> IWindow.CreateOutputChannel(string name) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createOutputChannel";
 			msg.Data = new dict(1);
 			msg.Data["name"] = name;
 			Func<any, bool> onresp = default;
-			Action<OutputChannel, OutputChannelBag> onret = default;
+			Action<OutputChannel> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
 				OutputChannel result = default;
@@ -3284,30 +3236,30 @@ namespace VscAppz {
 						return false;
 					}
 					result.__disp__.impl = this.Impl();
+				} else {
+					return false;
 				}
-				{
-					result.Get()((OutputChannelBag state) => {
-						if ((null != onret)) {
-							onret(result, state);
-						}
-					});
-				}
+				result.__appzObjBagPullFromPeer__()(() => {
+					if ((null != onret)) {
+						onret(result);
+					}
+				});
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<OutputChannel, OutputChannelBag> a0) => {
+			return (Action<OutputChannel> a0) => {
 				onret = a0;
 			};
 		}
 
-		Action<Action<TextEditorDecorationType, TextEditorDecorationTypeBag>> IWindow.CreateTextEditorDecorationType(DecorationRenderOptions options) {
+		Action<Action<TextEditorDecorationType>> IWindow.CreateTextEditorDecorationType(DecorationRenderOptions options) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createTextEditorDecorationType";
 			msg.Data = new dict(1);
 			msg.Data["options"] = options;
 			Func<any, bool> onresp = default;
-			Action<TextEditorDecorationType, TextEditorDecorationTypeBag> onret = default;
+			Action<TextEditorDecorationType> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
 				TextEditorDecorationType result = default;
@@ -3318,29 +3270,29 @@ namespace VscAppz {
 						return false;
 					}
 					result.__disp__.impl = this.Impl();
+				} else {
+					return false;
 				}
-				{
-					result.Get()((TextEditorDecorationTypeBag state) => {
-						if ((null != onret)) {
-							onret(result, state);
-						}
-					});
-				}
+				result.__appzObjBagPullFromPeer__()(() => {
+					if ((null != onret)) {
+						onret(result);
+					}
+				});
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<TextEditorDecorationType, TextEditorDecorationTypeBag> a0) => {
+			return (Action<TextEditorDecorationType> a0) => {
 				onret = a0;
 			};
 		}
 
-		Action<Action<InputBox, InputBoxBag>> IWindow.CreateInputBox() {
+		Action<Action<InputBox>> IWindow.CreateInputBox() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createInputBox";
 			msg.Data = new dict(0);
 			Func<any, bool> onresp = default;
-			Action<InputBox, InputBoxBag> onret = default;
+			Action<InputBox> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
 				InputBox result = default;
@@ -3351,29 +3303,29 @@ namespace VscAppz {
 						return false;
 					}
 					result.__disp__.impl = this.Impl();
+				} else {
+					return false;
 				}
-				{
-					result.Get()((InputBoxBag state) => {
-						if ((null != onret)) {
-							onret(result, state);
-						}
-					});
-				}
+				result.__appzObjBagPullFromPeer__()(() => {
+					if ((null != onret)) {
+						onret(result);
+					}
+				});
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<InputBox, InputBoxBag> a0) => {
+			return (Action<InputBox> a0) => {
 				onret = a0;
 			};
 		}
 
-		Action<Action<QuickPick, QuickPickBag>> IWindow.CreateQuickPick() {
+		Action<Action<QuickPick>> IWindow.CreateQuickPick() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "window.createQuickPick";
 			msg.Data = new dict(0);
 			Func<any, bool> onresp = default;
-			Action<QuickPick, QuickPickBag> onret = default;
+			Action<QuickPick> onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
 				QuickPick result = default;
@@ -3384,18 +3336,18 @@ namespace VscAppz {
 						return false;
 					}
 					result.__disp__.impl = this.Impl();
+				} else {
+					return false;
 				}
-				{
-					result.Get()((QuickPickBag state) => {
-						if ((null != onret)) {
-							onret(result, state);
-						}
-					});
-				}
+				result.__appzObjBagPullFromPeer__()(() => {
+					if ((null != onret)) {
+						onret(result);
+					}
+				});
 				return true;
 			};
 			this.Impl().send(msg, onresp);
-			return (Action<QuickPick, QuickPickBag> a0) => {
+			return (Action<QuickPick> a0) => {
 				onret = a0;
 			};
 		}
@@ -3419,10 +3371,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3448,10 +3398,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3477,10 +3425,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3506,10 +3452,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3535,10 +3479,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3566,10 +3508,8 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3595,10 +3535,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3624,10 +3562,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3653,10 +3589,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3685,10 +3619,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3720,10 +3652,8 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3774,10 +3704,8 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3805,10 +3733,8 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3837,10 +3763,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3889,10 +3813,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.Impl(), listenerFnId));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.Impl(), listenerFnId));
 				}
 				return true;
 			};
@@ -3920,10 +3842,8 @@ namespace VscAppz {
 						return false;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -3963,10 +3883,8 @@ namespace VscAppz {
 						__idx__result = __idx__result + 1;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -4021,10 +3939,8 @@ namespace VscAppz {
 						__idx__result = __idx__result + 1;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -4054,10 +3970,8 @@ namespace VscAppz {
 					}
 					result = _result_;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -4086,10 +4000,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -4128,10 +4040,8 @@ namespace VscAppz {
 						__idx__result = __idx__result + 1;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -4180,10 +4090,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.Impl(), listenerFnId));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.Impl(), listenerFnId));
 				}
 				return true;
 			};
@@ -4226,10 +4134,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.Impl(), listenerFnId));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.Impl(), listenerFnId));
 				}
 				return true;
 			};
@@ -4279,10 +4185,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.Impl(), callbackFnId));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.Impl(), callbackFnId));
 				}
 				return true;
 			};
@@ -4309,10 +4213,8 @@ namespace VscAppz {
 					if (ok) {
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -4352,10 +4254,8 @@ namespace VscAppz {
 						__idx__result = __idx__result + 1;
 					}
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				if ((null != onret)) {
+					onret(result);
 				}
 				return true;
 			};
@@ -4371,36 +4271,30 @@ namespace VscAppz {
 		/// <summary>
 		/// Shows the entry in the status bar.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.</return>
-		public Action<Action<StatusBarItemBag>> Show() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> Show() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.show";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
-			Action<StatusBarItemBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
-				bool ok = default;
-				StatusBarItemBag result = default;
 				if ((null != payload)) {
-					result = new StatusBarItemBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+					return false;
 				}
-				{
+				this.__appzObjBagPullFromPeer__()(() => {
 					if ((null != onret)) {
-						onret(result);
+						onret();
 					}
-				}
+				});
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<StatusBarItemBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -4410,36 +4304,30 @@ namespace VscAppz {
 		/// <summary>
 		/// Hide the entry in the status bar.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.</return>
-		public Action<Action<StatusBarItemBag>> Hide() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.hide";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
-			Action<StatusBarItemBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
-				bool ok = default;
-				StatusBarItemBag result = default;
 				if ((null != payload)) {
-					result = new StatusBarItemBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+					return false;
 				}
-				{
+				this.__appzObjBagPullFromPeer__()(() => {
 					if ((null != onret)) {
-						onret(result);
+						onret();
 					}
-				}
+				});
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<StatusBarItemBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -4464,36 +4352,34 @@ namespace VscAppz {
 		/// <summary>
 		/// Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.</return>
-		public Action<Action<StatusBarItemBag>> Get() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "StatusBarItem.appzObjPropsGet";
+			msg.QName = "StatusBarItem.__appzObjBagPullFromPeer__";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
-			Action<StatusBarItemBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				StatusBarItemBag result = default;
-				if ((null != payload)) {
-					result = new StatusBarItemBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+				if ((null == this.CfgBag)) {
+					this.CfgBag = new StatusBarItemBag();
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				this.CfgBag.__holder__ = this;
+				ok = this.CfgBag.loadFromJsonish(payload);
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
 				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<StatusBarItemBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -4503,16 +4389,16 @@ namespace VscAppz {
 		/// <summary>
 		/// Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
 		/// 
-		/// `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
+		/// `allUpdates` ── 
 		/// 
 		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <param name="allUpdates">be aware that **all** its fields are sent for update, no omissions.</param>
+		/// <param name="allUpdates"></param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
-		public Action<Action> Set(StatusBarItemBag allUpdates = default) {
+		public Action<Action> __appzObjBagPushToPeer_(StatusBarItemBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "StatusBarItem.appzObjPropsSet";
+			msg.QName = "StatusBarItem.__appzObjBagPushToPeer_";
 			msg.Data = new dict(2);
 			msg.Data[""] = this.__disp__.id;
 			msg.Data["allUpdates"] = allUpdates;
@@ -4540,11 +4426,11 @@ namespace VscAppz {
 		/// 
 		/// `value` ── A string, falsy values will not be printed.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
 		/// <param name="value">A string, falsy values will not be printed.</param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
-		public Action<Action<OutputChannelBag>> Append(string value = default) {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> Append(string value = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.append";
@@ -4552,26 +4438,20 @@ namespace VscAppz {
 			msg.Data[""] = this.__disp__.id;
 			msg.Data["value"] = value;
 			Func<any, bool> onresp = default;
-			Action<OutputChannelBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
-				bool ok = default;
-				OutputChannelBag result = default;
 				if ((null != payload)) {
-					result = new OutputChannelBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+					return false;
 				}
-				{
+				this.__appzObjBagPullFromPeer__()(() => {
 					if ((null != onret)) {
-						onret(result);
+						onret();
 					}
-				}
+				});
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<OutputChannelBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -4584,11 +4464,11 @@ namespace VscAppz {
 		/// 
 		/// `value` ── A string, falsy values will be printed.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
 		/// <param name="value">A string, falsy values will be printed.</param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
-		public Action<Action<OutputChannelBag>> AppendLine(string value = default) {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> AppendLine(string value = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.appendLine";
@@ -4596,26 +4476,20 @@ namespace VscAppz {
 			msg.Data[""] = this.__disp__.id;
 			msg.Data["value"] = value;
 			Func<any, bool> onresp = default;
-			Action<OutputChannelBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
-				bool ok = default;
-				OutputChannelBag result = default;
 				if ((null != payload)) {
-					result = new OutputChannelBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+					return false;
 				}
-				{
+				this.__appzObjBagPullFromPeer__()(() => {
 					if ((null != onret)) {
-						onret(result);
+						onret();
 					}
-				}
+				});
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<OutputChannelBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -4625,36 +4499,30 @@ namespace VscAppz {
 		/// <summary>
 		/// Removes all output from the channel.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
-		public Action<Action<OutputChannelBag>> Clear() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> Clear() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.clear";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
-			Action<OutputChannelBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
-				bool ok = default;
-				OutputChannelBag result = default;
 				if ((null != payload)) {
-					result = new OutputChannelBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+					return false;
 				}
-				{
+				this.__appzObjBagPullFromPeer__()(() => {
 					if ((null != onret)) {
-						onret(result);
+						onret();
 					}
-				}
+				});
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<OutputChannelBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -4666,11 +4534,11 @@ namespace VscAppz {
 		/// 
 		/// `preserveFocus` ── When `true` the channel will not take focus.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
 		/// <param name="preserveFocus">When `true` the channel will not take focus.</param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
-		public Action<Action<OutputChannelBag>> Show(bool preserveFocus = default) {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> Show(bool preserveFocus = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.show";
@@ -4678,26 +4546,20 @@ namespace VscAppz {
 			msg.Data[""] = this.__disp__.id;
 			msg.Data["preserveFocus"] = preserveFocus;
 			Func<any, bool> onresp = default;
-			Action<OutputChannelBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
-				bool ok = default;
-				OutputChannelBag result = default;
 				if ((null != payload)) {
-					result = new OutputChannelBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+					return false;
 				}
-				{
+				this.__appzObjBagPullFromPeer__()(() => {
 					if ((null != onret)) {
-						onret(result);
+						onret();
 					}
-				}
+				});
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<OutputChannelBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -4707,36 +4569,30 @@ namespace VscAppz {
 		/// <summary>
 		/// Hide this channel from the UI.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
-		public Action<Action<OutputChannelBag>> Hide() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.hide";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
-			Action<OutputChannelBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
-				bool ok = default;
-				OutputChannelBag result = default;
 				if ((null != payload)) {
-					result = new OutputChannelBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+					return false;
 				}
-				{
+				this.__appzObjBagPullFromPeer__()(() => {
 					if ((null != onret)) {
-						onret(result);
+						onret();
 					}
-				}
+				});
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<OutputChannelBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -4760,36 +4616,34 @@ namespace VscAppz {
 		/// <summary>
 		/// Obtains this `OutputChannel`'s current property value for: `name`.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
-		public Action<Action<OutputChannelBag>> Get() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "OutputChannel.appzObjPropsGet";
+			msg.QName = "OutputChannel.__appzObjBagPullFromPeer__";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
-			Action<OutputChannelBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				OutputChannelBag result = default;
-				if ((null != payload)) {
-					result = new OutputChannelBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+				if ((null == this.CfgBag)) {
+					this.CfgBag = new OutputChannelBag();
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				this.CfgBag.__holder__ = this;
+				ok = this.CfgBag.loadFromJsonish(payload);
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
 				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<OutputChannelBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -4813,36 +4667,34 @@ namespace VscAppz {
 		/// <summary>
 		/// Obtains this `TextEditorDecorationType`'s current property value for: `key`.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `TextEditorDecorationTypeBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `TextEditorDecorationTypeBag` result obtained.</return>
-		public Action<Action<TextEditorDecorationTypeBag>> Get() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "TextEditorDecorationType.appzObjPropsGet";
+			msg.QName = "TextEditorDecorationType.__appzObjBagPullFromPeer__";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
-			Action<TextEditorDecorationTypeBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				TextEditorDecorationTypeBag result = default;
-				if ((null != payload)) {
-					result = new TextEditorDecorationTypeBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+				if ((null == this.CfgBag)) {
+					this.CfgBag = new TextEditorDecorationTypeBag();
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				this.CfgBag.__holder__ = this;
+				ok = this.CfgBag.loadFromJsonish(payload);
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
 				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<TextEditorDecorationTypeBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -4904,10 +4756,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.__disp__.impl, handlerFnId));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.__disp__.impl, handlerFnId));
 				}
 				return true;
 			};
@@ -4969,10 +4819,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.__disp__.impl, handlerFnId));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.__disp__.impl, handlerFnId));
 				}
 				return true;
 			};
@@ -4988,36 +4836,30 @@ namespace VscAppz {
 		/// Makes the input UI visible in its current configuration. Any other input
 		/// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.</return>
-		public Action<Action<InputBoxBag>> Show() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> Show() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.show";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
-			Action<InputBoxBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
-				bool ok = default;
-				InputBoxBag result = default;
 				if ((null != payload)) {
-					result = new InputBoxBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+					return false;
 				}
-				{
+				this.__appzObjBagPullFromPeer__()(() => {
 					if ((null != onret)) {
-						onret(result);
+						onret();
 					}
-				}
+				});
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<InputBoxBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -5028,36 +4870,30 @@ namespace VscAppz {
 		/// Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 		/// event.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.</return>
-		public Action<Action<InputBoxBag>> Hide() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.hide";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
-			Action<InputBoxBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
-				bool ok = default;
-				InputBoxBag result = default;
 				if ((null != payload)) {
-					result = new InputBoxBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+					return false;
 				}
-				{
+				this.__appzObjBagPullFromPeer__()(() => {
 					if ((null != onret)) {
-						onret(result);
+						onret();
 					}
-				}
+				});
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<InputBoxBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -5119,10 +4955,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.__disp__.impl, handlerFnId));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.__disp__.impl, handlerFnId));
 				}
 				return true;
 			};
@@ -5154,36 +4988,34 @@ namespace VscAppz {
 		/// <summary>
 		/// Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.</return>
-		public Action<Action<InputBoxBag>> Get() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "InputBox.appzObjPropsGet";
+			msg.QName = "InputBox.__appzObjBagPullFromPeer__";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
-			Action<InputBoxBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				InputBoxBag result = default;
-				if ((null != payload)) {
-					result = new InputBoxBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+				if ((null == this.CfgBag)) {
+					this.CfgBag = new InputBoxBag();
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				this.CfgBag.__holder__ = this;
+				ok = this.CfgBag.loadFromJsonish(payload);
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
 				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<InputBoxBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -5193,16 +5025,16 @@ namespace VscAppz {
 		/// <summary>
 		/// Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 		/// 
-		/// `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
+		/// `allUpdates` ── 
 		/// 
 		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <param name="allUpdates">be aware that **all** its fields are sent for update, no omissions.</param>
+		/// <param name="allUpdates"></param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
-		public Action<Action> Set(InputBoxBag allUpdates = default) {
+		public Action<Action> __appzObjBagPushToPeer_(InputBoxBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "InputBox.appzObjPropsSet";
+			msg.QName = "InputBox.__appzObjBagPushToPeer_";
 			msg.Data = new dict(2);
 			msg.Data[""] = this.__disp__.id;
 			msg.Data["allUpdates"] = allUpdates;
@@ -5280,10 +5112,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.__disp__.impl, handlerFnId));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.__disp__.impl, handlerFnId));
 				}
 				return true;
 			};
@@ -5345,10 +5175,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.__disp__.impl, handlerFnId));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.__disp__.impl, handlerFnId));
 				}
 				return true;
 			};
@@ -5429,10 +5257,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.__disp__.impl, handlerFnId));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.__disp__.impl, handlerFnId));
 				}
 				return true;
 			};
@@ -5513,10 +5339,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.__disp__.impl, handlerFnId));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.__disp__.impl, handlerFnId));
 				}
 				return true;
 			};
@@ -5532,36 +5356,30 @@ namespace VscAppz {
 		/// Makes the input UI visible in its current configuration. Any other input
 		/// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.</return>
-		public Action<Action<QuickPickBag>> Show() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> Show() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.show";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
-			Action<QuickPickBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
-				bool ok = default;
-				QuickPickBag result = default;
 				if ((null != payload)) {
-					result = new QuickPickBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+					return false;
 				}
-				{
+				this.__appzObjBagPullFromPeer__()(() => {
 					if ((null != onret)) {
-						onret(result);
+						onret();
 					}
-				}
+				});
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<QuickPickBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -5572,36 +5390,30 @@ namespace VscAppz {
 		/// Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 		/// event.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.</return>
-		public Action<Action<QuickPickBag>> Hide() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.hide";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
-			Action<QuickPickBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
-				bool ok = default;
-				QuickPickBag result = default;
 				if ((null != payload)) {
-					result = new QuickPickBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+					return false;
 				}
-				{
+				this.__appzObjBagPullFromPeer__()(() => {
 					if ((null != onret)) {
-						onret(result);
+						onret();
 					}
-				}
+				});
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<QuickPickBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -5663,10 +5475,8 @@ namespace VscAppz {
 				} else {
 					return false;
 				}
-				{
-					if ((null != onret)) {
-						onret(result.bind(this.__disp__.impl, handlerFnId));
-					}
+				if ((null != onret)) {
+					onret(result.bind(this.__disp__.impl, handlerFnId));
 				}
 				return true;
 			};
@@ -5698,36 +5508,34 @@ namespace VscAppz {
 		/// <summary>
 		/// Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.</return>
-		public Action<Action<QuickPickBag>> Get() {
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "QuickPick.appzObjPropsGet";
+			msg.QName = "QuickPick.__appzObjBagPullFromPeer__";
 			msg.Data = new dict(1);
 			msg.Data[""] = this.__disp__.id;
 			Func<any, bool> onresp = default;
-			Action<QuickPickBag> onret = default;
+			Action onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				QuickPickBag result = default;
-				if ((null != payload)) {
-					result = new QuickPickBag();
-					ok = result.loadFromJsonish(payload);
-					if (!ok) {
-						return false;
-					}
+				if ((null == this.CfgBag)) {
+					this.CfgBag = new QuickPickBag();
 				}
-				{
-					if ((null != onret)) {
-						onret(result);
-					}
+				this.CfgBag.__holder__ = this;
+				ok = this.CfgBag.loadFromJsonish(payload);
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
 				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
-			return (Action<QuickPickBag> a0) => {
+			return (Action a0) => {
 				onret = a0;
 			};
 		}
@@ -5737,16 +5545,16 @@ namespace VscAppz {
 		/// <summary>
 		/// Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
 		/// 
-		/// `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
+		/// `allUpdates` ── 
 		/// 
 		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
-		/// <param name="allUpdates">be aware that **all** its fields are sent for update, no omissions.</param>
+		/// <param name="allUpdates"></param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
-		public Action<Action> Set(QuickPickBag allUpdates = default) {
+		public Action<Action> __appzObjBagPushToPeer_(QuickPickBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "QuickPick.appzObjPropsSet";
+			msg.QName = "QuickPick.__appzObjBagPushToPeer_";
 			msg.Data = new dict(2);
 			msg.Data[""] = this.__disp__.id;
 			msg.Data["allUpdates"] = allUpdates;
@@ -5765,6 +5573,102 @@ namespace VscAppz {
 			return (Action a0) => {
 				onret = a0;
 			};
+		}
+	}
+
+	public partial class StatusBarItemBag {
+		/// <summary>
+		/// getter docs
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> ReFetch() {
+			return this.__holder__.__appzObjBagPullFromPeer__();
+		}
+	}
+
+	public partial class StatusBarItemBag {
+		/// <summary>
+		/// setter docs
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> ApplyChanges() {
+			return this.__holder__.__appzObjBagPushToPeer_(this);
+		}
+	}
+
+	public partial class OutputChannelBag {
+		/// <summary>
+		/// getter docs
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> ReFetch() {
+			return this.__holder__.__appzObjBagPullFromPeer__();
+		}
+	}
+
+	public partial class TextEditorDecorationTypeBag {
+		/// <summary>
+		/// getter docs
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> ReFetch() {
+			return this.__holder__.__appzObjBagPullFromPeer__();
+		}
+	}
+
+	public partial class InputBoxBag {
+		/// <summary>
+		/// getter docs
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> ReFetch() {
+			return this.__holder__.__appzObjBagPullFromPeer__();
+		}
+	}
+
+	public partial class InputBoxBag {
+		/// <summary>
+		/// setter docs
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> ApplyChanges() {
+			return this.__holder__.__appzObjBagPushToPeer_(this);
+		}
+	}
+
+	public partial class QuickPickBag {
+		/// <summary>
+		/// getter docs
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> ReFetch() {
+			return this.__holder__.__appzObjBagPullFromPeer__();
+		}
+	}
+
+	public partial class QuickPickBag {
+		/// <summary>
+		/// setter docs
+		/// 
+		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// </summary>
+		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		public Action<Action> ApplyChanges() {
+			return this.__holder__.__appzObjBagPushToPeer_(this);
 		}
 	}
 

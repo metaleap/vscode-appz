@@ -513,7 +513,7 @@ console.log(importedApi.mul(42, 1));
 ```go
 type InputBox struct {
 
-	// CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	// CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 	CfgBag *InputBoxBag
 }
 ```
@@ -543,29 +543,17 @@ UI should be created.
 `return` ── A thenable that resolves when this call has completed at the
 counterparty.
 
-#### func (*InputBox) Get
-
-```go
-func (me *InputBox) Get() func(func(InputBoxBag))
-```
-Obtains this `InputBox`'s current property values for: `value`, `placeholder`,
-`password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`,
-`enabled`, `busy`, `ignoreFocusOut`.
-
-`return` ── A thenable that resolves when this call has completed at the
-counterparty and its `InputBoxBag` result obtained.
-
 #### func (*InputBox) Hide
 
 ```go
-func (me *InputBox) Hide() func(func(*InputBoxBag))
+func (me *InputBox) Hide() func(func())
 ```
 Hides this input UI. This will also fire an
 [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its `InputBoxBag` result obtained.
+counterparty.
 
 #### func (*InputBox) OnDidAccept
 
@@ -610,25 +598,10 @@ the user pressing Esc, some other input UI opening, etc.)
 `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide`
 event on `Dispose`.
 
-#### func (*InputBox) Set
-
-```go
-func (me *InputBox) Set(allUpdates InputBoxBag) func(func())
-```
-Updates this `InputBox`'s current property values for: `value`, `placeholder`,
-`password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`,
-`enabled`, `busy`, `ignoreFocusOut`.
-
-`allUpdates` ── be aware that **all** its fields are sent for update, no
-omissions.
-
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
-
 #### func (*InputBox) Show
 
 ```go
-func (me *InputBox) Show() func(func(*InputBoxBag))
+func (me *InputBox) Show() func(func())
 ```
 Makes the input UI visible in its current configuration. Any other input UI will
 first fire an
@@ -636,7 +609,7 @@ first fire an
 event.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its `InputBoxBag` result obtained.
+counterparty.
 
 #### type InputBoxBag
 
@@ -690,6 +663,26 @@ obtained whenever `InputBox` creations and method calls (incl. the dedicated
 always retain a factual view of the real full-picture) should not be constructed
 manually. Changes to any non-function-valued fields must be propagated to the
 counterparty via the `Set` method.
+
+#### func (*InputBoxBag) ApplyChanges
+
+```go
+func (me *InputBoxBag) ApplyChanges() func(func())
+```
+setter docs
+
+`return` ── A thenable that resolves when this call has completed at the
+counterparty.
+
+#### func (*InputBoxBag) ReFetch
+
+```go
+func (me *InputBoxBag) ReFetch() func(func())
+```
+getter docs
+
+`return` ── A thenable that resolves when this call has completed at the
+counterparty.
 
 #### type InputBoxOptions
 
@@ -873,7 +866,7 @@ and the editor then silently adjusts the options to select files.
 ```go
 type OutputChannel struct {
 
-	// CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
+	// CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
 	CfgBag *OutputChannelBag
 }
 ```
@@ -886,36 +879,36 @@ To get an instance of an `OutputChannel` use
 #### func (*OutputChannel) Append
 
 ```go
-func (me *OutputChannel) Append(value string) func(func(*OutputChannelBag))
+func (me *OutputChannel) Append(value string) func(func())
 ```
 Append the given value to the channel.
 
 `value` ── A string, falsy values will not be printed.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its `OutputChannelBag` result obtained.
+counterparty.
 
 #### func (*OutputChannel) AppendLine
 
 ```go
-func (me *OutputChannel) AppendLine(value string) func(func(*OutputChannelBag))
+func (me *OutputChannel) AppendLine(value string) func(func())
 ```
 Append the given value and a line feed character to the channel.
 
 `value` ── A string, falsy values will be printed.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its `OutputChannelBag` result obtained.
+counterparty.
 
 #### func (*OutputChannel) Clear
 
 ```go
-func (me *OutputChannel) Clear() func(func(*OutputChannelBag))
+func (me *OutputChannel) Clear() func(func())
 ```
 Removes all output from the channel.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its `OutputChannelBag` result obtained.
+counterparty.
 
 #### func (*OutputChannel) Dispose
 
@@ -927,37 +920,27 @@ Dispose and free associated resources.
 `return` ── A thenable that resolves when this call has completed at the
 counterparty.
 
-#### func (*OutputChannel) Get
-
-```go
-func (me *OutputChannel) Get() func(func(OutputChannelBag))
-```
-Obtains this `OutputChannel`'s current property value for: `name`.
-
-`return` ── A thenable that resolves when this call has completed at the
-counterparty and its `OutputChannelBag` result obtained.
-
 #### func (*OutputChannel) Hide
 
 ```go
-func (me *OutputChannel) Hide() func(func(*OutputChannelBag))
+func (me *OutputChannel) Hide() func(func())
 ```
 Hide this channel from the UI.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its `OutputChannelBag` result obtained.
+counterparty.
 
 #### func (*OutputChannel) Show
 
 ```go
-func (me *OutputChannel) Show(preserveFocus bool) func(func(*OutputChannelBag))
+func (me *OutputChannel) Show(preserveFocus bool) func(func())
 ```
 Reveal this channel in the UI.
 
 `preserveFocus` ── When `true` the channel will not take focus.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its `OutputChannelBag` result obtained.
+counterparty.
 
 #### type OutputChannelBag
 
@@ -975,6 +958,16 @@ dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to
 help always retain a factual view of the real full-picture) should not be
 constructed manually. All read-only properties are exposed as function-valued
 fields.
+
+#### func (*OutputChannelBag) ReFetch
+
+```go
+func (me *OutputChannelBag) ReFetch() func(func())
+```
+getter docs
+
+`return` ── A thenable that resolves when this call has completed at the
+counterparty.
 
 #### type OverviewRulerLane
 
@@ -1027,7 +1020,7 @@ or [InputBox](#InputBox).
 ```go
 type QuickPick struct {
 
-	// CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	// CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 	CfgBag *QuickPickBag
 }
 ```
@@ -1060,30 +1053,17 @@ UI should be created.
 `return` ── A thenable that resolves when this call has completed at the
 counterparty.
 
-#### func (*QuickPick) Get
-
-```go
-func (me *QuickPick) Get() func(func(QuickPickBag))
-```
-Obtains this `QuickPick`'s current property values for: `value`, `placeholder`,
-`items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`,
-`selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`,
-`ignoreFocusOut`.
-
-`return` ── A thenable that resolves when this call has completed at the
-counterparty and its `QuickPickBag` result obtained.
-
 #### func (*QuickPick) Hide
 
 ```go
-func (me *QuickPick) Hide() func(func(*QuickPickBag))
+func (me *QuickPick) Hide() func(func())
 ```
 Hides this input UI. This will also fire an
 [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its `QuickPickBag` result obtained.
+counterparty.
 
 #### func (*QuickPick) OnDidAccept
 
@@ -1152,26 +1132,10 @@ the user pressing Esc, some other input UI opening, etc.)
 `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide`
 event on `Dispose`.
 
-#### func (*QuickPick) Set
-
-```go
-func (me *QuickPick) Set(allUpdates QuickPickBag) func(func())
-```
-Updates this `QuickPick`'s current property values for: `value`, `placeholder`,
-`items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`,
-`selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`,
-`ignoreFocusOut`.
-
-`allUpdates` ── be aware that **all** its fields are sent for update, no
-omissions.
-
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
-
 #### func (*QuickPick) Show
 
 ```go
-func (me *QuickPick) Show() func(func(*QuickPickBag))
+func (me *QuickPick) Show() func(func())
 ```
 Makes the input UI visible in its current configuration. Any other input UI will
 first fire an
@@ -1179,7 +1143,7 @@ first fire an
 event.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its `QuickPickBag` result obtained.
+counterparty.
 
 #### type QuickPickBag
 
@@ -1242,6 +1206,26 @@ obtained whenever `QuickPick` creations and method calls (incl. the dedicated
 always retain a factual view of the real full-picture) should not be constructed
 manually. Changes to any non-function-valued fields must be propagated to the
 counterparty via the `Set` method.
+
+#### func (*QuickPickBag) ApplyChanges
+
+```go
+func (me *QuickPickBag) ApplyChanges() func(func())
+```
+setter docs
+
+`return` ── A thenable that resolves when this call has completed at the
+counterparty.
+
+#### func (*QuickPickBag) ReFetch
+
+```go
+func (me *QuickPickBag) ReFetch() func(func())
+```
+getter docs
+
+`return` ── A thenable that resolves when this call has completed at the
+counterparty.
 
 #### type QuickPickItem
 
@@ -1347,7 +1331,7 @@ const (
 ```go
 type StatusBarItem struct {
 
-	// CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	// CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 	CfgBag *StatusBarItemBag
 }
 ```
@@ -1366,37 +1350,12 @@ Dispose and free associated resources. Call
 `return` ── A thenable that resolves when this call has completed at the
 counterparty.
 
-#### func (*StatusBarItem) Get
-
-```go
-func (me *StatusBarItem) Get() func(func(StatusBarItemBag))
-```
-Obtains this `StatusBarItem`'s current property values for: `alignment`,
-`priority`, `text`, `tooltip`, `color`, `command`.
-
-`return` ── A thenable that resolves when this call has completed at the
-counterparty and its `StatusBarItemBag` result obtained.
-
 #### func (*StatusBarItem) Hide
 
 ```go
-func (me *StatusBarItem) Hide() func(func(*StatusBarItemBag))
+func (me *StatusBarItem) Hide() func(func())
 ```
 Hide the entry in the status bar.
-
-`return` ── A thenable that resolves when this call has completed at the
-counterparty and its `StatusBarItemBag` result obtained.
-
-#### func (*StatusBarItem) Set
-
-```go
-func (me *StatusBarItem) Set(allUpdates StatusBarItemBag) func(func())
-```
-Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`,
-`color`, `command`.
-
-`allUpdates` ── be aware that **all** its fields are sent for update, no
-omissions.
 
 `return` ── A thenable that resolves when this call has completed at the
 counterparty.
@@ -1404,12 +1363,12 @@ counterparty.
 #### func (*StatusBarItem) Show
 
 ```go
-func (me *StatusBarItem) Show() func(func(*StatusBarItemBag))
+func (me *StatusBarItem) Show() func(func())
 ```
 Shows the entry in the status bar.
 
 `return` ── A thenable that resolves when this call has completed at the
-counterparty and its `StatusBarItemBag` result obtained.
+counterparty.
 
 #### type StatusBarItemBag
 
@@ -1451,12 +1410,32 @@ constructed manually. All read-only properties are exposed as function-valued
 fields. Changes to any non-function-valued fields must be propagated to the
 counterparty via the `Set` method.
 
+#### func (*StatusBarItemBag) ApplyChanges
+
+```go
+func (me *StatusBarItemBag) ApplyChanges() func(func())
+```
+setter docs
+
+`return` ── A thenable that resolves when this call has completed at the
+counterparty.
+
+#### func (*StatusBarItemBag) ReFetch
+
+```go
+func (me *StatusBarItemBag) ReFetch() func(func())
+```
+getter docs
+
+`return` ── A thenable that resolves when this call has completed at the
+counterparty.
+
 #### type TextEditorDecorationType
 
 ```go
 type TextEditorDecorationType struct {
 
-	// CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
+	// CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
 	CfgBag *TextEditorDecorationTypeBag
 }
 ```
@@ -1478,16 +1457,6 @@ Remove this decoration type and all decorations on all text editors using it.
 `return` ── A thenable that resolves when this call has completed at the
 counterparty.
 
-#### func (*TextEditorDecorationType) Get
-
-```go
-func (me *TextEditorDecorationType) Get() func(func(TextEditorDecorationTypeBag))
-```
-Obtains this `TextEditorDecorationType`'s current property value for: `key`.
-
-`return` ── A thenable that resolves when this call has completed at the
-counterparty and its `TextEditorDecorationTypeBag` result obtained.
-
 #### type TextEditorDecorationTypeBag
 
 ```go
@@ -1504,6 +1473,16 @@ creations and method calls (incl. the dedicated `Get`) resolve or its event
 subscribers are invoked, and therefore (to help always retain a factual view of
 the real full-picture) should not be constructed manually. All read-only
 properties are exposed as function-valued fields.
+
+#### func (*TextEditorDecorationTypeBag) ReFetch
+
+```go
+func (me *TextEditorDecorationTypeBag) ReFetch() func(func())
+```
+getter docs
+
+`return` ── A thenable that resolves when this call has completed at the
+counterparty.
 
 #### type ThemableDecorationAttachmentRenderOptions
 
@@ -2030,21 +2009,21 @@ type Window interface {
 	// `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
 	//
 	// `return` ── A new status bar item.
-	CreateStatusBarItem(alignment StatusBarAlignment, priority *int) func(func(StatusBarItem, StatusBarItemBag))
+	CreateStatusBarItem(alignment StatusBarAlignment, priority *int) func(func(*StatusBarItem))
 
 	// Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 	//
 	// `name` ── Human-readable string which will be used to represent the channel in the UI.
 	//
 	// `return` ── a thenable that resolves to the newly created `OutputChannel`.
-	CreateOutputChannel(name string) func(func(OutputChannel, OutputChannelBag))
+	CreateOutputChannel(name string) func(func(*OutputChannel))
 
 	// Create a TextEditorDecorationType that can be used to add decorations to text editors.
 	//
 	// `options` ── Rendering options for the decoration type.
 	//
 	// `return` ── A new decoration type instance.
-	CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(TextEditorDecorationType, TextEditorDecorationTypeBag))
+	CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(*TextEditorDecorationType))
 
 	// Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
 	//
@@ -2053,7 +2032,7 @@ type Window interface {
 	// when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 	//
 	// `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
-	CreateInputBox() func(func(InputBox, InputBoxBag))
+	CreateInputBox() func(func(*InputBox))
 
 	// Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
 	// of items of type T.
@@ -2063,7 +2042,7 @@ type Window interface {
 	// when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 	//
 	// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
-	CreateQuickPick() func(func(QuickPick, QuickPickBag))
+	CreateQuickPick() func(func(*QuickPick))
 }
 ```
 

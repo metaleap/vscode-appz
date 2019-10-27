@@ -84,19 +84,19 @@ export class Gen extends gen.Gen implements gen.IGen {
                         src += "\t\t\t\t}\n"
                     }
                 if (hasgets) {
-                    src += '\t\t\t\tcase "appzObjPropsGet": {\n'
+                    src += `\t\t\t\tcase "${gen.idents.methodObjBagPull}": {\n`
                     src += "\t\t\t\t\treturn Promise.resolve({ " + this.propSrc(it) + " })\n"
                     src += "\t\t\t\t}\n"
                 }
                 if (hassets) {
-                    src += '\t\t\t\tcase "appzObjPropsSet": {\n'
-                    src += "\t\t\t\t\tconst allUpdates = msg.data['allUpdates'] as { [_:string]: any }\n"
-                    src += `\t\t\t\t\tif (!allUpdates)\n\t\t\t\t\t\treturn ppio.promRej("${it.name}.set#allUpdates", msg.data)\n`
+                    src += `\t\t\t\tcase "${gen.idents.methodObjBagPush}": {\n`
+                    src += `\t\t\t\t\tconst upd = msg.data["${gen.idents.argUpd}"] as { [_:string]: any }\n`
+                    src += `\t\t\t\t\tif (!upd)\n\t\t\t\t\t\treturn ppio.promRej("${it.name}.set#${gen.idents.argUpd}", msg.data)\n`
                     for (const prop of it.fields.filter(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec))) {
                         const tcol = gen.typeNames(prop.typeSpec).includes("ThemeColor")
                         for (const tname of gen.typeNames(prop.typeSpec))
                             this.typeNamesUsed[tname] = true
-                        src += `\t\t\t\t\tconst prop_${prop.name} = allUpdates["${prop.name}"] as ${this.typeSpec(prop.typeSpec)}\n`
+                        src += `\t\t\t\t\tconst prop_${prop.name} = upd["${prop.name}"] as ${this.typeSpec(prop.typeSpec)}\n`
                         src += `\t\t\t\t\tif (prop_${prop.name} !== undefined) {\n`
                             + `\t\t\t\t\t\tlet val = `
                             + ((!tcol) ? `prop_${prop.name}`
@@ -130,7 +130,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                     for (const f of fieldsextra)
                         src += `\t${f.name + (f.optional ? '?' : '')}: ${this.typeSpec(f.typeSpec)}\n`
                     for (const ff of it.funcFields)
-                        src += `\t${ff}_AppzFuncId: string\n`
+                        src += `\t${ff}${gen.idents.fldSuffFuncId}: string\n`
                     src += "}\n"
                 } else {
                     let tgen: string
@@ -155,7 +155,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         } else if ((tfunc = gen.typeFun(arg.typeSpec)) && (tfunc.length)) {
             for (const tname of gen.typeNames(arg.typeSpec))
                 this.typeNamesUsed[tname] = true
-            const fnid = "_fnid_" + arg.name
+            const fnid = arg.name + gen.idents.varSuffFnid
             src += `\t\t\t\t\tconst ${fnid} = msg.data['${arg.name}'] as string\n`
             src += `\t\t\t\t\tif (!(${fnid} && ${fnid}.length))\n`
             src += `\t\t\t\t\t\treturn ppio.promRej("${hint}", msg.data)\n`
@@ -179,8 +179,8 @@ export class Gen extends gen.Gen implements gen.IGen {
                 for (const ff of funcfields) {
                     const tfn = gen.typeFun(ff.struct.fields.find(_ => _.name === ff.name).typeSpec)
                     if (tfn && tfn.length) {
-                        src += `\t\t\t\t\tif (arg_${arg.name} && arg_${arg.name}.${ff.name}_AppzFuncId && arg_${arg.name}.${ff.name}_AppzFuncId.length)\n`
-                        src += `\t\t\t\t\t\targ_${arg.name}.${ff.name} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => prog.callBack("${hint}", true, arg_${arg.name}.${ff.name}_AppzFuncId, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`
+                        src += `\t\t\t\t\tif (arg_${arg.name} && arg_${arg.name}.${ff.name}${gen.idents.fldSuffFuncId} && arg_${arg.name}.${ff.name}${gen.idents.fldSuffFuncId}.length)\n`
+                        src += `\t\t\t\t\t\targ_${arg.name}.${ff.name} = (${tfn[0].map((_, idx) => 'a' + idx).join(', ')}) => prog.callBack("${hint}", true, arg_${arg.name}.${ff.name}${gen.idents.fldSuffFuncId}, ${tfn[0].map((_, idx) => 'a' + idx).join(', ')})\n`
                     }
                 }
         }
