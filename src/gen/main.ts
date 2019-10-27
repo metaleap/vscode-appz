@@ -45,6 +45,7 @@ const genApiSurface: genApiMember = {
                 'createTextEditorDecorationType',
                 'createInputBox',
                 'createQuickPick',
+                'createTerminal',
             ],
             'env': [
                 'openExternal',

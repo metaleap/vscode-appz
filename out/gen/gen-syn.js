@@ -223,7 +223,7 @@ class Builder {
         if (tsum && tsum.length) {
             let hadoptional = false;
             tsum = tsum.filter(_ => {
-                const optional = (_ === gen.ScriptPrimType.Undefined || _ === gen.ScriptPrimType.Null);
+                const optional = (_ === null || _ === gen.ScriptPrimType.Undefined || _ === gen.ScriptPrimType.Null);
                 hadoptional = hadoptional || optional;
                 return (!optional) && !gen.typeProm(_);
             });

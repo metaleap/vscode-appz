@@ -268,6 +268,29 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
+                case "createTerminal1": {
+                    const arg_name = (msg.data['name']);
+                    const arg_shellPath = (msg.data['shellPath']);
+                    const arg_shellArgs = (msg.data['shellArgs']);
+                    const ret = vscode.window.createTerminal(arg_name, arg_shellPath, arg_shellArgs);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "createTerminal2": {
+                    const arg_options = (msg.data['options']);
+                    const ret = vscode.window.createTerminal(arg_options);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "createTerminal3": {
+                    const arg_options = (msg.data['options']);
+                    const ret = vscode.window.createTerminal(arg_options);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
                 default:
                     throw (methodname);
             }
@@ -888,6 +911,32 @@ function handle(msg, prog, remoteCancellationTokens) {
                             thisQuickPick.ignoreFocusOut = val;
                     }
                     return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut });
+                }
+                default:
+                    throw methodname;
+            }
+        case "Terminal":
+            const thisTerminal = prog.objects[msg.data[""]];
+            if (!thisTerminal)
+                throw "Called vscode.Terminal." + methodname + " for an already disposed-and-forgotten instance";
+            switch (methodname) {
+                case "sendText": {
+                    const arg_text = (msg.data['text']);
+                    const arg_addNewLine = (msg.data['addNewLine']);
+                    const ret = thisTerminal.sendText(arg_text, arg_addNewLine);
+                    return Promise.resolve([ret, { name: thisTerminal.name, processId: thisTerminal.processId }]);
+                }
+                case "show": {
+                    const arg_preserveFocus = (msg.data['preserveFocus']);
+                    const ret = thisTerminal.show(arg_preserveFocus);
+                    return Promise.resolve([ret, { name: thisTerminal.name, processId: thisTerminal.processId }]);
+                }
+                case "hide": {
+                    const ret = thisTerminal.hide();
+                    return Promise.resolve([ret, { name: thisTerminal.name, processId: thisTerminal.processId }]);
+                }
+                case "__appzObjBagPullFromPeer__": {
+                    return Promise.resolve({ name: thisTerminal.name, processId: thisTerminal.processId });
                 }
                 default:
                     throw methodname;

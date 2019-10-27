@@ -268,6 +268,29 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
+				case "createTerminal1": {
+					const arg_name = (msg.data['name']) as string
+					const arg_shellPath = (msg.data['shellPath']) as string
+					const arg_shellArgs = (msg.data['shellArgs']) as string[]
+					const ret = vscode.window.createTerminal(arg_name, arg_shellPath, arg_shellArgs, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "createTerminal2": {
+					const arg_options = (msg.data['options']) as TerminalOptions
+					const ret = vscode.window.createTerminal(arg_options, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "createTerminal3": {
+					const arg_options = (msg.data['options']) as ExtensionTerminalOptions
+					const ret = vscode.window.createTerminal(arg_options, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
 				default:
 					throw (methodname)
 			}
@@ -892,6 +915,32 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				default:
 					throw methodname
 			}
+		case "Terminal":
+			const thisTerminal = prog.objects[msg.data[""]] as Terminal
+			if (!thisTerminal)
+				throw "Called vscode.Terminal." + methodname + " for an already disposed-and-forgotten instance"
+			switch (methodname) {
+				case "sendText": {
+					const arg_text = (msg.data['text']) as string
+					const arg_addNewLine = (msg.data['addNewLine']) as boolean
+					const ret = thisTerminal.sendText(arg_text, arg_addNewLine, )
+					return Promise.resolve([ret, { name: thisTerminal.name, processId: thisTerminal.processId }])
+				}
+				case "show": {
+					const arg_preserveFocus = (msg.data['preserveFocus']) as boolean
+					const ret = thisTerminal.show(arg_preserveFocus, )
+					return Promise.resolve([ret, { name: thisTerminal.name, processId: thisTerminal.processId }])
+				}
+				case "hide": {
+					const ret = thisTerminal.hide()
+					return Promise.resolve([ret, { name: thisTerminal.name, processId: thisTerminal.processId }])
+				}
+				case "__appzObjBagPullFromPeer__": {
+					return Promise.resolve({ name: thisTerminal.name, processId: thisTerminal.processId })
+				}
+				default:
+					throw methodname
+			}
 		case "FileSystemWatcher":
 			const thisFileSystemWatcher = prog.objects[msg.data[""]] as FileSystemWatcher
 			if (!thisFileSystemWatcher)
@@ -997,5 +1046,8 @@ type DecorationRenderOptions = vscode.DecorationRenderOptions
 type TextEditorDecorationType = vscode.TextEditorDecorationType
 type InputBox = vscode.InputBox
 type QuickPick = vscode.QuickPick<QuickPickItem>
+type Terminal = vscode.Terminal
+type TerminalOptions = vscode.TerminalOptions
+type ExtensionTerminalOptions = vscode.ExtensionTerminalOptions
 type FileSystemWatcher = vscode.FileSystemWatcher
 type Uri = vscode.Uri

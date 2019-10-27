@@ -453,6 +453,21 @@ type EnvBag struct {
 EnvBag gathers various properties of `Env`, obtainable via its `AllProperties`
 method.
 
+#### type ExtensionTerminalOptions
+
+```go
+type ExtensionTerminalOptions struct {
+	// A human-readable string which will be used to represent the terminal in the UI.
+	Name string `json:"name"`
+
+	// An implementation of [Pseudoterminal](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal) that allows an extension to
+	// control a terminal.
+	Pty Pseudoterminal `json:"pty"`
+}
+```
+
+Value-object describing what options a virtual process terminal should use.
+
 #### type Extensions
 
 ```go
@@ -1127,6 +1142,146 @@ const (
 )
 ```
 
+#### type Pseudoterminal
+
+```go
+type Pseudoterminal struct {
+	// An event that when fired will write data to the terminal. Unlike
+	// [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText) which sends text to the underlying _process_
+	// (the pty "slave"), this will write the text to the terminal itself (the pty "master").
+	//
+	// **Example:** Write red text to the terminal
+	//
+	// ```typescript
+	//
+	// const writeEmitter = new vscode.EventEmitter<string>();
+	// const pty: vscode.Pseudoterminal = {
+	//    onDidWrite: writeEmitter.event,
+	//    open: () => writeEmitter.fire('\x1b[31mHello world\x1b[0m'),
+	//    close: () => {}
+	// };
+	// vscode.window.createTerminal({ name: 'My terminal', pty });
+	//
+	// ```
+	//
+	//
+	// **Example:** Move the cursor to the 10th row and 20th column and write an asterisk
+	//
+	// ```typescript
+	//
+	// writeEmitter.fire('\x1b[10;20H*');
+	//
+	// ```
+	//
+	OnDidWrite func(func(string)) Disposable `json:"-"`
+
+	// An event that when fired allows overriding the [dimensions](https://code.visualstudio.com/api/references/vscode-api#Terminal.dimensions) of the
+	// terminal. Note that when set, the overridden dimensions will only take effect when they
+	// are lower than the actual dimensions of the terminal (ie. there will never be a scroll
+	// bar). Set to `undefined` for the terminal to go back to the regular dimensions (fit to
+	// the size of the panel).
+	//
+	// **Example:** Override the dimensions of a terminal to 20 columns and 10 rows
+	//
+	// ```typescript
+	//
+	// const dimensionsEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
+	// const pty: vscode.Pseudoterminal = {
+	//    onDidWrite: writeEmitter.event,
+	//    onDidOverrideDimensions: dimensionsEmitter.event,
+	//    open: () => {
+	//      dimensionsEmitter.fire({
+	//        columns: 20,
+	//        rows: 10
+	//      });
+	//    },
+	//    close: () => {}
+	// };
+	// vscode.window.createTerminal({ name: 'My terminal', pty });
+	//
+	// ```
+	//
+	OnDidOverrideDimensions func(func(*TerminalDimensions)) Disposable `json:"-"`
+
+	// An event that when fired will signal that the pty is closed and dispose of the terminal.
+	//
+	// A number can be used to provide an exit code for the terminal. Exit codes must be
+	// positive and a non-zero exit codes signals failure which shows a notification for a
+	// regular terminal and allows dependent tasks to proceed when used with the
+	// `CustomExecution2` API.
+	//
+	// **Example:** Exit the terminal when "y" is pressed, otherwise show a notification.
+	//
+	// ```typescript
+	//
+	// const writeEmitter = new vscode.EventEmitter<string>();
+	// const closeEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
+	// const pty: vscode.Pseudoterminal = {
+	//    onDidWrite: writeEmitter.event,
+	//    onDidClose: closeEmitter.event,
+	//    open: () => writeEmitter.fire('Press y to exit successfully'),
+	//    close: () => {},
+	//    handleInput: data => {
+	//      if (data !== 'y') {
+	//        vscode.window.showInformationMessage('Something went wrong');
+	//      }
+	//      closeEmitter.fire();
+	//    }
+	// };
+	// vscode.window.createTerminal({ name: 'Exit example', pty });
+	OnDidClose func(func(*int)) Disposable `json:"-"`
+
+	// Implement to handle when the pty is open and ready to start firing events.
+	//
+	// `initialDimensions` ── The dimensions of the terminal, this will be undefined if the
+	// terminal panel has not been opened before this is called.
+	Open func(*TerminalDimensions) `json:"-"`
+
+	// Implement to handle when the terminal is closed by an act of the user.
+	Close func() `json:"-"`
+
+	// Implement to handle incoming keystrokes in the terminal or when an extension calls
+	// [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText). `data` contains the keystrokes/text serialized into
+	// their corresponding VT sequence representation.
+	//
+	// `data` ── The incoming data.
+	//
+	// **Example:** Echo input in the terminal. The sequence for enter (`\r`) is translated to
+	// CRLF to go to a new line and move the cursor to the start of the line.
+	//
+	// ```typescript
+	//
+	// const writeEmitter = new vscode.EventEmitter<string>();
+	// const pty: vscode.Pseudoterminal = {
+	// onDidWrite: writeEmitter.event,
+	// open: () => {},
+	// close: () => {},
+	// handleInput: data => writeEmitter.fire(data === '\r' ? '\r\n' : data)
+	// };
+	// vscode.window.createTerminal({ name: 'Local echo', pty });
+	//
+	// ```
+	//
+	HandleInput func(string) `json:"-"`
+
+	// Implement to handle when the number of rows and columns that fit into the terminal panel
+	// changes, for example when font size changes or when the panel is resized. The initial
+	// state of a terminal's dimensions should be treated as `undefined` until this is triggered
+	// as the size of a terminal isn't know until it shows up in the user interface.
+	//
+	// When dimensions are overridden by
+	// [onDidOverrideDimensions](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal.onDidOverrideDimensions), `setDimensions` will
+	// continue to be called with the regular panel dimensions, allowing the extension continue
+	// to react dimension changes.
+	//
+	// `dimensions` ── The new dimensions.
+	SetDimensions func(TerminalDimensions) `json:"-"`
+}
+```
+
+Defines the interface of a terminal pty, enabling extensions to control a
+terminal.
+
 #### type QuickInputButton
 
 ```go
@@ -1572,6 +1727,149 @@ response refreshes this `StatusBarItemBag`'s property values for `alignment`,
 
 `return` ── a thenable that resolves when this `ReFetch` call has successfully
 completed at the VSC side.
+
+#### type Terminal
+
+```go
+type Terminal struct {
+
+	// Bag represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+	Bag *TerminalBag
+}
+```
+
+An individual terminal instance within the integrated terminal.
+
+#### func (*Terminal) Dispose
+
+```go
+func (me *Terminal) Dispose() func(func())
+```
+Dispose and free associated resources.
+
+`return` ── a thenable that resolves when this `Dispose` call has successfully
+completed at the VSC side.
+
+#### func (*Terminal) Hide
+
+```go
+func (me *Terminal) Hide() func(func())
+```
+Hide the terminal panel if this terminal is currently showing.
+
+`return` ── a thenable that resolves when this `Hide` call has successfully
+completed at the VSC side.
+
+#### func (*Terminal) SendText
+
+```go
+func (me *Terminal) SendText(text string, addNewLine bool) func(func())
+```
+Send text to the terminal. The text is written to the stdin of the underlying
+pty process (shell) of the terminal.
+
+`text` ── The text to send.
+
+`addNewLine` ── Whether to add a new line to the text being sent, this is
+normally required to run a command in the terminal. The character(s) added are
+\n or \r\n depending on the platform. This defaults to `true`.
+
+`return` ── a thenable that resolves when this `SendText` call has successfully
+completed at the VSC side.
+
+#### func (*Terminal) Show
+
+```go
+func (me *Terminal) Show(preserveFocus bool) func(func())
+```
+Show the terminal panel and reveal this terminal in the UI.
+
+`preserveFocus` ── When `true` the terminal will not take focus.
+
+`return` ── a thenable that resolves when this `Show` call has successfully
+completed at the VSC side.
+
+#### type TerminalBag
+
+```go
+type TerminalBag struct {
+
+	// The name of the terminal.
+	Name func() string `json:"-"`
+
+	// The process ID of the shell process.
+	ProcessId func() int `json:"-"`
+}
+```
+
+TerminalBag (to be accessed only via `Terminal.Bag`) is a snapshot of `Terminal`
+state. It is auto-updated whenever `Terminal` creations and method calls resolve
+or its event subscribers (if any) are invoked. All read-only properties are
+exposed as function-valued fields.
+
+#### func (*TerminalBag) ReFetch
+
+```go
+func (me *TerminalBag) ReFetch() func(func())
+```
+ReFetch requests the current `Terminal` state from the VSC side and upon
+response refreshes this `TerminalBag`'s property values for `name`, `processId`
+to reflect it.
+
+`return` ── a thenable that resolves when this `ReFetch` call has successfully
+completed at the VSC side.
+
+#### type TerminalDimensions
+
+```go
+type TerminalDimensions struct {
+	// The number of columns in the terminal.
+	Columns int `json:"columns"`
+
+	// The number of rows in the terminal.
+	Rows int `json:"rows"`
+}
+```
+
+Represents the dimensions of a terminal.
+
+#### type TerminalOptions
+
+```go
+type TerminalOptions struct {
+	// A human-readable string which will be used to represent the terminal in the UI.
+	Name string `json:"name,omitempty"`
+
+	// A path to a custom shell executable to be used in the terminal.
+	ShellPath string `json:"shellPath,omitempty"`
+
+	// Args for the custom shell executable. A string can be used on Windows only which allows
+	// specifying shell args in [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
+	ShellArgs []string `json:"shellArgs,omitempty"`
+
+	// A path or Uri for the current working directory to be used for the terminal.
+	Cwd string `json:"cwd,omitempty"`
+
+	// Object with environment variables that will be added to the VS Code process.
+	Env map[string]string `json:"env,omitempty"`
+
+	// Whether the terminal process environment should be exactly as provided in
+	// `TerminalOptions.env`. When this is false (default), the environment will be based on the
+	// window's environment and also apply configured platform settings like
+	// `terminal.integrated.windows.env` on top. When this is true, the complete environment
+	// must be provided as nothing will be inherited from the process or any configuration.
+	StrictEnv bool `json:"strictEnv,omitempty"`
+
+	// When enabled the terminal will run the process as normal but not be surfaced to the user
+	// until `Terminal.show` is called. The typical usage for this is when you need to run
+	// something that may need interactivity but only want to tell the user about it when
+	// interaction is needed. Note that the terminals will still be exposed to all extensions
+	// as normal.
+	HideFromUser bool `json:"hideFromUser,omitempty"`
+}
+```
+
+Value-object describing what options a terminal should use.
 
 #### type TextEditorDecorationType
 
@@ -2187,6 +2485,35 @@ type Window interface {
 	//
 	// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
 	CreateQuickPick() func(func(*QuickPick))
+
+	// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process. The cwd of the terminal will be the workspace
+	// directory if it exists.
+	//
+	// `name` ── Optional human-readable string which will be used to represent the terminal in the UI.
+	//
+	// `shellPath` ── Optional path to a custom shell executable to be used in the terminal.
+	//
+	// `shellArgs` ── Optional args for the custom shell executable. A string can be used on Windows only which
+	// allows specifying shell args in
+	// [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
+	//
+	// `return` ── A new Terminal.
+	CreateTerminal1(name *string, shellPath *string, shellArgs []string) func(func(*Terminal))
+
+	// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process.
+	//
+	// `options` ── A TerminalOptions object describing the characteristics of the new terminal.
+	//
+	// `return` ── A new Terminal.
+	CreateTerminal2(options TerminalOptions) func(func(*Terminal))
+
+	// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) where an extension controls its input and output.
+	//
+	// `options` ── An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing
+	// the characteristics of the new terminal.
+	//
+	// `return` ── A new Terminal.
+	CreateTerminal3(options ExtensionTerminalOptions) func(func(*Terminal))
 }
 ```
 

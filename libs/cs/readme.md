@@ -53,6 +53,9 @@
   - [SessionId](#F-VscAppz-EnvBag-SessionId 'VscAppz.EnvBag.SessionId')
   - [Shell](#F-VscAppz-EnvBag-Shell 'VscAppz.EnvBag.Shell')
   - [UriScheme](#F-VscAppz-EnvBag-UriScheme 'VscAppz.EnvBag.UriScheme')
+- [ExtensionTerminalOptions](#T-VscAppz-ExtensionTerminalOptions 'VscAppz.ExtensionTerminalOptions')
+  - [Name](#F-VscAppz-ExtensionTerminalOptions-Name 'VscAppz.ExtensionTerminalOptions.Name')
+  - [Pty](#F-VscAppz-ExtensionTerminalOptions-Pty 'VscAppz.ExtensionTerminalOptions.Pty')
 - [FileSystemWatcher](#T-VscAppz-FileSystemWatcher 'VscAppz.FileSystemWatcher')
   - [Bag](#F-VscAppz-FileSystemWatcher-Bag 'VscAppz.FileSystemWatcher.Bag')
   - [Dispose()](#M-VscAppz-FileSystemWatcher-Dispose 'VscAppz.FileSystemWatcher.Dispose')
@@ -101,6 +104,9 @@
   - [CreateOutputChannel(name)](#M-VscAppz-IWindow-CreateOutputChannel-System-String- 'VscAppz.IWindow.CreateOutputChannel(System.String)')
   - [CreateQuickPick()](#M-VscAppz-IWindow-CreateQuickPick 'VscAppz.IWindow.CreateQuickPick')
   - [CreateStatusBarItem(alignment,priority)](#M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32}- 'VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32})')
+  - [CreateTerminal1(name,shellPath,shellArgs)](#M-VscAppz-IWindow-CreateTerminal1-System-String,System-String,System-String[]- 'VscAppz.IWindow.CreateTerminal1(System.String,System.String,System.String[])')
+  - [CreateTerminal2(options)](#M-VscAppz-IWindow-CreateTerminal2-VscAppz-TerminalOptions- 'VscAppz.IWindow.CreateTerminal2(VscAppz.TerminalOptions)')
+  - [CreateTerminal3(options)](#M-VscAppz-IWindow-CreateTerminal3-VscAppz-ExtensionTerminalOptions- 'VscAppz.IWindow.CreateTerminal3(VscAppz.ExtensionTerminalOptions)')
   - [CreateTextEditorDecorationType(options)](#M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions- 'VscAppz.IWindow.CreateTextEditorDecorationType(VscAppz.DecorationRenderOptions)')
   - [OnDidChangeWindowState(listener)](#M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState}- 'VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState})')
   - [SetStatusBarMessage1(text,hideAfterTimeout)](#M-VscAppz-IWindow-SetStatusBarMessage1-System-String,System-Int32- 'VscAppz.IWindow.SetStatusBarMessage1(System.String,System.Int32)')
@@ -196,6 +202,14 @@
   - [Full](#F-VscAppz-OverviewRulerLane-Full 'VscAppz.OverviewRulerLane.Full')
   - [Left](#F-VscAppz-OverviewRulerLane-Left 'VscAppz.OverviewRulerLane.Left')
   - [Right](#F-VscAppz-OverviewRulerLane-Right 'VscAppz.OverviewRulerLane.Right')
+- [Pseudoterminal](#T-VscAppz-Pseudoterminal 'VscAppz.Pseudoterminal')
+  - [Close](#F-VscAppz-Pseudoterminal-Close 'VscAppz.Pseudoterminal.Close')
+  - [HandleInput](#F-VscAppz-Pseudoterminal-HandleInput 'VscAppz.Pseudoterminal.HandleInput')
+  - [OnDidClose](#F-VscAppz-Pseudoterminal-OnDidClose 'VscAppz.Pseudoterminal.OnDidClose')
+  - [OnDidOverrideDimensions](#F-VscAppz-Pseudoterminal-OnDidOverrideDimensions 'VscAppz.Pseudoterminal.OnDidOverrideDimensions')
+  - [OnDidWrite](#F-VscAppz-Pseudoterminal-OnDidWrite 'VscAppz.Pseudoterminal.OnDidWrite')
+  - [Open](#F-VscAppz-Pseudoterminal-Open 'VscAppz.Pseudoterminal.Open')
+  - [SetDimensions](#F-VscAppz-Pseudoterminal-SetDimensions 'VscAppz.Pseudoterminal.SetDimensions')
 - [QuickInputButton](#T-VscAppz-QuickInputButton 'VscAppz.QuickInputButton')
   - [IconPath](#F-VscAppz-QuickInputButton-IconPath 'VscAppz.QuickInputButton.IconPath')
   - [Tooltip](#F-VscAppz-QuickInputButton-Tooltip 'VscAppz.QuickInputButton.Tooltip')
@@ -261,6 +275,27 @@
   - [Tooltip](#F-VscAppz-StatusBarItemBag-Tooltip 'VscAppz.StatusBarItemBag.Tooltip')
   - [ApplyChanges()](#M-VscAppz-StatusBarItemBag-ApplyChanges 'VscAppz.StatusBarItemBag.ApplyChanges')
   - [ReFetch()](#M-VscAppz-StatusBarItemBag-ReFetch 'VscAppz.StatusBarItemBag.ReFetch')
+- [Terminal](#T-VscAppz-Terminal 'VscAppz.Terminal')
+  - [Bag](#F-VscAppz-Terminal-Bag 'VscAppz.Terminal.Bag')
+  - [Dispose()](#M-VscAppz-Terminal-Dispose 'VscAppz.Terminal.Dispose')
+  - [Hide()](#M-VscAppz-Terminal-Hide 'VscAppz.Terminal.Hide')
+  - [SendText(text,addNewLine)](#M-VscAppz-Terminal-SendText-System-String,System-Boolean- 'VscAppz.Terminal.SendText(System.String,System.Boolean)')
+  - [Show(preserveFocus)](#M-VscAppz-Terminal-Show-System-Boolean- 'VscAppz.Terminal.Show(System.Boolean)')
+- [TerminalBag](#T-VscAppz-TerminalBag 'VscAppz.TerminalBag')
+  - [Name](#F-VscAppz-TerminalBag-Name 'VscAppz.TerminalBag.Name')
+  - [ProcessId](#F-VscAppz-TerminalBag-ProcessId 'VscAppz.TerminalBag.ProcessId')
+  - [ReFetch()](#M-VscAppz-TerminalBag-ReFetch 'VscAppz.TerminalBag.ReFetch')
+- [TerminalDimensions](#T-VscAppz-TerminalDimensions 'VscAppz.TerminalDimensions')
+  - [Columns](#F-VscAppz-TerminalDimensions-Columns 'VscAppz.TerminalDimensions.Columns')
+  - [Rows](#F-VscAppz-TerminalDimensions-Rows 'VscAppz.TerminalDimensions.Rows')
+- [TerminalOptions](#T-VscAppz-TerminalOptions 'VscAppz.TerminalOptions')
+  - [Cwd](#F-VscAppz-TerminalOptions-Cwd 'VscAppz.TerminalOptions.Cwd')
+  - [Env](#F-VscAppz-TerminalOptions-Env 'VscAppz.TerminalOptions.Env')
+  - [HideFromUser](#F-VscAppz-TerminalOptions-HideFromUser 'VscAppz.TerminalOptions.HideFromUser')
+  - [Name](#F-VscAppz-TerminalOptions-Name 'VscAppz.TerminalOptions.Name')
+  - [ShellArgs](#F-VscAppz-TerminalOptions-ShellArgs 'VscAppz.TerminalOptions.ShellArgs')
+  - [ShellPath](#F-VscAppz-TerminalOptions-ShellPath 'VscAppz.TerminalOptions.ShellPath')
+  - [StrictEnv](#F-VscAppz-TerminalOptions-StrictEnv 'VscAppz.TerminalOptions.StrictEnv')
 - [TextEditorDecorationType](#T-VscAppz-TextEditorDecorationType 'VscAppz.TextEditorDecorationType')
   - [Bag](#F-VscAppz-TextEditorDecorationType-Bag 'VscAppz.TextEditorDecorationType.Bag')
   - [Dispose()](#M-VscAppz-TextEditorDecorationType-Dispose 'VscAppz.TextEditorDecorationType.Dispose')
@@ -733,6 +768,32 @@ The detected default shell for the extension host, this is overridden by the
 ##### Summary
 
 The custom uri scheme the editor registers to in the operating system.
+
+<a name='T-VscAppz-ExtensionTerminalOptions'></a>
+## ExtensionTerminalOptions `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Value-object describing what options a virtual process terminal should use.
+
+<a name='F-VscAppz-ExtensionTerminalOptions-Name'></a>
+### Name `constants`
+
+##### Summary
+
+A human-readable string which will be used to represent the terminal in the UI.
+
+<a name='F-VscAppz-ExtensionTerminalOptions-Pty'></a>
+### Pty `constants`
+
+##### Summary
+
+An implementation of [Pseudoterminal](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal) that allows an extension to
+control a terminal.
 
 <a name='T-VscAppz-FileSystemWatcher'></a>
 ## FileSystemWatcher `type`
@@ -1597,6 +1658,67 @@ Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-
 | ---- | ---- | ----------- |
 | alignment | [System.Nullable{VscAppz.StatusBarAlignment}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{VscAppz.StatusBarAlignment}') | The alignment of the item. |
 | priority | [System.Nullable{System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.Int32}') | The priority of the item. Higher values mean the item should be shown more to the left. |
+
+<a name='M-VscAppz-IWindow-CreateTerminal1-System-String,System-String,System-String[]-'></a>
+### CreateTerminal1(name,shellPath,shellArgs) `method`
+
+##### Summary
+
+Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process. The cwd of the terminal will be the workspace
+directory if it exists.
+
+`name` ── Optional human-readable string which will be used to represent the terminal in the UI.
+
+`shellPath` ── Optional path to a custom shell executable to be used in the terminal.
+
+`shellArgs` ── Optional args for the custom shell executable. A string can be used on Windows only which
+allows specifying shell args in
+[command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
+
+`return` ── A new Terminal.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| name | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Optional human-readable string which will be used to represent the terminal in the UI. |
+| shellPath | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Optional path to a custom shell executable to be used in the terminal. |
+| shellArgs | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | Optional args for the custom shell executable. A string can be used on Windows only which allows specifying shell args in [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6). |
+
+<a name='M-VscAppz-IWindow-CreateTerminal2-VscAppz-TerminalOptions-'></a>
+### CreateTerminal2(options) `method`
+
+##### Summary
+
+Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process.
+
+`options` ── A TerminalOptions object describing the characteristics of the new terminal.
+
+`return` ── A new Terminal.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| options | [VscAppz.TerminalOptions](#T-VscAppz-TerminalOptions 'VscAppz.TerminalOptions') | A TerminalOptions object describing the characteristics of the new terminal. |
+
+<a name='M-VscAppz-IWindow-CreateTerminal3-VscAppz-ExtensionTerminalOptions-'></a>
+### CreateTerminal3(options) `method`
+
+##### Summary
+
+Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) where an extension controls its input and output.
+
+`options` ── An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing
+the characteristics of the new terminal.
+
+`return` ── A new Terminal.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| options | [VscAppz.ExtensionTerminalOptions](#T-VscAppz-ExtensionTerminalOptions 'VscAppz.ExtensionTerminalOptions') | An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing the characteristics of the new terminal. |
 
 <a name='M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions-'></a>
 ### CreateTextEditorDecorationType(options) `method`
@@ -2982,6 +3104,173 @@ The overview ruler supports three lanes.
 Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
 The overview ruler supports three lanes.
 
+<a name='T-VscAppz-Pseudoterminal'></a>
+## Pseudoterminal `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Defines the interface of a terminal pty, enabling extensions to control a terminal.
+
+<a name='F-VscAppz-Pseudoterminal-Close'></a>
+### Close `constants`
+
+##### Summary
+
+Implement to handle when the terminal is closed by an act of the user.
+
+<a name='F-VscAppz-Pseudoterminal-HandleInput'></a>
+### HandleInput `constants`
+
+##### Summary
+
+Implement to handle incoming keystrokes in the terminal or when an extension calls
+[Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText). `data` contains the keystrokes/text serialized into
+their corresponding VT sequence representation.
+
+`data` ── The incoming data.
+
+**Example:** Echo input in the terminal. The sequence for enter (`\r`) is translated to
+CRLF to go to a new line and move the cursor to the start of the line.
+
+```typescript
+
+const writeEmitter = new vscode.EventEmitter<string>();
+const pty: vscode.Pseudoterminal = {
+onDidWrite: writeEmitter.event,
+open: () => {},
+close: () => {},
+handleInput: data => writeEmitter.fire(data === '\r' ? '\r\n' : data)
+};
+vscode.window.createTerminal({ name: 'Local echo', pty });
+
+```
+
+<a name='F-VscAppz-Pseudoterminal-OnDidClose'></a>
+### OnDidClose `constants`
+
+##### Summary
+
+An event that when fired will signal that the pty is closed and dispose of the terminal.
+
+A number can be used to provide an exit code for the terminal. Exit codes must be
+positive and a non-zero exit codes signals failure which shows a notification for a
+regular terminal and allows dependent tasks to proceed when used with the
+`CustomExecution2` API.
+
+**Example:** Exit the terminal when "y" is pressed, otherwise show a notification.
+
+```typescript
+
+const writeEmitter = new vscode.EventEmitter<string>();
+const closeEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
+const pty: vscode.Pseudoterminal = {
+   onDidWrite: writeEmitter.event,
+   onDidClose: closeEmitter.event,
+   open: () => writeEmitter.fire('Press y to exit successfully'),
+   close: () => {},
+   handleInput: data => {
+     if (data !== 'y') {
+       vscode.window.showInformationMessage('Something went wrong');
+     }
+     closeEmitter.fire();
+   }
+};
+vscode.window.createTerminal({ name: 'Exit example', pty });
+
+<a name='F-VscAppz-Pseudoterminal-OnDidOverrideDimensions'></a>
+### OnDidOverrideDimensions `constants`
+
+##### Summary
+
+An event that when fired allows overriding the [dimensions](https://code.visualstudio.com/api/references/vscode-api#Terminal.dimensions) of the
+terminal. Note that when set, the overridden dimensions will only take effect when they
+are lower than the actual dimensions of the terminal (ie. there will never be a scroll
+bar). Set to `undefined` for the terminal to go back to the regular dimensions (fit to
+the size of the panel).
+
+**Example:** Override the dimensions of a terminal to 20 columns and 10 rows
+
+```typescript
+
+const dimensionsEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
+const pty: vscode.Pseudoterminal = {
+   onDidWrite: writeEmitter.event,
+   onDidOverrideDimensions: dimensionsEmitter.event,
+   open: () => {
+     dimensionsEmitter.fire({
+       columns: 20,
+       rows: 10
+     });
+   },
+   close: () => {}
+};
+vscode.window.createTerminal({ name: 'My terminal', pty });
+
+```
+
+<a name='F-VscAppz-Pseudoterminal-OnDidWrite'></a>
+### OnDidWrite `constants`
+
+##### Summary
+
+An event that when fired will write data to the terminal. Unlike
+[Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText) which sends text to the underlying _process_
+(the pty "slave"), this will write the text to the terminal itself (the pty "master").
+
+**Example:** Write red text to the terminal
+
+```typescript
+
+const writeEmitter = new vscode.EventEmitter<string>();
+const pty: vscode.Pseudoterminal = {
+   onDidWrite: writeEmitter.event,
+   open: () => writeEmitter.fire('\x1b[31mHello world\x1b[0m'),
+   close: () => {}
+};
+vscode.window.createTerminal({ name: 'My terminal', pty });
+
+```
+
+
+**Example:** Move the cursor to the 10th row and 20th column and write an asterisk
+
+```typescript
+
+writeEmitter.fire('\x1b[10;20H*');
+
+```
+
+<a name='F-VscAppz-Pseudoterminal-Open'></a>
+### Open `constants`
+
+##### Summary
+
+Implement to handle when the pty is open and ready to start firing events.
+
+`initialDimensions` ── The dimensions of the terminal, this will be undefined if the
+terminal panel has not been opened before this is called.
+
+<a name='F-VscAppz-Pseudoterminal-SetDimensions'></a>
+### SetDimensions `constants`
+
+##### Summary
+
+Implement to handle when the number of rows and columns that fit into the terminal panel
+changes, for example when font size changes or when the panel is resized. The initial
+state of a terminal's dimensions should be treated as `undefined` until this is triggered
+as the size of a terminal isn't know until it shows up in the user interface.
+
+When dimensions are overridden by
+[onDidOverrideDimensions](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal.onDidOverrideDimensions), `setDimensions` will
+continue to be called with the regular panel dimensions, allowing the extension continue
+to react dimension changes.
+
+`dimensions` ── The new dimensions.
+
 <a name='T-VscAppz-QuickInputButton'></a>
 ## QuickInputButton `type`
 
@@ -3626,6 +3915,222 @@ ReFetch requests the current `StatusBarItem` state from the VSC side and upon re
 ##### Parameters
 
 This method has no parameters.
+
+<a name='T-VscAppz-Terminal'></a>
+## Terminal `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+An individual terminal instance within the integrated terminal.
+
+<a name='F-VscAppz-Terminal-Bag'></a>
+### Bag `constants`
+
+##### Summary
+
+Bag represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+
+<a name='M-VscAppz-Terminal-Dispose'></a>
+### Dispose() `method`
+
+##### Summary
+
+Dispose and free associated resources.
+
+`return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-Terminal-Hide'></a>
+### Hide() `method`
+
+##### Summary
+
+Hide the terminal panel if this terminal is currently showing.
+
+`return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-Terminal-SendText-System-String,System-Boolean-'></a>
+### SendText(text,addNewLine) `method`
+
+##### Summary
+
+Send text to the terminal. The text is written to the stdin of the underlying pty process
+(shell) of the terminal.
+
+`text` ── The text to send.
+
+`addNewLine` ── Whether to add a new line to the text being sent, this is normally
+required to run a command in the terminal. The character(s) added are \n or \r\n
+depending on the platform. This defaults to `true`.
+
+`return` ── a thenable that resolves when this `SendText` call has successfully completed at the VSC side.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| text | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The text to send. |
+| addNewLine | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Whether to add a new line to the text being sent, this is normally required to run a command in the terminal. The character(s) added are \n or \r\n depending on the platform. This defaults to `true`. |
+
+<a name='M-VscAppz-Terminal-Show-System-Boolean-'></a>
+### Show(preserveFocus) `method`
+
+##### Summary
+
+Show the terminal panel and reveal this terminal in the UI.
+
+`preserveFocus` ── When `true` the terminal will not take focus.
+
+`return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| preserveFocus | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | When `true` the terminal will not take focus. |
+
+<a name='T-VscAppz-TerminalBag'></a>
+## TerminalBag `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+TerminalBag (to be accessed only via `Terminal.Bag`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+
+<a name='F-VscAppz-TerminalBag-Name'></a>
+### Name `constants`
+
+##### Summary
+
+The name of the terminal.
+
+<a name='F-VscAppz-TerminalBag-ProcessId'></a>
+### ProcessId `constants`
+
+##### Summary
+
+The process ID of the shell process.
+
+<a name='M-VscAppz-TerminalBag-ReFetch'></a>
+### ReFetch() `method`
+
+##### Summary
+
+ReFetch requests the current `Terminal` state from the VSC side and upon response refreshes this `TerminalBag`'s property values for `name`, `processId` to reflect it.
+
+`return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='T-VscAppz-TerminalDimensions'></a>
+## TerminalDimensions `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Represents the dimensions of a terminal.
+
+<a name='F-VscAppz-TerminalDimensions-Columns'></a>
+### Columns `constants`
+
+##### Summary
+
+The number of columns in the terminal.
+
+<a name='F-VscAppz-TerminalDimensions-Rows'></a>
+### Rows `constants`
+
+##### Summary
+
+The number of rows in the terminal.
+
+<a name='T-VscAppz-TerminalOptions'></a>
+## TerminalOptions `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+Value-object describing what options a terminal should use.
+
+<a name='F-VscAppz-TerminalOptions-Cwd'></a>
+### Cwd `constants`
+
+##### Summary
+
+A path or Uri for the current working directory to be used for the terminal.
+
+<a name='F-VscAppz-TerminalOptions-Env'></a>
+### Env `constants`
+
+##### Summary
+
+Object with environment variables that will be added to the VS Code process.
+
+<a name='F-VscAppz-TerminalOptions-HideFromUser'></a>
+### HideFromUser `constants`
+
+##### Summary
+
+When enabled the terminal will run the process as normal but not be surfaced to the user
+until `Terminal.show` is called. The typical usage for this is when you need to run
+something that may need interactivity but only want to tell the user about it when
+interaction is needed. Note that the terminals will still be exposed to all extensions
+as normal.
+
+<a name='F-VscAppz-TerminalOptions-Name'></a>
+### Name `constants`
+
+##### Summary
+
+A human-readable string which will be used to represent the terminal in the UI.
+
+<a name='F-VscAppz-TerminalOptions-ShellArgs'></a>
+### ShellArgs `constants`
+
+##### Summary
+
+Args for the custom shell executable. A string can be used on Windows only which allows
+specifying shell args in [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
+
+<a name='F-VscAppz-TerminalOptions-ShellPath'></a>
+### ShellPath `constants`
+
+##### Summary
+
+A path to a custom shell executable to be used in the terminal.
+
+<a name='F-VscAppz-TerminalOptions-StrictEnv'></a>
+### StrictEnv `constants`
+
+##### Summary
+
+Whether the terminal process environment should be exactly as provided in
+`TerminalOptions.env`. When this is false (default), the environment will be based on the
+window's environment and also apply configured platform settings like
+`terminal.integrated.windows.env` on top. When this is true, the complete environment
+must be provided as nothing will be inherited from the process or any configuration.
 
 <a name='T-VscAppz-TextEditorDecorationType'></a>
 ## TextEditorDecorationType `type`

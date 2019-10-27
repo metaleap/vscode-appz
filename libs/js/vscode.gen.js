@@ -164,6 +164,16 @@ function newQuickPick() {
     me.__appzObjBagPushToPeer__ = (a0) => QuickPick___appzObjBagPushToPeer__.call(me, a0);
     return me;
 }
+function newTerminal() {
+    let me;
+    me = { __loadFromJsonish__: _ => Terminal___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined };
+    me.SendText = (a0, a1) => Terminal_SendText.call(me, a0, a1);
+    me.Show = (a0) => Terminal_Show.call(me, a0);
+    me.Hide = () => Terminal_Hide.call(me);
+    me.Dispose = () => Terminal_Dispose.call(me);
+    me.__appzObjBagPullFromPeer__ = () => Terminal___appzObjBagPullFromPeer__.call(me);
+    return me;
+}
 function newWorkspaceFoldersChangeEvent() {
     let me;
     me = { __loadFromJsonish__: _ => WorkspaceFoldersChangeEvent___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
@@ -225,6 +235,12 @@ function newQuickPickBag() {
     return me;
 }
 exports.newQuickPickBag = newQuickPickBag;
+function newTerminalBag() {
+    let me;
+    me = { __loadFromJsonish__: _ => TerminalBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TerminalBag_ReFetch.call(me) };
+    return me;
+}
+exports.newTerminalBag = newTerminalBag;
 function newFileSystemWatcherBag() {
     let me;
     me = { __loadFromJsonish__: _ => FileSystemWatcherBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => FileSystemWatcherBag_ApplyChanges.call(me), ReFetch: () => FileSystemWatcherBag_ReFetch.call(me) };
@@ -1427,6 +1443,116 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newQuickPick();
+                ok = result.__loadFromJsonish__(payload);
+                if (!ok) {
+                    return false;
+                }
+                result.__disp__.impl = this.Impl();
+            }
+            else {
+                return false;
+            }
+            result.__appzObjBagPullFromPeer__()(() => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
+            });
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
+    }
+    CreateTerminal1(name, shellPath, shellArgs) {
+        let msg;
+        msg = newipcMsg();
+        msg.QName = "window.createTerminal1";
+        msg.Data = {};
+        if ((undefined !== name && null !== name)) {
+            msg.Data["name"] = name;
+        }
+        if ((undefined !== shellPath && null !== shellPath)) {
+            msg.Data["shellPath"] = shellPath;
+        }
+        if ((undefined !== shellArgs && null !== shellArgs)) {
+            msg.Data["shellArgs"] = shellArgs;
+        }
+        let onresp;
+        let onret;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newTerminal();
+                ok = result.__loadFromJsonish__(payload);
+                if (!ok) {
+                    return false;
+                }
+                result.__disp__.impl = this.Impl();
+            }
+            else {
+                return false;
+            }
+            result.__appzObjBagPullFromPeer__()(() => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
+            });
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
+    }
+    CreateTerminal2(options) {
+        let msg;
+        msg = newipcMsg();
+        msg.QName = "window.createTerminal2";
+        msg.Data = {};
+        msg.Data["options"] = options;
+        let onresp;
+        let onret;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newTerminal();
+                ok = result.__loadFromJsonish__(payload);
+                if (!ok) {
+                    return false;
+                }
+                result.__disp__.impl = this.Impl();
+            }
+            else {
+                return false;
+            }
+            result.__appzObjBagPullFromPeer__()(() => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
+            });
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
+    }
+    CreateTerminal3(options) {
+        let msg;
+        msg = newipcMsg();
+        msg.QName = "window.createTerminal3";
+        msg.Data = {};
+        msg.Data["options"] = options;
+        let onresp;
+        let onret;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newTerminal();
                 ok = result.__loadFromJsonish__(payload);
                 if (!ok) {
                     return false;
@@ -3500,6 +3626,144 @@ function QuickPick___appzObjBagPushToPeer__(allUpdates) {
         onret = a0;
     };
 }
+function Terminal_SendText(text, addNewLine) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "Terminal.sendText";
+    msg.Data = {};
+    msg.Data[""] = this.__disp__.id;
+    msg.Data["text"] = text;
+    msg.Data["addNewLine"] = addNewLine;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let it;
+        let ok;
+        [it, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false;
+        }
+        {
+            ok = this.Bag.__loadFromJsonish__(it[1]);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.__disp__.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function Terminal_Show(preserveFocus) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "Terminal.show";
+    msg.Data = {};
+    msg.Data[""] = this.__disp__.id;
+    msg.Data["preserveFocus"] = preserveFocus;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let it;
+        let ok;
+        [it, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false;
+        }
+        {
+            ok = this.Bag.__loadFromJsonish__(it[1]);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.__disp__.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function Terminal_Hide() {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "Terminal.hide";
+    msg.Data = {};
+    msg.Data[""] = this.__disp__.id;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let it;
+        let ok;
+        [it, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false;
+        }
+        {
+            ok = this.Bag.__loadFromJsonish__(it[1]);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.__disp__.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function Terminal_Dispose() {
+    return this.__disp__.Dispose();
+}
+function Terminal___appzObjBagPullFromPeer__() {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "Terminal.__appzObjBagPullFromPeer__";
+    msg.Data = {};
+    msg.Data[""] = this.__disp__.id;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        if ((undefined === this.Bag || null === this.Bag)) {
+            this.Bag = newTerminalBag();
+        }
+        this.Bag.__holder__ = this;
+        {
+            ok = this.Bag.__loadFromJsonish__(payload);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.__disp__.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
 function FileSystemWatcher_OnDidCreate(handler) {
     let msg;
     msg = newipcMsg();
@@ -3761,6 +4025,9 @@ function QuickPickBag_ReFetch() {
 function QuickPickBag_ApplyChanges() {
     return this.__holder__.__appzObjBagPushToPeer__(this);
 }
+function TerminalBag_ReFetch() {
+    return this.__holder__.__appzObjBagPullFromPeer__();
+}
 function FileSystemWatcherBag_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
@@ -4008,6 +4275,12 @@ function InputBox___loadFromJsonish__(payload) {
     return ok;
 }
 function QuickPick___loadFromJsonish__(payload) {
+    let ok;
+    this.__disp__ = newDisposable();
+    ok = this.__disp__.__loadFromJsonish__(payload);
+    return ok;
+}
+function Terminal___loadFromJsonish__(payload) {
     let ok;
     this.__disp__ = newDisposable();
     ok = this.__disp__.__loadFromJsonish__(payload);
@@ -4777,6 +5050,47 @@ function QuickPickBag___loadFromJsonish__(payload) {
             }
         }
         this.ignoreFocusOut = ignoreFocusOut;
+    }
+    return true;
+}
+function TerminalBag___loadFromJsonish__(payload) {
+    let it;
+    let ok;
+    let val;
+    [it, ok] = [payload, typeof payload === "object"];
+    if (!ok) {
+        return false;
+    }
+    [val, ok] = [it["name"], undefined !== it["name"]];
+    if (ok) {
+        let name;
+        if ((undefined !== val && null !== val)) {
+            [name, ok] = [val, typeof val === "string"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.Name = () => {
+            return name;
+        };
+    }
+    [val, ok] = [it["processId"], undefined !== it["processId"]];
+    if (ok) {
+        let processId;
+        if ((undefined !== val && null !== val)) {
+            [processId, ok] = [val, typeof val === "number"];
+            if (!ok) {
+                let __processId__;
+                [__processId__, ok] = [val, typeof val === "number"];
+                if (!ok) {
+                    return false;
+                }
+                processId = __processId__;
+            }
+        }
+        this.ProcessId = () => {
+            return processId;
+        };
     }
     return true;
 }

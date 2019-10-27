@@ -115,7 +115,7 @@ namespace VscAppz {
 		/// a more complex [filter](https://code.visualstudio.com/api/references/vscode-api#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
 		/// a selector will result in a [score](https://code.visualstudio.com/api/references/vscode-api#languages.match) that is used to determine if and how a provider shall be used. When
 		/// scores are equal the provider that came last wins. For features that allow full arity, like [hover](https://code.visualstudio.com/api/references/vscode-api#languages.registerHoverProvider),
-		/// the score is only checked to be `>0`, for other features, like [IntelliSense](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider) the
+		/// the score is only checked to be `&gt;0`, for other features, like [IntelliSense](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider) the
 		/// score is used for determining the order in which providers are asked to participate.
 		/// </summary>
 		ILanguages Languages { get; }
@@ -184,7 +184,7 @@ namespace VscAppz {
 		/// 
 		/// ```javascript
 		/// 
-		/// commands.registerCommand('extension.sayHello', () => {
+		/// commands.registerCommand('extension.sayHello', () =&gt; {
 		///  	window.showInformationMessage('Hello World!');
 		/// });
 		/// 
@@ -635,6 +635,49 @@ namespace VscAppz {
 		/// </summary>
 		/// <return>A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).</return>
 		Action<Action<QuickPick>> CreateQuickPick();
+
+		/// <summary>
+		/// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process. The cwd of the terminal will be the workspace
+		/// directory if it exists.
+		/// 
+		/// `name` ── Optional human-readable string which will be used to represent the terminal in the UI.
+		/// 
+		/// `shellPath` ── Optional path to a custom shell executable to be used in the terminal.
+		/// 
+		/// `shellArgs` ── Optional args for the custom shell executable. A string can be used on Windows only which
+		/// allows specifying shell args in
+		/// [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
+		/// 
+		/// `return` ── A new Terminal.
+		/// </summary>
+		/// <param name="name">Optional human-readable string which will be used to represent the terminal in the UI.</param>
+		/// <param name="shellPath">Optional path to a custom shell executable to be used in the terminal.</param>
+		/// <param name="shellArgs">Optional args for the custom shell executable. A string can be used on Windows only which allows specifying shell args in [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).</param>
+		/// <return>A new Terminal.</return>
+		Action<Action<Terminal>> CreateTerminal1(string name = default, string shellPath = default, string[] shellArgs = default);
+
+		/// <summary>
+		/// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process.
+		/// 
+		/// `options` ── A TerminalOptions object describing the characteristics of the new terminal.
+		/// 
+		/// `return` ── A new Terminal.
+		/// </summary>
+		/// <param name="options">A TerminalOptions object describing the characteristics of the new terminal.</param>
+		/// <return>A new Terminal.</return>
+		Action<Action<Terminal>> CreateTerminal2(TerminalOptions options = default);
+
+		/// <summary>
+		/// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) where an extension controls its input and output.
+		/// 
+		/// `options` ── An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing
+		/// the characteristics of the new terminal.
+		/// 
+		/// `return` ── A new Terminal.
+		/// </summary>
+		/// <param name="options">An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing the characteristics of the new terminal.</param>
+		/// <return>A new Terminal.</return>
+		Action<Action<Terminal>> CreateTerminal3(ExtensionTerminalOptions options = default);
 	}
 
 	/// <summary>Namespace describing the environment the editor runs in.</summary>
@@ -970,7 +1013,7 @@ namespace VscAppz {
 	/// a more complex [filter](https://code.visualstudio.com/api/references/vscode-api#DocumentFilter) like `{ language: 'typescript', scheme: 'file' }`. Matching a document against such
 	/// a selector will result in a [score](https://code.visualstudio.com/api/references/vscode-api#languages.match) that is used to determine if and how a provider shall be used. When
 	/// scores are equal the provider that came last wins. For features that allow full arity, like [hover](https://code.visualstudio.com/api/references/vscode-api#languages.registerHoverProvider),
-	/// the score is only checked to be `>0`, for other features, like [IntelliSense](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider) the
+	/// the score is only checked to be `&gt;0`, for other features, like [IntelliSense](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider) the
 	/// score is used for determining the order in which providers are asked to participate.
 	/// </summary>
 	public interface ILanguages {
@@ -1071,7 +1114,7 @@ namespace VscAppz {
 	/// 
 	/// ```javascript
 	/// 
-	/// commands.registerCommand('extension.sayHello', () => {
+	/// commands.registerCommand('extension.sayHello', () =&gt; {
 	///  	window.showInformationMessage('Hello World!');
 	/// });
 	/// 
@@ -1821,6 +1864,259 @@ namespace VscAppz {
 		public QuickPickBag Bag;
 	}
 
+	/// <summary>An individual terminal instance within the integrated terminal.</summary>
+	public partial class Terminal {
+		internal Disposable __disp__;
+
+		/// <summary>Bag represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
+		public TerminalBag Bag;
+	}
+
+	/// <summary>Value-object describing what options a terminal should use.</summary>
+	public partial class TerminalOptions {
+		/// <summary>A human-readable string which will be used to represent the terminal in the UI.</summary>
+		[JsonProperty("name")]
+		public string Name;
+
+		/// <summary>A path to a custom shell executable to be used in the terminal.</summary>
+		[JsonProperty("shellPath")]
+		public string ShellPath;
+
+		/// <summary>
+		/// Args for the custom shell executable. A string can be used on Windows only which allows
+		/// specifying shell args in [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
+		/// </summary>
+		[JsonProperty("shellArgs")]
+		public string[] ShellArgs;
+
+		/// <summary>A path or Uri for the current working directory to be used for the terminal.</summary>
+		[JsonProperty("cwd")]
+		public string Cwd;
+
+		/// <summary>Object with environment variables that will be added to the VS Code process.</summary>
+		[JsonProperty("env")]
+		public Dictionary<string, string> Env;
+
+		/// <summary>
+		/// Whether the terminal process environment should be exactly as provided in
+		/// `TerminalOptions.env`. When this is false (default), the environment will be based on the
+		/// window's environment and also apply configured platform settings like
+		/// `terminal.integrated.windows.env` on top. When this is true, the complete environment
+		/// must be provided as nothing will be inherited from the process or any configuration.
+		/// </summary>
+		[JsonProperty("strictEnv")]
+		public bool StrictEnv;
+
+		/// <summary>
+		/// When enabled the terminal will run the process as normal but not be surfaced to the user
+		/// until `Terminal.show` is called. The typical usage for this is when you need to run
+		/// something that may need interactivity but only want to tell the user about it when
+		/// interaction is needed. Note that the terminals will still be exposed to all extensions
+		/// as normal.
+		/// </summary>
+		[JsonProperty("hideFromUser")]
+		public bool HideFromUser;
+	}
+
+	/// <summary>Value-object describing what options a virtual process terminal should use.</summary>
+	public partial class ExtensionTerminalOptions {
+		/// <summary>A human-readable string which will be used to represent the terminal in the UI.</summary>
+		[JsonProperty("name"), JsonRequired]
+		public string Name;
+
+		/// <summary>
+		/// An implementation of [Pseudoterminal](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal) that allows an extension to
+		/// control a terminal.
+		/// </summary>
+		[JsonProperty("pty"), JsonRequired]
+		public Pseudoterminal Pty;
+	}
+
+	/// <summary>Defines the interface of a terminal pty, enabling extensions to control a terminal.</summary>
+	public partial class Pseudoterminal {
+		/// <summary>
+		/// An event that when fired will write data to the terminal. Unlike
+		/// [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText) which sends text to the underlying _process_
+		/// (the pty "slave"), this will write the text to the terminal itself (the pty "master").
+		/// 
+		/// **Example:** Write red text to the terminal
+		/// 
+		/// ```typescript
+		/// 
+		/// const writeEmitter = new vscode.EventEmitter&lt;string&gt;();
+		/// const pty: vscode.Pseudoterminal = {
+		///    onDidWrite: writeEmitter.event,
+		///    open: () =&gt; writeEmitter.fire('\x1b[31mHello world\x1b[0m'),
+		///    close: () =&gt; {}
+		/// };
+		/// vscode.window.createTerminal({ name: 'My terminal', pty });
+		/// 
+		/// ```
+		/// 
+		/// 
+		/// **Example:** Move the cursor to the 10th row and 20th column and write an asterisk
+		/// 
+		/// ```typescript
+		/// 
+		/// writeEmitter.fire('\x1b[10;20H*');
+		/// 
+		/// ```
+		/// 
+		/// </summary>
+		[JsonIgnore]
+		public Func<Action<string>, Disposable> OnDidWrite;
+
+		/// <summary>
+		/// An event that when fired allows overriding the [dimensions](https://code.visualstudio.com/api/references/vscode-api#Terminal.dimensions) of the
+		/// terminal. Note that when set, the overridden dimensions will only take effect when they
+		/// are lower than the actual dimensions of the terminal (ie. there will never be a scroll
+		/// bar). Set to `undefined` for the terminal to go back to the regular dimensions (fit to
+		/// the size of the panel).
+		/// 
+		/// **Example:** Override the dimensions of a terminal to 20 columns and 10 rows
+		/// 
+		/// ```typescript
+		/// 
+		/// const dimensionsEmitter = new vscode.EventEmitter&lt;vscode.TerminalDimensions&gt;();
+		/// const pty: vscode.Pseudoterminal = {
+		///    onDidWrite: writeEmitter.event,
+		///    onDidOverrideDimensions: dimensionsEmitter.event,
+		///    open: () =&gt; {
+		///      dimensionsEmitter.fire({
+		///        columns: 20,
+		///        rows: 10
+		///      });
+		///    },
+		///    close: () =&gt; {}
+		/// };
+		/// vscode.window.createTerminal({ name: 'My terminal', pty });
+		/// 
+		/// ```
+		/// 
+		/// </summary>
+		[JsonIgnore]
+		public Func<Action<TerminalDimensions>, Disposable> OnDidOverrideDimensions;
+
+		/// <summary>
+		/// An event that when fired will signal that the pty is closed and dispose of the terminal.
+		/// 
+		/// A number can be used to provide an exit code for the terminal. Exit codes must be
+		/// positive and a non-zero exit codes signals failure which shows a notification for a
+		/// regular terminal and allows dependent tasks to proceed when used with the
+		/// `CustomExecution2` API.
+		/// 
+		/// **Example:** Exit the terminal when "y" is pressed, otherwise show a notification.
+		/// 
+		/// ```typescript
+		/// 
+		/// const writeEmitter = new vscode.EventEmitter&lt;string&gt;();
+		/// const closeEmitter = new vscode.EventEmitter&lt;vscode.TerminalDimensions&gt;();
+		/// const pty: vscode.Pseudoterminal = {
+		///    onDidWrite: writeEmitter.event,
+		///    onDidClose: closeEmitter.event,
+		///    open: () =&gt; writeEmitter.fire('Press y to exit successfully'),
+		///    close: () =&gt; {},
+		///    handleInput: data =&gt; {
+		///      if (data !== 'y') {
+		///        vscode.window.showInformationMessage('Something went wrong');
+		///      }
+		///      closeEmitter.fire();
+		///    }
+		/// };
+		/// vscode.window.createTerminal({ name: 'Exit example', pty });
+		/// </summary>
+		[JsonIgnore]
+		public Func<Action<int?>, Disposable> OnDidClose;
+
+		/// <summary>
+		/// Implement to handle when the pty is open and ready to start firing events.
+		/// 
+		/// `initialDimensions` ── The dimensions of the terminal, this will be undefined if the
+		/// terminal panel has not been opened before this is called.
+		/// </summary>
+		[JsonIgnore]
+		public Action<TerminalDimensions> Open;
+
+		/// <summary>Implement to handle when the terminal is closed by an act of the user.</summary>
+		[JsonIgnore]
+		public Action Close;
+
+		/// <summary>
+		/// Implement to handle incoming keystrokes in the terminal or when an extension calls
+		/// [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText). `data` contains the keystrokes/text serialized into
+		/// their corresponding VT sequence representation.
+		/// 
+		/// `data` ── The incoming data.
+		/// 
+		/// **Example:** Echo input in the terminal. The sequence for enter (`\r`) is translated to
+		/// CRLF to go to a new line and move the cursor to the start of the line.
+		/// 
+		/// ```typescript
+		/// 
+		/// const writeEmitter = new vscode.EventEmitter&lt;string&gt;();
+		/// const pty: vscode.Pseudoterminal = {
+		/// onDidWrite: writeEmitter.event,
+		/// open: () =&gt; {},
+		/// close: () =&gt; {},
+		/// handleInput: data =&gt; writeEmitter.fire(data === '\r' ? '\r\n' : data)
+		/// };
+		/// vscode.window.createTerminal({ name: 'Local echo', pty });
+		/// 
+		/// ```
+		/// 
+		/// </summary>
+		[JsonIgnore]
+		public Action<string> HandleInput;
+
+		/// <summary>
+		/// Implement to handle when the number of rows and columns that fit into the terminal panel
+		/// changes, for example when font size changes or when the panel is resized. The initial
+		/// state of a terminal's dimensions should be treated as `undefined` until this is triggered
+		/// as the size of a terminal isn't know until it shows up in the user interface.
+		/// 
+		/// When dimensions are overridden by
+		/// [onDidOverrideDimensions](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal.onDidOverrideDimensions), `setDimensions` will
+		/// continue to be called with the regular panel dimensions, allowing the extension continue
+		/// to react dimension changes.
+		/// 
+		/// `dimensions` ── The new dimensions.
+		/// </summary>
+		[JsonIgnore]
+		public Action<TerminalDimensions> SetDimensions;
+
+		[JsonProperty("onDidWrite_AppzFuncId")]
+		internal string OnDidWrite_AppzFuncId;
+
+		[JsonProperty("onDidOverrideDimensions_AppzFuncId")]
+		internal string OnDidOverrideDimensions_AppzFuncId;
+
+		[JsonProperty("onDidClose_AppzFuncId")]
+		internal string OnDidClose_AppzFuncId;
+
+		[JsonProperty("open_AppzFuncId")]
+		internal string Open_AppzFuncId;
+
+		[JsonProperty("close_AppzFuncId")]
+		internal string Close_AppzFuncId;
+
+		[JsonProperty("handleInput_AppzFuncId")]
+		internal string HandleInput_AppzFuncId;
+
+		[JsonProperty("setDimensions_AppzFuncId")]
+		internal string SetDimensions_AppzFuncId;
+	}
+
+	/// <summary>Represents the dimensions of a terminal.</summary>
+	public partial class TerminalDimensions {
+		/// <summary>The number of columns in the terminal.</summary>
+		[JsonProperty("columns"), JsonRequired]
+		public int Columns;
+
+		/// <summary>The number of rows in the terminal.</summary>
+		[JsonProperty("rows"), JsonRequired]
+		public int Rows;
+	}
+
 	/// <summary>An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).</summary>
 	public partial class WorkspaceFoldersChangeEvent {
 		/// <summary>Added workspace folders.</summary>
@@ -2148,6 +2444,20 @@ namespace VscAppz {
 		/// <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
 		[JsonProperty("ignoreFocusOut"), JsonRequired]
 		public bool IgnoreFocusOut;
+	}
+
+	/// <summary>TerminalBag (to be accessed only via `Terminal.Bag`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.</summary>
+	public partial class TerminalBag {
+		[JsonIgnore]
+		internal Terminal __holder__;
+
+		/// <summary>The name of the terminal.</summary>
+		[JsonIgnore]
+		public Func<string> Name;
+
+		/// <summary>The process ID of the shell process.</summary>
+		[JsonIgnore]
+		public Func<int> ProcessId;
 	}
 
 	/// <summary>FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.</summary>
@@ -3413,6 +3723,116 @@ namespace VscAppz {
 			};
 			this.Impl().send(msg, onresp);
 			return (Action<QuickPick> a0) => {
+				onret = a0;
+			};
+		}
+
+		Action<Action<Terminal>> IWindow.CreateTerminal1(string name, string shellPath, string[] shellArgs) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.createTerminal1";
+			msg.Data = new dict(3);
+			if ((null != name)) {
+				msg.Data["name"] = name;
+			}
+			if ((null != shellPath)) {
+				msg.Data["shellPath"] = shellPath;
+			}
+			if ((null != shellArgs)) {
+				msg.Data["shellArgs"] = shellArgs;
+			}
+			Func<any, bool> onresp = default;
+			Action<Terminal> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Terminal result = default;
+				if ((null != payload)) {
+					result = new Terminal();
+					ok = result.__loadFromJsonish__(payload);
+					if (!ok) {
+						return false;
+					}
+					result.__disp__.impl = this.Impl();
+				} else {
+					return false;
+				}
+				result.__appzObjBagPullFromPeer__()(() => {
+					if ((null != onret)) {
+						onret(result);
+					}
+				});
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<Terminal> a0) => {
+				onret = a0;
+			};
+		}
+
+		Action<Action<Terminal>> IWindow.CreateTerminal2(TerminalOptions options) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.createTerminal2";
+			msg.Data = new dict(1);
+			msg.Data["options"] = options;
+			Func<any, bool> onresp = default;
+			Action<Terminal> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Terminal result = default;
+				if ((null != payload)) {
+					result = new Terminal();
+					ok = result.__loadFromJsonish__(payload);
+					if (!ok) {
+						return false;
+					}
+					result.__disp__.impl = this.Impl();
+				} else {
+					return false;
+				}
+				result.__appzObjBagPullFromPeer__()(() => {
+					if ((null != onret)) {
+						onret(result);
+					}
+				});
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<Terminal> a0) => {
+				onret = a0;
+			};
+		}
+
+		Action<Action<Terminal>> IWindow.CreateTerminal3(ExtensionTerminalOptions options) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "window.createTerminal3";
+			msg.Data = new dict(1);
+			msg.Data["options"] = options;
+			Func<any, bool> onresp = default;
+			Action<Terminal> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Terminal result = default;
+				if ((null != payload)) {
+					result = new Terminal();
+					ok = result.__loadFromJsonish__(payload);
+					if (!ok) {
+						return false;
+					}
+					result.__disp__.impl = this.Impl();
+				} else {
+					return false;
+				}
+				result.__appzObjBagPullFromPeer__()(() => {
+					if ((null != onret)) {
+						onret(result);
+					}
+				});
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<Terminal> a0) => {
 				onret = a0;
 			};
 		}
@@ -5769,6 +6189,197 @@ namespace VscAppz {
 		}
 	}
 
+	public partial class Terminal {
+		/// <summary>
+		/// Send text to the terminal. The text is written to the stdin of the underlying pty process
+		/// (shell) of the terminal.
+		/// 
+		/// `text` ── The text to send.
+		/// 
+		/// `addNewLine` ── Whether to add a new line to the text being sent, this is normally
+		/// required to run a command in the terminal. The character(s) added are \n or \r\n
+		/// depending on the platform. This defaults to `true`.
+		/// 
+		/// `return` ── a thenable that resolves when this `SendText` call has successfully completed at the VSC side.
+		/// </summary>
+		/// <param name="text">The text to send.</param>
+		/// <param name="addNewLine">Whether to add a new line to the text being sent, this is normally required to run a command in the terminal. The character(s) added are \n or \r\n depending on the platform. This defaults to `true`.</param>
+		/// <return>a thenable that resolves when this `SendText` call has successfully completed at the VSC side.</return>
+		public Action<Action> SendText(string text = default, bool addNewLine = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "Terminal.sendText";
+			msg.Data = new dict(3);
+			msg.Data[""] = this.__disp__.id;
+			msg.Data["text"] = text;
+			msg.Data["addNewLine"] = addNewLine;
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onresp = (any payload) => {
+				any[] it = default;
+				bool ok = default;
+				(it, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+				if (!ok) {
+					return false;
+				}
+				if ((2 != it.Length) || (null == it[1])) {
+					return false;
+				}
+				lock (this.__disp__.impl) {
+					ok = this.Bag.__loadFromJsonish__(it[1]);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.__disp__.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class Terminal {
+		/// <summary>
+		/// Show the terminal panel and reveal this terminal in the UI.
+		/// 
+		/// `preserveFocus` ── When `true` the terminal will not take focus.
+		/// 
+		/// `return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
+		/// </summary>
+		/// <param name="preserveFocus">When `true` the terminal will not take focus.</param>
+		/// <return>a thenable that resolves when this `Show` call has successfully completed at the VSC side.</return>
+		public Action<Action> Show(bool preserveFocus = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "Terminal.show";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.__disp__.id;
+			msg.Data["preserveFocus"] = preserveFocus;
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onresp = (any payload) => {
+				any[] it = default;
+				bool ok = default;
+				(it, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+				if (!ok) {
+					return false;
+				}
+				if ((2 != it.Length) || (null == it[1])) {
+					return false;
+				}
+				lock (this.__disp__.impl) {
+					ok = this.Bag.__loadFromJsonish__(it[1]);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.__disp__.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class Terminal {
+		/// <summary>
+		/// Hide the terminal panel if this terminal is currently showing.
+		/// 
+		/// `return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
+		/// </summary>
+		/// <return>a thenable that resolves when this `Hide` call has successfully completed at the VSC side.</return>
+		public Action<Action> Hide() {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "Terminal.hide";
+			msg.Data = new dict(1);
+			msg.Data[""] = this.__disp__.id;
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onresp = (any payload) => {
+				any[] it = default;
+				bool ok = default;
+				(it, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+				if (!ok) {
+					return false;
+				}
+				if ((2 != it.Length) || (null == it[1])) {
+					return false;
+				}
+				lock (this.__disp__.impl) {
+					ok = this.Bag.__loadFromJsonish__(it[1]);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.__disp__.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class Terminal /*: IDisposable*/ {
+		/// <summary>
+		/// Dispose and free associated resources.
+		/// 
+		/// `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
+		/// </summary>
+		/// <return>a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.</return>
+		public Action<Action> Dispose() {
+			return this.__disp__.Dispose();
+		}
+		/*void IDisposable.Dispose() { this.Dispose(); }*/
+		internal Action<IVscode, any, any> OnError { get => this.__disp__?.impl?.OnError; }
+	}
+
+	public partial class Terminal {
+		internal Action<Action> __appzObjBagPullFromPeer__() {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "Terminal.__appzObjBagPullFromPeer__";
+			msg.Data = new dict(1);
+			msg.Data[""] = this.__disp__.id;
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				if ((null == this.Bag)) {
+					this.Bag = new TerminalBag();
+				}
+				this.Bag.__holder__ = this;
+				lock (this.Bag.__holder__.__disp__.impl) {
+					ok = this.Bag.__loadFromJsonish__(payload);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.__disp__.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
+		}
+	}
+
 	public partial class FileSystemWatcher {
 		/// <summary>
 		/// An event which fires on file/folder creation.
@@ -6152,6 +6763,18 @@ namespace VscAppz {
 		}
 	}
 
+	public partial class TerminalBag {
+		/// <summary>
+		/// ReFetch requests the current `Terminal` state from the VSC side and upon response refreshes this `TerminalBag`'s property values for `name`, `processId` to reflect it.
+		/// 
+		/// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
+		/// </summary>
+		/// <return>a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.</return>
+		public Action<Action> ReFetch() {
+			return this.__holder__.__appzObjBagPullFromPeer__();
+		}
+	}
+
 	public partial class FileSystemWatcherBag {
 		/// <summary>
 		/// ReFetch requests the current `FileSystemWatcher` state from the VSC side and upon response refreshes this `FileSystemWatcherBag`'s property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to reflect it.
@@ -6429,6 +7052,15 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPick {
+		internal bool __loadFromJsonish__(any payload = default) {
+			bool ok = default;
+			this.__disp__ = new Disposable();
+			ok = this.__disp__.__loadFromJsonish__(payload);
+			return ok;
+		}
+	}
+
+	public partial class Terminal {
 		internal bool __loadFromJsonish__(any payload = default) {
 			bool ok = default;
 			this.__disp__ = new Disposable();
@@ -7226,6 +7858,50 @@ namespace VscAppz {
 					}
 				}
 				this.IgnoreFocusOut = ignoreFocusOut;
+			}
+			return true;
+		}
+	}
+
+	public partial class TerminalBag {
+		internal bool __loadFromJsonish__(any payload = default) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if (!ok) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("name", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				string name = default;
+				if ((null != val)) {
+					(name, ok) = (val is string) ? (((string)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.Name = () => {
+					return name;
+				};
+			}
+			(val, ok) = (it.TryGetValue("processId", out var ___) ? (___, true) : (default, false));
+			if (ok) {
+				int processId = default;
+				if ((null != val)) {
+					(processId, ok) = (val is int) ? (((int)(val)), true) : (default, false);
+					if (!ok) {
+						double __processId__ = default;
+						(__processId__, ok) = (val is double) ? (((double)(val)), true) : (default, false);
+						if (!ok) {
+							return false;
+						}
+						processId = ((int)(__processId__));
+					}
+				}
+				this.ProcessId = () => {
+					return processId;
+				};
 			}
 			return true;
 		}

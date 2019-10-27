@@ -38,6 +38,7 @@ const genApiSurface = {
                 'createTextEditorDecorationType',
                 'createInputBox',
                 'createQuickPick',
+                'createTerminal',
             ],
             'env': [
                 'openExternal',

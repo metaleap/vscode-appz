@@ -546,6 +546,33 @@ export interface Window {
      * @return A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
      */
     CreateQuickPick: (_: (_: QuickPick) => void) => void
+
+    /**
+     * Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process. The cwd of the terminal will be the workspace
+     * directory if it exists.
+
+     * @param name Optional human-readable string which will be used to represent the terminal in the UI.
+     * @param shellPath Optional path to a custom shell executable to be used in the terminal.
+     * @param shellArgs Optional args for the custom shell executable. A string can be used on Windows only which allows specifying shell args in [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
+     * @return A new Terminal.
+     */
+    CreateTerminal1: (name?: string, shellPath?: string, shellArgs?: string[]) => (_: (_: Terminal) => void) => void
+
+    /**
+     * Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process.
+
+     * @param options A TerminalOptions object describing the characteristics of the new terminal.
+     * @return A new Terminal.
+     */
+    CreateTerminal2: (options: TerminalOptions) => (_: (_: Terminal) => void) => void
+
+    /**
+     * Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) where an extension controls its input and output.
+
+     * @param options An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing the characteristics of the new terminal.
+     * @return A new Terminal.
+     */
+    CreateTerminal3: (options: ExtensionTerminalOptions) => (_: (_: Terminal) => void) => void
 }
 
 /**
@@ -2093,6 +2120,324 @@ function newQuickPick (): QuickPick {
 }
 
 /**
+ * An individual terminal instance within the integrated terminal.
+
+ */
+export interface Terminal extends fromJson, withDisp, withBag<TerminalBag> {
+    /**
+     * Send text to the terminal. The text is written to the stdin of the underlying pty process
+     * (shell) of the terminal.
+     * 
+     * `text` ── The text to send.
+     * 
+     * `addNewLine` ── Whether to add a new line to the text being sent, this is normally
+     * required to run a command in the terminal. The character(s) added are \n or \r\n
+     * depending on the platform. This defaults to `true`.
+
+     */
+    SendText: (_: string, __: boolean) => (_: () => void) => void
+
+    /**
+     * Show the terminal panel and reveal this terminal in the UI.
+     * 
+     * `preserveFocus` ── When `true` the terminal will not take focus.
+
+     */
+    Show: (_: boolean) => (_: () => void) => void
+
+    /**
+     * Hide the terminal panel if this terminal is currently showing.
+
+     */
+    Hide: () => (_: () => void) => void
+
+    /**
+     * Dispose and free associated resources.
+
+     */
+    Dispose: () => (_: () => void) => void
+
+    __appzObjBagPullFromPeer__: () => (_: () => void) => void
+}
+
+function newTerminal (): Terminal {
+    let me: Terminal
+    me = { __loadFromJsonish__: _ => Terminal___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as Terminal
+    me.SendText = (a0, a1) => Terminal_SendText.call(me, a0, a1)
+    me.Show = (a0) => Terminal_Show.call(me, a0)
+    me.Hide = () => Terminal_Hide.call(me, )
+    me.Dispose = () => Terminal_Dispose.call(me, )
+    me.__appzObjBagPullFromPeer__ = () => Terminal___appzObjBagPullFromPeer__.call(me, )
+    return me
+}
+
+/**
+ * Value-object describing what options a terminal should use.
+
+ */
+export interface TerminalOptions {
+    /**
+     * A human-readable string which will be used to represent the terminal in the UI.
+
+     */
+    name?: string
+
+    /**
+     * A path to a custom shell executable to be used in the terminal.
+
+     */
+    shellPath?: string
+
+    /**
+     * Args for the custom shell executable. A string can be used on Windows only which allows
+     * specifying shell args in [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
+
+     */
+    shellArgs?: string[]
+
+    /**
+     * A path or Uri for the current working directory to be used for the terminal.
+
+     */
+    cwd?: string
+
+    /**
+     * Object with environment variables that will be added to the VS Code process.
+
+     */
+    env?: { [_:string]: string }
+
+    /**
+     * Whether the terminal process environment should be exactly as provided in
+     * `TerminalOptions.env`. When this is false (default), the environment will be based on the
+     * window's environment and also apply configured platform settings like
+     * `terminal.integrated.windows.env` on top. When this is true, the complete environment
+     * must be provided as nothing will be inherited from the process or any configuration.
+
+     */
+    strictEnv?: boolean
+
+    /**
+     * When enabled the terminal will run the process as normal but not be surfaced to the user
+     * until `Terminal.show` is called. The typical usage for this is when you need to run
+     * something that may need interactivity but only want to tell the user about it when
+     * interaction is needed. Note that the terminals will still be exposed to all extensions
+     * as normal.
+
+     */
+    hideFromUser?: boolean
+}
+
+/**
+ * Value-object describing what options a virtual process terminal should use.
+
+ */
+export interface ExtensionTerminalOptions {
+    /**
+     * A human-readable string which will be used to represent the terminal in the UI.
+
+     */
+    name: string
+
+    /**
+     * An implementation of [Pseudoterminal](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal) that allows an extension to
+     * control a terminal.
+
+     */
+    pty: Pseudoterminal
+}
+
+/**
+ * Defines the interface of a terminal pty, enabling extensions to control a terminal.
+
+ */
+export interface Pseudoterminal {
+    /**
+     * An event that when fired will write data to the terminal. Unlike
+     * [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText) which sends text to the underlying _process_
+     * (the pty "slave"), this will write the text to the terminal itself (the pty "master").
+     * 
+     * **Example:** Write red text to the terminal
+     * 
+     * ```typescript
+     * 
+     * const writeEmitter = new vscode.EventEmitter<string>();
+     * const pty: vscode.Pseudoterminal = {
+     *    onDidWrite: writeEmitter.event,
+     *    open: () => writeEmitter.fire('\x1b[31mHello world\x1b[0m'),
+     *    close: () => {}
+     * };
+     * vscode.window.createTerminal({ name: 'My terminal', pty });
+     * 
+     * ```
+     * 
+     * 
+     * **Example:** Move the cursor to the 10th row and 20th column and write an asterisk
+     * 
+     * ```typescript
+     * 
+     * writeEmitter.fire('\x1b[10;20H*');
+     * 
+     * ```
+     * 
+
+     */
+    onDidWrite: (_: (_: string) => void) => Disposable
+
+    /**
+     * An event that when fired allows overriding the [dimensions](https://code.visualstudio.com/api/references/vscode-api#Terminal.dimensions) of the
+     * terminal. Note that when set, the overridden dimensions will only take effect when they
+     * are lower than the actual dimensions of the terminal (ie. there will never be a scroll
+     * bar). Set to `undefined` for the terminal to go back to the regular dimensions (fit to
+     * the size of the panel).
+     * 
+     * **Example:** Override the dimensions of a terminal to 20 columns and 10 rows
+     * 
+     * ```typescript
+     * 
+     * const dimensionsEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
+     * const pty: vscode.Pseudoterminal = {
+     *    onDidWrite: writeEmitter.event,
+     *    onDidOverrideDimensions: dimensionsEmitter.event,
+     *    open: () => {
+     *      dimensionsEmitter.fire({
+     *        columns: 20,
+     *        rows: 10
+     *      });
+     *    },
+     *    close: () => {}
+     * };
+     * vscode.window.createTerminal({ name: 'My terminal', pty });
+     * 
+     * ```
+     * 
+
+     */
+    onDidOverrideDimensions?: (_: (_: TerminalDimensions) => void) => Disposable
+
+    /**
+     * An event that when fired will signal that the pty is closed and dispose of the terminal.
+     * 
+     * A number can be used to provide an exit code for the terminal. Exit codes must be
+     * positive and a non-zero exit codes signals failure which shows a notification for a
+     * regular terminal and allows dependent tasks to proceed when used with the
+     * `CustomExecution2` API.
+     * 
+     * **Example:** Exit the terminal when "y" is pressed, otherwise show a notification.
+     * 
+     * ```typescript
+     * 
+     * const writeEmitter = new vscode.EventEmitter<string>();
+     * const closeEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
+     * const pty: vscode.Pseudoterminal = {
+     *    onDidWrite: writeEmitter.event,
+     *    onDidClose: closeEmitter.event,
+     *    open: () => writeEmitter.fire('Press y to exit successfully'),
+     *    close: () => {},
+     *    handleInput: data => {
+     *      if (data !== 'y') {
+     *        vscode.window.showInformationMessage('Something went wrong');
+     *      }
+     *      closeEmitter.fire();
+     *    }
+     * };
+     * vscode.window.createTerminal({ name: 'Exit example', pty });
+
+     */
+    onDidClose?: (_: (_: number) => void) => Disposable
+
+    /**
+     * Implement to handle when the pty is open and ready to start firing events.
+     * 
+     * `initialDimensions` ── The dimensions of the terminal, this will be undefined if the
+     * terminal panel has not been opened before this is called.
+
+     */
+    open: (_: TerminalDimensions) => void
+
+    /**
+     * Implement to handle when the terminal is closed by an act of the user.
+
+     */
+    close: () => void
+
+    /**
+     * Implement to handle incoming keystrokes in the terminal or when an extension calls
+     * [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText). `data` contains the keystrokes/text serialized into
+     * their corresponding VT sequence representation.
+     * 
+     * `data` ── The incoming data.
+     * 
+     * **Example:** Echo input in the terminal. The sequence for enter (`\r`) is translated to
+     * CRLF to go to a new line and move the cursor to the start of the line.
+     * 
+     * ```typescript
+     * 
+     * const writeEmitter = new vscode.EventEmitter<string>();
+     * const pty: vscode.Pseudoterminal = {
+     * onDidWrite: writeEmitter.event,
+     * open: () => {},
+     * close: () => {},
+     * handleInput: data => writeEmitter.fire(data === '\r' ? '\r\n' : data)
+     * };
+     * vscode.window.createTerminal({ name: 'Local echo', pty });
+     * 
+     * ```
+     * 
+
+     */
+    handleInput?: (_: string) => void
+
+    /**
+     * Implement to handle when the number of rows and columns that fit into the terminal panel
+     * changes, for example when font size changes or when the panel is resized. The initial
+     * state of a terminal's dimensions should be treated as `undefined` until this is triggered
+     * as the size of a terminal isn't know until it shows up in the user interface.
+     * 
+     * When dimensions are overridden by
+     * [onDidOverrideDimensions](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal.onDidOverrideDimensions), `setDimensions` will
+     * continue to be called with the regular panel dimensions, allowing the extension continue
+     * to react dimension changes.
+     * 
+     * `dimensions` ── The new dimensions.
+
+     */
+    setDimensions?: (_: TerminalDimensions) => void
+
+    onDidWrite_AppzFuncId: string
+
+    onDidOverrideDimensions_AppzFuncId: string
+
+    onDidClose_AppzFuncId: string
+
+    open_AppzFuncId: string
+
+    close_AppzFuncId: string
+
+    handleInput_AppzFuncId: string
+
+    setDimensions_AppzFuncId: string
+}
+
+/**
+ * Represents the dimensions of a terminal.
+
+ */
+export interface TerminalDimensions {
+    /**
+     * The number of columns in the terminal.
+
+     */
+    columns: number
+
+    /**
+     * The number of rows in the terminal.
+
+     */
+    rows: number
+}
+
+/**
  * An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).
 
  */
@@ -2610,6 +2955,34 @@ export interface QuickPickBag extends fromJson {
 export function newQuickPickBag (): QuickPickBag {
     let me: QuickPickBag
     me = { __loadFromJsonish__: _ => QuickPickBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => QuickPickBag_ApplyChanges.call(me), ReFetch: () => QuickPickBag_ReFetch.call(me) } as QuickPickBag
+    return me
+}
+
+/**
+ * TerminalBag (to be accessed only via `Terminal.Bag`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+
+ */
+export interface TerminalBag extends fromJson {
+    __holder__: Terminal
+
+    /**
+     * The name of the terminal.
+
+     */
+    Name: () => string
+
+    /**
+     * The process ID of the shell process.
+
+     */
+    ProcessId: () => number
+
+    ReFetch: () => (_: () => void) => void
+}
+
+export function newTerminalBag (): TerminalBag {
+    let me: TerminalBag
+    me = { __loadFromJsonish__: _ => TerminalBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TerminalBag_ReFetch.call(me) } as TerminalBag
     return me
 }
 
@@ -3884,6 +4257,116 @@ class implWindow extends implBase implements Window {
         }
         this.Impl().send(msg, onresp)
         return (a0: (_: QuickPick) => void): void => {
+            onret = a0
+        }
+    }
+
+    CreateTerminal1(name?: string, shellPath?: string, shellArgs?: string[]): (_: (_: Terminal) => void) => void {
+        let msg: ipcMsg
+        msg = newipcMsg()
+        msg.QName = "window.createTerminal1"
+        msg.Data = {}
+        if ((undefined !== name && null !== name)) {
+            msg.Data["name"] = name
+        }
+        if ((undefined !== shellPath && null !== shellPath)) {
+            msg.Data["shellPath"] = shellPath
+        }
+        if ((undefined !== shellArgs && null !== shellArgs)) {
+            msg.Data["shellArgs"] = shellArgs
+        }
+        let onresp: (_: any) => boolean
+        let onret: (_: Terminal) => void
+        onresp = (payload: any): boolean => {
+            let ok: boolean
+            let result: Terminal
+            if ((undefined !== payload && null !== payload)) {
+                result = newTerminal()
+                ok = result.__loadFromJsonish__(payload)
+                if (!ok) {
+                    return false
+                }
+                result.__disp__.impl = this.Impl()
+            } else {
+                return false
+            }
+            result.__appzObjBagPullFromPeer__()((): void => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
+            })
+            return true
+        }
+        this.Impl().send(msg, onresp)
+        return (a0: (_: Terminal) => void): void => {
+            onret = a0
+        }
+    }
+
+    CreateTerminal2(options: TerminalOptions): (_: (_: Terminal) => void) => void {
+        let msg: ipcMsg
+        msg = newipcMsg()
+        msg.QName = "window.createTerminal2"
+        msg.Data = {}
+        msg.Data["options"] = options
+        let onresp: (_: any) => boolean
+        let onret: (_: Terminal) => void
+        onresp = (payload: any): boolean => {
+            let ok: boolean
+            let result: Terminal
+            if ((undefined !== payload && null !== payload)) {
+                result = newTerminal()
+                ok = result.__loadFromJsonish__(payload)
+                if (!ok) {
+                    return false
+                }
+                result.__disp__.impl = this.Impl()
+            } else {
+                return false
+            }
+            result.__appzObjBagPullFromPeer__()((): void => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
+            })
+            return true
+        }
+        this.Impl().send(msg, onresp)
+        return (a0: (_: Terminal) => void): void => {
+            onret = a0
+        }
+    }
+
+    CreateTerminal3(options: ExtensionTerminalOptions): (_: (_: Terminal) => void) => void {
+        let msg: ipcMsg
+        msg = newipcMsg()
+        msg.QName = "window.createTerminal3"
+        msg.Data = {}
+        msg.Data["options"] = options
+        let onresp: (_: any) => boolean
+        let onret: (_: Terminal) => void
+        onresp = (payload: any): boolean => {
+            let ok: boolean
+            let result: Terminal
+            if ((undefined !== payload && null !== payload)) {
+                result = newTerminal()
+                ok = result.__loadFromJsonish__(payload)
+                if (!ok) {
+                    return false
+                }
+                result.__disp__.impl = this.Impl()
+            } else {
+                return false
+            }
+            result.__appzObjBagPullFromPeer__()((): void => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
+            })
+            return true
+        }
+        this.Impl().send(msg, onresp)
+        return (a0: (_: Terminal) => void): void => {
             onret = a0
         }
     }
@@ -5991,6 +6474,149 @@ function QuickPick___appzObjBagPushToPeer__(this: QuickPick, allUpdates?: QuickP
     }
 }
 
+function Terminal_SendText(this: Terminal, text: string, addNewLine?: boolean): (_: () => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "Terminal.sendText"
+    msg.Data = {}
+    msg.Data[""] = this.__disp__.id
+    msg.Data["text"] = text
+    msg.Data["addNewLine"] = addNewLine
+    let onresp: (_: any) => boolean
+    let onret: () => void
+    onresp = (payload: any): boolean => {
+        let it: any[]
+        let ok: boolean
+        [it, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
+        if (!ok) {
+            return false
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false
+        }
+        {
+            ok = this.Bag.__loadFromJsonish__(it[1])
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
+        return true
+    }
+    this.__disp__.impl.send(msg, onresp)
+    return (a0: () => void): void => {
+        onret = a0
+    }
+}
+
+function Terminal_Show(this: Terminal, preserveFocus?: boolean): (_: () => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "Terminal.show"
+    msg.Data = {}
+    msg.Data[""] = this.__disp__.id
+    msg.Data["preserveFocus"] = preserveFocus
+    let onresp: (_: any) => boolean
+    let onret: () => void
+    onresp = (payload: any): boolean => {
+        let it: any[]
+        let ok: boolean
+        [it, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
+        if (!ok) {
+            return false
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false
+        }
+        {
+            ok = this.Bag.__loadFromJsonish__(it[1])
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
+        return true
+    }
+    this.__disp__.impl.send(msg, onresp)
+    return (a0: () => void): void => {
+        onret = a0
+    }
+}
+
+function Terminal_Hide(this: Terminal, ): (_: () => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "Terminal.hide"
+    msg.Data = {}
+    msg.Data[""] = this.__disp__.id
+    let onresp: (_: any) => boolean
+    let onret: () => void
+    onresp = (payload: any): boolean => {
+        let it: any[]
+        let ok: boolean
+        [it, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
+        if (!ok) {
+            return false
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false
+        }
+        {
+            ok = this.Bag.__loadFromJsonish__(it[1])
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
+        return true
+    }
+    this.__disp__.impl.send(msg, onresp)
+    return (a0: () => void): void => {
+        onret = a0
+    }
+}
+
+function Terminal_Dispose(this: Terminal, ): (_: () => void) => void {
+    return this.__disp__.Dispose()
+}
+
+function Terminal___appzObjBagPullFromPeer__(this: Terminal, ): (_: () => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "Terminal.__appzObjBagPullFromPeer__"
+    msg.Data = {}
+    msg.Data[""] = this.__disp__.id
+    let onresp: (_: any) => boolean
+    let onret: () => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        if ((undefined === this.Bag || null === this.Bag)) {
+            this.Bag = newTerminalBag()
+        }
+        this.Bag.__holder__ = this
+        {
+            ok = this.Bag.__loadFromJsonish__(payload)
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
+        return true
+    }
+    this.__disp__.impl.send(msg, onresp)
+    return (a0: () => void): void => {
+        onret = a0
+    }
+}
+
 function FileSystemWatcher_OnDidCreate(this: FileSystemWatcher, handler: (_: string) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
@@ -6263,6 +6889,10 @@ function QuickPickBag_ApplyChanges(this: QuickPickBag, ): (_: () => void) => voi
     return this.__holder__.__appzObjBagPushToPeer__(this)
 }
 
+function TerminalBag_ReFetch(this: TerminalBag, ): (_: () => void) => void {
+    return this.__holder__.__appzObjBagPullFromPeer__()
+}
+
 function FileSystemWatcherBag_ReFetch(this: FileSystemWatcherBag, ): (_: () => void) => void {
     return this.__holder__.__appzObjBagPullFromPeer__()
 }
@@ -6514,6 +7144,13 @@ function InputBox___loadFromJsonish__(this: InputBox, payload: any): boolean {
 }
 
 function QuickPick___loadFromJsonish__(this: QuickPick, payload: any): boolean {
+    let ok: boolean
+    this.__disp__ = newDisposable()
+    ok = this.__disp__.__loadFromJsonish__(payload)
+    return ok
+}
+
+function Terminal___loadFromJsonish__(this: Terminal, payload: any): boolean {
     let ok: boolean
     this.__disp__ = newDisposable()
     ok = this.__disp__.__loadFromJsonish__(payload)
@@ -7290,6 +7927,48 @@ function QuickPickBag___loadFromJsonish__(this: QuickPickBag, payload: any): boo
             }
         }
         this.ignoreFocusOut = ignoreFocusOut
+    }
+    return true
+}
+
+function TerminalBag___loadFromJsonish__(this: TerminalBag, payload: any): boolean {
+    let it: { [_: string]: any }
+    let ok: boolean
+    let val: any
+    [it, ok] = [payload as { [_: string]: any }, typeof payload === "object"]
+    if (!ok) {
+        return false
+    }
+    [val, ok] = [it["name"], undefined !== it["name"]]
+    if (ok) {
+        let name: string
+        if ((undefined !== val && null !== val)) {
+            [name, ok] = [val as string, typeof val === "string"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.Name = (): string => {
+            return name
+        }
+    }
+    [val, ok] = [it["processId"], undefined !== it["processId"]]
+    if (ok) {
+        let processId: number
+        if ((undefined !== val && null !== val)) {
+            [processId, ok] = [val as number, typeof val === "number"]
+            if (!ok) {
+                let __processId__: number
+                [__processId__, ok] = [val as number, typeof val === "number"]
+                if (!ok) {
+                    return false
+                }
+                processId = __processId__
+            }
+        }
+        this.ProcessId = (): number => {
+            return processId
+        }
     }
     return true
 }

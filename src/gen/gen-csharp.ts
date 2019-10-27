@@ -38,22 +38,24 @@ export class Gen extends gen_syn.Gen {
     emitDocs(it: gen_syn.WithDocs): Gen {
         this.ensureMethodDocsArgsAndRet(it)
         const paramnames: string[] = []
+        const htmlesc = (_: string): string =>
+            _.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
         if (it.Docs && it.Docs.length)
             for (const doc of it.Docs)
                 if (doc.Lines && doc.Lines.length)
                     if (doc.ForParam && doc.ForParam.length) {
                         this.line(
                             (doc.ForParam === this.options.doc.appendArgsToSummary.retArgName ? "/// <return>" : "/// <param name=\"" + doc.ForParam + "\">")
-                            + doc.Lines.join(" ")
+                            + doc.Lines.map(htmlesc).join(" ")
                             + (doc.ForParam === this.options.doc.appendArgsToSummary.retArgName ? "</return>" : "</param>"))
                         if (!paramnames.includes(doc.ForParam))
                             paramnames.push(doc.ForParam)
                     } else if (doc.Lines.length > 1)
                         this.line("/// <summary>")
-                            .lines(...doc.Lines.map(_ => "/// " + _))
+                            .lines(...doc.Lines.map(_ => "/// " + htmlesc(_)))
                             .line("/// </summary>")
                     else
-                        this.line("/// <summary>" + doc.Lines[0] + "</summary>")
+                        this.line("/// <summary>" + htmlesc(doc.Lines[0]) + "</summary>")
         return this
     }
 
