@@ -2215,7 +2215,7 @@ namespace VscAppz {
 				MessageItem result = default;
 				if ((null != payload)) {
 					result = new MessageItem();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2246,7 +2246,7 @@ namespace VscAppz {
 				MessageItem result = default;
 				if ((null != payload)) {
 					result = new MessageItem();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2339,7 +2339,7 @@ namespace VscAppz {
 				MessageItem result = default;
 				if ((null != payload)) {
 					result = new MessageItem();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2370,7 +2370,7 @@ namespace VscAppz {
 				MessageItem result = default;
 				if ((null != payload)) {
 					result = new MessageItem();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2463,7 +2463,7 @@ namespace VscAppz {
 				MessageItem result = default;
 				if ((null != payload)) {
 					result = new MessageItem();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2494,7 +2494,7 @@ namespace VscAppz {
 				MessageItem result = default;
 				if ((null != payload)) {
 					result = new MessageItem();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2611,7 +2611,7 @@ namespace VscAppz {
 								QuickPickItem __0 = default;
 								if ((null != args[0])) {
 									__0 = new QuickPickItem();
-									ok = __0.loadFromJsonish(args[0]);
+									ok = __0.__loadFromJsonish__(args[0]);
 									if (!ok) {
 										return (null, false);
 									}
@@ -2703,7 +2703,7 @@ namespace VscAppz {
 								QuickPickItem __0 = default;
 								if ((null != args[0])) {
 									__0 = new QuickPickItem();
-									ok = __0.loadFromJsonish(args[0]);
+									ok = __0.__loadFromJsonish__(args[0]);
 									if (!ok) {
 										return (null, false);
 									}
@@ -2785,7 +2785,7 @@ namespace VscAppz {
 								QuickPickItem __0 = default;
 								if ((null != args[0])) {
 									__0 = new QuickPickItem();
-									ok = __0.loadFromJsonish(args[0]);
+									ok = __0.__loadFromJsonish__(args[0]);
 									if (!ok) {
 										return (null, false);
 									}
@@ -2827,7 +2827,7 @@ namespace VscAppz {
 					foreach (var __item__result in __coll__result) {
 						QuickPickItem __val__result = default;
 						__val__result = new QuickPickItem();
-						ok = __val__result.loadFromJsonish(__item__result);
+						ok = __val__result.__loadFromJsonish__(__item__result);
 						if (!ok) {
 							return false;
 						}
@@ -2878,7 +2878,7 @@ namespace VscAppz {
 								QuickPickItem __0 = default;
 								if ((null != args[0])) {
 									__0 = new QuickPickItem();
-									ok = __0.loadFromJsonish(args[0]);
+									ok = __0.__loadFromJsonish__(args[0]);
 									if (!ok) {
 										return (null, false);
 									}
@@ -2911,7 +2911,7 @@ namespace VscAppz {
 				QuickPickItem result = default;
 				if ((null != payload)) {
 					result = new QuickPickItem();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2950,7 +2950,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -2981,7 +2981,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3085,7 +3085,7 @@ namespace VscAppz {
 				WorkspaceFolder result = default;
 				if ((null != payload)) {
 					result = new WorkspaceFolder();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3113,7 +3113,7 @@ namespace VscAppz {
 				WindowState result = default;
 				if ((null != payload)) {
 					result = new WindowState();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3146,7 +3146,7 @@ namespace VscAppz {
 				}
 				WindowState _a_0_ = default;
 				_a_0_ = new WindowState();
-				ok = _a_0_.loadFromJsonish(args[0]);
+				ok = _a_0_.__loadFromJsonish__(args[0]);
 				if (!ok) {
 					return false;
 				}
@@ -3161,7 +3161,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3197,7 +3197,7 @@ namespace VscAppz {
 				StatusBarItem result = default;
 				if ((null != payload)) {
 					result = new StatusBarItem();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3231,7 +3231,7 @@ namespace VscAppz {
 				OutputChannel result = default;
 				if ((null != payload)) {
 					result = new OutputChannel();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3265,7 +3265,7 @@ namespace VscAppz {
 				TextEditorDecorationType result = default;
 				if ((null != payload)) {
 					result = new TextEditorDecorationType();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3298,7 +3298,7 @@ namespace VscAppz {
 				InputBox result = default;
 				if ((null != payload)) {
 					result = new InputBox();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3331,7 +3331,7 @@ namespace VscAppz {
 				QuickPick result = default;
 				if ((null != payload)) {
 					result = new QuickPick();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3612,7 +3612,7 @@ namespace VscAppz {
 				EnvBag result = default;
 				if ((null != payload)) {
 					result = new EnvBag();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3791,7 +3791,7 @@ namespace VscAppz {
 				}
 				WorkspaceFoldersChangeEvent _a_0_ = default;
 				_a_0_ = new WorkspaceFoldersChangeEvent();
-				ok = _a_0_.loadFromJsonish(args[0]);
+				ok = _a_0_.__loadFromJsonish__(args[0]);
 				if (!ok) {
 					return false;
 				}
@@ -3806,7 +3806,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3837,7 +3837,7 @@ namespace VscAppz {
 				WorkspaceFolder result = default;
 				if ((null != payload)) {
 					result = new WorkspaceFolder();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -3875,7 +3875,7 @@ namespace VscAppz {
 					foreach (var __item__result in __coll__result) {
 						WorkspaceFolder __val__result = default;
 						__val__result = new WorkspaceFolder();
-						ok = __val__result.loadFromJsonish(__item__result);
+						ok = __val__result.__loadFromJsonish__(__item__result);
 						if (!ok) {
 							return false;
 						}
@@ -3993,7 +3993,7 @@ namespace VscAppz {
 				WorkspaceBag result = default;
 				if ((null != payload)) {
 					result = new WorkspaceBag();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4068,7 +4068,7 @@ namespace VscAppz {
 				}
 				DiagnosticChangeEvent _a_0_ = default;
 				_a_0_ = new DiagnosticChangeEvent();
-				ok = _a_0_.loadFromJsonish(args[0]);
+				ok = _a_0_.__loadFromJsonish__(args[0]);
 				if (!ok) {
 					return false;
 				}
@@ -4083,7 +4083,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4127,7 +4127,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4178,7 +4178,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4293,7 +4293,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(it[1]);
+					ok = this.CfgBag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4336,7 +4336,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(it[1]);
+					ok = this.CfgBag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4375,7 +4375,7 @@ namespace VscAppz {
 		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
-		public Action<Action> __appzObjBagPullFromPeer__() {
+		internal Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "StatusBarItem.__appzObjBagPullFromPeer__";
@@ -4390,7 +4390,7 @@ namespace VscAppz {
 				}
 				this.CfgBag.__holder__ = this;
 				lock (this.CfgBag.__holder__.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(payload);
+					ok = this.CfgBag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -4429,7 +4429,7 @@ namespace VscAppz {
 			onresp = (any payload) => {
 				bool ok = default;
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(payload);
+					ok = this.CfgBag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -4476,7 +4476,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(it[1]);
+					ok = this.CfgBag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4524,7 +4524,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(it[1]);
+					ok = this.CfgBag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4567,7 +4567,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(it[1]);
+					ok = this.CfgBag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4614,7 +4614,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(it[1]);
+					ok = this.CfgBag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4657,7 +4657,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(it[1]);
+					ok = this.CfgBag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4695,7 +4695,7 @@ namespace VscAppz {
 		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
-		public Action<Action> __appzObjBagPullFromPeer__() {
+		internal Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "OutputChannel.__appzObjBagPullFromPeer__";
@@ -4710,7 +4710,7 @@ namespace VscAppz {
 				}
 				this.CfgBag.__holder__ = this;
 				lock (this.CfgBag.__holder__.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(payload);
+					ok = this.CfgBag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -4748,7 +4748,7 @@ namespace VscAppz {
 		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
-		public Action<Action> __appzObjBagPullFromPeer__() {
+		internal Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "TextEditorDecorationType.__appzObjBagPullFromPeer__";
@@ -4763,7 +4763,7 @@ namespace VscAppz {
 				}
 				this.CfgBag.__holder__ = this;
 				lock (this.CfgBag.__holder__.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(payload);
+					ok = this.CfgBag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -4813,7 +4813,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.loadFromJsonish(args[1]);
+						ok = this.CfgBag.__loadFromJsonish__(args[1]);
 					}
 					if (!ok) {
 						return false;
@@ -4831,7 +4831,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4878,7 +4878,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.loadFromJsonish(args[0]);
+						ok = this.CfgBag.__loadFromJsonish__(args[0]);
 					}
 					if (!ok) {
 						return false;
@@ -4896,7 +4896,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -4942,7 +4942,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(it[1]);
+					ok = this.CfgBag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4986,7 +4986,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(it[1]);
+					ok = this.CfgBag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -5036,7 +5036,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.loadFromJsonish(args[0]);
+						ok = this.CfgBag.__loadFromJsonish__(args[0]);
 					}
 					if (!ok) {
 						return false;
@@ -5054,7 +5054,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5097,7 +5097,7 @@ namespace VscAppz {
 		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
-		public Action<Action> __appzObjBagPullFromPeer__() {
+		internal Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.__appzObjBagPullFromPeer__";
@@ -5112,7 +5112,7 @@ namespace VscAppz {
 				}
 				this.CfgBag.__holder__ = this;
 				lock (this.CfgBag.__holder__.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(payload);
+					ok = this.CfgBag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -5151,7 +5151,7 @@ namespace VscAppz {
 			onresp = (any payload) => {
 				bool ok = default;
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(payload);
+					ok = this.CfgBag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -5201,7 +5201,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.loadFromJsonish(args[1]);
+						ok = this.CfgBag.__loadFromJsonish__(args[1]);
 					}
 					if (!ok) {
 						return false;
@@ -5219,7 +5219,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5266,7 +5266,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.loadFromJsonish(args[0]);
+						ok = this.CfgBag.__loadFromJsonish__(args[0]);
 					}
 					if (!ok) {
 						return false;
@@ -5284,7 +5284,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5341,7 +5341,7 @@ namespace VscAppz {
 				foreach (var __item___a_0_ in __coll___a_0_) {
 					QuickPickItem __val___a_0_ = default;
 					__val___a_0_ = new QuickPickItem();
-					ok = __val___a_0_.loadFromJsonish(__item___a_0_);
+					ok = __val___a_0_.__loadFromJsonish__(__item___a_0_);
 					if (!ok) {
 						return false;
 					}
@@ -5350,7 +5350,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.loadFromJsonish(args[1]);
+						ok = this.CfgBag.__loadFromJsonish__(args[1]);
 					}
 					if (!ok) {
 						return false;
@@ -5368,7 +5368,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5425,7 +5425,7 @@ namespace VscAppz {
 				foreach (var __item___a_0_ in __coll___a_0_) {
 					QuickPickItem __val___a_0_ = default;
 					__val___a_0_ = new QuickPickItem();
-					ok = __val___a_0_.loadFromJsonish(__item___a_0_);
+					ok = __val___a_0_.__loadFromJsonish__(__item___a_0_);
 					if (!ok) {
 						return false;
 					}
@@ -5434,7 +5434,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.loadFromJsonish(args[1]);
+						ok = this.CfgBag.__loadFromJsonish__(args[1]);
 					}
 					if (!ok) {
 						return false;
@@ -5452,7 +5452,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5498,7 +5498,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(it[1]);
+					ok = this.CfgBag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -5542,7 +5542,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(it[1]);
+					ok = this.CfgBag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -5592,7 +5592,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.loadFromJsonish(args[0]);
+						ok = this.CfgBag.__loadFromJsonish__(args[0]);
 					}
 					if (!ok) {
 						return false;
@@ -5610,7 +5610,7 @@ namespace VscAppz {
 				Disposable result = default;
 				if ((null != payload)) {
 					result = new Disposable();
-					ok = result.loadFromJsonish(payload);
+					ok = result.__loadFromJsonish__(payload);
 					if (!ok) {
 						return false;
 					}
@@ -5653,7 +5653,7 @@ namespace VscAppz {
 		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
-		public Action<Action> __appzObjBagPullFromPeer__() {
+		internal Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.__appzObjBagPullFromPeer__";
@@ -5668,7 +5668,7 @@ namespace VscAppz {
 				}
 				this.CfgBag.__holder__ = this;
 				lock (this.CfgBag.__holder__.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(payload);
+					ok = this.CfgBag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -5707,7 +5707,7 @@ namespace VscAppz {
 			onresp = (any payload) => {
 				bool ok = default;
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.loadFromJsonish(payload);
+					ok = this.CfgBag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -5821,7 +5821,7 @@ namespace VscAppz {
 	}
 
 	public partial class MessageItem {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -5869,7 +5869,7 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPickItem {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -5954,7 +5954,7 @@ namespace VscAppz {
 	}
 
 	public partial class WorkspaceFolder {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6011,7 +6011,7 @@ namespace VscAppz {
 	}
 
 	public partial class WindowState {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6037,52 +6037,52 @@ namespace VscAppz {
 	}
 
 	public partial class StatusBarItem {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			bool ok = default;
 			this.__disp__ = new Disposable();
-			ok = this.__disp__.loadFromJsonish(payload);
+			ok = this.__disp__.__loadFromJsonish__(payload);
 			return ok;
 		}
 	}
 
 	public partial class OutputChannel {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			bool ok = default;
 			this.__disp__ = new Disposable();
-			ok = this.__disp__.loadFromJsonish(payload);
+			ok = this.__disp__.__loadFromJsonish__(payload);
 			return ok;
 		}
 	}
 
 	public partial class TextEditorDecorationType {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			bool ok = default;
 			this.__disp__ = new Disposable();
-			ok = this.__disp__.loadFromJsonish(payload);
+			ok = this.__disp__.__loadFromJsonish__(payload);
 			return ok;
 		}
 	}
 
 	public partial class InputBox {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			bool ok = default;
 			this.__disp__ = new Disposable();
-			ok = this.__disp__.loadFromJsonish(payload);
+			ok = this.__disp__.__loadFromJsonish__(payload);
 			return ok;
 		}
 	}
 
 	public partial class QuickPick {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			bool ok = default;
 			this.__disp__ = new Disposable();
-			ok = this.__disp__.loadFromJsonish(payload);
+			ok = this.__disp__.__loadFromJsonish__(payload);
 			return ok;
 		}
 	}
 
 	public partial class EnvBag {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6199,7 +6199,7 @@ namespace VscAppz {
 	}
 
 	public partial class WorkspaceFoldersChangeEvent {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6222,7 +6222,7 @@ namespace VscAppz {
 					foreach (var __item__added in __coll__added) {
 						WorkspaceFolder __val__added = default;
 						__val__added = new WorkspaceFolder();
-						ok = __val__added.loadFromJsonish(__item__added);
+						ok = __val__added.__loadFromJsonish__(__item__added);
 						if (!ok) {
 							return false;
 						}
@@ -6249,7 +6249,7 @@ namespace VscAppz {
 					foreach (var __item__removed in __coll__removed) {
 						WorkspaceFolder __val__removed = default;
 						__val__removed = new WorkspaceFolder();
-						ok = __val__removed.loadFromJsonish(__item__removed);
+						ok = __val__removed.__loadFromJsonish__(__item__removed);
 						if (!ok) {
 							return false;
 						}
@@ -6266,7 +6266,7 @@ namespace VscAppz {
 	}
 
 	public partial class WorkspaceBag {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6315,7 +6315,7 @@ namespace VscAppz {
 					foreach (var __item__workspaceFolders in __coll__workspaceFolders) {
 						WorkspaceFolder __val__workspaceFolders = default;
 						__val__workspaceFolders = new WorkspaceFolder();
-						ok = __val__workspaceFolders.loadFromJsonish(__item__workspaceFolders);
+						ok = __val__workspaceFolders.__loadFromJsonish__(__item__workspaceFolders);
 						if (!ok) {
 							return false;
 						}
@@ -6330,7 +6330,7 @@ namespace VscAppz {
 	}
 
 	public partial class DiagnosticChangeEvent {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6369,7 +6369,7 @@ namespace VscAppz {
 	}
 
 	public partial class StatusBarItemBag {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6464,7 +6464,7 @@ namespace VscAppz {
 	}
 
 	public partial class OutputChannelBag {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6490,7 +6490,7 @@ namespace VscAppz {
 	}
 
 	public partial class TextEditorDecorationTypeBag {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6516,7 +6516,7 @@ namespace VscAppz {
 	}
 
 	public partial class InputBoxBag {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6654,7 +6654,7 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPickBag {
-		internal bool loadFromJsonish(any payload = default) {
+		internal bool __loadFromJsonish__(any payload = default) {
 			dict it = default;
 			bool ok = default;
 			any val = default;
@@ -6699,7 +6699,7 @@ namespace VscAppz {
 					foreach (var __item__items in __coll__items) {
 						QuickPickItem __val__items = default;
 						__val__items = new QuickPickItem();
-						ok = __val__items.loadFromJsonish(__item__items);
+						ok = __val__items.__loadFromJsonish__(__item__items);
 						if (!ok) {
 							return false;
 						}
@@ -6757,7 +6757,7 @@ namespace VscAppz {
 					foreach (var __item__activeItems in __coll__activeItems) {
 						QuickPickItem __val__activeItems = default;
 						__val__activeItems = new QuickPickItem();
-						ok = __val__activeItems.loadFromJsonish(__item__activeItems);
+						ok = __val__activeItems.__loadFromJsonish__(__item__activeItems);
 						if (!ok) {
 							return false;
 						}
@@ -6782,7 +6782,7 @@ namespace VscAppz {
 					foreach (var __item__selectedItems in __coll__selectedItems) {
 						QuickPickItem __val__selectedItems = default;
 						__val__selectedItems = new QuickPickItem();
-						ok = __val__selectedItems.loadFromJsonish(__item__selectedItems);
+						ok = __val__selectedItems.__loadFromJsonish__(__item__selectedItems);
 						if (!ok) {
 							return false;
 						}

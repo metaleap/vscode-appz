@@ -1685,7 +1685,7 @@ func (me implWindow) ShowInformationMessage3(message string, items []MessageItem
 		var result *MessageItem
 		if (nil != payload) {
 			result = new(MessageItem)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -1716,7 +1716,7 @@ func (me implWindow) ShowInformationMessage4(message string, options MessageOpti
 		var result *MessageItem
 		if (nil != payload) {
 			result = new(MessageItem)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -1809,7 +1809,7 @@ func (me implWindow) ShowWarningMessage3(message string, items []MessageItem) fu
 		var result *MessageItem
 		if (nil != payload) {
 			result = new(MessageItem)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -1840,7 +1840,7 @@ func (me implWindow) ShowWarningMessage4(message string, options MessageOptions,
 		var result *MessageItem
 		if (nil != payload) {
 			result = new(MessageItem)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -1933,7 +1933,7 @@ func (me implWindow) ShowErrorMessage3(message string, items []MessageItem) func
 		var result *MessageItem
 		if (nil != payload) {
 			result = new(MessageItem)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -1964,7 +1964,7 @@ func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, i
 		var result *MessageItem
 		if (nil != payload) {
 			result = new(MessageItem)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -2093,7 +2093,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 						var ok bool
 						var __0 QuickPickItem
 						if (nil != args[0]) {
-							ok = __0.loadFromJsonish(args[0])
+							ok = __0.__loadFromJsonish__(args[0])
 							if !ok {
 								return nil, false
 							}
@@ -2193,7 +2193,7 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 						var ok bool
 						var __0 QuickPickItem
 						if (nil != args[0]) {
-							ok = __0.loadFromJsonish(args[0])
+							ok = __0.__loadFromJsonish__(args[0])
 							if !ok {
 								return nil, false
 							}
@@ -2283,7 +2283,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 						var ok bool
 						var __0 QuickPickItem
 						if (nil != args[0]) {
-							ok = __0.loadFromJsonish(args[0])
+							ok = __0.__loadFromJsonish__(args[0])
 							if !ok {
 								return nil, false
 							}
@@ -2327,7 +2327,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 			__idx__result = 0
 			for _, __item__result := range __coll__result {
 				var __val__result QuickPickItem
-				ok = __val__result.loadFromJsonish(__item__result)
+				ok = __val__result.__loadFromJsonish__(__item__result)
 				if !ok {
 					return false
 				}
@@ -2383,7 +2383,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 						var ok bool
 						var __0 QuickPickItem
 						if (nil != args[0]) {
-							ok = __0.loadFromJsonish(args[0])
+							ok = __0.__loadFromJsonish__(args[0])
 							if !ok {
 								return nil, false
 							}
@@ -2419,7 +2419,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 		var result *QuickPickItem
 		if (nil != payload) {
 			result = new(QuickPickItem)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -2460,7 +2460,7 @@ func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int) fun
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -2491,7 +2491,7 @@ func (me implWindow) SetStatusBarMessage2(text string) func(func(*Disposable)) {
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -2595,7 +2595,7 @@ func (me implWindow) ShowWorkspaceFolderPick(options *WorkspaceFolderPickOptions
 		var result *WorkspaceFolder
 		if (nil != payload) {
 			result = new(WorkspaceFolder)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -2622,7 +2622,7 @@ func (me implWindow) State() func(func(WindowState)) {
 		var ok bool
 		var result WindowState
 		if (nil != payload) {
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -2654,7 +2654,7 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState)) func(fun
 			return ok
 		}
 		var _a_0_ WindowState
-		ok = _a_0_.loadFromJsonish(args[0])
+		ok = _a_0_.__loadFromJsonish__(args[0])
 		if !ok {
 			return false
 		}
@@ -2669,7 +2669,7 @@ func (me implWindow) OnDidChangeWindowState(listener func(WindowState)) func(fun
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -2705,7 +2705,7 @@ func (me implWindow) CreateStatusBarItem(alignment StatusBarAlignment, priority 
 		var result *StatusBarItem
 		if (nil != payload) {
 			result = new(StatusBarItem)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -2739,7 +2739,7 @@ func (me implWindow) CreateOutputChannel(name string) func(func(*OutputChannel))
 		var result *OutputChannel
 		if (nil != payload) {
 			result = new(OutputChannel)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -2773,7 +2773,7 @@ func (me implWindow) CreateTextEditorDecorationType(options DecorationRenderOpti
 		var result *TextEditorDecorationType
 		if (nil != payload) {
 			result = new(TextEditorDecorationType)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -2806,7 +2806,7 @@ func (me implWindow) CreateInputBox() func(func(*InputBox)) {
 		var result *InputBox
 		if (nil != payload) {
 			result = new(InputBox)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -2839,7 +2839,7 @@ func (me implWindow) CreateQuickPick() func(func(*QuickPick)) {
 		var result *QuickPick
 		if (nil != payload) {
 			result = new(QuickPick)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -3119,7 +3119,7 @@ func (me implEnv) AllProperties() func(func(EnvBag)) {
 		var ok bool
 		var result EnvBag
 		if (nil != payload) {
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -3297,7 +3297,7 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 			return ok
 		}
 		var _a_0_ WorkspaceFoldersChangeEvent
-		ok = _a_0_.loadFromJsonish(args[0])
+		ok = _a_0_.__loadFromJsonish__(args[0])
 		if !ok {
 			return false
 		}
@@ -3312,7 +3312,7 @@ func (me implWorkspace) OnDidChangeWorkspaceFolders(listener func(WorkspaceFolde
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -3343,7 +3343,7 @@ func (me implWorkspace) GetWorkspaceFolder(uri string) func(func(*WorkspaceFolde
 		var result *WorkspaceFolder
 		if (nil != payload) {
 			result = new(WorkspaceFolder)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -3380,7 +3380,7 @@ func (me implWorkspace) WorkspaceFolders() func(func([]WorkspaceFolder)) {
 			__idx__result = 0
 			for _, __item__result := range __coll__result {
 				var __val__result WorkspaceFolder
-				ok = __val__result.loadFromJsonish(__item__result)
+				ok = __val__result.__loadFromJsonish__(__item__result)
 				if !ok {
 					return false
 				}
@@ -3499,7 +3499,7 @@ func (me implWorkspace) AllProperties() func(func(WorkspaceBag)) {
 		var ok bool
 		var result WorkspaceBag
 		if (nil != payload) {
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -3573,7 +3573,7 @@ func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEve
 			return ok
 		}
 		var _a_0_ DiagnosticChangeEvent
-		ok = _a_0_.loadFromJsonish(args[0])
+		ok = _a_0_.__loadFromJsonish__(args[0])
 		if !ok {
 			return false
 		}
@@ -3588,7 +3588,7 @@ func (me implLanguages) OnDidChangeDiagnostics(listener func(DiagnosticChangeEve
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -3632,7 +3632,7 @@ func (me implExtensions) OnDidChange(listener func()) func(func(*Disposable)) {
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -3683,7 +3683,7 @@ func (me implCommands) RegisterCommand(command string, callback func([]any) any)
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -3793,7 +3793,7 @@ func (me *StatusBarItem) Show() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(it[1])
+			ok = me.CfgBag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -3833,7 +3833,7 @@ func (me *StatusBarItem) Hide() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(it[1])
+			ok = me.CfgBag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -3877,7 +3877,7 @@ func (me *StatusBarItem) __appzObjBagPullFromPeer__() func(func()) {
 		me.CfgBag.__holder__ = me
 		me.CfgBag.__holder__.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(payload)
+			ok = me.CfgBag.__loadFromJsonish__(payload)
 		}
 		me.CfgBag.__holder__.__disp__.impl.Unlock()
 		if !ok {
@@ -3912,7 +3912,7 @@ func (me *StatusBarItem) __appzObjBagPushToPeer_(allUpdates *StatusBarItemBag) f
 		var ok bool
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(payload)
+			ok = me.CfgBag.__loadFromJsonish__(payload)
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -3955,7 +3955,7 @@ func (me *OutputChannel) Append(value string) func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(it[1])
+			ok = me.CfgBag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -3999,7 +3999,7 @@ func (me *OutputChannel) AppendLine(value string) func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(it[1])
+			ok = me.CfgBag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4039,7 +4039,7 @@ func (me *OutputChannel) Clear() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(it[1])
+			ok = me.CfgBag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4082,7 +4082,7 @@ func (me *OutputChannel) Show(preserveFocus bool) func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(it[1])
+			ok = me.CfgBag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4122,7 +4122,7 @@ func (me *OutputChannel) Hide() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(it[1])
+			ok = me.CfgBag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4165,7 +4165,7 @@ func (me *OutputChannel) __appzObjBagPullFromPeer__() func(func()) {
 		me.CfgBag.__holder__ = me
 		me.CfgBag.__holder__.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(payload)
+			ok = me.CfgBag.__loadFromJsonish__(payload)
 		}
 		me.CfgBag.__holder__.__disp__.impl.Unlock()
 		if !ok {
@@ -4208,7 +4208,7 @@ func (me *TextEditorDecorationType) __appzObjBagPullFromPeer__() func(func()) {
 		me.CfgBag.__holder__ = me
 		me.CfgBag.__holder__.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(payload)
+			ok = me.CfgBag.__loadFromJsonish__(payload)
 		}
 		me.CfgBag.__holder__.__disp__.impl.Unlock()
 		if !ok {
@@ -4254,7 +4254,7 @@ func (me *InputBox) OnDidChangeValue(handler func(string)) func(func(*Disposable
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.loadFromJsonish(args[1])
+				ok = me.CfgBag.__loadFromJsonish__(args[1])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4273,7 +4273,7 @@ func (me *InputBox) OnDidChangeValue(handler func(string)) func(func(*Disposable
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -4315,7 +4315,7 @@ func (me *InputBox) OnDidAccept(handler func()) func(func(*Disposable)) {
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.loadFromJsonish(args[0])
+				ok = me.CfgBag.__loadFromJsonish__(args[0])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4334,7 +4334,7 @@ func (me *InputBox) OnDidAccept(handler func()) func(func(*Disposable)) {
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -4376,7 +4376,7 @@ func (me *InputBox) Show() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(it[1])
+			ok = me.CfgBag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4417,7 +4417,7 @@ func (me *InputBox) Hide() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(it[1])
+			ok = me.CfgBag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4463,7 +4463,7 @@ func (me *InputBox) OnDidHide(handler func()) func(func(*Disposable)) {
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.loadFromJsonish(args[0])
+				ok = me.CfgBag.__loadFromJsonish__(args[0])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4482,7 +4482,7 @@ func (me *InputBox) OnDidHide(handler func()) func(func(*Disposable)) {
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -4529,7 +4529,7 @@ func (me *InputBox) __appzObjBagPullFromPeer__() func(func()) {
 		me.CfgBag.__holder__ = me
 		me.CfgBag.__holder__.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(payload)
+			ok = me.CfgBag.__loadFromJsonish__(payload)
 		}
 		me.CfgBag.__holder__.__disp__.impl.Unlock()
 		if !ok {
@@ -4564,7 +4564,7 @@ func (me *InputBox) __appzObjBagPushToPeer_(allUpdates *InputBoxBag) func(func()
 		var ok bool
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(payload)
+			ok = me.CfgBag.__loadFromJsonish__(payload)
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4610,7 +4610,7 @@ func (me *QuickPick) OnDidChangeValue(handler func(string)) func(func(*Disposabl
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.loadFromJsonish(args[1])
+				ok = me.CfgBag.__loadFromJsonish__(args[1])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4629,7 +4629,7 @@ func (me *QuickPick) OnDidChangeValue(handler func(string)) func(func(*Disposabl
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -4671,7 +4671,7 @@ func (me *QuickPick) OnDidAccept(handler func()) func(func(*Disposable)) {
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.loadFromJsonish(args[0])
+				ok = me.CfgBag.__loadFromJsonish__(args[0])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4690,7 +4690,7 @@ func (me *QuickPick) OnDidAccept(handler func()) func(func(*Disposable)) {
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -4740,7 +4740,7 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem)) func(func(
 		__idx___a_0_ = 0
 		for _, __item___a_0_ := range __coll___a_0_ {
 			var __val___a_0_ QuickPickItem
-			ok = __val___a_0_.loadFromJsonish(__item___a_0_)
+			ok = __val___a_0_.__loadFromJsonish__(__item___a_0_)
 			if !ok {
 				return false
 			}
@@ -4750,7 +4750,7 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem)) func(func(
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.loadFromJsonish(args[1])
+				ok = me.CfgBag.__loadFromJsonish__(args[1])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4769,7 +4769,7 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem)) func(func(
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -4819,7 +4819,7 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem)) func(fu
 		__idx___a_0_ = 0
 		for _, __item___a_0_ := range __coll___a_0_ {
 			var __val___a_0_ QuickPickItem
-			ok = __val___a_0_.loadFromJsonish(__item___a_0_)
+			ok = __val___a_0_.__loadFromJsonish__(__item___a_0_)
 			if !ok {
 				return false
 			}
@@ -4829,7 +4829,7 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem)) func(fu
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.loadFromJsonish(args[1])
+				ok = me.CfgBag.__loadFromJsonish__(args[1])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4848,7 +4848,7 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem)) func(fu
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -4890,7 +4890,7 @@ func (me *QuickPick) Show() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(it[1])
+			ok = me.CfgBag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4931,7 +4931,7 @@ func (me *QuickPick) Hide() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(it[1])
+			ok = me.CfgBag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4977,7 +4977,7 @@ func (me *QuickPick) OnDidHide(handler func()) func(func(*Disposable)) {
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.loadFromJsonish(args[0])
+				ok = me.CfgBag.__loadFromJsonish__(args[0])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4996,7 +4996,7 @@ func (me *QuickPick) OnDidHide(handler func()) func(func(*Disposable)) {
 		var result *Disposable
 		if (nil != payload) {
 			result = new(Disposable)
-			ok = result.loadFromJsonish(payload)
+			ok = result.__loadFromJsonish__(payload)
 			if !ok {
 				return false
 			}
@@ -5043,7 +5043,7 @@ func (me *QuickPick) __appzObjBagPullFromPeer__() func(func()) {
 		me.CfgBag.__holder__ = me
 		me.CfgBag.__holder__.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(payload)
+			ok = me.CfgBag.__loadFromJsonish__(payload)
 		}
 		me.CfgBag.__holder__.__disp__.impl.Unlock()
 		if !ok {
@@ -5078,7 +5078,7 @@ func (me *QuickPick) __appzObjBagPushToPeer_(allUpdates *QuickPickBag) func(func
 		var ok bool
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.loadFromJsonish(payload)
+			ok = me.CfgBag.__loadFromJsonish__(payload)
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -5151,7 +5151,7 @@ func (me *QuickPickBag) ApplyChanges() func(func()) {
 	return me.__holder__.__appzObjBagPushToPeer_(me)
 }
 
-func (me *MessageItem) loadFromJsonish(payload any) bool {
+func (me *MessageItem) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5197,7 +5197,7 @@ func (me *MessageItem) loadFromJsonish(payload any) bool {
 	return true
 }
 
-func (me *QuickPickItem) loadFromJsonish(payload any) bool {
+func (me *QuickPickItem) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5276,7 +5276,7 @@ func (me *QuickPickItem) loadFromJsonish(payload any) bool {
 	return true
 }
 
-func (me *WorkspaceFolder) loadFromJsonish(payload any) bool {
+func (me *WorkspaceFolder) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5331,7 +5331,7 @@ func (me *WorkspaceFolder) loadFromJsonish(payload any) bool {
 	return true
 }
 
-func (me *WindowState) loadFromJsonish(payload any) bool {
+func (me *WindowState) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5355,42 +5355,42 @@ func (me *WindowState) loadFromJsonish(payload any) bool {
 	return true
 }
 
-func (me *StatusBarItem) loadFromJsonish(payload any) bool {
+func (me *StatusBarItem) __loadFromJsonish__(payload any) bool {
 	var ok bool
 	me.__disp__ = new(Disposable)
-	ok = me.__disp__.loadFromJsonish(payload)
+	ok = me.__disp__.__loadFromJsonish__(payload)
 	return ok
 }
 
-func (me *OutputChannel) loadFromJsonish(payload any) bool {
+func (me *OutputChannel) __loadFromJsonish__(payload any) bool {
 	var ok bool
 	me.__disp__ = new(Disposable)
-	ok = me.__disp__.loadFromJsonish(payload)
+	ok = me.__disp__.__loadFromJsonish__(payload)
 	return ok
 }
 
-func (me *TextEditorDecorationType) loadFromJsonish(payload any) bool {
+func (me *TextEditorDecorationType) __loadFromJsonish__(payload any) bool {
 	var ok bool
 	me.__disp__ = new(Disposable)
-	ok = me.__disp__.loadFromJsonish(payload)
+	ok = me.__disp__.__loadFromJsonish__(payload)
 	return ok
 }
 
-func (me *InputBox) loadFromJsonish(payload any) bool {
+func (me *InputBox) __loadFromJsonish__(payload any) bool {
 	var ok bool
 	me.__disp__ = new(Disposable)
-	ok = me.__disp__.loadFromJsonish(payload)
+	ok = me.__disp__.__loadFromJsonish__(payload)
 	return ok
 }
 
-func (me *QuickPick) loadFromJsonish(payload any) bool {
+func (me *QuickPick) __loadFromJsonish__(payload any) bool {
 	var ok bool
 	me.__disp__ = new(Disposable)
-	ok = me.__disp__.loadFromJsonish(payload)
+	ok = me.__disp__.__loadFromJsonish__(payload)
 	return ok
 }
 
-func (me *EnvBag) loadFromJsonish(payload any) bool {
+func (me *EnvBag) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5489,7 +5489,7 @@ func (me *EnvBag) loadFromJsonish(payload any) bool {
 	return true
 }
 
-func (me *WorkspaceFoldersChangeEvent) loadFromJsonish(payload any) bool {
+func (me *WorkspaceFoldersChangeEvent) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5511,7 +5511,7 @@ func (me *WorkspaceFoldersChangeEvent) loadFromJsonish(payload any) bool {
 			__idx__added = 0
 			for _, __item__added := range __coll__added {
 				var __val__added WorkspaceFolder
-				ok = __val__added.loadFromJsonish(__item__added)
+				ok = __val__added.__loadFromJsonish__(__item__added)
 				if !ok {
 					return false
 				}
@@ -5537,7 +5537,7 @@ func (me *WorkspaceFoldersChangeEvent) loadFromJsonish(payload any) bool {
 			__idx__removed = 0
 			for _, __item__removed := range __coll__removed {
 				var __val__removed WorkspaceFolder
-				ok = __val__removed.loadFromJsonish(__item__removed)
+				ok = __val__removed.__loadFromJsonish__(__item__removed)
 				if !ok {
 					return false
 				}
@@ -5552,7 +5552,7 @@ func (me *WorkspaceFoldersChangeEvent) loadFromJsonish(payload any) bool {
 	return true
 }
 
-func (me *WorkspaceBag) loadFromJsonish(payload any) bool {
+func (me *WorkspaceBag) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5596,7 +5596,7 @@ func (me *WorkspaceBag) loadFromJsonish(payload any) bool {
 			__idx__workspaceFolders = 0
 			for _, __item__workspaceFolders := range __coll__workspaceFolders {
 				var __val__workspaceFolders WorkspaceFolder
-				ok = __val__workspaceFolders.loadFromJsonish(__item__workspaceFolders)
+				ok = __val__workspaceFolders.__loadFromJsonish__(__item__workspaceFolders)
 				if !ok {
 					return false
 				}
@@ -5609,7 +5609,7 @@ func (me *WorkspaceBag) loadFromJsonish(payload any) bool {
 	return true
 }
 
-func (me *DiagnosticChangeEvent) loadFromJsonish(payload any) bool {
+func (me *DiagnosticChangeEvent) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5646,7 +5646,7 @@ func (me *DiagnosticChangeEvent) loadFromJsonish(payload any) bool {
 	return true
 }
 
-func (me *StatusBarItemBag) loadFromJsonish(payload any) bool {
+func (me *StatusBarItemBag) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5739,7 +5739,7 @@ func (me *StatusBarItemBag) loadFromJsonish(payload any) bool {
 	return true
 }
 
-func (me *OutputChannelBag) loadFromJsonish(payload any) bool {
+func (me *OutputChannelBag) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5763,7 +5763,7 @@ func (me *OutputChannelBag) loadFromJsonish(payload any) bool {
 	return true
 }
 
-func (me *TextEditorDecorationTypeBag) loadFromJsonish(payload any) bool {
+func (me *TextEditorDecorationTypeBag) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5787,7 +5787,7 @@ func (me *TextEditorDecorationTypeBag) loadFromJsonish(payload any) bool {
 	return true
 }
 
-func (me *InputBoxBag) loadFromJsonish(payload any) bool {
+func (me *InputBoxBag) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5929,7 +5929,7 @@ func (me *InputBoxBag) loadFromJsonish(payload any) bool {
 	return true
 }
 
-func (me *QuickPickBag) loadFromJsonish(payload any) bool {
+func (me *QuickPickBag) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -5973,7 +5973,7 @@ func (me *QuickPickBag) loadFromJsonish(payload any) bool {
 			__idx__items = 0
 			for _, __item__items := range __coll__items {
 				var __val__items QuickPickItem
-				ok = __val__items.loadFromJsonish(__item__items)
+				ok = __val__items.__loadFromJsonish__(__item__items)
 				if !ok {
 					return false
 				}
@@ -6030,7 +6030,7 @@ func (me *QuickPickBag) loadFromJsonish(payload any) bool {
 			__idx__activeItems = 0
 			for _, __item__activeItems := range __coll__activeItems {
 				var __val__activeItems QuickPickItem
-				ok = __val__activeItems.loadFromJsonish(__item__activeItems)
+				ok = __val__activeItems.__loadFromJsonish__(__item__activeItems)
 				if !ok {
 					return false
 				}
@@ -6054,7 +6054,7 @@ func (me *QuickPickBag) loadFromJsonish(payload any) bool {
 			__idx__selectedItems = 0
 			for _, __item__selectedItems := range __coll__selectedItems {
 				var __val__selectedItems QuickPickItem
-				ok = __val__selectedItems.loadFromJsonish(__item__selectedItems)
+				ok = __val__selectedItems.__loadFromJsonish__(__item__selectedItems)
 				if !ok {
 					return false
 				}

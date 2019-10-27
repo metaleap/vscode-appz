@@ -4,7 +4,7 @@ import { OnError } from './vsc-appz'
 type ipcMsg = core.ipcMsg
 type Cancel = core.Cancel
 type Disposable = core.Disposable
-interface fromJson { loadFromJsonish: (_: any) => boolean }
+interface fromJson { __loadFromJsonish__: (_: any) => boolean }
 interface withDisp { __disp__: Disposable }
 interface withBag<T extends fromJson> { CfgBag: T, toJSON: () => any }
 
@@ -1171,7 +1171,7 @@ export interface MessageItem extends fromJson {
 
 export function newMessageItem (): MessageItem {
     let me: MessageItem
-    me = { loadFromJsonish: _ => MessageItem_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as MessageItem
+    me = { __loadFromJsonish__: _ => MessageItem___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as MessageItem
     return me
 }
 
@@ -1332,7 +1332,7 @@ export interface QuickPickItem extends fromJson {
 
 export function newQuickPickItem (): QuickPickItem {
     let me: QuickPickItem
-    me = { loadFromJsonish: _ => QuickPickItem_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPickItem
+    me = { __loadFromJsonish__: _ => QuickPickItem___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPickItem
     return me
 }
 
@@ -1478,7 +1478,7 @@ export interface WorkspaceFolder extends fromJson {
 
 function newWorkspaceFolder (): WorkspaceFolder {
     let me: WorkspaceFolder
-    me = { loadFromJsonish: _ => WorkspaceFolder_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceFolder
+    me = { __loadFromJsonish__: _ => WorkspaceFolder___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceFolder
     return me
 }
 
@@ -1496,7 +1496,7 @@ export interface WindowState extends fromJson {
 
 function newWindowState (): WindowState {
     let me: WindowState
-    me = { loadFromJsonish: _ => WindowState_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WindowState
+    me = { __loadFromJsonish__: _ => WindowState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WindowState
     return me
 }
 
@@ -1532,7 +1532,7 @@ export interface StatusBarItem extends fromJson, withDisp, withBag<StatusBarItem
 
 function newStatusBarItem (): StatusBarItem {
     let me: StatusBarItem
-    me = { loadFromJsonish: _ => StatusBarItem_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as StatusBarItem
+    me = { __loadFromJsonish__: _ => StatusBarItem___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as StatusBarItem
     me.Show = () => StatusBarItem_Show.call(me, )
     me.Hide = () => StatusBarItem_Hide.call(me, )
     me.Dispose = () => StatusBarItem_Dispose.call(me, )
@@ -1597,7 +1597,7 @@ export interface OutputChannel extends fromJson, withDisp, withBag<OutputChannel
 
 function newOutputChannel (): OutputChannel {
     let me: OutputChannel
-    me = { loadFromJsonish: _ => OutputChannel_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as OutputChannel
+    me = { __loadFromJsonish__: _ => OutputChannel___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as OutputChannel
     me.Append = (a0) => OutputChannel_Append.call(me, a0)
     me.AppendLine = (a0) => OutputChannel_AppendLine.call(me, a0)
     me.Clear = () => OutputChannel_Clear.call(me, )
@@ -1895,7 +1895,7 @@ export interface TextEditorDecorationType extends fromJson, withDisp, withBag<Te
 
 function newTextEditorDecorationType (): TextEditorDecorationType {
     let me: TextEditorDecorationType
-    me = { loadFromJsonish: _ => TextEditorDecorationType_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as TextEditorDecorationType
+    me = { __loadFromJsonish__: _ => TextEditorDecorationType___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as TextEditorDecorationType
     me.Dispose = () => TextEditorDecorationType_Dispose.call(me, )
     me.__appzObjBagPullFromPeer__ = () => TextEditorDecorationType___appzObjBagPullFromPeer__.call(me, )
     return me
@@ -1963,7 +1963,7 @@ export interface InputBox extends fromJson, withDisp, withBag<InputBoxBag> {
 
 function newInputBox (): InputBox {
     let me: InputBox
-    me = { loadFromJsonish: _ => InputBox_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as InputBox
+    me = { __loadFromJsonish__: _ => InputBox___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as InputBox
     me.OnDidChangeValue = (a0) => InputBox_OnDidChangeValue.call(me, a0)
     me.OnDidAccept = (a0) => InputBox_OnDidAccept.call(me, a0)
     me.Show = () => InputBox_Show.call(me, )
@@ -2070,7 +2070,7 @@ export interface QuickPick extends fromJson, withDisp, withBag<QuickPickBag> {
 
 function newQuickPick (): QuickPick {
     let me: QuickPick
-    me = { loadFromJsonish: _ => QuickPick_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as QuickPick
+    me = { __loadFromJsonish__: _ => QuickPick___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as QuickPick
     me.OnDidChangeValue = (a0) => QuickPick_OnDidChangeValue.call(me, a0)
     me.OnDidAccept = (a0) => QuickPick_OnDidAccept.call(me, a0)
     me.OnDidChangeActive = (a0) => QuickPick_OnDidChangeActive.call(me, a0)
@@ -2104,7 +2104,7 @@ export interface WorkspaceFoldersChangeEvent extends fromJson {
 
 function newWorkspaceFoldersChangeEvent (): WorkspaceFoldersChangeEvent {
     let me: WorkspaceFoldersChangeEvent
-    me = { loadFromJsonish: _ => WorkspaceFoldersChangeEvent_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceFoldersChangeEvent
+    me = { __loadFromJsonish__: _ => WorkspaceFoldersChangeEvent___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceFoldersChangeEvent
     return me
 }
 
@@ -2122,7 +2122,7 @@ export interface DiagnosticChangeEvent extends fromJson {
 
 function newDiagnosticChangeEvent (): DiagnosticChangeEvent {
     let me: DiagnosticChangeEvent
-    me = { loadFromJsonish: _ => DiagnosticChangeEvent_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as DiagnosticChangeEvent
+    me = { __loadFromJsonish__: _ => DiagnosticChangeEvent___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as DiagnosticChangeEvent
     return me
 }
 
@@ -2190,7 +2190,7 @@ export interface EnvBag extends fromJson {
 
 function newEnvBag (): EnvBag {
     let me: EnvBag
-    me = { loadFromJsonish: _ => EnvBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as EnvBag
+    me = { __loadFromJsonish__: _ => EnvBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as EnvBag
     return me
 }
 
@@ -2252,7 +2252,7 @@ export interface WorkspaceBag extends fromJson {
 
 function newWorkspaceBag (): WorkspaceBag {
     let me: WorkspaceBag
-    me = { loadFromJsonish: _ => WorkspaceBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceBag
+    me = { __loadFromJsonish__: _ => WorkspaceBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceBag
     return me
 }
 
@@ -2313,7 +2313,7 @@ export interface StatusBarItemBag extends fromJson {
 
 export function newStatusBarItemBag (): StatusBarItemBag {
     let me: StatusBarItemBag
-    me = { loadFromJsonish: _ => StatusBarItemBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => StatusBarItemBag_ApplyChanges.call(me), ReFetch: () => StatusBarItemBag_ReFetch.call(me) } as StatusBarItemBag
+    me = { __loadFromJsonish__: _ => StatusBarItemBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => StatusBarItemBag_ApplyChanges.call(me), ReFetch: () => StatusBarItemBag_ReFetch.call(me) } as StatusBarItemBag
     return me
 }
 
@@ -2335,7 +2335,7 @@ export interface OutputChannelBag extends fromJson {
 
 export function newOutputChannelBag (): OutputChannelBag {
     let me: OutputChannelBag
-    me = { loadFromJsonish: _ => OutputChannelBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => OutputChannelBag_ReFetch.call(me) } as OutputChannelBag
+    me = { __loadFromJsonish__: _ => OutputChannelBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => OutputChannelBag_ReFetch.call(me) } as OutputChannelBag
     return me
 }
 
@@ -2357,7 +2357,7 @@ export interface TextEditorDecorationTypeBag extends fromJson {
 
 export function newTextEditorDecorationTypeBag (): TextEditorDecorationTypeBag {
     let me: TextEditorDecorationTypeBag
-    me = { loadFromJsonish: _ => TextEditorDecorationTypeBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TextEditorDecorationTypeBag_ReFetch.call(me) } as TextEditorDecorationTypeBag
+    me = { __loadFromJsonish__: _ => TextEditorDecorationTypeBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TextEditorDecorationTypeBag_ReFetch.call(me) } as TextEditorDecorationTypeBag
     return me
 }
 
@@ -2447,7 +2447,7 @@ export interface InputBoxBag extends fromJson {
 
 export function newInputBoxBag (): InputBoxBag {
     let me: InputBoxBag
-    me = { loadFromJsonish: _ => InputBoxBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => InputBoxBag_ApplyChanges.call(me), ReFetch: () => InputBoxBag_ReFetch.call(me) } as InputBoxBag
+    me = { __loadFromJsonish__: _ => InputBoxBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => InputBoxBag_ApplyChanges.call(me), ReFetch: () => InputBoxBag_ReFetch.call(me) } as InputBoxBag
     return me
 }
 
@@ -2555,7 +2555,7 @@ export interface QuickPickBag extends fromJson {
 
 export function newQuickPickBag (): QuickPickBag {
     let me: QuickPickBag
-    me = { loadFromJsonish: _ => QuickPickBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => QuickPickBag_ApplyChanges.call(me), ReFetch: () => QuickPickBag_ReFetch.call(me) } as QuickPickBag
+    me = { __loadFromJsonish__: _ => QuickPickBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => QuickPickBag_ApplyChanges.call(me), ReFetch: () => QuickPickBag_ReFetch.call(me) } as QuickPickBag
     return me
 }
 
@@ -2658,7 +2658,7 @@ class implWindow extends implBase implements Window {
             let result: MessageItem
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -2689,7 +2689,7 @@ class implWindow extends implBase implements Window {
             let result: MessageItem
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -2782,7 +2782,7 @@ class implWindow extends implBase implements Window {
             let result: MessageItem
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -2813,7 +2813,7 @@ class implWindow extends implBase implements Window {
             let result: MessageItem
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -2906,7 +2906,7 @@ class implWindow extends implBase implements Window {
             let result: MessageItem
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -2937,7 +2937,7 @@ class implWindow extends implBase implements Window {
             let result: MessageItem
             if ((undefined !== payload && null !== payload)) {
                 result = newMessageItem()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -3054,7 +3054,7 @@ class implWindow extends implBase implements Window {
                             let __0: QuickPickItem
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = newQuickPickItem()
-                                ok = __0.loadFromJsonish(args[0])
+                                ok = __0.__loadFromJsonish__(args[0])
                                 if (!ok) {
                                     return [null, false]
                                 }
@@ -3146,7 +3146,7 @@ class implWindow extends implBase implements Window {
                             let __0: QuickPickItem
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = newQuickPickItem()
-                                ok = __0.loadFromJsonish(args[0])
+                                ok = __0.__loadFromJsonish__(args[0])
                                 if (!ok) {
                                     return [null, false]
                                 }
@@ -3228,7 +3228,7 @@ class implWindow extends implBase implements Window {
                             let __0: QuickPickItem
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = newQuickPickItem()
-                                ok = __0.loadFromJsonish(args[0])
+                                ok = __0.__loadFromJsonish__(args[0])
                                 if (!ok) {
                                     return [null, false]
                                 }
@@ -3270,7 +3270,7 @@ class implWindow extends implBase implements Window {
                 for (const __item__result of __coll__result) {
                     let __val__result: QuickPickItem
                     __val__result = newQuickPickItem()
-                    ok = __val__result.loadFromJsonish(__item__result)
+                    ok = __val__result.__loadFromJsonish__(__item__result)
                     if (!ok) {
                         return false
                     }
@@ -3321,7 +3321,7 @@ class implWindow extends implBase implements Window {
                             let __0: QuickPickItem
                             if ((undefined !== args[0] && null !== args[0])) {
                                 __0 = newQuickPickItem()
-                                ok = __0.loadFromJsonish(args[0])
+                                ok = __0.__loadFromJsonish__(args[0])
                                 if (!ok) {
                                     return [null, false]
                                 }
@@ -3354,7 +3354,7 @@ class implWindow extends implBase implements Window {
             let result: QuickPickItem
             if ((undefined !== payload && null !== payload)) {
                 result = newQuickPickItem()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -3393,7 +3393,7 @@ class implWindow extends implBase implements Window {
             let result: Disposable
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -3424,7 +3424,7 @@ class implWindow extends implBase implements Window {
             let result: Disposable
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -3528,7 +3528,7 @@ class implWindow extends implBase implements Window {
             let result: WorkspaceFolder
             if ((undefined !== payload && null !== payload)) {
                 result = newWorkspaceFolder()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -3556,7 +3556,7 @@ class implWindow extends implBase implements Window {
             let result: WindowState
             if ((undefined !== payload && null !== payload)) {
                 result = newWindowState()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -3589,7 +3589,7 @@ class implWindow extends implBase implements Window {
             }
             let _a_0_: WindowState
             _a_0_ = newWindowState()
-            ok = _a_0_.loadFromJsonish(args[0])
+            ok = _a_0_.__loadFromJsonish__(args[0])
             if (!ok) {
                 return false
             }
@@ -3604,7 +3604,7 @@ class implWindow extends implBase implements Window {
             let result: Disposable
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -3640,7 +3640,7 @@ class implWindow extends implBase implements Window {
             let result: StatusBarItem
             if ((undefined !== payload && null !== payload)) {
                 result = newStatusBarItem()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -3674,7 +3674,7 @@ class implWindow extends implBase implements Window {
             let result: OutputChannel
             if ((undefined !== payload && null !== payload)) {
                 result = newOutputChannel()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -3708,7 +3708,7 @@ class implWindow extends implBase implements Window {
             let result: TextEditorDecorationType
             if ((undefined !== payload && null !== payload)) {
                 result = newTextEditorDecorationType()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -3741,7 +3741,7 @@ class implWindow extends implBase implements Window {
             let result: InputBox
             if ((undefined !== payload && null !== payload)) {
                 result = newInputBox()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -3774,7 +3774,7 @@ class implWindow extends implBase implements Window {
             let result: QuickPick
             if ((undefined !== payload && null !== payload)) {
                 result = newQuickPick()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -4059,7 +4059,7 @@ class implEnv extends implBase implements Env {
             let result: EnvBag
             if ((undefined !== payload && null !== payload)) {
                 result = newEnvBag()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -4246,7 +4246,7 @@ class implWorkspace extends implBase implements Workspace {
             }
             let _a_0_: WorkspaceFoldersChangeEvent
             _a_0_ = newWorkspaceFoldersChangeEvent()
-            ok = _a_0_.loadFromJsonish(args[0])
+            ok = _a_0_.__loadFromJsonish__(args[0])
             if (!ok) {
                 return false
             }
@@ -4261,7 +4261,7 @@ class implWorkspace extends implBase implements Workspace {
             let result: Disposable
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -4292,7 +4292,7 @@ class implWorkspace extends implBase implements Workspace {
             let result: WorkspaceFolder
             if ((undefined !== payload && null !== payload)) {
                 result = newWorkspaceFolder()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -4330,7 +4330,7 @@ class implWorkspace extends implBase implements Workspace {
                 for (const __item__result of __coll__result) {
                     let __val__result: WorkspaceFolder
                     __val__result = newWorkspaceFolder()
-                    ok = __val__result.loadFromJsonish(__item__result)
+                    ok = __val__result.__loadFromJsonish__(__item__result)
                     if (!ok) {
                         return false
                     }
@@ -4448,7 +4448,7 @@ class implWorkspace extends implBase implements Workspace {
             let result: WorkspaceBag
             if ((undefined !== payload && null !== payload)) {
                 result = newWorkspaceBag()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -4527,7 +4527,7 @@ class implLanguages extends implBase implements Languages {
             }
             let _a_0_: DiagnosticChangeEvent
             _a_0_ = newDiagnosticChangeEvent()
-            ok = _a_0_.loadFromJsonish(args[0])
+            ok = _a_0_.__loadFromJsonish__(args[0])
             if (!ok) {
                 return false
             }
@@ -4542,7 +4542,7 @@ class implLanguages extends implBase implements Languages {
             let result: Disposable
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -4590,7 +4590,7 @@ class implExtensions extends implBase implements Extensions {
             let result: Disposable
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -4645,7 +4645,7 @@ class implCommands extends implBase implements Commands {
             let result: Disposable
             if ((undefined !== payload && null !== payload)) {
                 result = newDisposable()
-                ok = result.loadFromJsonish(payload)
+                ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
                 }
@@ -4753,7 +4753,7 @@ function StatusBarItem_Show(this: StatusBarItem, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.loadFromJsonish(it[1])
+            ok = this.CfgBag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -4788,7 +4788,7 @@ function StatusBarItem_Hide(this: StatusBarItem, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.loadFromJsonish(it[1])
+            ok = this.CfgBag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -4823,7 +4823,7 @@ function StatusBarItem___appzObjBagPullFromPeer__(this: StatusBarItem, ): (_: ()
         }
         this.CfgBag.__holder__ = this
         {
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -4851,7 +4851,7 @@ function StatusBarItem___appzObjBagPushToPeer_(this: StatusBarItem, allUpdates?:
     onresp = (payload: any): boolean => {
         let ok: boolean
         {
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -4887,7 +4887,7 @@ function OutputChannel_Append(this: OutputChannel, value: string): (_: () => voi
             return false
         }
         {
-            ok = this.CfgBag.loadFromJsonish(it[1])
+            ok = this.CfgBag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -4923,7 +4923,7 @@ function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: () =>
             return false
         }
         {
-            ok = this.CfgBag.loadFromJsonish(it[1])
+            ok = this.CfgBag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -4958,7 +4958,7 @@ function OutputChannel_Clear(this: OutputChannel, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.loadFromJsonish(it[1])
+            ok = this.CfgBag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -4994,7 +4994,7 @@ function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (
             return false
         }
         {
-            ok = this.CfgBag.loadFromJsonish(it[1])
+            ok = this.CfgBag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5029,7 +5029,7 @@ function OutputChannel_Hide(this: OutputChannel, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.loadFromJsonish(it[1])
+            ok = this.CfgBag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5064,7 +5064,7 @@ function OutputChannel___appzObjBagPullFromPeer__(this: OutputChannel, ): (_: ()
         }
         this.CfgBag.__holder__ = this
         {
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5099,7 +5099,7 @@ function TextEditorDecorationType___appzObjBagPullFromPeer__(this: TextEditorDec
         }
         this.CfgBag.__holder__ = this
         {
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5138,7 +5138,7 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string) => void)
         }
         {
             {
-                ok = this.CfgBag.loadFromJsonish(args[1])
+                ok = this.CfgBag.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -5156,7 +5156,7 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string) => void)
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if (!ok) {
                 return false
             }
@@ -5192,7 +5192,7 @@ function InputBox_OnDidAccept(this: InputBox, handler: () => void): (_: (_: Disp
         }
         {
             {
-                ok = this.CfgBag.loadFromJsonish(args[0])
+                ok = this.CfgBag.__loadFromJsonish__(args[0])
             }
             if (!ok) {
                 return false
@@ -5210,7 +5210,7 @@ function InputBox_OnDidAccept(this: InputBox, handler: () => void): (_: (_: Disp
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if (!ok) {
                 return false
             }
@@ -5247,7 +5247,7 @@ function InputBox_Show(this: InputBox, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.loadFromJsonish(it[1])
+            ok = this.CfgBag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5282,7 +5282,7 @@ function InputBox_Hide(this: InputBox, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.loadFromJsonish(it[1])
+            ok = this.CfgBag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5316,7 +5316,7 @@ function InputBox_OnDidHide(this: InputBox, handler: () => void): (_: (_: Dispos
         }
         {
             {
-                ok = this.CfgBag.loadFromJsonish(args[0])
+                ok = this.CfgBag.__loadFromJsonish__(args[0])
             }
             if (!ok) {
                 return false
@@ -5334,7 +5334,7 @@ function InputBox_OnDidHide(this: InputBox, handler: () => void): (_: (_: Dispos
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if (!ok) {
                 return false
             }
@@ -5371,7 +5371,7 @@ function InputBox___appzObjBagPullFromPeer__(this: InputBox, ): (_: () => void) 
         }
         this.CfgBag.__holder__ = this
         {
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5399,7 +5399,7 @@ function InputBox___appzObjBagPushToPeer_(this: InputBox, allUpdates?: InputBoxB
     onresp = (payload: any): boolean => {
         let ok: boolean
         {
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5438,7 +5438,7 @@ function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string) => voi
         }
         {
             {
-                ok = this.CfgBag.loadFromJsonish(args[1])
+                ok = this.CfgBag.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -5456,7 +5456,7 @@ function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string) => voi
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if (!ok) {
                 return false
             }
@@ -5492,7 +5492,7 @@ function QuickPick_OnDidAccept(this: QuickPick, handler: () => void): (_: (_: Di
         }
         {
             {
-                ok = this.CfgBag.loadFromJsonish(args[0])
+                ok = this.CfgBag.__loadFromJsonish__(args[0])
             }
             if (!ok) {
                 return false
@@ -5510,7 +5510,7 @@ function QuickPick_OnDidAccept(this: QuickPick, handler: () => void): (_: (_: Di
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if (!ok) {
                 return false
             }
@@ -5556,7 +5556,7 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
         for (const __item___a_0_ of __coll___a_0_) {
             let __val___a_0_: QuickPickItem
             __val___a_0_ = newQuickPickItem()
-            ok = __val___a_0_.loadFromJsonish(__item___a_0_)
+            ok = __val___a_0_.__loadFromJsonish__(__item___a_0_)
             if (!ok) {
                 return false
             }
@@ -5565,7 +5565,7 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
         }
         {
             {
-                ok = this.CfgBag.loadFromJsonish(args[1])
+                ok = this.CfgBag.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -5583,7 +5583,7 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if (!ok) {
                 return false
             }
@@ -5629,7 +5629,7 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
         for (const __item___a_0_ of __coll___a_0_) {
             let __val___a_0_: QuickPickItem
             __val___a_0_ = newQuickPickItem()
-            ok = __val___a_0_.loadFromJsonish(__item___a_0_)
+            ok = __val___a_0_.__loadFromJsonish__(__item___a_0_)
             if (!ok) {
                 return false
             }
@@ -5638,7 +5638,7 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
         }
         {
             {
-                ok = this.CfgBag.loadFromJsonish(args[1])
+                ok = this.CfgBag.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -5656,7 +5656,7 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if (!ok) {
                 return false
             }
@@ -5693,7 +5693,7 @@ function QuickPick_Show(this: QuickPick, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.loadFromJsonish(it[1])
+            ok = this.CfgBag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5728,7 +5728,7 @@ function QuickPick_Hide(this: QuickPick, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.loadFromJsonish(it[1])
+            ok = this.CfgBag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5762,7 +5762,7 @@ function QuickPick_OnDidHide(this: QuickPick, handler: () => void): (_: (_: Disp
         }
         {
             {
-                ok = this.CfgBag.loadFromJsonish(args[0])
+                ok = this.CfgBag.__loadFromJsonish__(args[0])
             }
             if (!ok) {
                 return false
@@ -5780,7 +5780,7 @@ function QuickPick_OnDidHide(this: QuickPick, handler: () => void): (_: (_: Disp
         let result: Disposable
         if ((undefined !== payload && null !== payload)) {
             result = newDisposable()
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if (!ok) {
                 return false
             }
@@ -5817,7 +5817,7 @@ function QuickPick___appzObjBagPullFromPeer__(this: QuickPick, ): (_: () => void
         }
         this.CfgBag.__holder__ = this
         {
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5845,7 +5845,7 @@ function QuickPick___appzObjBagPushToPeer_(this: QuickPick, allUpdates?: QuickPi
     onresp = (payload: any): boolean => {
         let ok: boolean
         {
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5893,7 +5893,7 @@ function QuickPickBag_ApplyChanges(this: QuickPickBag, ): (_: () => void) => voi
     return this.__holder__.__appzObjBagPushToPeer_(this)
 }
 
-function MessageItem_loadFromJsonish(this: MessageItem, payload: any): boolean {
+function MessageItem___loadFromJsonish__(this: MessageItem, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -5941,7 +5941,7 @@ function MessageItem_loadFromJsonish(this: MessageItem, payload: any): boolean {
     return true
 }
 
-function QuickPickItem_loadFromJsonish(this: QuickPickItem, payload: any): boolean {
+function QuickPickItem___loadFromJsonish__(this: QuickPickItem, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6028,7 +6028,7 @@ function QuickPickItem_loadFromJsonish(this: QuickPickItem, payload: any): boole
     return true
 }
 
-function WorkspaceFolder_loadFromJsonish(this: WorkspaceFolder, payload: any): boolean {
+function WorkspaceFolder___loadFromJsonish__(this: WorkspaceFolder, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6083,7 +6083,7 @@ function WorkspaceFolder_loadFromJsonish(this: WorkspaceFolder, payload: any): b
     return true
 }
 
-function WindowState_loadFromJsonish(this: WindowState, payload: any): boolean {
+function WindowState___loadFromJsonish__(this: WindowState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6107,42 +6107,42 @@ function WindowState_loadFromJsonish(this: WindowState, payload: any): boolean {
     return true
 }
 
-function StatusBarItem_loadFromJsonish(this: StatusBarItem, payload: any): boolean {
+function StatusBarItem___loadFromJsonish__(this: StatusBarItem, payload: any): boolean {
     let ok: boolean
     this.__disp__ = newDisposable()
-    ok = this.__disp__.loadFromJsonish(payload)
+    ok = this.__disp__.__loadFromJsonish__(payload)
     return ok
 }
 
-function OutputChannel_loadFromJsonish(this: OutputChannel, payload: any): boolean {
+function OutputChannel___loadFromJsonish__(this: OutputChannel, payload: any): boolean {
     let ok: boolean
     this.__disp__ = newDisposable()
-    ok = this.__disp__.loadFromJsonish(payload)
+    ok = this.__disp__.__loadFromJsonish__(payload)
     return ok
 }
 
-function TextEditorDecorationType_loadFromJsonish(this: TextEditorDecorationType, payload: any): boolean {
+function TextEditorDecorationType___loadFromJsonish__(this: TextEditorDecorationType, payload: any): boolean {
     let ok: boolean
     this.__disp__ = newDisposable()
-    ok = this.__disp__.loadFromJsonish(payload)
+    ok = this.__disp__.__loadFromJsonish__(payload)
     return ok
 }
 
-function InputBox_loadFromJsonish(this: InputBox, payload: any): boolean {
+function InputBox___loadFromJsonish__(this: InputBox, payload: any): boolean {
     let ok: boolean
     this.__disp__ = newDisposable()
-    ok = this.__disp__.loadFromJsonish(payload)
+    ok = this.__disp__.__loadFromJsonish__(payload)
     return ok
 }
 
-function QuickPick_loadFromJsonish(this: QuickPick, payload: any): boolean {
+function QuickPick___loadFromJsonish__(this: QuickPick, payload: any): boolean {
     let ok: boolean
     this.__disp__ = newDisposable()
-    ok = this.__disp__.loadFromJsonish(payload)
+    ok = this.__disp__.__loadFromJsonish__(payload)
     return ok
 }
 
-function EnvBag_loadFromJsonish(this: EnvBag, payload: any): boolean {
+function EnvBag___loadFromJsonish__(this: EnvBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6257,7 +6257,7 @@ function EnvBag_loadFromJsonish(this: EnvBag, payload: any): boolean {
     return true
 }
 
-function WorkspaceFoldersChangeEvent_loadFromJsonish(this: WorkspaceFoldersChangeEvent, payload: any): boolean {
+function WorkspaceFoldersChangeEvent___loadFromJsonish__(this: WorkspaceFoldersChangeEvent, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6280,7 +6280,7 @@ function WorkspaceFoldersChangeEvent_loadFromJsonish(this: WorkspaceFoldersChang
             for (const __item__added of __coll__added) {
                 let __val__added: WorkspaceFolder
                 __val__added = newWorkspaceFolder()
-                ok = __val__added.loadFromJsonish(__item__added)
+                ok = __val__added.__loadFromJsonish__(__item__added)
                 if (!ok) {
                     return false
                 }
@@ -6307,7 +6307,7 @@ function WorkspaceFoldersChangeEvent_loadFromJsonish(this: WorkspaceFoldersChang
             for (const __item__removed of __coll__removed) {
                 let __val__removed: WorkspaceFolder
                 __val__removed = newWorkspaceFolder()
-                ok = __val__removed.loadFromJsonish(__item__removed)
+                ok = __val__removed.__loadFromJsonish__(__item__removed)
                 if (!ok) {
                     return false
                 }
@@ -6322,7 +6322,7 @@ function WorkspaceFoldersChangeEvent_loadFromJsonish(this: WorkspaceFoldersChang
     return true
 }
 
-function WorkspaceBag_loadFromJsonish(this: WorkspaceBag, payload: any): boolean {
+function WorkspaceBag___loadFromJsonish__(this: WorkspaceBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6371,7 +6371,7 @@ function WorkspaceBag_loadFromJsonish(this: WorkspaceBag, payload: any): boolean
             for (const __item__workspaceFolders of __coll__workspaceFolders) {
                 let __val__workspaceFolders: WorkspaceFolder
                 __val__workspaceFolders = newWorkspaceFolder()
-                ok = __val__workspaceFolders.loadFromJsonish(__item__workspaceFolders)
+                ok = __val__workspaceFolders.__loadFromJsonish__(__item__workspaceFolders)
                 if (!ok) {
                     return false
                 }
@@ -6384,7 +6384,7 @@ function WorkspaceBag_loadFromJsonish(this: WorkspaceBag, payload: any): boolean
     return true
 }
 
-function DiagnosticChangeEvent_loadFromJsonish(this: DiagnosticChangeEvent, payload: any): boolean {
+function DiagnosticChangeEvent___loadFromJsonish__(this: DiagnosticChangeEvent, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6421,7 +6421,7 @@ function DiagnosticChangeEvent_loadFromJsonish(this: DiagnosticChangeEvent, payl
     return true
 }
 
-function StatusBarItemBag_loadFromJsonish(this: StatusBarItemBag, payload: any): boolean {
+function StatusBarItemBag___loadFromJsonish__(this: StatusBarItemBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6514,7 +6514,7 @@ function StatusBarItemBag_loadFromJsonish(this: StatusBarItemBag, payload: any):
     return true
 }
 
-function OutputChannelBag_loadFromJsonish(this: OutputChannelBag, payload: any): boolean {
+function OutputChannelBag___loadFromJsonish__(this: OutputChannelBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6538,7 +6538,7 @@ function OutputChannelBag_loadFromJsonish(this: OutputChannelBag, payload: any):
     return true
 }
 
-function TextEditorDecorationTypeBag_loadFromJsonish(this: TextEditorDecorationTypeBag, payload: any): boolean {
+function TextEditorDecorationTypeBag___loadFromJsonish__(this: TextEditorDecorationTypeBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6562,7 +6562,7 @@ function TextEditorDecorationTypeBag_loadFromJsonish(this: TextEditorDecorationT
     return true
 }
 
-function InputBoxBag_loadFromJsonish(this: InputBoxBag, payload: any): boolean {
+function InputBoxBag___loadFromJsonish__(this: InputBoxBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6698,7 +6698,7 @@ function InputBoxBag_loadFromJsonish(this: InputBoxBag, payload: any): boolean {
     return true
 }
 
-function QuickPickBag_loadFromJsonish(this: QuickPickBag, payload: any): boolean {
+function QuickPickBag___loadFromJsonish__(this: QuickPickBag, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -6743,7 +6743,7 @@ function QuickPickBag_loadFromJsonish(this: QuickPickBag, payload: any): boolean
             for (const __item__items of __coll__items) {
                 let __val__items: QuickPickItem
                 __val__items = newQuickPickItem()
-                ok = __val__items.loadFromJsonish(__item__items)
+                ok = __val__items.__loadFromJsonish__(__item__items)
                 if (!ok) {
                     return false
                 }
@@ -6801,7 +6801,7 @@ function QuickPickBag_loadFromJsonish(this: QuickPickBag, payload: any): boolean
             for (const __item__activeItems of __coll__activeItems) {
                 let __val__activeItems: QuickPickItem
                 __val__activeItems = newQuickPickItem()
-                ok = __val__activeItems.loadFromJsonish(__item__activeItems)
+                ok = __val__activeItems.__loadFromJsonish__(__item__activeItems)
                 if (!ok) {
                     return false
                 }
@@ -6826,7 +6826,7 @@ function QuickPickBag_loadFromJsonish(this: QuickPickBag, payload: any): boolean
             for (const __item__selectedItems of __coll__selectedItems) {
                 let __val__selectedItems: QuickPickItem
                 __val__selectedItems = newQuickPickItem()
-                ok = __val__selectedItems.loadFromJsonish(__item__selectedItems)
+                ok = __val__selectedItems.__loadFromJsonish__(__item__selectedItems)
                 if (!ok) {
                     return false
                 }

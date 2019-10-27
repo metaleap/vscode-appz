@@ -83,7 +83,7 @@ class Gen extends gen_syn.Gen {
         [struct, iface] = [(struct && struct.Fields) ? struct : null, (iface && iface.Methods) ? iface : null];
         const isdisp = struct && (it.Name === "Dispose");
         const isproperty = it.Func.Type && !(it.Func.Args && it.Func.Args.length) && iface && iface.IsTop;
-        const emitsigheadln = () => this.lf(iface ? "" : (struct ? ((it.Name !== gen.idents.methodLoadFrom) ? "public " : "internal ") : "private static "))
+        const emitsigheadln = () => this.lf(iface ? "" : (struct ? ((!(it.Name.startsWith("__") && it.Name.endsWith("__"))) ? "public " : "internal ") : "private static "))
             .emitTypeRef(it.Func.Type)
             .s(" ", (iface ? (iface.Name + ".") : "") + it.Name)
             .when(isproperty, () => this.s(" { get "), () => this.s("(")

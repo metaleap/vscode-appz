@@ -18,7 +18,7 @@ exports.idents = {
     methodBagPublish: "ApplyChanges",
     methodObjBagPull: "__appzObjBagPullFromPeer__",
     methodObjBagPush: "__appzObjBagPushToPeer_",
-    methodLoadFrom: "loadFromJsonish",
+    methodLoadFrom: "__loadFromJsonish__",
     methodImpl: "Impl",
     argHandler: "handler",
     argListener: "listener",

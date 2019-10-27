@@ -138,7 +138,7 @@ class Disposable {
         [this.impl, this.subFnIds] = [impl, subFnIds];
         return this;
     }
-    loadFromJsonish(payload) {
+    __loadFromJsonish__(payload) {
         return ((typeof payload === 'string') && (this.id = payload) && this.id.length) ? true : false;
     }
     Dispose() {

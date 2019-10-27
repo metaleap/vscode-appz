@@ -46,7 +46,7 @@ export declare class Disposable {
     subFnIds: string[];
     addSub(fnId: string): void;
     bind(impl: impl, ...subFnIds: string[]): this;
-    loadFromJsonish(payload: any): boolean;
+    __loadFromJsonish__(payload: any): boolean;
     Dispose(): (_: () => void) => void;
 }
 export {};

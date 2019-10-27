@@ -185,7 +185,7 @@ namespace VscAppz {
             this.subFnIds.AddRange(subFnIds);
             return this;
         }
-        internal bool loadFromJsonish(any payload) =>
+        internal bool __loadFromJsonish__(any payload) =>
             (payload is string s) && !string.IsNullOrEmpty(id = s);
         void IDisposable.Dispose(){}
         /// <summary>Dispose signals to the counterparty to destroy the object.</summary>

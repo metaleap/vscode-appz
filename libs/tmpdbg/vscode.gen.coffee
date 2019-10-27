@@ -2566,7 +2566,7 @@ Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> ((?Me
         var result of ?MessageItem
         if =?payload
             result = ?MessageItem·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         if =?onret
@@ -2596,7 +2596,7 @@ Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> it
         var result of ?MessageItem
         if =?payload
             result = ?MessageItem·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         if =?onret
@@ -2686,7 +2686,7 @@ Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> ((?Messag
         var result of ?MessageItem
         if =?payload
             result = ?MessageItem·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         if =?onret
@@ -2716,7 +2716,7 @@ Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:
         var result of ?MessageItem
         if =?payload
             result = ?MessageItem·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         if =?onret
@@ -2806,7 +2806,7 @@ Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> ((?MessageI
         var result of ?MessageItem
         if =?payload
             result = ?MessageItem·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         if =?onret
@@ -2836,7 +2836,7 @@ Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[M
         var result of ?MessageItem
         if =?payload
             result = ?MessageItem·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         if =?onret
@@ -2938,7 +2938,7 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
                         var __0 of QuickPickItem
                         if =?args@0
                             __0 = QuickPickItem·new
-                            ok = __0.loadFromJsonish(args@0)
+                            ok = __0.__loadFromJsonish__(args@0)
                             if !ok
                                 return [null, false]
                         else
@@ -3015,7 +3015,7 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
                         var __0 of QuickPickItem
                         if =?args@0
                             __0 = QuickPickItem·new
-                            ok = __0.loadFromJsonish(args@0)
+                            ok = __0.__loadFromJsonish__(args@0)
                             if !ok
                                 return [null, false]
                         else
@@ -3083,7 +3083,7 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
                         var __0 of QuickPickItem
                         if =?args@0
                             __0 = QuickPickItem·new
-                            ok = __0.loadFromJsonish(args@0)
+                            ok = __0.__loadFromJsonish__(args@0)
                             if !ok
                                 return [null, false]
                         else
@@ -3115,7 +3115,7 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
             for __item__result in __coll__result
                 var __val__result of QuickPickItem
                 __val__result = QuickPickItem·new
-                ok = __val__result.loadFromJsonish(__item__result)
+                ok = __val__result.__loadFromJsonish__(__item__result)
                 if !ok
                     return false
                 result@__idx__result = __val__result
@@ -3161,7 +3161,7 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
                         var __0 of QuickPickItem
                         if =?args@0
                             __0 = QuickPickItem·new
-                            ok = __0.loadFromJsonish(args@0)
+                            ok = __0.__loadFromJsonish__(args@0)
                             if !ok
                                 return [null, false]
                         else
@@ -3184,7 +3184,7 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
         var result of ?QuickPickItem
         if =?payload
             result = ?QuickPickItem·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         if =?onret
@@ -3219,7 +3219,7 @@ Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> ((?Disposa
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -3249,7 +3249,7 @@ Window·SetStatusBarMessage2: (text:string -> ((?Disposable->void)->void))
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -3347,7 +3347,7 @@ Window·ShowWorkspaceFolderPick: (options:?WorkspaceFolderPickOptions -> ((?Work
         var result of ?WorkspaceFolder
         if =?payload
             result = ?WorkspaceFolder·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         if =?onret
@@ -3374,7 +3374,7 @@ Window·State: ( -> ((WindowState->void)->void))
         var result of WindowState
         if =?payload
             result = WindowState·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         if =?onret
@@ -3404,7 +3404,7 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> ((?Disposable->
             return ok
         var _a_0_ of WindowState
         _a_0_ = WindowState·new
-        ok = _a_0_.loadFromJsonish(args@0)
+        ok = _a_0_.__loadFromJsonish__(args@0)
         if !ok
             return false
         listener(_a_0_)
@@ -3418,7 +3418,7 @@ Window·OnDidChangeWindowState: (listener:(WindowState->void) -> ((?Disposable->
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -3451,7 +3451,7 @@ Window·CreateStatusBarItem: (alignment:?StatusBarAlignment -> priority:?int -> 
         var result of ?StatusBarItem
         if =?payload
             result = ?StatusBarItem·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
             result.__disp__.impl = this.Impl()
@@ -3484,7 +3484,7 @@ Window·CreateOutputChannel: (name:string -> ((?OutputChannel->void)->void))
         var result of ?OutputChannel
         if =?payload
             result = ?OutputChannel·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
             result.__disp__.impl = this.Impl()
@@ -3517,7 +3517,7 @@ Window·CreateTextEditorDecorationType: (options:DecorationRenderOptions -> ((?T
         var result of ?TextEditorDecorationType
         if =?payload
             result = ?TextEditorDecorationType·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
             result.__disp__.impl = this.Impl()
@@ -3549,7 +3549,7 @@ Window·CreateInputBox: ( -> ((?InputBox->void)->void))
         var result of ?InputBox
         if =?payload
             result = ?InputBox·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
             result.__disp__.impl = this.Impl()
@@ -3581,7 +3581,7 @@ Window·CreateQuickPick: ( -> ((?QuickPick->void)->void))
         var result of ?QuickPick
         if =?payload
             result = ?QuickPick·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
             result.__disp__.impl = this.Impl()
@@ -3852,7 +3852,7 @@ Env·AllProperties: ( -> ((EnvBag->void)->void))
         var result of EnvBag
         if =?payload
             result = EnvBag·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -4026,7 +4026,7 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
             return ok
         var _a_0_ of WorkspaceFoldersChangeEvent
         _a_0_ = WorkspaceFoldersChangeEvent·new
-        ok = _a_0_.loadFromJsonish(args@0)
+        ok = _a_0_.__loadFromJsonish__(args@0)
         if !ok
             return false
         listener(_a_0_)
@@ -4040,7 +4040,7 @@ Workspace·OnDidChangeWorkspaceFolders: (listener:(WorkspaceFoldersChangeEvent->
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -4070,7 +4070,7 @@ Workspace·GetWorkspaceFolder: (uri:string -> ((?WorkspaceFolder->void)->void))
         var result of ?WorkspaceFolder
         if =?payload
             result = ?WorkspaceFolder·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         if =?onret
@@ -4106,7 +4106,7 @@ Workspace·WorkspaceFolders: ( -> ((?[WorkspaceFolder]->void)->void))
             for __item__result in __coll__result
                 var __val__result of WorkspaceFolder
                 __val__result = WorkspaceFolder·new
-                ok = __val__result.loadFromJsonish(__item__result)
+                ok = __val__result.__loadFromJsonish__(__item__result)
                 if !ok
                     return false
                 result@__idx__result = __val__result
@@ -4213,7 +4213,7 @@ Workspace·AllProperties: ( -> ((WorkspaceBag->void)->void))
         var result of WorkspaceBag
         if =?payload
             result = WorkspaceBag·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -4282,7 +4282,7 @@ Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> ((
             return ok
         var _a_0_ of DiagnosticChangeEvent
         _a_0_ = DiagnosticChangeEvent·new
-        ok = _a_0_.loadFromJsonish(args@0)
+        ok = _a_0_.__loadFromJsonish__(args@0)
         if !ok
             return false
         listener(_a_0_)
@@ -4296,7 +4296,7 @@ Languages·OnDidChangeDiagnostics: (listener:(DiagnosticChangeEvent->void) -> ((
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -4337,7 +4337,7 @@ Extensions·OnDidChange: (listener:(->void) -> ((?Disposable->void)->void))
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -4384,7 +4384,7 @@ Commands·RegisterCommand: (command:string -> callback:([any]->any) -> ((?Dispos
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -4483,7 +4483,7 @@ StatusBarItem·Show: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(it@1)
+            ok = this.CfgBag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4515,7 +4515,7 @@ StatusBarItem·Hide: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(it@1)
+            ok = this.CfgBag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4550,7 +4550,7 @@ StatusBarItem·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
             this.CfgBag = ?StatusBarItemBag·new
         this.CfgBag.__holder__ = this
         lock this.CfgBag.__holder__.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -4577,7 +4577,7 @@ StatusBarItem·__appzObjBagPushToPeer_: (allUpdates:?StatusBarItemBag -> ((void-
     onresp = (payload:any -> bool)
         var ok of bool
         lock this.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -4610,7 +4610,7 @@ OutputChannel·Append: (value:string -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(it@1)
+            ok = this.CfgBag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4643,7 +4643,7 @@ OutputChannel·AppendLine: (value:string -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(it@1)
+            ok = this.CfgBag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4675,7 +4675,7 @@ OutputChannel·Clear: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(it@1)
+            ok = this.CfgBag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4708,7 +4708,7 @@ OutputChannel·Show: (preserveFocus:bool -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(it@1)
+            ok = this.CfgBag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4740,7 +4740,7 @@ OutputChannel·Hide: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(it@1)
+            ok = this.CfgBag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4775,7 +4775,7 @@ OutputChannel·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
             this.CfgBag = ?OutputChannelBag·new
         this.CfgBag.__holder__ = this
         lock this.CfgBag.__holder__.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -4810,7 +4810,7 @@ TextEditorDecorationType·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
             this.CfgBag = ?TextEditorDecorationTypeBag·new
         this.CfgBag.__holder__ = this
         lock this.CfgBag.__holder__.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -4844,7 +4844,7 @@ InputBox·OnDidChangeValue: (handler:(string->void) -> ((?Disposable->void)->voi
         if !ok
             return false
             lock this.__disp__.impl
-                ok = this.CfgBag.loadFromJsonish(args@1)
+                ok = this.CfgBag.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -4859,7 +4859,7 @@ InputBox·OnDidChangeValue: (handler:(string->void) -> ((?Disposable->void)->voi
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -4891,7 +4891,7 @@ InputBox·OnDidAccept: (handler:(->void) -> ((?Disposable->void)->void))
         if 1 != args·len
             return ok
             lock this.__disp__.impl
-                ok = this.CfgBag.loadFromJsonish(args@0)
+                ok = this.CfgBag.__loadFromJsonish__(args@0)
             if !ok
                 return false
             handler()
@@ -4906,7 +4906,7 @@ InputBox·OnDidAccept: (handler:(->void) -> ((?Disposable->void)->void))
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -4940,7 +4940,7 @@ InputBox·Show: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(it@1)
+            ok = this.CfgBag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4972,7 +4972,7 @@ InputBox·Hide: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(it@1)
+            ok = this.CfgBag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5002,7 +5002,7 @@ InputBox·OnDidHide: (handler:(->void) -> ((?Disposable->void)->void))
         if 1 != args·len
             return ok
             lock this.__disp__.impl
-                ok = this.CfgBag.loadFromJsonish(args@0)
+                ok = this.CfgBag.__loadFromJsonish__(args@0)
             if !ok
                 return false
             handler()
@@ -5017,7 +5017,7 @@ InputBox·OnDidHide: (handler:(->void) -> ((?Disposable->void)->void))
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -5054,7 +5054,7 @@ InputBox·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
             this.CfgBag = ?InputBoxBag·new
         this.CfgBag.__holder__ = this
         lock this.CfgBag.__holder__.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -5081,7 +5081,7 @@ InputBox·__appzObjBagPushToPeer_: (allUpdates:?InputBoxBag -> ((void->void)->vo
     onresp = (payload:any -> bool)
         var ok of bool
         lock this.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -5115,7 +5115,7 @@ QuickPick·OnDidChangeValue: (handler:(string->void) -> ((?Disposable->void)->vo
         if !ok
             return false
             lock this.__disp__.impl
-                ok = this.CfgBag.loadFromJsonish(args@1)
+                ok = this.CfgBag.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -5130,7 +5130,7 @@ QuickPick·OnDidChangeValue: (handler:(string->void) -> ((?Disposable->void)->vo
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -5162,7 +5162,7 @@ QuickPick·OnDidAccept: (handler:(->void) -> ((?Disposable->void)->void))
         if 1 != args·len
             return ok
             lock this.__disp__.impl
-                ok = this.CfgBag.loadFromJsonish(args@0)
+                ok = this.CfgBag.__loadFromJsonish__(args@0)
             if !ok
                 return false
             handler()
@@ -5177,7 +5177,7 @@ QuickPick·OnDidAccept: (handler:(->void) -> ((?Disposable->void)->void))
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -5219,13 +5219,13 @@ QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->void) -> ((?Disposable-
         for __item___a_0_ in __coll___a_0_
             var __val___a_0_ of QuickPickItem
             __val___a_0_ = QuickPickItem·new
-            ok = __val___a_0_.loadFromJsonish(__item___a_0_)
+            ok = __val___a_0_.__loadFromJsonish__(__item___a_0_)
             if !ok
                 return false
             _a_0_@__idx___a_0_ = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
             lock this.__disp__.impl
-                ok = this.CfgBag.loadFromJsonish(args@1)
+                ok = this.CfgBag.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -5240,7 +5240,7 @@ QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->void) -> ((?Disposable-
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -5282,13 +5282,13 @@ QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->void) -> ((?Disposab
         for __item___a_0_ in __coll___a_0_
             var __val___a_0_ of QuickPickItem
             __val___a_0_ = QuickPickItem·new
-            ok = __val___a_0_.loadFromJsonish(__item___a_0_)
+            ok = __val___a_0_.__loadFromJsonish__(__item___a_0_)
             if !ok
                 return false
             _a_0_@__idx___a_0_ = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
             lock this.__disp__.impl
-                ok = this.CfgBag.loadFromJsonish(args@1)
+                ok = this.CfgBag.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -5303,7 +5303,7 @@ QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->void) -> ((?Disposab
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -5337,7 +5337,7 @@ QuickPick·Show: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(it@1)
+            ok = this.CfgBag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5369,7 +5369,7 @@ QuickPick·Hide: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(it@1)
+            ok = this.CfgBag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5399,7 +5399,7 @@ QuickPick·OnDidHide: (handler:(->void) -> ((?Disposable->void)->void))
         if 1 != args·len
             return ok
             lock this.__disp__.impl
-                ok = this.CfgBag.loadFromJsonish(args@0)
+                ok = this.CfgBag.__loadFromJsonish__(args@0)
             if !ok
                 return false
             handler()
@@ -5414,7 +5414,7 @@ QuickPick·OnDidHide: (handler:(->void) -> ((?Disposable->void)->void))
         var result of ?Disposable
         if =?payload
             result = ?Disposable·new
-            ok = result.loadFromJsonish(payload)
+            ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
         else
@@ -5451,7 +5451,7 @@ QuickPick·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
             this.CfgBag = ?QuickPickBag·new
         this.CfgBag.__holder__ = this
         lock this.CfgBag.__holder__.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -5478,7 +5478,7 @@ QuickPick·__appzObjBagPushToPeer_: (allUpdates:?QuickPickBag -> ((void->void)->
     onresp = (payload:any -> bool)
         var ok of bool
         lock this.__disp__.impl
-            ok = this.CfgBag.loadFromJsonish(payload)
+            ok = this.CfgBag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -5541,7 +5541,7 @@ QuickPickBag·ApplyChanges: ( -> ((->void)->void))
 
 
 
-MessageItem·loadFromJsonish: (payload:any -> bool)
+MessageItem·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5581,7 +5581,7 @@ MessageItem·loadFromJsonish: (payload:any -> bool)
 
 
 
-QuickPickItem·loadFromJsonish: (payload:any -> bool)
+QuickPickItem·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5651,7 +5651,7 @@ QuickPickItem·loadFromJsonish: (payload:any -> bool)
 
 
 
-WorkspaceFolder·loadFromJsonish: (payload:any -> bool)
+WorkspaceFolder·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5697,7 +5697,7 @@ WorkspaceFolder·loadFromJsonish: (payload:any -> bool)
 
 
 
-WindowState·loadFromJsonish: (payload:any -> bool)
+WindowState·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5719,52 +5719,52 @@ WindowState·loadFromJsonish: (payload:any -> bool)
 
 
 
-StatusBarItem·loadFromJsonish: (payload:any -> bool)
+StatusBarItem·__loadFromJsonish__: (payload:any -> bool)
     var ok of bool
     this.__disp__ = ?Disposable·new
-    ok = this.__disp__.loadFromJsonish(payload)
+    ok = this.__disp__.__loadFromJsonish__(payload)
     return ok
 
 
 
 
-OutputChannel·loadFromJsonish: (payload:any -> bool)
+OutputChannel·__loadFromJsonish__: (payload:any -> bool)
     var ok of bool
     this.__disp__ = ?Disposable·new
-    ok = this.__disp__.loadFromJsonish(payload)
+    ok = this.__disp__.__loadFromJsonish__(payload)
     return ok
 
 
 
 
-TextEditorDecorationType·loadFromJsonish: (payload:any -> bool)
+TextEditorDecorationType·__loadFromJsonish__: (payload:any -> bool)
     var ok of bool
     this.__disp__ = ?Disposable·new
-    ok = this.__disp__.loadFromJsonish(payload)
+    ok = this.__disp__.__loadFromJsonish__(payload)
     return ok
 
 
 
 
-InputBox·loadFromJsonish: (payload:any -> bool)
+InputBox·__loadFromJsonish__: (payload:any -> bool)
     var ok of bool
     this.__disp__ = ?Disposable·new
-    ok = this.__disp__.loadFromJsonish(payload)
+    ok = this.__disp__.__loadFromJsonish__(payload)
     return ok
 
 
 
 
-QuickPick·loadFromJsonish: (payload:any -> bool)
+QuickPick·__loadFromJsonish__: (payload:any -> bool)
     var ok of bool
     this.__disp__ = ?Disposable·new
-    ok = this.__disp__.loadFromJsonish(payload)
+    ok = this.__disp__.__loadFromJsonish__(payload)
     return ok
 
 
 
 
-EnvBag·loadFromJsonish: (payload:any -> bool)
+EnvBag·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5856,7 +5856,7 @@ EnvBag·loadFromJsonish: (payload:any -> bool)
 
 
 
-WorkspaceFoldersChangeEvent·loadFromJsonish: (payload:any -> bool)
+WorkspaceFoldersChangeEvent·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5877,7 +5877,7 @@ WorkspaceFoldersChangeEvent·loadFromJsonish: (payload:any -> bool)
             for __item__added in __coll__added
                 var __val__added of WorkspaceFolder
                 __val__added = WorkspaceFolder·new
-                ok = __val__added.loadFromJsonish(__item__added)
+                ok = __val__added.__loadFromJsonish__(__item__added)
                 if !ok
                     return false
                 added@__idx__added = __val__added
@@ -5899,7 +5899,7 @@ WorkspaceFoldersChangeEvent·loadFromJsonish: (payload:any -> bool)
             for __item__removed in __coll__removed
                 var __val__removed of WorkspaceFolder
                 __val__removed = WorkspaceFolder·new
-                ok = __val__removed.loadFromJsonish(__item__removed)
+                ok = __val__removed.__loadFromJsonish__(__item__removed)
                 if !ok
                     return false
                 removed@__idx__removed = __val__removed
@@ -5912,7 +5912,7 @@ WorkspaceFoldersChangeEvent·loadFromJsonish: (payload:any -> bool)
 
 
 
-WorkspaceBag·loadFromJsonish: (payload:any -> bool)
+WorkspaceBag·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5953,7 +5953,7 @@ WorkspaceBag·loadFromJsonish: (payload:any -> bool)
             for __item__workspaceFolders in __coll__workspaceFolders
                 var __val__workspaceFolders of WorkspaceFolder
                 __val__workspaceFolders = WorkspaceFolder·new
-                ok = __val__workspaceFolders.loadFromJsonish(__item__workspaceFolders)
+                ok = __val__workspaceFolders.__loadFromJsonish__(__item__workspaceFolders)
                 if !ok
                     return false
                 workspaceFolders@__idx__workspaceFolders = __val__workspaceFolders
@@ -5964,7 +5964,7 @@ WorkspaceBag·loadFromJsonish: (payload:any -> bool)
 
 
 
-DiagnosticChangeEvent·loadFromJsonish: (payload:any -> bool)
+DiagnosticChangeEvent·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -5997,7 +5997,7 @@ DiagnosticChangeEvent·loadFromJsonish: (payload:any -> bool)
 
 
 
-StatusBarItemBag·loadFromJsonish: (payload:any -> bool)
+StatusBarItemBag·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -6071,7 +6071,7 @@ StatusBarItemBag·loadFromJsonish: (payload:any -> bool)
 
 
 
-OutputChannelBag·loadFromJsonish: (payload:any -> bool)
+OutputChannelBag·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -6093,7 +6093,7 @@ OutputChannelBag·loadFromJsonish: (payload:any -> bool)
 
 
 
-TextEditorDecorationTypeBag·loadFromJsonish: (payload:any -> bool)
+TextEditorDecorationTypeBag·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -6115,7 +6115,7 @@ TextEditorDecorationTypeBag·loadFromJsonish: (payload:any -> bool)
 
 
 
-InputBoxBag·loadFromJsonish: (payload:any -> bool)
+InputBoxBag·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -6219,7 +6219,7 @@ InputBoxBag·loadFromJsonish: (payload:any -> bool)
 
 
 
-QuickPickBag·loadFromJsonish: (payload:any -> bool)
+QuickPickBag·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -6256,7 +6256,7 @@ QuickPickBag·loadFromJsonish: (payload:any -> bool)
             for __item__items in __coll__items
                 var __val__items of QuickPickItem
                 __val__items = QuickPickItem·new
-                ok = __val__items.loadFromJsonish(__item__items)
+                ok = __val__items.__loadFromJsonish__(__item__items)
                 if !ok
                     return false
                 items@__idx__items = __val__items
@@ -6300,7 +6300,7 @@ QuickPickBag·loadFromJsonish: (payload:any -> bool)
             for __item__activeItems in __coll__activeItems
                 var __val__activeItems of QuickPickItem
                 __val__activeItems = QuickPickItem·new
-                ok = __val__activeItems.loadFromJsonish(__item__activeItems)
+                ok = __val__activeItems.__loadFromJsonish__(__item__activeItems)
                 if !ok
                     return false
                 activeItems@__idx__activeItems = __val__activeItems
@@ -6320,7 +6320,7 @@ QuickPickBag·loadFromJsonish: (payload:any -> bool)
             for __item__selectedItems in __coll__selectedItems
                 var __val__selectedItems of QuickPickItem
                 __val__selectedItems = QuickPickItem·new
-                ok = __val__selectedItems.loadFromJsonish(__item__selectedItems)
+                ok = __val__selectedItems.__loadFromJsonish__(__item__selectedItems)
                 if !ok
                     return false
                 selectedItems@__idx__selectedItems = __val__selectedItems

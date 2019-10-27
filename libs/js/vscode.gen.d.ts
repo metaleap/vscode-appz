@@ -2,7 +2,7 @@ import * as core from './core';
 declare type Cancel = core.Cancel;
 declare type Disposable = core.Disposable;
 interface fromJson {
-    loadFromJsonish: (_: any) => boolean;
+    __loadFromJsonish__: (_: any) => boolean;
 }
 interface withDisp {
     __disp__: Disposable;
