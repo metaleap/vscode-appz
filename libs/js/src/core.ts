@@ -151,6 +151,8 @@ export class Disposable {
     subFnIds: string[]
 
     addSub(fnId: string) {
+        if (!this.subFnIds)
+            this.subFnIds = []
         this.subFnIds.push(fnId)
     }
 
@@ -175,7 +177,7 @@ export class Disposable {
                 delete this.impl.cbListeners[subfnid]
                 delete this.impl.cbOther[subfnid]
             }
-            this.subFnIds = null
+            this.subFnIds = []
         }
         return (on: () => void) => ondone = on;
     }

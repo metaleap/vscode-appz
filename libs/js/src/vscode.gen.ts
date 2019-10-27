@@ -6,7 +6,7 @@ type Cancel = core.Cancel
 type Disposable = core.Disposable
 interface fromJson { loadFromJsonish: (_: any) => boolean }
 interface withDisp { __disp__: Disposable }
-interface withBag<T extends fromJson> { CfgBag: T }
+interface withBag<T extends fromJson> { CfgBag: T, toJSON: () => any }
 
 abstract class implBase {
     impl: impl
@@ -1532,7 +1532,7 @@ export interface StatusBarItem extends fromJson, withDisp, withBag<StatusBarItem
 
 function newStatusBarItem (): StatusBarItem {
     let me: StatusBarItem
-    me = { loadFromJsonish: _ => StatusBarItem_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as StatusBarItem
+    me = { loadFromJsonish: _ => StatusBarItem_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as StatusBarItem
     me.Show = () => StatusBarItem_Show.call(me, )
     me.Hide = () => StatusBarItem_Hide.call(me, )
     me.Dispose = () => StatusBarItem_Dispose.call(me, )
@@ -1597,7 +1597,7 @@ export interface OutputChannel extends fromJson, withDisp, withBag<OutputChannel
 
 function newOutputChannel (): OutputChannel {
     let me: OutputChannel
-    me = { loadFromJsonish: _ => OutputChannel_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as OutputChannel
+    me = { loadFromJsonish: _ => OutputChannel_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as OutputChannel
     me.Append = (a0) => OutputChannel_Append.call(me, a0)
     me.AppendLine = (a0) => OutputChannel_AppendLine.call(me, a0)
     me.Clear = () => OutputChannel_Clear.call(me, )
@@ -1895,7 +1895,7 @@ export interface TextEditorDecorationType extends fromJson, withDisp, withBag<Te
 
 function newTextEditorDecorationType (): TextEditorDecorationType {
     let me: TextEditorDecorationType
-    me = { loadFromJsonish: _ => TextEditorDecorationType_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as TextEditorDecorationType
+    me = { loadFromJsonish: _ => TextEditorDecorationType_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as TextEditorDecorationType
     me.Dispose = () => TextEditorDecorationType_Dispose.call(me, )
     me.__appzObjBagPullFromPeer__ = () => TextEditorDecorationType___appzObjBagPullFromPeer__.call(me, )
     return me
@@ -1963,7 +1963,7 @@ export interface InputBox extends fromJson, withDisp, withBag<InputBoxBag> {
 
 function newInputBox (): InputBox {
     let me: InputBox
-    me = { loadFromJsonish: _ => InputBox_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBox
+    me = { loadFromJsonish: _ => InputBox_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as InputBox
     me.OnDidChangeValue = (a0) => InputBox_OnDidChangeValue.call(me, a0)
     me.OnDidAccept = (a0) => InputBox_OnDidAccept.call(me, a0)
     me.Show = () => InputBox_Show.call(me, )
@@ -2070,7 +2070,7 @@ export interface QuickPick extends fromJson, withDisp, withBag<QuickPickBag> {
 
 function newQuickPick (): QuickPick {
     let me: QuickPick
-    me = { loadFromJsonish: _ => QuickPick_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPick
+    me = { loadFromJsonish: _ => QuickPick_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as QuickPick
     me.OnDidChangeValue = (a0) => QuickPick_OnDidChangeValue.call(me, a0)
     me.OnDidAccept = (a0) => QuickPick_OnDidAccept.call(me, a0)
     me.OnDidChangeActive = (a0) => QuickPick_OnDidChangeActive.call(me, a0)
@@ -2576,6 +2576,7 @@ export abstract class impl implements Vscode {
         this.Extensions = new implExtensions(this)
         this.Commands = new implCommands(this)
     }
+    toJSON(): any { return undefined }
 }
 
 class implWindow extends implBase implements Window {

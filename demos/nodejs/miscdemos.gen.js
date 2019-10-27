@@ -294,21 +294,21 @@ function demo_Window_ShowQuickPick() {
 
 function demo_Window_CreateQuickPick() {
     vsc.Window.CreateQuickPick()((ctl) => {
-        ctl.CfgBag.IgnoreFocusOut = true
-        ctl.CfgBag.Title = "I'm a full-fledged QuickPick"
-        ctl.CfgBag.Step = 23
-        ctl.CfgBag.TotalSteps = 42
-        ctl.CfgBag.Items = new Array(88)
+        ctl.CfgBag.ignoreFocusOut = true
+        ctl.CfgBag.title = "I'm a full-fledged QuickPick"
+        ctl.CfgBag.step = 23
+        ctl.CfgBag.totalSteps = 42
+        ctl.CfgBag.items = new Array(88)
         for (const i of nums1To(88)) {
-            ctl.CfgBag.Items[i] = {}
-            ctl.CfgBag.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i)
-            ctl.CfgBag.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i)
-            ctl.CfgBag.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i)
-            ctl.CfgBag.Items[(i - 1)].AlwaysShow = i === 42
+            ctl.CfgBag.items[i - 1] = {}
+            ctl.CfgBag.items[(i - 1)].label = strFmt("$(eye) Label {0}", i)
+            ctl.CfgBag.items[(i - 1)].description = strFmt("$(gift) Description {0}", i)
+            ctl.CfgBag.items[(i - 1)].detail = strFmt("$(globe~spin) Detail {0}", i)
+            ctl.CfgBag.items[(i - 1)].alwaysShow = i === 42
         }
         ctl.CfgBag.ApplyChanges()
         ctl.OnDidAccept(() => {
-            logLn(strFmt("Picked: {0}", ctl.CfgBag.SelectedItems))
+            logLn(strFmt("Picked: {0}", ctl.CfgBag.selectedItems))
             ctl.Hide()
         })
         ctl.OnDidHide(() => {

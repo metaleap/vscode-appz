@@ -42,7 +42,7 @@ export class Gen extends gen_syn.Gen {
             "type " + gen.idents.coreTypeDisp + " = core." + gen.idents.coreTypeDisp + "",
             "interface fromJson { " + gen.idents.methodLoadFrom + ": (_: any) => boolean }",
             "interface withDisp { " + gen.idents.fldDisp + ": " + gen.idents.coreTypeDisp + " }",
-            "interface withBag<T extends fromJson> { CfgBag: T }",
+            "interface withBag<T extends fromJson> { CfgBag: T, toJSON: () => any }",
             "",
             "abstract class implBase {",
             "    impl: impl",
@@ -155,7 +155,7 @@ export class Gen extends gen_syn.Gen {
                 (it.IsOutgoing ? "export " : "") + "function new" + it.Name + " (): " + it.Name + " {",
                 "    let me: " + it.Name,
                 "    me = { " + gen.idents.methodLoadFrom + ": _ => " + it.Name + "_" + gen.idents.methodLoadFrom + ".call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v)"
-                + (isobjpropsof ? ((objpropssetter ? `, ${gen.idents.methodBagPublish}: () => ${it.Name}_${gen.idents.methodBagPublish}.call(me)` : "") + `, ${gen.idents.methodBagFetch}: () => ${it.Name}_${gen.idents.methodBagFetch}.call(me)`) : "")
+                + (isdispobj ? (", toJSON: () => undefined") : (isobjpropsof ? ((objpropssetter ? `, ${gen.idents.methodBagPublish}: () => ${it.Name}_${gen.idents.methodBagPublish}.call(me)` : "") + `, ${gen.idents.methodBagFetch}: () => ${it.Name}_${gen.idents.methodBagFetch}.call(me)`) : ""))
                 + " } as " + it.Name
             ).each(dispobjmethods, "", f => {
                 const tfun = gen.typeFun(f.typeSpec)
@@ -180,6 +180,7 @@ export class Gen extends gen_syn.Gen {
                         for (const iface of this.allInterfaces) if (iface !== itop)
                             this.line(`this.${iface.Name} = new impl${iface.Name}(this)`)
                     }).lines("}")
+                    this.line("toJSON(): any { return undefined }")
                 })
                 .lines("}", "")
         }

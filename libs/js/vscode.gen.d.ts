@@ -9,6 +9,7 @@ interface withDisp {
 }
 interface withBag<T extends fromJson> {
     CfgBag: T;
+    toJSON: () => any;
 }
 /**
  * Represents the alignment of status bar items.
@@ -2166,5 +2167,6 @@ export declare abstract class impl implements Vscode {
     Extensions: Extensions;
     Commands: Commands;
     constructor();
+    toJSON(): any;
 }
 export {};

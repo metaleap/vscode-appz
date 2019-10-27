@@ -290,7 +290,7 @@ namespace VscAppzDemo {
 				ctl.CfgBag.TotalSteps = 42;
 				ctl.CfgBag.Items = new QuickPickItem[88];
 				foreach (var i in nums1To(88)) {
-					ctl.CfgBag.Items[i] = new QuickPickItem();
+					ctl.CfgBag.Items[i - 1] = new QuickPickItem();
 					ctl.CfgBag.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i);
 					ctl.CfgBag.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i);
 					ctl.CfgBag.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i);

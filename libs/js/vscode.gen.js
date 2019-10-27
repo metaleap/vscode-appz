@@ -109,7 +109,7 @@ function newWindowState() {
 }
 function newStatusBarItem() {
     let me;
-    me = { loadFromJsonish: _ => StatusBarItem_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => StatusBarItem_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined };
     me.Show = () => StatusBarItem_Show.call(me);
     me.Hide = () => StatusBarItem_Hide.call(me);
     me.Dispose = () => StatusBarItem_Dispose.call(me);
@@ -119,7 +119,7 @@ function newStatusBarItem() {
 }
 function newOutputChannel() {
     let me;
-    me = { loadFromJsonish: _ => OutputChannel_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => OutputChannel_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined };
     me.Append = (a0) => OutputChannel_Append.call(me, a0);
     me.AppendLine = (a0) => OutputChannel_AppendLine.call(me, a0);
     me.Clear = () => OutputChannel_Clear.call(me);
@@ -131,14 +131,14 @@ function newOutputChannel() {
 }
 function newTextEditorDecorationType() {
     let me;
-    me = { loadFromJsonish: _ => TextEditorDecorationType_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => TextEditorDecorationType_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined };
     me.Dispose = () => TextEditorDecorationType_Dispose.call(me);
     me.__appzObjBagPullFromPeer__ = () => TextEditorDecorationType___appzObjBagPullFromPeer__.call(me);
     return me;
 }
 function newInputBox() {
     let me;
-    me = { loadFromJsonish: _ => InputBox_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => InputBox_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined };
     me.OnDidChangeValue = (a0) => InputBox_OnDidChangeValue.call(me, a0);
     me.OnDidAccept = (a0) => InputBox_OnDidAccept.call(me, a0);
     me.Show = () => InputBox_Show.call(me);
@@ -151,7 +151,7 @@ function newInputBox() {
 }
 function newQuickPick() {
     let me;
-    me = { loadFromJsonish: _ => QuickPick_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => QuickPick_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined };
     me.OnDidChangeValue = (a0) => QuickPick_OnDidChangeValue.call(me, a0);
     me.OnDidAccept = (a0) => QuickPick_OnDidAccept.call(me, a0);
     me.OnDidChangeActive = (a0) => QuickPick_OnDidChangeActive.call(me, a0);
@@ -224,6 +224,7 @@ class impl {
         this.Extensions = new implExtensions(this);
         this.Commands = new implCommands(this);
     }
+    toJSON() { return undefined; }
 }
 exports.impl = impl;
 class implWindow extends implBase {

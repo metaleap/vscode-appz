@@ -176,14 +176,15 @@ namespace VscAppz {
     public class Disposable : IDisposable {
         internal impl impl;
         internal string id;
-        internal string[] subFnIds;
+        internal readonly List<string> subFnIds = new List<string>(4);
         internal Disposable() {}
-        internal void addSub(string fnId){
-            Array.Resize(ref subFnIds, 1+subFnIds.Length);
-            subFnIds[subFnIds.Length-1] = fnId;
-        }
+        internal void addSub(string fnId) =>
+            subFnIds.Add(fnId);
         internal Disposable bind(impl impl, params string[] subFnIds) {
-            (this.impl, this.subFnIds) = (impl, subFnIds); return this; }
+            this.impl = impl;
+            this.subFnIds.AddRange(subFnIds);
+            return this;
+        }
         internal bool loadFromJsonish(any payload) =>
             (payload is string s) && !string.IsNullOrEmpty(id = s);
         void IDisposable.Dispose(){}
@@ -195,13 +196,13 @@ namespace VscAppz {
                     ondone();
                 return true;
             });
-            if (subFnIds != null && subFnIds.Length > 0) {
+            if (subFnIds.Count > 0) {
                 lock (this)
                     foreach (var subfnid in subFnIds) {
                         impl.cbListeners.Remove(subfnid);
                         impl.cbOther.Remove(subfnid);
                     }
-                subFnIds = null;
+                subFnIds.Clear();
             }
             return on => ondone = on;
         }

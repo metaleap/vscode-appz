@@ -130,6 +130,8 @@ class Cancel {
 exports.Cancel = Cancel;
 class Disposable {
     addSub(fnId) {
+        if (!this.subFnIds)
+            this.subFnIds = [];
         this.subFnIds.push(fnId);
     }
     bind(impl, ...subFnIds) {
@@ -151,7 +153,7 @@ class Disposable {
                 delete this.impl.cbListeners[subfnid];
                 delete this.impl.cbOther[subfnid];
             }
-            this.subFnIds = null;
+            this.subFnIds = [];
         }
         return (on) => ondone = on;
     }
