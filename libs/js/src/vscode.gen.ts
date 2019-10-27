@@ -494,7 +494,7 @@ export interface Window {
      * An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
      * changes. The value of the event represents whether the window is focused.
 
-     * @param listener will be invoked whenever this event fires; mandatory, not optional.
+     * @param listener will be invoked whenever the `OnDidChangeWindowState` event fires (mandatory, not optional).
      * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
      */
     OnDidChangeWindowState: (listener: (_: WindowState) => void) => (_: (_: Disposable) => void) => void
@@ -731,7 +731,7 @@ export interface Workspace {
     /**
      * An event that is emitted when a workspace folder is added or removed.
 
-     * @param listener will be invoked whenever this event fires; mandatory, not optional.
+     * @param listener will be invoked whenever the `OnDidChangeWorkspaceFolders` event fires (mandatory, not optional).
      * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
      */
     OnDidChangeWorkspaceFolders: (listener: (_: WorkspaceFoldersChangeEvent) => void) => (_: (_: Disposable) => void) => void
@@ -831,7 +831,7 @@ export interface Languages {
      * An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
      * newly added and removed diagnostics.
 
-     * @param listener will be invoked whenever this event fires; mandatory, not optional.
+     * @param listener will be invoked whenever the `OnDidChangeDiagnostics` event fires (mandatory, not optional).
      * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
      */
     OnDidChangeDiagnostics: (listener: (_: DiagnosticChangeEvent) => void) => (_: (_: Disposable) => void) => void
@@ -883,7 +883,7 @@ export interface Extensions {
      * An event which fires when `extensions.all` changes. This can happen when extensions are
      * installed, uninstalled, enabled or disabled.
 
-     * @param listener will be invoked whenever this event fires; mandatory, not optional.
+     * @param listener will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).
      * @return A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
      */
     OnDidChange: (listener: () => void) => (_: (_: Disposable) => void) => void

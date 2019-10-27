@@ -567,11 +567,11 @@ namespace VscAppz {
 		/// An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
 		/// changes. The value of the event represents whether the window is focused.
 		/// 
-		/// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// `listener` ── will be invoked whenever the `OnDidChangeWindowState` event fires (mandatory, not optional).
 		/// 
 		/// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
 		/// </summary>
-		/// <param name="listener">will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="listener">will be invoked whenever the `OnDidChangeWindowState` event fires (mandatory, not optional).</param>
 		/// <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.</return>
 		Action<Action<Disposable>> OnDidChangeWindowState(Action<WindowState> listener = default);
 
@@ -831,11 +831,11 @@ namespace VscAppz {
 		/// <summary>
 		/// An event that is emitted when a workspace folder is added or removed.
 		/// 
-		/// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// `listener` ── will be invoked whenever the `OnDidChangeWorkspaceFolders` event fires (mandatory, not optional).
 		/// 
 		/// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
 		/// </summary>
-		/// <param name="listener">will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="listener">will be invoked whenever the `OnDidChangeWorkspaceFolders` event fires (mandatory, not optional).</param>
 		/// <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.</return>
 		Action<Action<Disposable>> OnDidChangeWorkspaceFolders(Action<WorkspaceFoldersChangeEvent> listener = default);
 
@@ -960,11 +960,11 @@ namespace VscAppz {
 		/// An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
 		/// newly added and removed diagnostics.
 		/// 
-		/// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// `listener` ── will be invoked whenever the `OnDidChangeDiagnostics` event fires (mandatory, not optional).
 		/// 
 		/// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
 		/// </summary>
-		/// <param name="listener">will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="listener">will be invoked whenever the `OnDidChangeDiagnostics` event fires (mandatory, not optional).</param>
 		/// <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.</return>
 		Action<Action<Disposable>> OnDidChangeDiagnostics(Action<DiagnosticChangeEvent> listener = default);
 	}
@@ -1014,11 +1014,11 @@ namespace VscAppz {
 		/// An event which fires when `extensions.all` changes. This can happen when extensions are
 		/// installed, uninstalled, enabled or disabled.
 		/// 
-		/// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// `listener` ── will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).
 		/// 
 		/// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
 		/// </summary>
-		/// <param name="listener">will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="listener">will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).</param>
 		/// <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.</return>
 		Action<Action<Disposable>> OnDidChange(Action listener = default);
 	}
@@ -4757,11 +4757,11 @@ namespace VscAppz {
 		/// <summary>
 		/// An event signaling when the value has changed.
 		/// 
-		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// `handler` ── will be invoked whenever the `OnDidChangeValue` event fires (mandatory, not optional).
 		/// 
 		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
 		/// </summary>
-		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="handler">will be invoked whenever the `OnDidChangeValue` event fires (mandatory, not optional).</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidChangeValue(Action<string> handler = default) {
 			ipcMsg msg = default;
@@ -4827,11 +4827,11 @@ namespace VscAppz {
 		/// <summary>
 		/// An event signaling when the user indicated acceptance of the input value.
 		/// 
-		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// `handler` ── will be invoked whenever the `OnDidAccept` event fires (mandatory, not optional).
 		/// 
 		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
 		/// </summary>
-		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="handler">will be invoked whenever the `OnDidAccept` event fires (mandatory, not optional).</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidAccept(Action handler = default) {
 			ipcMsg msg = default;
@@ -4985,11 +4985,11 @@ namespace VscAppz {
 		/// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 		/// the user pressing Esc, some other input UI opening, etc.)
 		/// 
-		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// `handler` ── will be invoked whenever the `OnDidHide` event fires (mandatory, not optional).
 		/// 
 		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
 		/// </summary>
-		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="handler">will be invoked whenever the `OnDidHide` event fires (mandatory, not optional).</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidHide(Action handler = default) {
 			ipcMsg msg = default;
@@ -5130,11 +5130,11 @@ namespace VscAppz {
 		/// <summary>
 		/// An event signaling when the value of the filter text has changed.
 		/// 
-		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// `handler` ── will be invoked whenever the `OnDidChangeValue` event fires (mandatory, not optional).
 		/// 
 		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
 		/// </summary>
-		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="handler">will be invoked whenever the `OnDidChangeValue` event fires (mandatory, not optional).</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidChangeValue(Action<string> handler = default) {
 			ipcMsg msg = default;
@@ -5200,11 +5200,11 @@ namespace VscAppz {
 		/// <summary>
 		/// An event signaling when the user indicated acceptance of the selected item(s).
 		/// 
-		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// `handler` ── will be invoked whenever the `OnDidAccept` event fires (mandatory, not optional).
 		/// 
 		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
 		/// </summary>
-		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="handler">will be invoked whenever the `OnDidAccept` event fires (mandatory, not optional).</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidAccept(Action handler = default) {
 			ipcMsg msg = default;
@@ -5265,11 +5265,11 @@ namespace VscAppz {
 		/// <summary>
 		/// An event signaling when the active items have changed.
 		/// 
-		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// `handler` ── will be invoked whenever the `OnDidChangeActive` event fires (mandatory, not optional).
 		/// 
 		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.
 		/// </summary>
-		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="handler">will be invoked whenever the `OnDidChangeActive` event fires (mandatory, not optional).</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidChangeActive(Action<QuickPickItem[]> handler = default) {
 			ipcMsg msg = default;
@@ -5349,11 +5349,11 @@ namespace VscAppz {
 		/// <summary>
 		/// An event signaling when the selected items have changed.
 		/// 
-		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// `handler` ── will be invoked whenever the `OnDidChangeSelection` event fires (mandatory, not optional).
 		/// 
 		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.
 		/// </summary>
-		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="handler">will be invoked whenever the `OnDidChangeSelection` event fires (mandatory, not optional).</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidChangeSelection(Action<QuickPickItem[]> handler = default) {
 			ipcMsg msg = default;
@@ -5526,11 +5526,11 @@ namespace VscAppz {
 		/// (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 		/// the user pressing Esc, some other input UI opening, etc.)
 		/// 
-		/// `handler` ── will be invoked whenever this event fires; mandatory, not optional.
+		/// `handler` ── will be invoked whenever the `OnDidHide` event fires (mandatory, not optional).
 		/// 
 		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
 		/// </summary>
-		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
+		/// <param name="handler">will be invoked whenever the `OnDidHide` event fires (mandatory, not optional).</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.</return>
 		public Action<Action<Disposable>> OnDidHide(Action handler = default) {
 			ipcMsg msg = default;
@@ -5681,7 +5681,7 @@ namespace VscAppz {
 
 	public partial class StatusBarItemBag {
 		/// <summary>
-		/// ApplyChanges propagates this `StatusBarItemBag`'s current property values for `text`, `tooltip`, `color`, `command` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
+		/// ApplyChanges propagates this `StatusBarItemBag`'s current property values for `text`, `tooltip`, `color`, `command` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
 		/// 
 		/// `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 		/// </summary>
@@ -5729,7 +5729,7 @@ namespace VscAppz {
 
 	public partial class InputBoxBag {
 		/// <summary>
-		/// ApplyChanges propagates this `InputBoxBag`'s current property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
+		/// ApplyChanges propagates this `InputBoxBag`'s current property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
 		/// 
 		/// `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 		/// </summary>
@@ -5753,7 +5753,7 @@ namespace VscAppz {
 
 	public partial class QuickPickBag {
 		/// <summary>
-		/// ApplyChanges propagates this `QuickPickBag`'s current property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
+		/// ApplyChanges propagates this `QuickPickBag`'s current property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
 		/// 
 		/// `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 		/// </summary>

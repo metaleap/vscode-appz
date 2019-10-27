@@ -573,9 +573,9 @@ export class Gen extends gen.Gen implements gen.IGen {
                 if (me.IsObjCtor)
                     docret = "a thenable that resolves to the newly created `" + me.IsObjCtor + "`."
                 else if (me.IsObjEvt)
-                    [docarg, docret] = ["will be invoked whenever this event fires; mandatory, not optional.", "A `" + gen.idents.coreTypeDisp + "` that will unsubscribe `" + gen.idents.argHandler + "` from the `" + me.Name + "` event on `Dispose`."]
+                    [docarg, docret] = ["will be invoked whenever the `" + me.Name + "` event fires (mandatory, not optional).", "A `" + gen.idents.coreTypeDisp + "` that will unsubscribe `" + gen.idents.argHandler + "` from the `" + me.Name + "` event on `Dispose`."]
                 else if (me.Args.length === 1 && me.Args[0].Name === gen.idents.argListener && this.typeFunc(me.Args[0].Type) && this.typeFunc(me.Type) && gen.typePromOf(me.fromPrep.args.find(_ => _.isFromRetThenable).typeSpec, gen.idents.coreTypeDisp))
-                    [docarg, docret] = ["will be invoked whenever this event fires; mandatory, not optional.", "A `" + gen.idents.coreTypeDisp + "` that will unsubscribe `" + gen.idents.argListener + "` from the `" + me.Name + "` event on `Dispose`."]
+                    [docarg, docret] = ["will be invoked whenever the `" + me.Name + "` event fires (mandatory, not optional).", "A `" + gen.idents.coreTypeDisp + "` that will unsubscribe `" + gen.idents.argListener + "` from the `" + me.Name + "` event on `Dispose`."]
                 else if (me.IsSubNs)
                     docarg = "TODO_ARG_SUB"
                 else if (me.fromPrep && me.fromPrep.isProps)
@@ -1465,7 +1465,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                     if ((propsfields = propsfields.filter(_ => !_.readOnly)).length)
                         this.emitMethodImpl(struct, {
                             Name: gen.idents.methodBagPublish, Type: { From: [{ From: [], To: null }], To: null }, Args: [], Docs: [{
-                                Lines: [gen.idents.methodBagPublish + " propagates this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for `" + propsfields.map(_ => _.name).join("`, `") + "` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions."]
+                                Lines: [gen.idents.methodBagPublish + " propagates this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for `" + propsfields.map(_ => _.name).join("`, `") + "` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions."]
                             }]
                         }, (_t: TypeRefOwn, _m: Method, _: Builder, b: Instr[]) => {
                             b.push(_.iRet(_.eCall(_._(_.eThis(), gen.idents.fldBagHolder, gen.idents.methodObjBagPush), _.eThis())))

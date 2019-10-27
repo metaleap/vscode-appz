@@ -600,7 +600,7 @@ Window: interface
     # changes. The value of the event represents whether the window is focused.
     #
     # @listener:
-    # will be invoked whenever this event fires; mandatory, not optional.
+    # will be invoked whenever the `OnDidChangeWindowState` event fires (mandatory, not optional).
     #
     # @return:
     # A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
@@ -860,7 +860,7 @@ Workspace: interface
     # An event that is emitted when a workspace folder is added or removed.
     #
     # @listener:
-    # will be invoked whenever this event fires; mandatory, not optional.
+    # will be invoked whenever the `OnDidChangeWorkspaceFolders` event fires (mandatory, not optional).
     #
     # @return:
     # A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
@@ -991,7 +991,7 @@ Languages: interface
     # newly added and removed diagnostics.
     #
     # @listener:
-    # will be invoked whenever this event fires; mandatory, not optional.
+    # will be invoked whenever the `OnDidChangeDiagnostics` event fires (mandatory, not optional).
     #
     # @return:
     # A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
@@ -1047,7 +1047,7 @@ Extensions: interface
     # installed, uninstalled, enabled or disabled.
     #
     # @listener:
-    # will be invoked whenever this event fires; mandatory, not optional.
+    # will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).
     #
     # @return:
     # A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.

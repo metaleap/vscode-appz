@@ -17,6 +17,8 @@ cd ../..
 
 
 cd libs/js
+rm -rf ./readme.md
+rm -rf ./docs
 npx typedoc --plugin typedoc-plugin-markdown --hideBreadcrumbs --hideSources
 npx concat-md docs > readme.md
 rm -rf ./docs

@@ -458,7 +458,7 @@ type Extensions interface {
 	// An event which fires when `extensions.all` changes. This can happen when extensions are
 	// installed, uninstalled, enabled or disabled.
 	//
-	// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+	// `listener` ── will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).
 	//
 	// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
 	OnDidChange(listener func()) func(func(*Disposable))
@@ -562,7 +562,8 @@ func (me *InputBox) OnDidAccept(handler func()) func(func(*Disposable))
 ```
 An event signaling when the user indicated acceptance of the input value.
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidAccept` event fires (mandatory,
+not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the
 `OnDidAccept` event on `Dispose`.
@@ -574,7 +575,8 @@ func (me *InputBox) OnDidChangeValue(handler func(string)) func(func(*Disposable
 ```
 An event signaling when the value has changed.
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidChangeValue` event fires
+(mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the
 `OnDidChangeValue` event on `Dispose`.
@@ -593,7 +595,8 @@ will be notified through
 [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 the user pressing Esc, some other input UI opening, etc.)
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidHide` event fires (mandatory,
+not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide`
 event on `Dispose`.
@@ -672,7 +675,7 @@ ApplyChanges propagates this `InputBoxBag`'s current property values for
 `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`,
 `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to
 immediately become active there. Note that all those property values are
-trasmitted, no omissions.
+transmitted, no omissions.
 
 `return` ── a thenable that resolves when this `ApplyChanges` call has
 successfully completed at the VSC side.
@@ -740,7 +743,7 @@ type Languages interface {
 	// An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
 	// newly added and removed diagnostics.
 	//
-	// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+	// `listener` ── will be invoked whenever the `OnDidChangeDiagnostics` event fires (mandatory, not optional).
 	//
 	// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
 	OnDidChangeDiagnostics(listener func(DiagnosticChangeEvent)) func(func(*Disposable))
@@ -1078,7 +1081,8 @@ func (me *QuickPick) OnDidAccept(handler func()) func(func(*Disposable))
 ```
 An event signaling when the user indicated acceptance of the selected item(s).
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidAccept` event fires (mandatory,
+not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the
 `OnDidAccept` event on `Dispose`.
@@ -1090,7 +1094,8 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem)) func(func(
 ```
 An event signaling when the active items have changed.
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidChangeActive` event fires
+(mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the
 `OnDidChangeActive` event on `Dispose`.
@@ -1102,7 +1107,8 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem)) func(fu
 ```
 An event signaling when the selected items have changed.
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidChangeSelection` event fires
+(mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the
 `OnDidChangeSelection` event on `Dispose`.
@@ -1114,7 +1120,8 @@ func (me *QuickPick) OnDidChangeValue(handler func(string)) func(func(*Disposabl
 ```
 An event signaling when the value of the filter text has changed.
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidChangeValue` event fires
+(mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the
 `OnDidChangeValue` event on `Dispose`.
@@ -1133,7 +1140,8 @@ will be notified through
 [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 the user pressing Esc, some other input UI opening, etc.)
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidHide` event fires (mandatory,
+not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide`
 event on `Dispose`.
@@ -1221,7 +1229,7 @@ ApplyChanges propagates this `QuickPickBag`'s current property values for
 `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`,
 `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`,
 `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active
-there. Note that all those property values are trasmitted, no omissions.
+there. Note that all those property values are transmitted, no omissions.
 
 `return` ── a thenable that resolves when this `ApplyChanges` call has
 successfully completed at the VSC side.
@@ -1429,7 +1437,7 @@ func (me *StatusBarItemBag) ApplyChanges() func(func())
 ```
 ApplyChanges propagates this `StatusBarItemBag`'s current property values for
 `text`, `tooltip`, `color`, `command` to the VSC side to immediately become
-active there. Note that all those property values are trasmitted, no omissions.
+active there. Note that all those property values are transmitted, no omissions.
 
 `return` ── a thenable that resolves when this `ApplyChanges` call has
 successfully completed at the VSC side.
@@ -2014,7 +2022,7 @@ type Window interface {
 	// An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
 	// changes. The value of the event represents whether the window is focused.
 	//
-	// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+	// `listener` ── will be invoked whenever the `OnDidChangeWindowState` event fires (mandatory, not optional).
 	//
 	// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
 	OnDidChangeWindowState(listener func(WindowState)) func(func(*Disposable))
@@ -2132,7 +2140,7 @@ type Workspace interface {
 
 	// An event that is emitted when a workspace folder is added or removed.
 	//
-	// `listener` ── will be invoked whenever this event fires; mandatory, not optional.
+	// `listener` ── will be invoked whenever the `OnDidChangeWorkspaceFolders` event fires (mandatory, not optional).
 	//
 	// `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
 	OnDidChangeWorkspaceFolders(listener func(WorkspaceFoldersChangeEvent)) func(func(*Disposable))

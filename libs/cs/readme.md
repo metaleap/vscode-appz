@@ -1107,7 +1107,7 @@ console.log(importedApi.mul(42, 1));
 An event which fires when `extensions.all` changes. This can happen when extensions are
 installed, uninstalled, enabled or disabled.
 
-`listener` ── will be invoked whenever this event fires; mandatory, not optional.
+`listener` ── will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
 
@@ -1115,7 +1115,7 @@ installed, uninstalled, enabled or disabled.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| listener | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever this event fires; mandatory, not optional. |
+| listener | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever the `OnDidChange` event fires (mandatory, not optional). |
 
 <a name='T-VscAppz-ILanguages'></a>
 ## ILanguages `type`
@@ -1178,7 +1178,7 @@ This method has no parameters.
 An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
 newly added and removed diagnostics.
 
-`listener` ── will be invoked whenever this event fires; mandatory, not optional.
+`listener` ── will be invoked whenever the `OnDidChangeDiagnostics` event fires (mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
 
@@ -1186,7 +1186,7 @@ newly added and removed diagnostics.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| listener | [System.Action{VscAppz.DiagnosticChangeEvent}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.DiagnosticChangeEvent}') | will be invoked whenever this event fires; mandatory, not optional. |
+| listener | [System.Action{VscAppz.DiagnosticChangeEvent}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.DiagnosticChangeEvent}') | will be invoked whenever the `OnDidChangeDiagnostics` event fires (mandatory, not optional). |
 
 <a name='T-VscAppz-IVscode'></a>
 ## IVscode `type`
@@ -1465,7 +1465,7 @@ Create a TextEditorDecorationType that can be used to add decorations to text ed
 An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
 changes. The value of the event represents whether the window is focused.
 
-`listener` ── will be invoked whenever this event fires; mandatory, not optional.
+`listener` ── will be invoked whenever the `OnDidChangeWindowState` event fires (mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
 
@@ -1473,7 +1473,7 @@ changes. The value of the event represents whether the window is focused.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| listener | [System.Action{VscAppz.WindowState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.WindowState}') | will be invoked whenever this event fires; mandatory, not optional. |
+| listener | [System.Action{VscAppz.WindowState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.WindowState}') | will be invoked whenever the `OnDidChangeWindowState` event fires (mandatory, not optional). |
 
 <a name='M-VscAppz-IWindow-SetStatusBarMessage1-System-String,System-Int32-'></a>
 ### SetStatusBarMessage1(text,hideAfterTimeout) `method`
@@ -2087,7 +2087,7 @@ This method has no parameters.
 
 An event that is emitted when a workspace folder is added or removed.
 
-`listener` ── will be invoked whenever this event fires; mandatory, not optional.
+`listener` ── will be invoked whenever the `OnDidChangeWorkspaceFolders` event fires (mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
 
@@ -2095,7 +2095,7 @@ An event that is emitted when a workspace folder is added or removed.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| listener | [System.Action{VscAppz.WorkspaceFoldersChangeEvent}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.WorkspaceFoldersChangeEvent}') | will be invoked whenever this event fires; mandatory, not optional. |
+| listener | [System.Action{VscAppz.WorkspaceFoldersChangeEvent}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.WorkspaceFoldersChangeEvent}') | will be invoked whenever the `OnDidChangeWorkspaceFolders` event fires (mandatory, not optional). |
 
 <a name='M-VscAppz-IWorkspace-SaveAll-System-Boolean-'></a>
 ### SaveAll(includeUntitled) `method`
@@ -2230,7 +2230,7 @@ This method has no parameters.
 
 An event signaling when the user indicated acceptance of the input value.
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidAccept` event fires (mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
 
@@ -2238,7 +2238,7 @@ An event signaling when the user indicated acceptance of the input value.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever the `OnDidAccept` event fires (mandatory, not optional). |
 
 <a name='M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String}-'></a>
 ### OnDidChangeValue(handler) `method`
@@ -2247,7 +2247,7 @@ An event signaling when the user indicated acceptance of the input value.
 
 An event signaling when the value has changed.
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidChangeValue` event fires (mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
 
@@ -2255,7 +2255,7 @@ An event signaling when the value has changed.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | will be invoked whenever the `OnDidChangeValue` event fires (mandatory, not optional). |
 
 <a name='M-VscAppz-InputBox-OnDidHide-System-Action-'></a>
 ### OnDidHide(handler) `method`
@@ -2269,7 +2269,7 @@ the extension will be notified through [QuickInput.onDidHide](https://code.visua
 (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 the user pressing Esc, some other input UI opening, etc.)
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidHide` event fires (mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
 
@@ -2277,7 +2277,7 @@ the user pressing Esc, some other input UI opening, etc.)
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever the `OnDidHide` event fires (mandatory, not optional). |
 
 <a name='M-VscAppz-InputBox-Show'></a>
 ### Show() `method`
@@ -2392,7 +2392,7 @@ Current input value.
 
 ##### Summary
 
-ApplyChanges propagates this `InputBoxBag`'s current property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
+ApplyChanges propagates this `InputBoxBag`'s current property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
 
 `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 
@@ -2886,7 +2886,7 @@ This method has no parameters.
 
 An event signaling when the user indicated acceptance of the selected item(s).
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidAccept` event fires (mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
 
@@ -2894,7 +2894,7 @@ An event signaling when the user indicated acceptance of the selected item(s).
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever the `OnDidAccept` event fires (mandatory, not optional). |
 
 <a name='M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[]}-'></a>
 ### OnDidChangeActive(handler) `method`
@@ -2903,7 +2903,7 @@ An event signaling when the user indicated acceptance of the selected item(s).
 
 An event signaling when the active items have changed.
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidChangeActive` event fires (mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.
 
@@ -2911,7 +2911,7 @@ An event signaling when the active items have changed.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickPickItem[]}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[]}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.QuickPickItem[]}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[]}') | will be invoked whenever the `OnDidChangeActive` event fires (mandatory, not optional). |
 
 <a name='M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[]}-'></a>
 ### OnDidChangeSelection(handler) `method`
@@ -2920,7 +2920,7 @@ An event signaling when the active items have changed.
 
 An event signaling when the selected items have changed.
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidChangeSelection` event fires (mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.
 
@@ -2928,7 +2928,7 @@ An event signaling when the selected items have changed.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickPickItem[]}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[]}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.QuickPickItem[]}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[]}') | will be invoked whenever the `OnDidChangeSelection` event fires (mandatory, not optional). |
 
 <a name='M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String}-'></a>
 ### OnDidChangeValue(handler) `method`
@@ -2937,7 +2937,7 @@ An event signaling when the selected items have changed.
 
 An event signaling when the value of the filter text has changed.
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidChangeValue` event fires (mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
 
@@ -2945,7 +2945,7 @@ An event signaling when the value of the filter text has changed.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | will be invoked whenever the `OnDidChangeValue` event fires (mandatory, not optional). |
 
 <a name='M-VscAppz-QuickPick-OnDidHide-System-Action-'></a>
 ### OnDidHide(handler) `method`
@@ -2959,7 +2959,7 @@ the extension will be notified through [QuickInput.onDidHide](https://code.visua
 (Examples include: an explicit call to [QuickInput.hide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.hide),
 the user pressing Esc, some other input UI opening, etc.)
 
-`handler` ── will be invoked whenever this event fires; mandatory, not optional.
+`handler` ── will be invoked whenever the `OnDidHide` event fires (mandatory, not optional).
 
 `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
 
@@ -2967,7 +2967,7 @@ the user pressing Esc, some other input UI opening, etc.)
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever the `OnDidHide` event fires (mandatory, not optional). |
 
 <a name='M-VscAppz-QuickPick-Show'></a>
 ### Show() `method`
@@ -3103,7 +3103,7 @@ Current value of the filter text.
 
 ##### Summary
 
-ApplyChanges propagates this `QuickPickBag`'s current property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
+ApplyChanges propagates this `QuickPickBag`'s current property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
 
 `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 
@@ -3430,7 +3430,7 @@ The tooltip text when you hover over this entry.
 
 ##### Summary
 
-ApplyChanges propagates this `StatusBarItemBag`'s current property values for `text`, `tooltip`, `color`, `command` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
+ApplyChanges propagates this `StatusBarItemBag`'s current property values for `text`, `tooltip`, `color`, `command` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
 
 `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 
