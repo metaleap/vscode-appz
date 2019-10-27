@@ -1320,7 +1320,6 @@ namespace VscAppz {
 		[JsonIgnore]
 		public Func<string, string> ValidateInput;
 
-		/// <summary>For internal runtime use only.</summary>
 		[JsonProperty("validateInput_AppzFuncId")]
 		internal string ValidateInput_AppzFuncId;
 	}
@@ -1351,7 +1350,6 @@ namespace VscAppz {
 		[JsonIgnore]
 		public Func<QuickPickItem, any> OnDidSelectItem;
 
-		/// <summary>For internal runtime use only.</summary>
 		[JsonProperty("onDidSelectItem_AppzFuncId")]
 		internal string OnDidSelectItem_AppzFuncId;
 	}

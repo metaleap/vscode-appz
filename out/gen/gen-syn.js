@@ -181,7 +181,6 @@ class Builder {
             if (fldfn) {
                 fldfn.FuncFieldRel = {
                     Name: ffname + gen.idents.fldSuffFuncId,
-                    Docs: this.docs(null, [gen.docStrs.internalOnly]),
                     Type: TypeRefPrim.String,
                     Json: { Name: ff + gen.idents.fldSuffFuncId, Required: false, Excluded: false },
                     FuncFieldRel: fldfn,

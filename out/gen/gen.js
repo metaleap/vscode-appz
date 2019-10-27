@@ -9,7 +9,6 @@ const tmpSuppressObjMembers = {
 };
 exports.docStrs = {
     extBaggage: "Free-form custom data, preserved across a roundtrip.",
-    internalOnly: "For internal runtime use only."
 };
 exports.idents = {
     typeSuffBag: "Bag",

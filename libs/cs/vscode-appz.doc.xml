@@ -1326,9 +1326,6 @@
             Return `undefined`, `null`, or the empty string when 'value' is valid.
             </summary>
         </member>
-        <member name="F:VscAppz.InputBoxOptions.ValidateInput_AppzFuncId">
-            <summary>For internal runtime use only.</summary>
-        </member>
         <member name="T:VscAppz.QuickPickOptions">
             <summary>Options to configure the behavior of the quick pick UI.</summary>
         </member>
@@ -1349,9 +1346,6 @@
         </member>
         <member name="F:VscAppz.QuickPickOptions.OnDidSelectItem">
             <summary>An optional function that is invoked whenever an item is selected.</summary>
-        </member>
-        <member name="F:VscAppz.QuickPickOptions.OnDidSelectItem_AppzFuncId">
-            <summary>For internal runtime use only.</summary>
         </member>
         <member name="T:VscAppz.QuickPickItem">
             <summary>

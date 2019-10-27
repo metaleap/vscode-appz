@@ -1115,10 +1115,6 @@ export interface InputBoxOptions {
 
      */
     validateInput?: (_: string) => string;
-    /**
-     * For internal runtime use only.
-
-     */
     validateInput_AppzFuncId: string;
 }
 /**
@@ -1156,10 +1152,6 @@ export interface QuickPickOptions {
 
      */
     onDidSelectItem?: (_: QuickPickItem) => any;
-    /**
-     * For internal runtime use only.
-
-     */
     onDidSelectItem_AppzFuncId: string;
 }
 /**

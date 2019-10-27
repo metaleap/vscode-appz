@@ -152,7 +152,6 @@
   - [PlaceHolder](#F-VscAppz-InputBoxOptions-PlaceHolder 'VscAppz.InputBoxOptions.PlaceHolder')
   - [Prompt](#F-VscAppz-InputBoxOptions-Prompt 'VscAppz.InputBoxOptions.Prompt')
   - [ValidateInput](#F-VscAppz-InputBoxOptions-ValidateInput 'VscAppz.InputBoxOptions.ValidateInput')
-  - [ValidateInput_AppzFuncId](#F-VscAppz-InputBoxOptions-ValidateInput_AppzFuncId 'VscAppz.InputBoxOptions.ValidateInput_AppzFuncId')
   - [Value](#F-VscAppz-InputBoxOptions-Value 'VscAppz.InputBoxOptions.Value')
   - [ValueSelection](#F-VscAppz-InputBoxOptions-ValueSelection 'VscAppz.InputBoxOptions.ValueSelection')
 - [MessageItem](#T-VscAppz-MessageItem 'VscAppz.MessageItem')
@@ -227,7 +226,6 @@
   - [MatchOnDescription](#F-VscAppz-QuickPickOptions-MatchOnDescription 'VscAppz.QuickPickOptions.MatchOnDescription')
   - [MatchOnDetail](#F-VscAppz-QuickPickOptions-MatchOnDetail 'VscAppz.QuickPickOptions.MatchOnDetail')
   - [OnDidSelectItem](#F-VscAppz-QuickPickOptions-OnDidSelectItem 'VscAppz.QuickPickOptions.OnDidSelectItem')
-  - [OnDidSelectItem_AppzFuncId](#F-VscAppz-QuickPickOptions-OnDidSelectItem_AppzFuncId 'VscAppz.QuickPickOptions.OnDidSelectItem_AppzFuncId')
   - [PlaceHolder](#F-VscAppz-QuickPickOptions-PlaceHolder 'VscAppz.QuickPickOptions.PlaceHolder')
 - [SaveDialogOptions](#T-VscAppz-SaveDialogOptions 'VscAppz.SaveDialogOptions')
   - [DefaultUri](#F-VscAppz-SaveDialogOptions-DefaultUri 'VscAppz.SaveDialogOptions.DefaultUri')
@@ -2465,13 +2463,6 @@ to the user.
 `return` ── A human readable string which is presented as diagnostic message.
 Return `undefined`, `null`, or the empty string when 'value' is valid.
 
-<a name='F-VscAppz-InputBoxOptions-ValidateInput_AppzFuncId'></a>
-### ValidateInput_AppzFuncId `constants`
-
-##### Summary
-
-For internal runtime use only.
-
 <a name='F-VscAppz-InputBoxOptions-Value'></a>
 ### Value `constants`
 
@@ -3224,13 +3215,6 @@ An optional flag to include the detail when filtering the picks.
 ##### Summary
 
 An optional function that is invoked whenever an item is selected.
-
-<a name='F-VscAppz-QuickPickOptions-OnDidSelectItem_AppzFuncId'></a>
-### OnDidSelectItem_AppzFuncId `constants`
-
-##### Summary
-
-For internal runtime use only.
 
 <a name='F-VscAppz-QuickPickOptions-PlaceHolder'></a>
 ### PlaceHolder `constants`

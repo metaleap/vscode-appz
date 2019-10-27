@@ -4661,8 +4661,6 @@ ___
 
 • **validateInput_AppzFuncId**: *string*
 
-For internal runtime use only.
-
 ___
 
 ### `Optional` value
@@ -6121,8 +6119,6 @@ ___
 ###  onDidSelectItem_AppzFuncId
 
 • **onDidSelectItem_AppzFuncId**: *string*
-
-For internal runtime use only.
 
 ___
 

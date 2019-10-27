@@ -1408,7 +1408,6 @@ InputBoxOptions: class
     # JSON FLAGS: {"Name":"validateInput","Required":false,"Excluded":true}
     ValidateInput: ?(string->string)
 
-    # For internal runtime use only.
     #
     # JSON FLAGS: {"Name":"validateInput_AppzFuncId","Required":false,"Excluded":false}
     ValidateInput_AppzFuncId: string
@@ -1455,7 +1454,6 @@ QuickPickOptions: class
     # JSON FLAGS: {"Name":"onDidSelectItem","Required":false,"Excluded":true}
     OnDidSelectItem: ?(QuickPickItem->any)
 
-    # For internal runtime use only.
     #
     # JSON FLAGS: {"Name":"onDidSelectItem_AppzFuncId","Required":false,"Excluded":false}
     OnDidSelectItem_AppzFuncId: string

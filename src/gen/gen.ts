@@ -9,7 +9,6 @@ const tmpSuppressObjMembers: { [_: string]: string[] } = {
 }
 export const docStrs = {
     extBaggage: "Free-form custom data, preserved across a roundtrip.",
-    internalOnly: "For internal runtime use only."
 }
 export const idents = {
     typeSuffBag: "Bag",
