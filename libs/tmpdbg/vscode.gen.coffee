@@ -937,6 +937,35 @@ Workspace: interface
         pathOrUri: string
         includeWorkspaceFolder: bool
 
+    # createFileSystemWatcher:
+    # Creates a file system watcher.
+    # 
+    # A glob pattern that filters the file events on their absolute path must be provided. Optionally,
+    # flags to ignore certain kinds of events can be provided. To stop listening to events the watcher must be disposed.
+    # 
+    # *Note* that only files within the current [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) can be watched.
+    #
+    # @globPattern:
+    # A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that is applied to the absolute paths of created, changed,
+    # and deleted files. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern) to limit events to a certain [workspace folder](#WorkspaceFolder).
+    #
+    # @ignoreCreateEvents:
+    # Ignore when files have been created.
+    #
+    # @ignoreChangeEvents:
+    # Ignore when files have been changed.
+    #
+    # @ignoreDeleteEvents:
+    # Ignore when files have been deleted.
+    #
+    # @return:
+    # A new file system watcher instance.
+    CreateFileSystemWatcher: ((?FileSystemWatcher->void)->void)
+        globPattern: string
+        ignoreCreateEvents: bool
+        ignoreChangeEvents: bool
+        ignoreDeleteEvents: bool
+
     # Provides single-call access to numerous individual `Workspace` properties at once.
     #
     # @return:
@@ -2054,6 +2083,25 @@ WorkspaceFoldersChangeEvent: class
 
 
 
+# A file system watcher notifies about changes to files and folders
+# on disk.
+# 
+# To get an instance of a `FileSystemWatcher` use
+# [createFileSystemWatcher](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher).
+FileSystemWatcher: class
+
+    #
+    # JSON FLAGS: undefined
+    __disp__: ?Disposable
+
+    # Bag represents this `FileSystemWatcher`'s current state. All its members get auto-refreshed every time a (subscribed) `FileSystemWatcher` event fires or any `FileSystemWatcher` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+    #
+    # JSON FLAGS: undefined
+    Bag: ?FileSystemWatcherBag
+
+
+
+
 # The event that is fired when diagnostics change.
 DiagnosticChangeEvent: class
 
@@ -2449,6 +2497,37 @@ QuickPickBag: class
     #
     # JSON FLAGS: {"Name":"ignoreFocusOut","Required":false,"Excluded":false}
     IgnoreFocusOut: bool
+
+
+
+
+# FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+FileSystemWatcherBag: class
+
+    #
+    # JSON FLAGS: {"Excluded":true}
+    __holder__: ?FileSystemWatcher
+
+    # ignoreCreateEvents:
+    # true if this file system watcher has been created such that
+    # it ignores creation file system events.
+    #
+    # JSON FLAGS: {"Name":"ignoreCreateEvents","Required":false,"Excluded":false}
+    IgnoreCreateEvents: bool
+
+    # ignoreChangeEvents:
+    # true if this file system watcher has been created such that
+    # it ignores change file system events.
+    #
+    # JSON FLAGS: {"Name":"ignoreChangeEvents","Required":false,"Excluded":false}
+    IgnoreChangeEvents: bool
+
+    # ignoreDeleteEvents:
+    # true if this file system watcher has been created such that
+    # it ignores delete file system events.
+    #
+    # JSON FLAGS: {"Name":"ignoreDeleteEvents","Required":false,"Excluded":false}
+    IgnoreDeleteEvents: bool
 
 
 
@@ -2904,7 +2983,7 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> ((?string->v
             lock this
                 for fnid in fnids
                     this.Impl().cbOther·del(fnid)
-        return (=!onresp) || onresp(payload)
+        return onresp(payload)
     )
     return (a0:(?string->void) -> void)
         onret = a0
@@ -2981,7 +3060,7 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
             lock this
                 for fnid in fnids
                     this.Impl().cbOther·del(fnid)
-        return (=!onresp) || onresp(payload)
+        return onresp(payload)
     )
     return (a0:(?[string]->void) -> void)
         onret = a0
@@ -3049,7 +3128,7 @@ Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?C
             lock this
                 for fnid in fnids
                     this.Impl().cbOther·del(fnid)
-        return (=!onresp) || onresp(payload)
+        return onresp(payload)
     )
     return (a0:(?string->void) -> void)
         onret = a0
@@ -3127,7 +3206,7 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
             lock this
                 for fnid in fnids
                     this.Impl().cbOther·del(fnid)
-        return (=!onresp) || onresp(payload)
+        return onresp(payload)
     )
     return (a0:(?[QuickPickItem]->void) -> void)
         onret = a0
@@ -3194,7 +3273,7 @@ Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> t
             lock this
                 for fnid in fnids
                     this.Impl().cbOther·del(fnid)
-        return (=!onresp) || onresp(payload)
+        return onresp(payload)
     )
     return (a0:(?QuickPickItem->void) -> void)
         onret = a0
@@ -4193,6 +4272,42 @@ Workspace·AsRelativePath: (pathOrUri:string -> includeWorkspaceFolder:bool -> (
     
     this.Impl().send(msg, onresp)
     return (a0:(?string->void) -> void)
+        onret = a0
+    
+
+
+
+
+Workspace·CreateFileSystemWatcher: (globPattern:string -> ignoreCreateEvents:bool -> ignoreChangeEvents:bool -> ignoreDeleteEvents:bool -> ((?FileSystemWatcher->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "workspace.createFileSystemWatcher"
+    msg.Data = dict·new(4)
+    msg.Data@"globPattern" = globPattern
+    msg.Data@"ignoreCreateEvents" = ignoreCreateEvents
+    msg.Data@"ignoreChangeEvents" = ignoreChangeEvents
+    msg.Data@"ignoreDeleteEvents" = ignoreDeleteEvents
+    var onresp of (any->bool)
+    var onret of (?FileSystemWatcher->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?FileSystemWatcher
+        if =?payload
+            result = ?FileSystemWatcher·new
+            ok = result.__loadFromJsonish__(payload)
+            if !ok
+                return false
+            result.__disp__.impl = this.Impl()
+        else
+            return false
+        result.__appzObjBagPullFromPeer__()(( -> void)
+            if =?onret
+                onret(result)
+        )
+        return true
+    
+    this.Impl().send(msg, onresp)
+    return (a0:(?FileSystemWatcher->void) -> void)
         onret = a0
     
 
@@ -5491,6 +5606,221 @@ QuickPick·__appzObjBagPushToPeer__: (allUpdates:?QuickPickBag -> ((void->void)-
 
 
 
+FileSystemWatcher·OnDidCreate: (handler:(string->void) -> ((?Disposable->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "FileSystemWatcher.onDidCreate"
+    msg.Data = dict·new(2)
+    msg.Data@"" = this.__disp__.id
+    var handlerFnId of string
+    if =!handler
+        OnError(this.__disp__.impl, "FileSystemWatcher.OnDidCreate: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    handlerFnId = this.__disp__.impl.nextSub((args:[any] -> bool)
+        var ok of bool
+        if 2 != args·len
+            return ok
+        var _a_0_ of string
+        [_a_0_, ok] = ((args@0)·(string))
+        if !ok
+            return false
+            lock this.__disp__.impl
+                ok = this.Bag.__loadFromJsonish__(args@1)
+            if !ok
+                return false
+            handler(_a_0_)
+        return true
+    , null)
+    msg.Data@"handler" = handlerFnId
+    this.__disp__.addSub(handlerFnId)
+    var onresp of (any->bool)
+    var onret of (?Disposable->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?Disposable
+        if =?payload
+            result = ?Disposable·new
+            ok = result.__loadFromJsonish__(payload)
+            if !ok
+                return false
+        else
+            return false
+        if =?onret
+            onret(result.bind(this.__disp__.impl, handlerFnId))
+        return true
+    
+    this.__disp__.impl.send(msg, onresp)
+    return (a0:(?Disposable->void) -> void)
+        onret = a0
+    
+
+
+
+
+FileSystemWatcher·OnDidChange: (handler:(string->void) -> ((?Disposable->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "FileSystemWatcher.onDidChange"
+    msg.Data = dict·new(2)
+    msg.Data@"" = this.__disp__.id
+    var handlerFnId of string
+    if =!handler
+        OnError(this.__disp__.impl, "FileSystemWatcher.OnDidChange: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    handlerFnId = this.__disp__.impl.nextSub((args:[any] -> bool)
+        var ok of bool
+        if 2 != args·len
+            return ok
+        var _a_0_ of string
+        [_a_0_, ok] = ((args@0)·(string))
+        if !ok
+            return false
+            lock this.__disp__.impl
+                ok = this.Bag.__loadFromJsonish__(args@1)
+            if !ok
+                return false
+            handler(_a_0_)
+        return true
+    , null)
+    msg.Data@"handler" = handlerFnId
+    this.__disp__.addSub(handlerFnId)
+    var onresp of (any->bool)
+    var onret of (?Disposable->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?Disposable
+        if =?payload
+            result = ?Disposable·new
+            ok = result.__loadFromJsonish__(payload)
+            if !ok
+                return false
+        else
+            return false
+        if =?onret
+            onret(result.bind(this.__disp__.impl, handlerFnId))
+        return true
+    
+    this.__disp__.impl.send(msg, onresp)
+    return (a0:(?Disposable->void) -> void)
+        onret = a0
+    
+
+
+
+
+FileSystemWatcher·OnDidDelete: (handler:(string->void) -> ((?Disposable->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "FileSystemWatcher.onDidDelete"
+    msg.Data = dict·new(2)
+    msg.Data@"" = this.__disp__.id
+    var handlerFnId of string
+    if =!handler
+        OnError(this.__disp__.impl, "FileSystemWatcher.OnDidDelete: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    handlerFnId = this.__disp__.impl.nextSub((args:[any] -> bool)
+        var ok of bool
+        if 2 != args·len
+            return ok
+        var _a_0_ of string
+        [_a_0_, ok] = ((args@0)·(string))
+        if !ok
+            return false
+            lock this.__disp__.impl
+                ok = this.Bag.__loadFromJsonish__(args@1)
+            if !ok
+                return false
+            handler(_a_0_)
+        return true
+    , null)
+    msg.Data@"handler" = handlerFnId
+    this.__disp__.addSub(handlerFnId)
+    var onresp of (any->bool)
+    var onret of (?Disposable->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        var result of ?Disposable
+        if =?payload
+            result = ?Disposable·new
+            ok = result.__loadFromJsonish__(payload)
+            if !ok
+                return false
+        else
+            return false
+        if =?onret
+            onret(result.bind(this.__disp__.impl, handlerFnId))
+        return true
+    
+    this.__disp__.impl.send(msg, onresp)
+    return (a0:(?Disposable->void) -> void)
+        onret = a0
+    
+
+
+
+
+FileSystemWatcher·Dispose: ( -> ((void->void)->void))
+    return this.__disp__.Dispose()
+
+
+
+
+FileSystemWatcher·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "FileSystemWatcher.__appzObjBagPullFromPeer__"
+    msg.Data = dict·new(1)
+    msg.Data@"" = this.__disp__.id
+    var onresp of (any->bool)
+    var onret of (->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        if =!this.Bag
+            this.Bag = ?FileSystemWatcherBag·new
+        this.Bag.__holder__ = this
+        lock this.Bag.__holder__.__disp__.impl
+            ok = this.Bag.__loadFromJsonish__(payload)
+        if !ok
+            return false
+        if =?onret
+            onret()
+        return true
+    
+    this.__disp__.impl.send(msg, onresp)
+    return (a0:(->void) -> void)
+        onret = a0
+    
+
+
+
+
+FileSystemWatcher·__appzObjBagPushToPeer__: (allUpdates:?FileSystemWatcherBag -> ((void->void)->void))
+    var msg of ?ipcMsg
+    msg = ?ipcMsg·new
+    msg.QName = "FileSystemWatcher.__appzObjBagPushToPeer__"
+    msg.Data = dict·new(2)
+    msg.Data@"" = this.__disp__.id
+    msg.Data@"allUpdates" = allUpdates
+    var onresp of (any->bool)
+    var onret of (void->void)
+    onresp = (payload:any -> bool)
+        var ok of bool
+        lock this.__disp__.impl
+            ok = this.Bag.__loadFromJsonish__(payload)
+        if !ok
+            return false
+        if =?onret
+            onret()
+        return true
+    
+    this.__disp__.impl.send(msg, onresp)
+    return (a0:(void->void) -> void)
+        onret = a0
+    
+
+
+
+
 StatusBarItemBag·ReFetch: ( -> ((->void)->void))
     return this.__holder__.__appzObjBagPullFromPeer__()
 
@@ -5534,6 +5864,18 @@ QuickPickBag·ReFetch: ( -> ((->void)->void))
 
 
 QuickPickBag·ApplyChanges: ( -> ((->void)->void))
+    return this.__holder__.__appzObjBagPushToPeer__(this)
+
+
+
+
+FileSystemWatcherBag·ReFetch: ( -> ((->void)->void))
+    return this.__holder__.__appzObjBagPullFromPeer__()
+
+
+
+
+FileSystemWatcherBag·ApplyChanges: ( -> ((->void)->void))
     return this.__holder__.__appzObjBagPushToPeer__(this)
 
 
@@ -5906,6 +6248,15 @@ WorkspaceFoldersChangeEvent·__loadFromJsonish__: (payload:any -> bool)
     else
         return false
     return true
+
+
+
+
+FileSystemWatcher·__loadFromJsonish__: (payload:any -> bool)
+    var ok of bool
+    this.__disp__ = ?Disposable·new
+    ok = this.__disp__.__loadFromJsonish__(payload)
+    return ok
 
 
 
@@ -6376,6 +6727,42 @@ QuickPickBag·__loadFromJsonish__: (payload:any -> bool)
             if !ok
                 return false
         this.IgnoreFocusOut = ignoreFocusOut
+    return true
+
+
+
+
+FileSystemWatcherBag·__loadFromJsonish__: (payload:any -> bool)
+    var it of dict
+    var ok of bool
+    var val of any
+    [it, ok] = ((payload)·(dict))
+    if !ok
+        return false
+    [val, ok] = it@?"ignoreCreateEvents"
+    if ok
+        var ignoreCreateEvents of bool
+        if =?val
+            [ignoreCreateEvents, ok] = ((val)·(bool))
+            if !ok
+                return false
+        this.IgnoreCreateEvents = ignoreCreateEvents
+    [val, ok] = it@?"ignoreChangeEvents"
+    if ok
+        var ignoreChangeEvents of bool
+        if =?val
+            [ignoreChangeEvents, ok] = ((val)·(bool))
+            if !ok
+                return false
+        this.IgnoreChangeEvents = ignoreChangeEvents
+    [val, ok] = it@?"ignoreDeleteEvents"
+    if ok
+        var ignoreDeleteEvents of bool
+        if =?val
+            [ignoreDeleteEvents, ok] = ((val)·(bool))
+            if !ok
+                return false
+        this.IgnoreDeleteEvents = ignoreDeleteEvents
     return true
 
 

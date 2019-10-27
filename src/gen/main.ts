@@ -68,6 +68,7 @@ const genApiSurface: genApiMember = {
                 'workspaceFolders',
                 'findFiles',
                 'asRelativePath',
+                'createFileSystemWatcher',
             ],
             'languages': [
                 'getLanguages',
@@ -348,12 +349,14 @@ function gatherStruct(into: gen.GenJob, decl: ts.InterfaceDeclaration | ts.Class
             if (hc.types && hc.types.length)
                 for (const hct of hc.types) {
                     const tname = hct.getText()
-                    if (!into.mereBaseTypes.includes(tname))
-                        into.mereBaseTypes.push(tname)
-                    gatherAll(into, into.fromOrig.body, [tname], into.moduleName)
-                    if (hct.typeArguments && hct.typeArguments.length)
-                        for (const hcta of hct.typeArguments)
-                            gatherFromTypeNode(into, hcta, decl.typeParameters)
+                    if (tname !== "Disposable") {
+                        if (!into.mereBaseTypes.includes(tname))
+                            into.mereBaseTypes.push(tname)
+                        gatherAll(into, into.fromOrig.body, [tname], into.moduleName)
+                        if (hct.typeArguments && hct.typeArguments.length)
+                            for (const hcta of hct.typeArguments)
+                                gatherFromTypeNode(into, hcta, decl.typeParameters)
+                    }
                 }
 
     if (decl.name.text !== "Event")

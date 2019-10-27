@@ -83,8 +83,8 @@ exports.strFmt = (s, ...args) => {
         s = s.replace('{' + i + '}', '' + args[i])
     return s
 }
-exports.strLo = s => s.toLowerCase()
-exports.strUp = s => s.toUpperCase()
+exports.strLo = s => s ? s.toLowerCase() : ""
+exports.strUp = s => s ? s.toUpperCase() : ""
 exports.nums1To = n => {
     const ret = new Array(n)
     for (let i = 0; i < n; i++)

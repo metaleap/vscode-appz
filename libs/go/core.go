@@ -217,7 +217,7 @@ func (me *Disposable) __loadFromJsonish__(payload any) (ok bool) {
 	return ok && me.id != ""
 }
 
-// Dispose signals to the counterparty to destroy the object.
+// Dispose requests the VSC side to forget about this object and release or destroy all resources associated with or occupied by it. All subsequent usage attempts will be rejected.
 func (me Disposable) Dispose() func(func()) {
 	var ondone func()
 	me.impl.send(&ipcMsg{QName: "dispose", Data: dict{"": me.id}}, func(any) bool {

@@ -779,6 +779,22 @@ export interface Workspace {
     AsRelativePath: (pathOrUri: string, includeWorkspaceFolder: boolean) => (_: (_: string) => void) => void
 
     /**
+     * Creates a file system watcher.
+     * 
+     * A glob pattern that filters the file events on their absolute path must be provided. Optionally,
+     * flags to ignore certain kinds of events can be provided. To stop listening to events the watcher must be disposed.
+     * 
+     * *Note* that only files within the current [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) can be watched.
+
+     * @param globPattern A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that is applied to the absolute paths of created, changed, and deleted files. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern) to limit events to a certain [workspace folder](#WorkspaceFolder).
+     * @param ignoreCreateEvents Ignore when files have been created.
+     * @param ignoreChangeEvents Ignore when files have been changed.
+     * @param ignoreDeleteEvents Ignore when files have been deleted.
+     * @return A new file system watcher instance.
+     */
+    CreateFileSystemWatcher: (globPattern: string, ignoreCreateEvents: boolean, ignoreChangeEvents: boolean, ignoreDeleteEvents: boolean) => (_: (_: FileSystemWatcher) => void) => void
+
+    /**
      * Provides single-call access to numerous individual `Workspace` properties at once.
 
      * @return a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
@@ -2101,6 +2117,52 @@ function newWorkspaceFoldersChangeEvent (): WorkspaceFoldersChangeEvent {
 }
 
 /**
+ * A file system watcher notifies about changes to files and folders
+ * on disk.
+ * 
+ * To get an instance of a `FileSystemWatcher` use
+ * [createFileSystemWatcher](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher).
+
+ */
+export interface FileSystemWatcher extends fromJson, withDisp, withBag<FileSystemWatcherBag> {
+    /**
+     * An event which fires on file/folder creation.
+
+     */
+    OnDidCreate: (_: (_: string) => void) => (_: (_: Disposable) => void) => void
+
+    /**
+     * An event which fires on file/folder change.
+
+     */
+    OnDidChange: (_: (_: string) => void) => (_: (_: Disposable) => void) => void
+
+    /**
+     * An event which fires on file/folder deletion.
+
+     */
+    OnDidDelete: (_: (_: string) => void) => (_: (_: Disposable) => void) => void
+
+    Dispose: () => (_: () => void) => void
+
+    __appzObjBagPullFromPeer__: () => (_: () => void) => void
+
+    __appzObjBagPushToPeer__: (_: FileSystemWatcherBag) => (_: () => void) => void
+}
+
+function newFileSystemWatcher (): FileSystemWatcher {
+    let me: FileSystemWatcher
+    me = { __loadFromJsonish__: _ => FileSystemWatcher___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as FileSystemWatcher
+    me.OnDidCreate = (a0) => FileSystemWatcher_OnDidCreate.call(me, a0)
+    me.OnDidChange = (a0) => FileSystemWatcher_OnDidChange.call(me, a0)
+    me.OnDidDelete = (a0) => FileSystemWatcher_OnDidDelete.call(me, a0)
+    me.Dispose = () => FileSystemWatcher_Dispose.call(me, )
+    me.__appzObjBagPullFromPeer__ = () => FileSystemWatcher___appzObjBagPullFromPeer__.call(me, )
+    me.__appzObjBagPushToPeer__ = (a0) => FileSystemWatcher___appzObjBagPushToPeer__.call(me, a0)
+    return me
+}
+
+/**
  * The event that is fired when diagnostics change.
 
  */
@@ -2548,6 +2610,45 @@ export interface QuickPickBag extends fromJson {
 export function newQuickPickBag (): QuickPickBag {
     let me: QuickPickBag
     me = { __loadFromJsonish__: _ => QuickPickBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => QuickPickBag_ApplyChanges.call(me), ReFetch: () => QuickPickBag_ReFetch.call(me) } as QuickPickBag
+    return me
+}
+
+/**
+ * FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+
+ */
+export interface FileSystemWatcherBag extends fromJson {
+    __holder__: FileSystemWatcher
+
+    /**
+     * true if this file system watcher has been created such that
+     * it ignores creation file system events.
+
+     */
+    ignoreCreateEvents?: boolean
+
+    /**
+     * true if this file system watcher has been created such that
+     * it ignores change file system events.
+
+     */
+    ignoreChangeEvents?: boolean
+
+    /**
+     * true if this file system watcher has been created such that
+     * it ignores delete file system events.
+
+     */
+    ignoreDeleteEvents?: boolean
+
+    ApplyChanges: () => (_: () => void) => void
+
+    ReFetch: () => (_: () => void) => void
+}
+
+export function newFileSystemWatcherBag (): FileSystemWatcherBag {
+    let me: FileSystemWatcherBag
+    me = { __loadFromJsonish__: _ => FileSystemWatcherBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => FileSystemWatcherBag_ApplyChanges.call(me), ReFetch: () => FileSystemWatcherBag_ReFetch.call(me) } as FileSystemWatcherBag
     return me
 }
 
@@ -3016,7 +3117,7 @@ class implWindow extends implBase implements Window {
                     }
                 }
             }
-            return (undefined === onresp || null === onresp) || onresp(payload)
+            return onresp(payload)
         })
         return (a0: (_: string) => void): void => {
             onret = a0
@@ -3108,7 +3209,7 @@ class implWindow extends implBase implements Window {
                     }
                 }
             }
-            return (undefined === onresp || null === onresp) || onresp(payload)
+            return onresp(payload)
         })
         return (a0: (_: string[]) => void): void => {
             onret = a0
@@ -3190,7 +3291,7 @@ class implWindow extends implBase implements Window {
                     }
                 }
             }
-            return (undefined === onresp || null === onresp) || onresp(payload)
+            return onresp(payload)
         })
         return (a0: (_: string) => void): void => {
             onret = a0
@@ -3283,7 +3384,7 @@ class implWindow extends implBase implements Window {
                     }
                 }
             }
-            return (undefined === onresp || null === onresp) || onresp(payload)
+            return onresp(payload)
         })
         return (a0: (_: QuickPickItem[]) => void): void => {
             onret = a0
@@ -3364,7 +3465,7 @@ class implWindow extends implBase implements Window {
                     }
                 }
             }
-            return (undefined === onresp || null === onresp) || onresp(payload)
+            return onresp(payload)
         })
         return (a0: (_: QuickPickItem) => void): void => {
             onret = a0
@@ -4424,6 +4525,43 @@ class implWorkspace extends implBase implements Workspace {
         }
         this.Impl().send(msg, onresp)
         return (a0: (_: string) => void): void => {
+            onret = a0
+        }
+    }
+
+    CreateFileSystemWatcher(globPattern: string, ignoreCreateEvents: boolean, ignoreChangeEvents: boolean, ignoreDeleteEvents: boolean): (_: (_: FileSystemWatcher) => void) => void {
+        let msg: ipcMsg
+        msg = newipcMsg()
+        msg.QName = "workspace.createFileSystemWatcher"
+        msg.Data = {}
+        msg.Data["globPattern"] = globPattern
+        msg.Data["ignoreCreateEvents"] = ignoreCreateEvents
+        msg.Data["ignoreChangeEvents"] = ignoreChangeEvents
+        msg.Data["ignoreDeleteEvents"] = ignoreDeleteEvents
+        let onresp: (_: any) => boolean
+        let onret: (_: FileSystemWatcher) => void
+        onresp = (payload: any): boolean => {
+            let ok: boolean
+            let result: FileSystemWatcher
+            if ((undefined !== payload && null !== payload)) {
+                result = newFileSystemWatcher()
+                ok = result.__loadFromJsonish__(payload)
+                if (!ok) {
+                    return false
+                }
+                result.__disp__.impl = this.Impl()
+            } else {
+                return false
+            }
+            result.__appzObjBagPullFromPeer__()((): void => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result)
+                }
+            })
+            return true
+        }
+        this.Impl().send(msg, onresp)
+        return (a0: (_: FileSystemWatcher) => void): void => {
             onret = a0
         }
     }
@@ -5853,6 +5991,246 @@ function QuickPick___appzObjBagPushToPeer__(this: QuickPick, allUpdates?: QuickP
     }
 }
 
+function FileSystemWatcher_OnDidCreate(this: FileSystemWatcher, handler: (_: string) => void): (_: (_: Disposable) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "FileSystemWatcher.onDidCreate"
+    msg.Data = {}
+    msg.Data[""] = this.__disp__.id
+    let handlerFnId: string
+    if ((undefined === handler || null === handler)) {
+        OnError(this.__disp__.impl, "FileSystemWatcher.OnDidCreate: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    }
+    handlerFnId = this.__disp__.impl.nextSub((args: any[]): boolean => {
+        let ok: boolean
+        if (2 !== args.length) {
+            return ok
+        }
+        let _a_0_: string
+        [_a_0_, ok] = [args[0] as string, typeof args[0] === "string"]
+        if (!ok) {
+            return false
+        }
+        {
+            {
+                ok = this.Bag.__loadFromJsonish__(args[1])
+            }
+            if (!ok) {
+                return false
+            }
+            handler(_a_0_)
+        }
+        return true
+    }, null)
+    msg.Data["handler"] = handlerFnId
+    this.__disp__.addSub(handlerFnId)
+    let onresp: (_: any) => boolean
+    let onret: (_: Disposable) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: Disposable
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable()
+            ok = result.__loadFromJsonish__(payload)
+            if (!ok) {
+                return false
+            }
+        } else {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId))
+        }
+        return true
+    }
+    this.__disp__.impl.send(msg, onresp)
+    return (a0: (_: Disposable) => void): void => {
+        onret = a0
+    }
+}
+
+function FileSystemWatcher_OnDidChange(this: FileSystemWatcher, handler: (_: string) => void): (_: (_: Disposable) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "FileSystemWatcher.onDidChange"
+    msg.Data = {}
+    msg.Data[""] = this.__disp__.id
+    let handlerFnId: string
+    if ((undefined === handler || null === handler)) {
+        OnError(this.__disp__.impl, "FileSystemWatcher.OnDidChange: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    }
+    handlerFnId = this.__disp__.impl.nextSub((args: any[]): boolean => {
+        let ok: boolean
+        if (2 !== args.length) {
+            return ok
+        }
+        let _a_0_: string
+        [_a_0_, ok] = [args[0] as string, typeof args[0] === "string"]
+        if (!ok) {
+            return false
+        }
+        {
+            {
+                ok = this.Bag.__loadFromJsonish__(args[1])
+            }
+            if (!ok) {
+                return false
+            }
+            handler(_a_0_)
+        }
+        return true
+    }, null)
+    msg.Data["handler"] = handlerFnId
+    this.__disp__.addSub(handlerFnId)
+    let onresp: (_: any) => boolean
+    let onret: (_: Disposable) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: Disposable
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable()
+            ok = result.__loadFromJsonish__(payload)
+            if (!ok) {
+                return false
+            }
+        } else {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId))
+        }
+        return true
+    }
+    this.__disp__.impl.send(msg, onresp)
+    return (a0: (_: Disposable) => void): void => {
+        onret = a0
+    }
+}
+
+function FileSystemWatcher_OnDidDelete(this: FileSystemWatcher, handler: (_: string) => void): (_: (_: Disposable) => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "FileSystemWatcher.onDidDelete"
+    msg.Data = {}
+    msg.Data[""] = this.__disp__.id
+    let handlerFnId: string
+    if ((undefined === handler || null === handler)) {
+        OnError(this.__disp__.impl, "FileSystemWatcher.OnDidDelete: the 'handler' arg (which is not optional but required) was not passed by the caller", null)
+        return null
+    }
+    handlerFnId = this.__disp__.impl.nextSub((args: any[]): boolean => {
+        let ok: boolean
+        if (2 !== args.length) {
+            return ok
+        }
+        let _a_0_: string
+        [_a_0_, ok] = [args[0] as string, typeof args[0] === "string"]
+        if (!ok) {
+            return false
+        }
+        {
+            {
+                ok = this.Bag.__loadFromJsonish__(args[1])
+            }
+            if (!ok) {
+                return false
+            }
+            handler(_a_0_)
+        }
+        return true
+    }, null)
+    msg.Data["handler"] = handlerFnId
+    this.__disp__.addSub(handlerFnId)
+    let onresp: (_: any) => boolean
+    let onret: (_: Disposable) => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        let result: Disposable
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable()
+            ok = result.__loadFromJsonish__(payload)
+            if (!ok) {
+                return false
+            }
+        } else {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId))
+        }
+        return true
+    }
+    this.__disp__.impl.send(msg, onresp)
+    return (a0: (_: Disposable) => void): void => {
+        onret = a0
+    }
+}
+
+function FileSystemWatcher_Dispose(this: FileSystemWatcher, ): (_: () => void) => void {
+    return this.__disp__.Dispose()
+}
+
+function FileSystemWatcher___appzObjBagPullFromPeer__(this: FileSystemWatcher, ): (_: () => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "FileSystemWatcher.__appzObjBagPullFromPeer__"
+    msg.Data = {}
+    msg.Data[""] = this.__disp__.id
+    let onresp: (_: any) => boolean
+    let onret: () => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        if ((undefined === this.Bag || null === this.Bag)) {
+            this.Bag = newFileSystemWatcherBag()
+        }
+        this.Bag.__holder__ = this
+        {
+            ok = this.Bag.__loadFromJsonish__(payload)
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
+        return true
+    }
+    this.__disp__.impl.send(msg, onresp)
+    return (a0: () => void): void => {
+        onret = a0
+    }
+}
+
+function FileSystemWatcher___appzObjBagPushToPeer__(this: FileSystemWatcher, allUpdates?: FileSystemWatcherBag): (_: () => void) => void {
+    let msg: ipcMsg
+    msg = newipcMsg()
+    msg.QName = "FileSystemWatcher.__appzObjBagPushToPeer__"
+    msg.Data = {}
+    msg.Data[""] = this.__disp__.id
+    msg.Data["allUpdates"] = allUpdates
+    let onresp: (_: any) => boolean
+    let onret: () => void
+    onresp = (payload: any): boolean => {
+        let ok: boolean
+        {
+            ok = this.Bag.__loadFromJsonish__(payload)
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
+        return true
+    }
+    this.__disp__.impl.send(msg, onresp)
+    return (a0: () => void): void => {
+        onret = a0
+    }
+}
+
 function StatusBarItemBag_ReFetch(this: StatusBarItemBag, ): (_: () => void) => void {
     return this.__holder__.__appzObjBagPullFromPeer__()
 }
@@ -5882,6 +6260,14 @@ function QuickPickBag_ReFetch(this: QuickPickBag, ): (_: () => void) => void {
 }
 
 function QuickPickBag_ApplyChanges(this: QuickPickBag, ): (_: () => void) => void {
+    return this.__holder__.__appzObjBagPushToPeer__(this)
+}
+
+function FileSystemWatcherBag_ReFetch(this: FileSystemWatcherBag, ): (_: () => void) => void {
+    return this.__holder__.__appzObjBagPullFromPeer__()
+}
+
+function FileSystemWatcherBag_ApplyChanges(this: FileSystemWatcherBag, ): (_: () => void) => void {
     return this.__holder__.__appzObjBagPushToPeer__(this)
 }
 
@@ -6312,6 +6698,13 @@ function WorkspaceFoldersChangeEvent___loadFromJsonish__(this: WorkspaceFoldersC
         return false
     }
     return true
+}
+
+function FileSystemWatcher___loadFromJsonish__(this: FileSystemWatcher, payload: any): boolean {
+    let ok: boolean
+    this.__disp__ = newDisposable()
+    ok = this.__disp__.__loadFromJsonish__(payload)
+    return ok
 }
 
 function WorkspaceBag___loadFromJsonish__(this: WorkspaceBag, payload: any): boolean {
@@ -6897,6 +7290,50 @@ function QuickPickBag___loadFromJsonish__(this: QuickPickBag, payload: any): boo
             }
         }
         this.ignoreFocusOut = ignoreFocusOut
+    }
+    return true
+}
+
+function FileSystemWatcherBag___loadFromJsonish__(this: FileSystemWatcherBag, payload: any): boolean {
+    let it: { [_: string]: any }
+    let ok: boolean
+    let val: any
+    [it, ok] = [payload as { [_: string]: any }, typeof payload === "object"]
+    if (!ok) {
+        return false
+    }
+    [val, ok] = [it["ignoreCreateEvents"], undefined !== it["ignoreCreateEvents"]]
+    if (ok) {
+        let ignoreCreateEvents: boolean
+        if ((undefined !== val && null !== val)) {
+            [ignoreCreateEvents, ok] = [val as boolean, typeof val === "boolean"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.ignoreCreateEvents = ignoreCreateEvents
+    }
+    [val, ok] = [it["ignoreChangeEvents"], undefined !== it["ignoreChangeEvents"]]
+    if (ok) {
+        let ignoreChangeEvents: boolean
+        if ((undefined !== val && null !== val)) {
+            [ignoreChangeEvents, ok] = [val as boolean, typeof val === "boolean"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.ignoreChangeEvents = ignoreChangeEvents
+    }
+    [val, ok] = [it["ignoreDeleteEvents"], undefined !== it["ignoreDeleteEvents"]]
+    if (ok) {
+        let ignoreDeleteEvents: boolean
+        if ((undefined !== val && null !== val)) {
+            [ignoreDeleteEvents, ok] = [val as boolean, typeof val === "boolean"]
+            if (!ok) {
+                return false
+            }
+        }
+        this.ignoreDeleteEvents = ignoreDeleteEvents
     }
     return true
 }

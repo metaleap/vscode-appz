@@ -53,6 +53,18 @@
   - [SessionId](#F-VscAppz-EnvBag-SessionId 'VscAppz.EnvBag.SessionId')
   - [Shell](#F-VscAppz-EnvBag-Shell 'VscAppz.EnvBag.Shell')
   - [UriScheme](#F-VscAppz-EnvBag-UriScheme 'VscAppz.EnvBag.UriScheme')
+- [FileSystemWatcher](#T-VscAppz-FileSystemWatcher 'VscAppz.FileSystemWatcher')
+  - [Bag](#F-VscAppz-FileSystemWatcher-Bag 'VscAppz.FileSystemWatcher.Bag')
+  - [Dispose()](#M-VscAppz-FileSystemWatcher-Dispose 'VscAppz.FileSystemWatcher.Dispose')
+  - [OnDidChange(handler)](#M-VscAppz-FileSystemWatcher-OnDidChange-System-Action{System-String}- 'VscAppz.FileSystemWatcher.OnDidChange(System.Action{System.String})')
+  - [OnDidCreate(handler)](#M-VscAppz-FileSystemWatcher-OnDidCreate-System-Action{System-String}- 'VscAppz.FileSystemWatcher.OnDidCreate(System.Action{System.String})')
+  - [OnDidDelete(handler)](#M-VscAppz-FileSystemWatcher-OnDidDelete-System-Action{System-String}- 'VscAppz.FileSystemWatcher.OnDidDelete(System.Action{System.String})')
+- [FileSystemWatcherBag](#T-VscAppz-FileSystemWatcherBag 'VscAppz.FileSystemWatcherBag')
+  - [IgnoreChangeEvents](#F-VscAppz-FileSystemWatcherBag-IgnoreChangeEvents 'VscAppz.FileSystemWatcherBag.IgnoreChangeEvents')
+  - [IgnoreCreateEvents](#F-VscAppz-FileSystemWatcherBag-IgnoreCreateEvents 'VscAppz.FileSystemWatcherBag.IgnoreCreateEvents')
+  - [IgnoreDeleteEvents](#F-VscAppz-FileSystemWatcherBag-IgnoreDeleteEvents 'VscAppz.FileSystemWatcherBag.IgnoreDeleteEvents')
+  - [ApplyChanges()](#M-VscAppz-FileSystemWatcherBag-ApplyChanges 'VscAppz.FileSystemWatcherBag.ApplyChanges')
+  - [ReFetch()](#M-VscAppz-FileSystemWatcherBag-ReFetch 'VscAppz.FileSystemWatcherBag.ReFetch')
 - [IClipboard](#T-VscAppz-IClipboard 'VscAppz.IClipboard')
   - [ReadText()](#M-VscAppz-IClipboard-ReadText 'VscAppz.IClipboard.ReadText')
   - [WriteText(value)](#M-VscAppz-IClipboard-WriteText-System-String- 'VscAppz.IClipboard.WriteText(System.String)')
@@ -117,6 +129,7 @@
 - [IWorkspace](#T-VscAppz-IWorkspace 'VscAppz.IWorkspace')
   - [AllProperties()](#M-VscAppz-IWorkspace-AllProperties 'VscAppz.IWorkspace.AllProperties')
   - [AsRelativePath(pathOrUri,includeWorkspaceFolder)](#M-VscAppz-IWorkspace-AsRelativePath-System-String,System-Boolean- 'VscAppz.IWorkspace.AsRelativePath(System.String,System.Boolean)')
+  - [CreateFileSystemWatcher(globPattern,ignoreCreateEvents,ignoreChangeEvents,ignoreDeleteEvents)](#M-VscAppz-IWorkspace-CreateFileSystemWatcher-System-String,System-Boolean,System-Boolean,System-Boolean- 'VscAppz.IWorkspace.CreateFileSystemWatcher(System.String,System.Boolean,System.Boolean,System.Boolean)')
   - [FindFiles(include,exclude,maxResults,token)](#M-VscAppz-IWorkspace-FindFiles-System-String,System-String,System-Nullable{System-Int32},VscAppz-Cancel- 'VscAppz.IWorkspace.FindFiles(System.String,System.String,System.Nullable{System.Int32},VscAppz.Cancel)')
   - [GetWorkspaceFolder(uri)](#M-VscAppz-IWorkspace-GetWorkspaceFolder-System-String- 'VscAppz.IWorkspace.GetWorkspaceFolder(System.String)')
   - [Name()](#M-VscAppz-IWorkspace-Name 'VscAppz.IWorkspace.Name')
@@ -640,7 +653,7 @@ Disposable represents an non-transient object identity lifetimed at the counterp
 
 ##### Summary
 
-Dispose signals to the counterparty to destroy the object.
+Dispose requests the VSC side to forget about this object and release or destroy all resources associated with or occupied by it. All subsequent usage attempts will be rejected.
 
 ##### Parameters
 
@@ -720,6 +733,153 @@ The detected default shell for the extension host, this is overridden by the
 ##### Summary
 
 The custom uri scheme the editor registers to in the operating system.
+
+<a name='T-VscAppz-FileSystemWatcher'></a>
+## FileSystemWatcher `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+A file system watcher notifies about changes to files and folders
+on disk.
+
+To get an instance of a `FileSystemWatcher` use
+[createFileSystemWatcher](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher).
+
+<a name='F-VscAppz-FileSystemWatcher-Bag'></a>
+### Bag `constants`
+
+##### Summary
+
+Bag represents this `FileSystemWatcher`'s current state. All its members get auto-refreshed every time a (subscribed) `FileSystemWatcher` event fires or any `FileSystemWatcher` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+
+<a name='M-VscAppz-FileSystemWatcher-Dispose'></a>
+### Dispose() `method`
+
+##### Summary
+
+Dispose requests the VSC side to forget about this object and release or destroy all resources associated with or occupied by it. All subsequent usage attempts will be rejected.
+
+`return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-FileSystemWatcher-OnDidChange-System-Action{System-String}-'></a>
+### OnDidChange(handler) `method`
+
+##### Summary
+
+An event which fires on file/folder change.
+
+`handler` ── will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).
+
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChange` event on `Dispose`.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| handler | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | will be invoked whenever the `OnDidChange` event fires (mandatory, not optional). |
+
+<a name='M-VscAppz-FileSystemWatcher-OnDidCreate-System-Action{System-String}-'></a>
+### OnDidCreate(handler) `method`
+
+##### Summary
+
+An event which fires on file/folder creation.
+
+`handler` ── will be invoked whenever the `OnDidCreate` event fires (mandatory, not optional).
+
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidCreate` event on `Dispose`.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| handler | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | will be invoked whenever the `OnDidCreate` event fires (mandatory, not optional). |
+
+<a name='M-VscAppz-FileSystemWatcher-OnDidDelete-System-Action{System-String}-'></a>
+### OnDidDelete(handler) `method`
+
+##### Summary
+
+An event which fires on file/folder deletion.
+
+`handler` ── will be invoked whenever the `OnDidDelete` event fires (mandatory, not optional).
+
+`return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidDelete` event on `Dispose`.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| handler | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | will be invoked whenever the `OnDidDelete` event fires (mandatory, not optional). |
+
+<a name='T-VscAppz-FileSystemWatcherBag'></a>
+## FileSystemWatcherBag `type`
+
+##### Namespace
+
+VscAppz
+
+##### Summary
+
+FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+
+<a name='F-VscAppz-FileSystemWatcherBag-IgnoreChangeEvents'></a>
+### IgnoreChangeEvents `constants`
+
+##### Summary
+
+true if this file system watcher has been created such that
+it ignores change file system events.
+
+<a name='F-VscAppz-FileSystemWatcherBag-IgnoreCreateEvents'></a>
+### IgnoreCreateEvents `constants`
+
+##### Summary
+
+true if this file system watcher has been created such that
+it ignores creation file system events.
+
+<a name='F-VscAppz-FileSystemWatcherBag-IgnoreDeleteEvents'></a>
+### IgnoreDeleteEvents `constants`
+
+##### Summary
+
+true if this file system watcher has been created such that
+it ignores delete file system events.
+
+<a name='M-VscAppz-FileSystemWatcherBag-ApplyChanges'></a>
+### ApplyChanges() `method`
+
+##### Summary
+
+ApplyChanges propagates this `FileSystemWatcherBag`'s current property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
+
+`return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-FileSystemWatcherBag-ReFetch'></a>
+### ReFetch() `method`
+
+##### Summary
+
+ReFetch requests the current `FileSystemWatcher` state from the VSC side and upon response refreshes this `FileSystemWatcherBag`'s property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to reflect it.
+
+`return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='T-VscAppz-IClipboard'></a>
 ## IClipboard `type`
@@ -2012,6 +2172,38 @@ multiple workspace folders and `false` otherwise.
 | ---- | ---- | ----------- |
 | pathOrUri | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | A path or uri. When a uri is given its [fsPath](https://code.visualstudio.com/api/references/vscode-api#Uri.fsPath) is used. |
 | includeWorkspaceFolder | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | When `true` and when the given path is contained inside a workspace folder the name of the workspace is prepended. Defaults to `true` when there are multiple workspace folders and `false` otherwise. |
+
+<a name='M-VscAppz-IWorkspace-CreateFileSystemWatcher-System-String,System-Boolean,System-Boolean,System-Boolean-'></a>
+### CreateFileSystemWatcher(globPattern,ignoreCreateEvents,ignoreChangeEvents,ignoreDeleteEvents) `method`
+
+##### Summary
+
+Creates a file system watcher.
+
+A glob pattern that filters the file events on their absolute path must be provided. Optionally,
+flags to ignore certain kinds of events can be provided. To stop listening to events the watcher must be disposed.
+
+*Note* that only files within the current [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) can be watched.
+
+`globPattern` ── A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that is applied to the absolute paths of created, changed,
+and deleted files. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern) to limit events to a certain [workspace folder](#WorkspaceFolder).
+
+`ignoreCreateEvents` ── Ignore when files have been created.
+
+`ignoreChangeEvents` ── Ignore when files have been changed.
+
+`ignoreDeleteEvents` ── Ignore when files have been deleted.
+
+`return` ── A new file system watcher instance.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| globPattern | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that is applied to the absolute paths of created, changed, and deleted files. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern) to limit events to a certain [workspace folder](#WorkspaceFolder). |
+| ignoreCreateEvents | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Ignore when files have been created. |
+| ignoreChangeEvents | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Ignore when files have been changed. |
+| ignoreDeleteEvents | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Ignore when files have been deleted. |
 
 <a name='M-VscAppz-IWorkspace-FindFiles-System-String,System-String,System-Nullable{System-Int32},VscAppz-Cancel-'></a>
 ### FindFiles(include,exclude,maxResults,token) `method`

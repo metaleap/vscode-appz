@@ -707,6 +707,21 @@ export interface Workspace {
      */
     AsRelativePath: (pathOrUri: string, includeWorkspaceFolder: boolean) => (_: (_: string) => void) => void;
     /**
+     * Creates a file system watcher.
+     *
+     * A glob pattern that filters the file events on their absolute path must be provided. Optionally,
+     * flags to ignore certain kinds of events can be provided. To stop listening to events the watcher must be disposed.
+     *
+     * *Note* that only files within the current [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) can be watched.
+
+     * @param globPattern A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that is applied to the absolute paths of created, changed, and deleted files. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern) to limit events to a certain [workspace folder](#WorkspaceFolder).
+     * @param ignoreCreateEvents Ignore when files have been created.
+     * @param ignoreChangeEvents Ignore when files have been changed.
+     * @param ignoreDeleteEvents Ignore when files have been deleted.
+     * @return A new file system watcher instance.
+     */
+    CreateFileSystemWatcher: (globPattern: string, ignoreCreateEvents: boolean, ignoreChangeEvents: boolean, ignoreDeleteEvents: boolean) => (_: (_: FileSystemWatcher) => void) => void;
+    /**
      * Provides single-call access to numerous individual `Workspace` properties at once.
 
      * @return a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
@@ -1801,6 +1816,34 @@ export interface WorkspaceFoldersChangeEvent extends fromJson {
     removed: WorkspaceFolder[];
 }
 /**
+ * A file system watcher notifies about changes to files and folders
+ * on disk.
+ *
+ * To get an instance of a `FileSystemWatcher` use
+ * [createFileSystemWatcher](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher).
+
+ */
+export interface FileSystemWatcher extends fromJson, withDisp, withBag<FileSystemWatcherBag> {
+    /**
+     * An event which fires on file/folder creation.
+
+     */
+    OnDidCreate: (_: (_: string) => void) => (_: (_: Disposable) => void) => void;
+    /**
+     * An event which fires on file/folder change.
+
+     */
+    OnDidChange: (_: (_: string) => void) => (_: (_: Disposable) => void) => void;
+    /**
+     * An event which fires on file/folder deletion.
+
+     */
+    OnDidDelete: (_: (_: string) => void) => (_: (_: Disposable) => void) => void;
+    Dispose: () => (_: () => void) => void;
+    __appzObjBagPullFromPeer__: () => (_: () => void) => void;
+    __appzObjBagPushToPeer__: (_: FileSystemWatcherBag) => (_: () => void) => void;
+}
+/**
  * The event that is fired when diagnostics change.
 
  */
@@ -2150,6 +2193,34 @@ export interface QuickPickBag extends fromJson {
     ReFetch: () => (_: () => void) => void;
 }
 export declare function newQuickPickBag(): QuickPickBag;
+/**
+ * FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+
+ */
+export interface FileSystemWatcherBag extends fromJson {
+    __holder__: FileSystemWatcher;
+    /**
+     * true if this file system watcher has been created such that
+     * it ignores creation file system events.
+
+     */
+    ignoreCreateEvents?: boolean;
+    /**
+     * true if this file system watcher has been created such that
+     * it ignores change file system events.
+
+     */
+    ignoreChangeEvents?: boolean;
+    /**
+     * true if this file system watcher has been created such that
+     * it ignores delete file system events.
+
+     */
+    ignoreDeleteEvents?: boolean;
+    ApplyChanges: () => (_: () => void) => void;
+    ReFetch: () => (_: () => void) => void;
+}
+export declare function newFileSystemWatcherBag(): FileSystemWatcherBag;
 export declare abstract class impl implements Vscode {
     Window: Window;
     Env: Env;

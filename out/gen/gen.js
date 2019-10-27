@@ -128,6 +128,8 @@ class Prep {
                 struct.fields.push({ name: exports.idents.fldMyTags, isExtBaggage: true, optional: true, typeSpec: ScriptPrimType.Dict });
             if (struct.isIncoming && struct.fields.find(_ => typeFun(_.typeSpec))) {
                 struct.isDispObj = true;
+                if (!struct.fields.some(_ => _.name === "dispose"))
+                    struct.fields.push({ name: "dispose", typeSpec: { From: [], To: null } });
                 const propfields = struct.fields.filter(_ => !typeFun(_.typeSpec));
                 if (propfields.length) {
                     const propstruct = {
@@ -263,10 +265,8 @@ class Prep {
                 optional: false, typeSpec: { From: decle.EvtArgs.map((_, i) => evtargs[i]), To: null },
             });
         }
-        let tret = (declp && declp.PropType) ?
-            this.typeSpec(declp.PropType) :
-            (decle && decle.EvtName && decle.EvtName.length) ?
-                exports.idents.coreTypeDisp :
+        let tret = (declp && declp.PropType) ? this.typeSpec(declp.PropType) :
+            (decle && decle.EvtName && decle.EvtName.length) ? exports.idents.coreTypeDisp :
                 this.typeSpec(declf.type, declf.typeParameters);
         if (typeof tret === 'string') {
             const struct = this.structs.find(_ => _.name === tret);

@@ -119,10 +119,13 @@ export class Gen extends gen.Gen implements gen.IGen {
         src += "}\n\n"
 
         for (const it of prep.enums)
-            if (this.typeNamesUsed[it.name])
+            if (this.typeNamesUsed[it.name]) {
                 src += "type " + it.name + " = " + this.pkg + "." + it.name + "\n"
+                this.typeNamesUsed[it.name] = false
+            }
         for (const it of prep.structs)
             if (this.typeNamesUsed[it.name]) {
+                this.typeNamesUsed[it.name] = false
                 const fieldsextra = it.fields.filter(_ => _.isExtBaggage)
                 if (((!(it.isPropsOfIface || it.isPropsOfStruct)) && it.isOutgoing) && ((it.funcFields && it.funcFields.length) || (fieldsextra && fieldsextra.length))) {
                     src += "interface " + it.name + " extends " + this.pkg + "." + it.name + " {\n"
@@ -138,6 +141,9 @@ export class Gen extends gen.Gen implements gen.IGen {
                     src += "type " + it.name + " = " + this.pkg + "." + it.name + (tgen ? `<${tgen}>` : "") + "\n"
                 }
             }
+        for (const name in this.typeNamesUsed)
+            if (this.typeNamesUsed[name] && name !== "ThemeColor")
+                src += "type " + name + " = " + this.pkg + "." + name + "\n"
 
         this.writeFileSync(this.pkg, src)
     }
@@ -160,7 +166,7 @@ export class Gen extends gen.Gen implements gen.IGen {
             src += `\t\t\t\t\t\treturn ppio.promRej("${hint}", msg.data)\n`
             src += `\t\t\t\t\tconst arg_${arg.name} = (${tfunc[0].map((_, i) => (gen.typeArrSpreads(_) ? '...' : '') + '_' + i + ': ' + this.typeSpec(_)).join(', ')}): ${this.typeSpec(tfunc[1])} => {\n`
             src += "\t\t\t\t\t\tif (prog && prog.proc)\n"
-            src += `\t\t\t\t\t\t\treturn prog.callBack("${hint}", ${!isEvt}, ${fnid}, ${tfunc[0].map((_, i) => '_' + i).join(', ') + ((!(isEvt && curDispObjInst)) ? "" : ("" + (tfunc[0].length ? ", " : "") + "({ " + this.propSrc(curDispObjInst) + " })"))})\n`
+            src += `\t\t\t\t\t\t\treturn prog.callBack("${hint}", ${!isEvt}, ${fnid}, ${tfunc[0].map((_, i) => _ !== "Uri" ? ('_' + i) : ("(_" + i + ".fsPath && _" + i + ".fsPath.length) ? _" + i + ".fsPath : _" + i + ".toString(true)")).join(', ') + ((!(isEvt && curDispObjInst)) ? "" : ("" + (tfunc[0].length ? ", " : "") + "({ " + this.propSrc(curDispObjInst) + " })"))})\n`
             src += "\t\t\t\t\t\treturn undefined\n"
             src += "\t\t\t\t\t}\n"
         } else {

@@ -188,7 +188,7 @@ namespace VscAppz {
         internal bool __loadFromJsonish__(any payload) =>
             (payload is string s) && !string.IsNullOrEmpty(id = s);
         void IDisposable.Dispose(){}
-        /// <summary>Dispose signals to the counterparty to destroy the object.</summary>
+        /// <summary>Dispose requests the VSC side to forget about this object and release or destroy all resources associated with or occupied by it. All subsequent usage attempts will be rejected.</summary>
         public Action<Action> Dispose() {
             Action ondone = null;
             impl.send(new ipcMsg("dispose", 1) { Data = { [""] = id } }, _ => {

@@ -907,6 +907,32 @@ namespace VscAppz {
 		Action<Action<string>> AsRelativePath(string pathOrUri = default, bool includeWorkspaceFolder = default);
 
 		/// <summary>
+		/// Creates a file system watcher.
+		/// 
+		/// A glob pattern that filters the file events on their absolute path must be provided. Optionally,
+		/// flags to ignore certain kinds of events can be provided. To stop listening to events the watcher must be disposed.
+		/// 
+		/// *Note* that only files within the current [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) can be watched.
+		/// 
+		/// `globPattern` ── A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that is applied to the absolute paths of created, changed,
+		/// and deleted files. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern) to limit events to a certain [workspace folder](#WorkspaceFolder).
+		/// 
+		/// `ignoreCreateEvents` ── Ignore when files have been created.
+		/// 
+		/// `ignoreChangeEvents` ── Ignore when files have been changed.
+		/// 
+		/// `ignoreDeleteEvents` ── Ignore when files have been deleted.
+		/// 
+		/// `return` ── A new file system watcher instance.
+		/// </summary>
+		/// <param name="globPattern">A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that is applied to the absolute paths of created, changed, and deleted files. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern) to limit events to a certain [workspace folder](#WorkspaceFolder).</param>
+		/// <param name="ignoreCreateEvents">Ignore when files have been created.</param>
+		/// <param name="ignoreChangeEvents">Ignore when files have been changed.</param>
+		/// <param name="ignoreDeleteEvents">Ignore when files have been deleted.</param>
+		/// <return>A new file system watcher instance.</return>
+		Action<Action<FileSystemWatcher>> CreateFileSystemWatcher(string globPattern = default, bool ignoreCreateEvents = default, bool ignoreChangeEvents = default, bool ignoreDeleteEvents = default);
+
+		/// <summary>
 		/// Provides single-call access to numerous individual `IWorkspace` properties at once.
 		/// 
 		/// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
@@ -1806,6 +1832,20 @@ namespace VscAppz {
 		public WorkspaceFolder[] Removed;
 	}
 
+	/// <summary>
+	/// A file system watcher notifies about changes to files and folders
+	/// on disk.
+	/// 
+	/// To get an instance of a `FileSystemWatcher` use
+	/// [createFileSystemWatcher](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher).
+	/// </summary>
+	public partial class FileSystemWatcher {
+		internal Disposable __disp__;
+
+		/// <summary>Bag represents this `FileSystemWatcher`'s current state. All its members get auto-refreshed every time a (subscribed) `FileSystemWatcher` event fires or any `FileSystemWatcher` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+		public FileSystemWatcherBag Bag;
+	}
+
 	/// <summary>The event that is fired when diagnostics change.</summary>
 	public partial class DiagnosticChangeEvent {
 		/// <summary>An array of resources for which diagnostics have changed.</summary>
@@ -1939,22 +1979,22 @@ namespace VscAppz {
 		/// Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
 		/// `light-bulb`, `thumbsup`, `zap` etc.
 		/// </summary>
-		[JsonProperty("text")]
+		[JsonProperty("text"), JsonRequired]
 		public string Text;
 
 		/// <summary>The tooltip text when you hover over this entry.</summary>
-		[JsonProperty("tooltip")]
+		[JsonProperty("tooltip"), JsonRequired]
 		public string Tooltip;
 
 		/// <summary>The foreground color for this entry.</summary>
-		[JsonProperty("color")]
+		[JsonProperty("color"), JsonRequired]
 		public string Color;
 
 		/// <summary>
 		/// The identifier of a command to run on click. The command must be
 		/// [known](https://code.visualstudio.com/api/references/vscode-api#commands.getCommands).
 		/// </summary>
-		[JsonProperty("command")]
+		[JsonProperty("command"), JsonRequired]
 		public string Command;
 	}
 
@@ -1984,35 +2024,35 @@ namespace VscAppz {
 		internal InputBox __holder__;
 
 		/// <summary>Current input value.</summary>
-		[JsonProperty("value")]
+		[JsonProperty("value"), JsonRequired]
 		public string Value;
 
 		/// <summary>Optional placeholder in the filter text.</summary>
-		[JsonProperty("placeholder")]
+		[JsonProperty("placeholder"), JsonRequired]
 		public string Placeholder;
 
 		/// <summary>If the input value should be hidden. Defaults to false.</summary>
-		[JsonProperty("password")]
+		[JsonProperty("password"), JsonRequired]
 		public bool Password;
 
 		/// <summary>An optional prompt text providing some ask or explanation to the user.</summary>
-		[JsonProperty("prompt")]
+		[JsonProperty("prompt"), JsonRequired]
 		public string Prompt;
 
 		/// <summary>An optional validation message indicating a problem with the current input value.</summary>
-		[JsonProperty("validationMessage")]
+		[JsonProperty("validationMessage"), JsonRequired]
 		public string ValidationMessage;
 
 		/// <summary>An optional title.</summary>
-		[JsonProperty("title")]
+		[JsonProperty("title"), JsonRequired]
 		public string Title;
 
 		/// <summary>An optional current step count.</summary>
-		[JsonProperty("step")]
+		[JsonProperty("step"), JsonRequired]
 		public int? Step;
 
 		/// <summary>An optional total step count.</summary>
-		[JsonProperty("totalSteps")]
+		[JsonProperty("totalSteps"), JsonRequired]
 		public int? TotalSteps;
 
 		/// <summary>
@@ -2021,7 +2061,7 @@ namespace VscAppz {
 		/// Change this to false, e.g., while validating user input or
 		/// loading data for the next step in user input.
 		/// </summary>
-		[JsonProperty("enabled")]
+		[JsonProperty("enabled"), JsonRequired]
 		public bool Enabled;
 
 		/// <summary>
@@ -2030,11 +2070,11 @@ namespace VscAppz {
 		/// Change this to true, e.g., while loading more data or validating
 		/// user input.
 		/// </summary>
-		[JsonProperty("busy")]
+		[JsonProperty("busy"), JsonRequired]
 		public bool Busy;
 
 		/// <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
-		[JsonProperty("ignoreFocusOut")]
+		[JsonProperty("ignoreFocusOut"), JsonRequired]
 		public bool IgnoreFocusOut;
 	}
 
@@ -2044,47 +2084,47 @@ namespace VscAppz {
 		internal QuickPick __holder__;
 
 		/// <summary>Current value of the filter text.</summary>
-		[JsonProperty("value")]
+		[JsonProperty("value"), JsonRequired]
 		public string Value;
 
 		/// <summary>Optional placeholder in the filter text.</summary>
-		[JsonProperty("placeholder")]
+		[JsonProperty("placeholder"), JsonRequired]
 		public string Placeholder;
 
 		/// <summary>Items to pick from.</summary>
-		[JsonProperty("items")]
+		[JsonProperty("items"), JsonRequired]
 		public QuickPickItem[] Items;
 
 		/// <summary>If multiple items can be selected at the same time. Defaults to false.</summary>
-		[JsonProperty("canSelectMany")]
+		[JsonProperty("canSelectMany"), JsonRequired]
 		public bool CanSelectMany;
 
 		/// <summary>If the filter text should also be matched against the description of the items. Defaults to false.</summary>
-		[JsonProperty("matchOnDescription")]
+		[JsonProperty("matchOnDescription"), JsonRequired]
 		public bool MatchOnDescription;
 
 		/// <summary>If the filter text should also be matched against the detail of the items. Defaults to false.</summary>
-		[JsonProperty("matchOnDetail")]
+		[JsonProperty("matchOnDetail"), JsonRequired]
 		public bool MatchOnDetail;
 
 		/// <summary>Active items. This can be read and updated by the extension.</summary>
-		[JsonProperty("activeItems")]
+		[JsonProperty("activeItems"), JsonRequired]
 		public QuickPickItem[] ActiveItems;
 
 		/// <summary>Selected items. This can be read and updated by the extension.</summary>
-		[JsonProperty("selectedItems")]
+		[JsonProperty("selectedItems"), JsonRequired]
 		public QuickPickItem[] SelectedItems;
 
 		/// <summary>An optional title.</summary>
-		[JsonProperty("title")]
+		[JsonProperty("title"), JsonRequired]
 		public string Title;
 
 		/// <summary>An optional current step count.</summary>
-		[JsonProperty("step")]
+		[JsonProperty("step"), JsonRequired]
 		public int? Step;
 
 		/// <summary>An optional total step count.</summary>
-		[JsonProperty("totalSteps")]
+		[JsonProperty("totalSteps"), JsonRequired]
 		public int? TotalSteps;
 
 		/// <summary>
@@ -2093,7 +2133,7 @@ namespace VscAppz {
 		/// Change this to false, e.g., while validating user input or
 		/// loading data for the next step in user input.
 		/// </summary>
-		[JsonProperty("enabled")]
+		[JsonProperty("enabled"), JsonRequired]
 		public bool Enabled;
 
 		/// <summary>
@@ -2102,12 +2142,39 @@ namespace VscAppz {
 		/// Change this to true, e.g., while loading more data or validating
 		/// user input.
 		/// </summary>
-		[JsonProperty("busy")]
+		[JsonProperty("busy"), JsonRequired]
 		public bool Busy;
 
 		/// <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
-		[JsonProperty("ignoreFocusOut")]
+		[JsonProperty("ignoreFocusOut"), JsonRequired]
 		public bool IgnoreFocusOut;
+	}
+
+	/// <summary>FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.</summary>
+	public partial class FileSystemWatcherBag {
+		[JsonIgnore]
+		internal FileSystemWatcher __holder__;
+
+		/// <summary>
+		/// true if this file system watcher has been created such that
+		/// it ignores creation file system events.
+		/// </summary>
+		[JsonProperty("ignoreCreateEvents"), JsonRequired]
+		public bool IgnoreCreateEvents;
+
+		/// <summary>
+		/// true if this file system watcher has been created such that
+		/// it ignores change file system events.
+		/// </summary>
+		[JsonProperty("ignoreChangeEvents"), JsonRequired]
+		public bool IgnoreChangeEvents;
+
+		/// <summary>
+		/// true if this file system watcher has been created such that
+		/// it ignores delete file system events.
+		/// </summary>
+		[JsonProperty("ignoreDeleteEvents"), JsonRequired]
+		public bool IgnoreDeleteEvents;
 	}
 
 	internal partial class impl : IVscode, IWindow, IEnv, IClipboard, IWorkspace, ILanguages, IExtensions, ICommands {
@@ -2579,7 +2646,7 @@ namespace VscAppz {
 						}
 					}
 				}
-				return (null == onresp) || onresp(payload);
+				return onresp(payload);
 			});
 			return (Action<string> a0) => {
 				onret = a0;
@@ -2671,7 +2738,7 @@ namespace VscAppz {
 						}
 					}
 				}
-				return (null == onresp) || onresp(payload);
+				return onresp(payload);
 			});
 			return (Action<string[]> a0) => {
 				onret = a0;
@@ -2753,7 +2820,7 @@ namespace VscAppz {
 						}
 					}
 				}
-				return (null == onresp) || onresp(payload);
+				return onresp(payload);
 			});
 			return (Action<string> a0) => {
 				onret = a0;
@@ -2846,7 +2913,7 @@ namespace VscAppz {
 						}
 					}
 				}
-				return (null == onresp) || onresp(payload);
+				return onresp(payload);
 			});
 			return (Action<QuickPickItem[]> a0) => {
 				onret = a0;
@@ -2927,7 +2994,7 @@ namespace VscAppz {
 						}
 					}
 				}
-				return (null == onresp) || onresp(payload);
+				return onresp(payload);
 			});
 			return (Action<QuickPickItem> a0) => {
 				onret = a0;
@@ -3979,6 +4046,43 @@ namespace VscAppz {
 			};
 		}
 
+		Action<Action<FileSystemWatcher>> IWorkspace.CreateFileSystemWatcher(string globPattern, bool ignoreCreateEvents, bool ignoreChangeEvents, bool ignoreDeleteEvents) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "workspace.createFileSystemWatcher";
+			msg.Data = new dict(4);
+			msg.Data["globPattern"] = globPattern;
+			msg.Data["ignoreCreateEvents"] = ignoreCreateEvents;
+			msg.Data["ignoreChangeEvents"] = ignoreChangeEvents;
+			msg.Data["ignoreDeleteEvents"] = ignoreDeleteEvents;
+			Func<any, bool> onresp = default;
+			Action<FileSystemWatcher> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				FileSystemWatcher result = default;
+				if ((null != payload)) {
+					result = new FileSystemWatcher();
+					ok = result.__loadFromJsonish__(payload);
+					if (!ok) {
+						return false;
+					}
+					result.__disp__.impl = this.Impl();
+				} else {
+					return false;
+				}
+				result.__appzObjBagPullFromPeer__()(() => {
+					if ((null != onret)) {
+						onret(result);
+					}
+				});
+				return true;
+			};
+			this.Impl().send(msg, onresp);
+			return (Action<FileSystemWatcher> a0) => {
+				onret = a0;
+			};
+		}
+
 		Action<Action<WorkspaceBag>> IWorkspace.AllProperties() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4351,7 +4455,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class StatusBarItem : IDisposable {
+	public partial class StatusBarItem /*: IDisposable*/ {
 		/// <summary>
 		/// Dispose and free associated resources. Call
 		/// [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
@@ -4362,7 +4466,7 @@ namespace VscAppz {
 		public Action<Action> Dispose() {
 			return this.__disp__.Dispose();
 		}
-		void IDisposable.Dispose() { this.Dispose(); }
+		/*void IDisposable.Dispose() { this.Dispose(); }*/
 		internal Action<IVscode, any, any> OnError { get => this.__disp__?.impl?.OnError; }
 	}
 
@@ -4657,7 +4761,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class OutputChannel : IDisposable {
+	public partial class OutputChannel /*: IDisposable*/ {
 		/// <summary>
 		/// Dispose and free associated resources.
 		/// 
@@ -4667,7 +4771,7 @@ namespace VscAppz {
 		public Action<Action> Dispose() {
 			return this.__disp__.Dispose();
 		}
-		void IDisposable.Dispose() { this.Dispose(); }
+		/*void IDisposable.Dispose() { this.Dispose(); }*/
 		internal Action<IVscode, any, any> OnError { get => this.__disp__?.impl?.OnError; }
 	}
 
@@ -4704,7 +4808,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class TextEditorDecorationType : IDisposable {
+	public partial class TextEditorDecorationType /*: IDisposable*/ {
 		/// <summary>
 		/// Remove this decoration type and all decorations on all text editors using it.
 		/// 
@@ -4714,7 +4818,7 @@ namespace VscAppz {
 		public Action<Action> Dispose() {
 			return this.__disp__.Dispose();
 		}
-		void IDisposable.Dispose() { this.Dispose(); }
+		/*void IDisposable.Dispose() { this.Dispose(); }*/
 		internal Action<IVscode, any, any> OnError { get => this.__disp__?.impl?.OnError; }
 	}
 
@@ -5044,7 +5148,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class InputBox : IDisposable {
+	public partial class InputBox /*: IDisposable*/ {
 		/// <summary>
 		/// Dispose of this input UI and any associated resources. If it is still
 		/// visible, it is first hidden. After this call the input UI is no longer
@@ -5057,7 +5161,7 @@ namespace VscAppz {
 		public Action<Action> Dispose() {
 			return this.__disp__.Dispose();
 		}
-		void IDisposable.Dispose() { this.Dispose(); }
+		/*void IDisposable.Dispose() { this.Dispose(); }*/
 		internal Action<IVscode, any, any> OnError { get => this.__disp__?.impl?.OnError; }
 	}
 
@@ -5585,7 +5689,7 @@ namespace VscAppz {
 		}
 	}
 
-	public partial class QuickPick : IDisposable {
+	public partial class QuickPick /*: IDisposable*/ {
 		/// <summary>
 		/// Dispose of this input UI and any associated resources. If it is still
 		/// visible, it is first hidden. After this call the input UI is no longer
@@ -5598,7 +5702,7 @@ namespace VscAppz {
 		public Action<Action> Dispose() {
 			return this.__disp__.Dispose();
 		}
-		void IDisposable.Dispose() { this.Dispose(); }
+		/*void IDisposable.Dispose() { this.Dispose(); }*/
 		internal Action<IVscode, any, any> OnError { get => this.__disp__?.impl?.OnError; }
 	}
 
@@ -5640,6 +5744,293 @@ namespace VscAppz {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.__appzObjBagPushToPeer__";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.__disp__.id;
+			msg.Data["allUpdates"] = allUpdates;
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				lock (this.__disp__.impl) {
+					ok = this.Bag.__loadFromJsonish__(payload);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.__disp__.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class FileSystemWatcher {
+		/// <summary>
+		/// An event which fires on file/folder creation.
+		/// 
+		/// `handler` ── will be invoked whenever the `OnDidCreate` event fires (mandatory, not optional).
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidCreate` event on `Dispose`.
+		/// </summary>
+		/// <param name="handler">will be invoked whenever the `OnDidCreate` event fires (mandatory, not optional).</param>
+		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidCreate` event on `Dispose`.</return>
+		public Action<Action<Disposable>> OnDidCreate(Action<string> handler = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "FileSystemWatcher.onDidCreate";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.__disp__.id;
+			string handlerFnId = default;
+			if ((null == handler)) {
+				OnError(this.__disp__.impl, "FileSystemWatcher.OnDidCreate: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				return null;
+			}
+			handlerFnId = this.__disp__.impl.nextSub((any[] args) => {
+				bool ok = default;
+				if (2 != args.Length) {
+					return ok;
+				}
+				string _a_0_ = default;
+				(_a_0_, ok) = (args[0] is string) ? (((string)(args[0])), true) : (default, false);
+				if (!ok) {
+					return false;
+				}
+				{
+					lock (this.__disp__.impl) {
+						ok = this.Bag.__loadFromJsonish__(args[1]);
+					}
+					if (!ok) {
+						return false;
+					}
+					handler(_a_0_);
+				}
+				return true;
+			}, null);
+			msg.Data["handler"] = handlerFnId;
+			this.__disp__.addSub(handlerFnId);
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.__loadFromJsonish__(payload);
+					if (!ok) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.__disp__.impl, handlerFnId));
+				}
+				return true;
+			};
+			this.__disp__.impl.send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class FileSystemWatcher {
+		/// <summary>
+		/// An event which fires on file/folder change.
+		/// 
+		/// `handler` ── will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChange` event on `Dispose`.
+		/// </summary>
+		/// <param name="handler">will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).</param>
+		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChange` event on `Dispose`.</return>
+		public Action<Action<Disposable>> OnDidChange(Action<string> handler = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "FileSystemWatcher.onDidChange";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.__disp__.id;
+			string handlerFnId = default;
+			if ((null == handler)) {
+				OnError(this.__disp__.impl, "FileSystemWatcher.OnDidChange: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				return null;
+			}
+			handlerFnId = this.__disp__.impl.nextSub((any[] args) => {
+				bool ok = default;
+				if (2 != args.Length) {
+					return ok;
+				}
+				string _a_0_ = default;
+				(_a_0_, ok) = (args[0] is string) ? (((string)(args[0])), true) : (default, false);
+				if (!ok) {
+					return false;
+				}
+				{
+					lock (this.__disp__.impl) {
+						ok = this.Bag.__loadFromJsonish__(args[1]);
+					}
+					if (!ok) {
+						return false;
+					}
+					handler(_a_0_);
+				}
+				return true;
+			}, null);
+			msg.Data["handler"] = handlerFnId;
+			this.__disp__.addSub(handlerFnId);
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.__loadFromJsonish__(payload);
+					if (!ok) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.__disp__.impl, handlerFnId));
+				}
+				return true;
+			};
+			this.__disp__.impl.send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class FileSystemWatcher {
+		/// <summary>
+		/// An event which fires on file/folder deletion.
+		/// 
+		/// `handler` ── will be invoked whenever the `OnDidDelete` event fires (mandatory, not optional).
+		/// 
+		/// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidDelete` event on `Dispose`.
+		/// </summary>
+		/// <param name="handler">will be invoked whenever the `OnDidDelete` event fires (mandatory, not optional).</param>
+		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidDelete` event on `Dispose`.</return>
+		public Action<Action<Disposable>> OnDidDelete(Action<string> handler = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "FileSystemWatcher.onDidDelete";
+			msg.Data = new dict(2);
+			msg.Data[""] = this.__disp__.id;
+			string handlerFnId = default;
+			if ((null == handler)) {
+				OnError(this.__disp__.impl, "FileSystemWatcher.OnDidDelete: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+				return null;
+			}
+			handlerFnId = this.__disp__.impl.nextSub((any[] args) => {
+				bool ok = default;
+				if (2 != args.Length) {
+					return ok;
+				}
+				string _a_0_ = default;
+				(_a_0_, ok) = (args[0] is string) ? (((string)(args[0])), true) : (default, false);
+				if (!ok) {
+					return false;
+				}
+				{
+					lock (this.__disp__.impl) {
+						ok = this.Bag.__loadFromJsonish__(args[1]);
+					}
+					if (!ok) {
+						return false;
+					}
+					handler(_a_0_);
+				}
+				return true;
+			}, null);
+			msg.Data["handler"] = handlerFnId;
+			this.__disp__.addSub(handlerFnId);
+			Func<any, bool> onresp = default;
+			Action<Disposable> onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				Disposable result = default;
+				if ((null != payload)) {
+					result = new Disposable();
+					ok = result.__loadFromJsonish__(payload);
+					if (!ok) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+				if ((null != onret)) {
+					onret(result.bind(this.__disp__.impl, handlerFnId));
+				}
+				return true;
+			};
+			this.__disp__.impl.send(msg, onresp);
+			return (Action<Disposable> a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class FileSystemWatcher /*: IDisposable*/ {
+		/// <summary>
+		/// Dispose requests the VSC side to forget about this object and release or destroy all resources associated with or occupied by it. All subsequent usage attempts will be rejected.
+		/// 
+		/// `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
+		/// </summary>
+		/// <return>a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.</return>
+		public Action<Action> Dispose() {
+			return this.__disp__.Dispose();
+		}
+		/*void IDisposable.Dispose() { this.Dispose(); }*/
+		internal Action<IVscode, any, any> OnError { get => this.__disp__?.impl?.OnError; }
+	}
+
+	public partial class FileSystemWatcher {
+		internal Action<Action> __appzObjBagPullFromPeer__() {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "FileSystemWatcher.__appzObjBagPullFromPeer__";
+			msg.Data = new dict(1);
+			msg.Data[""] = this.__disp__.id;
+			Func<any, bool> onresp = default;
+			Action onret = default;
+			onresp = (any payload) => {
+				bool ok = default;
+				if ((null == this.Bag)) {
+					this.Bag = new FileSystemWatcherBag();
+				}
+				this.Bag.__holder__ = this;
+				lock (this.Bag.__holder__.__disp__.impl) {
+					ok = this.Bag.__loadFromJsonish__(payload);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
+				return true;
+			};
+			this.__disp__.impl.send(msg, onresp);
+			return (Action a0) => {
+				onret = a0;
+			};
+		}
+	}
+
+	public partial class FileSystemWatcher {
+		internal Action<Action> __appzObjBagPushToPeer__(FileSystemWatcherBag allUpdates = default) {
+			ipcMsg msg = default;
+			msg = new ipcMsg();
+			msg.QName = "FileSystemWatcher.__appzObjBagPushToPeer__";
 			msg.Data = new dict(2);
 			msg.Data[""] = this.__disp__.id;
 			msg.Data["allUpdates"] = allUpdates;
@@ -5752,6 +6143,30 @@ namespace VscAppz {
 	public partial class QuickPickBag {
 		/// <summary>
 		/// ApplyChanges propagates this `QuickPickBag`'s current property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
+		/// 
+		/// `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
+		/// </summary>
+		/// <return>a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.</return>
+		public Action<Action> ApplyChanges() {
+			return this.__holder__.__appzObjBagPushToPeer__(this);
+		}
+	}
+
+	public partial class FileSystemWatcherBag {
+		/// <summary>
+		/// ReFetch requests the current `FileSystemWatcher` state from the VSC side and upon response refreshes this `FileSystemWatcherBag`'s property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to reflect it.
+		/// 
+		/// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
+		/// </summary>
+		/// <return>a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.</return>
+		public Action<Action> ReFetch() {
+			return this.__holder__.__appzObjBagPullFromPeer__();
+		}
+	}
+
+	public partial class FileSystemWatcherBag {
+		/// <summary>
+		/// ApplyChanges propagates this `FileSystemWatcherBag`'s current property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
 		/// 
 		/// `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 		/// </summary>
@@ -6203,6 +6618,15 @@ namespace VscAppz {
 				return false;
 			}
 			return true;
+		}
+	}
+
+	public partial class FileSystemWatcher {
+		internal bool __loadFromJsonish__(any payload = default) {
+			bool ok = default;
+			this.__disp__ = new Disposable();
+			ok = this.__disp__.__loadFromJsonish__(payload);
+			return ok;
 		}
 	}
 
@@ -6802,6 +7226,52 @@ namespace VscAppz {
 					}
 				}
 				this.IgnoreFocusOut = ignoreFocusOut;
+			}
+			return true;
+		}
+	}
+
+	public partial class FileSystemWatcherBag {
+		internal bool __loadFromJsonish__(any payload = default) {
+			dict it = default;
+			bool ok = default;
+			any val = default;
+			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
+			if (!ok) {
+				return false;
+			}
+			(val, ok) = (it.TryGetValue("ignoreCreateEvents", out var __) ? (__, true) : (default, false));
+			if (ok) {
+				bool ignoreCreateEvents = default;
+				if ((null != val)) {
+					(ignoreCreateEvents, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.IgnoreCreateEvents = ignoreCreateEvents;
+			}
+			(val, ok) = (it.TryGetValue("ignoreChangeEvents", out var ___) ? (___, true) : (default, false));
+			if (ok) {
+				bool ignoreChangeEvents = default;
+				if ((null != val)) {
+					(ignoreChangeEvents, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.IgnoreChangeEvents = ignoreChangeEvents;
+			}
+			(val, ok) = (it.TryGetValue("ignoreDeleteEvents", out var ____) ? (____, true) : (default, false));
+			if (ok) {
+				bool ignoreDeleteEvents = default;
+				if ((null != val)) {
+					(ignoreDeleteEvents, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
+					if (!ok) {
+						return false;
+					}
+				}
+				this.IgnoreDeleteEvents = ignoreDeleteEvents;
 			}
 			return true;
 		}

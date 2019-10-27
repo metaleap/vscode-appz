@@ -397,6 +397,16 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
+                case "createFileSystemWatcher": {
+                    const arg_globPattern = (msg.data['globPattern']);
+                    const arg_ignoreCreateEvents = (msg.data['ignoreCreateEvents']);
+                    const arg_ignoreChangeEvents = (msg.data['ignoreChangeEvents']);
+                    const arg_ignoreDeleteEvents = (msg.data['ignoreDeleteEvents']);
+                    const ret = vscode.workspace.createFileSystemWatcher(arg_globPattern, arg_ignoreCreateEvents, arg_ignoreChangeEvents, arg_ignoreDeleteEvents);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
                 case "AllProperties": {
                     return Promise.resolve({
                         name: vscode.workspace.name,
@@ -878,6 +888,83 @@ function handle(msg, prog, remoteCancellationTokens) {
                             thisQuickPick.ignoreFocusOut = val;
                     }
                     return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut });
+                }
+                default:
+                    throw methodname;
+            }
+        case "FileSystemWatcher":
+            const thisFileSystemWatcher = prog.objects[msg.data[""]];
+            if (!thisFileSystemWatcher)
+                throw "Called vscode.FileSystemWatcher." + methodname + " for an already disposed-and-forgotten instance";
+            switch (methodname) {
+                case "onDidCreate": {
+                    const handlerFnId = msg.data['handler'];
+                    if (!(handlerFnId && handlerFnId.length))
+                        return ppio.promRej("FileSystemWatcher.onDidCreate.handler", msg.data);
+                    const arg_handler = (_0) => {
+                        if (prog && prog.proc)
+                            return prog.callBack("FileSystemWatcher.onDidCreate.handler", false, handlerFnId, (_0.fsPath && _0.fsPath.length) ? _0.fsPath : _0.toString(true), ({ ignoreCreateEvents: thisFileSystemWatcher.ignoreCreateEvents, ignoreChangeEvents: thisFileSystemWatcher.ignoreChangeEvents, ignoreDeleteEvents: thisFileSystemWatcher.ignoreDeleteEvents }));
+                        return undefined;
+                    };
+                    const ret = thisFileSystemWatcher.onDidCreate(arg_handler);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "onDidChange": {
+                    const handlerFnId = msg.data['handler'];
+                    if (!(handlerFnId && handlerFnId.length))
+                        return ppio.promRej("FileSystemWatcher.onDidChange.handler", msg.data);
+                    const arg_handler = (_0) => {
+                        if (prog && prog.proc)
+                            return prog.callBack("FileSystemWatcher.onDidChange.handler", false, handlerFnId, (_0.fsPath && _0.fsPath.length) ? _0.fsPath : _0.toString(true), ({ ignoreCreateEvents: thisFileSystemWatcher.ignoreCreateEvents, ignoreChangeEvents: thisFileSystemWatcher.ignoreChangeEvents, ignoreDeleteEvents: thisFileSystemWatcher.ignoreDeleteEvents }));
+                        return undefined;
+                    };
+                    const ret = thisFileSystemWatcher.onDidChange(arg_handler);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "onDidDelete": {
+                    const handlerFnId = msg.data['handler'];
+                    if (!(handlerFnId && handlerFnId.length))
+                        return ppio.promRej("FileSystemWatcher.onDidDelete.handler", msg.data);
+                    const arg_handler = (_0) => {
+                        if (prog && prog.proc)
+                            return prog.callBack("FileSystemWatcher.onDidDelete.handler", false, handlerFnId, (_0.fsPath && _0.fsPath.length) ? _0.fsPath : _0.toString(true), ({ ignoreCreateEvents: thisFileSystemWatcher.ignoreCreateEvents, ignoreChangeEvents: thisFileSystemWatcher.ignoreChangeEvents, ignoreDeleteEvents: thisFileSystemWatcher.ignoreDeleteEvents }));
+                        return undefined;
+                    };
+                    const ret = thisFileSystemWatcher.onDidDelete(arg_handler);
+                    const retdisp = ret;
+                    const retprom = ret;
+                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
+                }
+                case "__appzObjBagPullFromPeer__": {
+                    return Promise.resolve({ ignoreCreateEvents: thisFileSystemWatcher.ignoreCreateEvents, ignoreChangeEvents: thisFileSystemWatcher.ignoreChangeEvents, ignoreDeleteEvents: thisFileSystemWatcher.ignoreDeleteEvents });
+                }
+                case "__appzObjBagPushToPeer__": {
+                    const upd = msg.data["allUpdates"];
+                    if (!upd)
+                        return ppio.promRej("FileSystemWatcher.set#allUpdates", msg.data);
+                    const prop_ignoreCreateEvents = upd["ignoreCreateEvents"];
+                    if (prop_ignoreCreateEvents !== undefined) {
+                        let val = prop_ignoreCreateEvents;
+                        if (val !== thisFileSystemWatcher.ignoreCreateEvents)
+                            thisFileSystemWatcher.ignoreCreateEvents = val;
+                    }
+                    const prop_ignoreChangeEvents = upd["ignoreChangeEvents"];
+                    if (prop_ignoreChangeEvents !== undefined) {
+                        let val = prop_ignoreChangeEvents;
+                        if (val !== thisFileSystemWatcher.ignoreChangeEvents)
+                            thisFileSystemWatcher.ignoreChangeEvents = val;
+                    }
+                    const prop_ignoreDeleteEvents = upd["ignoreDeleteEvents"];
+                    if (prop_ignoreDeleteEvents !== undefined) {
+                        let val = prop_ignoreDeleteEvents;
+                        if (val !== thisFileSystemWatcher.ignoreDeleteEvents)
+                            thisFileSystemWatcher.ignoreDeleteEvents = val;
+                    }
+                    return Promise.resolve({ ignoreCreateEvents: thisFileSystemWatcher.ignoreCreateEvents, ignoreChangeEvents: thisFileSystemWatcher.ignoreChangeEvents, ignoreDeleteEvents: thisFileSystemWatcher.ignoreDeleteEvents });
                 }
                 default:
                     throw methodname;

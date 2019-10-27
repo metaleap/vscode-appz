@@ -86,7 +86,7 @@ export class Gen extends gen_syn.Gen {
                                 this.s(" `json:\"")
                                     .when(f.Json.Excluded,
                                         () => this.s("-"),
-                                        () => this.s(f.Json.Name + (f.Json.Required ? "" : ",omitempty"))
+                                        () => this.s(f.Json.Name + ((f.Json.Required || (it.fromPrep && it.fromPrep.isPropsOfStruct)) ? "" : ",omitempty"))
                                     ).s("\"`")
                             )
                         )

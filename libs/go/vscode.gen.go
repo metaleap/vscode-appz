@@ -669,6 +669,25 @@ type Workspace interface {
 	// `return` ── A path relative to the root or the input.
 	AsRelativePath(pathOrUri string, includeWorkspaceFolder bool) func(func(*string))
 
+	// Creates a file system watcher.
+	// 
+	// A glob pattern that filters the file events on their absolute path must be provided. Optionally,
+	// flags to ignore certain kinds of events can be provided. To stop listening to events the watcher must be disposed.
+	// 
+	// *Note* that only files within the current [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) can be watched.
+	// 
+	// `globPattern` ── A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that is applied to the absolute paths of created, changed,
+	// and deleted files. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern) to limit events to a certain [workspace folder](#WorkspaceFolder).
+	// 
+	// `ignoreCreateEvents` ── Ignore when files have been created.
+	// 
+	// `ignoreChangeEvents` ── Ignore when files have been changed.
+	// 
+	// `ignoreDeleteEvents` ── Ignore when files have been deleted.
+	// 
+	// `return` ── A new file system watcher instance.
+	CreateFileSystemWatcher(globPattern string, ignoreCreateEvents bool, ignoreChangeEvents bool, ignoreDeleteEvents bool) func(func(*FileSystemWatcher))
+
 	// Provides single-call access to numerous individual `Workspace` properties at once.
 	// 
 	// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
@@ -1356,6 +1375,18 @@ type WorkspaceFoldersChangeEvent struct {
 	Removed []WorkspaceFolder `json:"removed"`
 }
 
+// A file system watcher notifies about changes to files and folders
+// on disk.
+// 
+// To get an instance of a `FileSystemWatcher` use
+// [createFileSystemWatcher](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher).
+type FileSystemWatcher struct {
+	__disp__ *Disposable
+
+	// Bag represents this `FileSystemWatcher`'s current state. All its members get auto-refreshed every time a (subscribed) `FileSystemWatcher` event fires or any `FileSystemWatcher` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Bag *FileSystemWatcherBag
+}
+
 // The event that is fired when diagnostics change.
 type DiagnosticChangeEvent struct {
 	// An array of resources for which diagnostics have changed.
@@ -1458,17 +1489,17 @@ type StatusBarItemBag struct {
 	// 
 	// Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
 	// `light-bulb`, `thumbsup`, `zap` etc.
-	Text string `json:"text,omitempty"`
+	Text string `json:"text"`
 
 	// The tooltip text when you hover over this entry.
-	Tooltip string `json:"tooltip,omitempty"`
+	Tooltip string `json:"tooltip"`
 
 	// The foreground color for this entry.
-	Color string `json:"color,omitempty"`
+	Color string `json:"color"`
 
 	// The identifier of a command to run on click. The command must be
 	// [known](https://code.visualstudio.com/api/references/vscode-api#commands.getCommands).
-	Command string `json:"command,omitempty"`
+	Command string `json:"command"`
 }
 
 // OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
@@ -1492,43 +1523,43 @@ type InputBoxBag struct {
 	__holder__ *InputBox
 
 	// Current input value.
-	Value string `json:"value,omitempty"`
+	Value string `json:"value"`
 
 	// Optional placeholder in the filter text.
-	Placeholder string `json:"placeholder,omitempty"`
+	Placeholder string `json:"placeholder"`
 
 	// If the input value should be hidden. Defaults to false.
-	Password bool `json:"password,omitempty"`
+	Password bool `json:"password"`
 
 	// An optional prompt text providing some ask or explanation to the user.
-	Prompt string `json:"prompt,omitempty"`
+	Prompt string `json:"prompt"`
 
 	// An optional validation message indicating a problem with the current input value.
-	ValidationMessage string `json:"validationMessage,omitempty"`
+	ValidationMessage string `json:"validationMessage"`
 
 	// An optional title.
-	Title string `json:"title,omitempty"`
+	Title string `json:"title"`
 
 	// An optional current step count.
-	Step int `json:"step,omitempty"`
+	Step int `json:"step"`
 
 	// An optional total step count.
-	TotalSteps int `json:"totalSteps,omitempty"`
+	TotalSteps int `json:"totalSteps"`
 
 	// If the UI should allow for user input. Defaults to true.
 	// 
 	// Change this to false, e.g., while validating user input or
 	// loading data for the next step in user input.
-	Enabled bool `json:"enabled,omitempty"`
+	Enabled bool `json:"enabled"`
 
 	// If the UI should show a progress indicator. Defaults to false.
 	// 
 	// Change this to true, e.g., while loading more data or validating
 	// user input.
-	Busy bool `json:"busy,omitempty"`
+	Busy bool `json:"busy"`
 
 	// If the UI should stay open even when loosing UI focus. Defaults to false.
-	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
+	IgnoreFocusOut bool `json:"ignoreFocusOut"`
 }
 
 // QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
@@ -1536,52 +1567,69 @@ type QuickPickBag struct {
 	__holder__ *QuickPick
 
 	// Current value of the filter text.
-	Value string `json:"value,omitempty"`
+	Value string `json:"value"`
 
 	// Optional placeholder in the filter text.
-	Placeholder string `json:"placeholder,omitempty"`
+	Placeholder string `json:"placeholder"`
 
 	// Items to pick from.
-	Items []QuickPickItem `json:"items,omitempty"`
+	Items []QuickPickItem `json:"items"`
 
 	// If multiple items can be selected at the same time. Defaults to false.
-	CanSelectMany bool `json:"canSelectMany,omitempty"`
+	CanSelectMany bool `json:"canSelectMany"`
 
 	// If the filter text should also be matched against the description of the items. Defaults to false.
-	MatchOnDescription bool `json:"matchOnDescription,omitempty"`
+	MatchOnDescription bool `json:"matchOnDescription"`
 
 	// If the filter text should also be matched against the detail of the items. Defaults to false.
-	MatchOnDetail bool `json:"matchOnDetail,omitempty"`
+	MatchOnDetail bool `json:"matchOnDetail"`
 
 	// Active items. This can be read and updated by the extension.
-	ActiveItems []QuickPickItem `json:"activeItems,omitempty"`
+	ActiveItems []QuickPickItem `json:"activeItems"`
 
 	// Selected items. This can be read and updated by the extension.
-	SelectedItems []QuickPickItem `json:"selectedItems,omitempty"`
+	SelectedItems []QuickPickItem `json:"selectedItems"`
 
 	// An optional title.
-	Title string `json:"title,omitempty"`
+	Title string `json:"title"`
 
 	// An optional current step count.
-	Step int `json:"step,omitempty"`
+	Step int `json:"step"`
 
 	// An optional total step count.
-	TotalSteps int `json:"totalSteps,omitempty"`
+	TotalSteps int `json:"totalSteps"`
 
 	// If the UI should allow for user input. Defaults to true.
 	// 
 	// Change this to false, e.g., while validating user input or
 	// loading data for the next step in user input.
-	Enabled bool `json:"enabled,omitempty"`
+	Enabled bool `json:"enabled"`
 
 	// If the UI should show a progress indicator. Defaults to false.
 	// 
 	// Change this to true, e.g., while loading more data or validating
 	// user input.
-	Busy bool `json:"busy,omitempty"`
+	Busy bool `json:"busy"`
 
 	// If the UI should stay open even when loosing UI focus. Defaults to false.
-	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
+	IgnoreFocusOut bool `json:"ignoreFocusOut"`
+}
+
+// FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+type FileSystemWatcherBag struct {
+	__holder__ *FileSystemWatcher
+
+	// true if this file system watcher has been created such that
+	// it ignores creation file system events.
+	IgnoreCreateEvents bool `json:"ignoreCreateEvents"`
+
+	// true if this file system watcher has been created such that
+	// it ignores change file system events.
+	IgnoreChangeEvents bool `json:"ignoreChangeEvents"`
+
+	// true if this file system watcher has been created such that
+	// it ignores delete file system events.
+	IgnoreDeleteEvents bool `json:"ignoreDeleteEvents"`
 }
 
 func (me *impl) Window() Window {
@@ -2060,7 +2108,7 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel) func(
 			}
 			me.Unlock()
 		}
-		return (nil == onresp) || onresp(payload)
+		return onresp(payload)
 	})
 	return func(a0 func(*string)) {
 		onret = a0
@@ -2160,7 +2208,7 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 			}
 			me.Unlock()
 		}
-		return (nil == onresp) || onresp(payload)
+		return onresp(payload)
 	})
 	return func(a0 func([]string)) {
 		onret = a0
@@ -2250,7 +2298,7 @@ func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, t
 			}
 			me.Unlock()
 		}
-		return (nil == onresp) || onresp(payload)
+		return onresp(payload)
 	})
 	return func(a0 func(*string)) {
 		onret = a0
@@ -2350,7 +2398,7 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 			}
 			me.Unlock()
 		}
-		return (nil == onresp) || onresp(payload)
+		return onresp(payload)
 	})
 	return func(a0 func([]QuickPickItem)) {
 		onret = a0
@@ -2439,7 +2487,7 @@ func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOpt
 			}
 			me.Unlock()
 		}
-		return (nil == onresp) || onresp(payload)
+		return onresp(payload)
 	})
 	return func(a0 func(*QuickPickItem)) {
 		onret = a0
@@ -3484,6 +3532,43 @@ func (me implWorkspace) AsRelativePath(pathOrUri string, includeWorkspaceFolder 
 	}
 	me.Impl().send(msg, onresp)
 	return func(a0 func(*string)) {
+		onret = a0
+	}
+}
+
+func (me implWorkspace) CreateFileSystemWatcher(globPattern string, ignoreCreateEvents bool, ignoreChangeEvents bool, ignoreDeleteEvents bool) func(func(*FileSystemWatcher)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "workspace.createFileSystemWatcher"
+	msg.Data = make(dict, 4)
+	msg.Data["globPattern"] = globPattern
+	msg.Data["ignoreCreateEvents"] = ignoreCreateEvents
+	msg.Data["ignoreChangeEvents"] = ignoreChangeEvents
+	msg.Data["ignoreDeleteEvents"] = ignoreDeleteEvents
+	var onresp func(any) bool
+	var onret func(*FileSystemWatcher)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result *FileSystemWatcher
+		if (nil != payload) {
+			result = new(FileSystemWatcher)
+			ok = result.__loadFromJsonish__(payload)
+			if !ok {
+				return false
+			}
+			result.__disp__.impl = me.Impl()
+		} else {
+			return false
+		}
+		result.__appzObjBagPullFromPeer__()(func() {
+			if (nil != onret) {
+				onret(result)
+			}
+		})
+		return true
+	}
+	me.Impl().send(msg, onresp)
+	return func(a0 func(*FileSystemWatcher)) {
 		onret = a0
 	}
 }
@@ -5065,6 +5150,274 @@ func (me *QuickPick) __appzObjBagPushToPeer__(allUpdates *QuickPickBag) func(fun
 	}
 }
 
+// An event which fires on file/folder creation.
+// 
+// `handler` ── will be invoked whenever the `OnDidCreate` event fires (mandatory, not optional).
+// 
+// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidCreate` event on `Dispose`.
+func (me *FileSystemWatcher) OnDidCreate(handler func(string)) func(func(*Disposable)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "FileSystemWatcher.onDidCreate"
+	msg.Data = make(dict, 2)
+	msg.Data[""] = me.__disp__.id
+	var handlerFnId string
+	if (nil == handler) {
+		OnError(me.__disp__.impl, "FileSystemWatcher.OnDidCreate: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		return nil
+	}
+	handlerFnId = me.__disp__.impl.nextSub(func(args []any) bool {
+		var ok bool
+		if 2 != len(args) {
+			return ok
+		}
+		var _a_0_ string
+		_a_0_, ok = args[0].(string)
+		if !ok {
+			return false
+		}
+		{
+			me.__disp__.impl.Lock()
+			{
+				ok = me.Bag.__loadFromJsonish__(args[1])
+			}
+			me.__disp__.impl.Unlock()
+			if !ok {
+				return false
+			}
+			handler(_a_0_)
+		}
+		return true
+	}, nil)
+	msg.Data["handler"] = handlerFnId
+	me.__disp__.addSub(handlerFnId)
+	var onresp func(any) bool
+	var onret func(*Disposable)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result *Disposable
+		if (nil != payload) {
+			result = new(Disposable)
+			ok = result.__loadFromJsonish__(payload)
+			if !ok {
+				return false
+			}
+		} else {
+			return false
+		}
+		if (nil != onret) {
+			onret(result.bind(me.__disp__.impl, handlerFnId))
+		}
+		return true
+	}
+	me.__disp__.impl.send(msg, onresp)
+	return func(a0 func(*Disposable)) {
+		onret = a0
+	}
+}
+
+// An event which fires on file/folder change.
+// 
+// `handler` ── will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).
+// 
+// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChange` event on `Dispose`.
+func (me *FileSystemWatcher) OnDidChange(handler func(string)) func(func(*Disposable)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "FileSystemWatcher.onDidChange"
+	msg.Data = make(dict, 2)
+	msg.Data[""] = me.__disp__.id
+	var handlerFnId string
+	if (nil == handler) {
+		OnError(me.__disp__.impl, "FileSystemWatcher.OnDidChange: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		return nil
+	}
+	handlerFnId = me.__disp__.impl.nextSub(func(args []any) bool {
+		var ok bool
+		if 2 != len(args) {
+			return ok
+		}
+		var _a_0_ string
+		_a_0_, ok = args[0].(string)
+		if !ok {
+			return false
+		}
+		{
+			me.__disp__.impl.Lock()
+			{
+				ok = me.Bag.__loadFromJsonish__(args[1])
+			}
+			me.__disp__.impl.Unlock()
+			if !ok {
+				return false
+			}
+			handler(_a_0_)
+		}
+		return true
+	}, nil)
+	msg.Data["handler"] = handlerFnId
+	me.__disp__.addSub(handlerFnId)
+	var onresp func(any) bool
+	var onret func(*Disposable)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result *Disposable
+		if (nil != payload) {
+			result = new(Disposable)
+			ok = result.__loadFromJsonish__(payload)
+			if !ok {
+				return false
+			}
+		} else {
+			return false
+		}
+		if (nil != onret) {
+			onret(result.bind(me.__disp__.impl, handlerFnId))
+		}
+		return true
+	}
+	me.__disp__.impl.send(msg, onresp)
+	return func(a0 func(*Disposable)) {
+		onret = a0
+	}
+}
+
+// An event which fires on file/folder deletion.
+// 
+// `handler` ── will be invoked whenever the `OnDidDelete` event fires (mandatory, not optional).
+// 
+// `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidDelete` event on `Dispose`.
+func (me *FileSystemWatcher) OnDidDelete(handler func(string)) func(func(*Disposable)) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "FileSystemWatcher.onDidDelete"
+	msg.Data = make(dict, 2)
+	msg.Data[""] = me.__disp__.id
+	var handlerFnId string
+	if (nil == handler) {
+		OnError(me.__disp__.impl, "FileSystemWatcher.OnDidDelete: the 'handler' arg (which is not optional but required) was not passed by the caller", nil)
+		return nil
+	}
+	handlerFnId = me.__disp__.impl.nextSub(func(args []any) bool {
+		var ok bool
+		if 2 != len(args) {
+			return ok
+		}
+		var _a_0_ string
+		_a_0_, ok = args[0].(string)
+		if !ok {
+			return false
+		}
+		{
+			me.__disp__.impl.Lock()
+			{
+				ok = me.Bag.__loadFromJsonish__(args[1])
+			}
+			me.__disp__.impl.Unlock()
+			if !ok {
+				return false
+			}
+			handler(_a_0_)
+		}
+		return true
+	}, nil)
+	msg.Data["handler"] = handlerFnId
+	me.__disp__.addSub(handlerFnId)
+	var onresp func(any) bool
+	var onret func(*Disposable)
+	onresp = func(payload any) bool {
+		var ok bool
+		var result *Disposable
+		if (nil != payload) {
+			result = new(Disposable)
+			ok = result.__loadFromJsonish__(payload)
+			if !ok {
+				return false
+			}
+		} else {
+			return false
+		}
+		if (nil != onret) {
+			onret(result.bind(me.__disp__.impl, handlerFnId))
+		}
+		return true
+	}
+	me.__disp__.impl.send(msg, onresp)
+	return func(a0 func(*Disposable)) {
+		onret = a0
+	}
+}
+
+// Dispose requests the VSC side to forget about this object and release or destroy all resources associated with or occupied by it. All subsequent usage attempts will be rejected.
+// 
+// `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
+func (me *FileSystemWatcher) Dispose() func(func()) {
+	return me.__disp__.Dispose()
+}
+
+func (me *FileSystemWatcher) __appzObjBagPullFromPeer__() func(func()) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "FileSystemWatcher.__appzObjBagPullFromPeer__"
+	msg.Data = make(dict, 1)
+	msg.Data[""] = me.__disp__.id
+	var onresp func(any) bool
+	var onret func()
+	onresp = func(payload any) bool {
+		var ok bool
+		if (nil == me.Bag) {
+			me.Bag = new(FileSystemWatcherBag)
+		}
+		me.Bag.__holder__ = me
+		me.Bag.__holder__.__disp__.impl.Lock()
+		{
+			ok = me.Bag.__loadFromJsonish__(payload)
+		}
+		me.Bag.__holder__.__disp__.impl.Unlock()
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
+		return true
+	}
+	me.__disp__.impl.send(msg, onresp)
+	return func(a0 func()) {
+		onret = a0
+	}
+}
+
+func (me *FileSystemWatcher) __appzObjBagPushToPeer__(allUpdates *FileSystemWatcherBag) func(func()) {
+	var msg *ipcMsg
+	msg = new(ipcMsg)
+	msg.QName = "FileSystemWatcher.__appzObjBagPushToPeer__"
+	msg.Data = make(dict, 2)
+	msg.Data[""] = me.__disp__.id
+	msg.Data["allUpdates"] = allUpdates
+	var onresp func(any) bool
+	var onret func()
+	onresp = func(payload any) bool {
+		var ok bool
+		me.__disp__.impl.Lock()
+		{
+			ok = me.Bag.__loadFromJsonish__(payload)
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
+		return true
+	}
+	me.__disp__.impl.send(msg, onresp)
+	return func(a0 func()) {
+		onret = a0
+	}
+}
+
 // ReFetch requests the current `StatusBarItem` state from the VSC side and upon response refreshes this `StatusBarItemBag`'s property values for `alignment`, `priority`, `text`, `tooltip`, `color`, `command` to reflect it.
 // 
 // `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
@@ -5118,6 +5471,20 @@ func (me *QuickPickBag) ReFetch() func(func()) {
 // 
 // `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 func (me *QuickPickBag) ApplyChanges() func(func()) {
+	return me.__holder__.__appzObjBagPushToPeer__(me)
+}
+
+// ReFetch requests the current `FileSystemWatcher` state from the VSC side and upon response refreshes this `FileSystemWatcherBag`'s property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to reflect it.
+// 
+// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
+func (me *FileSystemWatcherBag) ReFetch() func(func()) {
+	return me.__holder__.__appzObjBagPullFromPeer__()
+}
+
+// ApplyChanges propagates this `FileSystemWatcherBag`'s current property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
+// 
+// `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
+func (me *FileSystemWatcherBag) ApplyChanges() func(func()) {
 	return me.__holder__.__appzObjBagPushToPeer__(me)
 }
 
@@ -5520,6 +5887,13 @@ func (me *WorkspaceFoldersChangeEvent) __loadFromJsonish__(payload any) bool {
 		return false
 	}
 	return true
+}
+
+func (me *FileSystemWatcher) __loadFromJsonish__(payload any) bool {
+	var ok bool
+	me.__disp__ = new(Disposable)
+	ok = me.__disp__.__loadFromJsonish__(payload)
+	return ok
 }
 
 func (me *WorkspaceBag) __loadFromJsonish__(payload any) bool {
@@ -6109,6 +6483,50 @@ func (me *QuickPickBag) __loadFromJsonish__(payload any) bool {
 			}
 		}
 		me.IgnoreFocusOut = ignoreFocusOut
+	}
+	return true
+}
+
+func (me *FileSystemWatcherBag) __loadFromJsonish__(payload any) bool {
+	var it dict
+	var ok bool
+	var val any
+	it, ok = payload.(dict)
+	if !ok {
+		return false
+	}
+	val, ok = it["ignoreCreateEvents"]
+	if ok {
+		var ignoreCreateEvents bool
+		if (nil != val) {
+			ignoreCreateEvents, ok = val.(bool)
+			if !ok {
+				return false
+			}
+		}
+		me.IgnoreCreateEvents = ignoreCreateEvents
+	}
+	val, ok = it["ignoreChangeEvents"]
+	if ok {
+		var ignoreChangeEvents bool
+		if (nil != val) {
+			ignoreChangeEvents, ok = val.(bool)
+			if !ok {
+				return false
+			}
+		}
+		me.IgnoreChangeEvents = ignoreChangeEvents
+	}
+	val, ok = it["ignoreDeleteEvents"]
+	if ok {
+		var ignoreDeleteEvents bool
+		if (nil != val) {
+			ignoreDeleteEvents, ok = val.(bool)
+			if !ok {
+				return false
+			}
+		}
+		me.IgnoreDeleteEvents = ignoreDeleteEvents
 	}
 	return true
 }

@@ -169,6 +169,17 @@ function newWorkspaceFoldersChangeEvent() {
     me = { __loadFromJsonish__: _ => WorkspaceFoldersChangeEvent___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
+function newFileSystemWatcher() {
+    let me;
+    me = { __loadFromJsonish__: _ => FileSystemWatcher___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined };
+    me.OnDidCreate = (a0) => FileSystemWatcher_OnDidCreate.call(me, a0);
+    me.OnDidChange = (a0) => FileSystemWatcher_OnDidChange.call(me, a0);
+    me.OnDidDelete = (a0) => FileSystemWatcher_OnDidDelete.call(me, a0);
+    me.Dispose = () => FileSystemWatcher_Dispose.call(me);
+    me.__appzObjBagPullFromPeer__ = () => FileSystemWatcher___appzObjBagPullFromPeer__.call(me);
+    me.__appzObjBagPushToPeer__ = (a0) => FileSystemWatcher___appzObjBagPushToPeer__.call(me, a0);
+    return me;
+}
 function newDiagnosticChangeEvent() {
     let me;
     me = { __loadFromJsonish__: _ => DiagnosticChangeEvent___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
@@ -214,6 +225,12 @@ function newQuickPickBag() {
     return me;
 }
 exports.newQuickPickBag = newQuickPickBag;
+function newFileSystemWatcherBag() {
+    let me;
+    me = { __loadFromJsonish__: _ => FileSystemWatcherBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => FileSystemWatcherBag_ApplyChanges.call(me), ReFetch: () => FileSystemWatcherBag_ReFetch.call(me) };
+    return me;
+}
+exports.newFileSystemWatcherBag = newFileSystemWatcherBag;
 class impl {
     constructor() {
         this.Window = new implWindow(this);
@@ -661,7 +678,7 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return (undefined === onresp || null === onresp) || onresp(payload);
+            return onresp(payload);
         });
         return (a0) => {
             onret = a0;
@@ -754,7 +771,7 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return (undefined === onresp || null === onresp) || onresp(payload);
+            return onresp(payload);
         });
         return (a0) => {
             onret = a0;
@@ -837,7 +854,7 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return (undefined === onresp || null === onresp) || onresp(payload);
+            return onresp(payload);
         });
         return (a0) => {
             onret = a0;
@@ -931,7 +948,7 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return (undefined === onresp || null === onresp) || onresp(payload);
+            return onresp(payload);
         });
         return (a0) => {
             onret = a0;
@@ -1013,7 +1030,7 @@ class implWindow extends implBase {
                     }
                 }
             }
-            return (undefined === onresp || null === onresp) || onresp(payload);
+            return onresp(payload);
         });
         return (a0) => {
             onret = a0;
@@ -2045,6 +2062,43 @@ class implWorkspace extends implBase {
             if ((undefined !== onret && null !== onret)) {
                 onret(result);
             }
+            return true;
+        };
+        this.Impl().send(msg, onresp);
+        return (a0) => {
+            onret = a0;
+        };
+    }
+    CreateFileSystemWatcher(globPattern, ignoreCreateEvents, ignoreChangeEvents, ignoreDeleteEvents) {
+        let msg;
+        msg = newipcMsg();
+        msg.QName = "workspace.createFileSystemWatcher";
+        msg.Data = {};
+        msg.Data["globPattern"] = globPattern;
+        msg.Data["ignoreCreateEvents"] = ignoreCreateEvents;
+        msg.Data["ignoreChangeEvents"] = ignoreChangeEvents;
+        msg.Data["ignoreDeleteEvents"] = ignoreDeleteEvents;
+        let onresp;
+        let onret;
+        onresp = (payload) => {
+            let ok;
+            let result;
+            if ((undefined !== payload && null !== payload)) {
+                result = newFileSystemWatcher();
+                ok = result.__loadFromJsonish__(payload);
+                if (!ok) {
+                    return false;
+                }
+                result.__disp__.impl = this.Impl();
+            }
+            else {
+                return false;
+            }
+            result.__appzObjBagPullFromPeer__()(() => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
+            });
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -3446,6 +3500,243 @@ function QuickPick___appzObjBagPushToPeer__(allUpdates) {
         onret = a0;
     };
 }
+function FileSystemWatcher_OnDidCreate(handler) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "FileSystemWatcher.onDidCreate";
+    msg.Data = {};
+    msg.Data[""] = this.__disp__.id;
+    let handlerFnId;
+    if ((undefined === handler || null === handler)) {
+        vsc_appz_1.OnError(this.__disp__.impl, "FileSystemWatcher.OnDidCreate: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        return null;
+    }
+    handlerFnId = this.__disp__.impl.nextSub((args) => {
+        let ok;
+        if (2 !== args.length) {
+            return ok;
+        }
+        let _a_0_;
+        [_a_0_, ok] = [args[0], typeof args[0] === "string"];
+        if (!ok) {
+            return false;
+        }
+        {
+            {
+                ok = this.Bag.__loadFromJsonish__(args[1]);
+            }
+            if (!ok) {
+                return false;
+            }
+            handler(_a_0_);
+        }
+        return true;
+    }, null);
+    msg.Data["handler"] = handlerFnId;
+    this.__disp__.addSub(handlerFnId);
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable();
+            ok = result.__loadFromJsonish__(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId));
+        }
+        return true;
+    };
+    this.__disp__.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function FileSystemWatcher_OnDidChange(handler) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "FileSystemWatcher.onDidChange";
+    msg.Data = {};
+    msg.Data[""] = this.__disp__.id;
+    let handlerFnId;
+    if ((undefined === handler || null === handler)) {
+        vsc_appz_1.OnError(this.__disp__.impl, "FileSystemWatcher.OnDidChange: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        return null;
+    }
+    handlerFnId = this.__disp__.impl.nextSub((args) => {
+        let ok;
+        if (2 !== args.length) {
+            return ok;
+        }
+        let _a_0_;
+        [_a_0_, ok] = [args[0], typeof args[0] === "string"];
+        if (!ok) {
+            return false;
+        }
+        {
+            {
+                ok = this.Bag.__loadFromJsonish__(args[1]);
+            }
+            if (!ok) {
+                return false;
+            }
+            handler(_a_0_);
+        }
+        return true;
+    }, null);
+    msg.Data["handler"] = handlerFnId;
+    this.__disp__.addSub(handlerFnId);
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable();
+            ok = result.__loadFromJsonish__(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId));
+        }
+        return true;
+    };
+    this.__disp__.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function FileSystemWatcher_OnDidDelete(handler) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "FileSystemWatcher.onDidDelete";
+    msg.Data = {};
+    msg.Data[""] = this.__disp__.id;
+    let handlerFnId;
+    if ((undefined === handler || null === handler)) {
+        vsc_appz_1.OnError(this.__disp__.impl, "FileSystemWatcher.OnDidDelete: the 'handler' arg (which is not optional but required) was not passed by the caller", null);
+        return null;
+    }
+    handlerFnId = this.__disp__.impl.nextSub((args) => {
+        let ok;
+        if (2 !== args.length) {
+            return ok;
+        }
+        let _a_0_;
+        [_a_0_, ok] = [args[0], typeof args[0] === "string"];
+        if (!ok) {
+            return false;
+        }
+        {
+            {
+                ok = this.Bag.__loadFromJsonish__(args[1]);
+            }
+            if (!ok) {
+                return false;
+            }
+            handler(_a_0_);
+        }
+        return true;
+    }, null);
+    msg.Data["handler"] = handlerFnId;
+    this.__disp__.addSub(handlerFnId);
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        let result;
+        if ((undefined !== payload && null !== payload)) {
+            result = newDisposable();
+            ok = result.__loadFromJsonish__(payload);
+            if (!ok) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId));
+        }
+        return true;
+    };
+    this.__disp__.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function FileSystemWatcher_Dispose() {
+    return this.__disp__.Dispose();
+}
+function FileSystemWatcher___appzObjBagPullFromPeer__() {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "FileSystemWatcher.__appzObjBagPullFromPeer__";
+    msg.Data = {};
+    msg.Data[""] = this.__disp__.id;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        if ((undefined === this.Bag || null === this.Bag)) {
+            this.Bag = newFileSystemWatcherBag();
+        }
+        this.Bag.__holder__ = this;
+        {
+            ok = this.Bag.__loadFromJsonish__(payload);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.__disp__.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function FileSystemWatcher___appzObjBagPushToPeer__(allUpdates) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "FileSystemWatcher.__appzObjBagPushToPeer__";
+    msg.Data = {};
+    msg.Data[""] = this.__disp__.id;
+    msg.Data["allUpdates"] = allUpdates;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        {
+            ok = this.Bag.__loadFromJsonish__(payload);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.__disp__.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
 function StatusBarItemBag_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
@@ -3468,6 +3759,12 @@ function QuickPickBag_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
 function QuickPickBag_ApplyChanges() {
+    return this.__holder__.__appzObjBagPushToPeer__(this);
+}
+function FileSystemWatcherBag_ReFetch() {
+    return this.__holder__.__appzObjBagPullFromPeer__();
+}
+function FileSystemWatcherBag_ApplyChanges() {
     return this.__holder__.__appzObjBagPushToPeer__(this);
 }
 function MessageItem___loadFromJsonish__(payload) {
@@ -3895,6 +4192,12 @@ function WorkspaceFoldersChangeEvent___loadFromJsonish__(payload) {
         return false;
     }
     return true;
+}
+function FileSystemWatcher___loadFromJsonish__(payload) {
+    let ok;
+    this.__disp__ = newDisposable();
+    ok = this.__disp__.__loadFromJsonish__(payload);
+    return ok;
 }
 function WorkspaceBag___loadFromJsonish__(payload) {
     let it;
@@ -4474,6 +4777,49 @@ function QuickPickBag___loadFromJsonish__(payload) {
             }
         }
         this.ignoreFocusOut = ignoreFocusOut;
+    }
+    return true;
+}
+function FileSystemWatcherBag___loadFromJsonish__(payload) {
+    let it;
+    let ok;
+    let val;
+    [it, ok] = [payload, typeof payload === "object"];
+    if (!ok) {
+        return false;
+    }
+    [val, ok] = [it["ignoreCreateEvents"], undefined !== it["ignoreCreateEvents"]];
+    if (ok) {
+        let ignoreCreateEvents;
+        if ((undefined !== val && null !== val)) {
+            [ignoreCreateEvents, ok] = [val, typeof val === "boolean"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.ignoreCreateEvents = ignoreCreateEvents;
+    }
+    [val, ok] = [it["ignoreChangeEvents"], undefined !== it["ignoreChangeEvents"]];
+    if (ok) {
+        let ignoreChangeEvents;
+        if ((undefined !== val && null !== val)) {
+            [ignoreChangeEvents, ok] = [val, typeof val === "boolean"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.ignoreChangeEvents = ignoreChangeEvents;
+    }
+    [val, ok] = [it["ignoreDeleteEvents"], undefined !== it["ignoreDeleteEvents"]];
+    if (ok) {
+        let ignoreDeleteEvents;
+        if ((undefined !== val && null !== val)) {
+            [ignoreDeleteEvents, ok] = [val, typeof val === "boolean"];
+            if (!ok) {
+                return false;
+            }
+        }
+        this.ignoreDeleteEvents = ignoreDeleteEvents;
     }
     return true;
 }

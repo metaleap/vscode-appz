@@ -91,7 +91,7 @@ export class Gen extends gen_syn.Gen {
                     this.emitDocs(f)
                         .when(f.Json, () => this.line(f.Json.Excluded
                             ? "[JsonIgnore]"
-                            : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnMaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + (f.Json.Required ? ", JsonRequired]" : "]")
+                            : `[JsonProperty("${f.Json.Name}")` + (this.typeTup(this.typeUnMaybe(f.Type)) ? ", JsonConverter(typeof(json.valueTuples))" : "") + ((f.Json.Required || (it.fromPrep && it.fromPrep.isPropsOfStruct)) ? ", JsonRequired]" : "]")
                         ))
                         .ln(() => this
                             .s(((f.Type === gen_syn.TypeRefPrim.String && f.FuncFieldRel) || (isdispobj && f.Name !== gen.idents.fldDispObjBag) || (f.Name.startsWith("__") && f.Name.endsWith("__"))) ? "internal " : "public ")
@@ -134,12 +134,12 @@ export class Gen extends gen_syn.Gen {
                 )
 
         if (struct)
-            this.line("public partial class " + struct.Name + (isdisp ? ' : IDisposable' : '') + " {")
+            this.line("public partial class " + struct.Name + (isdisp ? ' /*: IDisposable*/' : '') + " {")
                 .indented(() => {
                     this.emitDocs(it)
                     emitsigheadln().emitInstr(it.Func.Body).line()
                     if (isdisp) this.lines(
-                        "void IDisposable.Dispose() { this.Dispose(); }",
+                        "/*void IDisposable.Dispose() { this.Dispose(); }*/",
                         "internal Action<IVscode, any, any> " + gen.idents.coreMethodOnErr + " { get => this." + gen.idents.fldDisp + "?." + gen.idents.fldImpl + "?." + gen.idents.coreMethodOnErr + "; }",
                     )
                 }).lines("}", "")

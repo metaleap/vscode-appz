@@ -55,7 +55,7 @@ class Gen extends gen_syn.Gen {
         this.emitDocs(it)
             .line("type " + it.Name + " struct {").indented(() => this.each(it.Fields.filter(_ => (!_.FuncFieldRel) || _.Type !== gen_syn.TypeRefPrim.String), "\n", f => {
             this.emitDocs(f).ln(() => this.s(f.Name, " ").emitTypeRef(f.Type).when(f.Json && !(f.Name.startsWith("__") && f.Name.endsWith("__")), () => this.s(" `json:\"")
-                .when(f.Json.Excluded, () => this.s("-"), () => this.s(f.Json.Name + (f.Json.Required ? "" : ",omitempty"))).s("\"`")));
+                .when(f.Json.Excluded, () => this.s("-"), () => this.s(f.Json.Name + ((f.Json.Required || (it.fromPrep && it.fromPrep.isPropsOfStruct)) ? "" : ",omitempty"))).s("\"`")));
         })).lines("}", "");
         const fflds = it.Fields.filter(_ => _.FuncFieldRel && _.Type === gen_syn.TypeRefPrim.String);
         if (fflds && fflds.length) {

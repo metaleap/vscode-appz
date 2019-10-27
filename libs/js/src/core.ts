@@ -165,6 +165,9 @@ export class Disposable {
         return ((typeof payload === 'string') && (this.id = payload) && this.id.length) ? true : false
     }
 
+    /**
+     * Dispose requests the VSC side to forget about this object and release or destroy all resources associated with or occupied by it. All subsequent usage attempts will be rejected.
+     */
     Dispose(): (_: () => void) => void {
         let ondone: () => void
         this.impl.send(new ipcMsg('dispose', { '': this.id }), () => {

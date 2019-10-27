@@ -397,6 +397,16 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
+				case "createFileSystemWatcher": {
+					const arg_globPattern = (msg.data['globPattern']) as string
+					const arg_ignoreCreateEvents = (msg.data['ignoreCreateEvents']) as boolean
+					const arg_ignoreChangeEvents = (msg.data['ignoreChangeEvents']) as boolean
+					const arg_ignoreDeleteEvents = (msg.data['ignoreDeleteEvents']) as boolean
+					const ret = vscode.workspace.createFileSystemWatcher(arg_globPattern, arg_ignoreCreateEvents, arg_ignoreChangeEvents, arg_ignoreDeleteEvents, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
 				case "AllProperties": {
 					return Promise.resolve({
 						name: vscode.workspace.name,
@@ -882,6 +892,83 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				default:
 					throw methodname
 			}
+		case "FileSystemWatcher":
+			const thisFileSystemWatcher = prog.objects[msg.data[""]] as FileSystemWatcher
+			if (!thisFileSystemWatcher)
+				throw "Called vscode.FileSystemWatcher." + methodname + " for an already disposed-and-forgotten instance"
+			switch (methodname) {
+				case "onDidCreate": {
+					const handlerFnId = msg.data['handler'] as string
+					if (!(handlerFnId && handlerFnId.length))
+						return ppio.promRej("FileSystemWatcher.onDidCreate.handler", msg.data)
+					const arg_handler = (_0: Uri): unknown => {
+						if (prog && prog.proc)
+							return prog.callBack("FileSystemWatcher.onDidCreate.handler", false, handlerFnId, (_0.fsPath && _0.fsPath.length) ? _0.fsPath : _0.toString(true), ({ ignoreCreateEvents: thisFileSystemWatcher.ignoreCreateEvents, ignoreChangeEvents: thisFileSystemWatcher.ignoreChangeEvents, ignoreDeleteEvents: thisFileSystemWatcher.ignoreDeleteEvents }))
+						return undefined
+					}
+					const ret = thisFileSystemWatcher.onDidCreate(arg_handler, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "onDidChange": {
+					const handlerFnId = msg.data['handler'] as string
+					if (!(handlerFnId && handlerFnId.length))
+						return ppio.promRej("FileSystemWatcher.onDidChange.handler", msg.data)
+					const arg_handler = (_0: Uri): unknown => {
+						if (prog && prog.proc)
+							return prog.callBack("FileSystemWatcher.onDidChange.handler", false, handlerFnId, (_0.fsPath && _0.fsPath.length) ? _0.fsPath : _0.toString(true), ({ ignoreCreateEvents: thisFileSystemWatcher.ignoreCreateEvents, ignoreChangeEvents: thisFileSystemWatcher.ignoreChangeEvents, ignoreDeleteEvents: thisFileSystemWatcher.ignoreDeleteEvents }))
+						return undefined
+					}
+					const ret = thisFileSystemWatcher.onDidChange(arg_handler, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "onDidDelete": {
+					const handlerFnId = msg.data['handler'] as string
+					if (!(handlerFnId && handlerFnId.length))
+						return ppio.promRej("FileSystemWatcher.onDidDelete.handler", msg.data)
+					const arg_handler = (_0: Uri): unknown => {
+						if (prog && prog.proc)
+							return prog.callBack("FileSystemWatcher.onDidDelete.handler", false, handlerFnId, (_0.fsPath && _0.fsPath.length) ? _0.fsPath : _0.toString(true), ({ ignoreCreateEvents: thisFileSystemWatcher.ignoreCreateEvents, ignoreChangeEvents: thisFileSystemWatcher.ignoreChangeEvents, ignoreDeleteEvents: thisFileSystemWatcher.ignoreDeleteEvents }))
+						return undefined
+					}
+					const ret = thisFileSystemWatcher.onDidDelete(arg_handler, )
+					const retdisp = ret as any as vscode.Disposable
+					const retprom = ret as any as Thenable<any>
+					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
+				}
+				case "__appzObjBagPullFromPeer__": {
+					return Promise.resolve({ ignoreCreateEvents: thisFileSystemWatcher.ignoreCreateEvents, ignoreChangeEvents: thisFileSystemWatcher.ignoreChangeEvents, ignoreDeleteEvents: thisFileSystemWatcher.ignoreDeleteEvents })
+				}
+				case "__appzObjBagPushToPeer__": {
+					const upd = msg.data["allUpdates"] as { [_:string]: any }
+					if (!upd)
+						return ppio.promRej("FileSystemWatcher.set#allUpdates", msg.data)
+					const prop_ignoreCreateEvents = upd["ignoreCreateEvents"] as boolean
+					if (prop_ignoreCreateEvents !== undefined) {
+						let val = prop_ignoreCreateEvents
+						if (val !== thisFileSystemWatcher.ignoreCreateEvents)
+							thisFileSystemWatcher.ignoreCreateEvents = val
+					}
+					const prop_ignoreChangeEvents = upd["ignoreChangeEvents"] as boolean
+					if (prop_ignoreChangeEvents !== undefined) {
+						let val = prop_ignoreChangeEvents
+						if (val !== thisFileSystemWatcher.ignoreChangeEvents)
+							thisFileSystemWatcher.ignoreChangeEvents = val
+					}
+					const prop_ignoreDeleteEvents = upd["ignoreDeleteEvents"] as boolean
+					if (prop_ignoreDeleteEvents !== undefined) {
+						let val = prop_ignoreDeleteEvents
+						if (val !== thisFileSystemWatcher.ignoreDeleteEvents)
+							thisFileSystemWatcher.ignoreDeleteEvents = val
+					}
+					return Promise.resolve({ ignoreCreateEvents: thisFileSystemWatcher.ignoreCreateEvents, ignoreChangeEvents: thisFileSystemWatcher.ignoreChangeEvents, ignoreDeleteEvents: thisFileSystemWatcher.ignoreDeleteEvents })
+				}
+				default:
+					throw methodname
+			}
 		default:
 			throw (apiname)
 	}
@@ -910,3 +997,5 @@ type DecorationRenderOptions = vscode.DecorationRenderOptions
 type TextEditorDecorationType = vscode.TextEditorDecorationType
 type InputBox = vscode.InputBox
 type QuickPick = vscode.QuickPick<QuickPickItem>
+type FileSystemWatcher = vscode.FileSystemWatcher
+type Uri = vscode.Uri

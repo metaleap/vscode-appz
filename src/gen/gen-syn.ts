@@ -237,9 +237,8 @@ export class Builder {
                         const tn = this.gen.typeUnMaybe(tf.From[0]) as TypeRefOwn
                         if (tn && tn.Name && tn.Name.length) {
                             const struct = this.prep.structs.find(_ => this.gen.nameRewriters.types.structs(_.name) === tn.Name)
-                            if (struct && struct.isDispObj) {
+                            if (struct && struct.isDispObj)
                                 me.IsObjCtor = tn.Name
-                            }
                         }
                     }
                 }
@@ -565,6 +564,15 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     ensureMethodDocsArgsAndRet(it: WithDocs): Gen {
+        if (!(it.Docs && it.Docs.length)) {
+            const named = it as WithName
+            if (named && named.Name && named.Name.length)
+                switch (named.Name) {
+                    case "Dispose":
+                        it.Docs = [{ Lines: ["Dispose requests the VSC side to forget about this object and release or destroy all resources associated with or occupied by it. All subsequent usage attempts will be rejected."] }]
+                        break
+                }
+        }
         if (it.Docs && it.Docs.length) {
             const me = it as Method
             if (me && me.Name && me.Name.length && me.Args !== undefined && me.Args !== null) {
@@ -1308,7 +1316,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                         ),
                     ),
                 ]),
-                _.iRet(_.oOr(_.oIsnt(_._(gen.idents.varOnResp)), _.eCall(_._(gen.idents.varOnResp), _._(gen.idents.argPayload)))),
+                _.iRet(_.eCall(_._(gen.idents.varOnResp), _._(gen.idents.argPayload))),
             )),
         )
         body.push(_.iRet(_.eFunc((method.Type as TypeRefFunc).From.map((_, i) => ({ Name: "a" + i, Type: _ })), null,
@@ -1470,10 +1478,10 @@ export class Gen extends gen.Gen implements gen.IGen {
                             b.push(_.iRet(_.eCall(_._(_.eThis(), gen.idents.fldBagHolder, gen.idents.methodObjBagPush), _.eThis())))
                         })
                 } if (struct.fromPrep.isDispObj) {
-                    for (const field of struct.fromPrep.fields) {
-                        const orig = field.fromOrig
+                    for (const field of struct.fromPrep.fields)
                         if (tfun = gen.typeFun(field.typeSpec)) {
-                            const isevt = (ts.isPropertySignature(orig) && ts.isTypeReferenceNode(orig.type) && orig.type.typeName.getText() === "Event")
+                            const orig = field.fromOrig
+                            const isevt = (orig && ts.isPropertySignature(orig) && ts.isTypeReferenceNode(orig.type) && orig.type.typeName.getText() === "Event")
                             const prepargs = isevt
                                 ? [{ name: gen.idents.argHandler, optional: false, typeSpec: (field.typeSpec as gen.TypeSpecFun).From[0] }]
                                 : (tfun[0].map((_, i): gen.PrepArg => gen.argFrom(_, (orig as ts.MethodSignature).parameters[i])))
@@ -1491,13 +1499,12 @@ export class Gen extends gen.Gen implements gen.IGen {
                                 }),
                                 Type: null, IsObjEvt: isevt,
                                 Docs: this.b.docs(gen.docs(orig), [], true, true),
-                                fromPrep: { args: prepargs, name: field.name, nameOrig: orig.getText() }
+                                fromPrep: { args: prepargs, name: field.name, nameOrig: orig ? orig.getText() : field.name }
                             }
                             me.Type = { From: [this.typeUnMaybe(me.Args[me.Args.length - 1].Type)], To: null }
                             me.Args = me.Args.slice(0, me.Args.length - 1)
                             this.emitMethodImpl(struct, me, this.genMethodImpl_ObjMethodCall)
                         }
-                    }
                     let propsfields = struct.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec))
                     if (propsfields && propsfields.length) {
                         const mget: Method = {

@@ -141,6 +141,9 @@ class Disposable {
     __loadFromJsonish__(payload) {
         return ((typeof payload === 'string') && (this.id = payload) && this.id.length) ? true : false;
     }
+    /**
+     * Dispose requests the VSC side to forget about this object and release or destroy all resources associated with or occupied by it. All subsequent usage attempts will be rejected.
+     */
     Dispose() {
         let ondone;
         this.impl.send(new ipcMsg('dispose', { '': this.id }), () => {

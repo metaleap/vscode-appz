@@ -47,6 +47,9 @@ export declare class Disposable {
     addSub(fnId: string): void;
     bind(impl: impl, ...subFnIds: string[]): this;
     __loadFromJsonish__(payload: any): boolean;
+    /**
+     * Dispose requests the VSC side to forget about this object and release or destroy all resources associated with or occupied by it. All subsequent usage attempts will be rejected.
+     */
     Dispose(): (_: () => void) => void;
 }
 export {};
