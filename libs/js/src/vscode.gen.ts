@@ -2971,12 +2971,6 @@ export interface TerminalBag extends fromJson {
      */
     Name: () => string
 
-    /**
-     * The process ID of the shell process.
-
-     */
-    ProcessId: () => number
-
     ReFetch: () => (_: () => void) => void
 }
 
@@ -7950,24 +7944,6 @@ function TerminalBag___loadFromJsonish__(this: TerminalBag, payload: any): boole
         }
         this.Name = (): string => {
             return name
-        }
-    }
-    [val, ok] = [it["processId"], undefined !== it["processId"]]
-    if (ok) {
-        let processId: number
-        if ((undefined !== val && null !== val)) {
-            [processId, ok] = [val as number, typeof val === "number"]
-            if (!ok) {
-                let __processId__: number
-                [__processId__, ok] = [val as number, typeof val === "number"]
-                if (!ok) {
-                    return false
-                }
-                processId = __processId__
-            }
-        }
-        this.ProcessId = (): number => {
-            return processId
         }
     }
     return true

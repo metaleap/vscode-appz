@@ -283,7 +283,6 @@
   - [Show(preserveFocus)](#M-VscAppz-Terminal-Show-System-Boolean- 'VscAppz.Terminal.Show(System.Boolean)')
 - [TerminalBag](#T-VscAppz-TerminalBag 'VscAppz.TerminalBag')
   - [Name](#F-VscAppz-TerminalBag-Name 'VscAppz.TerminalBag.Name')
-  - [ProcessId](#F-VscAppz-TerminalBag-ProcessId 'VscAppz.TerminalBag.ProcessId')
   - [ReFetch()](#M-VscAppz-TerminalBag-ReFetch 'VscAppz.TerminalBag.ReFetch')
 - [TerminalDimensions](#T-VscAppz-TerminalDimensions 'VscAppz.TerminalDimensions')
   - [Columns](#F-VscAppz-TerminalDimensions-Columns 'VscAppz.TerminalDimensions.Columns')
@@ -4018,19 +4017,12 @@ TerminalBag (to be accessed only via `Terminal.Bag`) is a snapshot of `Terminal`
 
 The name of the terminal.
 
-<a name='F-VscAppz-TerminalBag-ProcessId'></a>
-### ProcessId `constants`
-
-##### Summary
-
-The process ID of the shell process.
-
 <a name='M-VscAppz-TerminalBag-ReFetch'></a>
 ### ReFetch() `method`
 
 ##### Summary
 
-ReFetch requests the current `Terminal` state from the VSC side and upon response refreshes this `TerminalBag`'s property values for `name`, `processId` to reflect it.
+ReFetch requests the current `Terminal` state from the VSC side and upon response refreshes this `TerminalBag`'s property value for `name` to reflect it.
 
 `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 

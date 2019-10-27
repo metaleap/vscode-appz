@@ -130,7 +130,7 @@ class Prep {
                 struct.isDispObj = true;
                 if (!struct.fields.some(_ => _.name === "dispose"))
                     struct.fields.push({ name: "dispose", typeSpec: { From: [], To: null } });
-                const propfields = struct.fields.filter(_ => !typeFun(_.typeSpec));
+                const propfields = struct.fields.filter(_ => (!typeProm(_.typeSpec)) && !typeFun(_.typeSpec));
                 if (propfields.length) {
                     const propstruct = {
                         funcFields: [], name: struct.name + exports.idents.typeSuffBag, isPropsOfStruct: struct,

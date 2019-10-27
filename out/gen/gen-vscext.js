@@ -65,20 +65,21 @@ class Gen extends gen.Gen {
                 let tfun;
                 let hasgets = false, hassets = false;
                 for (const mem of it.fields)
-                    if (!(tfun = gen.typeFun(mem.typeSpec)))
-                        [hasgets, hassets] = [true, hassets || !mem.readOnly];
-                    else if (mem.name !== "dispose") {
-                        const orig = mem.fromOrig;
-                        const isevt = (ts.isPropertySignature(orig) && ts.isTypeReferenceNode(orig.type) && orig.type.typeName.getText() === "Event");
-                        const args = isevt ? [
-                            { name: "handler", optional: false, typeSpec: mem.typeSpec.From[0] },
-                        ] : (tfun[0].map((_, i) => gen.argFrom(_, orig.parameters[i])).filter(_ => !_.isFromRetThenable));
-                        src += `\t\t\t\tcase "${mem.name}": {\n`;
-                        for (const arg of args)
-                            src += this.argsSrc(prep, it.name + "." + mem.name + "." + arg.name, arg, isevt, it);
-                        src += this.retArgsSrc(`this${it.name}.${mem.name}`, args, (mem.name === "dispose" || isevt) ? "" : ("{ " + this.propSrc(it) + " }"));
-                        src += "\t\t\t\t}\n";
-                    }
+                    if (!gen.typeProm(mem.typeSpec))
+                        if (!(tfun = gen.typeFun(mem.typeSpec)))
+                            [hasgets, hassets] = [true, hassets || !mem.readOnly];
+                        else if (mem.name !== "dispose") {
+                            const orig = mem.fromOrig;
+                            const isevt = (ts.isPropertySignature(orig) && ts.isTypeReferenceNode(orig.type) && orig.type.typeName.getText() === "Event");
+                            const args = isevt ? [
+                                { name: "handler", optional: false, typeSpec: mem.typeSpec.From[0] },
+                            ] : (tfun[0].map((_, i) => gen.argFrom(_, orig.parameters[i])).filter(_ => !_.isFromRetThenable));
+                            src += `\t\t\t\tcase "${mem.name}": {\n`;
+                            for (const arg of args)
+                                src += this.argsSrc(prep, it.name + "." + mem.name + "." + arg.name, arg, isevt, it);
+                            src += this.retArgsSrc(`this${it.name}.${mem.name}`, args, (mem.name === "dispose" || isevt) ? "" : ("{ " + this.propSrc(it) + " }"));
+                            src += "\t\t\t\t}\n";
+                        }
                 if (hasgets) {
                     src += `\t\t\t\tcase "${gen.idents.methodObjBagPull}": {\n`;
                     src += "\t\t\t\t\treturn Promise.resolve({ " + this.propSrc(it) + " })\n";
@@ -88,7 +89,7 @@ class Gen extends gen.Gen {
                     src += `\t\t\t\tcase "${gen.idents.methodObjBagPush}": {\n`;
                     src += `\t\t\t\t\tconst upd = msg.data["${gen.idents.argUpd}"] as { [_:string]: any }\n`;
                     src += `\t\t\t\t\tif (!upd)\n\t\t\t\t\t\treturn ppio.promRej("${it.name}.set#${gen.idents.argUpd}", msg.data)\n`;
-                    for (const prop of it.fields.filter(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec))) {
+                    for (const prop of it.fields.filter(_ => (!_.readOnly) && (!gen.typeProm(_.typeSpec)) && !gen.typeFun(_.typeSpec))) {
                         const tcol = gen.typeNames(prop.typeSpec).includes("ThemeColor");
                         for (const tname of gen.typeNames(prop.typeSpec))
                             this.typeNamesUsed[tname] = true;
@@ -204,7 +205,7 @@ class Gen extends gen.Gen {
         return src;
     }
     propSrc(it) {
-        return it.fields.filter(_ => !gen.typeFun(_.typeSpec)).map(prop => `${prop.name}: ` + (!gen.typeSumOf(prop.typeSpec, 'ThemeColor') ? `this${it.name}.${prop.name}` : `(this${it.name}.${prop.name} && ((this${it.name}.${prop.name} as any)["id"])) ? ((this${it.name}.${prop.name} as any)["id"]) : this${it.name}.${prop.name}`)).join(", ");
+        return it.fields.filter(_ => (!gen.typeProm(_.typeSpec)) && !gen.typeFun(_.typeSpec)).map(prop => `${prop.name}: ` + (!gen.typeSumOf(prop.typeSpec, 'ThemeColor') ? `this${it.name}.${prop.name}` : `(this${it.name}.${prop.name} && ((this${it.name}.${prop.name} as any)["id"])) ? ((this${it.name}.${prop.name} as any)["id"]) : this${it.name}.${prop.name}`)).join(", ");
     }
     typeSpec(from, intoProm = false) {
         if (!from)

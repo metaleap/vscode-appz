@@ -2454,10 +2454,6 @@ namespace VscAppz {
 		/// <summary>The name of the terminal.</summary>
 		[JsonIgnore]
 		public Func<string> Name;
-
-		/// <summary>The process ID of the shell process.</summary>
-		[JsonIgnore]
-		public Func<int> ProcessId;
 	}
 
 	/// <summary>FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.</summary>
@@ -6765,7 +6761,7 @@ namespace VscAppz {
 
 	public partial class TerminalBag {
 		/// <summary>
-		/// ReFetch requests the current `Terminal` state from the VSC side and upon response refreshes this `TerminalBag`'s property values for `name`, `processId` to reflect it.
+		/// ReFetch requests the current `Terminal` state from the VSC side and upon response refreshes this `TerminalBag`'s property value for `name` to reflect it.
 		/// 
 		/// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 		/// </summary>
@@ -7883,24 +7879,6 @@ namespace VscAppz {
 				}
 				this.Name = () => {
 					return name;
-				};
-			}
-			(val, ok) = (it.TryGetValue("processId", out var ___) ? (___, true) : (default, false));
-			if (ok) {
-				int processId = default;
-				if ((null != val)) {
-					(processId, ok) = (val is int) ? (((int)(val)), true) : (default, false);
-					if (!ok) {
-						double __processId__ = default;
-						(__processId__, ok) = (val is double) ? (((double)(val)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						processId = ((int)(__processId__));
-					}
-				}
-				this.ProcessId = () => {
-					return processId;
 				};
 			}
 			return true;

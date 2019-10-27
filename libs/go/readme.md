@@ -1796,9 +1796,6 @@ type TerminalBag struct {
 
 	// The name of the terminal.
 	Name func() string `json:"-"`
-
-	// The process ID of the shell process.
-	ProcessId func() int `json:"-"`
 }
 ```
 
@@ -1813,8 +1810,7 @@ exposed as function-valued fields.
 func (me *TerminalBag) ReFetch() func(func())
 ```
 ReFetch requests the current `Terminal` state from the VSC side and upon
-response refreshes this `TerminalBag`'s property values for `name`, `processId`
-to reflect it.
+response refreshes this `TerminalBag`'s property value for `name` to reflect it.
 
 `return` ── a thenable that resolves when this `ReFetch` call has successfully
 completed at the VSC side.

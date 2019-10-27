@@ -2663,12 +2663,9 @@
         <member name="F:VscAppz.TerminalBag.Name">
             <summary>The name of the terminal.</summary>
         </member>
-        <member name="F:VscAppz.TerminalBag.ProcessId">
-            <summary>The process ID of the shell process.</summary>
-        </member>
         <member name="M:VscAppz.TerminalBag.ReFetch">
             <summary>
-            ReFetch requests the current `Terminal` state from the VSC side and upon response refreshes this `TerminalBag`'s property values for `name`, `processId` to reflect it.
+            ReFetch requests the current `Terminal` state from the VSC side and upon response refreshes this `TerminalBag`'s property value for `name` to reflect it.
             
             `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
             </summary>

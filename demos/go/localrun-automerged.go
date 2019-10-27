@@ -40,6 +40,10 @@ func main() {
 						case buttons[0]:
 							demo_Window_ShowInputBox()
 						case buttons[1]:
+							// appname := appName
+							// win.CreateTerminal1(&appname, nil, nil)(func(t *Terminal) {
+							// 	t.Show(true)(func() { t.SendText("HelloTerm", false) })
+							// })
 							demosMenu()
 						default:
 							win.ShowErrorMessage1("Unknown: `"+button+"`", nil)(demosmenu)

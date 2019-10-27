@@ -5074,24 +5074,6 @@ function TerminalBag___loadFromJsonish__(payload) {
             return name;
         };
     }
-    [val, ok] = [it["processId"], undefined !== it["processId"]];
-    if (ok) {
-        let processId;
-        if ((undefined !== val && null !== val)) {
-            [processId, ok] = [val, typeof val === "number"];
-            if (!ok) {
-                let __processId__;
-                [__processId__, ok] = [val, typeof val === "number"];
-                if (!ok) {
-                    return false;
-                }
-                processId = __processId__;
-            }
-        }
-        this.ProcessId = () => {
-            return processId;
-        };
-    }
     return true;
 }
 function FileSystemWatcherBag___loadFromJsonish__(payload) {

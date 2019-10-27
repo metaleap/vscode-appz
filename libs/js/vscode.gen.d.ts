@@ -2507,11 +2507,6 @@ export interface TerminalBag extends fromJson {
 
      */
     Name: () => string;
-    /**
-     * The process ID of the shell process.
-
-     */
-    ProcessId: () => number;
     ReFetch: () => (_: () => void) => void;
 }
 export declare function newTerminalBag(): TerminalBag;

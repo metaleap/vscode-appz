@@ -1855,9 +1855,6 @@ type TerminalBag struct {
 
 	// The name of the terminal.
 	Name func() string `json:"-"`
-
-	// The process ID of the shell process.
-	ProcessId func() int `json:"-"`
 }
 
 // FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
@@ -6001,7 +5998,7 @@ func (me *QuickPickBag) ApplyChanges() func(func()) {
 	return me.__holder__.__appzObjBagPushToPeer__(me)
 }
 
-// ReFetch requests the current `Terminal` state from the VSC side and upon response refreshes this `TerminalBag`'s property values for `name`, `processId` to reflect it.
+// ReFetch requests the current `Terminal` state from the VSC side and upon response refreshes this `TerminalBag`'s property value for `name` to reflect it.
 // 
 // `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 func (me *TerminalBag) ReFetch() func(func()) {
@@ -7047,24 +7044,6 @@ func (me *TerminalBag) __loadFromJsonish__(payload any) bool {
 		}
 		me.Name = func() string {
 			return name
-		}
-	}
-	val, ok = it["processId"]
-	if ok {
-		var processId int
-		if (nil != val) {
-			processId, ok = val.(int)
-			if !ok {
-				var __processId__ float64
-				__processId__, ok = val.(float64)
-				if !ok {
-					return false
-				}
-				processId = int(__processId__)
-			}
-		}
-		me.ProcessId = func() int {
-			return processId
 		}
 	}
 	return true

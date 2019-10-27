@@ -2854,12 +2854,6 @@ TerminalBag: class
     # JSON FLAGS: {"Name":"name","Required":false,"Excluded":true}
     Name: (->string)
 
-    # processId:
-    # The process ID of the shell process.
-    #
-    # JSON FLAGS: {"Name":"processId","Required":false,"Excluded":true}
-    ProcessId: (->int)
-
 
 
 
@@ -7363,20 +7357,6 @@ TerminalBag·__loadFromJsonish__: (payload:any -> bool)
                 return false
         this.Name = ( -> string)
             return name
-        
-    [val, ok] = it@?"processId"
-    if ok
-        var processId of int
-        if =?val
-            [processId, ok] = ((val)·(int))
-            if !ok
-                var __processId__ of real
-                [__processId__, ok] = ((val)·(real))
-                if !ok
-                    return false
-                processId = ((__processId__)·(int))
-        this.ProcessId = ( -> int)
-            return processId
         
     return true
 

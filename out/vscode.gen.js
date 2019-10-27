@@ -924,19 +924,19 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const arg_text = (msg.data['text']);
                     const arg_addNewLine = (msg.data['addNewLine']);
                     const ret = thisTerminal.sendText(arg_text, arg_addNewLine);
-                    return Promise.resolve([ret, { name: thisTerminal.name, processId: thisTerminal.processId }]);
+                    return Promise.resolve([ret, { name: thisTerminal.name }]);
                 }
                 case "show": {
                     const arg_preserveFocus = (msg.data['preserveFocus']);
                     const ret = thisTerminal.show(arg_preserveFocus);
-                    return Promise.resolve([ret, { name: thisTerminal.name, processId: thisTerminal.processId }]);
+                    return Promise.resolve([ret, { name: thisTerminal.name }]);
                 }
                 case "hide": {
                     const ret = thisTerminal.hide();
-                    return Promise.resolve([ret, { name: thisTerminal.name, processId: thisTerminal.processId }]);
+                    return Promise.resolve([ret, { name: thisTerminal.name }]);
                 }
                 case "__appzObjBagPullFromPeer__": {
-                    return Promise.resolve({ name: thisTerminal.name, processId: thisTerminal.processId });
+                    return Promise.resolve({ name: thisTerminal.name });
                 }
                 default:
                     throw methodname;
