@@ -1518,25 +1518,6 @@
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.StatusBarItem.__appzObjBagPullFromPeer__">
-            <summary>
-            Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
-            
-            `return` ── A thenable that resolves when this call has completed at the counterparty.
-            </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty.</return>
-        </member>
-        <member name="M:VscAppz.StatusBarItem.__appzObjBagPushToPeer__(VscAppz.StatusBarItemBag)">
-            <summary>
-            Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
-            
-            `allUpdates` ── 
-            
-            `return` ── A thenable that resolves when this call has completed at the counterparty.
-            </summary>
-            <param name="allUpdates"></param>
-            <return>A thenable that resolves when this call has completed at the counterparty.</return>
-        </member>
         <member name="T:VscAppz.OutputChannel">
             <summary>
             An output channel is a container for readonly textual information.
@@ -1601,14 +1582,6 @@
         <member name="M:VscAppz.OutputChannel.Dispose">
             <summary>
             Dispose and free associated resources.
-            
-            `return` ── A thenable that resolves when this call has completed at the counterparty.
-            </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty.</return>
-        </member>
-        <member name="M:VscAppz.OutputChannel.__appzObjBagPullFromPeer__">
-            <summary>
-            Obtains this `OutputChannel`'s current property value for: `name`.
             
             `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
@@ -1803,14 +1776,6 @@
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.TextEditorDecorationType.__appzObjBagPullFromPeer__">
-            <summary>
-            Obtains this `TextEditorDecorationType`'s current property value for: `key`.
-            
-            `return` ── A thenable that resolves when this call has completed at the counterparty.
-            </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty.</return>
-        </member>
         <member name="T:VscAppz.InputBox">
             <summary>
             A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
@@ -1888,25 +1853,6 @@
             
             `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty.</return>
-        </member>
-        <member name="M:VscAppz.InputBox.__appzObjBagPullFromPeer__">
-            <summary>
-            Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-            
-            `return` ── A thenable that resolves when this call has completed at the counterparty.
-            </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty.</return>
-        </member>
-        <member name="M:VscAppz.InputBox.__appzObjBagPushToPeer__(VscAppz.InputBoxBag)">
-            <summary>
-            Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-            
-            `allUpdates` ── 
-            
-            `return` ── A thenable that resolves when this call has completed at the counterparty.
-            </summary>
-            <param name="allUpdates"></param>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="T:VscAppz.QuickInputButton">
@@ -2020,25 +1966,6 @@
             
             `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty.</return>
-        </member>
-        <member name="M:VscAppz.QuickPick.__appzObjBagPullFromPeer__">
-            <summary>
-            Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-            
-            `return` ── A thenable that resolves when this call has completed at the counterparty.
-            </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty.</return>
-        </member>
-        <member name="M:VscAppz.QuickPick.__appzObjBagPushToPeer__(VscAppz.QuickPickBag)">
-            <summary>
-            Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-            
-            `allUpdates` ── 
-            
-            `return` ── A thenable that resolves when this call has completed at the counterparty.
-            </summary>
-            <param name="allUpdates"></param>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="T:VscAppz.WorkspaceFoldersChangeEvent">

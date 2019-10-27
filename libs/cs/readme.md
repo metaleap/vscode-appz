@@ -132,8 +132,6 @@
   - [OnDidChangeValue(handler)](#M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String}- 'VscAppz.InputBox.OnDidChangeValue(System.Action{System.String})')
   - [OnDidHide(handler)](#M-VscAppz-InputBox-OnDidHide-System-Action- 'VscAppz.InputBox.OnDidHide(System.Action)')
   - [Show()](#M-VscAppz-InputBox-Show 'VscAppz.InputBox.Show')
-  - [__appzObjBagPullFromPeer__()](#M-VscAppz-InputBox-__appzObjBagPullFromPeer__ 'VscAppz.InputBox.__appzObjBagPullFromPeer__')
-  - [__appzObjBagPushToPeer__(allUpdates)](#M-VscAppz-InputBox-__appzObjBagPushToPeer__-VscAppz-InputBoxBag- 'VscAppz.InputBox.__appzObjBagPushToPeer__(VscAppz.InputBoxBag)')
 - [InputBoxBag](#T-VscAppz-InputBoxBag 'VscAppz.InputBoxBag')
   - [Busy](#F-VscAppz-InputBoxBag-Busy 'VscAppz.InputBoxBag.Busy')
   - [Enabled](#F-VscAppz-InputBoxBag-Enabled 'VscAppz.InputBoxBag.Enabled')
@@ -178,7 +176,6 @@
   - [Dispose()](#M-VscAppz-OutputChannel-Dispose 'VscAppz.OutputChannel.Dispose')
   - [Hide()](#M-VscAppz-OutputChannel-Hide 'VscAppz.OutputChannel.Hide')
   - [Show(preserveFocus)](#M-VscAppz-OutputChannel-Show-System-Boolean- 'VscAppz.OutputChannel.Show(System.Boolean)')
-  - [__appzObjBagPullFromPeer__()](#M-VscAppz-OutputChannel-__appzObjBagPullFromPeer__ 'VscAppz.OutputChannel.__appzObjBagPullFromPeer__')
 - [OutputChannelBag](#T-VscAppz-OutputChannelBag 'VscAppz.OutputChannelBag')
   - [Name](#F-VscAppz-OutputChannelBag-Name 'VscAppz.OutputChannelBag.Name')
   - [ReFetch()](#M-VscAppz-OutputChannelBag-ReFetch 'VscAppz.OutputChannelBag.ReFetch')
@@ -200,8 +197,6 @@
   - [OnDidChangeValue(handler)](#M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String}- 'VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String})')
   - [OnDidHide(handler)](#M-VscAppz-QuickPick-OnDidHide-System-Action- 'VscAppz.QuickPick.OnDidHide(System.Action)')
   - [Show()](#M-VscAppz-QuickPick-Show 'VscAppz.QuickPick.Show')
-  - [__appzObjBagPullFromPeer__()](#M-VscAppz-QuickPick-__appzObjBagPullFromPeer__ 'VscAppz.QuickPick.__appzObjBagPullFromPeer__')
-  - [__appzObjBagPushToPeer__(allUpdates)](#M-VscAppz-QuickPick-__appzObjBagPushToPeer__-VscAppz-QuickPickBag- 'VscAppz.QuickPick.__appzObjBagPushToPeer__(VscAppz.QuickPickBag)')
 - [QuickPickBag](#T-VscAppz-QuickPickBag 'VscAppz.QuickPickBag')
   - [ActiveItems](#F-VscAppz-QuickPickBag-ActiveItems 'VscAppz.QuickPickBag.ActiveItems')
   - [Busy](#F-VscAppz-QuickPickBag-Busy 'VscAppz.QuickPickBag.Busy')
@@ -246,8 +241,6 @@
   - [Dispose()](#M-VscAppz-StatusBarItem-Dispose 'VscAppz.StatusBarItem.Dispose')
   - [Hide()](#M-VscAppz-StatusBarItem-Hide 'VscAppz.StatusBarItem.Hide')
   - [Show()](#M-VscAppz-StatusBarItem-Show 'VscAppz.StatusBarItem.Show')
-  - [__appzObjBagPullFromPeer__()](#M-VscAppz-StatusBarItem-__appzObjBagPullFromPeer__ 'VscAppz.StatusBarItem.__appzObjBagPullFromPeer__')
-  - [__appzObjBagPushToPeer__(allUpdates)](#M-VscAppz-StatusBarItem-__appzObjBagPushToPeer__-VscAppz-StatusBarItemBag- 'VscAppz.StatusBarItem.__appzObjBagPushToPeer__(VscAppz.StatusBarItemBag)')
 - [StatusBarItemBag](#T-VscAppz-StatusBarItemBag 'VscAppz.StatusBarItemBag')
   - [Alignment](#F-VscAppz-StatusBarItemBag-Alignment 'VscAppz.StatusBarItemBag.Alignment')
   - [Color](#F-VscAppz-StatusBarItemBag-Color 'VscAppz.StatusBarItemBag.Color')
@@ -260,7 +253,6 @@
 - [TextEditorDecorationType](#T-VscAppz-TextEditorDecorationType 'VscAppz.TextEditorDecorationType')
   - [CfgBag](#F-VscAppz-TextEditorDecorationType-CfgBag 'VscAppz.TextEditorDecorationType.CfgBag')
   - [Dispose()](#M-VscAppz-TextEditorDecorationType-Dispose 'VscAppz.TextEditorDecorationType.Dispose')
-  - [__appzObjBagPullFromPeer__()](#M-VscAppz-TextEditorDecorationType-__appzObjBagPullFromPeer__ 'VscAppz.TextEditorDecorationType.__appzObjBagPullFromPeer__')
 - [TextEditorDecorationTypeBag](#T-VscAppz-TextEditorDecorationTypeBag 'VscAppz.TextEditorDecorationTypeBag')
   - [Key](#F-VscAppz-TextEditorDecorationTypeBag-Key 'VscAppz.TextEditorDecorationTypeBag.Key')
   - [ReFetch()](#M-VscAppz-TextEditorDecorationTypeBag-ReFetch 'VscAppz.TextEditorDecorationTypeBag.ReFetch')
@@ -2301,36 +2293,6 @@ UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/r
 
 This method has no parameters.
 
-<a name='M-VscAppz-InputBox-__appzObjBagPullFromPeer__'></a>
-### __appzObjBagPullFromPeer__() `method`
-
-##### Summary
-
-Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-
-`return` ── A thenable that resolves when this call has completed at the counterparty.
-
-##### Parameters
-
-This method has no parameters.
-
-<a name='M-VscAppz-InputBox-__appzObjBagPushToPeer__-VscAppz-InputBoxBag-'></a>
-### __appzObjBagPushToPeer__(allUpdates) `method`
-
-##### Summary
-
-Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-
-`allUpdates` ── 
-
-`return` ── A thenable that resolves when this call has completed at the counterparty.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| allUpdates | [VscAppz.InputBoxBag](#T-VscAppz-InputBoxBag 'VscAppz.InputBoxBag') |  |
-
 <a name='T-VscAppz-InputBoxBag'></a>
 ## InputBoxBag `type`
 
@@ -2762,19 +2724,6 @@ Reveal this channel in the UI.
 | ---- | ---- | ----------- |
 | preserveFocus | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | When `true` the channel will not take focus. |
 
-<a name='M-VscAppz-OutputChannel-__appzObjBagPullFromPeer__'></a>
-### __appzObjBagPullFromPeer__() `method`
-
-##### Summary
-
-Obtains this `OutputChannel`'s current property value for: `name`.
-
-`return` ── A thenable that resolves when this call has completed at the counterparty.
-
-##### Parameters
-
-This method has no parameters.
-
 <a name='T-VscAppz-OutputChannelBag'></a>
 ## OutputChannelBag `type`
 
@@ -3033,36 +2982,6 @@ UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/r
 ##### Parameters
 
 This method has no parameters.
-
-<a name='M-VscAppz-QuickPick-__appzObjBagPullFromPeer__'></a>
-### __appzObjBagPullFromPeer__() `method`
-
-##### Summary
-
-Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-
-`return` ── A thenable that resolves when this call has completed at the counterparty.
-
-##### Parameters
-
-This method has no parameters.
-
-<a name='M-VscAppz-QuickPick-__appzObjBagPushToPeer__-VscAppz-QuickPickBag-'></a>
-### __appzObjBagPushToPeer__(allUpdates) `method`
-
-##### Summary
-
-Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-
-`allUpdates` ── 
-
-`return` ── A thenable that resolves when this call has completed at the counterparty.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| allUpdates | [VscAppz.QuickPickBag](#T-VscAppz-QuickPickBag 'VscAppz.QuickPickBag') |  |
 
 <a name='T-VscAppz-QuickPickBag'></a>
 ## QuickPickBag `type`
@@ -3446,36 +3365,6 @@ Shows the entry in the status bar.
 
 This method has no parameters.
 
-<a name='M-VscAppz-StatusBarItem-__appzObjBagPullFromPeer__'></a>
-### __appzObjBagPullFromPeer__() `method`
-
-##### Summary
-
-Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
-
-`return` ── A thenable that resolves when this call has completed at the counterparty.
-
-##### Parameters
-
-This method has no parameters.
-
-<a name='M-VscAppz-StatusBarItem-__appzObjBagPushToPeer__-VscAppz-StatusBarItemBag-'></a>
-### __appzObjBagPushToPeer__(allUpdates) `method`
-
-##### Summary
-
-Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
-
-`allUpdates` ── 
-
-`return` ── A thenable that resolves when this call has completed at the counterparty.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| allUpdates | [VscAppz.StatusBarItemBag](#T-VscAppz-StatusBarItemBag 'VscAppz.StatusBarItemBag') |  |
-
 <a name='T-VscAppz-StatusBarItemBag'></a>
 ## StatusBarItemBag `type`
 
@@ -3590,19 +3479,6 @@ CfgBag represents this `TextEditorDecorationType`'s current state. All its membe
 ##### Summary
 
 Remove this decoration type and all decorations on all text editors using it.
-
-`return` ── A thenable that resolves when this call has completed at the counterparty.
-
-##### Parameters
-
-This method has no parameters.
-
-<a name='M-VscAppz-TextEditorDecorationType-__appzObjBagPullFromPeer__'></a>
-### __appzObjBagPullFromPeer__() `method`
-
-##### Summary
-
-Obtains this `TextEditorDecorationType`'s current property value for: `key`.
 
 `return` ── A thenable that resolves when this call has completed at the counterparty.
 

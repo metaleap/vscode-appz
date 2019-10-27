@@ -3858,9 +3858,6 @@ func (me *StatusBarItem) Dispose() func(func()) {
 	return me.__disp__.Dispose()
 }
 
-// Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
-// 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *StatusBarItem) __appzObjBagPullFromPeer__() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -3894,11 +3891,6 @@ func (me *StatusBarItem) __appzObjBagPullFromPeer__() func(func()) {
 	}
 }
 
-// Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
-// 
-// `allUpdates` ── 
-// 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *StatusBarItem) __appzObjBagPushToPeer__(allUpdates *StatusBarItemBag) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4146,9 +4138,6 @@ func (me *OutputChannel) Dispose() func(func()) {
 	return me.__disp__.Dispose()
 }
 
-// Obtains this `OutputChannel`'s current property value for: `name`.
-// 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *OutputChannel) __appzObjBagPullFromPeer__() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4189,9 +4178,6 @@ func (me *TextEditorDecorationType) Dispose() func(func()) {
 	return me.__disp__.Dispose()
 }
 
-// Obtains this `TextEditorDecorationType`'s current property value for: `key`.
-// 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *TextEditorDecorationType) __appzObjBagPullFromPeer__() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4510,9 +4496,6 @@ func (me *InputBox) Dispose() func(func()) {
 	return me.__disp__.Dispose()
 }
 
-// Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-// 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *InputBox) __appzObjBagPullFromPeer__() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4546,11 +4529,6 @@ func (me *InputBox) __appzObjBagPullFromPeer__() func(func()) {
 	}
 }
 
-// Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-// 
-// `allUpdates` ── 
-// 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *InputBox) __appzObjBagPushToPeer__(allUpdates *InputBoxBag) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -5024,9 +5002,6 @@ func (me *QuickPick) Dispose() func(func()) {
 	return me.__disp__.Dispose()
 }
 
-// Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-// 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *QuickPick) __appzObjBagPullFromPeer__() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -5060,11 +5035,6 @@ func (me *QuickPick) __appzObjBagPullFromPeer__() func(func()) {
 	}
 }
 
-// Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-// 
-// `allUpdates` ── 
-// 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *QuickPick) __appzObjBagPushToPeer__(allUpdates *QuickPickBag) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)

@@ -4369,12 +4369,6 @@ namespace VscAppz {
 	}
 
 	public partial class StatusBarItem {
-		/// <summary>
-		/// Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
-		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
-		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		internal Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4408,15 +4402,6 @@ namespace VscAppz {
 	}
 
 	public partial class StatusBarItem {
-		/// <summary>
-		/// Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
-		/// 
-		/// `allUpdates` ── 
-		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
-		/// </summary>
-		/// <param name="allUpdates"></param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		internal Action<Action> __appzObjBagPushToPeer__(StatusBarItemBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4689,12 +4674,6 @@ namespace VscAppz {
 	}
 
 	public partial class OutputChannel {
-		/// <summary>
-		/// Obtains this `OutputChannel`'s current property value for: `name`.
-		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
-		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		internal Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4742,12 +4721,6 @@ namespace VscAppz {
 	}
 
 	public partial class TextEditorDecorationType {
-		/// <summary>
-		/// Obtains this `TextEditorDecorationType`'s current property value for: `key`.
-		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
-		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		internal Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5091,12 +5064,6 @@ namespace VscAppz {
 	}
 
 	public partial class InputBox {
-		/// <summary>
-		/// Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
-		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		internal Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5130,15 +5097,6 @@ namespace VscAppz {
 	}
 
 	public partial class InputBox {
-		/// <summary>
-		/// Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-		/// 
-		/// `allUpdates` ── 
-		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
-		/// </summary>
-		/// <param name="allUpdates"></param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		internal Action<Action> __appzObjBagPushToPeer__(InputBoxBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5647,12 +5605,6 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPick {
-		/// <summary>
-		/// Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
-		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		internal Action<Action> __appzObjBagPullFromPeer__() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5686,15 +5638,6 @@ namespace VscAppz {
 	}
 
 	public partial class QuickPick {
-		/// <summary>
-		/// Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-		/// 
-		/// `allUpdates` ── 
-		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
-		/// </summary>
-		/// <param name="allUpdates"></param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		internal Action<Action> __appzObjBagPushToPeer__(QuickPickBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();

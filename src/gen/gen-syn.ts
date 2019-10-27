@@ -1507,7 +1507,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                         const mget: Method = {
                             name: gen.idents.methodObjBagPull, Name: gen.idents.methodObjBagPull, Args: [],
                             Type: { From: [{ From: [], To: null }], To: null },
-                            Docs: [{ Lines: ["Obtains this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
+                            // Docs: [{ Lines: ["Obtains this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
                         }
                         this.state.genPopulateFor[struct.Name + gen.idents.typeSuffBag] = true
                         this.emitMethodImpl(struct, mget, this.genMethodImpl_ObjPropsGet)
@@ -1517,7 +1517,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                                 name: gen.idents.methodObjBagPull, Name: gen.idents.methodObjBagPush,
                                 Args: [{ Name: gen.idents.argUpd, Type: { Maybe: { Name: struct.Name + gen.idents.typeSuffBag } } }],
                                 Type: { From: [{ From: [null], To: null }], To: null },
-                                Docs: [{ Lines: ["Updates this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
+                                // Docs: [{ Lines: ["Updates this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for: `" + propsfields.map(_ => _.name).join("`, `") + "`."] }]
                             }
                             this.emitMethodImpl(struct, mset, this.genMethodImpl_ObjPropsSet)
                         }
