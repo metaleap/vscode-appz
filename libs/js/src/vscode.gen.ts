@@ -6,6 +6,7 @@ type Cancel = core.Cancel
 type Disposable = core.Disposable
 interface fromJson { loadFromJsonish: (_: any) => boolean }
 interface withDisp { __disp__: Disposable }
+interface withBag<T extends fromJson> { CfgBag: T }
 
 abstract class implBase {
     impl: impl
@@ -1504,7 +1505,7 @@ function newWindowState (): WindowState {
  * show text and icons and run a command on click.
 
  */
-export interface StatusBarItem extends fromJson, withDisp {
+export interface StatusBarItem extends fromJson, withDisp, withBag<StatusBarItemBag> {
     /**
      * Shows the entry in the status bar.
 
@@ -1524,7 +1525,7 @@ export interface StatusBarItem extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    __appzObjBagPullFromPeer__: () => (_: (_: StatusBarItemBag) => void) => void
+    __appzObjBagPullFromPeer__: () => (_: () => void) => void
 
     __appzObjBagPushToPeer_: (_: StatusBarItemBag) => (_: () => void) => void
 }
@@ -1547,7 +1548,7 @@ function newStatusBarItem (): StatusBarItem {
  * [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 
  */
-export interface OutputChannel extends fromJson, withDisp {
+export interface OutputChannel extends fromJson, withDisp, withBag<OutputChannelBag> {
     /**
      * Append the given value to the channel.
      * 
@@ -1591,7 +1592,7 @@ export interface OutputChannel extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    __appzObjBagPullFromPeer__: () => (_: (_: OutputChannelBag) => void) => void
+    __appzObjBagPullFromPeer__: () => (_: () => void) => void
 }
 
 function newOutputChannel (): OutputChannel {
@@ -1882,14 +1883,14 @@ export interface DecorationRenderOptions {
  * [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 
  */
-export interface TextEditorDecorationType extends fromJson, withDisp {
+export interface TextEditorDecorationType extends fromJson, withDisp, withBag<TextEditorDecorationTypeBag> {
     /**
      * Remove this decoration type and all decorations on all text editors using it.
 
      */
     Dispose: () => (_: () => void) => void
 
-    __appzObjBagPullFromPeer__: () => (_: (_: TextEditorDecorationTypeBag) => void) => void
+    __appzObjBagPullFromPeer__: () => (_: () => void) => void
 }
 
 function newTextEditorDecorationType (): TextEditorDecorationType {
@@ -1908,7 +1909,7 @@ function newTextEditorDecorationType (): TextEditorDecorationType {
  * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
  */
-export interface InputBox extends fromJson, withDisp {
+export interface InputBox extends fromJson, withDisp, withBag<InputBoxBag> {
     /**
      * An event signaling when the value has changed.
 
@@ -1955,7 +1956,7 @@ export interface InputBox extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    __appzObjBagPullFromPeer__: () => (_: (_: InputBoxBag) => void) => void
+    __appzObjBagPullFromPeer__: () => (_: () => void) => void
 
     __appzObjBagPushToPeer_: (_: InputBoxBag) => (_: () => void) => void
 }
@@ -2003,7 +2004,7 @@ export interface QuickInputButton {
  * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
  */
-export interface QuickPick extends fromJson, withDisp {
+export interface QuickPick extends fromJson, withDisp, withBag<QuickPickBag> {
     /**
      * An event signaling when the value of the filter text has changed.
 
@@ -2062,7 +2063,7 @@ export interface QuickPick extends fromJson, withDisp {
      */
     Dispose: () => (_: () => void) => void
 
-    __appzObjBagPullFromPeer__: () => (_: (_: QuickPickBag) => void) => void
+    __appzObjBagPullFromPeer__: () => (_: () => void) => void
 
     __appzObjBagPushToPeer_: (_: QuickPickBag) => (_: () => void) => void
 }
@@ -2304,11 +2305,15 @@ export interface StatusBarItemBag extends fromJson {
 
      */
     command?: string
+
+    ApplyChanges: () => (_: () => void) => void
+
+    ReFetch: () => (_: () => void) => void
 }
 
 export function newStatusBarItemBag (): StatusBarItemBag {
     let me: StatusBarItemBag
-    me = { loadFromJsonish: _ => StatusBarItemBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as StatusBarItemBag
+    me = { loadFromJsonish: _ => StatusBarItemBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => StatusBarItemBag_ApplyChanges.call(me), ReFetch: () => StatusBarItemBag_ReFetch.call(me) } as StatusBarItemBag
     return me
 }
 
@@ -2324,11 +2329,13 @@ export interface OutputChannelBag extends fromJson {
 
      */
     Name: () => string
+
+    ReFetch: () => (_: () => void) => void
 }
 
 export function newOutputChannelBag (): OutputChannelBag {
     let me: OutputChannelBag
-    me = { loadFromJsonish: _ => OutputChannelBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as OutputChannelBag
+    me = { loadFromJsonish: _ => OutputChannelBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => OutputChannelBag_ReFetch.call(me) } as OutputChannelBag
     return me
 }
 
@@ -2344,11 +2351,13 @@ export interface TextEditorDecorationTypeBag extends fromJson {
 
      */
     Key: () => string
+
+    ReFetch: () => (_: () => void) => void
 }
 
 export function newTextEditorDecorationTypeBag (): TextEditorDecorationTypeBag {
     let me: TextEditorDecorationTypeBag
-    me = { loadFromJsonish: _ => TextEditorDecorationTypeBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as TextEditorDecorationTypeBag
+    me = { loadFromJsonish: _ => TextEditorDecorationTypeBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TextEditorDecorationTypeBag_ReFetch.call(me) } as TextEditorDecorationTypeBag
     return me
 }
 
@@ -2430,11 +2439,15 @@ export interface InputBoxBag extends fromJson {
 
      */
     ignoreFocusOut?: boolean
+
+    ApplyChanges: () => (_: () => void) => void
+
+    ReFetch: () => (_: () => void) => void
 }
 
 export function newInputBoxBag (): InputBoxBag {
     let me: InputBoxBag
-    me = { loadFromJsonish: _ => InputBoxBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as InputBoxBag
+    me = { loadFromJsonish: _ => InputBoxBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => InputBoxBag_ApplyChanges.call(me), ReFetch: () => InputBoxBag_ReFetch.call(me) } as InputBoxBag
     return me
 }
 
@@ -2534,11 +2547,15 @@ export interface QuickPickBag extends fromJson {
 
      */
     ignoreFocusOut?: boolean
+
+    ApplyChanges: () => (_: () => void) => void
+
+    ReFetch: () => (_: () => void) => void
 }
 
 export function newQuickPickBag (): QuickPickBag {
     let me: QuickPickBag
-    me = { loadFromJsonish: _ => QuickPickBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPickBag
+    me = { loadFromJsonish: _ => QuickPickBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => QuickPickBag_ApplyChanges.call(me), ReFetch: () => QuickPickBag_ReFetch.call(me) } as QuickPickBag
     return me
 }
 
@@ -4725,14 +4742,24 @@ function StatusBarItem_Show(this: StatusBarItem, ): (_: () => void) => void {
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {
-        if ((undefined !== payload && null !== payload)) {
+        let it: any[]
+        let ok: boolean
+        [it, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
+        if (!ok) {
             return false
         }
-        this.__appzObjBagPullFromPeer__()((): void => {
-            if ((undefined !== onret && null !== onret)) {
-                onret()
-            }
-        })
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false
+        }
+        {
+            ok = this.CfgBag.loadFromJsonish(it[1])
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
@@ -4750,14 +4777,24 @@ function StatusBarItem_Hide(this: StatusBarItem, ): (_: () => void) => void {
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {
-        if ((undefined !== payload && null !== payload)) {
+        let it: any[]
+        let ok: boolean
+        [it, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
+        if (!ok) {
             return false
         }
-        this.__appzObjBagPullFromPeer__()((): void => {
-            if ((undefined !== onret && null !== onret)) {
-                onret()
-            }
-        })
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false
+        }
+        {
+            ok = this.CfgBag.loadFromJsonish(it[1])
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
@@ -4784,7 +4821,9 @@ function StatusBarItem___appzObjBagPullFromPeer__(this: StatusBarItem, ): (_: ()
             this.CfgBag = newStatusBarItemBag()
         }
         this.CfgBag.__holder__ = this
-        ok = this.CfgBag.loadFromJsonish(payload)
+        {
+            ok = this.CfgBag.loadFromJsonish(payload)
+        }
         if (!ok) {
             return false
         }
@@ -4809,7 +4848,11 @@ function StatusBarItem___appzObjBagPushToPeer_(this: StatusBarItem, allUpdates?:
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {
-        if ((undefined !== payload && null !== payload)) {
+        let ok: boolean
+        {
+            ok = this.CfgBag.loadFromJsonish(payload)
+        }
+        if (!ok) {
             return false
         }
         if ((undefined !== onret && null !== onret)) {
@@ -4833,14 +4876,24 @@ function OutputChannel_Append(this: OutputChannel, value: string): (_: () => voi
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {
-        if ((undefined !== payload && null !== payload)) {
+        let it: any[]
+        let ok: boolean
+        [it, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
+        if (!ok) {
             return false
         }
-        this.__appzObjBagPullFromPeer__()((): void => {
-            if ((undefined !== onret && null !== onret)) {
-                onret()
-            }
-        })
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false
+        }
+        {
+            ok = this.CfgBag.loadFromJsonish(it[1])
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
@@ -4859,14 +4912,24 @@ function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: () =>
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {
-        if ((undefined !== payload && null !== payload)) {
+        let it: any[]
+        let ok: boolean
+        [it, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
+        if (!ok) {
             return false
         }
-        this.__appzObjBagPullFromPeer__()((): void => {
-            if ((undefined !== onret && null !== onret)) {
-                onret()
-            }
-        })
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false
+        }
+        {
+            ok = this.CfgBag.loadFromJsonish(it[1])
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
@@ -4884,14 +4947,24 @@ function OutputChannel_Clear(this: OutputChannel, ): (_: () => void) => void {
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {
-        if ((undefined !== payload && null !== payload)) {
+        let it: any[]
+        let ok: boolean
+        [it, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
+        if (!ok) {
             return false
         }
-        this.__appzObjBagPullFromPeer__()((): void => {
-            if ((undefined !== onret && null !== onret)) {
-                onret()
-            }
-        })
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false
+        }
+        {
+            ok = this.CfgBag.loadFromJsonish(it[1])
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
@@ -4910,14 +4983,24 @@ function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {
-        if ((undefined !== payload && null !== payload)) {
+        let it: any[]
+        let ok: boolean
+        [it, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
+        if (!ok) {
             return false
         }
-        this.__appzObjBagPullFromPeer__()((): void => {
-            if ((undefined !== onret && null !== onret)) {
-                onret()
-            }
-        })
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false
+        }
+        {
+            ok = this.CfgBag.loadFromJsonish(it[1])
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
@@ -4935,14 +5018,24 @@ function OutputChannel_Hide(this: OutputChannel, ): (_: () => void) => void {
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {
-        if ((undefined !== payload && null !== payload)) {
+        let it: any[]
+        let ok: boolean
+        [it, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
+        if (!ok) {
             return false
         }
-        this.__appzObjBagPullFromPeer__()((): void => {
-            if ((undefined !== onret && null !== onret)) {
-                onret()
-            }
-        })
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false
+        }
+        {
+            ok = this.CfgBag.loadFromJsonish(it[1])
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
@@ -4969,7 +5062,9 @@ function OutputChannel___appzObjBagPullFromPeer__(this: OutputChannel, ): (_: ()
             this.CfgBag = newOutputChannelBag()
         }
         this.CfgBag.__holder__ = this
-        ok = this.CfgBag.loadFromJsonish(payload)
+        {
+            ok = this.CfgBag.loadFromJsonish(payload)
+        }
         if (!ok) {
             return false
         }
@@ -5002,7 +5097,9 @@ function TextEditorDecorationType___appzObjBagPullFromPeer__(this: TextEditorDec
             this.CfgBag = newTextEditorDecorationTypeBag()
         }
         this.CfgBag.__holder__ = this
-        ok = this.CfgBag.loadFromJsonish(payload)
+        {
+            ok = this.CfgBag.loadFromJsonish(payload)
+        }
         if (!ok) {
             return false
         }
@@ -5017,7 +5114,7 @@ function TextEditorDecorationType___appzObjBagPullFromPeer__(this: TextEditorDec
     }
 }
 
-function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string, __: InputBoxBag) => void): (_: (_: Disposable) => void) => void {
+function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.onDidChangeValue"
@@ -5038,13 +5135,15 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string, __: Inpu
         if (!ok) {
             return false
         }
-        let _a_1_: InputBoxBag
-        _a_1_ = newInputBoxBag()
-        ok = _a_1_.loadFromJsonish(args[1])
-        if (!ok) {
-            return false
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[1])
+            }
+            if (!ok) {
+                return false
+            }
+            handler(_a_0_)
         }
-        handler(_a_0_, _a_1_)
         return true
     }, null)
     msg.Data["handler"] = handlerFnId
@@ -5074,7 +5173,7 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string, __: Inpu
     }
 }
 
-function InputBox_OnDidAccept(this: InputBox, handler: (_: InputBoxBag) => void): (_: (_: Disposable) => void) => void {
+function InputBox_OnDidAccept(this: InputBox, handler: () => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.onDidAccept"
@@ -5090,13 +5189,15 @@ function InputBox_OnDidAccept(this: InputBox, handler: (_: InputBoxBag) => void)
         if (1 !== args.length) {
             return ok
         }
-        let _a_0_: InputBoxBag
-        _a_0_ = newInputBoxBag()
-        ok = _a_0_.loadFromJsonish(args[0])
-        if (!ok) {
-            return false
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[0])
+            }
+            if (!ok) {
+                return false
+            }
+            handler()
         }
-        handler(_a_0_)
         return true
     }, null)
     msg.Data["handler"] = handlerFnId
@@ -5135,14 +5236,24 @@ function InputBox_Show(this: InputBox, ): (_: () => void) => void {
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {
-        if ((undefined !== payload && null !== payload)) {
+        let it: any[]
+        let ok: boolean
+        [it, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
+        if (!ok) {
             return false
         }
-        this.__appzObjBagPullFromPeer__()((): void => {
-            if ((undefined !== onret && null !== onret)) {
-                onret()
-            }
-        })
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false
+        }
+        {
+            ok = this.CfgBag.loadFromJsonish(it[1])
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
@@ -5160,14 +5271,24 @@ function InputBox_Hide(this: InputBox, ): (_: () => void) => void {
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {
-        if ((undefined !== payload && null !== payload)) {
+        let it: any[]
+        let ok: boolean
+        [it, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
+        if (!ok) {
             return false
         }
-        this.__appzObjBagPullFromPeer__()((): void => {
-            if ((undefined !== onret && null !== onret)) {
-                onret()
-            }
-        })
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false
+        }
+        {
+            ok = this.CfgBag.loadFromJsonish(it[1])
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
@@ -5176,7 +5297,7 @@ function InputBox_Hide(this: InputBox, ): (_: () => void) => void {
     }
 }
 
-function InputBox_OnDidHide(this: InputBox, handler: (_: InputBoxBag) => void): (_: (_: Disposable) => void) => void {
+function InputBox_OnDidHide(this: InputBox, handler: () => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.onDidHide"
@@ -5192,13 +5313,15 @@ function InputBox_OnDidHide(this: InputBox, handler: (_: InputBoxBag) => void): 
         if (1 !== args.length) {
             return ok
         }
-        let _a_0_: InputBoxBag
-        _a_0_ = newInputBoxBag()
-        ok = _a_0_.loadFromJsonish(args[0])
-        if (!ok) {
-            return false
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[0])
+            }
+            if (!ok) {
+                return false
+            }
+            handler()
         }
-        handler(_a_0_)
         return true
     }, null)
     msg.Data["handler"] = handlerFnId
@@ -5246,7 +5369,9 @@ function InputBox___appzObjBagPullFromPeer__(this: InputBox, ): (_: () => void) 
             this.CfgBag = newInputBoxBag()
         }
         this.CfgBag.__holder__ = this
-        ok = this.CfgBag.loadFromJsonish(payload)
+        {
+            ok = this.CfgBag.loadFromJsonish(payload)
+        }
         if (!ok) {
             return false
         }
@@ -5271,7 +5396,11 @@ function InputBox___appzObjBagPushToPeer_(this: InputBox, allUpdates?: InputBoxB
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {
-        if ((undefined !== payload && null !== payload)) {
+        let ok: boolean
+        {
+            ok = this.CfgBag.loadFromJsonish(payload)
+        }
+        if (!ok) {
             return false
         }
         if ((undefined !== onret && null !== onret)) {
@@ -5285,7 +5414,7 @@ function InputBox___appzObjBagPushToPeer_(this: InputBox, allUpdates?: InputBoxB
     }
 }
 
-function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string, __: QuickPickBag) => void): (_: (_: Disposable) => void) => void {
+function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidChangeValue"
@@ -5306,13 +5435,15 @@ function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string, __: Qu
         if (!ok) {
             return false
         }
-        let _a_1_: QuickPickBag
-        _a_1_ = newQuickPickBag()
-        ok = _a_1_.loadFromJsonish(args[1])
-        if (!ok) {
-            return false
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[1])
+            }
+            if (!ok) {
+                return false
+            }
+            handler(_a_0_)
         }
-        handler(_a_0_, _a_1_)
         return true
     }, null)
     msg.Data["handler"] = handlerFnId
@@ -5342,7 +5473,7 @@ function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string, __: Qu
     }
 }
 
-function QuickPick_OnDidAccept(this: QuickPick, handler: (_: QuickPickBag) => void): (_: (_: Disposable) => void) => void {
+function QuickPick_OnDidAccept(this: QuickPick, handler: () => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidAccept"
@@ -5358,13 +5489,15 @@ function QuickPick_OnDidAccept(this: QuickPick, handler: (_: QuickPickBag) => vo
         if (1 !== args.length) {
             return ok
         }
-        let _a_0_: QuickPickBag
-        _a_0_ = newQuickPickBag()
-        ok = _a_0_.loadFromJsonish(args[0])
-        if (!ok) {
-            return false
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[0])
+            }
+            if (!ok) {
+                return false
+            }
+            handler()
         }
-        handler(_a_0_)
         return true
     }, null)
     msg.Data["handler"] = handlerFnId
@@ -5394,7 +5527,7 @@ function QuickPick_OnDidAccept(this: QuickPick, handler: (_: QuickPickBag) => vo
     }
 }
 
-function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem[], __: QuickPickBag) => void): (_: (_: Disposable) => void) => void {
+function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem[]) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidChangeActive"
@@ -5429,13 +5562,15 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
             _a_0_[__idx___a_0_] = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
         }
-        let _a_1_: QuickPickBag
-        _a_1_ = newQuickPickBag()
-        ok = _a_1_.loadFromJsonish(args[1])
-        if (!ok) {
-            return false
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[1])
+            }
+            if (!ok) {
+                return false
+            }
+            handler(_a_0_)
         }
-        handler(_a_0_, _a_1_)
         return true
     }, null)
     msg.Data["handler"] = handlerFnId
@@ -5465,7 +5600,7 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
     }
 }
 
-function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickItem[], __: QuickPickBag) => void): (_: (_: Disposable) => void) => void {
+function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickItem[]) => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidChangeSelection"
@@ -5500,13 +5635,15 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
             _a_0_[__idx___a_0_] = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
         }
-        let _a_1_: QuickPickBag
-        _a_1_ = newQuickPickBag()
-        ok = _a_1_.loadFromJsonish(args[1])
-        if (!ok) {
-            return false
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[1])
+            }
+            if (!ok) {
+                return false
+            }
+            handler(_a_0_)
         }
-        handler(_a_0_, _a_1_)
         return true
     }, null)
     msg.Data["handler"] = handlerFnId
@@ -5545,14 +5682,24 @@ function QuickPick_Show(this: QuickPick, ): (_: () => void) => void {
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {
-        if ((undefined !== payload && null !== payload)) {
+        let it: any[]
+        let ok: boolean
+        [it, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
+        if (!ok) {
             return false
         }
-        this.__appzObjBagPullFromPeer__()((): void => {
-            if ((undefined !== onret && null !== onret)) {
-                onret()
-            }
-        })
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false
+        }
+        {
+            ok = this.CfgBag.loadFromJsonish(it[1])
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
@@ -5570,14 +5717,24 @@ function QuickPick_Hide(this: QuickPick, ): (_: () => void) => void {
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {
-        if ((undefined !== payload && null !== payload)) {
+        let it: any[]
+        let ok: boolean
+        [it, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
+        if (!ok) {
             return false
         }
-        this.__appzObjBagPullFromPeer__()((): void => {
-            if ((undefined !== onret && null !== onret)) {
-                onret()
-            }
-        })
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false
+        }
+        {
+            ok = this.CfgBag.loadFromJsonish(it[1])
+        }
+        if (!ok) {
+            return false
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret()
+        }
         return true
     }
     this.__disp__.impl.send(msg, onresp)
@@ -5586,7 +5743,7 @@ function QuickPick_Hide(this: QuickPick, ): (_: () => void) => void {
     }
 }
 
-function QuickPick_OnDidHide(this: QuickPick, handler: (_: QuickPickBag) => void): (_: (_: Disposable) => void) => void {
+function QuickPick_OnDidHide(this: QuickPick, handler: () => void): (_: (_: Disposable) => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.onDidHide"
@@ -5602,13 +5759,15 @@ function QuickPick_OnDidHide(this: QuickPick, handler: (_: QuickPickBag) => void
         if (1 !== args.length) {
             return ok
         }
-        let _a_0_: QuickPickBag
-        _a_0_ = newQuickPickBag()
-        ok = _a_0_.loadFromJsonish(args[0])
-        if (!ok) {
-            return false
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[0])
+            }
+            if (!ok) {
+                return false
+            }
+            handler()
         }
-        handler(_a_0_)
         return true
     }, null)
     msg.Data["handler"] = handlerFnId
@@ -5656,7 +5815,9 @@ function QuickPick___appzObjBagPullFromPeer__(this: QuickPick, ): (_: () => void
             this.CfgBag = newQuickPickBag()
         }
         this.CfgBag.__holder__ = this
-        ok = this.CfgBag.loadFromJsonish(payload)
+        {
+            ok = this.CfgBag.loadFromJsonish(payload)
+        }
         if (!ok) {
             return false
         }
@@ -5681,7 +5842,11 @@ function QuickPick___appzObjBagPushToPeer_(this: QuickPick, allUpdates?: QuickPi
     let onresp: (_: any) => boolean
     let onret: () => void
     onresp = (payload: any): boolean => {
-        if ((undefined !== payload && null !== payload)) {
+        let ok: boolean
+        {
+            ok = this.CfgBag.loadFromJsonish(payload)
+        }
+        if (!ok) {
             return false
         }
         if ((undefined !== onret && null !== onret)) {

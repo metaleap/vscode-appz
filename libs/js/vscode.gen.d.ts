@@ -7,6 +7,9 @@ interface fromJson {
 interface withDisp {
     __disp__: Disposable;
 }
+interface withBag<T extends fromJson> {
+    CfgBag: T;
+}
 /**
  * Represents the alignment of status bar items.
 
@@ -456,21 +459,21 @@ export interface Window {
      * @param priority The priority of the item. Higher values mean the item should be shown more to the left.
      * @return A new status bar item.
      */
-    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number) => (_: (_: StatusBarItem, __: StatusBarItemBag) => void) => void;
+    CreateStatusBarItem: (alignment?: StatusBarAlignment, priority?: number) => (_: (_: StatusBarItem) => void) => void;
     /**
      * Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
 
      * @param name Human-readable string which will be used to represent the channel in the UI.
      * @return a thenable that resolves to the newly created `OutputChannel`.
      */
-    CreateOutputChannel: (name: string) => (_: (_: OutputChannel, __: OutputChannelBag) => void) => void;
+    CreateOutputChannel: (name: string) => (_: (_: OutputChannel) => void) => void;
     /**
      * Create a TextEditorDecorationType that can be used to add decorations to text editors.
 
      * @param options Rendering options for the decoration type.
      * @return A new decoration type instance.
      */
-    CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType, __: TextEditorDecorationTypeBag) => void) => void;
+    CreateTextEditorDecorationType: (options: DecorationRenderOptions) => (_: (_: TextEditorDecorationType) => void) => void;
     /**
      * Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
      *
@@ -480,7 +483,7 @@ export interface Window {
 
      * @return A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
      */
-    CreateInputBox: (_: (_: InputBox, __: InputBoxBag) => void) => void;
+    CreateInputBox: (_: (_: InputBox) => void) => void;
     /**
      * Creates a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) to let the user pick an item from a list
      * of items of type T.
@@ -491,7 +494,7 @@ export interface Window {
 
      * @return A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
      */
-    CreateQuickPick: (_: (_: QuickPick, __: QuickPickBag) => void) => void;
+    CreateQuickPick: (_: (_: QuickPick) => void) => void;
 }
 /**
  * Namespace describing the environment the editor runs in.
@@ -1345,7 +1348,7 @@ export interface WindowState extends fromJson {
  * show text and icons and run a command on click.
 
  */
-export interface StatusBarItem extends fromJson, withDisp {
+export interface StatusBarItem extends fromJson, withDisp, withBag<StatusBarItemBag> {
     /**
      * Shows the entry in the status bar.
 
@@ -1362,8 +1365,8 @@ export interface StatusBarItem extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void;
-    Get: () => (_: (_: StatusBarItemBag) => void) => void;
-    Set: (_: StatusBarItemBag) => (_: () => void) => void;
+    __appzObjBagPullFromPeer__: () => (_: () => void) => void;
+    __appzObjBagPushToPeer_: (_: StatusBarItemBag) => (_: () => void) => void;
 }
 /**
  * An output channel is a container for readonly textual information.
@@ -1372,7 +1375,7 @@ export interface StatusBarItem extends fromJson, withDisp {
  * [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 
  */
-export interface OutputChannel extends fromJson, withDisp {
+export interface OutputChannel extends fromJson, withDisp, withBag<OutputChannelBag> {
     /**
      * Append the given value to the channel.
      *
@@ -1410,7 +1413,7 @@ export interface OutputChannel extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void;
-    Get: () => (_: (_: OutputChannelBag) => void) => void;
+    __appzObjBagPullFromPeer__: () => (_: () => void) => void;
 }
 /**
  * Type Definition for Visual Studio Code 1.39 Extension API
@@ -1647,13 +1650,13 @@ export interface DecorationRenderOptions {
  * [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 
  */
-export interface TextEditorDecorationType extends fromJson, withDisp {
+export interface TextEditorDecorationType extends fromJson, withDisp, withBag<TextEditorDecorationTypeBag> {
     /**
      * Remove this decoration type and all decorations on all text editors using it.
 
      */
     Dispose: () => (_: () => void) => void;
-    Get: () => (_: (_: TextEditorDecorationTypeBag) => void) => void;
+    __appzObjBagPullFromPeer__: () => (_: () => void) => void;
 }
 /**
  * A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
@@ -1663,7 +1666,7 @@ export interface TextEditorDecorationType extends fromJson, withDisp {
  * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
  */
-export interface InputBox extends fromJson, withDisp {
+export interface InputBox extends fromJson, withDisp, withBag<InputBoxBag> {
     /**
      * An event signaling when the value has changed.
 
@@ -1704,8 +1707,8 @@ export interface InputBox extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void;
-    Get: () => (_: (_: InputBoxBag) => void) => void;
-    Set: (_: InputBoxBag) => (_: () => void) => void;
+    __appzObjBagPullFromPeer__: () => (_: () => void) => void;
+    __appzObjBagPushToPeer_: (_: InputBoxBag) => (_: () => void) => void;
 }
 /**
  * Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
@@ -1734,7 +1737,7 @@ export interface QuickInputButton {
  * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
  */
-export interface QuickPick extends fromJson, withDisp {
+export interface QuickPick extends fromJson, withDisp, withBag<QuickPickBag> {
     /**
      * An event signaling when the value of the filter text has changed.
 
@@ -1785,8 +1788,8 @@ export interface QuickPick extends fromJson, withDisp {
 
      */
     Dispose: () => (_: () => void) => void;
-    Get: () => (_: (_: QuickPickBag) => void) => void;
-    Set: (_: QuickPickBag) => (_: () => void) => void;
+    __appzObjBagPullFromPeer__: () => (_: () => void) => void;
+    __appzObjBagPushToPeer_: (_: QuickPickBag) => (_: () => void) => void;
 }
 /**
  * An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).
@@ -1927,7 +1930,7 @@ export interface WorkspaceBag extends fromJson {
 
  */
 export interface StatusBarItemBag extends fromJson {
-    __holder__: Disposable;
+    __holder__: StatusBarItem;
     /**
      * The alignment of this item.
 
@@ -1965,6 +1968,8 @@ export interface StatusBarItemBag extends fromJson {
 
      */
     command?: string;
+    ApplyChanges: () => (_: () => void) => void;
+    ReFetch: () => (_: () => void) => void;
 }
 export declare function newStatusBarItemBag(): StatusBarItemBag;
 /**
@@ -1972,12 +1977,13 @@ export declare function newStatusBarItemBag(): StatusBarItemBag;
 
  */
 export interface OutputChannelBag extends fromJson {
-    __holder__: Disposable;
+    __holder__: OutputChannel;
     /**
      * The human-readable name of this output channel.
 
      */
     Name: () => string;
+    ReFetch: () => (_: () => void) => void;
 }
 export declare function newOutputChannelBag(): OutputChannelBag;
 /**
@@ -1985,12 +1991,13 @@ export declare function newOutputChannelBag(): OutputChannelBag;
 
  */
 export interface TextEditorDecorationTypeBag extends fromJson {
-    __holder__: Disposable;
+    __holder__: TextEditorDecorationType;
     /**
      * Internal representation of the handle.
 
      */
     Key: () => string;
+    ReFetch: () => (_: () => void) => void;
 }
 export declare function newTextEditorDecorationTypeBag(): TextEditorDecorationTypeBag;
 /**
@@ -1998,7 +2005,7 @@ export declare function newTextEditorDecorationTypeBag(): TextEditorDecorationTy
 
  */
 export interface InputBoxBag extends fromJson {
-    __holder__: Disposable;
+    __holder__: InputBox;
     /**
      * Current input value.
 
@@ -2060,6 +2067,8 @@ export interface InputBoxBag extends fromJson {
 
      */
     ignoreFocusOut?: boolean;
+    ApplyChanges: () => (_: () => void) => void;
+    ReFetch: () => (_: () => void) => void;
 }
 export declare function newInputBoxBag(): InputBoxBag;
 /**
@@ -2067,7 +2076,7 @@ export declare function newInputBoxBag(): InputBoxBag;
 
  */
 export interface QuickPickBag extends fromJson {
-    __holder__: Disposable;
+    __holder__: QuickPick;
     /**
      * Current value of the filter text.
 
@@ -2144,6 +2153,8 @@ export interface QuickPickBag extends fromJson {
 
      */
     ignoreFocusOut?: boolean;
+    ApplyChanges: () => (_: () => void) => void;
+    ReFetch: () => (_: () => void) => void;
 }
 export declare function newQuickPickBag(): QuickPickBag;
 export declare abstract class impl implements Vscode {

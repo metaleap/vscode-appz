@@ -558,7 +558,7 @@ counterparty.
 #### func (*InputBox) OnDidAccept
 
 ```go
-func (me *InputBox) OnDidAccept(handler func(InputBoxBag)) func(func(*Disposable))
+func (me *InputBox) OnDidAccept(handler func()) func(func(*Disposable))
 ```
 An event signaling when the user indicated acceptance of the input value.
 
@@ -570,7 +570,7 @@ An event signaling when the user indicated acceptance of the input value.
 #### func (*InputBox) OnDidChangeValue
 
 ```go
-func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxBag)) func(func(*Disposable))
+func (me *InputBox) OnDidChangeValue(handler func(string)) func(func(*Disposable))
 ```
 An event signaling when the value has changed.
 
@@ -582,7 +582,7 @@ An event signaling when the value has changed.
 #### func (*InputBox) OnDidHide
 
 ```go
-func (me *InputBox) OnDidHide(handler func(InputBoxBag)) func(func(*Disposable))
+func (me *InputBox) OnDidHide(handler func()) func(func(*Disposable))
 ```
 An event signaling when this input UI is hidden.
 
@@ -1068,7 +1068,7 @@ counterparty.
 #### func (*QuickPick) OnDidAccept
 
 ```go
-func (me *QuickPick) OnDidAccept(handler func(QuickPickBag)) func(func(*Disposable))
+func (me *QuickPick) OnDidAccept(handler func()) func(func(*Disposable))
 ```
 An event signaling when the user indicated acceptance of the selected item(s).
 
@@ -1080,7 +1080,7 @@ An event signaling when the user indicated acceptance of the selected item(s).
 #### func (*QuickPick) OnDidChangeActive
 
 ```go
-func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickBag)) func(func(*Disposable))
+func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem)) func(func(*Disposable))
 ```
 An event signaling when the active items have changed.
 
@@ -1092,7 +1092,7 @@ An event signaling when the active items have changed.
 #### func (*QuickPick) OnDidChangeSelection
 
 ```go
-func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPickBag)) func(func(*Disposable))
+func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem)) func(func(*Disposable))
 ```
 An event signaling when the selected items have changed.
 
@@ -1104,7 +1104,7 @@ An event signaling when the selected items have changed.
 #### func (*QuickPick) OnDidChangeValue
 
 ```go
-func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickBag)) func(func(*Disposable))
+func (me *QuickPick) OnDidChangeValue(handler func(string)) func(func(*Disposable))
 ```
 An event signaling when the value of the filter text has changed.
 
@@ -1116,7 +1116,7 @@ An event signaling when the value of the filter text has changed.
 #### func (*QuickPick) OnDidHide
 
 ```go
-func (me *QuickPick) OnDidHide(handler func(QuickPickBag)) func(func(*Disposable))
+func (me *QuickPick) OnDidHide(handler func()) func(func(*Disposable))
 ```
 An event signaling when this input UI is hidden.
 

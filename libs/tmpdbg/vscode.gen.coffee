@@ -4475,12 +4475,19 @@ StatusBarItem·Show: ( -> ((void->void)->void))
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)
-        if =?payload
+        var it of [any]
+        var ok of bool
+        [it, ok] = ((payload)·([any]))
+        if !ok
             return false
-        this.__appzObjBagPullFromPeer__()(( -> void)
-            if =?onret
-                onret()
-        )
+        if (2 != it·len) || (=!it@1)
+            return false
+        lock this.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(it@1)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -4500,12 +4507,19 @@ StatusBarItem·Hide: ( -> ((void->void)->void))
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)
-        if =?payload
+        var it of [any]
+        var ok of bool
+        [it, ok] = ((payload)·([any]))
+        if !ok
             return false
-        this.__appzObjBagPullFromPeer__()(( -> void)
-            if =?onret
-                onret()
-        )
+        if (2 != it·len) || (=!it@1)
+            return false
+        lock this.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(it@1)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -4535,7 +4549,8 @@ StatusBarItem·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
         if =!this.CfgBag
             this.CfgBag = ?StatusBarItemBag·new
         this.CfgBag.__holder__ = this
-        ok = this.CfgBag.loadFromJsonish(payload)
+        lock this.CfgBag.__holder__.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(payload)
         if !ok
             return false
         if =?onret
@@ -4560,7 +4575,10 @@ StatusBarItem·__appzObjBagPushToPeer_: (allUpdates:?StatusBarItemBag -> ((void-
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)
-        if =?payload
+        var ok of bool
+        lock this.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(payload)
+        if !ok
             return false
         if =?onret
             onret()
@@ -4584,12 +4602,19 @@ OutputChannel·Append: (value:string -> ((void->void)->void))
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)
-        if =?payload
+        var it of [any]
+        var ok of bool
+        [it, ok] = ((payload)·([any]))
+        if !ok
             return false
-        this.__appzObjBagPullFromPeer__()(( -> void)
-            if =?onret
-                onret()
-        )
+        if (2 != it·len) || (=!it@1)
+            return false
+        lock this.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(it@1)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -4610,12 +4635,19 @@ OutputChannel·AppendLine: (value:string -> ((void->void)->void))
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)
-        if =?payload
+        var it of [any]
+        var ok of bool
+        [it, ok] = ((payload)·([any]))
+        if !ok
             return false
-        this.__appzObjBagPullFromPeer__()(( -> void)
-            if =?onret
-                onret()
-        )
+        if (2 != it·len) || (=!it@1)
+            return false
+        lock this.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(it@1)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -4635,12 +4667,19 @@ OutputChannel·Clear: ( -> ((void->void)->void))
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)
-        if =?payload
+        var it of [any]
+        var ok of bool
+        [it, ok] = ((payload)·([any]))
+        if !ok
             return false
-        this.__appzObjBagPullFromPeer__()(( -> void)
-            if =?onret
-                onret()
-        )
+        if (2 != it·len) || (=!it@1)
+            return false
+        lock this.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(it@1)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -4661,12 +4700,19 @@ OutputChannel·Show: (preserveFocus:bool -> ((void->void)->void))
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)
-        if =?payload
+        var it of [any]
+        var ok of bool
+        [it, ok] = ((payload)·([any]))
+        if !ok
             return false
-        this.__appzObjBagPullFromPeer__()(( -> void)
-            if =?onret
-                onret()
-        )
+        if (2 != it·len) || (=!it@1)
+            return false
+        lock this.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(it@1)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -4686,12 +4732,19 @@ OutputChannel·Hide: ( -> ((void->void)->void))
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)
-        if =?payload
+        var it of [any]
+        var ok of bool
+        [it, ok] = ((payload)·([any]))
+        if !ok
             return false
-        this.__appzObjBagPullFromPeer__()(( -> void)
-            if =?onret
-                onret()
-        )
+        if (2 != it·len) || (=!it@1)
+            return false
+        lock this.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(it@1)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -4721,7 +4774,8 @@ OutputChannel·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
         if =!this.CfgBag
             this.CfgBag = ?OutputChannelBag·new
         this.CfgBag.__holder__ = this
-        ok = this.CfgBag.loadFromJsonish(payload)
+        lock this.CfgBag.__holder__.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(payload)
         if !ok
             return false
         if =?onret
@@ -4755,7 +4809,8 @@ TextEditorDecorationType·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
         if =!this.CfgBag
             this.CfgBag = ?TextEditorDecorationTypeBag·new
         this.CfgBag.__holder__ = this
-        ok = this.CfgBag.loadFromJsonish(payload)
+        lock this.CfgBag.__holder__.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(payload)
         if !ok
             return false
         if =?onret
@@ -4770,7 +4825,7 @@ TextEditorDecorationType·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
 
 
 
-InputBox·OnDidChangeValue: (handler:(string->InputBoxBag->void) -> ((?Disposable->void)->void))
+InputBox·OnDidChangeValue: (handler:(string->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.onDidChangeValue"
@@ -4788,12 +4843,11 @@ InputBox·OnDidChangeValue: (handler:(string->InputBoxBag->void) -> ((?Disposabl
         [_a_0_, ok] = ((args@0)·(string))
         if !ok
             return false
-        var _a_1_ of InputBoxBag
-        _a_1_ = InputBoxBag·new
-        ok = _a_1_.loadFromJsonish(args@1)
-        if !ok
-            return false
-        handler(_a_0_, _a_1_)
+            lock this.__disp__.impl
+                ok = this.CfgBag.loadFromJsonish(args@1)
+            if !ok
+                return false
+            handler(_a_0_)
         return true
     , null)
     msg.Data@"handler" = handlerFnId
@@ -4822,7 +4876,7 @@ InputBox·OnDidChangeValue: (handler:(string->InputBoxBag->void) -> ((?Disposabl
 
 
 
-InputBox·OnDidAccept: (handler:(InputBoxBag->void) -> ((?Disposable->void)->void))
+InputBox·OnDidAccept: (handler:(->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.onDidAccept"
@@ -4836,12 +4890,11 @@ InputBox·OnDidAccept: (handler:(InputBoxBag->void) -> ((?Disposable->void)->voi
         var ok of bool
         if 1 != args·len
             return ok
-        var _a_0_ of InputBoxBag
-        _a_0_ = InputBoxBag·new
-        ok = _a_0_.loadFromJsonish(args@0)
-        if !ok
-            return false
-        handler(_a_0_)
+            lock this.__disp__.impl
+                ok = this.CfgBag.loadFromJsonish(args@0)
+            if !ok
+                return false
+            handler()
         return true
     , null)
     msg.Data@"handler" = handlerFnId
@@ -4879,12 +4932,19 @@ InputBox·Show: ( -> ((void->void)->void))
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)
-        if =?payload
+        var it of [any]
+        var ok of bool
+        [it, ok] = ((payload)·([any]))
+        if !ok
             return false
-        this.__appzObjBagPullFromPeer__()(( -> void)
-            if =?onret
-                onret()
-        )
+        if (2 != it·len) || (=!it@1)
+            return false
+        lock this.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(it@1)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -4904,12 +4964,19 @@ InputBox·Hide: ( -> ((void->void)->void))
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)
-        if =?payload
+        var it of [any]
+        var ok of bool
+        [it, ok] = ((payload)·([any]))
+        if !ok
             return false
-        this.__appzObjBagPullFromPeer__()(( -> void)
-            if =?onret
-                onret()
-        )
+        if (2 != it·len) || (=!it@1)
+            return false
+        lock this.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(it@1)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -4920,7 +4987,7 @@ InputBox·Hide: ( -> ((void->void)->void))
 
 
 
-InputBox·OnDidHide: (handler:(InputBoxBag->void) -> ((?Disposable->void)->void))
+InputBox·OnDidHide: (handler:(->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.onDidHide"
@@ -4934,12 +5001,11 @@ InputBox·OnDidHide: (handler:(InputBoxBag->void) -> ((?Disposable->void)->void)
         var ok of bool
         if 1 != args·len
             return ok
-        var _a_0_ of InputBoxBag
-        _a_0_ = InputBoxBag·new
-        ok = _a_0_.loadFromJsonish(args@0)
-        if !ok
-            return false
-        handler(_a_0_)
+            lock this.__disp__.impl
+                ok = this.CfgBag.loadFromJsonish(args@0)
+            if !ok
+                return false
+            handler()
         return true
     , null)
     msg.Data@"handler" = handlerFnId
@@ -4987,7 +5053,8 @@ InputBox·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
         if =!this.CfgBag
             this.CfgBag = ?InputBoxBag·new
         this.CfgBag.__holder__ = this
-        ok = this.CfgBag.loadFromJsonish(payload)
+        lock this.CfgBag.__holder__.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(payload)
         if !ok
             return false
         if =?onret
@@ -5012,7 +5079,10 @@ InputBox·__appzObjBagPushToPeer_: (allUpdates:?InputBoxBag -> ((void->void)->vo
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)
-        if =?payload
+        var ok of bool
+        lock this.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(payload)
+        if !ok
             return false
         if =?onret
             onret()
@@ -5026,7 +5096,7 @@ InputBox·__appzObjBagPushToPeer_: (allUpdates:?InputBoxBag -> ((void->void)->vo
 
 
 
-QuickPick·OnDidChangeValue: (handler:(string->QuickPickBag->void) -> ((?Disposable->void)->void))
+QuickPick·OnDidChangeValue: (handler:(string->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidChangeValue"
@@ -5044,12 +5114,11 @@ QuickPick·OnDidChangeValue: (handler:(string->QuickPickBag->void) -> ((?Disposa
         [_a_0_, ok] = ((args@0)·(string))
         if !ok
             return false
-        var _a_1_ of QuickPickBag
-        _a_1_ = QuickPickBag·new
-        ok = _a_1_.loadFromJsonish(args@1)
-        if !ok
-            return false
-        handler(_a_0_, _a_1_)
+            lock this.__disp__.impl
+                ok = this.CfgBag.loadFromJsonish(args@1)
+            if !ok
+                return false
+            handler(_a_0_)
         return true
     , null)
     msg.Data@"handler" = handlerFnId
@@ -5078,7 +5147,7 @@ QuickPick·OnDidChangeValue: (handler:(string->QuickPickBag->void) -> ((?Disposa
 
 
 
-QuickPick·OnDidAccept: (handler:(QuickPickBag->void) -> ((?Disposable->void)->void))
+QuickPick·OnDidAccept: (handler:(->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidAccept"
@@ -5092,12 +5161,11 @@ QuickPick·OnDidAccept: (handler:(QuickPickBag->void) -> ((?Disposable->void)->v
         var ok of bool
         if 1 != args·len
             return ok
-        var _a_0_ of QuickPickBag
-        _a_0_ = QuickPickBag·new
-        ok = _a_0_.loadFromJsonish(args@0)
-        if !ok
-            return false
-        handler(_a_0_)
+            lock this.__disp__.impl
+                ok = this.CfgBag.loadFromJsonish(args@0)
+            if !ok
+                return false
+            handler()
         return true
     , null)
     msg.Data@"handler" = handlerFnId
@@ -5126,7 +5194,7 @@ QuickPick·OnDidAccept: (handler:(QuickPickBag->void) -> ((?Disposable->void)->v
 
 
 
-QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->QuickPickBag->void) -> ((?Disposable->void)->void))
+QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidChangeActive"
@@ -5156,12 +5224,11 @@ QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->QuickPickBag->void) -> 
                 return false
             _a_0_@__idx___a_0_ = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
-        var _a_1_ of QuickPickBag
-        _a_1_ = QuickPickBag·new
-        ok = _a_1_.loadFromJsonish(args@1)
-        if !ok
-            return false
-        handler(_a_0_, _a_1_)
+            lock this.__disp__.impl
+                ok = this.CfgBag.loadFromJsonish(args@1)
+            if !ok
+                return false
+            handler(_a_0_)
         return true
     , null)
     msg.Data@"handler" = handlerFnId
@@ -5190,7 +5257,7 @@ QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->QuickPickBag->void) -> 
 
 
 
-QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->QuickPickBag->void) -> ((?Disposable->void)->void))
+QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidChangeSelection"
@@ -5220,12 +5287,11 @@ QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->QuickPickBag->void) 
                 return false
             _a_0_@__idx___a_0_ = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
-        var _a_1_ of QuickPickBag
-        _a_1_ = QuickPickBag·new
-        ok = _a_1_.loadFromJsonish(args@1)
-        if !ok
-            return false
-        handler(_a_0_, _a_1_)
+            lock this.__disp__.impl
+                ok = this.CfgBag.loadFromJsonish(args@1)
+            if !ok
+                return false
+            handler(_a_0_)
         return true
     , null)
     msg.Data@"handler" = handlerFnId
@@ -5263,12 +5329,19 @@ QuickPick·Show: ( -> ((void->void)->void))
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)
-        if =?payload
+        var it of [any]
+        var ok of bool
+        [it, ok] = ((payload)·([any]))
+        if !ok
             return false
-        this.__appzObjBagPullFromPeer__()(( -> void)
-            if =?onret
-                onret()
-        )
+        if (2 != it·len) || (=!it@1)
+            return false
+        lock this.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(it@1)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -5288,12 +5361,19 @@ QuickPick·Hide: ( -> ((void->void)->void))
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)
-        if =?payload
+        var it of [any]
+        var ok of bool
+        [it, ok] = ((payload)·([any]))
+        if !ok
             return false
-        this.__appzObjBagPullFromPeer__()(( -> void)
-            if =?onret
-                onret()
-        )
+        if (2 != it·len) || (=!it@1)
+            return false
+        lock this.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(it@1)
+        if !ok
+            return false
+        if =?onret
+            onret()
         return true
     
     this.__disp__.impl.send(msg, onresp)
@@ -5304,7 +5384,7 @@ QuickPick·Hide: ( -> ((void->void)->void))
 
 
 
-QuickPick·OnDidHide: (handler:(QuickPickBag->void) -> ((?Disposable->void)->void))
+QuickPick·OnDidHide: (handler:(->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.onDidHide"
@@ -5318,12 +5398,11 @@ QuickPick·OnDidHide: (handler:(QuickPickBag->void) -> ((?Disposable->void)->voi
         var ok of bool
         if 1 != args·len
             return ok
-        var _a_0_ of QuickPickBag
-        _a_0_ = QuickPickBag·new
-        ok = _a_0_.loadFromJsonish(args@0)
-        if !ok
-            return false
-        handler(_a_0_)
+            lock this.__disp__.impl
+                ok = this.CfgBag.loadFromJsonish(args@0)
+            if !ok
+                return false
+            handler()
         return true
     , null)
     msg.Data@"handler" = handlerFnId
@@ -5371,7 +5450,8 @@ QuickPick·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
         if =!this.CfgBag
             this.CfgBag = ?QuickPickBag·new
         this.CfgBag.__holder__ = this
-        ok = this.CfgBag.loadFromJsonish(payload)
+        lock this.CfgBag.__holder__.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(payload)
         if !ok
             return false
         if =?onret
@@ -5396,7 +5476,10 @@ QuickPick·__appzObjBagPushToPeer_: (allUpdates:?QuickPickBag -> ((void->void)->
     var onresp of (any->bool)
     var onret of (void->void)
     onresp = (payload:any -> bool)
-        if =?payload
+        var ok of bool
+        lock this.__disp__.impl
+            ok = this.CfgBag.loadFromJsonish(payload)
+        if !ok
             return false
         if =?onret
             onret()

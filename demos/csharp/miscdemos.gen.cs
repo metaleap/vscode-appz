@@ -297,11 +297,11 @@ namespace VscAppzDemo {
 					ctl.CfgBag.Items[(i - 1)].AlwaysShow = i == 42;
 				}
 				ctl.CfgBag.ApplyChanges();
-				ctl.OnDidAccept((QuickPickBag bag) => {
-					logLn(strFmt("Picked: {0}", bag.SelectedItems));
+				ctl.OnDidAccept(() => {
+					logLn(strFmt("Picked: {0}", ctl.CfgBag.SelectedItems));
 					ctl.Hide();
 				});
-				ctl.OnDidHide((QuickPickBag _) => {
+				ctl.OnDidHide(() => {
 					ctl.Dispose();
 				});
 				ctl.Show();
@@ -314,17 +314,17 @@ namespace VscAppzDemo {
 				ctl.CfgBag.Prompt = "The initial Prompt";
 				ctl.CfgBag.Title = "The initial Title";
 				ctl.CfgBag.ApplyChanges();
-				ctl.OnDidChangeValue((string input, InputBoxBag bag) => {
+				ctl.OnDidChangeValue((string input) => {
 					ctl.CfgBag.Prompt = strFmt("Lower: {0}", strLo(ctl.CfgBag.Value));
 					ctl.CfgBag.Title = strFmt("Upper: {0}", strUp(ctl.CfgBag.Value));
 					ctl.CfgBag.ApplyChanges();
 				});
 				string finalinputvalue = default;
-				ctl.OnDidAccept((InputBoxBag bag) => {
-					finalinputvalue = bag.Value;
+				ctl.OnDidAccept(() => {
+					finalinputvalue = ctl.CfgBag.Value;
 					ctl.Hide();
 				});
-				ctl.OnDidHide((InputBoxBag bag) => {
+				ctl.OnDidHide(() => {
 					ctl.Dispose();
 					if ((null != finalinputvalue)) {
 						vsc.Window.ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", finalinputvalue)), null);

@@ -1491,23 +1491,23 @@
             </summary>
         </member>
         <member name="F:VscAppz.StatusBarItem.CfgBag">
-            <summary>CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+            <summary>CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
         </member>
         <member name="M:VscAppz.StatusBarItem.Show">
             <summary>
             Shows the entry in the status bar.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="M:VscAppz.StatusBarItem.Hide">
             <summary>
             Hide the entry in the status bar.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="M:VscAppz.StatusBarItem.Dispose">
             <summary>
@@ -1518,23 +1518,23 @@
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.StatusBarItem.Get">
+        <member name="M:VscAppz.StatusBarItem.__appzObjBagPullFromPeer__">
             <summary>
             Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.StatusBarItem.Set(VscAppz.StatusBarItemBag)">
+        <member name="M:VscAppz.StatusBarItem.__appzObjBagPushToPeer_(VscAppz.StatusBarItemBag)">
             <summary>
             Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
             
-            `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
+            `allUpdates` ── 
             
             `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <param name="allUpdates">be aware that **all** its fields are sent for update, no omissions.</param>
+            <param name="allUpdates"></param>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="T:VscAppz.OutputChannel">
@@ -1546,7 +1546,7 @@
             </summary>
         </member>
         <member name="F:VscAppz.OutputChannel.CfgBag">
-            <summary>CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.</summary>
+            <summary>CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
         </member>
         <member name="M:VscAppz.OutputChannel.Append(System.String)">
             <summary>
@@ -1554,10 +1554,10 @@
             
             `value` ── A string, falsy values will not be printed.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
             <param name="value">A string, falsy values will not be printed.</param>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="M:VscAppz.OutputChannel.AppendLine(System.String)">
             <summary>
@@ -1566,18 +1566,18 @@
             
             `value` ── A string, falsy values will be printed.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
             <param name="value">A string, falsy values will be printed.</param>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="M:VscAppz.OutputChannel.Clear">
             <summary>
             Removes all output from the channel.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="M:VscAppz.OutputChannel.Show(System.Boolean)">
             <summary>
@@ -1585,18 +1585,18 @@
             
             `preserveFocus` ── When `true` the channel will not take focus.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
             <param name="preserveFocus">When `true` the channel will not take focus.</param>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="M:VscAppz.OutputChannel.Hide">
             <summary>
             Hide this channel from the UI.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="M:VscAppz.OutputChannel.Dispose">
             <summary>
@@ -1606,13 +1606,13 @@
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.OutputChannel.Get">
+        <member name="M:VscAppz.OutputChannel.__appzObjBagPullFromPeer__">
             <summary>
             Obtains this `OutputChannel`'s current property value for: `name`.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="T:VscAppz.ThemableDecorationAttachmentRenderOptions">
             <summary>
@@ -1793,7 +1793,7 @@
             </summary>
         </member>
         <member name="F:VscAppz.TextEditorDecorationType.CfgBag">
-            <summary>CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.</summary>
+            <summary>CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
         </member>
         <member name="M:VscAppz.TextEditorDecorationType.Dispose">
             <summary>
@@ -1803,13 +1803,13 @@
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.TextEditorDecorationType.Get">
+        <member name="M:VscAppz.TextEditorDecorationType.__appzObjBagPullFromPeer__">
             <summary>
             Obtains this `TextEditorDecorationType`'s current property value for: `key`.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `TextEditorDecorationTypeBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `TextEditorDecorationTypeBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="T:VscAppz.InputBox">
             <summary>
@@ -1821,9 +1821,9 @@
             </summary>
         </member>
         <member name="F:VscAppz.InputBox.CfgBag">
-            <summary>CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+            <summary>CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
         </member>
-        <member name="M:VscAppz.InputBox.OnDidChangeValue(System.Action{System.String,VscAppz.InputBoxBag})">
+        <member name="M:VscAppz.InputBox.OnDidChangeValue(System.Action{System.String})">
             <summary>
             An event signaling when the value has changed.
             
@@ -1834,7 +1834,7 @@
             <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
         </member>
-        <member name="M:VscAppz.InputBox.OnDidAccept(System.Action{VscAppz.InputBoxBag})">
+        <member name="M:VscAppz.InputBox.OnDidAccept(System.Action)">
             <summary>
             An event signaling when the user indicated acceptance of the input value.
             
@@ -1850,20 +1850,20 @@
             Makes the input UI visible in its current configuration. Any other input
             UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="M:VscAppz.InputBox.Hide">
             <summary>
             Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
             event.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.InputBox.OnDidHide(System.Action{VscAppz.InputBoxBag})">
+        <member name="M:VscAppz.InputBox.OnDidHide(System.Action)">
             <summary>
             An event signaling when this input UI is hidden.
             
@@ -1890,23 +1890,23 @@
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.InputBox.Get">
+        <member name="M:VscAppz.InputBox.__appzObjBagPullFromPeer__">
             <summary>
             Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.InputBox.Set(VscAppz.InputBoxBag)">
+        <member name="M:VscAppz.InputBox.__appzObjBagPushToPeer_(VscAppz.InputBoxBag)">
             <summary>
             Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
             
-            `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
+            `allUpdates` ── 
             
             `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <param name="allUpdates">be aware that **all** its fields are sent for update, no omissions.</param>
+            <param name="allUpdates"></param>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="T:VscAppz.QuickInputButton">
@@ -1931,9 +1931,9 @@
             </summary>
         </member>
         <member name="F:VscAppz.QuickPick.CfgBag">
-            <summary>CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+            <summary>CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
         </member>
-        <member name="M:VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String,VscAppz.QuickPickBag})">
+        <member name="M:VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String})">
             <summary>
             An event signaling when the value of the filter text has changed.
             
@@ -1944,7 +1944,7 @@
             <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
         </member>
-        <member name="M:VscAppz.QuickPick.OnDidAccept(System.Action{VscAppz.QuickPickBag})">
+        <member name="M:VscAppz.QuickPick.OnDidAccept(System.Action)">
             <summary>
             An event signaling when the user indicated acceptance of the selected item(s).
             
@@ -1955,7 +1955,7 @@
             <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
         </member>
-        <member name="M:VscAppz.QuickPick.OnDidChangeActive(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickBag})">
+        <member name="M:VscAppz.QuickPick.OnDidChangeActive(System.Action{VscAppz.QuickPickItem[]})">
             <summary>
             An event signaling when the active items have changed.
             
@@ -1966,7 +1966,7 @@
             <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.</return>
         </member>
-        <member name="M:VscAppz.QuickPick.OnDidChangeSelection(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickBag})">
+        <member name="M:VscAppz.QuickPick.OnDidChangeSelection(System.Action{VscAppz.QuickPickItem[]})">
             <summary>
             An event signaling when the selected items have changed.
             
@@ -1982,20 +1982,20 @@
             Makes the input UI visible in its current configuration. Any other input
             UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="M:VscAppz.QuickPick.Hide">
             <summary>
             Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
             event.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.QuickPick.OnDidHide(System.Action{VscAppz.QuickPickBag})">
+        <member name="M:VscAppz.QuickPick.OnDidHide(System.Action)">
             <summary>
             An event signaling when this input UI is hidden.
             
@@ -2022,23 +2022,23 @@
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.QuickPick.Get">
+        <member name="M:VscAppz.QuickPick.__appzObjBagPullFromPeer__">
             <summary>
             Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
             
-            `return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <return>A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.</return>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.QuickPick.Set(VscAppz.QuickPickBag)">
+        <member name="M:VscAppz.QuickPick.__appzObjBagPushToPeer_(VscAppz.QuickPickBag)">
             <summary>
             Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
             
-            `allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
+            `allUpdates` ── 
             
             `return` ── A thenable that resolves when this call has completed at the counterparty.
             </summary>
-            <param name="allUpdates">be aware that **all** its fields are sent for update, no omissions.</param>
+            <param name="allUpdates"></param>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="T:VscAppz.WorkspaceFoldersChangeEvent">
@@ -2181,17 +2181,49 @@
             [known](https://code.visualstudio.com/api/references/vscode-api#commands.getCommands).
             </summary>
         </member>
+        <member name="M:VscAppz.StatusBarItemBag.ReFetch">
+            <summary>
+            getter docs
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
+            </summary>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
+        </member>
+        <member name="M:VscAppz.StatusBarItemBag.ApplyChanges">
+            <summary>
+            setter docs
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
+            </summary>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
+        </member>
         <member name="T:VscAppz.OutputChannelBag">
             <summary>OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
         </member>
         <member name="F:VscAppz.OutputChannelBag.Name">
             <summary>The human-readable name of this output channel.</summary>
         </member>
+        <member name="M:VscAppz.OutputChannelBag.ReFetch">
+            <summary>
+            getter docs
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
+            </summary>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
+        </member>
         <member name="T:VscAppz.TextEditorDecorationTypeBag">
             <summary>TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
         </member>
         <member name="F:VscAppz.TextEditorDecorationTypeBag.Key">
             <summary>Internal representation of the handle.</summary>
+        </member>
+        <member name="M:VscAppz.TextEditorDecorationTypeBag.ReFetch">
+            <summary>
+            getter docs
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
+            </summary>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="T:VscAppz.InputBoxBag">
             <summary>InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
@@ -2238,6 +2270,22 @@
         </member>
         <member name="F:VscAppz.InputBoxBag.IgnoreFocusOut">
             <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
+        </member>
+        <member name="M:VscAppz.InputBoxBag.ReFetch">
+            <summary>
+            getter docs
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
+            </summary>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
+        </member>
+        <member name="M:VscAppz.InputBoxBag.ApplyChanges">
+            <summary>
+            setter docs
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
+            </summary>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
         <member name="T:VscAppz.QuickPickBag">
             <summary>QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
@@ -2293,6 +2341,22 @@
         </member>
         <member name="F:VscAppz.QuickPickBag.IgnoreFocusOut">
             <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
+        </member>
+        <member name="M:VscAppz.QuickPickBag.ReFetch">
+            <summary>
+            getter docs
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
+            </summary>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
+        </member>
+        <member name="M:VscAppz.QuickPickBag.ApplyChanges">
+            <summary>
+            setter docs
+            
+            `return` ── A thenable that resolves when this call has completed at the counterparty.
+            </summary>
+            <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
     </members>
 </doc>

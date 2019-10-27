@@ -482,12 +482,12 @@ function handle(msg, prog, remoteCancellationTokens) {
                 throw "Called vscode.StatusBarItem." + methodname + " for an already disposed-and-forgotten instance";
             switch (methodname) {
                 case "show": {
-                    thisStatusBarItem.show();
-                    return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && (thisStatusBarItem.color["id"])) ? (thisStatusBarItem.color["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command });
+                    const ret = thisStatusBarItem.show();
+                    return Promise.resolve([ret, { alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && (thisStatusBarItem.color["id"])) ? (thisStatusBarItem.color["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command }]);
                 }
                 case "hide": {
-                    thisStatusBarItem.hide();
-                    return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && (thisStatusBarItem.color["id"])) ? (thisStatusBarItem.color["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command });
+                    const ret = thisStatusBarItem.hide();
+                    return Promise.resolve([ret, { alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && (thisStatusBarItem.color["id"])) ? (thisStatusBarItem.color["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command }]);
                 }
                 case "__appzObjBagPullFromPeer__": {
                     return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && (thisStatusBarItem.color["id"])) ? (thisStatusBarItem.color["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command });
@@ -520,7 +520,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         if (val !== thisStatusBarItem.command)
                             thisStatusBarItem.command = val;
                     }
-                    return Promise.resolve();
+                    return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && (thisStatusBarItem.color["id"])) ? (thisStatusBarItem.color["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command });
                 }
                 default:
                     throw methodname;
@@ -532,26 +532,26 @@ function handle(msg, prog, remoteCancellationTokens) {
             switch (methodname) {
                 case "append": {
                     const arg_value = (msg.data['value']);
-                    thisOutputChannel.append(arg_value);
-                    return Promise.resolve({ name: thisOutputChannel.name });
+                    const ret = thisOutputChannel.append(arg_value);
+                    return Promise.resolve([ret, { name: thisOutputChannel.name }]);
                 }
                 case "appendLine": {
                     const arg_value = (msg.data['value']);
-                    thisOutputChannel.appendLine(arg_value);
-                    return Promise.resolve({ name: thisOutputChannel.name });
+                    const ret = thisOutputChannel.appendLine(arg_value);
+                    return Promise.resolve([ret, { name: thisOutputChannel.name }]);
                 }
                 case "clear": {
-                    thisOutputChannel.clear();
-                    return Promise.resolve({ name: thisOutputChannel.name });
+                    const ret = thisOutputChannel.clear();
+                    return Promise.resolve([ret, { name: thisOutputChannel.name }]);
                 }
                 case "show": {
                     const arg_preserveFocus = (msg.data['preserveFocus']);
-                    thisOutputChannel.show(arg_preserveFocus);
-                    return Promise.resolve({ name: thisOutputChannel.name });
+                    const ret = thisOutputChannel.show(arg_preserveFocus);
+                    return Promise.resolve([ret, { name: thisOutputChannel.name }]);
                 }
                 case "hide": {
-                    thisOutputChannel.hide();
-                    return Promise.resolve({ name: thisOutputChannel.name });
+                    const ret = thisOutputChannel.hide();
+                    return Promise.resolve([ret, { name: thisOutputChannel.name }]);
                 }
                 case "__appzObjBagPullFromPeer__": {
                     return Promise.resolve({ name: thisOutputChannel.name });
@@ -604,12 +604,12 @@ function handle(msg, prog, remoteCancellationTokens) {
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "show": {
-                    thisInputBox.show();
-                    return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut });
+                    const ret = thisInputBox.show();
+                    return Promise.resolve([ret, { value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }]);
                 }
                 case "hide": {
-                    thisInputBox.hide();
-                    return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut });
+                    const ret = thisInputBox.hide();
+                    return Promise.resolve([ret, { value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut }]);
                 }
                 case "onDidHide": {
                     const handlerFnId = msg.data['handler'];
@@ -698,7 +698,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         if (val !== thisInputBox.ignoreFocusOut)
                             thisInputBox.ignoreFocusOut = val;
                     }
-                    return Promise.resolve();
+                    return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut });
                 }
                 default:
                     throw methodname;
@@ -765,12 +765,12 @@ function handle(msg, prog, remoteCancellationTokens) {
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
                 case "show": {
-                    thisQuickPick.show();
-                    return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut });
+                    const ret = thisQuickPick.show();
+                    return Promise.resolve([ret, { value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }]);
                 }
                 case "hide": {
-                    thisQuickPick.hide();
-                    return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut });
+                    const ret = thisQuickPick.hide();
+                    return Promise.resolve([ret, { value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut }]);
                 }
                 case "onDidHide": {
                     const handlerFnId = msg.data['handler'];
@@ -877,7 +877,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                         if (val !== thisQuickPick.ignoreFocusOut)
                             thisQuickPick.ignoreFocusOut = val;
                     }
-                    return Promise.resolve();
+                    return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut });
                 }
                 default:
                     throw methodname;

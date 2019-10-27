@@ -42,6 +42,7 @@ export class Gen extends gen_syn.Gen {
             "type " + gen.idents.coreTypeDisp + " = core." + gen.idents.coreTypeDisp + "",
             "interface fromJson { " + gen.idents.methodLoadFrom + ": (_: any) => boolean }",
             "interface withDisp { " + gen.idents.fldDisp + ": " + gen.idents.coreTypeDisp + " }",
+            "interface withBag<T extends fromJson> { CfgBag: T }",
             "",
             "abstract class implBase {",
             "    impl: impl",
@@ -108,20 +109,22 @@ export class Gen extends gen_syn.Gen {
 
     emitStruct(it: gen_syn.TStruct) {
         const isdispobj = it.fromPrep && it.fromPrep.isDispObj
-        const dispmethods: gen.PrepField[] = []
+        const dispobjffuncs = isdispobj ? it.fromPrep.fields.filter(_ => gen.typeFun(_.typeSpec)) : []
+        const dispobjfprops = isdispobj ? it.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec)) : []
+        const dispobjmethods: gen.PrepField[] = []
+        const isobjpropsof = it.fromPrep ? it.fromPrep.isPropsOfStruct : null
+        const objpropssetter = isobjpropsof ? it.fromPrep.fields.some(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec)) : false
         this.emitDocs(it)
-            .line("export interface " + it.Name + (it.IsIncoming ? " extends fromJson" + (isdispobj ? ", withDisp" : "") + " {" : " {")).indented(() => {
+            .line("export interface " + it.Name + (it.IsIncoming ? " extends fromJson" + (isdispobj ? (", withDisp" + (dispobjfprops.length ? (", with" + gen.idents.typeSuffBag + "<" + it.Name + gen.idents.typeSuffBag + ">") : "")) : "") + " {" : " {")).indented(() => {
                 if (isdispobj) {
-                    const ffuncs = it.fromPrep.fields.filter(_ => gen.typeFun(_.typeSpec))
-                    const fprops = it.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec))
-                    if (fprops && fprops.length) {
-                        ffuncs.push({ name: gen.idents.methodObjBagPull, typeSpec: { From: [], To: it.Name + gen.idents.typeSuffBag } })
-                        if (fprops.find(_ => !_.readOnly))
-                            ffuncs.push({ name: gen.idents.methodObjBagPush, typeSpec: { From: [it.Name + gen.idents.typeSuffBag], To: null } })
+                    if (dispobjfprops && dispobjfprops.length) {
+                        dispobjffuncs.push({ name: gen.idents.methodObjBagPull, typeSpec: { From: [], To: null } })
+                        if (dispobjfprops.find(_ => !_.readOnly))
+                            dispobjffuncs.push({ name: gen.idents.methodObjBagPush, typeSpec: { From: [it.Name + gen.idents.typeSuffBag], To: null } })
                     }
-                    this.each(ffuncs, "\n", f => {
+                    this.each(dispobjffuncs, "\n", f => {
                         const tfun = gen.typeFun(f.typeSpec)
-                        dispmethods.push(f)
+                        dispobjmethods.push(f)
                         this.emitDocs({ Docs: this.b.docs(gen.docs(f.fromOrig)) })
                             .ln(() => {
                                 this.s(this.nameRewriters.methods(f.name), ": ")
@@ -129,9 +132,9 @@ export class Gen extends gen_syn.Gen {
                             })
                     })
                 }
-                else
+                else {
                     this.each(it.Fields, "\n", f => {
-                        const isreadonly = it.fromPrep && it.fromPrep.isPropsOfStruct && f.fromPrep && f.fromPrep.readOnly
+                        const isreadonly = isobjpropsof && f.fromPrep && f.fromPrep.readOnly
                         const isoptional = f.fromPrep && f.fromPrep.optional
                         this.emitDocs(f)
                             .ln(() => {
@@ -139,15 +142,22 @@ export class Gen extends gen_syn.Gen {
                                     .s((isoptional && !isreadonly) ? "?: " : ": ")
                                     .emitTypeRef(f.Type)
                             })
+                    }).when(isobjpropsof && it.fromPrep.fields.some(_ => !gen.typeFun(_.typeSpec)), () => {
+                        if (objpropssetter)
+                            this.lines("", gen.idents.methodBagPublish + ": () => (_: () => void) => void")
+                        this.lines("", gen.idents.methodBagFetch + ": () => (_: () => void) => void")
                     })
+                }
             })
             .lines("}", "")
         if (it.IsIncoming)
             this.lines(
                 (it.IsOutgoing ? "export " : "") + "function new" + it.Name + " (): " + it.Name + " {",
                 "    let me: " + it.Name,
-                "    me = { " + gen.idents.methodLoadFrom + ": _ => " + it.Name + "_" + gen.idents.methodLoadFrom + ".call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as " + it.Name
-            ).each(dispmethods, "", f => {
+                "    me = { " + gen.idents.methodLoadFrom + ": _ => " + it.Name + "_" + gen.idents.methodLoadFrom + ".call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v)"
+                + (isobjpropsof ? ((objpropssetter ? `, ${gen.idents.methodBagPublish}: () => ${it.Name}_${gen.idents.methodBagPublish}.call(me)` : "") + `, ${gen.idents.methodBagFetch}: () => ${it.Name}_${gen.idents.methodBagFetch}.call(me)`) : "")
+                + " } as " + it.Name
+            ).each(dispobjmethods, "", f => {
                 const tfun = gen.typeFun(f.typeSpec)
                 const args = tfun[0].map((_, i) => 'a' + i).join(', ')
                 this.line(`    me.${this.nameRewriters.methods(f.name)} = (${args}) => ${it.Name}_${this.nameRewriters.methods(f.name)}.call(me, ${args})`)

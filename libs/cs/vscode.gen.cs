@@ -4283,14 +4283,24 @@ namespace VscAppz {
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
-				if ((null != payload)) {
+				any[] it = default;
+				bool ok = default;
+				(it, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+				if (!ok) {
 					return false;
 				}
-				this.__appzObjBagPullFromPeer__()(() => {
-					if ((null != onret)) {
-						onret();
-					}
-				});
+				if ((2 != it.Length) || (null == it[1])) {
+					return false;
+				}
+				lock (this.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(it[1]);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
@@ -4316,14 +4326,24 @@ namespace VscAppz {
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
-				if ((null != payload)) {
+				any[] it = default;
+				bool ok = default;
+				(it, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+				if (!ok) {
 					return false;
 				}
-				this.__appzObjBagPullFromPeer__()(() => {
-					if ((null != onret)) {
-						onret();
-					}
-				});
+				if ((2 != it.Length) || (null == it[1])) {
+					return false;
+				}
+				lock (this.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(it[1]);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
@@ -4369,7 +4389,9 @@ namespace VscAppz {
 					this.CfgBag = new StatusBarItemBag();
 				}
 				this.CfgBag.__holder__ = this;
-				ok = this.CfgBag.loadFromJsonish(payload);
+				lock (this.CfgBag.__holder__.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(payload);
+				}
 				if (!ok) {
 					return false;
 				}
@@ -4405,7 +4427,11 @@ namespace VscAppz {
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
-				if ((null != payload)) {
+				bool ok = default;
+				lock (this.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(payload);
+				}
+				if (!ok) {
 					return false;
 				}
 				if ((null != onret)) {
@@ -4440,14 +4466,24 @@ namespace VscAppz {
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
-				if ((null != payload)) {
+				any[] it = default;
+				bool ok = default;
+				(it, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+				if (!ok) {
 					return false;
 				}
-				this.__appzObjBagPullFromPeer__()(() => {
-					if ((null != onret)) {
-						onret();
-					}
-				});
+				if ((2 != it.Length) || (null == it[1])) {
+					return false;
+				}
+				lock (this.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(it[1]);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
@@ -4478,14 +4514,24 @@ namespace VscAppz {
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
-				if ((null != payload)) {
+				any[] it = default;
+				bool ok = default;
+				(it, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+				if (!ok) {
 					return false;
 				}
-				this.__appzObjBagPullFromPeer__()(() => {
-					if ((null != onret)) {
-						onret();
-					}
-				});
+				if ((2 != it.Length) || (null == it[1])) {
+					return false;
+				}
+				lock (this.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(it[1]);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
@@ -4511,14 +4557,24 @@ namespace VscAppz {
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
-				if ((null != payload)) {
+				any[] it = default;
+				bool ok = default;
+				(it, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+				if (!ok) {
 					return false;
 				}
-				this.__appzObjBagPullFromPeer__()(() => {
-					if ((null != onret)) {
-						onret();
-					}
-				});
+				if ((2 != it.Length) || (null == it[1])) {
+					return false;
+				}
+				lock (this.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(it[1]);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
@@ -4548,14 +4604,24 @@ namespace VscAppz {
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
-				if ((null != payload)) {
+				any[] it = default;
+				bool ok = default;
+				(it, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+				if (!ok) {
 					return false;
 				}
-				this.__appzObjBagPullFromPeer__()(() => {
-					if ((null != onret)) {
-						onret();
-					}
-				});
+				if ((2 != it.Length) || (null == it[1])) {
+					return false;
+				}
+				lock (this.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(it[1]);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
@@ -4581,14 +4647,24 @@ namespace VscAppz {
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
-				if ((null != payload)) {
+				any[] it = default;
+				bool ok = default;
+				(it, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+				if (!ok) {
 					return false;
 				}
-				this.__appzObjBagPullFromPeer__()(() => {
-					if ((null != onret)) {
-						onret();
-					}
-				});
+				if ((2 != it.Length) || (null == it[1])) {
+					return false;
+				}
+				lock (this.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(it[1]);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
@@ -4633,7 +4709,9 @@ namespace VscAppz {
 					this.CfgBag = new OutputChannelBag();
 				}
 				this.CfgBag.__holder__ = this;
-				ok = this.CfgBag.loadFromJsonish(payload);
+				lock (this.CfgBag.__holder__.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(payload);
+				}
 				if (!ok) {
 					return false;
 				}
@@ -4684,7 +4762,9 @@ namespace VscAppz {
 					this.CfgBag = new TextEditorDecorationTypeBag();
 				}
 				this.CfgBag.__holder__ = this;
-				ok = this.CfgBag.loadFromJsonish(payload);
+				lock (this.CfgBag.__holder__.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(payload);
+				}
 				if (!ok) {
 					return false;
 				}
@@ -4710,7 +4790,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidChangeValue(Action<string, InputBoxBag> handler = default) {
+		public Action<Action<Disposable>> OnDidChangeValue(Action<string> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.onDidChangeValue";
@@ -4731,13 +4811,15 @@ namespace VscAppz {
 				if (!ok) {
 					return false;
 				}
-				InputBoxBag _a_1_ = default;
-				_a_1_ = new InputBoxBag();
-				ok = _a_1_.loadFromJsonish(args[1]);
-				if (!ok) {
-					return false;
+				{
+					lock (this.__disp__.impl) {
+						ok = this.CfgBag.loadFromJsonish(args[1]);
+					}
+					if (!ok) {
+						return false;
+					}
+					handler(_a_0_);
 				}
-				handler(_a_0_, _a_1_);
 				return true;
 			}, null);
 			msg.Data["handler"] = handlerFnId;
@@ -4778,7 +4860,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidAccept(Action<InputBoxBag> handler = default) {
+		public Action<Action<Disposable>> OnDidAccept(Action handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.onDidAccept";
@@ -4794,13 +4876,15 @@ namespace VscAppz {
 				if (1 != args.Length) {
 					return ok;
 				}
-				InputBoxBag _a_0_ = default;
-				_a_0_ = new InputBoxBag();
-				ok = _a_0_.loadFromJsonish(args[0]);
-				if (!ok) {
-					return false;
+				{
+					lock (this.__disp__.impl) {
+						ok = this.CfgBag.loadFromJsonish(args[0]);
+					}
+					if (!ok) {
+						return false;
+					}
+					handler();
 				}
-				handler(_a_0_);
 				return true;
 			}, null);
 			msg.Data["handler"] = handlerFnId;
@@ -4848,14 +4932,24 @@ namespace VscAppz {
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
-				if ((null != payload)) {
+				any[] it = default;
+				bool ok = default;
+				(it, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+				if (!ok) {
 					return false;
 				}
-				this.__appzObjBagPullFromPeer__()(() => {
-					if ((null != onret)) {
-						onret();
-					}
-				});
+				if ((2 != it.Length) || (null == it[1])) {
+					return false;
+				}
+				lock (this.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(it[1]);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
@@ -4882,14 +4976,24 @@ namespace VscAppz {
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
-				if ((null != payload)) {
+				any[] it = default;
+				bool ok = default;
+				(it, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+				if (!ok) {
 					return false;
 				}
-				this.__appzObjBagPullFromPeer__()(() => {
-					if ((null != onret)) {
-						onret();
-					}
-				});
+				if ((2 != it.Length) || (null == it[1])) {
+					return false;
+				}
+				lock (this.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(it[1]);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
@@ -4914,7 +5018,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidHide(Action<InputBoxBag> handler = default) {
+		public Action<Action<Disposable>> OnDidHide(Action handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "InputBox.onDidHide";
@@ -4930,13 +5034,15 @@ namespace VscAppz {
 				if (1 != args.Length) {
 					return ok;
 				}
-				InputBoxBag _a_0_ = default;
-				_a_0_ = new InputBoxBag();
-				ok = _a_0_.loadFromJsonish(args[0]);
-				if (!ok) {
-					return false;
+				{
+					lock (this.__disp__.impl) {
+						ok = this.CfgBag.loadFromJsonish(args[0]);
+					}
+					if (!ok) {
+						return false;
+					}
+					handler();
 				}
-				handler(_a_0_);
 				return true;
 			}, null);
 			msg.Data["handler"] = handlerFnId;
@@ -5005,7 +5111,9 @@ namespace VscAppz {
 					this.CfgBag = new InputBoxBag();
 				}
 				this.CfgBag.__holder__ = this;
-				ok = this.CfgBag.loadFromJsonish(payload);
+				lock (this.CfgBag.__holder__.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(payload);
+				}
 				if (!ok) {
 					return false;
 				}
@@ -5041,7 +5149,11 @@ namespace VscAppz {
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
-				if ((null != payload)) {
+				bool ok = default;
+				lock (this.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(payload);
+				}
+				if (!ok) {
 					return false;
 				}
 				if ((null != onret)) {
@@ -5066,7 +5178,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidChangeValue(Action<string, QuickPickBag> handler = default) {
+		public Action<Action<Disposable>> OnDidChangeValue(Action<string> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidChangeValue";
@@ -5087,13 +5199,15 @@ namespace VscAppz {
 				if (!ok) {
 					return false;
 				}
-				QuickPickBag _a_1_ = default;
-				_a_1_ = new QuickPickBag();
-				ok = _a_1_.loadFromJsonish(args[1]);
-				if (!ok) {
-					return false;
+				{
+					lock (this.__disp__.impl) {
+						ok = this.CfgBag.loadFromJsonish(args[1]);
+					}
+					if (!ok) {
+						return false;
+					}
+					handler(_a_0_);
 				}
-				handler(_a_0_, _a_1_);
 				return true;
 			}, null);
 			msg.Data["handler"] = handlerFnId;
@@ -5134,7 +5248,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidAccept(Action<QuickPickBag> handler = default) {
+		public Action<Action<Disposable>> OnDidAccept(Action handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidAccept";
@@ -5150,13 +5264,15 @@ namespace VscAppz {
 				if (1 != args.Length) {
 					return ok;
 				}
-				QuickPickBag _a_0_ = default;
-				_a_0_ = new QuickPickBag();
-				ok = _a_0_.loadFromJsonish(args[0]);
-				if (!ok) {
-					return false;
+				{
+					lock (this.__disp__.impl) {
+						ok = this.CfgBag.loadFromJsonish(args[0]);
+					}
+					if (!ok) {
+						return false;
+					}
+					handler();
 				}
-				handler(_a_0_);
 				return true;
 			}, null);
 			msg.Data["handler"] = handlerFnId;
@@ -5197,7 +5313,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidChangeActive(Action<QuickPickItem[], QuickPickBag> handler = default) {
+		public Action<Action<Disposable>> OnDidChangeActive(Action<QuickPickItem[]> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidChangeActive";
@@ -5232,13 +5348,15 @@ namespace VscAppz {
 					_a_0_[__idx___a_0_] = __val___a_0_;
 					__idx___a_0_ = __idx___a_0_ + 1;
 				}
-				QuickPickBag _a_1_ = default;
-				_a_1_ = new QuickPickBag();
-				ok = _a_1_.loadFromJsonish(args[1]);
-				if (!ok) {
-					return false;
+				{
+					lock (this.__disp__.impl) {
+						ok = this.CfgBag.loadFromJsonish(args[1]);
+					}
+					if (!ok) {
+						return false;
+					}
+					handler(_a_0_);
 				}
-				handler(_a_0_, _a_1_);
 				return true;
 			}, null);
 			msg.Data["handler"] = handlerFnId;
@@ -5279,7 +5397,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidChangeSelection(Action<QuickPickItem[], QuickPickBag> handler = default) {
+		public Action<Action<Disposable>> OnDidChangeSelection(Action<QuickPickItem[]> handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidChangeSelection";
@@ -5314,13 +5432,15 @@ namespace VscAppz {
 					_a_0_[__idx___a_0_] = __val___a_0_;
 					__idx___a_0_ = __idx___a_0_ + 1;
 				}
-				QuickPickBag _a_1_ = default;
-				_a_1_ = new QuickPickBag();
-				ok = _a_1_.loadFromJsonish(args[1]);
-				if (!ok) {
-					return false;
+				{
+					lock (this.__disp__.impl) {
+						ok = this.CfgBag.loadFromJsonish(args[1]);
+					}
+					if (!ok) {
+						return false;
+					}
+					handler(_a_0_);
 				}
-				handler(_a_0_, _a_1_);
 				return true;
 			}, null);
 			msg.Data["handler"] = handlerFnId;
@@ -5368,14 +5488,24 @@ namespace VscAppz {
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
-				if ((null != payload)) {
+				any[] it = default;
+				bool ok = default;
+				(it, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+				if (!ok) {
 					return false;
 				}
-				this.__appzObjBagPullFromPeer__()(() => {
-					if ((null != onret)) {
-						onret();
-					}
-				});
+				if ((2 != it.Length) || (null == it[1])) {
+					return false;
+				}
+				lock (this.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(it[1]);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
@@ -5402,14 +5532,24 @@ namespace VscAppz {
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
-				if ((null != payload)) {
+				any[] it = default;
+				bool ok = default;
+				(it, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
+				if (!ok) {
 					return false;
 				}
-				this.__appzObjBagPullFromPeer__()(() => {
-					if ((null != onret)) {
-						onret();
-					}
-				});
+				if ((2 != it.Length) || (null == it[1])) {
+					return false;
+				}
+				lock (this.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(it[1]);
+				}
+				if (!ok) {
+					return false;
+				}
+				if ((null != onret)) {
+					onret();
+				}
 				return true;
 			};
 			this.__disp__.impl.send(msg, onresp);
@@ -5434,7 +5574,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="handler">will be invoked whenever this event fires; mandatory, not optional.</param>
 		/// <return>A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.</return>
-		public Action<Action<Disposable>> OnDidHide(Action<QuickPickBag> handler = default) {
+		public Action<Action<Disposable>> OnDidHide(Action handler = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
 			msg.QName = "QuickPick.onDidHide";
@@ -5450,13 +5590,15 @@ namespace VscAppz {
 				if (1 != args.Length) {
 					return ok;
 				}
-				QuickPickBag _a_0_ = default;
-				_a_0_ = new QuickPickBag();
-				ok = _a_0_.loadFromJsonish(args[0]);
-				if (!ok) {
-					return false;
+				{
+					lock (this.__disp__.impl) {
+						ok = this.CfgBag.loadFromJsonish(args[0]);
+					}
+					if (!ok) {
+						return false;
+					}
+					handler();
 				}
-				handler(_a_0_);
 				return true;
 			}, null);
 			msg.Data["handler"] = handlerFnId;
@@ -5525,7 +5667,9 @@ namespace VscAppz {
 					this.CfgBag = new QuickPickBag();
 				}
 				this.CfgBag.__holder__ = this;
-				ok = this.CfgBag.loadFromJsonish(payload);
+				lock (this.CfgBag.__holder__.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(payload);
+				}
 				if (!ok) {
 					return false;
 				}
@@ -5561,7 +5705,11 @@ namespace VscAppz {
 			Func<any, bool> onresp = default;
 			Action onret = default;
 			onresp = (any payload) => {
-				if ((null != payload)) {
+				bool ok = default;
+				lock (this.__disp__.impl) {
+					ok = this.CfgBag.loadFromJsonish(payload);
+				}
+				if (!ok) {
 					return false;
 				}
 				if ((null != onret)) {

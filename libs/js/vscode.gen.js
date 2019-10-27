@@ -113,8 +113,8 @@ function newStatusBarItem() {
     me.Show = () => StatusBarItem_Show.call(me);
     me.Hide = () => StatusBarItem_Hide.call(me);
     me.Dispose = () => StatusBarItem_Dispose.call(me);
-    me.Get = () => StatusBarItem_Get.call(me);
-    me.Set = (a0) => StatusBarItem_Set.call(me, a0);
+    me.__appzObjBagPullFromPeer__ = () => StatusBarItem___appzObjBagPullFromPeer__.call(me);
+    me.__appzObjBagPushToPeer_ = (a0) => StatusBarItem___appzObjBagPushToPeer_.call(me, a0);
     return me;
 }
 function newOutputChannel() {
@@ -126,14 +126,14 @@ function newOutputChannel() {
     me.Show = (a0) => OutputChannel_Show.call(me, a0);
     me.Hide = () => OutputChannel_Hide.call(me);
     me.Dispose = () => OutputChannel_Dispose.call(me);
-    me.Get = () => OutputChannel_Get.call(me);
+    me.__appzObjBagPullFromPeer__ = () => OutputChannel___appzObjBagPullFromPeer__.call(me);
     return me;
 }
 function newTextEditorDecorationType() {
     let me;
     me = { loadFromJsonish: _ => TextEditorDecorationType_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     me.Dispose = () => TextEditorDecorationType_Dispose.call(me);
-    me.Get = () => TextEditorDecorationType_Get.call(me);
+    me.__appzObjBagPullFromPeer__ = () => TextEditorDecorationType___appzObjBagPullFromPeer__.call(me);
     return me;
 }
 function newInputBox() {
@@ -145,8 +145,8 @@ function newInputBox() {
     me.Hide = () => InputBox_Hide.call(me);
     me.OnDidHide = (a0) => InputBox_OnDidHide.call(me, a0);
     me.Dispose = () => InputBox_Dispose.call(me);
-    me.Get = () => InputBox_Get.call(me);
-    me.Set = (a0) => InputBox_Set.call(me, a0);
+    me.__appzObjBagPullFromPeer__ = () => InputBox___appzObjBagPullFromPeer__.call(me);
+    me.__appzObjBagPushToPeer_ = (a0) => InputBox___appzObjBagPushToPeer_.call(me, a0);
     return me;
 }
 function newQuickPick() {
@@ -160,8 +160,8 @@ function newQuickPick() {
     me.Hide = () => QuickPick_Hide.call(me);
     me.OnDidHide = (a0) => QuickPick_OnDidHide.call(me, a0);
     me.Dispose = () => QuickPick_Dispose.call(me);
-    me.Get = () => QuickPick_Get.call(me);
-    me.Set = (a0) => QuickPick_Set.call(me, a0);
+    me.__appzObjBagPullFromPeer__ = () => QuickPick___appzObjBagPullFromPeer__.call(me);
+    me.__appzObjBagPushToPeer_ = (a0) => QuickPick___appzObjBagPushToPeer_.call(me, a0);
     return me;
 }
 function newWorkspaceFoldersChangeEvent() {
@@ -186,31 +186,31 @@ function newWorkspaceBag() {
 }
 function newStatusBarItemBag() {
     let me;
-    me = { loadFromJsonish: _ => StatusBarItemBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => StatusBarItemBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => StatusBarItemBag_ApplyChanges.call(me), ReFetch: () => StatusBarItemBag_ReFetch.call(me) };
     return me;
 }
 exports.newStatusBarItemBag = newStatusBarItemBag;
 function newOutputChannelBag() {
     let me;
-    me = { loadFromJsonish: _ => OutputChannelBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => OutputChannelBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => OutputChannelBag_ReFetch.call(me) };
     return me;
 }
 exports.newOutputChannelBag = newOutputChannelBag;
 function newTextEditorDecorationTypeBag() {
     let me;
-    me = { loadFromJsonish: _ => TextEditorDecorationTypeBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => TextEditorDecorationTypeBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TextEditorDecorationTypeBag_ReFetch.call(me) };
     return me;
 }
 exports.newTextEditorDecorationTypeBag = newTextEditorDecorationTypeBag;
 function newInputBoxBag() {
     let me;
-    me = { loadFromJsonish: _ => InputBoxBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => InputBoxBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => InputBoxBag_ApplyChanges.call(me), ReFetch: () => InputBoxBag_ReFetch.call(me) };
     return me;
 }
 exports.newInputBoxBag = newInputBoxBag;
 function newQuickPickBag() {
     let me;
-    me = { loadFromJsonish: _ => QuickPickBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { loadFromJsonish: _ => QuickPickBag_loadFromJsonish.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => QuickPickBag_ApplyChanges.call(me), ReFetch: () => QuickPickBag_ReFetch.call(me) };
     return me;
 }
 exports.newQuickPickBag = newQuickPickBag;
@@ -248,10 +248,8 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -281,10 +279,8 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -312,10 +308,8 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -344,10 +338,8 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -376,10 +368,8 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -409,10 +399,8 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -440,10 +428,8 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -472,10 +458,8 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -504,10 +488,8 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -537,10 +519,8 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -568,10 +548,8 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -600,10 +578,8 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -671,10 +647,8 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -766,10 +740,8 @@ class implWindow extends implBase {
                     __idx__result = __idx__result + 1;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -851,10 +823,8 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -947,10 +917,8 @@ class implWindow extends implBase {
                     __idx__result = __idx__result + 1;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1031,10 +999,8 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1074,10 +1040,8 @@ class implWindow extends implBase {
             else {
                 return false;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl()));
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl()));
             }
             return true;
         };
@@ -1107,10 +1071,8 @@ class implWindow extends implBase {
             else {
                 return false;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl()));
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl()));
             }
             return true;
         };
@@ -1138,10 +1100,8 @@ class implWindow extends implBase {
                 }
                 result = _result_;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1180,10 +1140,8 @@ class implWindow extends implBase {
                     __idx__result = __idx__result + 1;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1212,10 +1170,8 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1241,10 +1197,8 @@ class implWindow extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1293,10 +1247,8 @@ class implWindow extends implBase {
             else {
                 return false;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), listenerFnId));
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), listenerFnId));
             }
             return true;
         };
@@ -1329,13 +1281,14 @@ class implWindow extends implBase {
                 }
                 result.__disp__.impl = this.Impl();
             }
-            {
-                result.Get()((state) => {
-                    if ((undefined !== onret && null !== onret)) {
-                        onret(result, state);
-                    }
-                });
+            else {
+                return false;
             }
+            result.__appzObjBagPullFromPeer__()(() => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
+            });
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -1362,13 +1315,14 @@ class implWindow extends implBase {
                 }
                 result.__disp__.impl = this.Impl();
             }
-            {
-                result.Get()((state) => {
-                    if ((undefined !== onret && null !== onret)) {
-                        onret(result, state);
-                    }
-                });
+            else {
+                return false;
             }
+            result.__appzObjBagPullFromPeer__()(() => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
+            });
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -1395,13 +1349,14 @@ class implWindow extends implBase {
                 }
                 result.__disp__.impl = this.Impl();
             }
-            {
-                result.Get()((state) => {
-                    if ((undefined !== onret && null !== onret)) {
-                        onret(result, state);
-                    }
-                });
+            else {
+                return false;
             }
+            result.__appzObjBagPullFromPeer__()(() => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
+            });
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -1427,13 +1382,14 @@ class implWindow extends implBase {
                 }
                 result.__disp__.impl = this.Impl();
             }
-            {
-                result.Get()((state) => {
-                    if ((undefined !== onret && null !== onret)) {
-                        onret(result, state);
-                    }
-                });
+            else {
+                return false;
             }
+            result.__appzObjBagPullFromPeer__()(() => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
+            });
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -1459,13 +1415,14 @@ class implWindow extends implBase {
                 }
                 result.__disp__.impl = this.Impl();
             }
-            {
-                result.Get()((state) => {
-                    if ((undefined !== onret && null !== onret)) {
-                        onret(result, state);
-                    }
-                });
+            else {
+                return false;
             }
+            result.__appzObjBagPullFromPeer__()(() => {
+                if ((undefined !== onret && null !== onret)) {
+                    onret(result);
+                }
+            });
             return true;
         };
         this.Impl().send(msg, onresp);
@@ -1496,10 +1453,8 @@ class implEnv extends implBase {
             else {
                 return false;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1524,10 +1479,8 @@ class implEnv extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1552,10 +1505,8 @@ class implEnv extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1580,10 +1531,8 @@ class implEnv extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1608,10 +1557,8 @@ class implEnv extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1638,10 +1585,8 @@ class implEnv extends implBase {
                 }
                 result = _result_;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1666,10 +1611,8 @@ class implEnv extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1694,10 +1637,8 @@ class implEnv extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1722,10 +1663,8 @@ class implEnv extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1754,10 +1693,8 @@ class implEnv extends implBase {
             else {
                 return false;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1790,10 +1727,8 @@ class implClipboard extends implBase {
                 }
                 result = _result_;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1845,10 +1780,8 @@ class implWorkspace extends implBase {
                 }
                 result = _result_;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1875,10 +1808,8 @@ class implWorkspace extends implBase {
                 }
                 result = _result_;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1907,10 +1838,8 @@ class implWorkspace extends implBase {
             else {
                 return false;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -1959,10 +1888,8 @@ class implWorkspace extends implBase {
             else {
                 return false;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), listenerFnId));
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), listenerFnId));
             }
             return true;
         };
@@ -1989,10 +1916,8 @@ class implWorkspace extends implBase {
                     return false;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -2031,10 +1956,8 @@ class implWorkspace extends implBase {
                     __idx__result = __idx__result + 1;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -2088,10 +2011,8 @@ class implWorkspace extends implBase {
                     __idx__result = __idx__result + 1;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -2120,10 +2041,8 @@ class implWorkspace extends implBase {
                 }
                 result = _result_;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -2152,10 +2071,8 @@ class implWorkspace extends implBase {
             else {
                 return false;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -2196,10 +2113,8 @@ class implLanguages extends implBase {
                     __idx__result = __idx__result + 1;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -2248,10 +2163,8 @@ class implLanguages extends implBase {
             else {
                 return false;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), listenerFnId));
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), listenerFnId));
             }
             return true;
         };
@@ -2297,10 +2210,8 @@ class implExtensions extends implBase {
             else {
                 return false;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), listenerFnId));
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), listenerFnId));
             }
             return true;
         };
@@ -2353,10 +2264,8 @@ class implCommands extends implBase {
             else {
                 return false;
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result.bind(this.Impl(), callbackFnId));
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result.bind(this.Impl(), callbackFnId));
             }
             return true;
         };
@@ -2382,10 +2291,8 @@ class implCommands extends implBase {
                 if (ok) {
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -2424,10 +2331,8 @@ class implCommands extends implBase {
                     __idx__result = __idx__result + 1;
                 }
             }
-            {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
+            if ((undefined !== onret && null !== onret)) {
+                onret(result);
             }
             return true;
         };
@@ -2446,19 +2351,23 @@ function StatusBarItem_Show() {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let it;
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newStatusBarItemBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        [it, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false;
         }
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(it[1]);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -2476,19 +2385,23 @@ function StatusBarItem_Hide() {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let it;
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newStatusBarItemBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        [it, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false;
         }
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(it[1]);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -2500,28 +2413,28 @@ function StatusBarItem_Hide() {
 function StatusBarItem_Dispose() {
     return this.__disp__.Dispose();
 }
-function StatusBarItem_Get() {
+function StatusBarItem___appzObjBagPullFromPeer__() {
     let msg;
     msg = newipcMsg();
-    msg.QName = "StatusBarItem.appzObjPropsGet";
+    msg.QName = "StatusBarItem.__appzObjBagPullFromPeer__";
     msg.Data = {};
     msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newStatusBarItemBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        if ((undefined === this.CfgBag || null === this.CfgBag)) {
+            this.CfgBag = newStatusBarItemBag();
         }
+        this.CfgBag.__holder__ = this;
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(payload);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -2530,17 +2443,21 @@ function StatusBarItem_Get() {
         onret = a0;
     };
 }
-function StatusBarItem_Set(allUpdates) {
+function StatusBarItem___appzObjBagPushToPeer_(allUpdates) {
     let msg;
     msg = newipcMsg();
-    msg.QName = "StatusBarItem.appzObjPropsSet";
+    msg.QName = "StatusBarItem.__appzObjBagPushToPeer_";
     msg.Data = {};
     msg.Data[""] = this.__disp__.id;
     msg.Data["allUpdates"] = allUpdates;
     let onresp;
     let onret;
     onresp = (payload) => {
-        if ((undefined !== payload && null !== payload)) {
+        let ok;
+        {
+            ok = this.CfgBag.loadFromJsonish(payload);
+        }
+        if (!ok) {
             return false;
         }
         if ((undefined !== onret && null !== onret)) {
@@ -2563,19 +2480,23 @@ function OutputChannel_Append(value) {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let it;
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        [it, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false;
         }
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(it[1]);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -2594,19 +2515,23 @@ function OutputChannel_AppendLine(value) {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let it;
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        [it, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false;
         }
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(it[1]);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -2624,19 +2549,23 @@ function OutputChannel_Clear() {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let it;
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        [it, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false;
         }
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(it[1]);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -2655,19 +2584,23 @@ function OutputChannel_Show(preserveFocus) {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let it;
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        [it, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false;
         }
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(it[1]);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -2685,19 +2618,23 @@ function OutputChannel_Hide() {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let it;
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        [it, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false;
         }
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(it[1]);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -2709,28 +2646,28 @@ function OutputChannel_Hide() {
 function OutputChannel_Dispose() {
     return this.__disp__.Dispose();
 }
-function OutputChannel_Get() {
+function OutputChannel___appzObjBagPullFromPeer__() {
     let msg;
     msg = newipcMsg();
-    msg.QName = "OutputChannel.appzObjPropsGet";
+    msg.QName = "OutputChannel.__appzObjBagPullFromPeer__";
     msg.Data = {};
     msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newOutputChannelBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        if ((undefined === this.CfgBag || null === this.CfgBag)) {
+            this.CfgBag = newOutputChannelBag();
         }
+        this.CfgBag.__holder__ = this;
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(payload);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -2742,28 +2679,28 @@ function OutputChannel_Get() {
 function TextEditorDecorationType_Dispose() {
     return this.__disp__.Dispose();
 }
-function TextEditorDecorationType_Get() {
+function TextEditorDecorationType___appzObjBagPullFromPeer__() {
     let msg;
     msg = newipcMsg();
-    msg.QName = "TextEditorDecorationType.appzObjPropsGet";
+    msg.QName = "TextEditorDecorationType.__appzObjBagPullFromPeer__";
     msg.Data = {};
     msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newTextEditorDecorationTypeBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        if ((undefined === this.CfgBag || null === this.CfgBag)) {
+            this.CfgBag = newTextEditorDecorationTypeBag();
         }
+        this.CfgBag.__holder__ = this;
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(payload);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -2793,13 +2730,15 @@ function InputBox_OnDidChangeValue(handler) {
         if (!ok) {
             return false;
         }
-        let _a_1_;
-        _a_1_ = newInputBoxBag();
-        ok = _a_1_.loadFromJsonish(args[1]);
-        if (!ok) {
-            return false;
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[1]);
+            }
+            if (!ok) {
+                return false;
+            }
+            handler(_a_0_);
         }
-        handler(_a_0_, _a_1_);
         return true;
     }, null);
     msg.Data["handler"] = handlerFnId;
@@ -2819,10 +2758,8 @@ function InputBox_OnDidChangeValue(handler) {
         else {
             return false;
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId));
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId));
         }
         return true;
     };
@@ -2847,13 +2784,15 @@ function InputBox_OnDidAccept(handler) {
         if (1 !== args.length) {
             return ok;
         }
-        let _a_0_;
-        _a_0_ = newInputBoxBag();
-        ok = _a_0_.loadFromJsonish(args[0]);
-        if (!ok) {
-            return false;
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[0]);
+            }
+            if (!ok) {
+                return false;
+            }
+            handler();
         }
-        handler(_a_0_);
         return true;
     }, null);
     msg.Data["handler"] = handlerFnId;
@@ -2873,10 +2812,8 @@ function InputBox_OnDidAccept(handler) {
         else {
             return false;
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId));
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId));
         }
         return true;
     };
@@ -2894,19 +2831,23 @@ function InputBox_Show() {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let it;
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newInputBoxBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        [it, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false;
         }
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(it[1]);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -2924,19 +2865,23 @@ function InputBox_Hide() {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let it;
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newInputBoxBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        [it, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false;
         }
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(it[1]);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -2961,13 +2906,15 @@ function InputBox_OnDidHide(handler) {
         if (1 !== args.length) {
             return ok;
         }
-        let _a_0_;
-        _a_0_ = newInputBoxBag();
-        ok = _a_0_.loadFromJsonish(args[0]);
-        if (!ok) {
-            return false;
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[0]);
+            }
+            if (!ok) {
+                return false;
+            }
+            handler();
         }
-        handler(_a_0_);
         return true;
     }, null);
     msg.Data["handler"] = handlerFnId;
@@ -2987,10 +2934,8 @@ function InputBox_OnDidHide(handler) {
         else {
             return false;
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId));
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId));
         }
         return true;
     };
@@ -3002,28 +2947,28 @@ function InputBox_OnDidHide(handler) {
 function InputBox_Dispose() {
     return this.__disp__.Dispose();
 }
-function InputBox_Get() {
+function InputBox___appzObjBagPullFromPeer__() {
     let msg;
     msg = newipcMsg();
-    msg.QName = "InputBox.appzObjPropsGet";
+    msg.QName = "InputBox.__appzObjBagPullFromPeer__";
     msg.Data = {};
     msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newInputBoxBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        if ((undefined === this.CfgBag || null === this.CfgBag)) {
+            this.CfgBag = newInputBoxBag();
         }
+        this.CfgBag.__holder__ = this;
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(payload);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -3032,17 +2977,21 @@ function InputBox_Get() {
         onret = a0;
     };
 }
-function InputBox_Set(allUpdates) {
+function InputBox___appzObjBagPushToPeer_(allUpdates) {
     let msg;
     msg = newipcMsg();
-    msg.QName = "InputBox.appzObjPropsSet";
+    msg.QName = "InputBox.__appzObjBagPushToPeer_";
     msg.Data = {};
     msg.Data[""] = this.__disp__.id;
     msg.Data["allUpdates"] = allUpdates;
     let onresp;
     let onret;
     onresp = (payload) => {
-        if ((undefined !== payload && null !== payload)) {
+        let ok;
+        {
+            ok = this.CfgBag.loadFromJsonish(payload);
+        }
+        if (!ok) {
             return false;
         }
         if ((undefined !== onret && null !== onret)) {
@@ -3076,13 +3025,15 @@ function QuickPick_OnDidChangeValue(handler) {
         if (!ok) {
             return false;
         }
-        let _a_1_;
-        _a_1_ = newQuickPickBag();
-        ok = _a_1_.loadFromJsonish(args[1]);
-        if (!ok) {
-            return false;
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[1]);
+            }
+            if (!ok) {
+                return false;
+            }
+            handler(_a_0_);
         }
-        handler(_a_0_, _a_1_);
         return true;
     }, null);
     msg.Data["handler"] = handlerFnId;
@@ -3102,10 +3053,8 @@ function QuickPick_OnDidChangeValue(handler) {
         else {
             return false;
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId));
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId));
         }
         return true;
     };
@@ -3130,13 +3079,15 @@ function QuickPick_OnDidAccept(handler) {
         if (1 !== args.length) {
             return ok;
         }
-        let _a_0_;
-        _a_0_ = newQuickPickBag();
-        ok = _a_0_.loadFromJsonish(args[0]);
-        if (!ok) {
-            return false;
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[0]);
+            }
+            if (!ok) {
+                return false;
+            }
+            handler();
         }
-        handler(_a_0_);
         return true;
     }, null);
     msg.Data["handler"] = handlerFnId;
@@ -3156,10 +3107,8 @@ function QuickPick_OnDidAccept(handler) {
         else {
             return false;
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId));
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId));
         }
         return true;
     };
@@ -3203,13 +3152,15 @@ function QuickPick_OnDidChangeActive(handler) {
             _a_0_[__idx___a_0_] = __val___a_0_;
             __idx___a_0_ = __idx___a_0_ + 1;
         }
-        let _a_1_;
-        _a_1_ = newQuickPickBag();
-        ok = _a_1_.loadFromJsonish(args[1]);
-        if (!ok) {
-            return false;
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[1]);
+            }
+            if (!ok) {
+                return false;
+            }
+            handler(_a_0_);
         }
-        handler(_a_0_, _a_1_);
         return true;
     }, null);
     msg.Data["handler"] = handlerFnId;
@@ -3229,10 +3180,8 @@ function QuickPick_OnDidChangeActive(handler) {
         else {
             return false;
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId));
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId));
         }
         return true;
     };
@@ -3276,13 +3225,15 @@ function QuickPick_OnDidChangeSelection(handler) {
             _a_0_[__idx___a_0_] = __val___a_0_;
             __idx___a_0_ = __idx___a_0_ + 1;
         }
-        let _a_1_;
-        _a_1_ = newQuickPickBag();
-        ok = _a_1_.loadFromJsonish(args[1]);
-        if (!ok) {
-            return false;
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[1]);
+            }
+            if (!ok) {
+                return false;
+            }
+            handler(_a_0_);
         }
-        handler(_a_0_, _a_1_);
         return true;
     }, null);
     msg.Data["handler"] = handlerFnId;
@@ -3302,10 +3253,8 @@ function QuickPick_OnDidChangeSelection(handler) {
         else {
             return false;
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId));
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId));
         }
         return true;
     };
@@ -3323,19 +3272,23 @@ function QuickPick_Show() {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let it;
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newQuickPickBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        [it, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false;
         }
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(it[1]);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -3353,19 +3306,23 @@ function QuickPick_Hide() {
     let onresp;
     let onret;
     onresp = (payload) => {
+        let it;
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newQuickPickBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        [it, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
+        if (!ok) {
+            return false;
+        }
+        if (2 !== it.length || (undefined === it[1] || null === it[1])) {
+            return false;
         }
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(it[1]);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
         }
         return true;
     };
@@ -3390,13 +3347,15 @@ function QuickPick_OnDidHide(handler) {
         if (1 !== args.length) {
             return ok;
         }
-        let _a_0_;
-        _a_0_ = newQuickPickBag();
-        ok = _a_0_.loadFromJsonish(args[0]);
-        if (!ok) {
-            return false;
+        {
+            {
+                ok = this.CfgBag.loadFromJsonish(args[0]);
+            }
+            if (!ok) {
+                return false;
+            }
+            handler();
         }
-        handler(_a_0_);
         return true;
     }, null);
     msg.Data["handler"] = handlerFnId;
@@ -3416,10 +3375,8 @@ function QuickPick_OnDidHide(handler) {
         else {
             return false;
         }
-        {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.__disp__.impl, handlerFnId));
-            }
+        if ((undefined !== onret && null !== onret)) {
+            onret(result.bind(this.__disp__.impl, handlerFnId));
         }
         return true;
     };
@@ -3431,47 +3388,24 @@ function QuickPick_OnDidHide(handler) {
 function QuickPick_Dispose() {
     return this.__disp__.Dispose();
 }
-function QuickPick_Get() {
+function QuickPick___appzObjBagPullFromPeer__() {
     let msg;
     msg = newipcMsg();
-    msg.QName = "QuickPick.appzObjPropsGet";
+    msg.QName = "QuickPick.__appzObjBagPullFromPeer__";
     msg.Data = {};
     msg.Data[""] = this.__disp__.id;
     let onresp;
     let onret;
     onresp = (payload) => {
         let ok;
-        let result;
-        if ((undefined !== payload && null !== payload)) {
-            result = newQuickPickBag();
-            ok = result.loadFromJsonish(payload);
-            if (!ok) {
-                return false;
-            }
+        if ((undefined === this.CfgBag || null === this.CfgBag)) {
+            this.CfgBag = newQuickPickBag();
         }
+        this.CfgBag.__holder__ = this;
         {
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
+            ok = this.CfgBag.loadFromJsonish(payload);
         }
-        return true;
-    };
-    this.__disp__.impl.send(msg, onresp);
-    return (a0) => {
-        onret = a0;
-    };
-}
-function QuickPick_Set(allUpdates) {
-    let msg;
-    msg = newipcMsg();
-    msg.QName = "QuickPick.appzObjPropsSet";
-    msg.Data = {};
-    msg.Data[""] = this.__disp__.id;
-    msg.Data["allUpdates"] = allUpdates;
-    let onresp;
-    let onret;
-    onresp = (payload) => {
-        if ((undefined !== payload && null !== payload)) {
+        if (!ok) {
             return false;
         }
         if ((undefined !== onret && null !== onret)) {
@@ -3483,6 +3417,57 @@ function QuickPick_Set(allUpdates) {
     return (a0) => {
         onret = a0;
     };
+}
+function QuickPick___appzObjBagPushToPeer_(allUpdates) {
+    let msg;
+    msg = newipcMsg();
+    msg.QName = "QuickPick.__appzObjBagPushToPeer_";
+    msg.Data = {};
+    msg.Data[""] = this.__disp__.id;
+    msg.Data["allUpdates"] = allUpdates;
+    let onresp;
+    let onret;
+    onresp = (payload) => {
+        let ok;
+        {
+            ok = this.CfgBag.loadFromJsonish(payload);
+        }
+        if (!ok) {
+            return false;
+        }
+        if ((undefined !== onret && null !== onret)) {
+            onret();
+        }
+        return true;
+    };
+    this.__disp__.impl.send(msg, onresp);
+    return (a0) => {
+        onret = a0;
+    };
+}
+function StatusBarItemBag_ReFetch() {
+    return this.__holder__.__appzObjBagPullFromPeer__();
+}
+function StatusBarItemBag_ApplyChanges() {
+    return this.__holder__.__appzObjBagPushToPeer_(this);
+}
+function OutputChannelBag_ReFetch() {
+    return this.__holder__.__appzObjBagPullFromPeer__();
+}
+function TextEditorDecorationTypeBag_ReFetch() {
+    return this.__holder__.__appzObjBagPullFromPeer__();
+}
+function InputBoxBag_ReFetch() {
+    return this.__holder__.__appzObjBagPullFromPeer__();
+}
+function InputBoxBag_ApplyChanges() {
+    return this.__holder__.__appzObjBagPushToPeer_(this);
+}
+function QuickPickBag_ReFetch() {
+    return this.__holder__.__appzObjBagPullFromPeer__();
+}
+function QuickPickBag_ApplyChanges() {
+    return this.__holder__.__appzObjBagPushToPeer_(this);
 }
 function MessageItem_loadFromJsonish(payload) {
     let it;

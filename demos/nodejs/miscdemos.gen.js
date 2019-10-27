@@ -307,11 +307,11 @@ function demo_Window_CreateQuickPick() {
             ctl.CfgBag.Items[(i - 1)].AlwaysShow = i === 42
         }
         ctl.CfgBag.ApplyChanges()
-        ctl.OnDidAccept((bag) => {
-            logLn(strFmt("Picked: {0}", bag.SelectedItems))
+        ctl.OnDidAccept(() => {
+            logLn(strFmt("Picked: {0}", ctl.CfgBag.SelectedItems))
             ctl.Hide()
         })
-        ctl.OnDidHide((_) => {
+        ctl.OnDidHide(() => {
             ctl.Dispose()
         })
         ctl.Show()
@@ -325,17 +325,17 @@ function demo_Window_CreateInputBox() {
         ctl.CfgBag.prompt = "The initial Prompt"
         ctl.CfgBag.title = "The initial Title"
         ctl.CfgBag.ApplyChanges()
-        ctl.OnDidChangeValue((input, bag) => {
+        ctl.OnDidChangeValue((input) => {
             ctl.CfgBag.prompt = strFmt("Lower: {0}", strLo(ctl.CfgBag.value))
             ctl.CfgBag.title = strFmt("Upper: {0}", strUp(ctl.CfgBag.value))
             ctl.CfgBag.ApplyChanges()
         })
         let finalinputvalue
-        ctl.OnDidAccept((bag) => {
-            finalinputvalue = bag.value
+        ctl.OnDidAccept(() => {
+            finalinputvalue = ctl.CfgBag.value
             ctl.Hide()
         })
-        ctl.OnDidHide((bag) => {
+        ctl.OnDidHide(() => {
             ctl.Dispose()
             if ((undefined !== finalinputvalue && null !== finalinputvalue)) {
                 vsc.Window.ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", finalinputvalue)), null)

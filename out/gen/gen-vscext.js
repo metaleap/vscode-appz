@@ -70,14 +70,13 @@ class Gen extends gen.Gen {
                     else if (mem.name !== "dispose") {
                         const orig = mem.fromOrig;
                         const isevt = (ts.isPropertySignature(orig) && ts.isTypeReferenceNode(orig.type) && orig.type.typeName.getText() === "Event");
-                        const isvoidmethod = (mem.name !== "dispose" && !isevt);
                         const args = isevt ? [
                             { name: "handler", optional: false, typeSpec: mem.typeSpec.From[0] },
                         ] : (tfun[0].map((_, i) => gen.argFrom(_, orig.parameters[i])).filter(_ => !_.isFromRetThenable));
                         src += `\t\t\t\tcase "${mem.name}": {\n`;
                         for (const arg of args)
                             src += this.argsSrc(prep, it.name + "." + mem.name + "." + arg.name, arg, isevt, it);
-                        src += this.retArgsSrc(`this${it.name}.${mem.name}`, args, (!isvoidmethod) ? "" : ("{ " + this.propSrc(it) + " }"));
+                        src += this.retArgsSrc(`this${it.name}.${mem.name}`, args, (mem.name === "dispose" || isevt) ? "" : ("{ " + this.propSrc(it) + " }"));
                         src += "\t\t\t\t}\n";
                     }
                 if (hasgets) {
@@ -103,7 +102,7 @@ class Gen extends gen.Gen {
                             + `\t\t\t\t\t\t\tthis${it.name}.${prop.name} = val\n`
                             + "\t\t\t\t\t}\n";
                     }
-                    src += "\t\t\t\t\treturn Promise.resolve()\n";
+                    src += "\t\t\t\t\treturn Promise.resolve({ " + this.propSrc(it) + " })\n";
                     src += "\t\t\t\t}\n";
                 }
                 src += "\t\t\t\tdefault:\n";
@@ -185,15 +184,12 @@ class Gen extends gen.Gen {
     }
     retArgsSrc(callee, args, altRet) {
         let src = "";
-        if (altRet && altRet.length)
-            src += `\t\t\t\t\t${callee}(`;
-        else
-            src += `\t\t\t\t\tconst ret = ${callee}(`;
+        src += `\t\t\t\t\tconst ret = ${callee}(`;
         for (const arg of args)
             src += (arg.spreads ? '...' : '') + 'arg_' + arg.name + ', ';
         src += ")\n";
         if (altRet && altRet.length)
-            src += "\t\t\t\t\treturn Promise.resolve(" + altRet + ")\n";
+            src += "\t\t\t\t\treturn Promise.resolve([ret, " + altRet + "])\n";
         else {
             src += `\t\t\t\t\tconst retdisp = ret as any as ${this.pkg}.Disposable\n`;
             src += `\t\t\t\t\tconst retprom = ret as any as Thenable<any>\n`;

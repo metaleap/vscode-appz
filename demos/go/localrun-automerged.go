@@ -397,11 +397,11 @@ func demo_Window_CreateQuickPick() {
 			ctl.CfgBag.Items[(i - 1)].AlwaysShow = i == 42
 		}
 		ctl.CfgBag.ApplyChanges()
-		ctl.OnDidAccept(func(bag QuickPickBag) {
-			logLn(strFmt("Picked: {0}", bag.SelectedItems))
+		ctl.OnDidAccept(func() {
+			logLn(strFmt("Picked: {0}", ctl.CfgBag.SelectedItems))
 			ctl.Hide()
 		})
-		ctl.OnDidHide(func(_ QuickPickBag) {
+		ctl.OnDidHide(func() {
 			ctl.Dispose()
 		})
 		ctl.Show()
@@ -415,17 +415,17 @@ func demo_Window_CreateInputBox() {
 		ctl.CfgBag.Prompt = "The initial Prompt"
 		ctl.CfgBag.Title = "The initial Title"
 		ctl.CfgBag.ApplyChanges()
-		ctl.OnDidChangeValue(func(input string, bag InputBoxBag) {
+		ctl.OnDidChangeValue(func(input string) {
 			ctl.CfgBag.Prompt = strFmt("Lower: {0}", strLo(ctl.CfgBag.Value))
 			ctl.CfgBag.Title = strFmt("Upper: {0}", strUp(ctl.CfgBag.Value))
 			ctl.CfgBag.ApplyChanges()
 		})
 		var finalinputvalue *string
-		ctl.OnDidAccept(func(bag InputBoxBag) {
-			finalinputvalue = &bag.Value
+		ctl.OnDidAccept(func() {
+			finalinputvalue = &ctl.CfgBag.Value
 			ctl.Hide()
 		})
-		ctl.OnDidHide(func(bag InputBoxBag) {
+		ctl.OnDidHide(func() {
 			ctl.Dispose()
 			if (nil != finalinputvalue) {
 				vsc.Window().ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", *finalinputvalue)), nil)

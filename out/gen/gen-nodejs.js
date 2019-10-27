@@ -20,7 +20,7 @@ class Gen extends gen_syn.Gen {
         super.genDemos();
     }
     emitIntro() {
-        return this.isDemos ? this.lines("const main = require('./main')", 'Object.defineProperty(exports, "__esModule", { value: true })', "// " + this.doNotEditComment("nodejs"), "let vsc, appName, cmdName, strFmt, quit, cancelIn, demo_Window_ShowInputBox, setOutChan, logLn, strLo, strUp, nums1To", "exports.onUpAndRunning = () => { /* crikey!.. */ vsc = main.vsc; appName = main.appName; cmdName = main.cmdName; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox; setOutChan = main.setOutChan; logLn = main.logLn; strLo = main.strLo; strUp = main.strUp; nums1To = main.nums1To; onUpAndRunning() }", "exports.demosMenu = demosMenu", "") : this.lines("// " + this.doNotEditComment("nodejs"), "import * as core from './core'", "import { " + gen.idents.coreMethodOnErr + " } from './vsc-appz'", "type " + gen.idents.coreTypeMsg + " = core." + gen.idents.coreTypeMsg + "", "type " + gen.idents.coreTypeCancel + " = core." + gen.idents.coreTypeCancel + "", "type " + gen.idents.coreTypeDisp + " = core." + gen.idents.coreTypeDisp + "", "interface fromJson { " + gen.idents.methodLoadFrom + ": (_: any) => boolean }", "interface withDisp { " + gen.idents.fldDisp + ": " + gen.idents.coreTypeDisp + " }", "", "abstract class implBase {", "    impl: impl", "    constructor(impl: impl) { this.impl = impl }", "    " + gen.idents.methodImpl + "() { return this.impl as any as core.impl /* crikey, codegen life.. */ }", "}", "", "function new" + gen.idents.coreTypeMsg + "() { return new core." + gen.idents.coreTypeMsg + "() }", "function new" + gen.idents.coreTypeDisp + "() { return new core." + gen.idents.coreTypeDisp + "() }", "");
+        return this.isDemos ? this.lines("const main = require('./main')", 'Object.defineProperty(exports, "__esModule", { value: true })', "// " + this.doNotEditComment("nodejs"), "let vsc, appName, cmdName, strFmt, quit, cancelIn, demo_Window_ShowInputBox, setOutChan, logLn, strLo, strUp, nums1To", "exports.onUpAndRunning = () => { /* crikey!.. */ vsc = main.vsc; appName = main.appName; cmdName = main.cmdName; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox; setOutChan = main.setOutChan; logLn = main.logLn; strLo = main.strLo; strUp = main.strUp; nums1To = main.nums1To; onUpAndRunning() }", "exports.demosMenu = demosMenu", "") : this.lines("// " + this.doNotEditComment("nodejs"), "import * as core from './core'", "import { " + gen.idents.coreMethodOnErr + " } from './vsc-appz'", "type " + gen.idents.coreTypeMsg + " = core." + gen.idents.coreTypeMsg + "", "type " + gen.idents.coreTypeCancel + " = core." + gen.idents.coreTypeCancel + "", "type " + gen.idents.coreTypeDisp + " = core." + gen.idents.coreTypeDisp + "", "interface fromJson { " + gen.idents.methodLoadFrom + ": (_: any) => boolean }", "interface withDisp { " + gen.idents.fldDisp + ": " + gen.idents.coreTypeDisp + " }", "interface withBag<T extends fromJson> { CfgBag: T }", "", "abstract class implBase {", "    impl: impl", "    constructor(impl: impl) { this.impl = impl }", "    " + gen.idents.methodImpl + "() { return this.impl as any as core.impl /* crikey, codegen life.. */ }", "}", "", "function new" + gen.idents.coreTypeMsg + "() { return new core." + gen.idents.coreTypeMsg + "() }", "function new" + gen.idents.coreTypeDisp + "() { return new core." + gen.idents.coreTypeDisp + "() }", "");
     }
     emitOutro() { return this; }
     emitDocs(it) {
@@ -61,20 +61,22 @@ class Gen extends gen_syn.Gen {
     }
     emitStruct(it) {
         const isdispobj = it.fromPrep && it.fromPrep.isDispObj;
-        const dispmethods = [];
+        const dispobjffuncs = isdispobj ? it.fromPrep.fields.filter(_ => gen.typeFun(_.typeSpec)) : [];
+        const dispobjfprops = isdispobj ? it.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec)) : [];
+        const dispobjmethods = [];
+        const isobjpropsof = it.fromPrep ? it.fromPrep.isPropsOfStruct : null;
+        const objpropssetter = isobjpropsof ? it.fromPrep.fields.some(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec)) : false;
         this.emitDocs(it)
-            .line("export interface " + it.Name + (it.IsIncoming ? " extends fromJson" + (isdispobj ? ", withDisp" : "") + " {" : " {")).indented(() => {
+            .line("export interface " + it.Name + (it.IsIncoming ? " extends fromJson" + (isdispobj ? (", withDisp" + (dispobjfprops.length ? (", with" + gen.idents.typeSuffBag + "<" + it.Name + gen.idents.typeSuffBag + ">") : "")) : "") + " {" : " {")).indented(() => {
             if (isdispobj) {
-                const ffuncs = it.fromPrep.fields.filter(_ => gen.typeFun(_.typeSpec));
-                const fprops = it.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec));
-                if (fprops && fprops.length) {
-                    ffuncs.push({ name: gen.idents.methodObjBagPull, typeSpec: { From: [], To: it.Name + gen.idents.typeSuffBag } });
-                    if (fprops.find(_ => !_.readOnly))
-                        ffuncs.push({ name: gen.idents.methodObjBagPush, typeSpec: { From: [it.Name + gen.idents.typeSuffBag], To: null } });
+                if (dispobjfprops && dispobjfprops.length) {
+                    dispobjffuncs.push({ name: gen.idents.methodObjBagPull, typeSpec: { From: [], To: null } });
+                    if (dispobjfprops.find(_ => !_.readOnly))
+                        dispobjffuncs.push({ name: gen.idents.methodObjBagPush, typeSpec: { From: [it.Name + gen.idents.typeSuffBag], To: null } });
                 }
-                this.each(ffuncs, "\n", f => {
+                this.each(dispobjffuncs, "\n", f => {
                     const tfun = gen.typeFun(f.typeSpec);
-                    dispmethods.push(f);
+                    dispobjmethods.push(f);
                     this.emitDocs({ Docs: this.b.docs(gen.docs(f.fromOrig)) })
                         .ln(() => {
                         this.s(this.nameRewriters.methods(f.name), ": ")
@@ -82,9 +84,9 @@ class Gen extends gen_syn.Gen {
                     });
                 });
             }
-            else
+            else {
                 this.each(it.Fields, "\n", f => {
-                    const isreadonly = it.fromPrep && it.fromPrep.isPropsOfStruct && f.fromPrep && f.fromPrep.readOnly;
+                    const isreadonly = isobjpropsof && f.fromPrep && f.fromPrep.readOnly;
                     const isoptional = f.fromPrep && f.fromPrep.optional;
                     this.emitDocs(f)
                         .ln(() => {
@@ -92,11 +94,18 @@ class Gen extends gen_syn.Gen {
                             .s((isoptional && !isreadonly) ? "?: " : ": ")
                             .emitTypeRef(f.Type);
                     });
+                }).when(isobjpropsof && it.fromPrep.fields.some(_ => !gen.typeFun(_.typeSpec)), () => {
+                    if (objpropssetter)
+                        this.lines("", gen.idents.methodBagPublish + ": () => (_: () => void) => void");
+                    this.lines("", gen.idents.methodBagFetch + ": () => (_: () => void) => void");
                 });
+            }
         })
             .lines("}", "");
         if (it.IsIncoming)
-            this.lines((it.IsOutgoing ? "export " : "") + "function new" + it.Name + " (): " + it.Name + " {", "    let me: " + it.Name, "    me = { " + gen.idents.methodLoadFrom + ": _ => " + it.Name + "_" + gen.idents.methodLoadFrom + ".call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as " + it.Name).each(dispmethods, "", f => {
+            this.lines((it.IsOutgoing ? "export " : "") + "function new" + it.Name + " (): " + it.Name + " {", "    let me: " + it.Name, "    me = { " + gen.idents.methodLoadFrom + ": _ => " + it.Name + "_" + gen.idents.methodLoadFrom + ".call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v)"
+                + (isobjpropsof ? ((objpropssetter ? `, ${gen.idents.methodBagPublish}: () => ${it.Name}_${gen.idents.methodBagPublish}.call(me)` : "") + `, ${gen.idents.methodBagFetch}: () => ${it.Name}_${gen.idents.methodBagFetch}.call(me)`) : "")
+                + " } as " + it.Name).each(dispobjmethods, "", f => {
                 const tfun = gen.typeFun(f.typeSpec);
                 const args = tfun[0].map((_, i) => 'a' + i).join(', ');
                 this.line(`    me.${this.nameRewriters.methods(f.name)} = (${args}) => ${it.Name}_${this.nameRewriters.methods(f.name)}.call(me, ${args})`);

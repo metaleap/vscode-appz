@@ -818,9 +818,11 @@ class Gen extends gen.Gen {
             let onerrret;
             if (rettype)
                 [call, onerrret] = [_.iSet(_._(gen.idents.varRet), call), _.eTup(_.eZilch(), _.eLit(false))];
+            if (method.IsObjEvt)
+                call = _.iBlock(_.iLock(_._(_.eThis(), gen.idents.fldDisp, gen.idents.fldImpl), _.iSet(_._(gen.idents.varOk), _.eCall(_._(_.eThis(), gen.idents.fldDispObjBag, gen.idents.methodLoadFrom), _.oIdx(_._(gen.idents.argArgs), _.eLit(numargs))))), _.iIf(_.oNot(_._(gen.idents.varOk)), [_.iRet(_.eLit(false))]), call);
             const handler = _.eFunc([{ Name: gen.idents.argArgs, Type: { ValsOf: TypeRefPrim.Any } }], rettype ? { TupOf: [TypeRefPrim.Any, TypeRefPrim.Bool] } : TypeRefPrim.Bool, ...[
                 _.iVar(gen.idents.varOk, TypeRefPrim.Bool),
-                _.iIf(_.oNeq(_.eLit(numargs), _.eLen(_._(gen.idents.argArgs), true)), [
+                _.iIf(_.oNeq(_.eLit((method.IsObjEvt ? 1 : 0) + numargs), _.eLen(_._(gen.idents.argArgs), true)), [
                     _.iRet(rettype ? _.eTup(_.eZilch(), _._(gen.idents.varOk)) : _._(gen.idents.varOk)),
                 ]),
             ].concat(..._.WHEN(rettype, () => [
@@ -893,17 +895,17 @@ class Gen extends gen.Gen {
         if (retintofld)
             dsttype = retintofld.Type;
         const result = retIntoFld ? _._(_.eThis(), retIntoFld) : _._(gen.idents.varRes);
-        body.push(_.iSet(_._(gen.idents.varOnResp), _.eFunc([{ Name: gen.idents.argPayload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, ..._.WHEN(dsttype, () => _.WHEN(!retIntoFld, () => [
-            _.iVar(gen.idents.varOk, TypeRefPrim.Bool),
-            _.iVar(gen.idents.varRes, dsttype),
-            _.iIf(_.oIs(_._(gen.idents.argPayload)), this.convOrRet(gen.idents.varRes, _._(gen.idents.argPayload), dsttype), _.WHEN(isdisp || isval || isprops || method.IsObjCtor, () => [_.iRet(_.eLit(false))], () => [])),
-        ], () => [
+        body.push(_.iSet(_._(gen.idents.varOnResp), _.eFunc([{ Name: gen.idents.argPayload, Type: TypeRefPrim.Any }], TypeRefPrim.Bool, ..._.WHEN(dsttype, () => ((retIntoFld ? [
             _.iVar(gen.idents.varOk, TypeRefPrim.Bool),
             _.iIf(_.oIsnt(_._(_.eThis(), retIntoFld)), [_.iSet(_._(_.eThis(), retIntoFld), _.eNew(dsttype))]),
             _.iSet(_._(_.eThis(), retIntoFld, gen.idents.fldBagHolder), _.eThis()),
-            _.iSet(_._(gen.idents.varOk), _.eCall(_._(_.eThis(), retIntoFld, gen.idents.methodLoadFrom), _._(gen.idents.argPayload))),
+            _.iLock(_._(_.eThis(), retIntoFld, gen.idents.fldBagHolder, gen.idents.fldDisp, gen.idents.fldImpl), _.iSet(_._(gen.idents.varOk), _.eCall(_._(_.eThis(), retIntoFld, gen.idents.methodLoadFrom), _._(gen.idents.argPayload)))),
             _.iIf(_.oNot(_._(gen.idents.varOk)), [_.iRet(_.eLit(false))]),
-        ]).concat(..._.WHEN(isdisp, () => [_.iIf(_.oIs(_._(gen.idents.varOnRet)), [
+        ] : [
+            _.iVar(gen.idents.varOk, TypeRefPrim.Bool),
+            _.iVar(gen.idents.varRes, dsttype),
+            _.iIf(_.oIs(_._(gen.idents.argPayload)), this.convOrRet(gen.idents.varRes, _._(gen.idents.argPayload), dsttype), _.WHEN(isdisp || isval || isprops || method.IsObjCtor, () => [_.iRet(_.eLit(false))], () => [])),
+        ])).concat(..._.WHEN(isdisp, () => [_.iIf(_.oIs(_._(gen.idents.varOnRet)), [
                 _.eCall(_._(gen.idents.varOnRet), _.eCall(_._(result, gen.idents.coreMethodBind), ...[impl].concat(...evtsubfnids.map(fnid => _._(fnid))))),
             ])], () => (!(method.IsObjCtor && method.IsObjCtor.length))
             ? [_.iIf(_.oIs(_._(gen.idents.varOnRet)), [
@@ -912,12 +914,34 @@ class Gen extends gen.Gen {
             : [_.eCall(_.eCall(_._(result, gen.idents.methodObjBagPull)), _.eFunc([], null, _.iIf(_.oIs(_._(gen.idents.varOnRet)), [
                     _.eCall(_._(gen.idents.varOnRet), _._(result)),
                 ])))])).concat(_.iRet(_.eLit(true))), () => {
-            const refetch = (tstruct && tstruct.fromPrep && tstruct.fromPrep.isDispObj && !(method.IsObjCtor || method.IsObjEvt || method.Name === gen.idents.methodObjBagPush));
-            return [
-                _.iIf(_.oIs(_._(gen.idents.argPayload)), [_.iRet(_.eLit(false))]),
-                refetch ?
-                    _.eCall(_.eCall(_._(_.eThis(), gen.idents.methodObjBagPull)), _.eFunc([], null, _.iIf(_.oIs(_._(gen.idents.varOnRet)), [_.eCall(_._(gen.idents.varOnRet))]))) :
+            const isdispobj = tstruct && tstruct.fromPrep && tstruct.fromPrep.isDispObj;
+            const refetch = (isdispobj && !(method.IsObjCtor || method.IsObjEvt || method.Name === gen.idents.methodObjBagPush));
+            if (refetch) {
+                const tmp = gen.typeProm(method.fromPrep.args.find(_ => _.isFromRetThenable).typeSpec);
+                if (!(tmp && tmp.length && tmp.length === 1 && tmp[0] === null))
+                    throw "TODO because new: non-void dispObj methods, specifically: " + ifaceOrStruct.Name + "." + method.Name;
+            }
+            return refetch ?
+                [
+                    _.iVar(gen.idents.varIt, { ValsOf: TypeRefPrim.Any }),
+                    _.iVar(gen.idents.varOk, TypeRefPrim.Bool),
+                ].concat(...this.convOrRet(gen.idents.varIt, _._(gen.idents.argPayload), { ValsOf: TypeRefPrim.Any })).concat(...[
+                    _.iIf(_.oOr(_.oNeq(_.eLit(2), _.eLen(_._(gen.idents.varIt), true)), _.oIsnt(_.oIdx(_._(gen.idents.varIt), _.eLit(1)))), [
+                        _.iRet(_.eLit(false)),
+                    ]),
+                    _.iLock(_._(_.eThis(), gen.idents.fldDisp, gen.idents.fldImpl), _.iSet(_._(gen.idents.varOk), _.eCall(_._(_.eThis(), gen.idents.fldDispObjBag, gen.idents.methodLoadFrom), _.oIdx(_._(gen.idents.varIt), _.eLit(1))))),
+                    _.iIf(_.oNot(_._(gen.idents.varOk)), [_.iRet(_.eLit(false))]),
                     _.iIf(_.oIs(_._(gen.idents.varOnRet)), [_.eCall(_._(gen.idents.varOnRet))]),
+                    _.iRet(_.eLit(true)),
+                ]) : (isdispobj && method.Name === gen.idents.methodObjBagPush) ? [
+                _.iVar(gen.idents.varOk, TypeRefPrim.Bool),
+                _.iLock(_._(_.eThis(), gen.idents.fldDisp, gen.idents.fldImpl), _.iSet(_._(gen.idents.varOk), _.eCall(_._(_.eThis(), gen.idents.fldDispObjBag, gen.idents.methodLoadFrom), _._(gen.idents.argPayload)))),
+                _.iIf(_.oNot(_._(gen.idents.varOk)), [_.iRet(_.eLit(false))]),
+                _.iIf(_.oIs(_._(gen.idents.varOnRet)), [_.eCall(_._(gen.idents.varOnRet))]),
+                _.iRet(_.eLit(true)),
+            ] : [
+                _.iIf(_.oIs(_._(gen.idents.argPayload)), [_.iRet(_.eLit(false))]),
+                _.iIf(_.oIs(_._(gen.idents.varOnRet)), [_.eCall(_._(gen.idents.varOnRet))]),
                 _.iRet(_.eLit(true)),
             ];
         }))));
@@ -1069,11 +1093,6 @@ class Gen extends gen.Gen {
                         const prepargs = isevt
                             ? [{ name: gen.idents.argHandler, optional: false, typeSpec: field.typeSpec.From[0] }]
                             : (tfun[0].map((_, i) => gen.argFrom(_, orig.parameters[i])));
-                        if (isevt) {
-                            const tf = gen.typeFun(prepargs[0].typeSpec);
-                            if (tf)
-                                prepargs[0].typeSpec = { From: tf[0].concat(struct.Name + gen.idents.typeSuffBag), To: tf[1] };
-                        }
                         let tret = tfun[1];
                         tret = { Thens: [tret] };
                         prepargs.push({ name: "?", isFromRetThenable: true, optional: true, typeSpec: tret });

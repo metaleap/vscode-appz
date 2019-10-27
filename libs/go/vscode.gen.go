@@ -3782,14 +3782,26 @@ func (me *StatusBarItem) Show() func(func()) {
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
-		if (nil != payload) {
+		var it []any
+		var ok bool
+		it, ok = payload.([]any)
+		if !ok {
 			return false
 		}
-		me.__appzObjBagPullFromPeer__()(func() {
-			if (nil != onret) {
-				onret()
-			}
-		})
+		if (2 != len(it)) || (nil == it[1]) {
+			return false
+		}
+		me.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(it[1])
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
@@ -3810,14 +3822,26 @@ func (me *StatusBarItem) Hide() func(func()) {
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
-		if (nil != payload) {
+		var it []any
+		var ok bool
+		it, ok = payload.([]any)
+		if !ok {
 			return false
 		}
-		me.__appzObjBagPullFromPeer__()(func() {
-			if (nil != onret) {
-				onret()
-			}
-		})
+		if (2 != len(it)) || (nil == it[1]) {
+			return false
+		}
+		me.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(it[1])
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
@@ -3851,7 +3875,11 @@ func (me *StatusBarItem) __appzObjBagPullFromPeer__() func(func()) {
 			me.CfgBag = new(StatusBarItemBag)
 		}
 		me.CfgBag.__holder__ = me
-		ok = me.CfgBag.loadFromJsonish(payload)
+		me.CfgBag.__holder__.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(payload)
+		}
+		me.CfgBag.__holder__.__disp__.impl.Unlock()
 		if !ok {
 			return false
 		}
@@ -3881,7 +3909,13 @@ func (me *StatusBarItem) __appzObjBagPushToPeer_(allUpdates *StatusBarItemBag) f
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
-		if (nil != payload) {
+		var ok bool
+		me.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(payload)
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
 			return false
 		}
 		if (nil != onret) {
@@ -3910,14 +3944,26 @@ func (me *OutputChannel) Append(value string) func(func()) {
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
-		if (nil != payload) {
+		var it []any
+		var ok bool
+		it, ok = payload.([]any)
+		if !ok {
 			return false
 		}
-		me.__appzObjBagPullFromPeer__()(func() {
-			if (nil != onret) {
-				onret()
-			}
-		})
+		if (2 != len(it)) || (nil == it[1]) {
+			return false
+		}
+		me.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(it[1])
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
@@ -3942,14 +3988,26 @@ func (me *OutputChannel) AppendLine(value string) func(func()) {
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
-		if (nil != payload) {
+		var it []any
+		var ok bool
+		it, ok = payload.([]any)
+		if !ok {
 			return false
 		}
-		me.__appzObjBagPullFromPeer__()(func() {
-			if (nil != onret) {
-				onret()
-			}
-		})
+		if (2 != len(it)) || (nil == it[1]) {
+			return false
+		}
+		me.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(it[1])
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
@@ -3970,14 +4028,26 @@ func (me *OutputChannel) Clear() func(func()) {
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
-		if (nil != payload) {
+		var it []any
+		var ok bool
+		it, ok = payload.([]any)
+		if !ok {
 			return false
 		}
-		me.__appzObjBagPullFromPeer__()(func() {
-			if (nil != onret) {
-				onret()
-			}
-		})
+		if (2 != len(it)) || (nil == it[1]) {
+			return false
+		}
+		me.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(it[1])
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
@@ -4001,14 +4071,26 @@ func (me *OutputChannel) Show(preserveFocus bool) func(func()) {
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
-		if (nil != payload) {
+		var it []any
+		var ok bool
+		it, ok = payload.([]any)
+		if !ok {
 			return false
 		}
-		me.__appzObjBagPullFromPeer__()(func() {
-			if (nil != onret) {
-				onret()
-			}
-		})
+		if (2 != len(it)) || (nil == it[1]) {
+			return false
+		}
+		me.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(it[1])
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
@@ -4029,14 +4111,26 @@ func (me *OutputChannel) Hide() func(func()) {
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
-		if (nil != payload) {
+		var it []any
+		var ok bool
+		it, ok = payload.([]any)
+		if !ok {
 			return false
 		}
-		me.__appzObjBagPullFromPeer__()(func() {
-			if (nil != onret) {
-				onret()
-			}
-		})
+		if (2 != len(it)) || (nil == it[1]) {
+			return false
+		}
+		me.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(it[1])
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
@@ -4069,7 +4163,11 @@ func (me *OutputChannel) __appzObjBagPullFromPeer__() func(func()) {
 			me.CfgBag = new(OutputChannelBag)
 		}
 		me.CfgBag.__holder__ = me
-		ok = me.CfgBag.loadFromJsonish(payload)
+		me.CfgBag.__holder__.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(payload)
+		}
+		me.CfgBag.__holder__.__disp__.impl.Unlock()
 		if !ok {
 			return false
 		}
@@ -4108,7 +4206,11 @@ func (me *TextEditorDecorationType) __appzObjBagPullFromPeer__() func(func()) {
 			me.CfgBag = new(TextEditorDecorationTypeBag)
 		}
 		me.CfgBag.__holder__ = me
-		ok = me.CfgBag.loadFromJsonish(payload)
+		me.CfgBag.__holder__.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(payload)
+		}
+		me.CfgBag.__holder__.__disp__.impl.Unlock()
 		if !ok {
 			return false
 		}
@@ -4128,7 +4230,7 @@ func (me *TextEditorDecorationType) __appzObjBagPullFromPeer__() func(func()) {
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
-func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxBag)) func(func(*Disposable)) {
+func (me *InputBox) OnDidChangeValue(handler func(string)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.onDidChangeValue"
@@ -4149,12 +4251,17 @@ func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxBag)) func(fun
 		if !ok {
 			return false
 		}
-		var _a_1_ InputBoxBag
-		ok = _a_1_.loadFromJsonish(args[1])
-		if !ok {
-			return false
+		{
+			me.__disp__.impl.Lock()
+			{
+				ok = me.CfgBag.loadFromJsonish(args[1])
+			}
+			me.__disp__.impl.Unlock()
+			if !ok {
+				return false
+			}
+			handler(_a_0_)
 		}
-		handler(_a_0_, _a_1_)
 		return true
 	}, nil)
 	msg.Data["handler"] = handlerFnId
@@ -4189,7 +4296,7 @@ func (me *InputBox) OnDidChangeValue(handler func(string, InputBoxBag)) func(fun
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
-func (me *InputBox) OnDidAccept(handler func(InputBoxBag)) func(func(*Disposable)) {
+func (me *InputBox) OnDidAccept(handler func()) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.onDidAccept"
@@ -4205,12 +4312,17 @@ func (me *InputBox) OnDidAccept(handler func(InputBoxBag)) func(func(*Disposable
 		if 1 != len(args) {
 			return ok
 		}
-		var _a_0_ InputBoxBag
-		ok = _a_0_.loadFromJsonish(args[0])
-		if !ok {
-			return false
+		{
+			me.__disp__.impl.Lock()
+			{
+				ok = me.CfgBag.loadFromJsonish(args[0])
+			}
+			me.__disp__.impl.Unlock()
+			if !ok {
+				return false
+			}
+			handler()
 		}
-		handler(_a_0_)
 		return true
 	}, nil)
 	msg.Data["handler"] = handlerFnId
@@ -4253,14 +4365,26 @@ func (me *InputBox) Show() func(func()) {
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
-		if (nil != payload) {
+		var it []any
+		var ok bool
+		it, ok = payload.([]any)
+		if !ok {
 			return false
 		}
-		me.__appzObjBagPullFromPeer__()(func() {
-			if (nil != onret) {
-				onret()
-			}
-		})
+		if (2 != len(it)) || (nil == it[1]) {
+			return false
+		}
+		me.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(it[1])
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
@@ -4282,14 +4406,26 @@ func (me *InputBox) Hide() func(func()) {
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
-		if (nil != payload) {
+		var it []any
+		var ok bool
+		it, ok = payload.([]any)
+		if !ok {
 			return false
 		}
-		me.__appzObjBagPullFromPeer__()(func() {
-			if (nil != onret) {
-				onret()
-			}
-		})
+		if (2 != len(it)) || (nil == it[1]) {
+			return false
+		}
+		me.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(it[1])
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
@@ -4308,7 +4444,7 @@ func (me *InputBox) Hide() func(func()) {
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
-func (me *InputBox) OnDidHide(handler func(InputBoxBag)) func(func(*Disposable)) {
+func (me *InputBox) OnDidHide(handler func()) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.onDidHide"
@@ -4324,12 +4460,17 @@ func (me *InputBox) OnDidHide(handler func(InputBoxBag)) func(func(*Disposable))
 		if 1 != len(args) {
 			return ok
 		}
-		var _a_0_ InputBoxBag
-		ok = _a_0_.loadFromJsonish(args[0])
-		if !ok {
-			return false
+		{
+			me.__disp__.impl.Lock()
+			{
+				ok = me.CfgBag.loadFromJsonish(args[0])
+			}
+			me.__disp__.impl.Unlock()
+			if !ok {
+				return false
+			}
+			handler()
 		}
-		handler(_a_0_)
 		return true
 	}, nil)
 	msg.Data["handler"] = handlerFnId
@@ -4386,7 +4527,11 @@ func (me *InputBox) __appzObjBagPullFromPeer__() func(func()) {
 			me.CfgBag = new(InputBoxBag)
 		}
 		me.CfgBag.__holder__ = me
-		ok = me.CfgBag.loadFromJsonish(payload)
+		me.CfgBag.__holder__.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(payload)
+		}
+		me.CfgBag.__holder__.__disp__.impl.Unlock()
 		if !ok {
 			return false
 		}
@@ -4416,7 +4561,13 @@ func (me *InputBox) __appzObjBagPushToPeer_(allUpdates *InputBoxBag) func(func()
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
-		if (nil != payload) {
+		var ok bool
+		me.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(payload)
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
 			return false
 		}
 		if (nil != onret) {
@@ -4435,7 +4586,7 @@ func (me *InputBox) __appzObjBagPushToPeer_(allUpdates *InputBoxBag) func(func()
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
-func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickBag)) func(func(*Disposable)) {
+func (me *QuickPick) OnDidChangeValue(handler func(string)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidChangeValue"
@@ -4456,12 +4607,17 @@ func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickBag)) func(f
 		if !ok {
 			return false
 		}
-		var _a_1_ QuickPickBag
-		ok = _a_1_.loadFromJsonish(args[1])
-		if !ok {
-			return false
+		{
+			me.__disp__.impl.Lock()
+			{
+				ok = me.CfgBag.loadFromJsonish(args[1])
+			}
+			me.__disp__.impl.Unlock()
+			if !ok {
+				return false
+			}
+			handler(_a_0_)
 		}
-		handler(_a_0_, _a_1_)
 		return true
 	}, nil)
 	msg.Data["handler"] = handlerFnId
@@ -4496,7 +4652,7 @@ func (me *QuickPick) OnDidChangeValue(handler func(string, QuickPickBag)) func(f
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
-func (me *QuickPick) OnDidAccept(handler func(QuickPickBag)) func(func(*Disposable)) {
+func (me *QuickPick) OnDidAccept(handler func()) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidAccept"
@@ -4512,12 +4668,17 @@ func (me *QuickPick) OnDidAccept(handler func(QuickPickBag)) func(func(*Disposab
 		if 1 != len(args) {
 			return ok
 		}
-		var _a_0_ QuickPickBag
-		ok = _a_0_.loadFromJsonish(args[0])
-		if !ok {
-			return false
+		{
+			me.__disp__.impl.Lock()
+			{
+				ok = me.CfgBag.loadFromJsonish(args[0])
+			}
+			me.__disp__.impl.Unlock()
+			if !ok {
+				return false
+			}
+			handler()
 		}
-		handler(_a_0_)
 		return true
 	}, nil)
 	msg.Data["handler"] = handlerFnId
@@ -4552,7 +4713,7 @@ func (me *QuickPick) OnDidAccept(handler func(QuickPickBag)) func(func(*Disposab
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.
-func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickBag)) func(func(*Disposable)) {
+func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidChangeActive"
@@ -4586,12 +4747,17 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickBa
 			_a_0_[__idx___a_0_] = __val___a_0_
 			__idx___a_0_ = __idx___a_0_ + 1
 		}
-		var _a_1_ QuickPickBag
-		ok = _a_1_.loadFromJsonish(args[1])
-		if !ok {
-			return false
+		{
+			me.__disp__.impl.Lock()
+			{
+				ok = me.CfgBag.loadFromJsonish(args[1])
+			}
+			me.__disp__.impl.Unlock()
+			if !ok {
+				return false
+			}
+			handler(_a_0_)
 		}
-		handler(_a_0_, _a_1_)
 		return true
 	}, nil)
 	msg.Data["handler"] = handlerFnId
@@ -4626,7 +4792,7 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem, QuickPickBa
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.
-func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPickBag)) func(func(*Disposable)) {
+func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem)) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidChangeSelection"
@@ -4660,12 +4826,17 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem, QuickPic
 			_a_0_[__idx___a_0_] = __val___a_0_
 			__idx___a_0_ = __idx___a_0_ + 1
 		}
-		var _a_1_ QuickPickBag
-		ok = _a_1_.loadFromJsonish(args[1])
-		if !ok {
-			return false
+		{
+			me.__disp__.impl.Lock()
+			{
+				ok = me.CfgBag.loadFromJsonish(args[1])
+			}
+			me.__disp__.impl.Unlock()
+			if !ok {
+				return false
+			}
+			handler(_a_0_)
 		}
-		handler(_a_0_, _a_1_)
 		return true
 	}, nil)
 	msg.Data["handler"] = handlerFnId
@@ -4708,14 +4879,26 @@ func (me *QuickPick) Show() func(func()) {
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
-		if (nil != payload) {
+		var it []any
+		var ok bool
+		it, ok = payload.([]any)
+		if !ok {
 			return false
 		}
-		me.__appzObjBagPullFromPeer__()(func() {
-			if (nil != onret) {
-				onret()
-			}
-		})
+		if (2 != len(it)) || (nil == it[1]) {
+			return false
+		}
+		me.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(it[1])
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
@@ -4737,14 +4920,26 @@ func (me *QuickPick) Hide() func(func()) {
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
-		if (nil != payload) {
+		var it []any
+		var ok bool
+		it, ok = payload.([]any)
+		if !ok {
 			return false
 		}
-		me.__appzObjBagPullFromPeer__()(func() {
-			if (nil != onret) {
-				onret()
-			}
-		})
+		if (2 != len(it)) || (nil == it[1]) {
+			return false
+		}
+		me.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(it[1])
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
+			return false
+		}
+		if (nil != onret) {
+			onret()
+		}
 		return true
 	}
 	me.__disp__.impl.send(msg, onresp)
@@ -4763,7 +4958,7 @@ func (me *QuickPick) Hide() func(func()) {
 // `handler` ── will be invoked whenever this event fires; mandatory, not optional.
 // 
 // `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
-func (me *QuickPick) OnDidHide(handler func(QuickPickBag)) func(func(*Disposable)) {
+func (me *QuickPick) OnDidHide(handler func()) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.onDidHide"
@@ -4779,12 +4974,17 @@ func (me *QuickPick) OnDidHide(handler func(QuickPickBag)) func(func(*Disposable
 		if 1 != len(args) {
 			return ok
 		}
-		var _a_0_ QuickPickBag
-		ok = _a_0_.loadFromJsonish(args[0])
-		if !ok {
-			return false
+		{
+			me.__disp__.impl.Lock()
+			{
+				ok = me.CfgBag.loadFromJsonish(args[0])
+			}
+			me.__disp__.impl.Unlock()
+			if !ok {
+				return false
+			}
+			handler()
 		}
-		handler(_a_0_)
 		return true
 	}, nil)
 	msg.Data["handler"] = handlerFnId
@@ -4841,7 +5041,11 @@ func (me *QuickPick) __appzObjBagPullFromPeer__() func(func()) {
 			me.CfgBag = new(QuickPickBag)
 		}
 		me.CfgBag.__holder__ = me
-		ok = me.CfgBag.loadFromJsonish(payload)
+		me.CfgBag.__holder__.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(payload)
+		}
+		me.CfgBag.__holder__.__disp__.impl.Unlock()
 		if !ok {
 			return false
 		}
@@ -4871,7 +5075,13 @@ func (me *QuickPick) __appzObjBagPushToPeer_(allUpdates *QuickPickBag) func(func
 	var onresp func(any) bool
 	var onret func()
 	onresp = func(payload any) bool {
-		if (nil != payload) {
+		var ok bool
+		me.__disp__.impl.Lock()
+		{
+			ok = me.CfgBag.loadFromJsonish(payload)
+		}
+		me.__disp__.impl.Unlock()
+		if !ok {
 			return false
 		}
 		if (nil != onret) {

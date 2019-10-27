@@ -127,13 +127,13 @@
 - [InputBox](#T-VscAppz-InputBox 'VscAppz.InputBox')
   - [CfgBag](#F-VscAppz-InputBox-CfgBag 'VscAppz.InputBox.CfgBag')
   - [Dispose()](#M-VscAppz-InputBox-Dispose 'VscAppz.InputBox.Dispose')
-  - [Get()](#M-VscAppz-InputBox-Get 'VscAppz.InputBox.Get')
   - [Hide()](#M-VscAppz-InputBox-Hide 'VscAppz.InputBox.Hide')
-  - [OnDidAccept(handler)](#M-VscAppz-InputBox-OnDidAccept-System-Action{VscAppz-InputBoxBag}- 'VscAppz.InputBox.OnDidAccept(System.Action{VscAppz.InputBoxBag})')
-  - [OnDidChangeValue(handler)](#M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String,VscAppz-InputBoxBag}- 'VscAppz.InputBox.OnDidChangeValue(System.Action{System.String,VscAppz.InputBoxBag})')
-  - [OnDidHide(handler)](#M-VscAppz-InputBox-OnDidHide-System-Action{VscAppz-InputBoxBag}- 'VscAppz.InputBox.OnDidHide(System.Action{VscAppz.InputBoxBag})')
-  - [Set(allUpdates)](#M-VscAppz-InputBox-Set-VscAppz-InputBoxBag- 'VscAppz.InputBox.Set(VscAppz.InputBoxBag)')
+  - [OnDidAccept(handler)](#M-VscAppz-InputBox-OnDidAccept-System-Action- 'VscAppz.InputBox.OnDidAccept(System.Action)')
+  - [OnDidChangeValue(handler)](#M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String}- 'VscAppz.InputBox.OnDidChangeValue(System.Action{System.String})')
+  - [OnDidHide(handler)](#M-VscAppz-InputBox-OnDidHide-System-Action- 'VscAppz.InputBox.OnDidHide(System.Action)')
   - [Show()](#M-VscAppz-InputBox-Show 'VscAppz.InputBox.Show')
+  - [__appzObjBagPullFromPeer__()](#M-VscAppz-InputBox-__appzObjBagPullFromPeer__ 'VscAppz.InputBox.__appzObjBagPullFromPeer__')
+  - [__appzObjBagPushToPeer_(allUpdates)](#M-VscAppz-InputBox-__appzObjBagPushToPeer_-VscAppz-InputBoxBag- 'VscAppz.InputBox.__appzObjBagPushToPeer_(VscAppz.InputBoxBag)')
 - [InputBoxBag](#T-VscAppz-InputBoxBag 'VscAppz.InputBoxBag')
   - [Busy](#F-VscAppz-InputBoxBag-Busy 'VscAppz.InputBoxBag.Busy')
   - [Enabled](#F-VscAppz-InputBoxBag-Enabled 'VscAppz.InputBoxBag.Enabled')
@@ -146,6 +146,8 @@
   - [TotalSteps](#F-VscAppz-InputBoxBag-TotalSteps 'VscAppz.InputBoxBag.TotalSteps')
   - [ValidationMessage](#F-VscAppz-InputBoxBag-ValidationMessage 'VscAppz.InputBoxBag.ValidationMessage')
   - [Value](#F-VscAppz-InputBoxBag-Value 'VscAppz.InputBoxBag.Value')
+  - [ApplyChanges()](#M-VscAppz-InputBoxBag-ApplyChanges 'VscAppz.InputBoxBag.ApplyChanges')
+  - [ReFetch()](#M-VscAppz-InputBoxBag-ReFetch 'VscAppz.InputBoxBag.ReFetch')
 - [InputBoxOptions](#T-VscAppz-InputBoxOptions 'VscAppz.InputBoxOptions')
   - [IgnoreFocusOut](#F-VscAppz-InputBoxOptions-IgnoreFocusOut 'VscAppz.InputBoxOptions.IgnoreFocusOut')
   - [Password](#F-VscAppz-InputBoxOptions-Password 'VscAppz.InputBoxOptions.Password')
@@ -174,11 +176,12 @@
   - [AppendLine(value)](#M-VscAppz-OutputChannel-AppendLine-System-String- 'VscAppz.OutputChannel.AppendLine(System.String)')
   - [Clear()](#M-VscAppz-OutputChannel-Clear 'VscAppz.OutputChannel.Clear')
   - [Dispose()](#M-VscAppz-OutputChannel-Dispose 'VscAppz.OutputChannel.Dispose')
-  - [Get()](#M-VscAppz-OutputChannel-Get 'VscAppz.OutputChannel.Get')
   - [Hide()](#M-VscAppz-OutputChannel-Hide 'VscAppz.OutputChannel.Hide')
   - [Show(preserveFocus)](#M-VscAppz-OutputChannel-Show-System-Boolean- 'VscAppz.OutputChannel.Show(System.Boolean)')
+  - [__appzObjBagPullFromPeer__()](#M-VscAppz-OutputChannel-__appzObjBagPullFromPeer__ 'VscAppz.OutputChannel.__appzObjBagPullFromPeer__')
 - [OutputChannelBag](#T-VscAppz-OutputChannelBag 'VscAppz.OutputChannelBag')
   - [Name](#F-VscAppz-OutputChannelBag-Name 'VscAppz.OutputChannelBag.Name')
+  - [ReFetch()](#M-VscAppz-OutputChannelBag-ReFetch 'VscAppz.OutputChannelBag.ReFetch')
 - [OverviewRulerLane](#T-VscAppz-OverviewRulerLane 'VscAppz.OverviewRulerLane')
   - [Center](#F-VscAppz-OverviewRulerLane-Center 'VscAppz.OverviewRulerLane.Center')
   - [Full](#F-VscAppz-OverviewRulerLane-Full 'VscAppz.OverviewRulerLane.Full')
@@ -190,15 +193,15 @@
 - [QuickPick](#T-VscAppz-QuickPick 'VscAppz.QuickPick')
   - [CfgBag](#F-VscAppz-QuickPick-CfgBag 'VscAppz.QuickPick.CfgBag')
   - [Dispose()](#M-VscAppz-QuickPick-Dispose 'VscAppz.QuickPick.Dispose')
-  - [Get()](#M-VscAppz-QuickPick-Get 'VscAppz.QuickPick.Get')
   - [Hide()](#M-VscAppz-QuickPick-Hide 'VscAppz.QuickPick.Hide')
-  - [OnDidAccept(handler)](#M-VscAppz-QuickPick-OnDidAccept-System-Action{VscAppz-QuickPickBag}- 'VscAppz.QuickPick.OnDidAccept(System.Action{VscAppz.QuickPickBag})')
-  - [OnDidChangeActive(handler)](#M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickBag}- 'VscAppz.QuickPick.OnDidChangeActive(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickBag})')
-  - [OnDidChangeSelection(handler)](#M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickBag}- 'VscAppz.QuickPick.OnDidChangeSelection(System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickBag})')
-  - [OnDidChangeValue(handler)](#M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String,VscAppz-QuickPickBag}- 'VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String,VscAppz.QuickPickBag})')
-  - [OnDidHide(handler)](#M-VscAppz-QuickPick-OnDidHide-System-Action{VscAppz-QuickPickBag}- 'VscAppz.QuickPick.OnDidHide(System.Action{VscAppz.QuickPickBag})')
-  - [Set(allUpdates)](#M-VscAppz-QuickPick-Set-VscAppz-QuickPickBag- 'VscAppz.QuickPick.Set(VscAppz.QuickPickBag)')
+  - [OnDidAccept(handler)](#M-VscAppz-QuickPick-OnDidAccept-System-Action- 'VscAppz.QuickPick.OnDidAccept(System.Action)')
+  - [OnDidChangeActive(handler)](#M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[]}- 'VscAppz.QuickPick.OnDidChangeActive(System.Action{VscAppz.QuickPickItem[]})')
+  - [OnDidChangeSelection(handler)](#M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[]}- 'VscAppz.QuickPick.OnDidChangeSelection(System.Action{VscAppz.QuickPickItem[]})')
+  - [OnDidChangeValue(handler)](#M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String}- 'VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String})')
+  - [OnDidHide(handler)](#M-VscAppz-QuickPick-OnDidHide-System-Action- 'VscAppz.QuickPick.OnDidHide(System.Action)')
   - [Show()](#M-VscAppz-QuickPick-Show 'VscAppz.QuickPick.Show')
+  - [__appzObjBagPullFromPeer__()](#M-VscAppz-QuickPick-__appzObjBagPullFromPeer__ 'VscAppz.QuickPick.__appzObjBagPullFromPeer__')
+  - [__appzObjBagPushToPeer_(allUpdates)](#M-VscAppz-QuickPick-__appzObjBagPushToPeer_-VscAppz-QuickPickBag- 'VscAppz.QuickPick.__appzObjBagPushToPeer_(VscAppz.QuickPickBag)')
 - [QuickPickBag](#T-VscAppz-QuickPickBag 'VscAppz.QuickPickBag')
   - [ActiveItems](#F-VscAppz-QuickPickBag-ActiveItems 'VscAppz.QuickPickBag.ActiveItems')
   - [Busy](#F-VscAppz-QuickPickBag-Busy 'VscAppz.QuickPickBag.Busy')
@@ -214,6 +217,8 @@
   - [Title](#F-VscAppz-QuickPickBag-Title 'VscAppz.QuickPickBag.Title')
   - [TotalSteps](#F-VscAppz-QuickPickBag-TotalSteps 'VscAppz.QuickPickBag.TotalSteps')
   - [Value](#F-VscAppz-QuickPickBag-Value 'VscAppz.QuickPickBag.Value')
+  - [ApplyChanges()](#M-VscAppz-QuickPickBag-ApplyChanges 'VscAppz.QuickPickBag.ApplyChanges')
+  - [ReFetch()](#M-VscAppz-QuickPickBag-ReFetch 'VscAppz.QuickPickBag.ReFetch')
 - [QuickPickItem](#T-VscAppz-QuickPickItem 'VscAppz.QuickPickItem')
   - [AlwaysShow](#F-VscAppz-QuickPickItem-AlwaysShow 'VscAppz.QuickPickItem.AlwaysShow')
   - [Description](#F-VscAppz-QuickPickItem-Description 'VscAppz.QuickPickItem.Description')
@@ -239,10 +244,10 @@
 - [StatusBarItem](#T-VscAppz-StatusBarItem 'VscAppz.StatusBarItem')
   - [CfgBag](#F-VscAppz-StatusBarItem-CfgBag 'VscAppz.StatusBarItem.CfgBag')
   - [Dispose()](#M-VscAppz-StatusBarItem-Dispose 'VscAppz.StatusBarItem.Dispose')
-  - [Get()](#M-VscAppz-StatusBarItem-Get 'VscAppz.StatusBarItem.Get')
   - [Hide()](#M-VscAppz-StatusBarItem-Hide 'VscAppz.StatusBarItem.Hide')
-  - [Set(allUpdates)](#M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemBag- 'VscAppz.StatusBarItem.Set(VscAppz.StatusBarItemBag)')
   - [Show()](#M-VscAppz-StatusBarItem-Show 'VscAppz.StatusBarItem.Show')
+  - [__appzObjBagPullFromPeer__()](#M-VscAppz-StatusBarItem-__appzObjBagPullFromPeer__ 'VscAppz.StatusBarItem.__appzObjBagPullFromPeer__')
+  - [__appzObjBagPushToPeer_(allUpdates)](#M-VscAppz-StatusBarItem-__appzObjBagPushToPeer_-VscAppz-StatusBarItemBag- 'VscAppz.StatusBarItem.__appzObjBagPushToPeer_(VscAppz.StatusBarItemBag)')
 - [StatusBarItemBag](#T-VscAppz-StatusBarItemBag 'VscAppz.StatusBarItemBag')
   - [Alignment](#F-VscAppz-StatusBarItemBag-Alignment 'VscAppz.StatusBarItemBag.Alignment')
   - [Color](#F-VscAppz-StatusBarItemBag-Color 'VscAppz.StatusBarItemBag.Color')
@@ -250,12 +255,15 @@
   - [Priority](#F-VscAppz-StatusBarItemBag-Priority 'VscAppz.StatusBarItemBag.Priority')
   - [Text](#F-VscAppz-StatusBarItemBag-Text 'VscAppz.StatusBarItemBag.Text')
   - [Tooltip](#F-VscAppz-StatusBarItemBag-Tooltip 'VscAppz.StatusBarItemBag.Tooltip')
+  - [ApplyChanges()](#M-VscAppz-StatusBarItemBag-ApplyChanges 'VscAppz.StatusBarItemBag.ApplyChanges')
+  - [ReFetch()](#M-VscAppz-StatusBarItemBag-ReFetch 'VscAppz.StatusBarItemBag.ReFetch')
 - [TextEditorDecorationType](#T-VscAppz-TextEditorDecorationType 'VscAppz.TextEditorDecorationType')
   - [CfgBag](#F-VscAppz-TextEditorDecorationType-CfgBag 'VscAppz.TextEditorDecorationType.CfgBag')
   - [Dispose()](#M-VscAppz-TextEditorDecorationType-Dispose 'VscAppz.TextEditorDecorationType.Dispose')
-  - [Get()](#M-VscAppz-TextEditorDecorationType-Get 'VscAppz.TextEditorDecorationType.Get')
+  - [__appzObjBagPullFromPeer__()](#M-VscAppz-TextEditorDecorationType-__appzObjBagPullFromPeer__ 'VscAppz.TextEditorDecorationType.__appzObjBagPullFromPeer__')
 - [TextEditorDecorationTypeBag](#T-VscAppz-TextEditorDecorationTypeBag 'VscAppz.TextEditorDecorationTypeBag')
   - [Key](#F-VscAppz-TextEditorDecorationTypeBag-Key 'VscAppz.TextEditorDecorationTypeBag.Key')
+  - [ReFetch()](#M-VscAppz-TextEditorDecorationTypeBag-ReFetch 'VscAppz.TextEditorDecorationTypeBag.ReFetch')
 - [ThemableDecorationAttachmentRenderOptions](#T-VscAppz-ThemableDecorationAttachmentRenderOptions 'VscAppz.ThemableDecorationAttachmentRenderOptions')
   - [BackgroundColor](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-BackgroundColor 'VscAppz.ThemableDecorationAttachmentRenderOptions.BackgroundColor')
   - [Border](#F-VscAppz-ThemableDecorationAttachmentRenderOptions-Border 'VscAppz.ThemableDecorationAttachmentRenderOptions.Border')
@@ -2191,7 +2199,7 @@ when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-a
 
 ##### Summary
 
-CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 
 <a name='M-VscAppz-InputBox-Dispose'></a>
 ### Dispose() `method`
@@ -2209,19 +2217,6 @@ accessed. Instead a new input UI should be created.
 
 This method has no parameters.
 
-<a name='M-VscAppz-InputBox-Get'></a>
-### Get() `method`
-
-##### Summary
-
-Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
-
-##### Parameters
-
-This method has no parameters.
-
 <a name='M-VscAppz-InputBox-Hide'></a>
 ### Hide() `method`
 
@@ -2230,13 +2225,13 @@ This method has no parameters.
 Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
 This method has no parameters.
 
-<a name='M-VscAppz-InputBox-OnDidAccept-System-Action{VscAppz-InputBoxBag}-'></a>
+<a name='M-VscAppz-InputBox-OnDidAccept-System-Action-'></a>
 ### OnDidAccept(handler) `method`
 
 ##### Summary
@@ -2251,9 +2246,9 @@ An event signaling when the user indicated acceptance of the input value.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.InputBoxBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.InputBoxBag}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever this event fires; mandatory, not optional. |
 
-<a name='M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String,VscAppz-InputBoxBag}-'></a>
+<a name='M-VscAppz-InputBox-OnDidChangeValue-System-Action{System-String}-'></a>
 ### OnDidChangeValue(handler) `method`
 
 ##### Summary
@@ -2268,9 +2263,9 @@ An event signaling when the value has changed.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{System.String,VscAppz.InputBoxBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String,VscAppz.InputBoxBag}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | will be invoked whenever this event fires; mandatory, not optional. |
 
-<a name='M-VscAppz-InputBox-OnDidHide-System-Action{VscAppz-InputBoxBag}-'></a>
+<a name='M-VscAppz-InputBox-OnDidHide-System-Action-'></a>
 ### OnDidHide(handler) `method`
 
 ##### Summary
@@ -2290,24 +2285,7 @@ the user pressing Esc, some other input UI opening, etc.)
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.InputBoxBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.InputBoxBag}') | will be invoked whenever this event fires; mandatory, not optional. |
-
-<a name='M-VscAppz-InputBox-Set-VscAppz-InputBoxBag-'></a>
-### Set(allUpdates) `method`
-
-##### Summary
-
-Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-
-`allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
-
-`return` ── A thenable that resolves when this call has completed at the counterparty.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| allUpdates | [VscAppz.InputBoxBag](#T-VscAppz-InputBoxBag 'VscAppz.InputBoxBag') | be aware that **all** its fields are sent for update, no omissions. |
+| handler | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-InputBox-Show'></a>
 ### Show() `method`
@@ -2317,11 +2295,41 @@ Updates this `InputBox`'s current property values for: `value`, `placeholder`, `
 Makes the input UI visible in its current configuration. Any other input
 UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `InputBoxBag` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
 This method has no parameters.
+
+<a name='M-VscAppz-InputBox-__appzObjBagPullFromPeer__'></a>
+### __appzObjBagPullFromPeer__() `method`
+
+##### Summary
+
+Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-InputBox-__appzObjBagPushToPeer_-VscAppz-InputBoxBag-'></a>
+### __appzObjBagPushToPeer_(allUpdates) `method`
+
+##### Summary
+
+Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+
+`allUpdates` ── 
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| allUpdates | [VscAppz.InputBoxBag](#T-VscAppz-InputBoxBag 'VscAppz.InputBoxBag') |  |
 
 <a name='T-VscAppz-InputBoxBag'></a>
 ## InputBoxBag `type`
@@ -2416,6 +2424,32 @@ An optional validation message indicating a problem with the current input value
 ##### Summary
 
 Current input value.
+
+<a name='M-VscAppz-InputBoxBag-ApplyChanges'></a>
+### ApplyChanges() `method`
+
+##### Summary
+
+setter docs
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-InputBoxBag-ReFetch'></a>
+### ReFetch() `method`
+
+##### Summary
+
+getter docs
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='T-VscAppz-InputBoxOptions'></a>
 ## InputBoxOptions `type`
@@ -2635,7 +2669,7 @@ To get an instance of an `OutputChannel` use
 
 ##### Summary
 
-CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
+CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
 
 <a name='M-VscAppz-OutputChannel-Append-System-String-'></a>
 ### Append(value) `method`
@@ -2646,7 +2680,7 @@ Append the given value to the channel.
 
 `value` ── A string, falsy values will not be printed.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -2664,7 +2698,7 @@ to the channel.
 
 `value` ── A string, falsy values will be printed.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -2679,7 +2713,7 @@ to the channel.
 
 Removes all output from the channel.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -2698,19 +2732,6 @@ Dispose and free associated resources.
 
 This method has no parameters.
 
-<a name='M-VscAppz-OutputChannel-Get'></a>
-### Get() `method`
-
-##### Summary
-
-Obtains this `OutputChannel`'s current property value for: `name`.
-
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
-
-##### Parameters
-
-This method has no parameters.
-
 <a name='M-VscAppz-OutputChannel-Hide'></a>
 ### Hide() `method`
 
@@ -2718,7 +2739,7 @@ This method has no parameters.
 
 Hide this channel from the UI.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -2733,13 +2754,26 @@ Reveal this channel in the UI.
 
 `preserveFocus` ── When `true` the channel will not take focus.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `OutputChannelBag` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | preserveFocus | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | When `true` the channel will not take focus. |
+
+<a name='M-VscAppz-OutputChannel-__appzObjBagPullFromPeer__'></a>
+### __appzObjBagPullFromPeer__() `method`
+
+##### Summary
+
+Obtains this `OutputChannel`'s current property value for: `name`.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='T-VscAppz-OutputChannelBag'></a>
 ## OutputChannelBag `type`
@@ -2758,6 +2792,19 @@ OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty.
 ##### Summary
 
 The human-readable name of this output channel.
+
+<a name='M-VscAppz-OutputChannelBag-ReFetch'></a>
+### ReFetch() `method`
+
+##### Summary
+
+getter docs
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='T-VscAppz-OverviewRulerLane'></a>
 ## OverviewRulerLane `type`
@@ -2851,7 +2898,7 @@ when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-
 
 ##### Summary
 
-CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 
 <a name='M-VscAppz-QuickPick-Dispose'></a>
 ### Dispose() `method`
@@ -2869,19 +2916,6 @@ accessed. Instead a new input UI should be created.
 
 This method has no parameters.
 
-<a name='M-VscAppz-QuickPick-Get'></a>
-### Get() `method`
-
-##### Summary
-
-Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
-
-##### Parameters
-
-This method has no parameters.
-
 <a name='M-VscAppz-QuickPick-Hide'></a>
 ### Hide() `method`
 
@@ -2890,13 +2924,13 @@ This method has no parameters.
 Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
 This method has no parameters.
 
-<a name='M-VscAppz-QuickPick-OnDidAccept-System-Action{VscAppz-QuickPickBag}-'></a>
+<a name='M-VscAppz-QuickPick-OnDidAccept-System-Action-'></a>
 ### OnDidAccept(handler) `method`
 
 ##### Summary
@@ -2911,9 +2945,9 @@ An event signaling when the user indicated acceptance of the selected item(s).
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickPickBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickBag}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever this event fires; mandatory, not optional. |
 
-<a name='M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickBag}-'></a>
+<a name='M-VscAppz-QuickPick-OnDidChangeActive-System-Action{VscAppz-QuickPickItem[]}-'></a>
 ### OnDidChangeActive(handler) `method`
 
 ##### Summary
@@ -2928,9 +2962,9 @@ An event signaling when the active items have changed.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickBag}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.QuickPickItem[]}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[]}') | will be invoked whenever this event fires; mandatory, not optional. |
 
-<a name='M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[],VscAppz-QuickPickBag}-'></a>
+<a name='M-VscAppz-QuickPick-OnDidChangeSelection-System-Action{VscAppz-QuickPickItem[]}-'></a>
 ### OnDidChangeSelection(handler) `method`
 
 ##### Summary
@@ -2945,9 +2979,9 @@ An event signaling when the selected items have changed.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[],VscAppz.QuickPickBag}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{VscAppz.QuickPickItem[]}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickItem[]}') | will be invoked whenever this event fires; mandatory, not optional. |
 
-<a name='M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String,VscAppz-QuickPickBag}-'></a>
+<a name='M-VscAppz-QuickPick-OnDidChangeValue-System-Action{System-String}-'></a>
 ### OnDidChangeValue(handler) `method`
 
 ##### Summary
@@ -2962,9 +2996,9 @@ An event signaling when the value of the filter text has changed.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{System.String,VscAppz.QuickPickBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String,VscAppz.QuickPickBag}') | will be invoked whenever this event fires; mandatory, not optional. |
+| handler | [System.Action{System.String}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{System.String}') | will be invoked whenever this event fires; mandatory, not optional. |
 
-<a name='M-VscAppz-QuickPick-OnDidHide-System-Action{VscAppz-QuickPickBag}-'></a>
+<a name='M-VscAppz-QuickPick-OnDidHide-System-Action-'></a>
 ### OnDidHide(handler) `method`
 
 ##### Summary
@@ -2984,24 +3018,7 @@ the user pressing Esc, some other input UI opening, etc.)
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| handler | [System.Action{VscAppz.QuickPickBag}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.QuickPickBag}') | will be invoked whenever this event fires; mandatory, not optional. |
-
-<a name='M-VscAppz-QuickPick-Set-VscAppz-QuickPickBag-'></a>
-### Set(allUpdates) `method`
-
-##### Summary
-
-Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
-
-`allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
-
-`return` ── A thenable that resolves when this call has completed at the counterparty.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| allUpdates | [VscAppz.QuickPickBag](#T-VscAppz-QuickPickBag 'VscAppz.QuickPickBag') | be aware that **all** its fields are sent for update, no omissions. |
+| handler | [System.Action](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action') | will be invoked whenever this event fires; mandatory, not optional. |
 
 <a name='M-VscAppz-QuickPick-Show'></a>
 ### Show() `method`
@@ -3011,11 +3028,41 @@ Updates this `QuickPick`'s current property values for: `value`, `placeholder`, 
 Makes the input UI visible in its current configuration. Any other input
 UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `QuickPickBag` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
 This method has no parameters.
+
+<a name='M-VscAppz-QuickPick-__appzObjBagPullFromPeer__'></a>
+### __appzObjBagPullFromPeer__() `method`
+
+##### Summary
+
+Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-QuickPick-__appzObjBagPushToPeer_-VscAppz-QuickPickBag-'></a>
+### __appzObjBagPushToPeer_(allUpdates) `method`
+
+##### Summary
+
+Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
+
+`allUpdates` ── 
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| allUpdates | [VscAppz.QuickPickBag](#T-VscAppz-QuickPickBag 'VscAppz.QuickPickBag') |  |
 
 <a name='T-VscAppz-QuickPickBag'></a>
 ## QuickPickBag `type`
@@ -3131,6 +3178,32 @@ An optional total step count.
 ##### Summary
 
 Current value of the filter text.
+
+<a name='M-VscAppz-QuickPickBag-ApplyChanges'></a>
+### ApplyChanges() `method`
+
+##### Summary
+
+setter docs
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-QuickPickBag-ReFetch'></a>
+### ReFetch() `method`
+
+##### Summary
+
+getter docs
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='T-VscAppz-QuickPickItem'></a>
 ## QuickPickItem `type`
@@ -3331,7 +3404,7 @@ show text and icons and run a command on click.
 
 ##### Summary
 
-CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 
 <a name='M-VscAppz-StatusBarItem-Dispose'></a>
 ### Dispose() `method`
@@ -3347,19 +3420,6 @@ Dispose and free associated resources. Call
 
 This method has no parameters.
 
-<a name='M-VscAppz-StatusBarItem-Get'></a>
-### Get() `method`
-
-##### Summary
-
-Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
-
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
-
-##### Parameters
-
-This method has no parameters.
-
 <a name='M-VscAppz-StatusBarItem-Hide'></a>
 ### Hide() `method`
 
@@ -3367,28 +3427,11 @@ This method has no parameters.
 
 Hide the entry in the status bar.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
-
-##### Parameters
-
-This method has no parameters.
-
-<a name='M-VscAppz-StatusBarItem-Set-VscAppz-StatusBarItemBag-'></a>
-### Set(allUpdates) `method`
-
-##### Summary
-
-Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
-
-`allUpdates` ── be aware that **all** its fields are sent for update, no omissions.
-
 `return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| allUpdates | [VscAppz.StatusBarItemBag](#T-VscAppz-StatusBarItemBag 'VscAppz.StatusBarItemBag') | be aware that **all** its fields are sent for update, no omissions. |
+This method has no parameters.
 
 <a name='M-VscAppz-StatusBarItem-Show'></a>
 ### Show() `method`
@@ -3397,11 +3440,41 @@ Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `
 
 Shows the entry in the status bar.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `StatusBarItemBag` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
 This method has no parameters.
+
+<a name='M-VscAppz-StatusBarItem-__appzObjBagPullFromPeer__'></a>
+### __appzObjBagPullFromPeer__() `method`
+
+##### Summary
+
+Obtains this `StatusBarItem`'s current property values for: `alignment`, `priority`, `text`, `tooltip`, `color`, `command`.
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-StatusBarItem-__appzObjBagPushToPeer_-VscAppz-StatusBarItemBag-'></a>
+### __appzObjBagPushToPeer_(allUpdates) `method`
+
+##### Summary
+
+Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
+
+`allUpdates` ── 
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| allUpdates | [VscAppz.StatusBarItemBag](#T-VscAppz-StatusBarItemBag 'VscAppz.StatusBarItemBag') |  |
 
 <a name='T-VscAppz-StatusBarItemBag'></a>
 ## StatusBarItemBag `type`
@@ -3463,6 +3536,32 @@ Where the icon-name is taken from the [octicon](https://octicons.github.com) ico
 
 The tooltip text when you hover over this entry.
 
+<a name='M-VscAppz-StatusBarItemBag-ApplyChanges'></a>
+### ApplyChanges() `method`
+
+##### Summary
+
+setter docs
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-VscAppz-StatusBarItemBag-ReFetch'></a>
+### ReFetch() `method`
+
+##### Summary
+
+getter docs
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+This method has no parameters.
+
 <a name='T-VscAppz-TextEditorDecorationType'></a>
 ## TextEditorDecorationType `type`
 
@@ -3483,7 +3582,7 @@ To get an instance of a `TextEditorDecorationType` use
 
 ##### Summary
 
-CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `Restore` method.
+CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
 
 <a name='M-VscAppz-TextEditorDecorationType-Dispose'></a>
 ### Dispose() `method`
@@ -3498,14 +3597,14 @@ Remove this decoration type and all decorations on all text editors using it.
 
 This method has no parameters.
 
-<a name='M-VscAppz-TextEditorDecorationType-Get'></a>
-### Get() `method`
+<a name='M-VscAppz-TextEditorDecorationType-__appzObjBagPullFromPeer__'></a>
+### __appzObjBagPullFromPeer__() `method`
 
 ##### Summary
 
 Obtains this `TextEditorDecorationType`'s current property value for: `key`.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `TextEditorDecorationTypeBag` result obtained.
+`return` ── A thenable that resolves when this call has completed at the counterparty.
 
 ##### Parameters
 
@@ -3528,6 +3627,19 @@ TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at
 ##### Summary
 
 Internal representation of the handle.
+
+<a name='M-VscAppz-TextEditorDecorationTypeBag-ReFetch'></a>
+### ReFetch() `method`
+
+##### Summary
+
+getter docs
+
+`return` ── A thenable that resolves when this call has completed at the counterparty.
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='T-VscAppz-ThemableDecorationAttachmentRenderOptions'></a>
 ## ThemableDecorationAttachmentRenderOptions `type`
