@@ -558,9 +558,9 @@ namespace VscAppz {
 		/// <summary>
 		/// Represents the current window's state.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
+		/// `return` ── a thenable that resolves when this `State` call has successfully completed at the VSC side and its `WindowState` result received back at our end.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.</return>
+		/// <return>a thenable that resolves when this `State` call has successfully completed at the VSC side and its `WindowState` result received back at our end.</return>
 		Action<Action<WindowState>> State();
 
 		/// <summary>
@@ -657,33 +657,33 @@ namespace VscAppz {
 		/// <summary>
 		/// The application name of the editor, like 'VS Code'.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+		/// `return` ── a thenable that resolves when this `AppName` call has successfully completed at the VSC side and its result received back at our end.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
+		/// <return>a thenable that resolves when this `AppName` call has successfully completed at the VSC side and its result received back at our end.</return>
 		Action<Action<string>> AppName();
 
 		/// <summary>
 		/// The application root folder from which the editor is running.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+		/// `return` ── a thenable that resolves when this `AppRoot` call has successfully completed at the VSC side and its result received back at our end.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
+		/// <return>a thenable that resolves when this `AppRoot` call has successfully completed at the VSC side and its result received back at our end.</return>
 		Action<Action<string>> AppRoot();
 
 		/// <summary>
 		/// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+		/// `return` ── a thenable that resolves when this `Language` call has successfully completed at the VSC side and its result received back at our end.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
+		/// <return>a thenable that resolves when this `Language` call has successfully completed at the VSC side and its result received back at our end.</return>
 		Action<Action<string>> Language();
 
 		/// <summary>
 		/// A unique identifier for the computer.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+		/// `return` ── a thenable that resolves when this `MachineId` call has successfully completed at the VSC side and its result received back at our end.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
+		/// <return>a thenable that resolves when this `MachineId` call has successfully completed at the VSC side and its result received back at our end.</return>
 		Action<Action<string>> MachineId();
 
 		/// <summary>
@@ -695,43 +695,43 @@ namespace VscAppz {
 		/// exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 		/// a specific extension runs remote or not.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+		/// `return` ── a thenable that resolves when this `RemoteName` call has successfully completed at the VSC side and its result received back at our end.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
+		/// <return>a thenable that resolves when this `RemoteName` call has successfully completed at the VSC side and its result received back at our end.</return>
 		Action<Action<string>> RemoteName();
 
 		/// <summary>
 		/// A unique identifier for the current session.
 		/// Changes each time the editor is started.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+		/// `return` ── a thenable that resolves when this `SessionId` call has successfully completed at the VSC side and its result received back at our end.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
+		/// <return>a thenable that resolves when this `SessionId` call has successfully completed at the VSC side and its result received back at our end.</return>
 		Action<Action<string>> SessionId();
 
 		/// <summary>
 		/// The detected default shell for the extension host, this is overridden by the
 		/// `terminal.integrated.shell` setting for the extension host's platform.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+		/// `return` ── a thenable that resolves when this `Shell` call has successfully completed at the VSC side and its result received back at our end.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
+		/// <return>a thenable that resolves when this `Shell` call has successfully completed at the VSC side and its result received back at our end.</return>
 		Action<Action<string>> Shell();
 
 		/// <summary>
 		/// The custom uri scheme the editor registers to in the operating system.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+		/// `return` ── a thenable that resolves when this `UriScheme` call has successfully completed at the VSC side and its result received back at our end.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
+		/// <return>a thenable that resolves when this `UriScheme` call has successfully completed at the VSC side and its result received back at our end.</return>
 		Action<Action<string>> UriScheme();
 
 		/// <summary>
 		/// Provides single-call access to numerous individual `IEnv` properties at once.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
+		/// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.</return>
+		/// <return>a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.</return>
 		Action<Action<EnvBag>> AllProperties();
 
 		/// <summary>The clipboard provides read and write access to the system's clipboard.</summary>
@@ -774,9 +774,9 @@ namespace VscAppz {
 		/// The name of the workspace. `undefined` when no folder
 		/// has been opened.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+		/// `return` ── a thenable that resolves when this `Name` call has successfully completed at the VSC side and its result received back at our end.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
+		/// <return>a thenable that resolves when this `Name` call has successfully completed at the VSC side and its result received back at our end.</return>
 		Action<Action<string>> Name();
 
 		/// <summary>
@@ -812,9 +812,9 @@ namespace VscAppz {
 		/// for that purpose which will work both when a single folder is opened as
 		/// well as an untitled or saved workspace.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+		/// `return` ── a thenable that resolves when this `WorkspaceFile` call has successfully completed at the VSC side and its result received back at our end.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
+		/// <return>a thenable that resolves when this `WorkspaceFile` call has successfully completed at the VSC side and its result received back at our end.</return>
 		Action<Action<string>> WorkspaceFile();
 
 		/// <summary>
@@ -856,9 +856,9 @@ namespace VscAppz {
 		/// List of workspace folders or `undefined` when no folder is open.
 		/// *Note* that the first entry corresponds to the value of `rootPath`.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+		/// `return` ── a thenable that resolves when this `WorkspaceFolders` call has successfully completed at the VSC side and its result received back at our end.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its result obtained.</return>
+		/// <return>a thenable that resolves when this `WorkspaceFolders` call has successfully completed at the VSC side and its result received back at our end.</return>
 		Action<Action<WorkspaceFolder[]>> WorkspaceFolders();
 
 		/// <summary>
@@ -909,9 +909,9 @@ namespace VscAppz {
 		/// <summary>
 		/// Provides single-call access to numerous individual `IWorkspace` properties at once.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
+		/// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.</return>
+		/// <return>a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.</return>
 		Action<Action<WorkspaceBag>> AllProperties();
 	}
 
@@ -1515,8 +1515,8 @@ namespace VscAppz {
 	public partial class StatusBarItem {
 		internal Disposable __disp__;
 
-		/// <summary>CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
-		public StatusBarItemBag CfgBag;
+		/// <summary>Bag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+		public StatusBarItemBag Bag;
 	}
 
 	/// <summary>
@@ -1528,8 +1528,8 @@ namespace VscAppz {
 	public partial class OutputChannel {
 		internal Disposable __disp__;
 
-		/// <summary>CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
-		public OutputChannelBag CfgBag;
+		/// <summary>Bag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
+		public OutputChannelBag Bag;
 	}
 
 	/// <summary>
@@ -1751,8 +1751,8 @@ namespace VscAppz {
 	public partial class TextEditorDecorationType {
 		internal Disposable __disp__;
 
-		/// <summary>CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
-		public TextEditorDecorationTypeBag CfgBag;
+		/// <summary>Bag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
+		public TextEditorDecorationTypeBag Bag;
 	}
 
 	/// <summary>
@@ -1765,8 +1765,8 @@ namespace VscAppz {
 	public partial class InputBox {
 		internal Disposable __disp__;
 
-		/// <summary>CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
-		public InputBoxBag CfgBag;
+		/// <summary>Bag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+		public InputBoxBag Bag;
 	}
 
 	/// <summary>Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).</summary>
@@ -1793,8 +1793,8 @@ namespace VscAppz {
 	public partial class QuickPick {
 		internal Disposable __disp__;
 
-		/// <summary>CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
-		public QuickPickBag CfgBag;
+		/// <summary>Bag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+		public QuickPickBag Bag;
 	}
 
 	/// <summary>An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).</summary>
@@ -1917,7 +1917,7 @@ namespace VscAppz {
 		public WorkspaceFolder[] WorkspaceFolders;
 	}
 
-	/// <summary>StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
+	/// <summary>StatusBarItemBag (to be accessed only via `StatusBarItem.Bag`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.</summary>
 	public partial class StatusBarItemBag {
 		[JsonIgnore]
 		internal StatusBarItem __holder__;
@@ -1960,7 +1960,7 @@ namespace VscAppz {
 		public string Command;
 	}
 
-	/// <summary>OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
+	/// <summary>OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.</summary>
 	public partial class OutputChannelBag {
 		[JsonIgnore]
 		internal OutputChannel __holder__;
@@ -1970,7 +1970,7 @@ namespace VscAppz {
 		public Func<string> Name;
 	}
 
-	/// <summary>TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.</summary>
+	/// <summary>TextEditorDecorationTypeBag (to be accessed only via `TextEditorDecorationType.Bag`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.</summary>
 	public partial class TextEditorDecorationTypeBag {
 		[JsonIgnore]
 		internal TextEditorDecorationType __holder__;
@@ -1980,7 +1980,7 @@ namespace VscAppz {
 		public Func<string> Key;
 	}
 
-	/// <summary>InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
+	/// <summary>InputBoxBag (to be accessed only via `InputBox.Bag`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.</summary>
 	public partial class InputBoxBag {
 		[JsonIgnore]
 		internal InputBox __holder__;
@@ -2040,7 +2040,7 @@ namespace VscAppz {
 		public bool IgnoreFocusOut;
 	}
 
-	/// <summary>QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.</summary>
+	/// <summary>QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.</summary>
 	public partial class QuickPickBag {
 		[JsonIgnore]
 		internal QuickPick __holder__;
@@ -4271,9 +4271,9 @@ namespace VscAppz {
 		/// <summary>
 		/// Shows the entry in the status bar.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Show` call has successfully completed at the VSC side.</return>
 		public Action<Action> Show() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4293,7 +4293,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(it[1]);
+					ok = this.Bag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4314,9 +4314,9 @@ namespace VscAppz {
 		/// <summary>
 		/// Hide the entry in the status bar.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Hide` call has successfully completed at the VSC side.</return>
 		public Action<Action> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4336,7 +4336,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(it[1]);
+					ok = this.Bag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4358,9 +4358,9 @@ namespace VscAppz {
 		/// Dispose and free associated resources. Call
 		/// [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.</return>
 		public Action<Action> Dispose() {
 			return this.__disp__.Dispose();
 		}
@@ -4379,12 +4379,12 @@ namespace VscAppz {
 			Action onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				if ((null == this.CfgBag)) {
-					this.CfgBag = new StatusBarItemBag();
+				if ((null == this.Bag)) {
+					this.Bag = new StatusBarItemBag();
 				}
-				this.CfgBag.__holder__ = this;
-				lock (this.CfgBag.__holder__.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(payload);
+				this.Bag.__holder__ = this;
+				lock (this.Bag.__holder__.__disp__.impl) {
+					ok = this.Bag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -4414,7 +4414,7 @@ namespace VscAppz {
 			onresp = (any payload) => {
 				bool ok = default;
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(payload);
+					ok = this.Bag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -4437,10 +4437,10 @@ namespace VscAppz {
 		/// 
 		/// `value` ── A string, falsy values will not be printed.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Append` call has successfully completed at the VSC side.
 		/// </summary>
 		/// <param name="value">A string, falsy values will not be printed.</param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Append` call has successfully completed at the VSC side.</return>
 		public Action<Action> Append(string value = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4461,7 +4461,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(it[1]);
+					ok = this.Bag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4485,10 +4485,10 @@ namespace VscAppz {
 		/// 
 		/// `value` ── A string, falsy values will be printed.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `AppendLine` call has successfully completed at the VSC side.
 		/// </summary>
 		/// <param name="value">A string, falsy values will be printed.</param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `AppendLine` call has successfully completed at the VSC side.</return>
 		public Action<Action> AppendLine(string value = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4509,7 +4509,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(it[1]);
+					ok = this.Bag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4530,9 +4530,9 @@ namespace VscAppz {
 		/// <summary>
 		/// Removes all output from the channel.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Clear` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Clear` call has successfully completed at the VSC side.</return>
 		public Action<Action> Clear() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4552,7 +4552,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(it[1]);
+					ok = this.Bag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4575,10 +4575,10 @@ namespace VscAppz {
 		/// 
 		/// `preserveFocus` ── When `true` the channel will not take focus.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
 		/// </summary>
 		/// <param name="preserveFocus">When `true` the channel will not take focus.</param>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Show` call has successfully completed at the VSC side.</return>
 		public Action<Action> Show(bool preserveFocus = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4599,7 +4599,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(it[1]);
+					ok = this.Bag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4620,9 +4620,9 @@ namespace VscAppz {
 		/// <summary>
 		/// Hide this channel from the UI.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Hide` call has successfully completed at the VSC side.</return>
 		public Action<Action> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4642,7 +4642,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(it[1]);
+					ok = this.Bag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4663,9 +4663,9 @@ namespace VscAppz {
 		/// <summary>
 		/// Dispose and free associated resources.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.</return>
 		public Action<Action> Dispose() {
 			return this.__disp__.Dispose();
 		}
@@ -4684,12 +4684,12 @@ namespace VscAppz {
 			Action onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				if ((null == this.CfgBag)) {
-					this.CfgBag = new OutputChannelBag();
+				if ((null == this.Bag)) {
+					this.Bag = new OutputChannelBag();
 				}
-				this.CfgBag.__holder__ = this;
-				lock (this.CfgBag.__holder__.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(payload);
+				this.Bag.__holder__ = this;
+				lock (this.Bag.__holder__.__disp__.impl) {
+					ok = this.Bag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -4710,9 +4710,9 @@ namespace VscAppz {
 		/// <summary>
 		/// Remove this decoration type and all decorations on all text editors using it.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.</return>
 		public Action<Action> Dispose() {
 			return this.__disp__.Dispose();
 		}
@@ -4731,12 +4731,12 @@ namespace VscAppz {
 			Action onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				if ((null == this.CfgBag)) {
-					this.CfgBag = new TextEditorDecorationTypeBag();
+				if ((null == this.Bag)) {
+					this.Bag = new TextEditorDecorationTypeBag();
 				}
-				this.CfgBag.__holder__ = this;
-				lock (this.CfgBag.__holder__.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(payload);
+				this.Bag.__holder__ = this;
+				lock (this.Bag.__holder__.__disp__.impl) {
+					ok = this.Bag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -4786,7 +4786,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.__loadFromJsonish__(args[1]);
+						ok = this.Bag.__loadFromJsonish__(args[1]);
 					}
 					if (!ok) {
 						return false;
@@ -4851,7 +4851,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.__loadFromJsonish__(args[0]);
+						ok = this.Bag.__loadFromJsonish__(args[0]);
 					}
 					if (!ok) {
 						return false;
@@ -4893,9 +4893,9 @@ namespace VscAppz {
 		/// Makes the input UI visible in its current configuration. Any other input
 		/// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Show` call has successfully completed at the VSC side.</return>
 		public Action<Action> Show() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4915,7 +4915,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(it[1]);
+					ok = this.Bag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -4937,9 +4937,9 @@ namespace VscAppz {
 		/// Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 		/// event.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Hide` call has successfully completed at the VSC side.</return>
 		public Action<Action> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -4959,7 +4959,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(it[1]);
+					ok = this.Bag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -5009,7 +5009,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.__loadFromJsonish__(args[0]);
+						ok = this.Bag.__loadFromJsonish__(args[0]);
 					}
 					if (!ok) {
 						return false;
@@ -5053,9 +5053,9 @@ namespace VscAppz {
 		/// functional and no additional methods or properties on it should be
 		/// accessed. Instead a new input UI should be created.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.</return>
 		public Action<Action> Dispose() {
 			return this.__disp__.Dispose();
 		}
@@ -5074,12 +5074,12 @@ namespace VscAppz {
 			Action onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				if ((null == this.CfgBag)) {
-					this.CfgBag = new InputBoxBag();
+				if ((null == this.Bag)) {
+					this.Bag = new InputBoxBag();
 				}
-				this.CfgBag.__holder__ = this;
-				lock (this.CfgBag.__holder__.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(payload);
+				this.Bag.__holder__ = this;
+				lock (this.Bag.__holder__.__disp__.impl) {
+					ok = this.Bag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -5109,7 +5109,7 @@ namespace VscAppz {
 			onresp = (any payload) => {
 				bool ok = default;
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(payload);
+					ok = this.Bag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -5159,7 +5159,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.__loadFromJsonish__(args[1]);
+						ok = this.Bag.__loadFromJsonish__(args[1]);
 					}
 					if (!ok) {
 						return false;
@@ -5224,7 +5224,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.__loadFromJsonish__(args[0]);
+						ok = this.Bag.__loadFromJsonish__(args[0]);
 					}
 					if (!ok) {
 						return false;
@@ -5308,7 +5308,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.__loadFromJsonish__(args[1]);
+						ok = this.Bag.__loadFromJsonish__(args[1]);
 					}
 					if (!ok) {
 						return false;
@@ -5392,7 +5392,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.__loadFromJsonish__(args[1]);
+						ok = this.Bag.__loadFromJsonish__(args[1]);
 					}
 					if (!ok) {
 						return false;
@@ -5434,9 +5434,9 @@ namespace VscAppz {
 		/// Makes the input UI visible in its current configuration. Any other input
 		/// UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Show` call has successfully completed at the VSC side.</return>
 		public Action<Action> Show() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5456,7 +5456,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(it[1]);
+					ok = this.Bag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -5478,9 +5478,9 @@ namespace VscAppz {
 		/// Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 		/// event.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Hide` call has successfully completed at the VSC side.</return>
 		public Action<Action> Hide() {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
@@ -5500,7 +5500,7 @@ namespace VscAppz {
 					return false;
 				}
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(it[1]);
+					ok = this.Bag.__loadFromJsonish__(it[1]);
 				}
 				if (!ok) {
 					return false;
@@ -5550,7 +5550,7 @@ namespace VscAppz {
 				}
 				{
 					lock (this.__disp__.impl) {
-						ok = this.CfgBag.__loadFromJsonish__(args[0]);
+						ok = this.Bag.__loadFromJsonish__(args[0]);
 					}
 					if (!ok) {
 						return false;
@@ -5594,9 +5594,9 @@ namespace VscAppz {
 		/// functional and no additional methods or properties on it should be
 		/// accessed. Instead a new input UI should be created.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.</return>
 		public Action<Action> Dispose() {
 			return this.__disp__.Dispose();
 		}
@@ -5615,12 +5615,12 @@ namespace VscAppz {
 			Action onret = default;
 			onresp = (any payload) => {
 				bool ok = default;
-				if ((null == this.CfgBag)) {
-					this.CfgBag = new QuickPickBag();
+				if ((null == this.Bag)) {
+					this.Bag = new QuickPickBag();
 				}
-				this.CfgBag.__holder__ = this;
-				lock (this.CfgBag.__holder__.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(payload);
+				this.Bag.__holder__ = this;
+				lock (this.Bag.__holder__.__disp__.impl) {
+					ok = this.Bag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -5650,7 +5650,7 @@ namespace VscAppz {
 			onresp = (any payload) => {
 				bool ok = default;
 				lock (this.__disp__.impl) {
-					ok = this.CfgBag.__loadFromJsonish__(payload);
+					ok = this.Bag.__loadFromJsonish__(payload);
 				}
 				if (!ok) {
 					return false;
@@ -5669,11 +5669,11 @@ namespace VscAppz {
 
 	public partial class StatusBarItemBag {
 		/// <summary>
-		/// getter docs
+		/// ReFetch requests the current `StatusBarItem` state from the VSC side and upon response refreshes this `StatusBarItemBag`'s property values for `alignment`, `priority`, `text`, `tooltip`, `color`, `command` to reflect it.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.</return>
 		public Action<Action> ReFetch() {
 			return this.__holder__.__appzObjBagPullFromPeer__();
 		}
@@ -5681,11 +5681,11 @@ namespace VscAppz {
 
 	public partial class StatusBarItemBag {
 		/// <summary>
-		/// setter docs
+		/// ApplyChanges propagates this `StatusBarItemBag`'s current property values for `text`, `tooltip`, `color`, `command` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.</return>
 		public Action<Action> ApplyChanges() {
 			return this.__holder__.__appzObjBagPushToPeer__(this);
 		}
@@ -5693,11 +5693,11 @@ namespace VscAppz {
 
 	public partial class OutputChannelBag {
 		/// <summary>
-		/// getter docs
+		/// ReFetch requests the current `OutputChannel` state from the VSC side and upon response refreshes this `OutputChannelBag`'s property value for `name` to reflect it.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.</return>
 		public Action<Action> ReFetch() {
 			return this.__holder__.__appzObjBagPullFromPeer__();
 		}
@@ -5705,11 +5705,11 @@ namespace VscAppz {
 
 	public partial class TextEditorDecorationTypeBag {
 		/// <summary>
-		/// getter docs
+		/// ReFetch requests the current `TextEditorDecorationType` state from the VSC side and upon response refreshes this `TextEditorDecorationTypeBag`'s property value for `key` to reflect it.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.</return>
 		public Action<Action> ReFetch() {
 			return this.__holder__.__appzObjBagPullFromPeer__();
 		}
@@ -5717,11 +5717,11 @@ namespace VscAppz {
 
 	public partial class InputBoxBag {
 		/// <summary>
-		/// getter docs
+		/// ReFetch requests the current `InputBox` state from the VSC side and upon response refreshes this `InputBoxBag`'s property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.</return>
 		public Action<Action> ReFetch() {
 			return this.__holder__.__appzObjBagPullFromPeer__();
 		}
@@ -5729,11 +5729,11 @@ namespace VscAppz {
 
 	public partial class InputBoxBag {
 		/// <summary>
-		/// setter docs
+		/// ApplyChanges propagates this `InputBoxBag`'s current property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.</return>
 		public Action<Action> ApplyChanges() {
 			return this.__holder__.__appzObjBagPushToPeer__(this);
 		}
@@ -5741,11 +5741,11 @@ namespace VscAppz {
 
 	public partial class QuickPickBag {
 		/// <summary>
-		/// getter docs
+		/// ReFetch requests the current `QuickPick` state from the VSC side and upon response refreshes this `QuickPickBag`'s property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.</return>
 		public Action<Action> ReFetch() {
 			return this.__holder__.__appzObjBagPullFromPeer__();
 		}
@@ -5753,11 +5753,11 @@ namespace VscAppz {
 
 	public partial class QuickPickBag {
 		/// <summary>
-		/// setter docs
+		/// ApplyChanges propagates this `QuickPickBag`'s current property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
 		/// 
-		/// `return` ── A thenable that resolves when this call has completed at the counterparty.
+		/// `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 		/// </summary>
-		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
+		/// <return>a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.</return>
 		public Action<Action> ApplyChanges() {
 			return this.__holder__.__appzObjBagPushToPeer__(this);
 		}

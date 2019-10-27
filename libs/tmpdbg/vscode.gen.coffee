@@ -592,7 +592,7 @@ Window: interface
     # Represents the current window's state.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
+    # a thenable that resolves when this `State` call has successfully completed at the VSC side and its `WindowState` result received back at our end.
     State: ((WindowState->void)->void)
 
     # onDidChangeWindowState:
@@ -693,28 +693,28 @@ Env: interface
     # The application name of the editor, like 'VS Code'.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
+    # a thenable that resolves when this `AppName` call has successfully completed at the VSC side and its result received back at our end.
     AppName: ((string->void)->void)
 
     # appRoot:
     # The application root folder from which the editor is running.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
+    # a thenable that resolves when this `AppRoot` call has successfully completed at the VSC side and its result received back at our end.
     AppRoot: ((string->void)->void)
 
     # language:
     # Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
+    # a thenable that resolves when this `Language` call has successfully completed at the VSC side and its result received back at our end.
     Language: ((string->void)->void)
 
     # machineId:
     # A unique identifier for the computer.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
+    # a thenable that resolves when this `MachineId` call has successfully completed at the VSC side and its result received back at our end.
     MachineId: ((string->void)->void)
 
     # remoteName:
@@ -727,7 +727,7 @@ Env: interface
     # a specific extension runs remote or not.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
+    # a thenable that resolves when this `RemoteName` call has successfully completed at the VSC side and its result received back at our end.
     RemoteName: ((?string->void)->void)
 
     # sessionId:
@@ -735,7 +735,7 @@ Env: interface
     # Changes each time the editor is started.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
+    # a thenable that resolves when this `SessionId` call has successfully completed at the VSC side and its result received back at our end.
     SessionId: ((string->void)->void)
 
     # shell:
@@ -743,20 +743,20 @@ Env: interface
     # `terminal.integrated.shell` setting for the extension host's platform.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
+    # a thenable that resolves when this `Shell` call has successfully completed at the VSC side and its result received back at our end.
     Shell: ((string->void)->void)
 
     # uriScheme:
     # The custom uri scheme the editor registers to in the operating system.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
+    # a thenable that resolves when this `UriScheme` call has successfully completed at the VSC side and its result received back at our end.
     UriScheme: ((string->void)->void)
 
     # Provides single-call access to numerous individual `Env` properties at once.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
+    # a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.
     AllProperties: ((EnvBag->void)->void)
 
     # The clipboard provides read and write access to the system's clipboard.
@@ -805,7 +805,7 @@ Workspace: interface
     # has been opened.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
+    # a thenable that resolves when this `Name` call has successfully completed at the VSC side and its result received back at our end.
     Name: ((?string->void)->void)
 
     # workspaceFile:
@@ -842,7 +842,7 @@ Workspace: interface
     # well as an untitled or saved workspace.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
+    # a thenable that resolves when this `WorkspaceFile` call has successfully completed at the VSC side and its result received back at our end.
     WorkspaceFile: ((?string->void)->void)
 
     # saveAll:
@@ -885,7 +885,7 @@ Workspace: interface
     # *Note* that the first entry corresponds to the value of `rootPath`.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its result obtained.
+    # a thenable that resolves when this `WorkspaceFolders` call has successfully completed at the VSC side and its result received back at our end.
     WorkspaceFolders: ((?[WorkspaceFolder]->void)->void)
 
     # findFiles:
@@ -940,7 +940,7 @@ Workspace: interface
     # Provides single-call access to numerous individual `Workspace` properties at once.
     #
     # @return:
-    # A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
+    # a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
     AllProperties: ((WorkspaceBag->void)->void)
 
 
@@ -1667,10 +1667,10 @@ StatusBarItem: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+    # Bag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
     #
     # JSON FLAGS: undefined
-    CfgBag: ?StatusBarItemBag
+    Bag: ?StatusBarItemBag
 
 
 
@@ -1685,10 +1685,10 @@ OutputChannel: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+    # Bag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
     #
     # JSON FLAGS: undefined
-    CfgBag: ?OutputChannelBag
+    Bag: ?OutputChannelBag
 
 
 
@@ -1971,10 +1971,10 @@ TextEditorDecorationType: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+    # Bag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
     #
     # JSON FLAGS: undefined
-    CfgBag: ?TextEditorDecorationTypeBag
+    Bag: ?TextEditorDecorationTypeBag
 
 
 
@@ -1990,10 +1990,10 @@ InputBox: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+    # Bag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
     #
     # JSON FLAGS: undefined
-    CfgBag: ?InputBoxBag
+    Bag: ?InputBoxBag
 
 
 
@@ -2030,10 +2030,10 @@ QuickPick: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+    # Bag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
     #
     # JSON FLAGS: undefined
-    CfgBag: ?QuickPickBag
+    Bag: ?QuickPickBag
 
 
 
@@ -2188,7 +2188,7 @@ WorkspaceBag: class
 
 
 
-# StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+# StatusBarItemBag (to be accessed only via `StatusBarItem.Bag`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 StatusBarItemBag: class
 
     #
@@ -2241,7 +2241,7 @@ StatusBarItemBag: class
 
 
 
-# OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+# OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 OutputChannelBag: class
 
     #
@@ -2257,7 +2257,7 @@ OutputChannelBag: class
 
 
 
-# TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+# TextEditorDecorationTypeBag (to be accessed only via `TextEditorDecorationType.Bag`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 TextEditorDecorationTypeBag: class
 
     #
@@ -2273,7 +2273,7 @@ TextEditorDecorationTypeBag: class
 
 
 
-# InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+# InputBoxBag (to be accessed only via `InputBox.Bag`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 InputBoxBag: class
 
     #
@@ -2355,7 +2355,7 @@ InputBoxBag: class
 
 
 
-# QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+# QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 QuickPickBag: class
 
     #
@@ -4483,7 +4483,7 @@ StatusBarItem·Show: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(it@1)
+            ok = this.Bag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4515,7 +4515,7 @@ StatusBarItem·Hide: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(it@1)
+            ok = this.Bag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4546,11 +4546,11 @@ StatusBarItem·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        if =!this.CfgBag
-            this.CfgBag = ?StatusBarItemBag·new
-        this.CfgBag.__holder__ = this
-        lock this.CfgBag.__holder__.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+        if =!this.Bag
+            this.Bag = ?StatusBarItemBag·new
+        this.Bag.__holder__ = this
+        lock this.Bag.__holder__.__disp__.impl
+            ok = this.Bag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -4577,7 +4577,7 @@ StatusBarItem·__appzObjBagPushToPeer__: (allUpdates:?StatusBarItemBag -> ((void
     onresp = (payload:any -> bool)
         var ok of bool
         lock this.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+            ok = this.Bag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -4610,7 +4610,7 @@ OutputChannel·Append: (value:string -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(it@1)
+            ok = this.Bag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4643,7 +4643,7 @@ OutputChannel·AppendLine: (value:string -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(it@1)
+            ok = this.Bag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4675,7 +4675,7 @@ OutputChannel·Clear: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(it@1)
+            ok = this.Bag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4708,7 +4708,7 @@ OutputChannel·Show: (preserveFocus:bool -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(it@1)
+            ok = this.Bag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4740,7 +4740,7 @@ OutputChannel·Hide: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(it@1)
+            ok = this.Bag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4771,11 +4771,11 @@ OutputChannel·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        if =!this.CfgBag
-            this.CfgBag = ?OutputChannelBag·new
-        this.CfgBag.__holder__ = this
-        lock this.CfgBag.__holder__.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+        if =!this.Bag
+            this.Bag = ?OutputChannelBag·new
+        this.Bag.__holder__ = this
+        lock this.Bag.__holder__.__disp__.impl
+            ok = this.Bag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -4806,11 +4806,11 @@ TextEditorDecorationType·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        if =!this.CfgBag
-            this.CfgBag = ?TextEditorDecorationTypeBag·new
-        this.CfgBag.__holder__ = this
-        lock this.CfgBag.__holder__.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+        if =!this.Bag
+            this.Bag = ?TextEditorDecorationTypeBag·new
+        this.Bag.__holder__ = this
+        lock this.Bag.__holder__.__disp__.impl
+            ok = this.Bag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -4844,7 +4844,7 @@ InputBox·OnDidChangeValue: (handler:(string->void) -> ((?Disposable->void)->voi
         if !ok
             return false
             lock this.__disp__.impl
-                ok = this.CfgBag.__loadFromJsonish__(args@1)
+                ok = this.Bag.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -4891,7 +4891,7 @@ InputBox·OnDidAccept: (handler:(->void) -> ((?Disposable->void)->void))
         if 1 != args·len
             return ok
             lock this.__disp__.impl
-                ok = this.CfgBag.__loadFromJsonish__(args@0)
+                ok = this.Bag.__loadFromJsonish__(args@0)
             if !ok
                 return false
             handler()
@@ -4940,7 +4940,7 @@ InputBox·Show: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(it@1)
+            ok = this.Bag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -4972,7 +4972,7 @@ InputBox·Hide: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(it@1)
+            ok = this.Bag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5002,7 +5002,7 @@ InputBox·OnDidHide: (handler:(->void) -> ((?Disposable->void)->void))
         if 1 != args·len
             return ok
             lock this.__disp__.impl
-                ok = this.CfgBag.__loadFromJsonish__(args@0)
+                ok = this.Bag.__loadFromJsonish__(args@0)
             if !ok
                 return false
             handler()
@@ -5050,11 +5050,11 @@ InputBox·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        if =!this.CfgBag
-            this.CfgBag = ?InputBoxBag·new
-        this.CfgBag.__holder__ = this
-        lock this.CfgBag.__holder__.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+        if =!this.Bag
+            this.Bag = ?InputBoxBag·new
+        this.Bag.__holder__ = this
+        lock this.Bag.__holder__.__disp__.impl
+            ok = this.Bag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -5081,7 +5081,7 @@ InputBox·__appzObjBagPushToPeer__: (allUpdates:?InputBoxBag -> ((void->void)->v
     onresp = (payload:any -> bool)
         var ok of bool
         lock this.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+            ok = this.Bag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -5115,7 +5115,7 @@ QuickPick·OnDidChangeValue: (handler:(string->void) -> ((?Disposable->void)->vo
         if !ok
             return false
             lock this.__disp__.impl
-                ok = this.CfgBag.__loadFromJsonish__(args@1)
+                ok = this.Bag.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -5162,7 +5162,7 @@ QuickPick·OnDidAccept: (handler:(->void) -> ((?Disposable->void)->void))
         if 1 != args·len
             return ok
             lock this.__disp__.impl
-                ok = this.CfgBag.__loadFromJsonish__(args@0)
+                ok = this.Bag.__loadFromJsonish__(args@0)
             if !ok
                 return false
             handler()
@@ -5225,7 +5225,7 @@ QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->void) -> ((?Disposable-
             _a_0_@__idx___a_0_ = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
             lock this.__disp__.impl
-                ok = this.CfgBag.__loadFromJsonish__(args@1)
+                ok = this.Bag.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -5288,7 +5288,7 @@ QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->void) -> ((?Disposab
             _a_0_@__idx___a_0_ = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
             lock this.__disp__.impl
-                ok = this.CfgBag.__loadFromJsonish__(args@1)
+                ok = this.Bag.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -5337,7 +5337,7 @@ QuickPick·Show: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(it@1)
+            ok = this.Bag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5369,7 +5369,7 @@ QuickPick·Hide: ( -> ((void->void)->void))
         if (2 != it·len) || (=!it@1)
             return false
         lock this.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(it@1)
+            ok = this.Bag.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5399,7 +5399,7 @@ QuickPick·OnDidHide: (handler:(->void) -> ((?Disposable->void)->void))
         if 1 != args·len
             return ok
             lock this.__disp__.impl
-                ok = this.CfgBag.__loadFromJsonish__(args@0)
+                ok = this.Bag.__loadFromJsonish__(args@0)
             if !ok
                 return false
             handler()
@@ -5447,11 +5447,11 @@ QuickPick·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        if =!this.CfgBag
-            this.CfgBag = ?QuickPickBag·new
-        this.CfgBag.__holder__ = this
-        lock this.CfgBag.__holder__.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+        if =!this.Bag
+            this.Bag = ?QuickPickBag·new
+        this.Bag.__holder__ = this
+        lock this.Bag.__holder__.__disp__.impl
+            ok = this.Bag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -5478,7 +5478,7 @@ QuickPick·__appzObjBagPushToPeer__: (allUpdates:?QuickPickBag -> ((void->void)-
     onresp = (payload:any -> bool)
         var ok of bool
         lock this.__disp__.impl
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+            ok = this.Bag.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret

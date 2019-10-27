@@ -416,7 +416,7 @@ type Window interface {
 
 	// Represents the current window's state.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
+	// `return` ── a thenable that resolves when this `State` call has successfully completed at the VSC side and its `WindowState` result received back at our end.
 	State() func(func(WindowState))
 
 	// An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
@@ -486,22 +486,22 @@ type Env interface {
 
 	// The application name of the editor, like 'VS Code'.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `AppName` call has successfully completed at the VSC side and its result received back at our end.
 	AppName() func(func(string))
 
 	// The application root folder from which the editor is running.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `AppRoot` call has successfully completed at the VSC side and its result received back at our end.
 	AppRoot() func(func(string))
 
 	// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `Language` call has successfully completed at the VSC side and its result received back at our end.
 	Language() func(func(string))
 
 	// A unique identifier for the computer.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `MachineId` call has successfully completed at the VSC side and its result received back at our end.
 	MachineId() func(func(string))
 
 	// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
@@ -512,29 +512,29 @@ type Env interface {
 	// exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 	// a specific extension runs remote or not.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `RemoteName` call has successfully completed at the VSC side and its result received back at our end.
 	RemoteName() func(func(*string))
 
 	// A unique identifier for the current session.
 	// Changes each time the editor is started.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `SessionId` call has successfully completed at the VSC side and its result received back at our end.
 	SessionId() func(func(string))
 
 	// The detected default shell for the extension host, this is overridden by the
 	// `terminal.integrated.shell` setting for the extension host's platform.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `Shell` call has successfully completed at the VSC side and its result received back at our end.
 	Shell() func(func(string))
 
 	// The custom uri scheme the editor registers to in the operating system.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `UriScheme` call has successfully completed at the VSC side and its result received back at our end.
 	UriScheme() func(func(string))
 
 	// Provides single-call access to numerous individual `Env` properties at once.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
+	// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.
 	AllProperties() func(func(EnvBag))
 
 	// The clipboard provides read and write access to the system's clipboard.
@@ -569,7 +569,7 @@ type Workspace interface {
 	// The name of the workspace. `undefined` when no folder
 	// has been opened.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `Name` call has successfully completed at the VSC side and its result received back at our end.
 	Name() func(func(*string))
 
 	// The location of the workspace file, for example:
@@ -604,7 +604,7 @@ type Workspace interface {
 	// for that purpose which will work both when a single folder is opened as
 	// well as an untitled or saved workspace.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `WorkspaceFile` call has successfully completed at the VSC side and its result received back at our end.
 	WorkspaceFile() func(func(*string))
 
 	// Save all dirty files.
@@ -633,7 +633,7 @@ type Workspace interface {
 	// List of workspace folders or `undefined` when no folder is open.
 	// *Note* that the first entry corresponds to the value of `rootPath`.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `WorkspaceFolders` call has successfully completed at the VSC side and its result received back at our end.
 	WorkspaceFolders() func(func([]WorkspaceFolder))
 
 	// Find files across all [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) in the workspace.
@@ -671,7 +671,7 @@ type Workspace interface {
 
 	// Provides single-call access to numerous individual `Workspace` properties at once.
 	// 
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
+	// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
 	AllProperties() func(func(WorkspaceBag))
 }
 type implWorkspace struct{ *impl }
@@ -1143,8 +1143,8 @@ type WindowState struct {
 type StatusBarItem struct {
 	__disp__ *Disposable
 
-	// CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
-	CfgBag *StatusBarItemBag
+	// Bag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Bag *StatusBarItemBag
 }
 
 // An output channel is a container for readonly textual information.
@@ -1154,8 +1154,8 @@ type StatusBarItem struct {
 type OutputChannel struct {
 	__disp__ *Disposable
 
-	// CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
-	CfgBag *OutputChannelBag
+	// Bag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+	Bag *OutputChannelBag
 }
 
 // Type Definition for Visual Studio Code 1.39 Extension API
@@ -1307,8 +1307,8 @@ type DecorationRenderOptions struct {
 type TextEditorDecorationType struct {
 	__disp__ *Disposable
 
-	// CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
-	CfgBag *TextEditorDecorationTypeBag
+	// Bag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+	Bag *TextEditorDecorationTypeBag
 }
 
 // A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
@@ -1319,8 +1319,8 @@ type TextEditorDecorationType struct {
 type InputBox struct {
 	__disp__ *Disposable
 
-	// CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
-	CfgBag *InputBoxBag
+	// Bag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Bag *InputBoxBag
 }
 
 // Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
@@ -1343,8 +1343,8 @@ type QuickInputButton struct {
 type QuickPick struct {
 	__disp__ *Disposable
 
-	// CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
-	CfgBag *QuickPickBag
+	// Bag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Bag *QuickPickBag
 }
 
 // An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).
@@ -1441,7 +1441,7 @@ type WorkspaceBag struct {
 	WorkspaceFolders []WorkspaceFolder `json:"workspaceFolders,omitempty"`
 }
 
-// StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+// StatusBarItemBag (to be accessed only via `StatusBarItem.Bag`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 type StatusBarItemBag struct {
 	__holder__ *StatusBarItem
 
@@ -1471,7 +1471,7 @@ type StatusBarItemBag struct {
 	Command string `json:"command,omitempty"`
 }
 
-// OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+// OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 type OutputChannelBag struct {
 	__holder__ *OutputChannel
 
@@ -1479,7 +1479,7 @@ type OutputChannelBag struct {
 	Name func() string `json:"-"`
 }
 
-// TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+// TextEditorDecorationTypeBag (to be accessed only via `TextEditorDecorationType.Bag`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 type TextEditorDecorationTypeBag struct {
 	__holder__ *TextEditorDecorationType
 
@@ -1487,7 +1487,7 @@ type TextEditorDecorationTypeBag struct {
 	Key func() string `json:"-"`
 }
 
-// InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+// InputBoxBag (to be accessed only via `InputBox.Bag`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 type InputBoxBag struct {
 	__holder__ *InputBox
 
@@ -1531,7 +1531,7 @@ type InputBoxBag struct {
 	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
 }
 
-// QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+// QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 type QuickPickBag struct {
 	__holder__ *QuickPick
 
@@ -3772,7 +3772,7 @@ func (me implCommands) GetCommands(filterInternal bool) func(func([]string)) {
 
 // Shows the entry in the status bar.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
 func (me *StatusBarItem) Show() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -3793,7 +3793,7 @@ func (me *StatusBarItem) Show() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(it[1])
+			ok = me.Bag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -3812,7 +3812,7 @@ func (me *StatusBarItem) Show() func(func()) {
 
 // Hide the entry in the status bar.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
 func (me *StatusBarItem) Hide() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -3833,7 +3833,7 @@ func (me *StatusBarItem) Hide() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(it[1])
+			ok = me.Bag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -3853,7 +3853,7 @@ func (me *StatusBarItem) Hide() func(func()) {
 // Dispose and free associated resources. Call
 // [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 func (me *StatusBarItem) Dispose() func(func()) {
 	return me.__disp__.Dispose()
 }
@@ -3868,15 +3868,15 @@ func (me *StatusBarItem) __appzObjBagPullFromPeer__() func(func()) {
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		if (nil == me.CfgBag) {
-			me.CfgBag = new(StatusBarItemBag)
+		if (nil == me.Bag) {
+			me.Bag = new(StatusBarItemBag)
 		}
-		me.CfgBag.__holder__ = me
-		me.CfgBag.__holder__.__disp__.impl.Lock()
+		me.Bag.__holder__ = me
+		me.Bag.__holder__.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(payload)
+			ok = me.Bag.__loadFromJsonish__(payload)
 		}
-		me.CfgBag.__holder__.__disp__.impl.Unlock()
+		me.Bag.__holder__.__disp__.impl.Unlock()
 		if !ok {
 			return false
 		}
@@ -3904,7 +3904,7 @@ func (me *StatusBarItem) __appzObjBagPushToPeer__(allUpdates *StatusBarItemBag) 
 		var ok bool
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(payload)
+			ok = me.Bag.__loadFromJsonish__(payload)
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -3925,7 +3925,7 @@ func (me *StatusBarItem) __appzObjBagPushToPeer__(allUpdates *StatusBarItemBag) 
 // 
 // `value` ── A string, falsy values will not be printed.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Append` call has successfully completed at the VSC side.
 func (me *OutputChannel) Append(value string) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -3947,7 +3947,7 @@ func (me *OutputChannel) Append(value string) func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(it[1])
+			ok = me.Bag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -3969,7 +3969,7 @@ func (me *OutputChannel) Append(value string) func(func()) {
 // 
 // `value` ── A string, falsy values will be printed.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `AppendLine` call has successfully completed at the VSC side.
 func (me *OutputChannel) AppendLine(value string) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -3991,7 +3991,7 @@ func (me *OutputChannel) AppendLine(value string) func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(it[1])
+			ok = me.Bag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4010,7 +4010,7 @@ func (me *OutputChannel) AppendLine(value string) func(func()) {
 
 // Removes all output from the channel.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Clear` call has successfully completed at the VSC side.
 func (me *OutputChannel) Clear() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4031,7 +4031,7 @@ func (me *OutputChannel) Clear() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(it[1])
+			ok = me.Bag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4052,7 +4052,7 @@ func (me *OutputChannel) Clear() func(func()) {
 // 
 // `preserveFocus` ── When `true` the channel will not take focus.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
 func (me *OutputChannel) Show(preserveFocus bool) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4074,7 +4074,7 @@ func (me *OutputChannel) Show(preserveFocus bool) func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(it[1])
+			ok = me.Bag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4093,7 +4093,7 @@ func (me *OutputChannel) Show(preserveFocus bool) func(func()) {
 
 // Hide this channel from the UI.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
 func (me *OutputChannel) Hide() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4114,7 +4114,7 @@ func (me *OutputChannel) Hide() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(it[1])
+			ok = me.Bag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4133,7 +4133,7 @@ func (me *OutputChannel) Hide() func(func()) {
 
 // Dispose and free associated resources.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 func (me *OutputChannel) Dispose() func(func()) {
 	return me.__disp__.Dispose()
 }
@@ -4148,15 +4148,15 @@ func (me *OutputChannel) __appzObjBagPullFromPeer__() func(func()) {
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		if (nil == me.CfgBag) {
-			me.CfgBag = new(OutputChannelBag)
+		if (nil == me.Bag) {
+			me.Bag = new(OutputChannelBag)
 		}
-		me.CfgBag.__holder__ = me
-		me.CfgBag.__holder__.__disp__.impl.Lock()
+		me.Bag.__holder__ = me
+		me.Bag.__holder__.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(payload)
+			ok = me.Bag.__loadFromJsonish__(payload)
 		}
-		me.CfgBag.__holder__.__disp__.impl.Unlock()
+		me.Bag.__holder__.__disp__.impl.Unlock()
 		if !ok {
 			return false
 		}
@@ -4173,7 +4173,7 @@ func (me *OutputChannel) __appzObjBagPullFromPeer__() func(func()) {
 
 // Remove this decoration type and all decorations on all text editors using it.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 func (me *TextEditorDecorationType) Dispose() func(func()) {
 	return me.__disp__.Dispose()
 }
@@ -4188,15 +4188,15 @@ func (me *TextEditorDecorationType) __appzObjBagPullFromPeer__() func(func()) {
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		if (nil == me.CfgBag) {
-			me.CfgBag = new(TextEditorDecorationTypeBag)
+		if (nil == me.Bag) {
+			me.Bag = new(TextEditorDecorationTypeBag)
 		}
-		me.CfgBag.__holder__ = me
-		me.CfgBag.__holder__.__disp__.impl.Lock()
+		me.Bag.__holder__ = me
+		me.Bag.__holder__.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(payload)
+			ok = me.Bag.__loadFromJsonish__(payload)
 		}
-		me.CfgBag.__holder__.__disp__.impl.Unlock()
+		me.Bag.__holder__.__disp__.impl.Unlock()
 		if !ok {
 			return false
 		}
@@ -4240,7 +4240,7 @@ func (me *InputBox) OnDidChangeValue(handler func(string)) func(func(*Disposable
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.__loadFromJsonish__(args[1])
+				ok = me.Bag.__loadFromJsonish__(args[1])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4301,7 +4301,7 @@ func (me *InputBox) OnDidAccept(handler func()) func(func(*Disposable)) {
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.__loadFromJsonish__(args[0])
+				ok = me.Bag.__loadFromJsonish__(args[0])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4341,7 +4341,7 @@ func (me *InputBox) OnDidAccept(handler func()) func(func(*Disposable)) {
 // Makes the input UI visible in its current configuration. Any other input
 // UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
 func (me *InputBox) Show() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4362,7 +4362,7 @@ func (me *InputBox) Show() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(it[1])
+			ok = me.Bag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4382,7 +4382,7 @@ func (me *InputBox) Show() func(func()) {
 // Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 // event.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
 func (me *InputBox) Hide() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4403,7 +4403,7 @@ func (me *InputBox) Hide() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(it[1])
+			ok = me.Bag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4449,7 +4449,7 @@ func (me *InputBox) OnDidHide(handler func()) func(func(*Disposable)) {
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.__loadFromJsonish__(args[0])
+				ok = me.Bag.__loadFromJsonish__(args[0])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4491,7 +4491,7 @@ func (me *InputBox) OnDidHide(handler func()) func(func(*Disposable)) {
 // functional and no additional methods or properties on it should be
 // accessed. Instead a new input UI should be created.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 func (me *InputBox) Dispose() func(func()) {
 	return me.__disp__.Dispose()
 }
@@ -4506,15 +4506,15 @@ func (me *InputBox) __appzObjBagPullFromPeer__() func(func()) {
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		if (nil == me.CfgBag) {
-			me.CfgBag = new(InputBoxBag)
+		if (nil == me.Bag) {
+			me.Bag = new(InputBoxBag)
 		}
-		me.CfgBag.__holder__ = me
-		me.CfgBag.__holder__.__disp__.impl.Lock()
+		me.Bag.__holder__ = me
+		me.Bag.__holder__.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(payload)
+			ok = me.Bag.__loadFromJsonish__(payload)
 		}
-		me.CfgBag.__holder__.__disp__.impl.Unlock()
+		me.Bag.__holder__.__disp__.impl.Unlock()
 		if !ok {
 			return false
 		}
@@ -4542,7 +4542,7 @@ func (me *InputBox) __appzObjBagPushToPeer__(allUpdates *InputBoxBag) func(func(
 		var ok bool
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(payload)
+			ok = me.Bag.__loadFromJsonish__(payload)
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4588,7 +4588,7 @@ func (me *QuickPick) OnDidChangeValue(handler func(string)) func(func(*Disposabl
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.__loadFromJsonish__(args[1])
+				ok = me.Bag.__loadFromJsonish__(args[1])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4649,7 +4649,7 @@ func (me *QuickPick) OnDidAccept(handler func()) func(func(*Disposable)) {
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.__loadFromJsonish__(args[0])
+				ok = me.Bag.__loadFromJsonish__(args[0])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4728,7 +4728,7 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem)) func(func(
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.__loadFromJsonish__(args[1])
+				ok = me.Bag.__loadFromJsonish__(args[1])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4807,7 +4807,7 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem)) func(fu
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.__loadFromJsonish__(args[1])
+				ok = me.Bag.__loadFromJsonish__(args[1])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4847,7 +4847,7 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem)) func(fu
 // Makes the input UI visible in its current configuration. Any other input
 // UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
 func (me *QuickPick) Show() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4868,7 +4868,7 @@ func (me *QuickPick) Show() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(it[1])
+			ok = me.Bag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4888,7 +4888,7 @@ func (me *QuickPick) Show() func(func()) {
 // Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 // event.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
 func (me *QuickPick) Hide() func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
@@ -4909,7 +4909,7 @@ func (me *QuickPick) Hide() func(func()) {
 		}
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(it[1])
+			ok = me.Bag.__loadFromJsonish__(it[1])
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -4955,7 +4955,7 @@ func (me *QuickPick) OnDidHide(handler func()) func(func(*Disposable)) {
 		{
 			me.__disp__.impl.Lock()
 			{
-				ok = me.CfgBag.__loadFromJsonish__(args[0])
+				ok = me.Bag.__loadFromJsonish__(args[0])
 			}
 			me.__disp__.impl.Unlock()
 			if !ok {
@@ -4997,7 +4997,7 @@ func (me *QuickPick) OnDidHide(handler func()) func(func(*Disposable)) {
 // functional and no additional methods or properties on it should be
 // accessed. Instead a new input UI should be created.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 func (me *QuickPick) Dispose() func(func()) {
 	return me.__disp__.Dispose()
 }
@@ -5012,15 +5012,15 @@ func (me *QuickPick) __appzObjBagPullFromPeer__() func(func()) {
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		if (nil == me.CfgBag) {
-			me.CfgBag = new(QuickPickBag)
+		if (nil == me.Bag) {
+			me.Bag = new(QuickPickBag)
 		}
-		me.CfgBag.__holder__ = me
-		me.CfgBag.__holder__.__disp__.impl.Lock()
+		me.Bag.__holder__ = me
+		me.Bag.__holder__.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(payload)
+			ok = me.Bag.__loadFromJsonish__(payload)
 		}
-		me.CfgBag.__holder__.__disp__.impl.Unlock()
+		me.Bag.__holder__.__disp__.impl.Unlock()
 		if !ok {
 			return false
 		}
@@ -5048,7 +5048,7 @@ func (me *QuickPick) __appzObjBagPushToPeer__(allUpdates *QuickPickBag) func(fun
 		var ok bool
 		me.__disp__.impl.Lock()
 		{
-			ok = me.CfgBag.__loadFromJsonish__(payload)
+			ok = me.Bag.__loadFromJsonish__(payload)
 		}
 		me.__disp__.impl.Unlock()
 		if !ok {
@@ -5065,58 +5065,58 @@ func (me *QuickPick) __appzObjBagPushToPeer__(allUpdates *QuickPickBag) func(fun
 	}
 }
 
-// getter docs
+// ReFetch requests the current `StatusBarItem` state from the VSC side and upon response refreshes this `StatusBarItemBag`'s property values for `alignment`, `priority`, `text`, `tooltip`, `color`, `command` to reflect it.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 func (me *StatusBarItemBag) ReFetch() func(func()) {
 	return me.__holder__.__appzObjBagPullFromPeer__()
 }
 
-// setter docs
+// ApplyChanges propagates this `StatusBarItemBag`'s current property values for `text`, `tooltip`, `color`, `command` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 func (me *StatusBarItemBag) ApplyChanges() func(func()) {
 	return me.__holder__.__appzObjBagPushToPeer__(me)
 }
 
-// getter docs
+// ReFetch requests the current `OutputChannel` state from the VSC side and upon response refreshes this `OutputChannelBag`'s property value for `name` to reflect it.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 func (me *OutputChannelBag) ReFetch() func(func()) {
 	return me.__holder__.__appzObjBagPullFromPeer__()
 }
 
-// getter docs
+// ReFetch requests the current `TextEditorDecorationType` state from the VSC side and upon response refreshes this `TextEditorDecorationTypeBag`'s property value for `key` to reflect it.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 func (me *TextEditorDecorationTypeBag) ReFetch() func(func()) {
 	return me.__holder__.__appzObjBagPullFromPeer__()
 }
 
-// getter docs
+// ReFetch requests the current `InputBox` state from the VSC side and upon response refreshes this `InputBoxBag`'s property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 func (me *InputBoxBag) ReFetch() func(func()) {
 	return me.__holder__.__appzObjBagPullFromPeer__()
 }
 
-// setter docs
+// ApplyChanges propagates this `InputBoxBag`'s current property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 func (me *InputBoxBag) ApplyChanges() func(func()) {
 	return me.__holder__.__appzObjBagPushToPeer__(me)
 }
 
-// getter docs
+// ReFetch requests the current `QuickPick` state from the VSC side and upon response refreshes this `QuickPickBag`'s property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 func (me *QuickPickBag) ReFetch() func(func()) {
 	return me.__holder__.__appzObjBagPullFromPeer__()
 }
 
-// setter docs
+// ApplyChanges propagates this `QuickPickBag`'s current property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
 // 
-// `return` ── A thenable that resolves when this call has completed at the counterparty.
+// `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 func (me *QuickPickBag) ApplyChanges() func(func()) {
 	return me.__holder__.__appzObjBagPushToPeer__(me)
 }

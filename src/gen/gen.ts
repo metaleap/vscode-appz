@@ -30,7 +30,7 @@ export const idents = {
     fldImpl: "impl",
     fldBagHolder: "__holder__",
     fldSuffFuncId: "_AppzFuncId",
-    fldDispObjBag: "CfgBag",
+    fldDispObjBag: "Bag",
     varOk: "ok",
     varRes: "result",
     varRet: "ret",

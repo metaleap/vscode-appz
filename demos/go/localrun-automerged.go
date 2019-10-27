@@ -385,20 +385,20 @@ func demo_Window_ShowQuickPick() {
 
 func demo_Window_CreateQuickPick() {
 	vsc.Window().CreateQuickPick()(func(ctl *QuickPick) {
-		ctl.CfgBag.IgnoreFocusOut = true
-		ctl.CfgBag.Title = "I'm a full-fledged QuickPick"
-		ctl.CfgBag.Step = 23
-		ctl.CfgBag.TotalSteps = 42
-		ctl.CfgBag.Items = make([]QuickPickItem, 88)
+		ctl.Bag.IgnoreFocusOut = true
+		ctl.Bag.Title = "I'm a full-fledged QuickPick"
+		ctl.Bag.Step = 23
+		ctl.Bag.TotalSteps = 42
+		ctl.Bag.Items = make([]QuickPickItem, 88)
 		for _, i := range nums1To(88) {
-			ctl.CfgBag.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i)
-			ctl.CfgBag.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i)
-			ctl.CfgBag.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i)
-			ctl.CfgBag.Items[(i - 1)].AlwaysShow = i == 42
+			ctl.Bag.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i)
+			ctl.Bag.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i)
+			ctl.Bag.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i)
+			ctl.Bag.Items[(i - 1)].AlwaysShow = i == 42
 		}
-		ctl.CfgBag.ApplyChanges()
+		ctl.Bag.ApplyChanges()
 		ctl.OnDidAccept(func() {
-			logLn(strFmt("Picked: {0}", ctl.CfgBag.SelectedItems))
+			logLn(strFmt("Picked: {0}", ctl.Bag.SelectedItems))
 			ctl.Hide()
 		})
 		ctl.OnDidHide(func() {
@@ -410,19 +410,19 @@ func demo_Window_CreateQuickPick() {
 
 func demo_Window_CreateInputBox() {
 	vsc.Window().CreateInputBox()(func(ctl *InputBox) {
-		ctl.CfgBag.IgnoreFocusOut = true
-		ctl.CfgBag.Placeholder = "The initial Placeholder"
-		ctl.CfgBag.Prompt = "The initial Prompt"
-		ctl.CfgBag.Title = "The initial Title"
-		ctl.CfgBag.ApplyChanges()
+		ctl.Bag.IgnoreFocusOut = true
+		ctl.Bag.Placeholder = "The initial Placeholder"
+		ctl.Bag.Prompt = "The initial Prompt"
+		ctl.Bag.Title = "The initial Title"
+		ctl.Bag.ApplyChanges()
 		ctl.OnDidChangeValue(func(input string) {
-			ctl.CfgBag.Prompt = strFmt("Lower: {0}", strLo(ctl.CfgBag.Value))
-			ctl.CfgBag.Title = strFmt("Upper: {0}", strUp(ctl.CfgBag.Value))
-			ctl.CfgBag.ApplyChanges()
+			ctl.Bag.Prompt = strFmt("Lower: {0}", strLo(ctl.Bag.Value))
+			ctl.Bag.Title = strFmt("Upper: {0}", strUp(ctl.Bag.Value))
+			ctl.Bag.ApplyChanges()
 		})
 		var finalinputvalue *string
 		ctl.OnDidAccept(func() {
-			finalinputvalue = &ctl.CfgBag.Value
+			finalinputvalue = &ctl.Bag.Value
 			ctl.Hide()
 		})
 		ctl.OnDidHide(func() {
@@ -549,31 +549,31 @@ func onUpAndRunning() {
 		var mycmd func([]any) any
 		mycmd = func(_unused []any) any {
 			clickcount = 1 + clickcount
-			statusitem.CfgBag.ReFetch()(func() {
-				statusitem.CfgBag.Text = logLn(strFmt("You clicked me {0} time(s).", clickcount))
-				if "editorLightBulb.foreground" == statusitem.CfgBag.Color {
-					statusitem.CfgBag.Color = "terminal.ansiGreen"
+			statusitem.Bag.ReFetch()(func() {
+				statusitem.Bag.Text = logLn(strFmt("You clicked me {0} time(s).", clickcount))
+				if "editorLightBulb.foreground" == statusitem.Bag.Color {
+					statusitem.Bag.Color = "terminal.ansiGreen"
 					if toggleonclick && (nil != logchan) {
 						logchan.Hide()
 					}
 				} else {
-					statusitem.CfgBag.Color = "editorLightBulb.foreground"
+					statusitem.Bag.Color = "editorLightBulb.foreground"
 					if toggleonclick && (nil != logchan) {
 						logchan.Show(true)
 					}
 				}
-				statusitem.CfgBag.ApplyChanges()(demosMenu)
+				statusitem.Bag.ApplyChanges()(demosMenu)
 			})
 			return nil
 		}
 		vsc.Commands().RegisterCommand(cmdName, mycmd)
 		vsc.Window().CreateStatusBarItem(0, nil)(func(it *StatusBarItem) {
 			statusitem = it
-			statusitem.CfgBag.Tooltip = strFmt("Hi from {0}!", appName)
-			statusitem.CfgBag.Text = "You clicked me 0 time(s)."
-			statusitem.CfgBag.Color = "#42BEEF"
-			statusitem.CfgBag.Command = cmdName
-			statusitem.CfgBag.ApplyChanges()
+			statusitem.Bag.Tooltip = strFmt("Hi from {0}!", appName)
+			statusitem.Bag.Text = "You clicked me 0 time(s)."
+			statusitem.Bag.Color = "#42BEEF"
+			statusitem.Bag.Command = cmdName
+			statusitem.Bag.ApplyChanges()
 			statusitem.Show()
 		})
 	}

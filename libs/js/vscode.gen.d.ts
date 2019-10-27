@@ -8,7 +8,7 @@ interface withDisp {
     __disp__: Disposable;
 }
 interface withBag<T extends fromJson> {
-    CfgBag: T;
+    Bag: T;
     toJSON: () => any;
 }
 /**
@@ -442,7 +442,7 @@ export interface Window {
     /**
      * Represents the current window's state.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
+     * @return a thenable that resolves when this `State` call has successfully completed at the VSC side and its `WindowState` result received back at our end.
      */
     State: (_: (_: WindowState) => void) => void;
     /**
@@ -516,25 +516,25 @@ export interface Env {
     /**
      * The application name of the editor, like 'VS Code'.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `AppName` call has successfully completed at the VSC side and its result received back at our end.
      */
     AppName: (_: (_: string) => void) => void;
     /**
      * The application root folder from which the editor is running.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `AppRoot` call has successfully completed at the VSC side and its result received back at our end.
      */
     AppRoot: (_: (_: string) => void) => void;
     /**
      * Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `Language` call has successfully completed at the VSC side and its result received back at our end.
      */
     Language: (_: (_: string) => void) => void;
     /**
      * A unique identifier for the computer.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `MachineId` call has successfully completed at the VSC side and its result received back at our end.
      */
     MachineId: (_: (_: string) => void) => void;
     /**
@@ -546,33 +546,33 @@ export interface Env {
      * exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
      * a specific extension runs remote or not.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `RemoteName` call has successfully completed at the VSC side and its result received back at our end.
      */
     RemoteName: (_: (_: string) => void) => void;
     /**
      * A unique identifier for the current session.
      * Changes each time the editor is started.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `SessionId` call has successfully completed at the VSC side and its result received back at our end.
      */
     SessionId: (_: (_: string) => void) => void;
     /**
      * The detected default shell for the extension host, this is overridden by the
      * `terminal.integrated.shell` setting for the extension host's platform.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `Shell` call has successfully completed at the VSC side and its result received back at our end.
      */
     Shell: (_: (_: string) => void) => void;
     /**
      * The custom uri scheme the editor registers to in the operating system.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `UriScheme` call has successfully completed at the VSC side and its result received back at our end.
      */
     UriScheme: (_: (_: string) => void) => void;
     /**
      * Provides single-call access to numerous individual `Env` properties at once.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
+     * @return a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.
      */
     AllProperties: (_: (_: EnvBag) => void) => void;
     /**
@@ -615,7 +615,7 @@ export interface Workspace {
      * The name of the workspace. `undefined` when no folder
      * has been opened.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `Name` call has successfully completed at the VSC side and its result received back at our end.
      */
     Name: (_: (_: string) => void) => void;
     /**
@@ -651,7 +651,7 @@ export interface Workspace {
      * for that purpose which will work both when a single folder is opened as
      * well as an untitled or saved workspace.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `WorkspaceFile` call has successfully completed at the VSC side and its result received back at our end.
      */
     WorkspaceFile: (_: (_: string) => void) => void;
     /**
@@ -681,7 +681,7 @@ export interface Workspace {
      * List of workspace folders or `undefined` when no folder is open.
      * *Note* that the first entry corresponds to the value of `rootPath`.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `WorkspaceFolders` call has successfully completed at the VSC side and its result received back at our end.
      */
     WorkspaceFolders: (_: (_: WorkspaceFolder[]) => void) => void;
     /**
@@ -709,7 +709,7 @@ export interface Workspace {
     /**
      * Provides single-call access to numerous individual `Workspace` properties at once.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
+     * @return a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
      */
     AllProperties: (_: (_: WorkspaceBag) => void) => void;
 }
@@ -1927,7 +1927,7 @@ export interface WorkspaceBag extends fromJson {
     workspaceFolders?: WorkspaceFolder[];
 }
 /**
- * StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+ * StatusBarItemBag (to be accessed only via `StatusBarItem.Bag`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
  */
 export interface StatusBarItemBag extends fromJson {
@@ -1974,7 +1974,7 @@ export interface StatusBarItemBag extends fromJson {
 }
 export declare function newStatusBarItemBag(): StatusBarItemBag;
 /**
- * OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+ * OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 
  */
 export interface OutputChannelBag extends fromJson {
@@ -1988,7 +1988,7 @@ export interface OutputChannelBag extends fromJson {
 }
 export declare function newOutputChannelBag(): OutputChannelBag;
 /**
- * TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+ * TextEditorDecorationTypeBag (to be accessed only via `TextEditorDecorationType.Bag`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 
  */
 export interface TextEditorDecorationTypeBag extends fromJson {
@@ -2002,7 +2002,7 @@ export interface TextEditorDecorationTypeBag extends fromJson {
 }
 export declare function newTextEditorDecorationTypeBag(): TextEditorDecorationTypeBag;
 /**
- * InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+ * InputBoxBag (to be accessed only via `InputBox.Bag`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
  */
 export interface InputBoxBag extends fromJson {
@@ -2073,7 +2073,7 @@ export interface InputBoxBag extends fromJson {
 }
 export declare function newInputBoxBag(): InputBoxBag;
 /**
- * QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+ * QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
  */
 export interface QuickPickBag extends fromJson {

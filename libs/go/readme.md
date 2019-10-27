@@ -352,22 +352,22 @@ type Env interface {
 
 	// The application name of the editor, like 'VS Code'.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `AppName` call has successfully completed at the VSC side and its result received back at our end.
 	AppName() func(func(string))
 
 	// The application root folder from which the editor is running.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `AppRoot` call has successfully completed at the VSC side and its result received back at our end.
 	AppRoot() func(func(string))
 
 	// Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `Language` call has successfully completed at the VSC side and its result received back at our end.
 	Language() func(func(string))
 
 	// A unique identifier for the computer.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `MachineId` call has successfully completed at the VSC side and its result received back at our end.
 	MachineId() func(func(string))
 
 	// The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
@@ -378,29 +378,29 @@ type Env interface {
 	// exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 	// a specific extension runs remote or not.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `RemoteName` call has successfully completed at the VSC side and its result received back at our end.
 	RemoteName() func(func(*string))
 
 	// A unique identifier for the current session.
 	// Changes each time the editor is started.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `SessionId` call has successfully completed at the VSC side and its result received back at our end.
 	SessionId() func(func(string))
 
 	// The detected default shell for the extension host, this is overridden by the
 	// `terminal.integrated.shell` setting for the extension host's platform.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `Shell` call has successfully completed at the VSC side and its result received back at our end.
 	Shell() func(func(string))
 
 	// The custom uri scheme the editor registers to in the operating system.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `UriScheme` call has successfully completed at the VSC side and its result received back at our end.
 	UriScheme() func(func(string))
 
 	// Provides single-call access to numerous individual `Env` properties at once.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
+	// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.
 	AllProperties() func(func(EnvBag))
 
 	// The clipboard provides read and write access to the system's clipboard.
@@ -513,8 +513,8 @@ console.log(importedApi.mul(42, 1));
 ```go
 type InputBox struct {
 
-	// CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
-	CfgBag *InputBoxBag
+	// Bag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Bag *InputBoxBag
 }
 ```
 
@@ -540,8 +540,8 @@ it is first hidden. After this call the input UI is no longer functional and no
 additional methods or properties on it should be accessed. Instead a new input
 UI should be created.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Dispose` call has successfully
+completed at the VSC side.
 
 #### func (*InputBox) Hide
 
@@ -552,8 +552,8 @@ Hides this input UI. This will also fire an
 [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Hide` call has successfully
+completed at the VSC side.
 
 #### func (*InputBox) OnDidAccept
 
@@ -608,8 +608,8 @@ first fire an
 [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Show` call has successfully
+completed at the VSC side.
 
 #### type InputBoxBag
 
@@ -657,32 +657,38 @@ type InputBoxBag struct {
 }
 ```
 
-InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is
-obtained whenever `InputBox` creations and method calls (incl. the dedicated
-`Get`) resolve or its event subscribers are invoked, and therefore (to help
-always retain a factual view of the real full-picture) should not be constructed
-manually. Changes to any non-function-valued fields must be propagated to the
-counterparty via the `Set` method.
+InputBoxBag (to be accessed only via `InputBox.Bag`) is a snapshot of `InputBox`
+state. It is auto-updated whenever `InputBox` creations and method calls resolve
+or its event subscribers (if any) are invoked. Changes to any non-read-only
+properties (ie. non-function-valued fields) must be explicitly propagated to the
+VSC side via the `ApplyChanges` method.
 
 #### func (*InputBoxBag) ApplyChanges
 
 ```go
 func (me *InputBoxBag) ApplyChanges() func(func())
 ```
-setter docs
+ApplyChanges propagates this `InputBoxBag`'s current property values for
+`value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`,
+`step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to
+immediately become active there. Note that all those property values are
+trasmitted, no omissions.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `ApplyChanges` call has
+successfully completed at the VSC side.
 
 #### func (*InputBoxBag) ReFetch
 
 ```go
 func (me *InputBoxBag) ReFetch() func(func())
 ```
-getter docs
+ReFetch requests the current `InputBox` state from the VSC side and upon
+response refreshes this `InputBoxBag`'s property values for `value`,
+`placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`,
+`totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `ReFetch` call has successfully
+completed at the VSC side.
 
 #### type InputBoxOptions
 
@@ -866,8 +872,8 @@ and the editor then silently adjusts the options to select files.
 ```go
 type OutputChannel struct {
 
-	// CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
-	CfgBag *OutputChannelBag
+	// Bag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+	Bag *OutputChannelBag
 }
 ```
 
@@ -885,8 +891,8 @@ Append the given value to the channel.
 
 `value` ── A string, falsy values will not be printed.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Append` call has successfully
+completed at the VSC side.
 
 #### func (*OutputChannel) AppendLine
 
@@ -897,8 +903,8 @@ Append the given value and a line feed character to the channel.
 
 `value` ── A string, falsy values will be printed.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `AppendLine` call has
+successfully completed at the VSC side.
 
 #### func (*OutputChannel) Clear
 
@@ -907,8 +913,8 @@ func (me *OutputChannel) Clear() func(func())
 ```
 Removes all output from the channel.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Clear` call has successfully
+completed at the VSC side.
 
 #### func (*OutputChannel) Dispose
 
@@ -917,8 +923,8 @@ func (me *OutputChannel) Dispose() func(func())
 ```
 Dispose and free associated resources.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Dispose` call has successfully
+completed at the VSC side.
 
 #### func (*OutputChannel) Hide
 
@@ -927,8 +933,8 @@ func (me *OutputChannel) Hide() func(func())
 ```
 Hide this channel from the UI.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Hide` call has successfully
+completed at the VSC side.
 
 #### func (*OutputChannel) Show
 
@@ -939,8 +945,8 @@ Reveal this channel in the UI.
 
 `preserveFocus` ── When `true` the channel will not take focus.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Show` call has successfully
+completed at the VSC side.
 
 #### type OutputChannelBag
 
@@ -952,22 +958,22 @@ type OutputChannelBag struct {
 }
 ```
 
-OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty.
-It is obtained whenever `OutputChannel` creations and method calls (incl. the
-dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to
-help always retain a factual view of the real full-picture) should not be
-constructed manually. All read-only properties are exposed as function-valued
-fields.
+OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of
+`OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and
+method calls resolve or its event subscribers (if any) are invoked. All
+read-only properties are exposed as function-valued fields.
 
 #### func (*OutputChannelBag) ReFetch
 
 ```go
 func (me *OutputChannelBag) ReFetch() func(func())
 ```
-getter docs
+ReFetch requests the current `OutputChannel` state from the VSC side and upon
+response refreshes this `OutputChannelBag`'s property value for `name` to
+reflect it.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `ReFetch` call has successfully
+completed at the VSC side.
 
 #### type OverviewRulerLane
 
@@ -1020,8 +1026,8 @@ or [InputBox](#InputBox).
 ```go
 type QuickPick struct {
 
-	// CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
-	CfgBag *QuickPickBag
+	// Bag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Bag *QuickPickBag
 }
 ```
 
@@ -1050,8 +1056,8 @@ it is first hidden. After this call the input UI is no longer functional and no
 additional methods or properties on it should be accessed. Instead a new input
 UI should be created.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Dispose` call has successfully
+completed at the VSC side.
 
 #### func (*QuickPick) Hide
 
@@ -1062,8 +1068,8 @@ Hides this input UI. This will also fire an
 [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Hide` call has successfully
+completed at the VSC side.
 
 #### func (*QuickPick) OnDidAccept
 
@@ -1142,8 +1148,8 @@ first fire an
 [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Show` call has successfully
+completed at the VSC side.
 
 #### type QuickPickBag
 
@@ -1200,32 +1206,39 @@ type QuickPickBag struct {
 }
 ```
 
-QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is
-obtained whenever `QuickPick` creations and method calls (incl. the dedicated
-`Get`) resolve or its event subscribers are invoked, and therefore (to help
-always retain a factual view of the real full-picture) should not be constructed
-manually. Changes to any non-function-valued fields must be propagated to the
-counterparty via the `Set` method.
+QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of
+`QuickPick` state. It is auto-updated whenever `QuickPick` creations and method
+calls resolve or its event subscribers (if any) are invoked. Changes to any
+non-read-only properties (ie. non-function-valued fields) must be explicitly
+propagated to the VSC side via the `ApplyChanges` method.
 
 #### func (*QuickPickBag) ApplyChanges
 
 ```go
 func (me *QuickPickBag) ApplyChanges() func(func())
 ```
-setter docs
+ApplyChanges propagates this `QuickPickBag`'s current property values for
+`value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`,
+`matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`,
+`enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active
+there. Note that all those property values are trasmitted, no omissions.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `ApplyChanges` call has
+successfully completed at the VSC side.
 
 #### func (*QuickPickBag) ReFetch
 
 ```go
 func (me *QuickPickBag) ReFetch() func(func())
 ```
-getter docs
+ReFetch requests the current `QuickPick` state from the VSC side and upon
+response refreshes this `QuickPickBag`'s property values for `value`,
+`placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`,
+`activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`,
+`busy`, `ignoreFocusOut` to reflect it.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `ReFetch` call has successfully
+completed at the VSC side.
 
 #### type QuickPickItem
 
@@ -1331,8 +1344,8 @@ const (
 ```go
 type StatusBarItem struct {
 
-	// CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
-	CfgBag *StatusBarItemBag
+	// Bag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Bag *StatusBarItemBag
 }
 ```
 
@@ -1347,8 +1360,8 @@ func (me *StatusBarItem) Dispose() func(func())
 Dispose and free associated resources. Call
 [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Dispose` call has successfully
+completed at the VSC side.
 
 #### func (*StatusBarItem) Hide
 
@@ -1357,8 +1370,8 @@ func (me *StatusBarItem) Hide() func(func())
 ```
 Hide the entry in the status bar.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Hide` call has successfully
+completed at the VSC side.
 
 #### func (*StatusBarItem) Show
 
@@ -1367,8 +1380,8 @@ func (me *StatusBarItem) Show() func(func())
 ```
 Shows the entry in the status bar.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Show` call has successfully
+completed at the VSC side.
 
 #### type StatusBarItemBag
 
@@ -1402,41 +1415,44 @@ type StatusBarItemBag struct {
 }
 ```
 
-StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty.
-It is obtained whenever `StatusBarItem` creations and method calls (incl. the
-dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to
-help always retain a factual view of the real full-picture) should not be
-constructed manually. All read-only properties are exposed as function-valued
-fields. Changes to any non-function-valued fields must be propagated to the
-counterparty via the `Set` method.
+StatusBarItemBag (to be accessed only via `StatusBarItem.Bag`) is a snapshot of
+`StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and
+method calls resolve or its event subscribers (if any) are invoked. All
+read-only properties are exposed as function-valued fields. Changes to any
+non-read-only properties (ie. non-function-valued fields) must be explicitly
+propagated to the VSC side via the `ApplyChanges` method.
 
 #### func (*StatusBarItemBag) ApplyChanges
 
 ```go
 func (me *StatusBarItemBag) ApplyChanges() func(func())
 ```
-setter docs
+ApplyChanges propagates this `StatusBarItemBag`'s current property values for
+`text`, `tooltip`, `color`, `command` to the VSC side to immediately become
+active there. Note that all those property values are trasmitted, no omissions.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `ApplyChanges` call has
+successfully completed at the VSC side.
 
 #### func (*StatusBarItemBag) ReFetch
 
 ```go
 func (me *StatusBarItemBag) ReFetch() func(func())
 ```
-getter docs
+ReFetch requests the current `StatusBarItem` state from the VSC side and upon
+response refreshes this `StatusBarItemBag`'s property values for `alignment`,
+`priority`, `text`, `tooltip`, `color`, `command` to reflect it.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `ReFetch` call has successfully
+completed at the VSC side.
 
 #### type TextEditorDecorationType
 
 ```go
 type TextEditorDecorationType struct {
 
-	// CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
-	CfgBag *TextEditorDecorationTypeBag
+	// Bag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+	Bag *TextEditorDecorationTypeBag
 }
 ```
 
@@ -1454,8 +1470,8 @@ func (me *TextEditorDecorationType) Dispose() func(func())
 ```
 Remove this decoration type and all decorations on all text editors using it.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `Dispose` call has successfully
+completed at the VSC side.
 
 #### type TextEditorDecorationTypeBag
 
@@ -1467,22 +1483,23 @@ type TextEditorDecorationTypeBag struct {
 }
 ```
 
-TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at
-the VSC counterparty. It is obtained whenever `TextEditorDecorationType`
-creations and method calls (incl. the dedicated `Get`) resolve or its event
-subscribers are invoked, and therefore (to help always retain a factual view of
-the real full-picture) should not be constructed manually. All read-only
-properties are exposed as function-valued fields.
+TextEditorDecorationTypeBag (to be accessed only via
+`TextEditorDecorationType.Bag`) is a snapshot of `TextEditorDecorationType`
+state. It is auto-updated whenever `TextEditorDecorationType` creations and
+method calls resolve or its event subscribers (if any) are invoked. All
+read-only properties are exposed as function-valued fields.
 
 #### func (*TextEditorDecorationTypeBag) ReFetch
 
 ```go
 func (me *TextEditorDecorationTypeBag) ReFetch() func(func())
 ```
-getter docs
+ReFetch requests the current `TextEditorDecorationType` state from the VSC side
+and upon response refreshes this `TextEditorDecorationTypeBag`'s property value
+for `key` to reflect it.
 
-`return` ── A thenable that resolves when this call has completed at the
-counterparty.
+`return` ── a thenable that resolves when this `ReFetch` call has successfully
+completed at the VSC side.
 
 #### type ThemableDecorationAttachmentRenderOptions
 
@@ -1991,7 +2008,7 @@ type Window interface {
 
 	// Represents the current window's state.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
+	// `return` ── a thenable that resolves when this `State` call has successfully completed at the VSC side and its `WindowState` result received back at our end.
 	State() func(func(WindowState))
 
 	// An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
@@ -2068,7 +2085,7 @@ type Workspace interface {
 	// The name of the workspace. `undefined` when no folder
 	// has been opened.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `Name` call has successfully completed at the VSC side and its result received back at our end.
 	Name() func(func(*string))
 
 	// The location of the workspace file, for example:
@@ -2103,7 +2120,7 @@ type Workspace interface {
 	// for that purpose which will work both when a single folder is opened as
 	// well as an untitled or saved workspace.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `WorkspaceFile` call has successfully completed at the VSC side and its result received back at our end.
 	WorkspaceFile() func(func(*string))
 
 	// Save all dirty files.
@@ -2132,7 +2149,7 @@ type Workspace interface {
 	// List of workspace folders or `undefined` when no folder is open.
 	// *Note* that the first entry corresponds to the value of `rootPath`.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+	// `return` ── a thenable that resolves when this `WorkspaceFolders` call has successfully completed at the VSC side and its result received back at our end.
 	WorkspaceFolders() func(func([]WorkspaceFolder))
 
 	// Find files across all [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) in the workspace.
@@ -2170,7 +2187,7 @@ type Workspace interface {
 
 	// Provides single-call access to numerous individual `Workspace` properties at once.
 	//
-	// `return` ── A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
+	// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
 	AllProperties() func(func(WorkspaceBag))
 }
 ```

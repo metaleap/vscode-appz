@@ -125,7 +125,7 @@
   - [WorkspaceFile()](#M-VscAppz-IWorkspace-WorkspaceFile 'VscAppz.IWorkspace.WorkspaceFile')
   - [WorkspaceFolders()](#M-VscAppz-IWorkspace-WorkspaceFolders 'VscAppz.IWorkspace.WorkspaceFolders')
 - [InputBox](#T-VscAppz-InputBox 'VscAppz.InputBox')
-  - [CfgBag](#F-VscAppz-InputBox-CfgBag 'VscAppz.InputBox.CfgBag')
+  - [Bag](#F-VscAppz-InputBox-Bag 'VscAppz.InputBox.Bag')
   - [Dispose()](#M-VscAppz-InputBox-Dispose 'VscAppz.InputBox.Dispose')
   - [Hide()](#M-VscAppz-InputBox-Hide 'VscAppz.InputBox.Hide')
   - [OnDidAccept(handler)](#M-VscAppz-InputBox-OnDidAccept-System-Action- 'VscAppz.InputBox.OnDidAccept(System.Action)')
@@ -169,7 +169,7 @@
   - [Filters](#F-VscAppz-OpenDialogOptions-Filters 'VscAppz.OpenDialogOptions.Filters')
   - [OpenLabel](#F-VscAppz-OpenDialogOptions-OpenLabel 'VscAppz.OpenDialogOptions.OpenLabel')
 - [OutputChannel](#T-VscAppz-OutputChannel 'VscAppz.OutputChannel')
-  - [CfgBag](#F-VscAppz-OutputChannel-CfgBag 'VscAppz.OutputChannel.CfgBag')
+  - [Bag](#F-VscAppz-OutputChannel-Bag 'VscAppz.OutputChannel.Bag')
   - [Append(value)](#M-VscAppz-OutputChannel-Append-System-String- 'VscAppz.OutputChannel.Append(System.String)')
   - [AppendLine(value)](#M-VscAppz-OutputChannel-AppendLine-System-String- 'VscAppz.OutputChannel.AppendLine(System.String)')
   - [Clear()](#M-VscAppz-OutputChannel-Clear 'VscAppz.OutputChannel.Clear')
@@ -188,7 +188,7 @@
   - [IconPath](#F-VscAppz-QuickInputButton-IconPath 'VscAppz.QuickInputButton.IconPath')
   - [Tooltip](#F-VscAppz-QuickInputButton-Tooltip 'VscAppz.QuickInputButton.Tooltip')
 - [QuickPick](#T-VscAppz-QuickPick 'VscAppz.QuickPick')
-  - [CfgBag](#F-VscAppz-QuickPick-CfgBag 'VscAppz.QuickPick.CfgBag')
+  - [Bag](#F-VscAppz-QuickPick-Bag 'VscAppz.QuickPick.Bag')
   - [Dispose()](#M-VscAppz-QuickPick-Dispose 'VscAppz.QuickPick.Dispose')
   - [Hide()](#M-VscAppz-QuickPick-Hide 'VscAppz.QuickPick.Hide')
   - [OnDidAccept(handler)](#M-VscAppz-QuickPick-OnDidAccept-System-Action- 'VscAppz.QuickPick.OnDidAccept(System.Action)')
@@ -237,7 +237,7 @@
   - [Left](#F-VscAppz-StatusBarAlignment-Left 'VscAppz.StatusBarAlignment.Left')
   - [Right](#F-VscAppz-StatusBarAlignment-Right 'VscAppz.StatusBarAlignment.Right')
 - [StatusBarItem](#T-VscAppz-StatusBarItem 'VscAppz.StatusBarItem')
-  - [CfgBag](#F-VscAppz-StatusBarItem-CfgBag 'VscAppz.StatusBarItem.CfgBag')
+  - [Bag](#F-VscAppz-StatusBarItem-Bag 'VscAppz.StatusBarItem.Bag')
   - [Dispose()](#M-VscAppz-StatusBarItem-Dispose 'VscAppz.StatusBarItem.Dispose')
   - [Hide()](#M-VscAppz-StatusBarItem-Hide 'VscAppz.StatusBarItem.Hide')
   - [Show()](#M-VscAppz-StatusBarItem-Show 'VscAppz.StatusBarItem.Show')
@@ -251,7 +251,7 @@
   - [ApplyChanges()](#M-VscAppz-StatusBarItemBag-ApplyChanges 'VscAppz.StatusBarItemBag.ApplyChanges')
   - [ReFetch()](#M-VscAppz-StatusBarItemBag-ReFetch 'VscAppz.StatusBarItemBag.ReFetch')
 - [TextEditorDecorationType](#T-VscAppz-TextEditorDecorationType 'VscAppz.TextEditorDecorationType')
-  - [CfgBag](#F-VscAppz-TextEditorDecorationType-CfgBag 'VscAppz.TextEditorDecorationType.CfgBag')
+  - [Bag](#F-VscAppz-TextEditorDecorationType-Bag 'VscAppz.TextEditorDecorationType.Bag')
   - [Dispose()](#M-VscAppz-TextEditorDecorationType-Dispose 'VscAppz.TextEditorDecorationType.Dispose')
 - [TextEditorDecorationTypeBag](#T-VscAppz-TextEditorDecorationTypeBag 'VscAppz.TextEditorDecorationTypeBag')
   - [Key](#F-VscAppz-TextEditorDecorationTypeBag-Key 'VscAppz.TextEditorDecorationTypeBag.Key')
@@ -902,7 +902,7 @@ Namespace describing the environment the editor runs in.
 
 Provides single-call access to numerous individual `IEnv` properties at once.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
+`return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.
 
 ##### Parameters
 
@@ -915,7 +915,7 @@ This method has no parameters.
 
 The application name of the editor, like 'VS Code'.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── a thenable that resolves when this `AppName` call has successfully completed at the VSC side and its result received back at our end.
 
 ##### Parameters
 
@@ -928,7 +928,7 @@ This method has no parameters.
 
 The application root folder from which the editor is running.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── a thenable that resolves when this `AppRoot` call has successfully completed at the VSC side and its result received back at our end.
 
 ##### Parameters
 
@@ -952,7 +952,7 @@ This method has no parameters.
 
 Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── a thenable that resolves when this `Language` call has successfully completed at the VSC side and its result received back at our end.
 
 ##### Parameters
 
@@ -965,7 +965,7 @@ This method has no parameters.
 
 A unique identifier for the computer.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── a thenable that resolves when this `MachineId` call has successfully completed at the VSC side and its result received back at our end.
 
 ##### Parameters
 
@@ -1005,7 +1005,7 @@ value is defined in all extension hosts (local and remote) in case a remote exte
 exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
 a specific extension runs remote or not.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── a thenable that resolves when this `RemoteName` call has successfully completed at the VSC side and its result received back at our end.
 
 ##### Parameters
 
@@ -1019,7 +1019,7 @@ This method has no parameters.
 A unique identifier for the current session.
 Changes each time the editor is started.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── a thenable that resolves when this `SessionId` call has successfully completed at the VSC side and its result received back at our end.
 
 ##### Parameters
 
@@ -1033,7 +1033,7 @@ This method has no parameters.
 The detected default shell for the extension host, this is overridden by the
 `terminal.integrated.shell` setting for the extension host's platform.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── a thenable that resolves when this `Shell` call has successfully completed at the VSC side and its result received back at our end.
 
 ##### Parameters
 
@@ -1046,7 +1046,7 @@ This method has no parameters.
 
 The custom uri scheme the editor registers to in the operating system.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── a thenable that resolves when this `UriScheme` call has successfully completed at the VSC side and its result received back at our end.
 
 ##### Parameters
 
@@ -1954,7 +1954,7 @@ Returns `undefined` if no folder is open.
 
 Represents the current window's state.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
+`return` ── a thenable that resolves when this `State` call has successfully completed at the VSC side and its `WindowState` result received back at our end.
 
 ##### Parameters
 
@@ -1984,7 +1984,7 @@ the editor-process so that they should be always used instead of nodejs-equivale
 
 Provides single-call access to numerous individual `IWorkspace` properties at once.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
+`return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
 
 ##### Parameters
 
@@ -2074,7 +2074,7 @@ Returns the [workspace folder](https://code.visualstudio.com/api/references/vsco
 The name of the workspace. `undefined` when no folder
 has been opened.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── a thenable that resolves when this `Name` call has successfully completed at the VSC side and its result received back at our end.
 
 ##### Parameters
 
@@ -2151,7 +2151,7 @@ configuration data into the file. You can use `workspace.getConfiguration().upda
 for that purpose which will work both when a single folder is opened as
 well as an untitled or saved workspace.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── a thenable that resolves when this `WorkspaceFile` call has successfully completed at the VSC side and its result received back at our end.
 
 ##### Parameters
 
@@ -2165,7 +2165,7 @@ This method has no parameters.
 List of workspace folders or `undefined` when no folder is open.
 *Note* that the first entry corresponds to the value of `rootPath`.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty and its result obtained.
+`return` ── a thenable that resolves when this `WorkspaceFolders` call has successfully completed at the VSC side and its result received back at our end.
 
 ##### Parameters
 
@@ -2186,12 +2186,12 @@ Note that in many cases the more convenient [window.showInputBox](https://code.v
 is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
 when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
-<a name='F-VscAppz-InputBox-CfgBag'></a>
-### CfgBag `constants`
+<a name='F-VscAppz-InputBox-Bag'></a>
+### Bag `constants`
 
 ##### Summary
 
-CfgBag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+Bag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 
 <a name='M-VscAppz-InputBox-Dispose'></a>
 ### Dispose() `method`
@@ -2203,7 +2203,7 @@ visible, it is first hidden. After this call the input UI is no longer
 functional and no additional methods or properties on it should be
 accessed. Instead a new input UI should be created.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2217,7 +2217,7 @@ This method has no parameters.
 Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2287,7 +2287,7 @@ the user pressing Esc, some other input UI opening, etc.)
 Makes the input UI visible in its current configuration. Any other input
 UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2302,7 +2302,7 @@ VscAppz
 
 ##### Summary
 
-InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+InputBoxBag (to be accessed only via `InputBox.Bag`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
 <a name='F-VscAppz-InputBoxBag-Busy'></a>
 ### Busy `constants`
@@ -2392,9 +2392,9 @@ Current input value.
 
 ##### Summary
 
-setter docs
+ApplyChanges propagates this `InputBoxBag`'s current property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2405,9 +2405,9 @@ This method has no parameters.
 
 ##### Summary
 
-getter docs
+ReFetch requests the current `InputBox` state from the VSC side and upon response refreshes this `InputBoxBag`'s property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2626,12 +2626,12 @@ An output channel is a container for readonly textual information.
 To get an instance of an `OutputChannel` use
 [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 
-<a name='F-VscAppz-OutputChannel-CfgBag'></a>
-### CfgBag `constants`
+<a name='F-VscAppz-OutputChannel-Bag'></a>
+### Bag `constants`
 
 ##### Summary
 
-CfgBag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+Bag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
 
 <a name='M-VscAppz-OutputChannel-Append-System-String-'></a>
 ### Append(value) `method`
@@ -2642,7 +2642,7 @@ Append the given value to the channel.
 
 `value` ── A string, falsy values will not be printed.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Append` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2660,7 +2660,7 @@ to the channel.
 
 `value` ── A string, falsy values will be printed.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `AppendLine` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2675,7 +2675,7 @@ to the channel.
 
 Removes all output from the channel.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Clear` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2688,7 +2688,7 @@ This method has no parameters.
 
 Dispose and free associated resources.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2701,7 +2701,7 @@ This method has no parameters.
 
 Hide this channel from the UI.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2716,7 +2716,7 @@ Reveal this channel in the UI.
 
 `preserveFocus` ── When `true` the channel will not take focus.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2733,7 +2733,7 @@ VscAppz
 
 ##### Summary
 
-OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 
 <a name='F-VscAppz-OutputChannelBag-Name'></a>
 ### Name `constants`
@@ -2747,9 +2747,9 @@ The human-readable name of this output channel.
 
 ##### Summary
 
-getter docs
+ReFetch requests the current `OutputChannel` state from the VSC side and upon response refreshes this `OutputChannelBag`'s property value for `name` to reflect it.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2842,12 +2842,12 @@ Note that in many cases the more convenient [window.showQuickPick](https://code.
 is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
 when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
-<a name='F-VscAppz-QuickPick-CfgBag'></a>
-### CfgBag `constants`
+<a name='F-VscAppz-QuickPick-Bag'></a>
+### Bag `constants`
 
 ##### Summary
 
-CfgBag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+Bag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 
 <a name='M-VscAppz-QuickPick-Dispose'></a>
 ### Dispose() `method`
@@ -2859,7 +2859,7 @@ visible, it is first hidden. After this call the input UI is no longer
 functional and no additional methods or properties on it should be
 accessed. Instead a new input UI should be created.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2873,7 +2873,7 @@ This method has no parameters.
 Hides this input UI. This will also fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide)
 event.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2977,7 +2977,7 @@ the user pressing Esc, some other input UI opening, etc.)
 Makes the input UI visible in its current configuration. Any other input
 UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -2992,7 +2992,7 @@ VscAppz
 
 ##### Summary
 
-QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
 <a name='F-VscAppz-QuickPickBag-ActiveItems'></a>
 ### ActiveItems `constants`
@@ -3103,9 +3103,9 @@ Current value of the filter text.
 
 ##### Summary
 
-setter docs
+ApplyChanges propagates this `QuickPickBag`'s current property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -3116,9 +3116,9 @@ This method has no parameters.
 
 ##### Summary
 
-getter docs
+ReFetch requests the current `QuickPick` state from the VSC side and upon response refreshes this `QuickPickBag`'s property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -3318,12 +3318,12 @@ VscAppz
 A status bar item is a status bar contribution that can
 show text and icons and run a command on click.
 
-<a name='F-VscAppz-StatusBarItem-CfgBag'></a>
-### CfgBag `constants`
+<a name='F-VscAppz-StatusBarItem-Bag'></a>
+### Bag `constants`
 
 ##### Summary
 
-CfgBag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+Bag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
 
 <a name='M-VscAppz-StatusBarItem-Dispose'></a>
 ### Dispose() `method`
@@ -3333,7 +3333,7 @@ CfgBag represents this `StatusBarItem`'s current state. All its members get auto
 Dispose and free associated resources. Call
 [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -3346,7 +3346,7 @@ This method has no parameters.
 
 Hide the entry in the status bar.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -3359,7 +3359,7 @@ This method has no parameters.
 
 Shows the entry in the status bar.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -3374,7 +3374,7 @@ VscAppz
 
 ##### Summary
 
-StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+StatusBarItemBag (to be accessed only via `StatusBarItem.Bag`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
 <a name='F-VscAppz-StatusBarItemBag-Alignment'></a>
 ### Alignment `constants`
@@ -3430,9 +3430,9 @@ The tooltip text when you hover over this entry.
 
 ##### Summary
 
-setter docs
+ApplyChanges propagates this `StatusBarItemBag`'s current property values for `text`, `tooltip`, `color`, `command` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -3443,9 +3443,9 @@ This method has no parameters.
 
 ##### Summary
 
-getter docs
+ReFetch requests the current `StatusBarItem` state from the VSC side and upon response refreshes this `StatusBarItemBag`'s property values for `alignment`, `priority`, `text`, `tooltip`, `color`, `command` to reflect it.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -3466,12 +3466,12 @@ sharing the same [styling options](https://code.visualstudio.com/api/references/
 To get an instance of a `TextEditorDecorationType` use
 [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 
-<a name='F-VscAppz-TextEditorDecorationType-CfgBag'></a>
-### CfgBag `constants`
+<a name='F-VscAppz-TextEditorDecorationType-Bag'></a>
+### Bag `constants`
 
 ##### Summary
 
-CfgBag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+Bag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
 
 <a name='M-VscAppz-TextEditorDecorationType-Dispose'></a>
 ### Dispose() `method`
@@ -3480,7 +3480,7 @@ CfgBag represents this `TextEditorDecorationType`'s current state. All its membe
 
 Remove this decoration type and all decorations on all text editors using it.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
 
 ##### Parameters
 
@@ -3495,7 +3495,7 @@ VscAppz
 
 ##### Summary
 
-TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+TextEditorDecorationTypeBag (to be accessed only via `TextEditorDecorationType.Bag`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 
 <a name='F-VscAppz-TextEditorDecorationTypeBag-Key'></a>
 ### Key `constants`
@@ -3509,9 +3509,9 @@ Internal representation of the handle.
 
 ##### Summary
 
-getter docs
+ReFetch requests the current `TextEditorDecorationType` state from the VSC side and upon response refreshes this `TextEditorDecorationTypeBag`'s property value for `key` to reflect it.
 
-`return` ── A thenable that resolves when this call has completed at the counterparty.
+`return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
 
 ##### Parameters
 

@@ -6,7 +6,7 @@ type Cancel = core.Cancel
 type Disposable = core.Disposable
 interface fromJson { __loadFromJsonish__: (_: any) => boolean }
 interface withDisp { __disp__: Disposable }
-interface withBag<T extends fromJson> { CfgBag: T, toJSON: () => any }
+interface withBag<T extends fromJson> { Bag: T, toJSON: () => any }
 
 abstract class implBase {
     impl: impl
@@ -486,7 +486,7 @@ export interface Window {
     /**
      * Represents the current window's state.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its `WindowState` result obtained.
+     * @return a thenable that resolves when this `State` call has successfully completed at the VSC side and its `WindowState` result received back at our end.
      */
     State: (_: (_: WindowState) => void) => void
 
@@ -568,28 +568,28 @@ export interface Env {
     /**
      * The application name of the editor, like 'VS Code'.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `AppName` call has successfully completed at the VSC side and its result received back at our end.
      */
     AppName: (_: (_: string) => void) => void
 
     /**
      * The application root folder from which the editor is running.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `AppRoot` call has successfully completed at the VSC side and its result received back at our end.
      */
     AppRoot: (_: (_: string) => void) => void
 
     /**
      * Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `Language` call has successfully completed at the VSC side and its result received back at our end.
      */
     Language: (_: (_: string) => void) => void
 
     /**
      * A unique identifier for the computer.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `MachineId` call has successfully completed at the VSC side and its result received back at our end.
      */
     MachineId: (_: (_: string) => void) => void
 
@@ -602,7 +602,7 @@ export interface Env {
      * exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
      * a specific extension runs remote or not.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `RemoteName` call has successfully completed at the VSC side and its result received back at our end.
      */
     RemoteName: (_: (_: string) => void) => void
 
@@ -610,7 +610,7 @@ export interface Env {
      * A unique identifier for the current session.
      * Changes each time the editor is started.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `SessionId` call has successfully completed at the VSC side and its result received back at our end.
      */
     SessionId: (_: (_: string) => void) => void
 
@@ -618,21 +618,21 @@ export interface Env {
      * The detected default shell for the extension host, this is overridden by the
      * `terminal.integrated.shell` setting for the extension host's platform.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `Shell` call has successfully completed at the VSC side and its result received back at our end.
      */
     Shell: (_: (_: string) => void) => void
 
     /**
      * The custom uri scheme the editor registers to in the operating system.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `UriScheme` call has successfully completed at the VSC side and its result received back at our end.
      */
     UriScheme: (_: (_: string) => void) => void
 
     /**
      * Provides single-call access to numerous individual `Env` properties at once.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its `EnvBag` result obtained.
+     * @return a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.
      */
     AllProperties: (_: (_: EnvBag) => void) => void
 
@@ -679,7 +679,7 @@ export interface Workspace {
      * The name of the workspace. `undefined` when no folder
      * has been opened.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `Name` call has successfully completed at the VSC side and its result received back at our end.
      */
     Name: (_: (_: string) => void) => void
 
@@ -716,7 +716,7 @@ export interface Workspace {
      * for that purpose which will work both when a single folder is opened as
      * well as an untitled or saved workspace.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `WorkspaceFile` call has successfully completed at the VSC side and its result received back at our end.
      */
     WorkspaceFile: (_: (_: string) => void) => void
 
@@ -750,7 +750,7 @@ export interface Workspace {
      * List of workspace folders or `undefined` when no folder is open.
      * *Note* that the first entry corresponds to the value of `rootPath`.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its result obtained.
+     * @return a thenable that resolves when this `WorkspaceFolders` call has successfully completed at the VSC side and its result received back at our end.
      */
     WorkspaceFolders: (_: (_: WorkspaceFolder[]) => void) => void
 
@@ -781,7 +781,7 @@ export interface Workspace {
     /**
      * Provides single-call access to numerous individual `Workspace` properties at once.
 
-     * @return A thenable that resolves when this call has completed at the counterparty and its `WorkspaceBag` result obtained.
+     * @return a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
      */
     AllProperties: (_: (_: WorkspaceBag) => void) => void
 }
@@ -2257,7 +2257,7 @@ function newWorkspaceBag (): WorkspaceBag {
 }
 
 /**
- * StatusBarItemBag is a snapshot of `StatusBarItem` state at the VSC counterparty. It is obtained whenever `StatusBarItem` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+ * StatusBarItemBag (to be accessed only via `StatusBarItem.Bag`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
  */
 export interface StatusBarItemBag extends fromJson {
@@ -2318,7 +2318,7 @@ export function newStatusBarItemBag (): StatusBarItemBag {
 }
 
 /**
- * OutputChannelBag is a snapshot of `OutputChannel` state at the VSC counterparty. It is obtained whenever `OutputChannel` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+ * OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 
  */
 export interface OutputChannelBag extends fromJson {
@@ -2340,7 +2340,7 @@ export function newOutputChannelBag (): OutputChannelBag {
 }
 
 /**
- * TextEditorDecorationTypeBag is a snapshot of `TextEditorDecorationType` state at the VSC counterparty. It is obtained whenever `TextEditorDecorationType` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. All read-only properties are exposed as function-valued fields.
+ * TextEditorDecorationTypeBag (to be accessed only via `TextEditorDecorationType.Bag`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 
  */
 export interface TextEditorDecorationTypeBag extends fromJson {
@@ -2362,7 +2362,7 @@ export function newTextEditorDecorationTypeBag (): TextEditorDecorationTypeBag {
 }
 
 /**
- * InputBoxBag is a snapshot of `InputBox` state at the VSC counterparty. It is obtained whenever `InputBox` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+ * InputBoxBag (to be accessed only via `InputBox.Bag`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
  */
 export interface InputBoxBag extends fromJson {
@@ -2452,7 +2452,7 @@ export function newInputBoxBag (): InputBoxBag {
 }
 
 /**
- * QuickPickBag is a snapshot of `QuickPick` state at the VSC counterparty. It is obtained whenever `QuickPick` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually. Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method.
+ * QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
  */
 export interface QuickPickBag extends fromJson {
@@ -4753,7 +4753,7 @@ function StatusBarItem_Show(this: StatusBarItem, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.__loadFromJsonish__(it[1])
+            ok = this.Bag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -4788,7 +4788,7 @@ function StatusBarItem_Hide(this: StatusBarItem, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.__loadFromJsonish__(it[1])
+            ok = this.Bag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -4818,12 +4818,12 @@ function StatusBarItem___appzObjBagPullFromPeer__(this: StatusBarItem, ): (_: ()
     let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        if ((undefined === this.CfgBag || null === this.CfgBag)) {
-            this.CfgBag = newStatusBarItemBag()
+        if ((undefined === this.Bag || null === this.Bag)) {
+            this.Bag = newStatusBarItemBag()
         }
-        this.CfgBag.__holder__ = this
+        this.Bag.__holder__ = this
         {
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+            ok = this.Bag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -4851,7 +4851,7 @@ function StatusBarItem___appzObjBagPushToPeer__(this: StatusBarItem, allUpdates?
     onresp = (payload: any): boolean => {
         let ok: boolean
         {
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+            ok = this.Bag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -4887,7 +4887,7 @@ function OutputChannel_Append(this: OutputChannel, value: string): (_: () => voi
             return false
         }
         {
-            ok = this.CfgBag.__loadFromJsonish__(it[1])
+            ok = this.Bag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -4923,7 +4923,7 @@ function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: () =>
             return false
         }
         {
-            ok = this.CfgBag.__loadFromJsonish__(it[1])
+            ok = this.Bag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -4958,7 +4958,7 @@ function OutputChannel_Clear(this: OutputChannel, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.__loadFromJsonish__(it[1])
+            ok = this.Bag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -4994,7 +4994,7 @@ function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (
             return false
         }
         {
-            ok = this.CfgBag.__loadFromJsonish__(it[1])
+            ok = this.Bag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5029,7 +5029,7 @@ function OutputChannel_Hide(this: OutputChannel, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.__loadFromJsonish__(it[1])
+            ok = this.Bag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5059,12 +5059,12 @@ function OutputChannel___appzObjBagPullFromPeer__(this: OutputChannel, ): (_: ()
     let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        if ((undefined === this.CfgBag || null === this.CfgBag)) {
-            this.CfgBag = newOutputChannelBag()
+        if ((undefined === this.Bag || null === this.Bag)) {
+            this.Bag = newOutputChannelBag()
         }
-        this.CfgBag.__holder__ = this
+        this.Bag.__holder__ = this
         {
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+            ok = this.Bag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5094,12 +5094,12 @@ function TextEditorDecorationType___appzObjBagPullFromPeer__(this: TextEditorDec
     let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        if ((undefined === this.CfgBag || null === this.CfgBag)) {
-            this.CfgBag = newTextEditorDecorationTypeBag()
+        if ((undefined === this.Bag || null === this.Bag)) {
+            this.Bag = newTextEditorDecorationTypeBag()
         }
-        this.CfgBag.__holder__ = this
+        this.Bag.__holder__ = this
         {
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+            ok = this.Bag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5138,7 +5138,7 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string) => void)
         }
         {
             {
-                ok = this.CfgBag.__loadFromJsonish__(args[1])
+                ok = this.Bag.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -5192,7 +5192,7 @@ function InputBox_OnDidAccept(this: InputBox, handler: () => void): (_: (_: Disp
         }
         {
             {
-                ok = this.CfgBag.__loadFromJsonish__(args[0])
+                ok = this.Bag.__loadFromJsonish__(args[0])
             }
             if (!ok) {
                 return false
@@ -5247,7 +5247,7 @@ function InputBox_Show(this: InputBox, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.__loadFromJsonish__(it[1])
+            ok = this.Bag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5282,7 +5282,7 @@ function InputBox_Hide(this: InputBox, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.__loadFromJsonish__(it[1])
+            ok = this.Bag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5316,7 +5316,7 @@ function InputBox_OnDidHide(this: InputBox, handler: () => void): (_: (_: Dispos
         }
         {
             {
-                ok = this.CfgBag.__loadFromJsonish__(args[0])
+                ok = this.Bag.__loadFromJsonish__(args[0])
             }
             if (!ok) {
                 return false
@@ -5366,12 +5366,12 @@ function InputBox___appzObjBagPullFromPeer__(this: InputBox, ): (_: () => void) 
     let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        if ((undefined === this.CfgBag || null === this.CfgBag)) {
-            this.CfgBag = newInputBoxBag()
+        if ((undefined === this.Bag || null === this.Bag)) {
+            this.Bag = newInputBoxBag()
         }
-        this.CfgBag.__holder__ = this
+        this.Bag.__holder__ = this
         {
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+            ok = this.Bag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5399,7 +5399,7 @@ function InputBox___appzObjBagPushToPeer__(this: InputBox, allUpdates?: InputBox
     onresp = (payload: any): boolean => {
         let ok: boolean
         {
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+            ok = this.Bag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5438,7 +5438,7 @@ function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string) => voi
         }
         {
             {
-                ok = this.CfgBag.__loadFromJsonish__(args[1])
+                ok = this.Bag.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -5492,7 +5492,7 @@ function QuickPick_OnDidAccept(this: QuickPick, handler: () => void): (_: (_: Di
         }
         {
             {
-                ok = this.CfgBag.__loadFromJsonish__(args[0])
+                ok = this.Bag.__loadFromJsonish__(args[0])
             }
             if (!ok) {
                 return false
@@ -5565,7 +5565,7 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
         }
         {
             {
-                ok = this.CfgBag.__loadFromJsonish__(args[1])
+                ok = this.Bag.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -5638,7 +5638,7 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
         }
         {
             {
-                ok = this.CfgBag.__loadFromJsonish__(args[1])
+                ok = this.Bag.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -5693,7 +5693,7 @@ function QuickPick_Show(this: QuickPick, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.__loadFromJsonish__(it[1])
+            ok = this.Bag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5728,7 +5728,7 @@ function QuickPick_Hide(this: QuickPick, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.CfgBag.__loadFromJsonish__(it[1])
+            ok = this.Bag.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5762,7 +5762,7 @@ function QuickPick_OnDidHide(this: QuickPick, handler: () => void): (_: (_: Disp
         }
         {
             {
-                ok = this.CfgBag.__loadFromJsonish__(args[0])
+                ok = this.Bag.__loadFromJsonish__(args[0])
             }
             if (!ok) {
                 return false
@@ -5812,12 +5812,12 @@ function QuickPick___appzObjBagPullFromPeer__(this: QuickPick, ): (_: () => void
     let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        if ((undefined === this.CfgBag || null === this.CfgBag)) {
-            this.CfgBag = newQuickPickBag()
+        if ((undefined === this.Bag || null === this.Bag)) {
+            this.Bag = newQuickPickBag()
         }
-        this.CfgBag.__holder__ = this
+        this.Bag.__holder__ = this
         {
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+            ok = this.Bag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5845,7 +5845,7 @@ function QuickPick___appzObjBagPushToPeer__(this: QuickPick, allUpdates?: QuickP
     onresp = (payload: any): boolean => {
         let ok: boolean
         {
-            ok = this.CfgBag.__loadFromJsonish__(payload)
+            ok = this.Bag.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false

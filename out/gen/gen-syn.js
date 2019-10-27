@@ -153,7 +153,7 @@ class Builder {
                     ]
                 }] : it.isPropsOfStruct ? [{
                     Lines: [
-                        structname + " is a snapshot of `" + this.gen.nameRewriters.types.structs(it.isPropsOfStruct.name) + "` state at the VSC counterparty. It is obtained whenever `" + this.gen.nameRewriters.types.structs(it.isPropsOfStruct.name) + "` creations and method calls (incl. the dedicated `Get`) resolve or its event subscribers are invoked, and therefore (to help always retain a factual view of the real full-picture) should not be constructed manually." + (it.fields.some(_ => _.readOnly) ? " All read-only properties are exposed as function-valued fields." : "") + (it.fields.some(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec)) ? " Changes to any non-function-valued fields must be propagated to the counterparty via the `Set` method." : "")
+                        structname + " (to be accessed only via `" + it.isPropsOfStruct.name + "." + gen.idents.fldDispObjBag + "`) is a snapshot of `" + this.gen.nameRewriters.types.structs(it.isPropsOfStruct.name) + "` state. It is auto-updated whenever `" + this.gen.nameRewriters.types.structs(it.isPropsOfStruct.name) + "` creations and method calls resolve or its event subscribers (if any) are invoked." + (it.fields.some(_ => _.readOnly) ? " All read-only properties are exposed as function-valued fields." : "") + (it.fields.some(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec)) ? " Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `" + gen.idents.methodBagPublish + "` method." : "")
                     ]
                 }] : this.docs(gen.docs(it.fromOrig.decl)),
             IsOutgoing: it.isOutgoing ? true : false,
@@ -430,7 +430,7 @@ class Gen extends gen.Gen {
                     docarg = "TODO_ARG_PROPS";
                 if ((!docret) && this.typeFunc(me.Type) && me.Type.From && me.Type.From.length && this.typeFunc(me.Type.From[0])) {
                     const tret = this.typeUnMaybe((this.typeFunc(me.Type.From[0])).From[0]);
-                    docret = "A thenable that resolves when this call has completed at the counterparty" + ((!tret) ? "" : (" and its" + ((!tret.Name) ? " " : (" `" + tret.Name + "` ")) + "result obtained")) + ".";
+                    docret = "a thenable that resolves when this `" + me.Name + "` call has successfully completed at the VSC side" + ((!tret) ? "" : (" and its" + ((!tret.Name) ? " " : (" `" + tret.Name + "` ")) + "result received back at our end")) + ".";
                 }
                 const docsadded = [];
                 for (const arg of me.Args)
@@ -1065,21 +1065,18 @@ class Gen extends gen.Gen {
             const struct = this.allStructs[structname];
             if (struct && struct.fromPrep)
                 if (struct.fromPrep.isPropsOfStruct) {
+                    let propsfields = struct.fromPrep.fields.filter(_ => !gen.typeFun(_.typeSpec));
                     this.emitMethodImpl(struct, {
-                        Name: gen.idents.methodBagFetch, Type: { From: [{ From: [], To: null }], To: null }, Args: [], Docs: [{
-                                Lines: [
-                                    "getter docs"
-                                ]
-                            }]
+                        Name: gen.idents.methodBagFetch, Type: { From: [{ From: [], To: null }], To: null }, Args: [], Docs: [
+                            { Lines: [gen.idents.methodBagFetch + " requests the current `" + struct.fromPrep.isPropsOfStruct.name + "` state from the VSC side and upon response refreshes this `" + struct.Name + "`'s property value" + (propsfields.length > 1 ? 's' : '') + " for `" + propsfields.map(_ => _.name).join("`, `") + "` to reflect it."] }
+                        ]
                     }, (_t, _m, _, b) => {
                         b.push(_.iRet(_.eCall(_._(_.eThis(), gen.idents.fldBagHolder, gen.idents.methodObjBagPull))));
                     });
-                    if (struct.fromPrep.fields.some(_ => (!_.readOnly) && !gen.typeFun(_.typeSpec)))
+                    if ((propsfields = propsfields.filter(_ => !_.readOnly)).length)
                         this.emitMethodImpl(struct, {
                             Name: gen.idents.methodBagPublish, Type: { From: [{ From: [], To: null }], To: null }, Args: [], Docs: [{
-                                    Lines: [
-                                        "setter docs"
-                                    ]
+                                    Lines: [gen.idents.methodBagPublish + " propagates this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for `" + propsfields.map(_ => _.name).join("`, `") + "` to the VSC side to immediately become active there. Note that all those property values are trasmitted, no omissions."]
                                 }]
                         }, (_t, _m, _, b) => {
                             b.push(_.iRet(_.eCall(_._(_.eThis(), gen.idents.fldBagHolder, gen.idents.methodObjBagPush), _.eThis())));

@@ -42,7 +42,7 @@ export class Gen extends gen_syn.Gen {
             "type " + gen.idents.coreTypeDisp + " = core." + gen.idents.coreTypeDisp + "",
             "interface fromJson { " + gen.idents.methodLoadFrom + ": (_: any) => boolean }",
             "interface withDisp { " + gen.idents.fldDisp + ": " + gen.idents.coreTypeDisp + " }",
-            "interface withBag<T extends fromJson> { CfgBag: T, toJSON: () => any }",
+            "interface withBag<T extends fromJson> { " + gen.idents.fldDispObjBag + ": T, toJSON: () => any }",
             "",
             "abstract class implBase {",
             "    impl: impl",
