@@ -1367,7 +1367,7 @@ export interface StatusBarItem extends fromJson, withDisp, withBag<StatusBarItem
      */
     Dispose: () => (_: () => void) => void;
     __appzObjBagPullFromPeer__: () => (_: () => void) => void;
-    __appzObjBagPushToPeer_: (_: StatusBarItemBag) => (_: () => void) => void;
+    __appzObjBagPushToPeer__: (_: StatusBarItemBag) => (_: () => void) => void;
 }
 /**
  * An output channel is a container for readonly textual information.
@@ -1709,7 +1709,7 @@ export interface InputBox extends fromJson, withDisp, withBag<InputBoxBag> {
      */
     Dispose: () => (_: () => void) => void;
     __appzObjBagPullFromPeer__: () => (_: () => void) => void;
-    __appzObjBagPushToPeer_: (_: InputBoxBag) => (_: () => void) => void;
+    __appzObjBagPushToPeer__: (_: InputBoxBag) => (_: () => void) => void;
 }
 /**
  * Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
@@ -1790,7 +1790,7 @@ export interface QuickPick extends fromJson, withDisp, withBag<QuickPickBag> {
      */
     Dispose: () => (_: () => void) => void;
     __appzObjBagPullFromPeer__: () => (_: () => void) => void;
-    __appzObjBagPushToPeer_: (_: QuickPickBag) => (_: () => void) => void;
+    __appzObjBagPushToPeer__: (_: QuickPickBag) => (_: () => void) => void;
 }
 /**
  * An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).

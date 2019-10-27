@@ -133,7 +133,7 @@
   - [OnDidHide(handler)](#M-VscAppz-InputBox-OnDidHide-System-Action- 'VscAppz.InputBox.OnDidHide(System.Action)')
   - [Show()](#M-VscAppz-InputBox-Show 'VscAppz.InputBox.Show')
   - [__appzObjBagPullFromPeer__()](#M-VscAppz-InputBox-__appzObjBagPullFromPeer__ 'VscAppz.InputBox.__appzObjBagPullFromPeer__')
-  - [__appzObjBagPushToPeer_(allUpdates)](#M-VscAppz-InputBox-__appzObjBagPushToPeer_-VscAppz-InputBoxBag- 'VscAppz.InputBox.__appzObjBagPushToPeer_(VscAppz.InputBoxBag)')
+  - [__appzObjBagPushToPeer__(allUpdates)](#M-VscAppz-InputBox-__appzObjBagPushToPeer__-VscAppz-InputBoxBag- 'VscAppz.InputBox.__appzObjBagPushToPeer__(VscAppz.InputBoxBag)')
 - [InputBoxBag](#T-VscAppz-InputBoxBag 'VscAppz.InputBoxBag')
   - [Busy](#F-VscAppz-InputBoxBag-Busy 'VscAppz.InputBoxBag.Busy')
   - [Enabled](#F-VscAppz-InputBoxBag-Enabled 'VscAppz.InputBoxBag.Enabled')
@@ -201,7 +201,7 @@
   - [OnDidHide(handler)](#M-VscAppz-QuickPick-OnDidHide-System-Action- 'VscAppz.QuickPick.OnDidHide(System.Action)')
   - [Show()](#M-VscAppz-QuickPick-Show 'VscAppz.QuickPick.Show')
   - [__appzObjBagPullFromPeer__()](#M-VscAppz-QuickPick-__appzObjBagPullFromPeer__ 'VscAppz.QuickPick.__appzObjBagPullFromPeer__')
-  - [__appzObjBagPushToPeer_(allUpdates)](#M-VscAppz-QuickPick-__appzObjBagPushToPeer_-VscAppz-QuickPickBag- 'VscAppz.QuickPick.__appzObjBagPushToPeer_(VscAppz.QuickPickBag)')
+  - [__appzObjBagPushToPeer__(allUpdates)](#M-VscAppz-QuickPick-__appzObjBagPushToPeer__-VscAppz-QuickPickBag- 'VscAppz.QuickPick.__appzObjBagPushToPeer__(VscAppz.QuickPickBag)')
 - [QuickPickBag](#T-VscAppz-QuickPickBag 'VscAppz.QuickPickBag')
   - [ActiveItems](#F-VscAppz-QuickPickBag-ActiveItems 'VscAppz.QuickPickBag.ActiveItems')
   - [Busy](#F-VscAppz-QuickPickBag-Busy 'VscAppz.QuickPickBag.Busy')
@@ -247,7 +247,7 @@
   - [Hide()](#M-VscAppz-StatusBarItem-Hide 'VscAppz.StatusBarItem.Hide')
   - [Show()](#M-VscAppz-StatusBarItem-Show 'VscAppz.StatusBarItem.Show')
   - [__appzObjBagPullFromPeer__()](#M-VscAppz-StatusBarItem-__appzObjBagPullFromPeer__ 'VscAppz.StatusBarItem.__appzObjBagPullFromPeer__')
-  - [__appzObjBagPushToPeer_(allUpdates)](#M-VscAppz-StatusBarItem-__appzObjBagPushToPeer_-VscAppz-StatusBarItemBag- 'VscAppz.StatusBarItem.__appzObjBagPushToPeer_(VscAppz.StatusBarItemBag)')
+  - [__appzObjBagPushToPeer__(allUpdates)](#M-VscAppz-StatusBarItem-__appzObjBagPushToPeer__-VscAppz-StatusBarItemBag- 'VscAppz.StatusBarItem.__appzObjBagPushToPeer__(VscAppz.StatusBarItemBag)')
 - [StatusBarItemBag](#T-VscAppz-StatusBarItemBag 'VscAppz.StatusBarItemBag')
   - [Alignment](#F-VscAppz-StatusBarItemBag-Alignment 'VscAppz.StatusBarItemBag.Alignment')
   - [Color](#F-VscAppz-StatusBarItemBag-Color 'VscAppz.StatusBarItemBag.Color')
@@ -2314,8 +2314,8 @@ Obtains this `InputBox`'s current property values for: `value`, `placeholder`, `
 
 This method has no parameters.
 
-<a name='M-VscAppz-InputBox-__appzObjBagPushToPeer_-VscAppz-InputBoxBag-'></a>
-### __appzObjBagPushToPeer_(allUpdates) `method`
+<a name='M-VscAppz-InputBox-__appzObjBagPushToPeer__-VscAppz-InputBoxBag-'></a>
+### __appzObjBagPushToPeer__(allUpdates) `method`
 
 ##### Summary
 
@@ -3047,8 +3047,8 @@ Obtains this `QuickPick`'s current property values for: `value`, `placeholder`, 
 
 This method has no parameters.
 
-<a name='M-VscAppz-QuickPick-__appzObjBagPushToPeer_-VscAppz-QuickPickBag-'></a>
-### __appzObjBagPushToPeer_(allUpdates) `method`
+<a name='M-VscAppz-QuickPick-__appzObjBagPushToPeer__-VscAppz-QuickPickBag-'></a>
+### __appzObjBagPushToPeer__(allUpdates) `method`
 
 ##### Summary
 
@@ -3459,8 +3459,8 @@ Obtains this `StatusBarItem`'s current property values for: `alignment`, `priori
 
 This method has no parameters.
 
-<a name='M-VscAppz-StatusBarItem-__appzObjBagPushToPeer_-VscAppz-StatusBarItemBag-'></a>
-### __appzObjBagPushToPeer_(allUpdates) `method`
+<a name='M-VscAppz-StatusBarItem-__appzObjBagPushToPeer__-VscAppz-StatusBarItemBag-'></a>
+### __appzObjBagPushToPeer__(allUpdates) `method`
 
 ##### Summary
 

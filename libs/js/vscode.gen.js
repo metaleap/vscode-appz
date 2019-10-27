@@ -114,7 +114,7 @@ function newStatusBarItem() {
     me.Hide = () => StatusBarItem_Hide.call(me);
     me.Dispose = () => StatusBarItem_Dispose.call(me);
     me.__appzObjBagPullFromPeer__ = () => StatusBarItem___appzObjBagPullFromPeer__.call(me);
-    me.__appzObjBagPushToPeer_ = (a0) => StatusBarItem___appzObjBagPushToPeer_.call(me, a0);
+    me.__appzObjBagPushToPeer__ = (a0) => StatusBarItem___appzObjBagPushToPeer__.call(me, a0);
     return me;
 }
 function newOutputChannel() {
@@ -146,7 +146,7 @@ function newInputBox() {
     me.OnDidHide = (a0) => InputBox_OnDidHide.call(me, a0);
     me.Dispose = () => InputBox_Dispose.call(me);
     me.__appzObjBagPullFromPeer__ = () => InputBox___appzObjBagPullFromPeer__.call(me);
-    me.__appzObjBagPushToPeer_ = (a0) => InputBox___appzObjBagPushToPeer_.call(me, a0);
+    me.__appzObjBagPushToPeer__ = (a0) => InputBox___appzObjBagPushToPeer__.call(me, a0);
     return me;
 }
 function newQuickPick() {
@@ -161,7 +161,7 @@ function newQuickPick() {
     me.OnDidHide = (a0) => QuickPick_OnDidHide.call(me, a0);
     me.Dispose = () => QuickPick_Dispose.call(me);
     me.__appzObjBagPullFromPeer__ = () => QuickPick___appzObjBagPullFromPeer__.call(me);
-    me.__appzObjBagPushToPeer_ = (a0) => QuickPick___appzObjBagPushToPeer_.call(me, a0);
+    me.__appzObjBagPushToPeer__ = (a0) => QuickPick___appzObjBagPushToPeer__.call(me, a0);
     return me;
 }
 function newWorkspaceFoldersChangeEvent() {
@@ -2444,10 +2444,10 @@ function StatusBarItem___appzObjBagPullFromPeer__() {
         onret = a0;
     };
 }
-function StatusBarItem___appzObjBagPushToPeer_(allUpdates) {
+function StatusBarItem___appzObjBagPushToPeer__(allUpdates) {
     let msg;
     msg = newipcMsg();
-    msg.QName = "StatusBarItem.__appzObjBagPushToPeer_";
+    msg.QName = "StatusBarItem.__appzObjBagPushToPeer__";
     msg.Data = {};
     msg.Data[""] = this.__disp__.id;
     msg.Data["allUpdates"] = allUpdates;
@@ -2978,10 +2978,10 @@ function InputBox___appzObjBagPullFromPeer__() {
         onret = a0;
     };
 }
-function InputBox___appzObjBagPushToPeer_(allUpdates) {
+function InputBox___appzObjBagPushToPeer__(allUpdates) {
     let msg;
     msg = newipcMsg();
-    msg.QName = "InputBox.__appzObjBagPushToPeer_";
+    msg.QName = "InputBox.__appzObjBagPushToPeer__";
     msg.Data = {};
     msg.Data[""] = this.__disp__.id;
     msg.Data["allUpdates"] = allUpdates;
@@ -3419,10 +3419,10 @@ function QuickPick___appzObjBagPullFromPeer__() {
         onret = a0;
     };
 }
-function QuickPick___appzObjBagPushToPeer_(allUpdates) {
+function QuickPick___appzObjBagPushToPeer__(allUpdates) {
     let msg;
     msg = newipcMsg();
-    msg.QName = "QuickPick.__appzObjBagPushToPeer_";
+    msg.QName = "QuickPick.__appzObjBagPushToPeer__";
     msg.Data = {};
     msg.Data[""] = this.__disp__.id;
     msg.Data["allUpdates"] = allUpdates;
@@ -3450,7 +3450,7 @@ function StatusBarItemBag_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
 function StatusBarItemBag_ApplyChanges() {
-    return this.__holder__.__appzObjBagPushToPeer_(this);
+    return this.__holder__.__appzObjBagPushToPeer__(this);
 }
 function OutputChannelBag_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
@@ -3462,13 +3462,13 @@ function InputBoxBag_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
 function InputBoxBag_ApplyChanges() {
-    return this.__holder__.__appzObjBagPushToPeer_(this);
+    return this.__holder__.__appzObjBagPushToPeer__(this);
 }
 function QuickPickBag_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
 function QuickPickBag_ApplyChanges() {
-    return this.__holder__.__appzObjBagPushToPeer_(this);
+    return this.__holder__.__appzObjBagPushToPeer__(this);
 }
 function MessageItem___loadFromJsonish__(payload) {
     let it;

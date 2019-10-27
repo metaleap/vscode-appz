@@ -3899,10 +3899,10 @@ func (me *StatusBarItem) __appzObjBagPullFromPeer__() func(func()) {
 // `allUpdates` ── 
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
-func (me *StatusBarItem) __appzObjBagPushToPeer_(allUpdates *StatusBarItemBag) func(func()) {
+func (me *StatusBarItem) __appzObjBagPushToPeer__(allUpdates *StatusBarItemBag) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "StatusBarItem.__appzObjBagPushToPeer_"
+	msg.QName = "StatusBarItem.__appzObjBagPushToPeer__"
 	msg.Data = make(dict, 2)
 	msg.Data[""] = me.__disp__.id
 	msg.Data["allUpdates"] = allUpdates
@@ -4551,10 +4551,10 @@ func (me *InputBox) __appzObjBagPullFromPeer__() func(func()) {
 // `allUpdates` ── 
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
-func (me *InputBox) __appzObjBagPushToPeer_(allUpdates *InputBoxBag) func(func()) {
+func (me *InputBox) __appzObjBagPushToPeer__(allUpdates *InputBoxBag) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "InputBox.__appzObjBagPushToPeer_"
+	msg.QName = "InputBox.__appzObjBagPushToPeer__"
 	msg.Data = make(dict, 2)
 	msg.Data[""] = me.__disp__.id
 	msg.Data["allUpdates"] = allUpdates
@@ -5065,10 +5065,10 @@ func (me *QuickPick) __appzObjBagPullFromPeer__() func(func()) {
 // `allUpdates` ── 
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
-func (me *QuickPick) __appzObjBagPushToPeer_(allUpdates *QuickPickBag) func(func()) {
+func (me *QuickPick) __appzObjBagPushToPeer__(allUpdates *QuickPickBag) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "QuickPick.__appzObjBagPushToPeer_"
+	msg.QName = "QuickPick.__appzObjBagPushToPeer__"
 	msg.Data = make(dict, 2)
 	msg.Data[""] = me.__disp__.id
 	msg.Data["allUpdates"] = allUpdates
@@ -5106,7 +5106,7 @@ func (me *StatusBarItemBag) ReFetch() func(func()) {
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *StatusBarItemBag) ApplyChanges() func(func()) {
-	return me.__holder__.__appzObjBagPushToPeer_(me)
+	return me.__holder__.__appzObjBagPushToPeer__(me)
 }
 
 // getter docs
@@ -5134,7 +5134,7 @@ func (me *InputBoxBag) ReFetch() func(func()) {
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *InputBoxBag) ApplyChanges() func(func()) {
-	return me.__holder__.__appzObjBagPushToPeer_(me)
+	return me.__holder__.__appzObjBagPushToPeer__(me)
 }
 
 // getter docs
@@ -5148,7 +5148,7 @@ func (me *QuickPickBag) ReFetch() func(func()) {
 // 
 // `return` ── A thenable that resolves when this call has completed at the counterparty.
 func (me *QuickPickBag) ApplyChanges() func(func()) {
-	return me.__holder__.__appzObjBagPushToPeer_(me)
+	return me.__holder__.__appzObjBagPushToPeer__(me)
 }
 
 func (me *MessageItem) __loadFromJsonish__(payload any) bool {

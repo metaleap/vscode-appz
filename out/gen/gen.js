@@ -17,7 +17,7 @@ exports.idents = {
     methodBagFetch: "ReFetch",
     methodBagPublish: "ApplyChanges",
     methodObjBagPull: "__appzObjBagPullFromPeer__",
-    methodObjBagPush: "__appzObjBagPushToPeer_",
+    methodObjBagPush: "__appzObjBagPushToPeer__",
     methodLoadFrom: "__loadFromJsonish__",
     methodImpl: "Impl",
     argHandler: "handler",

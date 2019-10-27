@@ -492,7 +492,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "__appzObjBagPullFromPeer__": {
 					return Promise.resolve({ alignment: thisStatusBarItem.alignment, priority: thisStatusBarItem.priority, text: thisStatusBarItem.text, tooltip: thisStatusBarItem.tooltip, color: (thisStatusBarItem.color && ((thisStatusBarItem.color as any)["id"])) ? ((thisStatusBarItem.color as any)["id"]) : thisStatusBarItem.color, command: thisStatusBarItem.command })
 				}
-				case "__appzObjBagPushToPeer_": {
+				case "__appzObjBagPushToPeer__": {
 					const upd = msg.data["allUpdates"] as { [_:string]: any }
 					if (!upd)
 						return ppio.promRej("StatusBarItem.set#allUpdates", msg.data)
@@ -628,7 +628,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "__appzObjBagPullFromPeer__": {
 					return Promise.resolve({ value: thisInputBox.value, placeholder: thisInputBox.placeholder, password: thisInputBox.password, prompt: thisInputBox.prompt, validationMessage: thisInputBox.validationMessage, title: thisInputBox.title, step: thisInputBox.step, totalSteps: thisInputBox.totalSteps, enabled: thisInputBox.enabled, busy: thisInputBox.busy, ignoreFocusOut: thisInputBox.ignoreFocusOut })
 				}
-				case "__appzObjBagPushToPeer_": {
+				case "__appzObjBagPushToPeer__": {
 					const upd = msg.data["allUpdates"] as { [_:string]: any }
 					if (!upd)
 						return ppio.promRej("InputBox.set#allUpdates", msg.data)
@@ -789,7 +789,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				case "__appzObjBagPullFromPeer__": {
 					return Promise.resolve({ value: thisQuickPick.value, placeholder: thisQuickPick.placeholder, items: thisQuickPick.items, canSelectMany: thisQuickPick.canSelectMany, matchOnDescription: thisQuickPick.matchOnDescription, matchOnDetail: thisQuickPick.matchOnDetail, activeItems: thisQuickPick.activeItems, selectedItems: thisQuickPick.selectedItems, title: thisQuickPick.title, step: thisQuickPick.step, totalSteps: thisQuickPick.totalSteps, enabled: thisQuickPick.enabled, busy: thisQuickPick.busy, ignoreFocusOut: thisQuickPick.ignoreFocusOut })
 				}
-				case "__appzObjBagPushToPeer_": {
+				case "__appzObjBagPushToPeer__": {
 					const upd = msg.data["allUpdates"] as { [_:string]: any }
 					if (!upd)
 						return ppio.promRej("QuickPick.set#allUpdates", msg.data)

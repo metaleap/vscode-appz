@@ -1526,7 +1526,7 @@
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.StatusBarItem.__appzObjBagPushToPeer_(VscAppz.StatusBarItemBag)">
+        <member name="M:VscAppz.StatusBarItem.__appzObjBagPushToPeer__(VscAppz.StatusBarItemBag)">
             <summary>
             Updates this `StatusBarItem`'s current property values for: `text`, `tooltip`, `color`, `command`.
             
@@ -1898,7 +1898,7 @@
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.InputBox.__appzObjBagPushToPeer_(VscAppz.InputBoxBag)">
+        <member name="M:VscAppz.InputBox.__appzObjBagPushToPeer__(VscAppz.InputBoxBag)">
             <summary>
             Updates this `InputBox`'s current property values for: `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
             
@@ -2030,7 +2030,7 @@
             </summary>
             <return>A thenable that resolves when this call has completed at the counterparty.</return>
         </member>
-        <member name="M:VscAppz.QuickPick.__appzObjBagPushToPeer_(VscAppz.QuickPickBag)">
+        <member name="M:VscAppz.QuickPick.__appzObjBagPushToPeer__(VscAppz.QuickPickBag)">
             <summary>
             Updates this `QuickPick`'s current property values for: `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut`.
             

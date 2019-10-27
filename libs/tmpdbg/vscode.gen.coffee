@@ -4565,10 +4565,10 @@ StatusBarItem·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
 
 
 
-StatusBarItem·__appzObjBagPushToPeer_: (allUpdates:?StatusBarItemBag -> ((void->void)->void))
+StatusBarItem·__appzObjBagPushToPeer__: (allUpdates:?StatusBarItemBag -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "StatusBarItem.__appzObjBagPushToPeer_"
+    msg.QName = "StatusBarItem.__appzObjBagPushToPeer__"
     msg.Data = dict·new(2)
     msg.Data@"" = this.__disp__.id
     msg.Data@"allUpdates" = allUpdates
@@ -5069,10 +5069,10 @@ InputBox·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
 
 
 
-InputBox·__appzObjBagPushToPeer_: (allUpdates:?InputBoxBag -> ((void->void)->void))
+InputBox·__appzObjBagPushToPeer__: (allUpdates:?InputBoxBag -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "InputBox.__appzObjBagPushToPeer_"
+    msg.QName = "InputBox.__appzObjBagPushToPeer__"
     msg.Data = dict·new(2)
     msg.Data@"" = this.__disp__.id
     msg.Data@"allUpdates" = allUpdates
@@ -5466,10 +5466,10 @@ QuickPick·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
 
 
 
-QuickPick·__appzObjBagPushToPeer_: (allUpdates:?QuickPickBag -> ((void->void)->void))
+QuickPick·__appzObjBagPushToPeer__: (allUpdates:?QuickPickBag -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "QuickPick.__appzObjBagPushToPeer_"
+    msg.QName = "QuickPick.__appzObjBagPushToPeer__"
     msg.Data = dict·new(2)
     msg.Data@"" = this.__disp__.id
     msg.Data@"allUpdates" = allUpdates
@@ -5500,7 +5500,7 @@ StatusBarItemBag·ReFetch: ( -> ((->void)->void))
 
 
 StatusBarItemBag·ApplyChanges: ( -> ((->void)->void))
-    return this.__holder__.__appzObjBagPushToPeer_(this)
+    return this.__holder__.__appzObjBagPushToPeer__(this)
 
 
 
@@ -5524,7 +5524,7 @@ InputBoxBag·ReFetch: ( -> ((->void)->void))
 
 
 InputBoxBag·ApplyChanges: ( -> ((->void)->void))
-    return this.__holder__.__appzObjBagPushToPeer_(this)
+    return this.__holder__.__appzObjBagPushToPeer__(this)
 
 
 
@@ -5536,7 +5536,7 @@ QuickPickBag·ReFetch: ( -> ((->void)->void))
 
 
 QuickPickBag·ApplyChanges: ( -> ((->void)->void))
-    return this.__holder__.__appzObjBagPushToPeer_(this)
+    return this.__holder__.__appzObjBagPushToPeer__(this)
 
 
 

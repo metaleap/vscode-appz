@@ -4417,10 +4417,10 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="allUpdates"></param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
-		public Action<Action> __appzObjBagPushToPeer_(StatusBarItemBag allUpdates = default) {
+		internal Action<Action> __appzObjBagPushToPeer__(StatusBarItemBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "StatusBarItem.__appzObjBagPushToPeer_";
+			msg.QName = "StatusBarItem.__appzObjBagPushToPeer__";
 			msg.Data = new dict(2);
 			msg.Data[""] = this.__disp__.id;
 			msg.Data["allUpdates"] = allUpdates;
@@ -5139,10 +5139,10 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="allUpdates"></param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
-		public Action<Action> __appzObjBagPushToPeer_(InputBoxBag allUpdates = default) {
+		internal Action<Action> __appzObjBagPushToPeer__(InputBoxBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "InputBox.__appzObjBagPushToPeer_";
+			msg.QName = "InputBox.__appzObjBagPushToPeer__";
 			msg.Data = new dict(2);
 			msg.Data[""] = this.__disp__.id;
 			msg.Data["allUpdates"] = allUpdates;
@@ -5695,10 +5695,10 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="allUpdates"></param>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
-		public Action<Action> __appzObjBagPushToPeer_(QuickPickBag allUpdates = default) {
+		internal Action<Action> __appzObjBagPushToPeer__(QuickPickBag allUpdates = default) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "QuickPick.__appzObjBagPushToPeer_";
+			msg.QName = "QuickPick.__appzObjBagPushToPeer__";
 			msg.Data = new dict(2);
 			msg.Data[""] = this.__disp__.id;
 			msg.Data["allUpdates"] = allUpdates;
@@ -5744,7 +5744,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> ApplyChanges() {
-			return this.__holder__.__appzObjBagPushToPeer_(this);
+			return this.__holder__.__appzObjBagPushToPeer__(this);
 		}
 	}
 
@@ -5792,7 +5792,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> ApplyChanges() {
-			return this.__holder__.__appzObjBagPushToPeer_(this);
+			return this.__holder__.__appzObjBagPushToPeer__(this);
 		}
 	}
 
@@ -5816,7 +5816,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <return>A thenable that resolves when this call has completed at the counterparty.</return>
 		public Action<Action> ApplyChanges() {
-			return this.__holder__.__appzObjBagPushToPeer_(this);
+			return this.__holder__.__appzObjBagPushToPeer__(this);
 		}
 	}
 

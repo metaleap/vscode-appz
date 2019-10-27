@@ -1527,7 +1527,7 @@ export interface StatusBarItem extends fromJson, withDisp, withBag<StatusBarItem
 
     __appzObjBagPullFromPeer__: () => (_: () => void) => void
 
-    __appzObjBagPushToPeer_: (_: StatusBarItemBag) => (_: () => void) => void
+    __appzObjBagPushToPeer__: (_: StatusBarItemBag) => (_: () => void) => void
 }
 
 function newStatusBarItem (): StatusBarItem {
@@ -1537,7 +1537,7 @@ function newStatusBarItem (): StatusBarItem {
     me.Hide = () => StatusBarItem_Hide.call(me, )
     me.Dispose = () => StatusBarItem_Dispose.call(me, )
     me.__appzObjBagPullFromPeer__ = () => StatusBarItem___appzObjBagPullFromPeer__.call(me, )
-    me.__appzObjBagPushToPeer_ = (a0) => StatusBarItem___appzObjBagPushToPeer_.call(me, a0)
+    me.__appzObjBagPushToPeer__ = (a0) => StatusBarItem___appzObjBagPushToPeer__.call(me, a0)
     return me
 }
 
@@ -1958,7 +1958,7 @@ export interface InputBox extends fromJson, withDisp, withBag<InputBoxBag> {
 
     __appzObjBagPullFromPeer__: () => (_: () => void) => void
 
-    __appzObjBagPushToPeer_: (_: InputBoxBag) => (_: () => void) => void
+    __appzObjBagPushToPeer__: (_: InputBoxBag) => (_: () => void) => void
 }
 
 function newInputBox (): InputBox {
@@ -1971,7 +1971,7 @@ function newInputBox (): InputBox {
     me.OnDidHide = (a0) => InputBox_OnDidHide.call(me, a0)
     me.Dispose = () => InputBox_Dispose.call(me, )
     me.__appzObjBagPullFromPeer__ = () => InputBox___appzObjBagPullFromPeer__.call(me, )
-    me.__appzObjBagPushToPeer_ = (a0) => InputBox___appzObjBagPushToPeer_.call(me, a0)
+    me.__appzObjBagPushToPeer__ = (a0) => InputBox___appzObjBagPushToPeer__.call(me, a0)
     return me
 }
 
@@ -2065,7 +2065,7 @@ export interface QuickPick extends fromJson, withDisp, withBag<QuickPickBag> {
 
     __appzObjBagPullFromPeer__: () => (_: () => void) => void
 
-    __appzObjBagPushToPeer_: (_: QuickPickBag) => (_: () => void) => void
+    __appzObjBagPushToPeer__: (_: QuickPickBag) => (_: () => void) => void
 }
 
 function newQuickPick (): QuickPick {
@@ -2080,7 +2080,7 @@ function newQuickPick (): QuickPick {
     me.OnDidHide = (a0) => QuickPick_OnDidHide.call(me, a0)
     me.Dispose = () => QuickPick_Dispose.call(me, )
     me.__appzObjBagPullFromPeer__ = () => QuickPick___appzObjBagPullFromPeer__.call(me, )
-    me.__appzObjBagPushToPeer_ = (a0) => QuickPick___appzObjBagPushToPeer_.call(me, a0)
+    me.__appzObjBagPushToPeer__ = (a0) => QuickPick___appzObjBagPushToPeer__.call(me, a0)
     return me
 }
 
@@ -4839,10 +4839,10 @@ function StatusBarItem___appzObjBagPullFromPeer__(this: StatusBarItem, ): (_: ()
     }
 }
 
-function StatusBarItem___appzObjBagPushToPeer_(this: StatusBarItem, allUpdates?: StatusBarItemBag): (_: () => void) => void {
+function StatusBarItem___appzObjBagPushToPeer__(this: StatusBarItem, allUpdates?: StatusBarItemBag): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
-    msg.QName = "StatusBarItem.__appzObjBagPushToPeer_"
+    msg.QName = "StatusBarItem.__appzObjBagPushToPeer__"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     msg.Data["allUpdates"] = allUpdates
@@ -5387,10 +5387,10 @@ function InputBox___appzObjBagPullFromPeer__(this: InputBox, ): (_: () => void) 
     }
 }
 
-function InputBox___appzObjBagPushToPeer_(this: InputBox, allUpdates?: InputBoxBag): (_: () => void) => void {
+function InputBox___appzObjBagPushToPeer__(this: InputBox, allUpdates?: InputBoxBag): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
-    msg.QName = "InputBox.__appzObjBagPushToPeer_"
+    msg.QName = "InputBox.__appzObjBagPushToPeer__"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     msg.Data["allUpdates"] = allUpdates
@@ -5833,10 +5833,10 @@ function QuickPick___appzObjBagPullFromPeer__(this: QuickPick, ): (_: () => void
     }
 }
 
-function QuickPick___appzObjBagPushToPeer_(this: QuickPick, allUpdates?: QuickPickBag): (_: () => void) => void {
+function QuickPick___appzObjBagPushToPeer__(this: QuickPick, allUpdates?: QuickPickBag): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
-    msg.QName = "QuickPick.__appzObjBagPushToPeer_"
+    msg.QName = "QuickPick.__appzObjBagPushToPeer__"
     msg.Data = {}
     msg.Data[""] = this.__disp__.id
     msg.Data["allUpdates"] = allUpdates
@@ -5866,7 +5866,7 @@ function StatusBarItemBag_ReFetch(this: StatusBarItemBag, ): (_: () => void) => 
 }
 
 function StatusBarItemBag_ApplyChanges(this: StatusBarItemBag, ): (_: () => void) => void {
-    return this.__holder__.__appzObjBagPushToPeer_(this)
+    return this.__holder__.__appzObjBagPushToPeer__(this)
 }
 
 function OutputChannelBag_ReFetch(this: OutputChannelBag, ): (_: () => void) => void {
@@ -5882,7 +5882,7 @@ function InputBoxBag_ReFetch(this: InputBoxBag, ): (_: () => void) => void {
 }
 
 function InputBoxBag_ApplyChanges(this: InputBoxBag, ): (_: () => void) => void {
-    return this.__holder__.__appzObjBagPushToPeer_(this)
+    return this.__holder__.__appzObjBagPushToPeer__(this)
 }
 
 function QuickPickBag_ReFetch(this: QuickPickBag, ): (_: () => void) => void {
@@ -5890,7 +5890,7 @@ function QuickPickBag_ReFetch(this: QuickPickBag, ): (_: () => void) => void {
 }
 
 function QuickPickBag_ApplyChanges(this: QuickPickBag, ): (_: () => void) => void {
-    return this.__holder__.__appzObjBagPushToPeer_(this)
+    return this.__holder__.__appzObjBagPushToPeer__(this)
 }
 
 function MessageItem___loadFromJsonish__(this: MessageItem, payload: any): boolean {
