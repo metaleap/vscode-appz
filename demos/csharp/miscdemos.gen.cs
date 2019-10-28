@@ -26,11 +26,11 @@ namespace VscAppzDemo {
 					opts = new InputBoxOptions();
 					opts.IgnoreFocusOut = true;
 					opts.Value = text;
-					logLn(strFmt("input/opts/{0}:\t{1}", "Prompt", "Enter new contents to write to your clipboard."));
+					logLn(strFmt("input@opts/{0}:\t{1}", "Prompt", "Enter new contents to write to your clipboard."));
 					opts.Prompt = "Enter new contents to write to your clipboard.";
 					vsc.Window.ShowInputBox(opts, null)((string input) => {
 						if ((null == input)) {
-							vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null);
+							vsc.Window.ShowWarningMessage1(logLn("Don't be bashful.."), null);
 						} else {
 							logLn(strFmt("input <- {0}", input));
 							vsc.Env.Clipboard().WriteText(input)(() => {
@@ -54,11 +54,11 @@ namespace VscAppzDemo {
 						InputBoxOptions opts2 = default;
 						opts2 = new InputBoxOptions();
 						opts2.IgnoreFocusOut = true;
-						logLn(strFmt("cmdarg/opts2/{0}:\t{1}", "PlaceHolder", strFmt("Any param for `{0}` command? Else leave blank.", item)));
+						logLn(strFmt("cmdarg@opts2/{0}:\t{1}", "PlaceHolder", strFmt("Any param for `{0}` command? Else leave blank.", item)));
 						opts2.PlaceHolder = strFmt("Any param for `{0}` command? Else leave blank.", item);
 						vsc.Window.ShowInputBox(opts2, null)((string cmdarg) => {
 							if ((null == cmdarg)) {
-								vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null);
+								vsc.Window.ShowWarningMessage1(logLn("Don't be bashful.."), null);
 							} else {
 								logLn(strFmt("cmdarg <- {0}", cmdarg));
 								any[] cmdargs = default;
@@ -80,11 +80,11 @@ namespace VscAppzDemo {
 			opts = new InputBoxOptions();
 			opts.IgnoreFocusOut = true;
 			opts.Value = "foo.bar.baz";
-			logLn(strFmt("cmdname/opts/{0}:\t{1}", "Prompt", "Enter your command name. The command will accept a single text input and return a result built from it."));
+			logLn(strFmt("cmdname@opts/{0}:\t{1}", "Prompt", "Enter your command name. The command will accept a single text input and return a result built from it."));
 			opts.Prompt = "Enter your command name. The command will accept a single text input and return a result built from it.";
 			vsc.Window.ShowInputBox(opts, null)((string cmdname) => {
 				if ((null == cmdname)) {
-					vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null);
+					vsc.Window.ShowWarningMessage1(logLn("Don't be bashful.."), null);
 				} else {
 					logLn(strFmt("cmdname <- {0}", cmdname));
 					vsc.Commands.RegisterCommand(cmdname, (any[] cmdargs) => {
@@ -94,12 +94,12 @@ namespace VscAppzDemo {
 						InputBoxOptions opts2 = default;
 						opts2 = new InputBoxOptions();
 						opts2.IgnoreFocusOut = true;
-						logLn(strFmt("cmdarg/opts2/{0}:\t{1}", "Prompt", strFmt("Command `{0}` registered, try it now?", cmdname)));
+						logLn(strFmt("cmdarg@opts2/{0}:\t{1}", "Prompt", strFmt("Command `{0}` registered, try it now?", cmdname)));
 						opts2.Prompt = strFmt("Command `{0}` registered, try it now?", cmdname);
 						opts2.Value = strFmt("Enter input to command `{0}` here", cmdname);
 						vsc.Window.ShowInputBox(opts2, null)((string cmdarg) => {
 							if ((null == cmdarg)) {
-								vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null);
+								vsc.Window.ShowWarningMessage1(logLn("Don't be bashful.."), null);
 							} else {
 								logLn(strFmt("cmdarg <- {0}", cmdarg));
 								any[] cmdargs2 = default;
@@ -227,11 +227,11 @@ namespace VscAppzDemo {
 			opts = new InputBoxOptions();
 			opts.IgnoreFocusOut = true;
 			opts.Value = "http://github.com/metaleap/vscode-appz";
-			logLn(strFmt("uri/opts/{0}:\t{1}", "Prompt", "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."));
+			logLn(strFmt("uri@opts/{0}:\t{1}", "Prompt", "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."));
 			opts.Prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol.";
 			vsc.Window.ShowInputBox(opts, null)((string uri) => {
 				if ((null == uri)) {
-					vsc.Window.ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), null);
+					vsc.Window.ShowWarningMessage1(logLn("Don't be bashful.."), null);
 				} else {
 					logLn(strFmt("uri <- {0}", uri));
 					vsc.Env.OpenExternal(uri)((bool ok) => {
@@ -335,6 +335,62 @@ namespace VscAppzDemo {
 				ctl.Show();
 			});
 		}
+		private static void demo_Window_CreateTerminal() {
+			InputBoxOptions optsname = default;
+			optsname = new InputBoxOptions();
+			optsname.IgnoreFocusOut = true;
+			logLn(strFmt("termname@optsname/{0}:\t{1}", "Prompt", "Name of your new terminal?"));
+			optsname.Prompt = "Name of your new terminal?";
+			optsname.Value = appName;
+			vsc.Window.ShowInputBox(optsname, null)((string termname) => {
+				if ((null == termname)) {
+					vsc.Window.ShowWarningMessage1(logLn("Don't be bashful.."), null);
+				} else {
+					logLn(strFmt("termname <- {0}", termname));
+					InputBoxOptions optstext = default;
+					optstext = new InputBoxOptions();
+					optstext.IgnoreFocusOut = true;
+					logLn(strFmt("termtext@optstext/{0}:\t{1}", "Prompt", strFmt("Text to send to new terminal `{0}` initially upon creation?", termname)));
+					optstext.Prompt = strFmt("Text to send to new terminal `{0}` initially upon creation?", termname);
+					optstext.Value = appName;
+					vsc.Window.ShowInputBox(optstext, null)((string termtext) => {
+						if ((null == termtext)) {
+							vsc.Window.ShowWarningMessage1(logLn("Don't be bashful.."), null);
+						} else {
+							logLn(strFmt("termtext <- {0}", termtext));
+							InputBoxOptions optsvar = default;
+							optsvar = new InputBoxOptions();
+							optsvar.IgnoreFocusOut = true;
+							logLn(strFmt("termvar@optsvar/{0}:\t{1}", "Prompt", "Value for custom env var named `MY_ENV_VAR`?"));
+							optsvar.Prompt = "Value for custom env var named `MY_ENV_VAR`?";
+							vsc.Window.ShowInputBox(optsvar, null)((string termvar) => {
+								if ((null == termvar)) {
+									vsc.Window.ShowWarningMessage1(logLn("Don't be bashful.."), null);
+								} else {
+									logLn(strFmt("termvar <- {0}", termvar));
+									Action<Terminal> ontermcreated = default;
+									ontermcreated = (Terminal term) => {
+										term.Show(false)(() => {
+											term.SendText(termtext, false);
+										});
+									};
+									if (termvar == "") {
+										vsc.Window.CreateTerminal1(termname, null, null)(ontermcreated);
+									} else {
+										TerminalOptions cfg = default;
+										cfg = new TerminalOptions();
+										cfg.Name = termname;
+										cfg.Env = new Dictionary<string, string>(1);
+										cfg.Env["MY_ENV_VAR"] = termvar;
+										vsc.Window.CreateTerminal2(cfg)(ontermcreated);
+									}
+								}
+							});
+						}
+					});
+				}
+			});
+		}
 		private static void subscribeToMiscEvents() {
 			vsc.Extensions.OnDidChange(() => {
 				vsc.Window.SetStatusBarMessage1(logLn("Some extension(s) were just (un)installed or (de)activated."), 4242);
@@ -348,7 +404,7 @@ namespace VscAppzDemo {
 		}
 		private static void demosMenu() {
 			string[] items = default;
-			items = new[] { "demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_CreateQuickPick", "demo_Window_CreateInputBox", "demo_Window_ShowInputBox" };
+			items = new[] { "demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_CreateQuickPick", "demo_Window_CreateInputBox", "demo_Window_CreateTerminal", "demo_Window_ShowInputBox" };
 			QuickPickOptions opts = default;
 			opts = new QuickPickOptions();
 			opts.IgnoreFocusOut = true;
@@ -410,6 +466,10 @@ namespace VscAppzDemo {
 					if ("demo_Window_CreateInputBox" == menuitem) {
 						logLn("Picked `demo_Window_CreateInputBox` from main menu");
 						demo_Window_CreateInputBox();
+					}
+					if ("demo_Window_CreateTerminal" == menuitem) {
+						logLn("Picked `demo_Window_CreateTerminal` from main menu");
+						demo_Window_CreateTerminal();
 					}
 					if ("demo_Window_ShowInputBox" == menuitem) {
 						logLn("Picked `demo_Window_ShowInputBox` from main menu");

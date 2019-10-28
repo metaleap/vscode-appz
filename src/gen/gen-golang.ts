@@ -163,8 +163,9 @@ export class Gen extends gen_syn.Gen {
                     this.s("{").line()
                 }
 
-                this.indented(() =>
-                    iblock.Instrs.forEach(_ => this.emitInstr(_, true)))
+                this.indented(() => {
+                    iblock.Instrs.forEach(_ => this.emitInstr(_, true))
+                })
 
                 this.lf().s("}")
 

@@ -38,8 +38,7 @@ func main() {
 					} else {
 						switch button := *btn; button {
 						case buttons[0]:
-							demo_Window_CreateTerminal()
-							// demo_Window_ShowInputBox()
+							demo_Window_ShowInputBox()
 						case buttons[1]:
 							demosMenu()
 						default:
@@ -49,43 +48,6 @@ func main() {
 				})
 		})
 	}, nil, nil)
-}
-
-func demo_Window_CreateTerminal() {
-	win.ShowInputBox(&InputBoxOptions{Prompt: "Name of your new terminal?", Value: appName}, nil)(
-		func(termname *string) {
-			if termname == nil {
-				return
-			}
-			if *termname == "" {
-				*termname = appName
-			}
-			win.ShowInputBox(&InputBoxOptions{Prompt: "Text to send to new terminal `" + *termname + "` initially upon creation?", Value: appName}, nil)(
-				func(termtext *string) {
-					if termtext == nil {
-						return
-					}
-					win.ShowInputBox(&InputBoxOptions{Prompt: "Value for custom env var named `MY_ENV_VAR`?"}, nil)(
-						func(termvarval *string) {
-							if termvarval == nil {
-								return
-							}
-							oncreated := func(term *Terminal) {
-								term.Show(false)(func() {
-									term.SendText(*termtext, false)
-								})
-							}
-							if *termvarval == "" {
-								win.CreateTerminal1(termname, nil, nil)(oncreated)
-							} else {
-								win.CreateTerminal2(TerminalOptions{
-									Name: *termname,
-									Env:  map[string]string{"MY_ENV_VAR": *termvarval},
-								})(oncreated)
-							}
-						})
-				})
-		})
 }
 
 func demo_Window_ShowInputBox() {
@@ -165,11 +127,11 @@ func demo_clipboard() {
 			opts = new(InputBoxOptions)
 			opts.IgnoreFocusOut = true
 			opts.Value = *text
-			logLn(strFmt("input/opts/{0}:\t{1}", "Prompt", "Enter new contents to write to your clipboard."))
+			logLn(strFmt("input@opts/{0}:\t{1}", "Prompt", "Enter new contents to write to your clipboard."))
 			opts.Prompt = "Enter new contents to write to your clipboard."
 			vsc.Window().ShowInputBox(opts, nil)(func(input *string) {
 				if (nil == input) {
-					vsc.Window().ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), nil)
+					vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
 				} else {
 					logLn(strFmt("input <- {0}", *input))
 					vsc.Env().Clipboard().WriteText(*input)(func() {
@@ -193,11 +155,11 @@ func demo_Commands_GetCommands_and_ExecuteCommand() {
 				var opts2 *InputBoxOptions
 				opts2 = new(InputBoxOptions)
 				opts2.IgnoreFocusOut = true
-				logLn(strFmt("cmdarg/opts2/{0}:\t{1}", "PlaceHolder", strFmt("Any param for `{0}` command? Else leave blank.", *item)))
+				logLn(strFmt("cmdarg@opts2/{0}:\t{1}", "PlaceHolder", strFmt("Any param for `{0}` command? Else leave blank.", *item)))
 				opts2.PlaceHolder = strFmt("Any param for `{0}` command? Else leave blank.", *item)
 				vsc.Window().ShowInputBox(opts2, nil)(func(cmdarg *string) {
 					if (nil == cmdarg) {
-						vsc.Window().ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), nil)
+						vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
 					} else {
 						logLn(strFmt("cmdarg <- {0}", *cmdarg))
 						var cmdargs []any
@@ -220,11 +182,11 @@ func demo_Commands_RegisterCommand() {
 	opts = new(InputBoxOptions)
 	opts.IgnoreFocusOut = true
 	opts.Value = "foo.bar.baz"
-	logLn(strFmt("cmdname/opts/{0}:\t{1}", "Prompt", "Enter your command name. The command will accept a single text input and return a result built from it."))
+	logLn(strFmt("cmdname@opts/{0}:\t{1}", "Prompt", "Enter your command name. The command will accept a single text input and return a result built from it."))
 	opts.Prompt = "Enter your command name. The command will accept a single text input and return a result built from it."
 	vsc.Window().ShowInputBox(opts, nil)(func(cmdname *string) {
 		if (nil == cmdname) {
-			vsc.Window().ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), nil)
+			vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
 		} else {
 			logLn(strFmt("cmdname <- {0}", *cmdname))
 			vsc.Commands().RegisterCommand(*cmdname, func(cmdargs []any) any {
@@ -234,12 +196,12 @@ func demo_Commands_RegisterCommand() {
 				var opts2 *InputBoxOptions
 				opts2 = new(InputBoxOptions)
 				opts2.IgnoreFocusOut = true
-				logLn(strFmt("cmdarg/opts2/{0}:\t{1}", "Prompt", strFmt("Command `{0}` registered, try it now?", *cmdname)))
+				logLn(strFmt("cmdarg@opts2/{0}:\t{1}", "Prompt", strFmt("Command `{0}` registered, try it now?", *cmdname)))
 				opts2.Prompt = strFmt("Command `{0}` registered, try it now?", *cmdname)
 				opts2.Value = strFmt("Enter input to command `{0}` here", *cmdname)
 				vsc.Window().ShowInputBox(opts2, nil)(func(cmdarg *string) {
 					if (nil == cmdarg) {
-						vsc.Window().ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), nil)
+						vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
 					} else {
 						logLn(strFmt("cmdarg <- {0}", *cmdarg))
 						var cmdargs2 []any
@@ -369,11 +331,11 @@ func demo_Env_OpenExternal() {
 	opts = new(InputBoxOptions)
 	opts.IgnoreFocusOut = true
 	opts.Value = "http://github.com/metaleap/vscode-appz"
-	logLn(strFmt("uri/opts/{0}:\t{1}", "Prompt", "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."))
+	logLn(strFmt("uri@opts/{0}:\t{1}", "Prompt", "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."))
 	opts.Prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."
 	vsc.Window().ShowInputBox(opts, nil)(func(uri *string) {
 		if (nil == uri) {
-			vsc.Window().ShowWarningMessage1(logLn("Cancelled text input, out of ideas?"), nil)
+			vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
 		} else {
 			logLn(strFmt("uri <- {0}", *uri))
 			vsc.Env().OpenExternal(*uri)(func(ok bool) {
@@ -475,6 +437,62 @@ func demo_Window_CreateInputBox() {
 	})
 }
 
+func demo_Window_CreateTerminal() {
+	var optsname *InputBoxOptions
+	optsname = new(InputBoxOptions)
+	optsname.IgnoreFocusOut = true
+	logLn(strFmt("termname@optsname/{0}:\t{1}", "Prompt", "Name of your new terminal?"))
+	optsname.Prompt = "Name of your new terminal?"
+	optsname.Value = appName
+	vsc.Window().ShowInputBox(optsname, nil)(func(termname *string) {
+		if (nil == termname) {
+			vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
+		} else {
+			logLn(strFmt("termname <- {0}", *termname))
+			var optstext *InputBoxOptions
+			optstext = new(InputBoxOptions)
+			optstext.IgnoreFocusOut = true
+			logLn(strFmt("termtext@optstext/{0}:\t{1}", "Prompt", strFmt("Text to send to new terminal `{0}` initially upon creation?", *termname)))
+			optstext.Prompt = strFmt("Text to send to new terminal `{0}` initially upon creation?", *termname)
+			optstext.Value = appName
+			vsc.Window().ShowInputBox(optstext, nil)(func(termtext *string) {
+				if (nil == termtext) {
+					vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
+				} else {
+					logLn(strFmt("termtext <- {0}", *termtext))
+					var optsvar *InputBoxOptions
+					optsvar = new(InputBoxOptions)
+					optsvar.IgnoreFocusOut = true
+					logLn(strFmt("termvar@optsvar/{0}:\t{1}", "Prompt", "Value for custom env var named `MY_ENV_VAR`?"))
+					optsvar.Prompt = "Value for custom env var named `MY_ENV_VAR`?"
+					vsc.Window().ShowInputBox(optsvar, nil)(func(termvar *string) {
+						if (nil == termvar) {
+							vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
+						} else {
+							logLn(strFmt("termvar <- {0}", *termvar))
+							var ontermcreated func(*Terminal)
+							ontermcreated = func(term *Terminal) {
+								term.Show(false)(func() {
+									term.SendText(*termtext, false)
+								})
+							}
+							if (*termvar) == "" {
+								vsc.Window().CreateTerminal1(termname, nil, nil)(ontermcreated)
+							} else {
+								var cfg TerminalOptions
+								cfg.Name = *termname
+								cfg.Env = make(map[string]string, 1)
+								cfg.Env["MY_ENV_VAR"] = *termvar
+								vsc.Window().CreateTerminal2(cfg)(ontermcreated)
+							}
+						}
+					})
+				}
+			})
+		}
+	})
+}
+
 func subscribeToMiscEvents() {
 	vsc.Extensions().OnDidChange(func() {
 		vsc.Window().SetStatusBarMessage1(logLn("Some extension(s) were just (un)installed or (de)activated."), 4242)
@@ -489,7 +507,7 @@ func subscribeToMiscEvents() {
 
 func demosMenu() {
 	var items []string
-	items = []string{"demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_CreateQuickPick", "demo_Window_CreateInputBox", "demo_Window_ShowInputBox"}
+	items = []string{"demo_promptToExit", "demo_clipboard", "demo_Commands_GetCommands_and_ExecuteCommand", "demo_Commands_RegisterCommand", "demo_Languages_GetLanguages", "demo_Env_Properties", "demo_Workspace_Properties", "demo_Window_ShowOpenDialog", "demo_Window_ShowSaveDialog", "demo_Window_ShowWorkspaceFolderPick", "demo_Env_OpenExternal", "demo_Window_ShowQuickPick", "demo_Window_CreateQuickPick", "demo_Window_CreateInputBox", "demo_Window_CreateTerminal", "demo_Window_ShowInputBox"}
 	var opts QuickPickOptions
 	opts.IgnoreFocusOut = true
 	opts.PlaceHolder = "This menu can be re-opened any time via our custom status-bar item."
@@ -550,6 +568,10 @@ func demosMenu() {
 			if "demo_Window_CreateInputBox" == (*menuitem) {
 				logLn("Picked `demo_Window_CreateInputBox` from main menu")
 				demo_Window_CreateInputBox()
+			}
+			if "demo_Window_CreateTerminal" == (*menuitem) {
+				logLn("Picked `demo_Window_CreateTerminal` from main menu")
+				demo_Window_CreateTerminal()
 			}
 			if "demo_Window_ShowInputBox" == (*menuitem) {
 				logLn("Picked `demo_Window_ShowInputBox` from main menu")

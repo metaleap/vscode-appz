@@ -235,6 +235,37 @@ export class GenDemos {
                 ),
             ],
 
+            "demo_Window_CreateTerminal": () =>
+                this.genInput(
+                    _, "optsname", "termname", [
+                    { k: "Prompt", v: _.eLit("Name of your new terminal?") }, { k: "Value", v: _._("appName") }
+                ], ...this.genInput(
+                    _, "optstext", "termtext", [
+                    { k: "Prompt", v: _.eLit("Text to send to new terminal `{0}` initially upon creation?", _.oDeref(_._("termname"))) }, { k: "Value", v: _._("appName") }
+                ], ...this.genInput(
+                    _, "optsvar", "termvar", [{ k: "Prompt", v: _.eLit("Value for custom env var named `MY_ENV_VAR`?") }],
+                    _.iVar("ontermcreated", { From: [{ Maybe: { Name: "Terminal" } }], To: null }),
+                    _.iSet(_._("ontermcreated"), _.eFunc([{ Name: "term", Type: { Maybe: { Name: "Terminal" } } }], null,
+                        _.eCall(_.eCall(_._("term", "Show"), _.eLit(false)), _.eFunc([], null,
+                            _.eCall(_._("term", "SendText"), _.oDeref(_._("termtext")), _.eLit(false)),
+                        )),
+                    )),
+                    _.iIf(_.oEq(_.oDeref(_._("termvar")), _.eLit("")), [
+                        _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), "CreateTerminal1"), _._("termname"), _.eZilch(), _.eZilch()),
+                            _._("ontermcreated"),
+                        ),
+                    ], [
+                        _.iVar("cfg", { Name: "TerminalOptions" }),
+                        _.iSet(_._("cfg"), _.eNew({ Name: "TerminalOptions" })),
+                        _.iSet(_._("cfg", this.fld("Name")), _.oDeref(_._("termname"))),
+                        _.iSet(_._("cfg", this.fld("Env")), { ElemType: TypeRefPrim.String, KeyType: TypeRefPrim.String, Cap: _.eLit(1) }),
+                        _.iSet(_.oIdx(_._("cfg", this.fld("Env")), _.eLit("MY_ENV_VAR")), _.oDeref(_._("termvar"))),
+                        _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), "CreateTerminal2"), _._("cfg")),
+                            _._("ontermcreated"),
+                        ),
+                    ]),
+                ))),
+
             "subscribeToMiscEvents": () => this.genEventSubs(_, [
                 { ns: "Extensions", evtName: "OnDidChange", msg: _.eLit("Some extension(s) were just (un)installed or (de)activated.") },
                 { ns: "Window", evtName: "OnDidChangeWindowState", evtArgs: "WindowState", msg: _.eLit("Am I focused? {0}.", _._("evt", this.fld("Focused"))) },
@@ -372,7 +403,7 @@ export class GenDemos {
             _.iSet(_._(nameOpts, this.fld("IgnoreFocusOut")), _.eLit(true)),
         ] as Instr[]).concat(..._.EACH(props, (prop): Instr[] => {
             return _.WHEN(prop.k === "Prompt" || prop.k === "PlaceHolder", () => [
-                _.eCall(_._("logLn"), _.eLit(nameInput + "/" + nameOpts + "/{0}:\t{1}", _.eLit(prop.k), prop.v)),
+                _.eCall(_._("logLn"), _.eLit(nameInput + "@" + nameOpts + "/{0}:\t{1}", _.eLit(prop.k), prop.v)),
             ]).concat([
                 _.iSet(_._(nameOpts, this.fld(prop.k)), prop.v)
             ])
@@ -381,7 +412,7 @@ export class GenDemos {
                 _._(nameOpts), _.eZilch(),
             ), _.eFunc([{ Name: nameInput, Type: { Maybe: TypeRefPrim.String } }], null,
                 _.iIf(_.oIsnt(_._(nameInput)), [
-                    this.genByeMsg(_, "Cancelled text input, out of ideas?"),
+                    this.genByeMsg(_, "Don't be bashful.."),
                 ], ([
                     _.eCall(_._("logLn"), _.eLit(nameInput + " <- {0}", _.oDeref(_._(nameInput)))),
                 ] as Instr[]).concat(withInput)),

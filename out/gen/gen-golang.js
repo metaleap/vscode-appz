@@ -107,7 +107,9 @@ class Gen extends gen_syn.Gen {
                         this.lf();
                     this.s("{").line();
                 }
-                this.indented(() => iblock.Instrs.forEach(_ => this.emitInstr(_, true)));
+                this.indented(() => {
+                    iblock.Instrs.forEach(_ => this.emitInstr(_, true));
+                });
                 this.lf().s("}");
                 if (iblock.Lock)
                     this.line().lf().emitExpr(iblock.Lock).s(".Unlock()");

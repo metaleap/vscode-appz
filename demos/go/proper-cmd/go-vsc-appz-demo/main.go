@@ -37,8 +37,7 @@ func main() {
 					} else {
 						switch button := *btn; button {
 						case buttons[0]:
-							demo_Window_CreateTerminal()
-							// demo_Window_ShowInputBox()
+							demo_Window_ShowInputBox()
 						case buttons[1]:
 							demosMenu()
 						default:
@@ -48,43 +47,6 @@ func main() {
 				})
 		})
 	}, nil, nil)
-}
-
-func demo_Window_CreateTerminal() {
-	win.ShowInputBox(&InputBoxOptions{Prompt: "Name of your new terminal?", Value: appName}, nil)(
-		func(termname *string) {
-			if termname == nil {
-				return
-			}
-			if *termname == "" {
-				*termname = appName
-			}
-			win.ShowInputBox(&InputBoxOptions{Prompt: "Text to send to new terminal `" + *termname + "` initially upon creation?", Value: appName}, nil)(
-				func(termtext *string) {
-					if termtext == nil {
-						return
-					}
-					win.ShowInputBox(&InputBoxOptions{Prompt: "Value for custom env var named `MY_ENV_VAR`?"}, nil)(
-						func(termvarval *string) {
-							if termvarval == nil {
-								return
-							}
-							oncreated := func(term *Terminal) {
-								term.Show(false)(func() {
-									term.SendText(*termtext, false)
-								})
-							}
-							if *termvarval == "" {
-								win.CreateTerminal1(termname, nil, nil)(oncreated)
-							} else {
-								win.CreateTerminal2(TerminalOptions{
-									Name: *termname,
-									Env:  map[string]string{"MY_ENV_VAR": *termvarval},
-								})(oncreated)
-							}
-						})
-				})
-		})
 }
 
 func demo_Window_ShowInputBox() {
