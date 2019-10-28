@@ -223,6 +223,12 @@ Window: interface
     # showInformationMessage:
     # Show an information message to users. Optionally provide an array of items which will be presented as
     # clickable buttons.
+    # 
+    # `message` ── The message to show.
+    # 
+    # `items` ── A set of items that will be rendered as actions in the message.
+    # 
+    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
     #
     # @message:
     # The message to show.
@@ -239,6 +245,14 @@ Window: interface
     # showInformationMessage:
     # Show an information message to users. Optionally provide an array of items which will be presented as
     # clickable buttons.
+    # 
+    # `message` ── The message to show.
+    # 
+    # `options` ── Configures the behaviour of the message.
+    # 
+    # `items` ── A set of items that will be rendered as actions in the message.
+    # 
+    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
     #
     # @message:
     # The message to show.
@@ -258,6 +272,12 @@ Window: interface
 
     # showInformationMessage:
     # Show an information message.
+    # 
+    # `message` ── The message to show.
+    # 
+    # `items` ── A set of items that will be rendered as actions in the message.
+    # 
+    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
     #
     # @message:
     # The message to show.
@@ -273,6 +293,14 @@ Window: interface
 
     # showInformationMessage:
     # Show an information message.
+    # 
+    # `message` ── The message to show.
+    # 
+    # `options` ── Configures the behaviour of the message.
+    # 
+    # `items` ── A set of items that will be rendered as actions in the message.
+    # 
+    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
     #
     # @message:
     # The message to show.
@@ -292,6 +320,12 @@ Window: interface
 
     # showWarningMessage:
     # Show a warning message.
+    # 
+    # `message` ── The message to show.
+    # 
+    # `items` ── A set of items that will be rendered as actions in the message.
+    # 
+    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
     #
     # @message:
     # The message to show.
@@ -307,6 +341,14 @@ Window: interface
 
     # showWarningMessage:
     # Show a warning message.
+    # 
+    # `message` ── The message to show.
+    # 
+    # `options` ── Configures the behaviour of the message.
+    # 
+    # `items` ── A set of items that will be rendered as actions in the message.
+    # 
+    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
     #
     # @message:
     # The message to show.
@@ -326,6 +368,12 @@ Window: interface
 
     # showWarningMessage:
     # Show a warning message.
+    # 
+    # `message` ── The message to show.
+    # 
+    # `items` ── A set of items that will be rendered as actions in the message.
+    # 
+    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
     #
     # @message:
     # The message to show.
@@ -341,6 +389,14 @@ Window: interface
 
     # showWarningMessage:
     # Show a warning message.
+    # 
+    # `message` ── The message to show.
+    # 
+    # `options` ── Configures the behaviour of the message.
+    # 
+    # `items` ── A set of items that will be rendered as actions in the message.
+    # 
+    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
     #
     # @message:
     # The message to show.
@@ -360,6 +416,12 @@ Window: interface
 
     # showErrorMessage:
     # Show an error message.
+    # 
+    # `message` ── The message to show.
+    # 
+    # `items` ── A set of items that will be rendered as actions in the message.
+    # 
+    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
     #
     # @message:
     # The message to show.
@@ -375,6 +437,14 @@ Window: interface
 
     # showErrorMessage:
     # Show an error message.
+    # 
+    # `message` ── The message to show.
+    # 
+    # `options` ── Configures the behaviour of the message.
+    # 
+    # `items` ── A set of items that will be rendered as actions in the message.
+    # 
+    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
     #
     # @message:
     # The message to show.
@@ -394,6 +464,12 @@ Window: interface
 
     # showErrorMessage:
     # Show an error message.
+    # 
+    # `message` ── The message to show.
+    # 
+    # `items` ── A set of items that will be rendered as actions in the message.
+    # 
+    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
     #
     # @message:
     # The message to show.
@@ -409,6 +485,14 @@ Window: interface
 
     # showErrorMessage:
     # Show an error message.
+    # 
+    # `message` ── The message to show.
+    # 
+    # `options` ── Configures the behaviour of the message.
+    # 
+    # `items` ── A set of items that will be rendered as actions in the message.
+    # 
+    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
     #
     # @message:
     # The message to show.
@@ -432,6 +516,12 @@ Window: interface
     # The returned value will be `undefined` if the input box was canceled (e.g. pressing ESC). Otherwise the
     # returned value will be the string typed by the user or an empty string if the user did not type
     # anything but dismissed the input box with OK.
+    # 
+    # `options` ── Configures the behavior of the input box.
+    # 
+    # `token` ── A token that can be used to signal cancellation.
+    # 
+    # `return` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
     #
     # @options:
     # Configures the behavior of the input box.
@@ -447,6 +537,14 @@ Window: interface
 
     # showQuickPick:
     # Shows a selection list allowing multiple selections.
+    # 
+    # `items` ── An array of strings, or a promise that resolves to an array of strings.
+    # 
+    # `options` ── Configures the behavior of the selection list.
+    # 
+    # `token` ── A token that can be used to signal cancellation.
+    # 
+    # `return` ── A promise that resolves to the selected items or `undefined`.
     #
     # @items:
     # An array of strings, or a promise that resolves to an array of strings.
@@ -466,6 +564,14 @@ Window: interface
 
     # showQuickPick:
     # Shows a selection list.
+    # 
+    # `items` ── An array of strings, or a promise that resolves to an array of strings.
+    # 
+    # `options` ── Configures the behavior of the selection list.
+    # 
+    # `token` ── A token that can be used to signal cancellation.
+    # 
+    # `return` ── A promise that resolves to the selection or `undefined`.
     #
     # @items:
     # An array of strings, or a promise that resolves to an array of strings.
@@ -485,6 +591,14 @@ Window: interface
 
     # showQuickPick:
     # Shows a selection list allowing multiple selections.
+    # 
+    # `items` ── An array of items, or a promise that resolves to an array of items.
+    # 
+    # `options` ── Configures the behavior of the selection list.
+    # 
+    # `token` ── A token that can be used to signal cancellation.
+    # 
+    # `return` ── A promise that resolves to the selected items or `undefined`.
     #
     # @items:
     # An array of items, or a promise that resolves to an array of items.
@@ -504,6 +618,14 @@ Window: interface
 
     # showQuickPick:
     # Shows a selection list.
+    # 
+    # `items` ── An array of items, or a promise that resolves to an array of items.
+    # 
+    # `options` ── Configures the behavior of the selection list.
+    # 
+    # `token` ── A token that can be used to signal cancellation.
+    # 
+    # `return` ── A promise that resolves to the selected item or `undefined`.
     #
     # @items:
     # An array of items, or a promise that resolves to an array of items.
@@ -524,6 +646,12 @@ Window: interface
     # setStatusBarMessage:
     # Set a message to the status bar. This is a short hand for the more powerful
     # status bar [items](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem).
+    # 
+    # `text` ── The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
+    # 
+    # `hideAfterTimeout` ── Timeout in milliseconds after which the message will be disposed.
+    # 
+    # `return` ── A disposable which hides the status bar message.
     #
     # @text:
     # The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
@@ -543,6 +671,10 @@ Window: interface
     # 
     # *Note* that status bar messages stack and that they must be disposed when no
     # longer used.
+    # 
+    # `text` ── The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
+    # 
+    # `return` ── A disposable which hides the status bar message.
     #
     # @text:
     # The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
@@ -555,6 +687,10 @@ Window: interface
     # showSaveDialog:
     # Shows a file save dialog to the user which allows to select a file
     # for saving-purposes.
+    # 
+    # `options` ── Options that control the dialog.
+    # 
+    # `return` ── A promise that resolves to the selected resource or `undefined`.
     #
     # @options:
     # Options that control the dialog.
@@ -567,6 +703,10 @@ Window: interface
     # showOpenDialog:
     # Shows a file open dialog to the user which allows to select a file
     # for opening-purposes.
+    # 
+    # `options` ── Options that control the dialog.
+    # 
+    # `return` ── A promise that resolves to the selected resources or `undefined`.
     #
     # @options:
     # Options that control the dialog.
@@ -579,6 +719,10 @@ Window: interface
     # showWorkspaceFolderPick:
     # Shows a selection list of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) to pick from.
     # Returns `undefined` if no folder is open.
+    # 
+    # `options` ── Configures the behavior of the workspace folder list.
+    # 
+    # `return` ── A promise that resolves to the workspace folder or `undefined`.
     #
     # @options:
     # Configures the behavior of the workspace folder list.
@@ -590,6 +734,8 @@ Window: interface
 
     # state:
     # Represents the current window's state.
+    # 
+    # `return` ── a thenable that resolves when this `State` call has successfully completed at the VSC side and its `WindowState` result received back at our end.
     #
     # @return:
     # a thenable that resolves when this `State` call has successfully completed at the VSC side and its `WindowState` result received back at our end.
@@ -598,6 +744,10 @@ Window: interface
     # onDidChangeWindowState:
     # An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the focus state of the current window
     # changes. The value of the event represents whether the window is focused.
+    # 
+    # `listener` ── will be invoked whenever the `OnDidChangeWindowState` event fires (mandatory, not optional).
+    # 
+    # `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
     #
     # @listener:
     # will be invoked whenever the `OnDidChangeWindowState` event fires (mandatory, not optional).
@@ -609,6 +759,12 @@ Window: interface
 
     # createStatusBarItem:
     # Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem).
+    # 
+    # `alignment` ── The alignment of the item.
+    # 
+    # `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
+    # 
+    # `return` ── A new status bar item.
     #
     # @alignment:
     # The alignment of the item.
@@ -624,6 +780,10 @@ Window: interface
 
     # createOutputChannel:
     # Creates a new [output channel](https://code.visualstudio.com/api/references/vscode-api#OutputChannel) with the given name.
+    # 
+    # `name` ── Human-readable string which will be used to represent the channel in the UI.
+    # 
+    # `return` ── a thenable that resolves to the newly created `OutputChannel`.
     #
     # @name:
     # Human-readable string which will be used to represent the channel in the UI.
@@ -635,6 +795,10 @@ Window: interface
 
     # createTextEditorDecorationType:
     # Create a TextEditorDecorationType that can be used to add decorations to text editors.
+    # 
+    # `options` ── Rendering options for the decoration type.
+    # 
+    # `return` ── A new decoration type instance.
     #
     # @options:
     # Rendering options for the decoration type.
@@ -650,6 +814,8 @@ Window: interface
     # Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
     # is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
     # when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+    # 
+    # `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
     #
     # @return:
     # A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
@@ -662,6 +828,8 @@ Window: interface
     # Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
     # is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
     # when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+    # 
+    # `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
     #
     # @return:
     # A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
@@ -670,6 +838,16 @@ Window: interface
     # createTerminal:
     # Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process. The cwd of the terminal will be the workspace
     # directory if it exists.
+    # 
+    # `name` ── Optional human-readable string which will be used to represent the terminal in the UI.
+    # 
+    # `shellPath` ── Optional path to a custom shell executable to be used in the terminal.
+    # 
+    # `shellArgs` ── Optional args for the custom shell executable. A string can be used on Windows only which
+    # allows specifying shell args in
+    # [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
+    # 
+    # `return` ── A new Terminal.
     #
     # @name:
     # Optional human-readable string which will be used to represent the terminal in the UI.
@@ -691,6 +869,10 @@ Window: interface
 
     # createTerminal:
     # Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process.
+    # 
+    # `options` ── A TerminalOptions object describing the characteristics of the new terminal.
+    # 
+    # `return` ── A new Terminal.
     #
     # @options:
     # A TerminalOptions object describing the characteristics of the new terminal.
@@ -702,6 +884,11 @@ Window: interface
 
     # createTerminal:
     # Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) where an extension controls its input and output.
+    # 
+    # `options` ── An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing
+    # the characteristics of the new terminal.
+    # 
+    # `return` ── A new Terminal.
     #
     # @options:
     # An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing
@@ -725,6 +912,10 @@ Env: interface
     # 
     # *Note* that [`showTextDocument`](https://code.visualstudio.com/api/references/vscode-api#window.showTextDocument) is the right
     # way to open a text document inside the editor, not this function.
+    # 
+    # `target` ── The uri that should be opened.
+    # 
+    # `return` ── A promise indicating if open was successful.
     #
     # @target:
     # The uri that should be opened.
@@ -736,6 +927,8 @@ Env: interface
 
     # appName:
     # The application name of the editor, like 'VS Code'.
+    # 
+    # `return` ── a thenable that resolves when this `AppName` call has successfully completed at the VSC side and its result received back at our end.
     #
     # @return:
     # a thenable that resolves when this `AppName` call has successfully completed at the VSC side and its result received back at our end.
@@ -743,6 +936,8 @@ Env: interface
 
     # appRoot:
     # The application root folder from which the editor is running.
+    # 
+    # `return` ── a thenable that resolves when this `AppRoot` call has successfully completed at the VSC side and its result received back at our end.
     #
     # @return:
     # a thenable that resolves when this `AppRoot` call has successfully completed at the VSC side and its result received back at our end.
@@ -750,6 +945,8 @@ Env: interface
 
     # language:
     # Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
+    # 
+    # `return` ── a thenable that resolves when this `Language` call has successfully completed at the VSC side and its result received back at our end.
     #
     # @return:
     # a thenable that resolves when this `Language` call has successfully completed at the VSC side and its result received back at our end.
@@ -757,6 +954,8 @@ Env: interface
 
     # machineId:
     # A unique identifier for the computer.
+    # 
+    # `return` ── a thenable that resolves when this `MachineId` call has successfully completed at the VSC side and its result received back at our end.
     #
     # @return:
     # a thenable that resolves when this `MachineId` call has successfully completed at the VSC side and its result received back at our end.
@@ -770,6 +969,8 @@ Env: interface
     # value is defined in all extension hosts (local and remote) in case a remote extension host
     # exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
     # a specific extension runs remote or not.
+    # 
+    # `return` ── a thenable that resolves when this `RemoteName` call has successfully completed at the VSC side and its result received back at our end.
     #
     # @return:
     # a thenable that resolves when this `RemoteName` call has successfully completed at the VSC side and its result received back at our end.
@@ -778,6 +979,8 @@ Env: interface
     # sessionId:
     # A unique identifier for the current session.
     # Changes each time the editor is started.
+    # 
+    # `return` ── a thenable that resolves when this `SessionId` call has successfully completed at the VSC side and its result received back at our end.
     #
     # @return:
     # a thenable that resolves when this `SessionId` call has successfully completed at the VSC side and its result received back at our end.
@@ -786,6 +989,8 @@ Env: interface
     # shell:
     # The detected default shell for the extension host, this is overridden by the
     # `terminal.integrated.shell` setting for the extension host's platform.
+    # 
+    # `return` ── a thenable that resolves when this `Shell` call has successfully completed at the VSC side and its result received back at our end.
     #
     # @return:
     # a thenable that resolves when this `Shell` call has successfully completed at the VSC side and its result received back at our end.
@@ -793,16 +998,20 @@ Env: interface
 
     # uriScheme:
     # The custom uri scheme the editor registers to in the operating system.
+    # 
+    # `return` ── a thenable that resolves when this `UriScheme` call has successfully completed at the VSC side and its result received back at our end.
     #
     # @return:
     # a thenable that resolves when this `UriScheme` call has successfully completed at the VSC side and its result received back at our end.
     UriScheme: ((string->void)->void)
 
     # Provides single-call access to numerous individual `Env` properties at once.
+    # 
+    # `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvState` result received back at our end.
     #
     # @return:
-    # a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.
-    AllProperties: ((EnvBag->void)->void)
+    # a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvState` result received back at our end.
+    AllProperties: ((EnvState->void)->void)
 
     # The clipboard provides read and write access to the system's clipboard.
     Clipboard: Clipboard
@@ -816,6 +1025,8 @@ Clipboard: interface
 
     # readText:
     # Read the current clipboard contents as text.
+    # 
+    # `return` ── A thenable that resolves to a string.
     #
     # @return:
     # A thenable that resolves to a string.
@@ -823,6 +1034,10 @@ Clipboard: interface
 
     # writeText:
     # Writes text into the clipboard.
+    # 
+    # `value` ── 
+    # 
+    # `return` ── A thenable that resolves when writing happened.
     #
     # @return:
     # A thenable that resolves when writing happened.
@@ -848,6 +1063,8 @@ Workspace: interface
     # name:
     # The name of the workspace. `undefined` when no folder
     # has been opened.
+    # 
+    # `return` ── a thenable that resolves when this `Name` call has successfully completed at the VSC side and its result received back at our end.
     #
     # @return:
     # a thenable that resolves when this `Name` call has successfully completed at the VSC side and its result received back at our end.
@@ -885,6 +1102,8 @@ Workspace: interface
     # configuration data into the file. You can use `workspace.getConfiguration().update()`
     # for that purpose which will work both when a single folder is opened as
     # well as an untitled or saved workspace.
+    # 
+    # `return` ── a thenable that resolves when this `WorkspaceFile` call has successfully completed at the VSC side and its result received back at our end.
     #
     # @return:
     # a thenable that resolves when this `WorkspaceFile` call has successfully completed at the VSC side and its result received back at our end.
@@ -892,6 +1111,10 @@ Workspace: interface
 
     # saveAll:
     # Save all dirty files.
+    # 
+    # `includeUntitled` ── Also save files that have been created during this session.
+    # 
+    # `return` ── A thenable that resolves when the files have been saved.
     #
     # @includeUntitled:
     # Also save files that have been created during this session.
@@ -903,6 +1126,10 @@ Workspace: interface
 
     # onDidChangeWorkspaceFolders:
     # An event that is emitted when a workspace folder is added or removed.
+    # 
+    # `listener` ── will be invoked whenever the `OnDidChangeWorkspaceFolders` event fires (mandatory, not optional).
+    # 
+    # `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
     #
     # @listener:
     # will be invoked whenever the `OnDidChangeWorkspaceFolders` event fires (mandatory, not optional).
@@ -916,6 +1143,10 @@ Workspace: interface
     # Returns the [workspace folder](https://code.visualstudio.com/api/references/vscode-api#WorkspaceFolder) that contains a given uri.
     # * returns `undefined` when the given uri doesn't match any workspace folder
     # * returns the *input* when the given uri is a workspace folder itself
+    # 
+    # `uri` ── An uri.
+    # 
+    # `return` ── A workspace folder or `undefined`
     #
     # @uri:
     # An uri.
@@ -928,6 +1159,8 @@ Workspace: interface
     # workspaceFolders:
     # List of workspace folders or `undefined` when no folder is open.
     # *Note* that the first entry corresponds to the value of `rootPath`.
+    # 
+    # `return` ── a thenable that resolves when this `WorkspaceFolders` call has successfully completed at the VSC side and its result received back at our end.
     #
     # @return:
     # a thenable that resolves when this `WorkspaceFolders` call has successfully completed at the VSC side and its result received back at our end.
@@ -936,6 +1169,21 @@ Workspace: interface
     # findFiles:
     # Find files across all [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) in the workspace.
     # `findFiles('**​/*.js', '**​/node_modules/**', 10)`
+    # 
+    # `include` ── A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that defines the files to search for. The glob pattern
+    # will be matched against the file paths of resulting matches relative to their workspace. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern)
+    # to restrict the search results to a [workspace folder](https://code.visualstudio.com/api/references/vscode-api#WorkspaceFolder).
+    # 
+    # `exclude` ── A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that defines files and folders to exclude. The glob pattern
+    # will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will
+    # apply, when `null` no excludes will apply.
+    # 
+    # `maxResults` ── An upper-bound for the result.
+    # 
+    # `token` ── A token that can be used to signal cancellation to the underlying search engine.
+    # 
+    # `return` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
+    # [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) are opened.
     #
     # @include:
     # A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that defines the files to search for. The glob pattern
@@ -967,6 +1215,14 @@ Workspace: interface
     # 
     # When there are no [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) or when the path
     # is not contained in them, the input is returned.
+    # 
+    # `pathOrUri` ── A path or uri. When a uri is given its [fsPath](https://code.visualstudio.com/api/references/vscode-api#Uri.fsPath) is used.
+    # 
+    # `includeWorkspaceFolder` ── When `true` and when the given path is contained inside a
+    # workspace folder the name of the workspace is prepended. Defaults to `true` when there are
+    # multiple workspace folders and `false` otherwise.
+    # 
+    # `return` ── A path relative to the root or the input.
     #
     # @pathOrUri:
     # A path or uri. When a uri is given its [fsPath](https://code.visualstudio.com/api/references/vscode-api#Uri.fsPath) is used.
@@ -989,6 +1245,17 @@ Workspace: interface
     # flags to ignore certain kinds of events can be provided. To stop listening to events the watcher must be disposed.
     # 
     # *Note* that only files within the current [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) can be watched.
+    # 
+    # `globPattern` ── A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that is applied to the absolute paths of created, changed,
+    # and deleted files. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern) to limit events to a certain [workspace folder](#WorkspaceFolder).
+    # 
+    # `ignoreCreateEvents` ── Ignore when files have been created.
+    # 
+    # `ignoreChangeEvents` ── Ignore when files have been changed.
+    # 
+    # `ignoreDeleteEvents` ── Ignore when files have been deleted.
+    # 
+    # `return` ── A new file system watcher instance.
     #
     # @globPattern:
     # A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that is applied to the absolute paths of created, changed,
@@ -1012,10 +1279,12 @@ Workspace: interface
         ignoreDeleteEvents: bool
 
     # Provides single-call access to numerous individual `Workspace` properties at once.
+    # 
+    # `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceState` result received back at our end.
     #
     # @return:
-    # a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
-    AllProperties: ((WorkspaceBag->void)->void)
+    # a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceState` result received back at our end.
+    AllProperties: ((WorkspaceState->void)->void)
 
 
 
@@ -1055,6 +1324,8 @@ Languages: interface
 
     # getLanguages:
     # Return the identifiers of all known languages.
+    # 
+    # `return` ── Promise resolving to an array of identifier strings.
     #
     # @return:
     # Promise resolving to an array of identifier strings.
@@ -1063,6 +1334,10 @@ Languages: interface
     # onDidChangeDiagnostics:
     # An [event](https://code.visualstudio.com/api/references/vscode-api#Event) which fires when the global set of diagnostics changes. This is
     # newly added and removed diagnostics.
+    # 
+    # `listener` ── will be invoked whenever the `OnDidChangeDiagnostics` event fires (mandatory, not optional).
+    # 
+    # `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
     #
     # @listener:
     # will be invoked whenever the `OnDidChangeDiagnostics` event fires (mandatory, not optional).
@@ -1119,6 +1394,10 @@ Extensions: interface
     # onDidChange:
     # An event which fires when `extensions.all` changes. This can happen when extensions are
     # installed, uninstalled, enabled or disabled.
+    # 
+    # `listener` ── will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).
+    # 
+    # `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
     #
     # @listener:
     # will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).
@@ -1182,6 +1461,12 @@ Commands: interface
     # 
     # Registering a command with an existing command identifier twice
     # will cause an error.
+    # 
+    # `command` ── A unique identifier for the command.
+    # 
+    # `callback` ── A command handler function.
+    # 
+    # `return` ── Disposable which unregisters this command on disposal.
     #
     # @command:
     # A unique identifier for the command.
@@ -1203,6 +1488,13 @@ Commands: interface
     # `number`, `undefined`, and `null`, as well as [`Position`](https://code.visualstudio.com/api/references/vscode-api#Position), [`Range`](#Range), [`Uri`](#Uri) and [`Location`](#Location).
     # * *Note 2:* There are no restrictions when executing commands that have been contributed
     # by extensions.
+    # 
+    # `command` ── Identifier of the command to execute.
+    # 
+    # `rest` ── Parameters passed to the command function.
+    # 
+    # `return` ── A thenable that resolves to the returned value of the given command. `undefined` when
+    # the command handler function doesn't return anything.
     #
     # @command:
     # Identifier of the command to execute.
@@ -1220,6 +1512,10 @@ Commands: interface
     # getCommands:
     # Retrieve the list of all available commands. Commands starting an underscore are
     # treated as internal commands.
+    # 
+    # `filterInternal` ── Set `true` to not see internal commands (starting with an underscore)
+    # 
+    # `return` ── Thenable that resolves to a list of command ids.
     #
     # @filterInternal:
     # Set `true` to not see internal commands (starting with an underscore)
@@ -1739,10 +2035,10 @@ StatusBarItem: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # Bag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+    # Cfg represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
     #
     # JSON FLAGS: undefined
-    Bag: ?StatusBarItemBag
+    Cfg: ?StatusBarItemState
 
 
 
@@ -1757,10 +2053,10 @@ OutputChannel: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # Bag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+    # Cfg represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
     #
     # JSON FLAGS: undefined
-    Bag: ?OutputChannelBag
+    Cfg: ?OutputChannelState
 
 
 
@@ -2043,10 +2339,10 @@ TextEditorDecorationType: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # Bag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+    # Cfg represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
     #
     # JSON FLAGS: undefined
-    Bag: ?TextEditorDecorationTypeBag
+    Cfg: ?TextEditorDecorationTypeState
 
 
 
@@ -2062,10 +2358,10 @@ InputBox: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # Bag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+    # Cfg represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
     #
     # JSON FLAGS: undefined
-    Bag: ?InputBoxBag
+    Cfg: ?InputBoxState
 
 
 
@@ -2102,10 +2398,10 @@ QuickPick: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # Bag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+    # Cfg represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
     #
     # JSON FLAGS: undefined
-    Bag: ?QuickPickBag
+    Cfg: ?QuickPickState
 
 
 
@@ -2117,10 +2413,10 @@ Terminal: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # Bag represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+    # Cfg represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
     #
     # JSON FLAGS: undefined
-    Bag: ?TerminalBag
+    Cfg: ?TerminalState
 
 
 
@@ -2434,10 +2730,10 @@ FileSystemWatcher: class
     # JSON FLAGS: undefined
     __disp__: ?Disposable
 
-    # Bag represents this `FileSystemWatcher`'s current state. All its members get auto-refreshed every time a (subscribed) `FileSystemWatcher` event fires or any `FileSystemWatcher` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+    # Cfg represents this `FileSystemWatcher`'s current state. All its members get auto-refreshed every time a (subscribed) `FileSystemWatcher` event fires or any `FileSystemWatcher` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
     #
     # JSON FLAGS: undefined
-    Bag: ?FileSystemWatcherBag
+    Cfg: ?FileSystemWatcherState
 
 
 
@@ -2454,9 +2750,9 @@ DiagnosticChangeEvent: class
 
 
 
-# envBag:
-# EnvBag gathers various properties of `Env`, obtainable via its `AllProperties` method.
-EnvBag: class
+# envState:
+# EnvState gathers various properties of `Env`, obtainable via its `AllProperties` method.
+EnvState: class
 
     # appName:
     # The application name of the editor, like 'VS Code'.
@@ -2517,9 +2813,9 @@ EnvBag: class
 
 
 
-# workspaceBag:
-# WorkspaceBag gathers various properties of `Workspace`, obtainable via its `AllProperties` method.
-WorkspaceBag: class
+# workspaceState:
+# WorkspaceState gathers various properties of `Workspace`, obtainable via its `AllProperties` method.
+WorkspaceState: class
 
     # name:
     # The name of the workspace. `undefined` when no folder
@@ -2574,8 +2870,8 @@ WorkspaceBag: class
 
 
 
-# StatusBarItemBag (to be accessed only via `StatusBarItem.Bag`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
-StatusBarItemBag: class
+# StatusBarItemState (to be accessed only via `StatusBarItem.Cfg`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+StatusBarItemState: class
 
     #
     # JSON FLAGS: {"Excluded":true}
@@ -2627,8 +2923,8 @@ StatusBarItemBag: class
 
 
 
-# OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
-OutputChannelBag: class
+# OutputChannelState (to be accessed only via `OutputChannel.Cfg`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+OutputChannelState: class
 
     #
     # JSON FLAGS: {"Excluded":true}
@@ -2643,8 +2939,8 @@ OutputChannelBag: class
 
 
 
-# TextEditorDecorationTypeBag (to be accessed only via `TextEditorDecorationType.Bag`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
-TextEditorDecorationTypeBag: class
+# TextEditorDecorationTypeState (to be accessed only via `TextEditorDecorationType.Cfg`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+TextEditorDecorationTypeState: class
 
     #
     # JSON FLAGS: {"Excluded":true}
@@ -2659,8 +2955,8 @@ TextEditorDecorationTypeBag: class
 
 
 
-# InputBoxBag (to be accessed only via `InputBox.Bag`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
-InputBoxBag: class
+# InputBoxState (to be accessed only via `InputBox.Cfg`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+InputBoxState: class
 
     #
     # JSON FLAGS: {"Excluded":true}
@@ -2741,8 +3037,8 @@ InputBoxBag: class
 
 
 
-# QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
-QuickPickBag: class
+# QuickPickState (to be accessed only via `QuickPick.Cfg`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+QuickPickState: class
 
     #
     # JSON FLAGS: {"Excluded":true}
@@ -2841,8 +3137,8 @@ QuickPickBag: class
 
 
 
-# TerminalBag (to be accessed only via `Terminal.Bag`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
-TerminalBag: class
+# TerminalState (to be accessed only via `Terminal.Cfg`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+TerminalState: class
 
     #
     # JSON FLAGS: {"Excluded":true}
@@ -2857,8 +3153,8 @@ TerminalBag: class
 
 
 
-# FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
-FileSystemWatcherBag: class
+# FileSystemWatcherState (to be accessed only via `FileSystemWatcher.Cfg`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+FileSystemWatcherState: class
 
     #
     # JSON FLAGS: {"Excluded":true}
@@ -4377,18 +4673,18 @@ Env·UriScheme: ( -> ((string->void)->void))
 
 
 
-Env·AllProperties: ( -> ((EnvBag->void)->void))
+Env·AllProperties: ( -> ((EnvState->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "env.AllProperties"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
-    var onret of (EnvBag->void)
+    var onret of (EnvState->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of EnvBag
+        var result of EnvState
         if =?payload
-            result = EnvBag·new
+            result = EnvState·new
             ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
@@ -4399,7 +4695,7 @@ Env·AllProperties: ( -> ((EnvBag->void)->void))
         return true
     
     this.Impl().send(msg, onresp)
-    return (a0:(EnvBag->void) -> void)
+    return (a0:(EnvState->void) -> void)
         onret = a0
     
 
@@ -4774,18 +5070,18 @@ Workspace·CreateFileSystemWatcher: (globPattern:string -> ignoreCreateEvents:bo
 
 
 
-Workspace·AllProperties: ( -> ((WorkspaceBag->void)->void))
+Workspace·AllProperties: ( -> ((WorkspaceState->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "workspace.AllProperties"
     msg.Data = dict·new(0)
     var onresp of (any->bool)
-    var onret of (WorkspaceBag->void)
+    var onret of (WorkspaceState->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        var result of WorkspaceBag
+        var result of WorkspaceState
         if =?payload
-            result = WorkspaceBag·new
+            result = WorkspaceState·new
             ok = result.__loadFromJsonish__(payload)
             if !ok
                 return false
@@ -4796,7 +5092,7 @@ Workspace·AllProperties: ( -> ((WorkspaceBag->void)->void))
         return true
     
     this.Impl().send(msg, onresp)
-    return (a0:(WorkspaceBag->void) -> void)
+    return (a0:(WorkspaceState->void) -> void)
         onret = a0
     
 
@@ -5055,8 +5351,8 @@ StatusBarItem·Show: ( -> ((void->void)->void))
             return false
         if (2 != it·len) || (=!it@1)
             return false
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(it@1)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5087,8 +5383,8 @@ StatusBarItem·Hide: ( -> ((void->void)->void))
             return false
         if (2 != it·len) || (=!it@1)
             return false
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(it@1)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5119,11 +5415,11 @@ StatusBarItem·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        if =!this.Bag
-            this.Bag = ?StatusBarItemBag·new
-        this.Bag.__holder__ = this
-        lock this.Bag.__holder__.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(payload)
+        if =!this.Cfg
+            this.Cfg = ?StatusBarItemState·new
+        this.Cfg.__holder__ = this
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -5138,7 +5434,7 @@ StatusBarItem·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
 
 
 
-StatusBarItem·__appzObjBagPushToPeer__: (allUpdates:?StatusBarItemBag -> ((void->void)->void))
+StatusBarItem·__appzObjBagPushToPeer__: (allUpdates:?StatusBarItemState -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "StatusBarItem.__appzObjBagPushToPeer__"
@@ -5149,8 +5445,8 @@ StatusBarItem·__appzObjBagPushToPeer__: (allUpdates:?StatusBarItemBag -> ((void
     var onret of (void->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(payload)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -5182,8 +5478,8 @@ OutputChannel·Append: (value:string -> ((void->void)->void))
             return false
         if (2 != it·len) || (=!it@1)
             return false
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(it@1)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5215,8 +5511,8 @@ OutputChannel·AppendLine: (value:string -> ((void->void)->void))
             return false
         if (2 != it·len) || (=!it@1)
             return false
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(it@1)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5247,8 +5543,8 @@ OutputChannel·Clear: ( -> ((void->void)->void))
             return false
         if (2 != it·len) || (=!it@1)
             return false
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(it@1)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5280,8 +5576,8 @@ OutputChannel·Show: (preserveFocus:bool -> ((void->void)->void))
             return false
         if (2 != it·len) || (=!it@1)
             return false
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(it@1)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5312,8 +5608,8 @@ OutputChannel·Hide: ( -> ((void->void)->void))
             return false
         if (2 != it·len) || (=!it@1)
             return false
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(it@1)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5344,11 +5640,11 @@ OutputChannel·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        if =!this.Bag
-            this.Bag = ?OutputChannelBag·new
-        this.Bag.__holder__ = this
-        lock this.Bag.__holder__.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(payload)
+        if =!this.Cfg
+            this.Cfg = ?OutputChannelState·new
+        this.Cfg.__holder__ = this
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -5379,11 +5675,11 @@ TextEditorDecorationType·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        if =!this.Bag
-            this.Bag = ?TextEditorDecorationTypeBag·new
-        this.Bag.__holder__ = this
-        lock this.Bag.__holder__.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(payload)
+        if =!this.Cfg
+            this.Cfg = ?TextEditorDecorationTypeState·new
+        this.Cfg.__holder__ = this
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -5416,8 +5712,8 @@ InputBox·OnDidChangeValue: (handler:(string->void) -> ((?Disposable->void)->voi
         [_a_0_, ok] = ((args@0)·(string))
         if !ok
             return false
-            lock this.__disp__.impl
-                ok = this.Bag.__loadFromJsonish__(args@1)
+            lock this.Cfg
+                ok = this.Cfg.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -5463,8 +5759,8 @@ InputBox·OnDidAccept: (handler:(->void) -> ((?Disposable->void)->void))
         var ok of bool
         if 1 != args·len
             return ok
-            lock this.__disp__.impl
-                ok = this.Bag.__loadFromJsonish__(args@0)
+            lock this.Cfg
+                ok = this.Cfg.__loadFromJsonish__(args@0)
             if !ok
                 return false
             handler()
@@ -5512,8 +5808,8 @@ InputBox·Show: ( -> ((void->void)->void))
             return false
         if (2 != it·len) || (=!it@1)
             return false
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(it@1)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5544,8 +5840,8 @@ InputBox·Hide: ( -> ((void->void)->void))
             return false
         if (2 != it·len) || (=!it@1)
             return false
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(it@1)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5574,8 +5870,8 @@ InputBox·OnDidHide: (handler:(->void) -> ((?Disposable->void)->void))
         var ok of bool
         if 1 != args·len
             return ok
-            lock this.__disp__.impl
-                ok = this.Bag.__loadFromJsonish__(args@0)
+            lock this.Cfg
+                ok = this.Cfg.__loadFromJsonish__(args@0)
             if !ok
                 return false
             handler()
@@ -5623,11 +5919,11 @@ InputBox·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        if =!this.Bag
-            this.Bag = ?InputBoxBag·new
-        this.Bag.__holder__ = this
-        lock this.Bag.__holder__.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(payload)
+        if =!this.Cfg
+            this.Cfg = ?InputBoxState·new
+        this.Cfg.__holder__ = this
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -5642,7 +5938,7 @@ InputBox·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
 
 
 
-InputBox·__appzObjBagPushToPeer__: (allUpdates:?InputBoxBag -> ((void->void)->void))
+InputBox·__appzObjBagPushToPeer__: (allUpdates:?InputBoxState -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "InputBox.__appzObjBagPushToPeer__"
@@ -5653,8 +5949,8 @@ InputBox·__appzObjBagPushToPeer__: (allUpdates:?InputBoxBag -> ((void->void)->v
     var onret of (void->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(payload)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -5687,8 +5983,8 @@ QuickPick·OnDidChangeValue: (handler:(string->void) -> ((?Disposable->void)->vo
         [_a_0_, ok] = ((args@0)·(string))
         if !ok
             return false
-            lock this.__disp__.impl
-                ok = this.Bag.__loadFromJsonish__(args@1)
+            lock this.Cfg
+                ok = this.Cfg.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -5734,8 +6030,8 @@ QuickPick·OnDidAccept: (handler:(->void) -> ((?Disposable->void)->void))
         var ok of bool
         if 1 != args·len
             return ok
-            lock this.__disp__.impl
-                ok = this.Bag.__loadFromJsonish__(args@0)
+            lock this.Cfg
+                ok = this.Cfg.__loadFromJsonish__(args@0)
             if !ok
                 return false
             handler()
@@ -5797,8 +6093,8 @@ QuickPick·OnDidChangeActive: (handler:([QuickPickItem]->void) -> ((?Disposable-
                 return false
             _a_0_@__idx___a_0_ = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
-            lock this.__disp__.impl
-                ok = this.Bag.__loadFromJsonish__(args@1)
+            lock this.Cfg
+                ok = this.Cfg.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -5860,8 +6156,8 @@ QuickPick·OnDidChangeSelection: (handler:([QuickPickItem]->void) -> ((?Disposab
                 return false
             _a_0_@__idx___a_0_ = __val___a_0_
             __idx___a_0_ = __idx___a_0_ + 1
-            lock this.__disp__.impl
-                ok = this.Bag.__loadFromJsonish__(args@1)
+            lock this.Cfg
+                ok = this.Cfg.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -5909,8 +6205,8 @@ QuickPick·Show: ( -> ((void->void)->void))
             return false
         if (2 != it·len) || (=!it@1)
             return false
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(it@1)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5941,8 +6237,8 @@ QuickPick·Hide: ( -> ((void->void)->void))
             return false
         if (2 != it·len) || (=!it@1)
             return false
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(it@1)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -5971,8 +6267,8 @@ QuickPick·OnDidHide: (handler:(->void) -> ((?Disposable->void)->void))
         var ok of bool
         if 1 != args·len
             return ok
-            lock this.__disp__.impl
-                ok = this.Bag.__loadFromJsonish__(args@0)
+            lock this.Cfg
+                ok = this.Cfg.__loadFromJsonish__(args@0)
             if !ok
                 return false
             handler()
@@ -6020,11 +6316,11 @@ QuickPick·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        if =!this.Bag
-            this.Bag = ?QuickPickBag·new
-        this.Bag.__holder__ = this
-        lock this.Bag.__holder__.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(payload)
+        if =!this.Cfg
+            this.Cfg = ?QuickPickState·new
+        this.Cfg.__holder__ = this
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -6039,7 +6335,7 @@ QuickPick·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
 
 
 
-QuickPick·__appzObjBagPushToPeer__: (allUpdates:?QuickPickBag -> ((void->void)->void))
+QuickPick·__appzObjBagPushToPeer__: (allUpdates:?QuickPickState -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "QuickPick.__appzObjBagPushToPeer__"
@@ -6050,8 +6346,8 @@ QuickPick·__appzObjBagPushToPeer__: (allUpdates:?QuickPickBag -> ((void->void)-
     var onret of (void->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(payload)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -6084,8 +6380,8 @@ Terminal·SendText: (text:string -> addNewLine:bool -> ((void->void)->void))
             return false
         if (2 != it·len) || (=!it@1)
             return false
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(it@1)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -6117,8 +6413,8 @@ Terminal·Show: (preserveFocus:bool -> ((void->void)->void))
             return false
         if (2 != it·len) || (=!it@1)
             return false
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(it@1)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -6149,8 +6445,8 @@ Terminal·Hide: ( -> ((void->void)->void))
             return false
         if (2 != it·len) || (=!it@1)
             return false
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(it@1)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(it@1)
         if !ok
             return false
         if =?onret
@@ -6181,11 +6477,11 @@ Terminal·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        if =!this.Bag
-            this.Bag = ?TerminalBag·new
-        this.Bag.__holder__ = this
-        lock this.Bag.__holder__.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(payload)
+        if =!this.Cfg
+            this.Cfg = ?TerminalState·new
+        this.Cfg.__holder__ = this
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -6218,8 +6514,8 @@ FileSystemWatcher·OnDidCreate: (handler:(string->void) -> ((?Disposable->void)-
         [_a_0_, ok] = ((args@0)·(string))
         if !ok
             return false
-            lock this.__disp__.impl
-                ok = this.Bag.__loadFromJsonish__(args@1)
+            lock this.Cfg
+                ok = this.Cfg.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -6269,8 +6565,8 @@ FileSystemWatcher·OnDidChange: (handler:(string->void) -> ((?Disposable->void)-
         [_a_0_, ok] = ((args@0)·(string))
         if !ok
             return false
-            lock this.__disp__.impl
-                ok = this.Bag.__loadFromJsonish__(args@1)
+            lock this.Cfg
+                ok = this.Cfg.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -6320,8 +6616,8 @@ FileSystemWatcher·OnDidDelete: (handler:(string->void) -> ((?Disposable->void)-
         [_a_0_, ok] = ((args@0)·(string))
         if !ok
             return false
-            lock this.__disp__.impl
-                ok = this.Bag.__loadFromJsonish__(args@1)
+            lock this.Cfg
+                ok = this.Cfg.__loadFromJsonish__(args@1)
             if !ok
                 return false
             handler(_a_0_)
@@ -6369,11 +6665,11 @@ FileSystemWatcher·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
     var onret of (->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        if =!this.Bag
-            this.Bag = ?FileSystemWatcherBag·new
-        this.Bag.__holder__ = this
-        lock this.Bag.__holder__.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(payload)
+        if =!this.Cfg
+            this.Cfg = ?FileSystemWatcherState·new
+        this.Cfg.__holder__ = this
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -6388,7 +6684,7 @@ FileSystemWatcher·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
 
 
 
-FileSystemWatcher·__appzObjBagPushToPeer__: (allUpdates:?FileSystemWatcherBag -> ((void->void)->void))
+FileSystemWatcher·__appzObjBagPushToPeer__: (allUpdates:?FileSystemWatcherState -> ((void->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
     msg.QName = "FileSystemWatcher.__appzObjBagPushToPeer__"
@@ -6399,8 +6695,8 @@ FileSystemWatcher·__appzObjBagPushToPeer__: (allUpdates:?FileSystemWatcherBag -
     var onret of (void->void)
     onresp = (payload:any -> bool)
         var ok of bool
-        lock this.__disp__.impl
-            ok = this.Bag.__loadFromJsonish__(payload)
+        lock this.Cfg
+            ok = this.Cfg.__loadFromJsonish__(payload)
         if !ok
             return false
         if =?onret
@@ -6415,68 +6711,80 @@ FileSystemWatcher·__appzObjBagPushToPeer__: (allUpdates:?FileSystemWatcherBag -
 
 
 
-StatusBarItemBag·ReFetch: ( -> ((->void)->void))
+StatusBarItemState·ReFetch: ( -> ((->void)->void))
     return this.__holder__.__appzObjBagPullFromPeer__()
 
 
 
 
-StatusBarItemBag·ApplyChanges: ( -> ((->void)->void))
-    return this.__holder__.__appzObjBagPushToPeer__(this)
+StatusBarItemState·ApplyChanges: ( -> ((->void)->void))
+    var ret of ((->void)->void)
+    lock this
+        ret = this.__holder__.__appzObjBagPushToPeer__(this)
+    return ret
 
 
 
 
-OutputChannelBag·ReFetch: ( -> ((->void)->void))
+OutputChannelState·ReFetch: ( -> ((->void)->void))
     return this.__holder__.__appzObjBagPullFromPeer__()
 
 
 
 
-TextEditorDecorationTypeBag·ReFetch: ( -> ((->void)->void))
+TextEditorDecorationTypeState·ReFetch: ( -> ((->void)->void))
     return this.__holder__.__appzObjBagPullFromPeer__()
 
 
 
 
-InputBoxBag·ReFetch: ( -> ((->void)->void))
+InputBoxState·ReFetch: ( -> ((->void)->void))
     return this.__holder__.__appzObjBagPullFromPeer__()
 
 
 
 
-InputBoxBag·ApplyChanges: ( -> ((->void)->void))
-    return this.__holder__.__appzObjBagPushToPeer__(this)
+InputBoxState·ApplyChanges: ( -> ((->void)->void))
+    var ret of ((->void)->void)
+    lock this
+        ret = this.__holder__.__appzObjBagPushToPeer__(this)
+    return ret
 
 
 
 
-QuickPickBag·ReFetch: ( -> ((->void)->void))
+QuickPickState·ReFetch: ( -> ((->void)->void))
     return this.__holder__.__appzObjBagPullFromPeer__()
 
 
 
 
-QuickPickBag·ApplyChanges: ( -> ((->void)->void))
-    return this.__holder__.__appzObjBagPushToPeer__(this)
+QuickPickState·ApplyChanges: ( -> ((->void)->void))
+    var ret of ((->void)->void)
+    lock this
+        ret = this.__holder__.__appzObjBagPushToPeer__(this)
+    return ret
 
 
 
 
-TerminalBag·ReFetch: ( -> ((->void)->void))
+TerminalState·ReFetch: ( -> ((->void)->void))
     return this.__holder__.__appzObjBagPullFromPeer__()
 
 
 
 
-FileSystemWatcherBag·ReFetch: ( -> ((->void)->void))
+FileSystemWatcherState·ReFetch: ( -> ((->void)->void))
     return this.__holder__.__appzObjBagPullFromPeer__()
 
 
 
 
-FileSystemWatcherBag·ApplyChanges: ( -> ((->void)->void))
-    return this.__holder__.__appzObjBagPushToPeer__(this)
+FileSystemWatcherState·ApplyChanges: ( -> ((->void)->void))
+    var ret of ((->void)->void)
+    lock this
+        ret = this.__holder__.__appzObjBagPushToPeer__(this)
+    return ret
 
 
 
@@ -6713,7 +7021,7 @@ Terminal·__loadFromJsonish__: (payload:any -> bool)
 
 
 
-EnvBag·__loadFromJsonish__: (payload:any -> bool)
+EnvState·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -6870,7 +7178,7 @@ FileSystemWatcher·__loadFromJsonish__: (payload:any -> bool)
 
 
 
-WorkspaceBag·__loadFromJsonish__: (payload:any -> bool)
+WorkspaceState·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -6955,7 +7263,7 @@ DiagnosticChangeEvent·__loadFromJsonish__: (payload:any -> bool)
 
 
 
-StatusBarItemBag·__loadFromJsonish__: (payload:any -> bool)
+StatusBarItemState·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -7029,7 +7337,7 @@ StatusBarItemBag·__loadFromJsonish__: (payload:any -> bool)
 
 
 
-OutputChannelBag·__loadFromJsonish__: (payload:any -> bool)
+OutputChannelState·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -7051,7 +7359,7 @@ OutputChannelBag·__loadFromJsonish__: (payload:any -> bool)
 
 
 
-TextEditorDecorationTypeBag·__loadFromJsonish__: (payload:any -> bool)
+TextEditorDecorationTypeState·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -7073,7 +7381,7 @@ TextEditorDecorationTypeBag·__loadFromJsonish__: (payload:any -> bool)
 
 
 
-InputBoxBag·__loadFromJsonish__: (payload:any -> bool)
+InputBoxState·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -7177,7 +7485,7 @@ InputBoxBag·__loadFromJsonish__: (payload:any -> bool)
 
 
 
-QuickPickBag·__loadFromJsonish__: (payload:any -> bool)
+QuickPickState·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -7341,7 +7649,7 @@ QuickPickBag·__loadFromJsonish__: (payload:any -> bool)
 
 
 
-TerminalBag·__loadFromJsonish__: (payload:any -> bool)
+TerminalState·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any
@@ -7363,7 +7671,7 @@ TerminalBag·__loadFromJsonish__: (payload:any -> bool)
 
 
 
-FileSystemWatcherBag·__loadFromJsonish__: (payload:any -> bool)
+FileSystemWatcherState·__loadFromJsonish__: (payload:any -> bool)
     var it of dict
     var ok of bool
     var val of any

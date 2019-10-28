@@ -294,21 +294,21 @@ function demo_Window_ShowQuickPick() {
 
 function demo_Window_CreateQuickPick() {
     vsc.Window.CreateQuickPick()((ctl) => {
-        ctl.Bag.ignoreFocusOut = true
-        ctl.Bag.title = "I'm a full-fledged QuickPick"
-        ctl.Bag.step = 23
-        ctl.Bag.totalSteps = 42
-        ctl.Bag.items = new Array(88)
+        ctl.Cfg.ignoreFocusOut = true
+        ctl.Cfg.title = "I'm a full-fledged QuickPick"
+        ctl.Cfg.step = 23
+        ctl.Cfg.totalSteps = 42
+        ctl.Cfg.items = new Array(88)
         for (const i of nums1To(88)) {
-            ctl.Bag.items[i - 1] = {}
-            ctl.Bag.items[(i - 1)].label = strFmt("$(eye) Label {0}", i)
-            ctl.Bag.items[(i - 1)].description = strFmt("$(gift) Description {0}", i)
-            ctl.Bag.items[(i - 1)].detail = strFmt("$(globe~spin) Detail {0}", i)
-            ctl.Bag.items[(i - 1)].alwaysShow = i === 42
+            ctl.Cfg.items[i - 1] = {}
+            ctl.Cfg.items[(i - 1)].label = strFmt("$(eye) Label {0}", i)
+            ctl.Cfg.items[(i - 1)].description = strFmt("$(gift) Description {0}", i)
+            ctl.Cfg.items[(i - 1)].detail = strFmt("$(globe~spin) Detail {0}", i)
+            ctl.Cfg.items[(i - 1)].alwaysShow = i === 42
         }
-        ctl.Bag.ApplyChanges()
+        ctl.Cfg.ApplyChanges()
         ctl.OnDidAccept(() => {
-            logLn(strFmt("Picked: {0}", ctl.Bag.selectedItems))
+            logLn(strFmt("Picked: {0}", ctl.Cfg.selectedItems))
             ctl.Hide()
         })
         ctl.OnDidHide(() => {
@@ -320,19 +320,19 @@ function demo_Window_CreateQuickPick() {
 
 function demo_Window_CreateInputBox() {
     vsc.Window.CreateInputBox()((ctl) => {
-        ctl.Bag.ignoreFocusOut = true
-        ctl.Bag.placeholder = "The initial Placeholder"
-        ctl.Bag.prompt = "The initial Prompt"
-        ctl.Bag.title = "The initial Title"
-        ctl.Bag.ApplyChanges()
+        ctl.Cfg.ignoreFocusOut = true
+        ctl.Cfg.placeholder = "The initial Placeholder"
+        ctl.Cfg.prompt = "The initial Prompt"
+        ctl.Cfg.title = "The initial Title"
+        ctl.Cfg.ApplyChanges()
         ctl.OnDidChangeValue((input) => {
-            ctl.Bag.prompt = strFmt("Lower: {0}", strLo(ctl.Bag.value))
-            ctl.Bag.title = strFmt("Upper: {0}", strUp(ctl.Bag.value))
-            ctl.Bag.ApplyChanges()
+            ctl.Cfg.prompt = strFmt("Lower: {0}", strLo(ctl.Cfg.value))
+            ctl.Cfg.title = strFmt("Upper: {0}", strUp(ctl.Cfg.value))
+            ctl.Cfg.ApplyChanges()
         })
         let finalinputvalue
         ctl.OnDidAccept(() => {
-            finalinputvalue = ctl.Bag.value
+            finalinputvalue = ctl.Cfg.value
             ctl.Hide()
         })
         ctl.OnDidHide(() => {
@@ -521,31 +521,31 @@ function onUpAndRunning() {
         let mycmd
         mycmd = (_unused) => {
             clickcount = 1 + clickcount
-            statusitem.Bag.ReFetch()(() => {
-                statusitem.Bag.text = logLn(strFmt("You clicked me {0} time(s).", clickcount))
-                if ("editorLightBulb.foreground" === statusitem.Bag.color) {
-                    statusitem.Bag.color = "terminal.ansiGreen"
+            statusitem.Cfg.ReFetch()(() => {
+                statusitem.Cfg.text = logLn(strFmt("You clicked me {0} time(s).", clickcount))
+                if ("editorLightBulb.foreground" === statusitem.Cfg.color) {
+                    statusitem.Cfg.color = "terminal.ansiGreen"
                     if (toggleonclick && (undefined !== logchan && null !== logchan)) {
                         logchan.Hide()
                     }
                 } else {
-                    statusitem.Bag.color = "editorLightBulb.foreground"
+                    statusitem.Cfg.color = "editorLightBulb.foreground"
                     if (toggleonclick && (undefined !== logchan && null !== logchan)) {
                         logchan.Show(true)
                     }
                 }
-                statusitem.Bag.ApplyChanges()(demosMenu)
+                statusitem.Cfg.ApplyChanges()(demosMenu)
             })
             return null
         }
         vsc.Commands.RegisterCommand(cmdName, mycmd)
         vsc.Window.CreateStatusBarItem(0, null)((it) => {
             statusitem = it
-            statusitem.Bag.tooltip = strFmt("Hi from {0}!", appName)
-            statusitem.Bag.text = "You clicked me 0 time(s)."
-            statusitem.Bag.color = "#42BEEF"
-            statusitem.Bag.command = cmdName
-            statusitem.Bag.ApplyChanges()
+            statusitem.Cfg.tooltip = strFmt("Hi from {0}!", appName)
+            statusitem.Cfg.text = "You clicked me 0 time(s)."
+            statusitem.Cfg.color = "#42BEEF"
+            statusitem.Cfg.command = cmdName
+            statusitem.Cfg.ApplyChanges()
             statusitem.Show()
         })
     }

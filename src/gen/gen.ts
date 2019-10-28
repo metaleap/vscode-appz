@@ -11,7 +11,7 @@ export const docStrs = {
     extBaggage: "Free-form custom data, preserved across a roundtrip.",
 }
 export const idents = {
-    typeSuffBag: "Bag",
+    typeSuffBag: "State",
     methodNsProps: "AllProperties",
     methodBagFetch: "ReFetch",
     methodBagPublish: "ApplyChanges",
@@ -29,7 +29,7 @@ export const idents = {
     fldImpl: "impl",
     fldBagHolder: "__holder__",
     fldSuffFuncId: "_AppzFuncId",
-    fldDispObjBag: "Bag",
+    fldDispObjBag: "Cfg",
     varOk: "ok",
     varRes: "result",
     varRet: "ret",

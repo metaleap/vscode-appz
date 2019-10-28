@@ -191,7 +191,7 @@ class GenDemos {
         return _.eCall(_._(_.eProp(_._("vsc", "Window")), this.fn("SetStatusBarMessage", 1)), _.eCall(_._("logLn"), msg), _.eLit(4242));
     }
     genDemoOfPropsMenu(_, ns) {
-        const struct = this.gen.allStructs[ns + "Bag"];
+        const struct = this.gen.allStructs[ns + gen_1.idents.typeSuffBag];
         return [
             _.eCall(_.eCall(_._(_.eProp(_._("vsc", ns)), "AllProperties")), _.eFunc([{ Name: "props", Type: { Name: struct.Name } }], null, _.iVar("items", { ValsOf: gen_syn_1.TypeRefPrim.String }), _.iSet(_._("items"), _.eCollNew(_.eLit(struct.Fields.length), gen_syn_1.TypeRefPrim.String, true)), _.iBlock(..._.EACH(struct.Fields, (f, i) => [
                 _.iSet(_.oIdx(_._("items"), _.eLit(i)), _.eLit(f.Name + "\t".repeat(f.Name.length < 8 ? 3 : f.Name.length >= 16 ? 1 : 2) + "{0}", _._("props", f.Name))),

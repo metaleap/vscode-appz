@@ -563,8 +563,8 @@ type Env interface {
 
 	// Provides single-call access to numerous individual `Env` properties at once.
 	// 
-	// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.
-	AllProperties() func(func(EnvBag))
+	// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvState` result received back at our end.
+	AllProperties() func(func(EnvState))
 
 	// The clipboard provides read and write access to the system's clipboard.
 	Clipboard() Clipboard
@@ -719,8 +719,8 @@ type Workspace interface {
 
 	// Provides single-call access to numerous individual `Workspace` properties at once.
 	// 
-	// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
-	AllProperties() func(func(WorkspaceBag))
+	// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceState` result received back at our end.
+	AllProperties() func(func(WorkspaceState))
 }
 type implWorkspace struct{ *impl }
 
@@ -1191,8 +1191,8 @@ type WindowState struct {
 type StatusBarItem struct {
 	__disp__ *Disposable
 
-	// Bag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
-	Bag *StatusBarItemBag
+	// Cfg represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Cfg *StatusBarItemState
 }
 
 // An output channel is a container for readonly textual information.
@@ -1202,8 +1202,8 @@ type StatusBarItem struct {
 type OutputChannel struct {
 	__disp__ *Disposable
 
-	// Bag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
-	Bag *OutputChannelBag
+	// Cfg represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+	Cfg *OutputChannelState
 }
 
 // Type Definition for Visual Studio Code 1.39 Extension API
@@ -1355,8 +1355,8 @@ type DecorationRenderOptions struct {
 type TextEditorDecorationType struct {
 	__disp__ *Disposable
 
-	// Bag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
-	Bag *TextEditorDecorationTypeBag
+	// Cfg represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+	Cfg *TextEditorDecorationTypeState
 }
 
 // A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
@@ -1367,8 +1367,8 @@ type TextEditorDecorationType struct {
 type InputBox struct {
 	__disp__ *Disposable
 
-	// Bag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
-	Bag *InputBoxBag
+	// Cfg represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Cfg *InputBoxState
 }
 
 // Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
@@ -1391,16 +1391,16 @@ type QuickInputButton struct {
 type QuickPick struct {
 	__disp__ *Disposable
 
-	// Bag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
-	Bag *QuickPickBag
+	// Cfg represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Cfg *QuickPickState
 }
 
 // An individual terminal instance within the integrated terminal.
 type Terminal struct {
 	__disp__ *Disposable
 
-	// Bag represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
-	Bag *TerminalBag
+	// Cfg represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+	Cfg *TerminalState
 }
 
 // Value-object describing what options a terminal should use.
@@ -1617,8 +1617,8 @@ type WorkspaceFoldersChangeEvent struct {
 type FileSystemWatcher struct {
 	__disp__ *Disposable
 
-	// Bag represents this `FileSystemWatcher`'s current state. All its members get auto-refreshed every time a (subscribed) `FileSystemWatcher` event fires or any `FileSystemWatcher` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
-	Bag *FileSystemWatcherBag
+	// Cfg represents this `FileSystemWatcher`'s current state. All its members get auto-refreshed every time a (subscribed) `FileSystemWatcher` event fires or any `FileSystemWatcher` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Cfg *FileSystemWatcherState
 }
 
 // The event that is fired when diagnostics change.
@@ -1627,8 +1627,8 @@ type DiagnosticChangeEvent struct {
 	Uris []string `json:"uris"`
 }
 
-// EnvBag gathers various properties of `Env`, obtainable via its `AllProperties` method.
-type EnvBag struct {
+// EnvState gathers various properties of `Env`, obtainable via its `AllProperties` method.
+type EnvState struct {
 	// The application name of the editor, like 'VS Code'.
 	AppName string `json:"appName,omitempty"`
 
@@ -1662,8 +1662,8 @@ type EnvBag struct {
 	UriScheme string `json:"uriScheme,omitempty"`
 }
 
-// WorkspaceBag gathers various properties of `Workspace`, obtainable via its `AllProperties` method.
-type WorkspaceBag struct {
+// WorkspaceState gathers various properties of `Workspace`, obtainable via its `AllProperties` method.
+type WorkspaceState struct {
 	// The name of the workspace. `undefined` when no folder
 	// has been opened.
 	Name string `json:"name,omitempty"`
@@ -1706,8 +1706,9 @@ type WorkspaceBag struct {
 	WorkspaceFolders []WorkspaceFolder `json:"workspaceFolders,omitempty"`
 }
 
-// StatusBarItemBag (to be accessed only via `StatusBarItem.Bag`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
-type StatusBarItemBag struct {
+// StatusBarItemState (to be accessed only via `StatusBarItem.Cfg`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+type StatusBarItemState struct {
+	lock
 	__holder__ *StatusBarItem
 
 	// The alignment of this item.
@@ -1736,24 +1737,27 @@ type StatusBarItemBag struct {
 	Command string `json:"command"`
 }
 
-// OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
-type OutputChannelBag struct {
+// OutputChannelState (to be accessed only via `OutputChannel.Cfg`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+type OutputChannelState struct {
+	lock
 	__holder__ *OutputChannel
 
 	// The human-readable name of this output channel.
 	Name func() string `json:"-"`
 }
 
-// TextEditorDecorationTypeBag (to be accessed only via `TextEditorDecorationType.Bag`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
-type TextEditorDecorationTypeBag struct {
+// TextEditorDecorationTypeState (to be accessed only via `TextEditorDecorationType.Cfg`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+type TextEditorDecorationTypeState struct {
+	lock
 	__holder__ *TextEditorDecorationType
 
 	// Internal representation of the handle.
 	Key func() string `json:"-"`
 }
 
-// InputBoxBag (to be accessed only via `InputBox.Bag`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
-type InputBoxBag struct {
+// InputBoxState (to be accessed only via `InputBox.Cfg`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+type InputBoxState struct {
+	lock
 	__holder__ *InputBox
 
 	// Current input value.
@@ -1796,8 +1800,9 @@ type InputBoxBag struct {
 	IgnoreFocusOut bool `json:"ignoreFocusOut"`
 }
 
-// QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
-type QuickPickBag struct {
+// QuickPickState (to be accessed only via `QuickPick.Cfg`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+type QuickPickState struct {
+	lock
 	__holder__ *QuickPick
 
 	// Current value of the filter text.
@@ -1849,16 +1854,18 @@ type QuickPickBag struct {
 	IgnoreFocusOut bool `json:"ignoreFocusOut"`
 }
 
-// TerminalBag (to be accessed only via `Terminal.Bag`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
-type TerminalBag struct {
+// TerminalState (to be accessed only via `Terminal.Cfg`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+type TerminalState struct {
+	lock
 	__holder__ *Terminal
 
 	// The name of the terminal.
 	Name func() string `json:"-"`
 }
 
-// FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
-type FileSystemWatcherBag struct {
+// FileSystemWatcherState (to be accessed only via `FileSystemWatcher.Cfg`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+type FileSystemWatcherState struct {
+	lock
 	__holder__ *FileSystemWatcher
 
 	// true if this file system watcher has been created such that
@@ -3508,16 +3515,16 @@ func (me implEnv) UriScheme() func(func(string)) {
 	}
 }
 
-func (me implEnv) AllProperties() func(func(EnvBag)) {
+func (me implEnv) AllProperties() func(func(EnvState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "env.AllProperties"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
-	var onret func(EnvBag)
+	var onret func(EnvState)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result EnvBag
+		var result EnvState
 		if (nil != payload) {
 			ok = result.__loadFromJsonish__(payload)
 			if !ok {
@@ -3532,7 +3539,7 @@ func (me implEnv) AllProperties() func(func(EnvBag)) {
 		return true
 	}
 	me.Impl().send(msg, onresp)
-	return func(a0 func(EnvBag)) {
+	return func(a0 func(EnvState)) {
 		onret = a0
 	}
 }
@@ -3925,16 +3932,16 @@ func (me implWorkspace) CreateFileSystemWatcher(globPattern string, ignoreCreate
 	}
 }
 
-func (me implWorkspace) AllProperties() func(func(WorkspaceBag)) {
+func (me implWorkspace) AllProperties() func(func(WorkspaceState)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "workspace.AllProperties"
 	msg.Data = make(dict, 0)
 	var onresp func(any) bool
-	var onret func(WorkspaceBag)
+	var onret func(WorkspaceState)
 	onresp = func(payload any) bool {
 		var ok bool
-		var result WorkspaceBag
+		var result WorkspaceState
 		if (nil != payload) {
 			ok = result.__loadFromJsonish__(payload)
 			if !ok {
@@ -3949,7 +3956,7 @@ func (me implWorkspace) AllProperties() func(func(WorkspaceBag)) {
 		return true
 	}
 	me.Impl().send(msg, onresp)
-	return func(a0 func(WorkspaceBag)) {
+	return func(a0 func(WorkspaceState)) {
 		onret = a0
 	}
 }
@@ -4228,11 +4235,11 @@ func (me *StatusBarItem) Show() func(func()) {
 		if (2 != len(it)) || (nil == it[1]) {
 			return false
 		}
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(it[1])
+			ok = me.Cfg.__loadFromJsonish__(it[1])
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -4268,11 +4275,11 @@ func (me *StatusBarItem) Hide() func(func()) {
 		if (2 != len(it)) || (nil == it[1]) {
 			return false
 		}
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(it[1])
+			ok = me.Cfg.__loadFromJsonish__(it[1])
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -4305,15 +4312,15 @@ func (me *StatusBarItem) __appzObjBagPullFromPeer__() func(func()) {
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		if (nil == me.Bag) {
-			me.Bag = new(StatusBarItemBag)
+		if (nil == me.Cfg) {
+			me.Cfg = new(StatusBarItemState)
 		}
-		me.Bag.__holder__ = me
-		me.Bag.__holder__.__disp__.impl.Lock()
+		me.Cfg.__holder__ = me
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(payload)
+			ok = me.Cfg.__loadFromJsonish__(payload)
 		}
-		me.Bag.__holder__.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -4328,7 +4335,7 @@ func (me *StatusBarItem) __appzObjBagPullFromPeer__() func(func()) {
 	}
 }
 
-func (me *StatusBarItem) __appzObjBagPushToPeer__(allUpdates *StatusBarItemBag) func(func()) {
+func (me *StatusBarItem) __appzObjBagPushToPeer__(allUpdates *StatusBarItemState) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "StatusBarItem.__appzObjBagPushToPeer__"
@@ -4339,11 +4346,11 @@ func (me *StatusBarItem) __appzObjBagPushToPeer__(allUpdates *StatusBarItemBag) 
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(payload)
+			ok = me.Cfg.__loadFromJsonish__(payload)
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -4382,11 +4389,11 @@ func (me *OutputChannel) Append(value string) func(func()) {
 		if (2 != len(it)) || (nil == it[1]) {
 			return false
 		}
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(it[1])
+			ok = me.Cfg.__loadFromJsonish__(it[1])
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -4426,11 +4433,11 @@ func (me *OutputChannel) AppendLine(value string) func(func()) {
 		if (2 != len(it)) || (nil == it[1]) {
 			return false
 		}
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(it[1])
+			ok = me.Cfg.__loadFromJsonish__(it[1])
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -4466,11 +4473,11 @@ func (me *OutputChannel) Clear() func(func()) {
 		if (2 != len(it)) || (nil == it[1]) {
 			return false
 		}
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(it[1])
+			ok = me.Cfg.__loadFromJsonish__(it[1])
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -4509,11 +4516,11 @@ func (me *OutputChannel) Show(preserveFocus bool) func(func()) {
 		if (2 != len(it)) || (nil == it[1]) {
 			return false
 		}
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(it[1])
+			ok = me.Cfg.__loadFromJsonish__(it[1])
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -4549,11 +4556,11 @@ func (me *OutputChannel) Hide() func(func()) {
 		if (2 != len(it)) || (nil == it[1]) {
 			return false
 		}
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(it[1])
+			ok = me.Cfg.__loadFromJsonish__(it[1])
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -4585,15 +4592,15 @@ func (me *OutputChannel) __appzObjBagPullFromPeer__() func(func()) {
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		if (nil == me.Bag) {
-			me.Bag = new(OutputChannelBag)
+		if (nil == me.Cfg) {
+			me.Cfg = new(OutputChannelState)
 		}
-		me.Bag.__holder__ = me
-		me.Bag.__holder__.__disp__.impl.Lock()
+		me.Cfg.__holder__ = me
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(payload)
+			ok = me.Cfg.__loadFromJsonish__(payload)
 		}
-		me.Bag.__holder__.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -4625,15 +4632,15 @@ func (me *TextEditorDecorationType) __appzObjBagPullFromPeer__() func(func()) {
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		if (nil == me.Bag) {
-			me.Bag = new(TextEditorDecorationTypeBag)
+		if (nil == me.Cfg) {
+			me.Cfg = new(TextEditorDecorationTypeState)
 		}
-		me.Bag.__holder__ = me
-		me.Bag.__holder__.__disp__.impl.Lock()
+		me.Cfg.__holder__ = me
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(payload)
+			ok = me.Cfg.__loadFromJsonish__(payload)
 		}
-		me.Bag.__holder__.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -4675,11 +4682,11 @@ func (me *InputBox) OnDidChangeValue(handler func(string)) func(func(*Disposable
 			return false
 		}
 		{
-			me.__disp__.impl.Lock()
+			me.Cfg.Lock()
 			{
-				ok = me.Bag.__loadFromJsonish__(args[1])
+				ok = me.Cfg.__loadFromJsonish__(args[1])
 			}
-			me.__disp__.impl.Unlock()
+			me.Cfg.Unlock()
 			if !ok {
 				return false
 			}
@@ -4736,11 +4743,11 @@ func (me *InputBox) OnDidAccept(handler func()) func(func(*Disposable)) {
 			return ok
 		}
 		{
-			me.__disp__.impl.Lock()
+			me.Cfg.Lock()
 			{
-				ok = me.Bag.__loadFromJsonish__(args[0])
+				ok = me.Cfg.__loadFromJsonish__(args[0])
 			}
-			me.__disp__.impl.Unlock()
+			me.Cfg.Unlock()
 			if !ok {
 				return false
 			}
@@ -4797,11 +4804,11 @@ func (me *InputBox) Show() func(func()) {
 		if (2 != len(it)) || (nil == it[1]) {
 			return false
 		}
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(it[1])
+			ok = me.Cfg.__loadFromJsonish__(it[1])
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -4838,11 +4845,11 @@ func (me *InputBox) Hide() func(func()) {
 		if (2 != len(it)) || (nil == it[1]) {
 			return false
 		}
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(it[1])
+			ok = me.Cfg.__loadFromJsonish__(it[1])
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -4884,11 +4891,11 @@ func (me *InputBox) OnDidHide(handler func()) func(func(*Disposable)) {
 			return ok
 		}
 		{
-			me.__disp__.impl.Lock()
+			me.Cfg.Lock()
 			{
-				ok = me.Bag.__loadFromJsonish__(args[0])
+				ok = me.Cfg.__loadFromJsonish__(args[0])
 			}
-			me.__disp__.impl.Unlock()
+			me.Cfg.Unlock()
 			if !ok {
 				return false
 			}
@@ -4943,15 +4950,15 @@ func (me *InputBox) __appzObjBagPullFromPeer__() func(func()) {
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		if (nil == me.Bag) {
-			me.Bag = new(InputBoxBag)
+		if (nil == me.Cfg) {
+			me.Cfg = new(InputBoxState)
 		}
-		me.Bag.__holder__ = me
-		me.Bag.__holder__.__disp__.impl.Lock()
+		me.Cfg.__holder__ = me
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(payload)
+			ok = me.Cfg.__loadFromJsonish__(payload)
 		}
-		me.Bag.__holder__.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -4966,7 +4973,7 @@ func (me *InputBox) __appzObjBagPullFromPeer__() func(func()) {
 	}
 }
 
-func (me *InputBox) __appzObjBagPushToPeer__(allUpdates *InputBoxBag) func(func()) {
+func (me *InputBox) __appzObjBagPushToPeer__(allUpdates *InputBoxState) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "InputBox.__appzObjBagPushToPeer__"
@@ -4977,11 +4984,11 @@ func (me *InputBox) __appzObjBagPushToPeer__(allUpdates *InputBoxBag) func(func(
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(payload)
+			ok = me.Cfg.__loadFromJsonish__(payload)
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -5023,11 +5030,11 @@ func (me *QuickPick) OnDidChangeValue(handler func(string)) func(func(*Disposabl
 			return false
 		}
 		{
-			me.__disp__.impl.Lock()
+			me.Cfg.Lock()
 			{
-				ok = me.Bag.__loadFromJsonish__(args[1])
+				ok = me.Cfg.__loadFromJsonish__(args[1])
 			}
-			me.__disp__.impl.Unlock()
+			me.Cfg.Unlock()
 			if !ok {
 				return false
 			}
@@ -5084,11 +5091,11 @@ func (me *QuickPick) OnDidAccept(handler func()) func(func(*Disposable)) {
 			return ok
 		}
 		{
-			me.__disp__.impl.Lock()
+			me.Cfg.Lock()
 			{
-				ok = me.Bag.__loadFromJsonish__(args[0])
+				ok = me.Cfg.__loadFromJsonish__(args[0])
 			}
-			me.__disp__.impl.Unlock()
+			me.Cfg.Unlock()
 			if !ok {
 				return false
 			}
@@ -5163,11 +5170,11 @@ func (me *QuickPick) OnDidChangeActive(handler func([]QuickPickItem)) func(func(
 			__idx___a_0_ = __idx___a_0_ + 1
 		}
 		{
-			me.__disp__.impl.Lock()
+			me.Cfg.Lock()
 			{
-				ok = me.Bag.__loadFromJsonish__(args[1])
+				ok = me.Cfg.__loadFromJsonish__(args[1])
 			}
-			me.__disp__.impl.Unlock()
+			me.Cfg.Unlock()
 			if !ok {
 				return false
 			}
@@ -5242,11 +5249,11 @@ func (me *QuickPick) OnDidChangeSelection(handler func([]QuickPickItem)) func(fu
 			__idx___a_0_ = __idx___a_0_ + 1
 		}
 		{
-			me.__disp__.impl.Lock()
+			me.Cfg.Lock()
 			{
-				ok = me.Bag.__loadFromJsonish__(args[1])
+				ok = me.Cfg.__loadFromJsonish__(args[1])
 			}
-			me.__disp__.impl.Unlock()
+			me.Cfg.Unlock()
 			if !ok {
 				return false
 			}
@@ -5303,11 +5310,11 @@ func (me *QuickPick) Show() func(func()) {
 		if (2 != len(it)) || (nil == it[1]) {
 			return false
 		}
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(it[1])
+			ok = me.Cfg.__loadFromJsonish__(it[1])
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -5344,11 +5351,11 @@ func (me *QuickPick) Hide() func(func()) {
 		if (2 != len(it)) || (nil == it[1]) {
 			return false
 		}
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(it[1])
+			ok = me.Cfg.__loadFromJsonish__(it[1])
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -5390,11 +5397,11 @@ func (me *QuickPick) OnDidHide(handler func()) func(func(*Disposable)) {
 			return ok
 		}
 		{
-			me.__disp__.impl.Lock()
+			me.Cfg.Lock()
 			{
-				ok = me.Bag.__loadFromJsonish__(args[0])
+				ok = me.Cfg.__loadFromJsonish__(args[0])
 			}
-			me.__disp__.impl.Unlock()
+			me.Cfg.Unlock()
 			if !ok {
 				return false
 			}
@@ -5449,15 +5456,15 @@ func (me *QuickPick) __appzObjBagPullFromPeer__() func(func()) {
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		if (nil == me.Bag) {
-			me.Bag = new(QuickPickBag)
+		if (nil == me.Cfg) {
+			me.Cfg = new(QuickPickState)
 		}
-		me.Bag.__holder__ = me
-		me.Bag.__holder__.__disp__.impl.Lock()
+		me.Cfg.__holder__ = me
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(payload)
+			ok = me.Cfg.__loadFromJsonish__(payload)
 		}
-		me.Bag.__holder__.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -5472,7 +5479,7 @@ func (me *QuickPick) __appzObjBagPullFromPeer__() func(func()) {
 	}
 }
 
-func (me *QuickPick) __appzObjBagPushToPeer__(allUpdates *QuickPickBag) func(func()) {
+func (me *QuickPick) __appzObjBagPushToPeer__(allUpdates *QuickPickState) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "QuickPick.__appzObjBagPushToPeer__"
@@ -5483,11 +5490,11 @@ func (me *QuickPick) __appzObjBagPushToPeer__(allUpdates *QuickPickBag) func(fun
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(payload)
+			ok = me.Cfg.__loadFromJsonish__(payload)
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -5532,11 +5539,11 @@ func (me *Terminal) SendText(text string, addNewLine bool) func(func()) {
 		if (2 != len(it)) || (nil == it[1]) {
 			return false
 		}
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(it[1])
+			ok = me.Cfg.__loadFromJsonish__(it[1])
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -5575,11 +5582,11 @@ func (me *Terminal) Show(preserveFocus bool) func(func()) {
 		if (2 != len(it)) || (nil == it[1]) {
 			return false
 		}
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(it[1])
+			ok = me.Cfg.__loadFromJsonish__(it[1])
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -5615,11 +5622,11 @@ func (me *Terminal) Hide() func(func()) {
 		if (2 != len(it)) || (nil == it[1]) {
 			return false
 		}
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(it[1])
+			ok = me.Cfg.__loadFromJsonish__(it[1])
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -5651,15 +5658,15 @@ func (me *Terminal) __appzObjBagPullFromPeer__() func(func()) {
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		if (nil == me.Bag) {
-			me.Bag = new(TerminalBag)
+		if (nil == me.Cfg) {
+			me.Cfg = new(TerminalState)
 		}
-		me.Bag.__holder__ = me
-		me.Bag.__holder__.__disp__.impl.Lock()
+		me.Cfg.__holder__ = me
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(payload)
+			ok = me.Cfg.__loadFromJsonish__(payload)
 		}
-		me.Bag.__holder__.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -5701,11 +5708,11 @@ func (me *FileSystemWatcher) OnDidCreate(handler func(string)) func(func(*Dispos
 			return false
 		}
 		{
-			me.__disp__.impl.Lock()
+			me.Cfg.Lock()
 			{
-				ok = me.Bag.__loadFromJsonish__(args[1])
+				ok = me.Cfg.__loadFromJsonish__(args[1])
 			}
-			me.__disp__.impl.Unlock()
+			me.Cfg.Unlock()
 			if !ok {
 				return false
 			}
@@ -5767,11 +5774,11 @@ func (me *FileSystemWatcher) OnDidChange(handler func(string)) func(func(*Dispos
 			return false
 		}
 		{
-			me.__disp__.impl.Lock()
+			me.Cfg.Lock()
 			{
-				ok = me.Bag.__loadFromJsonish__(args[1])
+				ok = me.Cfg.__loadFromJsonish__(args[1])
 			}
-			me.__disp__.impl.Unlock()
+			me.Cfg.Unlock()
 			if !ok {
 				return false
 			}
@@ -5833,11 +5840,11 @@ func (me *FileSystemWatcher) OnDidDelete(handler func(string)) func(func(*Dispos
 			return false
 		}
 		{
-			me.__disp__.impl.Lock()
+			me.Cfg.Lock()
 			{
-				ok = me.Bag.__loadFromJsonish__(args[1])
+				ok = me.Cfg.__loadFromJsonish__(args[1])
 			}
-			me.__disp__.impl.Unlock()
+			me.Cfg.Unlock()
 			if !ok {
 				return false
 			}
@@ -5889,15 +5896,15 @@ func (me *FileSystemWatcher) __appzObjBagPullFromPeer__() func(func()) {
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		if (nil == me.Bag) {
-			me.Bag = new(FileSystemWatcherBag)
+		if (nil == me.Cfg) {
+			me.Cfg = new(FileSystemWatcherState)
 		}
-		me.Bag.__holder__ = me
-		me.Bag.__holder__.__disp__.impl.Lock()
+		me.Cfg.__holder__ = me
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(payload)
+			ok = me.Cfg.__loadFromJsonish__(payload)
 		}
-		me.Bag.__holder__.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -5912,7 +5919,7 @@ func (me *FileSystemWatcher) __appzObjBagPullFromPeer__() func(func()) {
 	}
 }
 
-func (me *FileSystemWatcher) __appzObjBagPushToPeer__(allUpdates *FileSystemWatcherBag) func(func()) {
+func (me *FileSystemWatcher) __appzObjBagPushToPeer__(allUpdates *FileSystemWatcherState) func(func()) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
 	msg.QName = "FileSystemWatcher.__appzObjBagPushToPeer__"
@@ -5923,11 +5930,11 @@ func (me *FileSystemWatcher) __appzObjBagPushToPeer__(allUpdates *FileSystemWatc
 	var onret func()
 	onresp = func(payload any) bool {
 		var ok bool
-		me.__disp__.impl.Lock()
+		me.Cfg.Lock()
 		{
-			ok = me.Bag.__loadFromJsonish__(payload)
+			ok = me.Cfg.__loadFromJsonish__(payload)
 		}
-		me.__disp__.impl.Unlock()
+		me.Cfg.Unlock()
 		if !ok {
 			return false
 		}
@@ -5942,81 +5949,105 @@ func (me *FileSystemWatcher) __appzObjBagPushToPeer__(allUpdates *FileSystemWatc
 	}
 }
 
-// ReFetch requests the current `StatusBarItem` state from the VSC side and upon response refreshes this `StatusBarItemBag`'s property values for `alignment`, `priority`, `text`, `tooltip`, `color`, `command` to reflect it.
+// ReFetch requests the current `StatusBarItem` state from the VSC side and upon response refreshes this `StatusBarItemState`'s property values for `alignment`, `priority`, `text`, `tooltip`, `color`, `command` to reflect it.
 // 
 // `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
-func (me *StatusBarItemBag) ReFetch() func(func()) {
+func (me *StatusBarItemState) ReFetch() func(func()) {
 	return me.__holder__.__appzObjBagPullFromPeer__()
 }
 
-// ApplyChanges propagates this `StatusBarItemBag`'s current property values for `text`, `tooltip`, `color`, `command` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
+// ApplyChanges propagates this `StatusBarItemState`'s current property values for `text`, `tooltip`, `color`, `command` to the VSC side to immediately become active there. Note that **all** those property values are transmitted, no omissions.
 // 
 // `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
-func (me *StatusBarItemBag) ApplyChanges() func(func()) {
-	return me.__holder__.__appzObjBagPushToPeer__(me)
+func (me *StatusBarItemState) ApplyChanges() func(func()) {
+	var ret func(func())
+	me.Lock()
+	{
+		ret = me.__holder__.__appzObjBagPushToPeer__(me)
+	}
+	me.Unlock()
+	return ret
 }
 
-// ReFetch requests the current `OutputChannel` state from the VSC side and upon response refreshes this `OutputChannelBag`'s property value for `name` to reflect it.
+// ReFetch requests the current `OutputChannel` state from the VSC side and upon response refreshes this `OutputChannelState`'s property value for `name` to reflect it.
 // 
 // `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
-func (me *OutputChannelBag) ReFetch() func(func()) {
+func (me *OutputChannelState) ReFetch() func(func()) {
 	return me.__holder__.__appzObjBagPullFromPeer__()
 }
 
-// ReFetch requests the current `TextEditorDecorationType` state from the VSC side and upon response refreshes this `TextEditorDecorationTypeBag`'s property value for `key` to reflect it.
+// ReFetch requests the current `TextEditorDecorationType` state from the VSC side and upon response refreshes this `TextEditorDecorationTypeState`'s property value for `key` to reflect it.
 // 
 // `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
-func (me *TextEditorDecorationTypeBag) ReFetch() func(func()) {
+func (me *TextEditorDecorationTypeState) ReFetch() func(func()) {
 	return me.__holder__.__appzObjBagPullFromPeer__()
 }
 
-// ReFetch requests the current `InputBox` state from the VSC side and upon response refreshes this `InputBoxBag`'s property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
+// ReFetch requests the current `InputBox` state from the VSC side and upon response refreshes this `InputBoxState`'s property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
 // 
 // `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
-func (me *InputBoxBag) ReFetch() func(func()) {
+func (me *InputBoxState) ReFetch() func(func()) {
 	return me.__holder__.__appzObjBagPullFromPeer__()
 }
 
-// ApplyChanges propagates this `InputBoxBag`'s current property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
+// ApplyChanges propagates this `InputBoxState`'s current property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that **all** those property values are transmitted, no omissions.
 // 
 // `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
-func (me *InputBoxBag) ApplyChanges() func(func()) {
-	return me.__holder__.__appzObjBagPushToPeer__(me)
+func (me *InputBoxState) ApplyChanges() func(func()) {
+	var ret func(func())
+	me.Lock()
+	{
+		ret = me.__holder__.__appzObjBagPushToPeer__(me)
+	}
+	me.Unlock()
+	return ret
 }
 
-// ReFetch requests the current `QuickPick` state from the VSC side and upon response refreshes this `QuickPickBag`'s property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
+// ReFetch requests the current `QuickPick` state from the VSC side and upon response refreshes this `QuickPickState`'s property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
 // 
 // `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
-func (me *QuickPickBag) ReFetch() func(func()) {
+func (me *QuickPickState) ReFetch() func(func()) {
 	return me.__holder__.__appzObjBagPullFromPeer__()
 }
 
-// ApplyChanges propagates this `QuickPickBag`'s current property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
+// ApplyChanges propagates this `QuickPickState`'s current property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that **all** those property values are transmitted, no omissions.
 // 
 // `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
-func (me *QuickPickBag) ApplyChanges() func(func()) {
-	return me.__holder__.__appzObjBagPushToPeer__(me)
+func (me *QuickPickState) ApplyChanges() func(func()) {
+	var ret func(func())
+	me.Lock()
+	{
+		ret = me.__holder__.__appzObjBagPushToPeer__(me)
+	}
+	me.Unlock()
+	return ret
 }
 
-// ReFetch requests the current `Terminal` state from the VSC side and upon response refreshes this `TerminalBag`'s property value for `name` to reflect it.
+// ReFetch requests the current `Terminal` state from the VSC side and upon response refreshes this `TerminalState`'s property value for `name` to reflect it.
 // 
 // `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
-func (me *TerminalBag) ReFetch() func(func()) {
+func (me *TerminalState) ReFetch() func(func()) {
 	return me.__holder__.__appzObjBagPullFromPeer__()
 }
 
-// ReFetch requests the current `FileSystemWatcher` state from the VSC side and upon response refreshes this `FileSystemWatcherBag`'s property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to reflect it.
+// ReFetch requests the current `FileSystemWatcher` state from the VSC side and upon response refreshes this `FileSystemWatcherState`'s property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to reflect it.
 // 
 // `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
-func (me *FileSystemWatcherBag) ReFetch() func(func()) {
+func (me *FileSystemWatcherState) ReFetch() func(func()) {
 	return me.__holder__.__appzObjBagPullFromPeer__()
 }
 
-// ApplyChanges propagates this `FileSystemWatcherBag`'s current property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
+// ApplyChanges propagates this `FileSystemWatcherState`'s current property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to the VSC side to immediately become active there. Note that **all** those property values are transmitted, no omissions.
 // 
 // `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
-func (me *FileSystemWatcherBag) ApplyChanges() func(func()) {
-	return me.__holder__.__appzObjBagPushToPeer__(me)
+func (me *FileSystemWatcherState) ApplyChanges() func(func()) {
+	var ret func(func())
+	me.Lock()
+	{
+		ret = me.__holder__.__appzObjBagPushToPeer__(me)
+	}
+	me.Unlock()
+	return ret
 }
 
 func (me *MessageItem) __loadFromJsonish__(payload any) bool {
@@ -6265,7 +6296,7 @@ func (me *Terminal) __loadFromJsonish__(payload any) bool {
 	return ok
 }
 
-func (me *EnvBag) __loadFromJsonish__(payload any) bool {
+func (me *EnvState) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -6434,7 +6465,7 @@ func (me *FileSystemWatcher) __loadFromJsonish__(payload any) bool {
 	return ok
 }
 
-func (me *WorkspaceBag) __loadFromJsonish__(payload any) bool {
+func (me *WorkspaceState) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -6528,7 +6559,7 @@ func (me *DiagnosticChangeEvent) __loadFromJsonish__(payload any) bool {
 	return true
 }
 
-func (me *StatusBarItemBag) __loadFromJsonish__(payload any) bool {
+func (me *StatusBarItemState) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -6621,7 +6652,7 @@ func (me *StatusBarItemBag) __loadFromJsonish__(payload any) bool {
 	return true
 }
 
-func (me *OutputChannelBag) __loadFromJsonish__(payload any) bool {
+func (me *OutputChannelState) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -6645,7 +6676,7 @@ func (me *OutputChannelBag) __loadFromJsonish__(payload any) bool {
 	return true
 }
 
-func (me *TextEditorDecorationTypeBag) __loadFromJsonish__(payload any) bool {
+func (me *TextEditorDecorationTypeState) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -6669,7 +6700,7 @@ func (me *TextEditorDecorationTypeBag) __loadFromJsonish__(payload any) bool {
 	return true
 }
 
-func (me *InputBoxBag) __loadFromJsonish__(payload any) bool {
+func (me *InputBoxState) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -6811,7 +6842,7 @@ func (me *InputBoxBag) __loadFromJsonish__(payload any) bool {
 	return true
 }
 
-func (me *QuickPickBag) __loadFromJsonish__(payload any) bool {
+func (me *QuickPickState) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -7025,7 +7056,7 @@ func (me *QuickPickBag) __loadFromJsonish__(payload any) bool {
 	return true
 }
 
-func (me *TerminalBag) __loadFromJsonish__(payload any) bool {
+func (me *TerminalState) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any
@@ -7049,7 +7080,7 @@ func (me *TerminalBag) __loadFromJsonish__(payload any) bool {
 	return true
 }
 
-func (me *FileSystemWatcherBag) __loadFromJsonish__(payload any) bool {
+func (me *FileSystemWatcherState) __loadFromJsonish__(payload any) bool {
 	var it dict
 	var ok bool
 	var val any

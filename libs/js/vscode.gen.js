@@ -195,58 +195,58 @@ function newDiagnosticChangeEvent() {
     me = { __loadFromJsonish__: _ => DiagnosticChangeEvent___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-function newEnvBag() {
+function newEnvState() {
     let me;
-    me = { __loadFromJsonish__: _ => EnvBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { __loadFromJsonish__: _ => EnvState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-function newWorkspaceBag() {
+function newWorkspaceState() {
     let me;
-    me = { __loadFromJsonish__: _ => WorkspaceBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
+    me = { __loadFromJsonish__: _ => WorkspaceState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
     return me;
 }
-function newStatusBarItemBag() {
+function newStatusBarItemState() {
     let me;
-    me = { __loadFromJsonish__: _ => StatusBarItemBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => StatusBarItemBag_ApplyChanges.call(me), ReFetch: () => StatusBarItemBag_ReFetch.call(me) };
+    me = { __loadFromJsonish__: _ => StatusBarItemState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => StatusBarItemState_ApplyChanges.call(me), ReFetch: () => StatusBarItemState_ReFetch.call(me) };
     return me;
 }
-exports.newStatusBarItemBag = newStatusBarItemBag;
-function newOutputChannelBag() {
+exports.newStatusBarItemState = newStatusBarItemState;
+function newOutputChannelState() {
     let me;
-    me = { __loadFromJsonish__: _ => OutputChannelBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => OutputChannelBag_ReFetch.call(me) };
+    me = { __loadFromJsonish__: _ => OutputChannelState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => OutputChannelState_ReFetch.call(me) };
     return me;
 }
-exports.newOutputChannelBag = newOutputChannelBag;
-function newTextEditorDecorationTypeBag() {
+exports.newOutputChannelState = newOutputChannelState;
+function newTextEditorDecorationTypeState() {
     let me;
-    me = { __loadFromJsonish__: _ => TextEditorDecorationTypeBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TextEditorDecorationTypeBag_ReFetch.call(me) };
+    me = { __loadFromJsonish__: _ => TextEditorDecorationTypeState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TextEditorDecorationTypeState_ReFetch.call(me) };
     return me;
 }
-exports.newTextEditorDecorationTypeBag = newTextEditorDecorationTypeBag;
-function newInputBoxBag() {
+exports.newTextEditorDecorationTypeState = newTextEditorDecorationTypeState;
+function newInputBoxState() {
     let me;
-    me = { __loadFromJsonish__: _ => InputBoxBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => InputBoxBag_ApplyChanges.call(me), ReFetch: () => InputBoxBag_ReFetch.call(me) };
+    me = { __loadFromJsonish__: _ => InputBoxState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => InputBoxState_ApplyChanges.call(me), ReFetch: () => InputBoxState_ReFetch.call(me) };
     return me;
 }
-exports.newInputBoxBag = newInputBoxBag;
-function newQuickPickBag() {
+exports.newInputBoxState = newInputBoxState;
+function newQuickPickState() {
     let me;
-    me = { __loadFromJsonish__: _ => QuickPickBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => QuickPickBag_ApplyChanges.call(me), ReFetch: () => QuickPickBag_ReFetch.call(me) };
+    me = { __loadFromJsonish__: _ => QuickPickState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => QuickPickState_ApplyChanges.call(me), ReFetch: () => QuickPickState_ReFetch.call(me) };
     return me;
 }
-exports.newQuickPickBag = newQuickPickBag;
-function newTerminalBag() {
+exports.newQuickPickState = newQuickPickState;
+function newTerminalState() {
     let me;
-    me = { __loadFromJsonish__: _ => TerminalBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TerminalBag_ReFetch.call(me) };
+    me = { __loadFromJsonish__: _ => TerminalState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TerminalState_ReFetch.call(me) };
     return me;
 }
-exports.newTerminalBag = newTerminalBag;
-function newFileSystemWatcherBag() {
+exports.newTerminalState = newTerminalState;
+function newFileSystemWatcherState() {
     let me;
-    me = { __loadFromJsonish__: _ => FileSystemWatcherBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => FileSystemWatcherBag_ApplyChanges.call(me), ReFetch: () => FileSystemWatcherBag_ReFetch.call(me) };
+    me = { __loadFromJsonish__: _ => FileSystemWatcherState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => FileSystemWatcherState_ApplyChanges.call(me), ReFetch: () => FileSystemWatcherState_ReFetch.call(me) };
     return me;
 }
-exports.newFileSystemWatcherBag = newFileSystemWatcherBag;
+exports.newFileSystemWatcherState = newFileSystemWatcherState;
 class impl {
     constructor() {
         this.Window = new implWindow(this);
@@ -1828,7 +1828,7 @@ class implEnv extends implBase {
             let ok;
             let result;
             if ((undefined !== payload && null !== payload)) {
-                result = newEnvBag();
+                result = newEnvState();
                 ok = result.__loadFromJsonish__(payload);
                 if (!ok) {
                     return false;
@@ -2243,7 +2243,7 @@ class implWorkspace extends implBase {
             let ok;
             let result;
             if ((undefined !== payload && null !== payload)) {
-                result = newWorkspaceBag();
+                result = newWorkspaceState();
                 ok = result.__loadFromJsonish__(payload);
                 if (!ok) {
                     return false;
@@ -2542,7 +2542,7 @@ function StatusBarItem_Show() {
             return false;
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1]);
+            ok = this.Cfg.__loadFromJsonish__(it[1]);
         }
         if (!ok) {
             return false;
@@ -2576,7 +2576,7 @@ function StatusBarItem_Hide() {
             return false;
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1]);
+            ok = this.Cfg.__loadFromJsonish__(it[1]);
         }
         if (!ok) {
             return false;
@@ -2604,12 +2604,12 @@ function StatusBarItem___appzObjBagPullFromPeer__() {
     let onret;
     onresp = (payload) => {
         let ok;
-        if ((undefined === this.Bag || null === this.Bag)) {
-            this.Bag = newStatusBarItemBag();
+        if ((undefined === this.Cfg || null === this.Cfg)) {
+            this.Cfg = newStatusBarItemState();
         }
-        this.Bag.__holder__ = this;
+        this.Cfg.__holder__ = this;
         {
-            ok = this.Bag.__loadFromJsonish__(payload);
+            ok = this.Cfg.__loadFromJsonish__(payload);
         }
         if (!ok) {
             return false;
@@ -2636,7 +2636,7 @@ function StatusBarItem___appzObjBagPushToPeer__(allUpdates) {
     onresp = (payload) => {
         let ok;
         {
-            ok = this.Bag.__loadFromJsonish__(payload);
+            ok = this.Cfg.__loadFromJsonish__(payload);
         }
         if (!ok) {
             return false;
@@ -2671,7 +2671,7 @@ function OutputChannel_Append(value) {
             return false;
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1]);
+            ok = this.Cfg.__loadFromJsonish__(it[1]);
         }
         if (!ok) {
             return false;
@@ -2706,7 +2706,7 @@ function OutputChannel_AppendLine(value) {
             return false;
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1]);
+            ok = this.Cfg.__loadFromJsonish__(it[1]);
         }
         if (!ok) {
             return false;
@@ -2740,7 +2740,7 @@ function OutputChannel_Clear() {
             return false;
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1]);
+            ok = this.Cfg.__loadFromJsonish__(it[1]);
         }
         if (!ok) {
             return false;
@@ -2775,7 +2775,7 @@ function OutputChannel_Show(preserveFocus) {
             return false;
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1]);
+            ok = this.Cfg.__loadFromJsonish__(it[1]);
         }
         if (!ok) {
             return false;
@@ -2809,7 +2809,7 @@ function OutputChannel_Hide() {
             return false;
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1]);
+            ok = this.Cfg.__loadFromJsonish__(it[1]);
         }
         if (!ok) {
             return false;
@@ -2837,12 +2837,12 @@ function OutputChannel___appzObjBagPullFromPeer__() {
     let onret;
     onresp = (payload) => {
         let ok;
-        if ((undefined === this.Bag || null === this.Bag)) {
-            this.Bag = newOutputChannelBag();
+        if ((undefined === this.Cfg || null === this.Cfg)) {
+            this.Cfg = newOutputChannelState();
         }
-        this.Bag.__holder__ = this;
+        this.Cfg.__holder__ = this;
         {
-            ok = this.Bag.__loadFromJsonish__(payload);
+            ok = this.Cfg.__loadFromJsonish__(payload);
         }
         if (!ok) {
             return false;
@@ -2870,12 +2870,12 @@ function TextEditorDecorationType___appzObjBagPullFromPeer__() {
     let onret;
     onresp = (payload) => {
         let ok;
-        if ((undefined === this.Bag || null === this.Bag)) {
-            this.Bag = newTextEditorDecorationTypeBag();
+        if ((undefined === this.Cfg || null === this.Cfg)) {
+            this.Cfg = newTextEditorDecorationTypeState();
         }
-        this.Bag.__holder__ = this;
+        this.Cfg.__holder__ = this;
         {
-            ok = this.Bag.__loadFromJsonish__(payload);
+            ok = this.Cfg.__loadFromJsonish__(payload);
         }
         if (!ok) {
             return false;
@@ -2913,7 +2913,7 @@ function InputBox_OnDidChangeValue(handler) {
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[1]);
+                ok = this.Cfg.__loadFromJsonish__(args[1]);
             }
             if (!ok) {
                 return false;
@@ -2967,7 +2967,7 @@ function InputBox_OnDidAccept(handler) {
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[0]);
+                ok = this.Cfg.__loadFromJsonish__(args[0]);
             }
             if (!ok) {
                 return false;
@@ -3022,7 +3022,7 @@ function InputBox_Show() {
             return false;
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1]);
+            ok = this.Cfg.__loadFromJsonish__(it[1]);
         }
         if (!ok) {
             return false;
@@ -3056,7 +3056,7 @@ function InputBox_Hide() {
             return false;
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1]);
+            ok = this.Cfg.__loadFromJsonish__(it[1]);
         }
         if (!ok) {
             return false;
@@ -3089,7 +3089,7 @@ function InputBox_OnDidHide(handler) {
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[0]);
+                ok = this.Cfg.__loadFromJsonish__(args[0]);
             }
             if (!ok) {
                 return false;
@@ -3138,12 +3138,12 @@ function InputBox___appzObjBagPullFromPeer__() {
     let onret;
     onresp = (payload) => {
         let ok;
-        if ((undefined === this.Bag || null === this.Bag)) {
-            this.Bag = newInputBoxBag();
+        if ((undefined === this.Cfg || null === this.Cfg)) {
+            this.Cfg = newInputBoxState();
         }
-        this.Bag.__holder__ = this;
+        this.Cfg.__holder__ = this;
         {
-            ok = this.Bag.__loadFromJsonish__(payload);
+            ok = this.Cfg.__loadFromJsonish__(payload);
         }
         if (!ok) {
             return false;
@@ -3170,7 +3170,7 @@ function InputBox___appzObjBagPushToPeer__(allUpdates) {
     onresp = (payload) => {
         let ok;
         {
-            ok = this.Bag.__loadFromJsonish__(payload);
+            ok = this.Cfg.__loadFromJsonish__(payload);
         }
         if (!ok) {
             return false;
@@ -3208,7 +3208,7 @@ function QuickPick_OnDidChangeValue(handler) {
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[1]);
+                ok = this.Cfg.__loadFromJsonish__(args[1]);
             }
             if (!ok) {
                 return false;
@@ -3262,7 +3262,7 @@ function QuickPick_OnDidAccept(handler) {
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[0]);
+                ok = this.Cfg.__loadFromJsonish__(args[0]);
             }
             if (!ok) {
                 return false;
@@ -3335,7 +3335,7 @@ function QuickPick_OnDidChangeActive(handler) {
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[1]);
+                ok = this.Cfg.__loadFromJsonish__(args[1]);
             }
             if (!ok) {
                 return false;
@@ -3408,7 +3408,7 @@ function QuickPick_OnDidChangeSelection(handler) {
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[1]);
+                ok = this.Cfg.__loadFromJsonish__(args[1]);
             }
             if (!ok) {
                 return false;
@@ -3463,7 +3463,7 @@ function QuickPick_Show() {
             return false;
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1]);
+            ok = this.Cfg.__loadFromJsonish__(it[1]);
         }
         if (!ok) {
             return false;
@@ -3497,7 +3497,7 @@ function QuickPick_Hide() {
             return false;
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1]);
+            ok = this.Cfg.__loadFromJsonish__(it[1]);
         }
         if (!ok) {
             return false;
@@ -3530,7 +3530,7 @@ function QuickPick_OnDidHide(handler) {
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[0]);
+                ok = this.Cfg.__loadFromJsonish__(args[0]);
             }
             if (!ok) {
                 return false;
@@ -3579,12 +3579,12 @@ function QuickPick___appzObjBagPullFromPeer__() {
     let onret;
     onresp = (payload) => {
         let ok;
-        if ((undefined === this.Bag || null === this.Bag)) {
-            this.Bag = newQuickPickBag();
+        if ((undefined === this.Cfg || null === this.Cfg)) {
+            this.Cfg = newQuickPickState();
         }
-        this.Bag.__holder__ = this;
+        this.Cfg.__holder__ = this;
         {
-            ok = this.Bag.__loadFromJsonish__(payload);
+            ok = this.Cfg.__loadFromJsonish__(payload);
         }
         if (!ok) {
             return false;
@@ -3611,7 +3611,7 @@ function QuickPick___appzObjBagPushToPeer__(allUpdates) {
     onresp = (payload) => {
         let ok;
         {
-            ok = this.Bag.__loadFromJsonish__(payload);
+            ok = this.Cfg.__loadFromJsonish__(payload);
         }
         if (!ok) {
             return false;
@@ -3647,7 +3647,7 @@ function Terminal_SendText(text, addNewLine) {
             return false;
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1]);
+            ok = this.Cfg.__loadFromJsonish__(it[1]);
         }
         if (!ok) {
             return false;
@@ -3682,7 +3682,7 @@ function Terminal_Show(preserveFocus) {
             return false;
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1]);
+            ok = this.Cfg.__loadFromJsonish__(it[1]);
         }
         if (!ok) {
             return false;
@@ -3716,7 +3716,7 @@ function Terminal_Hide() {
             return false;
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1]);
+            ok = this.Cfg.__loadFromJsonish__(it[1]);
         }
         if (!ok) {
             return false;
@@ -3744,12 +3744,12 @@ function Terminal___appzObjBagPullFromPeer__() {
     let onret;
     onresp = (payload) => {
         let ok;
-        if ((undefined === this.Bag || null === this.Bag)) {
-            this.Bag = newTerminalBag();
+        if ((undefined === this.Cfg || null === this.Cfg)) {
+            this.Cfg = newTerminalState();
         }
-        this.Bag.__holder__ = this;
+        this.Cfg.__holder__ = this;
         {
-            ok = this.Bag.__loadFromJsonish__(payload);
+            ok = this.Cfg.__loadFromJsonish__(payload);
         }
         if (!ok) {
             return false;
@@ -3787,7 +3787,7 @@ function FileSystemWatcher_OnDidCreate(handler) {
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[1]);
+                ok = this.Cfg.__loadFromJsonish__(args[1]);
             }
             if (!ok) {
                 return false;
@@ -3846,7 +3846,7 @@ function FileSystemWatcher_OnDidChange(handler) {
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[1]);
+                ok = this.Cfg.__loadFromJsonish__(args[1]);
             }
             if (!ok) {
                 return false;
@@ -3905,7 +3905,7 @@ function FileSystemWatcher_OnDidDelete(handler) {
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[1]);
+                ok = this.Cfg.__loadFromJsonish__(args[1]);
             }
             if (!ok) {
                 return false;
@@ -3954,12 +3954,12 @@ function FileSystemWatcher___appzObjBagPullFromPeer__() {
     let onret;
     onresp = (payload) => {
         let ok;
-        if ((undefined === this.Bag || null === this.Bag)) {
-            this.Bag = newFileSystemWatcherBag();
+        if ((undefined === this.Cfg || null === this.Cfg)) {
+            this.Cfg = newFileSystemWatcherState();
         }
-        this.Bag.__holder__ = this;
+        this.Cfg.__holder__ = this;
         {
-            ok = this.Bag.__loadFromJsonish__(payload);
+            ok = this.Cfg.__loadFromJsonish__(payload);
         }
         if (!ok) {
             return false;
@@ -3986,7 +3986,7 @@ function FileSystemWatcher___appzObjBagPushToPeer__(allUpdates) {
     onresp = (payload) => {
         let ok;
         {
-            ok = this.Bag.__loadFromJsonish__(payload);
+            ok = this.Cfg.__loadFromJsonish__(payload);
         }
         if (!ok) {
             return false;
@@ -4001,38 +4001,54 @@ function FileSystemWatcher___appzObjBagPushToPeer__(allUpdates) {
         onret = a0;
     };
 }
-function StatusBarItemBag_ReFetch() {
+function StatusBarItemState_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
-function StatusBarItemBag_ApplyChanges() {
-    return this.__holder__.__appzObjBagPushToPeer__(this);
+function StatusBarItemState_ApplyChanges() {
+    let ret;
+    {
+        ret = this.__holder__.__appzObjBagPushToPeer__(this);
+    }
+    return ret;
 }
-function OutputChannelBag_ReFetch() {
+function OutputChannelState_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
-function TextEditorDecorationTypeBag_ReFetch() {
+function TextEditorDecorationTypeState_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
-function InputBoxBag_ReFetch() {
+function InputBoxState_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
-function InputBoxBag_ApplyChanges() {
-    return this.__holder__.__appzObjBagPushToPeer__(this);
+function InputBoxState_ApplyChanges() {
+    let ret;
+    {
+        ret = this.__holder__.__appzObjBagPushToPeer__(this);
+    }
+    return ret;
 }
-function QuickPickBag_ReFetch() {
+function QuickPickState_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
-function QuickPickBag_ApplyChanges() {
-    return this.__holder__.__appzObjBagPushToPeer__(this);
+function QuickPickState_ApplyChanges() {
+    let ret;
+    {
+        ret = this.__holder__.__appzObjBagPushToPeer__(this);
+    }
+    return ret;
 }
-function TerminalBag_ReFetch() {
+function TerminalState_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
-function FileSystemWatcherBag_ReFetch() {
+function FileSystemWatcherState_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
-function FileSystemWatcherBag_ApplyChanges() {
-    return this.__holder__.__appzObjBagPushToPeer__(this);
+function FileSystemWatcherState_ApplyChanges() {
+    let ret;
+    {
+        ret = this.__holder__.__appzObjBagPushToPeer__(this);
+    }
+    return ret;
 }
 function MessageItem___loadFromJsonish__(payload) {
     let it;
@@ -4286,7 +4302,7 @@ function Terminal___loadFromJsonish__(payload) {
     ok = this.__disp__.__loadFromJsonish__(payload);
     return ok;
 }
-function EnvBag___loadFromJsonish__(payload) {
+function EnvState___loadFromJsonish__(payload) {
     let it;
     let ok;
     let val;
@@ -4472,7 +4488,7 @@ function FileSystemWatcher___loadFromJsonish__(payload) {
     ok = this.__disp__.__loadFromJsonish__(payload);
     return ok;
 }
-function WorkspaceBag___loadFromJsonish__(payload) {
+function WorkspaceState___loadFromJsonish__(payload) {
     let it;
     let ok;
     let val;
@@ -4570,7 +4586,7 @@ function DiagnosticChangeEvent___loadFromJsonish__(payload) {
     }
     return true;
 }
-function StatusBarItemBag___loadFromJsonish__(payload) {
+function StatusBarItemState___loadFromJsonish__(payload) {
     let it;
     let ok;
     let val;
@@ -4662,7 +4678,7 @@ function StatusBarItemBag___loadFromJsonish__(payload) {
     }
     return true;
 }
-function OutputChannelBag___loadFromJsonish__(payload) {
+function OutputChannelState___loadFromJsonish__(payload) {
     let it;
     let ok;
     let val;
@@ -4685,7 +4701,7 @@ function OutputChannelBag___loadFromJsonish__(payload) {
     }
     return true;
 }
-function TextEditorDecorationTypeBag___loadFromJsonish__(payload) {
+function TextEditorDecorationTypeState___loadFromJsonish__(payload) {
     let it;
     let ok;
     let val;
@@ -4708,7 +4724,7 @@ function TextEditorDecorationTypeBag___loadFromJsonish__(payload) {
     }
     return true;
 }
-function InputBoxBag___loadFromJsonish__(payload) {
+function InputBoxState___loadFromJsonish__(payload) {
     let it;
     let ok;
     let val;
@@ -4843,7 +4859,7 @@ function InputBoxBag___loadFromJsonish__(payload) {
     }
     return true;
 }
-function QuickPickBag___loadFromJsonish__(payload) {
+function QuickPickState___loadFromJsonish__(payload) {
     let it;
     let ok;
     let val;
@@ -5053,7 +5069,7 @@ function QuickPickBag___loadFromJsonish__(payload) {
     }
     return true;
 }
-function TerminalBag___loadFromJsonish__(payload) {
+function TerminalState___loadFromJsonish__(payload) {
     let it;
     let ok;
     let val;
@@ -5076,7 +5092,7 @@ function TerminalBag___loadFromJsonish__(payload) {
     }
     return true;
 }
-function FileSystemWatcherBag___loadFromJsonish__(payload) {
+function FileSystemWatcherState___loadFromJsonish__(payload) {
     let it;
     let ok;
     let val;

@@ -7,8 +7,6 @@ export class Gen extends gen_syn.Gen {
 
     gen(prep: gen.Prep) {
         this.options.oneIndent = "\t"
-        this.options.doc.appendArgsToSummary.forFuncFields = true
-        this.options.doc.appendArgsToSummary.forMethods = true
         this.options.idents.curInst = "me"
         this.options.idents.null = "nil"
         this.options.haveProps = false
@@ -78,7 +76,9 @@ export class Gen extends gen_syn.Gen {
 
     emitStruct(it: gen_syn.TStruct) {
         this.emitDocs(it)
-            .line("type " + it.Name + " struct {").indented(() =>
+            .line("type " + it.Name + " struct {").indented(() => {
+                if (it.fromPrep && it.fromPrep.isPropsOfStruct)
+                    this.line("lock")
                 this.each(it.Fields.filter(_ => (!_.FuncFieldRel) || _.Type !== gen_syn.TypeRefPrim.String),
                     "\n", f => {
                         this.emitDocs(f).ln(() =>
@@ -92,7 +92,7 @@ export class Gen extends gen_syn.Gen {
                         )
                     }
                 )
-            ).lines("}", "")
+            }).lines("}", "")
 
         const fflds = it.Fields.filter(_ => _.FuncFieldRel && _.Type === gen_syn.TypeRefPrim.String)
         if (fflds && fflds.length) {

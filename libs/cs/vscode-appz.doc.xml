@@ -73,36 +73,42 @@
             <summary>
             Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
             The overview ruler supports three lanes.
+            
             </summary>
         </member>
         <member name="F:VscAppz.OverviewRulerLane.Left">
             <summary>
             Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
             The overview ruler supports three lanes.
+            
             </summary>
         </member>
         <member name="F:VscAppz.OverviewRulerLane.Center">
             <summary>
             Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
             The overview ruler supports three lanes.
+            
             </summary>
         </member>
         <member name="F:VscAppz.OverviewRulerLane.Right">
             <summary>
             Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
             The overview ruler supports three lanes.
+            
             </summary>
         </member>
         <member name="F:VscAppz.OverviewRulerLane.Full">
             <summary>
             Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
             The overview ruler supports three lanes.
+            
             </summary>
         </member>
         <member name="T:VscAppz.IVscode">
             <summary>
             Type Definition for Visual Studio Code 1.39 Extension API
             See https://code.visualstudio.com/api for more information
+            
             </summary>
         </member>
         <member name="P:VscAppz.IVscode.Window">
@@ -110,6 +116,7 @@
             Namespace for dealing with the current window of the editor. That is visible
             and active editors, as well as, UI elements to show messages, selections, and
             asking for user input.
+            
             </summary>
         </member>
         <member name="P:VscAppz.IVscode.Env">
@@ -124,6 +131,7 @@
             The workspace offers support for [listening](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher) to fs
             events and for [finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles) files. Both perform well and run _outside_
             the editor-process so that they should be always used instead of nodejs-equivalents.
+            
             </summary>
         </member>
         <member name="P:VscAppz.IVscode.Languages">
@@ -158,6 +166,7 @@
             scores are equal the provider that came last wins. For features that allow full arity, like [hover](https://code.visualstudio.com/api/references/vscode-api#languages.registerHoverProvider),
             the score is only checked to be `&gt;0`, for other features, like [IntelliSense](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider) the
             score is used for determining the order in which providers are asked to participate.
+            
             </summary>
         </member>
         <member name="P:VscAppz.IVscode.Extensions">
@@ -199,6 +208,7 @@
             console.log(importedApi.mul(42, 1));
             
             ```
+            
             
             </summary>
         </member>
@@ -246,6 +256,7 @@
             
             ```
             
+            
             </summary>
         </member>
         <member name="T:VscAppz.IWindow">
@@ -253,6 +264,7 @@
             Namespace for dealing with the current window of the editor. That is visible
             and active editors, as well as, UI elements to show messages, selections, and
             asking for user input.
+            
             </summary>
         </member>
         <member name="M:VscAppz.IWindow.ShowInformationMessage1(System.String,System.String[])">
@@ -265,6 +277,7 @@
             `items` ── A set of items that will be rendered as actions in the message.
             
             `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            
             </summary>
             <param name="message">The message to show.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
@@ -282,6 +295,7 @@
             `items` ── A set of items that will be rendered as actions in the message.
             
             `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            
             </summary>
             <param name="message">The message to show.</param>
             <param name="options">Configures the behaviour of the message.</param>
@@ -297,6 +311,7 @@
             `items` ── A set of items that will be rendered as actions in the message.
             
             `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            
             </summary>
             <param name="message">The message to show.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
@@ -313,6 +328,7 @@
             `items` ── A set of items that will be rendered as actions in the message.
             
             `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            
             </summary>
             <param name="message">The message to show.</param>
             <param name="options">Configures the behaviour of the message.</param>
@@ -328,6 +344,7 @@
             `items` ── A set of items that will be rendered as actions in the message.
             
             `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            
             </summary>
             <param name="message">The message to show.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
@@ -344,6 +361,7 @@
             `items` ── A set of items that will be rendered as actions in the message.
             
             `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            
             </summary>
             <param name="message">The message to show.</param>
             <param name="options">Configures the behaviour of the message.</param>
@@ -359,6 +377,7 @@
             `items` ── A set of items that will be rendered as actions in the message.
             
             `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            
             </summary>
             <param name="message">The message to show.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
@@ -375,6 +394,7 @@
             `items` ── A set of items that will be rendered as actions in the message.
             
             `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            
             </summary>
             <param name="message">The message to show.</param>
             <param name="options">Configures the behaviour of the message.</param>
@@ -390,6 +410,7 @@
             `items` ── A set of items that will be rendered as actions in the message.
             
             `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            
             </summary>
             <param name="message">The message to show.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
@@ -406,6 +427,7 @@
             `items` ── A set of items that will be rendered as actions in the message.
             
             `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            
             </summary>
             <param name="message">The message to show.</param>
             <param name="options">Configures the behaviour of the message.</param>
@@ -421,6 +443,7 @@
             `items` ── A set of items that will be rendered as actions in the message.
             
             `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            
             </summary>
             <param name="message">The message to show.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
@@ -437,6 +460,7 @@
             `items` ── A set of items that will be rendered as actions in the message.
             
             `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
+            
             </summary>
             <param name="message">The message to show.</param>
             <param name="options">Configures the behaviour of the message.</param>
@@ -456,6 +480,7 @@
             `token` ── A token that can be used to signal cancellation.
             
             `return` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
+            
             </summary>
             <param name="options">Configures the behavior of the input box.</param>
             <param name="token">A token that can be used to signal cancellation.</param>
@@ -472,6 +497,7 @@
             `token` ── A token that can be used to signal cancellation.
             
             `return` ── A promise that resolves to the selected items or `undefined`.
+            
             </summary>
             <param name="items">An array of strings, or a promise that resolves to an array of strings.</param>
             <param name="options">Configures the behavior of the selection list.</param>
@@ -489,6 +515,7 @@
             `token` ── A token that can be used to signal cancellation.
             
             `return` ── A promise that resolves to the selection or `undefined`.
+            
             </summary>
             <param name="items">An array of strings, or a promise that resolves to an array of strings.</param>
             <param name="options">Configures the behavior of the selection list.</param>
@@ -506,6 +533,7 @@
             `token` ── A token that can be used to signal cancellation.
             
             `return` ── A promise that resolves to the selected items or `undefined`.
+            
             </summary>
             <param name="items">An array of items, or a promise that resolves to an array of items.</param>
             <param name="options">Configures the behavior of the selection list.</param>
@@ -523,6 +551,7 @@
             `token` ── A token that can be used to signal cancellation.
             
             `return` ── A promise that resolves to the selected item or `undefined`.
+            
             </summary>
             <param name="items">An array of items, or a promise that resolves to an array of items.</param>
             <param name="options">Configures the behavior of the selection list.</param>
@@ -539,6 +568,7 @@
             `hideAfterTimeout` ── Timeout in milliseconds after which the message will be disposed.
             
             `return` ── A disposable which hides the status bar message.
+            
             </summary>
             <param name="text">The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).</param>
             <param name="hideAfterTimeout">Timeout in milliseconds after which the message will be disposed.</param>
@@ -555,6 +585,7 @@
             `text` ── The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
             
             `return` ── A disposable which hides the status bar message.
+            
             </summary>
             <param name="text">The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).</param>
             <return>A disposable which hides the status bar message.</return>
@@ -567,6 +598,7 @@
             `options` ── Options that control the dialog.
             
             `return` ── A promise that resolves to the selected resource or `undefined`.
+            
             </summary>
             <param name="options">Options that control the dialog.</param>
             <return>A promise that resolves to the selected resource or `undefined`.</return>
@@ -579,6 +611,7 @@
             `options` ── Options that control the dialog.
             
             `return` ── A promise that resolves to the selected resources or `undefined`.
+            
             </summary>
             <param name="options">Options that control the dialog.</param>
             <return>A promise that resolves to the selected resources or `undefined`.</return>
@@ -591,6 +624,7 @@
             `options` ── Configures the behavior of the workspace folder list.
             
             `return` ── A promise that resolves to the workspace folder or `undefined`.
+            
             </summary>
             <param name="options">Configures the behavior of the workspace folder list.</param>
             <return>A promise that resolves to the workspace folder or `undefined`.</return>
@@ -600,6 +634,7 @@
             Represents the current window's state.
             
             `return` ── a thenable that resolves when this `State` call has successfully completed at the VSC side and its `WindowState` result received back at our end.
+            
             </summary>
             <return>a thenable that resolves when this `State` call has successfully completed at the VSC side and its `WindowState` result received back at our end.</return>
         </member>
@@ -611,6 +646,7 @@
             `listener` ── will be invoked whenever the `OnDidChangeWindowState` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.
+            
             </summary>
             <param name="listener">will be invoked whenever the `OnDidChangeWindowState` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWindowState` event on `Dispose`.</return>
@@ -624,6 +660,7 @@
             `priority` ── The priority of the item. Higher values mean the item should be shown more to the left.
             
             `return` ── A new status bar item.
+            
             </summary>
             <param name="alignment">The alignment of the item.</param>
             <param name="priority">The priority of the item. Higher values mean the item should be shown more to the left.</param>
@@ -636,6 +673,7 @@
             `name` ── Human-readable string which will be used to represent the channel in the UI.
             
             `return` ── a thenable that resolves to the newly created `OutputChannel`.
+            
             </summary>
             <param name="name">Human-readable string which will be used to represent the channel in the UI.</param>
             <return>a thenable that resolves to the newly created `OutputChannel`.</return>
@@ -647,6 +685,7 @@
             `options` ── Rendering options for the decoration type.
             
             `return` ── A new decoration type instance.
+            
             </summary>
             <param name="options">Rendering options for the decoration type.</param>
             <return>A new decoration type instance.</return>
@@ -660,6 +699,7 @@
             when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
             
             `return` ── A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).
+            
             </summary>
             <return>A new [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox).</return>
         </member>
@@ -673,6 +713,7 @@
             when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
             
             `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
+            
             </summary>
             <return>A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).</return>
         </member>
@@ -690,6 +731,7 @@
             [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
             
             `return` ── A new Terminal.
+            
             </summary>
             <param name="name">Optional human-readable string which will be used to represent the terminal in the UI.</param>
             <param name="shellPath">Optional path to a custom shell executable to be used in the terminal.</param>
@@ -703,6 +745,7 @@
             `options` ── A TerminalOptions object describing the characteristics of the new terminal.
             
             `return` ── A new Terminal.
+            
             </summary>
             <param name="options">A TerminalOptions object describing the characteristics of the new terminal.</param>
             <return>A new Terminal.</return>
@@ -715,6 +758,7 @@
             the characteristics of the new terminal.
             
             `return` ── A new Terminal.
+            
             </summary>
             <param name="options">An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing the characteristics of the new terminal.</param>
             <return>A new Terminal.</return>
@@ -733,6 +777,7 @@
             `target` ── The uri that should be opened.
             
             `return` ── A promise indicating if open was successful.
+            
             </summary>
             <param name="target">The uri that should be opened.</param>
             <return>A promise indicating if open was successful.</return>
@@ -742,6 +787,7 @@
             The application name of the editor, like 'VS Code'.
             
             `return` ── a thenable that resolves when this `AppName` call has successfully completed at the VSC side and its result received back at our end.
+            
             </summary>
             <return>a thenable that resolves when this `AppName` call has successfully completed at the VSC side and its result received back at our end.</return>
         </member>
@@ -750,6 +796,7 @@
             The application root folder from which the editor is running.
             
             `return` ── a thenable that resolves when this `AppRoot` call has successfully completed at the VSC side and its result received back at our end.
+            
             </summary>
             <return>a thenable that resolves when this `AppRoot` call has successfully completed at the VSC side and its result received back at our end.</return>
         </member>
@@ -758,6 +805,7 @@
             Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.
             
             `return` ── a thenable that resolves when this `Language` call has successfully completed at the VSC side and its result received back at our end.
+            
             </summary>
             <return>a thenable that resolves when this `Language` call has successfully completed at the VSC side and its result received back at our end.</return>
         </member>
@@ -766,6 +814,7 @@
             A unique identifier for the computer.
             
             `return` ── a thenable that resolves when this `MachineId` call has successfully completed at the VSC side and its result received back at our end.
+            
             </summary>
             <return>a thenable that resolves when this `MachineId` call has successfully completed at the VSC side and its result received back at our end.</return>
         </member>
@@ -780,6 +829,7 @@
             a specific extension runs remote or not.
             
             `return` ── a thenable that resolves when this `RemoteName` call has successfully completed at the VSC side and its result received back at our end.
+            
             </summary>
             <return>a thenable that resolves when this `RemoteName` call has successfully completed at the VSC side and its result received back at our end.</return>
         </member>
@@ -789,6 +839,7 @@
             Changes each time the editor is started.
             
             `return` ── a thenable that resolves when this `SessionId` call has successfully completed at the VSC side and its result received back at our end.
+            
             </summary>
             <return>a thenable that resolves when this `SessionId` call has successfully completed at the VSC side and its result received back at our end.</return>
         </member>
@@ -798,6 +849,7 @@
             `terminal.integrated.shell` setting for the extension host's platform.
             
             `return` ── a thenable that resolves when this `Shell` call has successfully completed at the VSC side and its result received back at our end.
+            
             </summary>
             <return>a thenable that resolves when this `Shell` call has successfully completed at the VSC side and its result received back at our end.</return>
         </member>
@@ -806,6 +858,7 @@
             The custom uri scheme the editor registers to in the operating system.
             
             `return` ── a thenable that resolves when this `UriScheme` call has successfully completed at the VSC side and its result received back at our end.
+            
             </summary>
             <return>a thenable that resolves when this `UriScheme` call has successfully completed at the VSC side and its result received back at our end.</return>
         </member>
@@ -813,9 +866,10 @@
             <summary>
             Provides single-call access to numerous individual `IEnv` properties at once.
             
-            `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.
+            `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvState` result received back at our end.
+            
             </summary>
-            <return>a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.</return>
+            <return>a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvState` result received back at our end.</return>
         </member>
         <member name="M:VscAppz.IEnv.Clipboard">
             <summary>The clipboard provides read and write access to the system's clipboard.</summary>
@@ -828,6 +882,7 @@
             Read the current clipboard contents as text.
             
             `return` ── A thenable that resolves to a string.
+            
             </summary>
             <return>A thenable that resolves to a string.</return>
         </member>
@@ -838,6 +893,7 @@
             `value` ── 
             
             `return` ── A thenable that resolves when writing happened.
+            
             </summary>
             <return>A thenable that resolves when writing happened.</return>
             <param name="value"></param>
@@ -851,6 +907,7 @@
             The workspace offers support for [listening](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher) to fs
             events and for [finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles) files. Both perform well and run _outside_
             the editor-process so that they should be always used instead of nodejs-equivalents.
+            
             </summary>
         </member>
         <member name="M:VscAppz.IWorkspace.Name">
@@ -859,6 +916,7 @@
             has been opened.
             
             `return` ── a thenable that resolves when this `Name` call has successfully completed at the VSC side and its result received back at our end.
+            
             </summary>
             <return>a thenable that resolves when this `Name` call has successfully completed at the VSC side and its result received back at our end.</return>
         </member>
@@ -897,6 +955,7 @@
             well as an untitled or saved workspace.
             
             `return` ── a thenable that resolves when this `WorkspaceFile` call has successfully completed at the VSC side and its result received back at our end.
+            
             </summary>
             <return>a thenable that resolves when this `WorkspaceFile` call has successfully completed at the VSC side and its result received back at our end.</return>
         </member>
@@ -907,6 +966,7 @@
             `includeUntitled` ── Also save files that have been created during this session.
             
             `return` ── A thenable that resolves when the files have been saved.
+            
             </summary>
             <param name="includeUntitled">Also save files that have been created during this session.</param>
             <return>A thenable that resolves when the files have been saved.</return>
@@ -918,6 +978,7 @@
             `listener` ── will be invoked whenever the `OnDidChangeWorkspaceFolders` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.
+            
             </summary>
             <param name="listener">will be invoked whenever the `OnDidChangeWorkspaceFolders` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeWorkspaceFolders` event on `Dispose`.</return>
@@ -931,6 +992,7 @@
             `uri` ── An uri.
             
             `return` ── A workspace folder or `undefined`
+            
             </summary>
             <param name="uri">An uri.</param>
             <return>A workspace folder or `undefined`</return>
@@ -941,6 +1003,7 @@
             *Note* that the first entry corresponds to the value of `rootPath`.
             
             `return` ── a thenable that resolves when this `WorkspaceFolders` call has successfully completed at the VSC side and its result received back at our end.
+            
             </summary>
             <return>a thenable that resolves when this `WorkspaceFolders` call has successfully completed at the VSC side and its result received back at our end.</return>
         </member>
@@ -963,6 +1026,7 @@
             
             `return` ── A thenable that resolves to an array of resource identifiers. Will return no results if no
             [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders) are opened.
+            
             </summary>
             <param name="include">A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that defines the files to search for. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern) to restrict the search results to a [workspace folder](https://code.visualstudio.com/api/references/vscode-api#WorkspaceFolder).</param>
             <param name="exclude">A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that defines files and folders to exclude. The glob pattern will be matched against the file paths of resulting matches relative to their workspace. When `undefined` only default excludes will apply, when `null` no excludes will apply.</param>
@@ -984,6 +1048,7 @@
             multiple workspace folders and `false` otherwise.
             
             `return` ── A path relative to the root or the input.
+            
             </summary>
             <param name="pathOrUri">A path or uri. When a uri is given its [fsPath](https://code.visualstudio.com/api/references/vscode-api#Uri.fsPath) is used.</param>
             <param name="includeWorkspaceFolder">When `true` and when the given path is contained inside a workspace folder the name of the workspace is prepended. Defaults to `true` when there are multiple workspace folders and `false` otherwise.</param>
@@ -1008,6 +1073,7 @@
             `ignoreDeleteEvents` ── Ignore when files have been deleted.
             
             `return` ── A new file system watcher instance.
+            
             </summary>
             <param name="globPattern">A [glob pattern](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) that is applied to the absolute paths of created, changed, and deleted files. Use a [relative pattern](https://code.visualstudio.com/api/references/vscode-api#RelativePattern) to limit events to a certain [workspace folder](#WorkspaceFolder).</param>
             <param name="ignoreCreateEvents">Ignore when files have been created.</param>
@@ -1019,9 +1085,10 @@
             <summary>
             Provides single-call access to numerous individual `IWorkspace` properties at once.
             
-            `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
+            `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceState` result received back at our end.
+            
             </summary>
-            <return>a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.</return>
+            <return>a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceState` result received back at our end.</return>
         </member>
         <member name="T:VscAppz.ILanguages">
             <summary>
@@ -1055,6 +1122,7 @@
             scores are equal the provider that came last wins. For features that allow full arity, like [hover](https://code.visualstudio.com/api/references/vscode-api#languages.registerHoverProvider),
             the score is only checked to be `&gt;0`, for other features, like [IntelliSense](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider) the
             score is used for determining the order in which providers are asked to participate.
+            
             </summary>
         </member>
         <member name="M:VscAppz.ILanguages.GetLanguages">
@@ -1062,6 +1130,7 @@
             Return the identifiers of all known languages.
             
             `return` ── Promise resolving to an array of identifier strings.
+            
             </summary>
             <return>Promise resolving to an array of identifier strings.</return>
         </member>
@@ -1073,6 +1142,7 @@
             `listener` ── will be invoked whenever the `OnDidChangeDiagnostics` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.
+            
             </summary>
             <param name="listener">will be invoked whenever the `OnDidChangeDiagnostics` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChangeDiagnostics` event on `Dispose`.</return>
@@ -1117,6 +1187,7 @@
             
             ```
             
+            
             </summary>
         </member>
         <member name="M:VscAppz.IExtensions.OnDidChange(System.Action)">
@@ -1127,6 +1198,7 @@
             `listener` ── will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.
+            
             </summary>
             <param name="listener">will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `listener` from the `OnDidChange` event on `Dispose`.</return>
@@ -1175,6 +1247,7 @@
             
             ```
             
+            
             </summary>
         </member>
         <member name="M:VscAppz.ICommands.RegisterCommand(System.String,System.Func{System.Object[],System.Object})">
@@ -1190,6 +1263,7 @@
             `callback` ── A command handler function.
             
             `return` ── Disposable which unregisters this command on disposal.
+            
             </summary>
             <param name="command">A unique identifier for the command.</param>
             <param name="callback">A command handler function.</param>
@@ -1211,6 +1285,7 @@
             
             `return` ── A thenable that resolves to the returned value of the given command. `undefined` when
             the command handler function doesn't return anything.
+            
             </summary>
             <param name="command">Identifier of the command to execute.</param>
             <param name="rest">Parameters passed to the command function.</param>
@@ -1224,6 +1299,7 @@
             `filterInternal` ── Set `true` to not see internal commands (starting with an underscore)
             
             `return` ── Thenable that resolves to a list of command ids.
+            
             </summary>
             <param name="filterInternal">Set `true` to not see internal commands (starting with an underscore)</param>
             <return>Thenable that resolves to a list of command ids.</return>
@@ -1235,6 +1311,7 @@
             <summary>
             Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
             Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
+            
             </summary>
         </member>
         <member name="F:VscAppz.ThemableDecorationRenderOptions.Outline">
@@ -1244,18 +1321,21 @@
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'outline' for setting one or more of the individual outline properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.ThemableDecorationRenderOptions.OutlineStyle">
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'outline' for setting one or more of the individual outline properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.ThemableDecorationRenderOptions.OutlineWidth">
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'outline' for setting one or more of the individual outline properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.ThemableDecorationRenderOptions.Border">
@@ -1265,30 +1345,35 @@
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'border' for setting one or more of the individual border properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderRadius">
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'border' for setting one or more of the individual border properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderSpacing">
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'border' for setting one or more of the individual border properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderStyle">
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'border' for setting one or more of the individual border properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.ThemableDecorationRenderOptions.BorderWidth">
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'border' for setting one or more of the individual border properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.ThemableDecorationRenderOptions.FontStyle">
@@ -1320,6 +1405,7 @@
             Specifies the size of the gutter icon.
             Available values are 'auto', 'contain', 'cover' and any percentage value.
             For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+            
             </summary>
         </member>
         <member name="F:VscAppz.ThemableDecorationRenderOptions.OverviewRulerColor">
@@ -1341,6 +1427,7 @@
             <summary>
             Represents an action that is shown with an information, warning, or
             error message.
+            
             </summary>
         </member>
         <member name="F:VscAppz.MessageItem.Title">
@@ -1353,6 +1440,7 @@
             key).
             
             Note: this option is ignored for non-modal messages.
+            
             </summary>
         </member>
         <member name="F:VscAppz.MessageItem.My">
@@ -1370,6 +1458,7 @@
             first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
             word will be selected, when empty (start equals end) only the cursor will be set,
             otherwise the defined range will be selected.
+            
             </summary>
         </member>
         <member name="F:VscAppz.InputBoxOptions.Prompt">
@@ -1393,6 +1482,7 @@
             
             `return` ── A human readable string which is presented as diagnostic message.
             Return `undefined`, `null`, or the empty string when 'value' is valid.
+            
             </summary>
         </member>
         <member name="T:VscAppz.QuickPickOptions">
@@ -1420,6 +1510,7 @@
             <summary>
             Represents an item that can be selected from
             a list of items.
+            
             </summary>
         </member>
         <member name="F:VscAppz.QuickPickItem.Label">
@@ -1435,6 +1526,7 @@
             <summary>
             Optional flag indicating if this item is picked initially.
             (Only honored when the picker allows multiple selections.)
+            
             </summary>
         </member>
         <member name="F:VscAppz.QuickPickItem.AlwaysShow">
@@ -1466,6 +1558,7 @@
             
             ```
             
+            
             </summary>
         </member>
         <member name="T:VscAppz.OpenDialogOptions">
@@ -1476,6 +1569,7 @@
             which enforces to open either files or folder, but *not both*.
             * Note 2: Explicitly setting `canSelectFiles` and `canSelectFolders` to `false` is futile
             and the editor then silently adjusts the options to select files.
+            
             </summary>
         </member>
         <member name="F:VscAppz.OpenDialogOptions.DefaultUri">
@@ -1507,6 +1601,7 @@
             
             ```
             
+            
             </summary>
         </member>
         <member name="T:VscAppz.WorkspaceFolderPickOptions">
@@ -1522,6 +1617,7 @@
             <summary>
             A workspace folder is one of potentially many roots opened by the editor. All workspace folders
             are equal which means there is no notion of an active or master workspace folder.
+            
             </summary>
         </member>
         <member name="F:VscAppz.WorkspaceFolder.Uri">
@@ -1530,12 +1626,14 @@
             
             *Note:* The [Uri](https://code.visualstudio.com/api/references/vscode-api#Uri)-type was intentionally chosen such that future releases of the editor can support
             workspace folders that are not stored on the local disk, e.g. `ftp://server/workspaces/foo`.
+            
             </summary>
         </member>
         <member name="F:VscAppz.WorkspaceFolder.Name">
             <summary>
             The name of this workspace folder. Defaults to
             the basename of its [uri-path](https://code.visualstudio.com/api/references/vscode-api#Uri.path)
+            
             </summary>
         </member>
         <member name="F:VscAppz.WorkspaceFolder.Index">
@@ -1551,26 +1649,27 @@
             <summary>
             A status bar item is a status bar contribution that can
             show text and icons and run a command on click.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.StatusBarItem.Bag">
-            <summary>Bag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+        <member name="F:VscAppz.StatusBarItem.Cfg">
+            <summary>Cfg represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
         </member>
         <member name="M:VscAppz.StatusBarItem.Show">
             <summary>
             Shows the entry in the status bar.
             
             `return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Show` call has successfully completed at the VSC side.</return>
         </member>
         <member name="M:VscAppz.StatusBarItem.Hide">
             <summary>
             Hide the entry in the status bar.
             
             `return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Hide` call has successfully completed at the VSC side.</return>
         </member>
         <member name="M:VscAppz.StatusBarItem.Dispose">
             <summary>
@@ -1578,8 +1677,8 @@
             [hide](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.hide).
             
             `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.</return>
         </member>
         <member name="T:VscAppz.OutputChannel">
             <summary>
@@ -1587,10 +1686,11 @@
             
             To get an instance of an `OutputChannel` use
             [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
+            
             </summary>
         </member>
-        <member name="F:VscAppz.OutputChannel.Bag">
-            <summary>Bag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
+        <member name="F:VscAppz.OutputChannel.Cfg">
+            <summary>Cfg represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
         </member>
         <member name="M:VscAppz.OutputChannel.Append(System.String)">
             <summary>
@@ -1599,6 +1699,7 @@
             `value` ── A string, falsy values will not be printed.
             
             `return` ── a thenable that resolves when this `Append` call has successfully completed at the VSC side.
+            
             </summary>
             <param name="value">A string, falsy values will not be printed.</param>
             <return>a thenable that resolves when this `Append` call has successfully completed at the VSC side.</return>
@@ -1611,6 +1712,7 @@
             `value` ── A string, falsy values will be printed.
             
             `return` ── a thenable that resolves when this `AppendLine` call has successfully completed at the VSC side.
+            
             </summary>
             <param name="value">A string, falsy values will be printed.</param>
             <return>a thenable that resolves when this `AppendLine` call has successfully completed at the VSC side.</return>
@@ -1620,8 +1722,8 @@
             Removes all output from the channel.
             
             `return` ── a thenable that resolves when this `Clear` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Clear` call has successfully completed at the VSC side.</return>
         </member>
         <member name="M:VscAppz.OutputChannel.Show(System.Boolean)">
             <summary>
@@ -1630,6 +1732,7 @@
             `preserveFocus` ── When `true` the channel will not take focus.
             
             `return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
+            
             </summary>
             <param name="preserveFocus">When `true` the channel will not take focus.</param>
             <return>a thenable that resolves when this `Show` call has successfully completed at the VSC side.</return>
@@ -1639,21 +1742,22 @@
             Hide this channel from the UI.
             
             `return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Hide` call has successfully completed at the VSC side.</return>
         </member>
         <member name="M:VscAppz.OutputChannel.Dispose">
             <summary>
             Dispose and free associated resources.
             
             `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.</return>
         </member>
         <member name="T:VscAppz.ThemableDecorationAttachmentRenderOptions">
             <summary>
             Type Definition for Visual Studio Code 1.39 Extension API
             See https://code.visualstudio.com/api for more information
+            
             </summary>
         </member>
         <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.ContentText">
@@ -1663,6 +1767,7 @@
             <summary>
             An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
             or a text can be shown, but not both.
+            
             </summary>
         </member>
         <member name="F:VscAppz.ThemableDecorationAttachmentRenderOptions.Border">
@@ -1702,12 +1807,14 @@
             <summary>
             Should the decoration be rendered also on the whitespace after the line text.
             Defaults to `false`.
+            
             </summary>
         </member>
         <member name="F:VscAppz.DecorationRenderOptions.RangeBehavior">
             <summary>
             Customize the growing behavior of the decoration when edits occur at the edges of the decoration's range.
             Defaults to `DecorationRangeBehavior.OpenOpen`.
+            
             </summary>
         </member>
         <member name="F:VscAppz.DecorationRenderOptions.OverviewRulerLane">
@@ -1723,6 +1830,7 @@
             <summary>
             Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
             Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
+            
             </summary>
         </member>
         <member name="F:VscAppz.DecorationRenderOptions.Outline">
@@ -1732,18 +1840,21 @@
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'outline' for setting one or more of the individual outline properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.DecorationRenderOptions.OutlineStyle">
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'outline' for setting one or more of the individual outline properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.DecorationRenderOptions.OutlineWidth">
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'outline' for setting one or more of the individual outline properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.DecorationRenderOptions.Border">
@@ -1753,30 +1864,35 @@
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'border' for setting one or more of the individual border properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.DecorationRenderOptions.BorderRadius">
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'border' for setting one or more of the individual border properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.DecorationRenderOptions.BorderSpacing">
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'border' for setting one or more of the individual border properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.DecorationRenderOptions.BorderStyle">
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'border' for setting one or more of the individual border properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.DecorationRenderOptions.BorderWidth">
             <summary>
             CSS styling property that will be applied to text enclosed by a decoration.
             Better use 'border' for setting one or more of the individual border properties.
+            
             </summary>
         </member>
         <member name="F:VscAppz.DecorationRenderOptions.FontStyle">
@@ -1808,6 +1924,7 @@
             Specifies the size of the gutter icon.
             Available values are 'auto', 'contain', 'cover' and any percentage value.
             For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
+            
             </summary>
         </member>
         <member name="F:VscAppz.DecorationRenderOptions.OverviewRulerColor">
@@ -1826,18 +1943,19 @@
             
             To get an instance of a `TextEditorDecorationType` use
             [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
+            
             </summary>
         </member>
-        <member name="F:VscAppz.TextEditorDecorationType.Bag">
-            <summary>Bag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
+        <member name="F:VscAppz.TextEditorDecorationType.Cfg">
+            <summary>Cfg represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
         </member>
         <member name="M:VscAppz.TextEditorDecorationType.Dispose">
             <summary>
             Remove this decoration type and all decorations on all text editors using it.
             
             `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.</return>
         </member>
         <member name="T:VscAppz.InputBox">
             <summary>
@@ -1846,10 +1964,11 @@
             Note that in many cases the more convenient [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
             is easier to use. [window.createInputBox](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox) should be used
             when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.InputBox.Bag">
-            <summary>Bag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+        <member name="F:VscAppz.InputBox.Cfg">
+            <summary>Cfg represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
         </member>
         <member name="M:VscAppz.InputBox.OnDidChangeValue(System.Action{System.String})">
             <summary>
@@ -1858,6 +1977,7 @@
             `handler` ── will be invoked whenever the `OnDidChangeValue` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
+            
             </summary>
             <param name="handler">will be invoked whenever the `OnDidChangeValue` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
@@ -1869,6 +1989,7 @@
             `handler` ── will be invoked whenever the `OnDidAccept` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
+            
             </summary>
             <param name="handler">will be invoked whenever the `OnDidAccept` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
@@ -1879,8 +2000,8 @@
             UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
             
             `return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Show` call has successfully completed at the VSC side.</return>
         </member>
         <member name="M:VscAppz.InputBox.Hide">
             <summary>
@@ -1888,8 +2009,8 @@
             event.
             
             `return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Hide` call has successfully completed at the VSC side.</return>
         </member>
         <member name="M:VscAppz.InputBox.OnDidHide(System.Action)">
             <summary>
@@ -1903,6 +2024,7 @@
             `handler` ── will be invoked whenever the `OnDidHide` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
+            
             </summary>
             <param name="handler">will be invoked whenever the `OnDidHide` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.</return>
@@ -1915,8 +2037,8 @@
             accessed. Instead a new input UI should be created.
             
             `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.</return>
         </member>
         <member name="T:VscAppz.QuickInputButton">
             <summary>Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).</summary>
@@ -1937,10 +2059,11 @@
             Note that in many cases the more convenient [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
             is easier to use. [window.createQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick) should be used
             when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.QuickPick.Bag">
-            <summary>Bag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+        <member name="F:VscAppz.QuickPick.Cfg">
+            <summary>Cfg represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
         </member>
         <member name="M:VscAppz.QuickPick.OnDidChangeValue(System.Action{System.String})">
             <summary>
@@ -1949,6 +2072,7 @@
             `handler` ── will be invoked whenever the `OnDidChangeValue` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.
+            
             </summary>
             <param name="handler">will be invoked whenever the `OnDidChangeValue` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeValue` event on `Dispose`.</return>
@@ -1960,6 +2084,7 @@
             `handler` ── will be invoked whenever the `OnDidAccept` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.
+            
             </summary>
             <param name="handler">will be invoked whenever the `OnDidAccept` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidAccept` event on `Dispose`.</return>
@@ -1971,6 +2096,7 @@
             `handler` ── will be invoked whenever the `OnDidChangeActive` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.
+            
             </summary>
             <param name="handler">will be invoked whenever the `OnDidChangeActive` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeActive` event on `Dispose`.</return>
@@ -1982,6 +2108,7 @@
             `handler` ── will be invoked whenever the `OnDidChangeSelection` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.
+            
             </summary>
             <param name="handler">will be invoked whenever the `OnDidChangeSelection` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChangeSelection` event on `Dispose`.</return>
@@ -1992,8 +2119,8 @@
             UI will first fire an [QuickInput.onDidHide](https://code.visualstudio.com/api/references/vscode-api#QuickInput.onDidHide) event.
             
             `return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Show` call has successfully completed at the VSC side.</return>
         </member>
         <member name="M:VscAppz.QuickPick.Hide">
             <summary>
@@ -2001,8 +2128,8 @@
             event.
             
             `return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Hide` call has successfully completed at the VSC side.</return>
         </member>
         <member name="M:VscAppz.QuickPick.OnDidHide(System.Action)">
             <summary>
@@ -2016,6 +2143,7 @@
             `handler` ── will be invoked whenever the `OnDidHide` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.
+            
             </summary>
             <param name="handler">will be invoked whenever the `OnDidHide` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidHide` event on `Dispose`.</return>
@@ -2028,14 +2156,14 @@
             accessed. Instead a new input UI should be created.
             
             `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.</return>
         </member>
         <member name="T:VscAppz.Terminal">
             <summary>An individual terminal instance within the integrated terminal.</summary>
         </member>
-        <member name="F:VscAppz.Terminal.Bag">
-            <summary>Bag represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
+        <member name="F:VscAppz.Terminal.Cfg">
+            <summary>Cfg represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
         </member>
         <member name="M:VscAppz.Terminal.SendText(System.String,System.Boolean)">
             <summary>
@@ -2049,6 +2177,7 @@
             depending on the platform. This defaults to `true`.
             
             `return` ── a thenable that resolves when this `SendText` call has successfully completed at the VSC side.
+            
             </summary>
             <param name="text">The text to send.</param>
             <param name="addNewLine">Whether to add a new line to the text being sent, this is normally required to run a command in the terminal. The character(s) added are \n or \r\n depending on the platform. This defaults to `true`.</param>
@@ -2061,6 +2190,7 @@
             `preserveFocus` ── When `true` the terminal will not take focus.
             
             `return` ── a thenable that resolves when this `Show` call has successfully completed at the VSC side.
+            
             </summary>
             <param name="preserveFocus">When `true` the terminal will not take focus.</param>
             <return>a thenable that resolves when this `Show` call has successfully completed at the VSC side.</return>
@@ -2070,16 +2200,16 @@
             Hide the terminal panel if this terminal is currently showing.
             
             `return` ── a thenable that resolves when this `Hide` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Hide` call has successfully completed at the VSC side.</return>
         </member>
         <member name="M:VscAppz.Terminal.Dispose">
             <summary>
             Dispose and free associated resources.
             
             `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.</return>
         </member>
         <member name="T:VscAppz.TerminalOptions">
             <summary>Value-object describing what options a terminal should use.</summary>
@@ -2094,6 +2224,7 @@
             <summary>
             Args for the custom shell executable. A string can be used on Windows only which allows
             specifying shell args in [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
+            
             </summary>
         </member>
         <member name="F:VscAppz.TerminalOptions.Cwd">
@@ -2109,6 +2240,7 @@
             window's environment and also apply configured platform settings like
             `terminal.integrated.windows.env` on top. When this is true, the complete environment
             must be provided as nothing will be inherited from the process or any configuration.
+            
             </summary>
         </member>
         <member name="F:VscAppz.TerminalOptions.HideFromUser">
@@ -2118,6 +2250,7 @@
             something that may need interactivity but only want to tell the user about it when
             interaction is needed. Note that the terminals will still be exposed to all extensions
             as normal.
+            
             </summary>
         </member>
         <member name="T:VscAppz.ExtensionTerminalOptions">
@@ -2130,6 +2263,7 @@
             <summary>
             An implementation of [Pseudoterminal](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal) that allows an extension to
             control a terminal.
+            
             </summary>
         </member>
         <member name="T:VscAppz.Pseudoterminal">
@@ -2164,6 +2298,7 @@
             
             ```
             
+            
             </summary>
         </member>
         <member name="F:VscAppz.Pseudoterminal.OnDidOverrideDimensions">
@@ -2193,6 +2328,7 @@
             vscode.window.createTerminal({ name: 'My terminal', pty });
             
             ```
+            
             
             </summary>
         </member>
@@ -2224,6 +2360,7 @@
                }
             };
             vscode.window.createTerminal({ name: 'Exit example', pty });
+            
             </summary>
         </member>
         <member name="F:VscAppz.Pseudoterminal.Open">
@@ -2232,6 +2369,7 @@
             
             `initialDimensions` ── The dimensions of the terminal, this will be undefined if the
             terminal panel has not been opened before this is called.
+            
             </summary>
         </member>
         <member name="F:VscAppz.Pseudoterminal.Close">
@@ -2261,6 +2399,7 @@
             
             ```
             
+            
             </summary>
         </member>
         <member name="F:VscAppz.Pseudoterminal.SetDimensions">
@@ -2276,6 +2415,7 @@
             to react dimension changes.
             
             `dimensions` ── The new dimensions.
+            
             </summary>
         </member>
         <member name="T:VscAppz.TerminalDimensions">
@@ -2303,10 +2443,11 @@
             
             To get an instance of a `FileSystemWatcher` use
             [createFileSystemWatcher](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher).
+            
             </summary>
         </member>
-        <member name="F:VscAppz.FileSystemWatcher.Bag">
-            <summary>Bag represents this `FileSystemWatcher`'s current state. All its members get auto-refreshed every time a (subscribed) `FileSystemWatcher` event fires or any `FileSystemWatcher` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
+        <member name="F:VscAppz.FileSystemWatcher.Cfg">
+            <summary>Cfg represents this `FileSystemWatcher`'s current state. All its members get auto-refreshed every time a (subscribed) `FileSystemWatcher` event fires or any `FileSystemWatcher` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.</summary>
         </member>
         <member name="M:VscAppz.FileSystemWatcher.OnDidCreate(System.Action{System.String})">
             <summary>
@@ -2315,6 +2456,7 @@
             `handler` ── will be invoked whenever the `OnDidCreate` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidCreate` event on `Dispose`.
+            
             </summary>
             <param name="handler">will be invoked whenever the `OnDidCreate` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidCreate` event on `Dispose`.</return>
@@ -2326,6 +2468,7 @@
             `handler` ── will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidChange` event on `Dispose`.
+            
             </summary>
             <param name="handler">will be invoked whenever the `OnDidChange` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidChange` event on `Dispose`.</return>
@@ -2337,6 +2480,7 @@
             `handler` ── will be invoked whenever the `OnDidDelete` event fires (mandatory, not optional).
             
             `return` ── A `Disposable` that will unsubscribe `handler` from the `OnDidDelete` event on `Dispose`.
+            
             </summary>
             <param name="handler">will be invoked whenever the `OnDidDelete` event fires (mandatory, not optional).</param>
             <return>A `Disposable` that will unsubscribe `handler` from the `OnDidDelete` event on `Dispose`.</return>
@@ -2346,8 +2490,8 @@
             Dispose requests the VSC side to forget about this object and release or destroy all resources associated with or occupied by it. All subsequent usage attempts will be rejected.
             
             `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.</return>
         </member>
         <member name="T:VscAppz.DiagnosticChangeEvent">
             <summary>The event that is fired when diagnostics change.</summary>
@@ -2355,22 +2499,22 @@
         <member name="F:VscAppz.DiagnosticChangeEvent.Uris">
             <summary>An array of resources for which diagnostics have changed.</summary>
         </member>
-        <member name="T:VscAppz.EnvBag">
-            <summary>EnvBag gathers various properties of `IEnv`, obtainable via its `AllProperties` method.</summary>
+        <member name="T:VscAppz.EnvState">
+            <summary>EnvState gathers various properties of `IEnv`, obtainable via its `AllProperties` method.</summary>
         </member>
-        <member name="F:VscAppz.EnvBag.AppName">
+        <member name="F:VscAppz.EnvState.AppName">
             <summary>The application name of the editor, like 'VS Code'.</summary>
         </member>
-        <member name="F:VscAppz.EnvBag.AppRoot">
+        <member name="F:VscAppz.EnvState.AppRoot">
             <summary>The application root folder from which the editor is running.</summary>
         </member>
-        <member name="F:VscAppz.EnvBag.Language">
+        <member name="F:VscAppz.EnvState.Language">
             <summary>Represents the preferred user-language, like `de-CH`, `fr`, or `en-US`.</summary>
         </member>
-        <member name="F:VscAppz.EnvBag.MachineId">
+        <member name="F:VscAppz.EnvState.MachineId">
             <summary>A unique identifier for the computer.</summary>
         </member>
-        <member name="F:VscAppz.EnvBag.RemoteName">
+        <member name="F:VscAppz.EnvState.RemoteName">
             <summary>
             The name of a remote. Defined by extensions, popular samples are `wsl` for the Windows
             Subsystem for Linux or `ssh-remote` for remotes using a secure shell.
@@ -2379,33 +2523,37 @@
             value is defined in all extension hosts (local and remote) in case a remote extension host
             exists. Use [`Extension#extensionKind`](https://code.visualstudio.com/api/references/vscode-api#Extension.extensionKind) to know if
             a specific extension runs remote or not.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.EnvBag.SessionId">
+        <member name="F:VscAppz.EnvState.SessionId">
             <summary>
             A unique identifier for the current session.
             Changes each time the editor is started.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.EnvBag.Shell">
+        <member name="F:VscAppz.EnvState.Shell">
             <summary>
             The detected default shell for the extension host, this is overridden by the
             `terminal.integrated.shell` setting for the extension host's platform.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.EnvBag.UriScheme">
+        <member name="F:VscAppz.EnvState.UriScheme">
             <summary>The custom uri scheme the editor registers to in the operating system.</summary>
         </member>
-        <member name="T:VscAppz.WorkspaceBag">
-            <summary>WorkspaceBag gathers various properties of `IWorkspace`, obtainable via its `AllProperties` method.</summary>
+        <member name="T:VscAppz.WorkspaceState">
+            <summary>WorkspaceState gathers various properties of `IWorkspace`, obtainable via its `AllProperties` method.</summary>
         </member>
-        <member name="F:VscAppz.WorkspaceBag.Name">
+        <member name="F:VscAppz.WorkspaceState.Name">
             <summary>
             The name of the workspace. `undefined` when no folder
             has been opened.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.WorkspaceBag.WorkspaceFile">
+        <member name="F:VscAppz.WorkspaceState.WorkspaceFile">
             <summary>
             The location of the workspace file, for example:
             
@@ -2438,27 +2586,30 @@
             configuration data into the file. You can use `workspace.getConfiguration().update()`
             for that purpose which will work both when a single folder is opened as
             well as an untitled or saved workspace.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.WorkspaceBag.WorkspaceFolders">
+        <member name="F:VscAppz.WorkspaceState.WorkspaceFolders">
             <summary>
             List of workspace folders or `undefined` when no folder is open.
             *Note* that the first entry corresponds to the value of `rootPath`.
+            
             </summary>
         </member>
-        <member name="T:VscAppz.StatusBarItemBag">
-            <summary>StatusBarItemBag (to be accessed only via `StatusBarItem.Bag`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.</summary>
+        <member name="T:VscAppz.StatusBarItemState">
+            <summary>StatusBarItemState (to be accessed only via `StatusBarItem.Cfg`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.</summary>
         </member>
-        <member name="F:VscAppz.StatusBarItemBag.Alignment">
+        <member name="F:VscAppz.StatusBarItemState.Alignment">
             <summary>The alignment of this item.</summary>
         </member>
-        <member name="F:VscAppz.StatusBarItemBag.Priority">
+        <member name="F:VscAppz.StatusBarItemState.Priority">
             <summary>
             The priority of this item. Higher value means the item should
             be shown more to the left.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.StatusBarItemBag.Text">
+        <member name="F:VscAppz.StatusBarItemState.Text">
             <summary>
             The text to show for the entry. You can embed icons in the text by leveraging the syntax:
             
@@ -2466,247 +2617,256 @@
             
             Where the icon-name is taken from the [octicon](https://octicons.github.com) icon set, e.g.
             `light-bulb`, `thumbsup`, `zap` etc.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.StatusBarItemBag.Tooltip">
+        <member name="F:VscAppz.StatusBarItemState.Tooltip">
             <summary>The tooltip text when you hover over this entry.</summary>
         </member>
-        <member name="F:VscAppz.StatusBarItemBag.Color">
+        <member name="F:VscAppz.StatusBarItemState.Color">
             <summary>The foreground color for this entry.</summary>
         </member>
-        <member name="F:VscAppz.StatusBarItemBag.Command">
+        <member name="F:VscAppz.StatusBarItemState.Command">
             <summary>
             The identifier of a command to run on click. The command must be
             [known](https://code.visualstudio.com/api/references/vscode-api#commands.getCommands).
+            
             </summary>
         </member>
-        <member name="M:VscAppz.StatusBarItemBag.ReFetch">
+        <member name="M:VscAppz.StatusBarItemState.ReFetch">
             <summary>
-            ReFetch requests the current `StatusBarItem` state from the VSC side and upon response refreshes this `StatusBarItemBag`'s property values for `alignment`, `priority`, `text`, `tooltip`, `color`, `command` to reflect it.
+            ReFetch requests the current `StatusBarItem` state from the VSC side and upon response refreshes this `StatusBarItemState`'s property values for `alignment`, `priority`, `text`, `tooltip`, `color`, `command` to reflect it.
             
             `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.</return>
         </member>
-        <member name="M:VscAppz.StatusBarItemBag.ApplyChanges">
+        <member name="M:VscAppz.StatusBarItemState.ApplyChanges">
             <summary>
-            ApplyChanges propagates this `StatusBarItemBag`'s current property values for `text`, `tooltip`, `color`, `command` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
+            ApplyChanges propagates this `StatusBarItemState`'s current property values for `text`, `tooltip`, `color`, `command` to the VSC side to immediately become active there. Note that **all** those property values are transmitted, no omissions.
             
             `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.</return>
         </member>
-        <member name="T:VscAppz.OutputChannelBag">
-            <summary>OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.</summary>
+        <member name="T:VscAppz.OutputChannelState">
+            <summary>OutputChannelState (to be accessed only via `OutputChannel.Cfg`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.</summary>
         </member>
-        <member name="F:VscAppz.OutputChannelBag.Name">
+        <member name="F:VscAppz.OutputChannelState.Name">
             <summary>The human-readable name of this output channel.</summary>
         </member>
-        <member name="M:VscAppz.OutputChannelBag.ReFetch">
+        <member name="M:VscAppz.OutputChannelState.ReFetch">
             <summary>
-            ReFetch requests the current `OutputChannel` state from the VSC side and upon response refreshes this `OutputChannelBag`'s property value for `name` to reflect it.
+            ReFetch requests the current `OutputChannel` state from the VSC side and upon response refreshes this `OutputChannelState`'s property value for `name` to reflect it.
             
             `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.</return>
         </member>
-        <member name="T:VscAppz.TextEditorDecorationTypeBag">
-            <summary>TextEditorDecorationTypeBag (to be accessed only via `TextEditorDecorationType.Bag`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.</summary>
+        <member name="T:VscAppz.TextEditorDecorationTypeState">
+            <summary>TextEditorDecorationTypeState (to be accessed only via `TextEditorDecorationType.Cfg`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.</summary>
         </member>
-        <member name="F:VscAppz.TextEditorDecorationTypeBag.Key">
+        <member name="F:VscAppz.TextEditorDecorationTypeState.Key">
             <summary>Internal representation of the handle.</summary>
         </member>
-        <member name="M:VscAppz.TextEditorDecorationTypeBag.ReFetch">
+        <member name="M:VscAppz.TextEditorDecorationTypeState.ReFetch">
             <summary>
-            ReFetch requests the current `TextEditorDecorationType` state from the VSC side and upon response refreshes this `TextEditorDecorationTypeBag`'s property value for `key` to reflect it.
+            ReFetch requests the current `TextEditorDecorationType` state from the VSC side and upon response refreshes this `TextEditorDecorationTypeState`'s property value for `key` to reflect it.
             
             `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.</return>
         </member>
-        <member name="T:VscAppz.InputBoxBag">
-            <summary>InputBoxBag (to be accessed only via `InputBox.Bag`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.</summary>
+        <member name="T:VscAppz.InputBoxState">
+            <summary>InputBoxState (to be accessed only via `InputBox.Cfg`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.</summary>
         </member>
-        <member name="F:VscAppz.InputBoxBag.Value">
+        <member name="F:VscAppz.InputBoxState.Value">
             <summary>Current input value.</summary>
         </member>
-        <member name="F:VscAppz.InputBoxBag.Placeholder">
+        <member name="F:VscAppz.InputBoxState.Placeholder">
             <summary>Optional placeholder in the filter text.</summary>
         </member>
-        <member name="F:VscAppz.InputBoxBag.Password">
+        <member name="F:VscAppz.InputBoxState.Password">
             <summary>If the input value should be hidden. Defaults to false.</summary>
         </member>
-        <member name="F:VscAppz.InputBoxBag.Prompt">
+        <member name="F:VscAppz.InputBoxState.Prompt">
             <summary>An optional prompt text providing some ask or explanation to the user.</summary>
         </member>
-        <member name="F:VscAppz.InputBoxBag.ValidationMessage">
+        <member name="F:VscAppz.InputBoxState.ValidationMessage">
             <summary>An optional validation message indicating a problem with the current input value.</summary>
         </member>
-        <member name="F:VscAppz.InputBoxBag.Title">
+        <member name="F:VscAppz.InputBoxState.Title">
             <summary>An optional title.</summary>
         </member>
-        <member name="F:VscAppz.InputBoxBag.Step">
+        <member name="F:VscAppz.InputBoxState.Step">
             <summary>An optional current step count.</summary>
         </member>
-        <member name="F:VscAppz.InputBoxBag.TotalSteps">
+        <member name="F:VscAppz.InputBoxState.TotalSteps">
             <summary>An optional total step count.</summary>
         </member>
-        <member name="F:VscAppz.InputBoxBag.Enabled">
+        <member name="F:VscAppz.InputBoxState.Enabled">
             <summary>
             If the UI should allow for user input. Defaults to true.
             
             Change this to false, e.g., while validating user input or
             loading data for the next step in user input.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.InputBoxBag.Busy">
+        <member name="F:VscAppz.InputBoxState.Busy">
             <summary>
             If the UI should show a progress indicator. Defaults to false.
             
             Change this to true, e.g., while loading more data or validating
             user input.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.InputBoxBag.IgnoreFocusOut">
+        <member name="F:VscAppz.InputBoxState.IgnoreFocusOut">
             <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
         </member>
-        <member name="M:VscAppz.InputBoxBag.ReFetch">
+        <member name="M:VscAppz.InputBoxState.ReFetch">
             <summary>
-            ReFetch requests the current `InputBox` state from the VSC side and upon response refreshes this `InputBoxBag`'s property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
+            ReFetch requests the current `InputBox` state from the VSC side and upon response refreshes this `InputBoxState`'s property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
             
             `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.</return>
         </member>
-        <member name="M:VscAppz.InputBoxBag.ApplyChanges">
+        <member name="M:VscAppz.InputBoxState.ApplyChanges">
             <summary>
-            ApplyChanges propagates this `InputBoxBag`'s current property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
+            ApplyChanges propagates this `InputBoxState`'s current property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that **all** those property values are transmitted, no omissions.
             
             `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.</return>
         </member>
-        <member name="T:VscAppz.QuickPickBag">
-            <summary>QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.</summary>
+        <member name="T:VscAppz.QuickPickState">
+            <summary>QuickPickState (to be accessed only via `QuickPick.Cfg`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.</summary>
         </member>
-        <member name="F:VscAppz.QuickPickBag.Value">
+        <member name="F:VscAppz.QuickPickState.Value">
             <summary>Current value of the filter text.</summary>
         </member>
-        <member name="F:VscAppz.QuickPickBag.Placeholder">
+        <member name="F:VscAppz.QuickPickState.Placeholder">
             <summary>Optional placeholder in the filter text.</summary>
         </member>
-        <member name="F:VscAppz.QuickPickBag.Items">
+        <member name="F:VscAppz.QuickPickState.Items">
             <summary>Items to pick from.</summary>
         </member>
-        <member name="F:VscAppz.QuickPickBag.CanSelectMany">
+        <member name="F:VscAppz.QuickPickState.CanSelectMany">
             <summary>If multiple items can be selected at the same time. Defaults to false.</summary>
         </member>
-        <member name="F:VscAppz.QuickPickBag.MatchOnDescription">
+        <member name="F:VscAppz.QuickPickState.MatchOnDescription">
             <summary>If the filter text should also be matched against the description of the items. Defaults to false.</summary>
         </member>
-        <member name="F:VscAppz.QuickPickBag.MatchOnDetail">
+        <member name="F:VscAppz.QuickPickState.MatchOnDetail">
             <summary>If the filter text should also be matched against the detail of the items. Defaults to false.</summary>
         </member>
-        <member name="F:VscAppz.QuickPickBag.ActiveItems">
+        <member name="F:VscAppz.QuickPickState.ActiveItems">
             <summary>Active items. This can be read and updated by the extension.</summary>
         </member>
-        <member name="F:VscAppz.QuickPickBag.SelectedItems">
+        <member name="F:VscAppz.QuickPickState.SelectedItems">
             <summary>Selected items. This can be read and updated by the extension.</summary>
         </member>
-        <member name="F:VscAppz.QuickPickBag.Title">
+        <member name="F:VscAppz.QuickPickState.Title">
             <summary>An optional title.</summary>
         </member>
-        <member name="F:VscAppz.QuickPickBag.Step">
+        <member name="F:VscAppz.QuickPickState.Step">
             <summary>An optional current step count.</summary>
         </member>
-        <member name="F:VscAppz.QuickPickBag.TotalSteps">
+        <member name="F:VscAppz.QuickPickState.TotalSteps">
             <summary>An optional total step count.</summary>
         </member>
-        <member name="F:VscAppz.QuickPickBag.Enabled">
+        <member name="F:VscAppz.QuickPickState.Enabled">
             <summary>
             If the UI should allow for user input. Defaults to true.
             
             Change this to false, e.g., while validating user input or
             loading data for the next step in user input.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.QuickPickBag.Busy">
+        <member name="F:VscAppz.QuickPickState.Busy">
             <summary>
             If the UI should show a progress indicator. Defaults to false.
             
             Change this to true, e.g., while loading more data or validating
             user input.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.QuickPickBag.IgnoreFocusOut">
+        <member name="F:VscAppz.QuickPickState.IgnoreFocusOut">
             <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
         </member>
-        <member name="M:VscAppz.QuickPickBag.ReFetch">
+        <member name="M:VscAppz.QuickPickState.ReFetch">
             <summary>
-            ReFetch requests the current `QuickPick` state from the VSC side and upon response refreshes this `QuickPickBag`'s property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
+            ReFetch requests the current `QuickPick` state from the VSC side and upon response refreshes this `QuickPickState`'s property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
             
             `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.</return>
         </member>
-        <member name="M:VscAppz.QuickPickBag.ApplyChanges">
+        <member name="M:VscAppz.QuickPickState.ApplyChanges">
             <summary>
-            ApplyChanges propagates this `QuickPickBag`'s current property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
+            ApplyChanges propagates this `QuickPickState`'s current property values for `value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active there. Note that **all** those property values are transmitted, no omissions.
             
             `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.</return>
         </member>
-        <member name="T:VscAppz.TerminalBag">
-            <summary>TerminalBag (to be accessed only via `Terminal.Bag`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.</summary>
+        <member name="T:VscAppz.TerminalState">
+            <summary>TerminalState (to be accessed only via `Terminal.Cfg`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.</summary>
         </member>
-        <member name="F:VscAppz.TerminalBag.Name">
+        <member name="F:VscAppz.TerminalState.Name">
             <summary>The name of the terminal.</summary>
         </member>
-        <member name="M:VscAppz.TerminalBag.ReFetch">
+        <member name="M:VscAppz.TerminalState.ReFetch">
             <summary>
-            ReFetch requests the current `Terminal` state from the VSC side and upon response refreshes this `TerminalBag`'s property value for `name` to reflect it.
+            ReFetch requests the current `Terminal` state from the VSC side and upon response refreshes this `TerminalState`'s property value for `name` to reflect it.
             
             `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.</return>
         </member>
-        <member name="T:VscAppz.FileSystemWatcherBag">
-            <summary>FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.</summary>
+        <member name="T:VscAppz.FileSystemWatcherState">
+            <summary>FileSystemWatcherState (to be accessed only via `FileSystemWatcher.Cfg`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.</summary>
         </member>
-        <member name="F:VscAppz.FileSystemWatcherBag.IgnoreCreateEvents">
+        <member name="F:VscAppz.FileSystemWatcherState.IgnoreCreateEvents">
             <summary>
             true if this file system watcher has been created such that
             it ignores creation file system events.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.FileSystemWatcherBag.IgnoreChangeEvents">
+        <member name="F:VscAppz.FileSystemWatcherState.IgnoreChangeEvents">
             <summary>
             true if this file system watcher has been created such that
             it ignores change file system events.
+            
             </summary>
         </member>
-        <member name="F:VscAppz.FileSystemWatcherBag.IgnoreDeleteEvents">
+        <member name="F:VscAppz.FileSystemWatcherState.IgnoreDeleteEvents">
             <summary>
             true if this file system watcher has been created such that
             it ignores delete file system events.
+            
             </summary>
         </member>
-        <member name="M:VscAppz.FileSystemWatcherBag.ReFetch">
+        <member name="M:VscAppz.FileSystemWatcherState.ReFetch">
             <summary>
-            ReFetch requests the current `FileSystemWatcher` state from the VSC side and upon response refreshes this `FileSystemWatcherBag`'s property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to reflect it.
+            ReFetch requests the current `FileSystemWatcher` state from the VSC side and upon response refreshes this `FileSystemWatcherState`'s property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to reflect it.
             
             `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.</return>
         </member>
-        <member name="M:VscAppz.FileSystemWatcherBag.ApplyChanges">
+        <member name="M:VscAppz.FileSystemWatcherState.ApplyChanges">
             <summary>
-            ApplyChanges propagates this `FileSystemWatcherBag`'s current property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions.
+            ApplyChanges propagates this `FileSystemWatcherState`'s current property values for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to the VSC side to immediately become active there. Note that **all** those property values are transmitted, no omissions.
             
             `return` ── a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.
+            
             </summary>
-            <return>a thenable that resolves when this `ApplyChanges` call has successfully completed at the VSC side.</return>
         </member>
     </members>
 </doc>

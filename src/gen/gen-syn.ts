@@ -468,10 +468,10 @@ export class Gen extends gen.Gen implements gen.IGen {
     options = {
         doc: {
             appendArgsToSummary: {
+                forMethods: true,
+                forFuncFields: true,
                 prefix: "`",
                 suffix: "` ── ",
-                forMethods: false,
-                forFuncFields: true,
                 retArgName: "return",
             }
         },
@@ -1118,7 +1118,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                 [call, onerrret] = [_.iSet(_._(gen.idents.varRet), call), _.eTup(_.eZilch(), _.eLit(false))]
             if (method.IsObjEvt)
                 call = _.iBlock(
-                    _.iLock(_._(_.eThis(), gen.idents.fldDisp, gen.idents.fldImpl),
+                    _.iLock(_._(_.eThis(), gen.idents.fldDispObjBag),
                         _.iSet(_._(gen.idents.varOk), _.eCall(_._(_.eThis(), gen.idents.fldDispObjBag, gen.idents.methodLoadFrom), _.oIdx(_._(gen.idents.argArgs), _.eLit(numargs)))),
                     ),
                     _.iIf(_.oNot(_._(gen.idents.varOk)), [_.iRet(_.eLit(false))]),
@@ -1237,7 +1237,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                         _.iVar(gen.idents.varOk, TypeRefPrim.Bool),
                         _.iIf(_.oIsnt(_._(_.eThis(), retIntoFld)), [_.iSet(_._(_.eThis(), retIntoFld), _.eNew(dsttype))]),
                         _.iSet(_._(_.eThis(), retIntoFld, gen.idents.fldBagHolder), _.eThis()),
-                        _.iLock(_._(_.eThis(), retIntoFld, gen.idents.fldBagHolder, gen.idents.fldDisp, gen.idents.fldImpl),
+                        _.iLock(_._(_.eThis(), retIntoFld),
                             _.iSet(_._(gen.idents.varOk), _.eCall(_._(_.eThis(), retIntoFld, gen.idents.methodLoadFrom), _._(gen.idents.argPayload))),
                         ),
                         _.iIf(_.oNot(_._(gen.idents.varOk)), [_.iRet(_.eLit(false))]),
@@ -1280,7 +1280,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                                 _.iIf(_.oOr(_.oNeq(_.eLit(2), _.eLen(_._(gen.idents.varIt), true)), _.oIsnt(_.oIdx(_._(gen.idents.varIt), _.eLit(1)))), [
                                     _.iRet(_.eLit(false)),
                                 ]),
-                                _.iLock(_._(_.eThis(), gen.idents.fldDisp, gen.idents.fldImpl),
+                                _.iLock(_._(_.eThis(), gen.idents.fldDispObjBag),
                                     _.iSet(_._(gen.idents.varOk), _.eCall(_._(_.eThis(), gen.idents.fldDispObjBag, gen.idents.methodLoadFrom), _.oIdx(_._(gen.idents.varIt), _.eLit(1)))),
                                 ),
                                 _.iIf(_.oNot(_._(gen.idents.varOk)), [_.iRet(_.eLit(false))]),
@@ -1288,7 +1288,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                                 _.iRet(_.eLit(true)),
                             ]) : (isdispobj && method.Name === gen.idents.methodObjBagPush) ? [
                                 _.iVar(gen.idents.varOk, TypeRefPrim.Bool),
-                                _.iLock(_._(_.eThis(), gen.idents.fldDisp, gen.idents.fldImpl),
+                                _.iLock(_._(_.eThis(), gen.idents.fldDispObjBag),
                                     _.iSet(_._(gen.idents.varOk), _.eCall(_._(_.eThis(), gen.idents.fldDispObjBag, gen.idents.methodLoadFrom), _._(gen.idents.argPayload))),
                                 ),
                                 _.iIf(_.oNot(_._(gen.idents.varOk)), [_.iRet(_.eLit(false))]),
@@ -1472,10 +1472,16 @@ export class Gen extends gen.Gen implements gen.IGen {
                     if ((propsfields = propsfields.filter(_ => !_.readOnly)).length)
                         this.emitMethodImpl(struct, {
                             Name: gen.idents.methodBagPublish, Type: { From: [{ From: [], To: null }], To: null }, Args: [], Docs: [{
-                                Lines: [gen.idents.methodBagPublish + " propagates this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for `" + propsfields.map(_ => _.name).join("`, `") + "` to the VSC side to immediately become active there. Note that all those property values are transmitted, no omissions."]
+                                Lines: [gen.idents.methodBagPublish + " propagates this `" + struct.Name + "`'s current property value" + (propsfields.length > 1 ? 's' : '') + " for `" + propsfields.map(_ => _.name).join("`, `") + "` to the VSC side to immediately become active there. Note that **all** those property values are transmitted, no omissions."]
                             }]
                         }, (_t: TypeRefOwn, _m: Method, _: Builder, b: Instr[]) => {
-                            b.push(_.iRet(_.eCall(_._(_.eThis(), gen.idents.fldBagHolder, gen.idents.methodObjBagPush), _.eThis())))
+                            b.push(
+                                _.iVar(gen.idents.varRet, { From: [{ From: [], To: null }], To: null }),
+                                _.iLock(_.eThis(),
+                                    _.iSet(_._(gen.idents.varRet), _.eCall(_._(_.eThis(), gen.idents.fldBagHolder, gen.idents.methodObjBagPush), _.eThis())),
+                                ),
+                                _.iRet(_._(gen.idents.varRet)),
+                            )
                         })
                 } if (struct.fromPrep.isDispObj) {
                     for (const field of struct.fromPrep.fields)

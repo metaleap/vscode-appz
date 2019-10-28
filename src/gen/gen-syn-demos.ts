@@ -425,7 +425,7 @@ export class GenDemos {
     }
 
     genDemoOfPropsMenu(_: Builder, ns: string): Instr[] {
-        const struct = this.gen.allStructs[ns + "Bag"]
+        const struct = this.gen.allStructs[ns + idents.typeSuffBag]
 
         return [
             _.eCall(_.eCall(_._(_.eProp(_._("vsc", ns)), "AllProperties")),

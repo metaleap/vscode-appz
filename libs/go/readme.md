@@ -402,8 +402,8 @@ type Env interface {
 
 	// Provides single-call access to numerous individual `Env` properties at once.
 	//
-	// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.
-	AllProperties() func(func(EnvBag))
+	// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvState` result received back at our end.
+	AllProperties() func(func(EnvState))
 
 	// The clipboard provides read and write access to the system's clipboard.
 	Clipboard() Clipboard
@@ -412,10 +412,10 @@ type Env interface {
 
 Namespace describing the environment the editor runs in.
 
-#### type EnvBag
+#### type EnvState
 
 ```go
-type EnvBag struct {
+type EnvState struct {
 	// The application name of the editor, like 'VS Code'.
 	AppName string `json:"appName,omitempty"`
 
@@ -450,7 +450,7 @@ type EnvBag struct {
 }
 ```
 
-EnvBag gathers various properties of `Env`, obtainable via its `AllProperties`
+EnvState gathers various properties of `Env`, obtainable via its `AllProperties`
 method.
 
 #### type ExtensionTerminalOptions
@@ -530,8 +530,8 @@ console.log(importedApi.mul(42, 1));
 ```go
 type FileSystemWatcher struct {
 
-	// Bag represents this `FileSystemWatcher`'s current state. All its members get auto-refreshed every time a (subscribed) `FileSystemWatcher` event fires or any `FileSystemWatcher` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
-	Bag *FileSystemWatcherBag
+	// Cfg represents this `FileSystemWatcher`'s current state. All its members get auto-refreshed every time a (subscribed) `FileSystemWatcher` event fires or any `FileSystemWatcher` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Cfg *FileSystemWatcherState
 }
 ```
 
@@ -591,10 +591,10 @@ not optional).
 `return` ── A `Disposable` that will unsubscribe `handler` from the
 `OnDidDelete` event on `Dispose`.
 
-#### type FileSystemWatcherBag
+#### type FileSystemWatcherState
 
 ```go
-type FileSystemWatcherBag struct {
+type FileSystemWatcherState struct {
 
 	// true if this file system watcher has been created such that
 	// it ignores creation file system events.
@@ -610,33 +610,33 @@ type FileSystemWatcherBag struct {
 }
 ```
 
-FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a
+FileSystemWatcherState (to be accessed only via `FileSystemWatcher.Cfg`) is a
 snapshot of `FileSystemWatcher` state. It is auto-updated whenever
 `FileSystemWatcher` creations and method calls resolve or its event subscribers
 (if any) are invoked. Changes to any non-read-only properties (ie.
 non-function-valued fields) must be explicitly propagated to the VSC side via
 the `ApplyChanges` method.
 
-#### func (*FileSystemWatcherBag) ApplyChanges
+#### func (*FileSystemWatcherState) ApplyChanges
 
 ```go
-func (me *FileSystemWatcherBag) ApplyChanges() func(func())
+func (me *FileSystemWatcherState) ApplyChanges() func(func())
 ```
-ApplyChanges propagates this `FileSystemWatcherBag`'s current property values
+ApplyChanges propagates this `FileSystemWatcherState`'s current property values
 for `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to the VSC
-side to immediately become active there. Note that all those property values are
-transmitted, no omissions.
+side to immediately become active there. Note that **all** those property values
+are transmitted, no omissions.
 
 `return` ── a thenable that resolves when this `ApplyChanges` call has
 successfully completed at the VSC side.
 
-#### func (*FileSystemWatcherBag) ReFetch
+#### func (*FileSystemWatcherState) ReFetch
 
 ```go
-func (me *FileSystemWatcherBag) ReFetch() func(func())
+func (me *FileSystemWatcherState) ReFetch() func(func())
 ```
 ReFetch requests the current `FileSystemWatcher` state from the VSC side and
-upon response refreshes this `FileSystemWatcherBag`'s property values for
+upon response refreshes this `FileSystemWatcherState`'s property values for
 `ignoreCreateEvents`, `ignoreChangeEvents`, `ignoreDeleteEvents` to reflect it.
 
 `return` ── a thenable that resolves when this `ReFetch` call has successfully
@@ -647,8 +647,8 @@ completed at the VSC side.
 ```go
 type InputBox struct {
 
-	// Bag represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
-	Bag *InputBoxBag
+	// Cfg represents this `InputBox`'s current state. All its members get auto-refreshed every time a (subscribed) `InputBox` event fires or any `InputBox` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Cfg *InputBoxState
 }
 ```
 
@@ -748,10 +748,48 @@ event.
 `return` ── a thenable that resolves when this `Show` call has successfully
 completed at the VSC side.
 
-#### type InputBoxBag
+#### type InputBoxOptions
 
 ```go
-type InputBoxBag struct {
+type InputBoxOptions struct {
+	// The value to prefill in the input box.
+	Value string `json:"value,omitempty"`
+
+	// Selection of the prefilled [`value`](https://code.visualstudio.com/api/references/vscode-api#InputBoxOptions.value). Defined as tuple of two number where the
+	// first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
+	// word will be selected, when empty (start equals end) only the cursor will be set,
+	// otherwise the defined range will be selected.
+	ValueSelection []int `json:"valueSelection,omitempty"`
+
+	// The text to display underneath the input box.
+	Prompt string `json:"prompt,omitempty"`
+
+	// An optional string to show as place holder in the input box to guide the user what to type.
+	PlaceHolder string `json:"placeHolder,omitempty"`
+
+	// Set to `true` to show a password prompt that will not show the typed value.
+	Password bool `json:"password,omitempty"`
+
+	// Set to `true` to keep the input box open when focus moves to another part of the editor or to another window.
+	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
+
+	// An optional function that will be called to validate input and to give a hint
+	// to the user.
+	//
+	// `value` ── The current value of the input box.
+	//
+	// `return` ── A human readable string which is presented as diagnostic message.
+	// Return `undefined`, `null`, or the empty string when 'value' is valid.
+	ValidateInput func(string) string `json:"-"`
+}
+```
+
+Options to configure the behavior of the input box UI.
+
+#### type InputBoxState
+
+```go
+type InputBoxState struct {
 
 	// Current input value.
 	Value string `json:"value"`
@@ -794,76 +832,38 @@ type InputBoxBag struct {
 }
 ```
 
-InputBoxBag (to be accessed only via `InputBox.Bag`) is a snapshot of `InputBox`
-state. It is auto-updated whenever `InputBox` creations and method calls resolve
-or its event subscribers (if any) are invoked. Changes to any non-read-only
-properties (ie. non-function-valued fields) must be explicitly propagated to the
-VSC side via the `ApplyChanges` method.
+InputBoxState (to be accessed only via `InputBox.Cfg`) is a snapshot of
+`InputBox` state. It is auto-updated whenever `InputBox` creations and method
+calls resolve or its event subscribers (if any) are invoked. Changes to any
+non-read-only properties (ie. non-function-valued fields) must be explicitly
+propagated to the VSC side via the `ApplyChanges` method.
 
-#### func (*InputBoxBag) ApplyChanges
+#### func (*InputBoxState) ApplyChanges
 
 ```go
-func (me *InputBoxBag) ApplyChanges() func(func())
+func (me *InputBoxState) ApplyChanges() func(func())
 ```
-ApplyChanges propagates this `InputBoxBag`'s current property values for
+ApplyChanges propagates this `InputBoxState`'s current property values for
 `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`,
 `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to the VSC side to
-immediately become active there. Note that all those property values are
+immediately become active there. Note that **all** those property values are
 transmitted, no omissions.
 
 `return` ── a thenable that resolves when this `ApplyChanges` call has
 successfully completed at the VSC side.
 
-#### func (*InputBoxBag) ReFetch
+#### func (*InputBoxState) ReFetch
 
 ```go
-func (me *InputBoxBag) ReFetch() func(func())
+func (me *InputBoxState) ReFetch() func(func())
 ```
 ReFetch requests the current `InputBox` state from the VSC side and upon
-response refreshes this `InputBoxBag`'s property values for `value`,
+response refreshes this `InputBoxState`'s property values for `value`,
 `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`,
 `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
 
 `return` ── a thenable that resolves when this `ReFetch` call has successfully
 completed at the VSC side.
-
-#### type InputBoxOptions
-
-```go
-type InputBoxOptions struct {
-	// The value to prefill in the input box.
-	Value string `json:"value,omitempty"`
-
-	// Selection of the prefilled [`value`](https://code.visualstudio.com/api/references/vscode-api#InputBoxOptions.value). Defined as tuple of two number where the
-	// first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
-	// word will be selected, when empty (start equals end) only the cursor will be set,
-	// otherwise the defined range will be selected.
-	ValueSelection []int `json:"valueSelection,omitempty"`
-
-	// The text to display underneath the input box.
-	Prompt string `json:"prompt,omitempty"`
-
-	// An optional string to show as place holder in the input box to guide the user what to type.
-	PlaceHolder string `json:"placeHolder,omitempty"`
-
-	// Set to `true` to show a password prompt that will not show the typed value.
-	Password bool `json:"password,omitempty"`
-
-	// Set to `true` to keep the input box open when focus moves to another part of the editor or to another window.
-	IgnoreFocusOut bool `json:"ignoreFocusOut,omitempty"`
-
-	// An optional function that will be called to validate input and to give a hint
-	// to the user.
-	//
-	// `value` ── The current value of the input box.
-	//
-	// `return` ── A human readable string which is presented as diagnostic message.
-	// Return `undefined`, `null`, or the empty string when 'value' is valid.
-	ValidateInput func(string) string `json:"-"`
-}
-```
-
-Options to configure the behavior of the input box UI.
 
 #### type Languages
 
@@ -1009,8 +1009,8 @@ and the editor then silently adjusts the options to select files.
 ```go
 type OutputChannel struct {
 
-	// Bag represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
-	Bag *OutputChannelBag
+	// Cfg represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+	Cfg *OutputChannelState
 }
 ```
 
@@ -1085,28 +1085,28 @@ Reveal this channel in the UI.
 `return` ── a thenable that resolves when this `Show` call has successfully
 completed at the VSC side.
 
-#### type OutputChannelBag
+#### type OutputChannelState
 
 ```go
-type OutputChannelBag struct {
+type OutputChannelState struct {
 
 	// The human-readable name of this output channel.
 	Name func() string `json:"-"`
 }
 ```
 
-OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of
-`OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and
-method calls resolve or its event subscribers (if any) are invoked. All
+OutputChannelState (to be accessed only via `OutputChannel.Cfg`) is a snapshot
+of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations
+and method calls resolve or its event subscribers (if any) are invoked. All
 read-only properties are exposed as function-valued fields.
 
-#### func (*OutputChannelBag) ReFetch
+#### func (*OutputChannelState) ReFetch
 
 ```go
-func (me *OutputChannelBag) ReFetch() func(func())
+func (me *OutputChannelState) ReFetch() func(func())
 ```
 ReFetch requests the current `OutputChannel` state from the VSC side and upon
-response refreshes this `OutputChannelBag`'s property value for `name` to
+response refreshes this `OutputChannelState`'s property value for `name` to
 reflect it.
 
 `return` ── a thenable that resolves when this `ReFetch` call has successfully
@@ -1303,8 +1303,8 @@ or [InputBox](#InputBox).
 ```go
 type QuickPick struct {
 
-	// Bag represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
-	Bag *QuickPickBag
+	// Cfg represents this `QuickPick`'s current state. All its members get auto-refreshed every time a (subscribed) `QuickPick` event fires or any `QuickPick` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Cfg *QuickPickState
 }
 ```
 
@@ -1433,95 +1433,6 @@ event.
 `return` ── a thenable that resolves when this `Show` call has successfully
 completed at the VSC side.
 
-#### type QuickPickBag
-
-```go
-type QuickPickBag struct {
-
-	// Current value of the filter text.
-	Value string `json:"value"`
-
-	// Optional placeholder in the filter text.
-	Placeholder string `json:"placeholder"`
-
-	// Items to pick from.
-	Items []QuickPickItem `json:"items"`
-
-	// If multiple items can be selected at the same time. Defaults to false.
-	CanSelectMany bool `json:"canSelectMany"`
-
-	// If the filter text should also be matched against the description of the items. Defaults to false.
-	MatchOnDescription bool `json:"matchOnDescription"`
-
-	// If the filter text should also be matched against the detail of the items. Defaults to false.
-	MatchOnDetail bool `json:"matchOnDetail"`
-
-	// Active items. This can be read and updated by the extension.
-	ActiveItems []QuickPickItem `json:"activeItems"`
-
-	// Selected items. This can be read and updated by the extension.
-	SelectedItems []QuickPickItem `json:"selectedItems"`
-
-	// An optional title.
-	Title string `json:"title"`
-
-	// An optional current step count.
-	Step int `json:"step"`
-
-	// An optional total step count.
-	TotalSteps int `json:"totalSteps"`
-
-	// If the UI should allow for user input. Defaults to true.
-	//
-	// Change this to false, e.g., while validating user input or
-	// loading data for the next step in user input.
-	Enabled bool `json:"enabled"`
-
-	// If the UI should show a progress indicator. Defaults to false.
-	//
-	// Change this to true, e.g., while loading more data or validating
-	// user input.
-	Busy bool `json:"busy"`
-
-	// If the UI should stay open even when loosing UI focus. Defaults to false.
-	IgnoreFocusOut bool `json:"ignoreFocusOut"`
-}
-```
-
-QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of
-`QuickPick` state. It is auto-updated whenever `QuickPick` creations and method
-calls resolve or its event subscribers (if any) are invoked. Changes to any
-non-read-only properties (ie. non-function-valued fields) must be explicitly
-propagated to the VSC side via the `ApplyChanges` method.
-
-#### func (*QuickPickBag) ApplyChanges
-
-```go
-func (me *QuickPickBag) ApplyChanges() func(func())
-```
-ApplyChanges propagates this `QuickPickBag`'s current property values for
-`value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`,
-`matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`,
-`enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active
-there. Note that all those property values are transmitted, no omissions.
-
-`return` ── a thenable that resolves when this `ApplyChanges` call has
-successfully completed at the VSC side.
-
-#### func (*QuickPickBag) ReFetch
-
-```go
-func (me *QuickPickBag) ReFetch() func(func())
-```
-ReFetch requests the current `QuickPick` state from the VSC side and upon
-response refreshes this `QuickPickBag`'s property values for `value`,
-`placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`,
-`activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`,
-`busy`, `ignoreFocusOut` to reflect it.
-
-`return` ── a thenable that resolves when this `ReFetch` call has successfully
-completed at the VSC side.
-
 #### type QuickPickItem
 
 ```go
@@ -1575,6 +1486,95 @@ type QuickPickOptions struct {
 
 Options to configure the behavior of the quick pick UI.
 
+#### type QuickPickState
+
+```go
+type QuickPickState struct {
+
+	// Current value of the filter text.
+	Value string `json:"value"`
+
+	// Optional placeholder in the filter text.
+	Placeholder string `json:"placeholder"`
+
+	// Items to pick from.
+	Items []QuickPickItem `json:"items"`
+
+	// If multiple items can be selected at the same time. Defaults to false.
+	CanSelectMany bool `json:"canSelectMany"`
+
+	// If the filter text should also be matched against the description of the items. Defaults to false.
+	MatchOnDescription bool `json:"matchOnDescription"`
+
+	// If the filter text should also be matched against the detail of the items. Defaults to false.
+	MatchOnDetail bool `json:"matchOnDetail"`
+
+	// Active items. This can be read and updated by the extension.
+	ActiveItems []QuickPickItem `json:"activeItems"`
+
+	// Selected items. This can be read and updated by the extension.
+	SelectedItems []QuickPickItem `json:"selectedItems"`
+
+	// An optional title.
+	Title string `json:"title"`
+
+	// An optional current step count.
+	Step int `json:"step"`
+
+	// An optional total step count.
+	TotalSteps int `json:"totalSteps"`
+
+	// If the UI should allow for user input. Defaults to true.
+	//
+	// Change this to false, e.g., while validating user input or
+	// loading data for the next step in user input.
+	Enabled bool `json:"enabled"`
+
+	// If the UI should show a progress indicator. Defaults to false.
+	//
+	// Change this to true, e.g., while loading more data or validating
+	// user input.
+	Busy bool `json:"busy"`
+
+	// If the UI should stay open even when loosing UI focus. Defaults to false.
+	IgnoreFocusOut bool `json:"ignoreFocusOut"`
+}
+```
+
+QuickPickState (to be accessed only via `QuickPick.Cfg`) is a snapshot of
+`QuickPick` state. It is auto-updated whenever `QuickPick` creations and method
+calls resolve or its event subscribers (if any) are invoked. Changes to any
+non-read-only properties (ie. non-function-valued fields) must be explicitly
+propagated to the VSC side via the `ApplyChanges` method.
+
+#### func (*QuickPickState) ApplyChanges
+
+```go
+func (me *QuickPickState) ApplyChanges() func(func())
+```
+ApplyChanges propagates this `QuickPickState`'s current property values for
+`value`, `placeholder`, `items`, `canSelectMany`, `matchOnDescription`,
+`matchOnDetail`, `activeItems`, `selectedItems`, `title`, `step`, `totalSteps`,
+`enabled`, `busy`, `ignoreFocusOut` to the VSC side to immediately become active
+there. Note that **all** those property values are transmitted, no omissions.
+
+`return` ── a thenable that resolves when this `ApplyChanges` call has
+successfully completed at the VSC side.
+
+#### func (*QuickPickState) ReFetch
+
+```go
+func (me *QuickPickState) ReFetch() func(func())
+```
+ReFetch requests the current `QuickPick` state from the VSC side and upon
+response refreshes this `QuickPickState`'s property values for `value`,
+`placeholder`, `items`, `canSelectMany`, `matchOnDescription`, `matchOnDetail`,
+`activeItems`, `selectedItems`, `title`, `step`, `totalSteps`, `enabled`,
+`busy`, `ignoreFocusOut` to reflect it.
+
+`return` ── a thenable that resolves when this `ReFetch` call has successfully
+completed at the VSC side.
+
 #### type SaveDialogOptions
 
 ```go
@@ -1626,8 +1626,8 @@ const (
 ```go
 type StatusBarItem struct {
 
-	// Bag represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
-	Bag *StatusBarItemBag
+	// Cfg represents this `StatusBarItem`'s current state. All its members get auto-refreshed every time any `StatusBarItem` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method. Your local modifications to its members will **not** be auto-propagated to VSC, this must be done explicitly via its `ApplyChanges` method.
+	Cfg *StatusBarItemState
 }
 ```
 
@@ -1665,10 +1665,10 @@ Shows the entry in the status bar.
 `return` ── a thenable that resolves when this `Show` call has successfully
 completed at the VSC side.
 
-#### type StatusBarItemBag
+#### type StatusBarItemState
 
 ```go
-type StatusBarItemBag struct {
+type StatusBarItemState struct {
 
 	// The alignment of this item.
 	Alignment func() StatusBarAlignment `json:"-"`
@@ -1697,32 +1697,33 @@ type StatusBarItemBag struct {
 }
 ```
 
-StatusBarItemBag (to be accessed only via `StatusBarItem.Bag`) is a snapshot of
-`StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and
-method calls resolve or its event subscribers (if any) are invoked. All
+StatusBarItemState (to be accessed only via `StatusBarItem.Cfg`) is a snapshot
+of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations
+and method calls resolve or its event subscribers (if any) are invoked. All
 read-only properties are exposed as function-valued fields. Changes to any
 non-read-only properties (ie. non-function-valued fields) must be explicitly
 propagated to the VSC side via the `ApplyChanges` method.
 
-#### func (*StatusBarItemBag) ApplyChanges
+#### func (*StatusBarItemState) ApplyChanges
 
 ```go
-func (me *StatusBarItemBag) ApplyChanges() func(func())
+func (me *StatusBarItemState) ApplyChanges() func(func())
 ```
-ApplyChanges propagates this `StatusBarItemBag`'s current property values for
+ApplyChanges propagates this `StatusBarItemState`'s current property values for
 `text`, `tooltip`, `color`, `command` to the VSC side to immediately become
-active there. Note that all those property values are transmitted, no omissions.
+active there. Note that **all** those property values are transmitted, no
+omissions.
 
 `return` ── a thenable that resolves when this `ApplyChanges` call has
 successfully completed at the VSC side.
 
-#### func (*StatusBarItemBag) ReFetch
+#### func (*StatusBarItemState) ReFetch
 
 ```go
-func (me *StatusBarItemBag) ReFetch() func(func())
+func (me *StatusBarItemState) ReFetch() func(func())
 ```
 ReFetch requests the current `StatusBarItem` state from the VSC side and upon
-response refreshes this `StatusBarItemBag`'s property values for `alignment`,
+response refreshes this `StatusBarItemState`'s property values for `alignment`,
 `priority`, `text`, `tooltip`, `color`, `command` to reflect it.
 
 `return` ── a thenable that resolves when this `ReFetch` call has successfully
@@ -1733,8 +1734,8 @@ completed at the VSC side.
 ```go
 type Terminal struct {
 
-	// Bag represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
-	Bag *TerminalBag
+	// Cfg represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+	Cfg *TerminalState
 }
 ```
 
@@ -1789,32 +1790,6 @@ Show the terminal panel and reveal this terminal in the UI.
 `return` ── a thenable that resolves when this `Show` call has successfully
 completed at the VSC side.
 
-#### type TerminalBag
-
-```go
-type TerminalBag struct {
-
-	// The name of the terminal.
-	Name func() string `json:"-"`
-}
-```
-
-TerminalBag (to be accessed only via `Terminal.Bag`) is a snapshot of `Terminal`
-state. It is auto-updated whenever `Terminal` creations and method calls resolve
-or its event subscribers (if any) are invoked. All read-only properties are
-exposed as function-valued fields.
-
-#### func (*TerminalBag) ReFetch
-
-```go
-func (me *TerminalBag) ReFetch() func(func())
-```
-ReFetch requests the current `Terminal` state from the VSC side and upon
-response refreshes this `TerminalBag`'s property value for `name` to reflect it.
-
-`return` ── a thenable that resolves when this `ReFetch` call has successfully
-completed at the VSC side.
-
 #### type TerminalDimensions
 
 ```go
@@ -1867,13 +1842,40 @@ type TerminalOptions struct {
 
 Value-object describing what options a terminal should use.
 
+#### type TerminalState
+
+```go
+type TerminalState struct {
+
+	// The name of the terminal.
+	Name func() string `json:"-"`
+}
+```
+
+TerminalState (to be accessed only via `Terminal.Cfg`) is a snapshot of
+`Terminal` state. It is auto-updated whenever `Terminal` creations and method
+calls resolve or its event subscribers (if any) are invoked. All read-only
+properties are exposed as function-valued fields.
+
+#### func (*TerminalState) ReFetch
+
+```go
+func (me *TerminalState) ReFetch() func(func())
+```
+ReFetch requests the current `Terminal` state from the VSC side and upon
+response refreshes this `TerminalState`'s property value for `name` to reflect
+it.
+
+`return` ── a thenable that resolves when this `ReFetch` call has successfully
+completed at the VSC side.
+
 #### type TextEditorDecorationType
 
 ```go
 type TextEditorDecorationType struct {
 
-	// Bag represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
-	Bag *TextEditorDecorationTypeBag
+	// Cfg represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+	Cfg *TextEditorDecorationTypeState
 }
 ```
 
@@ -1894,30 +1896,30 @@ Remove this decoration type and all decorations on all text editors using it.
 `return` ── a thenable that resolves when this `Dispose` call has successfully
 completed at the VSC side.
 
-#### type TextEditorDecorationTypeBag
+#### type TextEditorDecorationTypeState
 
 ```go
-type TextEditorDecorationTypeBag struct {
+type TextEditorDecorationTypeState struct {
 
 	// Internal representation of the handle.
 	Key func() string `json:"-"`
 }
 ```
 
-TextEditorDecorationTypeBag (to be accessed only via
-`TextEditorDecorationType.Bag`) is a snapshot of `TextEditorDecorationType`
+TextEditorDecorationTypeState (to be accessed only via
+`TextEditorDecorationType.Cfg`) is a snapshot of `TextEditorDecorationType`
 state. It is auto-updated whenever `TextEditorDecorationType` creations and
 method calls resolve or its event subscribers (if any) are invoked. All
 read-only properties are exposed as function-valued fields.
 
-#### func (*TextEditorDecorationTypeBag) ReFetch
+#### func (*TextEditorDecorationTypeState) ReFetch
 
 ```go
-func (me *TextEditorDecorationTypeBag) ReFetch() func(func())
+func (me *TextEditorDecorationTypeState) ReFetch() func(func())
 ```
 ReFetch requests the current `TextEditorDecorationType` state from the VSC side
-and upon response refreshes this `TextEditorDecorationTypeBag`'s property value
-for `key` to reflect it.
+and upon response refreshes this `TextEditorDecorationTypeState`'s property
+value for `key` to reflect it.
 
 `return` ── a thenable that resolves when this `ReFetch` call has successfully
 completed at the VSC side.
@@ -2656,8 +2658,8 @@ type Workspace interface {
 
 	// Provides single-call access to numerous individual `Workspace` properties at once.
 	//
-	// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
-	AllProperties() func(func(WorkspaceBag))
+	// `return` ── a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceState` result received back at our end.
+	AllProperties() func(func(WorkspaceState))
 }
 ```
 
@@ -2671,56 +2673,6 @@ to fs events and for
 [finding](https://code.visualstudio.com/api/references/vscode-api#workspace.findFiles)
 files. Both perform well and run _outside_ the editor-process so that they
 should be always used instead of nodejs-equivalents.
-
-#### type WorkspaceBag
-
-```go
-type WorkspaceBag struct {
-	// The name of the workspace. `undefined` when no folder
-	// has been opened.
-	Name string `json:"name,omitempty"`
-
-	// The location of the workspace file, for example:
-	//
-	// `file:///Users/name/Development/myProject.code-workspace`
-	//
-	// or
-	//
-	// `untitled:1555503116870`
-	//
-	// for a workspace that is untitled and not yet saved.
-	//
-	// Depending on the workspace that is opened, the value will be:
-	//   * `undefined` when no workspace or  a single folder is opened
-	//   * the path of the workspace file as `Uri` otherwise. if the workspace
-	// is untitled, the returned URI will use the `untitled:` scheme
-	//
-	// The location can e.g. be used with the `vscode.openFolder` command to
-	// open the workspace again after it has been closed.
-	//
-	// **Example:**
-	//
-	// ```typescript
-	//
-	// vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
-	//
-	// ```
-	//
-	//
-	// **Note:** it is not advised to use `workspace.workspaceFile` to write
-	// configuration data into the file. You can use `workspace.getConfiguration().update()`
-	// for that purpose which will work both when a single folder is opened as
-	// well as an untitled or saved workspace.
-	WorkspaceFile string `json:"workspaceFile,omitempty"`
-
-	// List of workspace folders or `undefined` when no folder is open.
-	// *Note* that the first entry corresponds to the value of `rootPath`.
-	WorkspaceFolders []WorkspaceFolder `json:"workspaceFolders,omitempty"`
-}
-```
-
-WorkspaceBag gathers various properties of `Workspace`, obtainable via its
-`AllProperties` method.
 
 #### type WorkspaceFolder
 
@@ -2775,3 +2727,53 @@ type WorkspaceFoldersChangeEvent struct {
 
 An event describing a change to the set of [workspace
 folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).
+
+#### type WorkspaceState
+
+```go
+type WorkspaceState struct {
+	// The name of the workspace. `undefined` when no folder
+	// has been opened.
+	Name string `json:"name,omitempty"`
+
+	// The location of the workspace file, for example:
+	//
+	// `file:///Users/name/Development/myProject.code-workspace`
+	//
+	// or
+	//
+	// `untitled:1555503116870`
+	//
+	// for a workspace that is untitled and not yet saved.
+	//
+	// Depending on the workspace that is opened, the value will be:
+	//   * `undefined` when no workspace or  a single folder is opened
+	//   * the path of the workspace file as `Uri` otherwise. if the workspace
+	// is untitled, the returned URI will use the `untitled:` scheme
+	//
+	// The location can e.g. be used with the `vscode.openFolder` command to
+	// open the workspace again after it has been closed.
+	//
+	// **Example:**
+	//
+	// ```typescript
+	//
+	// vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
+	//
+	// ```
+	//
+	//
+	// **Note:** it is not advised to use `workspace.workspaceFile` to write
+	// configuration data into the file. You can use `workspace.getConfiguration().update()`
+	// for that purpose which will work both when a single folder is opened as
+	// well as an untitled or saved workspace.
+	WorkspaceFile string `json:"workspaceFile,omitempty"`
+
+	// List of workspace folders or `undefined` when no folder is open.
+	// *Note* that the first entry corresponds to the value of `rootPath`.
+	WorkspaceFolders []WorkspaceFolder `json:"workspaceFolders,omitempty"`
+}
+```
+
+WorkspaceState gathers various properties of `Workspace`, obtainable via its
+`AllProperties` method.

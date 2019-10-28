@@ -6,7 +6,7 @@ type Cancel = core.Cancel
 type Disposable = core.Disposable
 interface fromJson { __loadFromJsonish__: (_: any) => boolean }
 interface withDisp { __disp__: Disposable }
-interface withBag<T extends fromJson> { Bag: T, toJSON: () => any }
+interface withState<T extends fromJson> { Cfg: T, toJSON: () => any }
 
 abstract class implBase {
     impl: impl
@@ -659,9 +659,9 @@ export interface Env {
     /**
      * Provides single-call access to numerous individual `Env` properties at once.
 
-     * @return a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.
+     * @return a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvState` result received back at our end.
      */
-    AllProperties: (_: (_: EnvBag) => void) => void
+    AllProperties: (_: (_: EnvState) => void) => void
 
     /**
      * The clipboard provides read and write access to the system's clipboard.
@@ -824,9 +824,9 @@ export interface Workspace {
     /**
      * Provides single-call access to numerous individual `Workspace` properties at once.
 
-     * @return a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
+     * @return a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceState` result received back at our end.
      */
-    AllProperties: (_: (_: WorkspaceBag) => void) => void
+    AllProperties: (_: (_: WorkspaceState) => void) => void
 }
 
 /**
@@ -1540,7 +1540,7 @@ function newWindowState (): WindowState {
  * show text and icons and run a command on click.
 
  */
-export interface StatusBarItem extends fromJson, withDisp, withBag<StatusBarItemBag> {
+export interface StatusBarItem extends fromJson, withDisp, withState<StatusBarItemState> {
     /**
      * Shows the entry in the status bar.
 
@@ -1562,7 +1562,7 @@ export interface StatusBarItem extends fromJson, withDisp, withBag<StatusBarItem
 
     __appzObjBagPullFromPeer__: () => (_: () => void) => void
 
-    __appzObjBagPushToPeer__: (_: StatusBarItemBag) => (_: () => void) => void
+    __appzObjBagPushToPeer__: (_: StatusBarItemState) => (_: () => void) => void
 }
 
 function newStatusBarItem (): StatusBarItem {
@@ -1583,7 +1583,7 @@ function newStatusBarItem (): StatusBarItem {
  * [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 
  */
-export interface OutputChannel extends fromJson, withDisp, withBag<OutputChannelBag> {
+export interface OutputChannel extends fromJson, withDisp, withState<OutputChannelState> {
     /**
      * Append the given value to the channel.
      * 
@@ -1918,7 +1918,7 @@ export interface DecorationRenderOptions {
  * [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 
  */
-export interface TextEditorDecorationType extends fromJson, withDisp, withBag<TextEditorDecorationTypeBag> {
+export interface TextEditorDecorationType extends fromJson, withDisp, withState<TextEditorDecorationTypeState> {
     /**
      * Remove this decoration type and all decorations on all text editors using it.
 
@@ -1944,7 +1944,7 @@ function newTextEditorDecorationType (): TextEditorDecorationType {
  * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
  */
-export interface InputBox extends fromJson, withDisp, withBag<InputBoxBag> {
+export interface InputBox extends fromJson, withDisp, withState<InputBoxState> {
     /**
      * An event signaling when the value has changed.
 
@@ -1993,7 +1993,7 @@ export interface InputBox extends fromJson, withDisp, withBag<InputBoxBag> {
 
     __appzObjBagPullFromPeer__: () => (_: () => void) => void
 
-    __appzObjBagPushToPeer__: (_: InputBoxBag) => (_: () => void) => void
+    __appzObjBagPushToPeer__: (_: InputBoxState) => (_: () => void) => void
 }
 
 function newInputBox (): InputBox {
@@ -2039,7 +2039,7 @@ export interface QuickInputButton {
  * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
  */
-export interface QuickPick extends fromJson, withDisp, withBag<QuickPickBag> {
+export interface QuickPick extends fromJson, withDisp, withState<QuickPickState> {
     /**
      * An event signaling when the value of the filter text has changed.
 
@@ -2100,7 +2100,7 @@ export interface QuickPick extends fromJson, withDisp, withBag<QuickPickBag> {
 
     __appzObjBagPullFromPeer__: () => (_: () => void) => void
 
-    __appzObjBagPushToPeer__: (_: QuickPickBag) => (_: () => void) => void
+    __appzObjBagPushToPeer__: (_: QuickPickState) => (_: () => void) => void
 }
 
 function newQuickPick (): QuickPick {
@@ -2123,7 +2123,7 @@ function newQuickPick (): QuickPick {
  * An individual terminal instance within the integrated terminal.
 
  */
-export interface Terminal extends fromJson, withDisp, withBag<TerminalBag> {
+export interface Terminal extends fromJson, withDisp, withState<TerminalState> {
     /**
      * Send text to the terminal. The text is written to the stdin of the underlying pty process
      * (shell) of the terminal.
@@ -2469,7 +2469,7 @@ function newWorkspaceFoldersChangeEvent (): WorkspaceFoldersChangeEvent {
  * [createFileSystemWatcher](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher).
 
  */
-export interface FileSystemWatcher extends fromJson, withDisp, withBag<FileSystemWatcherBag> {
+export interface FileSystemWatcher extends fromJson, withDisp, withState<FileSystemWatcherState> {
     /**
      * An event which fires on file/folder creation.
 
@@ -2492,7 +2492,7 @@ export interface FileSystemWatcher extends fromJson, withDisp, withBag<FileSyste
 
     __appzObjBagPullFromPeer__: () => (_: () => void) => void
 
-    __appzObjBagPushToPeer__: (_: FileSystemWatcherBag) => (_: () => void) => void
+    __appzObjBagPushToPeer__: (_: FileSystemWatcherState) => (_: () => void) => void
 }
 
 function newFileSystemWatcher (): FileSystemWatcher {
@@ -2526,10 +2526,10 @@ function newDiagnosticChangeEvent (): DiagnosticChangeEvent {
 }
 
 /**
- * EnvBag gathers various properties of `Env`, obtainable via its `AllProperties` method.
+ * EnvState gathers various properties of `Env`, obtainable via its `AllProperties` method.
 
  */
-export interface EnvBag extends fromJson {
+export interface EnvState extends fromJson {
     /**
      * The application name of the editor, like 'VS Code'.
 
@@ -2587,17 +2587,17 @@ export interface EnvBag extends fromJson {
     uriScheme?: string
 }
 
-function newEnvBag (): EnvBag {
-    let me: EnvBag
-    me = { __loadFromJsonish__: _ => EnvBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as EnvBag
+function newEnvState (): EnvState {
+    let me: EnvState
+    me = { __loadFromJsonish__: _ => EnvState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as EnvState
     return me
 }
 
 /**
- * WorkspaceBag gathers various properties of `Workspace`, obtainable via its `AllProperties` method.
+ * WorkspaceState gathers various properties of `Workspace`, obtainable via its `AllProperties` method.
 
  */
-export interface WorkspaceBag extends fromJson {
+export interface WorkspaceState extends fromJson {
     /**
      * The name of the workspace. `undefined` when no folder
      * has been opened.
@@ -2649,17 +2649,17 @@ export interface WorkspaceBag extends fromJson {
     workspaceFolders?: WorkspaceFolder[]
 }
 
-function newWorkspaceBag (): WorkspaceBag {
-    let me: WorkspaceBag
-    me = { __loadFromJsonish__: _ => WorkspaceBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceBag
+function newWorkspaceState (): WorkspaceState {
+    let me: WorkspaceState
+    me = { __loadFromJsonish__: _ => WorkspaceState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as WorkspaceState
     return me
 }
 
 /**
- * StatusBarItemBag (to be accessed only via `StatusBarItem.Bag`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+ * StatusBarItemState (to be accessed only via `StatusBarItem.Cfg`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
  */
-export interface StatusBarItemBag extends fromJson {
+export interface StatusBarItemState extends fromJson {
     __holder__: StatusBarItem
 
     /**
@@ -2710,17 +2710,17 @@ export interface StatusBarItemBag extends fromJson {
     ReFetch: () => (_: () => void) => void
 }
 
-export function newStatusBarItemBag (): StatusBarItemBag {
-    let me: StatusBarItemBag
-    me = { __loadFromJsonish__: _ => StatusBarItemBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => StatusBarItemBag_ApplyChanges.call(me), ReFetch: () => StatusBarItemBag_ReFetch.call(me) } as StatusBarItemBag
+export function newStatusBarItemState (): StatusBarItemState {
+    let me: StatusBarItemState
+    me = { __loadFromJsonish__: _ => StatusBarItemState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => StatusBarItemState_ApplyChanges.call(me), ReFetch: () => StatusBarItemState_ReFetch.call(me) } as StatusBarItemState
     return me
 }
 
 /**
- * OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+ * OutputChannelState (to be accessed only via `OutputChannel.Cfg`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 
  */
-export interface OutputChannelBag extends fromJson {
+export interface OutputChannelState extends fromJson {
     __holder__: OutputChannel
 
     /**
@@ -2732,17 +2732,17 @@ export interface OutputChannelBag extends fromJson {
     ReFetch: () => (_: () => void) => void
 }
 
-export function newOutputChannelBag (): OutputChannelBag {
-    let me: OutputChannelBag
-    me = { __loadFromJsonish__: _ => OutputChannelBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => OutputChannelBag_ReFetch.call(me) } as OutputChannelBag
+export function newOutputChannelState (): OutputChannelState {
+    let me: OutputChannelState
+    me = { __loadFromJsonish__: _ => OutputChannelState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => OutputChannelState_ReFetch.call(me) } as OutputChannelState
     return me
 }
 
 /**
- * TextEditorDecorationTypeBag (to be accessed only via `TextEditorDecorationType.Bag`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+ * TextEditorDecorationTypeState (to be accessed only via `TextEditorDecorationType.Cfg`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 
  */
-export interface TextEditorDecorationTypeBag extends fromJson {
+export interface TextEditorDecorationTypeState extends fromJson {
     __holder__: TextEditorDecorationType
 
     /**
@@ -2754,17 +2754,17 @@ export interface TextEditorDecorationTypeBag extends fromJson {
     ReFetch: () => (_: () => void) => void
 }
 
-export function newTextEditorDecorationTypeBag (): TextEditorDecorationTypeBag {
-    let me: TextEditorDecorationTypeBag
-    me = { __loadFromJsonish__: _ => TextEditorDecorationTypeBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TextEditorDecorationTypeBag_ReFetch.call(me) } as TextEditorDecorationTypeBag
+export function newTextEditorDecorationTypeState (): TextEditorDecorationTypeState {
+    let me: TextEditorDecorationTypeState
+    me = { __loadFromJsonish__: _ => TextEditorDecorationTypeState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TextEditorDecorationTypeState_ReFetch.call(me) } as TextEditorDecorationTypeState
     return me
 }
 
 /**
- * InputBoxBag (to be accessed only via `InputBox.Bag`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+ * InputBoxState (to be accessed only via `InputBox.Cfg`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
  */
-export interface InputBoxBag extends fromJson {
+export interface InputBoxState extends fromJson {
     __holder__: InputBox
 
     /**
@@ -2844,17 +2844,17 @@ export interface InputBoxBag extends fromJson {
     ReFetch: () => (_: () => void) => void
 }
 
-export function newInputBoxBag (): InputBoxBag {
-    let me: InputBoxBag
-    me = { __loadFromJsonish__: _ => InputBoxBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => InputBoxBag_ApplyChanges.call(me), ReFetch: () => InputBoxBag_ReFetch.call(me) } as InputBoxBag
+export function newInputBoxState (): InputBoxState {
+    let me: InputBoxState
+    me = { __loadFromJsonish__: _ => InputBoxState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => InputBoxState_ApplyChanges.call(me), ReFetch: () => InputBoxState_ReFetch.call(me) } as InputBoxState
     return me
 }
 
 /**
- * QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+ * QuickPickState (to be accessed only via `QuickPick.Cfg`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
  */
-export interface QuickPickBag extends fromJson {
+export interface QuickPickState extends fromJson {
     __holder__: QuickPick
 
     /**
@@ -2952,17 +2952,17 @@ export interface QuickPickBag extends fromJson {
     ReFetch: () => (_: () => void) => void
 }
 
-export function newQuickPickBag (): QuickPickBag {
-    let me: QuickPickBag
-    me = { __loadFromJsonish__: _ => QuickPickBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => QuickPickBag_ApplyChanges.call(me), ReFetch: () => QuickPickBag_ReFetch.call(me) } as QuickPickBag
+export function newQuickPickState (): QuickPickState {
+    let me: QuickPickState
+    me = { __loadFromJsonish__: _ => QuickPickState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => QuickPickState_ApplyChanges.call(me), ReFetch: () => QuickPickState_ReFetch.call(me) } as QuickPickState
     return me
 }
 
 /**
- * TerminalBag (to be accessed only via `Terminal.Bag`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+ * TerminalState (to be accessed only via `Terminal.Cfg`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 
  */
-export interface TerminalBag extends fromJson {
+export interface TerminalState extends fromJson {
     __holder__: Terminal
 
     /**
@@ -2974,17 +2974,17 @@ export interface TerminalBag extends fromJson {
     ReFetch: () => (_: () => void) => void
 }
 
-export function newTerminalBag (): TerminalBag {
-    let me: TerminalBag
-    me = { __loadFromJsonish__: _ => TerminalBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TerminalBag_ReFetch.call(me) } as TerminalBag
+export function newTerminalState (): TerminalState {
+    let me: TerminalState
+    me = { __loadFromJsonish__: _ => TerminalState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TerminalState_ReFetch.call(me) } as TerminalState
     return me
 }
 
 /**
- * FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+ * FileSystemWatcherState (to be accessed only via `FileSystemWatcher.Cfg`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
  */
-export interface FileSystemWatcherBag extends fromJson {
+export interface FileSystemWatcherState extends fromJson {
     __holder__: FileSystemWatcher
 
     /**
@@ -3013,9 +3013,9 @@ export interface FileSystemWatcherBag extends fromJson {
     ReFetch: () => (_: () => void) => void
 }
 
-export function newFileSystemWatcherBag (): FileSystemWatcherBag {
-    let me: FileSystemWatcherBag
-    me = { __loadFromJsonish__: _ => FileSystemWatcherBag___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => FileSystemWatcherBag_ApplyChanges.call(me), ReFetch: () => FileSystemWatcherBag_ReFetch.call(me) } as FileSystemWatcherBag
+export function newFileSystemWatcherState (): FileSystemWatcherState {
+    let me: FileSystemWatcherState
+    me = { __loadFromJsonish__: _ => FileSystemWatcherState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => FileSystemWatcherState_ApplyChanges.call(me), ReFetch: () => FileSystemWatcherState_ReFetch.call(me) } as FileSystemWatcherState
     return me
 }
 
@@ -4617,18 +4617,18 @@ class implEnv extends implBase implements Env {
         }
     }
 
-    AllProperties(): (_: (_: EnvBag) => void) => void {
+    AllProperties(): (_: (_: EnvState) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "env.AllProperties"
         msg.Data = {}
         let onresp: (_: any) => boolean
-        let onret: (_: EnvBag) => void
+        let onret: (_: EnvState) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
-            let result: EnvBag
+            let result: EnvState
             if ((undefined !== payload && null !== payload)) {
-                result = newEnvBag()
+                result = newEnvState()
                 ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
@@ -4642,7 +4642,7 @@ class implEnv extends implBase implements Env {
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: EnvBag) => void): void => {
+        return (a0: (_: EnvState) => void): void => {
             onret = a0
         }
     }
@@ -5043,18 +5043,18 @@ class implWorkspace extends implBase implements Workspace {
         }
     }
 
-    AllProperties(): (_: (_: WorkspaceBag) => void) => void {
+    AllProperties(): (_: (_: WorkspaceState) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
         msg.QName = "workspace.AllProperties"
         msg.Data = {}
         let onresp: (_: any) => boolean
-        let onret: (_: WorkspaceBag) => void
+        let onret: (_: WorkspaceState) => void
         onresp = (payload: any): boolean => {
             let ok: boolean
-            let result: WorkspaceBag
+            let result: WorkspaceState
             if ((undefined !== payload && null !== payload)) {
-                result = newWorkspaceBag()
+                result = newWorkspaceState()
                 ok = result.__loadFromJsonish__(payload)
                 if (!ok) {
                     return false
@@ -5068,7 +5068,7 @@ class implWorkspace extends implBase implements Workspace {
             return true
         }
         this.Impl().send(msg, onresp)
-        return (a0: (_: WorkspaceBag) => void): void => {
+        return (a0: (_: WorkspaceState) => void): void => {
             onret = a0
         }
     }
@@ -5360,7 +5360,7 @@ function StatusBarItem_Show(this: StatusBarItem, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1])
+            ok = this.Cfg.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5395,7 +5395,7 @@ function StatusBarItem_Hide(this: StatusBarItem, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1])
+            ok = this.Cfg.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5425,12 +5425,12 @@ function StatusBarItem___appzObjBagPullFromPeer__(this: StatusBarItem, ): (_: ()
     let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        if ((undefined === this.Bag || null === this.Bag)) {
-            this.Bag = newStatusBarItemBag()
+        if ((undefined === this.Cfg || null === this.Cfg)) {
+            this.Cfg = newStatusBarItemState()
         }
-        this.Bag.__holder__ = this
+        this.Cfg.__holder__ = this
         {
-            ok = this.Bag.__loadFromJsonish__(payload)
+            ok = this.Cfg.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5446,7 +5446,7 @@ function StatusBarItem___appzObjBagPullFromPeer__(this: StatusBarItem, ): (_: ()
     }
 }
 
-function StatusBarItem___appzObjBagPushToPeer__(this: StatusBarItem, allUpdates?: StatusBarItemBag): (_: () => void) => void {
+function StatusBarItem___appzObjBagPushToPeer__(this: StatusBarItem, allUpdates?: StatusBarItemState): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "StatusBarItem.__appzObjBagPushToPeer__"
@@ -5458,7 +5458,7 @@ function StatusBarItem___appzObjBagPushToPeer__(this: StatusBarItem, allUpdates?
     onresp = (payload: any): boolean => {
         let ok: boolean
         {
-            ok = this.Bag.__loadFromJsonish__(payload)
+            ok = this.Cfg.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5494,7 +5494,7 @@ function OutputChannel_Append(this: OutputChannel, value: string): (_: () => voi
             return false
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1])
+            ok = this.Cfg.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5530,7 +5530,7 @@ function OutputChannel_AppendLine(this: OutputChannel, value: string): (_: () =>
             return false
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1])
+            ok = this.Cfg.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5565,7 +5565,7 @@ function OutputChannel_Clear(this: OutputChannel, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1])
+            ok = this.Cfg.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5601,7 +5601,7 @@ function OutputChannel_Show(this: OutputChannel, preserveFocus?: boolean): (_: (
             return false
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1])
+            ok = this.Cfg.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5636,7 +5636,7 @@ function OutputChannel_Hide(this: OutputChannel, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1])
+            ok = this.Cfg.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5666,12 +5666,12 @@ function OutputChannel___appzObjBagPullFromPeer__(this: OutputChannel, ): (_: ()
     let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        if ((undefined === this.Bag || null === this.Bag)) {
-            this.Bag = newOutputChannelBag()
+        if ((undefined === this.Cfg || null === this.Cfg)) {
+            this.Cfg = newOutputChannelState()
         }
-        this.Bag.__holder__ = this
+        this.Cfg.__holder__ = this
         {
-            ok = this.Bag.__loadFromJsonish__(payload)
+            ok = this.Cfg.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5701,12 +5701,12 @@ function TextEditorDecorationType___appzObjBagPullFromPeer__(this: TextEditorDec
     let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        if ((undefined === this.Bag || null === this.Bag)) {
-            this.Bag = newTextEditorDecorationTypeBag()
+        if ((undefined === this.Cfg || null === this.Cfg)) {
+            this.Cfg = newTextEditorDecorationTypeState()
         }
-        this.Bag.__holder__ = this
+        this.Cfg.__holder__ = this
         {
-            ok = this.Bag.__loadFromJsonish__(payload)
+            ok = this.Cfg.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5745,7 +5745,7 @@ function InputBox_OnDidChangeValue(this: InputBox, handler: (_: string) => void)
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[1])
+                ok = this.Cfg.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -5799,7 +5799,7 @@ function InputBox_OnDidAccept(this: InputBox, handler: () => void): (_: (_: Disp
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[0])
+                ok = this.Cfg.__loadFromJsonish__(args[0])
             }
             if (!ok) {
                 return false
@@ -5854,7 +5854,7 @@ function InputBox_Show(this: InputBox, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1])
+            ok = this.Cfg.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5889,7 +5889,7 @@ function InputBox_Hide(this: InputBox, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1])
+            ok = this.Cfg.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -5923,7 +5923,7 @@ function InputBox_OnDidHide(this: InputBox, handler: () => void): (_: (_: Dispos
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[0])
+                ok = this.Cfg.__loadFromJsonish__(args[0])
             }
             if (!ok) {
                 return false
@@ -5973,12 +5973,12 @@ function InputBox___appzObjBagPullFromPeer__(this: InputBox, ): (_: () => void) 
     let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        if ((undefined === this.Bag || null === this.Bag)) {
-            this.Bag = newInputBoxBag()
+        if ((undefined === this.Cfg || null === this.Cfg)) {
+            this.Cfg = newInputBoxState()
         }
-        this.Bag.__holder__ = this
+        this.Cfg.__holder__ = this
         {
-            ok = this.Bag.__loadFromJsonish__(payload)
+            ok = this.Cfg.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -5994,7 +5994,7 @@ function InputBox___appzObjBagPullFromPeer__(this: InputBox, ): (_: () => void) 
     }
 }
 
-function InputBox___appzObjBagPushToPeer__(this: InputBox, allUpdates?: InputBoxBag): (_: () => void) => void {
+function InputBox___appzObjBagPushToPeer__(this: InputBox, allUpdates?: InputBoxState): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "InputBox.__appzObjBagPushToPeer__"
@@ -6006,7 +6006,7 @@ function InputBox___appzObjBagPushToPeer__(this: InputBox, allUpdates?: InputBox
     onresp = (payload: any): boolean => {
         let ok: boolean
         {
-            ok = this.Bag.__loadFromJsonish__(payload)
+            ok = this.Cfg.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -6045,7 +6045,7 @@ function QuickPick_OnDidChangeValue(this: QuickPick, handler: (_: string) => voi
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[1])
+                ok = this.Cfg.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -6099,7 +6099,7 @@ function QuickPick_OnDidAccept(this: QuickPick, handler: () => void): (_: (_: Di
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[0])
+                ok = this.Cfg.__loadFromJsonish__(args[0])
             }
             if (!ok) {
                 return false
@@ -6172,7 +6172,7 @@ function QuickPick_OnDidChangeActive(this: QuickPick, handler: (_: QuickPickItem
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[1])
+                ok = this.Cfg.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -6245,7 +6245,7 @@ function QuickPick_OnDidChangeSelection(this: QuickPick, handler: (_: QuickPickI
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[1])
+                ok = this.Cfg.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -6300,7 +6300,7 @@ function QuickPick_Show(this: QuickPick, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1])
+            ok = this.Cfg.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -6335,7 +6335,7 @@ function QuickPick_Hide(this: QuickPick, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1])
+            ok = this.Cfg.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -6369,7 +6369,7 @@ function QuickPick_OnDidHide(this: QuickPick, handler: () => void): (_: (_: Disp
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[0])
+                ok = this.Cfg.__loadFromJsonish__(args[0])
             }
             if (!ok) {
                 return false
@@ -6419,12 +6419,12 @@ function QuickPick___appzObjBagPullFromPeer__(this: QuickPick, ): (_: () => void
     let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        if ((undefined === this.Bag || null === this.Bag)) {
-            this.Bag = newQuickPickBag()
+        if ((undefined === this.Cfg || null === this.Cfg)) {
+            this.Cfg = newQuickPickState()
         }
-        this.Bag.__holder__ = this
+        this.Cfg.__holder__ = this
         {
-            ok = this.Bag.__loadFromJsonish__(payload)
+            ok = this.Cfg.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -6440,7 +6440,7 @@ function QuickPick___appzObjBagPullFromPeer__(this: QuickPick, ): (_: () => void
     }
 }
 
-function QuickPick___appzObjBagPushToPeer__(this: QuickPick, allUpdates?: QuickPickBag): (_: () => void) => void {
+function QuickPick___appzObjBagPushToPeer__(this: QuickPick, allUpdates?: QuickPickState): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "QuickPick.__appzObjBagPushToPeer__"
@@ -6452,7 +6452,7 @@ function QuickPick___appzObjBagPushToPeer__(this: QuickPick, allUpdates?: QuickP
     onresp = (payload: any): boolean => {
         let ok: boolean
         {
-            ok = this.Bag.__loadFromJsonish__(payload)
+            ok = this.Cfg.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -6489,7 +6489,7 @@ function Terminal_SendText(this: Terminal, text: string, addNewLine?: boolean): 
             return false
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1])
+            ok = this.Cfg.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -6525,7 +6525,7 @@ function Terminal_Show(this: Terminal, preserveFocus?: boolean): (_: () => void)
             return false
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1])
+            ok = this.Cfg.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -6560,7 +6560,7 @@ function Terminal_Hide(this: Terminal, ): (_: () => void) => void {
             return false
         }
         {
-            ok = this.Bag.__loadFromJsonish__(it[1])
+            ok = this.Cfg.__loadFromJsonish__(it[1])
         }
         if (!ok) {
             return false
@@ -6590,12 +6590,12 @@ function Terminal___appzObjBagPullFromPeer__(this: Terminal, ): (_: () => void) 
     let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        if ((undefined === this.Bag || null === this.Bag)) {
-            this.Bag = newTerminalBag()
+        if ((undefined === this.Cfg || null === this.Cfg)) {
+            this.Cfg = newTerminalState()
         }
-        this.Bag.__holder__ = this
+        this.Cfg.__holder__ = this
         {
-            ok = this.Bag.__loadFromJsonish__(payload)
+            ok = this.Cfg.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -6634,7 +6634,7 @@ function FileSystemWatcher_OnDidCreate(this: FileSystemWatcher, handler: (_: str
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[1])
+                ok = this.Cfg.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -6693,7 +6693,7 @@ function FileSystemWatcher_OnDidChange(this: FileSystemWatcher, handler: (_: str
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[1])
+                ok = this.Cfg.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -6752,7 +6752,7 @@ function FileSystemWatcher_OnDidDelete(this: FileSystemWatcher, handler: (_: str
         }
         {
             {
-                ok = this.Bag.__loadFromJsonish__(args[1])
+                ok = this.Cfg.__loadFromJsonish__(args[1])
             }
             if (!ok) {
                 return false
@@ -6802,12 +6802,12 @@ function FileSystemWatcher___appzObjBagPullFromPeer__(this: FileSystemWatcher, )
     let onret: () => void
     onresp = (payload: any): boolean => {
         let ok: boolean
-        if ((undefined === this.Bag || null === this.Bag)) {
-            this.Bag = newFileSystemWatcherBag()
+        if ((undefined === this.Cfg || null === this.Cfg)) {
+            this.Cfg = newFileSystemWatcherState()
         }
-        this.Bag.__holder__ = this
+        this.Cfg.__holder__ = this
         {
-            ok = this.Bag.__loadFromJsonish__(payload)
+            ok = this.Cfg.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -6823,7 +6823,7 @@ function FileSystemWatcher___appzObjBagPullFromPeer__(this: FileSystemWatcher, )
     }
 }
 
-function FileSystemWatcher___appzObjBagPushToPeer__(this: FileSystemWatcher, allUpdates?: FileSystemWatcherBag): (_: () => void) => void {
+function FileSystemWatcher___appzObjBagPushToPeer__(this: FileSystemWatcher, allUpdates?: FileSystemWatcherState): (_: () => void) => void {
     let msg: ipcMsg
     msg = newipcMsg()
     msg.QName = "FileSystemWatcher.__appzObjBagPushToPeer__"
@@ -6835,7 +6835,7 @@ function FileSystemWatcher___appzObjBagPushToPeer__(this: FileSystemWatcher, all
     onresp = (payload: any): boolean => {
         let ok: boolean
         {
-            ok = this.Bag.__loadFromJsonish__(payload)
+            ok = this.Cfg.__loadFromJsonish__(payload)
         }
         if (!ok) {
             return false
@@ -6851,48 +6851,64 @@ function FileSystemWatcher___appzObjBagPushToPeer__(this: FileSystemWatcher, all
     }
 }
 
-function StatusBarItemBag_ReFetch(this: StatusBarItemBag, ): (_: () => void) => void {
+function StatusBarItemState_ReFetch(this: StatusBarItemState, ): (_: () => void) => void {
     return this.__holder__.__appzObjBagPullFromPeer__()
 }
 
-function StatusBarItemBag_ApplyChanges(this: StatusBarItemBag, ): (_: () => void) => void {
-    return this.__holder__.__appzObjBagPushToPeer__(this)
+function StatusBarItemState_ApplyChanges(this: StatusBarItemState, ): (_: () => void) => void {
+    let ret: (_: () => void) => void
+    {
+        ret = this.__holder__.__appzObjBagPushToPeer__(this)
+    }
+    return ret
 }
 
-function OutputChannelBag_ReFetch(this: OutputChannelBag, ): (_: () => void) => void {
+function OutputChannelState_ReFetch(this: OutputChannelState, ): (_: () => void) => void {
     return this.__holder__.__appzObjBagPullFromPeer__()
 }
 
-function TextEditorDecorationTypeBag_ReFetch(this: TextEditorDecorationTypeBag, ): (_: () => void) => void {
+function TextEditorDecorationTypeState_ReFetch(this: TextEditorDecorationTypeState, ): (_: () => void) => void {
     return this.__holder__.__appzObjBagPullFromPeer__()
 }
 
-function InputBoxBag_ReFetch(this: InputBoxBag, ): (_: () => void) => void {
+function InputBoxState_ReFetch(this: InputBoxState, ): (_: () => void) => void {
     return this.__holder__.__appzObjBagPullFromPeer__()
 }
 
-function InputBoxBag_ApplyChanges(this: InputBoxBag, ): (_: () => void) => void {
-    return this.__holder__.__appzObjBagPushToPeer__(this)
+function InputBoxState_ApplyChanges(this: InputBoxState, ): (_: () => void) => void {
+    let ret: (_: () => void) => void
+    {
+        ret = this.__holder__.__appzObjBagPushToPeer__(this)
+    }
+    return ret
 }
 
-function QuickPickBag_ReFetch(this: QuickPickBag, ): (_: () => void) => void {
+function QuickPickState_ReFetch(this: QuickPickState, ): (_: () => void) => void {
     return this.__holder__.__appzObjBagPullFromPeer__()
 }
 
-function QuickPickBag_ApplyChanges(this: QuickPickBag, ): (_: () => void) => void {
-    return this.__holder__.__appzObjBagPushToPeer__(this)
+function QuickPickState_ApplyChanges(this: QuickPickState, ): (_: () => void) => void {
+    let ret: (_: () => void) => void
+    {
+        ret = this.__holder__.__appzObjBagPushToPeer__(this)
+    }
+    return ret
 }
 
-function TerminalBag_ReFetch(this: TerminalBag, ): (_: () => void) => void {
+function TerminalState_ReFetch(this: TerminalState, ): (_: () => void) => void {
     return this.__holder__.__appzObjBagPullFromPeer__()
 }
 
-function FileSystemWatcherBag_ReFetch(this: FileSystemWatcherBag, ): (_: () => void) => void {
+function FileSystemWatcherState_ReFetch(this: FileSystemWatcherState, ): (_: () => void) => void {
     return this.__holder__.__appzObjBagPullFromPeer__()
 }
 
-function FileSystemWatcherBag_ApplyChanges(this: FileSystemWatcherBag, ): (_: () => void) => void {
-    return this.__holder__.__appzObjBagPushToPeer__(this)
+function FileSystemWatcherState_ApplyChanges(this: FileSystemWatcherState, ): (_: () => void) => void {
+    let ret: (_: () => void) => void
+    {
+        ret = this.__holder__.__appzObjBagPushToPeer__(this)
+    }
+    return ret
 }
 
 function MessageItem___loadFromJsonish__(this: MessageItem, payload: any): boolean {
@@ -7151,7 +7167,7 @@ function Terminal___loadFromJsonish__(this: Terminal, payload: any): boolean {
     return ok
 }
 
-function EnvBag___loadFromJsonish__(this: EnvBag, payload: any): boolean {
+function EnvState___loadFromJsonish__(this: EnvState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -7338,7 +7354,7 @@ function FileSystemWatcher___loadFromJsonish__(this: FileSystemWatcher, payload:
     return ok
 }
 
-function WorkspaceBag___loadFromJsonish__(this: WorkspaceBag, payload: any): boolean {
+function WorkspaceState___loadFromJsonish__(this: WorkspaceState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -7437,7 +7453,7 @@ function DiagnosticChangeEvent___loadFromJsonish__(this: DiagnosticChangeEvent, 
     return true
 }
 
-function StatusBarItemBag___loadFromJsonish__(this: StatusBarItemBag, payload: any): boolean {
+function StatusBarItemState___loadFromJsonish__(this: StatusBarItemState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -7530,7 +7546,7 @@ function StatusBarItemBag___loadFromJsonish__(this: StatusBarItemBag, payload: a
     return true
 }
 
-function OutputChannelBag___loadFromJsonish__(this: OutputChannelBag, payload: any): boolean {
+function OutputChannelState___loadFromJsonish__(this: OutputChannelState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -7554,7 +7570,7 @@ function OutputChannelBag___loadFromJsonish__(this: OutputChannelBag, payload: a
     return true
 }
 
-function TextEditorDecorationTypeBag___loadFromJsonish__(this: TextEditorDecorationTypeBag, payload: any): boolean {
+function TextEditorDecorationTypeState___loadFromJsonish__(this: TextEditorDecorationTypeState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -7578,7 +7594,7 @@ function TextEditorDecorationTypeBag___loadFromJsonish__(this: TextEditorDecorat
     return true
 }
 
-function InputBoxBag___loadFromJsonish__(this: InputBoxBag, payload: any): boolean {
+function InputBoxState___loadFromJsonish__(this: InputBoxState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -7714,7 +7730,7 @@ function InputBoxBag___loadFromJsonish__(this: InputBoxBag, payload: any): boole
     return true
 }
 
-function QuickPickBag___loadFromJsonish__(this: QuickPickBag, payload: any): boolean {
+function QuickPickState___loadFromJsonish__(this: QuickPickState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -7925,7 +7941,7 @@ function QuickPickBag___loadFromJsonish__(this: QuickPickBag, payload: any): boo
     return true
 }
 
-function TerminalBag___loadFromJsonish__(this: TerminalBag, payload: any): boolean {
+function TerminalState___loadFromJsonish__(this: TerminalState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any
@@ -7949,7 +7965,7 @@ function TerminalBag___loadFromJsonish__(this: TerminalBag, payload: any): boole
     return true
 }
 
-function FileSystemWatcherBag___loadFromJsonish__(this: FileSystemWatcherBag, payload: any): boolean {
+function FileSystemWatcherState___loadFromJsonish__(this: FileSystemWatcherState, payload: any): boolean {
     let it: { [_: string]: any }
     let ok: boolean
     let val: any

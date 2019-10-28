@@ -26,6 +26,7 @@ var OnError func(this Vscode, err any, jsonMsg any)
 var OnErrorDefaultOutputFormat = "err:\t%v\njson:\t%v\n\n"
 
 type dict = map[string]any
+type lock = sync.Mutex
 
 // any is a type alias of `interface{}` for legibility reasons (just to reduce brackets-noise throughout).
 type any = interface{}

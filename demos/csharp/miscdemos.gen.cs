@@ -128,7 +128,7 @@ namespace VscAppzDemo {
 			});
 		}
 		private static void demo_Env_Properties() {
-			vsc.Env.AllProperties()((EnvBag props) => {
+			vsc.Env.AllProperties()((EnvState props) => {
 				string[] items = default;
 				items = new string[8];
 				{
@@ -153,7 +153,7 @@ namespace VscAppzDemo {
 			});
 		}
 		private static void demo_Workspace_Properties() {
-			vsc.Workspace.AllProperties()((WorkspaceBag props) => {
+			vsc.Workspace.AllProperties()((WorkspaceState props) => {
 				string[] items = default;
 				items = new string[3];
 				{
@@ -284,21 +284,21 @@ namespace VscAppzDemo {
 		}
 		private static void demo_Window_CreateQuickPick() {
 			vsc.Window.CreateQuickPick()((QuickPick ctl) => {
-				ctl.Bag.IgnoreFocusOut = true;
-				ctl.Bag.Title = "I'm a full-fledged QuickPick";
-				ctl.Bag.Step = 23;
-				ctl.Bag.TotalSteps = 42;
-				ctl.Bag.Items = new QuickPickItem[88];
+				ctl.Cfg.IgnoreFocusOut = true;
+				ctl.Cfg.Title = "I'm a full-fledged QuickPick";
+				ctl.Cfg.Step = 23;
+				ctl.Cfg.TotalSteps = 42;
+				ctl.Cfg.Items = new QuickPickItem[88];
 				foreach (var i in nums1To(88)) {
-					ctl.Bag.Items[i - 1] = new QuickPickItem();
-					ctl.Bag.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i);
-					ctl.Bag.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i);
-					ctl.Bag.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i);
-					ctl.Bag.Items[(i - 1)].AlwaysShow = i == 42;
+					ctl.Cfg.Items[i - 1] = new QuickPickItem();
+					ctl.Cfg.Items[(i - 1)].Label = strFmt("$(eye) Label {0}", i);
+					ctl.Cfg.Items[(i - 1)].Description = strFmt("$(gift) Description {0}", i);
+					ctl.Cfg.Items[(i - 1)].Detail = strFmt("$(globe~spin) Detail {0}", i);
+					ctl.Cfg.Items[(i - 1)].AlwaysShow = i == 42;
 				}
-				ctl.Bag.ApplyChanges();
+				ctl.Cfg.ApplyChanges();
 				ctl.OnDidAccept(() => {
-					logLn(strFmt("Picked: {0}", ctl.Bag.SelectedItems));
+					logLn(strFmt("Picked: {0}", ctl.Cfg.SelectedItems));
 					ctl.Hide();
 				});
 				ctl.OnDidHide(() => {
@@ -309,19 +309,19 @@ namespace VscAppzDemo {
 		}
 		private static void demo_Window_CreateInputBox() {
 			vsc.Window.CreateInputBox()((InputBox ctl) => {
-				ctl.Bag.IgnoreFocusOut = true;
-				ctl.Bag.Placeholder = "The initial Placeholder";
-				ctl.Bag.Prompt = "The initial Prompt";
-				ctl.Bag.Title = "The initial Title";
-				ctl.Bag.ApplyChanges();
+				ctl.Cfg.IgnoreFocusOut = true;
+				ctl.Cfg.Placeholder = "The initial Placeholder";
+				ctl.Cfg.Prompt = "The initial Prompt";
+				ctl.Cfg.Title = "The initial Title";
+				ctl.Cfg.ApplyChanges();
 				ctl.OnDidChangeValue((string input) => {
-					ctl.Bag.Prompt = strFmt("Lower: {0}", strLo(ctl.Bag.Value));
-					ctl.Bag.Title = strFmt("Upper: {0}", strUp(ctl.Bag.Value));
-					ctl.Bag.ApplyChanges();
+					ctl.Cfg.Prompt = strFmt("Lower: {0}", strLo(ctl.Cfg.Value));
+					ctl.Cfg.Title = strFmt("Upper: {0}", strUp(ctl.Cfg.Value));
+					ctl.Cfg.ApplyChanges();
 				});
 				string finalinputvalue = default;
 				ctl.OnDidAccept(() => {
-					finalinputvalue = ctl.Bag.Value;
+					finalinputvalue = ctl.Cfg.Value;
 					ctl.Hide();
 				});
 				ctl.OnDidHide(() => {
@@ -506,31 +506,31 @@ namespace VscAppzDemo {
 				Func<any[], any> mycmd = default;
 				mycmd = (any[] _unused) => {
 					clickcount = 1 + clickcount;
-					statusitem.Bag.ReFetch()(() => {
-						statusitem.Bag.Text = logLn(strFmt("You clicked me {0} time(s).", clickcount));
-						if ("editorLightBulb.foreground" == statusitem.Bag.Color) {
-							statusitem.Bag.Color = "terminal.ansiGreen";
+					statusitem.Cfg.ReFetch()(() => {
+						statusitem.Cfg.Text = logLn(strFmt("You clicked me {0} time(s).", clickcount));
+						if ("editorLightBulb.foreground" == statusitem.Cfg.Color) {
+							statusitem.Cfg.Color = "terminal.ansiGreen";
 							if (toggleonclick && (null != logchan)) {
 								logchan.Hide();
 							}
 						} else {
-							statusitem.Bag.Color = "editorLightBulb.foreground";
+							statusitem.Cfg.Color = "editorLightBulb.foreground";
 							if (toggleonclick && (null != logchan)) {
 								logchan.Show(true);
 							}
 						}
-						statusitem.Bag.ApplyChanges()(demosMenu);
+						statusitem.Cfg.ApplyChanges()(demosMenu);
 					});
 					return null;
 				};
 				vsc.Commands.RegisterCommand(cmdName, mycmd);
 				vsc.Window.CreateStatusBarItem(0, null)((StatusBarItem it) => {
 					statusitem = it;
-					statusitem.Bag.Tooltip = strFmt("Hi from {0}!", appName);
-					statusitem.Bag.Text = "You clicked me 0 time(s).";
-					statusitem.Bag.Color = "#42BEEF";
-					statusitem.Bag.Command = cmdName;
-					statusitem.Bag.ApplyChanges();
+					statusitem.Cfg.Tooltip = strFmt("Hi from {0}!", appName);
+					statusitem.Cfg.Text = "You clicked me 0 time(s).";
+					statusitem.Cfg.Color = "#42BEEF";
+					statusitem.Cfg.Command = cmdName;
+					statusitem.Cfg.ApplyChanges();
 					statusitem.Show();
 				});
 			}

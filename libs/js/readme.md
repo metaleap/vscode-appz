@@ -1068,13 +1068,13 @@ Name | Type |
 
 ▪ **_**: *function*
 
-▸ (`_`: [EnvBag](#interfaces_vscode_gen_envbagmd)): *void*
+▸ (`_`: [EnvState](#interfaces_vscode_gen_envstatemd)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`_` | [EnvBag](#interfaces_vscode_gen_envbagmd) |
+`_` | [EnvState](#interfaces_vscode_gen_envstatemd) |
 
 ___
 
@@ -2602,13 +2602,13 @@ Name | Type |
 
 ▪ **_**: *function*
 
-▸ (`_`: [WorkspaceBag](#interfaces_vscode_gen_workspacebagmd)): *void*
+▸ (`_`: [WorkspaceState](#interfaces_vscode_gen_workspacestatemd)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`_` | [WorkspaceBag](#interfaces_vscode_gen_workspacebagmd) |
+`_` | [WorkspaceState](#interfaces_vscode_gen_workspacestatemd) |
 
 ___
 
@@ -3000,2166 +3000,6 @@ ___
 • **Right**: = 2
 
 Aligned to the right side.
-
-
-<a name="modules_core_md"></a>
-
-
-# External module: "core"
-
-## Index
-
-### Classes
-
-* [Cancel](#classes_core_cancelmd)
-* [Disposable](#classes_core_disposablemd)
-* [impl](#classes_core_implmd)
-* [ipcMsg](#classes_core_ipcmsgmd)
-
-### Type aliases
-
-* [dict](#dict)
-
-## Type aliases
-
-###  dict
-
-Ƭ **dict**: *object*
-
-#### Type declaration:
-
-* \[ **_**: *string*\]: any
-
-
-<a name="modules_vsc_appz_md"></a>
-
-
-# External module: "vsc-appz"
-
-## Index
-
-### Functions
-
-* [CancelIn](#cancelin)
-* [Main](#main)
-* [OnError](#let-onerror)
-
-## Functions
-
-###  CancelIn
-
-▸ **CancelIn**(`msFromNow`: number): *[Cancel](#classes_core_cancelmd)*
-
-Returns a new `Cancel` with its `Now` already scheduled to be called in `msFromNow` milliseconds.
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`msFromNow` | number |
-
-**Returns:** *[Cancel](#classes_core_cancelmd)*
-
-___
-
-###  Main
-
-▸ **Main**(`main`: function, `stdIn?`: ReadStream, `stdOut?`: WriteStream): *void*
-
-Creates a `Vscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `process.stdin`, and `stdOut` defaulting to `process.stdout`), then loops forever to never `return`.
-
-**Parameters:**
-
-▪ **main**: *function*
-
-called whenever the counterparty demands, which usually means once at startup.
-
-▸ (`_`: [Vscode](#interfaces_vscode_gen_vscodemd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [Vscode](#interfaces_vscode_gen_vscodemd) |
-
-▪`Optional`  **stdIn**: *ReadStream*
-
-▪`Optional`  **stdOut**: *WriteStream*
-
-**Returns:** *void*
-
-___
-
-### `Let` OnError
-
-▸ **OnError**(`_this`: [Vscode](#interfaces_vscode_gen_vscodemd), `err`: any, `jsonMsg?`: any): *void*
-
-Reports problems during the ongoing forever-looping stdin/stdout communication
-with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be `null` or `undefined`.
-Any of its args must be checked for `null`/`undefined`-ness by your `OnError` handler.
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_this` | [Vscode](#interfaces_vscode_gen_vscodemd) |
-`err` | any |
-`jsonMsg?` | any |
-
-**Returns:** *void*
-
-
-<a name="modules_vscode_gen_md"></a>
-
-
-# External module: "vscode.gen"
-
-## Index
-
-### Enumerations
-
-* [DecorationRangeBehavior](#enums_vscode_gen_decorationrangebehaviormd)
-* [OverviewRulerLane](#enums_vscode_gen_overviewrulerlanemd)
-* [StatusBarAlignment](#enums_vscode_gen_statusbaralignmentmd)
-
-### Classes
-
-* [impl](#classes_vscode_gen_implmd)
-* [implBase](#classes_vscode_gen_implbasemd)
-* [implClipboard](#classes_vscode_gen_implclipboardmd)
-* [implCommands](#classes_vscode_gen_implcommandsmd)
-* [implEnv](#classes_vscode_gen_implenvmd)
-* [implExtensions](#classes_vscode_gen_implextensionsmd)
-* [implLanguages](#classes_vscode_gen_impllanguagesmd)
-* [implWindow](#classes_vscode_gen_implwindowmd)
-* [implWorkspace](#classes_vscode_gen_implworkspacemd)
-
-### Interfaces
-
-* [Clipboard](#interfaces_vscode_gen_clipboardmd)
-* [Commands](#interfaces_vscode_gen_commandsmd)
-* [DecorationRenderOptions](#interfaces_vscode_gen_decorationrenderoptionsmd)
-* [DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd)
-* [Env](#interfaces_vscode_gen_envmd)
-* [EnvBag](#interfaces_vscode_gen_envbagmd)
-* [ExtensionTerminalOptions](#interfaces_vscode_gen_extensionterminaloptionsmd)
-* [Extensions](#interfaces_vscode_gen_extensionsmd)
-* [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)
-* [FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd)
-* [InputBox](#interfaces_vscode_gen_inputboxmd)
-* [InputBoxBag](#interfaces_vscode_gen_inputboxbagmd)
-* [InputBoxOptions](#interfaces_vscode_gen_inputboxoptionsmd)
-* [Languages](#interfaces_vscode_gen_languagesmd)
-* [MessageItem](#interfaces_vscode_gen_messageitemmd)
-* [MessageOptions](#interfaces_vscode_gen_messageoptionsmd)
-* [OpenDialogOptions](#interfaces_vscode_gen_opendialogoptionsmd)
-* [OutputChannel](#interfaces_vscode_gen_outputchannelmd)
-* [OutputChannelBag](#interfaces_vscode_gen_outputchannelbagmd)
-* [Pseudoterminal](#interfaces_vscode_gen_pseudoterminalmd)
-* [QuickInputButton](#interfaces_vscode_gen_quickinputbuttonmd)
-* [QuickPick](#interfaces_vscode_gen_quickpickmd)
-* [QuickPickBag](#interfaces_vscode_gen_quickpickbagmd)
-* [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)
-* [QuickPickOptions](#interfaces_vscode_gen_quickpickoptionsmd)
-* [SaveDialogOptions](#interfaces_vscode_gen_savedialogoptionsmd)
-* [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)
-* [StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd)
-* [Terminal](#interfaces_vscode_gen_terminalmd)
-* [TerminalBag](#interfaces_vscode_gen_terminalbagmd)
-* [TerminalDimensions](#interfaces_vscode_gen_terminaldimensionsmd)
-* [TerminalOptions](#interfaces_vscode_gen_terminaloptionsmd)
-* [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)
-* [TextEditorDecorationTypeBag](#interfaces_vscode_gen_texteditordecorationtypebagmd)
-* [ThemableDecorationAttachmentRenderOptions](#interfaces_vscode_gen_themabledecorationattachmentrenderoptionsmd)
-* [ThemableDecorationRenderOptions](#interfaces_vscode_gen_themabledecorationrenderoptionsmd)
-* [Vscode](#interfaces_vscode_gen_vscodemd)
-* [Window](#interfaces_vscode_gen_windowmd)
-* [WindowState](#interfaces_vscode_gen_windowstatemd)
-* [Workspace](#interfaces_vscode_gen_workspacemd)
-* [WorkspaceBag](#interfaces_vscode_gen_workspacebagmd)
-* [WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)
-* [WorkspaceFolderPickOptions](#interfaces_vscode_gen_workspacefolderpickoptionsmd)
-* [WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd)
-* [fromJson](#interfaces_vscode_gen_fromjsonmd)
-* [withBag](#interfaces_vscode_gen_withbagmd)
-* [withDisp](#interfaces_vscode_gen_withdispmd)
-
-### Type aliases
-
-* [Cancel](#cancel)
-* [Disposable](#disposable)
-* [ipcMsg](#ipcmsg)
-
-### Functions
-
-* [DiagnosticChangeEvent___loadFromJsonish__](#diagnosticchangeevent___loadfromjsonish__)
-* [EnvBag___loadFromJsonish__](#envbag___loadfromjsonish__)
-* [FileSystemWatcherBag_ApplyChanges](#filesystemwatcherbag_applychanges)
-* [FileSystemWatcherBag_ReFetch](#filesystemwatcherbag_refetch)
-* [FileSystemWatcherBag___loadFromJsonish__](#filesystemwatcherbag___loadfromjsonish__)
-* [FileSystemWatcher_Dispose](#filesystemwatcher_dispose)
-* [FileSystemWatcher_OnDidChange](#filesystemwatcher_ondidchange)
-* [FileSystemWatcher_OnDidCreate](#filesystemwatcher_ondidcreate)
-* [FileSystemWatcher_OnDidDelete](#filesystemwatcher_ondiddelete)
-* [FileSystemWatcher___appzObjBagPullFromPeer__](#filesystemwatcher___appzobjbagpullfrompeer__)
-* [FileSystemWatcher___appzObjBagPushToPeer__](#filesystemwatcher___appzobjbagpushtopeer__)
-* [FileSystemWatcher___loadFromJsonish__](#filesystemwatcher___loadfromjsonish__)
-* [InputBoxBag_ApplyChanges](#inputboxbag_applychanges)
-* [InputBoxBag_ReFetch](#inputboxbag_refetch)
-* [InputBoxBag___loadFromJsonish__](#inputboxbag___loadfromjsonish__)
-* [InputBox_Dispose](#inputbox_dispose)
-* [InputBox_Hide](#inputbox_hide)
-* [InputBox_OnDidAccept](#inputbox_ondidaccept)
-* [InputBox_OnDidChangeValue](#inputbox_ondidchangevalue)
-* [InputBox_OnDidHide](#inputbox_ondidhide)
-* [InputBox_Show](#inputbox_show)
-* [InputBox___appzObjBagPullFromPeer__](#inputbox___appzobjbagpullfrompeer__)
-* [InputBox___appzObjBagPushToPeer__](#inputbox___appzobjbagpushtopeer__)
-* [InputBox___loadFromJsonish__](#inputbox___loadfromjsonish__)
-* [MessageItem___loadFromJsonish__](#messageitem___loadfromjsonish__)
-* [OutputChannelBag_ReFetch](#outputchannelbag_refetch)
-* [OutputChannelBag___loadFromJsonish__](#outputchannelbag___loadfromjsonish__)
-* [OutputChannel_Append](#outputchannel_append)
-* [OutputChannel_AppendLine](#outputchannel_appendline)
-* [OutputChannel_Clear](#outputchannel_clear)
-* [OutputChannel_Dispose](#outputchannel_dispose)
-* [OutputChannel_Hide](#outputchannel_hide)
-* [OutputChannel_Show](#outputchannel_show)
-* [OutputChannel___appzObjBagPullFromPeer__](#outputchannel___appzobjbagpullfrompeer__)
-* [OutputChannel___loadFromJsonish__](#outputchannel___loadfromjsonish__)
-* [QuickPickBag_ApplyChanges](#quickpickbag_applychanges)
-* [QuickPickBag_ReFetch](#quickpickbag_refetch)
-* [QuickPickBag___loadFromJsonish__](#quickpickbag___loadfromjsonish__)
-* [QuickPickItem___loadFromJsonish__](#quickpickitem___loadfromjsonish__)
-* [QuickPick_Dispose](#quickpick_dispose)
-* [QuickPick_Hide](#quickpick_hide)
-* [QuickPick_OnDidAccept](#quickpick_ondidaccept)
-* [QuickPick_OnDidChangeActive](#quickpick_ondidchangeactive)
-* [QuickPick_OnDidChangeSelection](#quickpick_ondidchangeselection)
-* [QuickPick_OnDidChangeValue](#quickpick_ondidchangevalue)
-* [QuickPick_OnDidHide](#quickpick_ondidhide)
-* [QuickPick_Show](#quickpick_show)
-* [QuickPick___appzObjBagPullFromPeer__](#quickpick___appzobjbagpullfrompeer__)
-* [QuickPick___appzObjBagPushToPeer__](#quickpick___appzobjbagpushtopeer__)
-* [QuickPick___loadFromJsonish__](#quickpick___loadfromjsonish__)
-* [StatusBarItemBag_ApplyChanges](#statusbaritembag_applychanges)
-* [StatusBarItemBag_ReFetch](#statusbaritembag_refetch)
-* [StatusBarItemBag___loadFromJsonish__](#statusbaritembag___loadfromjsonish__)
-* [StatusBarItem_Dispose](#statusbaritem_dispose)
-* [StatusBarItem_Hide](#statusbaritem_hide)
-* [StatusBarItem_Show](#statusbaritem_show)
-* [StatusBarItem___appzObjBagPullFromPeer__](#statusbaritem___appzobjbagpullfrompeer__)
-* [StatusBarItem___appzObjBagPushToPeer__](#statusbaritem___appzobjbagpushtopeer__)
-* [StatusBarItem___loadFromJsonish__](#statusbaritem___loadfromjsonish__)
-* [TerminalBag_ReFetch](#terminalbag_refetch)
-* [TerminalBag___loadFromJsonish__](#terminalbag___loadfromjsonish__)
-* [Terminal_Dispose](#terminal_dispose)
-* [Terminal_Hide](#terminal_hide)
-* [Terminal_SendText](#terminal_sendtext)
-* [Terminal_Show](#terminal_show)
-* [Terminal___appzObjBagPullFromPeer__](#terminal___appzobjbagpullfrompeer__)
-* [Terminal___loadFromJsonish__](#terminal___loadfromjsonish__)
-* [TextEditorDecorationTypeBag_ReFetch](#texteditordecorationtypebag_refetch)
-* [TextEditorDecorationTypeBag___loadFromJsonish__](#texteditordecorationtypebag___loadfromjsonish__)
-* [TextEditorDecorationType_Dispose](#texteditordecorationtype_dispose)
-* [TextEditorDecorationType___appzObjBagPullFromPeer__](#texteditordecorationtype___appzobjbagpullfrompeer__)
-* [TextEditorDecorationType___loadFromJsonish__](#texteditordecorationtype___loadfromjsonish__)
-* [WindowState___loadFromJsonish__](#windowstate___loadfromjsonish__)
-* [WorkspaceBag___loadFromJsonish__](#workspacebag___loadfromjsonish__)
-* [WorkspaceFolder___loadFromJsonish__](#workspacefolder___loadfromjsonish__)
-* [WorkspaceFoldersChangeEvent___loadFromJsonish__](#workspacefolderschangeevent___loadfromjsonish__)
-* [newDiagnosticChangeEvent](#newdiagnosticchangeevent)
-* [newDisposable](#newdisposable)
-* [newEnvBag](#newenvbag)
-* [newFileSystemWatcher](#newfilesystemwatcher)
-* [newFileSystemWatcherBag](#newfilesystemwatcherbag)
-* [newInputBox](#newinputbox)
-* [newInputBoxBag](#newinputboxbag)
-* [newMessageItem](#newmessageitem)
-* [newOutputChannel](#newoutputchannel)
-* [newOutputChannelBag](#newoutputchannelbag)
-* [newQuickPick](#newquickpick)
-* [newQuickPickBag](#newquickpickbag)
-* [newQuickPickItem](#newquickpickitem)
-* [newStatusBarItem](#newstatusbaritem)
-* [newStatusBarItemBag](#newstatusbaritembag)
-* [newTerminal](#newterminal)
-* [newTerminalBag](#newterminalbag)
-* [newTextEditorDecorationType](#newtexteditordecorationtype)
-* [newTextEditorDecorationTypeBag](#newtexteditordecorationtypebag)
-* [newWindowState](#newwindowstate)
-* [newWorkspaceBag](#newworkspacebag)
-* [newWorkspaceFolder](#newworkspacefolder)
-* [newWorkspaceFoldersChangeEvent](#newworkspacefolderschangeevent)
-* [newipcMsg](#newipcmsg)
-
-## Type aliases
-
-###  Cancel
-
-Ƭ **Cancel**: *[Cancel](#classes_core_cancelmd)*
-
-___
-
-###  Disposable
-
-Ƭ **Disposable**: *[Disposable](#classes_core_disposablemd)*
-
-___
-
-###  ipcMsg
-
-Ƭ **ipcMsg**: *[ipcMsg](#classes_core_ipcmsgmd)*
-
-## Functions
-
-###  DiagnosticChangeEvent___loadFromJsonish__
-
-▸ **DiagnosticChangeEvent___loadFromJsonish__**(`this`: [DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  EnvBag___loadFromJsonish__
-
-▸ **EnvBag___loadFromJsonish__**(`this`: [EnvBag](#interfaces_vscode_gen_envbagmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [EnvBag](#interfaces_vscode_gen_envbagmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  FileSystemWatcherBag_ApplyChanges
-
-▸ **FileSystemWatcherBag_ApplyChanges**(`this`: [FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  FileSystemWatcherBag_ReFetch
-
-▸ **FileSystemWatcherBag_ReFetch**(`this`: [FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  FileSystemWatcherBag___loadFromJsonish__
-
-▸ **FileSystemWatcherBag___loadFromJsonish__**(`this`: [FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  FileSystemWatcher_Dispose
-
-▸ **FileSystemWatcher_Dispose**(`this`: [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  FileSystemWatcher_OnDidChange
-
-▸ **FileSystemWatcher_OnDidChange**(`this`: [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd), `handler`: function): *function*
-
-**Parameters:**
-
-▪ **this**: *[FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)*
-
-▪ **handler**: *function*
-
-▸ (`_`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | string |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [Disposable](#classes_core_disposablemd) |
-
-___
-
-###  FileSystemWatcher_OnDidCreate
-
-▸ **FileSystemWatcher_OnDidCreate**(`this`: [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd), `handler`: function): *function*
-
-**Parameters:**
-
-▪ **this**: *[FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)*
-
-▪ **handler**: *function*
-
-▸ (`_`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | string |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [Disposable](#classes_core_disposablemd) |
-
-___
-
-###  FileSystemWatcher_OnDidDelete
-
-▸ **FileSystemWatcher_OnDidDelete**(`this`: [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd), `handler`: function): *function*
-
-**Parameters:**
-
-▪ **this**: *[FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)*
-
-▪ **handler**: *function*
-
-▸ (`_`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | string |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [Disposable](#classes_core_disposablemd) |
-
-___
-
-###  FileSystemWatcher___appzObjBagPullFromPeer__
-
-▸ **FileSystemWatcher___appzObjBagPullFromPeer__**(`this`: [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  FileSystemWatcher___appzObjBagPushToPeer__
-
-▸ **FileSystemWatcher___appzObjBagPushToPeer__**(`this`: [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd), `allUpdates?`: [FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd) |
-`allUpdates?` | [FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  FileSystemWatcher___loadFromJsonish__
-
-▸ **FileSystemWatcher___loadFromJsonish__**(`this`: [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  InputBoxBag_ApplyChanges
-
-▸ **InputBoxBag_ApplyChanges**(`this`: [InputBoxBag](#interfaces_vscode_gen_inputboxbagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [InputBoxBag](#interfaces_vscode_gen_inputboxbagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  InputBoxBag_ReFetch
-
-▸ **InputBoxBag_ReFetch**(`this`: [InputBoxBag](#interfaces_vscode_gen_inputboxbagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [InputBoxBag](#interfaces_vscode_gen_inputboxbagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  InputBoxBag___loadFromJsonish__
-
-▸ **InputBoxBag___loadFromJsonish__**(`this`: [InputBoxBag](#interfaces_vscode_gen_inputboxbagmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [InputBoxBag](#interfaces_vscode_gen_inputboxbagmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  InputBox_Dispose
-
-▸ **InputBox_Dispose**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  InputBox_Hide
-
-▸ **InputBox_Hide**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  InputBox_OnDidAccept
-
-▸ **InputBox_OnDidAccept**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `handler`: function): *function*
-
-**Parameters:**
-
-▪ **this**: *[InputBox](#interfaces_vscode_gen_inputboxmd)*
-
-▪ **handler**: *function*
-
-▸ (): *void*
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [Disposable](#classes_core_disposablemd) |
-
-___
-
-###  InputBox_OnDidChangeValue
-
-▸ **InputBox_OnDidChangeValue**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `handler`: function): *function*
-
-**Parameters:**
-
-▪ **this**: *[InputBox](#interfaces_vscode_gen_inputboxmd)*
-
-▪ **handler**: *function*
-
-▸ (`_`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | string |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [Disposable](#classes_core_disposablemd) |
-
-___
-
-###  InputBox_OnDidHide
-
-▸ **InputBox_OnDidHide**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `handler`: function): *function*
-
-**Parameters:**
-
-▪ **this**: *[InputBox](#interfaces_vscode_gen_inputboxmd)*
-
-▪ **handler**: *function*
-
-▸ (): *void*
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [Disposable](#classes_core_disposablemd) |
-
-___
-
-###  InputBox_Show
-
-▸ **InputBox_Show**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  InputBox___appzObjBagPullFromPeer__
-
-▸ **InputBox___appzObjBagPullFromPeer__**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  InputBox___appzObjBagPushToPeer__
-
-▸ **InputBox___appzObjBagPushToPeer__**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `allUpdates?`: [InputBoxBag](#interfaces_vscode_gen_inputboxbagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
-`allUpdates?` | [InputBoxBag](#interfaces_vscode_gen_inputboxbagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  InputBox___loadFromJsonish__
-
-▸ **InputBox___loadFromJsonish__**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  MessageItem___loadFromJsonish__
-
-▸ **MessageItem___loadFromJsonish__**(`this`: [MessageItem](#interfaces_vscode_gen_messageitemmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [MessageItem](#interfaces_vscode_gen_messageitemmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  OutputChannelBag_ReFetch
-
-▸ **OutputChannelBag_ReFetch**(`this`: [OutputChannelBag](#interfaces_vscode_gen_outputchannelbagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannelBag](#interfaces_vscode_gen_outputchannelbagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  OutputChannelBag___loadFromJsonish__
-
-▸ **OutputChannelBag___loadFromJsonish__**(`this`: [OutputChannelBag](#interfaces_vscode_gen_outputchannelbagmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannelBag](#interfaces_vscode_gen_outputchannelbagmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  OutputChannel_Append
-
-▸ **OutputChannel_Append**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `value`: string): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-`value` | string |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  OutputChannel_AppendLine
-
-▸ **OutputChannel_AppendLine**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `value`: string): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-`value` | string |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  OutputChannel_Clear
-
-▸ **OutputChannel_Clear**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  OutputChannel_Dispose
-
-▸ **OutputChannel_Dispose**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  OutputChannel_Hide
-
-▸ **OutputChannel_Hide**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  OutputChannel_Show
-
-▸ **OutputChannel_Show**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `preserveFocus?`: boolean): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-`preserveFocus?` | boolean |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  OutputChannel___appzObjBagPullFromPeer__
-
-▸ **OutputChannel___appzObjBagPullFromPeer__**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  OutputChannel___loadFromJsonish__
-
-▸ **OutputChannel___loadFromJsonish__**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  QuickPickBag_ApplyChanges
-
-▸ **QuickPickBag_ApplyChanges**(`this`: [QuickPickBag](#interfaces_vscode_gen_quickpickbagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [QuickPickBag](#interfaces_vscode_gen_quickpickbagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  QuickPickBag_ReFetch
-
-▸ **QuickPickBag_ReFetch**(`this`: [QuickPickBag](#interfaces_vscode_gen_quickpickbagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [QuickPickBag](#interfaces_vscode_gen_quickpickbagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  QuickPickBag___loadFromJsonish__
-
-▸ **QuickPickBag___loadFromJsonish__**(`this`: [QuickPickBag](#interfaces_vscode_gen_quickpickbagmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [QuickPickBag](#interfaces_vscode_gen_quickpickbagmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  QuickPickItem___loadFromJsonish__
-
-▸ **QuickPickItem___loadFromJsonish__**(`this`: [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  QuickPick_Dispose
-
-▸ **QuickPick_Dispose**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [QuickPick](#interfaces_vscode_gen_quickpickmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  QuickPick_Hide
-
-▸ **QuickPick_Hide**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [QuickPick](#interfaces_vscode_gen_quickpickmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  QuickPick_OnDidAccept
-
-▸ **QuickPick_OnDidAccept**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd), `handler`: function): *function*
-
-**Parameters:**
-
-▪ **this**: *[QuickPick](#interfaces_vscode_gen_quickpickmd)*
-
-▪ **handler**: *function*
-
-▸ (): *void*
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [Disposable](#classes_core_disposablemd) |
-
-___
-
-###  QuickPick_OnDidChangeActive
-
-▸ **QuickPick_OnDidChangeActive**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd), `handler`: function): *function*
-
-**Parameters:**
-
-▪ **this**: *[QuickPick](#interfaces_vscode_gen_quickpickmd)*
-
-▪ **handler**: *function*
-
-▸ (`_`: [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)[]): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)[] |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [Disposable](#classes_core_disposablemd) |
-
-___
-
-###  QuickPick_OnDidChangeSelection
-
-▸ **QuickPick_OnDidChangeSelection**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd), `handler`: function): *function*
-
-**Parameters:**
-
-▪ **this**: *[QuickPick](#interfaces_vscode_gen_quickpickmd)*
-
-▪ **handler**: *function*
-
-▸ (`_`: [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)[]): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)[] |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [Disposable](#classes_core_disposablemd) |
-
-___
-
-###  QuickPick_OnDidChangeValue
-
-▸ **QuickPick_OnDidChangeValue**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd), `handler`: function): *function*
-
-**Parameters:**
-
-▪ **this**: *[QuickPick](#interfaces_vscode_gen_quickpickmd)*
-
-▪ **handler**: *function*
-
-▸ (`_`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | string |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [Disposable](#classes_core_disposablemd) |
-
-___
-
-###  QuickPick_OnDidHide
-
-▸ **QuickPick_OnDidHide**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd), `handler`: function): *function*
-
-**Parameters:**
-
-▪ **this**: *[QuickPick](#interfaces_vscode_gen_quickpickmd)*
-
-▪ **handler**: *function*
-
-▸ (): *void*
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [Disposable](#classes_core_disposablemd) |
-
-___
-
-###  QuickPick_Show
-
-▸ **QuickPick_Show**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [QuickPick](#interfaces_vscode_gen_quickpickmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  QuickPick___appzObjBagPullFromPeer__
-
-▸ **QuickPick___appzObjBagPullFromPeer__**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [QuickPick](#interfaces_vscode_gen_quickpickmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  QuickPick___appzObjBagPushToPeer__
-
-▸ **QuickPick___appzObjBagPushToPeer__**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd), `allUpdates?`: [QuickPickBag](#interfaces_vscode_gen_quickpickbagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [QuickPick](#interfaces_vscode_gen_quickpickmd) |
-`allUpdates?` | [QuickPickBag](#interfaces_vscode_gen_quickpickbagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  QuickPick___loadFromJsonish__
-
-▸ **QuickPick___loadFromJsonish__**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [QuickPick](#interfaces_vscode_gen_quickpickmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  StatusBarItemBag_ApplyChanges
-
-▸ **StatusBarItemBag_ApplyChanges**(`this`: [StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  StatusBarItemBag_ReFetch
-
-▸ **StatusBarItemBag_ReFetch**(`this`: [StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  StatusBarItemBag___loadFromJsonish__
-
-▸ **StatusBarItemBag___loadFromJsonish__**(`this`: [StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  StatusBarItem_Dispose
-
-▸ **StatusBarItem_Dispose**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  StatusBarItem_Hide
-
-▸ **StatusBarItem_Hide**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  StatusBarItem_Show
-
-▸ **StatusBarItem_Show**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  StatusBarItem___appzObjBagPullFromPeer__
-
-▸ **StatusBarItem___appzObjBagPullFromPeer__**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  StatusBarItem___appzObjBagPushToPeer__
-
-▸ **StatusBarItem___appzObjBagPushToPeer__**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd), `allUpdates?`: [StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
-`allUpdates?` | [StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  StatusBarItem___loadFromJsonish__
-
-▸ **StatusBarItem___loadFromJsonish__**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  TerminalBag_ReFetch
-
-▸ **TerminalBag_ReFetch**(`this`: [TerminalBag](#interfaces_vscode_gen_terminalbagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [TerminalBag](#interfaces_vscode_gen_terminalbagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  TerminalBag___loadFromJsonish__
-
-▸ **TerminalBag___loadFromJsonish__**(`this`: [TerminalBag](#interfaces_vscode_gen_terminalbagmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [TerminalBag](#interfaces_vscode_gen_terminalbagmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  Terminal_Dispose
-
-▸ **Terminal_Dispose**(`this`: [Terminal](#interfaces_vscode_gen_terminalmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [Terminal](#interfaces_vscode_gen_terminalmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  Terminal_Hide
-
-▸ **Terminal_Hide**(`this`: [Terminal](#interfaces_vscode_gen_terminalmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [Terminal](#interfaces_vscode_gen_terminalmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  Terminal_SendText
-
-▸ **Terminal_SendText**(`this`: [Terminal](#interfaces_vscode_gen_terminalmd), `text`: string, `addNewLine?`: boolean): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [Terminal](#interfaces_vscode_gen_terminalmd) |
-`text` | string |
-`addNewLine?` | boolean |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  Terminal_Show
-
-▸ **Terminal_Show**(`this`: [Terminal](#interfaces_vscode_gen_terminalmd), `preserveFocus?`: boolean): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [Terminal](#interfaces_vscode_gen_terminalmd) |
-`preserveFocus?` | boolean |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  Terminal___appzObjBagPullFromPeer__
-
-▸ **Terminal___appzObjBagPullFromPeer__**(`this`: [Terminal](#interfaces_vscode_gen_terminalmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [Terminal](#interfaces_vscode_gen_terminalmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  Terminal___loadFromJsonish__
-
-▸ **Terminal___loadFromJsonish__**(`this`: [Terminal](#interfaces_vscode_gen_terminalmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [Terminal](#interfaces_vscode_gen_terminalmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  TextEditorDecorationTypeBag_ReFetch
-
-▸ **TextEditorDecorationTypeBag_ReFetch**(`this`: [TextEditorDecorationTypeBag](#interfaces_vscode_gen_texteditordecorationtypebagmd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [TextEditorDecorationTypeBag](#interfaces_vscode_gen_texteditordecorationtypebagmd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  TextEditorDecorationTypeBag___loadFromJsonish__
-
-▸ **TextEditorDecorationTypeBag___loadFromJsonish__**(`this`: [TextEditorDecorationTypeBag](#interfaces_vscode_gen_texteditordecorationtypebagmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [TextEditorDecorationTypeBag](#interfaces_vscode_gen_texteditordecorationtypebagmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  TextEditorDecorationType_Dispose
-
-▸ **TextEditorDecorationType_Dispose**(`this`: [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  TextEditorDecorationType___appzObjBagPullFromPeer__
-
-▸ **TextEditorDecorationType___appzObjBagPullFromPeer__**(`this`: [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)): *function*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd) |
-
-**Returns:** *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  TextEditorDecorationType___loadFromJsonish__
-
-▸ **TextEditorDecorationType___loadFromJsonish__**(`this`: [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  WindowState___loadFromJsonish__
-
-▸ **WindowState___loadFromJsonish__**(`this`: [WindowState](#interfaces_vscode_gen_windowstatemd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [WindowState](#interfaces_vscode_gen_windowstatemd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  WorkspaceBag___loadFromJsonish__
-
-▸ **WorkspaceBag___loadFromJsonish__**(`this`: [WorkspaceBag](#interfaces_vscode_gen_workspacebagmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [WorkspaceBag](#interfaces_vscode_gen_workspacebagmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  WorkspaceFolder___loadFromJsonish__
-
-▸ **WorkspaceFolder___loadFromJsonish__**(`this`: [WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  WorkspaceFoldersChangeEvent___loadFromJsonish__
-
-▸ **WorkspaceFoldersChangeEvent___loadFromJsonish__**(`this`: [WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd), `payload`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | [WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd) |
-`payload` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  newDiagnosticChangeEvent
-
-▸ **newDiagnosticChangeEvent**(): *[DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd)*
-
-**Returns:** *[DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd)*
-
-___
-
-###  newDisposable
-
-▸ **newDisposable**(): *[Disposable](#classes_core_disposablemd)*
-
-**Returns:** *[Disposable](#classes_core_disposablemd)*
-
-___
-
-###  newEnvBag
-
-▸ **newEnvBag**(): *[EnvBag](#interfaces_vscode_gen_envbagmd)*
-
-**Returns:** *[EnvBag](#interfaces_vscode_gen_envbagmd)*
-
-___
-
-###  newFileSystemWatcher
-
-▸ **newFileSystemWatcher**(): *[FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)*
-
-**Returns:** *[FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)*
-
-___
-
-###  newFileSystemWatcherBag
-
-▸ **newFileSystemWatcherBag**(): *[FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd)*
-
-**Returns:** *[FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd)*
-
-___
-
-###  newInputBox
-
-▸ **newInputBox**(): *[InputBox](#interfaces_vscode_gen_inputboxmd)*
-
-**Returns:** *[InputBox](#interfaces_vscode_gen_inputboxmd)*
-
-___
-
-###  newInputBoxBag
-
-▸ **newInputBoxBag**(): *[InputBoxBag](#interfaces_vscode_gen_inputboxbagmd)*
-
-**Returns:** *[InputBoxBag](#interfaces_vscode_gen_inputboxbagmd)*
-
-___
-
-###  newMessageItem
-
-▸ **newMessageItem**(): *[MessageItem](#interfaces_vscode_gen_messageitemmd)*
-
-**Returns:** *[MessageItem](#interfaces_vscode_gen_messageitemmd)*
-
-___
-
-###  newOutputChannel
-
-▸ **newOutputChannel**(): *[OutputChannel](#interfaces_vscode_gen_outputchannelmd)*
-
-**Returns:** *[OutputChannel](#interfaces_vscode_gen_outputchannelmd)*
-
-___
-
-###  newOutputChannelBag
-
-▸ **newOutputChannelBag**(): *[OutputChannelBag](#interfaces_vscode_gen_outputchannelbagmd)*
-
-**Returns:** *[OutputChannelBag](#interfaces_vscode_gen_outputchannelbagmd)*
-
-___
-
-###  newQuickPick
-
-▸ **newQuickPick**(): *[QuickPick](#interfaces_vscode_gen_quickpickmd)*
-
-**Returns:** *[QuickPick](#interfaces_vscode_gen_quickpickmd)*
-
-___
-
-###  newQuickPickBag
-
-▸ **newQuickPickBag**(): *[QuickPickBag](#interfaces_vscode_gen_quickpickbagmd)*
-
-**Returns:** *[QuickPickBag](#interfaces_vscode_gen_quickpickbagmd)*
-
-___
-
-###  newQuickPickItem
-
-▸ **newQuickPickItem**(): *[QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)*
-
-**Returns:** *[QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)*
-
-___
-
-###  newStatusBarItem
-
-▸ **newStatusBarItem**(): *[StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)*
-
-**Returns:** *[StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)*
-
-___
-
-###  newStatusBarItemBag
-
-▸ **newStatusBarItemBag**(): *[StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd)*
-
-**Returns:** *[StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd)*
-
-___
-
-###  newTerminal
-
-▸ **newTerminal**(): *[Terminal](#interfaces_vscode_gen_terminalmd)*
-
-**Returns:** *[Terminal](#interfaces_vscode_gen_terminalmd)*
-
-___
-
-###  newTerminalBag
-
-▸ **newTerminalBag**(): *[TerminalBag](#interfaces_vscode_gen_terminalbagmd)*
-
-**Returns:** *[TerminalBag](#interfaces_vscode_gen_terminalbagmd)*
-
-___
-
-###  newTextEditorDecorationType
-
-▸ **newTextEditorDecorationType**(): *[TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)*
-
-**Returns:** *[TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)*
-
-___
-
-###  newTextEditorDecorationTypeBag
-
-▸ **newTextEditorDecorationTypeBag**(): *[TextEditorDecorationTypeBag](#interfaces_vscode_gen_texteditordecorationtypebagmd)*
-
-**Returns:** *[TextEditorDecorationTypeBag](#interfaces_vscode_gen_texteditordecorationtypebagmd)*
-
-___
-
-###  newWindowState
-
-▸ **newWindowState**(): *[WindowState](#interfaces_vscode_gen_windowstatemd)*
-
-**Returns:** *[WindowState](#interfaces_vscode_gen_windowstatemd)*
-
-___
-
-###  newWorkspaceBag
-
-▸ **newWorkspaceBag**(): *[WorkspaceBag](#interfaces_vscode_gen_workspacebagmd)*
-
-**Returns:** *[WorkspaceBag](#interfaces_vscode_gen_workspacebagmd)*
-
-___
-
-###  newWorkspaceFolder
-
-▸ **newWorkspaceFolder**(): *[WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)*
-
-**Returns:** *[WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)*
-
-___
-
-###  newWorkspaceFoldersChangeEvent
-
-▸ **newWorkspaceFoldersChangeEvent**(): *[WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd)*
-
-**Returns:** *[WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd)*
-
-___
-
-###  newipcMsg
-
-▸ **newipcMsg**(): *[ipcMsg](#classes_core_ipcmsgmd)*
-
-**Returns:** *[ipcMsg](#classes_core_ipcmsgmd)*
 
 
 <a name="interfaces_vscode_gen_clipboardmd"></a>
@@ -5805,7 +3645,7 @@ Namespace describing the environment the editor runs in.
 
 Provides single-call access to numerous individual `Env` properties at once.
 
-**`returns`** a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.
+**`returns`** a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvState` result received back at our end.
 
 #### Type declaration:
 
@@ -5815,13 +3655,13 @@ Provides single-call access to numerous individual `Env` properties at once.
 
 ▪ **_**: *function*
 
-▸ (`_`: [EnvBag](#interfaces_vscode_gen_envbagmd)): *void*
+▸ (`_`: [EnvState](#interfaces_vscode_gen_envstatemd)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`_` | [EnvBag](#interfaces_vscode_gen_envbagmd) |
+`_` | [EnvState](#interfaces_vscode_gen_envstatemd) |
 
 ___
 
@@ -6092,18 +3932,18 @@ Name | Type |
 `_` | string |
 
 
-<a name="interfaces_vscode_gen_envbagmd"></a>
+<a name="interfaces_vscode_gen_envstatemd"></a>
 
 
-# Interface: EnvBag
+# Interface: EnvState
 
-EnvBag gathers various properties of `Env`, obtainable via its `AllProperties` method.
+EnvState gathers various properties of `Env`, obtainable via its `AllProperties` method.
 
 ## Hierarchy
 
 * [fromJson](#interfaces_vscode_gen_fromjsonmd)
 
-  ↳ **EnvBag**
+  ↳ **EnvState**
 
 ## Index
 
@@ -6356,7 +4196,7 @@ To get an instance of a `FileSystemWatcher` use
 
 * [withDisp](#interfaces_vscode_gen_withdispmd)
 
-* [withBag](#interfaces_vscode_gen_withbagmd)‹[FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd)›
+* [withState](#interfaces_vscode_gen_withstatemd)‹[FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd)›
 
   ↳ **FileSystemWatcher**
 
@@ -6364,7 +4204,7 @@ To get an instance of a `FileSystemWatcher` use
 
 ### Properties
 
-* [Bag](#bag)
+* [Cfg](#cfg)
 * [Dispose](#dispose)
 * [OnDidChange](#ondidchange)
 * [OnDidCreate](#ondidcreate)
@@ -6377,11 +4217,11 @@ To get an instance of a `FileSystemWatcher` use
 
 ## Properties
 
-###  Bag
+###  Cfg
 
-• **Bag**: *[FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd)*
+• **Cfg**: *[FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd)*
 
-*Inherited from [withBag](#interfaces_vscode_gen_withbagmd).[Bag](#bag)*
+*Inherited from [withState](#interfaces_vscode_gen_withstatemd).[Cfg](#cfg)*
 
 ___
 
@@ -6541,13 +4381,13 @@ ___
 
 #### Type declaration:
 
-▸ (`_`: [FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd)): *function*
+▸ (`_`: [FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd)): *function*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`_` | [FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd) |
+`_` | [FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd) |
 
 ▸ (`_`: function): *void*
 
@@ -6589,25 +4429,25 @@ ___
 
 • **toJSON**: *function*
 
-*Inherited from [withBag](#interfaces_vscode_gen_withbagmd).[toJSON](#tojson)*
+*Inherited from [withState](#interfaces_vscode_gen_withstatemd).[toJSON](#tojson)*
 
 #### Type declaration:
 
 ▸ (): *any*
 
 
-<a name="interfaces_vscode_gen_filesystemwatcherbagmd"></a>
+<a name="interfaces_vscode_gen_filesystemwatcherstatemd"></a>
 
 
-# Interface: FileSystemWatcherBag
+# Interface: FileSystemWatcherState
 
-FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+FileSystemWatcherState (to be accessed only via `FileSystemWatcher.Cfg`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
 ## Hierarchy
 
 * [fromJson](#interfaces_vscode_gen_fromjsonmd)
 
-  ↳ **FileSystemWatcherBag**
+  ↳ **FileSystemWatcherState**
 
 ## Index
 
@@ -6744,23 +4584,23 @@ it ignores delete file system events.
 
   ↳ [DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd)
 
-  ↳ [EnvBag](#interfaces_vscode_gen_envbagmd)
+  ↳ [EnvState](#interfaces_vscode_gen_envstatemd)
 
-  ↳ [WorkspaceBag](#interfaces_vscode_gen_workspacebagmd)
+  ↳ [WorkspaceState](#interfaces_vscode_gen_workspacestatemd)
 
-  ↳ [StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd)
+  ↳ [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)
 
-  ↳ [OutputChannelBag](#interfaces_vscode_gen_outputchannelbagmd)
+  ↳ [OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd)
 
-  ↳ [TextEditorDecorationTypeBag](#interfaces_vscode_gen_texteditordecorationtypebagmd)
+  ↳ [TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd)
 
-  ↳ [InputBoxBag](#interfaces_vscode_gen_inputboxbagmd)
+  ↳ [InputBoxState](#interfaces_vscode_gen_inputboxstatemd)
 
-  ↳ [QuickPickBag](#interfaces_vscode_gen_quickpickbagmd)
+  ↳ [QuickPickState](#interfaces_vscode_gen_quickpickstatemd)
 
-  ↳ [TerminalBag](#interfaces_vscode_gen_terminalbagmd)
+  ↳ [TerminalState](#interfaces_vscode_gen_terminalstatemd)
 
-  ↳ [FileSystemWatcherBag](#interfaces_vscode_gen_filesystemwatcherbagmd)
+  ↳ [FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd)
 
 ## Index
 
@@ -6802,7 +4642,7 @@ when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-a
 
 * [withDisp](#interfaces_vscode_gen_withdispmd)
 
-* [withBag](#interfaces_vscode_gen_withbagmd)‹[InputBoxBag](#interfaces_vscode_gen_inputboxbagmd)›
+* [withState](#interfaces_vscode_gen_withstatemd)‹[InputBoxState](#interfaces_vscode_gen_inputboxstatemd)›
 
   ↳ **InputBox**
 
@@ -6810,7 +4650,7 @@ when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-a
 
 ### Properties
 
-* [Bag](#bag)
+* [Cfg](#cfg)
 * [Dispose](#dispose)
 * [Hide](#hide)
 * [OnDidAccept](#ondidaccept)
@@ -6825,11 +4665,11 @@ when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-a
 
 ## Properties
 
-###  Bag
+###  Cfg
 
-• **Bag**: *[InputBoxBag](#interfaces_vscode_gen_inputboxbagmd)*
+• **Cfg**: *[InputBoxState](#interfaces_vscode_gen_inputboxstatemd)*
 
-*Inherited from [withBag](#interfaces_vscode_gen_withbagmd).[Bag](#bag)*
+*Inherited from [withState](#interfaces_vscode_gen_withstatemd).[Cfg](#cfg)*
 
 ___
 
@@ -7029,13 +4869,13 @@ ___
 
 #### Type declaration:
 
-▸ (`_`: [InputBoxBag](#interfaces_vscode_gen_inputboxbagmd)): *function*
+▸ (`_`: [InputBoxState](#interfaces_vscode_gen_inputboxstatemd)): *function*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`_` | [InputBoxBag](#interfaces_vscode_gen_inputboxbagmd) |
+`_` | [InputBoxState](#interfaces_vscode_gen_inputboxstatemd) |
 
 ▸ (`_`: function): *void*
 
@@ -7077,25 +4917,131 @@ ___
 
 • **toJSON**: *function*
 
-*Inherited from [withBag](#interfaces_vscode_gen_withbagmd).[toJSON](#tojson)*
+*Inherited from [withState](#interfaces_vscode_gen_withstatemd).[toJSON](#tojson)*
 
 #### Type declaration:
 
 ▸ (): *any*
 
 
-<a name="interfaces_vscode_gen_inputboxbagmd"></a>
+<a name="interfaces_vscode_gen_inputboxoptionsmd"></a>
 
 
-# Interface: InputBoxBag
+# Interface: InputBoxOptions
 
-InputBoxBag (to be accessed only via `InputBox.Bag`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+Options to configure the behavior of the input box UI.
+
+## Hierarchy
+
+* **InputBoxOptions**
+
+## Index
+
+### Properties
+
+* [ignoreFocusOut](#optional-ignorefocusout)
+* [password](#optional-password)
+* [placeHolder](#optional-placeholder)
+* [prompt](#optional-prompt)
+* [validateInput](#optional-validateinput)
+* [validateInput_AppzFuncId](#validateinput_appzfuncid)
+* [value](#optional-value)
+* [valueSelection](#optional-valueselection)
+
+## Properties
+
+### `Optional` ignoreFocusOut
+
+• **ignoreFocusOut**? : *boolean*
+
+Set to `true` to keep the input box open when focus moves to another part of the editor or to another window.
+
+___
+
+### `Optional` password
+
+• **password**? : *boolean*
+
+Set to `true` to show a password prompt that will not show the typed value.
+
+___
+
+### `Optional` placeHolder
+
+• **placeHolder**? : *string*
+
+An optional string to show as place holder in the input box to guide the user what to type.
+
+___
+
+### `Optional` prompt
+
+• **prompt**? : *string*
+
+The text to display underneath the input box.
+
+___
+
+### `Optional` validateInput
+
+• **validateInput**? : *function*
+
+An optional function that will be called to validate input and to give a hint
+to the user.
+
+`value` ── The current value of the input box.
+
+`return` ── A human readable string which is presented as diagnostic message.
+Return `undefined`, `null`, or the empty string when 'value' is valid.
+
+#### Type declaration:
+
+▸ (`_`: string): *string*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | string |
+
+___
+
+###  validateInput_AppzFuncId
+
+• **validateInput_AppzFuncId**: *string*
+
+___
+
+### `Optional` value
+
+• **value**? : *string*
+
+The value to prefill in the input box.
+
+___
+
+### `Optional` valueSelection
+
+• **valueSelection**? : *[number, number]*
+
+Selection of the prefilled [`value`](https://code.visualstudio.com/api/references/vscode-api#InputBoxOptions.value). Defined as tuple of two number where the
+first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
+word will be selected, when empty (start equals end) only the cursor will be set,
+otherwise the defined range will be selected.
+
+
+<a name="interfaces_vscode_gen_inputboxstatemd"></a>
+
+
+# Interface: InputBoxState
+
+InputBoxState (to be accessed only via `InputBox.Cfg`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
 ## Hierarchy
 
 * [fromJson](#interfaces_vscode_gen_fromjsonmd)
 
-  ↳ **InputBoxBag**
+  ↳ **InputBoxState**
 
 ## Index
 
@@ -7270,112 +5216,6 @@ ___
 • **value**? : *string*
 
 Current input value.
-
-
-<a name="interfaces_vscode_gen_inputboxoptionsmd"></a>
-
-
-# Interface: InputBoxOptions
-
-Options to configure the behavior of the input box UI.
-
-## Hierarchy
-
-* **InputBoxOptions**
-
-## Index
-
-### Properties
-
-* [ignoreFocusOut](#optional-ignorefocusout)
-* [password](#optional-password)
-* [placeHolder](#optional-placeholder)
-* [prompt](#optional-prompt)
-* [validateInput](#optional-validateinput)
-* [validateInput_AppzFuncId](#validateinput_appzfuncid)
-* [value](#optional-value)
-* [valueSelection](#optional-valueselection)
-
-## Properties
-
-### `Optional` ignoreFocusOut
-
-• **ignoreFocusOut**? : *boolean*
-
-Set to `true` to keep the input box open when focus moves to another part of the editor or to another window.
-
-___
-
-### `Optional` password
-
-• **password**? : *boolean*
-
-Set to `true` to show a password prompt that will not show the typed value.
-
-___
-
-### `Optional` placeHolder
-
-• **placeHolder**? : *string*
-
-An optional string to show as place holder in the input box to guide the user what to type.
-
-___
-
-### `Optional` prompt
-
-• **prompt**? : *string*
-
-The text to display underneath the input box.
-
-___
-
-### `Optional` validateInput
-
-• **validateInput**? : *function*
-
-An optional function that will be called to validate input and to give a hint
-to the user.
-
-`value` ── The current value of the input box.
-
-`return` ── A human readable string which is presented as diagnostic message.
-Return `undefined`, `null`, or the empty string when 'value' is valid.
-
-#### Type declaration:
-
-▸ (`_`: string): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | string |
-
-___
-
-###  validateInput_AppzFuncId
-
-• **validateInput_AppzFuncId**: *string*
-
-___
-
-### `Optional` value
-
-• **value**? : *string*
-
-The value to prefill in the input box.
-
-___
-
-### `Optional` valueSelection
-
-• **valueSelection**? : *[number, number]*
-
-Selection of the prefilled [`value`](https://code.visualstudio.com/api/references/vscode-api#InputBoxOptions.value). Defined as tuple of two number where the
-first is the inclusive start index and the second the exclusive end index. When `undefined` the whole
-word will be selected, when empty (start equals end) only the cursor will be set,
-otherwise the defined range will be selected.
 
 
 <a name="interfaces_vscode_gen_languagesmd"></a>
@@ -7703,7 +5543,7 @@ To get an instance of an `OutputChannel` use
 
 * [withDisp](#interfaces_vscode_gen_withdispmd)
 
-* [withBag](#interfaces_vscode_gen_withbagmd)‹[OutputChannelBag](#interfaces_vscode_gen_outputchannelbagmd)›
+* [withState](#interfaces_vscode_gen_withstatemd)‹[OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd)›
 
   ↳ **OutputChannel**
 
@@ -7713,7 +5553,7 @@ To get an instance of an `OutputChannel` use
 
 * [Append](#append)
 * [AppendLine](#appendline)
-* [Bag](#bag)
+* [Cfg](#cfg)
 * [Clear](#clear)
 * [Dispose](#dispose)
 * [Hide](#hide)
@@ -7782,11 +5622,11 @@ Name | Type |
 
 ___
 
-###  Bag
+###  Cfg
 
-• **Bag**: *[OutputChannelBag](#interfaces_vscode_gen_outputchannelbagmd)*
+• **Cfg**: *[OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd)*
 
-*Inherited from [withBag](#interfaces_vscode_gen_withbagmd).[Bag](#bag)*
+*Inherited from [withState](#interfaces_vscode_gen_withstatemd).[Cfg](#cfg)*
 
 ___
 
@@ -7926,25 +5766,25 @@ ___
 
 • **toJSON**: *function*
 
-*Inherited from [withBag](#interfaces_vscode_gen_withbagmd).[toJSON](#tojson)*
+*Inherited from [withState](#interfaces_vscode_gen_withstatemd).[toJSON](#tojson)*
 
 #### Type declaration:
 
 ▸ (): *any*
 
 
-<a name="interfaces_vscode_gen_outputchannelbagmd"></a>
+<a name="interfaces_vscode_gen_outputchannelstatemd"></a>
 
 
-# Interface: OutputChannelBag
+# Interface: OutputChannelState
 
-OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+OutputChannelState (to be accessed only via `OutputChannel.Cfg`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 
 ## Hierarchy
 
 * [fromJson](#interfaces_vscode_gen_fromjsonmd)
 
-  ↳ **OutputChannelBag**
+  ↳ **OutputChannelState**
 
 ## Index
 
@@ -8382,7 +6222,7 @@ when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-
 
 * [withDisp](#interfaces_vscode_gen_withdispmd)
 
-* [withBag](#interfaces_vscode_gen_withbagmd)‹[QuickPickBag](#interfaces_vscode_gen_quickpickbagmd)›
+* [withState](#interfaces_vscode_gen_withstatemd)‹[QuickPickState](#interfaces_vscode_gen_quickpickstatemd)›
 
   ↳ **QuickPick**
 
@@ -8390,7 +6230,7 @@ when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-
 
 ### Properties
 
-* [Bag](#bag)
+* [Cfg](#cfg)
 * [Dispose](#dispose)
 * [Hide](#hide)
 * [OnDidAccept](#ondidaccept)
@@ -8407,11 +6247,11 @@ when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-
 
 ## Properties
 
-###  Bag
+###  Cfg
 
-• **Bag**: *[QuickPickBag](#interfaces_vscode_gen_quickpickbagmd)*
+• **Cfg**: *[QuickPickState](#interfaces_vscode_gen_quickpickstatemd)*
 
-*Inherited from [withBag](#interfaces_vscode_gen_withbagmd).[Bag](#bag)*
+*Inherited from [withState](#interfaces_vscode_gen_withstatemd).[Cfg](#cfg)*
 
 ___
 
@@ -8687,13 +6527,13 @@ ___
 
 #### Type declaration:
 
-▸ (`_`: [QuickPickBag](#interfaces_vscode_gen_quickpickbagmd)): *function*
+▸ (`_`: [QuickPickState](#interfaces_vscode_gen_quickpickstatemd)): *function*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`_` | [QuickPickBag](#interfaces_vscode_gen_quickpickbagmd) |
+`_` | [QuickPickState](#interfaces_vscode_gen_quickpickstatemd) |
 
 ▸ (`_`: function): *void*
 
@@ -8735,25 +6575,211 @@ ___
 
 • **toJSON**: *function*
 
-*Inherited from [withBag](#interfaces_vscode_gen_withbagmd).[toJSON](#tojson)*
+*Inherited from [withState](#interfaces_vscode_gen_withstatemd).[toJSON](#tojson)*
 
 #### Type declaration:
 
 ▸ (): *any*
 
 
-<a name="interfaces_vscode_gen_quickpickbagmd"></a>
+<a name="interfaces_vscode_gen_quickpickitemmd"></a>
 
 
-# Interface: QuickPickBag
+# Interface: QuickPickItem
 
-QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+Represents an item that can be selected from
+a list of items.
 
 ## Hierarchy
 
 * [fromJson](#interfaces_vscode_gen_fromjsonmd)
 
-  ↳ **QuickPickBag**
+  ↳ **QuickPickItem**
+
+## Index
+
+### Properties
+
+* [__loadFromJsonish__](#__loadfromjsonish__)
+* [alwaysShow](#optional-alwaysshow)
+* [description](#optional-description)
+* [detail](#optional-detail)
+* [label](#label)
+* [my](#optional-my)
+* [picked](#optional-picked)
+
+## Properties
+
+###  __loadFromJsonish__
+
+• **__loadFromJsonish__**: *function*
+
+*Inherited from [fromJson](#interfaces_vscode_gen_fromjsonmd).[__loadFromJsonish__](#__loadfromjsonish__)*
+
+#### Type declaration:
+
+▸ (`_`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | any |
+
+___
+
+### `Optional` alwaysShow
+
+• **alwaysShow**? : *boolean*
+
+Always show this item.
+
+___
+
+### `Optional` description
+
+• **description**? : *string*
+
+A human readable string which is rendered less prominent.
+
+___
+
+### `Optional` detail
+
+• **detail**? : *string*
+
+A human readable string which is rendered less prominent.
+
+___
+
+###  label
+
+• **label**: *string*
+
+A human readable string which is rendered prominent.
+
+___
+
+### `Optional` my
+
+• **my**? : *object*
+
+Free-form custom data, preserved across a roundtrip.
+
+#### Type declaration:
+
+* \[ **_**: *string*\]: any
+
+___
+
+### `Optional` picked
+
+• **picked**? : *boolean*
+
+Optional flag indicating if this item is picked initially.
+(Only honored when the picker allows multiple selections.)
+
+
+<a name="interfaces_vscode_gen_quickpickoptionsmd"></a>
+
+
+# Interface: QuickPickOptions
+
+Options to configure the behavior of the quick pick UI.
+
+## Hierarchy
+
+* **QuickPickOptions**
+
+## Index
+
+### Properties
+
+* [canPickMany](#optional-canpickmany)
+* [ignoreFocusOut](#optional-ignorefocusout)
+* [matchOnDescription](#optional-matchondescription)
+* [matchOnDetail](#optional-matchondetail)
+* [onDidSelectItem](#optional-ondidselectitem)
+* [onDidSelectItem_AppzFuncId](#ondidselectitem_appzfuncid)
+* [placeHolder](#optional-placeholder)
+
+## Properties
+
+### `Optional` canPickMany
+
+• **canPickMany**? : *boolean*
+
+An optional flag to make the picker accept multiple selections, if true the result is an array of picks.
+
+___
+
+### `Optional` ignoreFocusOut
+
+• **ignoreFocusOut**? : *boolean*
+
+Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.
+
+___
+
+### `Optional` matchOnDescription
+
+• **matchOnDescription**? : *boolean*
+
+An optional flag to include the description when filtering the picks.
+
+___
+
+### `Optional` matchOnDetail
+
+• **matchOnDetail**? : *boolean*
+
+An optional flag to include the detail when filtering the picks.
+
+___
+
+### `Optional` onDidSelectItem
+
+• **onDidSelectItem**? : *function*
+
+An optional function that is invoked whenever an item is selected.
+
+#### Type declaration:
+
+▸ (`_`: [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)): *any*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd) |
+
+___
+
+###  onDidSelectItem_AppzFuncId
+
+• **onDidSelectItem_AppzFuncId**: *string*
+
+___
+
+### `Optional` placeHolder
+
+• **placeHolder**? : *string*
+
+An optional string to show as place holder in the input box to guide the user what to pick on.
+
+
+<a name="interfaces_vscode_gen_quickpickstatemd"></a>
+
+
+# Interface: QuickPickState
+
+QuickPickState (to be accessed only via `QuickPick.Cfg`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+
+## Hierarchy
+
+* [fromJson](#interfaces_vscode_gen_fromjsonmd)
+
+  ↳ **QuickPickState**
 
 ## Index
 
@@ -8957,192 +6983,6 @@ ___
 Current value of the filter text.
 
 
-<a name="interfaces_vscode_gen_quickpickitemmd"></a>
-
-
-# Interface: QuickPickItem
-
-Represents an item that can be selected from
-a list of items.
-
-## Hierarchy
-
-* [fromJson](#interfaces_vscode_gen_fromjsonmd)
-
-  ↳ **QuickPickItem**
-
-## Index
-
-### Properties
-
-* [__loadFromJsonish__](#__loadfromjsonish__)
-* [alwaysShow](#optional-alwaysshow)
-* [description](#optional-description)
-* [detail](#optional-detail)
-* [label](#label)
-* [my](#optional-my)
-* [picked](#optional-picked)
-
-## Properties
-
-###  __loadFromJsonish__
-
-• **__loadFromJsonish__**: *function*
-
-*Inherited from [fromJson](#interfaces_vscode_gen_fromjsonmd).[__loadFromJsonish__](#__loadfromjsonish__)*
-
-#### Type declaration:
-
-▸ (`_`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | any |
-
-___
-
-### `Optional` alwaysShow
-
-• **alwaysShow**? : *boolean*
-
-Always show this item.
-
-___
-
-### `Optional` description
-
-• **description**? : *string*
-
-A human readable string which is rendered less prominent.
-
-___
-
-### `Optional` detail
-
-• **detail**? : *string*
-
-A human readable string which is rendered less prominent.
-
-___
-
-###  label
-
-• **label**: *string*
-
-A human readable string which is rendered prominent.
-
-___
-
-### `Optional` my
-
-• **my**? : *object*
-
-Free-form custom data, preserved across a roundtrip.
-
-#### Type declaration:
-
-* \[ **_**: *string*\]: any
-
-___
-
-### `Optional` picked
-
-• **picked**? : *boolean*
-
-Optional flag indicating if this item is picked initially.
-(Only honored when the picker allows multiple selections.)
-
-
-<a name="interfaces_vscode_gen_quickpickoptionsmd"></a>
-
-
-# Interface: QuickPickOptions
-
-Options to configure the behavior of the quick pick UI.
-
-## Hierarchy
-
-* **QuickPickOptions**
-
-## Index
-
-### Properties
-
-* [canPickMany](#optional-canpickmany)
-* [ignoreFocusOut](#optional-ignorefocusout)
-* [matchOnDescription](#optional-matchondescription)
-* [matchOnDetail](#optional-matchondetail)
-* [onDidSelectItem](#optional-ondidselectitem)
-* [onDidSelectItem_AppzFuncId](#ondidselectitem_appzfuncid)
-* [placeHolder](#optional-placeholder)
-
-## Properties
-
-### `Optional` canPickMany
-
-• **canPickMany**? : *boolean*
-
-An optional flag to make the picker accept multiple selections, if true the result is an array of picks.
-
-___
-
-### `Optional` ignoreFocusOut
-
-• **ignoreFocusOut**? : *boolean*
-
-Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.
-
-___
-
-### `Optional` matchOnDescription
-
-• **matchOnDescription**? : *boolean*
-
-An optional flag to include the description when filtering the picks.
-
-___
-
-### `Optional` matchOnDetail
-
-• **matchOnDetail**? : *boolean*
-
-An optional flag to include the detail when filtering the picks.
-
-___
-
-### `Optional` onDidSelectItem
-
-• **onDidSelectItem**? : *function*
-
-An optional function that is invoked whenever an item is selected.
-
-#### Type declaration:
-
-▸ (`_`: [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd) |
-
-___
-
-###  onDidSelectItem_AppzFuncId
-
-• **onDidSelectItem_AppzFuncId**: *string*
-
-___
-
-### `Optional` placeHolder
-
-• **placeHolder**? : *string*
-
-An optional string to show as place holder in the input box to guide the user what to pick on.
-
-
 <a name="interfaces_vscode_gen_savedialogoptionsmd"></a>
 
 
@@ -9215,7 +7055,7 @@ show text and icons and run a command on click.
 
 * [withDisp](#interfaces_vscode_gen_withdispmd)
 
-* [withBag](#interfaces_vscode_gen_withbagmd)‹[StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd)›
+* [withState](#interfaces_vscode_gen_withstatemd)‹[StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)›
 
   ↳ **StatusBarItem**
 
@@ -9223,7 +7063,7 @@ show text and icons and run a command on click.
 
 ### Properties
 
-* [Bag](#bag)
+* [Cfg](#cfg)
 * [Dispose](#dispose)
 * [Hide](#hide)
 * [Show](#show)
@@ -9235,11 +7075,11 @@ show text and icons and run a command on click.
 
 ## Properties
 
-###  Bag
+###  Cfg
 
-• **Bag**: *[StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd)*
+• **Cfg**: *[StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)*
 
-*Inherited from [withBag](#interfaces_vscode_gen_withbagmd).[Bag](#bag)*
+*Inherited from [withState](#interfaces_vscode_gen_withstatemd).[Cfg](#cfg)*
 
 ___
 
@@ -9328,13 +7168,13 @@ ___
 
 #### Type declaration:
 
-▸ (`_`: [StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd)): *function*
+▸ (`_`: [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)): *function*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`_` | [StatusBarItemBag](#interfaces_vscode_gen_statusbaritembagmd) |
+`_` | [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd) |
 
 ▸ (`_`: function): *void*
 
@@ -9376,25 +7216,25 @@ ___
 
 • **toJSON**: *function*
 
-*Inherited from [withBag](#interfaces_vscode_gen_withbagmd).[toJSON](#tojson)*
+*Inherited from [withState](#interfaces_vscode_gen_withstatemd).[toJSON](#tojson)*
 
 #### Type declaration:
 
 ▸ (): *any*
 
 
-<a name="interfaces_vscode_gen_statusbaritembagmd"></a>
+<a name="interfaces_vscode_gen_statusbaritemstatemd"></a>
 
 
-# Interface: StatusBarItemBag
+# Interface: StatusBarItemState
 
-StatusBarItemBag (to be accessed only via `StatusBarItem.Bag`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+StatusBarItemState (to be accessed only via `StatusBarItem.Cfg`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
 ## Hierarchy
 
 * [fromJson](#interfaces_vscode_gen_fromjsonmd)
 
-  ↳ **StatusBarItemBag**
+  ↳ **StatusBarItemState**
 
 ## Index
 
@@ -9548,7 +7388,7 @@ An individual terminal instance within the integrated terminal.
 
 * [withDisp](#interfaces_vscode_gen_withdispmd)
 
-* [withBag](#interfaces_vscode_gen_withbagmd)‹[TerminalBag](#interfaces_vscode_gen_terminalbagmd)›
+* [withState](#interfaces_vscode_gen_withstatemd)‹[TerminalState](#interfaces_vscode_gen_terminalstatemd)›
 
   ↳ **Terminal**
 
@@ -9556,7 +7396,7 @@ An individual terminal instance within the integrated terminal.
 
 ### Properties
 
-* [Bag](#bag)
+* [Cfg](#cfg)
 * [Dispose](#dispose)
 * [Hide](#hide)
 * [SendText](#sendtext)
@@ -9568,11 +7408,11 @@ An individual terminal instance within the integrated terminal.
 
 ## Properties
 
-###  Bag
+###  Cfg
 
-• **Bag**: *[TerminalBag](#interfaces_vscode_gen_terminalbagmd)*
+• **Cfg**: *[TerminalState](#interfaces_vscode_gen_terminalstatemd)*
 
-*Inherited from [withBag](#interfaces_vscode_gen_withbagmd).[Bag](#bag)*
+*Inherited from [withState](#interfaces_vscode_gen_withstatemd).[Cfg](#cfg)*
 
 ___
 
@@ -9726,88 +7566,11 @@ ___
 
 • **toJSON**: *function*
 
-*Inherited from [withBag](#interfaces_vscode_gen_withbagmd).[toJSON](#tojson)*
+*Inherited from [withState](#interfaces_vscode_gen_withstatemd).[toJSON](#tojson)*
 
 #### Type declaration:
 
 ▸ (): *any*
-
-
-<a name="interfaces_vscode_gen_terminalbagmd"></a>
-
-
-# Interface: TerminalBag
-
-TerminalBag (to be accessed only via `Terminal.Bag`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
-
-## Hierarchy
-
-* [fromJson](#interfaces_vscode_gen_fromjsonmd)
-
-  ↳ **TerminalBag**
-
-## Index
-
-### Properties
-
-* [Name](#name)
-* [ReFetch](#refetch)
-* [__holder__](#__holder__)
-* [__loadFromJsonish__](#__loadfromjsonish__)
-
-## Properties
-
-###  Name
-
-• **Name**: *function*
-
-The name of the terminal.
-
-#### Type declaration:
-
-▸ (): *string*
-
-___
-
-###  ReFetch
-
-• **ReFetch**: *function*
-
-#### Type declaration:
-
-▸ (): *function*
-
-▸ (`_`: function): *void*
-
-**Parameters:**
-
-▪ **_**: *function*
-
-▸ (): *void*
-
-___
-
-###  __holder__
-
-• **__holder__**: *[Terminal](#interfaces_vscode_gen_terminalmd)*
-
-___
-
-###  __loadFromJsonish__
-
-• **__loadFromJsonish__**: *function*
-
-*Inherited from [fromJson](#interfaces_vscode_gen_fromjsonmd).[__loadFromJsonish__](#__loadfromjsonish__)*
-
-#### Type declaration:
-
-▸ (`_`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | any |
 
 
 <a name="interfaces_vscode_gen_terminaldimensionsmd"></a>
@@ -9938,6 +7701,83 @@ window's environment and also apply configured platform settings like
 must be provided as nothing will be inherited from the process or any configuration.
 
 
+<a name="interfaces_vscode_gen_terminalstatemd"></a>
+
+
+# Interface: TerminalState
+
+TerminalState (to be accessed only via `Terminal.Cfg`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+
+## Hierarchy
+
+* [fromJson](#interfaces_vscode_gen_fromjsonmd)
+
+  ↳ **TerminalState**
+
+## Index
+
+### Properties
+
+* [Name](#name)
+* [ReFetch](#refetch)
+* [__holder__](#__holder__)
+* [__loadFromJsonish__](#__loadfromjsonish__)
+
+## Properties
+
+###  Name
+
+• **Name**: *function*
+
+The name of the terminal.
+
+#### Type declaration:
+
+▸ (): *string*
+
+___
+
+###  ReFetch
+
+• **ReFetch**: *function*
+
+#### Type declaration:
+
+▸ (): *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  __holder__
+
+• **__holder__**: *[Terminal](#interfaces_vscode_gen_terminalmd)*
+
+___
+
+###  __loadFromJsonish__
+
+• **__loadFromJsonish__**: *function*
+
+*Inherited from [fromJson](#interfaces_vscode_gen_fromjsonmd).[__loadFromJsonish__](#__loadfromjsonish__)*
+
+#### Type declaration:
+
+▸ (`_`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | any |
+
+
 <a name="interfaces_vscode_gen_texteditordecorationtypemd"></a>
 
 
@@ -9955,7 +7795,7 @@ To get an instance of a `TextEditorDecorationType` use
 
 * [withDisp](#interfaces_vscode_gen_withdispmd)
 
-* [withBag](#interfaces_vscode_gen_withbagmd)‹[TextEditorDecorationTypeBag](#interfaces_vscode_gen_texteditordecorationtypebagmd)›
+* [withState](#interfaces_vscode_gen_withstatemd)‹[TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd)›
 
   ↳ **TextEditorDecorationType**
 
@@ -9963,7 +7803,7 @@ To get an instance of a `TextEditorDecorationType` use
 
 ### Properties
 
-* [Bag](#bag)
+* [Cfg](#cfg)
 * [Dispose](#dispose)
 * [__appzObjBagPullFromPeer__](#__appzobjbagpullfrompeer__)
 * [__disp__](#__disp__)
@@ -9972,11 +7812,11 @@ To get an instance of a `TextEditorDecorationType` use
 
 ## Properties
 
-###  Bag
+###  Cfg
 
-• **Bag**: *[TextEditorDecorationTypeBag](#interfaces_vscode_gen_texteditordecorationtypebagmd)*
+• **Cfg**: *[TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd)*
 
-*Inherited from [withBag](#interfaces_vscode_gen_withbagmd).[Bag](#bag)*
+*Inherited from [withState](#interfaces_vscode_gen_withstatemd).[Cfg](#cfg)*
 
 ___
 
@@ -10048,25 +7888,25 @@ ___
 
 • **toJSON**: *function*
 
-*Inherited from [withBag](#interfaces_vscode_gen_withbagmd).[toJSON](#tojson)*
+*Inherited from [withState](#interfaces_vscode_gen_withstatemd).[toJSON](#tojson)*
 
 #### Type declaration:
 
 ▸ (): *any*
 
 
-<a name="interfaces_vscode_gen_texteditordecorationtypebagmd"></a>
+<a name="interfaces_vscode_gen_texteditordecorationtypestatemd"></a>
 
 
-# Interface: TextEditorDecorationTypeBag
+# Interface: TextEditorDecorationTypeState
 
-TextEditorDecorationTypeBag (to be accessed only via `TextEditorDecorationType.Bag`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+TextEditorDecorationTypeState (to be accessed only via `TextEditorDecorationType.Cfg`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 
 ## Hierarchy
 
 * [fromJson](#interfaces_vscode_gen_fromjsonmd)
 
-  ↳ **TextEditorDecorationTypeBag**
+  ↳ **TextEditorDecorationTypeState**
 
 ## Index
 
@@ -12028,57 +9868,6 @@ ___
 Whether the current window is focused.
 
 
-<a name="interfaces_vscode_gen_withbagmd"></a>
-
-
-# Interface: withBag <**T**>
-
-## Type parameters
-
-▪ **T**: *[fromJson](#interfaces_vscode_gen_fromjsonmd)*
-
-## Hierarchy
-
-* **withBag**
-
-  ↳ [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)
-
-  ↳ [OutputChannel](#interfaces_vscode_gen_outputchannelmd)
-
-  ↳ [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)
-
-  ↳ [InputBox](#interfaces_vscode_gen_inputboxmd)
-
-  ↳ [QuickPick](#interfaces_vscode_gen_quickpickmd)
-
-  ↳ [Terminal](#interfaces_vscode_gen_terminalmd)
-
-  ↳ [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)
-
-## Index
-
-### Properties
-
-* [Bag](#bag)
-* [toJSON](#tojson)
-
-## Properties
-
-###  Bag
-
-• **Bag**: *T*
-
-___
-
-###  toJSON
-
-• **toJSON**: *function*
-
-#### Type declaration:
-
-▸ (): *any*
-
-
 <a name="interfaces_vscode_gen_withdispmd"></a>
 
 
@@ -12113,6 +9902,57 @@ ___
 ###  __disp__
 
 • **__disp__**: *[Disposable](#classes_core_disposablemd)*
+
+
+<a name="interfaces_vscode_gen_withstatemd"></a>
+
+
+# Interface: withState <**T**>
+
+## Type parameters
+
+▪ **T**: *[fromJson](#interfaces_vscode_gen_fromjsonmd)*
+
+## Hierarchy
+
+* **withState**
+
+  ↳ [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)
+
+  ↳ [OutputChannel](#interfaces_vscode_gen_outputchannelmd)
+
+  ↳ [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)
+
+  ↳ [InputBox](#interfaces_vscode_gen_inputboxmd)
+
+  ↳ [QuickPick](#interfaces_vscode_gen_quickpickmd)
+
+  ↳ [Terminal](#interfaces_vscode_gen_terminalmd)
+
+  ↳ [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)
+
+## Index
+
+### Properties
+
+* [Cfg](#cfg)
+* [toJSON](#tojson)
+
+## Properties
+
+###  Cfg
+
+• **Cfg**: *T*
+
+___
+
+###  toJSON
+
+• **toJSON**: *function*
+
+#### Type declaration:
+
+▸ (): *any*
 
 
 <a name="interfaces_vscode_gen_workspacemd"></a>
@@ -12159,7 +9999,7 @@ the editor-process so that they should be always used instead of nodejs-equivale
 
 Provides single-call access to numerous individual `Workspace` properties at once.
 
-**`returns`** a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
+**`returns`** a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceState` result received back at our end.
 
 #### Type declaration:
 
@@ -12169,13 +10009,13 @@ Provides single-call access to numerous individual `Workspace` properties at onc
 
 ▪ **_**: *function*
 
-▸ (`_`: [WorkspaceBag](#interfaces_vscode_gen_workspacebagmd)): *void*
+▸ (`_`: [WorkspaceState](#interfaces_vscode_gen_workspacestatemd)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`_` | [WorkspaceBag](#interfaces_vscode_gen_workspacebagmd) |
+`_` | [WorkspaceState](#interfaces_vscode_gen_workspacestatemd) |
 
 ___
 
@@ -12541,102 +10381,6 @@ Name | Type |
 `_` | [WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)[] |
 
 
-<a name="interfaces_vscode_gen_workspacebagmd"></a>
-
-
-# Interface: WorkspaceBag
-
-WorkspaceBag gathers various properties of `Workspace`, obtainable via its `AllProperties` method.
-
-## Hierarchy
-
-* [fromJson](#interfaces_vscode_gen_fromjsonmd)
-
-  ↳ **WorkspaceBag**
-
-## Index
-
-### Properties
-
-* [__loadFromJsonish__](#__loadfromjsonish__)
-* [name](#optional-name)
-* [workspaceFile](#optional-workspacefile)
-* [workspaceFolders](#optional-workspacefolders)
-
-## Properties
-
-###  __loadFromJsonish__
-
-• **__loadFromJsonish__**: *function*
-
-*Inherited from [fromJson](#interfaces_vscode_gen_fromjsonmd).[__loadFromJsonish__](#__loadfromjsonish__)*
-
-#### Type declaration:
-
-▸ (`_`: any): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`_` | any |
-
-___
-
-### `Optional` name
-
-• **name**? : *string*
-
-The name of the workspace. `undefined` when no folder
-has been opened.
-
-___
-
-### `Optional` workspaceFile
-
-• **workspaceFile**? : *string*
-
-The location of the workspace file, for example:
-
-`file:///Users/name/Development/myProject.code-workspace`
-
-or
-
-`untitled:1555503116870`
-
-for a workspace that is untitled and not yet saved.
-
-Depending on the workspace that is opened, the value will be:
-  * `undefined` when no workspace or  a single folder is opened
-  * the path of the workspace file as `Uri` otherwise. if the workspace
-is untitled, the returned URI will use the `untitled:` scheme
-
-The location can e.g. be used with the `vscode.openFolder` command to
-open the workspace again after it has been closed.
-
-**Example:**
-
-```typescript
-
-vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
-
-```
-
-**Note:** it is not advised to use `workspace.workspaceFile` to write
-configuration data into the file. You can use `workspace.getConfiguration().update()`
-for that purpose which will work both when a single folder is opened as
-well as an untitled or saved workspace.
-
-___
-
-### `Optional` workspaceFolders
-
-• **workspaceFolders**? : *[WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)[]*
-
-List of workspace folders or `undefined` when no folder is open.
-*Note* that the first entry corresponds to the value of `rootPath`.
-
-
 <a name="interfaces_vscode_gen_workspacefoldermd"></a>
 
 
@@ -12796,3 +10540,2259 @@ ___
 • **removed**: *[WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)[]*
 
 Removed workspace folders.
+
+
+<a name="interfaces_vscode_gen_workspacestatemd"></a>
+
+
+# Interface: WorkspaceState
+
+WorkspaceState gathers various properties of `Workspace`, obtainable via its `AllProperties` method.
+
+## Hierarchy
+
+* [fromJson](#interfaces_vscode_gen_fromjsonmd)
+
+  ↳ **WorkspaceState**
+
+## Index
+
+### Properties
+
+* [__loadFromJsonish__](#__loadfromjsonish__)
+* [name](#optional-name)
+* [workspaceFile](#optional-workspacefile)
+* [workspaceFolders](#optional-workspacefolders)
+
+## Properties
+
+###  __loadFromJsonish__
+
+• **__loadFromJsonish__**: *function*
+
+*Inherited from [fromJson](#interfaces_vscode_gen_fromjsonmd).[__loadFromJsonish__](#__loadfromjsonish__)*
+
+#### Type declaration:
+
+▸ (`_`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | any |
+
+___
+
+### `Optional` name
+
+• **name**? : *string*
+
+The name of the workspace. `undefined` when no folder
+has been opened.
+
+___
+
+### `Optional` workspaceFile
+
+• **workspaceFile**? : *string*
+
+The location of the workspace file, for example:
+
+`file:///Users/name/Development/myProject.code-workspace`
+
+or
+
+`untitled:1555503116870`
+
+for a workspace that is untitled and not yet saved.
+
+Depending on the workspace that is opened, the value will be:
+  * `undefined` when no workspace or  a single folder is opened
+  * the path of the workspace file as `Uri` otherwise. if the workspace
+is untitled, the returned URI will use the `untitled:` scheme
+
+The location can e.g. be used with the `vscode.openFolder` command to
+open the workspace again after it has been closed.
+
+**Example:**
+
+```typescript
+
+vscode.commands.executeCommand('vscode.openFolder', uriOfWorkspace);
+
+```
+
+**Note:** it is not advised to use `workspace.workspaceFile` to write
+configuration data into the file. You can use `workspace.getConfiguration().update()`
+for that purpose which will work both when a single folder is opened as
+well as an untitled or saved workspace.
+
+___
+
+### `Optional` workspaceFolders
+
+• **workspaceFolders**? : *[WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)[]*
+
+List of workspace folders or `undefined` when no folder is open.
+*Note* that the first entry corresponds to the value of `rootPath`.
+
+
+<a name="modules_core_md"></a>
+
+
+# External module: "core"
+
+## Index
+
+### Classes
+
+* [Cancel](#classes_core_cancelmd)
+* [Disposable](#classes_core_disposablemd)
+* [impl](#classes_core_implmd)
+* [ipcMsg](#classes_core_ipcmsgmd)
+
+### Type aliases
+
+* [dict](#dict)
+
+## Type aliases
+
+###  dict
+
+Ƭ **dict**: *object*
+
+#### Type declaration:
+
+* \[ **_**: *string*\]: any
+
+
+<a name="modules_vsc_appz_md"></a>
+
+
+# External module: "vsc-appz"
+
+## Index
+
+### Functions
+
+* [CancelIn](#cancelin)
+* [Main](#main)
+* [OnError](#let-onerror)
+
+## Functions
+
+###  CancelIn
+
+▸ **CancelIn**(`msFromNow`: number): *[Cancel](#classes_core_cancelmd)*
+
+Returns a new `Cancel` with its `Now` already scheduled to be called in `msFromNow` milliseconds.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`msFromNow` | number |
+
+**Returns:** *[Cancel](#classes_core_cancelmd)*
+
+___
+
+###  Main
+
+▸ **Main**(`main`: function, `stdIn?`: ReadStream, `stdOut?`: WriteStream): *void*
+
+Creates a `Vscode` implementation that communicates via the specified input and output streams (with `stdIn` defaulting to `process.stdin`, and `stdOut` defaulting to `process.stdout`), then loops forever to never `return`.
+
+**Parameters:**
+
+▪ **main**: *function*
+
+called whenever the counterparty demands, which usually means once at startup.
+
+▸ (`_`: [Vscode](#interfaces_vscode_gen_vscodemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Vscode](#interfaces_vscode_gen_vscodemd) |
+
+▪`Optional`  **stdIn**: *ReadStream*
+
+▪`Optional`  **stdOut**: *WriteStream*
+
+**Returns:** *void*
+
+___
+
+### `Let` OnError
+
+▸ **OnError**(`_this`: [Vscode](#interfaces_vscode_gen_vscodemd), `err`: any, `jsonMsg?`: any): *void*
+
+Reports problems during the ongoing forever-looping stdin/stdout communication
+with the `vscode-appz` VSC extension. Defaults to a stderr println. Must not be `null` or `undefined`.
+Any of its args must be checked for `null`/`undefined`-ness by your `OnError` handler.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_this` | [Vscode](#interfaces_vscode_gen_vscodemd) |
+`err` | any |
+`jsonMsg?` | any |
+
+**Returns:** *void*
+
+
+<a name="modules_vscode_gen_md"></a>
+
+
+# External module: "vscode.gen"
+
+## Index
+
+### Enumerations
+
+* [DecorationRangeBehavior](#enums_vscode_gen_decorationrangebehaviormd)
+* [OverviewRulerLane](#enums_vscode_gen_overviewrulerlanemd)
+* [StatusBarAlignment](#enums_vscode_gen_statusbaralignmentmd)
+
+### Classes
+
+* [impl](#classes_vscode_gen_implmd)
+* [implBase](#classes_vscode_gen_implbasemd)
+* [implClipboard](#classes_vscode_gen_implclipboardmd)
+* [implCommands](#classes_vscode_gen_implcommandsmd)
+* [implEnv](#classes_vscode_gen_implenvmd)
+* [implExtensions](#classes_vscode_gen_implextensionsmd)
+* [implLanguages](#classes_vscode_gen_impllanguagesmd)
+* [implWindow](#classes_vscode_gen_implwindowmd)
+* [implWorkspace](#classes_vscode_gen_implworkspacemd)
+
+### Interfaces
+
+* [Clipboard](#interfaces_vscode_gen_clipboardmd)
+* [Commands](#interfaces_vscode_gen_commandsmd)
+* [DecorationRenderOptions](#interfaces_vscode_gen_decorationrenderoptionsmd)
+* [DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd)
+* [Env](#interfaces_vscode_gen_envmd)
+* [EnvState](#interfaces_vscode_gen_envstatemd)
+* [ExtensionTerminalOptions](#interfaces_vscode_gen_extensionterminaloptionsmd)
+* [Extensions](#interfaces_vscode_gen_extensionsmd)
+* [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)
+* [FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd)
+* [InputBox](#interfaces_vscode_gen_inputboxmd)
+* [InputBoxOptions](#interfaces_vscode_gen_inputboxoptionsmd)
+* [InputBoxState](#interfaces_vscode_gen_inputboxstatemd)
+* [Languages](#interfaces_vscode_gen_languagesmd)
+* [MessageItem](#interfaces_vscode_gen_messageitemmd)
+* [MessageOptions](#interfaces_vscode_gen_messageoptionsmd)
+* [OpenDialogOptions](#interfaces_vscode_gen_opendialogoptionsmd)
+* [OutputChannel](#interfaces_vscode_gen_outputchannelmd)
+* [OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd)
+* [Pseudoterminal](#interfaces_vscode_gen_pseudoterminalmd)
+* [QuickInputButton](#interfaces_vscode_gen_quickinputbuttonmd)
+* [QuickPick](#interfaces_vscode_gen_quickpickmd)
+* [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)
+* [QuickPickOptions](#interfaces_vscode_gen_quickpickoptionsmd)
+* [QuickPickState](#interfaces_vscode_gen_quickpickstatemd)
+* [SaveDialogOptions](#interfaces_vscode_gen_savedialogoptionsmd)
+* [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)
+* [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)
+* [Terminal](#interfaces_vscode_gen_terminalmd)
+* [TerminalDimensions](#interfaces_vscode_gen_terminaldimensionsmd)
+* [TerminalOptions](#interfaces_vscode_gen_terminaloptionsmd)
+* [TerminalState](#interfaces_vscode_gen_terminalstatemd)
+* [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)
+* [TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd)
+* [ThemableDecorationAttachmentRenderOptions](#interfaces_vscode_gen_themabledecorationattachmentrenderoptionsmd)
+* [ThemableDecorationRenderOptions](#interfaces_vscode_gen_themabledecorationrenderoptionsmd)
+* [Vscode](#interfaces_vscode_gen_vscodemd)
+* [Window](#interfaces_vscode_gen_windowmd)
+* [WindowState](#interfaces_vscode_gen_windowstatemd)
+* [Workspace](#interfaces_vscode_gen_workspacemd)
+* [WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)
+* [WorkspaceFolderPickOptions](#interfaces_vscode_gen_workspacefolderpickoptionsmd)
+* [WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd)
+* [WorkspaceState](#interfaces_vscode_gen_workspacestatemd)
+* [fromJson](#interfaces_vscode_gen_fromjsonmd)
+* [withDisp](#interfaces_vscode_gen_withdispmd)
+* [withState](#interfaces_vscode_gen_withstatemd)
+
+### Type aliases
+
+* [Cancel](#cancel)
+* [Disposable](#disposable)
+* [ipcMsg](#ipcmsg)
+
+### Functions
+
+* [DiagnosticChangeEvent___loadFromJsonish__](#diagnosticchangeevent___loadfromjsonish__)
+* [EnvState___loadFromJsonish__](#envstate___loadfromjsonish__)
+* [FileSystemWatcherState_ApplyChanges](#filesystemwatcherstate_applychanges)
+* [FileSystemWatcherState_ReFetch](#filesystemwatcherstate_refetch)
+* [FileSystemWatcherState___loadFromJsonish__](#filesystemwatcherstate___loadfromjsonish__)
+* [FileSystemWatcher_Dispose](#filesystemwatcher_dispose)
+* [FileSystemWatcher_OnDidChange](#filesystemwatcher_ondidchange)
+* [FileSystemWatcher_OnDidCreate](#filesystemwatcher_ondidcreate)
+* [FileSystemWatcher_OnDidDelete](#filesystemwatcher_ondiddelete)
+* [FileSystemWatcher___appzObjBagPullFromPeer__](#filesystemwatcher___appzobjbagpullfrompeer__)
+* [FileSystemWatcher___appzObjBagPushToPeer__](#filesystemwatcher___appzobjbagpushtopeer__)
+* [FileSystemWatcher___loadFromJsonish__](#filesystemwatcher___loadfromjsonish__)
+* [InputBoxState_ApplyChanges](#inputboxstate_applychanges)
+* [InputBoxState_ReFetch](#inputboxstate_refetch)
+* [InputBoxState___loadFromJsonish__](#inputboxstate___loadfromjsonish__)
+* [InputBox_Dispose](#inputbox_dispose)
+* [InputBox_Hide](#inputbox_hide)
+* [InputBox_OnDidAccept](#inputbox_ondidaccept)
+* [InputBox_OnDidChangeValue](#inputbox_ondidchangevalue)
+* [InputBox_OnDidHide](#inputbox_ondidhide)
+* [InputBox_Show](#inputbox_show)
+* [InputBox___appzObjBagPullFromPeer__](#inputbox___appzobjbagpullfrompeer__)
+* [InputBox___appzObjBagPushToPeer__](#inputbox___appzobjbagpushtopeer__)
+* [InputBox___loadFromJsonish__](#inputbox___loadfromjsonish__)
+* [MessageItem___loadFromJsonish__](#messageitem___loadfromjsonish__)
+* [OutputChannelState_ReFetch](#outputchannelstate_refetch)
+* [OutputChannelState___loadFromJsonish__](#outputchannelstate___loadfromjsonish__)
+* [OutputChannel_Append](#outputchannel_append)
+* [OutputChannel_AppendLine](#outputchannel_appendline)
+* [OutputChannel_Clear](#outputchannel_clear)
+* [OutputChannel_Dispose](#outputchannel_dispose)
+* [OutputChannel_Hide](#outputchannel_hide)
+* [OutputChannel_Show](#outputchannel_show)
+* [OutputChannel___appzObjBagPullFromPeer__](#outputchannel___appzobjbagpullfrompeer__)
+* [OutputChannel___loadFromJsonish__](#outputchannel___loadfromjsonish__)
+* [QuickPickItem___loadFromJsonish__](#quickpickitem___loadfromjsonish__)
+* [QuickPickState_ApplyChanges](#quickpickstate_applychanges)
+* [QuickPickState_ReFetch](#quickpickstate_refetch)
+* [QuickPickState___loadFromJsonish__](#quickpickstate___loadfromjsonish__)
+* [QuickPick_Dispose](#quickpick_dispose)
+* [QuickPick_Hide](#quickpick_hide)
+* [QuickPick_OnDidAccept](#quickpick_ondidaccept)
+* [QuickPick_OnDidChangeActive](#quickpick_ondidchangeactive)
+* [QuickPick_OnDidChangeSelection](#quickpick_ondidchangeselection)
+* [QuickPick_OnDidChangeValue](#quickpick_ondidchangevalue)
+* [QuickPick_OnDidHide](#quickpick_ondidhide)
+* [QuickPick_Show](#quickpick_show)
+* [QuickPick___appzObjBagPullFromPeer__](#quickpick___appzobjbagpullfrompeer__)
+* [QuickPick___appzObjBagPushToPeer__](#quickpick___appzobjbagpushtopeer__)
+* [QuickPick___loadFromJsonish__](#quickpick___loadfromjsonish__)
+* [StatusBarItemState_ApplyChanges](#statusbaritemstate_applychanges)
+* [StatusBarItemState_ReFetch](#statusbaritemstate_refetch)
+* [StatusBarItemState___loadFromJsonish__](#statusbaritemstate___loadfromjsonish__)
+* [StatusBarItem_Dispose](#statusbaritem_dispose)
+* [StatusBarItem_Hide](#statusbaritem_hide)
+* [StatusBarItem_Show](#statusbaritem_show)
+* [StatusBarItem___appzObjBagPullFromPeer__](#statusbaritem___appzobjbagpullfrompeer__)
+* [StatusBarItem___appzObjBagPushToPeer__](#statusbaritem___appzobjbagpushtopeer__)
+* [StatusBarItem___loadFromJsonish__](#statusbaritem___loadfromjsonish__)
+* [TerminalState_ReFetch](#terminalstate_refetch)
+* [TerminalState___loadFromJsonish__](#terminalstate___loadfromjsonish__)
+* [Terminal_Dispose](#terminal_dispose)
+* [Terminal_Hide](#terminal_hide)
+* [Terminal_SendText](#terminal_sendtext)
+* [Terminal_Show](#terminal_show)
+* [Terminal___appzObjBagPullFromPeer__](#terminal___appzobjbagpullfrompeer__)
+* [Terminal___loadFromJsonish__](#terminal___loadfromjsonish__)
+* [TextEditorDecorationTypeState_ReFetch](#texteditordecorationtypestate_refetch)
+* [TextEditorDecorationTypeState___loadFromJsonish__](#texteditordecorationtypestate___loadfromjsonish__)
+* [TextEditorDecorationType_Dispose](#texteditordecorationtype_dispose)
+* [TextEditorDecorationType___appzObjBagPullFromPeer__](#texteditordecorationtype___appzobjbagpullfrompeer__)
+* [TextEditorDecorationType___loadFromJsonish__](#texteditordecorationtype___loadfromjsonish__)
+* [WindowState___loadFromJsonish__](#windowstate___loadfromjsonish__)
+* [WorkspaceFolder___loadFromJsonish__](#workspacefolder___loadfromjsonish__)
+* [WorkspaceFoldersChangeEvent___loadFromJsonish__](#workspacefolderschangeevent___loadfromjsonish__)
+* [WorkspaceState___loadFromJsonish__](#workspacestate___loadfromjsonish__)
+* [newDiagnosticChangeEvent](#newdiagnosticchangeevent)
+* [newDisposable](#newdisposable)
+* [newEnvState](#newenvstate)
+* [newFileSystemWatcher](#newfilesystemwatcher)
+* [newFileSystemWatcherState](#newfilesystemwatcherstate)
+* [newInputBox](#newinputbox)
+* [newInputBoxState](#newinputboxstate)
+* [newMessageItem](#newmessageitem)
+* [newOutputChannel](#newoutputchannel)
+* [newOutputChannelState](#newoutputchannelstate)
+* [newQuickPick](#newquickpick)
+* [newQuickPickItem](#newquickpickitem)
+* [newQuickPickState](#newquickpickstate)
+* [newStatusBarItem](#newstatusbaritem)
+* [newStatusBarItemState](#newstatusbaritemstate)
+* [newTerminal](#newterminal)
+* [newTerminalState](#newterminalstate)
+* [newTextEditorDecorationType](#newtexteditordecorationtype)
+* [newTextEditorDecorationTypeState](#newtexteditordecorationtypestate)
+* [newWindowState](#newwindowstate)
+* [newWorkspaceFolder](#newworkspacefolder)
+* [newWorkspaceFoldersChangeEvent](#newworkspacefolderschangeevent)
+* [newWorkspaceState](#newworkspacestate)
+* [newipcMsg](#newipcmsg)
+
+## Type aliases
+
+###  Cancel
+
+Ƭ **Cancel**: *[Cancel](#classes_core_cancelmd)*
+
+___
+
+###  Disposable
+
+Ƭ **Disposable**: *[Disposable](#classes_core_disposablemd)*
+
+___
+
+###  ipcMsg
+
+Ƭ **ipcMsg**: *[ipcMsg](#classes_core_ipcmsgmd)*
+
+## Functions
+
+###  DiagnosticChangeEvent___loadFromJsonish__
+
+▸ **DiagnosticChangeEvent___loadFromJsonish__**(`this`: [DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  EnvState___loadFromJsonish__
+
+▸ **EnvState___loadFromJsonish__**(`this`: [EnvState](#interfaces_vscode_gen_envstatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [EnvState](#interfaces_vscode_gen_envstatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  FileSystemWatcherState_ApplyChanges
+
+▸ **FileSystemWatcherState_ApplyChanges**(`this`: [FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  FileSystemWatcherState_ReFetch
+
+▸ **FileSystemWatcherState_ReFetch**(`this`: [FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  FileSystemWatcherState___loadFromJsonish__
+
+▸ **FileSystemWatcherState___loadFromJsonish__**(`this`: [FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  FileSystemWatcher_Dispose
+
+▸ **FileSystemWatcher_Dispose**(`this`: [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  FileSystemWatcher_OnDidChange
+
+▸ **FileSystemWatcher_OnDidChange**(`this`: [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)*
+
+▪ **handler**: *function*
+
+▸ (`_`: string): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | string |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  FileSystemWatcher_OnDidCreate
+
+▸ **FileSystemWatcher_OnDidCreate**(`this`: [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)*
+
+▪ **handler**: *function*
+
+▸ (`_`: string): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | string |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  FileSystemWatcher_OnDidDelete
+
+▸ **FileSystemWatcher_OnDidDelete**(`this`: [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)*
+
+▪ **handler**: *function*
+
+▸ (`_`: string): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | string |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  FileSystemWatcher___appzObjBagPullFromPeer__
+
+▸ **FileSystemWatcher___appzObjBagPullFromPeer__**(`this`: [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  FileSystemWatcher___appzObjBagPushToPeer__
+
+▸ **FileSystemWatcher___appzObjBagPushToPeer__**(`this`: [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd), `allUpdates?`: [FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd) |
+`allUpdates?` | [FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  FileSystemWatcher___loadFromJsonish__
+
+▸ **FileSystemWatcher___loadFromJsonish__**(`this`: [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  InputBoxState_ApplyChanges
+
+▸ **InputBoxState_ApplyChanges**(`this`: [InputBoxState](#interfaces_vscode_gen_inputboxstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBoxState](#interfaces_vscode_gen_inputboxstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  InputBoxState_ReFetch
+
+▸ **InputBoxState_ReFetch**(`this`: [InputBoxState](#interfaces_vscode_gen_inputboxstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBoxState](#interfaces_vscode_gen_inputboxstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  InputBoxState___loadFromJsonish__
+
+▸ **InputBoxState___loadFromJsonish__**(`this`: [InputBoxState](#interfaces_vscode_gen_inputboxstatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBoxState](#interfaces_vscode_gen_inputboxstatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  InputBox_Dispose
+
+▸ **InputBox_Dispose**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  InputBox_Hide
+
+▸ **InputBox_Hide**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  InputBox_OnDidAccept
+
+▸ **InputBox_OnDidAccept**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[InputBox](#interfaces_vscode_gen_inputboxmd)*
+
+▪ **handler**: *function*
+
+▸ (): *void*
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  InputBox_OnDidChangeValue
+
+▸ **InputBox_OnDidChangeValue**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[InputBox](#interfaces_vscode_gen_inputboxmd)*
+
+▪ **handler**: *function*
+
+▸ (`_`: string): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | string |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  InputBox_OnDidHide
+
+▸ **InputBox_OnDidHide**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[InputBox](#interfaces_vscode_gen_inputboxmd)*
+
+▪ **handler**: *function*
+
+▸ (): *void*
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  InputBox_Show
+
+▸ **InputBox_Show**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  InputBox___appzObjBagPullFromPeer__
+
+▸ **InputBox___appzObjBagPullFromPeer__**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  InputBox___appzObjBagPushToPeer__
+
+▸ **InputBox___appzObjBagPushToPeer__**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `allUpdates?`: [InputBoxState](#interfaces_vscode_gen_inputboxstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
+`allUpdates?` | [InputBoxState](#interfaces_vscode_gen_inputboxstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  InputBox___loadFromJsonish__
+
+▸ **InputBox___loadFromJsonish__**(`this`: [InputBox](#interfaces_vscode_gen_inputboxmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [InputBox](#interfaces_vscode_gen_inputboxmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  MessageItem___loadFromJsonish__
+
+▸ **MessageItem___loadFromJsonish__**(`this`: [MessageItem](#interfaces_vscode_gen_messageitemmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [MessageItem](#interfaces_vscode_gen_messageitemmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  OutputChannelState_ReFetch
+
+▸ **OutputChannelState_ReFetch**(`this`: [OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OutputChannelState___loadFromJsonish__
+
+▸ **OutputChannelState___loadFromJsonish__**(`this`: [OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  OutputChannel_Append
+
+▸ **OutputChannel_Append**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `value`: string): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+`value` | string |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OutputChannel_AppendLine
+
+▸ **OutputChannel_AppendLine**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `value`: string): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+`value` | string |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OutputChannel_Clear
+
+▸ **OutputChannel_Clear**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OutputChannel_Dispose
+
+▸ **OutputChannel_Dispose**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OutputChannel_Hide
+
+▸ **OutputChannel_Hide**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OutputChannel_Show
+
+▸ **OutputChannel_Show**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `preserveFocus?`: boolean): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+`preserveFocus?` | boolean |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OutputChannel___appzObjBagPullFromPeer__
+
+▸ **OutputChannel___appzObjBagPullFromPeer__**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  OutputChannel___loadFromJsonish__
+
+▸ **OutputChannel___loadFromJsonish__**(`this`: [OutputChannel](#interfaces_vscode_gen_outputchannelmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [OutputChannel](#interfaces_vscode_gen_outputchannelmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  QuickPickItem___loadFromJsonish__
+
+▸ **QuickPickItem___loadFromJsonish__**(`this`: [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  QuickPickState_ApplyChanges
+
+▸ **QuickPickState_ApplyChanges**(`this`: [QuickPickState](#interfaces_vscode_gen_quickpickstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [QuickPickState](#interfaces_vscode_gen_quickpickstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  QuickPickState_ReFetch
+
+▸ **QuickPickState_ReFetch**(`this`: [QuickPickState](#interfaces_vscode_gen_quickpickstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [QuickPickState](#interfaces_vscode_gen_quickpickstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  QuickPickState___loadFromJsonish__
+
+▸ **QuickPickState___loadFromJsonish__**(`this`: [QuickPickState](#interfaces_vscode_gen_quickpickstatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [QuickPickState](#interfaces_vscode_gen_quickpickstatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  QuickPick_Dispose
+
+▸ **QuickPick_Dispose**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [QuickPick](#interfaces_vscode_gen_quickpickmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  QuickPick_Hide
+
+▸ **QuickPick_Hide**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [QuickPick](#interfaces_vscode_gen_quickpickmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  QuickPick_OnDidAccept
+
+▸ **QuickPick_OnDidAccept**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[QuickPick](#interfaces_vscode_gen_quickpickmd)*
+
+▪ **handler**: *function*
+
+▸ (): *void*
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  QuickPick_OnDidChangeActive
+
+▸ **QuickPick_OnDidChangeActive**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[QuickPick](#interfaces_vscode_gen_quickpickmd)*
+
+▪ **handler**: *function*
+
+▸ (`_`: [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)[]): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)[] |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  QuickPick_OnDidChangeSelection
+
+▸ **QuickPick_OnDidChangeSelection**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[QuickPick](#interfaces_vscode_gen_quickpickmd)*
+
+▪ **handler**: *function*
+
+▸ (`_`: [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)[]): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)[] |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  QuickPick_OnDidChangeValue
+
+▸ **QuickPick_OnDidChangeValue**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[QuickPick](#interfaces_vscode_gen_quickpickmd)*
+
+▪ **handler**: *function*
+
+▸ (`_`: string): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | string |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  QuickPick_OnDidHide
+
+▸ **QuickPick_OnDidHide**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd), `handler`: function): *function*
+
+**Parameters:**
+
+▪ **this**: *[QuickPick](#interfaces_vscode_gen_quickpickmd)*
+
+▪ **handler**: *function*
+
+▸ (): *void*
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (`_`: [Disposable](#classes_core_disposablemd)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`_` | [Disposable](#classes_core_disposablemd) |
+
+___
+
+###  QuickPick_Show
+
+▸ **QuickPick_Show**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [QuickPick](#interfaces_vscode_gen_quickpickmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  QuickPick___appzObjBagPullFromPeer__
+
+▸ **QuickPick___appzObjBagPullFromPeer__**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [QuickPick](#interfaces_vscode_gen_quickpickmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  QuickPick___appzObjBagPushToPeer__
+
+▸ **QuickPick___appzObjBagPushToPeer__**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd), `allUpdates?`: [QuickPickState](#interfaces_vscode_gen_quickpickstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [QuickPick](#interfaces_vscode_gen_quickpickmd) |
+`allUpdates?` | [QuickPickState](#interfaces_vscode_gen_quickpickstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  QuickPick___loadFromJsonish__
+
+▸ **QuickPick___loadFromJsonish__**(`this`: [QuickPick](#interfaces_vscode_gen_quickpickmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [QuickPick](#interfaces_vscode_gen_quickpickmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  StatusBarItemState_ApplyChanges
+
+▸ **StatusBarItemState_ApplyChanges**(`this`: [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  StatusBarItemState_ReFetch
+
+▸ **StatusBarItemState_ReFetch**(`this`: [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  StatusBarItemState___loadFromJsonish__
+
+▸ **StatusBarItemState___loadFromJsonish__**(`this`: [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  StatusBarItem_Dispose
+
+▸ **StatusBarItem_Dispose**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  StatusBarItem_Hide
+
+▸ **StatusBarItem_Hide**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  StatusBarItem_Show
+
+▸ **StatusBarItem_Show**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  StatusBarItem___appzObjBagPullFromPeer__
+
+▸ **StatusBarItem___appzObjBagPullFromPeer__**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  StatusBarItem___appzObjBagPushToPeer__
+
+▸ **StatusBarItem___appzObjBagPushToPeer__**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd), `allUpdates?`: [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
+`allUpdates?` | [StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  StatusBarItem___loadFromJsonish__
+
+▸ **StatusBarItem___loadFromJsonish__**(`this`: [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [StatusBarItem](#interfaces_vscode_gen_statusbaritemmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  TerminalState_ReFetch
+
+▸ **TerminalState_ReFetch**(`this`: [TerminalState](#interfaces_vscode_gen_terminalstatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [TerminalState](#interfaces_vscode_gen_terminalstatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  TerminalState___loadFromJsonish__
+
+▸ **TerminalState___loadFromJsonish__**(`this`: [TerminalState](#interfaces_vscode_gen_terminalstatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [TerminalState](#interfaces_vscode_gen_terminalstatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  Terminal_Dispose
+
+▸ **Terminal_Dispose**(`this`: [Terminal](#interfaces_vscode_gen_terminalmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [Terminal](#interfaces_vscode_gen_terminalmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  Terminal_Hide
+
+▸ **Terminal_Hide**(`this`: [Terminal](#interfaces_vscode_gen_terminalmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [Terminal](#interfaces_vscode_gen_terminalmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  Terminal_SendText
+
+▸ **Terminal_SendText**(`this`: [Terminal](#interfaces_vscode_gen_terminalmd), `text`: string, `addNewLine?`: boolean): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [Terminal](#interfaces_vscode_gen_terminalmd) |
+`text` | string |
+`addNewLine?` | boolean |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  Terminal_Show
+
+▸ **Terminal_Show**(`this`: [Terminal](#interfaces_vscode_gen_terminalmd), `preserveFocus?`: boolean): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [Terminal](#interfaces_vscode_gen_terminalmd) |
+`preserveFocus?` | boolean |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  Terminal___appzObjBagPullFromPeer__
+
+▸ **Terminal___appzObjBagPullFromPeer__**(`this`: [Terminal](#interfaces_vscode_gen_terminalmd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [Terminal](#interfaces_vscode_gen_terminalmd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  Terminal___loadFromJsonish__
+
+▸ **Terminal___loadFromJsonish__**(`this`: [Terminal](#interfaces_vscode_gen_terminalmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [Terminal](#interfaces_vscode_gen_terminalmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  TextEditorDecorationTypeState_ReFetch
+
+▸ **TextEditorDecorationTypeState_ReFetch**(`this`: [TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  TextEditorDecorationTypeState___loadFromJsonish__
+
+▸ **TextEditorDecorationTypeState___loadFromJsonish__**(`this`: [TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  TextEditorDecorationType_Dispose
+
+▸ **TextEditorDecorationType_Dispose**(`this`: [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  TextEditorDecorationType___appzObjBagPullFromPeer__
+
+▸ **TextEditorDecorationType___appzObjBagPullFromPeer__**(`this`: [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)): *function*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd) |
+
+**Returns:** *function*
+
+▸ (`_`: function): *void*
+
+**Parameters:**
+
+▪ **_**: *function*
+
+▸ (): *void*
+
+___
+
+###  TextEditorDecorationType___loadFromJsonish__
+
+▸ **TextEditorDecorationType___loadFromJsonish__**(`this`: [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  WindowState___loadFromJsonish__
+
+▸ **WindowState___loadFromJsonish__**(`this`: [WindowState](#interfaces_vscode_gen_windowstatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [WindowState](#interfaces_vscode_gen_windowstatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  WorkspaceFolder___loadFromJsonish__
+
+▸ **WorkspaceFolder___loadFromJsonish__**(`this`: [WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  WorkspaceFoldersChangeEvent___loadFromJsonish__
+
+▸ **WorkspaceFoldersChangeEvent___loadFromJsonish__**(`this`: [WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  WorkspaceState___loadFromJsonish__
+
+▸ **WorkspaceState___loadFromJsonish__**(`this`: [WorkspaceState](#interfaces_vscode_gen_workspacestatemd), `payload`: any): *boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`this` | [WorkspaceState](#interfaces_vscode_gen_workspacestatemd) |
+`payload` | any |
+
+**Returns:** *boolean*
+
+___
+
+###  newDiagnosticChangeEvent
+
+▸ **newDiagnosticChangeEvent**(): *[DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd)*
+
+**Returns:** *[DiagnosticChangeEvent](#interfaces_vscode_gen_diagnosticchangeeventmd)*
+
+___
+
+###  newDisposable
+
+▸ **newDisposable**(): *[Disposable](#classes_core_disposablemd)*
+
+**Returns:** *[Disposable](#classes_core_disposablemd)*
+
+___
+
+###  newEnvState
+
+▸ **newEnvState**(): *[EnvState](#interfaces_vscode_gen_envstatemd)*
+
+**Returns:** *[EnvState](#interfaces_vscode_gen_envstatemd)*
+
+___
+
+###  newFileSystemWatcher
+
+▸ **newFileSystemWatcher**(): *[FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)*
+
+**Returns:** *[FileSystemWatcher](#interfaces_vscode_gen_filesystemwatchermd)*
+
+___
+
+###  newFileSystemWatcherState
+
+▸ **newFileSystemWatcherState**(): *[FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd)*
+
+**Returns:** *[FileSystemWatcherState](#interfaces_vscode_gen_filesystemwatcherstatemd)*
+
+___
+
+###  newInputBox
+
+▸ **newInputBox**(): *[InputBox](#interfaces_vscode_gen_inputboxmd)*
+
+**Returns:** *[InputBox](#interfaces_vscode_gen_inputboxmd)*
+
+___
+
+###  newInputBoxState
+
+▸ **newInputBoxState**(): *[InputBoxState](#interfaces_vscode_gen_inputboxstatemd)*
+
+**Returns:** *[InputBoxState](#interfaces_vscode_gen_inputboxstatemd)*
+
+___
+
+###  newMessageItem
+
+▸ **newMessageItem**(): *[MessageItem](#interfaces_vscode_gen_messageitemmd)*
+
+**Returns:** *[MessageItem](#interfaces_vscode_gen_messageitemmd)*
+
+___
+
+###  newOutputChannel
+
+▸ **newOutputChannel**(): *[OutputChannel](#interfaces_vscode_gen_outputchannelmd)*
+
+**Returns:** *[OutputChannel](#interfaces_vscode_gen_outputchannelmd)*
+
+___
+
+###  newOutputChannelState
+
+▸ **newOutputChannelState**(): *[OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd)*
+
+**Returns:** *[OutputChannelState](#interfaces_vscode_gen_outputchannelstatemd)*
+
+___
+
+###  newQuickPick
+
+▸ **newQuickPick**(): *[QuickPick](#interfaces_vscode_gen_quickpickmd)*
+
+**Returns:** *[QuickPick](#interfaces_vscode_gen_quickpickmd)*
+
+___
+
+###  newQuickPickItem
+
+▸ **newQuickPickItem**(): *[QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)*
+
+**Returns:** *[QuickPickItem](#interfaces_vscode_gen_quickpickitemmd)*
+
+___
+
+###  newQuickPickState
+
+▸ **newQuickPickState**(): *[QuickPickState](#interfaces_vscode_gen_quickpickstatemd)*
+
+**Returns:** *[QuickPickState](#interfaces_vscode_gen_quickpickstatemd)*
+
+___
+
+###  newStatusBarItem
+
+▸ **newStatusBarItem**(): *[StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)*
+
+**Returns:** *[StatusBarItem](#interfaces_vscode_gen_statusbaritemmd)*
+
+___
+
+###  newStatusBarItemState
+
+▸ **newStatusBarItemState**(): *[StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)*
+
+**Returns:** *[StatusBarItemState](#interfaces_vscode_gen_statusbaritemstatemd)*
+
+___
+
+###  newTerminal
+
+▸ **newTerminal**(): *[Terminal](#interfaces_vscode_gen_terminalmd)*
+
+**Returns:** *[Terminal](#interfaces_vscode_gen_terminalmd)*
+
+___
+
+###  newTerminalState
+
+▸ **newTerminalState**(): *[TerminalState](#interfaces_vscode_gen_terminalstatemd)*
+
+**Returns:** *[TerminalState](#interfaces_vscode_gen_terminalstatemd)*
+
+___
+
+###  newTextEditorDecorationType
+
+▸ **newTextEditorDecorationType**(): *[TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)*
+
+**Returns:** *[TextEditorDecorationType](#interfaces_vscode_gen_texteditordecorationtypemd)*
+
+___
+
+###  newTextEditorDecorationTypeState
+
+▸ **newTextEditorDecorationTypeState**(): *[TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd)*
+
+**Returns:** *[TextEditorDecorationTypeState](#interfaces_vscode_gen_texteditordecorationtypestatemd)*
+
+___
+
+###  newWindowState
+
+▸ **newWindowState**(): *[WindowState](#interfaces_vscode_gen_windowstatemd)*
+
+**Returns:** *[WindowState](#interfaces_vscode_gen_windowstatemd)*
+
+___
+
+###  newWorkspaceFolder
+
+▸ **newWorkspaceFolder**(): *[WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)*
+
+**Returns:** *[WorkspaceFolder](#interfaces_vscode_gen_workspacefoldermd)*
+
+___
+
+###  newWorkspaceFoldersChangeEvent
+
+▸ **newWorkspaceFoldersChangeEvent**(): *[WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd)*
+
+**Returns:** *[WorkspaceFoldersChangeEvent](#interfaces_vscode_gen_workspacefolderschangeeventmd)*
+
+___
+
+###  newWorkspaceState
+
+▸ **newWorkspaceState**(): *[WorkspaceState](#interfaces_vscode_gen_workspacestatemd)*
+
+**Returns:** *[WorkspaceState](#interfaces_vscode_gen_workspacestatemd)*
+
+___
+
+###  newipcMsg
+
+▸ **newipcMsg**(): *[ipcMsg](#classes_core_ipcmsgmd)*
+
+**Returns:** *[ipcMsg](#classes_core_ipcmsgmd)*

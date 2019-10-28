@@ -7,8 +7,8 @@ interface fromJson {
 interface withDisp {
     __disp__: Disposable;
 }
-interface withBag<T extends fromJson> {
-    Bag: T;
+interface withState<T extends fromJson> {
+    Cfg: T;
     toJSON: () => any;
 }
 /**
@@ -596,9 +596,9 @@ export interface Env {
     /**
      * Provides single-call access to numerous individual `Env` properties at once.
 
-     * @return a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvBag` result received back at our end.
+     * @return a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `EnvState` result received back at our end.
      */
-    AllProperties: (_: (_: EnvBag) => void) => void;
+    AllProperties: (_: (_: EnvState) => void) => void;
     /**
      * The clipboard provides read and write access to the system's clipboard.
 
@@ -748,9 +748,9 @@ export interface Workspace {
     /**
      * Provides single-call access to numerous individual `Workspace` properties at once.
 
-     * @return a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceBag` result received back at our end.
+     * @return a thenable that resolves when this `AllProperties` call has successfully completed at the VSC side and its `WorkspaceState` result received back at our end.
      */
-    AllProperties: (_: (_: WorkspaceBag) => void) => void;
+    AllProperties: (_: (_: WorkspaceState) => void) => void;
 }
 /**
  * Namespace for participating in language-specific editor [features](https://code.visualstudio.com/docs/editor/editingevolved),
@@ -1380,7 +1380,7 @@ export interface WindowState extends fromJson {
  * show text and icons and run a command on click.
 
  */
-export interface StatusBarItem extends fromJson, withDisp, withBag<StatusBarItemBag> {
+export interface StatusBarItem extends fromJson, withDisp, withState<StatusBarItemState> {
     /**
      * Shows the entry in the status bar.
 
@@ -1398,7 +1398,7 @@ export interface StatusBarItem extends fromJson, withDisp, withBag<StatusBarItem
      */
     Dispose: () => (_: () => void) => void;
     __appzObjBagPullFromPeer__: () => (_: () => void) => void;
-    __appzObjBagPushToPeer__: (_: StatusBarItemBag) => (_: () => void) => void;
+    __appzObjBagPushToPeer__: (_: StatusBarItemState) => (_: () => void) => void;
 }
 /**
  * An output channel is a container for readonly textual information.
@@ -1407,7 +1407,7 @@ export interface StatusBarItem extends fromJson, withDisp, withBag<StatusBarItem
  * [createOutputChannel](https://code.visualstudio.com/api/references/vscode-api#window.createOutputChannel).
 
  */
-export interface OutputChannel extends fromJson, withDisp, withBag<OutputChannelBag> {
+export interface OutputChannel extends fromJson, withDisp, withState<OutputChannelState> {
     /**
      * Append the given value to the channel.
      *
@@ -1682,7 +1682,7 @@ export interface DecorationRenderOptions {
  * [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
 
  */
-export interface TextEditorDecorationType extends fromJson, withDisp, withBag<TextEditorDecorationTypeBag> {
+export interface TextEditorDecorationType extends fromJson, withDisp, withState<TextEditorDecorationTypeState> {
     /**
      * Remove this decoration type and all decorations on all text editors using it.
 
@@ -1698,7 +1698,7 @@ export interface TextEditorDecorationType extends fromJson, withDisp, withBag<Te
  * when [window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox) does not offer the required flexibility.
 
  */
-export interface InputBox extends fromJson, withDisp, withBag<InputBoxBag> {
+export interface InputBox extends fromJson, withDisp, withState<InputBoxState> {
     /**
      * An event signaling when the value has changed.
 
@@ -1740,7 +1740,7 @@ export interface InputBox extends fromJson, withDisp, withBag<InputBoxBag> {
      */
     Dispose: () => (_: () => void) => void;
     __appzObjBagPullFromPeer__: () => (_: () => void) => void;
-    __appzObjBagPushToPeer__: (_: InputBoxBag) => (_: () => void) => void;
+    __appzObjBagPushToPeer__: (_: InputBoxState) => (_: () => void) => void;
 }
 /**
  * Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).
@@ -1769,7 +1769,7 @@ export interface QuickInputButton {
  * when [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick) does not offer the required flexibility.
 
  */
-export interface QuickPick extends fromJson, withDisp, withBag<QuickPickBag> {
+export interface QuickPick extends fromJson, withDisp, withState<QuickPickState> {
     /**
      * An event signaling when the value of the filter text has changed.
 
@@ -1821,13 +1821,13 @@ export interface QuickPick extends fromJson, withDisp, withBag<QuickPickBag> {
      */
     Dispose: () => (_: () => void) => void;
     __appzObjBagPullFromPeer__: () => (_: () => void) => void;
-    __appzObjBagPushToPeer__: (_: QuickPickBag) => (_: () => void) => void;
+    __appzObjBagPushToPeer__: (_: QuickPickState) => (_: () => void) => void;
 }
 /**
  * An individual terminal instance within the integrated terminal.
 
  */
-export interface Terminal extends fromJson, withDisp, withBag<TerminalBag> {
+export interface Terminal extends fromJson, withDisp, withState<TerminalState> {
     /**
      * Send text to the terminal. The text is written to the stdin of the underlying pty process
      * (shell) of the terminal.
@@ -2126,7 +2126,7 @@ export interface WorkspaceFoldersChangeEvent extends fromJson {
  * [createFileSystemWatcher](https://code.visualstudio.com/api/references/vscode-api#workspace.createFileSystemWatcher).
 
  */
-export interface FileSystemWatcher extends fromJson, withDisp, withBag<FileSystemWatcherBag> {
+export interface FileSystemWatcher extends fromJson, withDisp, withState<FileSystemWatcherState> {
     /**
      * An event which fires on file/folder creation.
 
@@ -2144,7 +2144,7 @@ export interface FileSystemWatcher extends fromJson, withDisp, withBag<FileSyste
     OnDidDelete: (_: (_: string) => void) => (_: (_: Disposable) => void) => void;
     Dispose: () => (_: () => void) => void;
     __appzObjBagPullFromPeer__: () => (_: () => void) => void;
-    __appzObjBagPushToPeer__: (_: FileSystemWatcherBag) => (_: () => void) => void;
+    __appzObjBagPushToPeer__: (_: FileSystemWatcherState) => (_: () => void) => void;
 }
 /**
  * The event that is fired when diagnostics change.
@@ -2158,10 +2158,10 @@ export interface DiagnosticChangeEvent extends fromJson {
     uris: string[];
 }
 /**
- * EnvBag gathers various properties of `Env`, obtainable via its `AllProperties` method.
+ * EnvState gathers various properties of `Env`, obtainable via its `AllProperties` method.
 
  */
-export interface EnvBag extends fromJson {
+export interface EnvState extends fromJson {
     /**
      * The application name of the editor, like 'VS Code'.
 
@@ -2212,10 +2212,10 @@ export interface EnvBag extends fromJson {
     uriScheme?: string;
 }
 /**
- * WorkspaceBag gathers various properties of `Workspace`, obtainable via its `AllProperties` method.
+ * WorkspaceState gathers various properties of `Workspace`, obtainable via its `AllProperties` method.
 
  */
-export interface WorkspaceBag extends fromJson {
+export interface WorkspaceState extends fromJson {
     /**
      * The name of the workspace. `undefined` when no folder
      * has been opened.
@@ -2265,10 +2265,10 @@ export interface WorkspaceBag extends fromJson {
     workspaceFolders?: WorkspaceFolder[];
 }
 /**
- * StatusBarItemBag (to be accessed only via `StatusBarItem.Bag`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+ * StatusBarItemState (to be accessed only via `StatusBarItem.Cfg`) is a snapshot of `StatusBarItem` state. It is auto-updated whenever `StatusBarItem` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
  */
-export interface StatusBarItemBag extends fromJson {
+export interface StatusBarItemState extends fromJson {
     __holder__: StatusBarItem;
     /**
      * The alignment of this item.
@@ -2310,12 +2310,12 @@ export interface StatusBarItemBag extends fromJson {
     ApplyChanges: () => (_: () => void) => void;
     ReFetch: () => (_: () => void) => void;
 }
-export declare function newStatusBarItemBag(): StatusBarItemBag;
+export declare function newStatusBarItemState(): StatusBarItemState;
 /**
- * OutputChannelBag (to be accessed only via `OutputChannel.Bag`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+ * OutputChannelState (to be accessed only via `OutputChannel.Cfg`) is a snapshot of `OutputChannel` state. It is auto-updated whenever `OutputChannel` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 
  */
-export interface OutputChannelBag extends fromJson {
+export interface OutputChannelState extends fromJson {
     __holder__: OutputChannel;
     /**
      * The human-readable name of this output channel.
@@ -2324,12 +2324,12 @@ export interface OutputChannelBag extends fromJson {
     Name: () => string;
     ReFetch: () => (_: () => void) => void;
 }
-export declare function newOutputChannelBag(): OutputChannelBag;
+export declare function newOutputChannelState(): OutputChannelState;
 /**
- * TextEditorDecorationTypeBag (to be accessed only via `TextEditorDecorationType.Bag`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+ * TextEditorDecorationTypeState (to be accessed only via `TextEditorDecorationType.Cfg`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 
  */
-export interface TextEditorDecorationTypeBag extends fromJson {
+export interface TextEditorDecorationTypeState extends fromJson {
     __holder__: TextEditorDecorationType;
     /**
      * Internal representation of the handle.
@@ -2338,12 +2338,12 @@ export interface TextEditorDecorationTypeBag extends fromJson {
     Key: () => string;
     ReFetch: () => (_: () => void) => void;
 }
-export declare function newTextEditorDecorationTypeBag(): TextEditorDecorationTypeBag;
+export declare function newTextEditorDecorationTypeState(): TextEditorDecorationTypeState;
 /**
- * InputBoxBag (to be accessed only via `InputBox.Bag`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+ * InputBoxState (to be accessed only via `InputBox.Cfg`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
  */
-export interface InputBoxBag extends fromJson {
+export interface InputBoxState extends fromJson {
     __holder__: InputBox;
     /**
      * Current input value.
@@ -2409,12 +2409,12 @@ export interface InputBoxBag extends fromJson {
     ApplyChanges: () => (_: () => void) => void;
     ReFetch: () => (_: () => void) => void;
 }
-export declare function newInputBoxBag(): InputBoxBag;
+export declare function newInputBoxState(): InputBoxState;
 /**
- * QuickPickBag (to be accessed only via `QuickPick.Bag`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+ * QuickPickState (to be accessed only via `QuickPick.Cfg`) is a snapshot of `QuickPick` state. It is auto-updated whenever `QuickPick` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
  */
-export interface QuickPickBag extends fromJson {
+export interface QuickPickState extends fromJson {
     __holder__: QuickPick;
     /**
      * Current value of the filter text.
@@ -2495,12 +2495,12 @@ export interface QuickPickBag extends fromJson {
     ApplyChanges: () => (_: () => void) => void;
     ReFetch: () => (_: () => void) => void;
 }
-export declare function newQuickPickBag(): QuickPickBag;
+export declare function newQuickPickState(): QuickPickState;
 /**
- * TerminalBag (to be accessed only via `Terminal.Bag`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
+ * TerminalState (to be accessed only via `Terminal.Cfg`) is a snapshot of `Terminal` state. It is auto-updated whenever `Terminal` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
 
  */
-export interface TerminalBag extends fromJson {
+export interface TerminalState extends fromJson {
     __holder__: Terminal;
     /**
      * The name of the terminal.
@@ -2509,12 +2509,12 @@ export interface TerminalBag extends fromJson {
     Name: () => string;
     ReFetch: () => (_: () => void) => void;
 }
-export declare function newTerminalBag(): TerminalBag;
+export declare function newTerminalState(): TerminalState;
 /**
- * FileSystemWatcherBag (to be accessed only via `FileSystemWatcher.Bag`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
+ * FileSystemWatcherState (to be accessed only via `FileSystemWatcher.Cfg`) is a snapshot of `FileSystemWatcher` state. It is auto-updated whenever `FileSystemWatcher` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
 
  */
-export interface FileSystemWatcherBag extends fromJson {
+export interface FileSystemWatcherState extends fromJson {
     __holder__: FileSystemWatcher;
     /**
      * true if this file system watcher has been created such that
@@ -2537,7 +2537,7 @@ export interface FileSystemWatcherBag extends fromJson {
     ApplyChanges: () => (_: () => void) => void;
     ReFetch: () => (_: () => void) => void;
 }
-export declare function newFileSystemWatcherBag(): FileSystemWatcherBag;
+export declare function newFileSystemWatcherState(): FileSystemWatcherState;
 export declare abstract class impl implements Vscode {
     Window: Window;
     Env: Env;

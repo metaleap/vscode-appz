@@ -11,7 +11,6 @@ export class Gen extends gen_syn.Gen {
     gen(prep: gen.Prep) {
         jsMode = false
         this.options.oneIndent = " ".repeat(4)
-        this.options.doc.appendArgsToSummary.forFuncFields = true
         this.options.doc.appendArgsToSummary.forMethods = false
         this.nameRewriters.types.interfaces = _ => this.caseUp(_)
         this.nameRewriters.fields = _ => this.caseLo(_)
@@ -42,7 +41,7 @@ export class Gen extends gen_syn.Gen {
             "type " + gen.idents.coreTypeDisp + " = core." + gen.idents.coreTypeDisp + "",
             "interface fromJson { " + gen.idents.methodLoadFrom + ": (_: any) => boolean }",
             "interface withDisp { " + gen.idents.fldDisp + ": " + gen.idents.coreTypeDisp + " }",
-            "interface withBag<T extends fromJson> { " + gen.idents.fldDispObjBag + ": T, toJSON: () => any }",
+            "interface with" + gen.idents.typeSuffBag + "<T extends fromJson> { " + gen.idents.fldDispObjBag + ": T, toJSON: () => any }",
             "",
             "abstract class implBase {",
             "    impl: impl",

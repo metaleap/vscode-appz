@@ -10,8 +10,6 @@ export class Gen extends gen_syn.Gen {
     gen(prep: gen.Prep) {
         anonVarCounter = 1
         this.options.oneIndent = "\t"
-        this.options.doc.appendArgsToSummary.forFuncFields = true
-        this.options.doc.appendArgsToSummary.forMethods = true
         this.nameRewriters.types.interfaces = _ => "I" + this.caseUp(_)
         super.gen(prep)
     }
@@ -40,19 +38,23 @@ export class Gen extends gen_syn.Gen {
         const paramnames: string[] = []
         const htmlesc = (_: string): string =>
             _.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        const me = it as gen_syn.Func
         if (it.Docs && it.Docs.length)
             for (const doc of it.Docs)
                 if (doc.Lines && doc.Lines.length)
                     if (doc.ForParam && doc.ForParam.length) {
-                        this.line(
-                            (doc.ForParam === this.options.doc.appendArgsToSummary.retArgName ? "/// <return>" : "/// <param name=\"" + doc.ForParam + "\">")
-                            + doc.Lines.map(htmlesc).join(" ")
-                            + (doc.ForParam === this.options.doc.appendArgsToSummary.retArgName ? "</return>" : "</param>"))
+                        const isret = (doc.ForParam === this.options.doc.appendArgsToSummary.retArgName)
+                        if (!(isret && me && me.Func && me.Func.Args && me.Func.Args.length === 0))
+                            this.line(
+                                (isret ? "/// <return>" : "/// <param name=\"" + doc.ForParam + "\">")
+                                + doc.Lines.map(htmlesc).join(" ")
+                                + (isret ? "</return>" : "</param>"))
                         if (!paramnames.includes(doc.ForParam))
                             paramnames.push(doc.ForParam)
                     } else if (doc.Lines.length > 1)
                         this.line("/// <summary>")
                             .lines(...doc.Lines.map(_ => "/// " + htmlesc(_)))
+                            .line("/// ")
                             .line("/// </summary>")
                     else
                         this.line("/// <summary>" + htmlesc(doc.Lines[0]) + "</summary>")
