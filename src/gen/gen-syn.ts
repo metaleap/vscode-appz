@@ -565,8 +565,11 @@ export class Gen extends gen.Gen implements gen.IGen {
     }
 
     ensureMethodDocsArgsAndRet(it: WithDocs): Gen {
+        const named = it as WithName
+        if (named && named.Name === "ShowQuickPick")
+            for (const d of it.Docs)
+                d.Lines = d.Lines.map(l => l.replace(" allowing multiple selections", "").replace(", or a promise that resolves to an array of items", ""))
         if (!(it.Docs && it.Docs.length)) {
-            const named = it as WithName
             if (named && named.Name && named.Name.length)
                 switch (named.Name) {
                     case "Dispose":

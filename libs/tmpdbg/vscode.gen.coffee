@@ -269,9 +269,9 @@ Window: interface
         token: ?Cancel
 
     # showQuickPick:
-    # Shows a selection list allowing multiple selections.
+    # Shows a selection list.
     # 
-    # `items` ── An array of items, or a promise that resolves to an array of items.
+    # `items` ── An array of items.
     # 
     # `options` ── Configures the behavior of the selection list.
     # 
@@ -280,7 +280,7 @@ Window: interface
     # `return` ── A promise that resolves to the selected items or `undefined`.
     #
     # @items:
-    # An array of items, or a promise that resolves to an array of items.
+    # An array of items.
     #
     # @options:
     # Configures the behavior of the selection list.

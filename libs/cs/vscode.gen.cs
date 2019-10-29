@@ -243,9 +243,9 @@ namespace VscAppz {
 		Action<Action<string>> ShowInputBox(InputBoxOptions options = default, Cancel token = default);
 
 		/// <summary>
-		/// Shows a selection list allowing multiple selections.
+		/// Shows a selection list.
 		/// 
-		/// `items` ── An array of items, or a promise that resolves to an array of items.
+		/// `items` ── An array of items.
 		/// 
 		/// `options` ── Configures the behavior of the selection list.
 		/// 
@@ -254,7 +254,7 @@ namespace VscAppz {
 		/// `return` ── A promise that resolves to the selected items or `undefined`.
 		/// 
 		/// </summary>
-		/// <param name="items">An array of items, or a promise that resolves to an array of items.</param>
+		/// <param name="items">An array of items.</param>
 		/// <param name="options">Configures the behavior of the selection list.</param>
 		/// <param name="token">A token that can be used to signal cancellation.</param>
 		/// <return>A promise that resolves to the selected items or `undefined`.</return>

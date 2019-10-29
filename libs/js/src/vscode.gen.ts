@@ -242,9 +242,9 @@ export interface Window {
     ShowInputBox: (options?: InputBoxOptions, token?: Cancel) => (_: (_: string) => void) => void
 
     /**
-     * Shows a selection list allowing multiple selections.
+     * Shows a selection list.
 
-     * @param items An array of items, or a promise that resolves to an array of items.
+     * @param items An array of items.
      * @param options Configures the behavior of the selection list.
      * @param token A token that can be used to signal cancellation.
      * @return A promise that resolves to the selected items or `undefined`.

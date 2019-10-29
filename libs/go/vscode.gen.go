@@ -194,9 +194,9 @@ type Window interface {
 	// `return` ── A promise that resolves to a string the user provided or to `undefined` in case of dismissal.
 	ShowInputBox(options *InputBoxOptions, token *Cancel) func(func(*string))
 
-	// Shows a selection list allowing multiple selections.
+	// Shows a selection list.
 	// 
-	// `items` ── An array of items, or a promise that resolves to an array of items.
+	// `items` ── An array of items.
 	// 
 	// `options` ── Configures the behavior of the selection list.
 	// 

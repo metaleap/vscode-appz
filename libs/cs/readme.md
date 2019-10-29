@@ -1399,9 +1399,9 @@ for opening-purposes.
 
 ##### Summary
 
-Shows a selection list allowing multiple selections.
+Shows a selection list.
 
-`items` ── An array of items, or a promise that resolves to an array of items.
+`items` ── An array of items.
 
 `options` ── Configures the behavior of the selection list.
 
@@ -1413,7 +1413,7 @@ Shows a selection list allowing multiple selections.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| items | [VscAppz.QuickPickItem[]](#T-VscAppz-QuickPickItem[] 'VscAppz.QuickPickItem[]') | An array of items, or a promise that resolves to an array of items. |
+| items | [VscAppz.QuickPickItem[]](#T-VscAppz-QuickPickItem[] 'VscAppz.QuickPickItem[]') | An array of items. |
 | options | [VscAppz.QuickPickOptions](#T-VscAppz-QuickPickOptions 'VscAppz.QuickPickOptions') | Configures the behavior of the selection list. |
 | token | [VscAppz.Cancel](#T-VscAppz-Cancel 'VscAppz.Cancel') | A token that can be used to signal cancellation. |
 

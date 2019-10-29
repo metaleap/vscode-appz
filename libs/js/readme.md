@@ -7056,9 +7056,9 @@ ___
 
 • **ShowQuickPick**: *function*
 
-Shows a selection list allowing multiple selections.
+Shows a selection list.
 
-**`param`** An array of items, or a promise that resolves to an array of items.
+**`param`** An array of items.
 
 **`param`** Configures the behavior of the selection list.
 
