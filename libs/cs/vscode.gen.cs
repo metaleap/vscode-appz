@@ -1199,7 +1199,7 @@ namespace VscAppz {
 	/// </summary>
 	public partial class QuickPickItem {
 		/// <summary>A human readable string which is rendered prominent.</summary>
-		[JsonProperty("label"), JsonRequired]
+		[JsonProperty("label")]
 		public string Label;
 
 		/// <summary>A human readable string which is rendered less prominent.</summary>
@@ -1359,7 +1359,7 @@ namespace VscAppz {
 		/// workspace folders that are not stored on the local disk, e.g. `ftp://server/workspaces/foo`.
 		/// 
 		/// </summary>
-		[JsonProperty("uri"), JsonRequired]
+		[JsonProperty("uri")]
 		public string Uri;
 
 		/// <summary>
@@ -1367,18 +1367,18 @@ namespace VscAppz {
 		/// the basename of its [uri-path](https://code.visualstudio.com/api/references/vscode-api#Uri.path)
 		/// 
 		/// </summary>
-		[JsonProperty("name"), JsonRequired]
+		[JsonProperty("name")]
 		public string Name;
 
 		/// <summary>The ordinal number of this workspace folder.</summary>
-		[JsonProperty("index"), JsonRequired]
+		[JsonProperty("index")]
 		public int Index;
 	}
 
 	/// <summary>Represents the state of a window.</summary>
 	public partial class WindowState {
 		/// <summary>Whether the current window is focused.</summary>
-		[JsonProperty("focused"), JsonRequired]
+		[JsonProperty("focused")]
 		public bool Focused;
 	}
 
@@ -1664,7 +1664,7 @@ namespace VscAppz {
 	/// <summary>Button for an action in a [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick) or [InputBox](#InputBox).</summary>
 	public partial class QuickInputButton {
 		/// <summary>Icon for the button.</summary>
-		[JsonProperty("iconPath"), JsonRequired]
+		[JsonProperty("iconPath")]
 		public string IconPath;
 
 		/// <summary>An optional tooltip.</summary>
@@ -1750,11 +1750,11 @@ namespace VscAppz {
 	/// <summary>An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).</summary>
 	public partial class WorkspaceFoldersChangeEvent {
 		/// <summary>Added workspace folders.</summary>
-		[JsonProperty("added"), JsonRequired]
+		[JsonProperty("added")]
 		public WorkspaceFolder[] Added;
 
 		/// <summary>Removed workspace folders.</summary>
-		[JsonProperty("removed"), JsonRequired]
+		[JsonProperty("removed")]
 		public WorkspaceFolder[] Removed;
 	}
 
@@ -1776,7 +1776,7 @@ namespace VscAppz {
 	/// <summary>The event that is fired when diagnostics change.</summary>
 	public partial class DiagnosticChangeEvent {
 		/// <summary>An array of resources for which diagnostics have changed.</summary>
-		[JsonProperty("uris"), JsonRequired]
+		[JsonProperty("uris")]
 		public string[] Uris;
 	}
 
@@ -1914,15 +1914,15 @@ namespace VscAppz {
 		/// `light-bulb`, `thumbsup`, `zap` etc.
 		/// 
 		/// </summary>
-		[JsonProperty("text"), JsonRequired]
+		[JsonProperty("text")]
 		public string Text;
 
 		/// <summary>The tooltip text when you hover over this entry.</summary>
-		[JsonProperty("tooltip"), JsonRequired]
+		[JsonProperty("tooltip")]
 		public string Tooltip;
 
 		/// <summary>The foreground color for this entry.</summary>
-		[JsonProperty("color"), JsonRequired]
+		[JsonProperty("color")]
 		public string Color;
 
 		/// <summary>
@@ -1930,7 +1930,7 @@ namespace VscAppz {
 		/// [known](https://code.visualstudio.com/api/references/vscode-api#commands.getCommands).
 		/// 
 		/// </summary>
-		[JsonProperty("command"), JsonRequired]
+		[JsonProperty("command")]
 		public string Command;
 	}
 
@@ -1960,35 +1960,35 @@ namespace VscAppz {
 		internal InputBox __holder__;
 
 		/// <summary>Current input value.</summary>
-		[JsonProperty("value"), JsonRequired]
+		[JsonProperty("value")]
 		public string Value;
 
 		/// <summary>Optional placeholder in the filter text.</summary>
-		[JsonProperty("placeholder"), JsonRequired]
+		[JsonProperty("placeholder")]
 		public string Placeholder;
 
 		/// <summary>If the input value should be hidden. Defaults to false.</summary>
-		[JsonProperty("password"), JsonRequired]
+		[JsonProperty("password")]
 		public bool Password;
 
 		/// <summary>An optional prompt text providing some ask or explanation to the user.</summary>
-		[JsonProperty("prompt"), JsonRequired]
+		[JsonProperty("prompt")]
 		public string Prompt;
 
 		/// <summary>An optional validation message indicating a problem with the current input value.</summary>
-		[JsonProperty("validationMessage"), JsonRequired]
+		[JsonProperty("validationMessage")]
 		public string ValidationMessage;
 
 		/// <summary>An optional title.</summary>
-		[JsonProperty("title"), JsonRequired]
+		[JsonProperty("title")]
 		public string Title;
 
 		/// <summary>An optional current step count.</summary>
-		[JsonProperty("step"), JsonRequired]
+		[JsonProperty("step")]
 		public int? Step;
 
 		/// <summary>An optional total step count.</summary>
-		[JsonProperty("totalSteps"), JsonRequired]
+		[JsonProperty("totalSteps")]
 		public int? TotalSteps;
 
 		/// <summary>
@@ -1998,7 +1998,7 @@ namespace VscAppz {
 		/// loading data for the next step in user input.
 		/// 
 		/// </summary>
-		[JsonProperty("enabled"), JsonRequired]
+		[JsonProperty("enabled")]
 		public bool Enabled;
 
 		/// <summary>
@@ -2008,11 +2008,11 @@ namespace VscAppz {
 		/// user input.
 		/// 
 		/// </summary>
-		[JsonProperty("busy"), JsonRequired]
+		[JsonProperty("busy")]
 		public bool Busy;
 
 		/// <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
-		[JsonProperty("ignoreFocusOut"), JsonRequired]
+		[JsonProperty("ignoreFocusOut")]
 		public bool IgnoreFocusOut;
 	}
 
@@ -2022,47 +2022,47 @@ namespace VscAppz {
 		internal QuickPick __holder__;
 
 		/// <summary>Current value of the filter text.</summary>
-		[JsonProperty("value"), JsonRequired]
+		[JsonProperty("value")]
 		public string Value;
 
 		/// <summary>Optional placeholder in the filter text.</summary>
-		[JsonProperty("placeholder"), JsonRequired]
+		[JsonProperty("placeholder")]
 		public string Placeholder;
 
 		/// <summary>Items to pick from.</summary>
-		[JsonProperty("items"), JsonRequired]
+		[JsonProperty("items")]
 		public QuickPickItem[] Items;
 
 		/// <summary>If multiple items can be selected at the same time. Defaults to false.</summary>
-		[JsonProperty("canSelectMany"), JsonRequired]
+		[JsonProperty("canSelectMany")]
 		public bool CanSelectMany;
 
 		/// <summary>If the filter text should also be matched against the description of the items. Defaults to false.</summary>
-		[JsonProperty("matchOnDescription"), JsonRequired]
+		[JsonProperty("matchOnDescription")]
 		public bool MatchOnDescription;
 
 		/// <summary>If the filter text should also be matched against the detail of the items. Defaults to false.</summary>
-		[JsonProperty("matchOnDetail"), JsonRequired]
+		[JsonProperty("matchOnDetail")]
 		public bool MatchOnDetail;
 
 		/// <summary>Active items. This can be read and updated by the extension.</summary>
-		[JsonProperty("activeItems"), JsonRequired]
+		[JsonProperty("activeItems")]
 		public QuickPickItem[] ActiveItems;
 
 		/// <summary>Selected items. This can be read and updated by the extension.</summary>
-		[JsonProperty("selectedItems"), JsonRequired]
+		[JsonProperty("selectedItems")]
 		public QuickPickItem[] SelectedItems;
 
 		/// <summary>An optional title.</summary>
-		[JsonProperty("title"), JsonRequired]
+		[JsonProperty("title")]
 		public string Title;
 
 		/// <summary>An optional current step count.</summary>
-		[JsonProperty("step"), JsonRequired]
+		[JsonProperty("step")]
 		public int? Step;
 
 		/// <summary>An optional total step count.</summary>
-		[JsonProperty("totalSteps"), JsonRequired]
+		[JsonProperty("totalSteps")]
 		public int? TotalSteps;
 
 		/// <summary>
@@ -2072,7 +2072,7 @@ namespace VscAppz {
 		/// loading data for the next step in user input.
 		/// 
 		/// </summary>
-		[JsonProperty("enabled"), JsonRequired]
+		[JsonProperty("enabled")]
 		public bool Enabled;
 
 		/// <summary>
@@ -2082,11 +2082,11 @@ namespace VscAppz {
 		/// user input.
 		/// 
 		/// </summary>
-		[JsonProperty("busy"), JsonRequired]
+		[JsonProperty("busy")]
 		public bool Busy;
 
 		/// <summary>If the UI should stay open even when loosing UI focus. Defaults to false.</summary>
-		[JsonProperty("ignoreFocusOut"), JsonRequired]
+		[JsonProperty("ignoreFocusOut")]
 		public bool IgnoreFocusOut;
 	}
 
@@ -2110,7 +2110,7 @@ namespace VscAppz {
 		/// it ignores creation file system events.
 		/// 
 		/// </summary>
-		[JsonProperty("ignoreCreateEvents"), JsonRequired]
+		[JsonProperty("ignoreCreateEvents")]
 		public bool IgnoreCreateEvents;
 
 		/// <summary>
@@ -2118,7 +2118,7 @@ namespace VscAppz {
 		/// it ignores change file system events.
 		/// 
 		/// </summary>
-		[JsonProperty("ignoreChangeEvents"), JsonRequired]
+		[JsonProperty("ignoreChangeEvents")]
 		public bool IgnoreChangeEvents;
 
 		/// <summary>
@@ -2126,7 +2126,7 @@ namespace VscAppz {
 		/// it ignores delete file system events.
 		/// 
 		/// </summary>
-		[JsonProperty("ignoreDeleteEvents"), JsonRequired]
+		[JsonProperty("ignoreDeleteEvents")]
 		public bool IgnoreDeleteEvents;
 	}
 
@@ -2383,7 +2383,8 @@ namespace VscAppz {
 					any[] __coll__result = default;
 					(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
 					if (!ok) {
-						return false;
+						__coll__result = new any[1];
+						__coll__result[0] = payload;
 					}
 					result = new QuickPickItem[__coll__result.Length];
 					int __idx__result = default;

@@ -862,7 +862,7 @@ export class Gen extends gen.Gen implements gen.IGen {
         throw "<expr>" + JSON.stringify(it)
     }
 
-    private convOrRet(dstVarName: string, src: Expr, dstType: TypeRef, onErrRet: Expr = undefined): Instr[] {
+    private convOrRet(dstVarName: string, src: Expr, dstType: TypeRef, onErrRet: Expr = undefined, allowOneElemArr: boolean = false): Instr[] {
         const _ = this.b
 
         if (!onErrRet)
@@ -919,7 +919,10 @@ export class Gen extends gen.Gen implements gen.IGen {
             ] : [
                     _.iVar(tncoll, tcoll),
                     _.iSet(_.eTup(_._(tncoll), _._(gen.idents.varOk)), _.eConv(tcoll, src)),
-                    retifnotok,
+                    (!(allowOneElemArr && tcoll.KeysOf === undefined)) ? retifnotok : _.iIf(_.oNot(_._(gen.idents.varOk)), [
+                        _.iSet(_._(tncoll), _.eCollNew(_.eLit(1), tcoll.ValsOf, true)),
+                        _.iSet(_.oIdx(_._(tncoll), _.eLit(0)), src),
+                    ]),
                     _.iSet(_._(dstVarName), _.eCollNew(_.eLen(_._(tncoll), true), tdstcoll.ValsOf, true)),
                     _.iVar(tnidx, TypeRefPrim.Int),
                     _.iSet(_._(tnidx), _.eLit(0)),
@@ -1246,7 +1249,7 @@ export class Gen extends gen.Gen implements gen.IGen {
                         _.iVar(gen.idents.varOk, TypeRefPrim.Bool),
                         _.iVar(gen.idents.varRes, dsttype),
                         _.iIf(_.oIs(_._(gen.idents.argPayload)),
-                            this.convOrRet(gen.idents.varRes, _._(gen.idents.argPayload), dsttype),
+                            this.convOrRet(gen.idents.varRes, _._(gen.idents.argPayload), dsttype, undefined, method.fromPrep && method.fromPrep.fromOrig && method.fromPrep.fromOrig.overload !== undefined && method.fromPrep.fromOrig.overload > 0),
                             _.WHEN(isdisp || isval || isprops || method.IsObjCtor, () => [_.iRet(_.eLit(false))], () => []),
                         ),
                     ] as Instr[])).concat(..._.WHEN(isdisp,

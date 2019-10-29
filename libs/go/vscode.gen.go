@@ -1800,7 +1800,8 @@ func (me implWindow) ShowQuickPick(items []QuickPickItem, options QuickPickOptio
 			var __coll__result []any
 			__coll__result, ok = payload.([]any)
 			if !ok {
-				return false
+				__coll__result = make([]any, 1)
+				__coll__result[0] = payload
 			}
 			result = make([]QuickPickItem, len(__coll__result))
 			var __idx__result int

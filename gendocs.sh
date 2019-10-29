@@ -5,6 +5,7 @@
 
 
 cd libs/go
+rm -rf ./readme.md
 godocdown -output readme.md .
 cd ../..
 

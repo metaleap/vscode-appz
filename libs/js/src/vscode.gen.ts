@@ -2863,7 +2863,8 @@ class implWindow extends implBase implements Window {
                 let __coll__result: any[]
                 [__coll__result, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
                 if (!ok) {
-                    return false
+                    __coll__result = new Array(1)
+                    __coll__result[0] = payload
                 }
                 result = new Array(__coll__result.length)
                 let __idx__result: number

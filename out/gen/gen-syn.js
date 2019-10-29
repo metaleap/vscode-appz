@@ -653,7 +653,7 @@ class Gen extends gen.Gen {
             return this.s(ename.Name ? ename.Name : this.options.idents.curInst);
         throw "<expr>" + JSON.stringify(it);
     }
-    convOrRet(dstVarName, src, dstType, onErrRet = undefined) {
+    convOrRet(dstVarName, src, dstType, onErrRet = undefined, allowOneElemArr = false) {
         const _ = this.b;
         if (!onErrRet)
             onErrRet = _.eLit(false);
@@ -706,7 +706,10 @@ class Gen extends gen.Gen {
             ] : [
                 _.iVar(tncoll, tcoll),
                 _.iSet(_.eTup(_._(tncoll), _._(gen.idents.varOk)), _.eConv(tcoll, src)),
-                retifnotok,
+                (!(allowOneElemArr && tcoll.KeysOf === undefined)) ? retifnotok : _.iIf(_.oNot(_._(gen.idents.varOk)), [
+                    _.iSet(_._(tncoll), _.eCollNew(_.eLit(1), tcoll.ValsOf, true)),
+                    _.iSet(_.oIdx(_._(tncoll), _.eLit(0)), src),
+                ]),
                 _.iSet(_._(dstVarName), _.eCollNew(_.eLen(_._(tncoll), true), tdstcoll.ValsOf, true)),
                 _.iVar(tnidx, TypeRefPrim.Int),
                 _.iSet(_._(tnidx), _.eLit(0)),
@@ -912,7 +915,7 @@ class Gen extends gen.Gen {
         ] : [
             _.iVar(gen.idents.varOk, TypeRefPrim.Bool),
             _.iVar(gen.idents.varRes, dsttype),
-            _.iIf(_.oIs(_._(gen.idents.argPayload)), this.convOrRet(gen.idents.varRes, _._(gen.idents.argPayload), dsttype), _.WHEN(isdisp || isval || isprops || method.IsObjCtor, () => [_.iRet(_.eLit(false))], () => [])),
+            _.iIf(_.oIs(_._(gen.idents.argPayload)), this.convOrRet(gen.idents.varRes, _._(gen.idents.argPayload), dsttype, undefined, method.fromPrep && method.fromPrep.fromOrig && method.fromPrep.fromOrig.overload !== undefined && method.fromPrep.fromOrig.overload > 0), _.WHEN(isdisp || isval || isprops || method.IsObjCtor, () => [_.iRet(_.eLit(false))], () => [])),
         ])).concat(..._.WHEN(isdisp, () => [_.iIf(_.oIs(_._(gen.idents.varOnRet)), [
                 _.eCall(_._(gen.idents.varOnRet), _.eCall(_._(result, gen.idents.coreMethodBind), ...[impl].concat(...evtsubfnids.map(fnid => _._(fnid))))),
             ])], () => (!(method.IsObjCtor && method.IsObjCtor.length))

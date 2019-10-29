@@ -2782,7 +2782,8 @@ Window·ShowQuickPick: (items:[QuickPickItem] -> options:QuickPickOptions -> tok
             var __coll__result of [any]
             [__coll__result, ok] = ((payload)·([any]))
             if !ok
-                return false
+                __coll__result = [any]·new(1)
+                __coll__result@0 = payload
             result = [QuickPickItem]·new(__coll__result·len)
             var __idx__result of int
             __idx__result = 0

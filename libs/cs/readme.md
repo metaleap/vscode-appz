@@ -53,9 +53,6 @@
   - [SessionId](#F-VscAppz-EnvState-SessionId 'VscAppz.EnvState.SessionId')
   - [Shell](#F-VscAppz-EnvState-Shell 'VscAppz.EnvState.Shell')
   - [UriScheme](#F-VscAppz-EnvState-UriScheme 'VscAppz.EnvState.UriScheme')
-- [ExtensionTerminalOptions](#T-VscAppz-ExtensionTerminalOptions 'VscAppz.ExtensionTerminalOptions')
-  - [Name](#F-VscAppz-ExtensionTerminalOptions-Name 'VscAppz.ExtensionTerminalOptions.Name')
-  - [Pty](#F-VscAppz-ExtensionTerminalOptions-Pty 'VscAppz.ExtensionTerminalOptions.Pty')
 - [FileSystemWatcher](#T-VscAppz-FileSystemWatcher 'VscAppz.FileSystemWatcher')
   - [Cfg](#F-VscAppz-FileSystemWatcher-Cfg 'VscAppz.FileSystemWatcher.Cfg')
   - [Dispose()](#M-VscAppz-FileSystemWatcher-Dispose 'VscAppz.FileSystemWatcher.Dispose')
@@ -104,32 +101,17 @@
   - [CreateOutputChannel(name)](#M-VscAppz-IWindow-CreateOutputChannel-System-String- 'VscAppz.IWindow.CreateOutputChannel(System.String)')
   - [CreateQuickPick()](#M-VscAppz-IWindow-CreateQuickPick 'VscAppz.IWindow.CreateQuickPick')
   - [CreateStatusBarItem(alignment,priority)](#M-VscAppz-IWindow-CreateStatusBarItem-System-Nullable{VscAppz-StatusBarAlignment},System-Nullable{System-Int32}- 'VscAppz.IWindow.CreateStatusBarItem(System.Nullable{VscAppz.StatusBarAlignment},System.Nullable{System.Int32})')
-  - [CreateTerminal1(name,shellPath,shellArgs)](#M-VscAppz-IWindow-CreateTerminal1-System-String,System-String,System-String[]- 'VscAppz.IWindow.CreateTerminal1(System.String,System.String,System.String[])')
-  - [CreateTerminal2(options)](#M-VscAppz-IWindow-CreateTerminal2-VscAppz-TerminalOptions- 'VscAppz.IWindow.CreateTerminal2(VscAppz.TerminalOptions)')
-  - [CreateTerminal3(options)](#M-VscAppz-IWindow-CreateTerminal3-VscAppz-ExtensionTerminalOptions- 'VscAppz.IWindow.CreateTerminal3(VscAppz.ExtensionTerminalOptions)')
+  - [CreateTerminal(options)](#M-VscAppz-IWindow-CreateTerminal-VscAppz-TerminalOptions- 'VscAppz.IWindow.CreateTerminal(VscAppz.TerminalOptions)')
   - [CreateTextEditorDecorationType(options)](#M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions- 'VscAppz.IWindow.CreateTextEditorDecorationType(VscAppz.DecorationRenderOptions)')
   - [OnDidChangeWindowState(listener)](#M-VscAppz-IWindow-OnDidChangeWindowState-System-Action{VscAppz-WindowState}- 'VscAppz.IWindow.OnDidChangeWindowState(System.Action{VscAppz.WindowState})')
-  - [SetStatusBarMessage1(text,hideAfterTimeout)](#M-VscAppz-IWindow-SetStatusBarMessage1-System-String,System-Int32- 'VscAppz.IWindow.SetStatusBarMessage1(System.String,System.Int32)')
-  - [SetStatusBarMessage2(text)](#M-VscAppz-IWindow-SetStatusBarMessage2-System-String- 'VscAppz.IWindow.SetStatusBarMessage2(System.String)')
-  - [ShowErrorMessage1(message,items)](#M-VscAppz-IWindow-ShowErrorMessage1-System-String,System-String[]- 'VscAppz.IWindow.ShowErrorMessage1(System.String,System.String[])')
-  - [ShowErrorMessage2(message,options,items)](#M-VscAppz-IWindow-ShowErrorMessage2-System-String,VscAppz-MessageOptions,System-String[]- 'VscAppz.IWindow.ShowErrorMessage2(System.String,VscAppz.MessageOptions,System.String[])')
-  - [ShowErrorMessage3(message,items)](#M-VscAppz-IWindow-ShowErrorMessage3-System-String,VscAppz-MessageItem[]- 'VscAppz.IWindow.ShowErrorMessage3(System.String,VscAppz.MessageItem[])')
-  - [ShowErrorMessage4(message,options,items)](#M-VscAppz-IWindow-ShowErrorMessage4-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[]- 'VscAppz.IWindow.ShowErrorMessage4(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[])')
-  - [ShowInformationMessage1(message,items)](#M-VscAppz-IWindow-ShowInformationMessage1-System-String,System-String[]- 'VscAppz.IWindow.ShowInformationMessage1(System.String,System.String[])')
-  - [ShowInformationMessage2(message,options,items)](#M-VscAppz-IWindow-ShowInformationMessage2-System-String,VscAppz-MessageOptions,System-String[]- 'VscAppz.IWindow.ShowInformationMessage2(System.String,VscAppz.MessageOptions,System.String[])')
-  - [ShowInformationMessage3(message,items)](#M-VscAppz-IWindow-ShowInformationMessage3-System-String,VscAppz-MessageItem[]- 'VscAppz.IWindow.ShowInformationMessage3(System.String,VscAppz.MessageItem[])')
-  - [ShowInformationMessage4(message,options,items)](#M-VscAppz-IWindow-ShowInformationMessage4-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[]- 'VscAppz.IWindow.ShowInformationMessage4(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[])')
+  - [SetStatusBarMessage(text,hideAfterTimeout)](#M-VscAppz-IWindow-SetStatusBarMessage-System-String,System-Int32- 'VscAppz.IWindow.SetStatusBarMessage(System.String,System.Int32)')
+  - [ShowErrorMessage(message,items)](#M-VscAppz-IWindow-ShowErrorMessage-System-String,System-String[]- 'VscAppz.IWindow.ShowErrorMessage(System.String,System.String[])')
+  - [ShowInformationMessage(message,items)](#M-VscAppz-IWindow-ShowInformationMessage-System-String,System-String[]- 'VscAppz.IWindow.ShowInformationMessage(System.String,System.String[])')
   - [ShowInputBox(options,token)](#M-VscAppz-IWindow-ShowInputBox-VscAppz-InputBoxOptions,VscAppz-Cancel- 'VscAppz.IWindow.ShowInputBox(VscAppz.InputBoxOptions,VscAppz.Cancel)')
   - [ShowOpenDialog(options)](#M-VscAppz-IWindow-ShowOpenDialog-VscAppz-OpenDialogOptions- 'VscAppz.IWindow.ShowOpenDialog(VscAppz.OpenDialogOptions)')
-  - [ShowQuickPick1(items,options,token)](#M-VscAppz-IWindow-ShowQuickPick1-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel- 'VscAppz.IWindow.ShowQuickPick1(System.String[],VscAppz.QuickPickOptions,VscAppz.Cancel)')
-  - [ShowQuickPick2(items,options,token)](#M-VscAppz-IWindow-ShowQuickPick2-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel- 'VscAppz.IWindow.ShowQuickPick2(System.String[],VscAppz.QuickPickOptions,VscAppz.Cancel)')
-  - [ShowQuickPick3(items,options,token)](#M-VscAppz-IWindow-ShowQuickPick3-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel- 'VscAppz.IWindow.ShowQuickPick3(VscAppz.QuickPickItem[],VscAppz.QuickPickOptions,VscAppz.Cancel)')
-  - [ShowQuickPick4(items,options,token)](#M-VscAppz-IWindow-ShowQuickPick4-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel- 'VscAppz.IWindow.ShowQuickPick4(VscAppz.QuickPickItem[],VscAppz.QuickPickOptions,VscAppz.Cancel)')
+  - [ShowQuickPick(items,options,token)](#M-VscAppz-IWindow-ShowQuickPick-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel- 'VscAppz.IWindow.ShowQuickPick(VscAppz.QuickPickItem[],VscAppz.QuickPickOptions,VscAppz.Cancel)')
   - [ShowSaveDialog(options)](#M-VscAppz-IWindow-ShowSaveDialog-VscAppz-SaveDialogOptions- 'VscAppz.IWindow.ShowSaveDialog(VscAppz.SaveDialogOptions)')
-  - [ShowWarningMessage1(message,items)](#M-VscAppz-IWindow-ShowWarningMessage1-System-String,System-String[]- 'VscAppz.IWindow.ShowWarningMessage1(System.String,System.String[])')
-  - [ShowWarningMessage2(message,options,items)](#M-VscAppz-IWindow-ShowWarningMessage2-System-String,VscAppz-MessageOptions,System-String[]- 'VscAppz.IWindow.ShowWarningMessage2(System.String,VscAppz.MessageOptions,System.String[])')
-  - [ShowWarningMessage3(message,items)](#M-VscAppz-IWindow-ShowWarningMessage3-System-String,VscAppz-MessageItem[]- 'VscAppz.IWindow.ShowWarningMessage3(System.String,VscAppz.MessageItem[])')
-  - [ShowWarningMessage4(message,options,items)](#M-VscAppz-IWindow-ShowWarningMessage4-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[]- 'VscAppz.IWindow.ShowWarningMessage4(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[])')
+  - [ShowWarningMessage(message,items)](#M-VscAppz-IWindow-ShowWarningMessage-System-String,System-String[]- 'VscAppz.IWindow.ShowWarningMessage(System.String,System.String[])')
   - [ShowWorkspaceFolderPick(options)](#M-VscAppz-IWindow-ShowWorkspaceFolderPick-VscAppz-WorkspaceFolderPickOptions- 'VscAppz.IWindow.ShowWorkspaceFolderPick(VscAppz.WorkspaceFolderPickOptions)')
   - [State()](#M-VscAppz-IWindow-State 'VscAppz.IWindow.State')
 - [IWorkspace](#T-VscAppz-IWorkspace 'VscAppz.IWorkspace')
@@ -173,12 +155,6 @@
   - [Value](#F-VscAppz-InputBoxState-Value 'VscAppz.InputBoxState.Value')
   - [ApplyChanges()](#M-VscAppz-InputBoxState-ApplyChanges 'VscAppz.InputBoxState.ApplyChanges')
   - [ReFetch()](#M-VscAppz-InputBoxState-ReFetch 'VscAppz.InputBoxState.ReFetch')
-- [MessageItem](#T-VscAppz-MessageItem 'VscAppz.MessageItem')
-  - [IsCloseAffordance](#F-VscAppz-MessageItem-IsCloseAffordance 'VscAppz.MessageItem.IsCloseAffordance')
-  - [My](#F-VscAppz-MessageItem-My 'VscAppz.MessageItem.My')
-  - [Title](#F-VscAppz-MessageItem-Title 'VscAppz.MessageItem.Title')
-- [MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions')
-  - [Modal](#F-VscAppz-MessageOptions-Modal 'VscAppz.MessageOptions.Modal')
 - [OpenDialogOptions](#T-VscAppz-OpenDialogOptions 'VscAppz.OpenDialogOptions')
   - [CanSelectFiles](#F-VscAppz-OpenDialogOptions-CanSelectFiles 'VscAppz.OpenDialogOptions.CanSelectFiles')
   - [CanSelectFolders](#F-VscAppz-OpenDialogOptions-CanSelectFolders 'VscAppz.OpenDialogOptions.CanSelectFolders')
@@ -202,14 +178,6 @@
   - [Full](#F-VscAppz-OverviewRulerLane-Full 'VscAppz.OverviewRulerLane.Full')
   - [Left](#F-VscAppz-OverviewRulerLane-Left 'VscAppz.OverviewRulerLane.Left')
   - [Right](#F-VscAppz-OverviewRulerLane-Right 'VscAppz.OverviewRulerLane.Right')
-- [Pseudoterminal](#T-VscAppz-Pseudoterminal 'VscAppz.Pseudoterminal')
-  - [Close](#F-VscAppz-Pseudoterminal-Close 'VscAppz.Pseudoterminal.Close')
-  - [HandleInput](#F-VscAppz-Pseudoterminal-HandleInput 'VscAppz.Pseudoterminal.HandleInput')
-  - [OnDidClose](#F-VscAppz-Pseudoterminal-OnDidClose 'VscAppz.Pseudoterminal.OnDidClose')
-  - [OnDidOverrideDimensions](#F-VscAppz-Pseudoterminal-OnDidOverrideDimensions 'VscAppz.Pseudoterminal.OnDidOverrideDimensions')
-  - [OnDidWrite](#F-VscAppz-Pseudoterminal-OnDidWrite 'VscAppz.Pseudoterminal.OnDidWrite')
-  - [Open](#F-VscAppz-Pseudoterminal-Open 'VscAppz.Pseudoterminal.Open')
-  - [SetDimensions](#F-VscAppz-Pseudoterminal-SetDimensions 'VscAppz.Pseudoterminal.SetDimensions')
 - [QuickInputButton](#T-VscAppz-QuickInputButton 'VscAppz.QuickInputButton')
   - [IconPath](#F-VscAppz-QuickInputButton-IconPath 'VscAppz.QuickInputButton.IconPath')
   - [Tooltip](#F-VscAppz-QuickInputButton-Tooltip 'VscAppz.QuickInputButton.Tooltip')
@@ -281,9 +249,6 @@
   - [Hide()](#M-VscAppz-Terminal-Hide 'VscAppz.Terminal.Hide')
   - [SendText(text,addNewLine)](#M-VscAppz-Terminal-SendText-System-String,System-Boolean- 'VscAppz.Terminal.SendText(System.String,System.Boolean)')
   - [Show(preserveFocus)](#M-VscAppz-Terminal-Show-System-Boolean- 'VscAppz.Terminal.Show(System.Boolean)')
-- [TerminalDimensions](#T-VscAppz-TerminalDimensions 'VscAppz.TerminalDimensions')
-  - [Columns](#F-VscAppz-TerminalDimensions-Columns 'VscAppz.TerminalDimensions.Columns')
-  - [Rows](#F-VscAppz-TerminalDimensions-Rows 'VscAppz.TerminalDimensions.Rows')
 - [TerminalOptions](#T-VscAppz-TerminalOptions 'VscAppz.TerminalOptions')
   - [Cwd](#F-VscAppz-TerminalOptions-Cwd 'VscAppz.TerminalOptions.Cwd')
   - [Env](#F-VscAppz-TerminalOptions-Env 'VscAppz.TerminalOptions.Env')
@@ -767,32 +732,6 @@ The detected default shell for the extension host, this is overridden by the
 ##### Summary
 
 The custom uri scheme the editor registers to in the operating system.
-
-<a name='T-VscAppz-ExtensionTerminalOptions'></a>
-## ExtensionTerminalOptions `type`
-
-##### Namespace
-
-VscAppz
-
-##### Summary
-
-Value-object describing what options a virtual process terminal should use.
-
-<a name='F-VscAppz-ExtensionTerminalOptions-Name'></a>
-### Name `constants`
-
-##### Summary
-
-A human-readable string which will be used to represent the terminal in the UI.
-
-<a name='F-VscAppz-ExtensionTerminalOptions-Pty'></a>
-### Pty `constants`
-
-##### Summary
-
-An implementation of [Pseudoterminal](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal) that allows an extension to
-control a terminal.
 
 <a name='T-VscAppz-FileSystemWatcher'></a>
 ## FileSystemWatcher `type`
@@ -1658,34 +1597,8 @@ Creates a status bar [item](https://code.visualstudio.com/api/references/vscode-
 | alignment | [System.Nullable{VscAppz.StatusBarAlignment}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{VscAppz.StatusBarAlignment}') | The alignment of the item. |
 | priority | [System.Nullable{System.Int32}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Nullable 'System.Nullable{System.Int32}') | The priority of the item. Higher values mean the item should be shown more to the left. |
 
-<a name='M-VscAppz-IWindow-CreateTerminal1-System-String,System-String,System-String[]-'></a>
-### CreateTerminal1(name,shellPath,shellArgs) `method`
-
-##### Summary
-
-Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process. The cwd of the terminal will be the workspace
-directory if it exists.
-
-`name` ── Optional human-readable string which will be used to represent the terminal in the UI.
-
-`shellPath` ── Optional path to a custom shell executable to be used in the terminal.
-
-`shellArgs` ── Optional args for the custom shell executable. A string can be used on Windows only which
-allows specifying shell args in
-[command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
-
-`return` ── A new Terminal.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| name | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Optional human-readable string which will be used to represent the terminal in the UI. |
-| shellPath | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Optional path to a custom shell executable to be used in the terminal. |
-| shellArgs | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | Optional args for the custom shell executable. A string can be used on Windows only which allows specifying shell args in [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6). |
-
-<a name='M-VscAppz-IWindow-CreateTerminal2-VscAppz-TerminalOptions-'></a>
-### CreateTerminal2(options) `method`
+<a name='M-VscAppz-IWindow-CreateTerminal-VscAppz-TerminalOptions-'></a>
+### CreateTerminal(options) `method`
 
 ##### Summary
 
@@ -1700,24 +1613,6 @@ Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Ter
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | options | [VscAppz.TerminalOptions](#T-VscAppz-TerminalOptions 'VscAppz.TerminalOptions') | A TerminalOptions object describing the characteristics of the new terminal. |
-
-<a name='M-VscAppz-IWindow-CreateTerminal3-VscAppz-ExtensionTerminalOptions-'></a>
-### CreateTerminal3(options) `method`
-
-##### Summary
-
-Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) where an extension controls its input and output.
-
-`options` ── An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing
-the characteristics of the new terminal.
-
-`return` ── A new Terminal.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| options | [VscAppz.ExtensionTerminalOptions](#T-VscAppz-ExtensionTerminalOptions 'VscAppz.ExtensionTerminalOptions') | An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing the characteristics of the new terminal. |
 
 <a name='M-VscAppz-IWindow-CreateTextEditorDecorationType-VscAppz-DecorationRenderOptions-'></a>
 ### CreateTextEditorDecorationType(options) `method`
@@ -1754,8 +1649,8 @@ changes. The value of the event represents whether the window is focused.
 | ---- | ---- | ----------- |
 | listener | [System.Action{VscAppz.WindowState}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Action 'System.Action{VscAppz.WindowState}') | will be invoked whenever the `OnDidChangeWindowState` event fires (mandatory, not optional). |
 
-<a name='M-VscAppz-IWindow-SetStatusBarMessage1-System-String,System-Int32-'></a>
-### SetStatusBarMessage1(text,hideAfterTimeout) `method`
+<a name='M-VscAppz-IWindow-SetStatusBarMessage-System-String,System-Int32-'></a>
+### SetStatusBarMessage(text,hideAfterTimeout) `method`
 
 ##### Summary
 
@@ -1775,29 +1670,8 @@ status bar [items](https://code.visualstudio.com/api/references/vscode-api#windo
 | text | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text). |
 | hideAfterTimeout | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Timeout in milliseconds after which the message will be disposed. |
 
-<a name='M-VscAppz-IWindow-SetStatusBarMessage2-System-String-'></a>
-### SetStatusBarMessage2(text) `method`
-
-##### Summary
-
-Set a message to the status bar. This is a short hand for the more powerful
-status bar [items](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem).
-
-*Note* that status bar messages stack and that they must be disposed when no
-longer used.
-
-`text` ── The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
-
-`return` ── A disposable which hides the status bar message.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| text | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text). |
-
-<a name='M-VscAppz-IWindow-ShowErrorMessage1-System-String,System-String[]-'></a>
-### ShowErrorMessage1(message,items) `method`
+<a name='M-VscAppz-IWindow-ShowErrorMessage-System-String,System-String[]-'></a>
+### ShowErrorMessage(message,items) `method`
 
 ##### Summary
 
@@ -1816,74 +1690,8 @@ Show an error message.
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
 
-<a name='M-VscAppz-IWindow-ShowErrorMessage2-System-String,VscAppz-MessageOptions,System-String[]-'></a>
-### ShowErrorMessage2(message,options,items) `method`
-
-##### Summary
-
-Show an error message.
-
-`message` ── The message to show.
-
-`options` ── Configures the behaviour of the message.
-
-`items` ── A set of items that will be rendered as actions in the message.
-
-`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
-| options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
-| items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
-
-<a name='M-VscAppz-IWindow-ShowErrorMessage3-System-String,VscAppz-MessageItem[]-'></a>
-### ShowErrorMessage3(message,items) `method`
-
-##### Summary
-
-Show an error message.
-
-`message` ── The message to show.
-
-`items` ── A set of items that will be rendered as actions in the message.
-
-`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
-| items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
-
-<a name='M-VscAppz-IWindow-ShowErrorMessage4-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[]-'></a>
-### ShowErrorMessage4(message,options,items) `method`
-
-##### Summary
-
-Show an error message.
-
-`message` ── The message to show.
-
-`options` ── Configures the behaviour of the message.
-
-`items` ── A set of items that will be rendered as actions in the message.
-
-`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
-| options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
-| items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
-
-<a name='M-VscAppz-IWindow-ShowInformationMessage1-System-String,System-String[]-'></a>
-### ShowInformationMessage1(message,items) `method`
+<a name='M-VscAppz-IWindow-ShowInformationMessage-System-String,System-String[]-'></a>
+### ShowInformationMessage(message,items) `method`
 
 ##### Summary
 
@@ -1902,73 +1710,6 @@ clickable buttons.
 | ---- | ---- | ----------- |
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
-
-<a name='M-VscAppz-IWindow-ShowInformationMessage2-System-String,VscAppz-MessageOptions,System-String[]-'></a>
-### ShowInformationMessage2(message,options,items) `method`
-
-##### Summary
-
-Show an information message to users. Optionally provide an array of items which will be presented as
-clickable buttons.
-
-`message` ── The message to show.
-
-`options` ── Configures the behaviour of the message.
-
-`items` ── A set of items that will be rendered as actions in the message.
-
-`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
-| options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
-| items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
-
-<a name='M-VscAppz-IWindow-ShowInformationMessage3-System-String,VscAppz-MessageItem[]-'></a>
-### ShowInformationMessage3(message,items) `method`
-
-##### Summary
-
-Show an information message.
-
-`message` ── The message to show.
-
-`items` ── A set of items that will be rendered as actions in the message.
-
-`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
-| items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
-
-<a name='M-VscAppz-IWindow-ShowInformationMessage4-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[]-'></a>
-### ShowInformationMessage4(message,options,items) `method`
-
-##### Summary
-
-Show an information message.
-
-`message` ── The message to show.
-
-`options` ── Configures the behaviour of the message.
-
-`items` ── A set of items that will be rendered as actions in the message.
-
-`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
-| options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
-| items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
 
 <a name='M-VscAppz-IWindow-ShowInputBox-VscAppz-InputBoxOptions,VscAppz-Cancel-'></a>
 ### ShowInputBox(options,token) `method`
@@ -2012,54 +1753,8 @@ for opening-purposes.
 | ---- | ---- | ----------- |
 | options | [VscAppz.OpenDialogOptions](#T-VscAppz-OpenDialogOptions 'VscAppz.OpenDialogOptions') | Options that control the dialog. |
 
-<a name='M-VscAppz-IWindow-ShowQuickPick1-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel-'></a>
-### ShowQuickPick1(items,options,token) `method`
-
-##### Summary
-
-Shows a selection list allowing multiple selections.
-
-`items` ── An array of strings, or a promise that resolves to an array of strings.
-
-`options` ── Configures the behavior of the selection list.
-
-`token` ── A token that can be used to signal cancellation.
-
-`return` ── A promise that resolves to the selected items or `undefined`.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | An array of strings, or a promise that resolves to an array of strings. |
-| options | [VscAppz.QuickPickOptions](#T-VscAppz-QuickPickOptions 'VscAppz.QuickPickOptions') | Configures the behavior of the selection list. |
-| token | [VscAppz.Cancel](#T-VscAppz-Cancel 'VscAppz.Cancel') | A token that can be used to signal cancellation. |
-
-<a name='M-VscAppz-IWindow-ShowQuickPick2-System-String[],VscAppz-QuickPickOptions,VscAppz-Cancel-'></a>
-### ShowQuickPick2(items,options,token) `method`
-
-##### Summary
-
-Shows a selection list.
-
-`items` ── An array of strings, or a promise that resolves to an array of strings.
-
-`options` ── Configures the behavior of the selection list.
-
-`token` ── A token that can be used to signal cancellation.
-
-`return` ── A promise that resolves to the selection or `undefined`.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | An array of strings, or a promise that resolves to an array of strings. |
-| options | [VscAppz.QuickPickOptions](#T-VscAppz-QuickPickOptions 'VscAppz.QuickPickOptions') | Configures the behavior of the selection list. |
-| token | [VscAppz.Cancel](#T-VscAppz-Cancel 'VscAppz.Cancel') | A token that can be used to signal cancellation. |
-
-<a name='M-VscAppz-IWindow-ShowQuickPick3-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel-'></a>
-### ShowQuickPick3(items,options,token) `method`
+<a name='M-VscAppz-IWindow-ShowQuickPick-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel-'></a>
+### ShowQuickPick(items,options,token) `method`
 
 ##### Summary
 
@@ -2072,29 +1767,6 @@ Shows a selection list allowing multiple selections.
 `token` ── A token that can be used to signal cancellation.
 
 `return` ── A promise that resolves to the selected items or `undefined`.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| items | [VscAppz.QuickPickItem[]](#T-VscAppz-QuickPickItem[] 'VscAppz.QuickPickItem[]') | An array of items, or a promise that resolves to an array of items. |
-| options | [VscAppz.QuickPickOptions](#T-VscAppz-QuickPickOptions 'VscAppz.QuickPickOptions') | Configures the behavior of the selection list. |
-| token | [VscAppz.Cancel](#T-VscAppz-Cancel 'VscAppz.Cancel') | A token that can be used to signal cancellation. |
-
-<a name='M-VscAppz-IWindow-ShowQuickPick4-VscAppz-QuickPickItem[],VscAppz-QuickPickOptions,VscAppz-Cancel-'></a>
-### ShowQuickPick4(items,options,token) `method`
-
-##### Summary
-
-Shows a selection list.
-
-`items` ── An array of items, or a promise that resolves to an array of items.
-
-`options` ── Configures the behavior of the selection list.
-
-`token` ── A token that can be used to signal cancellation.
-
-`return` ── A promise that resolves to the selected item or `undefined`.
 
 ##### Parameters
 
@@ -2122,8 +1794,8 @@ for saving-purposes.
 | ---- | ---- | ----------- |
 | options | [VscAppz.SaveDialogOptions](#T-VscAppz-SaveDialogOptions 'VscAppz.SaveDialogOptions') | Options that control the dialog. |
 
-<a name='M-VscAppz-IWindow-ShowWarningMessage1-System-String,System-String[]-'></a>
-### ShowWarningMessage1(message,items) `method`
+<a name='M-VscAppz-IWindow-ShowWarningMessage-System-String,System-String[]-'></a>
+### ShowWarningMessage(message,items) `method`
 
 ##### Summary
 
@@ -2141,72 +1813,6 @@ Show a warning message.
 | ---- | ---- | ----------- |
 | message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
 | items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
-
-<a name='M-VscAppz-IWindow-ShowWarningMessage2-System-String,VscAppz-MessageOptions,System-String[]-'></a>
-### ShowWarningMessage2(message,options,items) `method`
-
-##### Summary
-
-Show a warning message.
-
-`message` ── The message to show.
-
-`options` ── Configures the behaviour of the message.
-
-`items` ── A set of items that will be rendered as actions in the message.
-
-`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
-| options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
-| items | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | A set of items that will be rendered as actions in the message. |
-
-<a name='M-VscAppz-IWindow-ShowWarningMessage3-System-String,VscAppz-MessageItem[]-'></a>
-### ShowWarningMessage3(message,items) `method`
-
-##### Summary
-
-Show a warning message.
-
-`message` ── The message to show.
-
-`items` ── A set of items that will be rendered as actions in the message.
-
-`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
-| items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
-
-<a name='M-VscAppz-IWindow-ShowWarningMessage4-System-String,VscAppz-MessageOptions,VscAppz-MessageItem[]-'></a>
-### ShowWarningMessage4(message,options,items) `method`
-
-##### Summary
-
-Show a warning message.
-
-`message` ── The message to show.
-
-`options` ── Configures the behaviour of the message.
-
-`items` ── A set of items that will be rendered as actions in the message.
-
-`return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| message | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The message to show. |
-| options | [VscAppz.MessageOptions](#T-VscAppz-MessageOptions 'VscAppz.MessageOptions') | Configures the behaviour of the message. |
-| items | [VscAppz.MessageItem[]](#T-VscAppz-MessageItem[] 'VscAppz.MessageItem[]') | A set of items that will be rendered as actions in the message. |
 
 <a name='M-VscAppz-IWindow-ShowWorkspaceFolderPick-VscAppz-WorkspaceFolderPickOptions-'></a>
 ### ShowWorkspaceFolderPick(options) `method`
@@ -2793,61 +2399,6 @@ ReFetch requests the current `InputBox` state from the VSC side and upon respons
 
 This method has no parameters.
 
-<a name='T-VscAppz-MessageItem'></a>
-## MessageItem `type`
-
-##### Namespace
-
-VscAppz
-
-##### Summary
-
-Represents an action that is shown with an information, warning, or
-error message.
-
-<a name='F-VscAppz-MessageItem-IsCloseAffordance'></a>
-### IsCloseAffordance `constants`
-
-##### Summary
-
-A hint for modal dialogs that the item should be triggered
-when the user cancels the dialog (e.g. by pressing the ESC
-key).
-
-Note: this option is ignored for non-modal messages.
-
-<a name='F-VscAppz-MessageItem-My'></a>
-### My `constants`
-
-##### Summary
-
-Free-form custom data, preserved across a roundtrip.
-
-<a name='F-VscAppz-MessageItem-Title'></a>
-### Title `constants`
-
-##### Summary
-
-A short title like 'Retry', 'Open Log' etc.
-
-<a name='T-VscAppz-MessageOptions'></a>
-## MessageOptions `type`
-
-##### Namespace
-
-VscAppz
-
-##### Summary
-
-Options to configure the behavior of the message.
-
-<a name='F-VscAppz-MessageOptions-Modal'></a>
-### Modal `constants`
-
-##### Summary
-
-Indicates that this message should be modal.
-
 <a name='T-VscAppz-OpenDialogOptions'></a>
 ## OpenDialogOptions `type`
 
@@ -3102,173 +2653,6 @@ The overview ruler supports three lanes.
 
 Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
 The overview ruler supports three lanes.
-
-<a name='T-VscAppz-Pseudoterminal'></a>
-## Pseudoterminal `type`
-
-##### Namespace
-
-VscAppz
-
-##### Summary
-
-Defines the interface of a terminal pty, enabling extensions to control a terminal.
-
-<a name='F-VscAppz-Pseudoterminal-Close'></a>
-### Close `constants`
-
-##### Summary
-
-Implement to handle when the terminal is closed by an act of the user.
-
-<a name='F-VscAppz-Pseudoterminal-HandleInput'></a>
-### HandleInput `constants`
-
-##### Summary
-
-Implement to handle incoming keystrokes in the terminal or when an extension calls
-[Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText). `data` contains the keystrokes/text serialized into
-their corresponding VT sequence representation.
-
-`data` ── The incoming data.
-
-**Example:** Echo input in the terminal. The sequence for enter (`\r`) is translated to
-CRLF to go to a new line and move the cursor to the start of the line.
-
-```typescript
-
-const writeEmitter = new vscode.EventEmitter<string>();
-const pty: vscode.Pseudoterminal = {
-onDidWrite: writeEmitter.event,
-open: () => {},
-close: () => {},
-handleInput: data => writeEmitter.fire(data === '\r' ? '\r\n' : data)
-};
-vscode.window.createTerminal({ name: 'Local echo', pty });
-
-```
-
-<a name='F-VscAppz-Pseudoterminal-OnDidClose'></a>
-### OnDidClose `constants`
-
-##### Summary
-
-An event that when fired will signal that the pty is closed and dispose of the terminal.
-
-A number can be used to provide an exit code for the terminal. Exit codes must be
-positive and a non-zero exit codes signals failure which shows a notification for a
-regular terminal and allows dependent tasks to proceed when used with the
-`CustomExecution2` API.
-
-**Example:** Exit the terminal when "y" is pressed, otherwise show a notification.
-
-```typescript
-
-const writeEmitter = new vscode.EventEmitter<string>();
-const closeEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
-const pty: vscode.Pseudoterminal = {
-   onDidWrite: writeEmitter.event,
-   onDidClose: closeEmitter.event,
-   open: () => writeEmitter.fire('Press y to exit successfully'),
-   close: () => {},
-   handleInput: data => {
-     if (data !== 'y') {
-       vscode.window.showInformationMessage('Something went wrong');
-     }
-     closeEmitter.fire();
-   }
-};
-vscode.window.createTerminal({ name: 'Exit example', pty });
-
-<a name='F-VscAppz-Pseudoterminal-OnDidOverrideDimensions'></a>
-### OnDidOverrideDimensions `constants`
-
-##### Summary
-
-An event that when fired allows overriding the [dimensions](https://code.visualstudio.com/api/references/vscode-api#Terminal.dimensions) of the
-terminal. Note that when set, the overridden dimensions will only take effect when they
-are lower than the actual dimensions of the terminal (ie. there will never be a scroll
-bar). Set to `undefined` for the terminal to go back to the regular dimensions (fit to
-the size of the panel).
-
-**Example:** Override the dimensions of a terminal to 20 columns and 10 rows
-
-```typescript
-
-const dimensionsEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
-const pty: vscode.Pseudoterminal = {
-   onDidWrite: writeEmitter.event,
-   onDidOverrideDimensions: dimensionsEmitter.event,
-   open: () => {
-     dimensionsEmitter.fire({
-       columns: 20,
-       rows: 10
-     });
-   },
-   close: () => {}
-};
-vscode.window.createTerminal({ name: 'My terminal', pty });
-
-```
-
-<a name='F-VscAppz-Pseudoterminal-OnDidWrite'></a>
-### OnDidWrite `constants`
-
-##### Summary
-
-An event that when fired will write data to the terminal. Unlike
-[Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText) which sends text to the underlying _process_
-(the pty "slave"), this will write the text to the terminal itself (the pty "master").
-
-**Example:** Write red text to the terminal
-
-```typescript
-
-const writeEmitter = new vscode.EventEmitter<string>();
-const pty: vscode.Pseudoterminal = {
-   onDidWrite: writeEmitter.event,
-   open: () => writeEmitter.fire('\x1b[31mHello world\x1b[0m'),
-   close: () => {}
-};
-vscode.window.createTerminal({ name: 'My terminal', pty });
-
-```
-
-
-**Example:** Move the cursor to the 10th row and 20th column and write an asterisk
-
-```typescript
-
-writeEmitter.fire('\x1b[10;20H*');
-
-```
-
-<a name='F-VscAppz-Pseudoterminal-Open'></a>
-### Open `constants`
-
-##### Summary
-
-Implement to handle when the pty is open and ready to start firing events.
-
-`initialDimensions` ── The dimensions of the terminal, this will be undefined if the
-terminal panel has not been opened before this is called.
-
-<a name='F-VscAppz-Pseudoterminal-SetDimensions'></a>
-### SetDimensions `constants`
-
-##### Summary
-
-Implement to handle when the number of rows and columns that fit into the terminal panel
-changes, for example when font size changes or when the panel is resized. The initial
-state of a terminal's dimensions should be treated as `undefined` until this is triggered
-as the size of a terminal isn't know until it shows up in the user interface.
-
-When dimensions are overridden by
-[onDidOverrideDimensions](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal.onDidOverrideDimensions), `setDimensions` will
-continue to be called with the regular panel dimensions, allowing the extension continue
-to react dimension changes.
-
-`dimensions` ── The new dimensions.
 
 <a name='T-VscAppz-QuickInputButton'></a>
 ## QuickInputButton `type`
@@ -3998,31 +3382,6 @@ Show the terminal panel and reveal this terminal in the UI.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | preserveFocus | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | When `true` the terminal will not take focus. |
-
-<a name='T-VscAppz-TerminalDimensions'></a>
-## TerminalDimensions `type`
-
-##### Namespace
-
-VscAppz
-
-##### Summary
-
-Represents the dimensions of a terminal.
-
-<a name='F-VscAppz-TerminalDimensions-Columns'></a>
-### Columns `constants`
-
-##### Summary
-
-The number of columns in the terminal.
-
-<a name='F-VscAppz-TerminalDimensions-Rows'></a>
-### Rows `constants`
-
-##### Summary
-
-The number of rows in the terminal.
 
 <a name='T-VscAppz-TerminalOptions'></a>
 ## TerminalOptions `type`

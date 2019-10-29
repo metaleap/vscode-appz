@@ -92,6 +92,6 @@ exports.nums1To = n => {
     return ret
 }
 exports.quickPickItemsFrom = items =>
-    items.map(_ => { label: _ })
+    items.map((s) => ({ label: s }))
 
 main()

@@ -267,7 +267,7 @@
             
             </summary>
         </member>
-        <member name="M:VscAppz.IWindow.ShowInformationMessage1(System.String,System.String[])">
+        <member name="M:VscAppz.IWindow.ShowInformationMessage(System.String,System.String[])">
             <summary>
             Show an information message to users. Optionally provide an array of items which will be presented as
             clickable buttons.
@@ -283,59 +283,7 @@
             <param name="items">A set of items that will be rendered as actions in the message.</param>
             <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
         </member>
-        <member name="M:VscAppz.IWindow.ShowInformationMessage2(System.String,VscAppz.MessageOptions,System.String[])">
-            <summary>
-            Show an information message to users. Optionally provide an array of items which will be presented as
-            clickable buttons.
-            
-            `message` ── The message to show.
-            
-            `options` ── Configures the behaviour of the message.
-            
-            `items` ── A set of items that will be rendered as actions in the message.
-            
-            `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-            
-            </summary>
-            <param name="message">The message to show.</param>
-            <param name="options">Configures the behaviour of the message.</param>
-            <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.ShowInformationMessage3(System.String,VscAppz.MessageItem[])">
-            <summary>
-            Show an information message.
-            
-            `message` ── The message to show.
-            
-            `items` ── A set of items that will be rendered as actions in the message.
-            
-            `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-            
-            </summary>
-            <param name="message">The message to show.</param>
-            <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.ShowInformationMessage4(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[])">
-            <summary>
-            Show an information message.
-            
-            `message` ── The message to show.
-            
-            `options` ── Configures the behaviour of the message.
-            
-            `items` ── A set of items that will be rendered as actions in the message.
-            
-            `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-            
-            </summary>
-            <param name="message">The message to show.</param>
-            <param name="options">Configures the behaviour of the message.</param>
-            <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.ShowWarningMessage1(System.String,System.String[])">
+        <member name="M:VscAppz.IWindow.ShowWarningMessage(System.String,System.String[])">
             <summary>
             Show a warning message.
             
@@ -350,58 +298,7 @@
             <param name="items">A set of items that will be rendered as actions in the message.</param>
             <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
         </member>
-        <member name="M:VscAppz.IWindow.ShowWarningMessage2(System.String,VscAppz.MessageOptions,System.String[])">
-            <summary>
-            Show a warning message.
-            
-            `message` ── The message to show.
-            
-            `options` ── Configures the behaviour of the message.
-            
-            `items` ── A set of items that will be rendered as actions in the message.
-            
-            `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-            
-            </summary>
-            <param name="message">The message to show.</param>
-            <param name="options">Configures the behaviour of the message.</param>
-            <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.ShowWarningMessage3(System.String,VscAppz.MessageItem[])">
-            <summary>
-            Show a warning message.
-            
-            `message` ── The message to show.
-            
-            `items` ── A set of items that will be rendered as actions in the message.
-            
-            `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-            
-            </summary>
-            <param name="message">The message to show.</param>
-            <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.ShowWarningMessage4(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[])">
-            <summary>
-            Show a warning message.
-            
-            `message` ── The message to show.
-            
-            `options` ── Configures the behaviour of the message.
-            
-            `items` ── A set of items that will be rendered as actions in the message.
-            
-            `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-            
-            </summary>
-            <param name="message">The message to show.</param>
-            <param name="options">Configures the behaviour of the message.</param>
-            <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.ShowErrorMessage1(System.String,System.String[])">
+        <member name="M:VscAppz.IWindow.ShowErrorMessage(System.String,System.String[])">
             <summary>
             Show an error message.
             
@@ -413,57 +310,6 @@
             
             </summary>
             <param name="message">The message to show.</param>
-            <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.ShowErrorMessage2(System.String,VscAppz.MessageOptions,System.String[])">
-            <summary>
-            Show an error message.
-            
-            `message` ── The message to show.
-            
-            `options` ── Configures the behaviour of the message.
-            
-            `items` ── A set of items that will be rendered as actions in the message.
-            
-            `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-            
-            </summary>
-            <param name="message">The message to show.</param>
-            <param name="options">Configures the behaviour of the message.</param>
-            <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.ShowErrorMessage3(System.String,VscAppz.MessageItem[])">
-            <summary>
-            Show an error message.
-            
-            `message` ── The message to show.
-            
-            `items` ── A set of items that will be rendered as actions in the message.
-            
-            `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-            
-            </summary>
-            <param name="message">The message to show.</param>
-            <param name="items">A set of items that will be rendered as actions in the message.</param>
-            <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.ShowErrorMessage4(System.String,VscAppz.MessageOptions,VscAppz.MessageItem[])">
-            <summary>
-            Show an error message.
-            
-            `message` ── The message to show.
-            
-            `options` ── Configures the behaviour of the message.
-            
-            `items` ── A set of items that will be rendered as actions in the message.
-            
-            `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-            
-            </summary>
-            <param name="message">The message to show.</param>
-            <param name="options">Configures the behaviour of the message.</param>
             <param name="items">A set of items that will be rendered as actions in the message.</param>
             <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
         </member>
@@ -486,43 +332,7 @@
             <param name="token">A token that can be used to signal cancellation.</param>
             <return>A promise that resolves to a string the user provided or to `undefined` in case of dismissal.</return>
         </member>
-        <member name="M:VscAppz.IWindow.ShowQuickPick1(System.String[],VscAppz.QuickPickOptions,VscAppz.Cancel)">
-            <summary>
-            Shows a selection list allowing multiple selections.
-            
-            `items` ── An array of strings, or a promise that resolves to an array of strings.
-            
-            `options` ── Configures the behavior of the selection list.
-            
-            `token` ── A token that can be used to signal cancellation.
-            
-            `return` ── A promise that resolves to the selected items or `undefined`.
-            
-            </summary>
-            <param name="items">An array of strings, or a promise that resolves to an array of strings.</param>
-            <param name="options">Configures the behavior of the selection list.</param>
-            <param name="token">A token that can be used to signal cancellation.</param>
-            <return>A promise that resolves to the selected items or `undefined`.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.ShowQuickPick2(System.String[],VscAppz.QuickPickOptions,VscAppz.Cancel)">
-            <summary>
-            Shows a selection list.
-            
-            `items` ── An array of strings, or a promise that resolves to an array of strings.
-            
-            `options` ── Configures the behavior of the selection list.
-            
-            `token` ── A token that can be used to signal cancellation.
-            
-            `return` ── A promise that resolves to the selection or `undefined`.
-            
-            </summary>
-            <param name="items">An array of strings, or a promise that resolves to an array of strings.</param>
-            <param name="options">Configures the behavior of the selection list.</param>
-            <param name="token">A token that can be used to signal cancellation.</param>
-            <return>A promise that resolves to the selection or `undefined`.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.ShowQuickPick3(VscAppz.QuickPickItem[],VscAppz.QuickPickOptions,VscAppz.Cancel)">
+        <member name="M:VscAppz.IWindow.ShowQuickPick(VscAppz.QuickPickItem[],VscAppz.QuickPickOptions,VscAppz.Cancel)">
             <summary>
             Shows a selection list allowing multiple selections.
             
@@ -540,25 +350,7 @@
             <param name="token">A token that can be used to signal cancellation.</param>
             <return>A promise that resolves to the selected items or `undefined`.</return>
         </member>
-        <member name="M:VscAppz.IWindow.ShowQuickPick4(VscAppz.QuickPickItem[],VscAppz.QuickPickOptions,VscAppz.Cancel)">
-            <summary>
-            Shows a selection list.
-            
-            `items` ── An array of items, or a promise that resolves to an array of items.
-            
-            `options` ── Configures the behavior of the selection list.
-            
-            `token` ── A token that can be used to signal cancellation.
-            
-            `return` ── A promise that resolves to the selected item or `undefined`.
-            
-            </summary>
-            <param name="items">An array of items, or a promise that resolves to an array of items.</param>
-            <param name="options">Configures the behavior of the selection list.</param>
-            <param name="token">A token that can be used to signal cancellation.</param>
-            <return>A promise that resolves to the selected item or `undefined`.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.SetStatusBarMessage1(System.String,System.Int32)">
+        <member name="M:VscAppz.IWindow.SetStatusBarMessage(System.String,System.Int32)">
             <summary>
             Set a message to the status bar. This is a short hand for the more powerful
             status bar [items](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem).
@@ -572,22 +364,6 @@
             </summary>
             <param name="text">The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).</param>
             <param name="hideAfterTimeout">Timeout in milliseconds after which the message will be disposed.</param>
-            <return>A disposable which hides the status bar message.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.SetStatusBarMessage2(System.String)">
-            <summary>
-            Set a message to the status bar. This is a short hand for the more powerful
-            status bar [items](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem).
-            
-            *Note* that status bar messages stack and that they must be disposed when no
-            longer used.
-            
-            `text` ── The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
-            
-            `return` ── A disposable which hides the status bar message.
-            
-            </summary>
-            <param name="text">The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).</param>
             <return>A disposable which hides the status bar message.</return>
         </member>
         <member name="M:VscAppz.IWindow.ShowSaveDialog(VscAppz.SaveDialogOptions)">
@@ -717,28 +493,7 @@
             </summary>
             <return>A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).</return>
         </member>
-        <member name="M:VscAppz.IWindow.CreateTerminal1(System.String,System.String,System.String[])">
-            <summary>
-            Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process. The cwd of the terminal will be the workspace
-            directory if it exists.
-            
-            `name` ── Optional human-readable string which will be used to represent the terminal in the UI.
-            
-            `shellPath` ── Optional path to a custom shell executable to be used in the terminal.
-            
-            `shellArgs` ── Optional args for the custom shell executable. A string can be used on Windows only which
-            allows specifying shell args in
-            [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
-            
-            `return` ── A new Terminal.
-            
-            </summary>
-            <param name="name">Optional human-readable string which will be used to represent the terminal in the UI.</param>
-            <param name="shellPath">Optional path to a custom shell executable to be used in the terminal.</param>
-            <param name="shellArgs">Optional args for the custom shell executable. A string can be used on Windows only which allows specifying shell args in [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).</param>
-            <return>A new Terminal.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.CreateTerminal2(VscAppz.TerminalOptions)">
+        <member name="M:VscAppz.IWindow.CreateTerminal(VscAppz.TerminalOptions)">
             <summary>
             Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process.
             
@@ -748,19 +503,6 @@
             
             </summary>
             <param name="options">A TerminalOptions object describing the characteristics of the new terminal.</param>
-            <return>A new Terminal.</return>
-        </member>
-        <member name="M:VscAppz.IWindow.CreateTerminal3(VscAppz.ExtensionTerminalOptions)">
-            <summary>
-            Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) where an extension controls its input and output.
-            
-            `options` ── An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing
-            the characteristics of the new terminal.
-            
-            `return` ── A new Terminal.
-            
-            </summary>
-            <param name="options">An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing the characteristics of the new terminal.</param>
             <return>A new Terminal.</return>
         </member>
         <member name="T:VscAppz.IEnv">
@@ -1417,35 +1159,6 @@
         <member name="F:VscAppz.ThemableDecorationRenderOptions.After">
             <summary>Defines the rendering options of the attachment that is inserted after the decorated text.</summary>
         </member>
-        <member name="T:VscAppz.MessageOptions">
-            <summary>Options to configure the behavior of the message.</summary>
-        </member>
-        <member name="F:VscAppz.MessageOptions.Modal">
-            <summary>Indicates that this message should be modal.</summary>
-        </member>
-        <member name="T:VscAppz.MessageItem">
-            <summary>
-            Represents an action that is shown with an information, warning, or
-            error message.
-            
-            </summary>
-        </member>
-        <member name="F:VscAppz.MessageItem.Title">
-            <summary>A short title like 'Retry', 'Open Log' etc.</summary>
-        </member>
-        <member name="F:VscAppz.MessageItem.IsCloseAffordance">
-            <summary>
-            A hint for modal dialogs that the item should be triggered
-            when the user cancels the dialog (e.g. by pressing the ESC
-            key).
-            
-            Note: this option is ignored for non-modal messages.
-            
-            </summary>
-        </member>
-        <member name="F:VscAppz.MessageItem.My">
-            <summary>Free-form custom data, preserved across a roundtrip.</summary>
-        </member>
         <member name="T:VscAppz.InputBoxOptions">
             <summary>Options to configure the behavior of the input box UI.</summary>
         </member>
@@ -1485,27 +1198,6 @@
             
             </summary>
         </member>
-        <member name="T:VscAppz.QuickPickOptions">
-            <summary>Options to configure the behavior of the quick pick UI.</summary>
-        </member>
-        <member name="F:VscAppz.QuickPickOptions.MatchOnDescription">
-            <summary>An optional flag to include the description when filtering the picks.</summary>
-        </member>
-        <member name="F:VscAppz.QuickPickOptions.MatchOnDetail">
-            <summary>An optional flag to include the detail when filtering the picks.</summary>
-        </member>
-        <member name="F:VscAppz.QuickPickOptions.PlaceHolder">
-            <summary>An optional string to show as place holder in the input box to guide the user what to pick on.</summary>
-        </member>
-        <member name="F:VscAppz.QuickPickOptions.IgnoreFocusOut">
-            <summary>Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.</summary>
-        </member>
-        <member name="F:VscAppz.QuickPickOptions.CanPickMany">
-            <summary>An optional flag to make the picker accept multiple selections, if true the result is an array of picks.</summary>
-        </member>
-        <member name="F:VscAppz.QuickPickOptions.OnDidSelectItem">
-            <summary>An optional function that is invoked whenever an item is selected.</summary>
-        </member>
         <member name="T:VscAppz.QuickPickItem">
             <summary>
             Represents an item that can be selected from
@@ -1534,6 +1226,27 @@
         </member>
         <member name="F:VscAppz.QuickPickItem.My">
             <summary>Free-form custom data, preserved across a roundtrip.</summary>
+        </member>
+        <member name="T:VscAppz.QuickPickOptions">
+            <summary>Options to configure the behavior of the quick pick UI.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickOptions.MatchOnDescription">
+            <summary>An optional flag to include the description when filtering the picks.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickOptions.MatchOnDetail">
+            <summary>An optional flag to include the detail when filtering the picks.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickOptions.PlaceHolder">
+            <summary>An optional string to show as place holder in the input box to guide the user what to pick on.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickOptions.IgnoreFocusOut">
+            <summary>Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickOptions.CanPickMany">
+            <summary>An optional flag to make the picker accept multiple selections, if true the result is an array of picks.</summary>
+        </member>
+        <member name="F:VscAppz.QuickPickOptions.OnDidSelectItem">
+            <summary>An optional function that is invoked whenever an item is selected.</summary>
         </member>
         <member name="T:VscAppz.SaveDialogOptions">
             <summary>Options to configure the behaviour of a file save dialog.</summary>
@@ -2159,6 +1872,48 @@
             
             </summary>
         </member>
+        <member name="T:VscAppz.TerminalOptions">
+            <summary>Value-object describing what options a terminal should use.</summary>
+        </member>
+        <member name="F:VscAppz.TerminalOptions.Name">
+            <summary>A human-readable string which will be used to represent the terminal in the UI.</summary>
+        </member>
+        <member name="F:VscAppz.TerminalOptions.ShellPath">
+            <summary>A path to a custom shell executable to be used in the terminal.</summary>
+        </member>
+        <member name="F:VscAppz.TerminalOptions.ShellArgs">
+            <summary>
+            Args for the custom shell executable. A string can be used on Windows only which allows
+            specifying shell args in [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
+            
+            </summary>
+        </member>
+        <member name="F:VscAppz.TerminalOptions.Cwd">
+            <summary>A path or Uri for the current working directory to be used for the terminal.</summary>
+        </member>
+        <member name="F:VscAppz.TerminalOptions.Env">
+            <summary>Object with environment variables that will be added to the VS Code process.</summary>
+        </member>
+        <member name="F:VscAppz.TerminalOptions.StrictEnv">
+            <summary>
+            Whether the terminal process environment should be exactly as provided in
+            `TerminalOptions.env`. When this is false (default), the environment will be based on the
+            window's environment and also apply configured platform settings like
+            `terminal.integrated.windows.env` on top. When this is true, the complete environment
+            must be provided as nothing will be inherited from the process or any configuration.
+            
+            </summary>
+        </member>
+        <member name="F:VscAppz.TerminalOptions.HideFromUser">
+            <summary>
+            When enabled the terminal will run the process as normal but not be surfaced to the user
+            until `Terminal.show` is called. The typical usage for this is when you need to run
+            something that may need interactivity but only want to tell the user about it when
+            interaction is needed. Note that the terminals will still be exposed to all extensions
+            as normal.
+            
+            </summary>
+        </member>
         <member name="T:VscAppz.Terminal">
             <summary>An individual terminal instance within the integrated terminal.</summary>
         </member>
@@ -2210,222 +1965,6 @@
             `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
             
             </summary>
-        </member>
-        <member name="T:VscAppz.TerminalOptions">
-            <summary>Value-object describing what options a terminal should use.</summary>
-        </member>
-        <member name="F:VscAppz.TerminalOptions.Name">
-            <summary>A human-readable string which will be used to represent the terminal in the UI.</summary>
-        </member>
-        <member name="F:VscAppz.TerminalOptions.ShellPath">
-            <summary>A path to a custom shell executable to be used in the terminal.</summary>
-        </member>
-        <member name="F:VscAppz.TerminalOptions.ShellArgs">
-            <summary>
-            Args for the custom shell executable. A string can be used on Windows only which allows
-            specifying shell args in [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
-            
-            </summary>
-        </member>
-        <member name="F:VscAppz.TerminalOptions.Cwd">
-            <summary>A path or Uri for the current working directory to be used for the terminal.</summary>
-        </member>
-        <member name="F:VscAppz.TerminalOptions.Env">
-            <summary>Object with environment variables that will be added to the VS Code process.</summary>
-        </member>
-        <member name="F:VscAppz.TerminalOptions.StrictEnv">
-            <summary>
-            Whether the terminal process environment should be exactly as provided in
-            `TerminalOptions.env`. When this is false (default), the environment will be based on the
-            window's environment and also apply configured platform settings like
-            `terminal.integrated.windows.env` on top. When this is true, the complete environment
-            must be provided as nothing will be inherited from the process or any configuration.
-            
-            </summary>
-        </member>
-        <member name="F:VscAppz.TerminalOptions.HideFromUser">
-            <summary>
-            When enabled the terminal will run the process as normal but not be surfaced to the user
-            until `Terminal.show` is called. The typical usage for this is when you need to run
-            something that may need interactivity but only want to tell the user about it when
-            interaction is needed. Note that the terminals will still be exposed to all extensions
-            as normal.
-            
-            </summary>
-        </member>
-        <member name="T:VscAppz.ExtensionTerminalOptions">
-            <summary>Value-object describing what options a virtual process terminal should use.</summary>
-        </member>
-        <member name="F:VscAppz.ExtensionTerminalOptions.Name">
-            <summary>A human-readable string which will be used to represent the terminal in the UI.</summary>
-        </member>
-        <member name="F:VscAppz.ExtensionTerminalOptions.Pty">
-            <summary>
-            An implementation of [Pseudoterminal](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal) that allows an extension to
-            control a terminal.
-            
-            </summary>
-        </member>
-        <member name="T:VscAppz.Pseudoterminal">
-            <summary>Defines the interface of a terminal pty, enabling extensions to control a terminal.</summary>
-        </member>
-        <member name="F:VscAppz.Pseudoterminal.OnDidWrite">
-            <summary>
-            An event that when fired will write data to the terminal. Unlike
-            [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText) which sends text to the underlying _process_
-            (the pty "slave"), this will write the text to the terminal itself (the pty "master").
-            
-            **Example:** Write red text to the terminal
-            
-            ```typescript
-            
-            const writeEmitter = new vscode.EventEmitter&lt;string&gt;();
-            const pty: vscode.Pseudoterminal = {
-               onDidWrite: writeEmitter.event,
-               open: () =&gt; writeEmitter.fire('\x1b[31mHello world\x1b[0m'),
-               close: () =&gt; {}
-            };
-            vscode.window.createTerminal({ name: 'My terminal', pty });
-            
-            ```
-            
-            
-            **Example:** Move the cursor to the 10th row and 20th column and write an asterisk
-            
-            ```typescript
-            
-            writeEmitter.fire('\x1b[10;20H*');
-            
-            ```
-            
-            
-            </summary>
-        </member>
-        <member name="F:VscAppz.Pseudoterminal.OnDidOverrideDimensions">
-            <summary>
-            An event that when fired allows overriding the [dimensions](https://code.visualstudio.com/api/references/vscode-api#Terminal.dimensions) of the
-            terminal. Note that when set, the overridden dimensions will only take effect when they
-            are lower than the actual dimensions of the terminal (ie. there will never be a scroll
-            bar). Set to `undefined` for the terminal to go back to the regular dimensions (fit to
-            the size of the panel).
-            
-            **Example:** Override the dimensions of a terminal to 20 columns and 10 rows
-            
-            ```typescript
-            
-            const dimensionsEmitter = new vscode.EventEmitter&lt;vscode.TerminalDimensions&gt;();
-            const pty: vscode.Pseudoterminal = {
-               onDidWrite: writeEmitter.event,
-               onDidOverrideDimensions: dimensionsEmitter.event,
-               open: () =&gt; {
-                 dimensionsEmitter.fire({
-                   columns: 20,
-                   rows: 10
-                 });
-               },
-               close: () =&gt; {}
-            };
-            vscode.window.createTerminal({ name: 'My terminal', pty });
-            
-            ```
-            
-            
-            </summary>
-        </member>
-        <member name="F:VscAppz.Pseudoterminal.OnDidClose">
-            <summary>
-            An event that when fired will signal that the pty is closed and dispose of the terminal.
-            
-            A number can be used to provide an exit code for the terminal. Exit codes must be
-            positive and a non-zero exit codes signals failure which shows a notification for a
-            regular terminal and allows dependent tasks to proceed when used with the
-            `CustomExecution2` API.
-            
-            **Example:** Exit the terminal when "y" is pressed, otherwise show a notification.
-            
-            ```typescript
-            
-            const writeEmitter = new vscode.EventEmitter&lt;string&gt;();
-            const closeEmitter = new vscode.EventEmitter&lt;vscode.TerminalDimensions&gt;();
-            const pty: vscode.Pseudoterminal = {
-               onDidWrite: writeEmitter.event,
-               onDidClose: closeEmitter.event,
-               open: () =&gt; writeEmitter.fire('Press y to exit successfully'),
-               close: () =&gt; {},
-               handleInput: data =&gt; {
-                 if (data !== 'y') {
-                   vscode.window.showInformationMessage('Something went wrong');
-                 }
-                 closeEmitter.fire();
-               }
-            };
-            vscode.window.createTerminal({ name: 'Exit example', pty });
-            
-            </summary>
-        </member>
-        <member name="F:VscAppz.Pseudoterminal.Open">
-            <summary>
-            Implement to handle when the pty is open and ready to start firing events.
-            
-            `initialDimensions` ── The dimensions of the terminal, this will be undefined if the
-            terminal panel has not been opened before this is called.
-            
-            </summary>
-        </member>
-        <member name="F:VscAppz.Pseudoterminal.Close">
-            <summary>Implement to handle when the terminal is closed by an act of the user.</summary>
-        </member>
-        <member name="F:VscAppz.Pseudoterminal.HandleInput">
-            <summary>
-            Implement to handle incoming keystrokes in the terminal or when an extension calls
-            [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText). `data` contains the keystrokes/text serialized into
-            their corresponding VT sequence representation.
-            
-            `data` ── The incoming data.
-            
-            **Example:** Echo input in the terminal. The sequence for enter (`\r`) is translated to
-            CRLF to go to a new line and move the cursor to the start of the line.
-            
-            ```typescript
-            
-            const writeEmitter = new vscode.EventEmitter&lt;string&gt;();
-            const pty: vscode.Pseudoterminal = {
-            onDidWrite: writeEmitter.event,
-            open: () =&gt; {},
-            close: () =&gt; {},
-            handleInput: data =&gt; writeEmitter.fire(data === '\r' ? '\r\n' : data)
-            };
-            vscode.window.createTerminal({ name: 'Local echo', pty });
-            
-            ```
-            
-            
-            </summary>
-        </member>
-        <member name="F:VscAppz.Pseudoterminal.SetDimensions">
-            <summary>
-            Implement to handle when the number of rows and columns that fit into the terminal panel
-            changes, for example when font size changes or when the panel is resized. The initial
-            state of a terminal's dimensions should be treated as `undefined` until this is triggered
-            as the size of a terminal isn't know until it shows up in the user interface.
-            
-            When dimensions are overridden by
-            [onDidOverrideDimensions](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal.onDidOverrideDimensions), `setDimensions` will
-            continue to be called with the regular panel dimensions, allowing the extension continue
-            to react dimension changes.
-            
-            `dimensions` ── The new dimensions.
-            
-            </summary>
-        </member>
-        <member name="T:VscAppz.TerminalDimensions">
-            <summary>Represents the dimensions of a terminal.</summary>
-        </member>
-        <member name="F:VscAppz.TerminalDimensions.Columns">
-            <summary>The number of columns in the terminal.</summary>
-        </member>
-        <member name="F:VscAppz.TerminalDimensions.Rows">
-            <summary>The number of rows in the terminal.</summary>
         </member>
         <member name="T:VscAppz.WorkspaceFoldersChangeEvent">
             <summary>An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).</summary>
