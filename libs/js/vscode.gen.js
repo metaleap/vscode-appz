@@ -26,65 +26,6 @@ var StatusBarAlignment;
      */
     StatusBarAlignment[StatusBarAlignment["Right"] = 2] = "Right";
 })(StatusBarAlignment = exports.StatusBarAlignment || (exports.StatusBarAlignment = {}));
-/**
- * Describes the behavior of decorations when typing/editing at their edges.
-
- */
-var DecorationRangeBehavior;
-(function (DecorationRangeBehavior) {
-    /**
-     * The decoration's range will widen when edits occur at the start or end.
-
-     */
-    DecorationRangeBehavior[DecorationRangeBehavior["OpenOpen"] = 0] = "OpenOpen";
-    /**
-     * The decoration's range will not widen when edits occur at the start of end.
-
-     */
-    DecorationRangeBehavior[DecorationRangeBehavior["ClosedClosed"] = 1] = "ClosedClosed";
-    /**
-     * The decoration's range will widen when edits occur at the start, but not at the end.
-
-     */
-    DecorationRangeBehavior[DecorationRangeBehavior["OpenClosed"] = 2] = "OpenClosed";
-    /**
-     * The decoration's range will widen when edits occur at the end, but not at the start.
-
-     */
-    DecorationRangeBehavior[DecorationRangeBehavior["ClosedOpen"] = 3] = "ClosedOpen";
-})(DecorationRangeBehavior = exports.DecorationRangeBehavior || (exports.DecorationRangeBehavior = {}));
-/**
- * Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
- * The overview ruler supports three lanes.
-
- */
-var OverviewRulerLane;
-(function (OverviewRulerLane) {
-    /**
-     * Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
-     * The overview ruler supports three lanes.
-
-     */
-    OverviewRulerLane[OverviewRulerLane["Left"] = 1] = "Left";
-    /**
-     * Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
-     * The overview ruler supports three lanes.
-
-     */
-    OverviewRulerLane[OverviewRulerLane["Center"] = 2] = "Center";
-    /**
-     * Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
-     * The overview ruler supports three lanes.
-
-     */
-    OverviewRulerLane[OverviewRulerLane["Right"] = 4] = "Right";
-    /**
-     * Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
-     * The overview ruler supports three lanes.
-
-     */
-    OverviewRulerLane[OverviewRulerLane["Full"] = 7] = "Full";
-})(OverviewRulerLane = exports.OverviewRulerLane || (exports.OverviewRulerLane = {}));
 function newQuickPickItem() {
     let me;
     me = { __loadFromJsonish__: _ => QuickPickItem___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
@@ -121,13 +62,6 @@ function newOutputChannel() {
     me.Hide = () => OutputChannel_Hide.call(me);
     me.Dispose = () => OutputChannel_Dispose.call(me);
     me.__appzObjBagPullFromPeer__ = () => OutputChannel___appzObjBagPullFromPeer__.call(me);
-    return me;
-}
-function newTextEditorDecorationType() {
-    let me;
-    me = { __loadFromJsonish__: _ => TextEditorDecorationType___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined };
-    me.Dispose = () => TextEditorDecorationType_Dispose.call(me);
-    me.__appzObjBagPullFromPeer__ = () => TextEditorDecorationType___appzObjBagPullFromPeer__.call(me);
     return me;
 }
 function newInputBox() {
@@ -211,12 +145,6 @@ function newOutputChannelState() {
     return me;
 }
 exports.newOutputChannelState = newOutputChannelState;
-function newTextEditorDecorationTypeState() {
-    let me;
-    me = { __loadFromJsonish__: _ => TextEditorDecorationTypeState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ReFetch: () => TextEditorDecorationTypeState_ReFetch.call(me) };
-    return me;
-}
-exports.newTextEditorDecorationTypeState = newTextEditorDecorationTypeState;
 function newInputBoxState() {
     let me;
     me = { __loadFromJsonish__: _ => InputBoxState___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), ApplyChanges: () => InputBoxState_ApplyChanges.call(me), ReFetch: () => InputBoxState_ReFetch.call(me) };
@@ -778,40 +706,6 @@ class implWindow extends implBase {
             let result;
             if ((undefined !== payload && null !== payload)) {
                 result = newOutputChannel();
-                ok = result.__loadFromJsonish__(payload);
-                if (!ok) {
-                    return false;
-                }
-                result.__disp__.impl = this.Impl();
-            }
-            else {
-                return false;
-            }
-            result.__appzObjBagPullFromPeer__()(() => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
-            });
-            return true;
-        };
-        this.Impl().send(msg, onresp);
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    CreateTextEditorDecorationType(options) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.createTextEditorDecorationType";
-        msg.Data = {};
-        msg.Data["options"] = options;
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                result = newTextEditorDecorationType();
                 ok = result.__loadFromJsonish__(payload);
                 if (!ok) {
                     return false;
@@ -2216,39 +2110,6 @@ function OutputChannel___appzObjBagPullFromPeer__() {
         onret = a0;
     };
 }
-function TextEditorDecorationType_Dispose() {
-    return this.__disp__.Dispose();
-}
-function TextEditorDecorationType___appzObjBagPullFromPeer__() {
-    let msg;
-    msg = newipcMsg();
-    msg.QName = "TextEditorDecorationType.__appzObjBagPullFromPeer__";
-    msg.Data = {};
-    msg.Data[""] = this.__disp__.id;
-    let onresp;
-    let onret;
-    onresp = (payload) => {
-        let ok;
-        if ((undefined === this.Cfg || null === this.Cfg)) {
-            this.Cfg = newTextEditorDecorationTypeState();
-        }
-        this.Cfg.__holder__ = this;
-        {
-            ok = this.Cfg.__loadFromJsonish__(payload);
-        }
-        if (!ok) {
-            return false;
-        }
-        if ((undefined !== onret && null !== onret)) {
-            onret();
-        }
-        return true;
-    };
-    this.__disp__.impl.send(msg, onresp);
-    return (a0) => {
-        onret = a0;
-    };
-}
 function InputBox_OnDidChangeValue(handler) {
     let msg;
     msg = newipcMsg();
@@ -3373,9 +3234,6 @@ function StatusBarItemState_ApplyChanges() {
 function OutputChannelState_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
-function TextEditorDecorationTypeState_ReFetch() {
-    return this.__holder__.__appzObjBagPullFromPeer__();
-}
 function InputBoxState_ReFetch() {
     return this.__holder__.__appzObjBagPullFromPeer__();
 }
@@ -3584,12 +3442,6 @@ function StatusBarItem___loadFromJsonish__(payload) {
     return ok;
 }
 function OutputChannel___loadFromJsonish__(payload) {
-    let ok;
-    this.__disp__ = newDisposable();
-    ok = this.__disp__.__loadFromJsonish__(payload);
-    return ok;
-}
-function TextEditorDecorationType___loadFromJsonish__(payload) {
     let ok;
     this.__disp__ = newDisposable();
     ok = this.__disp__.__loadFromJsonish__(payload);
@@ -4008,29 +3860,6 @@ function OutputChannelState___loadFromJsonish__(payload) {
         }
         this.Name = () => {
             return name;
-        };
-    }
-    return true;
-}
-function TextEditorDecorationTypeState___loadFromJsonish__(payload) {
-    let it;
-    let ok;
-    let val;
-    [it, ok] = [payload, typeof payload === "object"];
-    if (!ok) {
-        return false;
-    }
-    [val, ok] = [it["key"], undefined !== it["key"]];
-    if (ok) {
-        let key;
-        if ((undefined !== val && null !== val)) {
-            [key, ok] = [val, typeof val === "string"];
-            if (!ok) {
-                return false;
-            }
-        }
-        this.Key = () => {
-            return key;
         };
     }
     return true;

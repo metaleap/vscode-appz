@@ -119,13 +119,6 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
-				case "createTextEditorDecorationType": {
-					const arg_options = (msg.data['options']) as DecorationRenderOptions
-					const ret = vscode.window.createTextEditorDecorationType(arg_options, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
 				case "createInputBox": {
 					const ret = vscode.window.createInputBox()
 					const retdisp = ret as any as vscode.Disposable
@@ -442,17 +435,6 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 				}
 				case "__appzObjBagPullFromPeer__": {
 					return Promise.resolve({ name: thisOutputChannel.name })
-				}
-				default:
-					throw methodname
-			}
-		case "TextEditorDecorationType":
-			const thisTextEditorDecorationType = prog.objects[msg.data[""]] as TextEditorDecorationType
-			if (!thisTextEditorDecorationType)
-				throw "Called vscode.TextEditorDecorationType." + methodname + " for an already disposed-and-forgotten instance"
-			switch (methodname) {
-				case "__appzObjBagPullFromPeer__": {
-					return Promise.resolve({ key: thisTextEditorDecorationType.key })
 				}
 				default:
 					throw methodname
@@ -892,8 +874,6 @@ type OpenDialogOptions = vscode.OpenDialogOptions
 type WorkspaceFolderPickOptions = vscode.WorkspaceFolderPickOptions
 type StatusBarItem = vscode.StatusBarItem
 type OutputChannel = vscode.OutputChannel
-type DecorationRenderOptions = vscode.DecorationRenderOptions
-type TextEditorDecorationType = vscode.TextEditorDecorationType
 type InputBox = vscode.InputBox
 type QuickPick = vscode.QuickPick<QuickPickItem>
 type TerminalOptions = vscode.TerminalOptions

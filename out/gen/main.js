@@ -35,7 +35,6 @@ const genApiSurface = {
                 'onDidChangeWindowState',
                 'createStatusBarItem',
                 'createOutputChannel',
-                'createTextEditorDecorationType',
                 'createInputBox',
                 'createQuickPick',
                 'createTerminal',

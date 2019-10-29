@@ -12,43 +12,6 @@ const (
 	StatusBarAlignmentRight StatusBarAlignment = 2
 )
 
-// Describes the behavior of decorations when typing/editing at their edges.
-type DecorationRangeBehavior int
-const (
-	// The decoration's range will widen when edits occur at the start or end.
-	DecorationRangeBehaviorOpenOpen DecorationRangeBehavior = 0
-
-	// The decoration's range will not widen when edits occur at the start of end.
-	DecorationRangeBehaviorClosedClosed DecorationRangeBehavior = 1
-
-	// The decoration's range will widen when edits occur at the start, but not at the end.
-	DecorationRangeBehaviorOpenClosed DecorationRangeBehavior = 2
-
-	// The decoration's range will widen when edits occur at the end, but not at the start.
-	DecorationRangeBehaviorClosedOpen DecorationRangeBehavior = 3
-)
-
-// Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
-// The overview ruler supports three lanes.
-type OverviewRulerLane int
-const (
-	// Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
-	// The overview ruler supports three lanes.
-	OverviewRulerLaneLeft OverviewRulerLane = 1
-
-	// Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
-	// The overview ruler supports three lanes.
-	OverviewRulerLaneCenter OverviewRulerLane = 2
-
-	// Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
-	// The overview ruler supports three lanes.
-	OverviewRulerLaneRight OverviewRulerLane = 4
-
-	// Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
-	// The overview ruler supports three lanes.
-	OverviewRulerLaneFull OverviewRulerLane = 7
-)
-
 // Type Definition for Visual Studio Code 1.39 Extension API
 // See https://code.visualstudio.com/api for more information
 type Vscode interface {
@@ -304,13 +267,6 @@ type Window interface {
 	// 
 	// `return` ── a thenable that resolves to the newly created `OutputChannel`.
 	CreateOutputChannel(name string) func(func(*OutputChannel))
-
-	// Create a TextEditorDecorationType that can be used to add decorations to text editors.
-	// 
-	// `options` ── Rendering options for the decoration type.
-	// 
-	// `return` ── A new decoration type instance.
-	CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(*TextEditorDecorationType))
 
 	// Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
 	// 
@@ -741,89 +697,6 @@ type Commands interface {
 }
 type implCommands struct{ *impl }
 
-// Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
-type ThemableDecorationRenderOptions struct {
-	// Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
-	// Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
-	BackgroundColor string `json:"backgroundColor,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	Outline string `json:"outline,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'outline' for setting one or more of the individual outline properties.
-	OutlineColor string `json:"outlineColor,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'outline' for setting one or more of the individual outline properties.
-	OutlineStyle string `json:"outlineStyle,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'outline' for setting one or more of the individual outline properties.
-	OutlineWidth string `json:"outlineWidth,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	Border string `json:"border,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'border' for setting one or more of the individual border properties.
-	BorderColor string `json:"borderColor,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'border' for setting one or more of the individual border properties.
-	BorderRadius string `json:"borderRadius,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'border' for setting one or more of the individual border properties.
-	BorderSpacing string `json:"borderSpacing,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'border' for setting one or more of the individual border properties.
-	BorderStyle string `json:"borderStyle,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'border' for setting one or more of the individual border properties.
-	BorderWidth string `json:"borderWidth,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	FontStyle string `json:"fontStyle,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	FontWeight string `json:"fontWeight,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	TextDecoration string `json:"textDecoration,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	Cursor string `json:"cursor,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	Color string `json:"color,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	Opacity string `json:"opacity,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	LetterSpacing string `json:"letterSpacing,omitempty"`
-
-	// An **absolute path** or an URI to an image to be rendered in the gutter.
-	GutterIconPath string `json:"gutterIconPath,omitempty"`
-
-	// Specifies the size of the gutter icon.
-	// Available values are 'auto', 'contain', 'cover' and any percentage value.
-	// For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
-	GutterIconSize string `json:"gutterIconSize,omitempty"`
-
-	// The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.
-	OverviewRulerColor string `json:"overviewRulerColor,omitempty"`
-
-	// Defines the rendering options of the attachment that is inserted before the decorated text.
-	Before ThemableDecorationAttachmentRenderOptions `json:"before,omitempty"`
-
-	// Defines the rendering options of the attachment that is inserted after the decorated text.
-	After ThemableDecorationAttachmentRenderOptions `json:"after,omitempty"`
-}
-
 // Options to configure the behavior of the input box UI.
 type InputBoxOptions struct {
 	// The value to prefill in the input box.
@@ -1021,159 +894,6 @@ type OutputChannel struct {
 
 	// Cfg represents this `OutputChannel`'s current state. All its members get auto-refreshed every time any `OutputChannel` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
 	Cfg *OutputChannelState
-}
-
-// Type Definition for Visual Studio Code 1.39 Extension API
-// See https://code.visualstudio.com/api for more information
-type ThemableDecorationAttachmentRenderOptions struct {
-	// Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.
-	ContentText string `json:"contentText,omitempty"`
-
-	// An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
-	// or a text can be shown, but not both.
-	ContentIconPath string `json:"contentIconPath,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	Border string `json:"border,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	BorderColor string `json:"borderColor,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	FontStyle string `json:"fontStyle,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	FontWeight string `json:"fontWeight,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	TextDecoration string `json:"textDecoration,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	Color string `json:"color,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	BackgroundColor string `json:"backgroundColor,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	Margin string `json:"margin,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	Width string `json:"width,omitempty"`
-
-	// CSS styling property that will be applied to the decoration attachment.
-	Height string `json:"height,omitempty"`
-}
-
-// Represents rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
-type DecorationRenderOptions struct {
-	// Should the decoration be rendered also on the whitespace after the line text.
-	// Defaults to `false`.
-	IsWholeLine bool `json:"isWholeLine,omitempty"`
-
-	// Customize the growing behavior of the decoration when edits occur at the edges of the decoration's range.
-	// Defaults to `DecorationRangeBehavior.OpenOpen`.
-	RangeBehavior DecorationRangeBehavior `json:"rangeBehavior,omitempty"`
-
-	// The position in the overview ruler where the decoration should be rendered.
-	OverviewRulerLane OverviewRulerLane `json:"overviewRulerLane,omitempty"`
-
-	// Overwrite options for light themes.
-	Light ThemableDecorationRenderOptions `json:"light,omitempty"`
-
-	// Overwrite options for dark themes.
-	Dark ThemableDecorationRenderOptions `json:"dark,omitempty"`
-
-	// Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
-	// Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
-	BackgroundColor string `json:"backgroundColor,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	Outline string `json:"outline,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'outline' for setting one or more of the individual outline properties.
-	OutlineColor string `json:"outlineColor,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'outline' for setting one or more of the individual outline properties.
-	OutlineStyle string `json:"outlineStyle,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'outline' for setting one or more of the individual outline properties.
-	OutlineWidth string `json:"outlineWidth,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	Border string `json:"border,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'border' for setting one or more of the individual border properties.
-	BorderColor string `json:"borderColor,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'border' for setting one or more of the individual border properties.
-	BorderRadius string `json:"borderRadius,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'border' for setting one or more of the individual border properties.
-	BorderSpacing string `json:"borderSpacing,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'border' for setting one or more of the individual border properties.
-	BorderStyle string `json:"borderStyle,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	// Better use 'border' for setting one or more of the individual border properties.
-	BorderWidth string `json:"borderWidth,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	FontStyle string `json:"fontStyle,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	FontWeight string `json:"fontWeight,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	TextDecoration string `json:"textDecoration,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	Cursor string `json:"cursor,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	Color string `json:"color,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	Opacity string `json:"opacity,omitempty"`
-
-	// CSS styling property that will be applied to text enclosed by a decoration.
-	LetterSpacing string `json:"letterSpacing,omitempty"`
-
-	// An **absolute path** or an URI to an image to be rendered in the gutter.
-	GutterIconPath string `json:"gutterIconPath,omitempty"`
-
-	// Specifies the size of the gutter icon.
-	// Available values are 'auto', 'contain', 'cover' and any percentage value.
-	// For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
-	GutterIconSize string `json:"gutterIconSize,omitempty"`
-
-	// The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.
-	OverviewRulerColor string `json:"overviewRulerColor,omitempty"`
-
-	// Defines the rendering options of the attachment that is inserted before the decorated text.
-	Before ThemableDecorationAttachmentRenderOptions `json:"before,omitempty"`
-
-	// Defines the rendering options of the attachment that is inserted after the decorated text.
-	After ThemableDecorationAttachmentRenderOptions `json:"after,omitempty"`
-}
-
-// Represents a handle to a set of decorations
-// sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
-// 
-// To get an instance of a `TextEditorDecorationType` use
-// [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
-type TextEditorDecorationType struct {
-	__disp__ *Disposable
-
-	// Cfg represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
-	Cfg *TextEditorDecorationTypeState
 }
 
 // A concrete [QuickInput](https://code.visualstudio.com/api/references/vscode-api#QuickInput) to let the user input a text value.
@@ -1397,15 +1117,6 @@ type OutputChannelState struct {
 
 	// The human-readable name of this output channel.
 	Name func() string `json:"-"`
-}
-
-// TextEditorDecorationTypeState (to be accessed only via `TextEditorDecorationType.Cfg`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
-type TextEditorDecorationTypeState struct {
-	lock
-	__holder__ *TextEditorDecorationType
-
-	// Internal representation of the handle.
-	Key func() string `json:"-"`
 }
 
 // InputBoxState (to be accessed only via `InputBox.Cfg`) is a snapshot of `InputBox` state. It is auto-updated whenever `InputBox` creations and method calls resolve or its event subscribers (if any) are invoked. Changes to any non-read-only properties (ie. non-function-valued fields) must be explicitly propagated to the VSC side via the `ApplyChanges` method.
@@ -2117,40 +1828,6 @@ func (me implWindow) CreateOutputChannel(name string) func(func(*OutputChannel))
 	}
 	me.Impl().send(msg, onresp)
 	return func(a0 func(*OutputChannel)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) CreateTextEditorDecorationType(options DecorationRenderOptions) func(func(*TextEditorDecorationType)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.createTextEditorDecorationType"
-	msg.Data = make(dict, 1)
-	msg.Data["options"] = options
-	var onresp func(any) bool
-	var onret func(*TextEditorDecorationType)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *TextEditorDecorationType
-		if (nil != payload) {
-			result = new(TextEditorDecorationType)
-			ok = result.__loadFromJsonish__(payload)
-			if !ok {
-				return false
-			}
-			result.__disp__.impl = me.Impl()
-		} else {
-			return false
-		}
-		result.__appzObjBagPullFromPeer__()(func() {
-			if (nil != onret) {
-				onret(result)
-			}
-		})
-		return true
-	}
-	me.Impl().send(msg, onresp)
-	return func(a0 func(*TextEditorDecorationType)) {
 		onret = a0
 	}
 }
@@ -3603,46 +3280,6 @@ func (me *OutputChannel) __appzObjBagPullFromPeer__() func(func()) {
 	}
 }
 
-// Remove this decoration type and all decorations on all text editors using it.
-// 
-// `return` ── a thenable that resolves when this `Dispose` call has successfully completed at the VSC side.
-func (me *TextEditorDecorationType) Dispose() func(func()) {
-	return me.__disp__.Dispose()
-}
-
-func (me *TextEditorDecorationType) __appzObjBagPullFromPeer__() func(func()) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "TextEditorDecorationType.__appzObjBagPullFromPeer__"
-	msg.Data = make(dict, 1)
-	msg.Data[""] = me.__disp__.id
-	var onresp func(any) bool
-	var onret func()
-	onresp = func(payload any) bool {
-		var ok bool
-		if (nil == me.Cfg) {
-			me.Cfg = new(TextEditorDecorationTypeState)
-		}
-		me.Cfg.__holder__ = me
-		me.Cfg.Lock()
-		{
-			ok = me.Cfg.__loadFromJsonish__(payload)
-		}
-		me.Cfg.Unlock()
-		if !ok {
-			return false
-		}
-		if (nil != onret) {
-			onret()
-		}
-		return true
-	}
-	me.__disp__.impl.send(msg, onresp)
-	return func(a0 func()) {
-		onret = a0
-	}
-}
-
 // An event signaling when the value has changed.
 // 
 // `handler` ── will be invoked whenever the `OnDidChangeValue` event fires (mandatory, not optional).
@@ -4964,13 +4601,6 @@ func (me *OutputChannelState) ReFetch() func(func()) {
 	return me.__holder__.__appzObjBagPullFromPeer__()
 }
 
-// ReFetch requests the current `TextEditorDecorationType` state from the VSC side and upon response refreshes this `TextEditorDecorationTypeState`'s property value for `key` to reflect it.
-// 
-// `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
-func (me *TextEditorDecorationTypeState) ReFetch() func(func()) {
-	return me.__holder__.__appzObjBagPullFromPeer__()
-}
-
 // ReFetch requests the current `InputBox` state from the VSC side and upon response refreshes this `InputBoxState`'s property values for `value`, `placeholder`, `password`, `prompt`, `validationMessage`, `title`, `step`, `totalSteps`, `enabled`, `busy`, `ignoreFocusOut` to reflect it.
 // 
 // `return` ── a thenable that resolves when this `ReFetch` call has successfully completed at the VSC side.
@@ -5204,13 +4834,6 @@ func (me *StatusBarItem) __loadFromJsonish__(payload any) bool {
 }
 
 func (me *OutputChannel) __loadFromJsonish__(payload any) bool {
-	var ok bool
-	me.__disp__ = new(Disposable)
-	ok = me.__disp__.__loadFromJsonish__(payload)
-	return ok
-}
-
-func (me *TextEditorDecorationType) __loadFromJsonish__(payload any) bool {
 	var ok bool
 	me.__disp__ = new(Disposable)
 	ok = me.__disp__.__loadFromJsonish__(payload)
@@ -5613,30 +5236,6 @@ func (me *OutputChannelState) __loadFromJsonish__(payload any) bool {
 		}
 		me.Name = func() string {
 			return name
-		}
-	}
-	return true
-}
-
-func (me *TextEditorDecorationTypeState) __loadFromJsonish__(payload any) bool {
-	var it dict
-	var ok bool
-	var val any
-	it, ok = payload.(dict)
-	if !ok {
-		return false
-	}
-	val, ok = it["key"]
-	if ok {
-		var key string
-		if (nil != val) {
-			key, ok = val.(string)
-			if !ok {
-				return false
-			}
-		}
-		me.Key = func() string {
-			return key
 		}
 	}
 	return true

@@ -119,13 +119,6 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
-                case "createTextEditorDecorationType": {
-                    const arg_options = (msg.data['options']);
-                    const ret = vscode.window.createTextEditorDecorationType(arg_options);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
                 case "createInputBox": {
                     const ret = vscode.window.createInputBox();
                     const retdisp = ret;
@@ -442,17 +435,6 @@ function handle(msg, prog, remoteCancellationTokens) {
                 }
                 case "__appzObjBagPullFromPeer__": {
                     return Promise.resolve({ name: thisOutputChannel.name });
-                }
-                default:
-                    throw methodname;
-            }
-        case "TextEditorDecorationType":
-            const thisTextEditorDecorationType = prog.objects[msg.data[""]];
-            if (!thisTextEditorDecorationType)
-                throw "Called vscode.TextEditorDecorationType." + methodname + " for an already disposed-and-forgotten instance";
-            switch (methodname) {
-                case "__appzObjBagPullFromPeer__": {
-                    return Promise.resolve({ key: thisTextEditorDecorationType.key });
                 }
                 default:
                     throw methodname;

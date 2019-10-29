@@ -42,7 +42,6 @@ const genApiSurface: genApiMember = {
                 'onDidChangeWindowState',
                 'createStatusBarItem',
                 'createOutputChannel',
-                'createTextEditorDecorationType',
                 'createInputBox',
                 'createQuickPick',
                 'createTerminal',

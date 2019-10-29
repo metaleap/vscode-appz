@@ -26,47 +26,6 @@ StatusBarAlignment: enum
 
 
 
-# Describes the behavior of decorations when typing/editing at their edges.
-DecorationRangeBehavior: enum
-
-    # The decoration's range will widen when edits occur at the start or end.
-    OpenOpen: 0
-
-    # The decoration's range will not widen when edits occur at the start of end.
-    ClosedClosed: 1
-
-    # The decoration's range will widen when edits occur at the start, but not at the end.
-    OpenClosed: 2
-
-    # The decoration's range will widen when edits occur at the end, but not at the start.
-    ClosedOpen: 3
-
-
-
-
-# Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
-# The overview ruler supports three lanes.
-OverviewRulerLane: enum
-
-    # Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
-    # The overview ruler supports three lanes.
-    Left: 1
-
-    # Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
-    # The overview ruler supports three lanes.
-    Center: 2
-
-    # Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
-    # The overview ruler supports three lanes.
-    Right: 4
-
-    # Represents different positions for rendering a decoration in an [overview ruler](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions.overviewRulerLane).
-    # The overview ruler supports three lanes.
-    Full: 7
-
-
-
-
 # vscode:
 # Type Definition for Visual Studio Code 1.39 Extension API
 # See https://code.visualstudio.com/api for more information
@@ -466,21 +425,6 @@ Window: interface
     # a thenable that resolves to the newly created `OutputChannel`.
     CreateOutputChannel: ((?OutputChannel->void)->void)
         name: string
-
-    # createTextEditorDecorationType:
-    # Create a TextEditorDecorationType that can be used to add decorations to text editors.
-    # 
-    # `options` ── Rendering options for the decoration type.
-    # 
-    # `return` ── A new decoration type instance.
-    #
-    # @options:
-    # Rendering options for the decoration type.
-    #
-    # @return:
-    # A new decoration type instance.
-    CreateTextEditorDecorationType: ((?TextEditorDecorationType->void)->void)
-        options: DecorationRenderOptions
 
     # createInputBox:
     # Creates a [InputBox](https://code.visualstudio.com/api/references/vscode-api#InputBox) to let the user enter some text input.
@@ -1153,161 +1097,6 @@ Commands: interface
 
 
 
-# Represents theme specific rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
-ThemableDecorationRenderOptions: class
-
-    # backgroundColor:
-    # Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
-    # Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
-    #
-    # JSON FLAGS: {"Name":"backgroundColor","Required":false,"Excluded":false}
-    BackgroundColor: ?string
-
-    # outline:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"outline","Required":false,"Excluded":false}
-    Outline: ?string
-
-    # outlineColor:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'outline' for setting one or more of the individual outline properties.
-    #
-    # JSON FLAGS: {"Name":"outlineColor","Required":false,"Excluded":false}
-    OutlineColor: ?string
-
-    # outlineStyle:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'outline' for setting one or more of the individual outline properties.
-    #
-    # JSON FLAGS: {"Name":"outlineStyle","Required":false,"Excluded":false}
-    OutlineStyle: ?string
-
-    # outlineWidth:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'outline' for setting one or more of the individual outline properties.
-    #
-    # JSON FLAGS: {"Name":"outlineWidth","Required":false,"Excluded":false}
-    OutlineWidth: ?string
-
-    # border:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"border","Required":false,"Excluded":false}
-    Border: ?string
-
-    # borderColor:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'border' for setting one or more of the individual border properties.
-    #
-    # JSON FLAGS: {"Name":"borderColor","Required":false,"Excluded":false}
-    BorderColor: ?string
-
-    # borderRadius:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'border' for setting one or more of the individual border properties.
-    #
-    # JSON FLAGS: {"Name":"borderRadius","Required":false,"Excluded":false}
-    BorderRadius: ?string
-
-    # borderSpacing:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'border' for setting one or more of the individual border properties.
-    #
-    # JSON FLAGS: {"Name":"borderSpacing","Required":false,"Excluded":false}
-    BorderSpacing: ?string
-
-    # borderStyle:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'border' for setting one or more of the individual border properties.
-    #
-    # JSON FLAGS: {"Name":"borderStyle","Required":false,"Excluded":false}
-    BorderStyle: ?string
-
-    # borderWidth:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'border' for setting one or more of the individual border properties.
-    #
-    # JSON FLAGS: {"Name":"borderWidth","Required":false,"Excluded":false}
-    BorderWidth: ?string
-
-    # fontStyle:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"fontStyle","Required":false,"Excluded":false}
-    FontStyle: ?string
-
-    # fontWeight:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"fontWeight","Required":false,"Excluded":false}
-    FontWeight: ?string
-
-    # textDecoration:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"textDecoration","Required":false,"Excluded":false}
-    TextDecoration: ?string
-
-    # cursor:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"cursor","Required":false,"Excluded":false}
-    Cursor: ?string
-
-    # color:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"color","Required":false,"Excluded":false}
-    Color: ?string
-
-    # opacity:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"opacity","Required":false,"Excluded":false}
-    Opacity: ?string
-
-    # letterSpacing:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"letterSpacing","Required":false,"Excluded":false}
-    LetterSpacing: ?string
-
-    # gutterIconPath:
-    # An **absolute path** or an URI to an image to be rendered in the gutter.
-    #
-    # JSON FLAGS: {"Name":"gutterIconPath","Required":false,"Excluded":false}
-    GutterIconPath: ?string
-
-    # gutterIconSize:
-    # Specifies the size of the gutter icon.
-    # Available values are 'auto', 'contain', 'cover' and any percentage value.
-    # For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
-    #
-    # JSON FLAGS: {"Name":"gutterIconSize","Required":false,"Excluded":false}
-    GutterIconSize: ?string
-
-    # overviewRulerColor:
-    # The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.
-    #
-    # JSON FLAGS: {"Name":"overviewRulerColor","Required":false,"Excluded":false}
-    OverviewRulerColor: ?string
-
-    # before:
-    # Defines the rendering options of the attachment that is inserted before the decorated text.
-    #
-    # JSON FLAGS: {"Name":"before","Required":false,"Excluded":false}
-    Before: ?ThemableDecorationAttachmentRenderOptions
-
-    # after:
-    # Defines the rendering options of the attachment that is inserted after the decorated text.
-    #
-    # JSON FLAGS: {"Name":"after","Required":false,"Excluded":false}
-    After: ?ThemableDecorationAttachmentRenderOptions
-
-
-
-
 # Options to configure the behavior of the input box UI.
 InputBoxOptions: class
 
@@ -1641,292 +1430,6 @@ OutputChannel: class
     #
     # JSON FLAGS: undefined
     Cfg: ?OutputChannelState
-
-
-
-
-# Type Definition for Visual Studio Code 1.39 Extension API
-# See https://code.visualstudio.com/api for more information
-ThemableDecorationAttachmentRenderOptions: class
-
-    # contentText:
-    # Defines a text content that is shown in the attachment. Either an icon or a text can be shown, but not both.
-    #
-    # JSON FLAGS: {"Name":"contentText","Required":false,"Excluded":false}
-    ContentText: ?string
-
-    # contentIconPath:
-    # An **absolute path** or an URI to an image to be rendered in the attachment. Either an icon
-    # or a text can be shown, but not both.
-    #
-    # JSON FLAGS: {"Name":"contentIconPath","Required":false,"Excluded":false}
-    ContentIconPath: ?string
-
-    # border:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"border","Required":false,"Excluded":false}
-    Border: ?string
-
-    # borderColor:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"borderColor","Required":false,"Excluded":false}
-    BorderColor: ?string
-
-    # fontStyle:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"fontStyle","Required":false,"Excluded":false}
-    FontStyle: ?string
-
-    # fontWeight:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"fontWeight","Required":false,"Excluded":false}
-    FontWeight: ?string
-
-    # textDecoration:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"textDecoration","Required":false,"Excluded":false}
-    TextDecoration: ?string
-
-    # color:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"color","Required":false,"Excluded":false}
-    Color: ?string
-
-    # backgroundColor:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"backgroundColor","Required":false,"Excluded":false}
-    BackgroundColor: ?string
-
-    # margin:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"margin","Required":false,"Excluded":false}
-    Margin: ?string
-
-    # width:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"width","Required":false,"Excluded":false}
-    Width: ?string
-
-    # height:
-    # CSS styling property that will be applied to the decoration attachment.
-    #
-    # JSON FLAGS: {"Name":"height","Required":false,"Excluded":false}
-    Height: ?string
-
-
-
-
-# Represents rendering styles for a [text editor decoration](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType).
-DecorationRenderOptions: class
-
-    # isWholeLine:
-    # Should the decoration be rendered also on the whitespace after the line text.
-    # Defaults to `false`.
-    #
-    # JSON FLAGS: {"Name":"isWholeLine","Required":false,"Excluded":false}
-    IsWholeLine: ?bool
-
-    # rangeBehavior:
-    # Customize the growing behavior of the decoration when edits occur at the edges of the decoration's range.
-    # Defaults to `DecorationRangeBehavior.OpenOpen`.
-    #
-    # JSON FLAGS: {"Name":"rangeBehavior","Required":false,"Excluded":false}
-    RangeBehavior: ?DecorationRangeBehavior
-
-    # overviewRulerLane:
-    # The position in the overview ruler where the decoration should be rendered.
-    #
-    # JSON FLAGS: {"Name":"overviewRulerLane","Required":false,"Excluded":false}
-    OverviewRulerLane: ?OverviewRulerLane
-
-    # light:
-    # Overwrite options for light themes.
-    #
-    # JSON FLAGS: {"Name":"light","Required":false,"Excluded":false}
-    Light: ?ThemableDecorationRenderOptions
-
-    # dark:
-    # Overwrite options for dark themes.
-    #
-    # JSON FLAGS: {"Name":"dark","Required":false,"Excluded":false}
-    Dark: ?ThemableDecorationRenderOptions
-
-    # backgroundColor:
-    # Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
-    # Alternatively a color from the color registry can be [referenced](https://code.visualstudio.com/api/references/vscode-api#ThemeColor).
-    #
-    # JSON FLAGS: {"Name":"backgroundColor","Required":false,"Excluded":false}
-    BackgroundColor: ?string
-
-    # outline:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"outline","Required":false,"Excluded":false}
-    Outline: ?string
-
-    # outlineColor:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'outline' for setting one or more of the individual outline properties.
-    #
-    # JSON FLAGS: {"Name":"outlineColor","Required":false,"Excluded":false}
-    OutlineColor: ?string
-
-    # outlineStyle:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'outline' for setting one or more of the individual outline properties.
-    #
-    # JSON FLAGS: {"Name":"outlineStyle","Required":false,"Excluded":false}
-    OutlineStyle: ?string
-
-    # outlineWidth:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'outline' for setting one or more of the individual outline properties.
-    #
-    # JSON FLAGS: {"Name":"outlineWidth","Required":false,"Excluded":false}
-    OutlineWidth: ?string
-
-    # border:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"border","Required":false,"Excluded":false}
-    Border: ?string
-
-    # borderColor:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'border' for setting one or more of the individual border properties.
-    #
-    # JSON FLAGS: {"Name":"borderColor","Required":false,"Excluded":false}
-    BorderColor: ?string
-
-    # borderRadius:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'border' for setting one or more of the individual border properties.
-    #
-    # JSON FLAGS: {"Name":"borderRadius","Required":false,"Excluded":false}
-    BorderRadius: ?string
-
-    # borderSpacing:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'border' for setting one or more of the individual border properties.
-    #
-    # JSON FLAGS: {"Name":"borderSpacing","Required":false,"Excluded":false}
-    BorderSpacing: ?string
-
-    # borderStyle:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'border' for setting one or more of the individual border properties.
-    #
-    # JSON FLAGS: {"Name":"borderStyle","Required":false,"Excluded":false}
-    BorderStyle: ?string
-
-    # borderWidth:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    # Better use 'border' for setting one or more of the individual border properties.
-    #
-    # JSON FLAGS: {"Name":"borderWidth","Required":false,"Excluded":false}
-    BorderWidth: ?string
-
-    # fontStyle:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"fontStyle","Required":false,"Excluded":false}
-    FontStyle: ?string
-
-    # fontWeight:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"fontWeight","Required":false,"Excluded":false}
-    FontWeight: ?string
-
-    # textDecoration:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"textDecoration","Required":false,"Excluded":false}
-    TextDecoration: ?string
-
-    # cursor:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"cursor","Required":false,"Excluded":false}
-    Cursor: ?string
-
-    # color:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"color","Required":false,"Excluded":false}
-    Color: ?string
-
-    # opacity:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"opacity","Required":false,"Excluded":false}
-    Opacity: ?string
-
-    # letterSpacing:
-    # CSS styling property that will be applied to text enclosed by a decoration.
-    #
-    # JSON FLAGS: {"Name":"letterSpacing","Required":false,"Excluded":false}
-    LetterSpacing: ?string
-
-    # gutterIconPath:
-    # An **absolute path** or an URI to an image to be rendered in the gutter.
-    #
-    # JSON FLAGS: {"Name":"gutterIconPath","Required":false,"Excluded":false}
-    GutterIconPath: ?string
-
-    # gutterIconSize:
-    # Specifies the size of the gutter icon.
-    # Available values are 'auto', 'contain', 'cover' and any percentage value.
-    # For further information: https://msdn.microsoft.com/en-us/library/jj127316(v=vs.85).aspx
-    #
-    # JSON FLAGS: {"Name":"gutterIconSize","Required":false,"Excluded":false}
-    GutterIconSize: ?string
-
-    # overviewRulerColor:
-    # The color of the decoration in the overview ruler. Use rgba() and define transparent colors to play well with other decorations.
-    #
-    # JSON FLAGS: {"Name":"overviewRulerColor","Required":false,"Excluded":false}
-    OverviewRulerColor: ?string
-
-    # before:
-    # Defines the rendering options of the attachment that is inserted before the decorated text.
-    #
-    # JSON FLAGS: {"Name":"before","Required":false,"Excluded":false}
-    Before: ?ThemableDecorationAttachmentRenderOptions
-
-    # after:
-    # Defines the rendering options of the attachment that is inserted after the decorated text.
-    #
-    # JSON FLAGS: {"Name":"after","Required":false,"Excluded":false}
-    After: ?ThemableDecorationAttachmentRenderOptions
-
-
-
-
-# Represents a handle to a set of decorations
-# sharing the same [styling options](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) in a [text editor](#TextEditor).
-# 
-# To get an instance of a `TextEditorDecorationType` use
-# [createTextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType).
-TextEditorDecorationType: class
-
-    #
-    # JSON FLAGS: undefined
-    __disp__: ?Disposable
-
-    # Cfg represents this `TextEditorDecorationType`'s current state. All its members get auto-refreshed every time any `TextEditorDecorationType` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
-    #
-    # JSON FLAGS: undefined
-    Cfg: ?TextEditorDecorationTypeState
 
 
 
@@ -2296,22 +1799,6 @@ OutputChannelState: class
     #
     # JSON FLAGS: {"Name":"name","Required":false,"Excluded":true}
     Name: (->string)
-
-
-
-
-# TextEditorDecorationTypeState (to be accessed only via `TextEditorDecorationType.Cfg`) is a snapshot of `TextEditorDecorationType` state. It is auto-updated whenever `TextEditorDecorationType` creations and method calls resolve or its event subscribers (if any) are invoked. All read-only properties are exposed as function-valued fields.
-TextEditorDecorationTypeState: class
-
-    #
-    # JSON FLAGS: {"Excluded":true}
-    __holder__: ?TextEditorDecorationType
-
-    # key:
-    # Internal representation of the handle.
-    #
-    # JSON FLAGS: {"Name":"key","Required":false,"Excluded":true}
-    Key: (->string)
 
 
 
@@ -3076,39 +2563,6 @@ Window·CreateOutputChannel: (name:string -> ((?OutputChannel->void)->void))
     
     this.Impl().send(msg, onresp)
     return (a0:(?OutputChannel->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·CreateTextEditorDecorationType: (options:DecorationRenderOptions -> ((?TextEditorDecorationType->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.createTextEditorDecorationType"
-    msg.Data = dict·new(1)
-    msg.Data@"options" = options
-    var onresp of (any->bool)
-    var onret of (?TextEditorDecorationType->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?TextEditorDecorationType
-        if =?payload
-            result = ?TextEditorDecorationType·new
-            ok = result.__loadFromJsonish__(payload)
-            if !ok
-                return false
-            result.__disp__.impl = this.Impl()
-        else
-            return false
-        result.__appzObjBagPullFromPeer__()(( -> void)
-            if =?onret
-                onret(result)
-        )
-        return true
-    
-    this.Impl().send(msg, onresp)
-    return (a0:(?TextEditorDecorationType->void) -> void)
         onret = a0
     
 
@@ -4437,41 +3891,6 @@ OutputChannel·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
 
 
 
-TextEditorDecorationType·Dispose: ( -> ((void->void)->void))
-    return this.__disp__.Dispose()
-
-
-
-
-TextEditorDecorationType·__appzObjBagPullFromPeer__: ( -> ((->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "TextEditorDecorationType.__appzObjBagPullFromPeer__"
-    msg.Data = dict·new(1)
-    msg.Data@"" = this.__disp__.id
-    var onresp of (any->bool)
-    var onret of (->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        if =!this.Cfg
-            this.Cfg = ?TextEditorDecorationTypeState·new
-        this.Cfg.__holder__ = this
-        lock this.Cfg
-            ok = this.Cfg.__loadFromJsonish__(payload)
-        if !ok
-            return false
-        if =?onret
-            onret()
-        return true
-    
-    this.__disp__.impl.send(msg, onresp)
-    return (a0:(->void) -> void)
-        onret = a0
-    
-
-
-
-
 InputBox·OnDidChangeValue: (handler:(string->void) -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
@@ -5510,12 +4929,6 @@ OutputChannelState·ReFetch: ( -> ((->void)->void))
 
 
 
-TextEditorDecorationTypeState·ReFetch: ( -> ((->void)->void))
-    return this.__holder__.__appzObjBagPullFromPeer__()
-
-
-
-
 InputBoxState·ReFetch: ( -> ((->void)->void))
     return this.__holder__.__appzObjBagPullFromPeer__()
 
@@ -5715,15 +5128,6 @@ StatusBarItem·__loadFromJsonish__: (payload:any -> bool)
 
 
 OutputChannel·__loadFromJsonish__: (payload:any -> bool)
-    var ok of bool
-    this.__disp__ = ?Disposable·new
-    ok = this.__disp__.__loadFromJsonish__(payload)
-    return ok
-
-
-
-
-TextEditorDecorationType·__loadFromJsonish__: (payload:any -> bool)
     var ok of bool
     this.__disp__ = ?Disposable·new
     ok = this.__disp__.__loadFromJsonish__(payload)
@@ -6091,28 +5495,6 @@ OutputChannelState·__loadFromJsonish__: (payload:any -> bool)
                 return false
         this.Name = ( -> string)
             return name
-        
-    return true
-
-
-
-
-TextEditorDecorationTypeState·__loadFromJsonish__: (payload:any -> bool)
-    var it of dict
-    var ok of bool
-    var val of any
-    [it, ok] = ((payload)·(dict))
-    if !ok
-        return false
-    [val, ok] = it@?"key"
-    if ok
-        var key of string
-        if =?val
-            [key, ok] = ((val)·(string))
-            if !ok
-                return false
-        this.Key = ( -> string)
-            return key
         
     return true
 
