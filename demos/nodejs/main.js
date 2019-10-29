@@ -22,10 +22,10 @@ function main() {
         win = vscode.Window
         miscdemos.onUpAndRunning()
 
-        win.SetStatusBarMessage2("React to the Welcome msg-box to remove me..")(statusmsg => {
+        win.SetStatusBarMessage("React to the Welcome msg-box to remove me..")(statusmsg => {
 
             const buttons = ["Demo Text Input", "All Demos"]
-            win.ShowInformationMessage1(greethow + ", " + greetname + "! What to try out? (If you cancel here, I quit.)", buttons)(
+            win.ShowInformationMessage(greethow + ", " + greetname + "! What to try out? (If you cancel here, I quit.)", buttons)(
                 btn => {
                     statusmsg.Dispose()
                     if (btn === undefined || btn === null)
@@ -39,7 +39,7 @@ function main() {
                                 miscdemos.demosMenu()
                                 break
                             default:
-                                win.ShowErrorMessage1("Unknown: `" + btn + "`!")(miscdemos.demosMenu)
+                                win.ShowErrorMessage("Unknown: `" + btn + "`!")(miscdemos.demosMenu)
                                 break
                         }
                 }
@@ -59,9 +59,9 @@ exports.demo_Window_ShowInputBox = () => {
         }
     })(input => {
         if (input === undefined || input === null)
-            win.ShowWarningMessage1("Drat! Was itching to hear that.")(miscdemos.demosMenu)
+            win.ShowWarningMessage("Drat! Was itching to hear that.")(miscdemos.demosMenu)
         else
-            win.ShowInformationMessage1("You entered: `" + input + "`, merci!")(miscdemos.demosMenu)
+            win.ShowInformationMessage("You entered: `" + input + "`, merci!")(miscdemos.demosMenu)
     })
 }
 
@@ -91,5 +91,7 @@ exports.nums1To = n => {
         ret[i] = i + 1
     return ret
 }
+exports.quickPickItemsFrom = items =>
+    items.map(_ => { label: _ })
 
 main()

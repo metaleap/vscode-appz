@@ -241,59 +241,7 @@ namespace VscAppz {
 		/// <param name="message">The message to show.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
 		/// <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-		Action<Action<string>> ShowInformationMessage1(string message = default, string[] items = default);
-
-		/// <summary>
-		/// Show an information message to users. Optionally provide an array of items which will be presented as
-		/// clickable buttons.
-		/// 
-		/// `message` ── The message to show.
-		/// 
-		/// `options` ── Configures the behaviour of the message.
-		/// 
-		/// `items` ── A set of items that will be rendered as actions in the message.
-		/// 
-		/// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-		/// 
-		/// </summary>
-		/// <param name="message">The message to show.</param>
-		/// <param name="options">Configures the behaviour of the message.</param>
-		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-		Action<Action<string>> ShowInformationMessage2(string message = default, MessageOptions options = default, string[] items = default);
-
-		/// <summary>
-		/// Show an information message.
-		/// 
-		/// `message` ── The message to show.
-		/// 
-		/// `items` ── A set of items that will be rendered as actions in the message.
-		/// 
-		/// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-		/// 
-		/// </summary>
-		/// <param name="message">The message to show.</param>
-		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-		Action<Action<MessageItem>> ShowInformationMessage3(string message = default, MessageItem[] items = default);
-
-		/// <summary>
-		/// Show an information message.
-		/// 
-		/// `message` ── The message to show.
-		/// 
-		/// `options` ── Configures the behaviour of the message.
-		/// 
-		/// `items` ── A set of items that will be rendered as actions in the message.
-		/// 
-		/// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-		/// 
-		/// </summary>
-		/// <param name="message">The message to show.</param>
-		/// <param name="options">Configures the behaviour of the message.</param>
-		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-		Action<Action<MessageItem>> ShowInformationMessage4(string message = default, MessageOptions options = default, MessageItem[] items = default);
+		Action<Action<string>> ShowInformationMessage(string message = default, string[] items = default);
 
 		/// <summary>
 		/// Show a warning message.
@@ -308,58 +256,7 @@ namespace VscAppz {
 		/// <param name="message">The message to show.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
 		/// <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-		Action<Action<string>> ShowWarningMessage1(string message = default, string[] items = default);
-
-		/// <summary>
-		/// Show a warning message.
-		/// 
-		/// `message` ── The message to show.
-		/// 
-		/// `options` ── Configures the behaviour of the message.
-		/// 
-		/// `items` ── A set of items that will be rendered as actions in the message.
-		/// 
-		/// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-		/// 
-		/// </summary>
-		/// <param name="message">The message to show.</param>
-		/// <param name="options">Configures the behaviour of the message.</param>
-		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-		Action<Action<string>> ShowWarningMessage2(string message = default, MessageOptions options = default, string[] items = default);
-
-		/// <summary>
-		/// Show a warning message.
-		/// 
-		/// `message` ── The message to show.
-		/// 
-		/// `items` ── A set of items that will be rendered as actions in the message.
-		/// 
-		/// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-		/// 
-		/// </summary>
-		/// <param name="message">The message to show.</param>
-		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-		Action<Action<MessageItem>> ShowWarningMessage3(string message = default, MessageItem[] items = default);
-
-		/// <summary>
-		/// Show a warning message.
-		/// 
-		/// `message` ── The message to show.
-		/// 
-		/// `options` ── Configures the behaviour of the message.
-		/// 
-		/// `items` ── A set of items that will be rendered as actions in the message.
-		/// 
-		/// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-		/// 
-		/// </summary>
-		/// <param name="message">The message to show.</param>
-		/// <param name="options">Configures the behaviour of the message.</param>
-		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-		Action<Action<MessageItem>> ShowWarningMessage4(string message = default, MessageOptions options = default, MessageItem[] items = default);
+		Action<Action<string>> ShowWarningMessage(string message = default, string[] items = default);
 
 		/// <summary>
 		/// Show an error message.
@@ -374,58 +271,7 @@ namespace VscAppz {
 		/// <param name="message">The message to show.</param>
 		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
 		/// <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-		Action<Action<string>> ShowErrorMessage1(string message = default, string[] items = default);
-
-		/// <summary>
-		/// Show an error message.
-		/// 
-		/// `message` ── The message to show.
-		/// 
-		/// `options` ── Configures the behaviour of the message.
-		/// 
-		/// `items` ── A set of items that will be rendered as actions in the message.
-		/// 
-		/// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-		/// 
-		/// </summary>
-		/// <param name="message">The message to show.</param>
-		/// <param name="options">Configures the behaviour of the message.</param>
-		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-		Action<Action<string>> ShowErrorMessage2(string message = default, MessageOptions options = default, string[] items = default);
-
-		/// <summary>
-		/// Show an error message.
-		/// 
-		/// `message` ── The message to show.
-		/// 
-		/// `items` ── A set of items that will be rendered as actions in the message.
-		/// 
-		/// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-		/// 
-		/// </summary>
-		/// <param name="message">The message to show.</param>
-		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-		Action<Action<MessageItem>> ShowErrorMessage3(string message = default, MessageItem[] items = default);
-
-		/// <summary>
-		/// Show an error message.
-		/// 
-		/// `message` ── The message to show.
-		/// 
-		/// `options` ── Configures the behaviour of the message.
-		/// 
-		/// `items` ── A set of items that will be rendered as actions in the message.
-		/// 
-		/// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-		/// 
-		/// </summary>
-		/// <param name="message">The message to show.</param>
-		/// <param name="options">Configures the behaviour of the message.</param>
-		/// <param name="items">A set of items that will be rendered as actions in the message.</param>
-		/// <return>A thenable that resolves to the selected item or `undefined` when being dismissed.</return>
-		Action<Action<MessageItem>> ShowErrorMessage4(string message = default, MessageOptions options = default, MessageItem[] items = default);
+		Action<Action<string>> ShowErrorMessage(string message = default, string[] items = default);
 
 		/// <summary>
 		/// Opens an input box to ask the user for input.
@@ -449,42 +295,6 @@ namespace VscAppz {
 		/// <summary>
 		/// Shows a selection list allowing multiple selections.
 		/// 
-		/// `items` ── An array of strings, or a promise that resolves to an array of strings.
-		/// 
-		/// `options` ── Configures the behavior of the selection list.
-		/// 
-		/// `token` ── A token that can be used to signal cancellation.
-		/// 
-		/// `return` ── A promise that resolves to the selected items or `undefined`.
-		/// 
-		/// </summary>
-		/// <param name="items">An array of strings, or a promise that resolves to an array of strings.</param>
-		/// <param name="options">Configures the behavior of the selection list.</param>
-		/// <param name="token">A token that can be used to signal cancellation.</param>
-		/// <return>A promise that resolves to the selected items or `undefined`.</return>
-		Action<Action<string[]>> ShowQuickPick1(string[] items = default, QuickPickOptions options = default, Cancel token = default);
-
-		/// <summary>
-		/// Shows a selection list.
-		/// 
-		/// `items` ── An array of strings, or a promise that resolves to an array of strings.
-		/// 
-		/// `options` ── Configures the behavior of the selection list.
-		/// 
-		/// `token` ── A token that can be used to signal cancellation.
-		/// 
-		/// `return` ── A promise that resolves to the selection or `undefined`.
-		/// 
-		/// </summary>
-		/// <param name="items">An array of strings, or a promise that resolves to an array of strings.</param>
-		/// <param name="options">Configures the behavior of the selection list.</param>
-		/// <param name="token">A token that can be used to signal cancellation.</param>
-		/// <return>A promise that resolves to the selection or `undefined`.</return>
-		Action<Action<string>> ShowQuickPick2(string[] items = default, QuickPickOptions options = default, Cancel token = default);
-
-		/// <summary>
-		/// Shows a selection list allowing multiple selections.
-		/// 
 		/// `items` ── An array of items, or a promise that resolves to an array of items.
 		/// 
 		/// `options` ── Configures the behavior of the selection list.
@@ -498,25 +308,7 @@ namespace VscAppz {
 		/// <param name="options">Configures the behavior of the selection list.</param>
 		/// <param name="token">A token that can be used to signal cancellation.</param>
 		/// <return>A promise that resolves to the selected items or `undefined`.</return>
-		Action<Action<QuickPickItem[]>> ShowQuickPick3(QuickPickItem[] items = default, QuickPickOptions options = default, Cancel token = default);
-
-		/// <summary>
-		/// Shows a selection list.
-		/// 
-		/// `items` ── An array of items, or a promise that resolves to an array of items.
-		/// 
-		/// `options` ── Configures the behavior of the selection list.
-		/// 
-		/// `token` ── A token that can be used to signal cancellation.
-		/// 
-		/// `return` ── A promise that resolves to the selected item or `undefined`.
-		/// 
-		/// </summary>
-		/// <param name="items">An array of items, or a promise that resolves to an array of items.</param>
-		/// <param name="options">Configures the behavior of the selection list.</param>
-		/// <param name="token">A token that can be used to signal cancellation.</param>
-		/// <return>A promise that resolves to the selected item or `undefined`.</return>
-		Action<Action<QuickPickItem>> ShowQuickPick4(QuickPickItem[] items = default, QuickPickOptions options = default, Cancel token = default);
+		Action<Action<QuickPickItem[]>> ShowQuickPick(QuickPickItem[] items = default, QuickPickOptions options = default, Cancel token = default);
 
 		/// <summary>
 		/// Set a message to the status bar. This is a short hand for the more powerful
@@ -532,23 +324,7 @@ namespace VscAppz {
 		/// <param name="text">The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).</param>
 		/// <param name="hideAfterTimeout">Timeout in milliseconds after which the message will be disposed.</param>
 		/// <return>A disposable which hides the status bar message.</return>
-		Action<Action<Disposable>> SetStatusBarMessage1(string text = default, int hideAfterTimeout = default);
-
-		/// <summary>
-		/// Set a message to the status bar. This is a short hand for the more powerful
-		/// status bar [items](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem).
-		/// 
-		/// *Note* that status bar messages stack and that they must be disposed when no
-		/// longer used.
-		/// 
-		/// `text` ── The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
-		/// 
-		/// `return` ── A disposable which hides the status bar message.
-		/// 
-		/// </summary>
-		/// <param name="text">The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).</param>
-		/// <return>A disposable which hides the status bar message.</return>
-		Action<Action<Disposable>> SetStatusBarMessage2(string text = default);
+		Action<Action<Disposable>> SetStatusBarMessage(string text = default, int hideAfterTimeout = default);
 
 		/// <summary>
 		/// Shows a file save dialog to the user which allows to select a file
@@ -678,27 +454,6 @@ namespace VscAppz {
 		Action<Action<QuickPick>> CreateQuickPick();
 
 		/// <summary>
-		/// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process. The cwd of the terminal will be the workspace
-		/// directory if it exists.
-		/// 
-		/// `name` ── Optional human-readable string which will be used to represent the terminal in the UI.
-		/// 
-		/// `shellPath` ── Optional path to a custom shell executable to be used in the terminal.
-		/// 
-		/// `shellArgs` ── Optional args for the custom shell executable. A string can be used on Windows only which
-		/// allows specifying shell args in
-		/// [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
-		/// 
-		/// `return` ── A new Terminal.
-		/// 
-		/// </summary>
-		/// <param name="name">Optional human-readable string which will be used to represent the terminal in the UI.</param>
-		/// <param name="shellPath">Optional path to a custom shell executable to be used in the terminal.</param>
-		/// <param name="shellArgs">Optional args for the custom shell executable. A string can be used on Windows only which allows specifying shell args in [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).</param>
-		/// <return>A new Terminal.</return>
-		Action<Action<Terminal>> CreateTerminal1(string name = default, string shellPath = default, string[] shellArgs = default);
-
-		/// <summary>
 		/// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process.
 		/// 
 		/// `options` ── A TerminalOptions object describing the characteristics of the new terminal.
@@ -708,20 +463,7 @@ namespace VscAppz {
 		/// </summary>
 		/// <param name="options">A TerminalOptions object describing the characteristics of the new terminal.</param>
 		/// <return>A new Terminal.</return>
-		Action<Action<Terminal>> CreateTerminal2(TerminalOptions options = default);
-
-		/// <summary>
-		/// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) where an extension controls its input and output.
-		/// 
-		/// `options` ── An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing
-		/// the characteristics of the new terminal.
-		/// 
-		/// `return` ── A new Terminal.
-		/// 
-		/// </summary>
-		/// <param name="options">An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing the characteristics of the new terminal.</param>
-		/// <return>A new Terminal.</return>
-		Action<Action<Terminal>> CreateTerminal3(ExtensionTerminalOptions options = default);
+		Action<Action<Terminal>> CreateTerminal(TerminalOptions options = default);
 	}
 
 	/// <summary>Namespace describing the environment the editor runs in.</summary>
@@ -1401,39 +1143,6 @@ namespace VscAppz {
 		public ThemableDecorationAttachmentRenderOptions After;
 	}
 
-	/// <summary>Options to configure the behavior of the message.</summary>
-	public partial class MessageOptions {
-		/// <summary>Indicates that this message should be modal.</summary>
-		[JsonProperty("modal")]
-		public bool Modal;
-	}
-
-	/// <summary>
-	/// Represents an action that is shown with an information, warning, or
-	/// error message.
-	/// 
-	/// </summary>
-	public partial class MessageItem {
-		/// <summary>A short title like 'Retry', 'Open Log' etc.</summary>
-		[JsonProperty("title"), JsonRequired]
-		public string Title;
-
-		/// <summary>
-		/// A hint for modal dialogs that the item should be triggered
-		/// when the user cancels the dialog (e.g. by pressing the ESC
-		/// key).
-		/// 
-		/// Note: this option is ignored for non-modal messages.
-		/// 
-		/// </summary>
-		[JsonProperty("isCloseAffordance")]
-		public bool IsCloseAffordance;
-
-		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
-		[JsonProperty("my")]
-		public dict My;
-	}
-
 	/// <summary>Options to configure the behavior of the input box UI.</summary>
 	public partial class InputBoxOptions {
 		/// <summary>The value to prefill in the input box.</summary>
@@ -1483,36 +1192,6 @@ namespace VscAppz {
 		internal string ValidateInput_AppzFuncId;
 	}
 
-	/// <summary>Options to configure the behavior of the quick pick UI.</summary>
-	public partial class QuickPickOptions {
-		/// <summary>An optional flag to include the description when filtering the picks.</summary>
-		[JsonProperty("matchOnDescription")]
-		public bool MatchOnDescription;
-
-		/// <summary>An optional flag to include the detail when filtering the picks.</summary>
-		[JsonProperty("matchOnDetail")]
-		public bool MatchOnDetail;
-
-		/// <summary>An optional string to show as place holder in the input box to guide the user what to pick on.</summary>
-		[JsonProperty("placeHolder")]
-		public string PlaceHolder;
-
-		/// <summary>Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.</summary>
-		[JsonProperty("ignoreFocusOut")]
-		public bool IgnoreFocusOut;
-
-		/// <summary>An optional flag to make the picker accept multiple selections, if true the result is an array of picks.</summary>
-		[JsonProperty("canPickMany")]
-		public bool CanPickMany;
-
-		/// <summary>An optional function that is invoked whenever an item is selected.</summary>
-		[JsonIgnore]
-		public Func<QuickPickItem, any> OnDidSelectItem;
-
-		[JsonProperty("onDidSelectItem_AppzFuncId")]
-		internal string OnDidSelectItem_AppzFuncId;
-	}
-
 	/// <summary>
 	/// Represents an item that can be selected from
 	/// a list of items.
@@ -1546,6 +1225,36 @@ namespace VscAppz {
 		/// <summary>Free-form custom data, preserved across a roundtrip.</summary>
 		[JsonProperty("my")]
 		public dict My;
+	}
+
+	/// <summary>Options to configure the behavior of the quick pick UI.</summary>
+	public partial class QuickPickOptions {
+		/// <summary>An optional flag to include the description when filtering the picks.</summary>
+		[JsonProperty("matchOnDescription")]
+		public bool MatchOnDescription;
+
+		/// <summary>An optional flag to include the detail when filtering the picks.</summary>
+		[JsonProperty("matchOnDetail")]
+		public bool MatchOnDetail;
+
+		/// <summary>An optional string to show as place holder in the input box to guide the user what to pick on.</summary>
+		[JsonProperty("placeHolder")]
+		public string PlaceHolder;
+
+		/// <summary>Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.</summary>
+		[JsonProperty("ignoreFocusOut")]
+		public bool IgnoreFocusOut;
+
+		/// <summary>An optional flag to make the picker accept multiple selections, if true the result is an array of picks.</summary>
+		[JsonProperty("canPickMany")]
+		public bool CanPickMany;
+
+		/// <summary>An optional function that is invoked whenever an item is selected.</summary>
+		[JsonIgnore]
+		public Func<QuickPickItem, any> OnDidSelectItem;
+
+		[JsonProperty("onDidSelectItem_AppzFuncId")]
+		internal string OnDidSelectItem_AppzFuncId;
 	}
 
 	/// <summary>Options to configure the behaviour of a file save dialog.</summary>
@@ -1981,14 +1690,6 @@ namespace VscAppz {
 		public QuickPickState Cfg;
 	}
 
-	/// <summary>An individual terminal instance within the integrated terminal.</summary>
-	public partial class Terminal {
-		internal Disposable __disp__;
-
-		/// <summary>Cfg represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
-		public TerminalState Cfg;
-	}
-
 	/// <summary>Value-object describing what options a terminal should use.</summary>
 	public partial class TerminalOptions {
 		/// <summary>A human-readable string which will be used to represent the terminal in the UI.</summary>
@@ -2038,210 +1739,12 @@ namespace VscAppz {
 		public bool HideFromUser;
 	}
 
-	/// <summary>Value-object describing what options a virtual process terminal should use.</summary>
-	public partial class ExtensionTerminalOptions {
-		/// <summary>A human-readable string which will be used to represent the terminal in the UI.</summary>
-		[JsonProperty("name"), JsonRequired]
-		public string Name;
+	/// <summary>An individual terminal instance within the integrated terminal.</summary>
+	public partial class Terminal {
+		internal Disposable __disp__;
 
-		/// <summary>
-		/// An implementation of [Pseudoterminal](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal) that allows an extension to
-		/// control a terminal.
-		/// 
-		/// </summary>
-		[JsonProperty("pty"), JsonRequired]
-		public Pseudoterminal Pty;
-	}
-
-	/// <summary>Defines the interface of a terminal pty, enabling extensions to control a terminal.</summary>
-	public partial class Pseudoterminal {
-		/// <summary>
-		/// An event that when fired will write data to the terminal. Unlike
-		/// [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText) which sends text to the underlying _process_
-		/// (the pty "slave"), this will write the text to the terminal itself (the pty "master").
-		/// 
-		/// **Example:** Write red text to the terminal
-		/// 
-		/// ```typescript
-		/// 
-		/// const writeEmitter = new vscode.EventEmitter&lt;string&gt;();
-		/// const pty: vscode.Pseudoterminal = {
-		///    onDidWrite: writeEmitter.event,
-		///    open: () =&gt; writeEmitter.fire('\x1b[31mHello world\x1b[0m'),
-		///    close: () =&gt; {}
-		/// };
-		/// vscode.window.createTerminal({ name: 'My terminal', pty });
-		/// 
-		/// ```
-		/// 
-		/// 
-		/// **Example:** Move the cursor to the 10th row and 20th column and write an asterisk
-		/// 
-		/// ```typescript
-		/// 
-		/// writeEmitter.fire('\x1b[10;20H*');
-		/// 
-		/// ```
-		/// 
-		/// 
-		/// </summary>
-		[JsonIgnore]
-		public Func<Action<string>, Disposable> OnDidWrite;
-
-		/// <summary>
-		/// An event that when fired allows overriding the [dimensions](https://code.visualstudio.com/api/references/vscode-api#Terminal.dimensions) of the
-		/// terminal. Note that when set, the overridden dimensions will only take effect when they
-		/// are lower than the actual dimensions of the terminal (ie. there will never be a scroll
-		/// bar). Set to `undefined` for the terminal to go back to the regular dimensions (fit to
-		/// the size of the panel).
-		/// 
-		/// **Example:** Override the dimensions of a terminal to 20 columns and 10 rows
-		/// 
-		/// ```typescript
-		/// 
-		/// const dimensionsEmitter = new vscode.EventEmitter&lt;vscode.TerminalDimensions&gt;();
-		/// const pty: vscode.Pseudoterminal = {
-		///    onDidWrite: writeEmitter.event,
-		///    onDidOverrideDimensions: dimensionsEmitter.event,
-		///    open: () =&gt; {
-		///      dimensionsEmitter.fire({
-		///        columns: 20,
-		///        rows: 10
-		///      });
-		///    },
-		///    close: () =&gt; {}
-		/// };
-		/// vscode.window.createTerminal({ name: 'My terminal', pty });
-		/// 
-		/// ```
-		/// 
-		/// 
-		/// </summary>
-		[JsonIgnore]
-		public Func<Action<TerminalDimensions>, Disposable> OnDidOverrideDimensions;
-
-		/// <summary>
-		/// An event that when fired will signal that the pty is closed and dispose of the terminal.
-		/// 
-		/// A number can be used to provide an exit code for the terminal. Exit codes must be
-		/// positive and a non-zero exit codes signals failure which shows a notification for a
-		/// regular terminal and allows dependent tasks to proceed when used with the
-		/// `CustomExecution2` API.
-		/// 
-		/// **Example:** Exit the terminal when "y" is pressed, otherwise show a notification.
-		/// 
-		/// ```typescript
-		/// 
-		/// const writeEmitter = new vscode.EventEmitter&lt;string&gt;();
-		/// const closeEmitter = new vscode.EventEmitter&lt;vscode.TerminalDimensions&gt;();
-		/// const pty: vscode.Pseudoterminal = {
-		///    onDidWrite: writeEmitter.event,
-		///    onDidClose: closeEmitter.event,
-		///    open: () =&gt; writeEmitter.fire('Press y to exit successfully'),
-		///    close: () =&gt; {},
-		///    handleInput: data =&gt; {
-		///      if (data !== 'y') {
-		///        vscode.window.showInformationMessage('Something went wrong');
-		///      }
-		///      closeEmitter.fire();
-		///    }
-		/// };
-		/// vscode.window.createTerminal({ name: 'Exit example', pty });
-		/// 
-		/// </summary>
-		[JsonIgnore]
-		public Func<Action<int?>, Disposable> OnDidClose;
-
-		/// <summary>
-		/// Implement to handle when the pty is open and ready to start firing events.
-		/// 
-		/// `initialDimensions` ── The dimensions of the terminal, this will be undefined if the
-		/// terminal panel has not been opened before this is called.
-		/// 
-		/// </summary>
-		[JsonIgnore]
-		public Action<TerminalDimensions> Open;
-
-		/// <summary>Implement to handle when the terminal is closed by an act of the user.</summary>
-		[JsonIgnore]
-		public Action Close;
-
-		/// <summary>
-		/// Implement to handle incoming keystrokes in the terminal or when an extension calls
-		/// [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText). `data` contains the keystrokes/text serialized into
-		/// their corresponding VT sequence representation.
-		/// 
-		/// `data` ── The incoming data.
-		/// 
-		/// **Example:** Echo input in the terminal. The sequence for enter (`\r`) is translated to
-		/// CRLF to go to a new line and move the cursor to the start of the line.
-		/// 
-		/// ```typescript
-		/// 
-		/// const writeEmitter = new vscode.EventEmitter&lt;string&gt;();
-		/// const pty: vscode.Pseudoterminal = {
-		/// onDidWrite: writeEmitter.event,
-		/// open: () =&gt; {},
-		/// close: () =&gt; {},
-		/// handleInput: data =&gt; writeEmitter.fire(data === '\r' ? '\r\n' : data)
-		/// };
-		/// vscode.window.createTerminal({ name: 'Local echo', pty });
-		/// 
-		/// ```
-		/// 
-		/// 
-		/// </summary>
-		[JsonIgnore]
-		public Action<string> HandleInput;
-
-		/// <summary>
-		/// Implement to handle when the number of rows and columns that fit into the terminal panel
-		/// changes, for example when font size changes or when the panel is resized. The initial
-		/// state of a terminal's dimensions should be treated as `undefined` until this is triggered
-		/// as the size of a terminal isn't know until it shows up in the user interface.
-		/// 
-		/// When dimensions are overridden by
-		/// [onDidOverrideDimensions](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal.onDidOverrideDimensions), `setDimensions` will
-		/// continue to be called with the regular panel dimensions, allowing the extension continue
-		/// to react dimension changes.
-		/// 
-		/// `dimensions` ── The new dimensions.
-		/// 
-		/// </summary>
-		[JsonIgnore]
-		public Action<TerminalDimensions> SetDimensions;
-
-		[JsonProperty("onDidWrite_AppzFuncId")]
-		internal string OnDidWrite_AppzFuncId;
-
-		[JsonProperty("onDidOverrideDimensions_AppzFuncId")]
-		internal string OnDidOverrideDimensions_AppzFuncId;
-
-		[JsonProperty("onDidClose_AppzFuncId")]
-		internal string OnDidClose_AppzFuncId;
-
-		[JsonProperty("open_AppzFuncId")]
-		internal string Open_AppzFuncId;
-
-		[JsonProperty("close_AppzFuncId")]
-		internal string Close_AppzFuncId;
-
-		[JsonProperty("handleInput_AppzFuncId")]
-		internal string HandleInput_AppzFuncId;
-
-		[JsonProperty("setDimensions_AppzFuncId")]
-		internal string SetDimensions_AppzFuncId;
-	}
-
-	/// <summary>Represents the dimensions of a terminal.</summary>
-	public partial class TerminalDimensions {
-		/// <summary>The number of columns in the terminal.</summary>
-		[JsonProperty("columns"), JsonRequired]
-		public int Columns;
-
-		/// <summary>The number of rows in the terminal.</summary>
-		[JsonProperty("rows"), JsonRequired]
-		public int Rows;
+		/// <summary>Cfg represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.</summary>
+		public TerminalState Cfg;
 	}
 
 	/// <summary>An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).</summary>
@@ -2653,10 +2156,10 @@ namespace VscAppz {
 			return this;
 		} }
 
-		Action<Action<string>> IWindow.ShowInformationMessage1(string message, string[] items) {
+		Action<Action<string>> IWindow.ShowInformationMessage(string message, string[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showInformationMessage1";
+			msg.QName = "window.showInformationMessage";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
@@ -2684,103 +2187,10 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<string>> IWindow.ShowInformationMessage2(string message, MessageOptions options, string[] items) {
+		Action<Action<string>> IWindow.ShowWarningMessage(string message, string[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showInformationMessage2";
-			msg.Data = new dict(3);
-			msg.Data["message"] = message;
-			msg.Data["options"] = options;
-			msg.Data["items"] = items;
-			Func<any, bool> onresp = default;
-			Action<string> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				string result = default;
-				if ((null != payload)) {
-					string _result_ = default;
-					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-					result = _result_;
-				}
-				if ((null != onret)) {
-					onret(result);
-				}
-				return true;
-			};
-			this.Impl().send(msg, onresp);
-			return (Action<string> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<MessageItem>> IWindow.ShowInformationMessage3(string message, MessageItem[] items) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.showInformationMessage3";
-			msg.Data = new dict(2);
-			msg.Data["message"] = message;
-			msg.Data["items"] = items;
-			Func<any, bool> onresp = default;
-			Action<MessageItem> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				MessageItem result = default;
-				if ((null != payload)) {
-					result = new MessageItem();
-					ok = result.__loadFromJsonish__(payload);
-					if (!ok) {
-						return false;
-					}
-				}
-				if ((null != onret)) {
-					onret(result);
-				}
-				return true;
-			};
-			this.Impl().send(msg, onresp);
-			return (Action<MessageItem> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<MessageItem>> IWindow.ShowInformationMessage4(string message, MessageOptions options, MessageItem[] items) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.showInformationMessage4";
-			msg.Data = new dict(3);
-			msg.Data["message"] = message;
-			msg.Data["options"] = options;
-			msg.Data["items"] = items;
-			Func<any, bool> onresp = default;
-			Action<MessageItem> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				MessageItem result = default;
-				if ((null != payload)) {
-					result = new MessageItem();
-					ok = result.__loadFromJsonish__(payload);
-					if (!ok) {
-						return false;
-					}
-				}
-				if ((null != onret)) {
-					onret(result);
-				}
-				return true;
-			};
-			this.Impl().send(msg, onresp);
-			return (Action<MessageItem> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<string>> IWindow.ShowWarningMessage1(string message, string[] items) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.showWarningMessage1";
+			msg.QName = "window.showWarningMessage";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
@@ -2808,103 +2218,10 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<string>> IWindow.ShowWarningMessage2(string message, MessageOptions options, string[] items) {
+		Action<Action<string>> IWindow.ShowErrorMessage(string message, string[] items) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showWarningMessage2";
-			msg.Data = new dict(3);
-			msg.Data["message"] = message;
-			msg.Data["options"] = options;
-			msg.Data["items"] = items;
-			Func<any, bool> onresp = default;
-			Action<string> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				string result = default;
-				if ((null != payload)) {
-					string _result_ = default;
-					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-					result = _result_;
-				}
-				if ((null != onret)) {
-					onret(result);
-				}
-				return true;
-			};
-			this.Impl().send(msg, onresp);
-			return (Action<string> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<MessageItem>> IWindow.ShowWarningMessage3(string message, MessageItem[] items) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.showWarningMessage3";
-			msg.Data = new dict(2);
-			msg.Data["message"] = message;
-			msg.Data["items"] = items;
-			Func<any, bool> onresp = default;
-			Action<MessageItem> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				MessageItem result = default;
-				if ((null != payload)) {
-					result = new MessageItem();
-					ok = result.__loadFromJsonish__(payload);
-					if (!ok) {
-						return false;
-					}
-				}
-				if ((null != onret)) {
-					onret(result);
-				}
-				return true;
-			};
-			this.Impl().send(msg, onresp);
-			return (Action<MessageItem> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<MessageItem>> IWindow.ShowWarningMessage4(string message, MessageOptions options, MessageItem[] items) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.showWarningMessage4";
-			msg.Data = new dict(3);
-			msg.Data["message"] = message;
-			msg.Data["options"] = options;
-			msg.Data["items"] = items;
-			Func<any, bool> onresp = default;
-			Action<MessageItem> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				MessageItem result = default;
-				if ((null != payload)) {
-					result = new MessageItem();
-					ok = result.__loadFromJsonish__(payload);
-					if (!ok) {
-						return false;
-					}
-				}
-				if ((null != onret)) {
-					onret(result);
-				}
-				return true;
-			};
-			this.Impl().send(msg, onresp);
-			return (Action<MessageItem> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<string>> IWindow.ShowErrorMessage1(string message, string[] items) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.showErrorMessage1";
+			msg.QName = "window.showErrorMessage";
 			msg.Data = new dict(2);
 			msg.Data["message"] = message;
 			msg.Data["items"] = items;
@@ -2928,99 +2245,6 @@ namespace VscAppz {
 			};
 			this.Impl().send(msg, onresp);
 			return (Action<string> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<string>> IWindow.ShowErrorMessage2(string message, MessageOptions options, string[] items) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.showErrorMessage2";
-			msg.Data = new dict(3);
-			msg.Data["message"] = message;
-			msg.Data["options"] = options;
-			msg.Data["items"] = items;
-			Func<any, bool> onresp = default;
-			Action<string> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				string result = default;
-				if ((null != payload)) {
-					string _result_ = default;
-					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-					result = _result_;
-				}
-				if ((null != onret)) {
-					onret(result);
-				}
-				return true;
-			};
-			this.Impl().send(msg, onresp);
-			return (Action<string> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<MessageItem>> IWindow.ShowErrorMessage3(string message, MessageItem[] items) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.showErrorMessage3";
-			msg.Data = new dict(2);
-			msg.Data["message"] = message;
-			msg.Data["items"] = items;
-			Func<any, bool> onresp = default;
-			Action<MessageItem> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				MessageItem result = default;
-				if ((null != payload)) {
-					result = new MessageItem();
-					ok = result.__loadFromJsonish__(payload);
-					if (!ok) {
-						return false;
-					}
-				}
-				if ((null != onret)) {
-					onret(result);
-				}
-				return true;
-			};
-			this.Impl().send(msg, onresp);
-			return (Action<MessageItem> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<MessageItem>> IWindow.ShowErrorMessage4(string message, MessageOptions options, MessageItem[] items) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.showErrorMessage4";
-			msg.Data = new dict(3);
-			msg.Data["message"] = message;
-			msg.Data["options"] = options;
-			msg.Data["items"] = items;
-			Func<any, bool> onresp = default;
-			Action<MessageItem> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				MessageItem result = default;
-				if ((null != payload)) {
-					result = new MessageItem();
-					ok = result.__loadFromJsonish__(payload);
-					if (!ok) {
-						return false;
-					}
-				}
-				if ((null != onret)) {
-					onret(result);
-				}
-				return true;
-			};
-			this.Impl().send(msg, onresp);
-			return (Action<MessageItem> a0) => {
 				onret = a0;
 			};
 		}
@@ -3103,10 +2327,10 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<string[]>> IWindow.ShowQuickPick1(string[] items, QuickPickOptions options, Cancel token) {
+		Action<Action<QuickPickItem[]>> IWindow.ShowQuickPick(QuickPickItem[] items, QuickPickOptions options, Cancel token) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showQuickPick1";
+			msg.QName = "window.showQuickPick";
 			msg.Data = new dict(3);
 			List<string> fnids = default;
 			fnids = new List<string>(1);
@@ -3140,181 +2364,6 @@ namespace VscAppz {
 				}
 			}
 			msg.Data["items"] = items;
-			options.CanPickMany = true;
-			msg.Data["options"] = options;
-			if ((null != token)) {
-				token.impl = this.Impl();
-				if ("" == token.fnId) {
-					lock (this) {
-						token.fnId = this.Impl().nextFuncId();
-					}
-				}
-				msg.Data["token"] = token.fnId;
-			}
-			Func<any, bool> onresp = default;
-			Action<string[]> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				string[] result = default;
-				if ((null != payload)) {
-					any[] __coll__result = default;
-					(__coll__result, ok) = (payload is any[]) ? (((any[])(payload)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-					result = new string[__coll__result.Length];
-					int __idx__result = default;
-					__idx__result = 0;
-					foreach (var __item__result in __coll__result) {
-						string __val__result = default;
-						(__val__result, ok) = (__item__result is string) ? (((string)(__item__result)), true) : (default, false);
-						if (!ok) {
-							return false;
-						}
-						result[__idx__result] = __val__result;
-						__idx__result = __idx__result + 1;
-					}
-				}
-				if ((null != onret)) {
-					onret(result);
-				}
-				return true;
-			};
-			this.Impl().send(msg, (any payload) => {
-				if (fnids.Count != 0) {
-					lock (this) {
-						foreach (var fnid in fnids) {
-							this.Impl().cbOther.Remove(fnid);
-						}
-					}
-				}
-				return onresp(payload);
-			});
-			return (Action<string[]> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<string>> IWindow.ShowQuickPick2(string[] items, QuickPickOptions options, Cancel token) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.showQuickPick2";
-			msg.Data = new dict(3);
-			List<string> fnids = default;
-			fnids = new List<string>(1);
-			if ((null != options)) {
-				options.OnDidSelectItem_AppzFuncId = "";
-				Func<QuickPickItem, any> fn = default;
-				fn = options.OnDidSelectItem;
-				if ((null != fn)) {
-					lock (this) {
-						options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId();
-						fnids.Add(options.OnDidSelectItem_AppzFuncId);
-						this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
-							if (1 != args.Length) {
-								return (null, false);
-							} else {
-								bool ok = default;
-								QuickPickItem __0 = default;
-								if ((null != args[0])) {
-									__0 = new QuickPickItem();
-									ok = __0.__loadFromJsonish__(args[0]);
-									if (!ok) {
-										return (null, false);
-									}
-								} else {
-									return (null, false);
-								}
-								return (fn(__0), true);
-							}
-						};
-					}
-				}
-			}
-			msg.Data["items"] = items;
-			if ((null != options)) {
-				msg.Data["options"] = options;
-			}
-			if ((null != token)) {
-				token.impl = this.Impl();
-				if ("" == token.fnId) {
-					lock (this) {
-						token.fnId = this.Impl().nextFuncId();
-					}
-				}
-				msg.Data["token"] = token.fnId;
-			}
-			Func<any, bool> onresp = default;
-			Action<string> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				string result = default;
-				if ((null != payload)) {
-					string _result_ = default;
-					(_result_, ok) = (payload is string) ? (((string)(payload)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-					result = _result_;
-				}
-				if ((null != onret)) {
-					onret(result);
-				}
-				return true;
-			};
-			this.Impl().send(msg, (any payload) => {
-				if (fnids.Count != 0) {
-					lock (this) {
-						foreach (var fnid in fnids) {
-							this.Impl().cbOther.Remove(fnid);
-						}
-					}
-				}
-				return onresp(payload);
-			});
-			return (Action<string> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<QuickPickItem[]>> IWindow.ShowQuickPick3(QuickPickItem[] items, QuickPickOptions options, Cancel token) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.showQuickPick3";
-			msg.Data = new dict(3);
-			List<string> fnids = default;
-			fnids = new List<string>(1);
-			if (true) {
-				options.OnDidSelectItem_AppzFuncId = "";
-				Func<QuickPickItem, any> fn = default;
-				fn = options.OnDidSelectItem;
-				if ((null != fn)) {
-					lock (this) {
-						options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId();
-						fnids.Add(options.OnDidSelectItem_AppzFuncId);
-						this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
-							if (1 != args.Length) {
-								return (null, false);
-							} else {
-								bool ok = default;
-								QuickPickItem __0 = default;
-								if ((null != args[0])) {
-									__0 = new QuickPickItem();
-									ok = __0.__loadFromJsonish__(args[0]);
-									if (!ok) {
-										return (null, false);
-									}
-								} else {
-									return (null, false);
-								}
-								return (fn(__0), true);
-							}
-						};
-					}
-				}
-			}
-			msg.Data["items"] = items;
-			options.CanPickMany = true;
 			msg.Data["options"] = options;
 			if ((null != token)) {
 				token.impl = this.Impl();
@@ -3370,125 +2419,13 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<QuickPickItem>> IWindow.ShowQuickPick4(QuickPickItem[] items, QuickPickOptions options, Cancel token) {
+		Action<Action<Disposable>> IWindow.SetStatusBarMessage(string text, int hideAfterTimeout) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.showQuickPick4";
-			msg.Data = new dict(3);
-			List<string> fnids = default;
-			fnids = new List<string>(1);
-			if ((null != options)) {
-				options.OnDidSelectItem_AppzFuncId = "";
-				Func<QuickPickItem, any> fn = default;
-				fn = options.OnDidSelectItem;
-				if ((null != fn)) {
-					lock (this) {
-						options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId();
-						fnids.Add(options.OnDidSelectItem_AppzFuncId);
-						this.Impl().cbOther[options.OnDidSelectItem_AppzFuncId] = (any[] args) => {
-							if (1 != args.Length) {
-								return (null, false);
-							} else {
-								bool ok = default;
-								QuickPickItem __0 = default;
-								if ((null != args[0])) {
-									__0 = new QuickPickItem();
-									ok = __0.__loadFromJsonish__(args[0]);
-									if (!ok) {
-										return (null, false);
-									}
-								} else {
-									return (null, false);
-								}
-								return (fn(__0), true);
-							}
-						};
-					}
-				}
-			}
-			msg.Data["items"] = items;
-			if ((null != options)) {
-				msg.Data["options"] = options;
-			}
-			if ((null != token)) {
-				token.impl = this.Impl();
-				if ("" == token.fnId) {
-					lock (this) {
-						token.fnId = this.Impl().nextFuncId();
-					}
-				}
-				msg.Data["token"] = token.fnId;
-			}
-			Func<any, bool> onresp = default;
-			Action<QuickPickItem> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				QuickPickItem result = default;
-				if ((null != payload)) {
-					result = new QuickPickItem();
-					ok = result.__loadFromJsonish__(payload);
-					if (!ok) {
-						return false;
-					}
-				}
-				if ((null != onret)) {
-					onret(result);
-				}
-				return true;
-			};
-			this.Impl().send(msg, (any payload) => {
-				if (fnids.Count != 0) {
-					lock (this) {
-						foreach (var fnid in fnids) {
-							this.Impl().cbOther.Remove(fnid);
-						}
-					}
-				}
-				return onresp(payload);
-			});
-			return (Action<QuickPickItem> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<Disposable>> IWindow.SetStatusBarMessage1(string text, int hideAfterTimeout) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.setStatusBarMessage1";
+			msg.QName = "window.setStatusBarMessage";
 			msg.Data = new dict(2);
 			msg.Data["text"] = text;
 			msg.Data["hideAfterTimeout"] = hideAfterTimeout;
-			Func<any, bool> onresp = default;
-			Action<Disposable> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				Disposable result = default;
-				if ((null != payload)) {
-					result = new Disposable();
-					ok = result.__loadFromJsonish__(payload);
-					if (!ok) {
-						return false;
-					}
-				} else {
-					return false;
-				}
-				if ((null != onret)) {
-					onret(result.bind(this.Impl()));
-				}
-				return true;
-			};
-			this.Impl().send(msg, onresp);
-			return (Action<Disposable> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<Disposable>> IWindow.SetStatusBarMessage2(string text) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.setStatusBarMessage2";
-			msg.Data = new dict(1);
-			msg.Data["text"] = text;
 			Func<any, bool> onresp = default;
 			Action<Disposable> onret = default;
 			onresp = (any payload) => {
@@ -3867,86 +2804,10 @@ namespace VscAppz {
 			};
 		}
 
-		Action<Action<Terminal>> IWindow.CreateTerminal1(string name, string shellPath, string[] shellArgs) {
+		Action<Action<Terminal>> IWindow.CreateTerminal(TerminalOptions options) {
 			ipcMsg msg = default;
 			msg = new ipcMsg();
-			msg.QName = "window.createTerminal1";
-			msg.Data = new dict(3);
-			if ((null != name)) {
-				msg.Data["name"] = name;
-			}
-			if ((null != shellPath)) {
-				msg.Data["shellPath"] = shellPath;
-			}
-			if ((null != shellArgs)) {
-				msg.Data["shellArgs"] = shellArgs;
-			}
-			Func<any, bool> onresp = default;
-			Action<Terminal> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				Terminal result = default;
-				if ((null != payload)) {
-					result = new Terminal();
-					ok = result.__loadFromJsonish__(payload);
-					if (!ok) {
-						return false;
-					}
-					result.__disp__.impl = this.Impl();
-				} else {
-					return false;
-				}
-				result.__appzObjBagPullFromPeer__()(() => {
-					if ((null != onret)) {
-						onret(result);
-					}
-				});
-				return true;
-			};
-			this.Impl().send(msg, onresp);
-			return (Action<Terminal> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<Terminal>> IWindow.CreateTerminal2(TerminalOptions options) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.createTerminal2";
-			msg.Data = new dict(1);
-			msg.Data["options"] = options;
-			Func<any, bool> onresp = default;
-			Action<Terminal> onret = default;
-			onresp = (any payload) => {
-				bool ok = default;
-				Terminal result = default;
-				if ((null != payload)) {
-					result = new Terminal();
-					ok = result.__loadFromJsonish__(payload);
-					if (!ok) {
-						return false;
-					}
-					result.__disp__.impl = this.Impl();
-				} else {
-					return false;
-				}
-				result.__appzObjBagPullFromPeer__()(() => {
-					if ((null != onret)) {
-						onret(result);
-					}
-				});
-				return true;
-			};
-			this.Impl().send(msg, onresp);
-			return (Action<Terminal> a0) => {
-				onret = a0;
-			};
-		}
-
-		Action<Action<Terminal>> IWindow.CreateTerminal3(ExtensionTerminalOptions options) {
-			ipcMsg msg = default;
-			msg = new ipcMsg();
-			msg.QName = "window.createTerminal3";
+			msg.QName = "window.createTerminal";
 			msg.Data = new dict(1);
 			msg.Data["options"] = options;
 			Func<any, bool> onresp = default;
@@ -6968,54 +5829,6 @@ namespace VscAppz {
 				ret = this.__holder__.__appzObjBagPushToPeer__(this);
 			}
 			return ret;
-		}
-	}
-
-	public partial class MessageItem {
-		internal bool __loadFromJsonish__(any payload = default) {
-			dict it = default;
-			bool ok = default;
-			any val = default;
-			(it, ok) = (payload is dict) ? (((dict)(payload)), true) : (default, false);
-			if (!ok) {
-				return false;
-			}
-			(val, ok) = (it.TryGetValue("title", out var __) ? (__, true) : (default, false));
-			if (ok) {
-				string title = default;
-				if ((null != val)) {
-					(title, ok) = (val is string) ? (((string)(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-				}
-				this.Title = title;
-			} else {
-				return false;
-			}
-			(val, ok) = (it.TryGetValue("isCloseAffordance", out var ___) ? (___, true) : (default, false));
-			if (ok) {
-				bool isCloseAffordance = default;
-				if ((null != val)) {
-					(isCloseAffordance, ok) = (val is bool) ? (((bool)(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-				}
-				this.IsCloseAffordance = isCloseAffordance;
-			}
-			(val, ok) = (it.TryGetValue("my", out var ____) ? (____, true) : (default, false));
-			if (ok) {
-				dict my = default;
-				if ((null != val)) {
-					(my, ok) = (val is dict) ? (((dict)(val)), true) : (default, false);
-					if (!ok) {
-						return false;
-					}
-				}
-				this.My = my;
-			}
-			return true;
 		}
 	}
 

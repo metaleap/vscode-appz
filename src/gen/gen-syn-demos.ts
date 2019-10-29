@@ -53,17 +53,17 @@ export class GenDemos {
 
             "demo_Commands_GetCommands_and_ExecuteCommand": () =>
                 this.genDemoOfStrListMenu(_, "Commands", "GetCommands", "command ID(s), pick one to execute or escape now:", [_.eLit(false)],
-                    _.eFunc([{ Name: "item", Type: { Maybe: TypeRefPrim.String } }], null,
+                    _.eFunc([{ Name: "item", Type: { ValsOf: { Name: "QuickPickItem" } } }], null,
                         _.iIf(_.oIsnt(_._("item")), [
                             this.genByeMsg(_, "Command selection cancelled, spooked?"),
-                        ], this.genInput(_, "opts2", "cmdarg", [{ k: "PlaceHolder", v: _.eLit("Any param for `{0}` command? Else leave blank.", _.oDeref(_._("item"))) }],
+                        ], this.genInput(_, "opts2", "cmdarg", [{ k: "PlaceHolder", v: _.eLit("Any param for `{0}` command? Else leave blank.", _._(_.oIdx(_._("item"), _.eLit(0)), _._(this.fld("Label")))) }],
                             _.iVar("cmdargs", { ValsOf: TypeRefPrim.Any }),
                             _.iIf(_.oNeq(_.eLit(""), _.oDeref(_._("cmdarg"))), [
                                 _.iSet(_._("cmdargs"), _.eCollNew(_.eLit(1), TypeRefPrim.Any, true)),
                                 _.iSet(_.oIdx(_._("cmdargs"), _.eLit(0)), _.oDeref(_._("cmdarg"))),
                             ]),
                             _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Commands")), "ExecuteCommand"),
-                                _.oDeref(_._("item")), _._("cmdargs"),
+                                _._(_.oIdx(_._("item"), _.eLit(0)), _._(this.fld("Label"))), _._("cmdargs"),
                             ), _.eFunc([{ Name: "ret", Type: TypeRefPrim.Any }], null,
                                 this.genInfoMsg(_, _.eLit("Command result was: `{0}`, kudos!", _._("ret"))),
                             ))
@@ -157,6 +157,7 @@ export class GenDemos {
                     _.iVar("opts", { Name: "QuickPickOptions" }),
                     _.iSet(_._("opts"), _.eNew({ Name: "QuickPickOptions" })),
                     _.iSet(_._("opts", this.fld("IgnoreFocusOut")), _.eLit(true)),
+                    _.iSet(_._("opts", this.fld("CanPickMany")), _.eLit(true)),
                     _.iSet(_._("opts", this.fld("MatchOnDescription")), _.eLit(true)),
                     _.iSet(_._("opts", this.fld("MatchOnDetail")), _.eLit(true)),
                     _.iSet(_._("opts", this.fld("PlaceHolder")), _.eLit("You have 42 seconds before auto-cancellation!")),
@@ -244,26 +245,18 @@ export class GenDemos {
                     { k: "Prompt", v: _.eLit("Text to send to new terminal `{0}` initially upon creation?", _.oDeref(_._("termname"))) }, { k: "Value", v: _._("appName") }
                 ], ...this.genInput(
                     _, "optsvar", "termvar", [{ k: "Prompt", v: _.eLit("Value for custom env var named `MY_ENV_VAR`?") }],
-                    _.iVar("ontermcreated", { From: [{ Maybe: { Name: "Terminal" } }], To: null }),
-                    _.iSet(_._("ontermcreated"), _.eFunc([{ Name: "term", Type: { Maybe: { Name: "Terminal" } } }], null,
-                        _.eCall(_.eCall(_._("term", "Show"), _.eLit(false)), _.eFunc([], null,
-                            _.eCall(_._("term", "SendText"), _.oDeref(_._("termtext")), _.eLit(false)),
-                        )),
-                    )),
-                    _.iIf(_.oEq(_.oDeref(_._("termvar")), _.eLit("")), [
-                        _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), "CreateTerminal1"), _._("termname"), _.eZilch(), _.eZilch()),
-                            _._("ontermcreated"),
+                    _.iVar("cfg", { Name: "TerminalOptions" }),
+                    _.iSet(_._("cfg"), _.eNew({ Name: "TerminalOptions" })),
+                    _.iSet(_._("cfg", this.fld("Name")), _.oDeref(_._("termname"))),
+                    _.iSet(_._("cfg", this.fld("Env")), { ElemType: TypeRefPrim.String, KeyType: TypeRefPrim.String, Cap: _.eLit(1) }),
+                    _.iSet(_.oIdx(_._("cfg", this.fld("Env")), _.eLit("MY_ENV_VAR")), _.oDeref(_._("termvar"))),
+                    _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), this.fn("CreateTerminal", 2)), _._("cfg")),
+                        _.eFunc([{ Name: "term", Type: { Maybe: { Name: "Terminal" } } }], null,
+                            _.eCall(_.eCall(_._("term", "Show"), _.eLit(false)), _.eFunc([], null,
+                                _.eCall(_._("term", "SendText"), _.oDeref(_._("termtext")), _.eLit(false)),
+                            )),
                         ),
-                    ], [
-                        _.iVar("cfg", { Name: "TerminalOptions" }),
-                        _.iSet(_._("cfg"), _.eNew({ Name: "TerminalOptions" })),
-                        _.iSet(_._("cfg", this.fld("Name")), _.oDeref(_._("termname"))),
-                        _.iSet(_._("cfg", this.fld("Env")), { ElemType: TypeRefPrim.String, KeyType: TypeRefPrim.String, Cap: _.eLit(1) }),
-                        _.iSet(_.oIdx(_._("cfg", this.fld("Env")), _.eLit("MY_ENV_VAR")), _.oDeref(_._("termvar"))),
-                        _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), "CreateTerminal2"), _._("cfg")),
-                            _._("ontermcreated"),
-                        ),
-                    ]),
+                    ),
                 ))),
 
             "subscribeToMiscEvents": () => this.genEventSubs(_, [
@@ -285,11 +278,15 @@ export class GenDemos {
             _.iSet(_._("items"), _.eLit(allnames)),
         ] as Instr[]).concat(
             ...this.genMenu(_, _.eLit("This menu can be re-opened any time via our custom status-bar item."),
-                _.eFunc([{ Name: "menuitem", Type: { Maybe: TypeRefPrim.String } }], null,
-                    _.iIf(_.oIs(_._("menuitem")), allnames.map(name => _.iIf(_.oEq(_.eLit(name), _.oDeref(_._("menuitem"))), [
-                        _.eCall(_._("logLn"), _.eLit("Picked `" + name + "` from main menu")),
-                        _.eCall(_._(name)),
-                    ]))),
+                _.eFunc([{ Name: "menuitems", Type: { ValsOf: { Name: "QuickPickItem" } } }], null,
+                    _.iIf(_.oIs(_._("menuitems")),
+                        allnames.map((name: string): Instr =>
+                            _.iIf(_.oEq(_.eLit(name), _._(_.oIdx(_._("menuitems"), _.eLit(0)), _._(this.fld("Label")))), [
+                                _.eCall(_._("logLn"), _.eLit("Picked `" + name + "` from main menu")),
+                                _.eCall(_._(name)),
+                            ]),
+                        ),
+                    ),
                 ),
             )
         )
@@ -459,15 +456,17 @@ export class GenDemos {
             _.iSet(_._("opts", this.fld("IgnoreFocusOut")), _.eLit(true)),
             _.iSet(_._("opts", this.fld("PlaceHolder")), msg),
             _.eCall(_.eCall(_._(_.eProp(_._("vsc", "Window")), this.fn("ShowQuickPick", 2)),
-                _._("items"), _.oAddr(_._("opts")), _.eZilch()
-            ), onPick ? onPick : _.eFunc([{ Name: "menuitem", Type: { Maybe: TypeRefPrim.String } }], null,
-                _.iIf(_.oIs(_._("menuitem")), [_.eCall(_._("logLn"), _.oDeref(_._("menuitem")))]),
+                _.eCall(_._("quickPickItemsFrom"), _._("items")), _._("opts"), _.eZilch()
+            ), onPick ? onPick : _.eFunc([{ Name: "menuitems", Type: { ValsOf: { Name: "QuickPickItem" } } }], null,
+                _.iIf(_.oIs(_._("menuitems")), [
+                    _.eCall(_._("logLn"), _._(_.oIdx(_._("menuitems"), _.eLit(0)), _._(this.fld("Label")))),
+                ]),
             ))
         ]
     }
 
-    fn(name: string, overload: number): string {
-        return name + overload
+    fn(name: string, _overload: number): string {
+        return name //+ overload
     }
 
     fld(name: string): string {

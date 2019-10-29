@@ -10,7 +10,7 @@ function handle(msg, prog, remoteCancellationTokens) {
     switch (apiname) {
         case "window":
             switch (methodname) {
-                case "showInformationMessage1": {
+                case "showInformationMessage": {
                     const arg_message = (msg.data['message']);
                     const arg_items = (msg.data['items'] || []);
                     const ret = vscode.window.showInformationMessage(arg_message, ...arg_items);
@@ -18,33 +18,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
-                case "showInformationMessage2": {
-                    const arg_message = (msg.data['message']);
-                    const arg_options = (msg.data['options']);
-                    const arg_items = (msg.data['items'] || []);
-                    const ret = vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "showInformationMessage3": {
-                    const arg_message = (msg.data['message']);
-                    const arg_items = (msg.data['items'] || []);
-                    const ret = vscode.window.showInformationMessage(arg_message, ...arg_items);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "showInformationMessage4": {
-                    const arg_message = (msg.data['message']);
-                    const arg_options = (msg.data['options']);
-                    const arg_items = (msg.data['items'] || []);
-                    const ret = vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "showWarningMessage1": {
+                case "showWarningMessage": {
                     const arg_message = (msg.data['message']);
                     const arg_items = (msg.data['items'] || []);
                     const ret = vscode.window.showWarningMessage(arg_message, ...arg_items);
@@ -52,62 +26,10 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
-                case "showWarningMessage2": {
-                    const arg_message = (msg.data['message']);
-                    const arg_options = (msg.data['options']);
-                    const arg_items = (msg.data['items'] || []);
-                    const ret = vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "showWarningMessage3": {
-                    const arg_message = (msg.data['message']);
-                    const arg_items = (msg.data['items'] || []);
-                    const ret = vscode.window.showWarningMessage(arg_message, ...arg_items);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "showWarningMessage4": {
-                    const arg_message = (msg.data['message']);
-                    const arg_options = (msg.data['options']);
-                    const arg_items = (msg.data['items'] || []);
-                    const ret = vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "showErrorMessage1": {
+                case "showErrorMessage": {
                     const arg_message = (msg.data['message']);
                     const arg_items = (msg.data['items'] || []);
                     const ret = vscode.window.showErrorMessage(arg_message, ...arg_items);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "showErrorMessage2": {
-                    const arg_message = (msg.data['message']);
-                    const arg_options = (msg.data['options']);
-                    const arg_items = (msg.data['items'] || []);
-                    const ret = vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "showErrorMessage3": {
-                    const arg_message = (msg.data['message']);
-                    const arg_items = (msg.data['items'] || []);
-                    const ret = vscode.window.showErrorMessage(arg_message, ...arg_items);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "showErrorMessage4": {
-                    const arg_message = (msg.data['message']);
-                    const arg_options = (msg.data['options']);
-                    const arg_items = (msg.data['items'] || []);
-                    const ret = vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items);
                     const retdisp = ret;
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
@@ -126,11 +48,11 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
-                case "showQuickPick1": {
+                case "showQuickPick": {
                     const arg_items = (msg.data['items']);
                     const arg_options = (msg.data['options']);
                     if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
-                        arg_options.onDidSelectItem = (a0) => prog.callBack("window.showQuickPick1", true, arg_options.onDidSelectItem_AppzFuncId, a0);
+                        arg_options.onDidSelectItem = (a0) => prog.callBack("window.showQuickPick", true, arg_options.onDidSelectItem_AppzFuncId, a0);
                     let ctid = msg.data['token'], arg_token = prog.cancellerToken(ctid);
                     if (!arg_token)
                         arg_token = prog.cancellers[''].token;
@@ -141,62 +63,10 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
-                case "showQuickPick2": {
-                    const arg_items = (msg.data['items']);
-                    const arg_options = (msg.data['options']);
-                    if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
-                        arg_options.onDidSelectItem = (a0) => prog.callBack("window.showQuickPick2", true, arg_options.onDidSelectItem_AppzFuncId, a0);
-                    let ctid = msg.data['token'], arg_token = prog.cancellerToken(ctid);
-                    if (!arg_token)
-                        arg_token = prog.cancellers[''].token;
-                    else
-                        remoteCancellationTokens.push(ctid);
-                    const ret = vscode.window.showQuickPick(arg_items, arg_options, arg_token);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "showQuickPick3": {
-                    const arg_items = (msg.data['items']);
-                    const arg_options = (msg.data['options']);
-                    if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
-                        arg_options.onDidSelectItem = (a0) => prog.callBack("window.showQuickPick3", true, arg_options.onDidSelectItem_AppzFuncId, a0);
-                    let ctid = msg.data['token'], arg_token = prog.cancellerToken(ctid);
-                    if (!arg_token)
-                        arg_token = prog.cancellers[''].token;
-                    else
-                        remoteCancellationTokens.push(ctid);
-                    const ret = vscode.window.showQuickPick(arg_items, arg_options, arg_token);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "showQuickPick4": {
-                    const arg_items = (msg.data['items']);
-                    const arg_options = (msg.data['options']);
-                    if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
-                        arg_options.onDidSelectItem = (a0) => prog.callBack("window.showQuickPick4", true, arg_options.onDidSelectItem_AppzFuncId, a0);
-                    let ctid = msg.data['token'], arg_token = prog.cancellerToken(ctid);
-                    if (!arg_token)
-                        arg_token = prog.cancellers[''].token;
-                    else
-                        remoteCancellationTokens.push(ctid);
-                    const ret = vscode.window.showQuickPick(arg_items, arg_options, arg_token);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "setStatusBarMessage1": {
+                case "setStatusBarMessage": {
                     const arg_text = (msg.data['text']);
                     const arg_hideAfterTimeout = (msg.data['hideAfterTimeout']);
                     const ret = vscode.window.setStatusBarMessage(arg_text, arg_hideAfterTimeout);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "setStatusBarMessage2": {
-                    const arg_text = (msg.data['text']);
-                    const ret = vscode.window.setStatusBarMessage(arg_text);
                     const retdisp = ret;
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
@@ -268,23 +138,7 @@ function handle(msg, prog, remoteCancellationTokens) {
                     const retprom = ret;
                     return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
                 }
-                case "createTerminal1": {
-                    const arg_name = (msg.data['name']);
-                    const arg_shellPath = (msg.data['shellPath']);
-                    const arg_shellArgs = (msg.data['shellArgs']);
-                    const ret = vscode.window.createTerminal(arg_name, arg_shellPath, arg_shellArgs);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "createTerminal2": {
-                    const arg_options = (msg.data['options']);
-                    const ret = vscode.window.createTerminal(arg_options);
-                    const retdisp = ret;
-                    const retprom = ret;
-                    return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret));
-                }
-                case "createTerminal3": {
+                case "createTerminal": {
                     const arg_options = (msg.data['options']);
                     const ret = vscode.window.createTerminal(arg_options);
                     const retdisp = ret;

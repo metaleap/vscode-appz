@@ -85,12 +85,6 @@ var OverviewRulerLane;
      */
     OverviewRulerLane[OverviewRulerLane["Full"] = 7] = "Full";
 })(OverviewRulerLane = exports.OverviewRulerLane || (exports.OverviewRulerLane = {}));
-function newMessageItem() {
-    let me;
-    me = { __loadFromJsonish__: _ => MessageItem___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
-    return me;
-}
-exports.newMessageItem = newMessageItem;
 function newQuickPickItem() {
     let me;
     me = { __loadFromJsonish__: _ => QuickPickItem___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) };
@@ -262,10 +256,10 @@ class impl {
 exports.impl = impl;
 class implWindow extends implBase {
     constructor(impl) { super(impl); }
-    ShowInformationMessage1(message, items) {
+    ShowInformationMessage(message, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showInformationMessage1";
+        msg.QName = "window.showInformationMessage";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
@@ -292,100 +286,10 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowInformationMessage2(message, options, items) {
+    ShowWarningMessage(message, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showInformationMessage2";
-        msg.Data = {};
-        msg.Data["message"] = message;
-        msg.Data["options"] = options;
-        msg.Data["items"] = items;
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                let _result_;
-                [_result_, ok] = [payload, typeof payload === "string"];
-                if (!ok) {
-                    return false;
-                }
-                result = _result_;
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
-            return true;
-        };
-        this.Impl().send(msg, onresp);
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    ShowInformationMessage3(message, items) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.showInformationMessage3";
-        msg.Data = {};
-        msg.Data["message"] = message;
-        msg.Data["items"] = items;
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                result = newMessageItem();
-                ok = result.__loadFromJsonish__(payload);
-                if (!ok) {
-                    return false;
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
-            return true;
-        };
-        this.Impl().send(msg, onresp);
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    ShowInformationMessage4(message, options, items) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.showInformationMessage4";
-        msg.Data = {};
-        msg.Data["message"] = message;
-        msg.Data["options"] = options;
-        msg.Data["items"] = items;
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                result = newMessageItem();
-                ok = result.__loadFromJsonish__(payload);
-                if (!ok) {
-                    return false;
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
-            return true;
-        };
-        this.Impl().send(msg, onresp);
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    ShowWarningMessage1(message, items) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.showWarningMessage1";
+        msg.QName = "window.showWarningMessage";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
@@ -412,100 +316,10 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowWarningMessage2(message, options, items) {
+    ShowErrorMessage(message, items) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showWarningMessage2";
-        msg.Data = {};
-        msg.Data["message"] = message;
-        msg.Data["options"] = options;
-        msg.Data["items"] = items;
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                let _result_;
-                [_result_, ok] = [payload, typeof payload === "string"];
-                if (!ok) {
-                    return false;
-                }
-                result = _result_;
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
-            return true;
-        };
-        this.Impl().send(msg, onresp);
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    ShowWarningMessage3(message, items) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.showWarningMessage3";
-        msg.Data = {};
-        msg.Data["message"] = message;
-        msg.Data["items"] = items;
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                result = newMessageItem();
-                ok = result.__loadFromJsonish__(payload);
-                if (!ok) {
-                    return false;
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
-            return true;
-        };
-        this.Impl().send(msg, onresp);
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    ShowWarningMessage4(message, options, items) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.showWarningMessage4";
-        msg.Data = {};
-        msg.Data["message"] = message;
-        msg.Data["options"] = options;
-        msg.Data["items"] = items;
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                result = newMessageItem();
-                ok = result.__loadFromJsonish__(payload);
-                if (!ok) {
-                    return false;
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
-            return true;
-        };
-        this.Impl().send(msg, onresp);
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    ShowErrorMessage1(message, items) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.showErrorMessage1";
+        msg.QName = "window.showErrorMessage";
         msg.Data = {};
         msg.Data["message"] = message;
         msg.Data["items"] = items;
@@ -521,96 +335,6 @@ class implWindow extends implBase {
                     return false;
                 }
                 result = _result_;
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
-            return true;
-        };
-        this.Impl().send(msg, onresp);
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    ShowErrorMessage2(message, options, items) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.showErrorMessage2";
-        msg.Data = {};
-        msg.Data["message"] = message;
-        msg.Data["options"] = options;
-        msg.Data["items"] = items;
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                let _result_;
-                [_result_, ok] = [payload, typeof payload === "string"];
-                if (!ok) {
-                    return false;
-                }
-                result = _result_;
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
-            return true;
-        };
-        this.Impl().send(msg, onresp);
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    ShowErrorMessage3(message, items) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.showErrorMessage3";
-        msg.Data = {};
-        msg.Data["message"] = message;
-        msg.Data["items"] = items;
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                result = newMessageItem();
-                ok = result.__loadFromJsonish__(payload);
-                if (!ok) {
-                    return false;
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
-            return true;
-        };
-        this.Impl().send(msg, onresp);
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    ShowErrorMessage4(message, options, items) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.showErrorMessage4";
-        msg.Data = {};
-        msg.Data["message"] = message;
-        msg.Data["options"] = options;
-        msg.Data["items"] = items;
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                result = newMessageItem();
-                ok = result.__loadFromJsonish__(payload);
-                if (!ok) {
-                    return false;
-                }
             }
             if ((undefined !== onret && null !== onret)) {
                 onret(result);
@@ -700,10 +424,10 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowQuickPick1(items, options, token) {
+    ShowQuickPick(items, options, token) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showQuickPick1";
+        msg.QName = "window.showQuickPick";
         msg.Data = {};
         let fnids;
         fnids = [];
@@ -739,183 +463,6 @@ class implWindow extends implBase {
             }
         }
         msg.Data["items"] = items;
-        options.canPickMany = true;
-        msg.Data["options"] = options;
-        if ((undefined !== token && null !== token)) {
-            token.impl = this.Impl();
-            if ("" === token.fnId) {
-                {
-                    token.fnId = this.Impl().nextFuncId();
-                }
-            }
-            msg.Data["token"] = token.fnId;
-        }
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                let __coll__result;
-                [__coll__result, ok] = [payload, (typeof payload === "object") && (typeof payload["length"] === "number")];
-                if (!ok) {
-                    return false;
-                }
-                result = new Array(__coll__result.length);
-                let __idx__result;
-                __idx__result = 0;
-                for (const __item__result of __coll__result) {
-                    let __val__result;
-                    [__val__result, ok] = [__item__result, typeof __item__result === "string"];
-                    if (!ok) {
-                        return false;
-                    }
-                    result[__idx__result] = __val__result;
-                    __idx__result = __idx__result + 1;
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
-            return true;
-        };
-        this.Impl().send(msg, (payload) => {
-            if (fnids.length !== 0) {
-                {
-                    for (const fnid of fnids) {
-                        delete this.Impl().cbOther[fnid];
-                    }
-                }
-            }
-            return onresp(payload);
-        });
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    ShowQuickPick2(items, options, token) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.showQuickPick2";
-        msg.Data = {};
-        let fnids;
-        fnids = [];
-        if ((undefined !== options && null !== options)) {
-            options.onDidSelectItem_AppzFuncId = "";
-            let fn;
-            fn = options.onDidSelectItem;
-            if ((undefined !== fn && null !== fn)) {
-                {
-                    options.onDidSelectItem_AppzFuncId = this.Impl().nextFuncId();
-                    fnids.push(options.onDidSelectItem_AppzFuncId);
-                    this.Impl().cbOther[options.onDidSelectItem_AppzFuncId] = (args) => {
-                        if (1 !== args.length) {
-                            return [null, false];
-                        }
-                        else {
-                            let ok;
-                            let __0;
-                            if ((undefined !== args[0] && null !== args[0])) {
-                                __0 = newQuickPickItem();
-                                ok = __0.__loadFromJsonish__(args[0]);
-                                if (!ok) {
-                                    return [null, false];
-                                }
-                            }
-                            else {
-                                return [null, false];
-                            }
-                            return [fn(__0), true];
-                        }
-                    };
-                }
-            }
-        }
-        msg.Data["items"] = items;
-        if ((undefined !== options && null !== options)) {
-            msg.Data["options"] = options;
-        }
-        if ((undefined !== token && null !== token)) {
-            token.impl = this.Impl();
-            if ("" === token.fnId) {
-                {
-                    token.fnId = this.Impl().nextFuncId();
-                }
-            }
-            msg.Data["token"] = token.fnId;
-        }
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                let _result_;
-                [_result_, ok] = [payload, typeof payload === "string"];
-                if (!ok) {
-                    return false;
-                }
-                result = _result_;
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
-            return true;
-        };
-        this.Impl().send(msg, (payload) => {
-            if (fnids.length !== 0) {
-                {
-                    for (const fnid of fnids) {
-                        delete this.Impl().cbOther[fnid];
-                    }
-                }
-            }
-            return onresp(payload);
-        });
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    ShowQuickPick3(items, options, token) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.showQuickPick3";
-        msg.Data = {};
-        let fnids;
-        fnids = [];
-        if (true) {
-            options.onDidSelectItem_AppzFuncId = "";
-            let fn;
-            fn = options.onDidSelectItem;
-            if ((undefined !== fn && null !== fn)) {
-                {
-                    options.onDidSelectItem_AppzFuncId = this.Impl().nextFuncId();
-                    fnids.push(options.onDidSelectItem_AppzFuncId);
-                    this.Impl().cbOther[options.onDidSelectItem_AppzFuncId] = (args) => {
-                        if (1 !== args.length) {
-                            return [null, false];
-                        }
-                        else {
-                            let ok;
-                            let __0;
-                            if ((undefined !== args[0] && null !== args[0])) {
-                                __0 = newQuickPickItem();
-                                ok = __0.__loadFromJsonish__(args[0]);
-                                if (!ok) {
-                                    return [null, false];
-                                }
-                            }
-                            else {
-                                return [null, false];
-                            }
-                            return [fn(__0), true];
-                        }
-                    };
-                }
-            }
-        }
-        msg.Data["items"] = items;
-        options.canPickMany = true;
         msg.Data["options"] = options;
         if ((undefined !== token && null !== token)) {
             token.impl = this.Impl();
@@ -970,126 +517,13 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    ShowQuickPick4(items, options, token) {
+    SetStatusBarMessage(text, hideAfterTimeout) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.showQuickPick4";
-        msg.Data = {};
-        let fnids;
-        fnids = [];
-        if ((undefined !== options && null !== options)) {
-            options.onDidSelectItem_AppzFuncId = "";
-            let fn;
-            fn = options.onDidSelectItem;
-            if ((undefined !== fn && null !== fn)) {
-                {
-                    options.onDidSelectItem_AppzFuncId = this.Impl().nextFuncId();
-                    fnids.push(options.onDidSelectItem_AppzFuncId);
-                    this.Impl().cbOther[options.onDidSelectItem_AppzFuncId] = (args) => {
-                        if (1 !== args.length) {
-                            return [null, false];
-                        }
-                        else {
-                            let ok;
-                            let __0;
-                            if ((undefined !== args[0] && null !== args[0])) {
-                                __0 = newQuickPickItem();
-                                ok = __0.__loadFromJsonish__(args[0]);
-                                if (!ok) {
-                                    return [null, false];
-                                }
-                            }
-                            else {
-                                return [null, false];
-                            }
-                            return [fn(__0), true];
-                        }
-                    };
-                }
-            }
-        }
-        msg.Data["items"] = items;
-        if ((undefined !== options && null !== options)) {
-            msg.Data["options"] = options;
-        }
-        if ((undefined !== token && null !== token)) {
-            token.impl = this.Impl();
-            if ("" === token.fnId) {
-                {
-                    token.fnId = this.Impl().nextFuncId();
-                }
-            }
-            msg.Data["token"] = token.fnId;
-        }
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                result = newQuickPickItem();
-                ok = result.__loadFromJsonish__(payload);
-                if (!ok) {
-                    return false;
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result);
-            }
-            return true;
-        };
-        this.Impl().send(msg, (payload) => {
-            if (fnids.length !== 0) {
-                {
-                    for (const fnid of fnids) {
-                        delete this.Impl().cbOther[fnid];
-                    }
-                }
-            }
-            return onresp(payload);
-        });
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    SetStatusBarMessage1(text, hideAfterTimeout) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.setStatusBarMessage1";
+        msg.QName = "window.setStatusBarMessage";
         msg.Data = {};
         msg.Data["text"] = text;
         msg.Data["hideAfterTimeout"] = hideAfterTimeout;
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                result = newDisposable();
-                ok = result.__loadFromJsonish__(payload);
-                if (!ok) {
-                    return false;
-                }
-            }
-            else {
-                return false;
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl()));
-            }
-            return true;
-        };
-        this.Impl().send(msg, onresp);
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    SetStatusBarMessage2(text) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.setStatusBarMessage2";
-        msg.Data = {};
-        msg.Data["text"] = text;
         let onresp;
         let onret;
         onresp = (payload) => {
@@ -1464,86 +898,10 @@ class implWindow extends implBase {
             onret = a0;
         };
     }
-    CreateTerminal1(name, shellPath, shellArgs) {
+    CreateTerminal(options) {
         let msg;
         msg = newipcMsg();
-        msg.QName = "window.createTerminal1";
-        msg.Data = {};
-        if ((undefined !== name && null !== name)) {
-            msg.Data["name"] = name;
-        }
-        if ((undefined !== shellPath && null !== shellPath)) {
-            msg.Data["shellPath"] = shellPath;
-        }
-        if ((undefined !== shellArgs && null !== shellArgs)) {
-            msg.Data["shellArgs"] = shellArgs;
-        }
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                result = newTerminal();
-                ok = result.__loadFromJsonish__(payload);
-                if (!ok) {
-                    return false;
-                }
-                result.__disp__.impl = this.Impl();
-            }
-            else {
-                return false;
-            }
-            result.__appzObjBagPullFromPeer__()(() => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
-            });
-            return true;
-        };
-        this.Impl().send(msg, onresp);
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    CreateTerminal2(options) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.createTerminal2";
-        msg.Data = {};
-        msg.Data["options"] = options;
-        let onresp;
-        let onret;
-        onresp = (payload) => {
-            let ok;
-            let result;
-            if ((undefined !== payload && null !== payload)) {
-                result = newTerminal();
-                ok = result.__loadFromJsonish__(payload);
-                if (!ok) {
-                    return false;
-                }
-                result.__disp__.impl = this.Impl();
-            }
-            else {
-                return false;
-            }
-            result.__appzObjBagPullFromPeer__()(() => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result);
-                }
-            });
-            return true;
-        };
-        this.Impl().send(msg, onresp);
-        return (a0) => {
-            onret = a0;
-        };
-    }
-    CreateTerminal3(options) {
-        let msg;
-        msg = newipcMsg();
-        msg.QName = "window.createTerminal3";
+        msg.QName = "window.createTerminal";
         msg.Data = {};
         msg.Data["options"] = options;
         let onresp;
@@ -4049,54 +3407,6 @@ function FileSystemWatcherState_ApplyChanges() {
         ret = this.__holder__.__appzObjBagPushToPeer__(this);
     }
     return ret;
-}
-function MessageItem___loadFromJsonish__(payload) {
-    let it;
-    let ok;
-    let val;
-    [it, ok] = [payload, typeof payload === "object"];
-    if (!ok) {
-        return false;
-    }
-    [val, ok] = [it["title"], undefined !== it["title"]];
-    if (ok) {
-        let title;
-        if ((undefined !== val && null !== val)) {
-            [title, ok] = [val, typeof val === "string"];
-            if (!ok) {
-                return false;
-            }
-        }
-        this.title = title;
-    }
-    else {
-        return false;
-    }
-    [val, ok] = [it["isCloseAffordance"], undefined !== it["isCloseAffordance"]];
-    if (ok) {
-        let isCloseAffordance;
-        if ((undefined !== val && null !== val)) {
-            let _isCloseAffordance_;
-            [_isCloseAffordance_, ok] = [val, typeof val === "boolean"];
-            if (!ok) {
-                return false;
-            }
-            isCloseAffordance = _isCloseAffordance_;
-        }
-        this.isCloseAffordance = isCloseAffordance;
-    }
-    [val, ok] = [it["my"], undefined !== it["my"]];
-    if (ok) {
-        let my;
-        if ((undefined !== val && null !== val)) {
-            [my, ok] = [val, typeof val === "object"];
-            if (!ok) {
-                return false;
-            }
-        }
-        this.my = my;
-    }
-    return true;
 }
 function QuickPickItem___loadFromJsonish__(payload) {
     let it;

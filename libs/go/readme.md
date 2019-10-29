@@ -453,21 +453,6 @@ type EnvState struct {
 EnvState gathers various properties of `Env`, obtainable via its `AllProperties`
 method.
 
-#### type ExtensionTerminalOptions
-
-```go
-type ExtensionTerminalOptions struct {
-	// A human-readable string which will be used to represent the terminal in the UI.
-	Name string `json:"name"`
-
-	// An implementation of [Pseudoterminal](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal) that allows an extension to
-	// control a terminal.
-	Pty Pseudoterminal `json:"pty"`
-}
-```
-
-Value-object describing what options a virtual process terminal should use.
-
 #### type Extensions
 
 ```go
@@ -929,39 +914,6 @@ the score is only checked to be `>0`, for other features, like
 the score is used for determining the order in which providers are asked to
 participate.
 
-#### type MessageItem
-
-```go
-type MessageItem struct {
-	// A short title like 'Retry', 'Open Log' etc.
-	Title string `json:"title"`
-
-	// A hint for modal dialogs that the item should be triggered
-	// when the user cancels the dialog (e.g. by pressing the ESC
-	// key).
-	//
-	// Note: this option is ignored for non-modal messages.
-	IsCloseAffordance bool `json:"isCloseAffordance,omitempty"`
-
-	// Free-form custom data, preserved across a roundtrip.
-	My dict `json:"my,omitempty"`
-}
-```
-
-Represents an action that is shown with an information, warning, or error
-message.
-
-#### type MessageOptions
-
-```go
-type MessageOptions struct {
-	// Indicates that this message should be modal.
-	Modal bool `json:"modal,omitempty"`
-}
-```
-
-Options to configure the behavior of the message.
-
 #### type OpenDialogOptions
 
 ```go
@@ -1141,146 +1093,6 @@ const (
 	OverviewRulerLaneFull OverviewRulerLane = 7
 )
 ```
-
-#### type Pseudoterminal
-
-```go
-type Pseudoterminal struct {
-	// An event that when fired will write data to the terminal. Unlike
-	// [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText) which sends text to the underlying _process_
-	// (the pty "slave"), this will write the text to the terminal itself (the pty "master").
-	//
-	// **Example:** Write red text to the terminal
-	//
-	// ```typescript
-	//
-	// const writeEmitter = new vscode.EventEmitter<string>();
-	// const pty: vscode.Pseudoterminal = {
-	//    onDidWrite: writeEmitter.event,
-	//    open: () => writeEmitter.fire('\x1b[31mHello world\x1b[0m'),
-	//    close: () => {}
-	// };
-	// vscode.window.createTerminal({ name: 'My terminal', pty });
-	//
-	// ```
-	//
-	//
-	// **Example:** Move the cursor to the 10th row and 20th column and write an asterisk
-	//
-	// ```typescript
-	//
-	// writeEmitter.fire('\x1b[10;20H*');
-	//
-	// ```
-	//
-	OnDidWrite func(func(string)) Disposable `json:"-"`
-
-	// An event that when fired allows overriding the [dimensions](https://code.visualstudio.com/api/references/vscode-api#Terminal.dimensions) of the
-	// terminal. Note that when set, the overridden dimensions will only take effect when they
-	// are lower than the actual dimensions of the terminal (ie. there will never be a scroll
-	// bar). Set to `undefined` for the terminal to go back to the regular dimensions (fit to
-	// the size of the panel).
-	//
-	// **Example:** Override the dimensions of a terminal to 20 columns and 10 rows
-	//
-	// ```typescript
-	//
-	// const dimensionsEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
-	// const pty: vscode.Pseudoterminal = {
-	//    onDidWrite: writeEmitter.event,
-	//    onDidOverrideDimensions: dimensionsEmitter.event,
-	//    open: () => {
-	//      dimensionsEmitter.fire({
-	//        columns: 20,
-	//        rows: 10
-	//      });
-	//    },
-	//    close: () => {}
-	// };
-	// vscode.window.createTerminal({ name: 'My terminal', pty });
-	//
-	// ```
-	//
-	OnDidOverrideDimensions func(func(*TerminalDimensions)) Disposable `json:"-"`
-
-	// An event that when fired will signal that the pty is closed and dispose of the terminal.
-	//
-	// A number can be used to provide an exit code for the terminal. Exit codes must be
-	// positive and a non-zero exit codes signals failure which shows a notification for a
-	// regular terminal and allows dependent tasks to proceed when used with the
-	// `CustomExecution2` API.
-	//
-	// **Example:** Exit the terminal when "y" is pressed, otherwise show a notification.
-	//
-	// ```typescript
-	//
-	// const writeEmitter = new vscode.EventEmitter<string>();
-	// const closeEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
-	// const pty: vscode.Pseudoterminal = {
-	//    onDidWrite: writeEmitter.event,
-	//    onDidClose: closeEmitter.event,
-	//    open: () => writeEmitter.fire('Press y to exit successfully'),
-	//    close: () => {},
-	//    handleInput: data => {
-	//      if (data !== 'y') {
-	//        vscode.window.showInformationMessage('Something went wrong');
-	//      }
-	//      closeEmitter.fire();
-	//    }
-	// };
-	// vscode.window.createTerminal({ name: 'Exit example', pty });
-	OnDidClose func(func(*int)) Disposable `json:"-"`
-
-	// Implement to handle when the pty is open and ready to start firing events.
-	//
-	// `initialDimensions` ── The dimensions of the terminal, this will be undefined if the
-	// terminal panel has not been opened before this is called.
-	Open func(*TerminalDimensions) `json:"-"`
-
-	// Implement to handle when the terminal is closed by an act of the user.
-	Close func() `json:"-"`
-
-	// Implement to handle incoming keystrokes in the terminal or when an extension calls
-	// [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText). `data` contains the keystrokes/text serialized into
-	// their corresponding VT sequence representation.
-	//
-	// `data` ── The incoming data.
-	//
-	// **Example:** Echo input in the terminal. The sequence for enter (`\r`) is translated to
-	// CRLF to go to a new line and move the cursor to the start of the line.
-	//
-	// ```typescript
-	//
-	// const writeEmitter = new vscode.EventEmitter<string>();
-	// const pty: vscode.Pseudoterminal = {
-	// onDidWrite: writeEmitter.event,
-	// open: () => {},
-	// close: () => {},
-	// handleInput: data => writeEmitter.fire(data === '\r' ? '\r\n' : data)
-	// };
-	// vscode.window.createTerminal({ name: 'Local echo', pty });
-	//
-	// ```
-	//
-	HandleInput func(string) `json:"-"`
-
-	// Implement to handle when the number of rows and columns that fit into the terminal panel
-	// changes, for example when font size changes or when the panel is resized. The initial
-	// state of a terminal's dimensions should be treated as `undefined` until this is triggered
-	// as the size of a terminal isn't know until it shows up in the user interface.
-	//
-	// When dimensions are overridden by
-	// [onDidOverrideDimensions](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal.onDidOverrideDimensions), `setDimensions` will
-	// continue to be called with the regular panel dimensions, allowing the extension continue
-	// to react dimension changes.
-	//
-	// `dimensions` ── The new dimensions.
-	SetDimensions func(TerminalDimensions) `json:"-"`
-}
-```
-
-Defines the interface of a terminal pty, enabling extensions to control a
-terminal.
 
 #### type QuickInputButton
 
@@ -1790,20 +1602,6 @@ Show the terminal panel and reveal this terminal in the UI.
 `return` ── a thenable that resolves when this `Show` call has successfully
 completed at the VSC side.
 
-#### type TerminalDimensions
-
-```go
-type TerminalDimensions struct {
-	// The number of columns in the terminal.
-	Columns int `json:"columns"`
-
-	// The number of rows in the terminal.
-	Rows int `json:"rows"`
-}
-```
-
-Represents the dimensions of a terminal.
-
 #### type TerminalOptions
 
 ```go
@@ -2213,39 +2011,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
 	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage1(message string, items []string) func(func(*string))
-
-	// Show an information message to users. Optionally provide an array of items which will be presented as
-	// clickable buttons.
-	//
-	// `message` ── The message to show.
-	//
-	// `options` ── Configures the behaviour of the message.
-	//
-	// `items` ── A set of items that will be rendered as actions in the message.
-	//
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage2(message string, options MessageOptions, items []string) func(func(*string))
-
-	// Show an information message.
-	//
-	// `message` ── The message to show.
-	//
-	// `items` ── A set of items that will be rendered as actions in the message.
-	//
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage3(message string, items []MessageItem) func(func(*MessageItem))
-
-	// Show an information message.
-	//
-	// `message` ── The message to show.
-	//
-	// `options` ── Configures the behaviour of the message.
-	//
-	// `items` ── A set of items that will be rendered as actions in the message.
-	//
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem))
+	ShowInformationMessage(message string, items []string) func(func(*string))
 
 	// Show a warning message.
 	//
@@ -2254,38 +2020,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
 	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage1(message string, items []string) func(func(*string))
-
-	// Show a warning message.
-	//
-	// `message` ── The message to show.
-	//
-	// `options` ── Configures the behaviour of the message.
-	//
-	// `items` ── A set of items that will be rendered as actions in the message.
-	//
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage2(message string, options MessageOptions, items []string) func(func(*string))
-
-	// Show a warning message.
-	//
-	// `message` ── The message to show.
-	//
-	// `items` ── A set of items that will be rendered as actions in the message.
-	//
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage3(message string, items []MessageItem) func(func(*MessageItem))
-
-	// Show a warning message.
-	//
-	// `message` ── The message to show.
-	//
-	// `options` ── Configures the behaviour of the message.
-	//
-	// `items` ── A set of items that will be rendered as actions in the message.
-	//
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem))
+	ShowWarningMessage(message string, items []string) func(func(*string))
 
 	// Show an error message.
 	//
@@ -2294,38 +2029,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	//
 	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage1(message string, items []string) func(func(*string))
-
-	// Show an error message.
-	//
-	// `message` ── The message to show.
-	//
-	// `options` ── Configures the behaviour of the message.
-	//
-	// `items` ── A set of items that will be rendered as actions in the message.
-	//
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage2(message string, options MessageOptions, items []string) func(func(*string))
-
-	// Show an error message.
-	//
-	// `message` ── The message to show.
-	//
-	// `items` ── A set of items that will be rendered as actions in the message.
-	//
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage3(message string, items []MessageItem) func(func(*MessageItem))
-
-	// Show an error message.
-	//
-	// `message` ── The message to show.
-	//
-	// `options` ── Configures the behaviour of the message.
-	//
-	// `items` ── A set of items that will be rendered as actions in the message.
-	//
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem))
+	ShowErrorMessage(message string, items []string) func(func(*string))
 
 	// Opens an input box to ask the user for input.
 	//
@@ -2342,28 +2046,6 @@ type Window interface {
 
 	// Shows a selection list allowing multiple selections.
 	//
-	// `items` ── An array of strings, or a promise that resolves to an array of strings.
-	//
-	// `options` ── Configures the behavior of the selection list.
-	//
-	// `token` ── A token that can be used to signal cancellation.
-	//
-	// `return` ── A promise that resolves to the selected items or `undefined`.
-	ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel) func(func([]string))
-
-	// Shows a selection list.
-	//
-	// `items` ── An array of strings, or a promise that resolves to an array of strings.
-	//
-	// `options` ── Configures the behavior of the selection list.
-	//
-	// `token` ── A token that can be used to signal cancellation.
-	//
-	// `return` ── A promise that resolves to the selection or `undefined`.
-	ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel) func(func(*string))
-
-	// Shows a selection list allowing multiple selections.
-	//
 	// `items` ── An array of items, or a promise that resolves to an array of items.
 	//
 	// `options` ── Configures the behavior of the selection list.
@@ -2371,18 +2053,7 @@ type Window interface {
 	// `token` ── A token that can be used to signal cancellation.
 	//
 	// `return` ── A promise that resolves to the selected items or `undefined`.
-	ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel) func(func([]QuickPickItem))
-
-	// Shows a selection list.
-	//
-	// `items` ── An array of items, or a promise that resolves to an array of items.
-	//
-	// `options` ── Configures the behavior of the selection list.
-	//
-	// `token` ── A token that can be used to signal cancellation.
-	//
-	// `return` ── A promise that resolves to the selected item or `undefined`.
-	ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel) func(func(*QuickPickItem))
+	ShowQuickPick(items []QuickPickItem, options QuickPickOptions, token *Cancel) func(func([]QuickPickItem))
 
 	// Set a message to the status bar. This is a short hand for the more powerful
 	// status bar [items](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem).
@@ -2392,18 +2063,7 @@ type Window interface {
 	// `hideAfterTimeout` ── Timeout in milliseconds after which the message will be disposed.
 	//
 	// `return` ── A disposable which hides the status bar message.
-	SetStatusBarMessage1(text string, hideAfterTimeout int) func(func(*Disposable))
-
-	// Set a message to the status bar. This is a short hand for the more powerful
-	// status bar [items](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem).
-	//
-	// *Note* that status bar messages stack and that they must be disposed when no
-	// longer used.
-	//
-	// `text` ── The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
-	//
-	// `return` ── A disposable which hides the status bar message.
-	SetStatusBarMessage2(text string) func(func(*Disposable))
+	SetStatusBarMessage(text string, hideAfterTimeout int) func(func(*Disposable))
 
 	// Shows a file save dialog to the user which allows to select a file
 	// for saving-purposes.
@@ -2484,34 +2144,12 @@ type Window interface {
 	// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
 	CreateQuickPick() func(func(*QuickPick))
 
-	// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process. The cwd of the terminal will be the workspace
-	// directory if it exists.
-	//
-	// `name` ── Optional human-readable string which will be used to represent the terminal in the UI.
-	//
-	// `shellPath` ── Optional path to a custom shell executable to be used in the terminal.
-	//
-	// `shellArgs` ── Optional args for the custom shell executable. A string can be used on Windows only which
-	// allows specifying shell args in
-	// [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
-	//
-	// `return` ── A new Terminal.
-	CreateTerminal1(name *string, shellPath *string, shellArgs []string) func(func(*Terminal))
-
 	// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process.
 	//
 	// `options` ── A TerminalOptions object describing the characteristics of the new terminal.
 	//
 	// `return` ── A new Terminal.
-	CreateTerminal2(options TerminalOptions) func(func(*Terminal))
-
-	// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) where an extension controls its input and output.
-	//
-	// `options` ── An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing
-	// the characteristics of the new terminal.
-	//
-	// `return` ── A new Terminal.
-	CreateTerminal3(options ExtensionTerminalOptions) func(func(*Terminal))
+	CreateTerminal(options TerminalOptions) func(func(*Terminal))
 }
 ```
 

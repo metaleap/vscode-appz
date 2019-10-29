@@ -7,6 +7,14 @@ const tmpSuppressObjMembers = {
     "QuickPick": ["onDidTriggerButton", "buttons"],
     "InputBox": ["onDidTriggerButton", "buttons"],
 };
+exports.overloadOverrides = {
+    "vscode.window.createTerminal": 2,
+    "vscode.window.showInformationMessage": 1,
+    "vscode.window.showWarningMessage": 1,
+    "vscode.window.showErrorMessage": 1,
+    "vscode.window.showQuickPick": 3,
+    "vscode.window.setStatusBarMessage": 1,
+};
 exports.docStrs = {
     extBaggage: "Free-form custom data, preserved across a roundtrip.",
 };
@@ -237,7 +245,7 @@ class Prep {
         const me = {
             fromOrig: it,
             nameOrig: qname[qname.length - 1],
-            name: qname[qname.length - 1] + ((it.overload > 0) ? it.overload : ''),
+            name: qname[qname.length - 1] /*+ ((it.overload > 0) ? it.overload : '')*/,
             args: (declf && declf.parameters && declf.parameters.length) ?
                 declf.parameters.filter(_ => _.name.getText() !== 'thisArg' && !seemsDeprecated(_)).map(_ => ({
                     fromOrig: _,

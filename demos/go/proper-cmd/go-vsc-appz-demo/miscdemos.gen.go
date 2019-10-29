@@ -7,12 +7,12 @@ import (
 )
 
 func demo_promptToExit() {
-	vsc.Window().ShowWarningMessage1(strFmt("Are you sure you want `{0}` to exit?", appName), []string{"Sure I'm sure"})(func(btn *string) {
+	vsc.Window().ShowWarningMessage(strFmt("Are you sure you want `{0}` to exit?", appName), []string{"Sure I'm sure"})(func(btn *string) {
 		if (nil != btn) {
-			vsc.Window().ShowInformationMessage1(logLn("So fish and long for all the thanks!"), nil)
+			vsc.Window().ShowInformationMessage(logLn("So fish and long for all the thanks!"), nil)
 			quit(nil)
 		} else {
-			vsc.Window().ShowInformationMessage1(logLn("So I'm not a goner yet. I'll stick around then."), nil)
+			vsc.Window().ShowInformationMessage(logLn("So I'm not a goner yet. I'll stick around then."), nil)
 		}
 	})
 }
@@ -20,7 +20,7 @@ func demo_promptToExit() {
 func demo_clipboard() {
 	vsc.Env().Clipboard().ReadText()(func(text *string) {
 		if (nil == text) {
-			vsc.Window().ShowWarningMessage1(logLn("No text in clipboard"), nil)
+			vsc.Window().ShowWarningMessage(logLn("No text in clipboard"), nil)
 		} else {
 			var opts *InputBoxOptions
 			opts = new(InputBoxOptions)
@@ -30,11 +30,11 @@ func demo_clipboard() {
 			opts.Prompt = "Enter new contents to write to your clipboard."
 			vsc.Window().ShowInputBox(opts, nil)(func(input *string) {
 				if (nil == input) {
-					vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
+					vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 				} else {
 					logLn(strFmt("input <- {0}", *input))
 					vsc.Env().Clipboard().WriteText(*input)(func() {
-						vsc.Window().ShowInformationMessage1(logLn("Okay. Now double-check by pasting somewhere."), nil)
+						vsc.Window().ShowInformationMessage(logLn("Okay. Now double-check by pasting somewhere."), nil)
 					})
 				}
 			})
@@ -47,18 +47,18 @@ func demo_Commands_GetCommands_and_ExecuteCommand() {
 		var opts QuickPickOptions
 		opts.IgnoreFocusOut = true
 		opts.PlaceHolder = strFmt("Retrieved {0} command ID(s), pick one to execute or escape now:", len(items))
-		vsc.Window().ShowQuickPick2(items, &opts, nil)(func(item *string) {
+		vsc.Window().ShowQuickPick(quickPickItemsFrom(items), opts, nil)(func(item []QuickPickItem) {
 			if (nil == item) {
-				vsc.Window().ShowWarningMessage1(logLn("Command selection cancelled, spooked?"), nil)
+				vsc.Window().ShowWarningMessage(logLn("Command selection cancelled, spooked?"), nil)
 			} else {
 				var opts2 *InputBoxOptions
 				opts2 = new(InputBoxOptions)
 				opts2.IgnoreFocusOut = true
-				logLn(strFmt("cmdarg@opts2/{0}:\t{1}", "PlaceHolder", strFmt("Any param for `{0}` command? Else leave blank.", *item)))
-				opts2.PlaceHolder = strFmt("Any param for `{0}` command? Else leave blank.", *item)
+				logLn(strFmt("cmdarg@opts2/{0}:\t{1}", "PlaceHolder", strFmt("Any param for `{0}` command? Else leave blank.", item[0].Label)))
+				opts2.PlaceHolder = strFmt("Any param for `{0}` command? Else leave blank.", item[0].Label)
 				vsc.Window().ShowInputBox(opts2, nil)(func(cmdarg *string) {
 					if (nil == cmdarg) {
-						vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
+						vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 					} else {
 						logLn(strFmt("cmdarg <- {0}", *cmdarg))
 						var cmdargs []any
@@ -66,8 +66,8 @@ func demo_Commands_GetCommands_and_ExecuteCommand() {
 							cmdargs = make([]any, 1)
 							cmdargs[0] = *cmdarg
 						}
-						vsc.Commands().ExecuteCommand(*item, cmdargs)(func(ret any) {
-							vsc.Window().ShowInformationMessage1(logLn(strFmt("Command result was: `{0}`, kudos!", ret)), nil)
+						vsc.Commands().ExecuteCommand(item[0].Label, cmdargs)(func(ret any) {
+							vsc.Window().ShowInformationMessage(logLn(strFmt("Command result was: `{0}`, kudos!", ret)), nil)
 						})
 					}
 				})
@@ -85,11 +85,11 @@ func demo_Commands_RegisterCommand() {
 	opts.Prompt = "Enter your command name. The command will accept a single text input and return a result built from it."
 	vsc.Window().ShowInputBox(opts, nil)(func(cmdname *string) {
 		if (nil == cmdname) {
-			vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
+			vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 		} else {
 			logLn(strFmt("cmdname <- {0}", *cmdname))
 			vsc.Commands().RegisterCommand(*cmdname, func(cmdargs []any) any {
-				vsc.Window().SetStatusBarMessage1(logLn(strFmt("Command `{0}` invoked with: `{1}`", *cmdname, cmdargs[0])), 4242)
+				vsc.Window().SetStatusBarMessage(logLn(strFmt("Command `{0}` invoked with: `{1}`", *cmdname, cmdargs[0])), 4242)
 				return strFmt("Input to command `{0}` was: `{1}`", *cmdname, cmdargs[0])
 			})(func(useToUnregister *Disposable) {
 				var opts2 *InputBoxOptions
@@ -100,14 +100,14 @@ func demo_Commands_RegisterCommand() {
 				opts2.Value = strFmt("Enter input to command `{0}` here", *cmdname)
 				vsc.Window().ShowInputBox(opts2, nil)(func(cmdarg *string) {
 					if (nil == cmdarg) {
-						vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
+						vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 					} else {
 						logLn(strFmt("cmdarg <- {0}", *cmdarg))
 						var cmdargs2 []any
 						cmdargs2 = make([]any, 1)
 						cmdargs2[0] = *cmdarg
 						vsc.Commands().ExecuteCommand(*cmdname, cmdargs2)(func(ret any) {
-							vsc.Window().ShowInformationMessage1(logLn(strFmt("Command result: `{0}`, mad props!", ret)), nil)
+							vsc.Window().ShowInformationMessage(logLn(strFmt("Command result: `{0}`, mad props!", ret)), nil)
 						})
 					}
 				})
@@ -121,9 +121,9 @@ func demo_Languages_GetLanguages() {
 		var opts QuickPickOptions
 		opts.IgnoreFocusOut = true
 		opts.PlaceHolder = strFmt("Retrieved {0} language ID(s)", len(items))
-		vsc.Window().ShowQuickPick2(items, &opts, nil)(func(menuitem *string) {
-			if (nil != menuitem) {
-				logLn(*menuitem)
+		vsc.Window().ShowQuickPick(quickPickItemsFrom(items), opts, nil)(func(menuitems []QuickPickItem) {
+			if (nil != menuitems) {
+				logLn(menuitems[0].Label)
 			}
 		})
 	})
@@ -145,9 +145,9 @@ func demo_Env_Properties() {
 			var opts QuickPickOptions
 			opts.IgnoreFocusOut = true
 			opts.PlaceHolder = logLn(strFmt("Env has {0} properties", len(items))) + ":"
-			vsc.Window().ShowQuickPick2(items, &opts, nil)(func(menuitem *string) {
-				if (nil != menuitem) {
-					logLn(*menuitem)
+			vsc.Window().ShowQuickPick(quickPickItemsFrom(items), opts, nil)(func(menuitems []QuickPickItem) {
+				if (nil != menuitems) {
+					logLn(menuitems[0].Label)
 				}
 			})
 		}
@@ -165,9 +165,9 @@ func demo_Workspace_Properties() {
 			var opts QuickPickOptions
 			opts.IgnoreFocusOut = true
 			opts.PlaceHolder = logLn(strFmt("Workspace has {0} properties", len(items))) + ":"
-			vsc.Window().ShowQuickPick2(items, &opts, nil)(func(menuitem *string) {
-				if (nil != menuitem) {
-					logLn(*menuitem)
+			vsc.Window().ShowQuickPick(quickPickItemsFrom(items), opts, nil)(func(menuitems []QuickPickItem) {
+				if (nil != menuitems) {
+					logLn(menuitems[0].Label)
 				}
 			})
 		}
@@ -188,9 +188,9 @@ func demo_Window_ShowOpenDialog() {
 	logLn("Showing File-Open dialog...")
 	vsc.Window().ShowOpenDialog(opts)(func(filepaths []string) {
 		if (nil == filepaths) {
-			vsc.Window().ShowWarningMessage1(logLn("Cancelled File-Open dialog, chicken?"), nil)
+			vsc.Window().ShowWarningMessage(logLn("Cancelled File-Open dialog, chicken?"), nil)
 		} else {
-			vsc.Window().ShowInformationMessage1(logLn(strFmt("Selected {0} file path(s), excellent!", len(filepaths))), nil)
+			vsc.Window().ShowInformationMessage(logLn(strFmt("Selected {0} file path(s), excellent!", len(filepaths))), nil)
 		}
 	})
 }
@@ -204,9 +204,9 @@ func demo_Window_ShowSaveDialog() {
 	logLn("Showing File-Save dialog...")
 	vsc.Window().ShowSaveDialog(opts)(func(filepath *string) {
 		if (nil == filepath) {
-			vsc.Window().ShowWarningMessage1(logLn("Cancelled File-Save dialog, chicken?"), nil)
+			vsc.Window().ShowWarningMessage(logLn("Cancelled File-Save dialog, chicken?"), nil)
 		} else {
-			vsc.Window().ShowInformationMessage1(logLn(strFmt("Selected file path `{0}`, excellent!", *filepath)), nil)
+			vsc.Window().ShowInformationMessage(logLn(strFmt("Selected file path `{0}`, excellent!", *filepath)), nil)
 		}
 	})
 }
@@ -218,9 +218,9 @@ func demo_Window_ShowWorkspaceFolderPick() {
 	opts.PlaceHolder = "Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side."
 	vsc.Window().ShowWorkspaceFolderPick(opts)(func(pickedfolder *WorkspaceFolder) {
 		if (nil == pickedfolder) {
-			vsc.Window().ShowWarningMessage1(logLn("Cancelled pick input, changed your mind?"), nil)
+			vsc.Window().ShowWarningMessage(logLn("Cancelled pick input, changed your mind?"), nil)
 		} else {
-			vsc.Window().ShowInformationMessage1(logLn(strFmt("Selected `{0}` located at `{1}`, respect!", pickedfolder.Name, pickedfolder.Uri)), nil)
+			vsc.Window().ShowInformationMessage(logLn(strFmt("Selected `{0}` located at `{1}`, respect!", pickedfolder.Name, pickedfolder.Uri)), nil)
 		}
 	})
 }
@@ -234,7 +234,7 @@ func demo_Env_OpenExternal() {
 	opts.Prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."
 	vsc.Window().ShowInputBox(opts, nil)(func(uri *string) {
 		if (nil == uri) {
-			vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
+			vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 		} else {
 			logLn(strFmt("uri <- {0}", *uri))
 			vsc.Env().OpenExternal(*uri)(func(ok bool) {
@@ -243,7 +243,7 @@ func demo_Env_OpenExternal() {
 				if !ok {
 					did = did  +  " not"
 				}
-				vsc.Window().ShowInformationMessage1(logLn(strFmt("{0} succeed in opening `{1}`, chapeau!", did, *uri)), nil)
+				vsc.Window().ShowInformationMessage(logLn(strFmt("{0} succeed in opening `{1}`, chapeau!", did, *uri)), nil)
 			})
 		}
 	})
@@ -266,18 +266,19 @@ func demo_Window_ShowQuickPick() {
 	items[3].Detail = "Das vierte"
 	var opts QuickPickOptions
 	opts.IgnoreFocusOut = true
+	opts.CanPickMany = true
 	opts.MatchOnDescription = true
 	opts.MatchOnDetail = true
 	opts.PlaceHolder = "You have 42 seconds before auto-cancellation!"
 	opts.OnDidSelectItem = func(item QuickPickItem) any {
-		vsc.Window().SetStatusBarMessage1(logLn(strFmt("Just selected: {0}", item.Label)), 4242)
+		vsc.Window().SetStatusBarMessage(logLn(strFmt("Just selected: {0}", item.Label)), 4242)
 		return nil
 	}
-	vsc.Window().ShowQuickPick3(items, opts, cancelIn(42))(func(pickeditems []QuickPickItem) {
+	vsc.Window().ShowQuickPick(items, opts, cancelIn(42))(func(pickeditems []QuickPickItem) {
 		if (nil == pickeditems) {
-			vsc.Window().ShowWarningMessage1(logLn("Cancelled pick input, not one to tick the boxes?"), nil)
+			vsc.Window().ShowWarningMessage(logLn("Cancelled pick input, not one to tick the boxes?"), nil)
 		} else {
-			vsc.Window().ShowInformationMessage1(logLn(strFmt("You picked {0} item(s), good stuff!", len(pickeditems))), nil)
+			vsc.Window().ShowInformationMessage(logLn(strFmt("You picked {0} item(s), good stuff!", len(pickeditems))), nil)
 		}
 	})
 }
@@ -327,9 +328,9 @@ func demo_Window_CreateInputBox() {
 		ctl.OnDidHide(func() {
 			ctl.Dispose()
 			if (nil != finalinputvalue) {
-				vsc.Window().ShowInformationMessage1(logLn(strFmt("You entered: `{0}`, ponderous!", *finalinputvalue)), nil)
+				vsc.Window().ShowInformationMessage(logLn(strFmt("You entered: `{0}`, ponderous!", *finalinputvalue)), nil)
 			} else {
-				vsc.Window().ShowWarningMessage1(logLn("Backing off or backing up?"), nil)
+				vsc.Window().ShowWarningMessage(logLn("Backing off or backing up?"), nil)
 			}
 		})
 		ctl.Show()
@@ -345,7 +346,7 @@ func demo_Window_CreateTerminal() {
 	optsname.Value = appName
 	vsc.Window().ShowInputBox(optsname, nil)(func(termname *string) {
 		if (nil == termname) {
-			vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
+			vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 		} else {
 			logLn(strFmt("termname <- {0}", *termname))
 			var optstext *InputBoxOptions
@@ -356,7 +357,7 @@ func demo_Window_CreateTerminal() {
 			optstext.Value = appName
 			vsc.Window().ShowInputBox(optstext, nil)(func(termtext *string) {
 				if (nil == termtext) {
-					vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
+					vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 				} else {
 					logLn(strFmt("termtext <- {0}", *termtext))
 					var optsvar *InputBoxOptions
@@ -366,24 +367,18 @@ func demo_Window_CreateTerminal() {
 					optsvar.Prompt = "Value for custom env var named `MY_ENV_VAR`?"
 					vsc.Window().ShowInputBox(optsvar, nil)(func(termvar *string) {
 						if (nil == termvar) {
-							vsc.Window().ShowWarningMessage1(logLn("Don't be bashful.."), nil)
+							vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 						} else {
 							logLn(strFmt("termvar <- {0}", *termvar))
-							var ontermcreated func(*Terminal)
-							ontermcreated = func(term *Terminal) {
+							var cfg TerminalOptions
+							cfg.Name = *termname
+							cfg.Env = make(map[string]string, 1)
+							cfg.Env["MY_ENV_VAR"] = *termvar
+							vsc.Window().CreateTerminal(cfg)(func(term *Terminal) {
 								term.Show(false)(func() {
 									term.SendText(*termtext, false)
 								})
-							}
-							if (*termvar) == "" {
-								vsc.Window().CreateTerminal1(termname, nil, nil)(ontermcreated)
-							} else {
-								var cfg TerminalOptions
-								cfg.Name = *termname
-								cfg.Env = make(map[string]string, 1)
-								cfg.Env["MY_ENV_VAR"] = *termvar
-								vsc.Window().CreateTerminal2(cfg)(ontermcreated)
-							}
+							})
 						}
 					})
 				}
@@ -394,13 +389,13 @@ func demo_Window_CreateTerminal() {
 
 func subscribeToMiscEvents() {
 	vsc.Extensions().OnDidChange(func() {
-		vsc.Window().SetStatusBarMessage1(logLn("Some extension(s) were just (un)installed or (de)activated."), 4242)
+		vsc.Window().SetStatusBarMessage(logLn("Some extension(s) were just (un)installed or (de)activated."), 4242)
 	})
 	vsc.Window().OnDidChangeWindowState(func(evt WindowState) {
-		vsc.Window().SetStatusBarMessage1(logLn(strFmt("Am I focused? {0}.", evt.Focused)), 4242)
+		vsc.Window().SetStatusBarMessage(logLn(strFmt("Am I focused? {0}.", evt.Focused)), 4242)
 	})
 	vsc.Languages().OnDidChangeDiagnostics(func(evt DiagnosticChangeEvent) {
-		vsc.Window().SetStatusBarMessage1(logLn(strFmt("Diag(s) changed for {0} file path(s).", len(evt.Uris))), 4242)
+		vsc.Window().SetStatusBarMessage(logLn(strFmt("Diag(s) changed for {0} file path(s).", len(evt.Uris))), 4242)
 	})
 }
 
@@ -410,69 +405,69 @@ func demosMenu() {
 	var opts QuickPickOptions
 	opts.IgnoreFocusOut = true
 	opts.PlaceHolder = "This menu can be re-opened any time via our custom status-bar item."
-	vsc.Window().ShowQuickPick2(items, &opts, nil)(func(menuitem *string) {
-		if (nil != menuitem) {
-			if "demo_promptToExit" == (*menuitem) {
+	vsc.Window().ShowQuickPick(quickPickItemsFrom(items), opts, nil)(func(menuitems []QuickPickItem) {
+		if (nil != menuitems) {
+			if "demo_promptToExit" == menuitems[0].Label {
 				logLn("Picked `demo_promptToExit` from main menu")
 				demo_promptToExit()
 			}
-			if "demo_clipboard" == (*menuitem) {
+			if "demo_clipboard" == menuitems[0].Label {
 				logLn("Picked `demo_clipboard` from main menu")
 				demo_clipboard()
 			}
-			if "demo_Commands_GetCommands_and_ExecuteCommand" == (*menuitem) {
+			if "demo_Commands_GetCommands_and_ExecuteCommand" == menuitems[0].Label {
 				logLn("Picked `demo_Commands_GetCommands_and_ExecuteCommand` from main menu")
 				demo_Commands_GetCommands_and_ExecuteCommand()
 			}
-			if "demo_Commands_RegisterCommand" == (*menuitem) {
+			if "demo_Commands_RegisterCommand" == menuitems[0].Label {
 				logLn("Picked `demo_Commands_RegisterCommand` from main menu")
 				demo_Commands_RegisterCommand()
 			}
-			if "demo_Languages_GetLanguages" == (*menuitem) {
+			if "demo_Languages_GetLanguages" == menuitems[0].Label {
 				logLn("Picked `demo_Languages_GetLanguages` from main menu")
 				demo_Languages_GetLanguages()
 			}
-			if "demo_Env_Properties" == (*menuitem) {
+			if "demo_Env_Properties" == menuitems[0].Label {
 				logLn("Picked `demo_Env_Properties` from main menu")
 				demo_Env_Properties()
 			}
-			if "demo_Workspace_Properties" == (*menuitem) {
+			if "demo_Workspace_Properties" == menuitems[0].Label {
 				logLn("Picked `demo_Workspace_Properties` from main menu")
 				demo_Workspace_Properties()
 			}
-			if "demo_Window_ShowOpenDialog" == (*menuitem) {
+			if "demo_Window_ShowOpenDialog" == menuitems[0].Label {
 				logLn("Picked `demo_Window_ShowOpenDialog` from main menu")
 				demo_Window_ShowOpenDialog()
 			}
-			if "demo_Window_ShowSaveDialog" == (*menuitem) {
+			if "demo_Window_ShowSaveDialog" == menuitems[0].Label {
 				logLn("Picked `demo_Window_ShowSaveDialog` from main menu")
 				demo_Window_ShowSaveDialog()
 			}
-			if "demo_Window_ShowWorkspaceFolderPick" == (*menuitem) {
+			if "demo_Window_ShowWorkspaceFolderPick" == menuitems[0].Label {
 				logLn("Picked `demo_Window_ShowWorkspaceFolderPick` from main menu")
 				demo_Window_ShowWorkspaceFolderPick()
 			}
-			if "demo_Env_OpenExternal" == (*menuitem) {
+			if "demo_Env_OpenExternal" == menuitems[0].Label {
 				logLn("Picked `demo_Env_OpenExternal` from main menu")
 				demo_Env_OpenExternal()
 			}
-			if "demo_Window_ShowQuickPick" == (*menuitem) {
+			if "demo_Window_ShowQuickPick" == menuitems[0].Label {
 				logLn("Picked `demo_Window_ShowQuickPick` from main menu")
 				demo_Window_ShowQuickPick()
 			}
-			if "demo_Window_CreateQuickPick" == (*menuitem) {
+			if "demo_Window_CreateQuickPick" == menuitems[0].Label {
 				logLn("Picked `demo_Window_CreateQuickPick` from main menu")
 				demo_Window_CreateQuickPick()
 			}
-			if "demo_Window_CreateInputBox" == (*menuitem) {
+			if "demo_Window_CreateInputBox" == menuitems[0].Label {
 				logLn("Picked `demo_Window_CreateInputBox` from main menu")
 				demo_Window_CreateInputBox()
 			}
-			if "demo_Window_CreateTerminal" == (*menuitem) {
+			if "demo_Window_CreateTerminal" == menuitems[0].Label {
 				logLn("Picked `demo_Window_CreateTerminal` from main menu")
 				demo_Window_CreateTerminal()
 			}
-			if "demo_Window_ShowInputBox" == (*menuitem) {
+			if "demo_Window_ShowInputBox" == menuitems[0].Label {
 				logLn("Picked `demo_Window_ShowInputBox` from main menu")
 				demo_Window_ShowInputBox()
 			}

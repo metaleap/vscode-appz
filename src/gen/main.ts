@@ -307,6 +307,9 @@ function gatherFromTypeNode(into: gen.GenJob, it: ts.TypeNode, typeParams: ts.No
 
 function gatherFunc(into: gen.GenJob, decl: ts.SignatureDeclarationBase, overload: number, ...prefixes: string[]) {
     const qname = prefixes.concat(decl.name.getText()).join(".")
+    const olor = gen.overloadOverrides[qname]
+    if (olor && olor !== overload)
+        return
     if (into.funcs.some(_ => _.qName === qname && _.overload === overload))
         return
     const owner = into.namespaces[prefixes.slice(1).join(".")]

@@ -238,20 +238,21 @@ class Builder {
         }
         const tmul = gen.typeMul(it);
         if (tmul && tmul.length && typeof tmul[0] === 'string') {
-            const ands = {};
-            for (const _ of tmul.slice(1)) {
-                let tobj = gen.typeObj(_);
-                if (!(tobj && tobj.length))
-                    throw _;
-                for (const tup of tobj)
-                    if (tup[1] === gen.ScriptPrimType.BooleanTrue)
-                        ands[tup[0]] = this.eLit(true);
-                    else if (tup[1] === gen.ScriptPrimType.BooleanFalse)
-                        ands[tup[0]] = this.eLit(false);
-                    else
-                        throw tup[1];
-            }
-            return { Name: tmul[0], Ands: ands };
+            return { Name: tmul[0] };
+            // const ands: { [_: string]: Expr } = {}
+            // for (const _ of tmul.slice(1)) {
+            //     let tobj = gen.typeObj(_)
+            //     if (!(tobj && tobj.length))
+            //         throw _
+            //     for (const tup of tobj)
+            //         if (tup[1] === gen.ScriptPrimType.BooleanTrue)
+            //             ands[tup[0]] = this.eLit(true)
+            //         else if (tup[1] === gen.ScriptPrimType.BooleanFalse)
+            //             ands[tup[0]] = this.eLit(false)
+            //         else
+            //             throw tup[1]
+            // }
+            // return { Name: tmul[0], Ands: ands }
         }
         const tobj = gen.typeObj(it);
         if (tobj && tobj.length)

@@ -28,8 +28,8 @@ export class Gen extends gen_syn.Gen {
             "const main = require('./main')",
             'Object.defineProperty(exports, "__esModule", { value: true })',
             "// " + this.doNotEditComment("nodejs"),
-            "let vsc, appName, cmdName, strFmt, quit, cancelIn, demo_Window_ShowInputBox, setOutChan, logLn, strLo, strUp, nums1To",
-            "exports.onUpAndRunning = () => { /* crikey!.. */ vsc = main.vsc; appName = main.appName; cmdName = main.cmdName; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox; setOutChan = main.setOutChan; logLn = main.logLn; strLo = main.strLo; strUp = main.strUp; nums1To = main.nums1To; onUpAndRunning() }",
+            "let vsc, appName, cmdName, strFmt, quit, cancelIn, demo_Window_ShowInputBox, setOutChan, logLn, strLo, strUp, nums1To, quickPickItemsFrom",
+            "exports.onUpAndRunning = () => { /* crikey!.. */ vsc = main.vsc; appName = main.appName; cmdName = main.cmdName; strFmt = main.strFmt; quit = main.quit; cancelIn = main.cancelIn; demo_Window_ShowInputBox = main.demo_Window_ShowInputBox; setOutChan = main.setOutChan; logLn = main.logLn; strLo = main.strLo; strUp = main.strUp; nums1To = main.nums1To; quickPickItemsFrom = main.quickPickItemsFrom; onUpAndRunning() }",
             "exports.demosMenu = demosMenu",
             "",
         ) : this.lines(

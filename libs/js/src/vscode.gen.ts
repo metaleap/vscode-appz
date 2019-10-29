@@ -273,37 +273,7 @@ export interface Window {
      * @param items A set of items that will be rendered as actions in the message.
      * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowInformationMessage1: (message: string, items: string[]) => (_: (_: string) => void) => void
-
-    /**
-     * Show an information message to users. Optionally provide an array of items which will be presented as
-     * clickable buttons.
-
-     * @param message The message to show.
-     * @param options Configures the behaviour of the message.
-     * @param items A set of items that will be rendered as actions in the message.
-     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
-     */
-    ShowInformationMessage2: (message: string, options: MessageOptions, items: string[]) => (_: (_: string) => void) => void
-
-    /**
-     * Show an information message.
-
-     * @param message The message to show.
-     * @param items A set of items that will be rendered as actions in the message.
-     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
-     */
-    ShowInformationMessage3: (message: string, items: MessageItem[]) => (_: (_: MessageItem) => void) => void
-
-    /**
-     * Show an information message.
-
-     * @param message The message to show.
-     * @param options Configures the behaviour of the message.
-     * @param items A set of items that will be rendered as actions in the message.
-     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
-     */
-    ShowInformationMessage4: (message: string, options: MessageOptions, items: MessageItem[]) => (_: (_: MessageItem) => void) => void
+    ShowInformationMessage: (message: string, items: string[]) => (_: (_: string) => void) => void
 
     /**
      * Show a warning message.
@@ -312,36 +282,7 @@ export interface Window {
      * @param items A set of items that will be rendered as actions in the message.
      * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowWarningMessage1: (message: string, items: string[]) => (_: (_: string) => void) => void
-
-    /**
-     * Show a warning message.
-
-     * @param message The message to show.
-     * @param options Configures the behaviour of the message.
-     * @param items A set of items that will be rendered as actions in the message.
-     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
-     */
-    ShowWarningMessage2: (message: string, options: MessageOptions, items: string[]) => (_: (_: string) => void) => void
-
-    /**
-     * Show a warning message.
-
-     * @param message The message to show.
-     * @param items A set of items that will be rendered as actions in the message.
-     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
-     */
-    ShowWarningMessage3: (message: string, items: MessageItem[]) => (_: (_: MessageItem) => void) => void
-
-    /**
-     * Show a warning message.
-
-     * @param message The message to show.
-     * @param options Configures the behaviour of the message.
-     * @param items A set of items that will be rendered as actions in the message.
-     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
-     */
-    ShowWarningMessage4: (message: string, options: MessageOptions, items: MessageItem[]) => (_: (_: MessageItem) => void) => void
+    ShowWarningMessage: (message: string, items: string[]) => (_: (_: string) => void) => void
 
     /**
      * Show an error message.
@@ -350,36 +291,7 @@ export interface Window {
      * @param items A set of items that will be rendered as actions in the message.
      * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
      */
-    ShowErrorMessage1: (message: string, items: string[]) => (_: (_: string) => void) => void
-
-    /**
-     * Show an error message.
-
-     * @param message The message to show.
-     * @param options Configures the behaviour of the message.
-     * @param items A set of items that will be rendered as actions in the message.
-     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
-     */
-    ShowErrorMessage2: (message: string, options: MessageOptions, items: string[]) => (_: (_: string) => void) => void
-
-    /**
-     * Show an error message.
-
-     * @param message The message to show.
-     * @param items A set of items that will be rendered as actions in the message.
-     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
-     */
-    ShowErrorMessage3: (message: string, items: MessageItem[]) => (_: (_: MessageItem) => void) => void
-
-    /**
-     * Show an error message.
-
-     * @param message The message to show.
-     * @param options Configures the behaviour of the message.
-     * @param items A set of items that will be rendered as actions in the message.
-     * @return A thenable that resolves to the selected item or `undefined` when being dismissed.
-     */
-    ShowErrorMessage4: (message: string, options: MessageOptions, items: MessageItem[]) => (_: (_: MessageItem) => void) => void
+    ShowErrorMessage: (message: string, items: string[]) => (_: (_: string) => void) => void
 
     /**
      * Opens an input box to ask the user for input.
@@ -397,42 +309,12 @@ export interface Window {
     /**
      * Shows a selection list allowing multiple selections.
 
-     * @param items An array of strings, or a promise that resolves to an array of strings.
-     * @param options Configures the behavior of the selection list.
-     * @param token A token that can be used to signal cancellation.
-     * @return A promise that resolves to the selected items or `undefined`.
-     */
-    ShowQuickPick1: (items: string[], options: QuickPickOptions, token?: Cancel) => (_: (_: string[]) => void) => void
-
-    /**
-     * Shows a selection list.
-
-     * @param items An array of strings, or a promise that resolves to an array of strings.
-     * @param options Configures the behavior of the selection list.
-     * @param token A token that can be used to signal cancellation.
-     * @return A promise that resolves to the selection or `undefined`.
-     */
-    ShowQuickPick2: (items: string[], options?: QuickPickOptions, token?: Cancel) => (_: (_: string) => void) => void
-
-    /**
-     * Shows a selection list allowing multiple selections.
-
      * @param items An array of items, or a promise that resolves to an array of items.
      * @param options Configures the behavior of the selection list.
      * @param token A token that can be used to signal cancellation.
      * @return A promise that resolves to the selected items or `undefined`.
      */
-    ShowQuickPick3: (items: QuickPickItem[], options: QuickPickOptions, token?: Cancel) => (_: (_: QuickPickItem[]) => void) => void
-
-    /**
-     * Shows a selection list.
-
-     * @param items An array of items, or a promise that resolves to an array of items.
-     * @param options Configures the behavior of the selection list.
-     * @param token A token that can be used to signal cancellation.
-     * @return A promise that resolves to the selected item or `undefined`.
-     */
-    ShowQuickPick4: (items: QuickPickItem[], options?: QuickPickOptions, token?: Cancel) => (_: (_: QuickPickItem) => void) => void
+    ShowQuickPick: (items: QuickPickItem[], options: QuickPickOptions, token?: Cancel) => (_: (_: QuickPickItem[]) => void) => void
 
     /**
      * Set a message to the status bar. This is a short hand for the more powerful
@@ -442,19 +324,7 @@ export interface Window {
      * @param hideAfterTimeout Timeout in milliseconds after which the message will be disposed.
      * @return A disposable which hides the status bar message.
      */
-    SetStatusBarMessage1: (text: string, hideAfterTimeout: number) => (_: (_: Disposable) => void) => void
-
-    /**
-     * Set a message to the status bar. This is a short hand for the more powerful
-     * status bar [items](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem).
-     * 
-     * *Note* that status bar messages stack and that they must be disposed when no
-     * longer used.
-
-     * @param text The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
-     * @return A disposable which hides the status bar message.
-     */
-    SetStatusBarMessage2: (text: string) => (_: (_: Disposable) => void) => void
+    SetStatusBarMessage: (text: string, hideAfterTimeout: number) => (_: (_: Disposable) => void) => void
 
     /**
      * Shows a file save dialog to the user which allows to select a file
@@ -548,31 +418,12 @@ export interface Window {
     CreateQuickPick: (_: (_: QuickPick) => void) => void
 
     /**
-     * Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process. The cwd of the terminal will be the workspace
-     * directory if it exists.
-
-     * @param name Optional human-readable string which will be used to represent the terminal in the UI.
-     * @param shellPath Optional path to a custom shell executable to be used in the terminal.
-     * @param shellArgs Optional args for the custom shell executable. A string can be used on Windows only which allows specifying shell args in [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
-     * @return A new Terminal.
-     */
-    CreateTerminal1: (name?: string, shellPath?: string, shellArgs?: string[]) => (_: (_: Terminal) => void) => void
-
-    /**
      * Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process.
 
      * @param options A TerminalOptions object describing the characteristics of the new terminal.
      * @return A new Terminal.
      */
-    CreateTerminal2: (options: TerminalOptions) => (_: (_: Terminal) => void) => void
-
-    /**
-     * Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) where an extension controls its input and output.
-
-     * @param options An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing the characteristics of the new terminal.
-     * @return A new Terminal.
-     */
-    CreateTerminal3: (options: ExtensionTerminalOptions) => (_: (_: Terminal) => void) => void
+    CreateTerminal: (options: TerminalOptions) => (_: (_: Terminal) => void) => void
 }
 
 /**
@@ -1172,53 +1023,6 @@ export interface ThemableDecorationRenderOptions {
 }
 
 /**
- * Options to configure the behavior of the message.
-
- */
-export interface MessageOptions {
-    /**
-     * Indicates that this message should be modal.
-
-     */
-    modal?: boolean
-}
-
-/**
- * Represents an action that is shown with an information, warning, or
- * error message.
-
- */
-export interface MessageItem extends fromJson {
-    /**
-     * A short title like 'Retry', 'Open Log' etc.
-
-     */
-    title: string
-
-    /**
-     * A hint for modal dialogs that the item should be triggered
-     * when the user cancels the dialog (e.g. by pressing the ESC
-     * key).
-     * 
-     * Note: this option is ignored for non-modal messages.
-
-     */
-    isCloseAffordance?: boolean
-
-    /**
-     * Free-form custom data, preserved across a roundtrip.
-
-     */
-    my?: { [_: string]: any }
-}
-
-export function newMessageItem (): MessageItem {
-    let me: MessageItem
-    me = { __loadFromJsonish__: _ => MessageItem___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as MessageItem
-    return me
-}
-
-/**
  * Options to configure the behavior of the input box UI.
 
  */
@@ -1278,50 +1082,6 @@ export interface InputBoxOptions {
 }
 
 /**
- * Options to configure the behavior of the quick pick UI.
-
- */
-export interface QuickPickOptions {
-    /**
-     * An optional flag to include the description when filtering the picks.
-
-     */
-    matchOnDescription?: boolean
-
-    /**
-     * An optional flag to include the detail when filtering the picks.
-
-     */
-    matchOnDetail?: boolean
-
-    /**
-     * An optional string to show as place holder in the input box to guide the user what to pick on.
-
-     */
-    placeHolder?: string
-
-    /**
-     * Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.
-
-     */
-    ignoreFocusOut?: boolean
-
-    /**
-     * An optional flag to make the picker accept multiple selections, if true the result is an array of picks.
-
-     */
-    canPickMany?: boolean
-
-    /**
-     * An optional function that is invoked whenever an item is selected.
-
-     */
-    onDidSelectItem?: (_: QuickPickItem) => any
-
-    onDidSelectItem_AppzFuncId: string
-}
-
-/**
  * Represents an item that can be selected from
  * a list of items.
 
@@ -1369,6 +1129,50 @@ export function newQuickPickItem (): QuickPickItem {
     let me: QuickPickItem
     me = { __loadFromJsonish__: _ => QuickPickItem___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v) } as QuickPickItem
     return me
+}
+
+/**
+ * Options to configure the behavior of the quick pick UI.
+
+ */
+export interface QuickPickOptions {
+    /**
+     * An optional flag to include the description when filtering the picks.
+
+     */
+    matchOnDescription?: boolean
+
+    /**
+     * An optional flag to include the detail when filtering the picks.
+
+     */
+    matchOnDetail?: boolean
+
+    /**
+     * An optional string to show as place holder in the input box to guide the user what to pick on.
+
+     */
+    placeHolder?: string
+
+    /**
+     * Set to `true` to keep the picker open when focus moves to another part of the editor or to another window.
+
+     */
+    ignoreFocusOut?: boolean
+
+    /**
+     * An optional flag to make the picker accept multiple selections, if true the result is an array of picks.
+
+     */
+    canPickMany?: boolean
+
+    /**
+     * An optional function that is invoked whenever an item is selected.
+
+     */
+    onDidSelectItem?: (_: QuickPickItem) => any
+
+    onDidSelectItem_AppzFuncId: string
 }
 
 /**
@@ -2120,58 +1924,6 @@ function newQuickPick (): QuickPick {
 }
 
 /**
- * An individual terminal instance within the integrated terminal.
-
- */
-export interface Terminal extends fromJson, withDisp, withState<TerminalState> {
-    /**
-     * Send text to the terminal. The text is written to the stdin of the underlying pty process
-     * (shell) of the terminal.
-     * 
-     * `text` ── The text to send.
-     * 
-     * `addNewLine` ── Whether to add a new line to the text being sent, this is normally
-     * required to run a command in the terminal. The character(s) added are \n or \r\n
-     * depending on the platform. This defaults to `true`.
-
-     */
-    SendText: (_: string, __: boolean) => (_: () => void) => void
-
-    /**
-     * Show the terminal panel and reveal this terminal in the UI.
-     * 
-     * `preserveFocus` ── When `true` the terminal will not take focus.
-
-     */
-    Show: (_: boolean) => (_: () => void) => void
-
-    /**
-     * Hide the terminal panel if this terminal is currently showing.
-
-     */
-    Hide: () => (_: () => void) => void
-
-    /**
-     * Dispose and free associated resources.
-
-     */
-    Dispose: () => (_: () => void) => void
-
-    __appzObjBagPullFromPeer__: () => (_: () => void) => void
-}
-
-function newTerminal (): Terminal {
-    let me: Terminal
-    me = { __loadFromJsonish__: _ => Terminal___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as Terminal
-    me.SendText = (a0, a1) => Terminal_SendText.call(me, a0, a1)
-    me.Show = (a0) => Terminal_Show.call(me, a0)
-    me.Hide = () => Terminal_Hide.call(me, )
-    me.Dispose = () => Terminal_Dispose.call(me, )
-    me.__appzObjBagPullFromPeer__ = () => Terminal___appzObjBagPullFromPeer__.call(me, )
-    return me
-}
-
-/**
  * Value-object describing what options a terminal should use.
 
  */
@@ -2229,212 +1981,55 @@ export interface TerminalOptions {
 }
 
 /**
- * Value-object describing what options a virtual process terminal should use.
+ * An individual terminal instance within the integrated terminal.
 
  */
-export interface ExtensionTerminalOptions {
+export interface Terminal extends fromJson, withDisp, withState<TerminalState> {
     /**
-     * A human-readable string which will be used to represent the terminal in the UI.
+     * Send text to the terminal. The text is written to the stdin of the underlying pty process
+     * (shell) of the terminal.
+     * 
+     * `text` ── The text to send.
+     * 
+     * `addNewLine` ── Whether to add a new line to the text being sent, this is normally
+     * required to run a command in the terminal. The character(s) added are \n or \r\n
+     * depending on the platform. This defaults to `true`.
 
      */
-    name: string
+    SendText: (_: string, __: boolean) => (_: () => void) => void
 
     /**
-     * An implementation of [Pseudoterminal](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal) that allows an extension to
-     * control a terminal.
+     * Show the terminal panel and reveal this terminal in the UI.
+     * 
+     * `preserveFocus` ── When `true` the terminal will not take focus.
 
      */
-    pty: Pseudoterminal
+    Show: (_: boolean) => (_: () => void) => void
+
+    /**
+     * Hide the terminal panel if this terminal is currently showing.
+
+     */
+    Hide: () => (_: () => void) => void
+
+    /**
+     * Dispose and free associated resources.
+
+     */
+    Dispose: () => (_: () => void) => void
+
+    __appzObjBagPullFromPeer__: () => (_: () => void) => void
 }
 
-/**
- * Defines the interface of a terminal pty, enabling extensions to control a terminal.
-
- */
-export interface Pseudoterminal {
-    /**
-     * An event that when fired will write data to the terminal. Unlike
-     * [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText) which sends text to the underlying _process_
-     * (the pty "slave"), this will write the text to the terminal itself (the pty "master").
-     * 
-     * **Example:** Write red text to the terminal
-     * 
-     * ```typescript
-     * 
-     * const writeEmitter = new vscode.EventEmitter<string>();
-     * const pty: vscode.Pseudoterminal = {
-     *    onDidWrite: writeEmitter.event,
-     *    open: () => writeEmitter.fire('\x1b[31mHello world\x1b[0m'),
-     *    close: () => {}
-     * };
-     * vscode.window.createTerminal({ name: 'My terminal', pty });
-     * 
-     * ```
-     * 
-     * 
-     * **Example:** Move the cursor to the 10th row and 20th column and write an asterisk
-     * 
-     * ```typescript
-     * 
-     * writeEmitter.fire('\x1b[10;20H*');
-     * 
-     * ```
-     * 
-
-     */
-    onDidWrite: (_: (_: string) => void) => Disposable
-
-    /**
-     * An event that when fired allows overriding the [dimensions](https://code.visualstudio.com/api/references/vscode-api#Terminal.dimensions) of the
-     * terminal. Note that when set, the overridden dimensions will only take effect when they
-     * are lower than the actual dimensions of the terminal (ie. there will never be a scroll
-     * bar). Set to `undefined` for the terminal to go back to the regular dimensions (fit to
-     * the size of the panel).
-     * 
-     * **Example:** Override the dimensions of a terminal to 20 columns and 10 rows
-     * 
-     * ```typescript
-     * 
-     * const dimensionsEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
-     * const pty: vscode.Pseudoterminal = {
-     *    onDidWrite: writeEmitter.event,
-     *    onDidOverrideDimensions: dimensionsEmitter.event,
-     *    open: () => {
-     *      dimensionsEmitter.fire({
-     *        columns: 20,
-     *        rows: 10
-     *      });
-     *    },
-     *    close: () => {}
-     * };
-     * vscode.window.createTerminal({ name: 'My terminal', pty });
-     * 
-     * ```
-     * 
-
-     */
-    onDidOverrideDimensions?: (_: (_: TerminalDimensions) => void) => Disposable
-
-    /**
-     * An event that when fired will signal that the pty is closed and dispose of the terminal.
-     * 
-     * A number can be used to provide an exit code for the terminal. Exit codes must be
-     * positive and a non-zero exit codes signals failure which shows a notification for a
-     * regular terminal and allows dependent tasks to proceed when used with the
-     * `CustomExecution2` API.
-     * 
-     * **Example:** Exit the terminal when "y" is pressed, otherwise show a notification.
-     * 
-     * ```typescript
-     * 
-     * const writeEmitter = new vscode.EventEmitter<string>();
-     * const closeEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
-     * const pty: vscode.Pseudoterminal = {
-     *    onDidWrite: writeEmitter.event,
-     *    onDidClose: closeEmitter.event,
-     *    open: () => writeEmitter.fire('Press y to exit successfully'),
-     *    close: () => {},
-     *    handleInput: data => {
-     *      if (data !== 'y') {
-     *        vscode.window.showInformationMessage('Something went wrong');
-     *      }
-     *      closeEmitter.fire();
-     *    }
-     * };
-     * vscode.window.createTerminal({ name: 'Exit example', pty });
-
-     */
-    onDidClose?: (_: (_: number) => void) => Disposable
-
-    /**
-     * Implement to handle when the pty is open and ready to start firing events.
-     * 
-     * `initialDimensions` ── The dimensions of the terminal, this will be undefined if the
-     * terminal panel has not been opened before this is called.
-
-     */
-    open: (_: TerminalDimensions) => void
-
-    /**
-     * Implement to handle when the terminal is closed by an act of the user.
-
-     */
-    close: () => void
-
-    /**
-     * Implement to handle incoming keystrokes in the terminal or when an extension calls
-     * [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText). `data` contains the keystrokes/text serialized into
-     * their corresponding VT sequence representation.
-     * 
-     * `data` ── The incoming data.
-     * 
-     * **Example:** Echo input in the terminal. The sequence for enter (`\r`) is translated to
-     * CRLF to go to a new line and move the cursor to the start of the line.
-     * 
-     * ```typescript
-     * 
-     * const writeEmitter = new vscode.EventEmitter<string>();
-     * const pty: vscode.Pseudoterminal = {
-     * onDidWrite: writeEmitter.event,
-     * open: () => {},
-     * close: () => {},
-     * handleInput: data => writeEmitter.fire(data === '\r' ? '\r\n' : data)
-     * };
-     * vscode.window.createTerminal({ name: 'Local echo', pty });
-     * 
-     * ```
-     * 
-
-     */
-    handleInput?: (_: string) => void
-
-    /**
-     * Implement to handle when the number of rows and columns that fit into the terminal panel
-     * changes, for example when font size changes or when the panel is resized. The initial
-     * state of a terminal's dimensions should be treated as `undefined` until this is triggered
-     * as the size of a terminal isn't know until it shows up in the user interface.
-     * 
-     * When dimensions are overridden by
-     * [onDidOverrideDimensions](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal.onDidOverrideDimensions), `setDimensions` will
-     * continue to be called with the regular panel dimensions, allowing the extension continue
-     * to react dimension changes.
-     * 
-     * `dimensions` ── The new dimensions.
-
-     */
-    setDimensions?: (_: TerminalDimensions) => void
-
-    onDidWrite_AppzFuncId: string
-
-    onDidOverrideDimensions_AppzFuncId: string
-
-    onDidClose_AppzFuncId: string
-
-    open_AppzFuncId: string
-
-    close_AppzFuncId: string
-
-    handleInput_AppzFuncId: string
-
-    setDimensions_AppzFuncId: string
-}
-
-/**
- * Represents the dimensions of a terminal.
-
- */
-export interface TerminalDimensions {
-    /**
-     * The number of columns in the terminal.
-
-     */
-    columns: number
-
-    /**
-     * The number of rows in the terminal.
-
-     */
-    rows: number
+function newTerminal (): Terminal {
+    let me: Terminal
+    me = { __loadFromJsonish__: _ => Terminal___loadFromJsonish__.call(me, _), toString: () => JSON.stringify(me, (_, v) => (typeof v === 'function') ? undefined : v), toJSON: () => undefined } as Terminal
+    me.SendText = (a0, a1) => Terminal_SendText.call(me, a0, a1)
+    me.Show = (a0) => Terminal_Show.call(me, a0)
+    me.Hide = () => Terminal_Hide.call(me, )
+    me.Dispose = () => Terminal_Dispose.call(me, )
+    me.__appzObjBagPullFromPeer__ = () => Terminal___appzObjBagPullFromPeer__.call(me, )
+    return me
 }
 
 /**
@@ -3041,10 +2636,10 @@ export abstract class impl implements Vscode {
 
 class implWindow extends implBase implements Window {
     constructor(impl: impl) { super(impl) }
-    ShowInformationMessage1(message: string, items: string[]): (_: (_: string) => void) => void {
+    ShowInformationMessage(message: string, items: string[]): (_: (_: string) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showInformationMessage1"
+        msg.QName = "window.showInformationMessage"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["items"] = items
@@ -3072,103 +2667,10 @@ class implWindow extends implBase implements Window {
         }
     }
 
-    ShowInformationMessage2(message: string, options: MessageOptions, items: string[]): (_: (_: string) => void) => void {
+    ShowWarningMessage(message: string, items: string[]): (_: (_: string) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showInformationMessage2"
-        msg.Data = {}
-        msg.Data["message"] = message
-        msg.Data["options"] = options
-        msg.Data["items"] = items
-        let onresp: (_: any) => boolean
-        let onret: (_: string) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: string
-            if ((undefined !== payload && null !== payload)) {
-                let _result_: string
-                [_result_, ok] = [payload as string, typeof payload === "string"]
-                if (!ok) {
-                    return false
-                }
-                result = _result_
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
-            return true
-        }
-        this.Impl().send(msg, onresp)
-        return (a0: (_: string) => void): void => {
-            onret = a0
-        }
-    }
-
-    ShowInformationMessage3(message: string, items: MessageItem[]): (_: (_: MessageItem) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.showInformationMessage3"
-        msg.Data = {}
-        msg.Data["message"] = message
-        msg.Data["items"] = items
-        let onresp: (_: any) => boolean
-        let onret: (_: MessageItem) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: MessageItem
-            if ((undefined !== payload && null !== payload)) {
-                result = newMessageItem()
-                ok = result.__loadFromJsonish__(payload)
-                if (!ok) {
-                    return false
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
-            return true
-        }
-        this.Impl().send(msg, onresp)
-        return (a0: (_: MessageItem) => void): void => {
-            onret = a0
-        }
-    }
-
-    ShowInformationMessage4(message: string, options: MessageOptions, items: MessageItem[]): (_: (_: MessageItem) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.showInformationMessage4"
-        msg.Data = {}
-        msg.Data["message"] = message
-        msg.Data["options"] = options
-        msg.Data["items"] = items
-        let onresp: (_: any) => boolean
-        let onret: (_: MessageItem) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: MessageItem
-            if ((undefined !== payload && null !== payload)) {
-                result = newMessageItem()
-                ok = result.__loadFromJsonish__(payload)
-                if (!ok) {
-                    return false
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
-            return true
-        }
-        this.Impl().send(msg, onresp)
-        return (a0: (_: MessageItem) => void): void => {
-            onret = a0
-        }
-    }
-
-    ShowWarningMessage1(message: string, items: string[]): (_: (_: string) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.showWarningMessage1"
+        msg.QName = "window.showWarningMessage"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["items"] = items
@@ -3196,103 +2698,10 @@ class implWindow extends implBase implements Window {
         }
     }
 
-    ShowWarningMessage2(message: string, options: MessageOptions, items: string[]): (_: (_: string) => void) => void {
+    ShowErrorMessage(message: string, items: string[]): (_: (_: string) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showWarningMessage2"
-        msg.Data = {}
-        msg.Data["message"] = message
-        msg.Data["options"] = options
-        msg.Data["items"] = items
-        let onresp: (_: any) => boolean
-        let onret: (_: string) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: string
-            if ((undefined !== payload && null !== payload)) {
-                let _result_: string
-                [_result_, ok] = [payload as string, typeof payload === "string"]
-                if (!ok) {
-                    return false
-                }
-                result = _result_
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
-            return true
-        }
-        this.Impl().send(msg, onresp)
-        return (a0: (_: string) => void): void => {
-            onret = a0
-        }
-    }
-
-    ShowWarningMessage3(message: string, items: MessageItem[]): (_: (_: MessageItem) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.showWarningMessage3"
-        msg.Data = {}
-        msg.Data["message"] = message
-        msg.Data["items"] = items
-        let onresp: (_: any) => boolean
-        let onret: (_: MessageItem) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: MessageItem
-            if ((undefined !== payload && null !== payload)) {
-                result = newMessageItem()
-                ok = result.__loadFromJsonish__(payload)
-                if (!ok) {
-                    return false
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
-            return true
-        }
-        this.Impl().send(msg, onresp)
-        return (a0: (_: MessageItem) => void): void => {
-            onret = a0
-        }
-    }
-
-    ShowWarningMessage4(message: string, options: MessageOptions, items: MessageItem[]): (_: (_: MessageItem) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.showWarningMessage4"
-        msg.Data = {}
-        msg.Data["message"] = message
-        msg.Data["options"] = options
-        msg.Data["items"] = items
-        let onresp: (_: any) => boolean
-        let onret: (_: MessageItem) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: MessageItem
-            if ((undefined !== payload && null !== payload)) {
-                result = newMessageItem()
-                ok = result.__loadFromJsonish__(payload)
-                if (!ok) {
-                    return false
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
-            return true
-        }
-        this.Impl().send(msg, onresp)
-        return (a0: (_: MessageItem) => void): void => {
-            onret = a0
-        }
-    }
-
-    ShowErrorMessage1(message: string, items: string[]): (_: (_: string) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.showErrorMessage1"
+        msg.QName = "window.showErrorMessage"
         msg.Data = {}
         msg.Data["message"] = message
         msg.Data["items"] = items
@@ -3316,99 +2725,6 @@ class implWindow extends implBase implements Window {
         }
         this.Impl().send(msg, onresp)
         return (a0: (_: string) => void): void => {
-            onret = a0
-        }
-    }
-
-    ShowErrorMessage2(message: string, options: MessageOptions, items: string[]): (_: (_: string) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.showErrorMessage2"
-        msg.Data = {}
-        msg.Data["message"] = message
-        msg.Data["options"] = options
-        msg.Data["items"] = items
-        let onresp: (_: any) => boolean
-        let onret: (_: string) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: string
-            if ((undefined !== payload && null !== payload)) {
-                let _result_: string
-                [_result_, ok] = [payload as string, typeof payload === "string"]
-                if (!ok) {
-                    return false
-                }
-                result = _result_
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
-            return true
-        }
-        this.Impl().send(msg, onresp)
-        return (a0: (_: string) => void): void => {
-            onret = a0
-        }
-    }
-
-    ShowErrorMessage3(message: string, items: MessageItem[]): (_: (_: MessageItem) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.showErrorMessage3"
-        msg.Data = {}
-        msg.Data["message"] = message
-        msg.Data["items"] = items
-        let onresp: (_: any) => boolean
-        let onret: (_: MessageItem) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: MessageItem
-            if ((undefined !== payload && null !== payload)) {
-                result = newMessageItem()
-                ok = result.__loadFromJsonish__(payload)
-                if (!ok) {
-                    return false
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
-            return true
-        }
-        this.Impl().send(msg, onresp)
-        return (a0: (_: MessageItem) => void): void => {
-            onret = a0
-        }
-    }
-
-    ShowErrorMessage4(message: string, options: MessageOptions, items: MessageItem[]): (_: (_: MessageItem) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.showErrorMessage4"
-        msg.Data = {}
-        msg.Data["message"] = message
-        msg.Data["options"] = options
-        msg.Data["items"] = items
-        let onresp: (_: any) => boolean
-        let onret: (_: MessageItem) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: MessageItem
-            if ((undefined !== payload && null !== payload)) {
-                result = newMessageItem()
-                ok = result.__loadFromJsonish__(payload)
-                if (!ok) {
-                    return false
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
-            return true
-        }
-        this.Impl().send(msg, onresp)
-        return (a0: (_: MessageItem) => void): void => {
             onret = a0
         }
     }
@@ -3491,10 +2807,10 @@ class implWindow extends implBase implements Window {
         }
     }
 
-    ShowQuickPick1(items: string[], options: QuickPickOptions, token?: Cancel): (_: (_: string[]) => void) => void {
+    ShowQuickPick(items: QuickPickItem[], options: QuickPickOptions, token?: Cancel): (_: (_: QuickPickItem[]) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showQuickPick1"
+        msg.QName = "window.showQuickPick"
         msg.Data = {}
         let fnids: string[]
         fnids = []
@@ -3528,181 +2844,6 @@ class implWindow extends implBase implements Window {
             }
         }
         msg.Data["items"] = items
-        options.canPickMany = true
-        msg.Data["options"] = options
-        if ((undefined !== token && null !== token)) {
-            token.impl = this.Impl()
-            if ("" === token.fnId) {
-                {
-                    token.fnId = this.Impl().nextFuncId()
-                }
-            }
-            msg.Data["token"] = token.fnId
-        }
-        let onresp: (_: any) => boolean
-        let onret: (_: string[]) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: string[]
-            if ((undefined !== payload && null !== payload)) {
-                let __coll__result: any[]
-                [__coll__result, ok] = [payload as any[], (typeof payload === "object") && (typeof payload["length"] === "number")]
-                if (!ok) {
-                    return false
-                }
-                result = new Array(__coll__result.length)
-                let __idx__result: number
-                __idx__result = 0
-                for (const __item__result of __coll__result) {
-                    let __val__result: string
-                    [__val__result, ok] = [__item__result as string, typeof __item__result === "string"]
-                    if (!ok) {
-                        return false
-                    }
-                    result[__idx__result] = __val__result
-                    __idx__result = __idx__result + 1
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
-            return true
-        }
-        this.Impl().send(msg, (payload: any): boolean => {
-            if (fnids.length !== 0) {
-                {
-                    for (const fnid of fnids) {
-                        delete this.Impl().cbOther[fnid]
-                    }
-                }
-            }
-            return onresp(payload)
-        })
-        return (a0: (_: string[]) => void): void => {
-            onret = a0
-        }
-    }
-
-    ShowQuickPick2(items: string[], options?: QuickPickOptions, token?: Cancel): (_: (_: string) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.showQuickPick2"
-        msg.Data = {}
-        let fnids: string[]
-        fnids = []
-        if ((undefined !== options && null !== options)) {
-            options.onDidSelectItem_AppzFuncId = ""
-            let fn: (_: QuickPickItem) => any
-            fn = options.onDidSelectItem
-            if ((undefined !== fn && null !== fn)) {
-                {
-                    options.onDidSelectItem_AppzFuncId = this.Impl().nextFuncId()
-                    fnids.push(options.onDidSelectItem_AppzFuncId)
-                    this.Impl().cbOther[options.onDidSelectItem_AppzFuncId] = (args: any[]): [any, boolean] => {
-                        if (1 !== args.length) {
-                            return [null, false]
-                        } else {
-                            let ok: boolean
-                            let __0: QuickPickItem
-                            if ((undefined !== args[0] && null !== args[0])) {
-                                __0 = newQuickPickItem()
-                                ok = __0.__loadFromJsonish__(args[0])
-                                if (!ok) {
-                                    return [null, false]
-                                }
-                            } else {
-                                return [null, false]
-                            }
-                            return [fn(__0), true]
-                        }
-                    }
-                }
-            }
-        }
-        msg.Data["items"] = items
-        if ((undefined !== options && null !== options)) {
-            msg.Data["options"] = options
-        }
-        if ((undefined !== token && null !== token)) {
-            token.impl = this.Impl()
-            if ("" === token.fnId) {
-                {
-                    token.fnId = this.Impl().nextFuncId()
-                }
-            }
-            msg.Data["token"] = token.fnId
-        }
-        let onresp: (_: any) => boolean
-        let onret: (_: string) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: string
-            if ((undefined !== payload && null !== payload)) {
-                let _result_: string
-                [_result_, ok] = [payload as string, typeof payload === "string"]
-                if (!ok) {
-                    return false
-                }
-                result = _result_
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
-            return true
-        }
-        this.Impl().send(msg, (payload: any): boolean => {
-            if (fnids.length !== 0) {
-                {
-                    for (const fnid of fnids) {
-                        delete this.Impl().cbOther[fnid]
-                    }
-                }
-            }
-            return onresp(payload)
-        })
-        return (a0: (_: string) => void): void => {
-            onret = a0
-        }
-    }
-
-    ShowQuickPick3(items: QuickPickItem[], options: QuickPickOptions, token?: Cancel): (_: (_: QuickPickItem[]) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.showQuickPick3"
-        msg.Data = {}
-        let fnids: string[]
-        fnids = []
-        if (true) {
-            options.onDidSelectItem_AppzFuncId = ""
-            let fn: (_: QuickPickItem) => any
-            fn = options.onDidSelectItem
-            if ((undefined !== fn && null !== fn)) {
-                {
-                    options.onDidSelectItem_AppzFuncId = this.Impl().nextFuncId()
-                    fnids.push(options.onDidSelectItem_AppzFuncId)
-                    this.Impl().cbOther[options.onDidSelectItem_AppzFuncId] = (args: any[]): [any, boolean] => {
-                        if (1 !== args.length) {
-                            return [null, false]
-                        } else {
-                            let ok: boolean
-                            let __0: QuickPickItem
-                            if ((undefined !== args[0] && null !== args[0])) {
-                                __0 = newQuickPickItem()
-                                ok = __0.__loadFromJsonish__(args[0])
-                                if (!ok) {
-                                    return [null, false]
-                                }
-                            } else {
-                                return [null, false]
-                            }
-                            return [fn(__0), true]
-                        }
-                    }
-                }
-            }
-        }
-        msg.Data["items"] = items
-        options.canPickMany = true
         msg.Data["options"] = options
         if ((undefined !== token && null !== token)) {
             token.impl = this.Impl()
@@ -3758,125 +2899,13 @@ class implWindow extends implBase implements Window {
         }
     }
 
-    ShowQuickPick4(items: QuickPickItem[], options?: QuickPickOptions, token?: Cancel): (_: (_: QuickPickItem) => void) => void {
+    SetStatusBarMessage(text: string, hideAfterTimeout: number): (_: (_: Disposable) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.showQuickPick4"
-        msg.Data = {}
-        let fnids: string[]
-        fnids = []
-        if ((undefined !== options && null !== options)) {
-            options.onDidSelectItem_AppzFuncId = ""
-            let fn: (_: QuickPickItem) => any
-            fn = options.onDidSelectItem
-            if ((undefined !== fn && null !== fn)) {
-                {
-                    options.onDidSelectItem_AppzFuncId = this.Impl().nextFuncId()
-                    fnids.push(options.onDidSelectItem_AppzFuncId)
-                    this.Impl().cbOther[options.onDidSelectItem_AppzFuncId] = (args: any[]): [any, boolean] => {
-                        if (1 !== args.length) {
-                            return [null, false]
-                        } else {
-                            let ok: boolean
-                            let __0: QuickPickItem
-                            if ((undefined !== args[0] && null !== args[0])) {
-                                __0 = newQuickPickItem()
-                                ok = __0.__loadFromJsonish__(args[0])
-                                if (!ok) {
-                                    return [null, false]
-                                }
-                            } else {
-                                return [null, false]
-                            }
-                            return [fn(__0), true]
-                        }
-                    }
-                }
-            }
-        }
-        msg.Data["items"] = items
-        if ((undefined !== options && null !== options)) {
-            msg.Data["options"] = options
-        }
-        if ((undefined !== token && null !== token)) {
-            token.impl = this.Impl()
-            if ("" === token.fnId) {
-                {
-                    token.fnId = this.Impl().nextFuncId()
-                }
-            }
-            msg.Data["token"] = token.fnId
-        }
-        let onresp: (_: any) => boolean
-        let onret: (_: QuickPickItem) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: QuickPickItem
-            if ((undefined !== payload && null !== payload)) {
-                result = newQuickPickItem()
-                ok = result.__loadFromJsonish__(payload)
-                if (!ok) {
-                    return false
-                }
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result)
-            }
-            return true
-        }
-        this.Impl().send(msg, (payload: any): boolean => {
-            if (fnids.length !== 0) {
-                {
-                    for (const fnid of fnids) {
-                        delete this.Impl().cbOther[fnid]
-                    }
-                }
-            }
-            return onresp(payload)
-        })
-        return (a0: (_: QuickPickItem) => void): void => {
-            onret = a0
-        }
-    }
-
-    SetStatusBarMessage1(text: string, hideAfterTimeout: number): (_: (_: Disposable) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.setStatusBarMessage1"
+        msg.QName = "window.setStatusBarMessage"
         msg.Data = {}
         msg.Data["text"] = text
         msg.Data["hideAfterTimeout"] = hideAfterTimeout
-        let onresp: (_: any) => boolean
-        let onret: (_: Disposable) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: Disposable
-            if ((undefined !== payload && null !== payload)) {
-                result = newDisposable()
-                ok = result.__loadFromJsonish__(payload)
-                if (!ok) {
-                    return false
-                }
-            } else {
-                return false
-            }
-            if ((undefined !== onret && null !== onret)) {
-                onret(result.bind(this.Impl()))
-            }
-            return true
-        }
-        this.Impl().send(msg, onresp)
-        return (a0: (_: Disposable) => void): void => {
-            onret = a0
-        }
-    }
-
-    SetStatusBarMessage2(text: string): (_: (_: Disposable) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.setStatusBarMessage2"
-        msg.Data = {}
-        msg.Data["text"] = text
         let onresp: (_: any) => boolean
         let onret: (_: Disposable) => void
         onresp = (payload: any): boolean => {
@@ -4255,86 +3284,10 @@ class implWindow extends implBase implements Window {
         }
     }
 
-    CreateTerminal1(name?: string, shellPath?: string, shellArgs?: string[]): (_: (_: Terminal) => void) => void {
+    CreateTerminal(options: TerminalOptions): (_: (_: Terminal) => void) => void {
         let msg: ipcMsg
         msg = newipcMsg()
-        msg.QName = "window.createTerminal1"
-        msg.Data = {}
-        if ((undefined !== name && null !== name)) {
-            msg.Data["name"] = name
-        }
-        if ((undefined !== shellPath && null !== shellPath)) {
-            msg.Data["shellPath"] = shellPath
-        }
-        if ((undefined !== shellArgs && null !== shellArgs)) {
-            msg.Data["shellArgs"] = shellArgs
-        }
-        let onresp: (_: any) => boolean
-        let onret: (_: Terminal) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: Terminal
-            if ((undefined !== payload && null !== payload)) {
-                result = newTerminal()
-                ok = result.__loadFromJsonish__(payload)
-                if (!ok) {
-                    return false
-                }
-                result.__disp__.impl = this.Impl()
-            } else {
-                return false
-            }
-            result.__appzObjBagPullFromPeer__()((): void => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
-            })
-            return true
-        }
-        this.Impl().send(msg, onresp)
-        return (a0: (_: Terminal) => void): void => {
-            onret = a0
-        }
-    }
-
-    CreateTerminal2(options: TerminalOptions): (_: (_: Terminal) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.createTerminal2"
-        msg.Data = {}
-        msg.Data["options"] = options
-        let onresp: (_: any) => boolean
-        let onret: (_: Terminal) => void
-        onresp = (payload: any): boolean => {
-            let ok: boolean
-            let result: Terminal
-            if ((undefined !== payload && null !== payload)) {
-                result = newTerminal()
-                ok = result.__loadFromJsonish__(payload)
-                if (!ok) {
-                    return false
-                }
-                result.__disp__.impl = this.Impl()
-            } else {
-                return false
-            }
-            result.__appzObjBagPullFromPeer__()((): void => {
-                if ((undefined !== onret && null !== onret)) {
-                    onret(result)
-                }
-            })
-            return true
-        }
-        this.Impl().send(msg, onresp)
-        return (a0: (_: Terminal) => void): void => {
-            onret = a0
-        }
-    }
-
-    CreateTerminal3(options: ExtensionTerminalOptions): (_: (_: Terminal) => void) => void {
-        let msg: ipcMsg
-        msg = newipcMsg()
-        msg.QName = "window.createTerminal3"
+        msg.QName = "window.createTerminal"
         msg.Data = {}
         msg.Data["options"] = options
         let onresp: (_: any) => boolean
@@ -6909,54 +5862,6 @@ function FileSystemWatcherState_ApplyChanges(this: FileSystemWatcherState, ): (_
         ret = this.__holder__.__appzObjBagPushToPeer__(this)
     }
     return ret
-}
-
-function MessageItem___loadFromJsonish__(this: MessageItem, payload: any): boolean {
-    let it: { [_: string]: any }
-    let ok: boolean
-    let val: any
-    [it, ok] = [payload as { [_: string]: any }, typeof payload === "object"]
-    if (!ok) {
-        return false
-    }
-    [val, ok] = [it["title"], undefined !== it["title"]]
-    if (ok) {
-        let title: string
-        if ((undefined !== val && null !== val)) {
-            [title, ok] = [val as string, typeof val === "string"]
-            if (!ok) {
-                return false
-            }
-        }
-        this.title = title
-    } else {
-        return false
-    }
-    [val, ok] = [it["isCloseAffordance"], undefined !== it["isCloseAffordance"]]
-    if (ok) {
-        let isCloseAffordance: boolean
-        if ((undefined !== val && null !== val)) {
-            let _isCloseAffordance_: boolean
-            [_isCloseAffordance_, ok] = [val as boolean, typeof val === "boolean"]
-            if (!ok) {
-                return false
-            }
-            isCloseAffordance = _isCloseAffordance_
-        }
-        this.isCloseAffordance = isCloseAffordance
-    }
-    [val, ok] = [it["my"], undefined !== it["my"]]
-    if (ok) {
-        let my: { [_: string]: any }
-        if ((undefined !== val && null !== val)) {
-            [my, ok] = [val as { [_: string]: any }, typeof val === "object"]
-            if (!ok) {
-                return false
-            }
-        }
-        this.my = my
-    }
-    return true
 }
 
 function QuickPickItem___loadFromJsonish__(this: QuickPickItem, payload: any): boolean {

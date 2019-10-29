@@ -294,6 +294,9 @@ function gatherFromTypeNode(into, it, typeParams = undefined) {
 }
 function gatherFunc(into, decl, overload, ...prefixes) {
     const qname = prefixes.concat(decl.name.getText()).join(".");
+    const olor = gen.overloadOverrides[qname];
+    if (olor && olor !== overload)
+        return;
     if (into.funcs.some(_ => _.qName === qname && _.overload === overload))
         return;
     const owner = into.namespaces[prefixes.slice(1).join(".")];

@@ -16,10 +16,10 @@ namespace VscAppzDemo {
                 (vsc, win) = (vscode, vscode.Window);
                 onUpAndRunning();
 
-                win.SetStatusBarMessage2("React to the Welcome msg-box to remove me..")(statusmsg => {
+                win.SetStatusBarMessage("React to the Welcome msg-box to remove me..")(statusmsg => {
 
                     var buttons = new[] {"Demo Pick Input", "Demo Text Input", "All Demos"};
-                    win.ShowInformationMessage1("What to try out? (If you cancel here, I quit.)", buttons)(
+                    win.ShowInformationMessage("What to try out? (If you cancel here, I quit.)", buttons)(
                         btn => {
                             statusmsg.Dispose();
                             if (btn == null)
@@ -31,7 +31,7 @@ namespace VscAppzDemo {
                             else if (btn == buttons[2])
                                 demosMenu();
                             else
-                                win.ShowErrorMessage1($"Unknown: `{btn}`!")(demosmenu);
+                                win.ShowErrorMessage($"Unknown: `{btn}`!")(demosmenu);
                         }
                     );
                 });
@@ -52,9 +52,9 @@ namespace VscAppzDemo {
                 ValidateInput   = val
             })(input => {
                 if (input == null)
-                    win.ShowWarningMessage1("Drat! Was itching to hear that.")(demosmenu);
+                    win.ShowWarningMessage("Drat! Was itching to hear that.")(demosmenu);
                 else
-                    win.ShowInformationMessage1("You entered: `"+input+"`, merci!")(demosmenu);
+                    win.ShowInformationMessage("You entered: `"+input+"`, merci!")(demosmenu);
             });
         }
 
@@ -79,6 +79,8 @@ namespace VscAppzDemo {
             for (int i = 0; i < ret.Length; i++) ret[i] = i+1;
             return ret;
         }
+        private static QuickPickItem[] quickPickItemsFrom(string[] items) =>
+            Array.ConvertAll(items, _ => new QuickPickItem() { Label = _ });
 
     }
 

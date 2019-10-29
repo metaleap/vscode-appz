@@ -198,39 +198,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
 	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage1(message string, items []string) func(func(*string))
-
-	// Show an information message to users. Optionally provide an array of items which will be presented as
-	// clickable buttons.
-	// 
-	// `message` ── The message to show.
-	// 
-	// `options` ── Configures the behaviour of the message.
-	// 
-	// `items` ── A set of items that will be rendered as actions in the message.
-	// 
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage2(message string, options MessageOptions, items []string) func(func(*string))
-
-	// Show an information message.
-	// 
-	// `message` ── The message to show.
-	// 
-	// `items` ── A set of items that will be rendered as actions in the message.
-	// 
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage3(message string, items []MessageItem) func(func(*MessageItem))
-
-	// Show an information message.
-	// 
-	// `message` ── The message to show.
-	// 
-	// `options` ── Configures the behaviour of the message.
-	// 
-	// `items` ── A set of items that will be rendered as actions in the message.
-	// 
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowInformationMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem))
+	ShowInformationMessage(message string, items []string) func(func(*string))
 
 	// Show a warning message.
 	// 
@@ -239,38 +207,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
 	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage1(message string, items []string) func(func(*string))
-
-	// Show a warning message.
-	// 
-	// `message` ── The message to show.
-	// 
-	// `options` ── Configures the behaviour of the message.
-	// 
-	// `items` ── A set of items that will be rendered as actions in the message.
-	// 
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage2(message string, options MessageOptions, items []string) func(func(*string))
-
-	// Show a warning message.
-	// 
-	// `message` ── The message to show.
-	// 
-	// `items` ── A set of items that will be rendered as actions in the message.
-	// 
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage3(message string, items []MessageItem) func(func(*MessageItem))
-
-	// Show a warning message.
-	// 
-	// `message` ── The message to show.
-	// 
-	// `options` ── Configures the behaviour of the message.
-	// 
-	// `items` ── A set of items that will be rendered as actions in the message.
-	// 
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowWarningMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem))
+	ShowWarningMessage(message string, items []string) func(func(*string))
 
 	// Show an error message.
 	// 
@@ -279,38 +216,7 @@ type Window interface {
 	// `items` ── A set of items that will be rendered as actions in the message.
 	// 
 	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage1(message string, items []string) func(func(*string))
-
-	// Show an error message.
-	// 
-	// `message` ── The message to show.
-	// 
-	// `options` ── Configures the behaviour of the message.
-	// 
-	// `items` ── A set of items that will be rendered as actions in the message.
-	// 
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage2(message string, options MessageOptions, items []string) func(func(*string))
-
-	// Show an error message.
-	// 
-	// `message` ── The message to show.
-	// 
-	// `items` ── A set of items that will be rendered as actions in the message.
-	// 
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage3(message string, items []MessageItem) func(func(*MessageItem))
-
-	// Show an error message.
-	// 
-	// `message` ── The message to show.
-	// 
-	// `options` ── Configures the behaviour of the message.
-	// 
-	// `items` ── A set of items that will be rendered as actions in the message.
-	// 
-	// `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-	ShowErrorMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem))
+	ShowErrorMessage(message string, items []string) func(func(*string))
 
 	// Opens an input box to ask the user for input.
 	// 
@@ -327,28 +233,6 @@ type Window interface {
 
 	// Shows a selection list allowing multiple selections.
 	// 
-	// `items` ── An array of strings, or a promise that resolves to an array of strings.
-	// 
-	// `options` ── Configures the behavior of the selection list.
-	// 
-	// `token` ── A token that can be used to signal cancellation.
-	// 
-	// `return` ── A promise that resolves to the selected items or `undefined`.
-	ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel) func(func([]string))
-
-	// Shows a selection list.
-	// 
-	// `items` ── An array of strings, or a promise that resolves to an array of strings.
-	// 
-	// `options` ── Configures the behavior of the selection list.
-	// 
-	// `token` ── A token that can be used to signal cancellation.
-	// 
-	// `return` ── A promise that resolves to the selection or `undefined`.
-	ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel) func(func(*string))
-
-	// Shows a selection list allowing multiple selections.
-	// 
 	// `items` ── An array of items, or a promise that resolves to an array of items.
 	// 
 	// `options` ── Configures the behavior of the selection list.
@@ -356,18 +240,7 @@ type Window interface {
 	// `token` ── A token that can be used to signal cancellation.
 	// 
 	// `return` ── A promise that resolves to the selected items or `undefined`.
-	ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel) func(func([]QuickPickItem))
-
-	// Shows a selection list.
-	// 
-	// `items` ── An array of items, or a promise that resolves to an array of items.
-	// 
-	// `options` ── Configures the behavior of the selection list.
-	// 
-	// `token` ── A token that can be used to signal cancellation.
-	// 
-	// `return` ── A promise that resolves to the selected item or `undefined`.
-	ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel) func(func(*QuickPickItem))
+	ShowQuickPick(items []QuickPickItem, options QuickPickOptions, token *Cancel) func(func([]QuickPickItem))
 
 	// Set a message to the status bar. This is a short hand for the more powerful
 	// status bar [items](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem).
@@ -377,18 +250,7 @@ type Window interface {
 	// `hideAfterTimeout` ── Timeout in milliseconds after which the message will be disposed.
 	// 
 	// `return` ── A disposable which hides the status bar message.
-	SetStatusBarMessage1(text string, hideAfterTimeout int) func(func(*Disposable))
-
-	// Set a message to the status bar. This is a short hand for the more powerful
-	// status bar [items](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem).
-	// 
-	// *Note* that status bar messages stack and that they must be disposed when no
-	// longer used.
-	// 
-	// `text` ── The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
-	// 
-	// `return` ── A disposable which hides the status bar message.
-	SetStatusBarMessage2(text string) func(func(*Disposable))
+	SetStatusBarMessage(text string, hideAfterTimeout int) func(func(*Disposable))
 
 	// Shows a file save dialog to the user which allows to select a file
 	// for saving-purposes.
@@ -469,34 +331,12 @@ type Window interface {
 	// `return` ── A new [QuickPick](https://code.visualstudio.com/api/references/vscode-api#QuickPick).
 	CreateQuickPick() func(func(*QuickPick))
 
-	// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process. The cwd of the terminal will be the workspace
-	// directory if it exists.
-	// 
-	// `name` ── Optional human-readable string which will be used to represent the terminal in the UI.
-	// 
-	// `shellPath` ── Optional path to a custom shell executable to be used in the terminal.
-	// 
-	// `shellArgs` ── Optional args for the custom shell executable. A string can be used on Windows only which
-	// allows specifying shell args in
-	// [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
-	// 
-	// `return` ── A new Terminal.
-	CreateTerminal1(name *string, shellPath *string, shellArgs []string) func(func(*Terminal))
-
 	// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process.
 	// 
 	// `options` ── A TerminalOptions object describing the characteristics of the new terminal.
 	// 
 	// `return` ── A new Terminal.
-	CreateTerminal2(options TerminalOptions) func(func(*Terminal))
-
-	// Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) where an extension controls its input and output.
-	// 
-	// `options` ── An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing
-	// the characteristics of the new terminal.
-	// 
-	// `return` ── A new Terminal.
-	CreateTerminal3(options ExtensionTerminalOptions) func(func(*Terminal))
+	CreateTerminal(options TerminalOptions) func(func(*Terminal))
 }
 type implWindow struct{ *impl }
 
@@ -984,29 +824,6 @@ type ThemableDecorationRenderOptions struct {
 	After ThemableDecorationAttachmentRenderOptions `json:"after,omitempty"`
 }
 
-// Options to configure the behavior of the message.
-type MessageOptions struct {
-	// Indicates that this message should be modal.
-	Modal bool `json:"modal,omitempty"`
-}
-
-// Represents an action that is shown with an information, warning, or
-// error message.
-type MessageItem struct {
-	// A short title like 'Retry', 'Open Log' etc.
-	Title string `json:"title"`
-
-	// A hint for modal dialogs that the item should be triggered
-	// when the user cancels the dialog (e.g. by pressing the ESC
-	// key).
-	// 
-	// Note: this option is ignored for non-modal messages.
-	IsCloseAffordance bool `json:"isCloseAffordance,omitempty"`
-
-	// Free-form custom data, preserved across a roundtrip.
-	My dict `json:"my,omitempty"`
-}
-
 // Options to configure the behavior of the input box UI.
 type InputBoxOptions struct {
 	// The value to prefill in the input box.
@@ -1045,6 +862,29 @@ type _InputBoxOptions struct {
 	ValidateInput_AppzFuncId string `json:"validateInput_AppzFuncId,omitempty"`
 }
 
+// Represents an item that can be selected from
+// a list of items.
+type QuickPickItem struct {
+	// A human readable string which is rendered prominent.
+	Label string `json:"label"`
+
+	// A human readable string which is rendered less prominent.
+	Description string `json:"description,omitempty"`
+
+	// A human readable string which is rendered less prominent.
+	Detail string `json:"detail,omitempty"`
+
+	// Optional flag indicating if this item is picked initially.
+	// (Only honored when the picker allows multiple selections.)
+	Picked bool `json:"picked,omitempty"`
+
+	// Always show this item.
+	AlwaysShow bool `json:"alwaysShow,omitempty"`
+
+	// Free-form custom data, preserved across a roundtrip.
+	My dict `json:"my,omitempty"`
+}
+
 // Options to configure the behavior of the quick pick UI.
 type QuickPickOptions struct {
 	// An optional flag to include the description when filtering the picks.
@@ -1069,29 +909,6 @@ type QuickPickOptions struct {
 type _QuickPickOptions struct {
 	*QuickPickOptions
 	OnDidSelectItem_AppzFuncId string `json:"onDidSelectItem_AppzFuncId,omitempty"`
-}
-
-// Represents an item that can be selected from
-// a list of items.
-type QuickPickItem struct {
-	// A human readable string which is rendered prominent.
-	Label string `json:"label"`
-
-	// A human readable string which is rendered less prominent.
-	Description string `json:"description,omitempty"`
-
-	// A human readable string which is rendered less prominent.
-	Detail string `json:"detail,omitempty"`
-
-	// Optional flag indicating if this item is picked initially.
-	// (Only honored when the picker allows multiple selections.)
-	Picked bool `json:"picked,omitempty"`
-
-	// Always show this item.
-	AlwaysShow bool `json:"alwaysShow,omitempty"`
-
-	// Free-form custom data, preserved across a roundtrip.
-	My dict `json:"my,omitempty"`
 }
 
 // Options to configure the behaviour of a file save dialog.
@@ -1395,14 +1212,6 @@ type QuickPick struct {
 	Cfg *QuickPickState
 }
 
-// An individual terminal instance within the integrated terminal.
-type Terminal struct {
-	__disp__ *Disposable
-
-	// Cfg represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
-	Cfg *TerminalState
-}
-
 // Value-object describing what options a terminal should use.
 type TerminalOptions struct {
 	// A human-readable string which will be used to represent the terminal in the UI.
@@ -1436,168 +1245,12 @@ type TerminalOptions struct {
 	HideFromUser bool `json:"hideFromUser,omitempty"`
 }
 
-// Value-object describing what options a virtual process terminal should use.
-type ExtensionTerminalOptions struct {
-	// A human-readable string which will be used to represent the terminal in the UI.
-	Name string `json:"name"`
+// An individual terminal instance within the integrated terminal.
+type Terminal struct {
+	__disp__ *Disposable
 
-	// An implementation of [Pseudoterminal](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal) that allows an extension to
-	// control a terminal.
-	Pty Pseudoterminal `json:"pty"`
-}
-
-// Defines the interface of a terminal pty, enabling extensions to control a terminal.
-type Pseudoterminal struct {
-	// An event that when fired will write data to the terminal. Unlike
-	// [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText) which sends text to the underlying _process_
-	// (the pty "slave"), this will write the text to the terminal itself (the pty "master").
-	// 
-	// **Example:** Write red text to the terminal
-	// 
-	// ```typescript
-	// 
-	// const writeEmitter = new vscode.EventEmitter<string>();
-	// const pty: vscode.Pseudoterminal = {
-	//    onDidWrite: writeEmitter.event,
-	//    open: () => writeEmitter.fire('\x1b[31mHello world\x1b[0m'),
-	//    close: () => {}
-	// };
-	// vscode.window.createTerminal({ name: 'My terminal', pty });
-	// 
-	// ```
-	// 
-	// 
-	// **Example:** Move the cursor to the 10th row and 20th column and write an asterisk
-	// 
-	// ```typescript
-	// 
-	// writeEmitter.fire('\x1b[10;20H*');
-	// 
-	// ```
-	// 
-	OnDidWrite func(func(string)) Disposable `json:"-"`
-
-	// An event that when fired allows overriding the [dimensions](https://code.visualstudio.com/api/references/vscode-api#Terminal.dimensions) of the
-	// terminal. Note that when set, the overridden dimensions will only take effect when they
-	// are lower than the actual dimensions of the terminal (ie. there will never be a scroll
-	// bar). Set to `undefined` for the terminal to go back to the regular dimensions (fit to
-	// the size of the panel).
-	// 
-	// **Example:** Override the dimensions of a terminal to 20 columns and 10 rows
-	// 
-	// ```typescript
-	// 
-	// const dimensionsEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
-	// const pty: vscode.Pseudoterminal = {
-	//    onDidWrite: writeEmitter.event,
-	//    onDidOverrideDimensions: dimensionsEmitter.event,
-	//    open: () => {
-	//      dimensionsEmitter.fire({
-	//        columns: 20,
-	//        rows: 10
-	//      });
-	//    },
-	//    close: () => {}
-	// };
-	// vscode.window.createTerminal({ name: 'My terminal', pty });
-	// 
-	// ```
-	// 
-	OnDidOverrideDimensions func(func(*TerminalDimensions)) Disposable `json:"-"`
-
-	// An event that when fired will signal that the pty is closed and dispose of the terminal.
-	// 
-	// A number can be used to provide an exit code for the terminal. Exit codes must be
-	// positive and a non-zero exit codes signals failure which shows a notification for a
-	// regular terminal and allows dependent tasks to proceed when used with the
-	// `CustomExecution2` API.
-	// 
-	// **Example:** Exit the terminal when "y" is pressed, otherwise show a notification.
-	// 
-	// ```typescript
-	// 
-	// const writeEmitter = new vscode.EventEmitter<string>();
-	// const closeEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
-	// const pty: vscode.Pseudoterminal = {
-	//    onDidWrite: writeEmitter.event,
-	//    onDidClose: closeEmitter.event,
-	//    open: () => writeEmitter.fire('Press y to exit successfully'),
-	//    close: () => {},
-	//    handleInput: data => {
-	//      if (data !== 'y') {
-	//        vscode.window.showInformationMessage('Something went wrong');
-	//      }
-	//      closeEmitter.fire();
-	//    }
-	// };
-	// vscode.window.createTerminal({ name: 'Exit example', pty });
-	OnDidClose func(func(*int)) Disposable `json:"-"`
-
-	// Implement to handle when the pty is open and ready to start firing events.
-	// 
-	// `initialDimensions` ── The dimensions of the terminal, this will be undefined if the
-	// terminal panel has not been opened before this is called.
-	Open func(*TerminalDimensions) `json:"-"`
-
-	// Implement to handle when the terminal is closed by an act of the user.
-	Close func() `json:"-"`
-
-	// Implement to handle incoming keystrokes in the terminal or when an extension calls
-	// [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText). `data` contains the keystrokes/text serialized into
-	// their corresponding VT sequence representation.
-	// 
-	// `data` ── The incoming data.
-	// 
-	// **Example:** Echo input in the terminal. The sequence for enter (`\r`) is translated to
-	// CRLF to go to a new line and move the cursor to the start of the line.
-	// 
-	// ```typescript
-	// 
-	// const writeEmitter = new vscode.EventEmitter<string>();
-	// const pty: vscode.Pseudoterminal = {
-	// onDidWrite: writeEmitter.event,
-	// open: () => {},
-	// close: () => {},
-	// handleInput: data => writeEmitter.fire(data === '\r' ? '\r\n' : data)
-	// };
-	// vscode.window.createTerminal({ name: 'Local echo', pty });
-	// 
-	// ```
-	// 
-	HandleInput func(string) `json:"-"`
-
-	// Implement to handle when the number of rows and columns that fit into the terminal panel
-	// changes, for example when font size changes or when the panel is resized. The initial
-	// state of a terminal's dimensions should be treated as `undefined` until this is triggered
-	// as the size of a terminal isn't know until it shows up in the user interface.
-	// 
-	// When dimensions are overridden by
-	// [onDidOverrideDimensions](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal.onDidOverrideDimensions), `setDimensions` will
-	// continue to be called with the regular panel dimensions, allowing the extension continue
-	// to react dimension changes.
-	// 
-	// `dimensions` ── The new dimensions.
-	SetDimensions func(TerminalDimensions) `json:"-"`
-}
-
-type _Pseudoterminal struct {
-	*Pseudoterminal
-	OnDidWrite_AppzFuncId string `json:"onDidWrite_AppzFuncId,omitempty"`
-	OnDidOverrideDimensions_AppzFuncId string `json:"onDidOverrideDimensions_AppzFuncId,omitempty"`
-	OnDidClose_AppzFuncId string `json:"onDidClose_AppzFuncId,omitempty"`
-	Open_AppzFuncId string `json:"open_AppzFuncId,omitempty"`
-	Close_AppzFuncId string `json:"close_AppzFuncId,omitempty"`
-	HandleInput_AppzFuncId string `json:"handleInput_AppzFuncId,omitempty"`
-	SetDimensions_AppzFuncId string `json:"setDimensions_AppzFuncId,omitempty"`
-}
-
-// Represents the dimensions of a terminal.
-type TerminalDimensions struct {
-	// The number of columns in the terminal.
-	Columns int `json:"columns"`
-
-	// The number of rows in the terminal.
-	Rows int `json:"rows"`
+	// Cfg represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
+	Cfg *TerminalState
 }
 
 // An event describing a change to the set of [workspace folders](https://code.visualstudio.com/api/references/vscode-api#workspace.workspaceFolders).
@@ -1905,10 +1558,10 @@ func (me *impl) Commands() Commands {
 	return implCommands{me}
 }
 
-func (me implWindow) ShowInformationMessage1(message string, items []string) func(func(*string)) {
+func (me implWindow) ShowInformationMessage(message string, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showInformationMessage1"
+	msg.QName = "window.showInformationMessage"
 	msg.Data = make(dict, 2)
 	msg.Data["message"] = message
 	msg.Data["items"] = items
@@ -1936,103 +1589,10 @@ func (me implWindow) ShowInformationMessage1(message string, items []string) fun
 	}
 }
 
-func (me implWindow) ShowInformationMessage2(message string, options MessageOptions, items []string) func(func(*string)) {
+func (me implWindow) ShowWarningMessage(message string, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showInformationMessage2"
-	msg.Data = make(dict, 3)
-	msg.Data["message"] = message
-	msg.Data["options"] = options
-	msg.Data["items"] = items
-	var onresp func(any) bool
-	var onret func(*string)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *string
-		if (nil != payload) {
-			var _result_ string
-			_result_, ok = payload.(string)
-			if !ok {
-				return false
-			}
-			result = &_result_
-		}
-		if (nil != onret) {
-			onret(result)
-		}
-		return true
-	}
-	me.Impl().send(msg, onresp)
-	return func(a0 func(*string)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) ShowInformationMessage3(message string, items []MessageItem) func(func(*MessageItem)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.showInformationMessage3"
-	msg.Data = make(dict, 2)
-	msg.Data["message"] = message
-	msg.Data["items"] = items
-	var onresp func(any) bool
-	var onret func(*MessageItem)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *MessageItem
-		if (nil != payload) {
-			result = new(MessageItem)
-			ok = result.__loadFromJsonish__(payload)
-			if !ok {
-				return false
-			}
-		}
-		if (nil != onret) {
-			onret(result)
-		}
-		return true
-	}
-	me.Impl().send(msg, onresp)
-	return func(a0 func(*MessageItem)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) ShowInformationMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.showInformationMessage4"
-	msg.Data = make(dict, 3)
-	msg.Data["message"] = message
-	msg.Data["options"] = options
-	msg.Data["items"] = items
-	var onresp func(any) bool
-	var onret func(*MessageItem)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *MessageItem
-		if (nil != payload) {
-			result = new(MessageItem)
-			ok = result.__loadFromJsonish__(payload)
-			if !ok {
-				return false
-			}
-		}
-		if (nil != onret) {
-			onret(result)
-		}
-		return true
-	}
-	me.Impl().send(msg, onresp)
-	return func(a0 func(*MessageItem)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) ShowWarningMessage1(message string, items []string) func(func(*string)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.showWarningMessage1"
+	msg.QName = "window.showWarningMessage"
 	msg.Data = make(dict, 2)
 	msg.Data["message"] = message
 	msg.Data["items"] = items
@@ -2060,103 +1620,10 @@ func (me implWindow) ShowWarningMessage1(message string, items []string) func(fu
 	}
 }
 
-func (me implWindow) ShowWarningMessage2(message string, options MessageOptions, items []string) func(func(*string)) {
+func (me implWindow) ShowErrorMessage(message string, items []string) func(func(*string)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showWarningMessage2"
-	msg.Data = make(dict, 3)
-	msg.Data["message"] = message
-	msg.Data["options"] = options
-	msg.Data["items"] = items
-	var onresp func(any) bool
-	var onret func(*string)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *string
-		if (nil != payload) {
-			var _result_ string
-			_result_, ok = payload.(string)
-			if !ok {
-				return false
-			}
-			result = &_result_
-		}
-		if (nil != onret) {
-			onret(result)
-		}
-		return true
-	}
-	me.Impl().send(msg, onresp)
-	return func(a0 func(*string)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) ShowWarningMessage3(message string, items []MessageItem) func(func(*MessageItem)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.showWarningMessage3"
-	msg.Data = make(dict, 2)
-	msg.Data["message"] = message
-	msg.Data["items"] = items
-	var onresp func(any) bool
-	var onret func(*MessageItem)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *MessageItem
-		if (nil != payload) {
-			result = new(MessageItem)
-			ok = result.__loadFromJsonish__(payload)
-			if !ok {
-				return false
-			}
-		}
-		if (nil != onret) {
-			onret(result)
-		}
-		return true
-	}
-	me.Impl().send(msg, onresp)
-	return func(a0 func(*MessageItem)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) ShowWarningMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.showWarningMessage4"
-	msg.Data = make(dict, 3)
-	msg.Data["message"] = message
-	msg.Data["options"] = options
-	msg.Data["items"] = items
-	var onresp func(any) bool
-	var onret func(*MessageItem)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *MessageItem
-		if (nil != payload) {
-			result = new(MessageItem)
-			ok = result.__loadFromJsonish__(payload)
-			if !ok {
-				return false
-			}
-		}
-		if (nil != onret) {
-			onret(result)
-		}
-		return true
-	}
-	me.Impl().send(msg, onresp)
-	return func(a0 func(*MessageItem)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) ShowErrorMessage1(message string, items []string) func(func(*string)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.showErrorMessage1"
+	msg.QName = "window.showErrorMessage"
 	msg.Data = make(dict, 2)
 	msg.Data["message"] = message
 	msg.Data["items"] = items
@@ -2180,99 +1647,6 @@ func (me implWindow) ShowErrorMessage1(message string, items []string) func(func
 	}
 	me.Impl().send(msg, onresp)
 	return func(a0 func(*string)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) ShowErrorMessage2(message string, options MessageOptions, items []string) func(func(*string)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.showErrorMessage2"
-	msg.Data = make(dict, 3)
-	msg.Data["message"] = message
-	msg.Data["options"] = options
-	msg.Data["items"] = items
-	var onresp func(any) bool
-	var onret func(*string)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *string
-		if (nil != payload) {
-			var _result_ string
-			_result_, ok = payload.(string)
-			if !ok {
-				return false
-			}
-			result = &_result_
-		}
-		if (nil != onret) {
-			onret(result)
-		}
-		return true
-	}
-	me.Impl().send(msg, onresp)
-	return func(a0 func(*string)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) ShowErrorMessage3(message string, items []MessageItem) func(func(*MessageItem)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.showErrorMessage3"
-	msg.Data = make(dict, 2)
-	msg.Data["message"] = message
-	msg.Data["items"] = items
-	var onresp func(any) bool
-	var onret func(*MessageItem)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *MessageItem
-		if (nil != payload) {
-			result = new(MessageItem)
-			ok = result.__loadFromJsonish__(payload)
-			if !ok {
-				return false
-			}
-		}
-		if (nil != onret) {
-			onret(result)
-		}
-		return true
-	}
-	me.Impl().send(msg, onresp)
-	return func(a0 func(*MessageItem)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) ShowErrorMessage4(message string, options MessageOptions, items []MessageItem) func(func(*MessageItem)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.showErrorMessage4"
-	msg.Data = make(dict, 3)
-	msg.Data["message"] = message
-	msg.Data["options"] = options
-	msg.Data["items"] = items
-	var onresp func(any) bool
-	var onret func(*MessageItem)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *MessageItem
-		if (nil != payload) {
-			result = new(MessageItem)
-			ok = result.__loadFromJsonish__(payload)
-			if !ok {
-				return false
-			}
-		}
-		if (nil != onret) {
-			onret(result)
-		}
-		return true
-	}
-	me.Impl().send(msg, onresp)
-	return func(a0 func(*MessageItem)) {
 		onret = a0
 	}
 }
@@ -2364,10 +1738,10 @@ func (me implWindow) ShowInputBox(options *InputBoxOptions, token *Cancel) func(
 	}
 }
 
-func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, token *Cancel) func(func([]string)) {
+func (me implWindow) ShowQuickPick(items []QuickPickItem, options QuickPickOptions, token *Cancel) func(func([]QuickPickItem)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showQuickPick1"
+	msg.QName = "window.showQuickPick"
 	msg.Data = make(dict, 3)
 	var __options__ *_QuickPickOptions
 	var fnids []string
@@ -2405,197 +1779,6 @@ func (me implWindow) ShowQuickPick1(items []string, options QuickPickOptions, to
 		}
 	}
 	msg.Data["items"] = items
-	options.CanPickMany = true
-	msg.Data["options"] = __options__
-	if (nil != token) {
-		token.impl = me.Impl()
-		if "" == token.fnId {
-			me.Lock()
-			{
-				token.fnId = me.Impl().nextFuncId()
-			}
-			me.Unlock()
-		}
-		msg.Data["token"] = token.fnId
-	}
-	var onresp func(any) bool
-	var onret func([]string)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result []string
-		if (nil != payload) {
-			var __coll__result []any
-			__coll__result, ok = payload.([]any)
-			if !ok {
-				return false
-			}
-			result = make([]string, len(__coll__result))
-			var __idx__result int
-			__idx__result = 0
-			for _, __item__result := range __coll__result {
-				var __val__result string
-				__val__result, ok = __item__result.(string)
-				if !ok {
-					return false
-				}
-				result[__idx__result] = __val__result
-				__idx__result = __idx__result + 1
-			}
-		}
-		if (nil != onret) {
-			onret(result)
-		}
-		return true
-	}
-	me.Impl().send(msg, func(payload any) bool {
-		if len(fnids) != 0 {
-			me.Lock()
-			{
-				for _, fnid := range fnids {
-					delete(me.Impl().cbOther, fnid)
-				}
-			}
-			me.Unlock()
-		}
-		return onresp(payload)
-	})
-	return func(a0 func([]string)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) ShowQuickPick2(items []string, options *QuickPickOptions, token *Cancel) func(func(*string)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.showQuickPick2"
-	msg.Data = make(dict, 3)
-	var __options__ *_QuickPickOptions
-	var fnids []string
-	fnids = make([]string, 0, 1)
-	if (nil != options) {
-		__options__ = new(_QuickPickOptions)
-		__options__.QuickPickOptions = options
-		__options__.OnDidSelectItem_AppzFuncId = ""
-		var fn func(QuickPickItem) any
-		fn = __options__.OnDidSelectItem
-		if (nil != fn) {
-			me.Lock()
-			{
-				__options__.OnDidSelectItem_AppzFuncId = me.Impl().nextFuncId()
-				fnids = append(fnids, __options__.OnDidSelectItem_AppzFuncId)
-				me.Impl().cbOther[__options__.OnDidSelectItem_AppzFuncId] = func(args []any) (any, bool) {
-					if 1 != len(args) {
-						return nil, false
-					} else {
-						var ok bool
-						var __0 QuickPickItem
-						if (nil != args[0]) {
-							ok = __0.__loadFromJsonish__(args[0])
-							if !ok {
-								return nil, false
-							}
-						} else {
-							return nil, false
-						}
-						return fn(__0), true
-					}
-				}
-			}
-			me.Unlock()
-		}
-	}
-	msg.Data["items"] = items
-	if (nil != options) {
-		msg.Data["options"] = __options__
-	}
-	if (nil != token) {
-		token.impl = me.Impl()
-		if "" == token.fnId {
-			me.Lock()
-			{
-				token.fnId = me.Impl().nextFuncId()
-			}
-			me.Unlock()
-		}
-		msg.Data["token"] = token.fnId
-	}
-	var onresp func(any) bool
-	var onret func(*string)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *string
-		if (nil != payload) {
-			var _result_ string
-			_result_, ok = payload.(string)
-			if !ok {
-				return false
-			}
-			result = &_result_
-		}
-		if (nil != onret) {
-			onret(result)
-		}
-		return true
-	}
-	me.Impl().send(msg, func(payload any) bool {
-		if len(fnids) != 0 {
-			me.Lock()
-			{
-				for _, fnid := range fnids {
-					delete(me.Impl().cbOther, fnid)
-				}
-			}
-			me.Unlock()
-		}
-		return onresp(payload)
-	})
-	return func(a0 func(*string)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOptions, token *Cancel) func(func([]QuickPickItem)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.showQuickPick3"
-	msg.Data = make(dict, 3)
-	var __options__ *_QuickPickOptions
-	var fnids []string
-	fnids = make([]string, 0, 1)
-	if true {
-		__options__ = new(_QuickPickOptions)
-		__options__.QuickPickOptions = &options
-		__options__.OnDidSelectItem_AppzFuncId = ""
-		var fn func(QuickPickItem) any
-		fn = __options__.OnDidSelectItem
-		if (nil != fn) {
-			me.Lock()
-			{
-				__options__.OnDidSelectItem_AppzFuncId = me.Impl().nextFuncId()
-				fnids = append(fnids, __options__.OnDidSelectItem_AppzFuncId)
-				me.Impl().cbOther[__options__.OnDidSelectItem_AppzFuncId] = func(args []any) (any, bool) {
-					if 1 != len(args) {
-						return nil, false
-					} else {
-						var ok bool
-						var __0 QuickPickItem
-						if (nil != args[0]) {
-							ok = __0.__loadFromJsonish__(args[0])
-							if !ok {
-								return nil, false
-							}
-						} else {
-							return nil, false
-						}
-						return fn(__0), true
-					}
-				}
-			}
-			me.Unlock()
-		}
-	}
-	msg.Data["items"] = items
-	options.CanPickMany = true
 	msg.Data["options"] = __options__
 	if (nil != token) {
 		token.impl = me.Impl()
@@ -2654,133 +1837,13 @@ func (me implWindow) ShowQuickPick3(items []QuickPickItem, options QuickPickOpti
 	}
 }
 
-func (me implWindow) ShowQuickPick4(items []QuickPickItem, options *QuickPickOptions, token *Cancel) func(func(*QuickPickItem)) {
+func (me implWindow) SetStatusBarMessage(text string, hideAfterTimeout int) func(func(*Disposable)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.showQuickPick4"
-	msg.Data = make(dict, 3)
-	var __options__ *_QuickPickOptions
-	var fnids []string
-	fnids = make([]string, 0, 1)
-	if (nil != options) {
-		__options__ = new(_QuickPickOptions)
-		__options__.QuickPickOptions = options
-		__options__.OnDidSelectItem_AppzFuncId = ""
-		var fn func(QuickPickItem) any
-		fn = __options__.OnDidSelectItem
-		if (nil != fn) {
-			me.Lock()
-			{
-				__options__.OnDidSelectItem_AppzFuncId = me.Impl().nextFuncId()
-				fnids = append(fnids, __options__.OnDidSelectItem_AppzFuncId)
-				me.Impl().cbOther[__options__.OnDidSelectItem_AppzFuncId] = func(args []any) (any, bool) {
-					if 1 != len(args) {
-						return nil, false
-					} else {
-						var ok bool
-						var __0 QuickPickItem
-						if (nil != args[0]) {
-							ok = __0.__loadFromJsonish__(args[0])
-							if !ok {
-								return nil, false
-							}
-						} else {
-							return nil, false
-						}
-						return fn(__0), true
-					}
-				}
-			}
-			me.Unlock()
-		}
-	}
-	msg.Data["items"] = items
-	if (nil != options) {
-		msg.Data["options"] = __options__
-	}
-	if (nil != token) {
-		token.impl = me.Impl()
-		if "" == token.fnId {
-			me.Lock()
-			{
-				token.fnId = me.Impl().nextFuncId()
-			}
-			me.Unlock()
-		}
-		msg.Data["token"] = token.fnId
-	}
-	var onresp func(any) bool
-	var onret func(*QuickPickItem)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *QuickPickItem
-		if (nil != payload) {
-			result = new(QuickPickItem)
-			ok = result.__loadFromJsonish__(payload)
-			if !ok {
-				return false
-			}
-		}
-		if (nil != onret) {
-			onret(result)
-		}
-		return true
-	}
-	me.Impl().send(msg, func(payload any) bool {
-		if len(fnids) != 0 {
-			me.Lock()
-			{
-				for _, fnid := range fnids {
-					delete(me.Impl().cbOther, fnid)
-				}
-			}
-			me.Unlock()
-		}
-		return onresp(payload)
-	})
-	return func(a0 func(*QuickPickItem)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) SetStatusBarMessage1(text string, hideAfterTimeout int) func(func(*Disposable)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.setStatusBarMessage1"
+	msg.QName = "window.setStatusBarMessage"
 	msg.Data = make(dict, 2)
 	msg.Data["text"] = text
 	msg.Data["hideAfterTimeout"] = hideAfterTimeout
-	var onresp func(any) bool
-	var onret func(*Disposable)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *Disposable
-		if (nil != payload) {
-			result = new(Disposable)
-			ok = result.__loadFromJsonish__(payload)
-			if !ok {
-				return false
-			}
-		} else {
-			return false
-		}
-		if (nil != onret) {
-			onret(result.bind(me.Impl()))
-		}
-		return true
-	}
-	me.Impl().send(msg, onresp)
-	return func(a0 func(*Disposable)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) SetStatusBarMessage2(text string) func(func(*Disposable)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.setStatusBarMessage2"
-	msg.Data = make(dict, 1)
-	msg.Data["text"] = text
 	var onresp func(any) bool
 	var onret func(*Disposable)
 	onresp = func(payload any) bool {
@@ -3157,86 +2220,10 @@ func (me implWindow) CreateQuickPick() func(func(*QuickPick)) {
 	}
 }
 
-func (me implWindow) CreateTerminal1(name *string, shellPath *string, shellArgs []string) func(func(*Terminal)) {
+func (me implWindow) CreateTerminal(options TerminalOptions) func(func(*Terminal)) {
 	var msg *ipcMsg
 	msg = new(ipcMsg)
-	msg.QName = "window.createTerminal1"
-	msg.Data = make(dict, 3)
-	if (nil != name) {
-		msg.Data["name"] = name
-	}
-	if (nil != shellPath) {
-		msg.Data["shellPath"] = shellPath
-	}
-	if (nil != shellArgs) {
-		msg.Data["shellArgs"] = shellArgs
-	}
-	var onresp func(any) bool
-	var onret func(*Terminal)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *Terminal
-		if (nil != payload) {
-			result = new(Terminal)
-			ok = result.__loadFromJsonish__(payload)
-			if !ok {
-				return false
-			}
-			result.__disp__.impl = me.Impl()
-		} else {
-			return false
-		}
-		result.__appzObjBagPullFromPeer__()(func() {
-			if (nil != onret) {
-				onret(result)
-			}
-		})
-		return true
-	}
-	me.Impl().send(msg, onresp)
-	return func(a0 func(*Terminal)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) CreateTerminal2(options TerminalOptions) func(func(*Terminal)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.createTerminal2"
-	msg.Data = make(dict, 1)
-	msg.Data["options"] = options
-	var onresp func(any) bool
-	var onret func(*Terminal)
-	onresp = func(payload any) bool {
-		var ok bool
-		var result *Terminal
-		if (nil != payload) {
-			result = new(Terminal)
-			ok = result.__loadFromJsonish__(payload)
-			if !ok {
-				return false
-			}
-			result.__disp__.impl = me.Impl()
-		} else {
-			return false
-		}
-		result.__appzObjBagPullFromPeer__()(func() {
-			if (nil != onret) {
-				onret(result)
-			}
-		})
-		return true
-	}
-	me.Impl().send(msg, onresp)
-	return func(a0 func(*Terminal)) {
-		onret = a0
-	}
-}
-
-func (me implWindow) CreateTerminal3(options ExtensionTerminalOptions) func(func(*Terminal)) {
-	var msg *ipcMsg
-	msg = new(ipcMsg)
-	msg.QName = "window.createTerminal3"
+	msg.QName = "window.createTerminal"
 	msg.Data = make(dict, 1)
 	msg.Data["options"] = options
 	var onresp func(any) bool
@@ -6048,52 +5035,6 @@ func (me *FileSystemWatcherState) ApplyChanges() func(func()) {
 	}
 	me.Unlock()
 	return ret
-}
-
-func (me *MessageItem) __loadFromJsonish__(payload any) bool {
-	var it dict
-	var ok bool
-	var val any
-	it, ok = payload.(dict)
-	if !ok {
-		return false
-	}
-	val, ok = it["title"]
-	if ok {
-		var title string
-		if (nil != val) {
-			title, ok = val.(string)
-			if !ok {
-				return false
-			}
-		}
-		me.Title = title
-	} else {
-		return false
-	}
-	val, ok = it["isCloseAffordance"]
-	if ok {
-		var isCloseAffordance bool
-		if (nil != val) {
-			isCloseAffordance, ok = val.(bool)
-			if !ok {
-				return false
-			}
-		}
-		me.IsCloseAffordance = isCloseAffordance
-	}
-	val, ok = it["my"]
-	if ok {
-		var my dict
-		if (nil != val) {
-			my, ok = val.(dict)
-			if !ok {
-				return false
-			}
-		}
-		me.My = my
-	}
-	return true
 }
 
 func (me *QuickPickItem) __loadFromJsonish__(payload any) bool {

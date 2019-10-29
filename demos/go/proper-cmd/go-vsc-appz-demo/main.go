@@ -26,9 +26,9 @@ func main() {
 
 		onUpAndRunning()
 
-		win.SetStatusBarMessage2("React to the Welcome msg-box to remove me..")(func(statusmsg *Disposable) {
+		win.SetStatusBarMessage("React to the Welcome msg-box to remove me..", 12345)(func(statusmsg *Disposable) {
 			buttons := []string{"Demo Text Input", "All Demos"}
-			win.ShowInformationMessage1(
+			win.ShowInformationMessage(
 				"What to try out? (If you cancel here, I quit.)", buttons)(
 				func(btn *string) {
 					statusmsg.Dispose()
@@ -41,7 +41,7 @@ func main() {
 						case buttons[1]:
 							demosMenu()
 						default:
-							win.ShowErrorMessage1("Unknown: `"+button+"`", nil)(demosmenu)
+							win.ShowErrorMessage("Unknown: `"+button+"`", nil)(demosmenu)
 						}
 					}
 				})
@@ -64,9 +64,9 @@ func demo_Window_ShowInputBox() {
 	}, nil)(
 		func(input *string) {
 			if input == nil {
-				win.ShowWarningMessage1("Drat! Was itching to hear that.", nil)(demosmenu)
+				win.ShowWarningMessage("Drat! Was itching to hear that.", nil)(demosmenu)
 			} else {
-				win.ShowInformationMessage1("You entered: `"+(*input)+"`, merci!", nil)(demosmenu)
+				win.ShowInformationMessage("You entered: `"+(*input)+"`, merci!", nil)(demosmenu)
 			}
 		})
 }
@@ -102,6 +102,14 @@ func nums1To(n int) (nums []int) {
 	nums = make([]int, n)
 	for i := range nums {
 		nums[i] = i + 1
+	}
+	return
+}
+
+func quickPickItemsFrom(items []string) (ret []QuickPickItem) {
+	ret = make([]QuickPickItem, len(items))
+	for i, s := range items {
+		ret[i].Label = s
 	}
 	return
 }

@@ -10,7 +10,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 	switch (apiname) {
 		case "window":
 			switch (methodname) {
-				case "showInformationMessage1": {
+				case "showInformationMessage": {
 					const arg_message = (msg.data['message']) as string
 					const arg_items = (msg.data['items'] || []) as string[]
 					const ret = vscode.window.showInformationMessage(arg_message, ...arg_items, )
@@ -18,33 +18,7 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
-				case "showInformationMessage2": {
-					const arg_message = (msg.data['message']) as string
-					const arg_options = (msg.data['options']) as MessageOptions
-					const arg_items = (msg.data['items'] || []) as string[]
-					const ret = vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "showInformationMessage3": {
-					const arg_message = (msg.data['message']) as string
-					const arg_items = (msg.data['items'] || []) as MessageItem[]
-					const ret = vscode.window.showInformationMessage(arg_message, ...arg_items, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "showInformationMessage4": {
-					const arg_message = (msg.data['message']) as string
-					const arg_options = (msg.data['options']) as MessageOptions
-					const arg_items = (msg.data['items'] || []) as MessageItem[]
-					const ret = vscode.window.showInformationMessage(arg_message, arg_options, ...arg_items, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "showWarningMessage1": {
+				case "showWarningMessage": {
 					const arg_message = (msg.data['message']) as string
 					const arg_items = (msg.data['items'] || []) as string[]
 					const ret = vscode.window.showWarningMessage(arg_message, ...arg_items, )
@@ -52,62 +26,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
-				case "showWarningMessage2": {
-					const arg_message = (msg.data['message']) as string
-					const arg_options = (msg.data['options']) as MessageOptions
-					const arg_items = (msg.data['items'] || []) as string[]
-					const ret = vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "showWarningMessage3": {
-					const arg_message = (msg.data['message']) as string
-					const arg_items = (msg.data['items'] || []) as MessageItem[]
-					const ret = vscode.window.showWarningMessage(arg_message, ...arg_items, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "showWarningMessage4": {
-					const arg_message = (msg.data['message']) as string
-					const arg_options = (msg.data['options']) as MessageOptions
-					const arg_items = (msg.data['items'] || []) as MessageItem[]
-					const ret = vscode.window.showWarningMessage(arg_message, arg_options, ...arg_items, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "showErrorMessage1": {
+				case "showErrorMessage": {
 					const arg_message = (msg.data['message']) as string
 					const arg_items = (msg.data['items'] || []) as string[]
 					const ret = vscode.window.showErrorMessage(arg_message, ...arg_items, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "showErrorMessage2": {
-					const arg_message = (msg.data['message']) as string
-					const arg_options = (msg.data['options']) as MessageOptions
-					const arg_items = (msg.data['items'] || []) as string[]
-					const ret = vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "showErrorMessage3": {
-					const arg_message = (msg.data['message']) as string
-					const arg_items = (msg.data['items'] || []) as MessageItem[]
-					const ret = vscode.window.showErrorMessage(arg_message, ...arg_items, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "showErrorMessage4": {
-					const arg_message = (msg.data['message']) as string
-					const arg_options = (msg.data['options']) as MessageOptions
-					const arg_items = (msg.data['items'] || []) as MessageItem[]
-					const ret = vscode.window.showErrorMessage(arg_message, arg_options, ...arg_items, )
 					const retdisp = ret as any as vscode.Disposable
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
@@ -126,41 +48,11 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
-				case "showQuickPick1": {
-					const arg_items = (msg.data['items']) as string[]
-					const arg_options = (msg.data['options']) as QuickPickOptions
-					if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
-						arg_options.onDidSelectItem = (a0) => prog.callBack("window.showQuickPick1", true, arg_options.onDidSelectItem_AppzFuncId, a0)
-					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
-					if (!arg_token)
-						arg_token = prog.cancellers[''].token
-					else
-						remoteCancellationTokens.push(ctid)
-					const ret = vscode.window.showQuickPick(arg_items, arg_options, arg_token, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "showQuickPick2": {
-					const arg_items = (msg.data['items']) as string[]
-					const arg_options = (msg.data['options']) as QuickPickOptions
-					if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
-						arg_options.onDidSelectItem = (a0) => prog.callBack("window.showQuickPick2", true, arg_options.onDidSelectItem_AppzFuncId, a0)
-					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
-					if (!arg_token)
-						arg_token = prog.cancellers[''].token
-					else
-						remoteCancellationTokens.push(ctid)
-					const ret = vscode.window.showQuickPick(arg_items, arg_options, arg_token, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "showQuickPick3": {
+				case "showQuickPick": {
 					const arg_items = (msg.data['items']) as QuickPickItem[]
 					const arg_options = (msg.data['options']) as QuickPickOptions
 					if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
-						arg_options.onDidSelectItem = (a0) => prog.callBack("window.showQuickPick3", true, arg_options.onDidSelectItem_AppzFuncId, a0)
+						arg_options.onDidSelectItem = (a0) => prog.callBack("window.showQuickPick", true, arg_options.onDidSelectItem_AppzFuncId, a0)
 					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
 					if (!arg_token)
 						arg_token = prog.cancellers[''].token
@@ -171,32 +63,10 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
-				case "showQuickPick4": {
-					const arg_items = (msg.data['items']) as QuickPickItem[]
-					const arg_options = (msg.data['options']) as QuickPickOptions
-					if (arg_options && arg_options.onDidSelectItem_AppzFuncId && arg_options.onDidSelectItem_AppzFuncId.length)
-						arg_options.onDidSelectItem = (a0) => prog.callBack("window.showQuickPick4", true, arg_options.onDidSelectItem_AppzFuncId, a0)
-					let ctid = msg.data['token'] as string, arg_token = prog.cancellerToken(ctid)
-					if (!arg_token)
-						arg_token = prog.cancellers[''].token
-					else
-						remoteCancellationTokens.push(ctid)
-					const ret = vscode.window.showQuickPick(arg_items, arg_options, arg_token, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "setStatusBarMessage1": {
+				case "setStatusBarMessage": {
 					const arg_text = (msg.data['text']) as string
 					const arg_hideAfterTimeout = (msg.data['hideAfterTimeout']) as number
 					const ret = vscode.window.setStatusBarMessage(arg_text, arg_hideAfterTimeout, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "setStatusBarMessage2": {
-					const arg_text = (msg.data['text']) as string
-					const ret = vscode.window.setStatusBarMessage(arg_text, )
 					const retdisp = ret as any as vscode.Disposable
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
@@ -268,24 +138,8 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 					const retprom = ret as any as Thenable<any>
 					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
 				}
-				case "createTerminal1": {
-					const arg_name = (msg.data['name']) as string
-					const arg_shellPath = (msg.data['shellPath']) as string
-					const arg_shellArgs = (msg.data['shellArgs']) as string[]
-					const ret = vscode.window.createTerminal(arg_name, arg_shellPath, arg_shellArgs, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "createTerminal2": {
+				case "createTerminal": {
 					const arg_options = (msg.data['options']) as TerminalOptions
-					const ret = vscode.window.createTerminal(arg_options, )
-					const retdisp = ret as any as vscode.Disposable
-					const retprom = ret as any as Thenable<any>
-					return (retprom && retprom.then) ? retprom : ((retdisp && retdisp.dispose) ? retdisp : Promise.resolve(ret))
-				}
-				case "createTerminal3": {
-					const arg_options = (msg.data['options']) as ExtensionTerminalOptions
 					const ret = vscode.window.createTerminal(arg_options, )
 					const retdisp = ret as any as vscode.Disposable
 					const retprom = ret as any as Thenable<any>
@@ -1024,18 +878,14 @@ export function handle(msg: ppio.IpcMsg, prog: ppio.Prog, remoteCancellationToke
 }
 
 type StatusBarAlignment = vscode.StatusBarAlignment
-type MessageOptions = vscode.MessageOptions
-interface MessageItem extends vscode.MessageItem {
-	my?: { [_: string]: any }
-}
 interface InputBoxOptions extends vscode.InputBoxOptions {
 	validateInput_AppzFuncId: string
 }
-interface QuickPickOptions extends vscode.QuickPickOptions {
-	onDidSelectItem_AppzFuncId: string
-}
 interface QuickPickItem extends vscode.QuickPickItem {
 	my?: { [_: string]: any }
+}
+interface QuickPickOptions extends vscode.QuickPickOptions {
+	onDidSelectItem_AppzFuncId: string
 }
 type SaveDialogOptions = vscode.SaveDialogOptions
 type OpenDialogOptions = vscode.OpenDialogOptions
@@ -1046,8 +896,7 @@ type DecorationRenderOptions = vscode.DecorationRenderOptions
 type TextEditorDecorationType = vscode.TextEditorDecorationType
 type InputBox = vscode.InputBox
 type QuickPick = vscode.QuickPick<QuickPickItem>
-type Terminal = vscode.Terminal
 type TerminalOptions = vscode.TerminalOptions
-type ExtensionTerminalOptions = vscode.ExtensionTerminalOptions
+type Terminal = vscode.Terminal
 type FileSystemWatcher = vscode.FileSystemWatcher
 type Uri = vscode.Uri

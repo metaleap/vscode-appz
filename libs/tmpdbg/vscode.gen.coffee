@@ -238,104 +238,7 @@ Window: interface
     #
     # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowInformationMessage1: ((?string->void)->void)
-        message: string
-        items: [string]
-
-    # showInformationMessage:
-    # Show an information message to users. Optionally provide an array of items which will be presented as
-    # clickable buttons.
-    # 
-    # `message` ── The message to show.
-    # 
-    # `options` ── Configures the behaviour of the message.
-    # 
-    # `items` ── A set of items that will be rendered as actions in the message.
-    # 
-    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-    #
-    # @message:
-    # The message to show.
-    #
-    # @options:
-    # Configures the behaviour of the message.
-    #
-    # @items:
-    # A set of items that will be rendered as actions in the message.
-    #
-    # @return:
-    # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowInformationMessage2: ((?string->void)->void)
-        message: string
-        options: MessageOptions
-        items: [string]
-
-    # showInformationMessage:
-    # Show an information message.
-    # 
-    # `message` ── The message to show.
-    # 
-    # `items` ── A set of items that will be rendered as actions in the message.
-    # 
-    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-    #
-    # @message:
-    # The message to show.
-    #
-    # @items:
-    # A set of items that will be rendered as actions in the message.
-    #
-    # @return:
-    # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowInformationMessage3: ((?MessageItem->void)->void)
-        message: string
-        items: [MessageItem]
-
-    # showInformationMessage:
-    # Show an information message.
-    # 
-    # `message` ── The message to show.
-    # 
-    # `options` ── Configures the behaviour of the message.
-    # 
-    # `items` ── A set of items that will be rendered as actions in the message.
-    # 
-    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-    #
-    # @message:
-    # The message to show.
-    #
-    # @options:
-    # Configures the behaviour of the message.
-    #
-    # @items:
-    # A set of items that will be rendered as actions in the message.
-    #
-    # @return:
-    # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowInformationMessage4: ((?MessageItem->void)->void)
-        message: string
-        options: MessageOptions
-        items: [MessageItem]
-
-    # showWarningMessage:
-    # Show a warning message.
-    # 
-    # `message` ── The message to show.
-    # 
-    # `items` ── A set of items that will be rendered as actions in the message.
-    # 
-    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-    #
-    # @message:
-    # The message to show.
-    #
-    # @items:
-    # A set of items that will be rendered as actions in the message.
-    #
-    # @return:
-    # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowWarningMessage1: ((?string->void)->void)
+    ShowInformationMessage: ((?string->void)->void)
         message: string
         items: [string]
 
@@ -344,33 +247,6 @@ Window: interface
     # 
     # `message` ── The message to show.
     # 
-    # `options` ── Configures the behaviour of the message.
-    # 
-    # `items` ── A set of items that will be rendered as actions in the message.
-    # 
-    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-    #
-    # @message:
-    # The message to show.
-    #
-    # @options:
-    # Configures the behaviour of the message.
-    #
-    # @items:
-    # A set of items that will be rendered as actions in the message.
-    #
-    # @return:
-    # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowWarningMessage2: ((?string->void)->void)
-        message: string
-        options: MessageOptions
-        items: [string]
-
-    # showWarningMessage:
-    # Show a warning message.
-    # 
-    # `message` ── The message to show.
-    # 
     # `items` ── A set of items that will be rendered as actions in the message.
     # 
     # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
@@ -383,83 +259,8 @@ Window: interface
     #
     # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowWarningMessage3: ((?MessageItem->void)->void)
+    ShowWarningMessage: ((?string->void)->void)
         message: string
-        items: [MessageItem]
-
-    # showWarningMessage:
-    # Show a warning message.
-    # 
-    # `message` ── The message to show.
-    # 
-    # `options` ── Configures the behaviour of the message.
-    # 
-    # `items` ── A set of items that will be rendered as actions in the message.
-    # 
-    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-    #
-    # @message:
-    # The message to show.
-    #
-    # @options:
-    # Configures the behaviour of the message.
-    #
-    # @items:
-    # A set of items that will be rendered as actions in the message.
-    #
-    # @return:
-    # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowWarningMessage4: ((?MessageItem->void)->void)
-        message: string
-        options: MessageOptions
-        items: [MessageItem]
-
-    # showErrorMessage:
-    # Show an error message.
-    # 
-    # `message` ── The message to show.
-    # 
-    # `items` ── A set of items that will be rendered as actions in the message.
-    # 
-    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-    #
-    # @message:
-    # The message to show.
-    #
-    # @items:
-    # A set of items that will be rendered as actions in the message.
-    #
-    # @return:
-    # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowErrorMessage1: ((?string->void)->void)
-        message: string
-        items: [string]
-
-    # showErrorMessage:
-    # Show an error message.
-    # 
-    # `message` ── The message to show.
-    # 
-    # `options` ── Configures the behaviour of the message.
-    # 
-    # `items` ── A set of items that will be rendered as actions in the message.
-    # 
-    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-    #
-    # @message:
-    # The message to show.
-    #
-    # @options:
-    # Configures the behaviour of the message.
-    #
-    # @items:
-    # A set of items that will be rendered as actions in the message.
-    #
-    # @return:
-    # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowErrorMessage2: ((?string->void)->void)
-        message: string
-        options: MessageOptions
         items: [string]
 
     # showErrorMessage:
@@ -479,36 +280,9 @@ Window: interface
     #
     # @return:
     # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowErrorMessage3: ((?MessageItem->void)->void)
+    ShowErrorMessage: ((?string->void)->void)
         message: string
-        items: [MessageItem]
-
-    # showErrorMessage:
-    # Show an error message.
-    # 
-    # `message` ── The message to show.
-    # 
-    # `options` ── Configures the behaviour of the message.
-    # 
-    # `items` ── A set of items that will be rendered as actions in the message.
-    # 
-    # `return` ── A thenable that resolves to the selected item or `undefined` when being dismissed.
-    #
-    # @message:
-    # The message to show.
-    #
-    # @options:
-    # Configures the behaviour of the message.
-    #
-    # @items:
-    # A set of items that will be rendered as actions in the message.
-    #
-    # @return:
-    # A thenable that resolves to the selected item or `undefined` when being dismissed.
-    ShowErrorMessage4: ((?MessageItem->void)->void)
-        message: string
-        options: MessageOptions
-        items: [MessageItem]
+        items: [string]
 
     # showInputBox:
     # Opens an input box to ask the user for input.
@@ -538,60 +312,6 @@ Window: interface
     # showQuickPick:
     # Shows a selection list allowing multiple selections.
     # 
-    # `items` ── An array of strings, or a promise that resolves to an array of strings.
-    # 
-    # `options` ── Configures the behavior of the selection list.
-    # 
-    # `token` ── A token that can be used to signal cancellation.
-    # 
-    # `return` ── A promise that resolves to the selected items or `undefined`.
-    #
-    # @items:
-    # An array of strings, or a promise that resolves to an array of strings.
-    #
-    # @options:
-    # Configures the behavior of the selection list.
-    #
-    # @token:
-    # A token that can be used to signal cancellation.
-    #
-    # @return:
-    # A promise that resolves to the selected items or `undefined`.
-    ShowQuickPick1: ((?[string]->void)->void)
-        items: [string]
-        options: QuickPickOptions
-        token: ?Cancel
-
-    # showQuickPick:
-    # Shows a selection list.
-    # 
-    # `items` ── An array of strings, or a promise that resolves to an array of strings.
-    # 
-    # `options` ── Configures the behavior of the selection list.
-    # 
-    # `token` ── A token that can be used to signal cancellation.
-    # 
-    # `return` ── A promise that resolves to the selection or `undefined`.
-    #
-    # @items:
-    # An array of strings, or a promise that resolves to an array of strings.
-    #
-    # @options:
-    # Configures the behavior of the selection list.
-    #
-    # @token:
-    # A token that can be used to signal cancellation.
-    #
-    # @return:
-    # A promise that resolves to the selection or `undefined`.
-    ShowQuickPick2: ((?string->void)->void)
-        items: [string]
-        options: ?QuickPickOptions
-        token: ?Cancel
-
-    # showQuickPick:
-    # Shows a selection list allowing multiple selections.
-    # 
     # `items` ── An array of items, or a promise that resolves to an array of items.
     # 
     # `options` ── Configures the behavior of the selection list.
@@ -611,36 +331,9 @@ Window: interface
     #
     # @return:
     # A promise that resolves to the selected items or `undefined`.
-    ShowQuickPick3: ((?[QuickPickItem]->void)->void)
+    ShowQuickPick: ((?[QuickPickItem]->void)->void)
         items: [QuickPickItem]
         options: QuickPickOptions
-        token: ?Cancel
-
-    # showQuickPick:
-    # Shows a selection list.
-    # 
-    # `items` ── An array of items, or a promise that resolves to an array of items.
-    # 
-    # `options` ── Configures the behavior of the selection list.
-    # 
-    # `token` ── A token that can be used to signal cancellation.
-    # 
-    # `return` ── A promise that resolves to the selected item or `undefined`.
-    #
-    # @items:
-    # An array of items, or a promise that resolves to an array of items.
-    #
-    # @options:
-    # Configures the behavior of the selection list.
-    #
-    # @token:
-    # A token that can be used to signal cancellation.
-    #
-    # @return:
-    # A promise that resolves to the selected item or `undefined`.
-    ShowQuickPick4: ((?QuickPickItem->void)->void)
-        items: [QuickPickItem]
-        options: ?QuickPickOptions
         token: ?Cancel
 
     # setStatusBarMessage:
@@ -661,28 +354,9 @@ Window: interface
     #
     # @return:
     # A disposable which hides the status bar message.
-    SetStatusBarMessage1: ((?Disposable->void)->void)
+    SetStatusBarMessage: ((?Disposable->void)->void)
         text: string
         hideAfterTimeout: int
-
-    # setStatusBarMessage:
-    # Set a message to the status bar. This is a short hand for the more powerful
-    # status bar [items](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem).
-    # 
-    # *Note* that status bar messages stack and that they must be disposed when no
-    # longer used.
-    # 
-    # `text` ── The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
-    # 
-    # `return` ── A disposable which hides the status bar message.
-    #
-    # @text:
-    # The message to show, supports icon substitution as in status bar [items](https://code.visualstudio.com/api/references/vscode-api#StatusBarItem.text).
-    #
-    # @return:
-    # A disposable which hides the status bar message.
-    SetStatusBarMessage2: ((?Disposable->void)->void)
-        text: string
 
     # showSaveDialog:
     # Shows a file save dialog to the user which allows to select a file
@@ -836,38 +510,6 @@ Window: interface
     CreateQuickPick: ((?QuickPick->void)->void)
 
     # createTerminal:
-    # Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process. The cwd of the terminal will be the workspace
-    # directory if it exists.
-    # 
-    # `name` ── Optional human-readable string which will be used to represent the terminal in the UI.
-    # 
-    # `shellPath` ── Optional path to a custom shell executable to be used in the terminal.
-    # 
-    # `shellArgs` ── Optional args for the custom shell executable. A string can be used on Windows only which
-    # allows specifying shell args in
-    # [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
-    # 
-    # `return` ── A new Terminal.
-    #
-    # @name:
-    # Optional human-readable string which will be used to represent the terminal in the UI.
-    #
-    # @shellPath:
-    # Optional path to a custom shell executable to be used in the terminal.
-    #
-    # @shellArgs:
-    # Optional args for the custom shell executable. A string can be used on Windows only which
-    # allows specifying shell args in
-    # [command-line format](https://msdn.microsoft.com/en-au/08dfcab2-eb6e-49a4-80eb-87d4076c98c6).
-    #
-    # @return:
-    # A new Terminal.
-    CreateTerminal1: ((?Terminal->void)->void)
-        name: ?string
-        shellPath: ?string
-        shellArgs: ?[string]
-
-    # createTerminal:
     # Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) with a backing shell process.
     # 
     # `options` ── A TerminalOptions object describing the characteristics of the new terminal.
@@ -879,25 +521,8 @@ Window: interface
     #
     # @return:
     # A new Terminal.
-    CreateTerminal2: ((?Terminal->void)->void)
+    CreateTerminal: ((?Terminal->void)->void)
         options: TerminalOptions
-
-    # createTerminal:
-    # Creates a [Terminal](https://code.visualstudio.com/api/references/vscode-api#Terminal) where an extension controls its input and output.
-    # 
-    # `options` ── An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing
-    # the characteristics of the new terminal.
-    # 
-    # `return` ── A new Terminal.
-    #
-    # @options:
-    # An [ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#ExtensionTerminalOptions) object describing
-    # the characteristics of the new terminal.
-    #
-    # @return:
-    # A new Terminal.
-    CreateTerminal3: ((?Terminal->void)->void)
-        options: ExtensionTerminalOptions
 
 
 
@@ -1683,47 +1308,6 @@ ThemableDecorationRenderOptions: class
 
 
 
-# Options to configure the behavior of the message.
-MessageOptions: class
-
-    # modal:
-    # Indicates that this message should be modal.
-    #
-    # JSON FLAGS: {"Name":"modal","Required":false,"Excluded":false}
-    Modal: ?bool
-
-
-
-
-# Represents an action that is shown with an information, warning, or
-# error message.
-MessageItem: class
-
-    # title:
-    # A short title like 'Retry', 'Open Log' etc.
-    #
-    # JSON FLAGS: {"Name":"title","Required":true,"Excluded":false}
-    Title: string
-
-    # isCloseAffordance:
-    # A hint for modal dialogs that the item should be triggered
-    # when the user cancels the dialog (e.g. by pressing the ESC
-    # key).
-    # 
-    # Note: this option is ignored for non-modal messages.
-    #
-    # JSON FLAGS: {"Name":"isCloseAffordance","Required":false,"Excluded":false}
-    IsCloseAffordance: ?bool
-
-    # my:
-    # Free-form custom data, preserved across a roundtrip.
-    #
-    # JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
-    My: ?dict
-
-
-
-
 # Options to configure the behavior of the input box UI.
 InputBoxOptions: class
 
@@ -1785,6 +1369,50 @@ InputBoxOptions: class
 
 
 
+# Represents an item that can be selected from
+# a list of items.
+QuickPickItem: class
+
+    # label:
+    # A human readable string which is rendered prominent.
+    #
+    # JSON FLAGS: {"Name":"label","Required":true,"Excluded":false}
+    Label: string
+
+    # description:
+    # A human readable string which is rendered less prominent.
+    #
+    # JSON FLAGS: {"Name":"description","Required":false,"Excluded":false}
+    Description: ?string
+
+    # detail:
+    # A human readable string which is rendered less prominent.
+    #
+    # JSON FLAGS: {"Name":"detail","Required":false,"Excluded":false}
+    Detail: ?string
+
+    # picked:
+    # Optional flag indicating if this item is picked initially.
+    # (Only honored when the picker allows multiple selections.)
+    #
+    # JSON FLAGS: {"Name":"picked","Required":false,"Excluded":false}
+    Picked: ?bool
+
+    # alwaysShow:
+    # Always show this item.
+    #
+    # JSON FLAGS: {"Name":"alwaysShow","Required":false,"Excluded":false}
+    AlwaysShow: ?bool
+
+    # my:
+    # Free-form custom data, preserved across a roundtrip.
+    #
+    # JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
+    My: ?dict
+
+
+
+
 # Options to configure the behavior of the quick pick UI.
 QuickPickOptions: class
 
@@ -1827,50 +1455,6 @@ QuickPickOptions: class
     #
     # JSON FLAGS: {"Name":"onDidSelectItem_AppzFuncId","Required":false,"Excluded":false}
     OnDidSelectItem_AppzFuncId: string
-
-
-
-
-# Represents an item that can be selected from
-# a list of items.
-QuickPickItem: class
-
-    # label:
-    # A human readable string which is rendered prominent.
-    #
-    # JSON FLAGS: {"Name":"label","Required":true,"Excluded":false}
-    Label: string
-
-    # description:
-    # A human readable string which is rendered less prominent.
-    #
-    # JSON FLAGS: {"Name":"description","Required":false,"Excluded":false}
-    Description: ?string
-
-    # detail:
-    # A human readable string which is rendered less prominent.
-    #
-    # JSON FLAGS: {"Name":"detail","Required":false,"Excluded":false}
-    Detail: ?string
-
-    # picked:
-    # Optional flag indicating if this item is picked initially.
-    # (Only honored when the picker allows multiple selections.)
-    #
-    # JSON FLAGS: {"Name":"picked","Required":false,"Excluded":false}
-    Picked: ?bool
-
-    # alwaysShow:
-    # Always show this item.
-    #
-    # JSON FLAGS: {"Name":"alwaysShow","Required":false,"Excluded":false}
-    AlwaysShow: ?bool
-
-    # my:
-    # Free-form custom data, preserved across a roundtrip.
-    #
-    # JSON FLAGS: {"Name":"my","Required":false,"Excluded":false}
-    My: ?dict
 
 
 
@@ -2406,21 +1990,6 @@ QuickPick: class
 
 
 
-# An individual terminal instance within the integrated terminal.
-Terminal: class
-
-    #
-    # JSON FLAGS: undefined
-    __disp__: ?Disposable
-
-    # Cfg represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
-    #
-    # JSON FLAGS: undefined
-    Cfg: ?TerminalState
-
-
-
-
 # Value-object describing what options a terminal should use.
 TerminalOptions: class
 
@@ -2478,225 +2047,17 @@ TerminalOptions: class
 
 
 
-# Value-object describing what options a virtual process terminal should use.
-ExtensionTerminalOptions: class
-
-    # name:
-    # A human-readable string which will be used to represent the terminal in the UI.
-    #
-    # JSON FLAGS: {"Name":"name","Required":true,"Excluded":false}
-    Name: string
-
-    # pty:
-    # An implementation of [Pseudoterminal](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal) that allows an extension to
-    # control a terminal.
-    #
-    # JSON FLAGS: {"Name":"pty","Required":true,"Excluded":false}
-    Pty: Pseudoterminal
-
-
-
-
-# Defines the interface of a terminal pty, enabling extensions to control a terminal.
-Pseudoterminal: class
-
-    # onDidWrite:
-    # An event that when fired will write data to the terminal. Unlike
-    # [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText) which sends text to the underlying _process_
-    # (the pty "slave"), this will write the text to the terminal itself (the pty "master").
-    # 
-    # **Example:** Write red text to the terminal
-    # 
-    # ```typescript
-    # 
-    # const writeEmitter = new vscode.EventEmitter<string>();
-    # const pty: vscode.Pseudoterminal = {
-    #    onDidWrite: writeEmitter.event,
-    #    open: () => writeEmitter.fire('\x1b[31mHello world\x1b[0m'),
-    #    close: () => {}
-    # };
-    # vscode.window.createTerminal({ name: 'My terminal', pty });
-    # 
-    # ```
-    # 
-    # 
-    # **Example:** Move the cursor to the 10th row and 20th column and write an asterisk
-    # 
-    # ```typescript
-    # 
-    # writeEmitter.fire('\x1b[10;20H*');
-    # 
-    # ```
-    # 
-    #
-    # JSON FLAGS: {"Name":"onDidWrite","Required":true,"Excluded":true}
-    OnDidWrite: ((string->void)->Disposable)
-
-    # onDidOverrideDimensions:
-    # An event that when fired allows overriding the [dimensions](https://code.visualstudio.com/api/references/vscode-api#Terminal.dimensions) of the
-    # terminal. Note that when set, the overridden dimensions will only take effect when they
-    # are lower than the actual dimensions of the terminal (ie. there will never be a scroll
-    # bar). Set to `undefined` for the terminal to go back to the regular dimensions (fit to
-    # the size of the panel).
-    # 
-    # **Example:** Override the dimensions of a terminal to 20 columns and 10 rows
-    # 
-    # ```typescript
-    # 
-    # const dimensionsEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
-    # const pty: vscode.Pseudoterminal = {
-    #    onDidWrite: writeEmitter.event,
-    #    onDidOverrideDimensions: dimensionsEmitter.event,
-    #    open: () => {
-    #      dimensionsEmitter.fire({
-    #        columns: 20,
-    #        rows: 10
-    #      });
-    #    },
-    #    close: () => {}
-    # };
-    # vscode.window.createTerminal({ name: 'My terminal', pty });
-    # 
-    # ```
-    # 
-    #
-    # JSON FLAGS: {"Name":"onDidOverrideDimensions","Required":false,"Excluded":true}
-    OnDidOverrideDimensions: ?((?TerminalDimensions->void)->Disposable)
-
-    # onDidClose:
-    # An event that when fired will signal that the pty is closed and dispose of the terminal.
-    # 
-    # A number can be used to provide an exit code for the terminal. Exit codes must be
-    # positive and a non-zero exit codes signals failure which shows a notification for a
-    # regular terminal and allows dependent tasks to proceed when used with the
-    # `CustomExecution2` API.
-    # 
-    # **Example:** Exit the terminal when "y" is pressed, otherwise show a notification.
-    # 
-    # ```typescript
-    # 
-    # const writeEmitter = new vscode.EventEmitter<string>();
-    # const closeEmitter = new vscode.EventEmitter<vscode.TerminalDimensions>();
-    # const pty: vscode.Pseudoterminal = {
-    #    onDidWrite: writeEmitter.event,
-    #    onDidClose: closeEmitter.event,
-    #    open: () => writeEmitter.fire('Press y to exit successfully'),
-    #    close: () => {},
-    #    handleInput: data => {
-    #      if (data !== 'y') {
-    #        vscode.window.showInformationMessage('Something went wrong');
-    #      }
-    #      closeEmitter.fire();
-    #    }
-    # };
-    # vscode.window.createTerminal({ name: 'Exit example', pty });
-    #
-    # JSON FLAGS: {"Name":"onDidClose","Required":false,"Excluded":true}
-    OnDidClose: ?((?int->void)->Disposable)
-
-    # open:
-    # Implement to handle when the pty is open and ready to start firing events.
-    # 
-    # `initialDimensions` ── The dimensions of the terminal, this will be undefined if the
-    # terminal panel has not been opened before this is called.
-    #
-    # JSON FLAGS: {"Name":"open","Required":true,"Excluded":true}
-    Open: (?TerminalDimensions->void)
-
-    # close:
-    # Implement to handle when the terminal is closed by an act of the user.
-    #
-    # JSON FLAGS: {"Name":"close","Required":true,"Excluded":true}
-    Close: (->void)
-
-    # handleInput:
-    # Implement to handle incoming keystrokes in the terminal or when an extension calls
-    # [Terminal.sendText](https://code.visualstudio.com/api/references/vscode-api#Terminal.sendText). `data` contains the keystrokes/text serialized into
-    # their corresponding VT sequence representation.
-    # 
-    # `data` ── The incoming data.
-    # 
-    # **Example:** Echo input in the terminal. The sequence for enter (`\r`) is translated to
-    # CRLF to go to a new line and move the cursor to the start of the line.
-    # 
-    # ```typescript
-    # 
-    # const writeEmitter = new vscode.EventEmitter<string>();
-    # const pty: vscode.Pseudoterminal = {
-    # onDidWrite: writeEmitter.event,
-    # open: () => {},
-    # close: () => {},
-    # handleInput: data => writeEmitter.fire(data === '\r' ? '\r\n' : data)
-    # };
-    # vscode.window.createTerminal({ name: 'Local echo', pty });
-    # 
-    # ```
-    # 
-    #
-    # JSON FLAGS: {"Name":"handleInput","Required":false,"Excluded":true}
-    HandleInput: ?(string->void)
-
-    # setDimensions:
-    # Implement to handle when the number of rows and columns that fit into the terminal panel
-    # changes, for example when font size changes or when the panel is resized. The initial
-    # state of a terminal's dimensions should be treated as `undefined` until this is triggered
-    # as the size of a terminal isn't know until it shows up in the user interface.
-    # 
-    # When dimensions are overridden by
-    # [onDidOverrideDimensions](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal.onDidOverrideDimensions), `setDimensions` will
-    # continue to be called with the regular panel dimensions, allowing the extension continue
-    # to react dimension changes.
-    # 
-    # `dimensions` ── The new dimensions.
-    #
-    # JSON FLAGS: {"Name":"setDimensions","Required":false,"Excluded":true}
-    SetDimensions: ?(TerminalDimensions->void)
+# An individual terminal instance within the integrated terminal.
+Terminal: class
 
     #
-    # JSON FLAGS: {"Name":"onDidWrite_AppzFuncId","Required":false,"Excluded":false}
-    OnDidWrite_AppzFuncId: string
+    # JSON FLAGS: undefined
+    __disp__: ?Disposable
 
+    # Cfg represents this `Terminal`'s current state. All its members get auto-refreshed every time any `Terminal` method call (other than `Dispose`) resolves, but can also be manually refreshed via its `ReFetch` method.
     #
-    # JSON FLAGS: {"Name":"onDidOverrideDimensions_AppzFuncId","Required":false,"Excluded":false}
-    OnDidOverrideDimensions_AppzFuncId: string
-
-    #
-    # JSON FLAGS: {"Name":"onDidClose_AppzFuncId","Required":false,"Excluded":false}
-    OnDidClose_AppzFuncId: string
-
-    #
-    # JSON FLAGS: {"Name":"open_AppzFuncId","Required":false,"Excluded":false}
-    Open_AppzFuncId: string
-
-    #
-    # JSON FLAGS: {"Name":"close_AppzFuncId","Required":false,"Excluded":false}
-    Close_AppzFuncId: string
-
-    #
-    # JSON FLAGS: {"Name":"handleInput_AppzFuncId","Required":false,"Excluded":false}
-    HandleInput_AppzFuncId: string
-
-    #
-    # JSON FLAGS: {"Name":"setDimensions_AppzFuncId","Required":false,"Excluded":false}
-    SetDimensions_AppzFuncId: string
-
-
-
-
-# Represents the dimensions of a terminal.
-TerminalDimensions: class
-
-    # columns:
-    # The number of columns in the terminal.
-    #
-    # JSON FLAGS: {"Name":"columns","Required":true,"Excluded":false}
-    Columns: int
-
-    # rows:
-    # The number of rows in the terminal.
-    #
-    # JSON FLAGS: {"Name":"rows","Required":true,"Excluded":false}
-    Rows: int
+    # JSON FLAGS: undefined
+    Cfg: ?TerminalState
 
 
 
@@ -3220,10 +2581,10 @@ Vscode·Commands: ( -> Commands)
 
 
 
-Window·ShowInformationMessage1: (message:string -> items:[string] -> ((?string->void)->void))
+Window·ShowInformationMessage: (message:string -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showInformationMessage1"
+    msg.QName = "window.showInformationMessage"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
@@ -3250,100 +2611,10 @@ Window·ShowInformationMessage1: (message:string -> items:[string] -> ((?string-
 
 
 
-Window·ShowInformationMessage2: (message:string -> options:MessageOptions -> items:[string] -> ((?string->void)->void))
+Window·ShowWarningMessage: (message:string -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showInformationMessage2"
-    msg.Data = dict·new(3)
-    msg.Data@"message" = message
-    msg.Data@"options" = options
-    msg.Data@"items" = items
-    var onresp of (any->bool)
-    var onret of (?string->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?string
-        if =?payload
-            var _result_ of string
-            [_result_, ok] = ((payload)·(string))
-            if !ok
-                return false
-            result = &_result_
-        if =?onret
-            onret(result)
-        return true
-    
-    this.Impl().send(msg, onresp)
-    return (a0:(?string->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·ShowInformationMessage3: (message:string -> items:[MessageItem] -> ((?MessageItem->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.showInformationMessage3"
-    msg.Data = dict·new(2)
-    msg.Data@"message" = message
-    msg.Data@"items" = items
-    var onresp of (any->bool)
-    var onret of (?MessageItem->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?MessageItem
-        if =?payload
-            result = ?MessageItem·new
-            ok = result.__loadFromJsonish__(payload)
-            if !ok
-                return false
-        if =?onret
-            onret(result)
-        return true
-    
-    this.Impl().send(msg, onresp)
-    return (a0:(?MessageItem->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·ShowInformationMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> ((?MessageItem->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.showInformationMessage4"
-    msg.Data = dict·new(3)
-    msg.Data@"message" = message
-    msg.Data@"options" = options
-    msg.Data@"items" = items
-    var onresp of (any->bool)
-    var onret of (?MessageItem->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?MessageItem
-        if =?payload
-            result = ?MessageItem·new
-            ok = result.__loadFromJsonish__(payload)
-            if !ok
-                return false
-        if =?onret
-            onret(result)
-        return true
-    
-    this.Impl().send(msg, onresp)
-    return (a0:(?MessageItem->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·ShowWarningMessage1: (message:string -> items:[string] -> ((?string->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.showWarningMessage1"
+    msg.QName = "window.showWarningMessage"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
@@ -3370,100 +2641,10 @@ Window·ShowWarningMessage1: (message:string -> items:[string] -> ((?string->voi
 
 
 
-Window·ShowWarningMessage2: (message:string -> options:MessageOptions -> items:[string] -> ((?string->void)->void))
+Window·ShowErrorMessage: (message:string -> items:[string] -> ((?string->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showWarningMessage2"
-    msg.Data = dict·new(3)
-    msg.Data@"message" = message
-    msg.Data@"options" = options
-    msg.Data@"items" = items
-    var onresp of (any->bool)
-    var onret of (?string->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?string
-        if =?payload
-            var _result_ of string
-            [_result_, ok] = ((payload)·(string))
-            if !ok
-                return false
-            result = &_result_
-        if =?onret
-            onret(result)
-        return true
-    
-    this.Impl().send(msg, onresp)
-    return (a0:(?string->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·ShowWarningMessage3: (message:string -> items:[MessageItem] -> ((?MessageItem->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.showWarningMessage3"
-    msg.Data = dict·new(2)
-    msg.Data@"message" = message
-    msg.Data@"items" = items
-    var onresp of (any->bool)
-    var onret of (?MessageItem->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?MessageItem
-        if =?payload
-            result = ?MessageItem·new
-            ok = result.__loadFromJsonish__(payload)
-            if !ok
-                return false
-        if =?onret
-            onret(result)
-        return true
-    
-    this.Impl().send(msg, onresp)
-    return (a0:(?MessageItem->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·ShowWarningMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> ((?MessageItem->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.showWarningMessage4"
-    msg.Data = dict·new(3)
-    msg.Data@"message" = message
-    msg.Data@"options" = options
-    msg.Data@"items" = items
-    var onresp of (any->bool)
-    var onret of (?MessageItem->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?MessageItem
-        if =?payload
-            result = ?MessageItem·new
-            ok = result.__loadFromJsonish__(payload)
-            if !ok
-                return false
-        if =?onret
-            onret(result)
-        return true
-    
-    this.Impl().send(msg, onresp)
-    return (a0:(?MessageItem->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·ShowErrorMessage1: (message:string -> items:[string] -> ((?string->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.showErrorMessage1"
+    msg.QName = "window.showErrorMessage"
     msg.Data = dict·new(2)
     msg.Data@"message" = message
     msg.Data@"items" = items
@@ -3484,96 +2665,6 @@ Window·ShowErrorMessage1: (message:string -> items:[string] -> ((?string->void)
     
     this.Impl().send(msg, onresp)
     return (a0:(?string->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·ShowErrorMessage2: (message:string -> options:MessageOptions -> items:[string] -> ((?string->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.showErrorMessage2"
-    msg.Data = dict·new(3)
-    msg.Data@"message" = message
-    msg.Data@"options" = options
-    msg.Data@"items" = items
-    var onresp of (any->bool)
-    var onret of (?string->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?string
-        if =?payload
-            var _result_ of string
-            [_result_, ok] = ((payload)·(string))
-            if !ok
-                return false
-            result = &_result_
-        if =?onret
-            onret(result)
-        return true
-    
-    this.Impl().send(msg, onresp)
-    return (a0:(?string->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·ShowErrorMessage3: (message:string -> items:[MessageItem] -> ((?MessageItem->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.showErrorMessage3"
-    msg.Data = dict·new(2)
-    msg.Data@"message" = message
-    msg.Data@"items" = items
-    var onresp of (any->bool)
-    var onret of (?MessageItem->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?MessageItem
-        if =?payload
-            result = ?MessageItem·new
-            ok = result.__loadFromJsonish__(payload)
-            if !ok
-                return false
-        if =?onret
-            onret(result)
-        return true
-    
-    this.Impl().send(msg, onresp)
-    return (a0:(?MessageItem->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·ShowErrorMessage4: (message:string -> options:MessageOptions -> items:[MessageItem] -> ((?MessageItem->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.showErrorMessage4"
-    msg.Data = dict·new(3)
-    msg.Data@"message" = message
-    msg.Data@"options" = options
-    msg.Data@"items" = items
-    var onresp of (any->bool)
-    var onret of (?MessageItem->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?MessageItem
-        if =?payload
-            result = ?MessageItem·new
-            ok = result.__loadFromJsonish__(payload)
-            if !ok
-                return false
-        if =?onret
-            onret(result)
-        return true
-    
-    this.Impl().send(msg, onresp)
-    return (a0:(?MessageItem->void) -> void)
         onret = a0
     
 
@@ -3644,10 +2735,10 @@ Window·ShowInputBox: (options:?InputBoxOptions -> token:?Cancel -> ((?string->v
 
 
 
-Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Cancel -> ((?[string]->void)->void))
+Window·ShowQuickPick: (items:[QuickPickItem] -> options:QuickPickOptions -> token:?Cancel -> ((?[QuickPickItem]->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showQuickPick1"
+    msg.QName = "window.showQuickPick"
     msg.Data = dict·new(3)
     var fnids of [string]
     fnids = [string]·new(1)
@@ -3675,152 +2766,6 @@ Window·ShowQuickPick1: (items:[string] -> options:QuickPickOptions -> token:?Ca
                         return [fn(__0), true]
                 
     msg.Data@"items" = items
-    options.CanPickMany = true
-    msg.Data@"options" = options
-    if =?token
-        token.impl = this.Impl()
-        if "" == token.fnId
-            lock this
-                token.fnId = this.Impl().nextFuncId()
-        msg.Data@"token" = token.fnId
-    var onresp of (any->bool)
-    var onret of (?[string]->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?[string]
-        if =?payload
-            var __coll__result of [any]
-            [__coll__result, ok] = ((payload)·([any]))
-            if !ok
-                return false
-            result = [string]·new(__coll__result·len)
-            var __idx__result of int
-            __idx__result = 0
-            for __item__result in __coll__result
-                var __val__result of string
-                [__val__result, ok] = ((__item__result)·(string))
-                if !ok
-                    return false
-                result@__idx__result = __val__result
-                __idx__result = __idx__result + 1
-        if =?onret
-            onret(result)
-        return true
-    
-    this.Impl().send(msg, (payload:any -> bool)
-        if fnids·len != 0
-            lock this
-                for fnid in fnids
-                    this.Impl().cbOther·del(fnid)
-        return onresp(payload)
-    )
-    return (a0:(?[string]->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·ShowQuickPick2: (items:[string] -> options:?QuickPickOptions -> token:?Cancel -> ((?string->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.showQuickPick2"
-    msg.Data = dict·new(3)
-    var fnids of [string]
-    fnids = [string]·new(1)
-    if =?options
-        options.OnDidSelectItem_AppzFuncId = ""
-        var fn of ?(QuickPickItem->any)
-        fn = options.OnDidSelectItem
-        if =?fn
-            lock this
-                options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId()
-                fnids·add(options.OnDidSelectItem_AppzFuncId)
-                this.Impl().cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
-                    if 1 != args·len
-                        return [null, false]
-                    else
-                        var ok of bool
-                        var __0 of QuickPickItem
-                        if =?args@0
-                            __0 = QuickPickItem·new
-                            ok = __0.__loadFromJsonish__(args@0)
-                            if !ok
-                                return [null, false]
-                        else
-                            return [null, false]
-                        return [fn(__0), true]
-                
-    msg.Data@"items" = items
-    if =?options
-        msg.Data@"options" = options
-    if =?token
-        token.impl = this.Impl()
-        if "" == token.fnId
-            lock this
-                token.fnId = this.Impl().nextFuncId()
-        msg.Data@"token" = token.fnId
-    var onresp of (any->bool)
-    var onret of (?string->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?string
-        if =?payload
-            var _result_ of string
-            [_result_, ok] = ((payload)·(string))
-            if !ok
-                return false
-            result = &_result_
-        if =?onret
-            onret(result)
-        return true
-    
-    this.Impl().send(msg, (payload:any -> bool)
-        if fnids·len != 0
-            lock this
-                for fnid in fnids
-                    this.Impl().cbOther·del(fnid)
-        return onresp(payload)
-    )
-    return (a0:(?string->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> token:?Cancel -> ((?[QuickPickItem]->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.showQuickPick3"
-    msg.Data = dict·new(3)
-    var fnids of [string]
-    fnids = [string]·new(1)
-    if true
-        options.OnDidSelectItem_AppzFuncId = ""
-        var fn of ?(QuickPickItem->any)
-        fn = options.OnDidSelectItem
-        if =?fn
-            lock this
-                options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId()
-                fnids·add(options.OnDidSelectItem_AppzFuncId)
-                this.Impl().cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
-                    if 1 != args·len
-                        return [null, false]
-                    else
-                        var ok of bool
-                        var __0 of QuickPickItem
-                        if =?args@0
-                            __0 = QuickPickItem·new
-                            ok = __0.__loadFromJsonish__(args@0)
-                            if !ok
-                                return [null, false]
-                        else
-                            return [null, false]
-                        return [fn(__0), true]
-                
-    msg.Data@"items" = items
-    options.CanPickMany = true
     msg.Data@"options" = options
     if =?token
         token.impl = this.Impl()
@@ -3867,110 +2812,13 @@ Window·ShowQuickPick3: (items:[QuickPickItem] -> options:QuickPickOptions -> to
 
 
 
-Window·ShowQuickPick4: (items:[QuickPickItem] -> options:?QuickPickOptions -> token:?Cancel -> ((?QuickPickItem->void)->void))
+Window·SetStatusBarMessage: (text:string -> hideAfterTimeout:int -> ((?Disposable->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.showQuickPick4"
-    msg.Data = dict·new(3)
-    var fnids of [string]
-    fnids = [string]·new(1)
-    if =?options
-        options.OnDidSelectItem_AppzFuncId = ""
-        var fn of ?(QuickPickItem->any)
-        fn = options.OnDidSelectItem
-        if =?fn
-            lock this
-                options.OnDidSelectItem_AppzFuncId = this.Impl().nextFuncId()
-                fnids·add(options.OnDidSelectItem_AppzFuncId)
-                this.Impl().cbOther@options.OnDidSelectItem_AppzFuncId = (args:[any] -> [any,bool])
-                    if 1 != args·len
-                        return [null, false]
-                    else
-                        var ok of bool
-                        var __0 of QuickPickItem
-                        if =?args@0
-                            __0 = QuickPickItem·new
-                            ok = __0.__loadFromJsonish__(args@0)
-                            if !ok
-                                return [null, false]
-                        else
-                            return [null, false]
-                        return [fn(__0), true]
-                
-    msg.Data@"items" = items
-    if =?options
-        msg.Data@"options" = options
-    if =?token
-        token.impl = this.Impl()
-        if "" == token.fnId
-            lock this
-                token.fnId = this.Impl().nextFuncId()
-        msg.Data@"token" = token.fnId
-    var onresp of (any->bool)
-    var onret of (?QuickPickItem->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?QuickPickItem
-        if =?payload
-            result = ?QuickPickItem·new
-            ok = result.__loadFromJsonish__(payload)
-            if !ok
-                return false
-        if =?onret
-            onret(result)
-        return true
-    
-    this.Impl().send(msg, (payload:any -> bool)
-        if fnids·len != 0
-            lock this
-                for fnid in fnids
-                    this.Impl().cbOther·del(fnid)
-        return onresp(payload)
-    )
-    return (a0:(?QuickPickItem->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·SetStatusBarMessage1: (text:string -> hideAfterTimeout:int -> ((?Disposable->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.setStatusBarMessage1"
+    msg.QName = "window.setStatusBarMessage"
     msg.Data = dict·new(2)
     msg.Data@"text" = text
     msg.Data@"hideAfterTimeout" = hideAfterTimeout
-    var onresp of (any->bool)
-    var onret of (?Disposable->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?Disposable
-        if =?payload
-            result = ?Disposable·new
-            ok = result.__loadFromJsonish__(payload)
-            if !ok
-                return false
-        else
-            return false
-        if =?onret
-            onret(result.bind(this.Impl()))
-        return true
-    
-    this.Impl().send(msg, onresp)
-    return (a0:(?Disposable->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·SetStatusBarMessage2: (text:string -> ((?Disposable->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.setStatusBarMessage2"
-    msg.Data = dict·new(1)
-    msg.Data@"text" = text
     var onresp of (any->bool)
     var onret of (?Disposable->void)
     onresp = (payload:any -> bool)
@@ -4330,81 +3178,10 @@ Window·CreateQuickPick: ( -> ((?QuickPick->void)->void))
 
 
 
-Window·CreateTerminal1: (name:?string -> shellPath:?string -> shellArgs:?[string] -> ((?Terminal->void)->void))
+Window·CreateTerminal: (options:TerminalOptions -> ((?Terminal->void)->void))
     var msg of ?ipcMsg
     msg = ?ipcMsg·new
-    msg.QName = "window.createTerminal1"
-    msg.Data = dict·new(3)
-    if =?name
-        msg.Data@"name" = name
-    if =?shellPath
-        msg.Data@"shellPath" = shellPath
-    if =?shellArgs
-        msg.Data@"shellArgs" = shellArgs
-    var onresp of (any->bool)
-    var onret of (?Terminal->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?Terminal
-        if =?payload
-            result = ?Terminal·new
-            ok = result.__loadFromJsonish__(payload)
-            if !ok
-                return false
-            result.__disp__.impl = this.Impl()
-        else
-            return false
-        result.__appzObjBagPullFromPeer__()(( -> void)
-            if =?onret
-                onret(result)
-        )
-        return true
-    
-    this.Impl().send(msg, onresp)
-    return (a0:(?Terminal->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·CreateTerminal2: (options:TerminalOptions -> ((?Terminal->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.createTerminal2"
-    msg.Data = dict·new(1)
-    msg.Data@"options" = options
-    var onresp of (any->bool)
-    var onret of (?Terminal->void)
-    onresp = (payload:any -> bool)
-        var ok of bool
-        var result of ?Terminal
-        if =?payload
-            result = ?Terminal·new
-            ok = result.__loadFromJsonish__(payload)
-            if !ok
-                return false
-            result.__disp__.impl = this.Impl()
-        else
-            return false
-        result.__appzObjBagPullFromPeer__()(( -> void)
-            if =?onret
-                onret(result)
-        )
-        return true
-    
-    this.Impl().send(msg, onresp)
-    return (a0:(?Terminal->void) -> void)
-        onret = a0
-    
-
-
-
-
-Window·CreateTerminal3: (options:ExtensionTerminalOptions -> ((?Terminal->void)->void))
-    var msg of ?ipcMsg
-    msg = ?ipcMsg·new
-    msg.QName = "window.createTerminal3"
+    msg.QName = "window.createTerminal"
     msg.Data = dict·new(1)
     msg.Data@"options" = options
     var onresp of (any->bool)
@@ -6785,46 +5562,6 @@ FileSystemWatcherState·ApplyChanges: ( -> ((->void)->void))
     lock this
         ret = this.__holder__.__appzObjBagPushToPeer__(this)
     return ret
-
-
-
-
-MessageItem·__loadFromJsonish__: (payload:any -> bool)
-    var it of dict
-    var ok of bool
-    var val of any
-    [it, ok] = ((payload)·(dict))
-    if !ok
-        return false
-    [val, ok] = it@?"title"
-    if ok
-        var title of string
-        if =?val
-            [title, ok] = ((val)·(string))
-            if !ok
-                return false
-        this.Title = title
-    else
-        return false
-    [val, ok] = it@?"isCloseAffordance"
-    if ok
-        var isCloseAffordance of ?bool
-        if =?val
-            var _isCloseAffordance_ of bool
-            [_isCloseAffordance_, ok] = ((val)·(bool))
-            if !ok
-                return false
-            isCloseAffordance = &_isCloseAffordance_
-        this.IsCloseAffordance = isCloseAffordance
-    [val, ok] = it@?"my"
-    if ok
-        var my of ?dict
-        if =?val
-            [my, ok] = ((val)·(?dict))
-            if !ok
-                return false
-        this.My = my
-    return true
 
 
 
