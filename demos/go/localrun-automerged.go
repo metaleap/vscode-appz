@@ -8,7 +8,8 @@ import (
 	"strings"
 	"time"
 
-	. "../../libs/go"
+	// . "../../libs/go"
+	. "github.com/metaleap/vscode-appz/libs/go"
 )
 
 type any = interface{}
@@ -117,7 +118,7 @@ func quickPickItemsFrom(items []string) (ret []QuickPickItem) {
 
 func demo_promptToExit() {
 	vsc.Window().ShowWarningMessage(strFmt("Are you sure you want `{0}` to exit?", appName), []string{"Sure I'm sure"})(func(btn *string) {
-		if (nil != btn) {
+		if nil != btn {
 			vsc.Window().ShowInformationMessage(logLn("So fish and long for all the thanks!"), nil)
 			quit(nil)
 		} else {
@@ -128,7 +129,7 @@ func demo_promptToExit() {
 
 func demo_clipboard() {
 	vsc.Env().Clipboard().ReadText()(func(text *string) {
-		if (nil == text) {
+		if nil == text {
 			vsc.Window().ShowWarningMessage(logLn("No text in clipboard"), nil)
 		} else {
 			var opts *InputBoxOptions
@@ -138,7 +139,7 @@ func demo_clipboard() {
 			logLn(strFmt("input@opts/{0}:\t{1}", "Prompt", "Enter new contents to write to your clipboard."))
 			opts.Prompt = "Enter new contents to write to your clipboard."
 			vsc.Window().ShowInputBox(opts, nil)(func(input *string) {
-				if (nil == input) {
+				if nil == input {
 					vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 				} else {
 					logLn(strFmt("input <- {0}", *input))
@@ -157,7 +158,7 @@ func demo_Commands_GetCommands_and_ExecuteCommand() {
 		opts.IgnoreFocusOut = true
 		opts.PlaceHolder = strFmt("Retrieved {0} command ID(s), pick one to execute or escape now:", len(items))
 		vsc.Window().ShowQuickPick(quickPickItemsFrom(items), opts, nil)(func(item []QuickPickItem) {
-			if (nil == item) {
+			if nil == item {
 				vsc.Window().ShowWarningMessage(logLn("Command selection cancelled, spooked?"), nil)
 			} else {
 				var opts2 *InputBoxOptions
@@ -166,7 +167,7 @@ func demo_Commands_GetCommands_and_ExecuteCommand() {
 				logLn(strFmt("cmdarg@opts2/{0}:\t{1}", "PlaceHolder", strFmt("Any param for `{0}` command? Else leave blank.", item[0].Label)))
 				opts2.PlaceHolder = strFmt("Any param for `{0}` command? Else leave blank.", item[0].Label)
 				vsc.Window().ShowInputBox(opts2, nil)(func(cmdarg *string) {
-					if (nil == cmdarg) {
+					if nil == cmdarg {
 						vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 					} else {
 						logLn(strFmt("cmdarg <- {0}", *cmdarg))
@@ -193,7 +194,7 @@ func demo_Commands_RegisterCommand() {
 	logLn(strFmt("cmdname@opts/{0}:\t{1}", "Prompt", "Enter your command name. The command will accept a single text input and return a result built from it."))
 	opts.Prompt = "Enter your command name. The command will accept a single text input and return a result built from it."
 	vsc.Window().ShowInputBox(opts, nil)(func(cmdname *string) {
-		if (nil == cmdname) {
+		if nil == cmdname {
 			vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 		} else {
 			logLn(strFmt("cmdname <- {0}", *cmdname))
@@ -208,7 +209,7 @@ func demo_Commands_RegisterCommand() {
 				opts2.Prompt = strFmt("Command `{0}` registered, try it now?", *cmdname)
 				opts2.Value = strFmt("Enter input to command `{0}` here", *cmdname)
 				vsc.Window().ShowInputBox(opts2, nil)(func(cmdarg *string) {
-					if (nil == cmdarg) {
+					if nil == cmdarg {
 						vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 					} else {
 						logLn(strFmt("cmdarg <- {0}", *cmdarg))
@@ -231,7 +232,7 @@ func demo_Languages_GetLanguages() {
 		opts.IgnoreFocusOut = true
 		opts.PlaceHolder = strFmt("Retrieved {0} language ID(s)", len(items))
 		vsc.Window().ShowQuickPick(quickPickItemsFrom(items), opts, nil)(func(menuitems []QuickPickItem) {
-			if (nil != menuitems) {
+			if nil != menuitems {
 				logLn(menuitems[0].Label)
 			}
 		})
@@ -255,7 +256,7 @@ func demo_Env_Properties() {
 			opts.IgnoreFocusOut = true
 			opts.PlaceHolder = logLn(strFmt("Env has {0} properties", len(items))) + ":"
 			vsc.Window().ShowQuickPick(quickPickItemsFrom(items), opts, nil)(func(menuitems []QuickPickItem) {
-				if (nil != menuitems) {
+				if nil != menuitems {
 					logLn(menuitems[0].Label)
 				}
 			})
@@ -275,7 +276,7 @@ func demo_Workspace_Properties() {
 			opts.IgnoreFocusOut = true
 			opts.PlaceHolder = logLn(strFmt("Workspace has {0} properties", len(items))) + ":"
 			vsc.Window().ShowQuickPick(quickPickItemsFrom(items), opts, nil)(func(menuitems []QuickPickItem) {
-				if (nil != menuitems) {
+				if nil != menuitems {
 					logLn(menuitems[0].Label)
 				}
 			})
@@ -296,7 +297,7 @@ func demo_Window_ShowOpenDialog() {
 	}
 	logLn("Showing File-Open dialog...")
 	vsc.Window().ShowOpenDialog(opts)(func(filepaths []string) {
-		if (nil == filepaths) {
+		if nil == filepaths {
 			vsc.Window().ShowWarningMessage(logLn("Cancelled File-Open dialog, chicken?"), nil)
 		} else {
 			vsc.Window().ShowInformationMessage(logLn(strFmt("Selected {0} file path(s), excellent!", len(filepaths))), nil)
@@ -312,7 +313,7 @@ func demo_Window_ShowSaveDialog() {
 	opts.Filters["Dummy Filter"] = []string{"dummy", "demo"}
 	logLn("Showing File-Save dialog...")
 	vsc.Window().ShowSaveDialog(opts)(func(filepath *string) {
-		if (nil == filepath) {
+		if nil == filepath {
 			vsc.Window().ShowWarningMessage(logLn("Cancelled File-Save dialog, chicken?"), nil)
 		} else {
 			vsc.Window().ShowInformationMessage(logLn(strFmt("Selected file path `{0}`, excellent!", *filepath)), nil)
@@ -326,7 +327,7 @@ func demo_Window_ShowWorkspaceFolderPick() {
 	opts.IgnoreFocusOut = true
 	opts.PlaceHolder = "Reminder, all local-FS-related 'URIs' sent on the VS Code side turn into standard (non-URI) file-path strings received by the prog side."
 	vsc.Window().ShowWorkspaceFolderPick(opts)(func(pickedfolder *WorkspaceFolder) {
-		if (nil == pickedfolder) {
+		if nil == pickedfolder {
 			vsc.Window().ShowWarningMessage(logLn("Cancelled pick input, changed your mind?"), nil)
 		} else {
 			vsc.Window().ShowInformationMessage(logLn(strFmt("Selected `{0}` located at `{1}`, respect!", pickedfolder.Name, pickedfolder.Uri)), nil)
@@ -342,7 +343,7 @@ func demo_Env_OpenExternal() {
 	logLn(strFmt("uri@opts/{0}:\t{1}", "Prompt", "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."))
 	opts.Prompt = "Enter any URI (of http: or mailto: or any other protocol scheme) to open in the applicable external app registered with your OS to handle that protocol."
 	vsc.Window().ShowInputBox(opts, nil)(func(uri *string) {
-		if (nil == uri) {
+		if nil == uri {
 			vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 		} else {
 			logLn(strFmt("uri <- {0}", *uri))
@@ -350,7 +351,7 @@ func demo_Env_OpenExternal() {
 				var did string
 				did = "Did"
 				if !ok {
-					did = did  +  " not"
+					did = did + " not"
 				}
 				vsc.Window().ShowInformationMessage(logLn(strFmt("{0} succeed in opening `{1}`, chapeau!", did, *uri)), nil)
 			})
@@ -384,7 +385,7 @@ func demo_Window_ShowQuickPick() {
 		return nil
 	}
 	vsc.Window().ShowQuickPick(items, opts, cancelIn(42))(func(pickeditems []QuickPickItem) {
-		if (nil == pickeditems) {
+		if nil == pickeditems {
 			vsc.Window().ShowWarningMessage(logLn("Cancelled pick input, not one to tick the boxes?"), nil)
 		} else {
 			vsc.Window().ShowInformationMessage(logLn(strFmt("You picked {0} item(s), good stuff!", len(pickeditems))), nil)
@@ -436,7 +437,7 @@ func demo_Window_CreateInputBox() {
 		})
 		ctl.OnDidHide(func() {
 			ctl.Dispose()
-			if (nil != finalinputvalue) {
+			if nil != finalinputvalue {
 				vsc.Window().ShowInformationMessage(logLn(strFmt("You entered: `{0}`, ponderous!", *finalinputvalue)), nil)
 			} else {
 				vsc.Window().ShowWarningMessage(logLn("Backing off or backing up?"), nil)
@@ -454,7 +455,7 @@ func demo_Window_CreateTerminal() {
 	optsname.Prompt = "Name of your new terminal?"
 	optsname.Value = appName
 	vsc.Window().ShowInputBox(optsname, nil)(func(termname *string) {
-		if (nil == termname) {
+		if nil == termname {
 			vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 		} else {
 			logLn(strFmt("termname <- {0}", *termname))
@@ -465,7 +466,7 @@ func demo_Window_CreateTerminal() {
 			optstext.Prompt = strFmt("Text to send to new terminal `{0}` initially upon creation?", *termname)
 			optstext.Value = appName
 			vsc.Window().ShowInputBox(optstext, nil)(func(termtext *string) {
-				if (nil == termtext) {
+				if nil == termtext {
 					vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 				} else {
 					logLn(strFmt("termtext <- {0}", *termtext))
@@ -475,7 +476,7 @@ func demo_Window_CreateTerminal() {
 					logLn(strFmt("termvar@optsvar/{0}:\t{1}", "Prompt", "Value for custom env var named `MY_ENV_VAR`?"))
 					optsvar.Prompt = "Value for custom env var named `MY_ENV_VAR`?"
 					vsc.Window().ShowInputBox(optsvar, nil)(func(termvar *string) {
-						if (nil == termvar) {
+						if nil == termvar {
 							vsc.Window().ShowWarningMessage(logLn("Don't be bashful.."), nil)
 						} else {
 							logLn(strFmt("termvar <- {0}", *termvar))
@@ -515,7 +516,7 @@ func demosMenu() {
 	opts.IgnoreFocusOut = true
 	opts.PlaceHolder = "This menu can be re-opened any time via our custom status-bar item."
 	vsc.Window().ShowQuickPick(quickPickItemsFrom(items), opts, nil)(func(menuitems []QuickPickItem) {
-		if (nil != menuitems) {
+		if nil != menuitems {
 			if "demo_promptToExit" == menuitems[0].Label {
 				logLn("Picked `demo_promptToExit` from main menu")
 				demo_promptToExit()
@@ -641,4 +642,3 @@ func onUpAndRunning() {
 		})
 	}
 }
-
